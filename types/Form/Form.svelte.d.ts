@@ -25,5 +25,5 @@ export default class Form extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     submit: WindowEventMap["submit"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

@@ -17,5 +17,5 @@ export default class FileUploaderSkeleton extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  {}
+  Record<string, never>
 > {}

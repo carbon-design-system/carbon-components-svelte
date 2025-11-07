@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 
-export type HeaderPanelDividerProps = {};
+export type HeaderPanelDividerProps = Record<string, never>;
 
 export default class HeaderPanelDivider extends SvelteComponentTyped<
   HeaderPanelDividerProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

@@ -20,7 +20,7 @@ export default class LocalStorage extends SvelteComponentTyped<
     save: CustomEvent<null>;
     update: CustomEvent<{ prevValue: any; value: any }>;
   },
-  {}
+  Record<string, never>
 > {
   /**
    * Remove the persisted key value from the browser's local storage

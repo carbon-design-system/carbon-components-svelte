@@ -1,6 +1,10 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type FormContext = {
+  formContext: { isFluid: boolean };
+};
+
 type $RestProps = SvelteHTMLElements["form"];
 
 type $Props = {
@@ -19,5 +23,5 @@ export default class FluidForm extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     submit: WindowEventMap["submit"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

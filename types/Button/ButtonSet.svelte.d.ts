@@ -18,5 +18,5 @@ export type ButtonSetProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ButtonSet extends SvelteComponentTyped<
   ButtonSetProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

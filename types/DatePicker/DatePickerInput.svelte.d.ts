@@ -114,5 +114,5 @@ export default class DatePickerInput extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
     paste: WindowEventMap["paste"];
   },
-  { labelText: {} }
+  { labelText: Record<string, never> }
 > {}

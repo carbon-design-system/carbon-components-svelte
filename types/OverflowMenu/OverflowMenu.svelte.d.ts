@@ -1,6 +1,36 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type OverflowMenuContext = {
+  focusedId: import("svelte/store").Writable<string | undefined>;
+  items: import("svelte/store").Writable<
+    ReadonlyArray<{
+      id: string;
+      text: string;
+      primaryFocus: boolean;
+      disabled: boolean;
+      index: number;
+    }>
+  >;
+  add: (data: {
+    id: string;
+    text: string;
+    primaryFocus: boolean;
+    disabled: boolean;
+  }) => void;
+  update: (
+    id: string,
+    item: {
+      id: string;
+      text: string;
+      primaryFocus: boolean;
+      disabled: boolean;
+      index: number;
+    },
+  ) => void;
+  change: (direction: number) => void;
+};
+
 type $RestProps = SvelteHTMLElements["button"];
 
 type $Props = {
@@ -92,5 +122,5 @@ export default class OverflowMenu extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     keydown: WindowEventMap["keydown"];
   },
-  { default: {}; menu: {} }
+  { menu: Record<string, never>; default: Record<string, never> }
 > {}

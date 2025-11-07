@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
 
-export type SideNavItemsProps = {};
+export type SideNavItemsProps = Record<string, never>;
 
 export default class SideNavItems extends SvelteComponentTyped<
   SideNavItemsProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

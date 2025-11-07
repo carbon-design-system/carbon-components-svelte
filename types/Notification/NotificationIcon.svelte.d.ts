@@ -29,5 +29,5 @@ export type NotificationIconProps = {
 export default class NotificationIcon extends SvelteComponentTyped<
   NotificationIconProps,
   Record<string, any>,
-  {}
+  Record<string, never>
 > {}

@@ -1,6 +1,11 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type StructuredListWrapperContext = {
+  selectedValue: import("svelte/store").Writable<string | undefined>;
+  update: (value: string) => void;
+};
+
 type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
@@ -42,5 +47,5 @@ export default class StructuredList extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

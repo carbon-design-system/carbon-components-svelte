@@ -1,6 +1,14 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type ContextMenuContext = {
+  menuOffsetX: import("svelte/store").Writable<number>;
+  currentIndex: import("svelte/store").Writable<number>;
+  position: import("svelte/store").Writable<[number, number]>;
+  close: () => void;
+  setPopup: (popup: boolean) => void;
+};
+
 type $RestProps = SvelteHTMLElements["ul"];
 
 type $Props = {
@@ -49,5 +57,5 @@ export default class ContextMenu extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
     close: CustomEvent<null>;
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

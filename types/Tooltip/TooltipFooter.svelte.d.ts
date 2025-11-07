@@ -11,5 +11,5 @@ export type TooltipFooterProps = {
 export default class TooltipFooter extends SvelteComponentTyped<
   TooltipFooterProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

@@ -42,6 +42,17 @@ export interface DataTableCell<Row = DataTableRow> {
   value: DataTableValue;
   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
 }
+export type DataTableContext = {
+  batchSelectedIds: import("svelte/store").Writable<
+    ReadonlyArray<DataTableRowId>
+  >;
+  tableRows: import("svelte/store").Writable<ReadonlyArray<Row>>;
+  resetSelectedRowIds: () => void;
+  filterRows: (
+    searchValue: string,
+    customFilter?: (row: Row, value: string) => boolean,
+  ) => ReadonlyArray<DataTableRowId>;
+};
 
 type $RestProps = SvelteHTMLElements["div"];
 
@@ -206,34 +217,33 @@ export default class DataTable<
       row?: Row;
       cell?: DataTableCell<Row>;
     }>;
-    ["click:header--expand"]: CustomEvent<{ expanded: boolean }>;
-    ["click:header"]: CustomEvent<{
+    "click:header--expand": CustomEvent<{ expanded: boolean }>;
+    "click:header": CustomEvent<{
       header: DataTableHeader<Row>;
       sortDirection?: "ascending" | "descending" | "none";
       target: EventTarget;
       currentTarget: EventTarget;
     }>;
-    ["click:header--select"]: CustomEvent<{
+    "click:header--select": CustomEvent<{
       indeterminate: boolean;
       selected: boolean;
     }>;
-    ["click:row"]: CustomEvent<{
+    "click:row": CustomEvent<{
       row: Row;
       target: EventTarget;
       currentTarget: EventTarget;
     }>;
-    ["mouseenter:row"]: CustomEvent<Row>;
-    ["mouseleave:row"]: CustomEvent<Row>;
-    ["click:row--expand"]: CustomEvent<{ expanded: boolean; row: Row }>;
-    ["click:row--select"]: CustomEvent<{ selected: boolean; row: Row }>;
-    ["click:cell"]: CustomEvent<{
+    "mouseenter:row": CustomEvent<Row>;
+    "mouseleave:row": CustomEvent<Row>;
+    "click:row--expand": CustomEvent<{ expanded: boolean; row: Row }>;
+    "click:row--select": CustomEvent<{ selected: boolean; row: Row }>;
+    "click:cell": CustomEvent<{
       cell: DataTableCell<Row>;
       target: EventTarget;
       currentTarget: EventTarget;
     }>;
   },
   {
-    default: {};
     cell: {
       row: Row;
       cell: DataTableCell<Row>;
@@ -242,9 +252,10 @@ export default class DataTable<
       rowSelected: boolean;
       rowExpanded: boolean;
     };
-    ["cell-header"]: { header: DataTableNonEmptyHeader };
+    "cell-header": { header: DataTableNonEmptyHeader };
     description: { props: { class: "bx--data-table-header__description" } };
-    ["expanded-row"]: { row: Row; rowSelected: boolean };
+    "expanded-row": { row: Row; rowSelected: boolean };
     title: { props: { class: "bx--data-table-header__title" } };
+    default: Record<string, never>;
   }
 > {}

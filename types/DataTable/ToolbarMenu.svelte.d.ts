@@ -6,5 +6,5 @@ export type ToolbarMenuProps = OverflowMenuProps & {};
 export default class ToolbarMenu extends SvelteComponentTyped<
   ToolbarMenuProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

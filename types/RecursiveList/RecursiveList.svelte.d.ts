@@ -30,5 +30,5 @@ export type RecursiveListProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class RecursiveList extends SvelteComponentTyped<
   RecursiveListProps,
   Record<string, any>,
-  {}
+  Record<string, never>
 > {}

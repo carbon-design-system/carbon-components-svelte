@@ -53,5 +53,5 @@ export default class TableHeader extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     click: WindowEventMap["click"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

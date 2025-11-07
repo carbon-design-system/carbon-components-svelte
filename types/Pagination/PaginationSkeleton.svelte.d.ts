@@ -17,5 +17,5 @@ export default class PaginationSkeleton extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  {}
+  Record<string, never>
 > {}

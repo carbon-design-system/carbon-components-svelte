@@ -11,5 +11,5 @@ export default class OutboundLink extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

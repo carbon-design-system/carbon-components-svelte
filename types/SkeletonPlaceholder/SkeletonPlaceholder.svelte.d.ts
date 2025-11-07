@@ -17,5 +17,5 @@ export default class SkeletonPlaceholder extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  {}
+  Record<string, never>
 > {}

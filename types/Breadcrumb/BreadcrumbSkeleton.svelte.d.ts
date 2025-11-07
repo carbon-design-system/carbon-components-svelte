@@ -29,5 +29,5 @@ export default class BreadcrumbSkeleton extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  {}
+  Record<string, never>
 > {}

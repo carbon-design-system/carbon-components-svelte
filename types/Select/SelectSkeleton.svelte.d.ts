@@ -23,5 +23,5 @@ export default class SelectSkeleton extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  {}
+  Record<string, never>
 > {}

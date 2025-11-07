@@ -185,18 +185,18 @@
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `AccordionItem`
 
@@ -211,21 +211,21 @@
 
 ### Slots
 
-| Slot name | Default | Props | Fallback             |
-| :-------- | :------ | :---- | :------------------- |
-| --        | Yes     | --    | --                   |
-| title     | No      | --    | <code>{title}</code> |
+| Slot name | Default | Props                               | Fallback             |
+| :-------- | :------ | :---------------------------------- | :------------------- |
+| title     | No      | <code>Record<string, never> </code> | <code>{title}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                   |
 
 ### Events
 
-| Event name   | Type      | Detail |
-| :----------- | :-------- | :----- |
-| animationend | forwarded | --     |
-| click        | forwarded | --     |
-| mouseover    | forwarded | --     |
-| mouseenter   | forwarded | --     |
-| mouseleave   | forwarded | --     |
-| keydown      | forwarded | --     |
+| Event name   | Type      | Detail | Description |
+| :----------- | :-------- | :----- | :---------- |
+| animationend | forwarded | --     | --          |
+| click        | forwarded | --     | --          |
+| mouseover    | forwarded | --     | --          |
+| mouseenter   | forwarded | --     | --          |
+| mouseleave   | forwarded | --     | --          |
+| keydown      | forwarded | --     | --          |
 
 ## `AccordionSkeleton`
 
@@ -244,12 +244,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `AspectRatio`
 
@@ -261,9 +261,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -280,18 +280,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `BreadcrumbItem`
 
@@ -310,12 +310,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `BreadcrumbSkeleton`
 
@@ -332,12 +332,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Breakpoint`
 
@@ -364,9 +364,9 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 
 ### Events
 
-| Event name | Type       | Detail                                                                   |
-| :--------- | :--------- | :----------------------------------------------------------------------- |
-| change     | dispatched | <code>{ size: BreakpointSize; breakpointValue: BreakpointValue; }</code> |
+| Event name | Type       | Detail                                                                   | Description |
+| :--------- | :--------- | :----------------------------------------------------------------------- | :---------- |
+| change     | dispatched | <code>{ size: BreakpointSize; breakpointValue: BreakpointValue; }</code> | --          |
 
 ## `Button`
 
@@ -400,14 +400,14 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ButtonSet`
 
@@ -419,9 +419,9 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -442,14 +442,14 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Checkbox`
 
@@ -475,22 +475,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail               |
-| :--------- | :--------- | :------------------- |
-| check      | dispatched | <code>boolean</code> |
-| click      | forwarded  | --                   |
-| mouseover  | forwarded  | --                   |
-| mouseenter | forwarded  | --                   |
-| mouseleave | forwarded  | --                   |
-| change     | forwarded  | --                   |
-| focus      | forwarded  | --                   |
-| blur       | forwarded  | --                   |
+| Event name | Type       | Detail               | Description |
+| :--------- | :--------- | :------------------- | :---------- |
+| check      | dispatched | <code>boolean</code> | --          |
+| click      | forwarded  | --                   | --          |
+| mouseover  | forwarded  | --                   | --          |
+| mouseenter | forwarded  | --                   | --          |
+| mouseleave | forwarded  | --                   | --          |
+| change     | forwarded  | --                   | --          |
+| focus      | forwarded  | --                   | --          |
+| blur       | forwarded  | --                   | --          |
 
 ## `CheckboxSkeleton`
 
@@ -504,12 +504,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ClickableTile`
 
@@ -524,19 +524,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `CodeSnippet`
 
@@ -565,22 +565,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | <code>{code}</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{code}</code> |
 
 ### Events
 
-| Event name   | Type       | Detail            |
-| :----------- | :--------- | :---------------- |
-| expand       | dispatched | <code>null</code> |
-| collapse     | dispatched | <code>null</code> |
-| copy         | dispatched | <code>null</code> |
-| click        | forwarded  | --                |
-| mouseover    | forwarded  | --                |
-| mouseenter   | forwarded  | --                |
-| mouseleave   | forwarded  | --                |
-| animationend | forwarded  | --                |
+| Event name   | Type       | Detail            | Description |
+| :----------- | :--------- | :---------------- | :---------- |
+| expand       | dispatched | <code>null</code> | --          |
+| collapse     | dispatched | <code>null</code> | --          |
+| copy         | dispatched | <code>null</code> | --          |
+| click        | forwarded  | --                | --          |
+| mouseover    | forwarded  | --                | --          |
+| mouseenter   | forwarded  | --                | --          |
+| mouseleave   | forwarded  | --                | --          |
+| animationend | forwarded  | --                | --          |
 
 ## `CodeSnippetSkeleton`
 
@@ -596,12 +596,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Column`
 
@@ -695,21 +695,21 @@ export interface ComboBoxItem {
 | Slot name | Default | Props                                               | Fallback                          |
 | :-------- | :------ | :-------------------------------------------------- | :-------------------------------- |
 | --        | Yes     | <code>{ item: ComboBoxItem; index: number } </code> | <code>{itemToString(item)}</code> |
-| titleText | No      | --                                                  | <code>{titleText}</code>          |
+| titleText | No      | <code>Record<string, never> </code>                 | <code>{titleText}</code>          |
 
 ### Events
 
-| Event name | Type       | Detail                                                                  |
-| :--------- | :--------- | :---------------------------------------------------------------------- |
-| select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }</code> |
-| clear      | forwarded  | --                                                                      |
-| input      | forwarded  | --                                                                      |
-| keydown    | forwarded  | --                                                                      |
-| keyup      | forwarded  | --                                                                      |
-| focus      | forwarded  | --                                                                      |
-| blur       | forwarded  | --                                                                      |
-| paste      | forwarded  | --                                                                      |
-| scroll     | forwarded  | --                                                                      |
+| Event name | Type       | Detail                                                                  | Description |
+| :--------- | :--------- | :---------------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }</code> | --          |
+| clear      | forwarded  | --                                                                      | --          |
+| input      | forwarded  | --                                                                      | --          |
+| keydown    | forwarded  | --                                                                      | --          |
+| keyup      | forwarded  | --                                                                      | --          |
+| focus      | forwarded  | --                                                                      | --          |
+| blur       | forwarded  | --                                                                      | --          |
+| paste      | forwarded  | --                                                                      | --          |
+| scroll     | forwarded  | --                                                                      | --          |
 
 ## `ComposedModal`
 
@@ -727,24 +727,24 @@ export interface ComboBoxItem {
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name            | Type       | Detail                                                                              |
-| :-------------------- | :--------- | :---------------------------------------------------------------------------------- |
-| close                 | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button" }</code> |
-| transitionend         | dispatched | <code>{ open: boolean; }</code>                                                     |
-| keydown               | forwarded  | --                                                                                  |
-| click                 | forwarded  | --                                                                                  |
-| mouseover             | forwarded  | --                                                                                  |
-| mouseenter            | forwarded  | --                                                                                  |
-| mouseleave            | forwarded  | --                                                                                  |
-| submit                | dispatched | <code>null</code>                                                                   |
-| click:button--primary | dispatched | <code>null</code>                                                                   |
-| open                  | dispatched | <code>null</code>                                                                   |
+| Event name            | Type       | Detail                                                                              | Description |
+| :-------------------- | :--------- | :---------------------------------------------------------------------------------- | :---------- |
+| close                 | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button" }</code> | --          |
+| transitionend         | dispatched | <code>{ open: boolean; }</code>                                                     | --          |
+| keydown               | forwarded  | --                                                                                  | --          |
+| click                 | forwarded  | --                                                                                  | --          |
+| mouseover             | forwarded  | --                                                                                  | --          |
+| mouseenter            | forwarded  | --                                                                                  | --          |
+| mouseleave            | forwarded  | --                                                                                  | --          |
+| submit                | dispatched | <code>null</code>                                                                   | --          |
+| click:button--primary | dispatched | <code>null</code>                                                                   | --          |
+| open                  | dispatched | <code>null</code>                                                                   | --          |
 
 ## `Content`
 
@@ -756,9 +756,9 @@ export interface ComboBoxItem {
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -775,19 +775,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>number</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>number</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `ContextMenu`
 
@@ -803,18 +803,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail                   |
-| :--------- | :--------- | :----------------------- |
-| open       | dispatched | <code>HTMLElement</code> |
-| click      | forwarded  | --                       |
-| keydown    | forwarded  | --                       |
-| close      | dispatched | <code>null</code>        |
+| Event name | Type       | Detail                   | Description |
+| :--------- | :--------- | :----------------------- | :---------- |
+| open       | dispatched | <code>HTMLElement</code> | --          |
+| click      | forwarded  | --                       | --          |
+| keydown    | forwarded  | --                       | --          |
+| close      | dispatched | <code>null</code>        | --          |
 
 ## `ContextMenuDivider`
 
@@ -841,9 +841,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -868,21 +868,21 @@ None.
 
 ### Slots
 
-| Slot name    | Default | Props | Fallback                                            |
-| :----------- | :------ | :---- | :-------------------------------------------------- |
-| --           | Yes     | --    | --                                                  |
-| icon         | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
-| labelText    | No      | --    | <code>{labelText}</code>                            |
-| shortcutText | No      | --    | <code>{shortcutText}</code>                         |
+| Slot name    | Default | Props                               | Fallback                                            |
+| :----------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| icon         | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| labelText    | No      | <code>Record<string, never> </code> | <code>{labelText}</code>                            |
+| --           | Yes     | <code>Record<string, never> </code> | --                                                  |
+| shortcutText | No      | <code>Record<string, never> </code> | <code>{shortcutText}</code>                         |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| keydown    | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| click      | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| keydown    | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| click      | dispatched | <code>null</code> | --          |
 
 ## `ContextMenuRadioGroup`
 
@@ -895,9 +895,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -921,11 +921,11 @@ None.
 
 ### Events
 
-| Event name   | Type       | Detail            |
-| :----------- | :--------- | :---------------- |
-| click        | forwarded  | --                |
-| animationend | forwarded  | --                |
-| copy         | dispatched | <code>null</code> |
+| Event name   | Type       | Detail            | Description |
+| :----------- | :--------- | :---------------- | :---------- |
+| click        | forwarded  | --                | --          |
+| animationend | forwarded  | --                | --          |
+| copy         | dispatched | <code>null</code> | --          |
 
 ## `DataTable`
 
@@ -1007,27 +1007,27 @@ export interface DataTableCell<Row = DataTableRow> {
 
 | Slot name    | Default | Props                                                                                                                                  | Fallback                                                                                        |
 | :----------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------- |
-| --           | Yes     | --                                                                                                                                     | --                                                                                              |
 | cell         | No      | <code>{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; } </code> | <code>{cell.display ? cell.display(cell.value, row) : cell.value}</code>                        |
 | cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                                                                     | <code>{header.value}</code>                                                                     |
 | description  | No      | <code>{ props: { class: "bx--data-table-header\_\_description" } } </code>                                                             | <code>&lt;p class:bx--data-table-header\_\_description={true}&gt;{description}&lt;/p&gt;</code> |
 | expanded-row | No      | <code>{ row: Row; rowSelected: boolean; } </code>                                                                                      | --                                                                                              |
 | title        | No      | <code>{ props: { class: "bx--data-table-header\_\_title" } } </code>                                                                   | <code>&lt;h4 class:bx--data-table-header\_\_title={true}&gt;{title}&lt;/h4&gt;</code>           |
+| --           | Yes     | <code>Record<string, never> </code>                                                                                                    | --                                                                                              |
 
 ### Events
 
-| Event name           | Type       | Detail                                                                                                                                                         |
-| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| click                | dispatched | <code>{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }</code>                                                                          |
-| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                                                                            |
-| click:header         | dispatched | <code>{ header: DataTableHeader<Row>; sortDirection?: "ascending" &#124; "descending" &#124; "none"; target: EventTarget; currentTarget: EventTarget; }</code> |
-| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                                                                                    |
-| click:row            | dispatched | <code>{ row: Row; target: EventTarget; currentTarget: EventTarget; }</code>                                                                                    |
-| mouseenter:row       | dispatched | <code>Row</code>                                                                                                                                               |
-| mouseleave:row       | dispatched | <code>Row</code>                                                                                                                                               |
-| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                                                                  |
-| click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                                                                  |
-| click:cell           | dispatched | <code>{ cell: DataTableCell<Row>; target: EventTarget; currentTarget: EventTarget; }</code>                                                                    |
+| Event name           | Type       | Detail                                                                                                                                                         | Description |
+| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| click                | dispatched | <code>{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }</code>                                                                          | --          |
+| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                                                                            | --          |
+| click:header         | dispatched | <code>{ header: DataTableHeader<Row>; sortDirection?: "ascending" &#124; "descending" &#124; "none"; target: EventTarget; currentTarget: EventTarget; }</code> | --          |
+| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                                                                                    | --          |
+| click:row            | dispatched | <code>{ row: Row; target: EventTarget; currentTarget: EventTarget; }</code>                                                                                    | --          |
+| mouseenter:row       | dispatched | <code>Row</code>                                                                                                                                               | --          |
+| mouseleave:row       | dispatched | <code>Row</code>                                                                                                                                               | --          |
+| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                                                                  | --          |
+| click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                                                                  | --          |
+| click:cell           | dispatched | <code>{ cell: DataTableCell<Row>; target: EventTarget; currentTarget: EventTarget; }</code>                                                                    | --          |
 
 ## `DataTableSkeleton`
 
@@ -1049,12 +1049,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `DatePicker`
 
@@ -1077,19 +1077,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail                                                                                                                              |
-| :--------- | :--------- | :---------------------------------------------------------------------------------------------------------------------------------- |
-| change     | dispatched | <code>string &#124; { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string &#124; { from: string; to: string; } }</code> |
-| click      | forwarded  | --                                                                                                                                  |
-| mouseover  | forwarded  | --                                                                                                                                  |
-| mouseenter | forwarded  | --                                                                                                                                  |
-| mouseleave | forwarded  | --                                                                                                                                  |
+| Event name | Type       | Detail                                                                                                                              | Description |
+| :--------- | :--------- | :---------------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| change     | dispatched | <code>string &#124; { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string &#124; { from: string; to: string; } }</code> | --          |
+| click      | forwarded  | --                                                                                                                                  | --          |
+| mouseover  | forwarded  | --                                                                                                                                  | --          |
+| mouseenter | forwarded  | --                                                                                                                                  | --          |
+| mouseleave | forwarded  | --                                                                                                                                  | --          |
 
 ## `DatePickerInput`
 
@@ -1116,19 +1116,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| input      | forwarded | --     |
-| keydown    | forwarded | --     |
-| keyup      | forwarded | --     |
-| blur       | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| input      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `DatePickerSkeleton`
 
@@ -1145,12 +1145,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Dropdown`
 
@@ -1202,9 +1202,9 @@ export interface DropdownItem {
 
 ### Events
 
-| Event name | Type       | Detail                                                                  |
-| :--------- | :--------- | :---------------------------------------------------------------------- |
-| select     | dispatched | <code>{ selectedId: DropdownItemId, selectedItem: DropdownItem }</code> |
+| Event name | Type       | Detail                                                                  | Description |
+| :--------- | :--------- | :---------------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedId: DropdownItemId, selectedItem: DropdownItem }</code> | --          |
 
 ## `DropdownSkeleton`
 
@@ -1220,12 +1220,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ExpandableTile`
 
@@ -1247,20 +1247,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| above     | No      | --    | --       |
-| below     | No      | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| above     | No      | <code>Record<string, never> </code> | --       |
+| below     | No      | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keypress   | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keypress   | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `FileUploader`
 
@@ -1284,23 +1284,23 @@ None.
 
 ### Slots
 
-| Slot name        | Default | Props | Fallback                        |
-| :--------------- | :------ | :---- | :------------------------------ |
-| labelDescription | No      | --    | <code>{labelDescription}</code> |
-| labelTitle       | No      | --    | <code>{labelTitle}</code>       |
+| Slot name        | Default | Props                               | Fallback                        |
+| :--------------- | :------ | :---------------------------------- | :------------------------------ |
+| labelDescription | No      | <code>Record<string, never> </code> | <code>{labelDescription}</code> |
+| labelTitle       | No      | <code>Record<string, never> </code> | <code>{labelTitle}</code>       |
 
 ### Events
 
-| Event name | Type       | Detail                           |
-| :--------- | :--------- | :------------------------------- |
-| add        | dispatched | <code>ReadonlyArray<File></code> |
-| remove     | dispatched | <code>ReadonlyArray<File></code> |
-| change     | forwarded  | --                               |
-| click      | forwarded  | --                               |
-| mouseover  | forwarded  | --                               |
-| mouseenter | forwarded  | --                               |
-| mouseleave | forwarded  | --                               |
-| keydown    | forwarded  | --                               |
+| Event name | Type       | Detail                           | Description |
+| :--------- | :--------- | :------------------------------- | :---------- |
+| add        | dispatched | <code>ReadonlyArray<File></code> | --          |
+| remove     | dispatched | <code>ReadonlyArray<File></code> | --          |
+| change     | forwarded  | --                               | --          |
+| click      | forwarded  | --                               | --          |
+| mouseover  | forwarded  | --                               | --          |
+| mouseenter | forwarded  | --                               | --          |
+| mouseleave | forwarded  | --                               | --          |
+| keydown    | forwarded  | --                               | --          |
 
 ## `FileUploaderButton`
 
@@ -1324,17 +1324,17 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                           |
-| :--------- | :--------- | :------------------------------- |
-| change     | dispatched | <code>ReadonlyArray<File></code> |
-| keydown    | forwarded  | --                               |
-| click      | forwarded  | --                               |
+| Event name | Type       | Detail                           | Description |
+| :--------- | :--------- | :------------------------------- | :---------- |
+| change     | dispatched | <code>ReadonlyArray<File></code> | --          |
+| keydown    | forwarded  | --                               | --          |
+| click      | forwarded  | --                               | --          |
 
 ## `FileUploaderDropContainer`
 
@@ -1356,21 +1356,21 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                           |
-| :--------- | :--------- | :------------------------------- |
-| add        | dispatched | <code>ReadonlyArray<File></code> |
-| change     | dispatched | <code>ReadonlyArray<File></code> |
-| dragover   | forwarded  | --                               |
-| dragleave  | forwarded  | --                               |
-| drop       | forwarded  | --                               |
-| keydown    | forwarded  | --                               |
-| click      | forwarded  | --                               |
+| Event name | Type       | Detail                           | Description |
+| :--------- | :--------- | :------------------------------- | :---------- |
+| add        | dispatched | <code>ReadonlyArray<File></code> | --          |
+| change     | dispatched | <code>ReadonlyArray<File></code> | --          |
+| dragover   | forwarded  | --                               | --          |
+| dragleave  | forwarded  | --                               | --          |
+| drop       | forwarded  | --                               | --          |
+| keydown    | forwarded  | --                               | --          |
+| click      | forwarded  | --                               | --          |
 
 ## `FileUploaderItem`
 
@@ -1393,12 +1393,12 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| delete     | dispatched | <code>string</code> |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| delete     | dispatched | <code>string</code> | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `FileUploaderSkeleton`
 
@@ -1412,12 +1412,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Filename`
 
@@ -1435,10 +1435,10 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `FluidForm`
 
@@ -1448,20 +1448,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| submit     | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| submit     | forwarded | --     | --          |
 
 ## `Form`
 
@@ -1473,20 +1473,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| submit     | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| submit     | forwarded | --     | --          |
 
 ## `FormGroup`
 
@@ -1503,18 +1503,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `FormItem`
 
@@ -1524,18 +1524,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `FormLabel`
 
@@ -1547,18 +1547,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Grid`
 
@@ -1606,18 +1606,18 @@ None.
 
 ### Slots
 
-| Slot name       | Default | Props | Fallback                     |
-| :-------------- | :------ | :---- | :--------------------------- |
-| --              | Yes     | --    | --                           |
-| company         | No      | --    | <code>{company}&nbsp;</code> |
-| platform        | No      | --    | <code>{platformName}</code>  |
-| skip-to-content | No      | --    | --                           |
+| Slot name       | Default | Props                               | Fallback                     |
+| :-------------- | :------ | :---------------------------------- | :--------------------------- |
+| company         | No      | <code>Record<string, never> </code> | <code>{company}&nbsp;</code> |
+| platform        | No      | <code>Record<string, never> </code> | <code>{platformName}</code>  |
+| skip-to-content | No      | <code>Record<string, never> </code> | --                           |
+| --              | Yes     | <code>Record<string, never> </code> | --                           |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `HeaderAction`
 
@@ -1637,20 +1637,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                           |
-| :-------- | :------ | :---- | :------------------------------------------------------------------------------------------------- |
-| --        | Yes     | --    | --                                                                                                 |
-| closeIcon | No      | --    | <code>&lt;svelte:component this={closeIcon} size={20} /&gt;</code>                                 |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} size={20} /&gt;</code>                                      |
-| text      | No      | --    | <code>{#if text}&lt;span class:bx--header\_\_action-text={true}&gt;{text}&lt;/span&gt;{/if}</code> |
+| Slot name | Default | Props                               | Fallback                                                                                           |
+| :-------- | :------ | :---------------------------------- | :------------------------------------------------------------------------------------------------- |
+| closeIcon | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={closeIcon} size={20} /&gt;</code>                                 |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} size={20} /&gt;</code>                                      |
+| text      | No      | <code>Record<string, never> </code> | <code>{#if text}&lt;span class:bx--header\_\_action-text={true}&gt;{text}&lt;/span&gt;{/if}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                                                                                                 |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| open       | dispatched | <code>null</code> |
-| close      | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| open       | dispatched | <code>null</code> | --          |
+| close      | dispatched | <code>null</code> | --          |
+| click      | forwarded  | --                | --          |
 
 ## `HeaderActionLink`
 
@@ -1665,15 +1665,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                      |
-| :-------- | :------ | :---- | :------------------------------------------------------------ |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} size={20} /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                                      |
+| :-------- | :------ | :---------------------------------- | :------------------------------------------------------------ |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} size={20} /&gt;</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `HeaderGlobalAction`
 
@@ -1691,9 +1691,9 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `HeaderNav`
 
@@ -1703,9 +1703,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -1724,22 +1724,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | <code>{text}</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{text}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keyup      | forwarded | --     |
-| keydown    | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
 
 ## `HeaderNavMenu`
 
@@ -1754,22 +1754,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| keydown    | forwarded | --     |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| keydown    | forwarded | --     | --          |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
 
 ## `HeaderPanelDivider`
 
@@ -1779,9 +1779,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -1798,15 +1798,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `HeaderPanelLinks`
 
@@ -1816,9 +1816,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -1854,18 +1854,18 @@ export interface HeaderSearchResult {
 
 ### Events
 
-| Event name | Type       | Detail                                                                                          |
-| :--------- | :--------- | :---------------------------------------------------------------------------------------------- |
-| active     | dispatched | <code>null</code>                                                                               |
-| inactive   | dispatched | <code>null</code>                                                                               |
-| clear      | dispatched | <code>null</code>                                                                               |
-| select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }</code> |
-| change     | forwarded  | --                                                                                              |
-| input      | forwarded  | --                                                                                              |
-| focus      | forwarded  | --                                                                                              |
-| blur       | forwarded  | --                                                                                              |
-| keydown    | forwarded  | --                                                                                              |
-| paste      | forwarded  | --                                                                                              |
+| Event name | Type       | Detail                                                                                          | Description |
+| :--------- | :--------- | :---------------------------------------------------------------------------------------------- | :---------- |
+| active     | dispatched | <code>null</code>                                                                               | --          |
+| inactive   | dispatched | <code>null</code>                                                                               | --          |
+| clear      | dispatched | <code>null</code>                                                                               | --          |
+| select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }</code> | --          |
+| change     | forwarded  | --                                                                                              | --          |
+| input      | forwarded  | --                                                                                              | --          |
+| focus      | forwarded  | --                                                                                              | --          |
+| blur       | forwarded  | --                                                                                              | --          |
+| keydown    | forwarded  | --                                                                                              | --          |
+| paste      | forwarded  | --                                                                                              | --          |
 
 ## `HeaderUtilities`
 
@@ -1875,9 +1875,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -1900,17 +1900,17 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| error     | No      | --    | --       |
-| loading   | No      | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| error     | No      | <code>Record<string, never> </code> | --       |
+| loading   | No      | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| load       | dispatched | <code>null</code> |
-| error      | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| load       | dispatched | <code>null</code> | --          |
+| error      | dispatched | <code>null</code> | --          |
 
 ## `InlineLoading`
 
@@ -1929,13 +1929,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| success    | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| click      | forwarded  | --                | --          |
+| mouseover  | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| success    | dispatched | <code>null</code> | --          |
 
 ## `InlineNotification`
 
@@ -1955,22 +1955,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                |
-| :-------- | :------ | :---- | :---------------------- |
-| --        | Yes     | --    | --                      |
-| actions   | No      | --    | --                      |
-| subtitle  | No      | --    | <code>{subtitle}</code> |
-| title     | No      | --    | <code>{title}</code>    |
+| Slot name | Default | Props                               | Fallback                |
+| :-------- | :------ | :---------------------------------- | :---------------------- |
+| actions   | No      | <code>Record<string, never> </code> | --                      |
+| subtitle  | No      | <code>Record<string, never> </code> | <code>{subtitle}</code> |
+| title     | No      | <code>Record<string, never> </code> | <code>{title}</code>    |
+| --        | Yes     | <code>Record<string, never> </code> | --                      |
 
 ### Events
 
-| Event name | Type       | Detail                            |
-| :--------- | :--------- | :-------------------------------- |
-| close      | dispatched | <code>{ timeout: boolean }</code> |
-| click      | forwarded  | --                                |
-| mouseover  | forwarded  | --                                |
-| mouseenter | forwarded  | --                                |
-| mouseleave | forwarded  | --                                |
+| Event name | Type       | Detail                            | Description |
+| :--------- | :--------- | :-------------------------------- | :---------- |
+| close      | dispatched | <code>{ timeout: boolean }</code> | --          |
+| click      | forwarded  | --                                | --          |
+| mouseover  | forwarded  | --                                | --          |
+| mouseenter | forwarded  | --                                | --          |
+| mouseleave | forwarded  | --                                | --          |
 
 ## `Link`
 
@@ -1988,19 +1988,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                            |
-| :-------- | :------ | :---- | :-------------------------------------------------- |
-| --        | Yes     | --    | --                                                  |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                            |
+| :-------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | --                                                  |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ListBox`
 
@@ -2020,16 +2020,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| keydown    | forwarded | --     |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| keydown    | forwarded | --     | --          |
+| click      | forwarded | --     | --          |
 
 ## `ListBoxField`
 
@@ -2053,21 +2053,21 @@ export type ListBoxFieldTranslationId = "close" | "open";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
 
 ## `ListBoxMenu`
 
@@ -2080,15 +2080,15 @@ export type ListBoxFieldTranslationId = "close" | "open";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| scroll     | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| scroll     | forwarded | --     | --          |
 
 ## `ListBoxMenuIcon`
 
@@ -2112,9 +2112,9 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `ListBoxMenuItem`
 
@@ -2128,17 +2128,17 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ListBoxSelection`
 
@@ -2164,9 +2164,9 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                       |
-| :--------- | :--------- | :------------------------------------------- |
-| clear      | dispatched | <code>KeyboardEvent &#124; MouseEvent</code> |
+| Event name | Type       | Detail                                       | Description |
+| :--------- | :--------- | :------------------------------------------- | :---------- |
+| clear      | dispatched | <code>KeyboardEvent &#124; MouseEvent</code> | --          |
 
 ## `ListItem`
 
@@ -2176,18 +2176,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Loading`
 
@@ -2225,10 +2225,10 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                       |
-| :--------- | :--------- | :------------------------------------------- |
-| save       | dispatched | <code>null</code>                            |
-| update     | dispatched | <code>{ prevValue: any; value: any; }</code> |
+| Event name | Type       | Detail                                       | Description |
+| :--------- | :--------- | :------------------------------------------- | :---------- |
+| save       | dispatched | <code>null</code>                            | --          |
+| update     | dispatched | <code>{ prevValue: any; value: any; }</code> | --          |
 
 ## `Modal`
 
@@ -2260,27 +2260,27 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                    |
-| :-------- | :------ | :---- | :-------------------------- |
-| --        | Yes     | --    | --                          |
-| heading   | No      | --    | <code>{modalHeading}</code> |
-| label     | No      | --    | <code>{modalLabel}</code>   |
+| Slot name | Default | Props                               | Fallback                    |
+| :-------- | :------ | :---------------------------------- | :-------------------------- |
+| heading   | No      | <code>Record<string, never> </code> | <code>{modalHeading}</code> |
+| label     | No      | <code>Record<string, never> </code> | <code>{modalLabel}</code>   |
+| --        | Yes     | <code>Record<string, never> </code> | --                          |
 
 ### Events
 
-| Event name              | Type       | Detail                                                                              |
-| :---------------------- | :--------- | :---------------------------------------------------------------------------------- |
-| close                   | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button" }</code> |
-| transitionend           | dispatched | <code>{ open: boolean; }</code>                                                     |
-| click:button--secondary | dispatched | <code>{ text: string; }</code>                                                      |
-| keydown                 | forwarded  | --                                                                                  |
-| click                   | forwarded  | --                                                                                  |
-| mouseover               | forwarded  | --                                                                                  |
-| mouseenter              | forwarded  | --                                                                                  |
-| mouseleave              | forwarded  | --                                                                                  |
-| submit                  | dispatched | <code>null</code>                                                                   |
-| click:button--primary   | dispatched | <code>null</code>                                                                   |
-| open                    | dispatched | <code>null</code>                                                                   |
+| Event name              | Type       | Detail                                                                              | Description |
+| :---------------------- | :--------- | :---------------------------------------------------------------------------------- | :---------- |
+| close                   | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button" }</code> | --          |
+| transitionend           | dispatched | <code>{ open: boolean; }</code>                                                     | --          |
+| click:button--secondary | dispatched | <code>{ text: string; }</code>                                                      | --          |
+| keydown                 | forwarded  | --                                                                                  | --          |
+| click                   | forwarded  | --                                                                                  | --          |
+| mouseover               | forwarded  | --                                                                                  | --          |
+| mouseenter              | forwarded  | --                                                                                  | --          |
+| mouseleave              | forwarded  | --                                                                                  | --          |
+| submit                  | dispatched | <code>null</code>                                                                   | --          |
+| click:button--primary   | dispatched | <code>null</code>                                                                   | --          |
+| open                    | dispatched | <code>null</code>                                                                   | --          |
 
 ## `ModalBody`
 
@@ -2293,9 +2293,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -2318,15 +2318,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name              | Type       | Detail                         |
-| :---------------------- | :--------- | :----------------------------- |
-| click:button--secondary | dispatched | <code>{ text: string; }</code> |
+| Event name              | Type       | Detail                         | Description |
+| :---------------------- | :--------- | :----------------------------- | :---------- |
+| click:button--secondary | dispatched | <code>{ text: string; }</code> | --          |
 
 ## `ModalHeader`
 
@@ -2344,15 +2344,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `MultiSelect`
 
@@ -2415,20 +2415,20 @@ export interface MultiSelectItem {
 | Slot name | Default | Props                                                  | Fallback                          |
 | :-------- | :------ | :----------------------------------------------------- | :-------------------------------- |
 | --        | Yes     | <code>{ item: MultiSelectItem; index: number } </code> | <code>{itemToString(item)}</code> |
-| titleText | No      | --                                                     | <code>{titleText}</code>          |
+| titleText | No      | <code>Record<string, never> </code>                    | <code>{titleText}</code>          |
 
 ### Events
 
-| Event name | Type       | Detail                                                                                                         |
-| :--------- | :--------- | :------------------------------------------------------------------------------------------------------------- |
-| select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
-| clear      | forwarded  | --                                                                                                             |
-| blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         |
-| keydown    | forwarded  | --                                                                                                             |
-| input      | forwarded  | --                                                                                                             |
-| keyup      | forwarded  | --                                                                                                             |
-| focus      | forwarded  | --                                                                                                             |
-| paste      | forwarded  | --                                                                                                             |
+| Event name | Type       | Detail                                                                                                         | Description |
+| :--------- | :--------- | :------------------------------------------------------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> | --          |
+| clear      | forwarded  | --                                                                                                             | --          |
+| blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         | --          |
+| keydown    | forwarded  | --                                                                                                             | --          |
+| input      | forwarded  | --                                                                                                             | --          |
+| keyup      | forwarded  | --                                                                                                             | --          |
+| focus      | forwarded  | --                                                                                                             | --          |
+| paste      | forwarded  | --                                                                                                             | --          |
 
 ## `NotificationActionButton`
 
@@ -2438,18 +2438,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `NotificationButton`
 
@@ -2468,12 +2468,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `NotificationIcon`
 
@@ -2532,25 +2532,25 @@ export type NumberInputTranslationId = "increment" | "decrement";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback             |
-| :-------- | :------ | :---- | :------------------- |
-| label     | No      | --    | <code>{label}</code> |
+| Slot name | Default | Props                               | Fallback             |
+| :-------- | :------ | :---------------------------------- | :------------------- |
+| label     | No      | <code>Record<string, never> </code> | <code>{label}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                          |
-| :--------- | :--------- | :------------------------------ |
-| change     | dispatched | <code>null &#124; number</code> |
-| input      | dispatched | <code>null &#124; number</code> |
-| click      | forwarded  | --                              |
-| mouseover  | forwarded  | --                              |
-| mouseenter | forwarded  | --                              |
-| mouseleave | forwarded  | --                              |
-| keydown    | forwarded  | --                              |
-| keyup      | forwarded  | --                              |
-| focus      | forwarded  | --                              |
-| blur       | forwarded  | --                              |
-| paste      | forwarded  | --                              |
+| Event name | Type       | Detail                          | Description |
+| :--------- | :--------- | :------------------------------ | :---------- |
+| change     | dispatched | <code>null &#124; number</code> | --          |
+| input      | dispatched | <code>null &#124; number</code> | --          |
+| click      | forwarded  | --                              | --          |
+| mouseover  | forwarded  | --                              | --          |
+| mouseenter | forwarded  | --                              | --          |
+| mouseleave | forwarded  | --                              | --          |
+| keydown    | forwarded  | --                              | --          |
+| keyup      | forwarded  | --                              | --          |
+| focus      | forwarded  | --                              | --          |
+| blur       | forwarded  | --                              | --          |
+| paste      | forwarded  | --                              | --          |
 
 ## `NumberInputSkeleton`
 
@@ -2566,12 +2566,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `OrderedList`
 
@@ -2585,18 +2585,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `OutboundLink`
 
@@ -2606,18 +2606,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `OverflowMenu`
 
@@ -2640,21 +2640,21 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                                                                                                             |
-| :-------- | :------ | :---- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| --        | Yes     | --    | --                                                                                                                                                                                   |
-| menu      | No      | --    | <code>&lt;svelte:component<br /> this={icon}<br /> aria-label={iconDescription}<br /> title={iconDescription}<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                                                                                                                                                             |
+| :-------- | :------ | :---------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| menu      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component<br /> this={icon}<br /> aria-label={iconDescription}<br /> title={iconDescription}<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                                                                                                                                                                                   |
 
 ### Events
 
-| Event name | Type       | Detail                                                    |
-| :--------- | :--------- | :-------------------------------------------------------- |
-| close      | dispatched | <code>null &#124; { index: number; text: string; }</code> |
-| click      | forwarded  | --                                                        |
-| mouseover  | forwarded  | --                                                        |
-| mouseenter | forwarded  | --                                                        |
-| mouseleave | forwarded  | --                                                        |
-| keydown    | forwarded  | --                                                        |
+| Event name | Type       | Detail                                                    | Description |
+| :--------- | :--------- | :-------------------------------------------------------- | :---------- |
+| close      | dispatched | <code>null &#124; { index: number; text: string; }</code> | --          |
+| click      | forwarded  | --                                                        | --          |
+| mouseover  | forwarded  | --                                                        | --          |
+| mouseenter | forwarded  | --                                                        | --          |
+| mouseleave | forwarded  | --                                                        | --          |
+| keydown    | forwarded  | --                                                        | --          |
 
 ## `OverflowMenuItem`
 
@@ -2674,16 +2674,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                                          |
-| :-------- | :------ | :---- | :---------------------------------------------------------------------------------------------------------------- |
-| --        | Yes     | --    | <code>&lt;div class:bx--overflow-menu-options\_\_option-content={true}&gt;<br /> {text}<br /> &lt;/div&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                                                                                          |
+| :-------- | :------ | :---------------------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | <code>&lt;div class:bx--overflow-menu-options\_\_option-content={true}&gt;<br /> {text}<br /> &lt;/div&gt;</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `Pagination`
 
@@ -2715,12 +2715,12 @@ None.
 
 ### Events
 
-| Event name             | Type       | Detail                                            |
-| :--------------------- | :--------- | :------------------------------------------------ |
-| change                 | dispatched | <code>{ page?: number; pageSize?: number }</code> |
-| click:button--previous | dispatched | <code>{ page: number; }</code>                    |
-| click:button--next     | dispatched | <code>{ page: number; }</code>                    |
-| update                 | dispatched | <code>{ pageSize: number; page: number; }</code>  |
+| Event name             | Type       | Detail                                            | Description                           |
+| :--------------------- | :--------- | :------------------------------------------------ | :------------------------------------ |
+| change                 | dispatched | <code>{ page?: number; pageSize?: number }</code> | Dispatched after any user interaction |
+| click:button--previous | dispatched | <code>{ page: number; }</code>                    | --                                    |
+| click:button--next     | dispatched | <code>{ page: number; }</code>                    | --                                    |
+| update                 | dispatched | <code>{ pageSize: number; page: number; }</code>  | --                                    |
 
 ## `PaginationNav`
 
@@ -2742,11 +2742,11 @@ None.
 
 ### Events
 
-| Event name             | Type       | Detail                         |
-| :--------------------- | :--------- | :----------------------------- |
-| change                 | dispatched | <code>{ page: number; }</code> |
-| click:button--previous | dispatched | <code>{ page: number; }</code> |
-| click:button--next     | dispatched | <code>{ page: number; }</code> |
+| Event name             | Type       | Detail                         | Description                        |
+| :--------------------- | :--------- | :----------------------------- | :--------------------------------- |
+| change                 | dispatched | <code>{ page: number; }</code> | fires after every user interaction |
+| click:button--previous | dispatched | <code>{ page: number; }</code> | --                                 |
+| click:button--next     | dispatched | <code>{ page: number; }</code> | --                                 |
 
 ## `PaginationSkeleton`
 
@@ -2760,12 +2760,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `PasswordInput`
 
@@ -2797,25 +2797,25 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| keydown    | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
+| input      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `Popover`
 
@@ -2833,15 +2833,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name    | Type       | Detail                                |
-| :------------ | :--------- | :------------------------------------ |
-| click:outside | dispatched | <code>{ target: HTMLElement; }</code> |
+| Event name    | Type       | Detail                                | Description |
+| :------------ | :--------- | :------------------------------------ | :---------- |
+| click:outside | dispatched | <code>{ target: HTMLElement; }</code> | --          |
 
 ## `ProgressBar`
 
@@ -2861,9 +2861,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -2882,19 +2882,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>number</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>number</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `ProgressIndicatorSkeleton`
 
@@ -2911,12 +2911,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ProgressStep`
 
@@ -2941,13 +2941,13 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `RadioButton`
 
@@ -2968,17 +2968,17 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| change     | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
 
 ## `RadioButtonGroup`
 
@@ -2999,20 +2999,20 @@ None.
 
 ### Slots
 
-| Slot name  | Default | Props | Fallback                  |
-| :--------- | :------ | :---- | :------------------------ |
-| --         | Yes     | --    | --                        |
-| legendText | No      | --    | <code>{legendText}</code> |
+| Slot name  | Default | Props                               | Fallback                  |
+| :--------- | :------ | :---------------------------------- | :------------------------ |
+| legendText | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
+| --         | Yes     | <code>Record<string, never> </code> | --                        |
 
 ### Events
 
-| Event name | Type       | Detail                            |
-| :--------- | :--------- | :-------------------------------- |
-| change     | dispatched | <code>string &#124; number</code> |
-| click      | forwarded  | --                                |
-| mouseover  | forwarded  | --                                |
-| mouseenter | forwarded  | --                                |
-| mouseleave | forwarded  | --                                |
+| Event name | Type       | Detail                            | Description |
+| :--------- | :--------- | :-------------------------------- | :---------- |
+| change     | dispatched | <code>string &#124; number</code> | --          |
+| click      | forwarded  | --                                | --          |
+| mouseover  | forwarded  | --                                | --          |
+| mouseenter | forwarded  | --                                | --          |
+| mouseleave | forwarded  | --                                | --          |
 
 ## `RadioButtonSkeleton`
 
@@ -3026,12 +3026,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `RadioTile`
 
@@ -3051,20 +3051,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| change     | forwarded | --     |
-| keydown    | forwarded | --     |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| change     | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `RecursiveList`
 
@@ -3142,28 +3142,28 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| expand     | dispatched | <code>null</code> |
-| collapse   | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| change     | forwarded  | --                |
-| input      | forwarded  | --                |
-| focus      | forwarded  | --                |
-| blur       | forwarded  | --                |
-| keydown    | forwarded  | --                |
-| keyup      | forwarded  | --                |
-| paste      | forwarded  | --                |
-| clear      | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| expand     | dispatched | <code>null</code> | --          |
+| collapse   | dispatched | <code>null</code> | --          |
+| click      | forwarded  | --                | --          |
+| mouseover  | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| change     | forwarded  | --                | --          |
+| input      | forwarded  | --                | --          |
+| focus      | forwarded  | --                | --          |
+| blur       | forwarded  | --                | --          |
+| keydown    | forwarded  | --                | --          |
+| keyup      | forwarded  | --                | --          |
+| paste      | forwarded  | --                | --          |
+| clear      | dispatched | <code>null</code> | --          |
 
 ## `SearchSkeleton`
 
@@ -3179,12 +3179,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Select`
 
@@ -3212,20 +3212,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| --        | Yes     | --    | --                       |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
-| Event name | Type       | Detail                            |
-| :--------- | :--------- | :-------------------------------- |
-| update     | dispatched | <code>string &#124; number</code> |
-| change     | forwarded  | --                                |
-| input      | forwarded  | --                                |
-| focus      | forwarded  | --                                |
-| blur       | forwarded  | --                                |
+| Event name | Type       | Detail                            | Description         |
+| :--------- | :--------- | :-------------------------------- | :------------------ |
+| update     | dispatched | <code>string &#124; number</code> | The selected value. |
+| change     | forwarded  | --                                | --                  |
+| input      | forwarded  | --                                | --                  |
+| focus      | forwarded  | --                                | --                  |
+| blur       | forwarded  | --                                | --                  |
 
 ## `SelectItem`
 
@@ -3259,9 +3259,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3281,12 +3281,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `SelectableTile`
 
@@ -3307,21 +3307,21 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| select     | dispatched | <code>string</code> |
-| deselect   | dispatched | <code>string</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
-| keydown    | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| select     | dispatched | <code>string</code> | --          |
+| deselect   | dispatched | <code>string</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
+| keydown    | forwarded  | --                  | --          |
 
 ## `SideNav`
 
@@ -3337,17 +3337,17 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name    | Type       | Detail            |
-| :------------ | :--------- | :---------------- |
-| open          | dispatched | <code>null</code> |
-| close         | dispatched | <code>null</code> |
-| click:overlay | dispatched | <code>null</code> |
+| Event name    | Type       | Detail            | Description |
+| :------------ | :--------- | :---------------- | :---------- |
+| open          | dispatched | <code>null</code> | --          |
+| close         | dispatched | <code>null</code> | --          |
+| click:overlay | dispatched | <code>null</code> | --          |
 
 ## `SideNavDivider`
 
@@ -3371,9 +3371,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3393,16 +3393,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                            |
-| :-------- | :------ | :---- | :-------------------------------------------------- |
-| --        | Yes     | --    | <code>{text}</code>                                 |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                            |
+| :-------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{text}</code>                                 |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `SideNavMenu`
 
@@ -3417,16 +3417,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                            |
-| :-------- | :------ | :---- | :-------------------------------------------------- |
-| --        | Yes     | --    | --                                                  |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                            |
+| :-------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                                                  |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `SideNavMenuItem`
 
@@ -3441,15 +3441,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | <code>{text}</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{text}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `SkeletonPlaceholder`
 
@@ -3463,12 +3463,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `SkeletonText`
 
@@ -3487,12 +3487,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `SkipToContent`
 
@@ -3505,15 +3505,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                          |
-| :-------- | :------ | :---- | :-------------------------------- |
-| --        | Yes     | --    | <code>Skip to main content</code> |
+| Slot name | Default | Props                               | Fallback                          |
+| :-------- | :------ | :---------------------------------- | :-------------------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | <code>Skip to main content</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `Slider`
 
@@ -3543,20 +3543,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>number</code> |
-| input      | dispatched | <code>number</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>number</code> | --          |
+| input      | dispatched | <code>number</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `SliderSkeleton`
 
@@ -3572,12 +3572,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `StructuredList`
 
@@ -3592,19 +3592,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>string</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>string</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `StructuredListBody`
 
@@ -3614,18 +3614,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `StructuredListCell`
 
@@ -3638,18 +3638,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `StructuredListHead`
 
@@ -3659,18 +3659,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `StructuredListInput`
 
@@ -3705,19 +3705,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `StructuredListSkeleton`
 
@@ -3733,12 +3733,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Switch`
 
@@ -3754,19 +3754,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | <code>{text}</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{text}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `Tab`
 
@@ -3783,18 +3783,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback             |
-| :-------- | :------ | :---- | :------------------- |
-| --        | Yes     | --    | <code>{label}</code> |
+| Slot name | Default | Props                               | Fallback             |
+| :-------- | :------ | :---------------------------------- | :------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{label}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TabContent`
 
@@ -3806,9 +3806,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3829,9 +3829,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3845,9 +3845,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3861,18 +3861,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TableContainer`
 
@@ -3887,9 +3887,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3903,18 +3903,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TableHeader`
 
@@ -3931,18 +3931,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| click      | forwarded | --     | --          |
 
 ## `TableRow`
 
@@ -3952,18 +3952,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Tabs`
 
@@ -3979,18 +3979,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
-| content   | No      | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
+| content   | No      | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>number</code> |
-| keypress   | forwarded  | --                  |
-| click      | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>number</code> | --          |
+| keypress   | forwarded  | --                  | --          |
+| click      | forwarded  | --                  | --          |
 
 ## `TabsSkeleton`
 
@@ -4007,12 +4007,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Tag`
 
@@ -4035,17 +4035,17 @@ None.
 | Slot name | Default | Props                                                  | Fallback                                            |
 | :-------- | :------ | :----------------------------------------------------- | :-------------------------------------------------- |
 | --        | Yes     | <code>{ props: { class: "bx--tag\_\_label" } } </code> | --                                                  |
-| icon      | No      | --                                                     | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| icon      | No      | <code>Record<string, never> </code>                    | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| close      | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| click      | forwarded  | --                | --          |
+| mouseover  | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| close      | dispatched | <code>null</code> | --          |
 
 ## `TagSkeleton`
 
@@ -4061,12 +4061,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TextArea`
 
@@ -4095,25 +4095,25 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| keydown    | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
+| input      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `TextAreaSkeleton`
 
@@ -4129,12 +4129,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TextInput`
 
@@ -4163,25 +4163,25 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                                        |
-| :--------- | :--------- | :-------------------------------------------- |
-| change     | dispatched | <code>null &#124; number &#124; string</code> |
-| input      | dispatched | <code>null &#124; number &#124; string</code> |
-| click      | forwarded  | --                                            |
-| mouseover  | forwarded  | --                                            |
-| mouseenter | forwarded  | --                                            |
-| mouseleave | forwarded  | --                                            |
-| keydown    | forwarded  | --                                            |
-| keyup      | forwarded  | --                                            |
-| focus      | forwarded  | --                                            |
-| blur       | forwarded  | --                                            |
-| paste      | forwarded  | --                                            |
+| Event name | Type       | Detail                                        | Description |
+| :--------- | :--------- | :-------------------------------------------- | :---------- |
+| change     | dispatched | <code>null &#124; number &#124; string</code> | --          |
+| input      | dispatched | <code>null &#124; number &#124; string</code> | --          |
+| click      | forwarded  | --                                            | --          |
+| mouseover  | forwarded  | --                                            | --          |
+| mouseenter | forwarded  | --                                            | --          |
+| mouseleave | forwarded  | --                                            | --          |
+| keydown    | forwarded  | --                                            | --          |
+| keyup      | forwarded  | --                                            | --          |
+| focus      | forwarded  | --                                            | --          |
+| blur       | forwarded  | --                                            | --          |
+| paste      | forwarded  | --                                            | --          |
 
 ## `TextInputSkeleton`
 
@@ -4197,12 +4197,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Theme`
 
@@ -4232,9 +4232,9 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Events
 
-| Event name | Type       | Detail                               |
-| :--------- | :--------- | :----------------------------------- |
-| update     | dispatched | <code>{ theme: CarbonTheme; }</code> |
+| Event name | Type       | Detail                               | Description |
+| :--------- | :--------- | :----------------------------------- | :---------- |
+| update     | dispatched | <code>{ theme: CarbonTheme; }</code> | --          |
 
 ## `Tile`
 
@@ -4246,18 +4246,18 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TileGroup`
 
@@ -4273,15 +4273,15 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| select     | dispatched | <code>string</code> |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| select     | dispatched | <code>string</code> | --          |
 
 ## `TimePicker`
 
@@ -4306,26 +4306,26 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| --        | Yes     | --    | --                       |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| keydown    | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
+| input      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `TimePickerSelect`
 
@@ -4343,19 +4343,19 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| --        | Yes     | --    | --                       |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ToastNotification`
 
@@ -4377,22 +4377,22 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                |
-| :-------- | :------ | :---- | :---------------------- |
-| --        | Yes     | --    | --                      |
-| caption   | No      | --    | <code>{caption}</code>  |
-| subtitle  | No      | --    | <code>{subtitle}</code> |
-| title     | No      | --    | <code>{title}</code>    |
+| Slot name | Default | Props                               | Fallback                |
+| :-------- | :------ | :---------------------------------- | :---------------------- |
+| caption   | No      | <code>Record<string, never> </code> | <code>{caption}</code>  |
+| subtitle  | No      | <code>Record<string, never> </code> | <code>{subtitle}</code> |
+| title     | No      | <code>Record<string, never> </code> | <code>{title}</code>    |
+| --        | Yes     | <code>Record<string, never> </code> | --                      |
 
 ### Events
 
-| Event name | Type       | Detail                            |
-| :--------- | :--------- | :-------------------------------- |
-| close      | dispatched | <code>{ timeout: boolean }</code> |
-| click      | forwarded  | --                                |
-| mouseover  | forwarded  | --                                |
-| mouseenter | forwarded  | --                                |
-| mouseleave | forwarded  | --                                |
+| Event name | Type       | Detail                            | Description |
+| :--------- | :--------- | :-------------------------------- | :---------- |
+| close      | dispatched | <code>{ timeout: boolean }</code> | --          |
+| click      | forwarded  | --                                | --          |
+| mouseover  | forwarded  | --                                | --          |
+| mouseenter | forwarded  | --                                | --          |
+| mouseleave | forwarded  | --                                | --          |
 
 ## `Toggle`
 
@@ -4413,25 +4413,25 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelA    | No      | --    | <code>{labelA}</code>    |
-| labelB    | No      | --    | <code>{labelB}</code>    |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelA    | No      | <code>Record<string, never> </code> | <code>{labelA}</code>    |
+| labelB    | No      | <code>Record<string, never> </code> | <code>{labelB}</code>    |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                             |
-| :--------- | :--------- | :--------------------------------- |
-| toggle     | dispatched | <code>{ toggled: boolean; }</code> |
-| click      | forwarded  | --                                 |
-| mouseover  | forwarded  | --                                 |
-| mouseenter | forwarded  | --                                 |
-| mouseleave | forwarded  | --                                 |
-| change     | forwarded  | --                                 |
-| keyup      | forwarded  | --                                 |
-| focus      | forwarded  | --                                 |
-| blur       | forwarded  | --                                 |
+| Event name | Type       | Detail                             | Description |
+| :--------- | :--------- | :--------------------------------- | :---------- |
+| toggle     | dispatched | <code>{ toggled: boolean; }</code> | --          |
+| click      | forwarded  | --                                 | --          |
+| mouseover  | forwarded  | --                                 | --          |
+| mouseenter | forwarded  | --                                 | --          |
+| mouseleave | forwarded  | --                                 | --          |
+| change     | forwarded  | --                                 | --          |
+| keyup      | forwarded  | --                                 | --          |
+| focus      | forwarded  | --                                 | --          |
+| blur       | forwarded  | --                                 | --          |
 
 ## `ToggleSkeleton`
 
@@ -4445,18 +4445,18 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Toolbar`
 
@@ -4468,9 +4468,9 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4488,16 +4488,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | --                  |
-| cancel    | No      | --    | <code>Cancel</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | --                  |
+| cancel    | No      | <code>Record<string, never> </code> | <code>Cancel</code> |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| cancel     | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| cancel     | dispatched | <code>null</code> | --          |
 
 ## `ToolbarContent`
 
@@ -4507,9 +4507,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4523,9 +4523,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4539,16 +4539,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `ToolbarSearch`
 
@@ -4571,16 +4571,16 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| clear      | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| keyup      | forwarded | --     |
-| keydown    | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| clear      | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
+| input      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `Tooltip`
 
@@ -4605,20 +4605,20 @@ None.
 
 ### Slots
 
-| Slot name   | Default | Props | Fallback                                                            |
-| :---------- | :------ | :---- | :------------------------------------------------------------------ |
-| --          | Yes     | --    | --                                                                  |
-| icon        | No      | --    | <code>&lt;svelte:component this={icon} name={iconName} /&gt;</code> |
-| triggerText | No      | --    | <code>{triggerText}</code>                                          |
+| Slot name   | Default | Props                               | Fallback                                                            |
+| :---------- | :------ | :---------------------------------- | :------------------------------------------------------------------ |
+| icon        | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} name={iconName} /&gt;</code> |
+| triggerText | No      | <code>Record<string, never> </code> | <code>{triggerText}</code>                                          |
+| --          | Yes     | <code>Record<string, never> </code> | --                                                                  |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| open       | dispatched | <code>null</code> |
-| close      | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
-| mousedown  | forwarded  | --                |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| open       | dispatched | <code>null</code> | --          |
+| close      | dispatched | <code>null</code> | --          |
+| click      | forwarded  | --                | --          |
+| mousedown  | forwarded  | --                | --          |
 
 ## `TooltipDefinition`
 
@@ -4635,22 +4635,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                   |
-| :-------- | :------ | :---- | :------------------------- |
-| --        | Yes     | --    | --                         |
-| tooltip   | No      | --    | <code>{tooltipText}</code> |
+| Slot name | Default | Props                               | Fallback                   |
+| :-------- | :------ | :---------------------------------- | :------------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | --                         |
+| tooltip   | No      | <code>Record<string, never> </code> | <code>{tooltipText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| open       | dispatched | <code>null</code> |
-| close      | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| focus      | forwarded  | --                |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| open       | dispatched | <code>null</code> | --          |
+| close      | dispatched | <code>null</code> | --          |
+| click      | forwarded  | --                | --          |
+| mouseover  | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| focus      | forwarded  | --                | --          |
 
 ## `TooltipFooter`
 
@@ -4662,9 +4662,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4686,20 +4686,20 @@ None.
 
 ### Slots
 
-| Slot name   | Default | Props | Fallback                                            |
-| :---------- | :------ | :---- | :-------------------------------------------------- |
-| --          | Yes     | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
-| tooltipText | No      | --    | <code>{tooltipText}</code>                          |
+| Slot name   | Default | Props                               | Fallback                                            |
+| :---------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| tooltipText | No      | <code>Record<string, never> </code> | <code>{tooltipText}</code>                          |
+| --          | Yes     | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| focus      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
 
 ## `TreeView`
 
@@ -4739,16 +4739,16 @@ export interface TreeNode {
 | Slot name | Default | Props                                                                                                                             | Fallback                 |
 | :-------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------- | :----------------------- |
 | --        | Yes     | <code>{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } } </code> | <code>{node.text}</code> |
-| labelText | No      | --                                                                                                                                | <code>{labelText}</code> |
+| labelText | No      | <code>Record<string, never> </code>                                                                                               | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                                                        |
-| :--------- | :--------- | :------------------------------------------------------------ |
-| select     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
-| toggle     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
-| focus      | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
-| keydown    | forwarded  | --                                                            |
+| Event name | Type       | Detail                                                        | Description |
+| :--------- | :--------- | :------------------------------------------------------------ | :---------- |
+| select     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> | --          |
+| toggle     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> | --          |
+| focus      | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> | --          |
+| keydown    | forwarded  | --                                                            | --          |
 
 ## `Truncate`
 
@@ -4760,9 +4760,9 @@ export interface TreeNode {
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4779,15 +4779,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |

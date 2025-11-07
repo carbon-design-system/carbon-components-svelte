@@ -24,5 +24,5 @@ export type ListBoxMenuProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ListBoxMenu extends SvelteComponentTyped<
   ListBoxMenuProps,
   { scroll: WindowEventMap["scroll"] },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

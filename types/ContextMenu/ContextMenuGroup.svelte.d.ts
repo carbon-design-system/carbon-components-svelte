@@ -1,5 +1,11 @@
 import type { SvelteComponentTyped } from "svelte";
 
+export type ContextMenuGroupContext = {
+  currentIds: import("svelte/store").Writable<ReadonlyArray<string>>;
+  addOption: (data: { id: string }) => void;
+  toggleOption: (data: { id: string }) => void;
+};
+
 export type ContextMenuGroupProps = {
   /**
    * @default []
@@ -16,5 +22,5 @@ export type ContextMenuGroupProps = {
 export default class ContextMenuGroup extends SvelteComponentTyped<
   ContextMenuGroupProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

@@ -36,5 +36,5 @@ export type LoadingProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class Loading extends SvelteComponentTyped<
   LoadingProps,
   Record<string, any>,
-  {}
+  Record<string, never>
 > {}
