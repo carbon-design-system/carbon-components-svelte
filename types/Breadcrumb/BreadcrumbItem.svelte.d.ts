@@ -1,6 +1,8 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type BreadcrumbItemContext = {};
+
 type $RestProps = SvelteHTMLElements["li"];
 
 type $Props = {

@@ -36,5 +36,5 @@ export default class StructuredListRow extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     keydown: WindowEventMap["keydown"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

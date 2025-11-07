@@ -24,5 +24,5 @@ export type SkipToContentProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class SkipToContent extends SvelteComponentTyped<
   SkipToContentProps,
   { click: WindowEventMap["click"] },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

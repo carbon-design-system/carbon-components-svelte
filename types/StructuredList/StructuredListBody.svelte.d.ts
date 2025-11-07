@@ -17,5 +17,5 @@ export default class StructuredListBody extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

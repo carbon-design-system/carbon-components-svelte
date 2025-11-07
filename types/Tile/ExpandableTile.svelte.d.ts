@@ -84,5 +84,5 @@ export default class ExpandableTile extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { above: {}; below: {} }
+  { above: Record<string, never>; below: Record<string, never> }
 > {}

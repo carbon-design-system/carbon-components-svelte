@@ -91,5 +91,10 @@ export default class ToastNotification extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {}; caption: {}; subtitle: {}; title: {} }
+  {
+    caption: Record<string, never>;
+    subtitle: Record<string, never>;
+    title: Record<string, never>;
+    default: Record<string, never>;
+  }
 > {}

@@ -48,5 +48,5 @@ export type StructuredListInputProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class StructuredListInput extends SvelteComponentTyped<
   StructuredListInputProps,
   Record<string, any>,
-  {}
+  Record<string, never>
 > {}

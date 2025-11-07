@@ -10,6 +10,12 @@ export interface MultiSelectItem {
   text: MultiSelectItemText;
   disabled?: boolean;
 }
+export type MultiSelectContext = {
+  declareRef: (data: {
+    key: "field" | "selection";
+    ref: HTMLDivElement;
+  }) => void;
+};
 
 type $RestProps = SvelteHTMLElements["input"];
 
@@ -260,5 +266,8 @@ export default class MultiSelect extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     paste: WindowEventMap["paste"];
   },
-  { default: { item: MultiSelectItem; index: number }; titleText: {} }
+  {
+    default: { item: MultiSelectItem; index: number };
+    titleText: Record<string, never>;
+  }
 > {}

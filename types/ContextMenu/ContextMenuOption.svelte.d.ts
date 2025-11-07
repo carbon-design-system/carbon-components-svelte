@@ -82,5 +82,10 @@ export default class ContextMenuOption extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     click: CustomEvent<null>;
   },
-  { default: {}; icon: {}; labelText: {}; shortcutText: {} }
+  {
+    icon: Record<string, never>;
+    labelText: Record<string, never>;
+    default: Record<string, never>;
+    shortcutText: Record<string, never>;
+  }
 > {}

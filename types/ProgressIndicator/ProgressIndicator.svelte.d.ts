@@ -1,6 +1,33 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type ProgressIndicatorContext = {
+  steps: import("svelte/store").Writable<
+    ReadonlyArray<{
+      id: string;
+      complete: boolean;
+      disabled: boolean;
+      index: number;
+      current: boolean;
+    }>
+  >;
+  stepsById: import("svelte/store").Readable<
+    Record<
+      string,
+      {
+        id: string;
+        complete: boolean;
+        disabled: boolean;
+        index: number;
+        current: boolean;
+      }
+    >
+  >;
+  preventChangeOnClick: import("svelte/store").Readable<boolean>;
+  add: (step: { id: string; complete: boolean; disabled: boolean }) => void;
+  change: (index: number) => void;
+};
+
 type $RestProps = SvelteHTMLElements["ul"];
 
 type $Props = {
@@ -42,5 +69,5 @@ export default class ProgressIndicator extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

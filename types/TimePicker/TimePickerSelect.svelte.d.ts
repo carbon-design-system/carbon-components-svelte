@@ -1,6 +1,10 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type TimePickerSelectContext = {
+  selectedValue: import("svelte/store").Writable<number | string>;
+};
+
 type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
@@ -59,5 +63,5 @@ export default class TimePickerSelect extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {}; labelText: {} }
+  { labelText: Record<string, never>; default: Record<string, never> }
 > {}

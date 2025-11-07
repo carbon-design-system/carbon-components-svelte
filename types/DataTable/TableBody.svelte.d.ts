@@ -12,5 +12,5 @@ export type TableBodyProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class TableBody extends SvelteComponentTyped<
   TableBodyProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

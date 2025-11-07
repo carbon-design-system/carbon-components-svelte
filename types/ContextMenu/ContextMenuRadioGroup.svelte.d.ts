@@ -1,5 +1,12 @@
 import type { SvelteComponentTyped } from "svelte";
 
+export type ContextMenuRadioGroupContext = {
+  currentId: import("svelte/store").Writable<string>;
+  radioIds: import("svelte/store").Writable<ReadonlyArray<string>>;
+  addOption: (data: { id: string }) => void;
+  setOption: (data: { id: string }) => void;
+};
+
 export type ContextMenuRadioGroupProps = {
   /**
    * Set the selected radio group id
@@ -17,5 +24,5 @@ export type ContextMenuRadioGroupProps = {
 export default class ContextMenuRadioGroup extends SvelteComponentTyped<
   ContextMenuRadioGroupProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

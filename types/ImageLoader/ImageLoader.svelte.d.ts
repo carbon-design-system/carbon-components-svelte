@@ -55,7 +55,7 @@ export type ImageLoaderProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ImageLoader extends SvelteComponentTyped<
   ImageLoaderProps,
   { load: CustomEvent<null>; error: CustomEvent<null> },
-  { error: {}; loading: {} }
+  { error: Record<string, never>; loading: Record<string, never> }
 > {
   /**
    * Method invoked to load the image provided a `src` value

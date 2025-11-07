@@ -124,5 +124,5 @@ export default class Search extends SvelteComponentTyped<
     paste: WindowEventMap["paste"];
     clear: CustomEvent<null>;
   },
-  { labelText: {} }
+  { labelText: Record<string, never> }
 > {}

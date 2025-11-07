@@ -17,5 +17,5 @@ export type TruncateProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class Truncate extends SvelteComponentTyped<
   TruncateProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

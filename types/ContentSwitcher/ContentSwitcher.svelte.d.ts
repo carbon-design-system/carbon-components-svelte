@@ -1,6 +1,13 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type ContentSwitcherContext = {
+  currentId: import("svelte/store").Writable<string | null>;
+  add: (data: { id: string; text: string; selected: boolean }) => void;
+  update: (id: string) => void;
+  change: (direction: number) => void;
+};
+
 type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
@@ -30,5 +37,5 @@ export default class ContentSwitcher extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

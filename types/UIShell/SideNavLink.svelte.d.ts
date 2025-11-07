@@ -42,5 +42,5 @@ export type SideNavLinkProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class SideNavLink extends SvelteComponentTyped<
   SideNavLinkProps,
   { click: WindowEventMap["click"] },
-  { default: {}; icon: {} }
+  { icon: Record<string, never>; default: Record<string, never> }
 > {}

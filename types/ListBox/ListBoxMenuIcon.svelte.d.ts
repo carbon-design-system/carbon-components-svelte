@@ -26,7 +26,7 @@ export type ListBoxMenuIconProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ListBoxMenuIcon extends SvelteComponentTyped<
   ListBoxMenuIconProps,
   { click: WindowEventMap["click"] },
-  {}
+  Record<string, never>
 > {
   /**
    * Default translation ids

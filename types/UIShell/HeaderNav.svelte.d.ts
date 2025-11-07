@@ -12,5 +12,5 @@ export type HeaderNavProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class HeaderNav extends SvelteComponentTyped<
   HeaderNavProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

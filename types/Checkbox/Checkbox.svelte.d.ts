@@ -111,5 +111,5 @@ export default class Checkbox extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  { labelText: {} }
+  { labelText: Record<string, never> }
 > {}

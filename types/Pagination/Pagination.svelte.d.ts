@@ -121,9 +121,9 @@ export default class Pagination extends SvelteComponentTyped<
   {
     /** Dispatched after any user interaction */
     change: CustomEvent<{ page?: number; pageSize?: number }>;
-    ["click:button--previous"]: CustomEvent<{ page: number }>;
-    ["click:button--next"]: CustomEvent<{ page: number }>;
+    "click:button--previous": CustomEvent<{ page: number }>;
+    "click:button--next": CustomEvent<{ page: number }>;
     update: CustomEvent<{ pageSize: number; page: number }>;
   },
-  {}
+  Record<string, never>
 > {}

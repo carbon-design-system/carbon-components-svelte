@@ -94,5 +94,5 @@ export default class FileUploaderButton extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
     click: WindowEventMap["click"];
   },
-  { labelText: {} }
+  { labelText: Record<string, never> }
 > {}

@@ -10,6 +10,16 @@ export interface TreeNode {
   disabled?: boolean;
   nodes?: TreeNode[];
 }
+export type TreeViewContext = {
+  activeNodeId: import("svelte/store").Writable<TreeNodeId>;
+  selectedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
+  expandedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
+  clickNode: (node: TreeNode) => void;
+  selectNode: (node: TreeNode) => void;
+  expandNode: (node: TreeNode, expanded: boolean) => void;
+  focusNode: (node: TreeNode) => void;
+  toggleNode: (node: TreeNode) => void;
+};
 
 type $RestProps = SvelteHTMLElements["ul"];
 
@@ -81,7 +91,7 @@ export default class TreeView extends SvelteComponentTyped<
         selected: boolean;
       };
     };
-    labelText: {};
+    labelText: Record<string, never>;
   }
 > {
   /**

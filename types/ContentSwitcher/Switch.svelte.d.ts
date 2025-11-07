@@ -49,5 +49,5 @@ export default class Switch extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     keydown: WindowEventMap["keydown"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

@@ -56,9 +56,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -92,7 +92,21 @@
       "extends": {
         "interface": "AccordionSkeletonProps",
         "import": "\"./AccordionSkeleton.svelte\""
-      }
+      },
+      "contexts": [
+        {
+          "key": "Accordion",
+          "typeName": "AccordionContext",
+          "properties": [
+            {
+              "name": "disableItems",
+              "type": "import(\"svelte/store\").Writable<boolean>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "AccordionItem",
@@ -150,15 +164,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "title",
           "default": false,
           "fallback": "{title}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -198,7 +212,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "AccordionSkeleton",
@@ -281,7 +296,8 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "AspectRatio",
@@ -303,9 +319,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -314,7 +330,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Breadcrumb",
@@ -348,9 +365,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -384,7 +401,8 @@
       "extends": {
         "interface": "BreadcrumbSkeletonProps",
         "import": "\"./BreadcrumbSkeleton.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "BreadcrumbItem",
@@ -417,7 +435,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props?: {\n    [\"aria-current\"]?: string;\n    class: \"bx--link\";\n  };\n}"
         }
@@ -449,7 +467,14 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": [
+        {
+          "key": "BreadcrumbItem",
+          "typeName": "BreadcrumbItemContext",
+          "properties": []
+        }
+      ]
     },
     {
       "moduleName": "BreadcrumbSkeleton",
@@ -509,7 +534,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Breakpoint",
@@ -542,7 +568,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  size: BreakpointSize;\n  sizes: Record<\n    BreakpointSize,\n    boolean\n  >;\n}"
         }
@@ -566,7 +592,8 @@
           "ts": "type BreakpointValue =\n  | 320\n  | 672\n  | 1056\n  | 1312\n  | 1584;\n"
         }
       ],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "Button",
@@ -765,7 +792,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: {\n    role: \"button\";\n    type?: string;\n    tabindex: any;\n    disabled: boolean;\n    href?: string;\n    class: string;\n    [key: string]: any;\n  };\n}"
         },
@@ -816,7 +843,8 @@
       "extends": {
         "interface": "ButtonSkeletonProps",
         "import": "\"./ButtonSkeleton.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ButtonSet",
@@ -838,9 +866,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -849,7 +877,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ButtonSkeleton",
@@ -918,7 +947,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Checkbox",
@@ -1109,7 +1139,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -1159,7 +1189,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "CheckboxSkeleton",
@@ -1194,7 +1225,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ClickableTile",
@@ -1251,9 +1283,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -1288,7 +1320,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a | p"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "CodeSnippet",
@@ -1511,10 +1544,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{code}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -1564,7 +1597,8 @@
       "rest_props": {
         "type": "InlineComponent",
         "name": "CodeSnippetSkeleton"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "CodeSnippetSkeleton",
@@ -1612,7 +1646,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Column",
@@ -1748,7 +1783,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: {\n    class: string;\n    [key: string]: any;\n  };\n}"
         }
@@ -1775,7 +1810,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ComboBox",
@@ -2104,7 +2140,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{itemToString(item)}",
           "slot_props": "{\n  item: ComboBoxItem;\n  index: number;\n}"
@@ -2113,7 +2149,7 @@
           "name": "titleText",
           "default": false,
           "fallback": "{titleText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -2180,7 +2216,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ComposedModal",
@@ -2273,9 +2310,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -2335,7 +2372,39 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "ComposedModal",
+          "typeName": "ComposedModalContext",
+          "properties": [
+            {
+              "name": "closeModal",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "submit",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "declareRef",
+              "type": "(ref: HTMLButtonElement) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "updateLabel",
+              "type": "(value: string | undefined) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "Content",
@@ -2357,9 +2426,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -2368,7 +2437,8 @@
       "rest_props": {
         "type": "Element",
         "name": "main"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ContentSwitcher",
@@ -2401,9 +2471,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -2438,7 +2508,39 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "ContentSwitcher",
+          "typeName": "ContentSwitcherContext",
+          "properties": [
+            {
+              "name": "currentId",
+              "type": "import(\"svelte/store\").Writable<string | null>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { id: string; text: string; selected: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(id: string) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "change",
+              "type": "(direction: number) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ContextMenu",
@@ -2508,9 +2610,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -2540,7 +2642,45 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": [
+        {
+          "key": "ContextMenu",
+          "typeName": "ContextMenuContext",
+          "properties": [
+            {
+              "name": "menuOffsetX",
+              "type": "import(\"svelte/store\").Writable<number>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "currentIndex",
+              "type": "import(\"svelte/store\").Writable<number>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "position",
+              "type": "import(\"svelte/store\").Writable<[number, number]>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "close",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "setPopup",
+              "type": "(popup: boolean) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ContextMenuDivider",
@@ -2550,7 +2690,8 @@
       "slots": [],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "ContextMenuGroup",
@@ -2583,14 +2724,40 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": [
+        {
+          "key": "ContextMenuGroup",
+          "typeName": "ContextMenuGroupContext",
+          "properties": [
+            {
+              "name": "currentIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<string>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "addOption",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "toggleOption",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ContextMenuOption",
@@ -2719,27 +2886,27 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "shortcutText",
           "default": false,
           "fallback": "{shortcutText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -2769,7 +2936,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ContextMenuRadioGroup",
@@ -2803,14 +2971,46 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": [
+        {
+          "key": "ContextMenuRadioGroup",
+          "typeName": "ContextMenuRadioGroupContext",
+          "properties": [
+            {
+              "name": "currentId",
+              "type": "import(\"svelte/store\").Writable<string>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "radioIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<string>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "addOption",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "setOption",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "CopyButton",
@@ -2900,7 +3100,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "DataTable",
@@ -3185,11 +3386,6 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "cell",
           "default": false,
           "fallback": "{cell.display ? cell.display(cell.value, row) : cell.value}",
@@ -3217,6 +3413,11 @@
           "default": false,
           "fallback": "<h4 class:bx--data-table-header__title={true}>{title}</h4>",
           "slot_props": "{\n  props: {\n    class: \"bx--data-table-header__title\";\n  };\n}"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -3320,7 +3521,39 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "DataTable",
+          "typeName": "DataTableContext",
+          "properties": [
+            {
+              "name": "batchSelectedIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<DataTableRowId>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "tableRows",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<Row>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "resetSelectedRowIds",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "filterRows",
+              "type": "(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<DataTableRowId>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "DataTableSkeleton",
@@ -3443,7 +3676,8 @@
       "extends": {
         "interface": "DataTableHeader",
         "import": "\"./DataTable.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "DatePicker",
@@ -3597,9 +3831,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -3634,7 +3868,87 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "DatePicker",
+          "typeName": "DatePickerContext",
+          "properties": [
+            {
+              "name": "range",
+              "type": "import(\"svelte/store\").Readable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "inputValue",
+              "type": "import(\"svelte/store\").Writable<number | string>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "inputValueFrom",
+              "type": "import(\"svelte/store\").Writable<string>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "inputValueTo",
+              "type": "import(\"svelte/store\").Writable<string>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "inputIds",
+              "type": "import(\"svelte/store\").Readable<ReadonlyArray<string>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "hasCalendar",
+              "type": "import(\"svelte/store\").Readable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { id: string; labelText: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "declareRef",
+              "type": "(data: { id: string; ref: HTMLInputElement }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "updateValue",
+              "type": "(data: { type: \"input\" | \"change\"; value: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "blurInput",
+              "type": "(relatedTarget: EventTarget | null) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "openCalendar",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "focusCalendar",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "DatePickerInput",
@@ -3837,7 +4151,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -3872,7 +4186,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "DatePickerSkeleton",
@@ -3932,7 +4247,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Dropdown",
@@ -4189,7 +4505,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{itemToString(item)}",
           "slot_props": "{\n  item: DropdownItem;\n  index: number;\n}"
@@ -4223,7 +4539,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "DropdownSkeleton",
@@ -4271,7 +4588,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ExpandableTile",
@@ -4415,12 +4733,12 @@
         {
           "name": "above",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "below",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -4455,7 +4773,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploader",
@@ -4624,13 +4943,13 @@
           "name": "labelDescription",
           "default": false,
           "fallback": "{labelDescription}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "labelTitle",
           "default": false,
           "fallback": "{labelTitle}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -4681,7 +5000,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploaderButton",
@@ -4850,7 +5170,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -4875,7 +5195,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploaderDropContainer",
@@ -5020,7 +5341,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5065,7 +5386,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploaderItem",
@@ -5197,7 +5519,8 @@
       "rest_props": {
         "type": "Element",
         "name": "span"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploaderSkeleton",
@@ -5232,7 +5555,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Filename",
@@ -5294,7 +5618,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div | button | svg"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FluidForm",
@@ -5303,9 +5628,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5345,7 +5670,21 @@
       "rest_props": {
         "type": "Element",
         "name": "form"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Form",
+          "typeName": "FormContext",
+          "properties": [
+            {
+              "name": "formContext",
+              "type": "{ isFluid: boolean }",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "Form",
@@ -5367,9 +5706,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5409,7 +5748,8 @@
       "rest_props": {
         "type": "Element",
         "name": "form"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FormGroup",
@@ -5491,9 +5831,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5523,7 +5863,8 @@
       "rest_props": {
         "type": "Element",
         "name": "fieldset"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FormItem",
@@ -5532,9 +5873,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5564,7 +5905,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FormLabel",
@@ -5586,9 +5928,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5618,7 +5960,8 @@
       "rest_props": {
         "type": "Element",
         "name": "label"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Grid",
@@ -5724,7 +6067,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: {\n    class: string;\n    [key: string]: any;\n  };\n}"
         }
@@ -5735,7 +6078,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Header",
@@ -5883,26 +6227,26 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "company",
           "default": false,
           "fallback": "{company}&nbsp;",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "platform",
           "default": false,
           "fallback": "{platformName}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "skip-to-content",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5917,7 +6261,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderAction",
@@ -6031,27 +6376,27 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "closeIcon",
           "default": false,
           "fallback": "<svelte:component this={closeIcon} size={20} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} size={20} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "text",
           "default": false,
           "fallback": "{#if text}<span class:bx--header__action-text={true}>{text}</span>{/if}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6076,7 +6421,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderActionLink",
@@ -6135,7 +6481,7 @@
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} size={20} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6150,7 +6496,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderGlobalAction",
@@ -6210,7 +6557,8 @@
       "extends": {
         "interface": "ButtonProps",
         "import": "\"../Button/Button.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderNav",
@@ -6219,9 +6567,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -6230,7 +6578,8 @@
       "rest_props": {
         "type": "Element",
         "name": "nav"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderNavItem",
@@ -6286,10 +6635,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{text}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6339,7 +6688,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderNavMenu",
@@ -6396,9 +6746,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6448,7 +6798,51 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": [
+        {
+          "key": "HeaderNavMenu",
+          "typeName": "HeaderNavMenuContext",
+          "properties": [
+            {
+              "name": "selectedItems",
+              "type": "import(\"svelte/store\").Writable<Record<string, boolean>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "menuItems",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<HTMLElement>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "updateSelectedItems",
+              "type": "(item: { id: string; isSelected: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "registerMenuItem",
+              "type": "(element: HTMLElement) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "unregisterMenuItem",
+              "type": "(element: HTMLElement) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "closeMenu",
+              "type": "() => Promise<void>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "HeaderPanelDivider",
@@ -6457,14 +6851,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "HeaderPanelLink",
@@ -6497,9 +6892,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6514,7 +6909,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderPanelLinks",
@@ -6523,14 +6919,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "HeaderSearch",
@@ -6600,7 +6997,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{result.text}\n              {#if result.description}<span\n                  class:bx--header-search-menu-description={true}\n                  >– {result.description}</span\n                >{/if}",
           "slot_props": "{\n  result: HeaderSearchResult;\n  index: number;\n}"
@@ -6669,7 +7066,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderUtilities",
@@ -6678,14 +7076,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "ImageLoader",
@@ -6792,12 +7191,12 @@
         {
           "name": "error",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "loading",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6817,7 +7216,8 @@
       "rest_props": {
         "type": "Element",
         "name": "img"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "InlineLoading",
@@ -6904,7 +7304,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "InlineNotification",
@@ -7022,26 +7423,26 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "actions",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "subtitle",
           "default": false,
           "fallback": "{subtitle}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "title",
           "default": false,
           "fallback": "{title}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7076,7 +7477,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Link",
@@ -7167,15 +7569,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7205,7 +7607,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBox",
@@ -7322,9 +7725,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7344,7 +7747,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxField",
@@ -7438,9 +7842,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7491,7 +7895,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxMenu",
@@ -7525,9 +7930,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7542,7 +7947,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxMenuIcon",
@@ -7605,7 +8011,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxMenuItem",
@@ -7651,9 +8058,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7678,7 +8085,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxSelection",
@@ -7764,7 +8172,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListItem",
@@ -7773,9 +8182,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7805,7 +8214,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Loading",
@@ -7868,7 +8278,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "LocalStorage",
@@ -7938,7 +8349,8 @@
         }
       ],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "Modal",
@@ -8195,21 +8607,21 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "heading",
           "default": false,
           "fallback": "{modalHeading}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "label",
           "default": false,
           "fallback": "{modalLabel}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -8274,7 +8686,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ModalBody",
@@ -8308,9 +8721,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -8319,7 +8732,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ModalFooter",
@@ -8422,9 +8836,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -8439,7 +8853,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ModalHeader",
@@ -8533,9 +8948,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -8550,7 +8965,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "MultiSelect",
@@ -8976,7 +9392,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{itemToString(item)}",
           "slot_props": "{\n  item: MultiSelectItem;\n  index: number;\n}"
@@ -8985,7 +9401,7 @@
           "name": "titleText",
           "default": false,
           "fallback": "{titleText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9052,7 +9468,21 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": [
+        {
+          "key": "MultiSelect",
+          "typeName": "MultiSelectContext",
+          "properties": [
+            {
+              "name": "declareRef",
+              "type": "(data: { key: \"field\" | \"selection\"; ref: HTMLDivElement }) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "NotificationActionButton",
@@ -9061,9 +9491,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9097,7 +9527,8 @@
       "extends": {
         "interface": "ButtonProps",
         "import": "\"../Button/Button.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "NotificationButton",
@@ -9179,7 +9610,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "NotificationIcon",
@@ -9224,7 +9656,8 @@
       "slots": [],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "NumberInput",
@@ -9521,7 +9954,7 @@
           "name": "label",
           "default": false,
           "fallback": "{label}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9592,7 +10025,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "NumberInputSkeleton",
@@ -9640,7 +10074,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "OrderedList",
@@ -9686,9 +10121,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9718,7 +10153,8 @@
       "rest_props": {
         "type": "Element",
         "name": "ol"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "OutboundLink",
@@ -9727,9 +10163,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9763,7 +10199,8 @@
       "extends": {
         "interface": "LinkProps",
         "import": "\"./Link.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "OverflowMenu",
@@ -9913,15 +10350,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "menu",
           "default": false,
           "fallback": "<svelte:component\n      this={icon}\n      aria-label={iconDescription}\n      title={iconDescription}\n      class=\"bx--overflow-menu__icon {iconClass}\"\n    />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9961,7 +10398,45 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": [
+        {
+          "key": "OverflowMenu",
+          "typeName": "OverflowMenuContext",
+          "properties": [
+            {
+              "name": "focusedId",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "items",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { id: string; text: string; primaryFocus: boolean; disabled: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "change",
+              "type": "(direction: number) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "OverflowMenuItem",
@@ -10079,10 +10554,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "<div class:bx--overflow-menu-options__option-content={true}>\n          {text}\n        </div>",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -10102,7 +10577,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Pagination",
@@ -10343,7 +10819,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "PaginationNav",
@@ -10459,7 +10936,8 @@
       "rest_props": {
         "type": "Element",
         "name": "nav"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "PaginationSkeleton",
@@ -10494,7 +10972,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "PasswordInput",
@@ -10757,7 +11236,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -10822,7 +11301,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Popover",
@@ -10916,9 +11396,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -10933,7 +11413,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ProgressBar",
@@ -11053,7 +11534,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -11062,7 +11543,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ProgressIndicator",
@@ -11120,9 +11602,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -11157,7 +11639,45 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": [
+        {
+          "key": "ProgressIndicator",
+          "typeName": "ProgressIndicatorContext",
+          "properties": [
+            {
+              "name": "steps",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<{ id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "stepsById",
+              "type": "import(\"svelte/store\").Readable<Record<string, { id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "preventChangeOnClick",
+              "type": "import(\"svelte/store\").Readable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(step: { id: string; complete: boolean; disabled: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "change",
+              "type": "(index: number) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ProgressIndicatorSkeleton",
@@ -11217,7 +11737,8 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ProgressStep",
@@ -11323,7 +11844,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "<p class:bx--progress-label={true}>{label}</p>",
           "slot_props": "{\n  props: {\n    class: \"bx--progress-label\";\n  };\n}"
@@ -11361,7 +11882,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "RadioButton",
@@ -11493,7 +12015,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -11518,7 +12040,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "RadioButtonGroup",
@@ -11644,15 +12167,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "legendText",
           "default": false,
           "fallback": "{legendText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -11687,7 +12210,43 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "RadioButtonGroup",
+          "typeName": "RadioButtonGroupContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<string | number | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "groupName",
+              "type": "any",
+              "optional": false
+            },
+            {
+              "name": "groupRequired",
+              "type": "any",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { checked: boolean; value: string | number }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(value: string | number) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "RadioButtonSkeleton",
@@ -11722,7 +12281,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "RadioTile",
@@ -11839,9 +12399,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -11881,7 +12441,8 @@
       "rest_props": {
         "type": "Element",
         "name": "label"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "RecursiveList",
@@ -11926,7 +12487,8 @@
       "rest_props": {
         "type": "Element",
         "name": "ul | ol"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Row",
@@ -12020,7 +12582,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: {\n    class: string;\n    [key: string]: any;\n  };\n}"
         }
@@ -12031,7 +12593,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Search",
@@ -12235,7 +12798,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -12315,7 +12878,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SearchSkeleton",
@@ -12363,7 +12927,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Select",
@@ -12574,15 +13139,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -12618,7 +13183,27 @@
       "rest_props": {
         "type": "Element",
         "name": "select"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Select",
+          "typeName": "SelectContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<string | number | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "setDefaultValue",
+              "type": "(id: string, value: string | number) => void",
+              "description": "Use the first `SelectItem` value as the\ndefault value if `selected` is `undefined`.",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "SelectItem",
@@ -12698,7 +13283,8 @@
       "slots": [],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "SelectItemGroup",
@@ -12732,9 +13318,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -12743,7 +13329,8 @@
       "rest_props": {
         "type": "Element",
         "name": "optgroup"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SelectSkeleton",
@@ -12791,7 +13378,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SelectableTile",
@@ -12921,9 +13509,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -12968,7 +13556,8 @@
       "rest_props": {
         "type": "Element",
         "name": "label"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNav",
@@ -13037,9 +13626,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13064,7 +13653,8 @@
       "rest_props": {
         "type": "Element",
         "name": "nav"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNavDivider",
@@ -13078,7 +13668,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNavItems",
@@ -13087,14 +13678,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "SideNavLink",
@@ -13161,16 +13753,16 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "fallback": "{text}",
-          "slot_props": "{}"
-        },
-        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "fallback": "{text}",
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13185,7 +13777,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNavMenu",
@@ -13241,15 +13834,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13264,7 +13857,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNavMenuItem",
@@ -13320,10 +13914,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{text}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13338,7 +13932,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SkeletonPlaceholder",
@@ -13373,7 +13968,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SkeletonText",
@@ -13457,7 +14053,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SkipToContent",
@@ -13491,10 +14088,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "Skip to main content",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13509,7 +14106,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Slider",
@@ -13750,7 +14348,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13790,7 +14388,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SliderSkeleton",
@@ -13838,7 +14437,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredList",
@@ -13895,9 +14495,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13932,7 +14532,27 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "StructuredListWrapper",
+          "typeName": "StructuredListWrapperContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(value: string) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "StructuredListBody",
@@ -13941,9 +14561,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13973,7 +14593,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListCell",
@@ -14007,9 +14628,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14039,7 +14660,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListHead",
@@ -14048,9 +14670,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14080,7 +14702,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListInput",
@@ -14167,7 +14790,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListRow",
@@ -14213,9 +14837,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14250,7 +14874,8 @@
       "rest_props": {
         "type": "Element",
         "name": "label"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListSkeleton",
@@ -14298,7 +14923,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Switch",
@@ -14368,10 +14994,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{text}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14406,7 +15032,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Tab",
@@ -14488,10 +15115,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{label}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14521,7 +15148,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TabContent",
@@ -14543,9 +15171,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -14554,7 +15182,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Table",
@@ -14634,9 +15263,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -14645,7 +15274,8 @@
       "rest_props": {
         "type": "Element",
         "name": "section"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableBody",
@@ -14654,9 +15284,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -14665,7 +15295,8 @@
       "rest_props": {
         "type": "Element",
         "name": "tbody"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableCell",
@@ -14674,9 +15305,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14706,7 +15337,8 @@
       "rest_props": {
         "type": "Element",
         "name": "td"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableContainer",
@@ -14764,9 +15396,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -14775,7 +15407,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableHead",
@@ -14784,9 +15417,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14816,7 +15449,8 @@
       "rest_props": {
         "type": "Element",
         "name": "thead"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableHeader",
@@ -14898,9 +15532,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14930,7 +15564,8 @@
       "rest_props": {
         "type": "Element",
         "name": "th"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableRow",
@@ -14939,9 +15574,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14971,7 +15606,8 @@
       "rest_props": {
         "type": "Element",
         "name": "tr"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Tabs",
@@ -15041,14 +15677,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "content",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -15073,7 +15709,69 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Tabs",
+          "typeName": "TabsContext",
+          "properties": [
+            {
+              "name": "tabs",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; index: number }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "contentById",
+              "type": "import(\"svelte/store\").Readable<Record<string, { id: string; index: number }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "selectedTab",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "selectedContent",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "useAutoWidth",
+              "type": "import(\"svelte/store\").Writable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { id: string; label: string; disabled: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "addContent",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(id: string) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "change",
+              "type": "(direction: number) => Promise<void>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "TabsSkeleton",
@@ -15133,7 +15831,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Tag",
@@ -15248,7 +15947,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: { class: \"bx--tag__label\" };\n}"
         },
@@ -15256,7 +15955,7 @@
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -15291,7 +15990,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div | span"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TagSkeleton",
@@ -15338,7 +16038,8 @@
       "rest_props": {
         "type": "Element",
         "name": "span"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TextArea",
@@ -15564,7 +16265,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -15629,7 +16330,8 @@
       "rest_props": {
         "type": "Element",
         "name": "textarea"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TextAreaSkeleton",
@@ -15677,7 +16379,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TextInput",
@@ -15904,7 +16607,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -15969,7 +16672,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TextInputSkeleton",
@@ -16017,7 +16721,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Theme",
@@ -16110,7 +16815,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{ theme: CarbonTheme }"
         }
@@ -16129,7 +16834,8 @@
           "ts": "type CarbonTheme =\n  | \"white\"\n  | \"g10\"\n  | \"g80\"\n  | \"g90\"\n  | \"g100\";\n"
         }
       ],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "Tile",
@@ -16151,9 +16857,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16183,7 +16889,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TileGroup",
@@ -16250,9 +16957,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16267,7 +16974,43 @@
       "rest_props": {
         "type": "Element",
         "name": "fieldset"
-      }
+      },
+      "contexts": [
+        {
+          "key": "TileGroup",
+          "typeName": "TileGroupContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "groupName",
+              "type": "any",
+              "optional": false
+            },
+            {
+              "name": "groupRequired",
+              "type": "any",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { checked: boolean; value: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(value: string) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "TimePicker",
@@ -16443,15 +17186,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16516,7 +17259,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TimePickerSelect",
@@ -16609,15 +17353,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16647,7 +17391,21 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "TimePickerSelect",
+          "typeName": "TimePickerSelectContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<number | string>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ToastNotification",
@@ -16789,27 +17547,27 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "caption",
           "default": false,
           "fallback": "{caption}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "subtitle",
           "default": false,
           "fallback": "{subtitle}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "title",
           "default": false,
           "fallback": "{title}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16844,7 +17602,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Toggle",
@@ -16976,19 +17735,19 @@
           "name": "labelA",
           "default": false,
           "fallback": "{labelA}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "labelB",
           "default": false,
           "fallback": "{labelB}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17043,7 +17802,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ToggleSkeleton",
@@ -17092,7 +17852,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17122,7 +17882,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Toolbar",
@@ -17144,9 +17905,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -17155,7 +17916,27 @@
       "rest_props": {
         "type": "Element",
         "name": "section"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Toolbar",
+          "typeName": "ToolbarContext",
+          "properties": [
+            {
+              "name": "overflowVisible",
+              "type": "import(\"svelte/store\").Writable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "setOverflowVisible",
+              "type": "(visible: boolean) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ToolbarBatchActions",
@@ -17200,15 +17981,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "cancel",
           "default": false,
           "fallback": "Cancel",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17223,7 +18004,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ToolbarContent",
@@ -17232,14 +18014,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "ToolbarMenu",
@@ -17248,9 +18031,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -17263,7 +18046,8 @@
       "extends": {
         "interface": "OverflowMenuProps",
         "import": "\"../OverflowMenu/OverflowMenu.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ToolbarMenuItem",
@@ -17272,9 +18056,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17298,7 +18082,8 @@
       "extends": {
         "interface": "OverflowMenuItemProps",
         "import": "\"../OverflowMenu/OverflowMenuItem.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ToolbarSearch",
@@ -17451,7 +18236,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Tooltip",
@@ -17628,21 +18414,21 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} name={iconName} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "triggerText",
           "default": false,
           "fallback": "{triggerText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17672,7 +18458,21 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Tooltip",
+          "typeName": "TooltipContext",
+          "properties": [
+            {
+              "name": "tooltipOpen",
+              "type": "import(\"svelte/store\").Writable<boolean>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "TooltipDefinition",
@@ -17754,15 +18554,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "tooltip",
           "default": false,
           "fallback": "{tooltipText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17807,7 +18607,8 @@
       "rest_props": {
         "type": "Element",
         "name": "span"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TooltipFooter",
@@ -17829,14 +18630,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "TooltipIcon",
@@ -17929,16 +18731,16 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
-        },
-        {
           "name": "tooltipText",
           "default": false,
           "fallback": "{tooltipText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "fallback": "<svelte:component this={icon} />",
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17973,7 +18775,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TreeView",
@@ -18127,7 +18930,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{node.text}",
           "slot_props": "{\n  node: {\n    id: TreeNodeId;\n    text: string;\n    expanded: boolean;\n    leaf: boolean;\n    disabled: boolean;\n    selected: boolean;\n  };\n}"
@@ -18136,7 +18939,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -18177,7 +18980,63 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": [
+        {
+          "key": "TreeView",
+          "typeName": "TreeViewContext",
+          "properties": [
+            {
+              "name": "activeNodeId",
+              "type": "import(\"svelte/store\").Writable<TreeNodeId>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "selectedNodeIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<TreeNodeId>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "expandedNodeIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<TreeNodeId>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "clickNode",
+              "type": "(node: TreeNode) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "selectNode",
+              "type": "(node: TreeNode) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "expandNode",
+              "type": "(node: TreeNode, expanded: boolean) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "focusNode",
+              "type": "(node: TreeNode) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "toggleNode",
+              "type": "(node: TreeNode) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "Truncate",
@@ -18198,9 +19057,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -18209,7 +19068,8 @@
       "rest_props": {
         "type": "Element",
         "name": "p"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "UnorderedList",
@@ -18243,9 +19103,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -18275,7 +19135,8 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": []
     }
   ]
 }

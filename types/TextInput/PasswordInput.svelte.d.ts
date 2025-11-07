@@ -150,5 +150,5 @@ export default class PasswordInput extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
     paste: WindowEventMap["paste"];
   },
-  { labelText: {} }
+  { labelText: Record<string, never> }
 > {}

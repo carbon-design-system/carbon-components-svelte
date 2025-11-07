@@ -1,6 +1,13 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type SelectContext = {
+  selectedValue: import("svelte/store").Writable<string | number | undefined>;
+  /** Use the first `SelectItem` value as the
+default value if `selected` is `undefined`. */
+  setDefaultValue: (id: string, value: string | number) => void;
+};
+
 type $RestProps = SvelteHTMLElements["select"];
 
 type $Props = {
@@ -120,5 +127,5 @@ export default class Select extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  { default: {}; labelText: {} }
+  { labelText: Record<string, never>; default: Record<string, never> }
 > {}

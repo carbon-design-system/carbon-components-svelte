@@ -54,5 +54,5 @@ export type ModalHeaderProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ModalHeader extends SvelteComponentTyped<
   ModalHeaderProps,
   { click: WindowEventMap["click"] },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

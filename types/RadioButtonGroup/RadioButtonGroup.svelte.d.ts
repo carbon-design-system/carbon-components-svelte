@@ -1,6 +1,14 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type RadioButtonGroupContext = {
+  selectedValue: import("svelte/store").Writable<string | number | undefined>;
+  groupName: any;
+  groupRequired: any;
+  add: (data: { checked: boolean; value: string | number }) => void;
+  update: (value: string | number) => void;
+};
+
 type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
@@ -78,5 +86,5 @@ export default class RadioButtonGroup extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {}; legendText: {} }
+  { legendText: Record<string, never>; default: Record<string, never> }
 > {}

@@ -1,6 +1,11 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type ToolbarContext = {
+  overflowVisible: import("svelte/store").Writable<boolean>;
+  setOverflowVisible: (visible: boolean) => void;
+};
+
 type $RestProps = SvelteHTMLElements["section"];
 
 type $Props = {
@@ -18,5 +23,5 @@ export type ToolbarProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class Toolbar extends SvelteComponentTyped<
   ToolbarProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

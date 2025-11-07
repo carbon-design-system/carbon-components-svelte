@@ -43,5 +43,5 @@ export default class InlineLoading extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     success: CustomEvent<null>;
   },
-  {}
+  Record<string, never>
 > {}
