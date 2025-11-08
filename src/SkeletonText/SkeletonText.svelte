@@ -13,7 +13,7 @@
 
   const RANDOM = [0.973, 0.153, 0.567];
 
-  $: widthNum = parseInt(width, 10);
+  $: widthNum = Number.parseInt(width, 10);
   $: widthPx = width.includes("px");
 </script>
 

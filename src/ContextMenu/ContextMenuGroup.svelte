@@ -26,10 +26,10 @@
    * @type {(data: { id: string }) => void}
    */
   const toggleOption = ({ id }) => {
-    if (!selectedIds.includes(id)) {
-      selectedIds = [...selectedIds, id];
-    } else {
+    if (selectedIds.includes(id)) {
       selectedIds = selectedIds.filter((_) => _ !== id);
+    } else {
+      selectedIds = [...selectedIds, id];
     }
   };
 
