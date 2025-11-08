@@ -48,7 +48,7 @@ describe("DataTableBatchSelectionToolbar", () => {
     await user.click(cancelButton);
 
     // Verify selected rows are cleared
-    expect(component.$$.ctx[component.$$.props["selectedRowIds"]]).toEqual([]);
+    expect(component.$$.ctx[component.$$.props.selectedRowIds]).toEqual([]);
   });
 
   it("handles custom batch actions", async () => {
@@ -101,7 +101,7 @@ describe("DataTableBatchSelectionToolbar", () => {
     await user.click(cancelButton);
 
     // Verify selected rows are not cleared
-    expect(component.$$.ctx[component.$$.props["selectedRowIds"]]).toEqual([
+    expect(component.$$.ctx[component.$$.props.selectedRowIds]).toEqual([
       "a",
       "b",
     ]);
