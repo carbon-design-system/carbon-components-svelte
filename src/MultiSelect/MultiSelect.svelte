@@ -408,8 +408,10 @@
             } else if (key === "Tab") {
               open = false;
             } else if (key === "ArrowDown") {
+              if (!open) open = true;
               change(1);
             } else if (key === "ArrowUp") {
+              if (!open) open = true;
               change(-1);
             } else if (key === "Escape") {
               open = false;
@@ -418,6 +420,9 @@
             }
           }}
           on:input
+          on:input={() => {
+            if (!open) open = true;
+          }}
           on:keyup
           on:focus
           on:blur
@@ -476,14 +481,12 @@
           if (key === " ") {
             open = !open;
           } else if (key === "Tab") {
-            if (selectionRef && checked.length > 0) {
-              selectionRef.focus();
-            } else {
-              open = false;
-            }
+            open = false;
           } else if (key === "ArrowDown") {
+            if (!open) open = true;
             change(1);
           } else if (key === "ArrowUp") {
+            if (!open) open = true;
             change(-1);
           } else if (key === "Enter") {
             if (highlightedIndex > -1) {
