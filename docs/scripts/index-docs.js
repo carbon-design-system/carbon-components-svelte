@@ -23,23 +23,23 @@ const files = fs.readdirSync(COMPONENTS_PATH);
 const documents = [];
 
 for (const file of files) {
-  const [component_name] = file.split(".");
-  const file_path = path.join(COMPONENTS_PATH, file);
-  const file_content = fs.readFileSync(file_path, "utf8");
+  const [componentName] = file.split(".");
+  const filePath = path.join(COMPONENTS_PATH, file);
+  const fileContent = fs.readFileSync(filePath, "utf8");
 
-  file_content.split("\n").forEach((line) => {
+  for (const line of fileContent.split("\n")) {
     if (line.startsWith(H2_DELMIMITER)) {
       const [, h2] = line.split(H2_DELMIMITER);
       const hash = slug(h2);
 
       documents.push({
-        id: component_name + hash,
-        text: component_name,
+        id: componentName + hash,
+        text: componentName,
         description: h2,
-        href: `/components/${component_name}#${hash}`,
+        href: `/components/${componentName}#${hash}`,
       });
     }
-  });
+  }
 }
 
 fs.writeFileSync(SEARCH_INDEX_PATH, JSON.stringify(documents, null, 2));

@@ -103,6 +103,7 @@ modified.components = await Promise.all(
 
         return {
           ...slot,
+          // biome-ignore lint/style/useNamingConvention: slot_props matches the JSON API structure
           slot_props: formatted,
         };
       }),

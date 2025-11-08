@@ -7,10 +7,10 @@ import slug from "remark-slug";
 import { parse, walk } from "svelte/compiler";
 import visit from "unist-util-visit";
 import pkg from "../package.json" with { type: "json" };
-import component_api from "./src/COMPONENT_API.json" with { type: "json" };
+import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
 import "prism-svelte";
 
-const component_api_by_name = component_api.components.reduce((a, c) => {
+const componentApiByName = componentApi.components.reduce((a, c) => {
   a[c.moduleName] = true;
   return a;
 }, {});
@@ -26,7 +26,7 @@ function createImports(source) {
 
   // heuristic to guess if the inline component or expression name is a Carbon icon
   const isIcon = (text) =>
-    ICON_NAME_REGEX.test(text) && !(text in component_api_by_name);
+    ICON_NAME_REGEX.test(text) && !(text in componentApiByName);
 
   walk(parse(source), {
     enter(node) {
@@ -49,21 +49,18 @@ function createImports(source) {
     },
   });
 
-  const action_imports = Array.from(actions.keys());
-  const ccs_imports = [
-    ...Array.from(inlineComponents.keys()),
-    ...action_imports,
-  ];
-  const icon_imports = Array.from(icons.keys());
+  const actionImports = Array.from(actions.keys());
+  const ccsImports = [...Array.from(inlineComponents.keys()), ...actionImports];
+  const iconImports = Array.from(icons.keys());
 
-  if (ccs_imports.length === 0) return "";
+  if (ccsImports.length === 0) return "";
 
   return `
   <script>
-    import {${ccs_imports.join(",")}} from "carbon-components-svelte";
+    import {${ccsImports.join(",")}} from "carbon-components-svelte";
     ${
       icons.size > 0
-        ? icon_imports
+        ? iconImports
             .map(
               (icon) =>
                 `import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
@@ -102,11 +99,11 @@ function plugin() {
       walk(parse(node.value), {
         enter(node) {
           if (node.name === "FileSource") {
-            node.attributes.forEach((attribute) => {
+            for (const attribute of node.attributes) {
               if (attribute.name === "src") {
                 src += attribute.value[0].raw;
               }
-            });
+            }
           }
         },
       });
