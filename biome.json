@@ -34,14 +34,28 @@
         "useTopLevelRegex": "error"
       },
       "complexity": {
-        "noImportantStyles": "off",
-        "useLiteralKeys": "error"
+        "noCommaOperator": "error",
+        "noForEach": "error",
+        "noUselessConstructor": "error",
+        "noUselessEmptyExport": "error",
+        "noUselessFragments": "error",
+        "noUselessLabel": "error",
+        "noUselessLoneBlockStatements": "error",
+        "noUselessRename": "error",
+        "noUselessSwitchCase": "error",
+        "noUselessTypeConstraint": "error",
+        "useArrowFunction": "error",
+        "useLiteralKeys": "error",
+        "noImportantStyles": "off"
       },
       "suspicious": {
         "noExplicitAny": "off"
       },
       "style": {
-        "noDescendingSpecificity": "off",
+        "noImplicitBoolean": "error",
+        "noNegationElse": "error",
+        "noParameterAssign": "error",
+        "noRestrictedGlobals": "error",
         "noRestrictedImports": {
           "level": "error",
           "options": {
@@ -51,7 +65,16 @@
               }
             }
           }
-        }
+        },
+        "noUnusedTemplateLiteral": "error",
+        "useDefaultParameterLast": "error",
+        "useExponentiationOperator": "error",
+        "useNamingConvention": "error",
+        "useNodejsImportProtocol": "error",
+        "useNumberNamespace": "error",
+        "useSingleVarDeclarator": "error",
+        "noCommonJs": "error",
+        "noDescendingSpecificity": "off"
       }
     }
   },
@@ -91,6 +114,19 @@
         "rules": {
           "performance": {
             "useTopLevelRegex": "off"
+          },
+          "complexity": {
+            "noForEach": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["docs/src/**/*.{svelte,svx}"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
           }
         }
       }
