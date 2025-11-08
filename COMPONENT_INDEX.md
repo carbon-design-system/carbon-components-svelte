@@ -1175,8 +1175,8 @@ export interface DropdownItem {
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                                                            | <code>null</code>                                     | Obtain a reference to the button HTML element                                                                                |
 | open            | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to open the dropdown                                                                                           |
 | selectedId      | Yes      | <code>let</code> | Yes      | <code>DropdownItemId</code>                                                                           | <code>undefined</code>                                | Specify the selected item id                                                                                                 |
-| items           | No       | <code>let</code> | No       | <code>ReadonlyArray<DropdownItem></code>                                                              | <code>[]</code>                                       | Set the dropdown items                                                                                                       |
-| itemToString    | No       | <code>let</code> | No       | <code>(item: DropdownItem) => string</code>                                                           | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a dropdown item                                                                                      |
+| items           | No       | <code>let</code> | No       | <code>ReadonlyArray<Item></code>                                                                      | <code>[]</code>                                       | Set the dropdown items                                                                                                       |
+| itemToString    | No       | <code>let</code> | No       | <code>(item: Item) => string</code>                                                                   | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a dropdown item                                                                                      |
 | type            | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                                | <code>"default"</code>                                | Specify the type of dropdown                                                                                                 |
 | direction       | No       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                                 | Specify the direction of the dropdown menu                                                                                   |
 | size            | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                             | <code>undefined</code>                                | Specify the size of the dropdown field                                                                                       |
@@ -1196,15 +1196,15 @@ export interface DropdownItem {
 
 ### Slots
 
-| Slot name | Default | Props                                                | Fallback                          |
-| :-------- | :------ | :--------------------------------------------------- | :-------------------------------- |
-| --        | Yes     | <code>{ item: DropdownItem; index: number; } </code> | <code>{itemToString(item)}</code> |
+| Slot name | Default | Props                                        | Fallback                          |
+| :-------- | :------ | :------------------------------------------- | :-------------------------------- |
+| --        | Yes     | <code>{ item: Item; index: number; } </code> | <code>{itemToString(item)}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                                                                  | Description |
-| :--------- | :--------- | :---------------------------------------------------------------------- | :---------- |
-| select     | dispatched | <code>{ selectedId: DropdownItemId, selectedItem: DropdownItem }</code> | --          |
+| Event name | Type       | Detail                                                          | Description |
+| :--------- | :--------- | :-------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedId: DropdownItemId, selectedItem: Item }</code> | --          |
 
 ## `DropdownSkeleton`
 
