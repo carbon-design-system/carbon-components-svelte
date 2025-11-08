@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.89.10](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.9...v0.89.10) (2025-11-08)
+
+
+### Bug Fixes
+
+* **multi-select:** restore keyboard navigation for filterable variant ([#2314](https://github.com/carbon-design-system/carbon-components-svelte/issues/2314)) ([ce0b9ca](https://github.com/carbon-design-system/carbon-components-svelte/commit/ce0b9ca3fbf8461ae94d5d6327bf2cbb1b02d92c)), closes [#2313](https://github.com/carbon-design-system/carbon-components-svelte/issues/2313)
+
 ## [0.90.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.89.8...v0.90.0) (2025-10-23)
 
 ### ⚠ BREAKING CHANGES
