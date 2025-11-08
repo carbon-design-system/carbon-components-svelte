@@ -304,9 +304,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                                                                     | Fallback |
-| :-------- | :------ | :------------------------------------------------------------------------ | :------- |
-| --        | Yes     | <code>{props?: { ["aria-current"]?: string; class: "bx--link"; }} </code> | --       |
+| Slot name | Default | Props                                                                   | Fallback |
+| :-------- | :------ | :---------------------------------------------------------------------- | :------- |
+| --        | Yes     | <code>{props?: { "aria-current"?: string; class: "bx--link"; }} </code> | --       |
 
 ### Events
 

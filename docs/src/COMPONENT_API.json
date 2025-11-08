@@ -437,7 +437,7 @@
         {
           "name": null,
           "default": true,
-          "slot_props": "{\n  props?: {\n    [\"aria-current\"]?: string;\n    class: \"bx--link\";\n  };\n}"
+          "slot_props": "{\n  props?: {\n    \"aria-current\"?: string;\n    class: \"bx--link\";\n  };\n}"
         }
       ],
       "events": [
