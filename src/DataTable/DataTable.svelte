@@ -4,45 +4,64 @@
    * @template {DataTableRow} Row
    * @typedef {import('./DataTableTypes.d.ts').PropertyPath<Row>} DataTableKey<Row=DataTableRow>
    * @typedef {any} DataTableValue
-   * @typedef {{
-   *    key: DataTableKey<Row> | (string & {});
-   *    empty: boolean;
-   *    display?: (item: DataTableValue, row: Row) => DataTableValue;
-   *    sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-   *    columnMenu?: boolean;
-   *    width?: string;
-   *    minWidth?: string;
-   * }} DataTableEmptyHeader<Row=DataTableRow>
-   * @typedef {{
-   *    key: DataTableKey<Row>;
-   *    value: DataTableValue;
-   *    display?: (item: DataTableValue, row: Row) => DataTableValue;
-   *    sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-   *    columnMenu?: boolean;
-   *    width?: string;
-   *    minWidth?: string;
-   * }} DataTableNonEmptyHeader<Row=DataTableRow>
+   * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
+   * @property {DataTableKey<Row> | (string & {})} key
+   * @property {boolean} empty - Whether the header is empty
+   * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
+   * @property {false | ((a: DataTableValue, b: DataTableValue) => number)} [sort]
+   * @property {boolean} [columnMenu] - Whether the column menu is enabled
+   * @property {string} [width]
+   * @property {string} [minWidth]
+   * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
+   * @property {DataTableKey<Row>} key
+   * @property {DataTableValue} value
+   * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
+   * @property {false | ((a: DataTableValue, b: DataTableValue) => number)} [sort]
+   * @property {boolean} [columnMenu] - Whether the column menu is enabled
+   * @property {string} [width]
+   * @property {string} [minWidth]
    * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
    * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
    * @typedef {any} DataTableRowId
-   * @typedef {{
-   *    key: DataTableKey<Row> | (string & {});
-   *    value: DataTableValue;
-   *    display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
-   * }} DataTableCell<Row=DataTableRow>
+   * @typedef {object} DataTableCell<Row=DataTableRow>
+   * @property {DataTableKey<Row> | (string & {})} key
+   * @property {DataTableValue} value
+   * @property {(item: DataTableValue, row: DataTableRow) => DataTableValue} [display]
    * @slot {{ row: Row; rowSelected: boolean; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
-   * @event {{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }} click
-   * @event {{ expanded: boolean; }} click:header--expand
-   * @event {{ header: DataTableHeader<Row>; sortDirection?: "ascending" | "descending" | "none"; target: EventTarget; currentTarget: EventTarget; }} click:header
-   * @event {{ indeterminate: boolean; selected: boolean; }} click:header--select
-   * @event {{ row: Row; target: EventTarget; currentTarget: EventTarget; }} click:row
+   * @event click
+   * @type {object}
+   * @property {DataTableHeader<Row>} [header]
+   * @property {Row} [row]
+   * @property {DataTableCell<Row>} [cell]
+   * @event click:header--expand
+   * @type {object}
+   * @property {boolean} expanded
+   * @event click:header
+   * @type {object}
+   * @property {DataTableHeader<Row>} header
+   * @property {"ascending" | "descending" | "none"} [sortDirection]
+   * @event click:header--select
+   * @type {object}
+   * @property {boolean} indeterminate
+   * @property {boolean} selected
+   * @event click:row
+   * @type {object}
+   * @property {Row} row
    * @event {Row} mouseenter:row
    * @event {Row} mouseleave:row
-   * @event {{ expanded: boolean; row: Row; }} click:row--expand
-   * @event {{ selected: boolean; row: Row; }} click:row--select
-   * @event {{ cell: DataTableCell<Row>; target: EventTarget; currentTarget: EventTarget; }} click:cell
+   * @event click:row--expand
+   * @type {object}
+   * @property {boolean} expanded
+   * @property {Row} row
+   * @event click:row--select
+   * @type {object}
+   * @property {boolean} selected
+   * @property {Row} row
+   * @event click:cell
+   * @type {object}
+   * @property {DataTableCell<Row>} cell
    * @restProps {div}
    */
 

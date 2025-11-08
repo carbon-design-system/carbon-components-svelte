@@ -54,7 +54,7 @@ export type PaginationNavProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class PaginationNav extends SvelteComponentTyped<
   PaginationNavProps,
   {
-    /** fires after every user interaction */
+    /** Fires after every user interaction */
     change: CustomEvent<{ page: number }>;
     "click:button--previous": CustomEvent<{ page: number }>;
     "click:button--next": CustomEvent<{ page: number }>;

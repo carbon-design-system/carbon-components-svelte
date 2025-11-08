@@ -1,6 +1,7 @@
 <script>
   /**
-   * @event {{ timeout: boolean }} close
+   * @event close
+   * @property {boolean} timeout
    */
 
   /**

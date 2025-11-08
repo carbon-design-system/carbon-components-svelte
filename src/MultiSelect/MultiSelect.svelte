@@ -4,8 +4,15 @@
    * @template {MultiSelectItem} Item
    * @typedef {any} MultiSelectItemId
    * @typedef {string} MultiSelectItemText
-   * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }} MultiSelectItem
-   * @event {{ selectedIds: MultiSelectItemId[]; selected: Item[]; unselected: Item[]; }} select
+   * @typedef {object} MultiSelectItem
+   * @property {MultiSelectItemId} id
+   * @property {MultiSelectItemText} text
+   * @property {boolean} [disabled] - Whether the item is disabled
+   * @event select
+   * @type {object}
+   * @property {MultiSelectItemId[]} selectedIds
+   * @property {Item[]} selected
+   * @property {Item[]} unselected
    * @event {null} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
    * @slot {{ item: Item; index: number }}

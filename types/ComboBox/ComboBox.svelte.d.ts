@@ -3,11 +3,11 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 export type ComboBoxItemId = any;
 
-export interface ComboBoxItem {
+export type ComboBoxItem = {
   id: ComboBoxItemId;
   text: string;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 
 type $RestProps = SvelteHTMLElements["input"];
 

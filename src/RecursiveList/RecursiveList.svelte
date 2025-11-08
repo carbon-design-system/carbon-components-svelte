@@ -1,6 +1,9 @@
 <script>
   /**
-   * @typedef {{ text?: string; href?: string; html?: string; }} RecursiveListNode
+   * @typedef RecursiveListNode
+   * @property {string} [text] - Node text content
+   * @property {string} [href] - Node link URL
+   * @property {string} [html] - Node HTML content
    * @restProps {ul | ol}
    */
 

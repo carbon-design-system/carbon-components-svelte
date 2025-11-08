@@ -610,10 +610,7 @@ None.
 ```ts
 export type ColumnSize = boolean | number;
 
-export interface ColumnSizeDescriptor {
-  span?: ColumnSize;
-  offset: number;
-}
+export type ColumnSizeDescriptor = { span?: ColumnSize; offset: number };
 
 export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 ```
@@ -651,11 +648,11 @@ None.
 ```ts
 export type ComboBoxItemId = any;
 
-export interface ComboBoxItem {
+export type ComboBoxItem = {
   id: ComboBoxItemId;
   text: string;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 ```
 
 ### Props
@@ -699,17 +696,17 @@ export interface ComboBoxItem {
 
 ### Events
 
-| Event name | Type       | Detail                                                          | Description |
-| :--------- | :--------- | :-------------------------------------------------------------- | :---------- |
-| select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: Item }</code> | --          |
-| clear      | forwarded  | --                                                              | --          |
-| input      | forwarded  | --                                                              | --          |
-| keydown    | forwarded  | --                                                              | --          |
-| keyup      | forwarded  | --                                                              | --          |
-| focus      | forwarded  | --                                                              | --          |
-| blur       | forwarded  | --                                                              | --          |
-| paste      | forwarded  | --                                                              | --          |
-| scroll     | forwarded  | --                                                              | --          |
+| Event name | Type       | Detail                                                           | Description |
+| :--------- | :--------- | :--------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: Item; }</code> | --          |
+| clear      | forwarded  | --                                                               | --          |
+| input      | forwarded  | --                                                               | --          |
+| keydown    | forwarded  | --                                                               | --          |
+| keyup      | forwarded  | --                                                               | --          |
+| focus      | forwarded  | --                                                               | --          |
+| blur       | forwarded  | --                                                               | --          |
+| paste      | forwarded  | --                                                               | --          |
+| scroll     | forwarded  | --                                                               | --          |
 
 ## `ComposedModal`
 
@@ -733,18 +730,18 @@ export interface ComboBoxItem {
 
 ### Events
 
-| Event name            | Type       | Detail                                                                              | Description |
-| :-------------------- | :--------- | :---------------------------------------------------------------------------------- | :---------- |
-| close                 | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button" }</code> | --          |
-| transitionend         | dispatched | <code>{ open: boolean; }</code>                                                     | --          |
-| keydown               | forwarded  | --                                                                                  | --          |
-| click                 | forwarded  | --                                                                                  | --          |
-| mouseover             | forwarded  | --                                                                                  | --          |
-| mouseenter            | forwarded  | --                                                                                  | --          |
-| mouseleave            | forwarded  | --                                                                                  | --          |
-| submit                | dispatched | <code>null</code>                                                                   | --          |
-| click:button--primary | dispatched | <code>null</code>                                                                   | --          |
-| open                  | dispatched | <code>null</code>                                                                   | --          |
+| Event name            | Type       | Detail                                                                               | Description |
+| :-------------------- | :--------- | :----------------------------------------------------------------------------------- | :---------- |
+| close                 | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button"; }</code> | --          |
+| transitionend         | dispatched | <code>{ open: boolean; }</code>                                                      | --          |
+| keydown               | forwarded  | --                                                                                   | --          |
+| click                 | forwarded  | --                                                                                   | --          |
+| mouseover             | forwarded  | --                                                                                   | --          |
+| mouseenter            | forwarded  | --                                                                                   | --          |
+| mouseleave            | forwarded  | --                                                                                   | --          |
+| submit                | dispatched | <code>null</code>                                                                    | --          |
+| click:button--primary | dispatched | <code>null</code>                                                                    | --          |
+| open                  | dispatched | <code>null</code>                                                                    | --          |
 
 ## `Content`
 
@@ -937,25 +934,25 @@ export type DataTableKey<Row = DataTableRow> =
 
 export type DataTableValue = any;
 
-export interface DataTableEmptyHeader<Row = DataTableRow> {
+export type DataTableEmptyHeader<Row = DataTableRow> = {
   key: DataTableKey<Row> | (string & {});
-  empty: boolean;
+  /** Whether the header is empty */ empty: boolean;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  columnMenu?: boolean;
+  /** Whether the column menu is enabled */ columnMenu?: boolean;
   width?: string;
   minWidth?: string;
-}
+};
 
-export interface DataTableNonEmptyHeader<Row = DataTableRow> {
+export type DataTableNonEmptyHeader<Row = DataTableRow> = {
   key: DataTableKey<Row>;
   value: DataTableValue;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  columnMenu?: boolean;
+  /** Whether the column menu is enabled */ columnMenu?: boolean;
   width?: string;
   minWidth?: string;
-}
+};
 
 export type DataTableHeader<Row = DataTableRow> =
   | DataTableNonEmptyHeader<Row>
@@ -968,11 +965,11 @@ export interface DataTableRow {
 
 export type DataTableRowId = any;
 
-export interface DataTableCell<Row = DataTableRow> {
+export type DataTableCell<Row = DataTableRow> = {
   key: DataTableKey<Row> | (string & {});
   value: DataTableValue;
   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
-}
+};
 ```
 
 ### Props
@@ -1016,18 +1013,18 @@ export interface DataTableCell<Row = DataTableRow> {
 
 ### Events
 
-| Event name           | Type       | Detail                                                                                                                                                         | Description |
-| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- |
-| click                | dispatched | <code>{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }</code>                                                                          | --          |
-| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                                                                            | --          |
-| click:header         | dispatched | <code>{ header: DataTableHeader<Row>; sortDirection?: "ascending" &#124; "descending" &#124; "none"; target: EventTarget; currentTarget: EventTarget; }</code> | --          |
-| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                                                                                    | --          |
-| click:row            | dispatched | <code>{ row: Row; target: EventTarget; currentTarget: EventTarget; }</code>                                                                                    | --          |
-| mouseenter:row       | dispatched | <code>Row</code>                                                                                                                                               | --          |
-| mouseleave:row       | dispatched | <code>Row</code>                                                                                                                                               | --          |
-| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                                                                  | --          |
-| click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                                                                  | --          |
-| click:cell           | dispatched | <code>{ cell: DataTableCell<Row>; target: EventTarget; currentTarget: EventTarget; }</code>                                                                    | --          |
+| Event name           | Type       | Detail                                                                                                        | Description |
+| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------------ | :---------- |
+| click                | dispatched | <code>{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }</code>                         | --          |
+| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                           | --          |
+| click:header         | dispatched | <code>{ header: DataTableHeader<Row>; sortDirection?: "ascending" &#124; "descending" &#124; "none"; }</code> | --          |
+| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                                   | --          |
+| click:row            | dispatched | <code>{ row: Row; }</code>                                                                                    | --          |
+| mouseenter:row       | dispatched | <code>Row</code>                                                                                              | --          |
+| mouseleave:row       | dispatched | <code>Row</code>                                                                                              | --          |
+| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                 | --          |
+| click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                 | --          |
+| click:cell           | dispatched | <code>{ cell: DataTableCell<Row>; }</code>                                                                    | --          |
 
 ## `DataTableSkeleton`
 
@@ -1161,11 +1158,11 @@ export type DropdownItemId = any;
 
 export type DropdownItemText = string;
 
-export interface DropdownItem {
+export type DropdownItem = {
   id: DropdownItemId;
   text: DropdownItemText;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 ```
 
 ### Props
@@ -1202,9 +1199,9 @@ export interface DropdownItem {
 
 ### Events
 
-| Event name | Type       | Detail                                                          | Description |
-| :--------- | :--------- | :-------------------------------------------------------------- | :---------- |
-| select     | dispatched | <code>{ selectedId: DropdownItemId, selectedItem: Item }</code> | --          |
+| Event name | Type       | Detail                                                           | Description |
+| :--------- | :--------- | :--------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedId: DropdownItemId; selectedItem: Item; }</code> | --          |
 
 ## `DropdownSkeleton`
 
@@ -1829,11 +1826,11 @@ None.
 ### Types
 
 ```ts
-export interface HeaderSearchResult {
+export type HeaderSearchResult = {
   href: string;
   text: string;
   description?: string;
-}
+};
 ```
 
 ### Props
@@ -1854,18 +1851,18 @@ export interface HeaderSearchResult {
 
 ### Events
 
-| Event name | Type       | Detail                                                                                          | Description |
-| :--------- | :--------- | :---------------------------------------------------------------------------------------------- | :---------- |
-| active     | dispatched | <code>null</code>                                                                               | --          |
-| inactive   | dispatched | <code>null</code>                                                                               | --          |
-| clear      | dispatched | <code>null</code>                                                                               | --          |
-| select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }</code> | --          |
-| change     | forwarded  | --                                                                                              | --          |
-| input      | forwarded  | --                                                                                              | --          |
-| focus      | forwarded  | --                                                                                              | --          |
-| blur       | forwarded  | --                                                                                              | --          |
-| keydown    | forwarded  | --                                                                                              | --          |
-| paste      | forwarded  | --                                                                                              | --          |
+| Event name | Type       | Detail                                                                                           | Description |
+| :--------- | :--------- | :----------------------------------------------------------------------------------------------- | :---------- |
+| active     | dispatched | <code>null</code>                                                                                | --          |
+| inactive   | dispatched | <code>null</code>                                                                                | --          |
+| clear      | dispatched | <code>null</code>                                                                                | --          |
+| select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult; }</code> | --          |
+| change     | forwarded  | --                                                                                               | --          |
+| input      | forwarded  | --                                                                                               | --          |
+| focus      | forwarded  | --                                                                                               | --          |
+| blur       | forwarded  | --                                                                                               | --          |
+| keydown    | forwarded  | --                                                                                               | --          |
+| paste      | forwarded  | --                                                                                               | --          |
 
 ## `HeaderUtilities`
 
@@ -1964,13 +1961,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                            | Description |
-| :--------- | :--------- | :-------------------------------- | :---------- |
-| close      | dispatched | <code>{ timeout: boolean }</code> | --          |
-| click      | forwarded  | --                                | --          |
-| mouseover  | forwarded  | --                                | --          |
-| mouseenter | forwarded  | --                                | --          |
-| mouseleave | forwarded  | --                                | --          |
+| Event name | Type       | Detail                             | Description |
+| :--------- | :--------- | :--------------------------------- | :---------- |
+| close      | dispatched | <code>{ timeout: boolean; }</code> | --          |
+| click      | forwarded  | --                                 | --          |
+| mouseover  | forwarded  | --                                 | --          |
+| mouseenter | forwarded  | --                                 | --          |
+| mouseleave | forwarded  | --                                 | --          |
 
 ## `Link`
 
@@ -2268,19 +2265,19 @@ None.
 
 ### Events
 
-| Event name              | Type       | Detail                                                                              | Description |
-| :---------------------- | :--------- | :---------------------------------------------------------------------------------- | :---------- |
-| close                   | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button" }</code> | --          |
-| transitionend           | dispatched | <code>{ open: boolean; }</code>                                                     | --          |
-| click:button--secondary | dispatched | <code>{ text: string; }</code>                                                      | --          |
-| keydown                 | forwarded  | --                                                                                  | --          |
-| click                   | forwarded  | --                                                                                  | --          |
-| mouseover               | forwarded  | --                                                                                  | --          |
-| mouseenter              | forwarded  | --                                                                                  | --          |
-| mouseleave              | forwarded  | --                                                                                  | --          |
-| submit                  | dispatched | <code>null</code>                                                                   | --          |
-| click:button--primary   | dispatched | <code>null</code>                                                                   | --          |
-| open                    | dispatched | <code>null</code>                                                                   | --          |
+| Event name              | Type       | Detail                                                                               | Description |
+| :---------------------- | :--------- | :----------------------------------------------------------------------------------- | :---------- |
+| close                   | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button"; }</code> | --          |
+| transitionend           | dispatched | <code>{ open: boolean; }</code>                                                      | --          |
+| click:button--secondary | dispatched | <code>{ text: string; }</code>                                                       | --          |
+| keydown                 | forwarded  | --                                                                                   | --          |
+| click                   | forwarded  | --                                                                                   | --          |
+| mouseover               | forwarded  | --                                                                                   | --          |
+| mouseenter              | forwarded  | --                                                                                   | --          |
+| mouseleave              | forwarded  | --                                                                                   | --          |
+| submit                  | dispatched | <code>null</code>                                                                    | --          |
+| click:button--primary   | dispatched | <code>null</code>                                                                    | --          |
+| open                    | dispatched | <code>null</code>                                                                    | --          |
 
 ## `ModalBody`
 
@@ -2363,11 +2360,11 @@ export type MultiSelectItemId = any;
 
 export type MultiSelectItemText = string;
 
-export interface MultiSelectItem {
+export type MultiSelectItem = {
   id: MultiSelectItemId;
   text: MultiSelectItemText;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 ```
 
 ### Props
@@ -2647,14 +2644,14 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                                    | Description |
-| :--------- | :--------- | :-------------------------------------------------------- | :---------- |
-| close      | dispatched | <code>null &#124; { index: number; text: string; }</code> | --          |
-| click      | forwarded  | --                                                        | --          |
-| mouseover  | forwarded  | --                                                        | --          |
-| mouseenter | forwarded  | --                                                        | --          |
-| mouseleave | forwarded  | --                                                        | --          |
-| keydown    | forwarded  | --                                                        | --          |
+| Event name | Type       | Detail                                          | Description |
+| :--------- | :--------- | :---------------------------------------------- | :---------- |
+| close      | dispatched | <code>{ index?: number; text?: string; }</code> | --          |
+| click      | forwarded  | --                                              | --          |
+| mouseover  | forwarded  | --                                              | --          |
+| mouseenter | forwarded  | --                                              | --          |
+| mouseleave | forwarded  | --                                              | --          |
+| keydown    | forwarded  | --                                              | --          |
 
 ## `OverflowMenuItem`
 
@@ -2715,12 +2712,12 @@ None.
 
 ### Events
 
-| Event name             | Type       | Detail                                            | Description                           |
-| :--------------------- | :--------- | :------------------------------------------------ | :------------------------------------ |
-| change                 | dispatched | <code>{ page?: number; pageSize?: number }</code> | Dispatched after any user interaction |
-| click:button--previous | dispatched | <code>{ page: number; }</code>                    | --                                    |
-| click:button--next     | dispatched | <code>{ page: number; }</code>                    | --                                    |
-| update                 | dispatched | <code>{ pageSize: number; page: number; }</code>  | --                                    |
+| Event name             | Type       | Detail                                             | Description                           |
+| :--------------------- | :--------- | :------------------------------------------------- | :------------------------------------ |
+| change                 | dispatched | <code>{ page?: number; pageSize?: number; }</code> | Dispatched after any user interaction |
+| click:button--previous | dispatched | <code>{ page: number; }</code>                     | Dispatched after any user interaction |
+| click:button--next     | dispatched | <code>{ page: number; }</code>                     | Dispatched after any user interaction |
+| update                 | dispatched | <code>{ pageSize: number; page: number; }</code>   | Dispatched after any user interaction |
 
 ## `PaginationNav`
 
@@ -2744,7 +2741,7 @@ None.
 
 | Event name             | Type       | Detail                         | Description                        |
 | :--------------------- | :--------- | :----------------------------- | :--------------------------------- |
-| change                 | dispatched | <code>{ page: number; }</code> | fires after every user interaction |
+| change                 | dispatched | <code>{ page: number; }</code> | Fires after every user interaction |
 | click:button--previous | dispatched | <code>{ page: number; }</code> | --                                 |
 | click:button--next     | dispatched | <code>{ page: number; }</code> | --                                 |
 
@@ -3071,11 +3068,11 @@ None.
 ### Types
 
 ```ts
-export interface RecursiveListNode {
-  text?: string;
-  href?: string;
-  html?: string;
-}
+export type RecursiveListNode = {
+  /** Node text content */ text?: string;
+  /** Node link URL */ href?: string;
+  /** Node HTML content */ html?: string;
+};
 ```
 
 ### Props
@@ -4386,13 +4383,13 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Events
 
-| Event name | Type       | Detail                            | Description |
-| :--------- | :--------- | :-------------------------------- | :---------- |
-| close      | dispatched | <code>{ timeout: boolean }</code> | --          |
-| click      | forwarded  | --                                | --          |
-| mouseover  | forwarded  | --                                | --          |
-| mouseenter | forwarded  | --                                | --          |
-| mouseleave | forwarded  | --                                | --          |
+| Event name | Type       | Detail                             | Description |
+| :--------- | :--------- | :--------------------------------- | :---------- |
+| close      | dispatched | <code>{ timeout: boolean; }</code> | --          |
+| click      | forwarded  | --                                 | --          |
+| mouseover  | forwarded  | --                                 | --          |
+| mouseenter | forwarded  | --                                 | --          |
+| mouseleave | forwarded  | --                                 | --          |
 
 ## `Toggle`
 
@@ -4708,13 +4705,13 @@ None.
 ```ts
 export type TreeNodeId = string | number;
 
-export interface TreeNode {
+export type TreeNode = {
   id: TreeNodeId;
   text: any;
   icon?: any;
-  disabled?: boolean;
+  /** Whether the node is disabled */ disabled?: boolean;
   nodes?: TreeNode[];
-}
+};
 ```
 
 ### Props
@@ -4743,12 +4740,12 @@ export interface TreeNode {
 
 ### Events
 
-| Event name | Type       | Detail                                                        | Description |
-| :--------- | :--------- | :------------------------------------------------------------ | :---------- |
-| select     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> | --          |
-| toggle     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> | --          |
-| focus      | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> | --          |
-| keydown    | forwarded  | --                                                            | --          |
+| Event name | Type       | Detail                                                                                                                            | Description |
+| :--------- | :--------- | :-------------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; expanded: boolean; leaf: boolean; }</code> | --          |
+| toggle     | dispatched | <code>{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; expanded: boolean; leaf: boolean; }</code> | --          |
+| focus      | dispatched | <code>{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; expanded: boolean; leaf: boolean; }</code> | --          |
+| keydown    | forwarded  | --                                                                                                                                | --          |
 
 ## `Truncate`
 

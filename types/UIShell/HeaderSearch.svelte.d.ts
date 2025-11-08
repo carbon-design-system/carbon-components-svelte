@@ -1,11 +1,11 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface HeaderSearchResult {
+export type HeaderSearchResult = {
   href: string;
   text: string;
   description?: string;
-}
+};
 
 type $RestProps = SvelteHTMLElements["input"];
 
