@@ -11,6 +11,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v6
         with:
           node-version: 22
