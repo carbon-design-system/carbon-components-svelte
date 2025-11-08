@@ -24,6 +24,15 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "performance": {
+        "noAccumulatingSpread": "error",
+        "noAwaitInLoops": "error",
+        "noDelete": "error",
+        "noDynamicNamespaceImportAccess": "error",
+        "noNamespaceImport": "error",
+        "noReExportAll": "error",
+        "useTopLevelRegex": "error"
+      },
       "complexity": {
         "noImportantStyles": "off",
         "useLiteralKeys": "error"
@@ -72,6 +81,16 @@
             "useConst": "off",
             "useImportType": "off",
             "useTemplate": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.test.ts"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "useTopLevelRegex": "off"
           }
         }
       }
