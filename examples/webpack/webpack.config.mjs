@@ -1,15 +1,18 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const path = require("node:path");
-const {
-  optimizeImports,
-  OptimizeCssPlugin,
-} = require("carbon-preprocess-svelte");
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import carbonPreprocess from "carbon-preprocess-svelte";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+
+const { OptimizeCssPlugin, optimizeImports } = carbonPreprocess;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 const PROD = NODE_ENV === "production";
 
-module.exports = {
+/** @type {import("webpack").Configuration} */
+export default {
   entry: { "build/bundle": ["./src/index.js"] },
   resolve: {
     alias: {
