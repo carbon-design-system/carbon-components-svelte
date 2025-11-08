@@ -4261,7 +4261,7 @@
           "name": "items",
           "kind": "let",
           "description": "Set the dropdown items",
-          "type": "ReadonlyArray<DropdownItem>",
+          "type": "ReadonlyArray<Item>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4273,7 +4273,7 @@
           "name": "itemToString",
           "kind": "let",
           "description": "Override the display of a dropdown item",
-          "type": "(item: DropdownItem) => string",
+          "type": "(item: Item) => string",
           "value": "(item) => item.text || item.id",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -4511,14 +4511,14 @@
           "name": null,
           "default": true,
           "fallback": "{itemToString(item)}",
-          "slot_props": "{\n  item: DropdownItem;\n  index: number;\n}"
+          "slot_props": "{\n  item: Item;\n  index: number;\n}"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  selectedId: DropdownItemId;\n  selectedItem: DropdownItem;\n}"
+          "detail": "{\n  selectedId: DropdownItemId;\n  selectedItem: Item;\n}"
         }
       ],
       "typedefs": [
@@ -4538,7 +4538,10 @@
           "ts": "interface DropdownItem {\n  id: DropdownItemId;\n  text: DropdownItemText;\n  disabled?: boolean;\n}\n"
         }
       ],
-      "generics": null,
+      "generics": [
+        "Item",
+        "Item extends DropdownItem = DropdownItem"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "div"
