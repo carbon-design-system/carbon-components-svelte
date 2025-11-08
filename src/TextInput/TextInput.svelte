@@ -94,7 +94,7 @@
   };
 
   const isFluid = !!ctx && ctx.isFluid;
-  $: error = invalid && !readonly;
+  $: hasError = invalid && !readonly;
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
@@ -162,7 +162,7 @@
     class:bx--text-input__field-outer-wrapper--inline={inline}
   >
     <div
-      data-invalid={error || undefined}
+      data-invalid={hasError || undefined}
       data-warn={warn || undefined}
       class:bx--text-input__field-wrapper={true}
       class:bx--text-input__field-wrapper--warning={!invalid && warn}
@@ -182,10 +182,10 @@
       {/if}
       <input
         bind:this={ref}
-        data-invalid={error || undefined}
-        aria-invalid={error || undefined}
+        data-invalid={hasError || undefined}
+        aria-invalid={hasError || undefined}
         data-warn={warn || undefined}
-        aria-describedby={error
+        aria-describedby={hasError
           ? errorId
           : warn
             ? warnId
@@ -201,7 +201,7 @@
         {readonly}
         class:bx--text-input={true}
         class:bx--text-input--light={light}
-        class:bx--text-input--invalid={error}
+        class:bx--text-input--invalid={hasError}
         class:bx--text-input--warning={warn}
         class:bx--text-input--sm={size === "sm"}
         class:bx--text-input--xl={size === "xl"}

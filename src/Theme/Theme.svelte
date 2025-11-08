@@ -78,9 +78,9 @@
   const dispatch = createEventDispatcher();
 
   $: if (typeof window !== "undefined") {
-    Object.entries(tokens).forEach(([token, value]) => {
+    for (const [token, value] of Object.entries(tokens)) {
       document.documentElement.style.setProperty(`--cds-${token}`, value);
-    });
+    }
 
     if (theme in themes) {
       document.documentElement.setAttribute("theme", theme);

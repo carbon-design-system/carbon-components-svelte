@@ -146,7 +146,7 @@
 
   function change(dir) {
     let index = highlightedIndex + dir;
-    let _items = !filteredItems?.length ? items : filteredItems;
+    let _items = filteredItems?.length ? filteredItems : items;
     if (_items.length === 0) return;
     if (index < 0) {
       index = _items.length - 1;
@@ -199,15 +199,7 @@
     } else {
       highlightedIndex = -1;
       filteredItems = [];
-      if (!selectedItem) {
-        selectedId = undefined;
-        // Only reset value if the input is not focused and allowCustomValue is false
-        if (!ref.contains(document.activeElement) && !allowCustomValue) {
-          value = "";
-        }
-        highlightedIndex = -1;
-        highlightedId = undefined;
-      } else {
+      if (selectedItem) {
         // Only set value if the input is not focused
         if (!ref.contains(document.activeElement)) {
           // Restore the value if clearFilterOnOpen was used and no new selection was made
@@ -219,6 +211,14 @@
           }
           valueBeforeOpen = "";
         }
+      } else {
+        selectedId = undefined;
+        // Only reset value if the input is not focused and allowCustomValue is false
+        if (!ref.contains(document.activeElement) && !allowCustomValue) {
+          value = "";
+        }
+        highlightedIndex = -1;
+        highlightedId = undefined;
       }
     }
   });

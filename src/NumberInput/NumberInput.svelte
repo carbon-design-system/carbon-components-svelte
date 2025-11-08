@@ -161,7 +161,7 @@
 
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: error =
+  $: hasError =
     (invalid && !readonly) ||
     (!allowEmpty && value == null) ||
     value > max ||
@@ -230,7 +230,7 @@
   on:mouseleave
 >
   <div
-    data-invalid={error || undefined}
+    data-invalid={hasError || undefined}
     class:bx--number={true}
     class:bx--number--helpertext={true}
     class:bx--number--readonly={readonly}
@@ -261,8 +261,8 @@
           type="text"
           inputmode="decimal"
           aria-describedby={errorId}
-          data-invalid={error || undefined}
-          aria-invalid={error || undefined}
+          data-invalid={hasError || undefined}
+          aria-invalid={hasError || undefined}
           aria-label={label ? undefined : ariaLabel}
           {disabled}
           {id}
@@ -284,8 +284,8 @@
           type="number"
           pattern="[0-9]*"
           aria-describedby={errorId}
-          data-invalid={error || undefined}
-          aria-invalid={error || undefined}
+          data-invalid={hasError || undefined}
+          aria-invalid={hasError || undefined}
           aria-label={label ? undefined : ariaLabel}
           {disabled}
           {id}
@@ -353,7 +353,7 @@
         </div>
       {/if}
     </div>
-    {#if !error && !warn && helperText}
+    {#if !hasError && !warn && helperText}
       <div
         class:bx--form__helper-text={true}
         class:bx--form__helper-text--disabled={disabled}
@@ -361,12 +361,12 @@
         {helperText}
       </div>
     {/if}
-    {#if error}
+    {#if hasError}
       <div id={errorId} class:bx--form-requirement={true}>
         {invalidText}
       </div>
     {/if}
-    {#if !error && warn}
+    {#if !hasError && warn}
       <div id={errorId} class:bx--form-requirement={true}>{warnText}</div>
     {/if}
   </div>

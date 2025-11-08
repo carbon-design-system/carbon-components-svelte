@@ -69,9 +69,9 @@
     // Sync input files with component files array.
     try {
       const dt = new DataTransfer();
-      files.forEach((file) => {
+      for (const file of files) {
         dt.items.add(file);
-      });
+      }
       ref.files = dt.files;
     } catch {
       // Fail open if DataTransfer API is not supported.

@@ -207,9 +207,9 @@
       calendar.set("maxDate", maxDate);
       calendar.set("locale", locale);
       calendar.set("dateFormat", dateFormat);
-      Object.entries(flatpickrProps).forEach(([_option, value]) => {
+      for (const [_option, value] of Object.entries(flatpickrProps)) {
         calendar.set(options, value);
-      });
+      }
       return;
     }
 

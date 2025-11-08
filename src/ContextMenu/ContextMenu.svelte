@@ -98,9 +98,9 @@
 
   $: if (target != null) {
     if (Array.isArray(target)) {
-      target.forEach((node) => {
+      for (const node of target) {
         node?.addEventListener("contextmenu", openMenu);
-      });
+      }
     } else {
       target.addEventListener("contextmenu", openMenu);
     }
@@ -110,9 +110,9 @@
     return () => {
       if (target != null) {
         if (Array.isArray(target)) {
-          target.forEach((node) => {
+          for (const node of target) {
             node?.removeEventListener("contextmenu", openMenu);
-          });
+          }
         } else {
           target.removeEventListener("contextmenu", openMenu);
         }
@@ -153,7 +153,7 @@
     if (!$hasPopup && options[focusIndex]) options[focusIndex].focus();
   });
 
-  $: level = !ctx ? 1 : 2;
+  $: level = ctx ? 2 : 1;
   $: currentIndex.set(focusIndex);
 </script>
 
