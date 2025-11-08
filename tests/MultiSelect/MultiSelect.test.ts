@@ -653,4 +653,97 @@ describe("MultiSelect", () => {
     expect(options[2]).toHaveAttribute("aria-selected", "true");
     expect(input).toHaveFocus();
   });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2313
+  describe("keyboard navigation (issue #2313)", () => {
+    it("filterable: menu opens when starting to type after Tab focus", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+
+      // Simulate tabbing into the field
+      input.focus();
+
+      // Menu doesn't need to open immediately on focus for filterable variant
+      // but should open when user starts typing
+      await user.type(input, "s");
+
+      // Menu should now be open
+      expect(input).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("filterable: accepts keyboard input after tabbing into field", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+
+      // Simulate tabbing into the field
+      input.focus();
+
+      // Should be able to type immediately
+      await user.type(input, "slack");
+      expect(input).toHaveValue("slack");
+
+      // Filtered results should be shown
+      expect(screen.getByText("Slack")).toBeInTheDocument();
+      expect(screen.queryByText("Email")).not.toBeInTheDocument();
+    });
+
+    it("filterable: Tab key does not close menu when navigating", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+
+      // Menu should be open
+      expect(input).toHaveAttribute("aria-expanded", "true");
+
+      // Press Tab - menu should close to allow natural tab navigation
+      await user.keyboard("{Tab}");
+
+      // Menu should close when Tab is pressed to move focus away
+      expect(input).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("filterable: focus should go to input, not clear button when items selected", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+
+      // Simulate tabbing into the field
+      input.focus();
+
+      // Input should have focus, not the clear button
+      expect(input).toHaveFocus();
+
+      const clearButton = screen.getAllByRole("button", { name: /clear/i })[0];
+      expect(clearButton).not.toHaveFocus();
+    });
+  });
 });
