@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.90.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.90.1...v0.90.2) (2025-11-08)
+
+### Bug Fixes
+
+- **button:** icon slot includes `style` prop in TypeScript definitions ([8507917](https://github.com/carbon-design-system/carbon-components-svelte/commit/8507917d693a93471b5858e6ab21965eeab17efe))
+- **multi-select:** restore keyboard navigation for filterable variant ([#2314](https://github.com/carbon-design-system/carbon-components-svelte/issues/2314)) ([7d849d2](https://github.com/carbon-design-system/carbon-components-svelte/commit/7d849d282a580cd62a075fc8f125263aa71de4d0)), closes [#2313](https://github.com/carbon-design-system/carbon-components-svelte/issues/2313)
+- **number-input:** avoid global `isNaN` ([f93aab2](https://github.com/carbon-design-system/carbon-components-svelte/commit/f93aab28c6098197d0bef6d438a663042d0f96fe))
+- **tooltip:** avoid useless ternary ([798fe61](https://github.com/carbon-design-system/carbon-components-svelte/commit/798fe61b795b98fc76dffe4221da11969f341e08))
+- **types:** include skeleton props for Button/DataTableSkeleton ([2f08b9a](https://github.com/carbon-design-system/carbon-components-svelte/commit/2f08b9aa8327e3a24fdd9cf4e4f509fbaeaaa947))
+- use strict equals in `Breakpoint` and `TextInput` ([a565dc5](https://github.com/carbon-design-system/carbon-components-svelte/commit/a565dc5733c618866686b29b7ddd5f28c6b7d10d))
+
 ### [0.90.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.90.0...v0.90.1) (2025-10-26)
 
 ### Bug Fixes
