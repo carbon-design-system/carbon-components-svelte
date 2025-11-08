@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
+import { expectTypeOf } from "vitest";
 import { user } from "../setup-tests";
 import Dropdown from "./Dropdown.test.svelte";
+import DropdownGenerics from "./DropdownGenerics.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
 
 const items = [
@@ -358,5 +360,110 @@ describe("Dropdown", () => {
     expect(
       button.querySelector(".bx--list-box__menu-icon svg"),
     ).toHaveAttribute("aria-label", "Open dropdown");
+  });
+
+  describe("Generics", () => {
+    it("should support custom item types with generics", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+        category: string;
+        inStock: boolean;
+      };
+
+      const products: Product[] = [
+        {
+          id: "1",
+          text: "Laptop",
+          price: 999,
+          category: "Electronics",
+          inStock: true,
+        },
+        {
+          id: "2",
+          text: "Phone",
+          price: 599,
+          category: "Electronics",
+          inStock: false,
+        },
+      ];
+
+      expectTypeOf<typeof products>().toEqualTypeOf<Product[]>();
+
+      const itemToString = (item: Product) => `${item.text} - $${item.price}`;
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
+
+      type SelectEvent = CustomEvent<{
+        selectedId: string;
+        selectedItem: Product;
+      }>;
+      expectTypeOf<
+        SelectEvent["detail"]["selectedItem"]
+      >().toEqualTypeOf<Product>();
+    });
+
+    it("should provide type-safe access to custom properties in callbacks", () => {
+      type Tag = {
+        id: number;
+        text: string;
+        color: string;
+        usageCount: number;
+      };
+
+      const itemToString = (item: Tag) => {
+        expectTypeOf(item).toHaveProperty("color");
+        expectTypeOf(item).toHaveProperty("usageCount");
+        return `${item.text} (${item.usageCount})`;
+      };
+
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Tag>();
+    });
+
+    it("should support slot props with generic item type", () => {
+      type MenuItem = {
+        id: string;
+        text: string;
+        icon: string;
+        shortcut?: string;
+      };
+
+      type SlotProps = { item: MenuItem; index: number };
+
+      const slotItem: MenuItem = {
+        id: "1",
+        text: "Save",
+        icon: "save-icon",
+        shortcut: "Ctrl+S",
+      };
+
+      expectTypeOf<SlotProps["item"]>().toEqualTypeOf<MenuItem>();
+      expectTypeOf(slotItem).toHaveProperty("icon");
+      expectTypeOf(slotItem).toHaveProperty("shortcut");
+    });
+
+    it("should infer generic type from items and support destructuring in slots", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(DropdownGenerics);
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(3);
+      expect(options[0]).toHaveTextContent("Laptop");
+      expect(options[0]).toHaveTextContent("$999");
+      expect(options[0]).toHaveTextContent("Electronics");
+
+      await user.click(screen.getByText("Laptop"));
+
+      expect(consoleLog).toHaveBeenCalledWith("selected:", {
+        id: "1",
+        text: "Laptop",
+        price: 999,
+        category: "Electronics",
+      });
+    });
   });
 });
