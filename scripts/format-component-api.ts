@@ -3,6 +3,11 @@ import { format } from "prettier";
 import plugin from "prettier/plugins/typescript";
 import componentApi from "../docs/src/COMPONENT_API.json" with { type: "json" };
 
+const WHITESPACE_REGEX = /\s{2,}/;
+const TRAILING_SEMICOLON_REGEX = /;\s*$/;
+const EVENT_DETAIL_PREFIX_REGEX = /type EventDetail = /;
+const SLOT_PROPS_PREFIX_REGEX = /type SlotProps = /;
+
 const formatTypeScript = async (value) => {
   return await format(value, {
     parser: "typescript",
@@ -20,7 +25,7 @@ modified.components = await Promise.all(
   componentApi.components.map(async (component) => {
     component.props = await Promise.all(
       component.props.map(async (prop) => {
-        if (!prop.value || !/\s{2,}/.test(prop.value)) {
+        if (!prop.value || !WHITESPACE_REGEX.test(prop.value)) {
           return prop;
         }
 
@@ -35,7 +40,7 @@ modified.components = await Promise.all(
           // Remove prefix needed for formatting.
           .replace(new RegExp(`^${prefix}`), "")
           // Remove trailing semi-colon.
-          .replace(/;\s*$/, "");
+          .replace(TRAILING_SEMICOLON_REGEX, "");
 
         return {
           ...prop,
@@ -67,9 +72,9 @@ modified.components = await Promise.all(
 
         const formatted = (await formatTypeScript(normalizedValue))
           // Remove prefix needed for formatting.
-          .replace(/type EventDetail = /, "")
+          .replace(EVENT_DETAIL_PREFIX_REGEX, "")
           // Remove trailing semi-colon.
-          .replace(/;\s*$/, "");
+          .replace(TRAILING_SEMICOLON_REGEX, "");
 
         return {
           ...event,
@@ -92,9 +97,9 @@ modified.components = await Promise.all(
 
         const formatted = (await formatTypeScript(normalizedValue))
           // Remove prefix needed for formatting.
-          .replace(/type SlotProps = /, "")
+          .replace(SLOT_PROPS_PREFIX_REGEX, "")
           // Remove trailing semi-colon.
-          .replace(/;\s*$/, "");
+          .replace(TRAILING_SEMICOLON_REGEX, "");
 
         return {
           ...slot,
