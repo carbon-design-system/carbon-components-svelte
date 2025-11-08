@@ -32,7 +32,17 @@
         "noExplicitAny": "off"
       },
       "style": {
-        "noDescendingSpecificity": "off"
+        "noDescendingSpecificity": "off",
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "vitest": {
+                "message": "Vitest functions are automatically imported."
+              }
+            }
+          }
+        }
       }
     }
   },

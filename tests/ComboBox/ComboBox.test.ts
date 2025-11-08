@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
-import { expectTypeOf } from "vitest";
 import { user } from "../setup-tests";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";

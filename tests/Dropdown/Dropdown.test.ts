@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/svelte";
-import { expectTypeOf } from "vitest";
 import { user } from "../setup-tests";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
