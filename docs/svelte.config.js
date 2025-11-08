@@ -15,6 +15,10 @@ const component_api_by_name = component_api.components.reduce((a, c) => {
   return a;
 }, {});
 
+const ICON_NAME_REGEX = /[A-Z][a-z]*/;
+const NODE_MODULES_REGEX = /node_modules/;
+const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
+
 function createImports(source) {
   const inlineComponents = new Set();
   const icons = new Set();
@@ -22,7 +26,7 @@ function createImports(source) {
 
   // heuristic to guess if the inline component or expression name is a Carbon icon
   const isIcon = (text) =>
-    /[A-Z][a-z]*/.test(text) && !(text in component_api_by_name);
+    ICON_NAME_REGEX.test(text) && !(text in component_api_by_name);
 
   walk(parse(source), {
     enter(node) {
@@ -142,7 +146,7 @@ export default {
   preprocess: [
     {
       markup: ({ filename, content }) => {
-        if (/node_modules/.test(filename) || !filename.endsWith(".svelte"))
+        if (NODE_MODULES_REGEX.test(filename) || !filename.endsWith(".svelte"))
           return;
         return {
           code: content.replace(
@@ -161,8 +165,8 @@ export default {
     }),
     {
       markup({ content, filename }) {
-        if (/node_modules/.test(filename)) return null;
-        if (!filename.match(/pages\/(components)/)) return null;
+        if (NODE_MODULES_REGEX.test(filename)) return null;
+        if (!filename.match(PAGES_COMPONENTS_REGEX)) return null;
 
         const toc = [];
 
