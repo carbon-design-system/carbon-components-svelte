@@ -106,6 +106,33 @@ describe("ContextMenu", () => {
     menus[0].appendChild(nestedMenu);
   });
 
+  it("should set level to 1 when ctx is null (root menu)", () => {
+    render(ContextMenu, { props: { open: true } });
+
+    const menus = screen.getAllByRole("menu");
+    expect(menus[0]).toHaveAttribute("data-level", "1");
+  });
+
+  it("should set level to 2 when ctx exists (nested menu)", async () => {
+    render(ContextMenu, {
+      props: {
+        open: true,
+        withSubmenu: true,
+        x: 100,
+        y: 100,
+      },
+    });
+
+    const submenuTrigger = screen.getByText("Option with submenu");
+    await user.hover(submenuTrigger);
+
+    const submenu = screen
+      .getAllByRole("menu")
+      .find((menu) => menu.getAttribute("data-level") === "2");
+    assert(submenu);
+    expect(submenu).toHaveAttribute("data-level", "2");
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1848
   it("should not close parent menu when clicking submenu trigger", async () => {
     const consoleLog = vi.spyOn(console, "log");
