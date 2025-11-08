@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
-import UIShell from "./UIShell.test.svelte";
+import UiShell from "./UIShell.test.svelte";
 
 describe("UIShell", () => {
   beforeEach(() => {
@@ -9,26 +9,26 @@ describe("UIShell", () => {
 
   describe("Header", () => {
     it("should render with default props", () => {
-      render(UIShell);
+      render(UiShell);
 
       const header = screen.getByRole("banner");
       expect(header).toHaveClass("bx--header");
     });
 
     it("should render with company name", () => {
-      render(UIShell, { props: { company: "IBM" } });
+      render(UiShell, { props: { company: "IBM" } });
 
       expect(screen.getByText(/IBM/)).toBeInTheDocument();
     });
 
     it("should render with platform name", () => {
-      render(UIShell, { props: { platformName: "Platform" } });
+      render(UiShell, { props: { platformName: "Platform" } });
 
       expect(screen.getByText("Platform")).toBeInTheDocument();
     });
 
     it("should render with href", () => {
-      render(UIShell, {
+      render(UiShell, {
         props: { headerHref: "/home", platformName: "Platform" },
       });
 
@@ -37,14 +37,14 @@ describe("UIShell", () => {
     });
 
     it("should render company and platform slots", () => {
-      render(UIShell, { props: { useSlots: true } });
+      render(UiShell, { props: { useSlots: true } });
 
       expect(screen.getByText("Custom Company")).toBeInTheDocument();
       expect(screen.getByText("Custom Platform")).toBeInTheDocument();
     });
 
     it("should apply custom class to Header link", () => {
-      render(UIShell, {
+      render(UiShell, {
         props: { headerClass: "custom-header", platformName: "Platform" },
       });
 
@@ -54,7 +54,7 @@ describe("UIShell", () => {
 
     it("should handle click events", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      render(UIShell, { props: { headerHref: "#", platformName: "Platform" } });
+      render(UiShell, { props: { headerHref: "#", platformName: "Platform" } });
 
       const link = screen.getByText("Platform").closest("a");
       assert(link);
@@ -64,7 +64,7 @@ describe("UIShell", () => {
     });
 
     it("should bind ref to anchor element", () => {
-      const { component } = render(UIShell, {
+      const { component } = render(UiShell, {
         props: { headerHref: "#", platformName: "Platform" },
       });
 
@@ -72,7 +72,7 @@ describe("UIShell", () => {
     });
 
     it("should apply custom ariaLabelMenu to hamburger menu when persistentHamburgerMenu is true", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: {
           persistentHamburgerMenu: true,
           ariaLabelMenu: "Toggle menu",
@@ -87,7 +87,7 @@ describe("UIShell", () => {
     });
 
     it("should default to 'Open menu' when side nav is closed", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: {
           persistentHamburgerMenu: true,
           isSideNavOpen: false,
@@ -102,7 +102,7 @@ describe("UIShell", () => {
     });
 
     it("should update label when hamburger menu is clicked", async () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: {
           persistentHamburgerMenu: true,
           isSideNavOpen: false,
@@ -124,21 +124,21 @@ describe("UIShell", () => {
 
   describe("HeaderNav", () => {
     it("should render navigation", () => {
-      render(UIShell);
+      render(UiShell);
 
       const nav = screen.getByRole("navigation");
       expect(nav).toHaveClass("bx--header__nav");
     });
 
     it("should render navigation items", () => {
-      render(UIShell);
+      render(UiShell);
 
       const nav = screen.getByRole("navigation", { name: "Navigation" });
       expect(nav.querySelector('[role="menuitem"]')).toBeInTheDocument();
     });
 
     it("should apply custom class to HeaderNav", () => {
-      render(UIShell, { props: { headerNavClass: "custom-nav" } });
+      render(UiShell, { props: { headerNavClass: "custom-nav" } });
 
       const nav = screen.getByRole("navigation");
       expect(nav).toHaveClass("custom-nav");
@@ -147,14 +147,14 @@ describe("UIShell", () => {
 
   describe("SideNav", () => {
     it("should render with default props", () => {
-      const { container } = render(UIShell);
+      const { container } = render(UiShell);
 
       const nav = container.querySelector(".bx--side-nav");
       expect(nav).toBeInTheDocument();
     });
 
     it("should render fixed variant", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: { sideNavFixed: true },
       });
 
@@ -163,7 +163,7 @@ describe("UIShell", () => {
     });
 
     it("should render rail variant", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: { sideNavRail: true },
       });
 
@@ -172,7 +172,7 @@ describe("UIShell", () => {
     });
 
     it("should handle isOpen state", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: { sideNavIsOpen: true },
       });
 
@@ -182,7 +182,7 @@ describe("UIShell", () => {
     });
 
     it("should apply custom aria-label", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: { sideNavAriaLabel: "Main navigation" },
       });
 
@@ -191,7 +191,7 @@ describe("UIShell", () => {
     });
 
     it("should apply custom class to SideNav", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: { sideNavClass: "custom-sidenav" },
       });
 
@@ -201,7 +201,7 @@ describe("UIShell", () => {
 
     it("should dispatch open event", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { component } = render(UIShell);
+      const { component } = render(UiShell);
 
       component.sideNavIsOpen = true;
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -211,7 +211,7 @@ describe("UIShell", () => {
 
     it("should dispatch close event", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { component } = render(UIShell, {
+      const { component } = render(UiShell, {
         props: { sideNavIsOpen: true },
       });
 
@@ -223,7 +223,7 @@ describe("UIShell", () => {
 
     it("should handle overlay click", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: { sideNavIsOpen: true },
       });
 
@@ -237,7 +237,7 @@ describe("UIShell", () => {
     });
 
     it("should render side nav links", () => {
-      const { container } = render(UIShell);
+      const { container } = render(UiShell);
 
       const sideNav = container.querySelector(".bx--side-nav");
       const links = sideNav?.querySelectorAll(".bx--side-nav__link");
@@ -247,7 +247,7 @@ describe("UIShell", () => {
 
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/604
     it("should prevent focus on links when closed (not rail mode)", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: { sideNavIsOpen: false },
       });
 
@@ -257,7 +257,7 @@ describe("UIShell", () => {
     });
 
     it("should allow focus on links when open", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: { sideNavIsOpen: true },
       });
 
@@ -267,7 +267,7 @@ describe("UIShell", () => {
     });
 
     it("should not apply visibility:hidden in rail mode when closed", () => {
-      const { container } = render(UIShell, {
+      const { container } = render(UiShell, {
         props: { sideNavIsOpen: false, sideNavRail: true },
       });
 
@@ -279,7 +279,7 @@ describe("UIShell", () => {
 
   describe("Content", () => {
     it("should render content", () => {
-      render(UIShell);
+      render(UiShell);
 
       expect(screen.getByText("Content goes here")).toBeInTheDocument();
     });
