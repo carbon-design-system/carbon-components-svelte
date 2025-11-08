@@ -420,6 +420,10 @@
           }}
           on:keyup
           on:focus
+          on:focus={() => {
+            if (disabled) return;
+            open = true;
+          }}
           on:blur
           on:paste
           {disabled}

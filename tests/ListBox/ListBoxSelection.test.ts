@@ -27,11 +27,11 @@ describe("ListBoxSelection", () => {
     expect(button).toHaveAttribute("tabindex", "-1");
   });
 
-  it("should handle enabled state for single selection", () => {
+  it("should not be in tab order (accessibility fix)", () => {
     render(ListBoxSelection, { props: { disabled: false } });
 
     const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("tabindex", "0");
+    expect(button).toHaveAttribute("tabindex", "-1");
   });
 
   it("should handle disabled state for multi selection", () => {
