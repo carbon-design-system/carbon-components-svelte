@@ -67,7 +67,7 @@
     <div
       bind:this={ref}
       role="button"
-      tabindex={disabled ? -1 : 0}
+      tabindex="-1"
       class:bx--tag__close-icon={true}
       on:click|preventDefault|stopPropagation={(e) => {
         if (!disabled) {
@@ -92,7 +92,7 @@
     role="button"
     aria-label={description}
     title={description}
-    tabindex={disabled ? "-1" : "0"}
+    tabindex="-1"
     class:bx--list-box__selection={true}
     class:bx--tag--filter={selectionCount}
     class:bx--list-box__selection--multi={selectionCount}
