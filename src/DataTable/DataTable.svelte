@@ -169,6 +169,8 @@
   import TableHeader from "./TableHeader.svelte";
   import TableRow from "./TableRow.svelte";
 
+  const PATH_SPLIT_REGEX = /[.[\]'"]/;
+
   const sortDirectionMap = {
     none: "ascending",
     ascending: "descending",
@@ -198,7 +200,7 @@
   const resolvePath = (object, path) => {
     if (path in object) return object[path];
     return path
-      .split(/[.[\]'"]/)
+      .split(PATH_SPLIT_REGEX)
       .filter((p) => p)
       .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
   };
