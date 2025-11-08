@@ -831,7 +831,8 @@ describe("MultiSelect", () => {
         expectTypeOf(item).toHaveProperty("color");
         expectTypeOf(item).toHaveProperty("usageCount");
         return (
-          item.color.includes(value) || item.usageCount > parseInt(value, 10)
+          item.color.includes(value) ||
+          item.usageCount > Number.parseInt(value, 10)
         );
       };
 

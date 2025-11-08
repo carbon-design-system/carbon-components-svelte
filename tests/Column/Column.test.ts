@@ -57,7 +57,7 @@ describe("Column", () => {
         const column = screen.getByTestId("content").parentElement;
         assert(column);
         expect(column).toHaveClass(
-          `bx--aspect-ratio`,
+          "bx--aspect-ratio",
           `bx--aspect-ratio--${ratio}`,
         );
       });
