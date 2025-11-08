@@ -656,7 +656,7 @@ describe("MultiSelect", () => {
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2313
   describe("keyboard navigation (issue #2313)", () => {
-    it("filterable: menu opens when starting to type after Tab focus", async () => {
+    it("filterable: menu opens when tabbing into field", async () => {
       render(MultiSelect, {
         props: {
           items,
@@ -667,19 +667,14 @@ describe("MultiSelect", () => {
 
       const input = screen.getByPlaceholderText("Filter...");
 
-      // Simulate tabbing into the field
-      input.focus();
+      await user.tab();
+      expect(input).toHaveFocus();
 
-      // Menu doesn't need to open immediately on focus for filterable variant
-      // but should open when user starts typing
-      await user.type(input, "s");
-
-      // Menu should now be open
       expect(input).toHaveAttribute("aria-expanded", "true");
       expect(screen.getByRole("listbox")).toBeInTheDocument();
     });
 
-    it("filterable: accepts keyboard input after tabbing into field", async () => {
+    it("filterable: first character shows correctly after tabbing", async () => {
       render(MultiSelect, {
         props: {
           items,
@@ -690,14 +685,15 @@ describe("MultiSelect", () => {
 
       const input = screen.getByPlaceholderText("Filter...");
 
-      // Simulate tabbing into the field
-      input.focus();
+      await user.tab();
+      expect(input).toHaveFocus();
 
-      // Should be able to type immediately
-      await user.type(input, "slack");
+      await user.type(input, "s");
+      expect(input).toHaveValue("s");
+
+      await user.type(input, "lack");
       expect(input).toHaveValue("slack");
 
-      // Filtered results should be shown
       expect(screen.getByText("Slack")).toBeInTheDocument();
       expect(screen.queryByText("Email")).not.toBeInTheDocument();
     });
@@ -713,18 +709,13 @@ describe("MultiSelect", () => {
 
       const input = screen.getByPlaceholderText("Filter...");
       await user.click(input);
-
-      // Menu should be open
       expect(input).toHaveAttribute("aria-expanded", "true");
 
-      // Press Tab - menu should close to allow natural tab navigation
       await user.keyboard("{Tab}");
-
-      // Menu should close when Tab is pressed to move focus away
       expect(input).toHaveAttribute("aria-expanded", "false");
     });
 
-    it("filterable: focus should go to input, not clear button when items selected", async () => {
+    it("filterable: focus goes to input, not clear button", async () => {
       render(MultiSelect, {
         props: {
           items,
@@ -735,15 +726,36 @@ describe("MultiSelect", () => {
       });
 
       const input = screen.getByPlaceholderText("Filter...");
-
-      // Simulate tabbing into the field
-      input.focus();
-
-      // Input should have focus, not the clear button
-      expect(input).toHaveFocus();
-
       const clearButton = screen.getAllByRole("button", { name: /clear/i })[0];
+
+      expect(clearButton).toHaveAttribute("tabindex", "-1");
+      await user.tab();
+
+      expect(input).toHaveFocus();
       expect(clearButton).not.toHaveFocus();
+      expect(input).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("filterable: clear button is not keyboard accessible but works with mouse", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      const clearButton = screen.getAllByRole("button", { name: /clear/i })[0];
+
+      expect(clearButton).toHaveAttribute("tabindex", "-1");
+      await user.click(clearButton);
+
+      await user.click(input);
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "false");
+      expect(options[1]).toHaveAttribute("aria-selected", "false");
     });
   });
 });
