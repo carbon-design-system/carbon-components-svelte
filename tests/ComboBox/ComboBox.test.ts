@@ -1,8 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
+import { expectTypeOf } from "vitest";
 import { user } from "../setup-tests";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
+import ComboBoxGenerics from "./ComboBoxGenerics.test.svelte";
 
 describe("ComboBox", () => {
   const getInput = () => screen.getByRole("combobox");
@@ -38,7 +40,7 @@ describe("ComboBox", () => {
 
     expect(consoleLog).toHaveBeenCalledWith("select", {
       selectedId: "1",
-      selectedItem: { id: "1", text: "Email" },
+      selectedItem: { id: "1", text: "Email", price: 200 },
     });
     expect(getInput()).toHaveValue("Email");
   });
@@ -523,5 +525,126 @@ describe("ComboBox", () => {
 
     await user.click(document.body);
     expect(input).toHaveValue("Email");
+  });
+
+  describe("Generics", () => {
+    it("should support custom item types with generics", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+        category: string;
+        inStock: boolean;
+      };
+
+      const products: Product[] = [
+        {
+          id: "1",
+          text: "Laptop",
+          price: 999,
+          category: "Electronics",
+          inStock: true,
+        },
+        {
+          id: "2",
+          text: "Phone",
+          price: 599,
+          category: "Electronics",
+          inStock: false,
+        },
+      ];
+
+      expectTypeOf<typeof products>().toEqualTypeOf<Product[]>();
+
+      const itemToString = (item: Product) => `${item.text} - $${item.price}`;
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
+
+      const shouldFilterItem = (item: Product, value: string) =>
+        item.category.toLowerCase().includes(value.toLowerCase()) ||
+        item.text.toLowerCase().includes(value.toLowerCase());
+      expectTypeOf(shouldFilterItem).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(shouldFilterItem).parameter(1).toEqualTypeOf<string>();
+      expectTypeOf(shouldFilterItem).returns.toEqualTypeOf<boolean>();
+
+      type SelectEvent = CustomEvent<{
+        selectedId: string;
+        selectedItem: Product;
+      }>;
+      expectTypeOf<
+        SelectEvent["detail"]["selectedItem"]
+      >().toEqualTypeOf<Product>();
+    });
+
+    it("should provide type-safe access to custom properties in callbacks", () => {
+      type Tag = {
+        id: number;
+        text: string;
+        color: string;
+        usageCount: number;
+      };
+
+      const itemToString = (item: Tag) => {
+        expectTypeOf(item).toHaveProperty("color");
+        expectTypeOf(item).toHaveProperty("usageCount");
+        return `${item.text} (${item.usageCount})`;
+      };
+
+      const shouldFilterItem = (item: Tag, value: string) => {
+        expectTypeOf(item).toHaveProperty("color");
+        expectTypeOf(item).toHaveProperty("usageCount");
+        return (
+          item.color.includes(value) || item.usageCount > parseInt(value, 10)
+        );
+      };
+
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Tag>();
+      expectTypeOf(shouldFilterItem).parameter(0).toEqualTypeOf<Tag>();
+    });
+
+    it("should support slot props with generic item type", () => {
+      type MenuItem = {
+        id: string;
+        text: string;
+        icon: string;
+        shortcut?: string;
+      };
+
+      type SlotProps = { item: MenuItem; index: number };
+
+      const slotItem: MenuItem = {
+        id: "1",
+        text: "Save",
+        icon: "save-icon",
+        shortcut: "Ctrl+S",
+      };
+
+      expectTypeOf<SlotProps["item"]>().toEqualTypeOf<MenuItem>();
+      expectTypeOf(slotItem).toHaveProperty("icon");
+      expectTypeOf(slotItem).toHaveProperty("shortcut");
+    });
+
+    it("should infer generic type from items and support destructuring in slots", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBoxGenerics);
+
+      const input = screen.getByRole("combobox");
+      await user.click(input);
+
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(3);
+      expect(options[0]).toHaveTextContent("Laptop");
+      expect(options[0]).toHaveTextContent("$999");
+      expect(options[0]).toHaveTextContent("Electronics");
+
+      await user.click(screen.getByText("Laptop"));
+
+      expect(consoleLog).toHaveBeenCalledWith("selected:", {
+        id: "1",
+        text: "Laptop",
+        price: 999,
+        category: "Electronics",
+      });
+    });
   });
 });
