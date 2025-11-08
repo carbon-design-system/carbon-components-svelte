@@ -526,6 +526,23 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Email");
   });
 
+  it("should reset value when menu closes with no selectedItem, input not focused, and allowCustomValue is false", async () => {
+    render(ComboBox, { props: { allowCustomValue: false } });
+
+    const input = getInput();
+    await user.click(input);
+    await user.type(input, "Custom Text");
+
+    await user.click(document.body);
+    expect(input).not.toHaveFocus();
+
+    // Value should be reset when:
+    // - no selectedItem
+    // - input is not focused (ref.contains(document.activeElement) is false)
+    // - allowCustomValue is false
+    expect(input).toHaveValue("");
+  });
+
   describe("Generics", () => {
     it("should support custom item types with generics", () => {
       type Product = {
