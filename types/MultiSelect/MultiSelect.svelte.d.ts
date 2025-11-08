@@ -19,24 +19,24 @@ export type MultiSelectContext = {
 
 type $RestProps = SvelteHTMLElements["input"];
 
-type $Props = {
+type $Props<Item> = {
   /**
    * Set the multiselect items
    * @default []
    */
-  items?: ReadonlyArray<MultiSelectItem>;
+  items?: ReadonlyArray<Item>;
 
   /**
    * Override the display of a multiselect item
    * @default (item) => item.text || item.id
    */
-  itemToString?: (item: MultiSelectItem) => any;
+  itemToString?: (item: Item) => any;
 
   /**
    * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
    * @default (_item) => {}
    */
-  itemToInput?: (item: MultiSelectItem) => {
+  itemToInput?: (item: Item) => {
     name?: string;
     labelText?: any;
     title?: string;
@@ -96,7 +96,7 @@ type $Props = {
    * The default filtering is an exact string comparison
    * @default (item, value) => item.text.toLowerCase().includes(value.trim().toLowerCase())
    */
-  filterItem?: (item: MultiSelectItem, value: string) => boolean;
+  filterItem?: (item: Item, value: string) => boolean;
 
   /**
    * Set to `true` to open the dropdown
@@ -127,9 +127,7 @@ type $Props = {
    * The default sorting compare the item text value
    * @default (a, b) => a.text.localeCompare(b.text, locale, { numeric: true })
    */
-  sortItem?:
-    | ((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem)
-    | (() => void);
+  sortItem?: ((a: Item, b: Item) => Item) | (() => void);
 
   /**
    * Override the chevron icon label based on the open state.
@@ -248,15 +246,18 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type MultiSelectProps = Omit<$RestProps, keyof $Props> & $Props;
+export type MultiSelectProps<Item> = Omit<$RestProps, keyof $Props<Item>> &
+  $Props<Item>;
 
-export default class MultiSelect extends SvelteComponentTyped<
-  MultiSelectProps,
+export default class MultiSelect<
+  Item extends MultiSelectItem = MultiSelectItem,
+> extends SvelteComponentTyped<
+  MultiSelectProps<Item>,
   {
     select: CustomEvent<{
       selectedIds: MultiSelectItemId[];
-      selected: MultiSelectItem[];
-      unselected: MultiSelectItem[];
+      selected: Item[];
+      unselected: Item[];
     }>;
     clear: CustomEvent<null>;
     blur: FocusEvent | CustomEvent<FocusEvent>;
@@ -266,8 +267,5 @@ export default class MultiSelect extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     paste: WindowEventMap["paste"];
   },
-  {
-    default: { item: MultiSelectItem; index: number };
-    titleText: Record<string, never>;
-  }
+  { default: { item: Item; index: number }; titleText: Record<string, never> }
 > {}

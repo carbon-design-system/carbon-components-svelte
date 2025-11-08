@@ -8982,7 +8982,7 @@
           "name": "items",
           "kind": "let",
           "description": "Set the multiselect items",
-          "type": "ReadonlyArray<MultiSelectItem>",
+          "type": "ReadonlyArray<Item>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -8994,7 +8994,7 @@
           "name": "itemToString",
           "kind": "let",
           "description": "Override the display of a multiselect item",
-          "type": "(item: MultiSelectItem) => any",
+          "type": "(item: Item) => any",
           "value": "(item) => item.text || item.id",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -9006,7 +9006,7 @@
           "name": "itemToInput",
           "kind": "let",
           "description": "Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.",
-          "type": "(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }",
+          "type": "(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }",
           "value": "(_item) => {}",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -9113,7 +9113,7 @@
           "name": "filterItem",
           "kind": "let",
           "description": "Override the filtering logic\nThe default filtering is an exact string comparison",
-          "type": "(item: MultiSelectItem, value: string) => boolean",
+          "type": "(item: Item, value: string) => boolean",
           "value": "(item, value) =>\n  item.text\n    .toLowerCase()\n    .includes(\n      value.trim().toLowerCase(),\n    )",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -9173,7 +9173,7 @@
           "name": "sortItem",
           "kind": "let",
           "description": "Override the sorting logic\nThe default sorting compare the item text value",
-          "type": "((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)",
+          "type": "((a: Item, b: Item) => Item) | (() => void)",
           "value": "(a, b) =>\n  a.text.localeCompare(b.text, locale, {\n    numeric: true,\n  })",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -9401,7 +9401,7 @@
           "name": null,
           "default": true,
           "fallback": "{itemToString(item)}",
-          "slot_props": "{\n  item: MultiSelectItem;\n  index: number;\n}"
+          "slot_props": "{\n  item: Item;\n  index: number;\n}"
         },
         {
           "name": "titleText",
@@ -9414,7 +9414,7 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  selectedIds: MultiSelectItemId[];\n  selected: MultiSelectItem[];\n  unselected: MultiSelectItem[];\n}"
+          "detail": "{\n  selectedIds: MultiSelectItemId[];\n  selected: Item[];\n  unselected: Item[];\n}"
         },
         {
           "type": "forwarded",
@@ -9470,7 +9470,10 @@
           "ts": "interface MultiSelectItem {\n  id: MultiSelectItemId;\n  text: MultiSelectItemText;\n  disabled?: boolean;\n}\n"
         }
       ],
-      "generics": null,
+      "generics": [
+        "Item",
+        "Item extends MultiSelectItem = MultiSelectItem"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "input"

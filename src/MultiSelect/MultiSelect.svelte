@@ -1,29 +1,31 @@
 <script>
   /**
+   * @generics {Item extends MultiSelectItem = MultiSelectItem} Item
+   * @template {MultiSelectItem} Item
    * @typedef {any} MultiSelectItemId
    * @typedef {string} MultiSelectItemText
    * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }} MultiSelectItem
-   * @event {{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
+   * @event {{ selectedIds: MultiSelectItemId[]; selected: Item[]; unselected: Item[]; }} select
    * @event {null} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
-   * @slot {{ item: MultiSelectItem; index: number }}
+   * @slot {{ item: Item; index: number }}
    */
 
   /**
    * Set the multiselect items
-   * @type {ReadonlyArray<MultiSelectItem>}
+   * @type {ReadonlyArray<Item>}
    */
   export let items = [];
 
   /**
    * Override the display of a multiselect item
-   * @type {(item: MultiSelectItem) => any}
+   * @type {(item: Item) => any}
    */
   export let itemToString = (item) => item.text || item.id;
 
   /**
    * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
-   * @type {(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }}
+   * @type {(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }}
    */
   export let itemToInput = (_item) => {};
 
@@ -69,7 +71,7 @@
   /**
    * Override the filtering logic
    * The default filtering is an exact string comparison
-   * @type {(item: MultiSelectItem, value: string) => boolean}
+   * @type {(item: Item, value: string) => boolean}
    */
   export let filterItem = (item, value) =>
     item.text.toLowerCase().includes(value.trim().toLowerCase());
@@ -89,7 +91,7 @@
   /**
    * Override the sorting logic
    * The default sorting compare the item text value
-   * @type {((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)}
+   * @type {((a: Item, b: Item) => Item) | (() => void)}
    */
   export let sortItem = (a, b) =>
     a.text.localeCompare(b.text, locale, { numeric: true });
