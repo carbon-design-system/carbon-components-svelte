@@ -4,30 +4,34 @@ import autoprefixer from "autoprefixer";
 import postcss from "postcss";
 import sass from "sass";
 
+const POPOVER_FILE_REGEX = /^_popover/;
+
 const scss = fs
   .readdirSync("css")
-  .filter((file) => file.endsWith(".scss") && !/^_popover/.test(file))
+  .filter((file) => file.endsWith(".scss") && !POPOVER_FILE_REGEX.test(file))
   .map((file) => path.parse(file));
 
-for (const { name, base } of scss) {
-  const file = `css/${base}`;
-  const outFile = `css/${name}.css`;
+await Promise.all(
+  scss.map(async ({ name, base }) => {
+    const file = `css/${base}`;
+    const outFile = `css/${name}.css`;
 
-  console.log("[build-css]", file, "-->", outFile);
+    console.log("[build-css]", file, "-->", outFile);
 
-  const { css } = sass.renderSync({
-    file,
-    outFile,
-    outputStyle: "compressed",
-    omitSourceMapUrl: true,
-    includePaths: ["node_modules"],
-  });
+    const { css } = sass.renderSync({
+      file,
+      outFile,
+      outputStyle: "compressed",
+      omitSourceMapUrl: true,
+      includePaths: ["node_modules"],
+    });
 
-  const prefixed = await postcss([
-    autoprefixer({
-      overrideBrowserslist: ["last 1 version", "ie >= 11", "Firefox ESR"],
-    }),
-  ]).process(css, { from: undefined });
+    const prefixed = await postcss([
+      autoprefixer({
+        overrideBrowserslist: ["last 1 version", "ie >= 11", "Firefox ESR"],
+      }),
+    ]).process(css, { from: undefined });
 
-  fs.writeFileSync(outFile, prefixed.css);
-}
+    fs.writeFileSync(outFile, prefixed.css);
+  }),
+);
