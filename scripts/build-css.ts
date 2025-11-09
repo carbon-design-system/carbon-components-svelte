@@ -1,14 +1,14 @@
-import fs from "node:fs";
 import path from "node:path";
 import autoprefixer from "autoprefixer";
+import { Glob } from "bun";
 import postcss from "postcss";
 import sass from "sass";
 
-const POPOVER_FILE_REGEX = /^_popover/;
+const PARTIAL_FILE_REGEX = /^_/;
 
-const scss = fs
-  .readdirSync("css")
-  .filter((file) => file.endsWith(".scss") && !POPOVER_FILE_REGEX.test(file))
+const glob = new Glob("*.scss");
+const scss = Array.from(glob.scanSync({ cwd: "css" }))
+  .filter((file) => !PARTIAL_FILE_REGEX.test(file))
   .map((file) => path.parse(file));
 
 await Promise.all(
@@ -32,6 +32,6 @@ await Promise.all(
       }),
     ]).process(css, { from: undefined });
 
-    fs.writeFileSync(outFile, prefixed.css);
+    await Bun.write(outFile, prefixed.css);
   }),
 );
