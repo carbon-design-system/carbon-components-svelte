@@ -12,7 +12,7 @@ type $Props = {
 
   /**
    * Specify the icon to render
-   * @default undefined
+   * @default Close
    */
   icon?: any;
 

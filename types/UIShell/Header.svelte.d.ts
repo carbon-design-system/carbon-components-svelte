@@ -69,15 +69,13 @@ type $Props = {
 
   /**
    * Specify the icon to render for the closed state.
-   * Defaults to `<Menu size={20} />`
-   * @default undefined
+   * @default Menu
    */
   iconMenu?: any;
 
   /**
    * Specify the icon to render for the opened state.
-   * Defaults to `<Close size={20} />`
-   * @default undefined
+   * @default Close
    */
   iconClose?: any;
 

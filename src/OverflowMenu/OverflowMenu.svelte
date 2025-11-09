@@ -32,7 +32,6 @@
 
   /**
    * Specify the icon to render.
-   * Defaults to `<OverflowMenuVertical />`
    * @type {any}
    */
   export let icon = OverflowMenuVertical;

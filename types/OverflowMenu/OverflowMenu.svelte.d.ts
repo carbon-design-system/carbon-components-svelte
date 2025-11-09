@@ -72,8 +72,7 @@ type $Props = {
 
   /**
    * Specify the icon to render.
-   * Defaults to `<OverflowMenuVertical />`
-   * @default undefined
+   * @default OverflowMenuVertical
    */
   icon?: any;
 
