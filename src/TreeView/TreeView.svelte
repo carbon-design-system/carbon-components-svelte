@@ -35,6 +35,10 @@
    * @property {any} [icon]
    * @property {boolean} [disabled] - Whether the node is disabled
    * @property {TreeNode[]} [nodes]
+   * @typedef {object} ShowNodeOptions
+   * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
+   * @property {boolean} [select] - Whether to select the node (default: true)
+   * @property {boolean} [focus] - Whether to focus the node (default: true)
    * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
    * @event select
    * @type {object}
@@ -146,10 +150,13 @@
 
   /**
    * Programmatically show a node by `id`.
-   * The matching node will be expanded, selected, and focused
-   * @type {(id: TreeNodeId) => void}
+   * By default, the matching node will be expanded, selected, and focused.
+   * Use the options parameter to customize this behavior.
+   * @type {(id: TreeNodeId, options?: ShowNodeOptions) => void}
    */
-  export function showNode(id) {
+  export function showNode(id, options = {}) {
+    const { expand = true, select = true, focus = true } = options;
+
     for (const child of nodes) {
       const nodes = findNodeById(child, id);
 
@@ -157,16 +164,22 @@
         const ids = nodes.map((node) => node.id);
         const nodeIds = new Set(ids);
 
-        expandNodes((node) => nodeIds.has(node.id));
+        if (expand) {
+          expandNodes((node) => nodeIds.has(node.id));
+        }
 
         const lastId = ids[ids.length - 1];
 
-        activeId = lastId;
-        selectedIds = [lastId];
+        if (select) {
+          activeId = lastId;
+          selectedIds = [lastId];
+        }
 
-        tick().then(() => {
-          ref?.querySelector(`[id="${lastId}"]`)?.focus();
-        });
+        if (focus) {
+          tick().then(() => {
+            ref?.querySelector(`[id="${lastId}"]`)?.focus();
+          });
+        }
 
         break;
       }

@@ -10,6 +10,12 @@ export type TreeNode = {
   /** Whether the node is disabled */ disabled?: boolean;
   nodes?: TreeNode[];
 };
+
+export type ShowNodeOptions = {
+  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;
+  /** Whether to select the node (default: true) */ select?: boolean;
+  /** Whether to focus the node (default: true) */ focus?: boolean;
+};
 export type TreeViewContext = {
   activeNodeId: import("svelte/store").Writable<TreeNodeId>;
   selectedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
@@ -142,7 +148,8 @@ export default class TreeView extends SvelteComponentTyped<
 
   /**
    * Programmatically show a node by `id`.
-   * The matching node will be expanded, selected, and focused
+   * By default, the matching node will be expanded, selected, and focused.
+   * Use the options parameter to customize this behavior.
    */
-  showNode: (id: TreeNodeId) => void;
+  showNode: (id: TreeNodeId, options?: ShowNodeOptions) => void;
 }

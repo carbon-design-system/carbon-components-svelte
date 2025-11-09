@@ -4712,24 +4712,30 @@ export type TreeNode = {
   /** Whether the node is disabled */ disabled?: boolean;
   nodes?: TreeNode[];
 };
+
+export type ShowNodeOptions = {
+  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;
+  /** Whether to select the node (default: true) */ select?: boolean;
+  /** Whether to focus the node (default: true) */ focus?: boolean;
+};
 ```
 
 ### Props
 
-| Prop name     | Required | Kind                  | Reactive | Type                                                          | Default value          | Description                                                                                          |
-| :------------ | :------- | :-------------------- | :------- | ------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------- |
-| expandedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                        | <code>[]</code>        | Set the node ids to be expanded                                                                      |
-| selectedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                        | <code>[]</code>        | Set the node ids to be selected                                                                      |
-| activeId      | No       | <code>let</code>      | Yes      | <code>TreeNodeId</code>                                       | <code>""</code>        | Set the current active node id<br />Only one node can be active                                      |
-| nodes         | No       | <code>let</code>      | No       | <code>Array<TreeNode></code>                                  | <code>[]</code>        | Provide an array of nodes to render                                                                  |
-| size          | No       | <code>let</code>      | No       | <code>"default" &#124; "compact"</code>                       | <code>"default"</code> | Specify the TreeView size                                                                            |
-| labelText     | No       | <code>let</code>      | No       | <code>string</code>                                           | <code>""</code>        | Specify the label text                                                                               |
-| hideLabel     | No       | <code>let</code>      | No       | <code>boolean</code>                                          | <code>false</code>     | Set to `true` to visually hide the label text                                                        |
-| expandAll     | No       | <code>function</code> | No       | <code>() => void</code>                                       | --                     | Programmatically expand all nodes                                                                    |
-| collapseAll   | No       | <code>function</code> | No       | <code>() => void</code>                                       | --                     | Programmatically collapse all nodes                                                                  |
-| expandNodes   | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code> | --                     | Programmatically expand a subset of nodes.<br />Expands all nodes if no argument is provided         |
-| collapseNodes | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code> | --                     | Programmatically collapse a subset of nodes.<br />Collapses all nodes if no argument is provided     |
-| showNode      | No       | <code>function</code> | No       | <code>(id: TreeNodeId) => void</code>                         | --                     | Programmatically show a node by `id`.<br />The matching node will be expanded, selected, and focused |
+| Prop name     | Required | Kind                  | Reactive | Type                                                             | Default value          | Description                                                                                                                                                                  |
+| :------------ | :------- | :-------------------- | :------- | ---------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| expandedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                           | <code>[]</code>        | Set the node ids to be expanded                                                                                                                                              |
+| selectedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                           | <code>[]</code>        | Set the node ids to be selected                                                                                                                                              |
+| activeId      | No       | <code>let</code>      | Yes      | <code>TreeNodeId</code>                                          | <code>""</code>        | Set the current active node id<br />Only one node can be active                                                                                                              |
+| nodes         | No       | <code>let</code>      | No       | <code>Array<TreeNode></code>                                     | <code>[]</code>        | Provide an array of nodes to render                                                                                                                                          |
+| size          | No       | <code>let</code>      | No       | <code>"default" &#124; "compact"</code>                          | <code>"default"</code> | Specify the TreeView size                                                                                                                                                    |
+| labelText     | No       | <code>let</code>      | No       | <code>string</code>                                              | <code>""</code>        | Specify the label text                                                                                                                                                       |
+| hideLabel     | No       | <code>let</code>      | No       | <code>boolean</code>                                             | <code>false</code>     | Set to `true` to visually hide the label text                                                                                                                                |
+| expandAll     | No       | <code>function</code> | No       | <code>() => void</code>                                          | --                     | Programmatically expand all nodes                                                                                                                                            |
+| collapseAll   | No       | <code>function</code> | No       | <code>() => void</code>                                          | --                     | Programmatically collapse all nodes                                                                                                                                          |
+| expandNodes   | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code>    | --                     | Programmatically expand a subset of nodes.<br />Expands all nodes if no argument is provided                                                                                 |
+| collapseNodes | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code>    | --                     | Programmatically collapse a subset of nodes.<br />Collapses all nodes if no argument is provided                                                                             |
+| showNode      | No       | <code>function</code> | No       | <code>(id: TreeNodeId, options?: ShowNodeOptions) => void</code> | --                     | Programmatically show a node by `id`.<br />By default, the matching node will be expanded, selected, and focused.<br />Use the options parameter to customize this behavior. |
 
 ### Slots
 
