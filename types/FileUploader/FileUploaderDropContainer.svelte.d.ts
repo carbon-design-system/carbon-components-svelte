@@ -25,7 +25,6 @@ type $Props = {
   /**
    * Override the default behavior of validating uploaded files.
    * By default, files are not validated
-   * @default (files) => files
    */
   validateFiles?: (files: ReadonlyArray<File>) => ReadonlyArray<File>;
 

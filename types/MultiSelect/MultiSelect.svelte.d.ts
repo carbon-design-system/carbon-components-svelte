@@ -28,13 +28,11 @@ type $Props<Item> = {
 
   /**
    * Override the display of a multiselect item
-   * @default (item) => item.text || item.id
    */
   itemToString?: (item: Item) => any;
 
   /**
    * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
-   * @default (_item) => {}
    */
   itemToInput?: (item: Item) => {
     name?: string;
@@ -94,7 +92,6 @@ type $Props<Item> = {
   /**
    * Override the filtering logic
    * The default filtering is an exact string comparison
-   * @default (item, value) => item.text.toLowerCase().includes(value.trim().toLowerCase())
    */
   filterItem?: (item: Item, value: string) => boolean;
 
@@ -125,7 +122,6 @@ type $Props<Item> = {
   /**
    * Override the sorting logic
    * The default sorting compare the item text value
-   * @default (a, b) => a.text.localeCompare(b.text, locale, { numeric: true })
    */
   sortItem?: ((a: Item, b: Item) => Item) | (() => void);
 

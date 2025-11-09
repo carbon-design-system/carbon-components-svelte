@@ -26,7 +26,6 @@ type $Props = {
 
   /**
    * Override the default translation ids
-   * @default (id) => defaultTranslations[id]
    */
   translateWithId?: (id: ListBoxFieldTranslationId) => string;
 
