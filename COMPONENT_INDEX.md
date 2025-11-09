@@ -2523,7 +2523,7 @@ export type NumberInputTranslationId = "increment" | "decrement";
 | warn            | No       | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to indicate a warning state                                                                                                                      |
 | warnText        | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the warning state text                                                                                                                                 |
 | helperText      | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the helper text                                                                                                                                        |
-| label           | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the label text                                                                                                                                         |
+| labelText       | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the label text                                                                                                                                         |
 | hideLabel       | No       | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to visually hide the label text                                                                                                                  |
 | translateWithId | No       | <code>let</code>   | No       | <code>(id: NumberInputTranslationId) => string</code>           | <code>(id) => defaultTranslations[id]</code>                     | Override the default translation ids                                                                                                                           |
 | translationIds  | No       | <code>const</code> | No       | <code>{ increment: "increment"; decrement: "decrement" }</code> | <code>{ increment: "increment", decrement: "decrement", }</code> | Default translation ids                                                                                                                                        |
@@ -2532,9 +2532,9 @@ export type NumberInputTranslationId = "increment" | "decrement";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback             |
-| :-------- | :------ | :---- | :------------------- |
-| label     | No      | --    | <code>{label}</code> |
+| Slot name | Default | Props | Fallback                 |
+| :-------- | :------ | :---- | :----------------------- |
+| labelText | No      | --    | <code>{labelText}</code> |
 
 ### Events
 

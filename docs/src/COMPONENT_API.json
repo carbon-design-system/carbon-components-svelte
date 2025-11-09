@@ -9429,7 +9429,7 @@
           "reactive": false
         },
         {
-          "name": "label",
+          "name": "labelText",
           "kind": "let",
           "description": "Specify the label text",
           "type": "string",
@@ -9515,9 +9515,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "label",
+          "name": "labelText",
           "default": false,
-          "fallback": "{label}",
+          "fallback": "{labelText}",
           "slot_props": "{}"
         }
       ],
