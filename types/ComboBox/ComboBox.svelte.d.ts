@@ -58,7 +58,7 @@ type $Props = {
    * Specify the title text of the combobox
    * @default ""
    */
-  titleText?: string;
+  labelText?: string;
 
   /**
    * Set to `true` to visually hide the label text
@@ -197,7 +197,7 @@ export default class ComboBox extends SvelteComponentTyped<
     paste: WindowEventMap["paste"];
     scroll: WindowEventMap["scroll"];
   },
-  { default: { item: ComboBoxItem; index: number }; titleText: {} }
+  { default: { item: ComboBoxItem; index: number }; labelText: {} }
 > {
   /**
    * Clear the combo box programmatically

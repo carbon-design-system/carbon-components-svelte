@@ -14,7 +14,7 @@
   export let warn = false;
   export let light = false;
   export let open = false;
-  export let titleText = "Contact";
+  export let labelText = "Contact";
   export let placeholder = "Select contact method";
   export let invalidText = "";
   export let warnText = "";
@@ -43,7 +43,7 @@
   {placeholder}
   {selectedId}
   {size}
-  {titleText}
+  {labelText}
   {value}
   {warn}
   {warnText}

@@ -44,7 +44,7 @@
   export let disabled = false;
 
   /** Specify the title text of the combobox */
-  export let titleText = "";
+  export let labelText = "";
 
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
@@ -255,15 +255,15 @@
 />
 
 <div class:bx--list-box__wrapper={true}>
-  {#if titleText || $$slots.titleText}
+  {#if labelText || $$slots.labelText}
     <label
       for={id}
       class:bx--label={true}
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
     >
-      <slot name="titleText">
-        {titleText}
+      <slot name="labelText">
+        {labelText}
       </slot>
     </label>
   {/if}

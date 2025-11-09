@@ -1864,7 +1864,7 @@
           "reactive": false
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "kind": "let",
           "description": "Specify the title text of the combobox",
           "type": "string",
@@ -2110,9 +2110,9 @@
           "slot_props": "{\n  item: ComboBoxItem;\n  index: number;\n}"
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "default": false,
-          "fallback": "{titleText}",
+          "fallback": "{labelText}",
           "slot_props": "{}"
         }
       ],
