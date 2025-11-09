@@ -15,7 +15,7 @@
 
 Create a combobox with a title and placeholder text. Each item requires a unique `id` and `text`.
 
-<ComboBox titleText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -32,7 +32,7 @@ Override the default slot to customize how each item displays. Access the item a
 
 Set `hideLabel` to `true` to visually hide the label while keeping it accessible to screen readers.
 
-<ComboBox hideLabel titleText="Hidden Label" placeholder="Select contact method"
+<ComboBox hideLabel labelText="Hidden Label" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -43,7 +43,7 @@ items={[
 
 Set `selectedId` to pre-select an item when the combobox loads.
 
-<ComboBox titleText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Contact" placeholder="Select contact method"
 selectedId="1"
 items={[
   {id: "0", text: "Slack"},
@@ -109,7 +109,7 @@ Set `allowCustomValue` to `true` to let users enter custom text that isn't in th
 
 Set `direction` to `"top"` to make the dropdown menu appear above the input.
 
-<ComboBox direction="top" titleText="Contact" placeholder="Select contact method"
+<ComboBox direction="top" labelText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -120,7 +120,7 @@ items={[
 
 Set `light` to `true` to use the light color scheme.
 
-<ComboBox light titleText="Contact" placeholder="Select contact method"
+<ComboBox light labelText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -131,7 +131,7 @@ items={[
 
 Set `size` to `"xl"` for an extra-large combobox.
 
-<ComboBox titleText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Contact" placeholder="Select contact method"
 size="xl"
 items={[
   {id: "0", text: "Slack"},
@@ -143,7 +143,7 @@ items={[
 
 Set `size` to `"sm"` for a small combobox.
 
-<ComboBox titleText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Contact" placeholder="Select contact method"
 size="sm"
 items={[
   {id: "0", text: "Slack"},
@@ -155,7 +155,7 @@ items={[
 
 Set `invalid` to `true` and provide `invalidText` to show an error message.
 
-<ComboBox invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" placeholder="Select contact method"
+<ComboBox invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -166,7 +166,7 @@ items={[
 
 Set `warn` to `true` and provide `warnText` to show a warning message.
 
-<ComboBox warn warnText="This contact method is not associated with your account" titleText="Contact" placeholder="Select contact method"
+<ComboBox warn warnText="This contact method is not associated with your account" labelText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -177,7 +177,7 @@ items={[
 
 Set `disabled` to `true` to prevent interaction with the combobox.
 
-<ComboBox disabled titleText="Contact" placeholder="Select contact method"
+<ComboBox disabled labelText="Contact" placeholder="Select contact method"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -189,7 +189,7 @@ items={[
 Set `disabled: true` in an item object to disable specific options.
 
 <ComboBox
-  titleText="Contact"
+  labelText="Contact"
   placeholder="Select contact method"
   items={[
     { id: "0", text: "Slack" },

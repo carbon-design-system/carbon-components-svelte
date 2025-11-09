@@ -24,7 +24,7 @@
   {direction}
   {shouldFilterItem}
   {itemToString}
-  titleText="Contact with icons"
+  labelText="Contact with icons"
   placeholder="Select contact method"
   on:select={(e) => {
     console.log("select", e.detail);

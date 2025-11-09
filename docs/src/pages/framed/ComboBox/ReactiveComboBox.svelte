@@ -5,7 +5,7 @@
 </script>
 
 <ComboBox
-  titleText="Contact"
+  labelText="Contact"
   placeholder="Select contact method"
   bind:selectedId
   items={[

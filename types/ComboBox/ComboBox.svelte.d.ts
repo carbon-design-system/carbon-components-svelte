@@ -57,7 +57,7 @@ type $Props<Item> = {
    * Specify the title text of the combobox
    * @default ""
    */
-  titleText?: string;
+  labelText?: string;
 
   /**
    * Set to `true` to visually hide the label text
@@ -195,7 +195,7 @@ export default class ComboBox<
     paste: WindowEventMap["paste"];
     scroll: WindowEventMap["scroll"];
   },
-  { default: { item: Item; index: number }; titleText: Record<string, never> }
+  { default: { item: Item; index: number }; labelText: Record<string, never> }
 > {
   /**
    * Clear the combo box programmatically

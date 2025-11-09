@@ -8,7 +8,7 @@
 </script>
 
 <ComboBox
-  titleText="Contact"
+  labelText="Contact"
   placeholder="Select contact method"
   items={[
     { id: "0", text: "Slack" },

@@ -51,7 +51,7 @@
 </script>
 
 <ComboBox
-  titleText="Contact"
+  labelText="Contact"
   placeholder="Type to search..."
   bind:value={inputValue}
   {items}
