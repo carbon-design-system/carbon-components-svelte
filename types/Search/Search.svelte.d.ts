@@ -84,8 +84,7 @@ type $Props = {
 
   /**
    * Specify the icon to render.
-   * Defaults to `<Search />`
-   * @default undefined
+   * @default IconSearch
    */
   icon?: any;
 

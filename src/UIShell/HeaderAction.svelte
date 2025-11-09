@@ -9,14 +9,12 @@
 
   /**
    * Specify the icon to render when the action panel is closed.
-   * Defaults to `<Switcher size={20} />`
    * @type {any}
    */
   export let icon = Switcher;
 
   /**
    * Specify the icon to render when the action panel is open.
-   * Defaults to `<Close size={20} />`
    * @type {any}
    */
   export let closeIcon = Close;

@@ -35,7 +35,7 @@ type $Props = {
   /**
    * Specify the icon to render for the tooltip button.
    * Default to `<Information />`
-   * @default undefined
+   * @default Information
    */
   icon?: any;
 

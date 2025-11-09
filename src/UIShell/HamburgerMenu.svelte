@@ -10,14 +10,12 @@
 
   /**
    * Specify the icon to render for the closed state.
-   * Defaults to `<Menu size={20} />`
    * @type {any}
    */
   export let iconMenu = Menu;
 
   /**
    * Specify the icon to render for the opened state.
-   * Defaults to `<Close size={20} />`
    * @type {any}
    */
   export let iconClose = Close;

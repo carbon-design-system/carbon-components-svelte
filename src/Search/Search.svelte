@@ -55,7 +55,6 @@
 
   /**
    * Specify the icon to render.
-   * Defaults to `<Search />`
    * @type {any}
    */
   export let icon = IconSearch;
