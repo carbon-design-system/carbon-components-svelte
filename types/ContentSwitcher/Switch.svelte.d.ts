@@ -6,7 +6,13 @@ type $RestProps = SvelteHTMLElements["button"];
 type $Props = {
   /**
    * Specify the switch text.
-   * Alternatively, use the "text" slot  (e.g., `<span slot="text">...</span>`)
+   * Alternatively, use the "text" slot
+   * @example
+   * ```svelte
+   * <Switch>
+   *   <span slot="text">Custom Text</span>
+   * </Switch>
+   * ```
    * @default "Provide text"
    */
   text?: string;

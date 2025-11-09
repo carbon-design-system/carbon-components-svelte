@@ -44,6 +44,14 @@
   /**
    * Method invoked to load the image provided a `src` value
    * @type {(url?: string) => void}
+   * @param {string} [url] - Optional URL to load. If not provided, uses the component's `src` prop
+   * @example
+   * ```svelte
+   * <ImageLoader bind:this={loader} src="default.jpg" />
+   * <button on:click={() => loader.loadImage("new-image.jpg")}>
+   *   Load New Image
+   * </button>
+   * ```
    */
   export const loadImage = (url) => {
     if (image != null) image = null;

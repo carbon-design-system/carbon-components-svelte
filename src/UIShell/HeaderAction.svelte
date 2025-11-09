@@ -21,8 +21,14 @@
 
   /**
    * Specify the text displayed next to the icon.
-   * Alternatively, use the named slot "text" (e.g., `<div slot="text">...</div>`)
+   * Alternatively, use the named slot "text"
    * @type {string}
+   * @example
+   * ```svelte
+   * <HeaderAction>
+   *   <div slot="text">Custom Text</div>
+   * </HeaderAction>
+   * ```
    */
   export let text = undefined;
 

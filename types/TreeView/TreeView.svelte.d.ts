@@ -126,23 +126,47 @@ export default class TreeView extends SvelteComponentTyped<
 > {
   /**
    * Programmatically expand all nodes
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.expandAll()}>Expand All</button>
+   * ```
    */
   expandAll: () => void;
 
   /**
    * Programmatically collapse all nodes
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.collapseAll()}>Collapse All</button>
+   * ```
    */
   collapseAll: () => void;
 
   /**
    * Programmatically expand a subset of nodes.
    * Expands all nodes if no argument is provided
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.expandNodes((node) => node.id.startsWith('folder-'))}>
+   *   Expand Folders
+   * </button>
+   * ```
    */
   expandNodes: (filterId?: (node: TreeNode) => boolean) => void;
 
   /**
    * Programmatically collapse a subset of nodes.
    * Collapses all nodes if no argument is provided
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.collapseNodes((node) => node.id.startsWith('folder-'))}>
+   *   Collapse Folders
+   * </button>
+   * ```
    */
   collapseNodes: (filterId?: (node: TreeNode) => boolean) => void;
 
@@ -150,6 +174,16 @@ export default class TreeView extends SvelteComponentTyped<
    * Programmatically show a node by `id`.
    * By default, the matching node will be expanded, selected, and focused.
    * Use the options parameter to customize this behavior.
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.showNode('node-123')}>
+   *   Show Node
+   * </button>
+   * <button on:click={() => treeView.showNode('node-123', { expand: false, focus: false })}>
+   *   Show Node (No Expand/Focus)
+   * </button>
+   * ```
    */
   showNode: (id: TreeNodeId, options?: ShowNodeOptions) => void;
 }

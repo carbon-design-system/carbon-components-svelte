@@ -24,7 +24,13 @@ type $Props = {
 
   /**
    * Specify the text displayed next to the icon.
-   * Alternatively, use the named slot "text" (e.g., `<div slot="text">...</div>`)
+   * Alternatively, use the named slot "text"
+   * @example
+   * ```svelte
+   * <HeaderAction>
+   *   <div slot="text">Custom Text</div>
+   * </HeaderAction>
+   * ```
    * @default undefined
    */
   text?: string;

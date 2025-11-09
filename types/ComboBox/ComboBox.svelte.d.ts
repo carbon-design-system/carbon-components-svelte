@@ -206,6 +206,12 @@ export default class ComboBox<
 > {
   /**
    * Clear the combo box programmatically
+   * @example
+   * ```svelte
+   * <ComboBox bind:this={comboBox} items={items} />
+   * <button on:click={() => comboBox.clear()}>Clear</button>
+   * <button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>
+   * ```
    */
   clear: (options?: { focus?: boolean }) => void;
 }

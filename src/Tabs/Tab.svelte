@@ -1,7 +1,13 @@
 <script>
   /**
    * Specify the tab label.
-   * Alternatively, use the default slot (e.g., `<Tab><span>Label</span></Tab>`)
+   * Alternatively, use the default slot
+   * @example
+   * ```svelte
+   * <Tab>
+   *   <span>Label</span>
+   * </Tab>
+   * ```
    */
   export let label = "";
 

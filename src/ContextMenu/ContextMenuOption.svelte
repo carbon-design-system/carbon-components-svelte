@@ -20,7 +20,13 @@
 
   /**
    * Specify the label text.
-   * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
+   * Alternatively, use the "labelText" slot
+   * @example
+   * ```svelte
+   * <ContextMenuOption>
+   *   <span slot="labelText">Custom Label</span>
+   * </ContextMenuOption>
+   * ```
    */
   export let labelText = "";
 
@@ -35,7 +41,13 @@
 
   /**
    * Specify the shortcut text.
-   * Alternatively, use the "shortcutText" slot (e.g., `<span slot="shortcutText">...</span>`)
+   * Alternatively, use the "shortcutText" slot
+   * @example
+   * ```svelte
+   * <ContextMenuOption>
+   *   <span slot="shortcutText">Ctrl+K</span>
+   * </ContextMenuOption>
+   * ```
    */
   export let shortcutText = "";
 

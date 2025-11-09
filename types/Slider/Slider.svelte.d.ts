@@ -97,7 +97,13 @@ type $Props = {
 
   /**
    * Specify the label text.
-   * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
+   * Alternatively, use the "labelText" slot
+   * @example
+   * ```svelte
+   * <Slider>
+   *   <span slot="labelText">Custom Label</span>
+   * </Slider>
+   * ```
    * @default ""
    */
   labelText?: string;

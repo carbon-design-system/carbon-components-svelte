@@ -6,7 +6,13 @@
 
   /**
    * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot (e.g., <Row let:props><section {...props}>...</section></Row>)
+   * Props are destructured as `props` in the default slot
+   * @example
+   * ```svelte
+   * <Row let:props>
+   *   <section {...props}>Content</section>
+   * </Row>
+   * ```
    */
   export let as = false;
 
