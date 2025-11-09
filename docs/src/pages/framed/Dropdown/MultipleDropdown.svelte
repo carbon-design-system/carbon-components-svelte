@@ -18,7 +18,7 @@
 </script>
 
 <Dropdown
-  titleText="Primary contact"
+  labelText="Primary contact"
   bind:selectedId={dropdown1_selectedId}
   {items}
 />
@@ -28,7 +28,7 @@
 <Dropdown
   invalid={dropdown1_selectedId === dropdown2_selectedId}
   invalidText="Secondary contact method must be different from the primary contact"
-  titleText="Secondary contact"
+  labelText="Secondary contact"
   bind:selectedId={dropdown2_selectedId}
   {items}
 />

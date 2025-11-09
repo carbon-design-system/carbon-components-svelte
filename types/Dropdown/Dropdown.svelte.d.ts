@@ -71,7 +71,7 @@ type $Props<Item> = {
    * Specify the title text
    * @default ""
    */
-  titleText?: string;
+  labelText?: string;
 
   /**
    * Set to `true` to indicate an invalid state
