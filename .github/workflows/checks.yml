@@ -54,6 +54,16 @@ jobs:
       - run: bun --bun test:src-types
       - run: bun --bun test:types
 
+      - name: Build docs
+        run: bun build:docs
+
+      - name: Validate docs
+        run: |
+          if ! git diff --exit-code; then
+            echo "Auto-generated documentation is out of date. Run `bun build:docs` locally and commit the changes."
+            exit 1
+          fi
+
   deploy-docs:
     if: github.ref == 'refs/heads/master'
     needs: [lint, test, types]
