@@ -13,7 +13,7 @@ The `MultiSelect` component provides a dropdown interface for selecting multiple
 
 Create a basic multi-select dropdown with three contact methods. By default, items are ordered alphabetically.
 
-<MultiSelect titleText="Contact" label="Select contact methods..."
+<MultiSelect labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -25,7 +25,7 @@ Format the display text of items using the `itemToString` prop. This example app
 
 <MultiSelect itemToString={item => {
   return item.text + ' (' + item.id +')'
-}} titleText="Contact" label="Select contact methods..."
+}} labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -42,7 +42,7 @@ Override the default slot to customize item rendering. This example shows how to
 
 Prevent automatic alphabetical ordering by passing a no-op function to `sortItem`. This maintains the original order of items.
 
-<MultiSelect titleText="Contact" label="Select contact methods..."
+<MultiSelect labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}" 
@@ -53,7 +53,7 @@ Prevent automatic alphabetical ordering by passing a no-op function to `sortItem
 
 Enable filtering by setting `filterable` to `true`. This example includes a placeholder text for the filter input.
 
-<MultiSelect spellcheck="false" filterable titleText="Contact" placeholder="Filter contact methods..."
+<MultiSelect spellcheck="false" filterable labelText="Contact" placeholder="Filter contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -63,7 +63,7 @@ Enable filtering by setting `filterable` to `true`. This example includes a plac
 
 Pre-select items by passing an array of item IDs to `selectedIds`. This example pre-selects Slack and Email.
 
-<MultiSelect selectedIds="{["0", "1"]}" titleText="Contact" label="Select contact methods..."
+<MultiSelect selectedIds="{["0", "1"]}" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}" 
@@ -97,7 +97,7 @@ renders, along with each respective item's `id` set to the `value` attribute.
 
 <MultiSelect
   itemToInput={(item) => ({name: 'contact', value: item.id})}
-  titleText="Contact"
+  labelText="Contact"
   label="Select contact methods..."
   items="{[
     {id: "0", text: "Slack"},
@@ -110,7 +110,7 @@ renders, along with each respective item's `id` set to the `value` attribute.
 
 Display the dropdown menu above the input by setting `direction` to `"top"`. This is useful when space below is limited.
 
-<MultiSelect direction="top" titleText="Contact" label="Select contact methods..."
+<MultiSelect direction="top" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -120,7 +120,7 @@ Display the dropdown menu above the input by setting `direction` to `"top"`. Thi
 
 Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
 
-<MultiSelect titleText="Contact" label="Select contact methods..." hideLabel
+<MultiSelect labelText="Contact" label="Select contact methods..." hideLabel
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -130,7 +130,7 @@ Hide the label visually while maintaining accessibility by setting `hideLabel` t
 
 Use the light variant for dark backgrounds by setting `light` to `true`. This provides better contrast in dark themes.
 
-<MultiSelect light titleText="Contact" label="Select contact methods..."
+<MultiSelect light labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -140,7 +140,7 @@ Use the light variant for dark backgrounds by setting `light` to `true`. This pr
 
 Display the dropdown inline with other content by setting `type` to `"inline"`. This removes the background and border.
 
-<MultiSelect type="inline" titleText="Contact" label="Select contact methods..."
+<MultiSelect type="inline" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -150,7 +150,7 @@ Display the dropdown inline with other content by setting `type` to `"inline"`. 
 
 Use the extra-large size for prominent selections by setting `size` to `"xl"`. This provides more visual emphasis.
 
-<MultiSelect size="xl" titleText="Contact" label="Select contact methods..."
+<MultiSelect size="xl" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -160,7 +160,7 @@ Use the extra-large size for prominent selections by setting `size` to `"xl"`. T
 
 Use the small size for compact layouts by setting `size` to `"sm"`. This is ideal for secondary selections.
 
-<MultiSelect size="sm" titleText="Contact" label="Select contact methods..."
+<MultiSelect size="sm" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -170,7 +170,7 @@ Use the small size for compact layouts by setting `size` to `"sm"`. This is idea
 
 Indicate an invalid selection by setting `invalid` to `true`. This example shows a required field error.
 
-<MultiSelect invalid invalidText="A contact method is required" titleText="Contact" label="Select contact methods..."
+<MultiSelect invalid invalidText="A contact method is required" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -180,7 +180,7 @@ Indicate an invalid selection by setting `invalid` to `true`. This example shows
 
 Indicate a warning state by setting `warn` to `true`. This example shows a warning about unassociated accounts.
 
-<MultiSelect warn warnText="One or more contact methods are not associated with your account" titleText="Contact" label="Select contact methods..."
+<MultiSelect warn warnText="One or more contact methods are not associated with your account" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -190,7 +190,7 @@ Indicate a warning state by setting `warn` to `true`. This example shows a warni
 
 Disable the entire dropdown by setting `disabled` to `true`. This prevents all user interaction.
 
-<MultiSelect disabled titleText="Contact" label="Select contact methods..."
+<MultiSelect disabled labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -201,7 +201,7 @@ Disable the entire dropdown by setting `disabled` to `true`. This prevents all u
 Disable specific items using the `disabled` property in the `items` prop. This example disables the Email option.
 
 <MultiSelect
-  titleText="Contact"
+  labelText="Contact"
   label="Select contact methods..."
   items={[
     { id: "0", text: "Slack" },

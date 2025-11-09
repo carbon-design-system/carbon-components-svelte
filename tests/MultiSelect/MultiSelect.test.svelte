@@ -7,7 +7,7 @@
   export let filterable = false;
   export let filterItem: ComponentProps<MultiSelect>["filterItem"] = undefined;
   export let placeholder = "";
-  export let titleText = "";
+  export let labelText = "";
   export let hideLabel = false;
   export let light = false;
   export let type: ComponentProps<MultiSelect>["type"] = "default";
@@ -34,7 +34,7 @@
   {filterable}
   {filterItem}
   {placeholder}
-  {titleText}
+  {labelText}
   {hideLabel}
   {light}
   {type}

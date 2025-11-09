@@ -144,10 +144,10 @@ type $Props<Item> = {
   ) => string;
 
   /**
-   * Specify the title text
+   * Specify the label text
    * @default ""
    */
-  titleText?: string;
+  labelText?: string;
 
   /**
    * Set to `true` to pass the item to `itemToString` in the checkbox
@@ -263,5 +263,5 @@ export default class MultiSelect<
     focus: WindowEventMap["focus"];
     paste: WindowEventMap["paste"];
   },
-  { default: { item: Item; index: number }; titleText: Record<string, never> }
+  { default: { item: Item; index: number }; labelText: Record<string, never> }
 > {}

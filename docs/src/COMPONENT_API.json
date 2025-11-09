@@ -9258,9 +9258,9 @@
           "reactive": false
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "kind": "let",
-          "description": "Specify the title text",
+          "description": "Specify the label text",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,

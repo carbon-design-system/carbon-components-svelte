@@ -39,7 +39,7 @@ describe("MultiSelect", () => {
     render(MultiSelect, {
       props: {
         items,
-        titleText: "Contact methods",
+        labelText: "Contact methods",
       },
     });
 
@@ -385,7 +385,7 @@ describe("MultiSelect", () => {
       render(MultiSelect, {
         props: {
           items,
-          titleText: "Contact methods",
+          labelText: "Contact methods",
           hideLabel: true,
         },
       });
@@ -398,7 +398,7 @@ describe("MultiSelect", () => {
       render(MultiSelect, {
         props: {
           items,
-          titleText: "Contact methods",
+          labelText: "Contact methods",
         },
       });
 
@@ -412,7 +412,7 @@ describe("MultiSelect", () => {
       render(MultiSelect, {
         props: {
           items,
-          titleText: "Contact methods",
+          labelText: "Contact methods",
         },
       });
 

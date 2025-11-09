@@ -20,7 +20,7 @@
 </script>
 
 <MultiSelect
-  titleText="Primary contact"
+  labelText="Primary contact"
   bind:selectedIds={multiselect1_selectedIds}
   label="Select contact methods..."
   {items}
@@ -29,7 +29,7 @@
 <div>Primary: {primary}</div>
 
 <MultiSelect
-  titleText="Secondary contact"
+  labelText="Secondary contact"
   bind:selectedIds={multiselect2_selectedIds}
   label="Select contact methods..."
   {items}
