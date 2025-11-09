@@ -344,7 +344,7 @@ describe("NumberInput", () => {
 
   it("should set aria-label when no label is provided", () => {
     render(NumberInput, {
-      props: { label: "" },
+      props: { labelText: "" },
     });
 
     const input = screen.getByRole("spinbutton");
@@ -371,7 +371,7 @@ describe("NumberInput", () => {
   it("should support aria-label override via restProps", () => {
     const { container } = render(NumberInput, {
       props: {
-        label: "",
+        labelText: "",
       },
     });
 

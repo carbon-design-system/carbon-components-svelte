@@ -19,7 +19,7 @@
   export let warn = false;
   export let warnText = "";
   export let helperText = "";
-  export let label = "Clusters";
+  export let labelText = "Clusters";
   export let hideLabel = false;
   export let translateWithId: ComponentProps<NumberInput>["translateWithId"] =
     undefined;
@@ -47,7 +47,7 @@
   {warn}
   {warnText}
   {helperText}
-  {label}
+  {labelText}
   {hideLabel}
   {translateWithId}
   {id}
