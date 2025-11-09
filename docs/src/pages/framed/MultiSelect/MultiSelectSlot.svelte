@@ -3,7 +3,7 @@
 </script>
 
 <MultiSelect
-  titleText="Contact"
+  labelText="Contact"
   label="Select contact methods..."
   items={[
     { id: "0", text: "Slack" },
