@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { mdsvex } from "mdsvex";
 import { format } from "prettier";
 import Prism from "prismjs";
@@ -9,6 +10,8 @@ import visit from "unist-util-visit";
 import pkg from "../package.json" with { type: "json" };
 import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
 import "prism-svelte";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const componentApiByName = componentApi.components.reduce((a, c) => {
   a[c.moduleName] = true;
@@ -157,7 +160,7 @@ export default {
       smartypants: false,
       remarkPlugins: [plugin, slug, carbonify],
       layout: {
-        _: path.join("src/layouts/ComponentLayout.svelte"),
+        _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
       },
     }),
     {
