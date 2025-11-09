@@ -9934,7 +9934,7 @@
           "reactive": false
         },
         {
-          "name": "label",
+          "name": "labelText",
           "kind": "let",
           "description": "Specify the label text",
           "type": "string",

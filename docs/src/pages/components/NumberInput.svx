@@ -13,7 +13,7 @@ The `NumberInput` component provides a controlled input for numerical values. It
 
 Create a basic number input with increment and decrement controls. The input accepts numerical values and provides visual feedback.
 
-<NumberInput label="Clusters" value={0} />
+<NumberInput labelText="Clusters" value={0} />
 
 ## No value
 
@@ -25,79 +25,79 @@ Allow empty values by setting both `allowEmpty` to `true` and `value` to `null`.
 
 Add descriptive text below the input using the `helperText` prop. This helps users understand the expected input.
 
-<NumberInput label="Clusters" value={0} helperText="Clusters provisioned in your region" />
+<NumberInput labelText="Clusters" value={0} helperText="Clusters provisioned in your region" />
 
 ## Minimum and maximum values
 
 Constrain input values using `min` and `max` props. This example limits values between 4 and 20.
 
-<NumberInput min="{4}" max="{20}" value="{4}" invalidText="Number must be between 4 and 20." helperText="Clusters provisioned in your region" label="Clusters (4 min, 20 max)" />
+<NumberInput min="{4}" max="{20}" value="{4}" invalidText="Number must be between 4 and 20." helperText="Clusters provisioned in your region" labelText="Clusters (4 min, 20 max)" />
 
 ## Step value
 
 Control the increment/decrement step size using the `step` prop. This example uses a step of 0.1.
 
-<NumberInput value="{1}" helperText="Step of 0.1" step={0.1} label="Clusters" />
+<NumberInput value="{1}" helperText="Step of 0.1" step={0.1} labelText="Clusters" />
 
 ## Preserve decimal input
 
 Preserve decimal input formatting like "1.0", "2.00", or "3." by setting `allowDecimal` to `true`. This uses `type="text"` with `inputmode="decimal"` instead of `type="number"`, allowing trailing zeros and decimal points to be preserved while typing. This is useful for financial data or precise decimal entry.
 
-<NumberInput allowDecimal value={1.0} helperText="Trailing zeros preserved" step={0.01} label="Amount" />
+<NumberInput allowDecimal value={1.0} helperText="Trailing zeros preserved" step={0.01} labelText="Amount" />
 
 ## Hidden label
 
 Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
 
-<NumberInput hideLabel label="Clusters" value={0} />
+<NumberInput hideLabel labelText="Clusters" value={0} />
 
 ## Extra-large size
 
 Use the extra-large size for prominent inputs by setting `size` to `"xl"`. This provides more visual emphasis.
 
-<NumberInput size="xl" label="Clusters" value={0} />
+<NumberInput size="xl" labelText="Clusters" value={0} />
 
 ## Small size
 
 Use the small size for compact layouts by setting `size` to `"sm"`. This is ideal for secondary inputs.
 
-<NumberInput size="sm" label="Clusters" value={0} />
+<NumberInput size="sm" labelText="Clusters" value={0} />
 
 ## Light variant
 
 Use the light variant for dark backgrounds by setting `light` to `true`. This provides better contrast in dark themes.
 
-<NumberInput light label="Clusters" value={0} />
+<NumberInput light labelText="Clusters" value={0} />
 
 ## Invalid state
 
 Indicate an invalid value by setting `invalid` to `true`. This example shows a validation error.
 
-<NumberInput invalid invalidText="Invalid value" label="Clusters" value={0} />
+<NumberInput invalid invalidText="Invalid value" labelText="Clusters" value={0} />
 
 ## Warning state
 
 Indicate a warning state by setting `warn` to `true`. This example shows a warning about the input value.
 
-<NumberInput warn warnText="A high number may impact initial rollout" label="Clusters" value={25} />
+<NumberInput warn warnText="A high number may impact initial rollout" labelText="Clusters" value={25} />
 
 ## Disabled state
 
 Disable the input by setting `disabled` to `true`. This prevents all user interaction.
 
-<NumberInput disabled label="Clusters" value={0} />
+<NumberInput disabled labelText="Clusters" value={0} />
 
 ## Read-only state
 
 Make the input read-only by setting `readonly` to `true`. This allows viewing but prevents editing.
 
-<NumberInput readonly label="Clusters" value={0} />
+<NumberInput readonly labelText="Clusters" value={0} />
 
 ## Hidden steppers
 
 Hide the increment/decrement controls by setting `hideSteppers` to `true`. This provides a simpler input interface.
 
-<NumberInput hideSteppers label="Clusters" value={0} />
+<NumberInput hideSteppers labelText="Clusters" value={0} />
 
 ## Skeleton
 
