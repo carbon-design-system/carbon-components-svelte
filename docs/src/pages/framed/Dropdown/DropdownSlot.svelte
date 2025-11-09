@@ -3,7 +3,7 @@
 </script>
 
 <Dropdown
-  titleText="Contact"
+  labelText="Contact"
   selectedId="0"
   items={[
     { id: "0", text: "Slack" },

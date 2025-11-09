@@ -61,7 +61,7 @@
   export let disabled = false;
 
   /** Specify the title text */
-  export let titleText = "";
+  export let labelText = "";
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
@@ -177,14 +177,14 @@
   class:bx--dropdown__wrapper--inline--invalid={inline && invalid}
   {...$$restProps}
 >
-  {#if titleText}
+  {#if labelText}
     <label
       for={id}
       class:bx--label={true}
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
     >
-      {titleText}
+      {labelText}
     </label>
   {/if}
   <ListBox
@@ -193,10 +193,10 @@
     {size}
     {name}
     aria-label={$$props["aria-label"]}
-    class="bx--dropdown 
-      {direction === 'top' && 'bx--list-box--up'} 
-      {invalid && 'bx--dropdown--invalid'} 
-      {!invalid && warn && 'bx--dropdown--warning'} 
+    class="bx--dropdown
+      {direction === 'top' && 'bx--list-box--up'}
+      {invalid && 'bx--dropdown--invalid'}
+      {!invalid && warn && 'bx--dropdown--warning'}
       {open && 'bx--dropdown--open'}
       {size === 'sm' && 'bx--dropdown--sm'}
       {size === 'xl' && 'bx--dropdown--xl'}

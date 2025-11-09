@@ -20,7 +20,7 @@ have a unique `id` property for proper functionality.
 Use the `Dropdown` component to create a select input with a dropdown menu. Each item
 must have a unique `id` property.
 
-<Dropdown titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -36,7 +36,7 @@ index through the `let:` directive.
 Hide the label while maintaining accessibility by setting the `hideLabel` prop to
 `true`. The label will still be available to screen readers.
 
-<Dropdown hideLabel titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown hideLabel labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -47,7 +47,7 @@ receives the item object and returns the formatted string.
 
 <Dropdown itemToString={item => {
   return item.text + ' (' + item.id +')'
-}} titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+}} labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -63,7 +63,7 @@ manage the state of multiple dropdowns.
 Display the dropdown menu above the input by setting the `direction` prop to
 `"top"`. This is useful when there's limited space below the input.
 
-<Dropdown direction="top" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown direction="top" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -72,7 +72,7 @@ Display the dropdown menu above the input by setting the `direction` prop to
 Use the light variant for dropdowns on dark backgrounds by setting the `light` prop
 to `true`.
 
-<Dropdown light titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown light labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -81,7 +81,7 @@ to `true`.
 Display the dropdown inline with other content by setting the `type` prop to
 `"inline"`. This variant removes the background and border.
 
-<Dropdown type="inline" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown type="inline" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -90,7 +90,7 @@ Display the dropdown inline with other content by setting the `type` prop to
 Increase the size of the dropdown by setting the `size` prop to `"xl"`. This
 provides more visual emphasis for important selections.
 
-<Dropdown size="xl" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown size="xl" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -99,7 +99,7 @@ provides more visual emphasis for important selections.
 Decrease the size of the dropdown by setting the `size` prop to `"sm"`. This is
 useful for compact layouts or secondary selections.
 
-<Dropdown size="sm" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown size="sm" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -108,7 +108,7 @@ useful for compact layouts or secondary selections.
 Indicate an invalid selection by setting the `invalid` prop to `true`. Provide
 feedback to users with the `invalidText` prop.
 
-<Dropdown invalid invalidText="Secondary contact method must be different from the primary contact" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -117,7 +117,7 @@ feedback to users with the `invalidText` prop.
 Indicate a warning state by setting the `warn` prop to `true`. Provide additional
 context with the `warnText` prop.
 
-<Dropdown warn warnText="This contact method is not associated with your account" titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown warn warnText="This contact method is not associated with your account" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -126,7 +126,7 @@ context with the `warnText` prop.
 Disable the entire dropdown by setting the `disabled` prop to `true`. This prevents
 user interaction with the component.
 
-<Dropdown disabled titleText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown disabled labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -138,7 +138,7 @@ selections.
 
 <Dropdown
   selectedId="0"
-  titleText="Contact"
+  labelText="Contact"
   items={[
     { id: "0", text: "Slack" },
     { id: "1", text: "Email", disabled: true },
