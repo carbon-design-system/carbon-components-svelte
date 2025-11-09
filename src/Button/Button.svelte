@@ -28,9 +28,15 @@
 
   /**
    * Specify the icon to render
-   * Alternatively, use the named slot "icon" (e.g., `<Icon slot="icon" size="{20}" />`)
+   * Alternatively, use the named slot "icon"
    *
    * @type {any}
+   * @example
+   * ```svelte
+   * <Button>
+   *   <Icon slot="icon" size={20} />
+   * </Button>
+   * ```
    */
   export let icon = undefined;
 
@@ -62,7 +68,13 @@
 
   /**
    * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot (e.g., <Button let:props><div {...props}>...</div></Button>)
+   * Props are destructured as `props` in the default slot
+   * @example
+   * ```svelte
+   * <Button let:props>
+   *   <div {...props}>Custom Element</div>
+   * </Button>
+   * ```
    */
   export let as = false;
 

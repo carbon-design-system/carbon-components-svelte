@@ -20,14 +20,26 @@
   /**
    * Specify the company name.
    *
-   * Alternatively, use the named slot "company" (e.g., `<span slot="company">...</span>`)
+   * Alternatively, use the named slot "company"
    * @type {string}
+   * @example
+   * ```svelte
+   * <Header>
+   *   <span slot="company">IBM</span>
+   * </Header>
+   * ```
    */
   export let company = undefined;
 
   /**
    * Specify the platform name.
-   * Alternatively, use the named slot "platform" (e.g., `<span slot="platform">...</span>`)
+   * Alternatively, use the named slot "platform"
+   * @example
+   * ```svelte
+   * <Header>
+   *   <span slot="platform">Platform Name</span>
+   * </Header>
+   * ```
    */
   export let platformName = "";
 

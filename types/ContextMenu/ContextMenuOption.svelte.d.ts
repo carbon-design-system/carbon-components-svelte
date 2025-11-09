@@ -31,7 +31,13 @@ type $Props = {
 
   /**
    * Specify the label text.
-   * Alternatively, use the "labelText" slot (e.g., `<span slot="labelText">...</span>`)
+   * Alternatively, use the "labelText" slot
+   * @example
+   * ```svelte
+   * <ContextMenuOption>
+   *   <span slot="labelText">Custom Label</span>
+   * </ContextMenuOption>
+   * ```
    * @default ""
    */
   labelText?: string;
@@ -51,7 +57,13 @@ type $Props = {
 
   /**
    * Specify the shortcut text.
-   * Alternatively, use the "shortcutText" slot (e.g., `<span slot="shortcutText">...</span>`)
+   * Alternatively, use the "shortcutText" slot
+   * @example
+   * ```svelte
+   * <ContextMenuOption>
+   *   <span slot="shortcutText">Ctrl+K</span>
+   * </ContextMenuOption>
+   * ```
    * @default ""
    */
   shortcutText?: string;

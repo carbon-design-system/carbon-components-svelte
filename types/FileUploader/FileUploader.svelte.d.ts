@@ -36,14 +36,26 @@ type $Props = {
 
   /**
    * Specify the label title.
-   * Alternatively, use the named slot "labelTitle" (e.g., `<span slot="labelTitle">...</span>`)
+   * Alternatively, use the named slot "labelTitle"
+   * @example
+   * ```svelte
+   * <FileUploader>
+   *   <span slot="labelTitle">Custom Label</span>
+   * </FileUploader>
+   * ```
    * @default ""
    */
   labelTitle?: string;
 
   /**
    * Specify the label description.
-   * Alternatively, use the named slot "labelDescription" (e.g., `<span slot="labelDescription">...</span>`)
+   * Alternatively, use the named slot "labelDescription"
+   * @example
+   * ```svelte
+   * <FileUploader>
+   *   <span slot="labelDescription">Custom description text</span>
+   * </FileUploader>
+   * ```
    * @default ""
    */
   labelDescription?: string;
@@ -99,6 +111,11 @@ export default class FileUploader extends SvelteComponentTyped<
 > {
   /**
    * Programmatically clear the uploaded files
+   * @example
+   * ```svelte
+   * <FileUploader bind:this={uploader} bind:files={files} />
+   * <button on:click={() => uploader.clearFiles()}>Clear Files</button>
+   * ```
    */
   clearFiles: () => void;
 }

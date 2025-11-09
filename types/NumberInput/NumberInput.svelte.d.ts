@@ -56,8 +56,13 @@ type $Props = {
   allowEmpty?: boolean;
 
   /**
-   * Set to `true` to preserve decimal input formatting (e.g., "1.0", "2.00")
+   * Set to `true` to preserve decimal input formatting.
    * When enabled, uses type="text" with inputmode="decimal" instead of type="number"
+   * @example
+   * ```svelte
+   * <NumberInput allowDecimal={true} value="1.0" />
+   * <NumberInput allowDecimal={true} value="2.00" />
+   * ```
    * @default false
    */
   allowDecimal?: boolean;

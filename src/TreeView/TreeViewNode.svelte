@@ -2,6 +2,16 @@
   /**
    * Computes the depth of a tree leaf node relative to <ul role="tree" />
    * @type {(node: HTMLLIElement) => number}
+   * @param {HTMLLIElement} node - The list item element representing the tree node
+   * @returns {number} The depth of the node (0-based, where 0 is the root level)
+   * @example
+   * ```svelte
+   * import { computeTreeLeafDepth } from 'carbon-components-svelte/TreeView/TreeViewNode.svelte';
+   * let nodeElement;
+   * $: depth = computeTreeLeafDepth(nodeElement);
+   *
+   * <li bind:this={nodeElement}>Node at depth {depth}</li>
+   * ```
    */
   export function computeTreeLeafDepth(node) {
     let depth = 0;

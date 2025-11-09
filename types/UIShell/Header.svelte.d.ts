@@ -31,14 +31,26 @@ type $Props = {
   /**
    * Specify the company name.
    *
-   * Alternatively, use the named slot "company" (e.g., `<span slot="company">...</span>`)
+   * Alternatively, use the named slot "company"
+   * @example
+   * ```svelte
+   * <Header>
+   *   <span slot="company">IBM</span>
+   * </Header>
+   * ```
    * @default undefined
    */
   company?: string;
 
   /**
    * Specify the platform name.
-   * Alternatively, use the named slot "platform" (e.g., `<span slot="platform">...</span>`)
+   * Alternatively, use the named slot "platform"
+   * @example
+   * ```svelte
+   * <Header>
+   *   <span slot="platform">Platform Name</span>
+   * </Header>
+   * ```
    * @default ""
    */
   platformName?: string;

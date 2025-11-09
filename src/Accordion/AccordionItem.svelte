@@ -1,7 +1,13 @@
 <script>
   /**
    * Specify the title of the accordion item heading.
-   * Alternatively, use the "title" slot (e.g., `<div slot="title">...</div>`)
+   * Alternatively, use the "title" slot
+   * @example
+   * ```svelte
+   * <AccordionItem>
+   *   <div slot="title">Custom Title</div>
+   * </AccordionItem>
+   * ```
    */
   export let title = "title";
 

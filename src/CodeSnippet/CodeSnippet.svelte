@@ -13,10 +13,14 @@
 
   /**
    * Set the code snippet text.
-   * Alternatively, use the default slot (e.g., `<CodeSnippet>{code}</CodeSnippet>`).
+   * Alternatively, use the default slot.
    *
    * NOTE: you *must* use the `code` prop for the copy-to-clipboard functionality.
    * @type {string}
+   * @example
+   * ```svelte
+   * <CodeSnippet>{code}</CodeSnippet>
+   * ```
    */
   export let code = undefined;
 

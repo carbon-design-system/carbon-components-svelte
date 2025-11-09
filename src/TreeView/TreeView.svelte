@@ -109,6 +109,11 @@
   /**
    * Programmatically expand all nodes
    * @type {() => void}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.expandAll()}>Expand All</button>
+   * ```
    */
   export function expandAll() {
     expandedIds = [...nodeIds];
@@ -117,6 +122,11 @@
   /**
    * Programmatically collapse all nodes
    * @type {() => void}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.collapseAll()}>Collapse All</button>
+   * ```
    */
   export function collapseAll() {
     expandedIds = [];
@@ -126,6 +136,14 @@
    * Programmatically expand a subset of nodes.
    * Expands all nodes if no argument is provided
    * @type {(filterId?: (node: TreeNode) => boolean) => void}
+   * @param {function(node: TreeNode): boolean} [filterNode] - Filter function that returns `true` for nodes to expand. If not provided, expands all nodes.
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.expandNodes((node) => node.id.startsWith('folder-'))}>
+   *   Expand Folders
+   * </button>
+   * ```
    */
   export function expandNodes(filterNode = (node) => false) {
     expandedIds = flattenedNodes
@@ -141,6 +159,14 @@
    * Programmatically collapse a subset of nodes.
    * Collapses all nodes if no argument is provided
    * @type {(filterId?: (node: TreeNode) => boolean) => void}
+   * @param {function(node: TreeNode): boolean} [filterNode] - Filter function that returns `true` for nodes to collapse. If not provided, collapses all nodes.
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.collapseNodes((node) => node.id.startsWith('folder-'))}>
+   *   Collapse Folders
+   * </button>
+   * ```
    */
   export function collapseNodes(filterNode = (node) => true) {
     expandedIds = flattenedNodes
@@ -153,6 +179,21 @@
    * By default, the matching node will be expanded, selected, and focused.
    * Use the options parameter to customize this behavior.
    * @type {(id: TreeNodeId, options?: ShowNodeOptions) => void}
+   * @param {TreeNodeId} id - The unique identifier of the node to show
+   * @param {ShowNodeOptions} [options] - Configuration options for showing the node
+   * @param {boolean} [options.expand=true] - Whether to expand the node and its ancestors
+   * @param {boolean} [options.select=true] - Whether to select the node
+   * @param {boolean} [options.focus=true] - Whether to focus the node
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => treeView.showNode('node-123')}>
+   *   Show Node
+   * </button>
+   * <button on:click={() => treeView.showNode('node-123', { expand: false, focus: false })}>
+   *   Show Node (No Expand/Focus)
+   * </button>
+   * ```
    */
   export function showNode(id, options = {}) {
     const { expand = true, select = true, focus = true } = options;

@@ -9,9 +9,13 @@ export type CodeSnippetProps = {
 
   /**
    * Set the code snippet text.
-   * Alternatively, use the default slot (e.g., `<CodeSnippet>{code}</CodeSnippet>`).
+   * Alternatively, use the default slot.
    *
    * NOTE: you *must* use the `code` prop for the copy-to-clipboard functionality.
+   * @example
+   * ```svelte
+   * <CodeSnippet>{code}</CodeSnippet>
+   * ```
    * @default undefined
    */
   code?: string;
