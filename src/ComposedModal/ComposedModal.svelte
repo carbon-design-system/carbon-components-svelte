@@ -1,7 +1,9 @@
 <script>
   /**
-   * @event {{ trigger: "escape-key" | "outside-click" | "close-button" }} close
-   * @event {{ open: boolean; }} transitionend
+   * @event close
+   * @property {"escape-key" | "outside-click" | "close-button"} trigger
+   * @event transitionend
+   * @property {boolean} open
    */
 
   /**

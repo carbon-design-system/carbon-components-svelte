@@ -1,6 +1,8 @@
 <script>
   /**
-   * @event {null | { index: number; text: string; }} close
+   * @event close
+   * @property {number} [index]
+   * @property {string} [text]
    */
 
   /**

@@ -1,7 +1,9 @@
 <script>
   /**
    * @typedef {boolean | number} ColumnSize
-   * @typedef {{span?: ColumnSize; offset: number;}} ColumnSizeDescriptor
+   * @typedef ColumnSizeDescriptor
+   * @property {ColumnSize} [span]
+   * @property {number} offset
    * @typedef {ColumnSize | ColumnSizeDescriptor} ColumnBreakpoint
    * @restProps {div}
    * @slot {{props: { class: string; [key: string]: any; }}}

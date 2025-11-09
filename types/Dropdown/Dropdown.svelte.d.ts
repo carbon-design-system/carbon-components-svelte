@@ -5,11 +5,11 @@ export type DropdownItemId = any;
 
 export type DropdownItemText = string;
 
-export interface DropdownItem {
+export type DropdownItem = {
   id: DropdownItemId;
   text: DropdownItemText;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 
 type $RestProps = SvelteHTMLElements["div"];
 

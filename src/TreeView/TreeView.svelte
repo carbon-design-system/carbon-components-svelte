@@ -29,11 +29,40 @@
 <script>
   /**
    * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; }} TreeNode
+   * @typedef {object} TreeNode
+   * @property {TreeNodeId} id
+   * @property {any} text
+   * @property {any} [icon]
+   * @property {boolean} [disabled] - Whether the node is disabled
+   * @property {TreeNode[]} [nodes]
    * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
-   * @event {TreeNode & { expanded: boolean; leaf: boolean; }} select
-   * @event {TreeNode & { expanded: boolean; leaf: boolean; }} toggle
-   * @event {TreeNode & { expanded: boolean; leaf: boolean; }} focus
+   * @event select
+   * @type {object}
+   * @property {TreeNodeId} id
+   * @property {any} text
+   * @property {any} [icon]
+   * @property {boolean} [disabled]
+   * @property {TreeNode[]} [nodes]
+   * @property {boolean} expanded
+   * @property {boolean} leaf
+   * @event toggle
+   * @type {object}
+   * @property {TreeNodeId} id
+   * @property {any} text
+   * @property {any} [icon]
+   * @property {boolean} [disabled]
+   * @property {TreeNode[]} [nodes]
+   * @property {boolean} expanded
+   * @property {boolean} leaf
+   * @event focus
+   * @type {object}
+   * @property {TreeNodeId} id
+   * @property {any} text
+   * @property {any} [icon]
+   * @property {boolean} [disabled]
+   * @property {TreeNode[]} [nodes]
+   * @property {boolean} expanded
+   * @property {boolean} leaf
    */
 
   /**

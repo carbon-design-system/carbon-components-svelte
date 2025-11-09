@@ -1,8 +1,14 @@
 <script>
   /**
-   * @event {{ trigger: "escape-key" | "outside-click" | "close-button" }} close
-   * @event {{ open: boolean; }} transitionend
-   * @event {{ text: string; }} click:button--secondary
+   * @event close
+   * @type {object}
+   * @property {"escape-key" | "outside-click" | "close-button"} trigger
+   * @event transitionend
+   * @type {object}
+   * @property {boolean} open
+   * @event click:button--secondary
+   * @type {object}
+   * @property {string} text
    */
 
   /**

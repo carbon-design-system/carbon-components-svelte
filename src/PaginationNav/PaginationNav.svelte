@@ -1,8 +1,11 @@
 <script>
   /**
-   * @event {{ page: number; }} change - fires after every user interaction
-   * @event {{ page: number; }} click:button--previous
-   * @event {{ page: number; }} click:button--next
+   * @event change - Fires after every user interaction
+   * @property {number} page
+   * @event click:button--previous
+   * @property {number} page
+   * @event click:button--next
+   * @property {number} page
    */
 
   /** Specify the current page index */

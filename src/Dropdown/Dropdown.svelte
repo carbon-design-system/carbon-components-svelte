@@ -4,8 +4,14 @@
    * @template {DropdownItem} Item
    * @typedef {any} DropdownItemId
    * @typedef {string} DropdownItemText
-   * @typedef {{ id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }} DropdownItem
-   * @event {{ selectedId: DropdownItemId, selectedItem: Item }} select
+   * @typedef {object} DropdownItem
+   * @property {DropdownItemId} id
+   * @property {DropdownItemText} text
+   * @property {boolean} [disabled] - Whether the item is disabled
+   * @event select
+   * @type {object}
+   * @property {DropdownItemId} selectedId
+   * @property {Item} selectedItem
    * @slot {{ item: Item; index: number; }}
    */
 

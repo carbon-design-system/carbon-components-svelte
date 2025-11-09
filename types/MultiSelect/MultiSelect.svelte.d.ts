@@ -5,11 +5,11 @@ export type MultiSelectItemId = any;
 
 export type MultiSelectItemText = string;
 
-export interface MultiSelectItem {
+export type MultiSelectItem = {
   id: MultiSelectItemId;
   text: MultiSelectItemText;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 export type MultiSelectContext = {
   declareRef: (data: {
     key: "field" | "selection";

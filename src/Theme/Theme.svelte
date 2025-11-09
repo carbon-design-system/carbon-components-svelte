@@ -6,7 +6,9 @@
 
   /**
    * @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme
-   * @event {{ theme: CarbonTheme; }} update
+   * @event update
+   * @type {object}
+   * @property {CarbonTheme} theme
    * @slot {{ theme: CarbonTheme; }}
    */
 

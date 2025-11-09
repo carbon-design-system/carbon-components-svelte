@@ -1,7 +1,9 @@
 <script>
   /**
    * @event {null} save
-   * @event {{ prevValue: any; value: any; }} update
+   * @event update
+   * @property {any} prevValue
+   * @property {any} value
    */
 
   /**

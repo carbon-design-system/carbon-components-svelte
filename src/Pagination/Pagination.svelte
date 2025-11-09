@@ -1,9 +1,20 @@
 <script>
   /**
-   * @event {{ page?: number; pageSize?: number }} change - Dispatched after any user interaction
-   * @event {{ page: number; }} click:button--previous
-   * @event {{ page: number; }} click:button--next
-   * @event {{ pageSize: number; page: number; }} update
+   * Dispatched after any user interaction
+   * @event change
+   * @type {object}
+   * @property {number} [page]
+   * @property {number} [pageSize]
+   * @event click:button--previous
+   * @type {object}
+   * @property {number} page
+   * @event click:button--next
+   * @type {object}
+   * @property {number} page
+   * @event update
+   * @type {object}
+   * @property {number} pageSize
+   * @property {number} page
    */
 
   /** Specify the current page index */

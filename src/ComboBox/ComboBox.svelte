@@ -3,8 +3,14 @@
    * @generics {Item extends ComboBoxItem = ComboBoxItem} Item
    * @template {ComboBoxItem} Item
    * @typedef {any} ComboBoxItemId
-   * @typedef {{ id: ComboBoxItemId; text: string; disabled?: boolean; }} ComboBoxItem
-   * @event {{ selectedId: ComboBoxItemId; selectedItem: Item }} select
+   * @typedef {object} ComboBoxItem
+   * @property {ComboBoxItemId} id
+   * @property {string} text
+   * @property {boolean} [disabled] - Whether the item is disabled
+   * @event select
+   * @type {object}
+   * @property {ComboBoxItemId} selectedId
+   * @property {Item} selectedItem
    * @event {KeyboardEvent | MouseEvent} clear
    * @slot {{ item: Item; index: number }}
    */

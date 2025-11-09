@@ -6,25 +6,25 @@ export type DataTableKey<Row = DataTableRow> =
 
 export type DataTableValue = any;
 
-export interface DataTableEmptyHeader<Row = DataTableRow> {
+export type DataTableEmptyHeader<Row = DataTableRow> = {
   key: DataTableKey<Row> | (string & {});
-  empty: boolean;
+  /** Whether the header is empty */ empty: boolean;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  columnMenu?: boolean;
+  /** Whether the column menu is enabled */ columnMenu?: boolean;
   width?: string;
   minWidth?: string;
-}
+};
 
-export interface DataTableNonEmptyHeader<Row = DataTableRow> {
+export type DataTableNonEmptyHeader<Row = DataTableRow> = {
   key: DataTableKey<Row>;
   value: DataTableValue;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  columnMenu?: boolean;
+  /** Whether the column menu is enabled */ columnMenu?: boolean;
   width?: string;
   minWidth?: string;
-}
+};
 
 export type DataTableHeader<Row = DataTableRow> =
   | DataTableNonEmptyHeader<Row>
@@ -37,11 +37,11 @@ export interface DataTableRow {
 
 export type DataTableRowId = any;
 
-export interface DataTableCell<Row = DataTableRow> {
+export type DataTableCell<Row = DataTableRow> = {
   key: DataTableKey<Row> | (string & {});
   value: DataTableValue;
   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
-}
+};
 export type DataTableContext = {
   batchSelectedIds: import("svelte/store").Writable<
     ReadonlyArray<DataTableRowId>
@@ -221,27 +221,17 @@ export default class DataTable<
     "click:header": CustomEvent<{
       header: DataTableHeader<Row>;
       sortDirection?: "ascending" | "descending" | "none";
-      target: EventTarget;
-      currentTarget: EventTarget;
     }>;
     "click:header--select": CustomEvent<{
       indeterminate: boolean;
       selected: boolean;
     }>;
-    "click:row": CustomEvent<{
-      row: Row;
-      target: EventTarget;
-      currentTarget: EventTarget;
-    }>;
+    "click:row": CustomEvent<{ row: Row }>;
     "mouseenter:row": CustomEvent<Row>;
     "mouseleave:row": CustomEvent<Row>;
     "click:row--expand": CustomEvent<{ expanded: boolean; row: Row }>;
     "click:row--select": CustomEvent<{ selected: boolean; row: Row }>;
-    "click:cell": CustomEvent<{
-      cell: DataTableCell<Row>;
-      target: EventTarget;
-      currentTarget: EventTarget;
-    }>;
+    "click:cell": CustomEvent<{ cell: DataTableCell<Row> }>;
   },
   {
     cell: {

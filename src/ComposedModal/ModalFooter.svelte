@@ -1,6 +1,7 @@
 <script>
   /**
-   * @event {{ text: string; }} click:button--secondary
+   * @event click:button--secondary
+   * @property {string} text
    */
 
   /** Specify the primary button text */

@@ -1815,9 +1815,9 @@
           "ts": "type ColumnSize = boolean | number;\n"
         },
         {
-          "type": "{span?: ColumnSize; offset: number;}",
+          "type": "{ span?: ColumnSize; offset: number; }",
           "name": "ColumnSizeDescriptor",
-          "ts": "interface ColumnSizeDescriptor {\n  span?: ColumnSize;\n  offset: number;\n}\n"
+          "ts": "type ColumnSizeDescriptor = {\n  span?: ColumnSize;\n  offset: number;\n};\n"
         },
         {
           "type": "ColumnSize | ColumnSizeDescriptor",
@@ -2228,9 +2228,9 @@
           "ts": "type ComboBoxItemId = any;\n"
         },
         {
-          "type": "{ id: ComboBoxItemId; text: string; disabled?: boolean; }",
+          "type": "{ id: ComboBoxItemId; text: string; /** Whether the item is disabled */ disabled?: boolean; }",
           "name": "ComboBoxItem",
-          "ts": "interface ComboBoxItem {\n  id: ComboBoxItemId;\n  text: string;\n  disabled?: boolean;\n}\n"
+          "ts": "type ComboBoxItem = {\n  id: ComboBoxItemId;\n  text: string;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
         }
       ],
       "generics": [
@@ -3461,7 +3461,7 @@
         {
           "type": "dispatched",
           "name": "click:header",
-          "detail": "{\n  header: DataTableHeader<Row>;\n  sortDirection?:\n    | \"ascending\"\n    | \"descending\"\n    | \"none\";\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
+          "detail": "{\n  header: DataTableHeader<Row>;\n  sortDirection?:\n    | \"ascending\"\n    | \"descending\"\n    | \"none\";\n}"
         },
         {
           "type": "dispatched",
@@ -3471,7 +3471,7 @@
         {
           "type": "dispatched",
           "name": "click:row",
-          "detail": "{\n  row: Row;\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
+          "detail": "{ row: Row }"
         },
         {
           "type": "dispatched",
@@ -3496,7 +3496,7 @@
         {
           "type": "dispatched",
           "name": "click:cell",
-          "detail": "{\n  cell: DataTableCell<Row>;\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
+          "detail": "{\n  cell: DataTableCell<Row>;\n}"
         }
       ],
       "typedefs": [
@@ -3511,14 +3511,14 @@
           "ts": "type DataTableValue = any;\n"
         },
         {
-          "type": "{\n   key: DataTableKey<Row> | (string & {});\n   empty: boolean;\n   display?: (item: DataTableValue, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
+          "type": "{ key: DataTableKey<Row> | (string & {}); /** Whether the header is empty */ empty: boolean; display?: (item: DataTableValue, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); /** Whether the column menu is enabled */ columnMenu?: boolean; width?: string; minWidth?: string; }",
           "name": "DataTableEmptyHeader<Row=DataTableRow>",
-          "ts": "interface DataTableEmptyHeader<\n  Row = DataTableRow,\n> {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  empty: boolean;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}\n"
+          "ts": "type DataTableEmptyHeader<\n  Row = DataTableRow,\n> = {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  /** Whether the header is empty */ empty: boolean;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  /** Whether the column menu is enabled */ columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n};\n"
         },
         {
-          "type": "{\n   key: DataTableKey<Row>;\n   value: DataTableValue;\n   display?: (item: DataTableValue, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
+          "type": "{ key: DataTableKey<Row>; value: DataTableValue; display?: (item: DataTableValue, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); /** Whether the column menu is enabled */ columnMenu?: boolean; width?: string; minWidth?: string; }",
           "name": "DataTableNonEmptyHeader<Row=DataTableRow>",
-          "ts": "interface DataTableNonEmptyHeader<\n  Row = DataTableRow,\n> {\n  key: DataTableKey<Row>;\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}\n"
+          "ts": "type DataTableNonEmptyHeader<\n  Row = DataTableRow,\n> = {\n  key: DataTableKey<Row>;\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  /** Whether the column menu is enabled */ columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n};\n"
         },
         {
           "type": "DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>",
@@ -3536,9 +3536,9 @@
           "ts": "type DataTableRowId = any;\n"
         },
         {
-          "type": "{\n   key: DataTableKey<Row> | (string & {});\n   value: DataTableValue;\n   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;\n}",
+          "type": "{ key: DataTableKey<Row> | (string & {}); value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; }",
           "name": "DataTableCell<Row=DataTableRow>",
-          "ts": "interface DataTableCell<\n  Row = DataTableRow,\n> {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: DataTableRow,\n  ) => DataTableValue;\n}\n"
+          "ts": "type DataTableCell<Row = DataTableRow> =\n  {\n    key:\n      | DataTableKey<Row>\n      | (string & {});\n    value: DataTableValue;\n    display?: (\n      item: DataTableValue,\n      row: DataTableRow,\n    ) => DataTableValue;\n  };\n"
         }
       ],
       "generics": [
@@ -4563,9 +4563,9 @@
           "ts": "type DropdownItemText = string;\n"
         },
         {
-          "type": "{ id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }",
+          "type": "{ id: DropdownItemId; text: DropdownItemText; /** Whether the item is disabled */ disabled?: boolean; }",
           "name": "DropdownItem",
-          "ts": "interface DropdownItem {\n  id: DropdownItemId;\n  text: DropdownItemText;\n  disabled?: boolean;\n}\n"
+          "ts": "type DropdownItem = {\n  id: DropdownItemId;\n  text: DropdownItemText;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
         }
       ],
       "generics": [
@@ -7110,7 +7110,7 @@
         {
           "type": "{ href: string; text: string; description?: string; }",
           "name": "HeaderSearchResult",
-          "ts": "interface HeaderSearchResult {\n  href: string;\n  text: string;\n  description?: string;\n}\n"
+          "ts": "type HeaderSearchResult = {\n  href: string;\n  text: string;\n  description?: string;\n};\n"
         }
       ],
       "generics": null,
@@ -9520,9 +9520,9 @@
           "ts": "type MultiSelectItemText = string;\n"
         },
         {
-          "type": "{ id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }",
+          "type": "{ id: MultiSelectItemId; text: MultiSelectItemText; /** Whether the item is disabled */ disabled?: boolean; }",
           "name": "MultiSelectItem",
-          "ts": "interface MultiSelectItem {\n  id: MultiSelectItemId;\n  text: MultiSelectItemText;\n  disabled?: boolean;\n}\n"
+          "ts": "type MultiSelectItem = {\n  id: MultiSelectItemId;\n  text: MultiSelectItemText;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
         }
       ],
       "generics": [
@@ -10438,7 +10438,7 @@
         {
           "type": "dispatched",
           "name": "close",
-          "detail": "null | {\n  index: number;\n  text: string;\n}"
+          "detail": "{\n  index?: number;\n  text?: string;\n}"
         },
         {
           "type": "forwarded",
@@ -10870,17 +10870,20 @@
         {
           "type": "dispatched",
           "name": "click:button--previous",
-          "detail": "{ page: number }"
+          "detail": "{ page: number }",
+          "description": "Dispatched after any user interaction"
         },
         {
           "type": "dispatched",
           "name": "click:button--next",
-          "detail": "{ page: number }"
+          "detail": "{ page: number }",
+          "description": "Dispatched after any user interaction"
         },
         {
           "type": "dispatched",
           "name": "update",
-          "detail": "{\n  pageSize: number;\n  page: number;\n}"
+          "detail": "{\n  pageSize: number;\n  page: number;\n}",
+          "description": "Dispatched after any user interaction"
         }
       ],
       "typedefs": [],
@@ -10987,7 +10990,7 @@
           "type": "dispatched",
           "name": "change",
           "detail": "{ page: number }",
-          "description": "fires after every user interaction"
+          "description": "Fires after every user interaction"
         },
         {
           "type": "dispatched",
@@ -12556,9 +12559,9 @@
       "events": [],
       "typedefs": [
         {
-          "type": "{ text?: string; href?: string; html?: string; }",
+          "type": "{ /** Node text content */ text?: string; /** Node link URL */ href?: string; /** Node HTML content */ html?: string; }",
           "name": "RecursiveListNode",
-          "ts": "interface RecursiveListNode {\n  text?: string;\n  href?: string;\n  html?: string;\n}\n"
+          "ts": "type RecursiveListNode = {\n  /** Node text content */ text?: string;\n  /** Node link URL */ href?: string;\n  /** Node HTML content */ html?: string;\n};\n"
         }
       ],
       "generics": null,
@@ -19053,17 +19056,17 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "TreeNode & {\n  expanded: boolean;\n  leaf: boolean;\n}"
+          "detail": "{\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n  expanded: boolean;\n  leaf: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "toggle",
-          "detail": "TreeNode & {\n  expanded: boolean;\n  leaf: boolean;\n}"
+          "detail": "{\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n  expanded: boolean;\n  leaf: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "focus",
-          "detail": "TreeNode & {\n  expanded: boolean;\n  leaf: boolean;\n}"
+          "detail": "{\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n  expanded: boolean;\n  leaf: boolean;\n}"
         },
         {
           "type": "forwarded",
@@ -19078,9 +19081,9 @@
           "ts": "type TreeNodeId = string | number;\n"
         },
         {
-          "type": "{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; }",
+          "type": "{ id: TreeNodeId; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: TreeNode[]; }",
           "name": "TreeNode",
-          "ts": "interface TreeNode {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n}\n"
+          "ts": "type TreeNode = {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: TreeNode[];\n};\n"
         }
       ],
       "generics": null,

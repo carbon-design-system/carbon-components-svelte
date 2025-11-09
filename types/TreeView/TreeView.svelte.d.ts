@@ -3,13 +3,13 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 export type TreeNodeId = string | number;
 
-export interface TreeNode {
+export type TreeNode = {
   id: TreeNodeId;
   text: any;
   icon?: any;
-  disabled?: boolean;
+  /** Whether the node is disabled */ disabled?: boolean;
   nodes?: TreeNode[];
-}
+};
 export type TreeViewContext = {
   activeNodeId: import("svelte/store").Writable<TreeNodeId>;
   selectedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
@@ -75,9 +75,33 @@ export type TreeViewProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class TreeView extends SvelteComponentTyped<
   TreeViewProps,
   {
-    select: CustomEvent<TreeNode & { expanded: boolean; leaf: boolean }>;
-    toggle: CustomEvent<TreeNode & { expanded: boolean; leaf: boolean }>;
-    focus: CustomEvent<TreeNode & { expanded: boolean; leaf: boolean }>;
+    select: CustomEvent<{
+      id: TreeNodeId;
+      text: any;
+      icon?: any;
+      disabled?: boolean;
+      nodes?: TreeNode[];
+      expanded: boolean;
+      leaf: boolean;
+    }>;
+    toggle: CustomEvent<{
+      id: TreeNodeId;
+      text: any;
+      icon?: any;
+      disabled?: boolean;
+      nodes?: TreeNode[];
+      expanded: boolean;
+      leaf: boolean;
+    }>;
+    focus: CustomEvent<{
+      id: TreeNodeId;
+      text: any;
+      icon?: any;
+      disabled?: boolean;
+      nodes?: TreeNode[];
+      expanded: boolean;
+      leaf: boolean;
+    }>;
     keydown: WindowEventMap["keydown"];
   },
   {
