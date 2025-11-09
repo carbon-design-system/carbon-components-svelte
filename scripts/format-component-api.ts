@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import { format } from "prettier";
 import plugin from "prettier/plugins/typescript";
 import componentApi from "../docs/src/COMPONENT_API.json" with { type: "json" };
@@ -19,101 +18,108 @@ const formatTypeScript = async (value) => {
 
 console.time("formatComponentApi");
 
-const modified = { ...componentApi };
+const modified = {
+  ...componentApi,
+  components: await Promise.all(
+    componentApi.components.map(async (component) => {
+      const props = await Promise.all(
+        component.props.map(async (prop) => {
+          if (!prop.value || !WHITESPACE_REGEX.test(prop.value)) {
+            return prop;
+          }
 
-modified.components = await Promise.all(
-  componentApi.components.map(async (component) => {
-    component.props = await Promise.all(
-      component.props.map(async (prop) => {
-        if (!prop.value || !WHITESPACE_REGEX.test(prop.value)) {
-          return prop;
-        }
+          let normalizedValue = prop.value;
+          const prefix = `const ${prop.name} = `;
 
-        let normalizedValue = prop.value;
-        const prefix = `const ${prop.name} = `;
+          if (prop.isFunction || prop.value.startsWith("{")) {
+            normalizedValue = prefix + prop.value;
+          }
 
-        if (prop.isFunction || prop.value.startsWith("{")) {
-          normalizedValue = prefix + prop.value;
-        }
+          const formatted = (await formatTypeScript(normalizedValue))
+            // Remove prefix needed for formatting.
+            .replace(new RegExp(`^${prefix}`), "")
+            // Remove trailing semi-colon.
+            .replace(TRAILING_SEMICOLON_REGEX, "");
 
-        const formatted = (await formatTypeScript(normalizedValue))
-          // Remove prefix needed for formatting.
-          .replace(new RegExp(`^${prefix}`), "")
-          // Remove trailing semi-colon.
-          .replace(TRAILING_SEMICOLON_REGEX, "");
+          return {
+            ...prop,
+            value: formatted,
+          };
+        }),
+      );
 
-        return {
-          ...prop,
-          value: formatted,
-        };
-      }),
-    );
+      const typedefs = await Promise.all(
+        component.typedefs.map(async (typedef) => {
+          if (!typedef.ts) {
+            return typedef;
+          }
 
-    component.typedefs = await Promise.all(
-      component.typedefs.map(async (typedef) => {
-        if (!typedef.ts) {
-          return typedef;
-        }
+          return {
+            ...typedef,
+            ts: await formatTypeScript(typedef.ts),
+          };
+        }),
+      );
 
-        return {
-          ...typedef,
-          ts: await formatTypeScript(typedef.ts),
-        };
-      }),
-    );
+      const events = await Promise.all(
+        component.events.map(async (event) => {
+          if (event.type === "forwarded") {
+            return event;
+          }
 
-    component.events = await Promise.all(
-      component.events.map(async (event) => {
-        if (event.type === "forwarded") {
-          return event;
-        }
+          const normalizedValue = `type EventDetail = ${event.detail}`;
 
-        const normalizedValue = `type EventDetail = ${event.detail}`;
+          const formatted = (await formatTypeScript(normalizedValue))
+            // Remove prefix needed for formatting.
+            .replace(EVENT_DETAIL_PREFIX_REGEX, "")
+            // Remove trailing semi-colon.
+            .replace(TRAILING_SEMICOLON_REGEX, "");
 
-        const formatted = (await formatTypeScript(normalizedValue))
-          // Remove prefix needed for formatting.
-          .replace(EVENT_DETAIL_PREFIX_REGEX, "")
-          // Remove trailing semi-colon.
-          .replace(TRAILING_SEMICOLON_REGEX, "");
+          return {
+            ...event,
+            detail: formatted,
+          };
+        }),
+      );
 
-        return {
-          ...event,
-          detail: formatted,
-        };
-      }),
-    );
+      const slots = await Promise.all(
+        component.slots.map(async (slot) => {
+          if (!slot.slot_props) {
+            return slot;
+          }
 
-    component.slots = await Promise.all(
-      component.slots.map(async (slot) => {
-        if (!slot.slot_props) {
-          return slot;
-        }
+          let normalizedValue = slot.slot_props;
 
-        let normalizedValue = slot.slot_props;
+          if (normalizedValue.startsWith("{")) {
+            normalizedValue = `type SlotProps = ${normalizedValue}`;
+          }
 
-        if (normalizedValue.startsWith("{")) {
-          normalizedValue = `type SlotProps = ${normalizedValue}`;
-        }
+          const formatted = (await formatTypeScript(normalizedValue))
+            // Remove prefix needed for formatting.
+            .replace(SLOT_PROPS_PREFIX_REGEX, "")
+            // Remove trailing semi-colon.
+            .replace(TRAILING_SEMICOLON_REGEX, "");
 
-        const formatted = (await formatTypeScript(normalizedValue))
-          // Remove prefix needed for formatting.
-          .replace(SLOT_PROPS_PREFIX_REGEX, "")
-          // Remove trailing semi-colon.
-          .replace(TRAILING_SEMICOLON_REGEX, "");
+          return {
+            ...slot,
+            // biome-ignore lint/style/useNamingConvention: slot_props matches the JSON API structure
+            slot_props: formatted,
+          };
+        }),
+      );
 
-        return {
-          ...slot,
-          // biome-ignore lint/style/useNamingConvention: slot_props matches the JSON API structure
-          slot_props: formatted,
-        };
-      }),
-    );
+      return {
+        ...component,
+        props,
+        typedefs,
+        events,
+        slots,
+      };
+    }),
+  ),
+};
 
-    return component;
-  }),
-);
-
-fs.writeFileSync(
+await Bun.write(
   "./docs/src/COMPONENT_API.json",
   JSON.stringify(modified, null, 2),
 );
