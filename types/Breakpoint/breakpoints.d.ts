@@ -2,7 +2,7 @@
  * Pixel sizes of Carbon grid breakpoints.
  * @type {Record<BreakpointSize, BreakpointValue>}
  */
-export const breakpoints: Record<BreakpointSize, BreakpointValue>;
+export declare const breakpoints: Record<BreakpointSize, BreakpointValue>;
 
 export type BreakpointSize = "sm" | "md" | "lg" | "xlg" | "max";
 
