@@ -2,7 +2,7 @@
   /** @extends {"./AccordionSkeleton.svelte"} AccordionSkeletonProps */
 
   /**
-   * Specify alignment of accordion item chevron icon
+   * Specify alignment of accordion item chevron icon.
    * @type {"start" | "end"}
    */
   export let align = "end";
