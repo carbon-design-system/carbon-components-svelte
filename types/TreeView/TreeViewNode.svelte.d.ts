@@ -3,7 +3,7 @@ import type { SvelteComponentTyped } from "svelte";
 /**
  * Computes the depth of a tree leaf node relative to <ul role="tree" />
  */
-export declare function computeTreeLeafDepth(): any;
+export declare function computeTreeLeafDepth(node: HTMLLIElement): number;
 export type TreeNodeId = string | number;
 
 export type TreeViewNodeProps = {
