@@ -108,6 +108,12 @@ Use `TreeView.showNode` to expand, select, and focus a specific node.
 
 <FileSource src="/framed/TreeView/TreeViewShowNode" />
 
+## Show node with options
+
+Configure `TreeView.showNode` behavior using optional parameters. By default, all three actions occur (`expand`, `select`, `focus`), but you can disable any combination. This is useful for expanding nodes without selecting them, or selecting without expanding.
+
+<FileSource src="/framed/TreeView/TreeViewShowNodeOptions" />
+
 ## Flat data structure
 
 Convert flat data to a hierarchical structure using the `toHierarchy` utility.
