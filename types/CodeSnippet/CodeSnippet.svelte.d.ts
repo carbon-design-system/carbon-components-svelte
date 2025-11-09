@@ -20,7 +20,6 @@ export type CodeSnippetProps = {
    * By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.
    *
    * Provide a custom function to override this behavior.
-   * @default async (code) => { try { await navigator.clipboard.writeText(code); } catch (e) { console.log(e); } }
    */
   copy?: (code: string) => void;
 

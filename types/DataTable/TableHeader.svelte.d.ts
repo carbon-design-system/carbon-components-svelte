@@ -30,7 +30,6 @@ type $Props = {
 
   /**
    * Override the default id translations
-   * @default () => ""
    */
   translateWithId?: () => string;
 

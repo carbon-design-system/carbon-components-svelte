@@ -22,7 +22,6 @@ type $Props<Item> = {
 
   /**
    * Override the display of a dropdown item
-   * @default (item) => item.text || item.id
    */
   itemToString?: (item: Item) => string;
 
