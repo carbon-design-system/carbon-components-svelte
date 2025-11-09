@@ -144,10 +144,10 @@ type $Props = {
   ) => string;
 
   /**
-   * Specify the title text
+   * Specify the label text
    * @default ""
    */
-  titleText?: string;
+  labelText?: string;
 
   /**
    * Set to `true` to pass the item to `itemToString` in the checkbox
@@ -260,5 +260,5 @@ export default class MultiSelect extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     paste: WindowEventMap["paste"];
   },
-  { default: { item: MultiSelectItem; index: number }; titleText: {} }
+  { default: { item: MultiSelectItem; index: number }; labelText: {} }
 > {}

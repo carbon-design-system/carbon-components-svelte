@@ -8780,9 +8780,9 @@
           "reactive": false
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "kind": "let",
-          "description": "Specify the title text",
+          "description": "Specify the label text",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -8980,9 +8980,9 @@
           "slot_props": "{\n  item: MultiSelectItem;\n  index: number;\n}"
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "default": false,
-          "fallback": "{titleText}",
+          "fallback": "{labelText}",
           "slot_props": "{}"
         }
       ],

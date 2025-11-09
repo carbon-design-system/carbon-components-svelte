@@ -108,8 +108,8 @@
    */
   export let translateWithIdSelection = undefined;
 
-  /** Specify the title text */
-  export let titleText = "";
+  /** Specify the label text */
+  export let labelText = "";
 
   /** Set to `true` to pass the item to `itemToString` in the checkbox */
   export let useTitleInItem = false;
@@ -311,15 +311,15 @@
   class:bx--list-box__wrapper--inline={inline}
   class:bx--multi-select__wrapper--inline--invalid={inline && invalid}
 >
-  {#if titleText || $$slots.titleText}
+  {#if labelText || $$slots.labelText}
     <label
       for={id}
       class:bx--label={true}
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
     >
-      <slot name="titleText">
-        {titleText}
+      <slot name="labelText">
+        {labelText}
       </slot>
     </label>
   {/if}
