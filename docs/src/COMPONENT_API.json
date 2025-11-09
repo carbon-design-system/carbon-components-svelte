@@ -19028,8 +19028,8 @@
         {
           "name": "showNode",
           "kind": "function",
-          "description": "Programmatically show a node by `id`.\nThe matching node will be expanded, selected, and focused",
-          "type": "(id: TreeNodeId) => void",
+          "description": "Programmatically show a node by `id`.\nBy default, the matching node will be expanded, selected, and focused.\nUse the options parameter to customize this behavior.",
+          "type": "(id: TreeNodeId, options?: ShowNodeOptions) => void",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -19084,6 +19084,11 @@
           "type": "{ id: TreeNodeId; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: TreeNode[]; }",
           "name": "TreeNode",
           "ts": "type TreeNode = {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: TreeNode[];\n};\n"
+        },
+        {
+          "type": "{ /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean; /** Whether to select the node (default: true) */ select?: boolean; /** Whether to focus the node (default: true) */ focus?: boolean; }",
+          "name": "ShowNodeOptions",
+          "ts": "type ShowNodeOptions = {\n  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;\n  /** Whether to select the node (default: true) */ select?: boolean;\n  /** Whether to focus the node (default: true) */ focus?: boolean;\n};\n"
         }
       ],
       "generics": null,
