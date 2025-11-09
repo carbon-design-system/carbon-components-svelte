@@ -12,7 +12,7 @@ const items = [
 describe("Dropdown", () => {
   it("should render with default props", () => {
     render(Dropdown, {
-      props: { items, selectedId: "0", titleText: "Contact" },
+      props: { items, selectedId: "0", labelText: "Contact" },
     });
 
     expect(screen.getByText("Contact")).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe("Dropdown", () => {
     const props = {
       items,
       selectedId: "0",
-      titleText: "Contact",
+      labelText: "Contact",
       itemToString: (item: (typeof items)[number]) =>
         `${item.text} (${item.id})`,
     };
@@ -44,7 +44,7 @@ describe("Dropdown", () => {
       props: {
         items,
         selectedId: "0",
-        titleText: "Contact",
+        labelText: "Contact",
         hideLabel: true,
       },
     });

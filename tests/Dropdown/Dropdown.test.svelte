@@ -11,7 +11,7 @@
   export let open: ComponentProps<Dropdown>["open"] = false;
   export let light: ComponentProps<Dropdown>["light"] = false;
   export let disabled: ComponentProps<Dropdown>["disabled"] = false;
-  export let titleText: ComponentProps<Dropdown>["titleText"] = "";
+  export let labelText: ComponentProps<Dropdown>["labelText"] = "";
   export let invalid: ComponentProps<Dropdown>["invalid"] = false;
   export let invalidText: ComponentProps<Dropdown>["invalidText"] = "";
   export let warn: ComponentProps<Dropdown>["warn"] = false;
@@ -36,7 +36,7 @@
   bind:open
   {light}
   {disabled}
-  {titleText}
+  {labelText}
   {invalid}
   {invalidText}
   {warn}

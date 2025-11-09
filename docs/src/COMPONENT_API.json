@@ -4044,7 +4044,7 @@
           "reactive": false
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "kind": "let",
           "description": "Specify the title text",
           "type": "string",
