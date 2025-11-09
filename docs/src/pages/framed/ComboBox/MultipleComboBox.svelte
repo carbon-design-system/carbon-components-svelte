@@ -19,7 +19,7 @@
 
 <ComboBox
   bind:selectedId={comboBox1_selectedId}
-  titleText="Primary contact"
+  labelText="Primary contact"
   placeholder="Select primary contact method"
   {items}
 />
@@ -28,7 +28,7 @@
 
 <ComboBox
   bind:selectedId={comboBox2_selectedId}
-  titleText="Secondary contact"
+  labelText="Secondary contact"
   placeholder="Select secondary contact method"
   {items}
 />

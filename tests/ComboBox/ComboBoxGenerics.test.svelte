@@ -10,7 +10,7 @@
 
 <ComboBox
   {items}
-  titleText="Products"
+  labelText="Products"
   placeholder="Select a product"
   on:select={(e) => {
     console.log("selected:", e.detail.selectedItem);

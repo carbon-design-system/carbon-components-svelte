@@ -143,7 +143,7 @@ describe("ComboBox", () => {
   it("should handle hidden label", () => {
     render(ComboBox, {
       props: {
-        titleText: "Hidden Label",
+        labelText: "Hidden Label",
         hideLabel: true,
       },
     });
