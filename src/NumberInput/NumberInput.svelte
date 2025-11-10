@@ -74,7 +74,7 @@
   export let helperText = "";
 
   /** Specify the label text */
-  export let label = "";
+  export let labelText = "";
 
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
@@ -240,14 +240,14 @@
     class:bx--number--sm={size === "sm"}
     class:bx--number--xl={size === "xl"}
   >
-    {#if $$slots.label || label}
+    {#if $$slots.labelText || labelText}
       <label
         for={id}
         class:bx--label={true}
         class:bx--label--disabled={disabled}
         class:bx--visually-hidden={hideLabel}
       >
-        <slot name="label">{label}</slot>
+        <slot name="labelText">{labelText}</slot>
       </label>
     {/if}
     <div
@@ -263,7 +263,7 @@
           aria-describedby={errorId}
           data-invalid={hasError || undefined}
           aria-invalid={hasError || undefined}
-          aria-label={label ? undefined : ariaLabel}
+          aria-label={labelText ? undefined : ariaLabel}
           {disabled}
           {id}
           {name}
@@ -286,7 +286,7 @@
           aria-describedby={errorId}
           data-invalid={hasError || undefined}
           aria-invalid={hasError || undefined}
-          aria-label={label ? undefined : ariaLabel}
+          aria-label={labelText ? undefined : ariaLabel}
           {disabled}
           {id}
           {name}

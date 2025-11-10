@@ -1920,7 +1920,7 @@
           "reactive": false
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "kind": "let",
           "description": "Specify the title text of the combobox",
           "type": "string",
@@ -2167,9 +2167,9 @@
           "slot_props": "{\n  item: Item;\n  index: number;\n}"
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "default": false,
-          "fallback": "{titleText}",
+          "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -4391,7 +4391,7 @@
           "reactive": false
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "kind": "let",
           "description": "Specify the title text",
           "type": "string",
@@ -9258,9 +9258,9 @@
           "reactive": false
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "kind": "let",
-          "description": "Specify the title text",
+          "description": "Specify the label text",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -9459,9 +9459,9 @@
           "slot_props": "{\n  item: Item;\n  index: number;\n}"
         },
         {
-          "name": "titleText",
+          "name": "labelText",
           "default": false,
-          "fallback": "{titleText}",
+          "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -9934,7 +9934,7 @@
           "reactive": false
         },
         {
-          "name": "label",
+          "name": "labelText",
           "kind": "let",
           "description": "Specify the label text",
           "type": "string",
@@ -10020,9 +10020,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "label",
+          "name": "labelText",
           "default": false,
-          "fallback": "{label}",
+          "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
         }
       ],
