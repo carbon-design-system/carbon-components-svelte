@@ -11,7 +11,7 @@
 <MultiSelect
   {items}
   label="Choose products"
-  titleText="Products"
+  labelText="Products"
   on:select={(e) => {
     console.log("selected:", e.detail.selected);
   }}

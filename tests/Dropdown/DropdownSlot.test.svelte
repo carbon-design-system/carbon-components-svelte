@@ -15,7 +15,7 @@
   {items}
   {selectedId}
   {id}
-  titleText="Custom slot dropdown"
+  labelText="Custom slot dropdown"
   let:item
   let:index
 >

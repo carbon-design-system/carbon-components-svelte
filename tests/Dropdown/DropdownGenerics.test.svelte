@@ -12,7 +12,7 @@
     {items}
     selectedId={undefined}
     label="Choose a product"
-    titleText="Products"
+    labelText="Products"
     on:select={(e) => {
       console.log("selected:", e.detail.selectedItem);
     }}
