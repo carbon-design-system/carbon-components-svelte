@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.91.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.90.2...v0.91.0) (2025-11-10)
+
+### Features
+
+- **combo-box:** support TypeScript generics ([9e3ce77](https://github.com/carbon-design-system/carbon-components-svelte/commit/9e3ce775617aecd31e914723a6f6d313c2eb9254))
+- **dropdown:** support TypeScript generics ([65572ec](https://github.com/carbon-design-system/carbon-components-svelte/commit/65572ecec461a2a9112c37ef6025b5d090e6e068))
+- **multi-select:** support TypeScript generics ([1b3d067](https://github.com/carbon-design-system/carbon-components-svelte/commit/1b3d06757e9e6095f0a27b92328b4e2b129d5f1c))
+- **tree-view:** `showNode` is configurable ([6f23803](https://github.com/carbon-design-system/carbon-components-svelte/commit/6f238034abfeb5c095715b497c84c86d6b10f059)), closes [#2282](https://github.com/carbon-design-system/carbon-components-svelte/issues/2282)
+- **tree-view:** add `filterTreeNodes` utilities ([038a4f4](https://github.com/carbon-design-system/carbon-components-svelte/commit/038a4f4b96a9a6579962b872e1407dc30b32dd82)), closes [#2281](https://github.com/carbon-design-system/carbon-components-svelte/issues/2281)
+- **types:** annotate typedefs and dispatched events ([#2322](https://github.com/carbon-design-system/carbon-components-svelte/issues/2322)) ([7632c03](https://github.com/carbon-design-system/carbon-components-svelte/commit/7632c03d1bb2e1287210865d60fe49597dc4812e))
+
+### Bug Fixes
+
+- **breakpoint:** use `declare const` in types ([#2330](https://github.com/carbon-design-system/carbon-components-svelte/issues/2330)) ([24152e2](https://github.com/carbon-design-system/carbon-components-svelte/commit/24152e29fc5677d0f3263cd42a5393d5a5a13c4e))
+- **multi-select:** restore complete keyboard navigation for filterable variant ([#2317](https://github.com/carbon-design-system/carbon-components-svelte/issues/2317)) ([2c0ae9e](https://github.com/carbon-design-system/carbon-components-svelte/commit/2c0ae9e30bcb7e09e83767c1c90b9e43d903ea3c)), closes [#2313](https://github.com/carbon-design-system/carbon-components-svelte/issues/2313)
+- **slider:** store event object for drag calculations ([#2320](https://github.com/carbon-design-system/carbon-components-svelte/issues/2320)) ([50f010d](https://github.com/carbon-design-system/carbon-components-svelte/commit/50f010d7ce532e29890336be1d34411fac85bf98))
+- **tree-view-node:** correctly type `computeTreeLeafDepth` export ([cbe7d93](https://github.com/carbon-design-system/carbon-components-svelte/commit/cbe7d93a92af9a93257e7328cec8a25fc4ce4229))
+- **types:** correctly generate `[@default](https://github.com/default)` values ([f2c0701](https://github.com/carbon-design-system/carbon-components-svelte/commit/f2c07011be488a3284d6c7f7a2704a51e1e680d7))
+- **types:** generate types for all components ([b90a1f2](https://github.com/carbon-design-system/carbon-components-svelte/commit/b90a1f21f0d82b73bd430ec82bc1df2a9b45e029))
+- **types:** re-generate `types/index.d.ts` ([47cd789](https://github.com/carbon-design-system/carbon-components-svelte/commit/47cd7891bb989c797b34a528fbe8d5165cb54ae8))
+- **types:** remove function code from `[@default](https://github.com/default)` tags ([527f34f](https://github.com/carbon-design-system/carbon-components-svelte/commit/527f34fd3a6f3c29739c64e6f489fd7949d139e7))
+
 ### [0.90.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.90.1...v0.90.2) (2025-11-08)
 
 ### Bug Fixes
