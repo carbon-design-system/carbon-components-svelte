@@ -6,6 +6,8 @@ on:
       - "examples/**"
   push:
     branches: [master]
+    tags:
+      - "v*"
     paths-ignore:
       - "**.md"
       - "examples/**"
@@ -44,9 +46,11 @@ jobs:
           IBM_TELEMETRY_DISABLED: true
 
       - name: Build docs
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: bun build:docs
 
       - name: Validate docs
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
           if ! git diff --quiet --exit-code; then
             echo "Error: Auto-generated documentation is out of date."
