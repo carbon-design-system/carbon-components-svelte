@@ -1,6 +1,6 @@
 <script>
   /**
-   * @slot {{props?: { ["aria-current"]?: string; class: "bx--link"; }}}
+   * @slot {{props?: { "aria-current"?: string; class: "bx--link"; }}}
    */
 
   /**

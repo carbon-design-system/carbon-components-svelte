@@ -2,10 +2,10 @@
   import { ComboBox } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 
-  export let items: ComponentProps<ComboBox>["items"] = [
-    { id: "0", text: "Slack" },
-    { id: "1", text: "Email" },
-    { id: "2", text: "Fax" },
+  export let items = [
+    { id: "0", text: "Slack", price: 100 },
+    { id: "1", text: "Email", price: 200 },
+    { id: "2", text: "Fax", price: 300 },
   ];
   export let selectedId: ComponentProps<ComboBox>["selectedId"] = undefined;
   export let value = "";

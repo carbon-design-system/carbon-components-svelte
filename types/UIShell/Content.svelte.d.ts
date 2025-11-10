@@ -18,5 +18,5 @@ export type ContentProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class Content extends SvelteComponentTyped<
   ContentProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

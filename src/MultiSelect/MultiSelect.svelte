@@ -1,29 +1,38 @@
 <script>
   /**
+   * @generics {Item extends MultiSelectItem = MultiSelectItem} Item
+   * @template {MultiSelectItem} Item
    * @typedef {any} MultiSelectItemId
    * @typedef {string} MultiSelectItemText
-   * @typedef {{ id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }} MultiSelectItem
-   * @event {{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }} select
+   * @typedef {object} MultiSelectItem
+   * @property {MultiSelectItemId} id
+   * @property {MultiSelectItemText} text
+   * @property {boolean} [disabled] - Whether the item is disabled
+   * @event select
+   * @type {object}
+   * @property {MultiSelectItemId[]} selectedIds
+   * @property {Item[]} selected
+   * @property {Item[]} unselected
    * @event {null} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
-   * @slot {{ item: MultiSelectItem; index: number }}
+   * @slot {{ item: Item; index: number }}
    */
 
   /**
    * Set the multiselect items
-   * @type {ReadonlyArray<MultiSelectItem>}
+   * @type {ReadonlyArray<Item>}
    */
   export let items = [];
 
   /**
    * Override the display of a multiselect item
-   * @type {(item: MultiSelectItem) => any}
+   * @type {(item: Item) => any}
    */
   export let itemToString = (item) => item.text || item.id;
 
   /**
    * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
-   * @type {(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }}
+   * @type {(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }}
    */
   export let itemToInput = (_item) => {};
 
@@ -69,7 +78,7 @@
   /**
    * Override the filtering logic
    * The default filtering is an exact string comparison
-   * @type {(item: MultiSelectItem, value: string) => boolean}
+   * @type {(item: Item, value: string) => boolean}
    */
   export let filterItem = (item, value) =>
     item.text.toLowerCase().includes(value.trim().toLowerCase());
@@ -89,7 +98,7 @@
   /**
    * Override the sorting logic
    * The default sorting compare the item text value
-   * @type {((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)}
+   * @type {((a: Item, b: Item) => Item) | (() => void)}
    */
   export let sortItem = (a, b) =>
     a.text.localeCompare(b.text, locale, { numeric: true });
@@ -186,17 +195,22 @@
   let highlightedIndex = -1;
   let prevChecked = [];
 
+  /**
+   * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement }) => void}
+   */
+  const declareRef = ({ key, ref }) => {
+    switch (key) {
+      case "field":
+        fieldRef = ref;
+        break;
+      case "selection":
+        selectionRef = ref;
+        break;
+    }
+  };
+
   setContext("MultiSelect", {
-    declareRef: ({ key, ref }) => {
-      switch (key) {
-        case "field":
-          fieldRef = ref;
-          break;
-        case "selection":
-          selectionRef = ref;
-          break;
-      }
-    },
+    declareRef,
   });
 
   function change(direction) {
@@ -403,8 +417,10 @@
             } else if (key === "Tab") {
               open = false;
             } else if (key === "ArrowDown") {
+              if (!open) open = true;
               change(1);
             } else if (key === "ArrowUp") {
+              if (!open) open = true;
               change(-1);
             } else if (key === "Escape") {
               open = false;
@@ -413,8 +429,15 @@
             }
           }}
           on:input
+          on:input={() => {
+            if (!open) open = true;
+          }}
           on:keyup
           on:focus
+          on:focus={() => {
+            if (disabled) return;
+            open = true;
+          }}
           on:blur
           on:paste
           {disabled}
@@ -471,14 +494,12 @@
           if (key === " ") {
             open = !open;
           } else if (key === "Tab") {
-            if (selectionRef && checked.length > 0) {
-              selectionRef.focus();
-            } else {
-              open = false;
-            }
+            open = false;
           } else if (key === "ArrowDown") {
+            if (!open) open = true;
             change(1);
           } else if (key === "ArrowUp") {
+            if (!open) open = true;
             change(-1);
           } else if (key === "Enter") {
             if (highlightedIndex > -1) {

@@ -99,7 +99,7 @@ describe("Theme", () => {
   });
 
   it("should load persisted theme from localStorage", async () => {
-    localStorageMock["theme"] = "g90";
+    localStorageMock.theme = "g90";
 
     render(Theme, { props: { persist: true } });
     await tick();

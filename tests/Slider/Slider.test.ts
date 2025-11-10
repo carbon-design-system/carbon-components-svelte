@@ -153,6 +153,24 @@ describe("Slider", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", 990);
   });
 
+  it("should handle mouse dragging without errors", async () => {
+    render(Slider);
+
+    const container = screen.getByRole("presentation");
+    const { left, width } = container.getBoundingClientRect();
+
+    await user.pointer({ target: container, keys: "[MouseLeft]" });
+    await user.pointer({
+      target: container,
+      coords: { x: left + width / 2 },
+    });
+
+    await user.pointer({ target: container, keys: "[/MouseLeft]" });
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    expect(container).toBeInTheDocument();
+  });
+
   it("should not respond to dragging when disabled", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Slider, {

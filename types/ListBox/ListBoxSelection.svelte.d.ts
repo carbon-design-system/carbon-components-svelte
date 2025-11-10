@@ -20,7 +20,6 @@ type $Props = {
 
   /**
    * Override the default translation ids
-   * @default (id) => defaultTranslations[id]
    */
   translateWithId?: (id: ListBoxSelectionTranslationId) => string;
 
@@ -38,7 +37,7 @@ export type ListBoxSelectionProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ListBoxSelection extends SvelteComponentTyped<
   ListBoxSelectionProps,
   { clear: CustomEvent<KeyboardEvent | MouseEvent> },
-  {}
+  Record<string, never>
 > {
   /**
    * Default translation ids

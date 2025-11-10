@@ -16,7 +16,7 @@ export function toHierarchy(flatArray, getParentId) {
   const childrenOf = new Map();
   const itemsMap = new Map(flatArray.map((item) => [item.id, item]));
 
-  flatArray.forEach((item) => {
+  for (const item of flatArray) {
     const parentId = getParentId(item);
 
     // Only create nodes array if we have children.
@@ -41,7 +41,7 @@ export function toHierarchy(flatArray, getParentId) {
     } else {
       tree.push(item);
     }
-  });
+  }
 
   return tree;
 }

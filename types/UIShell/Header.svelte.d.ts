@@ -69,15 +69,13 @@ type $Props = {
 
   /**
    * Specify the icon to render for the closed state.
-   * Defaults to `<Menu size={20} />`
-   * @default undefined
+   * @default Menu
    */
   iconMenu?: any;
 
   /**
    * Specify the icon to render for the opened state.
-   * Defaults to `<Close size={20} />`
-   * @default undefined
+   * @default Close
    */
   iconClose?: any;
 
@@ -96,5 +94,10 @@ export type HeaderProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class Header extends SvelteComponentTyped<
   HeaderProps,
   { click: WindowEventMap["click"] },
-  { default: {}; company: {}; platform: {}; ["skip-to-content"]: {} }
+  {
+    company: Record<string, never>;
+    platform: Record<string, never>;
+    "skip-to-content": Record<string, never>;
+    default: Record<string, never>;
+  }
 > {}

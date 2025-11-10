@@ -22,6 +22,7 @@
           "kind": "let",
           "description": "Specify the size of the accordion",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -56,9 +57,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -92,7 +93,21 @@
       "extends": {
         "interface": "AccordionSkeletonProps",
         "import": "\"./AccordionSkeleton.svelte\""
-      }
+      },
+      "contexts": [
+        {
+          "key": "Accordion",
+          "typeName": "AccordionContext",
+          "properties": [
+            {
+              "name": "disableItems",
+              "type": "import(\"svelte/store\").Writable<boolean>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "AccordionItem",
@@ -150,15 +165,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "title",
           "default": false,
           "fallback": "{title}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -198,7 +213,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "AccordionSkeleton",
@@ -233,6 +249,7 @@
           "kind": "let",
           "description": "Specify the size of the accordion",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -281,7 +298,8 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "AspectRatio",
@@ -303,9 +321,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -314,7 +332,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Breadcrumb",
@@ -348,9 +367,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -384,7 +403,8 @@
       "extends": {
         "interface": "BreadcrumbSkeletonProps",
         "import": "\"./BreadcrumbSkeleton.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "BreadcrumbItem",
@@ -395,6 +415,7 @@
           "kind": "let",
           "description": "Set the `href` to use an anchor link",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -417,9 +438,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{\n  props?: {\n    [\"aria-current\"]?: string;\n    class: \"bx--link\";\n  };\n}"
+          "slot_props": "{\n  props?: {\n    \"aria-current\"?: string;\n    class: \"bx--link\";\n  };\n}"
         }
       ],
       "events": [
@@ -449,7 +470,14 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": [
+        {
+          "key": "BreadcrumbItem",
+          "typeName": "BreadcrumbItemContext",
+          "properties": []
+        }
+      ]
     },
     {
       "moduleName": "BreadcrumbSkeleton",
@@ -509,7 +537,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Breakpoint",
@@ -520,6 +549,7 @@
           "kind": "let",
           "description": "Determine the current Carbon grid breakpoint size",
           "type": "BreakpointSize",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -542,7 +572,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  size: BreakpointSize;\n  sizes: Record<\n    BreakpointSize,\n    boolean\n  >;\n}"
         }
@@ -566,7 +596,8 @@
           "ts": "type BreakpointValue =\n  | 320\n  | 672\n  | 1056\n  | 1312\n  | 1584;\n"
         }
       ],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "Button",
@@ -625,6 +656,7 @@
           "kind": "let",
           "description": "Specify the icon to render\nAlternatively, use the named slot \"icon\" (e.g., `<Icon slot=\"icon\" size=\"{20}\" />`)",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -636,6 +668,7 @@
           "kind": "let",
           "description": "Specify the ARIA label for the button icon",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -719,6 +752,7 @@
           "kind": "let",
           "description": "Set the `href` to use an anchor link",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -765,14 +799,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: {\n    role: \"button\";\n    type?: string;\n    tabindex: any;\n    disabled: boolean;\n    href?: string;\n    class: string;\n    [key: string]: any;\n  };\n}"
         },
         {
           "name": "icon",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "{\n  style: undefined | string;\n}"
         }
       ],
       "events": [
@@ -816,7 +850,8 @@
       "extends": {
         "interface": "ButtonSkeletonProps",
         "import": "\"./ButtonSkeleton.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ButtonSet",
@@ -838,9 +873,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -849,7 +884,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ButtonSkeleton",
@@ -860,6 +896,7 @@
           "kind": "let",
           "description": "Set the `href` to use an anchor link",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -918,7 +955,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Checkbox",
@@ -953,6 +991,7 @@
           "kind": "let",
           "description": "Specify the bound group",
           "type": "ReadonlyArray<any>",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1072,6 +1111,7 @@
           "kind": "let",
           "description": "Specify the title attribute for the label element",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1109,7 +1149,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -1159,7 +1199,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "CheckboxSkeleton",
@@ -1194,7 +1235,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ClickableTile",
@@ -1241,6 +1283,7 @@
           "kind": "let",
           "description": "Set the `href`",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1251,9 +1294,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -1288,7 +1331,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a | p"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "CodeSnippet",
@@ -1311,6 +1355,7 @@
           "kind": "let",
           "description": "Set the code snippet text.\nAlternatively, use the default slot (e.g., `<CodeSnippet>{code}</CodeSnippet>`).\n\nNOTE: you *must* use the `code` prop for the copy-to-clipboard functionality.",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1322,7 +1367,6 @@
           "kind": "let",
           "description": "By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.\n\nProvide a custom function to override this behavior.",
           "type": "(code: string) => void",
-          "value": "async (code) => {\n  try {\n    await navigator.clipboard.writeText(\n      code,\n    );\n  } catch (e) {\n    console.log(e);\n  }\n}",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1406,6 +1450,7 @@
           "kind": "let",
           "description": "Specify the ARIA label for the copy button icon",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1417,6 +1462,7 @@
           "kind": "let",
           "description": "Specify the ARIA label of the copy button",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1511,10 +1557,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{code}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -1564,7 +1610,8 @@
       "rest_props": {
         "type": "InlineComponent",
         "name": "CodeSnippetSkeleton"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "CodeSnippetSkeleton",
@@ -1612,7 +1659,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Column",
@@ -1683,6 +1731,7 @@
           "kind": "let",
           "description": "Specify the aspect ratio of the column",
           "type": "\"2x1\" | \"16x9\" | \"9x16\" | \"1x2\" | \"4x3\" | \"3x4\" | \"1x1\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1694,6 +1743,7 @@
           "kind": "let",
           "description": "Set the small breakpoint",
           "type": "ColumnBreakpoint",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1705,6 +1755,7 @@
           "kind": "let",
           "description": "Set the medium breakpoint",
           "type": "ColumnBreakpoint",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1716,6 +1767,7 @@
           "kind": "let",
           "description": "Set the large breakpoint",
           "type": "ColumnBreakpoint",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1727,6 +1779,7 @@
           "kind": "let",
           "description": "Set the extra large breakpoint",
           "type": "ColumnBreakpoint",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1738,6 +1791,7 @@
           "kind": "let",
           "description": "Set the maximum breakpoint",
           "type": "ColumnBreakpoint",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1748,7 +1802,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: {\n    class: string;\n    [key: string]: any;\n  };\n}"
         }
@@ -1761,9 +1815,9 @@
           "ts": "type ColumnSize = boolean | number;\n"
         },
         {
-          "type": "{span?: ColumnSize; offset: number;}",
+          "type": "{ span?: ColumnSize; offset: number; }",
           "name": "ColumnSizeDescriptor",
-          "ts": "interface ColumnSizeDescriptor {\n  span?: ColumnSize;\n  offset: number;\n}\n"
+          "ts": "type ColumnSizeDescriptor = {\n  span?: ColumnSize;\n  offset: number;\n};\n"
         },
         {
           "type": "ColumnSize | ColumnSizeDescriptor",
@@ -1775,7 +1829,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ComboBox",
@@ -1785,7 +1840,7 @@
           "name": "items",
           "kind": "let",
           "description": "Set the combobox items",
-          "type": "ReadonlyArray<ComboBoxItem>",
+          "type": "ReadonlyArray<Item>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -1797,8 +1852,7 @@
           "name": "itemToString",
           "kind": "let",
           "description": "Override the display of a combobox item",
-          "type": "(item: ComboBoxItem) => string",
-          "value": "(item) => item.text || item.id",
+          "type": "(item: Item) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1810,6 +1864,7 @@
           "kind": "let",
           "description": "Set the selected item by value id",
           "type": "ComboBoxItemId",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1845,6 +1900,7 @@
           "kind": "let",
           "description": "Set the size of the combobox",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -1864,7 +1920,7 @@
           "reactive": false
         },
         {
-          "name": "labelText",
+          "name": "titleText",
           "kind": "let",
           "description": "Specify the title text of the combobox",
           "type": "string",
@@ -2011,8 +2067,7 @@
           "name": "shouldFilterItem",
           "kind": "let",
           "description": "Determine if an item should be filtered given the current combobox value",
-          "type": "(item: ComboBoxItem, value: string) => boolean",
-          "value": "() => true",
+          "type": "(item: Item, value: string) => boolean",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -2024,6 +2079,7 @@
           "kind": "let",
           "description": "Override the chevron icon label based on the open state.\nDefaults to \"Open menu\" when closed and \"Close menu\" when open",
           "type": "(id: import(\"../ListBox/ListBoxMenuIcon.svelte\").ListBoxMenuIconTranslationId) => string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -2035,6 +2091,7 @@
           "kind": "let",
           "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\" since a combo box can only have on selection.",
           "type": "(id: \"clearSelection\") => string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -2058,6 +2115,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the input",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -2093,7 +2151,6 @@
           "kind": "function",
           "description": "Clear the combo box programmatically",
           "type": "(options?: { focus?: boolean; }) => void",
-          "value": "() => {\n  prevSelectedId = null;\n  highlightedIndex = -1;\n  highlightedId = undefined;\n  selectedId = undefined;\n  selectedItem = undefined;\n  open = false;\n  value = \"\";\n  if (options?.focus !== false)\n    ref?.focus();\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -2104,28 +2161,29 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{itemToString(item)}",
-          "slot_props": "{\n  item: ComboBoxItem;\n  index: number;\n}"
+          "slot_props": "{\n  item: Item;\n  index: number;\n}"
         },
         {
-          "name": "labelText",
+          "name": "titleText",
           "default": false,
-          "fallback": "{labelText}",
-          "slot_props": "{}"
+          "fallback": "{titleText}",
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  selectedId: ComboBoxItemId;\n  selectedItem: ComboBoxItem;\n}"
+          "detail": "{\n  selectedId: ComboBoxItemId;\n  selectedItem: Item;\n}"
         },
         {
-          "type": "dispatched",
+          "type": "forwarded",
           "name": "clear",
-          "detail": "type EventDetail =\n  | KeyboardEvent\n  | MouseEvent"
+          "element": "ListBoxSelection",
+          "detail": "KeyboardEvent | MouseEvent"
         },
         {
           "type": "forwarded",
@@ -2170,16 +2228,20 @@
           "ts": "type ComboBoxItemId = any;\n"
         },
         {
-          "type": "{ id: ComboBoxItemId; text: string; disabled?: boolean; }",
+          "type": "{ id: ComboBoxItemId; text: string; /** Whether the item is disabled */ disabled?: boolean; }",
           "name": "ComboBoxItem",
-          "ts": "interface ComboBoxItem {\n  id: ComboBoxItemId;\n  text: string;\n  disabled?: boolean;\n}\n"
+          "ts": "type ComboBoxItem = {\n  id: ComboBoxItemId;\n  text: string;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
         }
       ],
-      "generics": null,
+      "generics": [
+        "Item",
+        "Item extends ComboBoxItem = ComboBoxItem"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ComposedModal",
@@ -2190,6 +2252,7 @@
           "kind": "let",
           "description": "Set the size of the composed modal",
           "type": "\"xs\" | \"sm\" | \"lg\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -2272,9 +2335,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -2334,7 +2397,39 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "ComposedModal",
+          "typeName": "ComposedModalContext",
+          "properties": [
+            {
+              "name": "closeModal",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "submit",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "declareRef",
+              "type": "(ref: HTMLButtonElement) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "updateLabel",
+              "type": "(value: string | undefined) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "Content",
@@ -2356,9 +2451,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -2367,7 +2462,8 @@
       "rest_props": {
         "type": "Element",
         "name": "main"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ContentSwitcher",
@@ -2390,6 +2486,7 @@
           "kind": "let",
           "description": "Specify the size of the content switcher",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -2400,9 +2497,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -2437,7 +2534,39 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "ContentSwitcher",
+          "typeName": "ContentSwitcherContext",
+          "properties": [
+            {
+              "name": "currentId",
+              "type": "import(\"svelte/store\").Writable<string | null>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { id: string; text: string; selected: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(id: string) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "change",
+              "type": "(direction: number) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ContextMenu",
@@ -2507,9 +2636,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -2539,7 +2668,45 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": [
+        {
+          "key": "ContextMenu",
+          "typeName": "ContextMenuContext",
+          "properties": [
+            {
+              "name": "menuOffsetX",
+              "type": "import(\"svelte/store\").Writable<number>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "currentIndex",
+              "type": "import(\"svelte/store\").Writable<number>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "position",
+              "type": "import(\"svelte/store\").Writable<[number, number]>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "close",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "setPopup",
+              "type": "(popup: boolean) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ContextMenuDivider",
@@ -2549,7 +2716,8 @@
       "slots": [],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "ContextMenuGroup",
@@ -2582,14 +2750,40 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": [
+        {
+          "key": "ContextMenuGroup",
+          "typeName": "ContextMenuGroupContext",
+          "properties": [
+            {
+              "name": "currentIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<string>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "addOption",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "toggleOption",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ContextMenuOption",
@@ -2636,6 +2830,7 @@
           "kind": "let",
           "description": "Specify the icon to render\nIcon is rendered to the left of the label text",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -2718,27 +2913,27 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "shortcutText",
           "default": false,
           "fallback": "{shortcutText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -2768,7 +2963,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ContextMenuRadioGroup",
@@ -2802,14 +2998,46 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": [
+        {
+          "key": "ContextMenuRadioGroup",
+          "typeName": "ContextMenuRadioGroupContext",
+          "properties": [
+            {
+              "name": "currentId",
+              "type": "import(\"svelte/store\").Writable<string>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "radioIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<string>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "addOption",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "setOption",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "CopyButton",
@@ -2867,7 +3095,6 @@
           "kind": "let",
           "description": "Override the default copy behavior of using the navigator.clipboard.writeText API to copy text",
           "type": "(text: string) => void",
-          "value": "async (text) => {\n  try {\n    await navigator.clipboard.writeText(\n      text,\n    );\n  } catch (e) {\n    console.log(e);\n  }\n}",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -2899,7 +3126,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "DataTable",
@@ -2934,6 +3162,7 @@
           "kind": "let",
           "description": "Set the size of the data table",
           "type": "\"compact\" | \"short\" | \"medium\" | \"tall\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -3184,11 +3413,6 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "cell",
           "default": false,
           "fallback": "{cell.display ? cell.display(cell.value, row) : cell.value}",
@@ -3216,6 +3440,11 @@
           "default": false,
           "fallback": "<h4 class:bx--data-table-header__title={true}>{title}</h4>",
           "slot_props": "{\n  props: {\n    class: \"bx--data-table-header__title\";\n  };\n}"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -3232,7 +3461,7 @@
         {
           "type": "dispatched",
           "name": "click:header",
-          "detail": "{\n  header: DataTableHeader<Row>;\n  sortDirection?:\n    | \"ascending\"\n    | \"descending\"\n    | \"none\";\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
+          "detail": "{\n  header: DataTableHeader<Row>;\n  sortDirection?:\n    | \"ascending\"\n    | \"descending\"\n    | \"none\";\n}"
         },
         {
           "type": "dispatched",
@@ -3242,7 +3471,7 @@
         {
           "type": "dispatched",
           "name": "click:row",
-          "detail": "{\n  row: Row;\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
+          "detail": "{ row: Row }"
         },
         {
           "type": "dispatched",
@@ -3267,7 +3496,7 @@
         {
           "type": "dispatched",
           "name": "click:cell",
-          "detail": "{\n  cell: DataTableCell<Row>;\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
+          "detail": "{\n  cell: DataTableCell<Row>;\n}"
         }
       ],
       "typedefs": [
@@ -3282,14 +3511,14 @@
           "ts": "type DataTableValue = any;\n"
         },
         {
-          "type": "{\n   key: DataTableKey<Row> | (string & {});\n   empty: boolean;\n   display?: (item: DataTableValue, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
+          "type": "{ key: DataTableKey<Row> | (string & {}); /** Whether the header is empty */ empty: boolean; display?: (item: DataTableValue, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); /** Whether the column menu is enabled */ columnMenu?: boolean; width?: string; minWidth?: string; }",
           "name": "DataTableEmptyHeader<Row=DataTableRow>",
-          "ts": "interface DataTableEmptyHeader<\n  Row = DataTableRow,\n> {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  empty: boolean;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}\n"
+          "ts": "type DataTableEmptyHeader<\n  Row = DataTableRow,\n> = {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  /** Whether the header is empty */ empty: boolean;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  /** Whether the column menu is enabled */ columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n};\n"
         },
         {
-          "type": "{\n   key: DataTableKey<Row>;\n   value: DataTableValue;\n   display?: (item: DataTableValue, row: Row) => DataTableValue;\n   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n   columnMenu?: boolean;\n   width?: string;\n   minWidth?: string;\n}",
+          "type": "{ key: DataTableKey<Row>; value: DataTableValue; display?: (item: DataTableValue, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); /** Whether the column menu is enabled */ columnMenu?: boolean; width?: string; minWidth?: string; }",
           "name": "DataTableNonEmptyHeader<Row=DataTableRow>",
-          "ts": "interface DataTableNonEmptyHeader<\n  Row = DataTableRow,\n> {\n  key: DataTableKey<Row>;\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}\n"
+          "ts": "type DataTableNonEmptyHeader<\n  Row = DataTableRow,\n> = {\n  key: DataTableKey<Row>;\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  /** Whether the column menu is enabled */ columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n};\n"
         },
         {
           "type": "DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>",
@@ -3307,9 +3536,9 @@
           "ts": "type DataTableRowId = any;\n"
         },
         {
-          "type": "{\n   key: DataTableKey<Row> | (string & {});\n   value: DataTableValue;\n   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;\n}",
+          "type": "{ key: DataTableKey<Row> | (string & {}); value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; }",
           "name": "DataTableCell<Row=DataTableRow>",
-          "ts": "interface DataTableCell<\n  Row = DataTableRow,\n> {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: DataTableRow,\n  ) => DataTableValue;\n}\n"
+          "ts": "type DataTableCell<Row = DataTableRow> =\n  {\n    key:\n      | DataTableKey<Row>\n      | (string & {});\n    value: DataTableValue;\n    display?: (\n      item: DataTableValue,\n      row: DataTableRow,\n    ) => DataTableValue;\n  };\n"
         }
       ],
       "generics": [
@@ -3319,7 +3548,39 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "DataTable",
+          "typeName": "DataTableContext",
+          "properties": [
+            {
+              "name": "batchSelectedIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<DataTableRowId>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "tableRows",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<Row>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "resetSelectedRowIds",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "filterRows",
+              "type": "(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<DataTableRowId>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "DataTableSkeleton",
@@ -3354,6 +3615,7 @@
           "kind": "let",
           "description": "Set the size of the data table",
           "type": "\"compact\" | \"short\" | \"tall\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -3442,7 +3704,8 @@
       "extends": {
         "interface": "DataTableHeader",
         "import": "\"./DataTable.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "DatePicker",
@@ -3596,9 +3859,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -3633,7 +3896,87 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "DatePicker",
+          "typeName": "DatePickerContext",
+          "properties": [
+            {
+              "name": "range",
+              "type": "import(\"svelte/store\").Readable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "inputValue",
+              "type": "import(\"svelte/store\").Writable<number | string>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "inputValueFrom",
+              "type": "import(\"svelte/store\").Writable<string>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "inputValueTo",
+              "type": "import(\"svelte/store\").Writable<string>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "inputIds",
+              "type": "import(\"svelte/store\").Readable<ReadonlyArray<string>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "hasCalendar",
+              "type": "import(\"svelte/store\").Readable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { id: string; labelText: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "declareRef",
+              "type": "(data: { id: string; ref: HTMLInputElement }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "updateValue",
+              "type": "(data: { type: \"input\" | \"change\"; value: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "blurInput",
+              "type": "(relatedTarget: EventTarget | null) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "openCalendar",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "focusCalendar",
+              "type": "() => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "DatePickerInput",
@@ -3644,6 +3987,7 @@
           "kind": "let",
           "description": "Set the size of the input",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -3811,6 +4155,7 @@
           "kind": "let",
           "description": "Set a name for the input element",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -3836,7 +4181,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -3871,7 +4216,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "DatePickerSkeleton",
@@ -3931,7 +4277,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Dropdown",
@@ -3941,7 +4288,7 @@
           "name": "items",
           "kind": "let",
           "description": "Set the dropdown items",
-          "type": "ReadonlyArray<DropdownItem>",
+          "type": "ReadonlyArray<Item>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -3953,8 +4300,7 @@
           "name": "itemToString",
           "kind": "let",
           "description": "Override the display of a dropdown item",
-          "type": "(item: DropdownItem) => string",
-          "value": "(item) => item.text || item.id",
+          "type": "(item: Item) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -4001,6 +4347,7 @@
           "kind": "let",
           "description": "Specify the size of the dropdown field",
           "type": "\"sm\" | \"lg\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -4044,7 +4391,7 @@
           "reactive": false
         },
         {
-          "name": "labelText",
+          "name": "titleText",
           "kind": "let",
           "description": "Specify the title text",
           "type": "string",
@@ -4120,6 +4467,7 @@
           "kind": "let",
           "description": "Specify the list box label",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -4143,6 +4491,7 @@
           "kind": "let",
           "description": "Override the chevron icon label based on the open state.\nDefaults to \"Open menu\" when closed and \"Close menu\" when open",
           "type": "(id: import(\"../ListBox/ListBoxMenuIcon.svelte\").ListBoxMenuIconTranslationId) => string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -4166,6 +4515,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the list box",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -4188,17 +4538,17 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{itemToString(item)}",
-          "slot_props": "{\n  item: DropdownItem;\n  index: number;\n}"
+          "slot_props": "{\n  item: Item;\n  index: number;\n}"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  selectedId: DropdownItemId;\n  selectedItem: DropdownItem;\n}"
+          "detail": "{\n  selectedId: DropdownItemId;\n  selectedItem: Item;\n}"
         }
       ],
       "typedefs": [
@@ -4213,16 +4563,20 @@
           "ts": "type DropdownItemText = string;\n"
         },
         {
-          "type": "{ id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }",
+          "type": "{ id: DropdownItemId; text: DropdownItemText; /** Whether the item is disabled */ disabled?: boolean; }",
           "name": "DropdownItem",
-          "ts": "interface DropdownItem {\n  id: DropdownItemId;\n  text: DropdownItemText;\n  disabled?: boolean;\n}\n"
+          "ts": "type DropdownItem = {\n  id: DropdownItemId;\n  text: DropdownItemText;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
         }
       ],
-      "generics": null,
+      "generics": [
+        "Item",
+        "Item extends DropdownItem = DropdownItem"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "DropdownSkeleton",
@@ -4270,7 +4624,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ExpandableTile",
@@ -4414,12 +4769,12 @@
         {
           "name": "above",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "below",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -4454,7 +4809,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploader",
@@ -4525,7 +4881,6 @@
           "kind": "const",
           "description": "Programmatically clear the uploaded files",
           "type": "() => void",
-          "value": "() => {\n  files = [];\n}",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -4623,13 +4978,13 @@
           "name": "labelDescription",
           "default": false,
           "fallback": "{labelDescription}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "labelTitle",
           "default": false,
           "fallback": "{labelTitle}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -4644,8 +4999,9 @@
           "detail": "ReadonlyArray<File>"
         },
         {
-          "type": "dispatched",
+          "type": "forwarded",
           "name": "change",
+          "element": "FileUploaderButton",
           "detail": "ReadonlyArray<File>"
         },
         {
@@ -4679,7 +5035,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploaderButton",
@@ -4848,7 +5205,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -4873,7 +5230,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploaderDropContainer",
@@ -4920,7 +5278,6 @@
           "kind": "let",
           "description": "Override the default behavior of validating uploaded files.\nBy default, files are not validated",
           "type": "(files: ReadonlyArray<File>) => ReadonlyArray<File>",
-          "value": "(files) => files",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5018,7 +5375,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5063,7 +5420,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploaderItem",
@@ -5195,7 +5553,8 @@
       "rest_props": {
         "type": "Element",
         "name": "span"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FileUploaderSkeleton",
@@ -5230,7 +5589,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Filename",
@@ -5292,7 +5652,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div | button | svg"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FluidForm",
@@ -5301,9 +5662,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5343,7 +5704,21 @@
       "rest_props": {
         "type": "Element",
         "name": "form"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Form",
+          "typeName": "FormContext",
+          "properties": [
+            {
+              "name": "formContext",
+              "type": "{ isFluid: boolean }",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "Form",
@@ -5365,9 +5740,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5407,7 +5782,8 @@
       "rest_props": {
         "type": "Element",
         "name": "form"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FormGroup",
@@ -5489,9 +5865,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5521,7 +5897,8 @@
       "rest_props": {
         "type": "Element",
         "name": "fieldset"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FormItem",
@@ -5530,9 +5907,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5562,7 +5939,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "FormLabel",
@@ -5584,9 +5962,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5616,7 +5994,8 @@
       "rest_props": {
         "type": "Element",
         "name": "label"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Grid",
@@ -5722,7 +6101,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: {\n    class: string;\n    [key: string]: any;\n  };\n}"
         }
@@ -5733,7 +6112,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Header",
@@ -5768,6 +6148,7 @@
           "kind": "let",
           "description": "Specify the ARIA label for the header",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5779,6 +6160,7 @@
           "kind": "let",
           "description": "Specify the `href` attribute",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5790,6 +6172,7 @@
           "kind": "let",
           "description": "Specify the company name.\n\nAlternatively, use the named slot \"company\" (e.g., `<span slot=\"company\">...</span>`)",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5847,8 +6230,9 @@
         {
           "name": "iconMenu",
           "kind": "let",
-          "description": "Specify the icon to render for the closed state.\nDefaults to `<Menu size={20} />`",
+          "description": "Specify the icon to render for the closed state.",
           "type": "any",
+          "value": "Menu",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5858,8 +6242,9 @@
         {
           "name": "iconClose",
           "kind": "let",
-          "description": "Specify the icon to render for the opened state.\nDefaults to `<Close size={20} />`",
+          "description": "Specify the icon to render for the opened state.",
           "type": "any",
+          "value": "Close",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5871,6 +6256,7 @@
           "kind": "let",
           "description": "Specify the ARIA label for the hamburger menu.\nDefaults to \"Open menu\" or \"Close menu\" based on `isSideNavOpen` state.",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5881,26 +6267,26 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "company",
           "default": false,
           "fallback": "{company}&nbsp;",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "platform",
           "default": false,
           "fallback": "{platformName}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "skip-to-content",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -5915,7 +6301,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderAction",
@@ -5936,8 +6323,9 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render when the action panel is closed.\nDefaults to `<Switcher size={20} />`",
+          "description": "Specify the icon to render when the action panel is closed.",
           "type": "any",
+          "value": "Switcher",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5947,8 +6335,9 @@
         {
           "name": "closeIcon",
           "kind": "let",
-          "description": "Specify the icon to render when the action panel is open.\nDefaults to `<Close size={20} />`",
+          "description": "Specify the icon to render when the action panel is open.",
           "type": "any",
+          "value": "Close",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5960,6 +6349,7 @@
           "kind": "let",
           "description": "Specify the text displayed next to the icon.\nAlternatively, use the named slot \"text\" (e.g., `<div slot=\"text\">...</div>`)",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -5971,6 +6361,7 @@
           "kind": "let",
           "description": "Specify an icon tooltip. The tooltip will not be displayed\nif either the `text` prop or a named slot=\"text\" is used",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6029,27 +6420,27 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "closeIcon",
           "default": false,
           "fallback": "<svelte:component this={closeIcon} size={20} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} size={20} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "text",
           "default": false,
           "fallback": "{#if text}<span class:bx--header__action-text={true}>{text}</span>{/if}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6074,7 +6465,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderActionLink",
@@ -6097,6 +6489,7 @@
           "kind": "let",
           "description": "Specify the `href` attribute",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6108,6 +6501,7 @@
           "kind": "let",
           "description": "Specify the icon to render",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6133,7 +6527,7 @@
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} size={20} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6148,7 +6542,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderGlobalAction",
@@ -6171,6 +6566,7 @@
           "kind": "let",
           "description": "Specify the icon to render",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6208,7 +6604,8 @@
       "extends": {
         "interface": "ButtonProps",
         "import": "\"../Button/Button.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderNav",
@@ -6217,9 +6614,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -6228,7 +6625,8 @@
       "rest_props": {
         "type": "Element",
         "name": "nav"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderNavItem",
@@ -6239,6 +6637,7 @@
           "kind": "let",
           "description": "Specify the `href` attribute",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6250,6 +6649,7 @@
           "kind": "let",
           "description": "Specify the text",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6284,10 +6684,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{text}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6337,7 +6737,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderNavMenu",
@@ -6372,6 +6773,7 @@
           "kind": "let",
           "description": "Specify the text",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6394,9 +6796,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6446,7 +6848,51 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": [
+        {
+          "key": "HeaderNavMenu",
+          "typeName": "HeaderNavMenuContext",
+          "properties": [
+            {
+              "name": "selectedItems",
+              "type": "import(\"svelte/store\").Writable<Record<string, boolean>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "menuItems",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<HTMLElement>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "updateSelectedItems",
+              "type": "(item: { id: string; isSelected: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "registerMenuItem",
+              "type": "(element: HTMLElement) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "unregisterMenuItem",
+              "type": "(element: HTMLElement) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "closeMenu",
+              "type": "() => Promise<void>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "HeaderPanelDivider",
@@ -6455,14 +6901,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "HeaderPanelLink",
@@ -6473,6 +6920,7 @@
           "kind": "let",
           "description": "Specify the `href` attribute",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6495,9 +6943,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6512,7 +6960,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderPanelLinks",
@@ -6521,14 +6970,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "HeaderSearch",
@@ -6598,7 +7048,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{result.text}\n              {#if result.description}<span\n                  class:bx--header-search-menu-description={true}\n                  >– {result.description}</span\n                >{/if}",
           "slot_props": "{\n  result: HeaderSearchResult;\n  index: number;\n}"
@@ -6660,14 +7110,15 @@
         {
           "type": "{ href: string; text: string; description?: string; }",
           "name": "HeaderSearchResult",
-          "ts": "interface HeaderSearchResult {\n  href: string;\n  text: string;\n  description?: string;\n}\n"
+          "ts": "type HeaderSearchResult = {\n  href: string;\n  text: string;\n  description?: string;\n};\n"
         }
       ],
       "generics": null,
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "HeaderUtilities",
@@ -6676,14 +7127,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "ImageLoader",
@@ -6718,6 +7170,7 @@
           "kind": "let",
           "description": "Specify the aspect ratio for the image wrapper",
           "type": "\"2x1\" | \"16x9\" | \"4x3\" | \"1x1\" | \"3x4\" | \"3x2\" | \"9x16\" | \"1x2\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6777,7 +7230,6 @@
           "kind": "const",
           "description": "Method invoked to load the image provided a `src` value",
           "type": "(url?: string) => void",
-          "value": "(url) => {\n  if (image != null) image = null;\n  loaded = false;\n  error = false;\n  image = new Image();\n  image.src = url || src;\n  image.onload = () => (loaded = true);\n  image.onerror = () => (error = true);\n}",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6790,12 +7242,12 @@
         {
           "name": "error",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "loading",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6815,7 +7267,8 @@
       "rest_props": {
         "type": "Element",
         "name": "img"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "InlineLoading",
@@ -6838,6 +7291,7 @@
           "kind": "let",
           "description": "Set the loading description",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6849,6 +7303,7 @@
           "kind": "let",
           "description": "Specify a description for the loading icon.\nDefaults to the `status` prop for the \"error\" and \"finished\" states",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -6902,7 +7357,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "InlineNotification",
@@ -7020,26 +7476,26 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "actions",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "subtitle",
           "default": false,
           "fallback": "{subtitle}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "title",
           "default": false,
           "fallback": "{title}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7074,7 +7530,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Link",
@@ -7085,6 +7542,7 @@
           "kind": "let",
           "description": "Specify the size of the link",
           "type": "\"sm\" | \"lg\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7096,6 +7554,7 @@
           "kind": "let",
           "description": "Specify the href value",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7119,6 +7578,7 @@
           "kind": "let",
           "description": "Specify the icon to render\n`inline` must be `false`",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7165,15 +7625,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7203,7 +7663,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBox",
@@ -7214,6 +7675,7 @@
           "kind": "let",
           "description": "Set the size of the list box",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7320,9 +7782,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7342,7 +7804,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxField",
@@ -7401,7 +7864,6 @@
           "kind": "let",
           "description": "Override the default translation ids",
           "type": "(id: ListBoxFieldTranslationId) => string",
-          "value": "(id) => defaultTranslations[id]",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7436,9 +7898,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7489,7 +7951,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxMenu",
@@ -7523,9 +7986,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7540,7 +8003,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxMenuIcon",
@@ -7575,7 +8039,6 @@
           "kind": "let",
           "description": "Override the default translation ids",
           "type": "(id: ListBoxMenuIconTranslationId) => string",
-          "value": "(id) => defaultTranslations[id]",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7603,7 +8066,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxMenuItem",
@@ -7649,9 +8113,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7676,7 +8140,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListBoxSelection",
@@ -7687,6 +8152,7 @@
           "kind": "let",
           "description": "Specify the number of selected items",
           "type": "number",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7722,7 +8188,6 @@
           "kind": "let",
           "description": "Override the default translation ids",
           "type": "(id: ListBoxSelectionTranslationId) => string",
-          "value": "(id) => defaultTranslations[id]",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -7762,7 +8227,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ListItem",
@@ -7771,9 +8237,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -7803,7 +8269,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Loading",
@@ -7866,7 +8333,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "LocalStorage",
@@ -7901,7 +8369,6 @@
           "kind": "function",
           "description": "Remove the persisted key value from the browser's local storage",
           "type": "() => void",
-          "value": "() => {\n  localStorage.removeItem(key);\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -7913,7 +8380,6 @@
           "kind": "function",
           "description": "Clear all key values from the browser's local storage",
           "type": "() => void",
-          "value": "() => {\n  localStorage.clear();\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -7936,7 +8402,8 @@
         }
       ],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "Modal",
@@ -7947,6 +8414,7 @@
           "kind": "let",
           "description": "Set the size of the modal",
           "type": "\"xs\" | \"sm\" | \"lg\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8006,6 +8474,7 @@
           "kind": "let",
           "description": "Specify the modal heading",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8017,6 +8486,7 @@
           "kind": "let",
           "description": "Specify the modal label",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8028,6 +8498,7 @@
           "kind": "let",
           "description": "Specify the ARIA label for the modal",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8099,6 +8570,7 @@
           "kind": "let",
           "description": "Specify the primary button icon",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8193,21 +8665,21 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "heading",
           "default": false,
           "fallback": "{modalHeading}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "label",
           "default": false,
           "fallback": "{modalLabel}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -8272,7 +8744,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ModalBody",
@@ -8306,9 +8779,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -8317,7 +8790,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ModalFooter",
@@ -8340,6 +8814,7 @@
           "kind": "let",
           "description": "Specify the primary button icon",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8363,6 +8838,7 @@
           "kind": "let",
           "description": "Specify a class for the primary button",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8398,6 +8874,7 @@
           "kind": "let",
           "description": "Specify a class for the secondary button",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8420,9 +8897,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -8437,7 +8914,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ModalHeader",
@@ -8531,9 +9009,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -8548,7 +9026,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "MultiSelect",
@@ -8558,7 +9037,7 @@
           "name": "items",
           "kind": "let",
           "description": "Set the multiselect items",
-          "type": "ReadonlyArray<MultiSelectItem>",
+          "type": "ReadonlyArray<Item>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -8570,8 +9049,7 @@
           "name": "itemToString",
           "kind": "let",
           "description": "Override the display of a multiselect item",
-          "type": "(item: MultiSelectItem) => any",
-          "value": "(item) => item.text || item.id",
+          "type": "(item: Item) => any",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8582,8 +9060,7 @@
           "name": "itemToInput",
           "kind": "let",
           "description": "Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.",
-          "type": "(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }",
-          "value": "(_item) => {}",
+          "type": "(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8619,6 +9096,7 @@
           "kind": "let",
           "description": "Set the size of the combobox",
           "type": "\"sm\" | \"lg\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8689,8 +9167,7 @@
           "name": "filterItem",
           "kind": "let",
           "description": "Override the filtering logic\nThe default filtering is an exact string comparison",
-          "type": "(item: MultiSelectItem, value: string) => boolean",
-          "value": "(item, value) =>\n  item.text\n    .toLowerCase()\n    .includes(\n      value.trim().toLowerCase(),\n    )",
+          "type": "(item: Item, value: string) => boolean",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8749,8 +9226,7 @@
           "name": "sortItem",
           "kind": "let",
           "description": "Override the sorting logic\nThe default sorting compare the item text value",
-          "type": "((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) | (() => void)",
-          "value": "(a, b) =>\n  a.text.localeCompare(b.text, locale, {\n    numeric: true,\n  })",
+          "type": "((a: Item, b: Item) => Item) | (() => void)",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8762,6 +9238,7 @@
           "kind": "let",
           "description": "Override the chevron icon label based on the open state.\nDefaults to \"Open menu\" when closed and \"Close menu\" when open",
           "type": "(id: import(\"../ListBox/ListBoxMenuIcon.svelte\").ListBoxMenuIconTranslationId) => string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8773,6 +9250,7 @@
           "kind": "let",
           "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\" and \"Clear all items\" if more than one item is selected",
           "type": "(id: import(\"../ListBox/ListBoxSelection.svelte\").ListBoxSelectionTranslationId) => string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8780,9 +9258,9 @@
           "reactive": false
         },
         {
-          "name": "labelText",
+          "name": "titleText",
           "kind": "let",
-          "description": "Specify the label text",
+          "description": "Specify the title text",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -8904,6 +9382,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the select",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -8974,27 +9453,28 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{itemToString(item)}",
-          "slot_props": "{\n  item: MultiSelectItem;\n  index: number;\n}"
+          "slot_props": "{\n  item: Item;\n  index: number;\n}"
         },
         {
-          "name": "labelText",
+          "name": "titleText",
           "default": false,
-          "fallback": "{labelText}",
-          "slot_props": "{}"
+          "fallback": "{titleText}",
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  selectedIds: MultiSelectItemId[];\n  selected: MultiSelectItem[];\n  unselected: MultiSelectItem[];\n}"
+          "detail": "{\n  selectedIds: MultiSelectItemId[];\n  selected: Item[];\n  unselected: Item[];\n}"
         },
         {
-          "type": "dispatched",
+          "type": "forwarded",
           "name": "clear",
+          "element": "ListBoxSelection",
           "detail": "null"
         },
         {
@@ -9040,16 +9520,33 @@
           "ts": "type MultiSelectItemText = string;\n"
         },
         {
-          "type": "{ id: MultiSelectItemId; text: MultiSelectItemText; disabled?: boolean; }",
+          "type": "{ id: MultiSelectItemId; text: MultiSelectItemText; /** Whether the item is disabled */ disabled?: boolean; }",
           "name": "MultiSelectItem",
-          "ts": "interface MultiSelectItem {\n  id: MultiSelectItemId;\n  text: MultiSelectItemText;\n  disabled?: boolean;\n}\n"
+          "ts": "type MultiSelectItem = {\n  id: MultiSelectItemId;\n  text: MultiSelectItemText;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
         }
       ],
-      "generics": null,
+      "generics": [
+        "Item",
+        "Item extends MultiSelectItem = MultiSelectItem"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": [
+        {
+          "key": "MultiSelect",
+          "typeName": "MultiSelectContext",
+          "properties": [
+            {
+              "name": "declareRef",
+              "type": "(data: { key: \"field\" | \"selection\"; ref: HTMLDivElement }) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "NotificationActionButton",
@@ -9058,9 +9555,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9094,7 +9591,8 @@
       "extends": {
         "interface": "ButtonProps",
         "import": "\"../Button/Button.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "NotificationButton",
@@ -9117,6 +9615,7 @@
           "kind": "let",
           "description": "Specify the icon to render",
           "type": "any",
+          "value": "Close",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9128,6 +9627,7 @@
           "kind": "let",
           "description": "Specify the title of the icon",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9176,7 +9676,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "NotificationIcon",
@@ -9221,7 +9722,8 @@
       "slots": [],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "NumberInput",
@@ -9232,6 +9734,7 @@
           "kind": "let",
           "description": "Set the size of the input",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9267,6 +9770,7 @@
           "kind": "let",
           "description": "Specify the maximum value",
           "type": "number",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9278,6 +9782,7 @@
           "kind": "let",
           "description": "Specify the minimum value",
           "type": "number",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9429,7 +9934,7 @@
           "reactive": false
         },
         {
-          "name": "labelText",
+          "name": "label",
           "kind": "let",
           "description": "Specify the label text",
           "type": "string",
@@ -9457,7 +9962,6 @@
           "kind": "let",
           "description": "Override the default translation ids",
           "type": "(id: NumberInputTranslationId) => string",
-          "value": "(id) => defaultTranslations[id]",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9493,6 +9997,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the input",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9515,10 +10020,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "label",
           "default": false,
-          "fallback": "{labelText}",
-          "slot_props": "{}"
+          "fallback": "{label}",
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9589,7 +10094,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "NumberInputSkeleton",
@@ -9637,7 +10143,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "OrderedList",
@@ -9683,9 +10190,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9715,7 +10222,8 @@
       "rest_props": {
         "type": "Element",
         "name": "ol"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "OutboundLink",
@@ -9724,9 +10232,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -9760,7 +10268,8 @@
       "extends": {
         "interface": "LinkProps",
         "import": "\"./Link.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "OverflowMenu",
@@ -9771,6 +10280,7 @@
           "kind": "let",
           "description": "Specify the size of the overflow menu",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9830,6 +10340,7 @@
           "kind": "let",
           "description": "Specify the menu options class",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9839,8 +10350,9 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render.\nDefaults to `<OverflowMenuVertical />`",
+          "description": "Specify the icon to render.",
           "type": "any",
+          "value": "OverflowMenuVertical",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9852,6 +10364,7 @@
           "kind": "let",
           "description": "Specify the icon class",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -9910,22 +10423,22 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "menu",
           "default": false,
           "fallback": "<svelte:component\n      this={icon}\n      aria-label={iconDescription}\n      title={iconDescription}\n      class=\"bx--overflow-menu__icon {iconClass}\"\n    />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "close",
-          "detail": "null | {\n  index: number;\n  text: string;\n}"
+          "detail": "{\n  index?: number;\n  text?: string;\n}"
         },
         {
           "type": "forwarded",
@@ -9958,7 +10471,45 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": [
+        {
+          "key": "OverflowMenu",
+          "typeName": "OverflowMenuContext",
+          "properties": [
+            {
+              "name": "focusedId",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "items",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { id: string; text: string; primaryFocus: boolean; disabled: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "change",
+              "type": "(direction: number) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "OverflowMenuItem",
@@ -10076,10 +10627,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "<div class:bx--overflow-menu-options__option-content={true}>\n          {text}\n        </div>",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -10099,7 +10650,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Pagination",
@@ -10194,7 +10746,6 @@
           "kind": "let",
           "description": "Override the item text",
           "type": "(min: number, max: number) => string",
-          "value": "(min, max) =>\n  `${min.toLocaleString()}–${max.toLocaleString()} item${max === 1 ? \"\" : \"s\"}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10206,7 +10757,6 @@
           "kind": "let",
           "description": "Override the item range text",
           "type": "(min: number, max: number, total: number) => string",
-          "value": "(\n  min,\n  max,\n  total,\n) =>\n  `${min.toLocaleString()}–${max.toLocaleString()} of ${total.toLocaleString()} item${max === 1 ? \"\" : \"s\"}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10278,7 +10828,6 @@
           "kind": "let",
           "description": "Override the page text",
           "type": "(page: number) => string",
-          "value": "(page) => `page ${page.toLocaleString()}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10290,7 +10839,6 @@
           "kind": "let",
           "description": "Override the page range text",
           "type": "(current: number, total: number) => string",
-          "value": "(\n  _current,\n  total,\n) =>\n  `of ${total.toLocaleString()} page${total === 1 ? \"\" : \"s\"}`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10322,17 +10870,20 @@
         {
           "type": "dispatched",
           "name": "click:button--previous",
-          "detail": "{ page: number }"
+          "detail": "{ page: number }",
+          "description": "Dispatched after any user interaction"
         },
         {
           "type": "dispatched",
           "name": "click:button--next",
-          "detail": "{ page: number }"
+          "detail": "{ page: number }",
+          "description": "Dispatched after any user interaction"
         },
         {
           "type": "dispatched",
           "name": "update",
-          "detail": "{\n  pageSize: number;\n  page: number;\n}"
+          "detail": "{\n  pageSize: number;\n  page: number;\n}",
+          "description": "Dispatched after any user interaction"
         }
       ],
       "typedefs": [],
@@ -10340,7 +10891,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "PaginationNav",
@@ -10438,7 +10990,7 @@
           "type": "dispatched",
           "name": "change",
           "detail": "{ page: number }",
-          "description": "fires after every user interaction"
+          "description": "Fires after every user interaction"
         },
         {
           "type": "dispatched",
@@ -10456,7 +11008,8 @@
       "rest_props": {
         "type": "Element",
         "name": "nav"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "PaginationSkeleton",
@@ -10491,7 +11044,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "PasswordInput",
@@ -10502,6 +11056,7 @@
           "kind": "let",
           "description": "Set the size of the input",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10729,6 +11284,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the input",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -10754,7 +11310,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -10819,7 +11375,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Popover",
@@ -10913,9 +11470,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -10930,7 +11487,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ProgressBar",
@@ -10941,6 +11499,7 @@
           "kind": "let",
           "description": "Specify the current value",
           "type": "number",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11050,7 +11609,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -11059,7 +11618,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ProgressIndicator",
@@ -11117,9 +11677,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -11154,7 +11714,45 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": [
+        {
+          "key": "ProgressIndicator",
+          "typeName": "ProgressIndicatorContext",
+          "properties": [
+            {
+              "name": "steps",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<{ id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "stepsById",
+              "type": "import(\"svelte/store\").Readable<Record<string, { id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "preventChangeOnClick",
+              "type": "import(\"svelte/store\").Readable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(step: { id: string; complete: boolean; disabled: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "change",
+              "type": "(index: number) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ProgressIndicatorSkeleton",
@@ -11214,7 +11812,8 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ProgressStep",
@@ -11320,7 +11919,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "<p class:bx--progress-label={true}>{label}</p>",
           "slot_props": "{\n  props: {\n    class: \"bx--progress-label\";\n  };\n}"
@@ -11358,7 +11957,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "RadioButton",
@@ -11465,6 +12065,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the radio button input",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11490,7 +12091,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -11515,7 +12116,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "RadioButtonGroup",
@@ -11526,6 +12128,7 @@
           "kind": "let",
           "description": "Set the selected radio button value",
           "type": "string | number",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11549,6 +12152,7 @@
           "kind": "let",
           "description": "Set to `true` to require the selection of a radio button",
           "type": "boolean",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11560,6 +12164,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the radio button inputs",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11631,6 +12236,7 @@
           "kind": "let",
           "description": "Set an id for the container div element",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11641,15 +12247,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "legendText",
           "default": false,
           "fallback": "{legendText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -11684,7 +12290,43 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "RadioButtonGroup",
+          "typeName": "RadioButtonGroupContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<string | number | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "groupName",
+              "type": "any",
+              "optional": false
+            },
+            {
+              "name": "groupRequired",
+              "type": "any",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { checked: boolean; value: string | number }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(value: string | number) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "RadioButtonSkeleton",
@@ -11719,7 +12361,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "RadioTile",
@@ -11826,6 +12469,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the radio tile input",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -11836,9 +12480,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -11878,7 +12522,8 @@
       "rest_props": {
         "type": "Element",
         "name": "label"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "RecursiveList",
@@ -11914,16 +12559,17 @@
       "events": [],
       "typedefs": [
         {
-          "type": "{ text?: string; href?: string; html?: string; }",
+          "type": "{ /** Node text content */ text?: string; /** Node link URL */ href?: string; /** Node HTML content */ html?: string; }",
           "name": "RecursiveListNode",
-          "ts": "interface RecursiveListNode {\n  text?: string;\n  href?: string;\n  html?: string;\n}\n"
+          "ts": "type RecursiveListNode = {\n  /** Node text content */ text?: string;\n  /** Node link URL */ href?: string;\n  /** Node HTML content */ html?: string;\n};\n"
         }
       ],
       "generics": null,
       "rest_props": {
         "type": "Element",
         "name": "ul | ol"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Row",
@@ -12017,7 +12663,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: {\n    class: string;\n    [key: string]: any;\n  };\n}"
         }
@@ -12028,7 +12674,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Search",
@@ -12193,8 +12840,9 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render.\nDefaults to `<Search />`",
+          "description": "Specify the icon to render.",
           "type": "any",
+          "value": "IconSearch",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12232,7 +12880,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -12312,7 +12960,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SearchSkeleton",
@@ -12360,7 +13009,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Select",
@@ -12371,6 +13021,7 @@
           "kind": "let",
           "description": "Specify the selected item value",
           "type": "string | number",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12382,6 +13033,7 @@
           "kind": "let",
           "description": "Set the size of the select input",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12441,6 +13093,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the select element",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12571,15 +13224,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -12615,7 +13268,27 @@
       "rest_props": {
         "type": "Element",
         "name": "select"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Select",
+          "typeName": "SelectContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<string | number | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "setDefaultValue",
+              "type": "(id: string, value: string | number) => void",
+              "description": "Use the first `SelectItem` value as the\ndefault value if `selected` is `undefined`.",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "SelectItem",
@@ -12638,6 +13311,7 @@
           "kind": "let",
           "description": "Specify the option text\nIf not specified, the value will be used as the text.",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12673,6 +13347,7 @@
           "kind": "let",
           "description": "Specify the class of the `option` element",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12684,6 +13359,7 @@
           "kind": "let",
           "description": "Specify the style of the `option` element",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -12695,7 +13371,8 @@
       "slots": [],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "SelectItemGroup",
@@ -12729,9 +13406,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -12740,7 +13417,8 @@
       "rest_props": {
         "type": "Element",
         "name": "optgroup"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SelectSkeleton",
@@ -12788,7 +13466,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SelectableTile",
@@ -12918,9 +13597,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -12965,7 +13644,8 @@
       "rest_props": {
         "type": "Element",
         "name": "label"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNav",
@@ -13000,6 +13680,7 @@
           "kind": "let",
           "description": "Specify the ARIA label for the nav",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13034,9 +13715,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13061,7 +13742,8 @@
       "rest_props": {
         "type": "Element",
         "name": "nav"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNavDivider",
@@ -13075,7 +13757,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNavItems",
@@ -13084,14 +13767,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "SideNavLink",
@@ -13114,6 +13798,7 @@
           "kind": "let",
           "description": "Specify the `href` attribute",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13125,6 +13810,7 @@
           "kind": "let",
           "description": "Specify the text",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13136,6 +13822,7 @@
           "kind": "let",
           "description": "Specify the icon to render",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13158,16 +13845,16 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "fallback": "{text}",
-          "slot_props": "{}"
-        },
-        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "fallback": "{text}",
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13182,7 +13869,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNavMenu",
@@ -13205,6 +13893,7 @@
           "kind": "let",
           "description": "Specify the text",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13216,6 +13905,7 @@
           "kind": "let",
           "description": "Specify the icon to render",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13238,15 +13928,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13261,7 +13951,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNavMenuItem",
@@ -13284,6 +13975,7 @@
           "kind": "let",
           "description": "Specify the `href` attribute",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13295,6 +13987,7 @@
           "kind": "let",
           "description": "Specify the item text",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13317,10 +14010,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{text}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13335,7 +14028,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SkeletonPlaceholder",
@@ -13370,7 +14064,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SkeletonText",
@@ -13454,7 +14149,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SkipToContent",
@@ -13488,10 +14184,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "Skip to main content",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13506,7 +14202,8 @@
       "rest_props": {
         "type": "Element",
         "name": "a"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Slider",
@@ -13747,7 +14444,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13787,7 +14484,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "SliderSkeleton",
@@ -13835,7 +14533,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredList",
@@ -13846,6 +14545,7 @@
           "kind": "let",
           "description": "Specify the selected structured list row value",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -13892,9 +14592,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13929,7 +14629,27 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "StructuredListWrapper",
+          "typeName": "StructuredListWrapperContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(value: string) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "StructuredListBody",
@@ -13938,9 +14658,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -13970,7 +14690,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListCell",
@@ -14004,9 +14725,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14036,7 +14757,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListHead",
@@ -14045,9 +14767,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14077,7 +14799,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListInput",
@@ -14164,7 +14887,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListRow",
@@ -14210,9 +14934,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14247,7 +14971,8 @@
       "rest_props": {
         "type": "Element",
         "name": "label"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "StructuredListSkeleton",
@@ -14295,7 +15020,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Switch",
@@ -14365,10 +15091,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{text}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14403,7 +15129,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Tab",
@@ -14485,10 +15212,10 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{label}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14518,7 +15245,8 @@
       "rest_props": {
         "type": "Element",
         "name": "li"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TabContent",
@@ -14540,9 +15268,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -14551,7 +15279,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Table",
@@ -14562,6 +15291,7 @@
           "kind": "let",
           "description": "Set the size of the table",
           "type": "\"compact\" | \"short\" | \"medium\" | \"tall\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -14621,6 +15351,7 @@
           "kind": "let",
           "description": "Set the style attribute on the `table` element",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -14631,9 +15362,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -14642,7 +15373,8 @@
       "rest_props": {
         "type": "Element",
         "name": "section"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableBody",
@@ -14651,9 +15383,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -14662,7 +15394,8 @@
       "rest_props": {
         "type": "Element",
         "name": "tbody"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableCell",
@@ -14671,9 +15404,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14703,7 +15436,8 @@
       "rest_props": {
         "type": "Element",
         "name": "td"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableContainer",
@@ -14761,9 +15495,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -14772,7 +15506,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableHead",
@@ -14781,9 +15516,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14813,7 +15548,8 @@
       "rest_props": {
         "type": "Element",
         "name": "thead"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableHeader",
@@ -14872,7 +15608,6 @@
           "kind": "let",
           "description": "Override the default id translations",
           "type": "() => string",
-          "value": "() => \"\"",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -14895,9 +15630,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14927,7 +15662,8 @@
       "rest_props": {
         "type": "Element",
         "name": "th"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TableRow",
@@ -14936,9 +15672,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -14968,7 +15704,8 @@
       "rest_props": {
         "type": "Element",
         "name": "tr"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Tabs",
@@ -15038,14 +15775,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "content",
           "default": false,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -15070,7 +15807,69 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Tabs",
+          "typeName": "TabsContext",
+          "properties": [
+            {
+              "name": "tabs",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; index: number }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "contentById",
+              "type": "import(\"svelte/store\").Readable<Record<string, { id: string; index: number }>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "selectedTab",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "selectedContent",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "useAutoWidth",
+              "type": "import(\"svelte/store\").Writable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { id: string; label: string; disabled: boolean }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "addContent",
+              "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(id: string) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "change",
+              "type": "(direction: number) => Promise<void>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "TabsSkeleton",
@@ -15130,7 +15929,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Tag",
@@ -15141,6 +15941,7 @@
           "kind": "let",
           "description": "Specify the type of tag",
           "type": "\"red\" | \"magenta\" | \"purple\" | \"blue\" | \"cyan\" | \"teal\" | \"green\" | \"gray\" | \"cool-gray\" | \"warm-gray\" | \"high-contrast\" | \"outline\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -15223,6 +16024,7 @@
           "kind": "let",
           "description": "Specify the icon to render",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -15245,7 +16047,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{\n  props: { class: \"bx--tag__label\" };\n}"
         },
@@ -15253,7 +16055,7 @@
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -15288,7 +16090,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div | span"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TagSkeleton",
@@ -15335,7 +16138,8 @@
       "rest_props": {
         "type": "Element",
         "name": "span"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TextArea",
@@ -15370,6 +16174,7 @@
           "kind": "let",
           "description": "Specify the number of cols.\nIf specified, the textarea will not be resizable.\nOverride this using the `resize` style attribute.",
           "type": "number",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -15393,6 +16198,7 @@
           "kind": "let",
           "description": "Specify the max character count",
           "type": "number",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -15536,6 +16342,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the input",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -15561,7 +16368,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -15626,7 +16433,8 @@
       "rest_props": {
         "type": "Element",
         "name": "textarea"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TextAreaSkeleton",
@@ -15674,7 +16482,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TextInput",
@@ -15685,6 +16494,7 @@
           "kind": "let",
           "description": "Set the size of the input",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -15768,6 +16578,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the input",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -15901,7 +16712,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -15966,7 +16777,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TextInputSkeleton",
@@ -16014,7 +16826,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Theme",
@@ -16073,6 +16886,7 @@
           "kind": "let",
           "description": "Render a toggle or select dropdown to control the theme",
           "type": "\"toggle\" | \"select\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -16107,7 +16921,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "slot_props": "{ theme: CarbonTheme }"
         }
@@ -16126,7 +16940,8 @@
           "ts": "type CarbonTheme =\n  | \"white\"\n  | \"g10\"\n  | \"g80\"\n  | \"g90\"\n  | \"g100\";\n"
         }
       ],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "Tile",
@@ -16148,9 +16963,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16180,7 +16995,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TileGroup",
@@ -16191,6 +17007,7 @@
           "kind": "let",
           "description": "Specify the selected tile value",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -16214,6 +17031,7 @@
           "kind": "let",
           "description": "Set to `true` to require the selection of a radio button",
           "type": "boolean",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -16225,6 +17043,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the radio button inputs",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -16247,9 +17066,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16264,7 +17083,43 @@
       "rest_props": {
         "type": "Element",
         "name": "fieldset"
-      }
+      },
+      "contexts": [
+        {
+          "key": "TileGroup",
+          "typeName": "TileGroupContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "groupName",
+              "type": "any",
+              "optional": false
+            },
+            {
+              "name": "groupRequired",
+              "type": "any",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { checked: boolean; value: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(value: string) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "TimePicker",
@@ -16275,6 +17130,7 @@
           "kind": "let",
           "description": "Specify the size of the input",
           "type": "\"sm\" | \"xl\"",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -16418,6 +17274,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the input",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -16440,15 +17297,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16513,7 +17370,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TimePickerSelect",
@@ -16584,6 +17442,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the select element",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -16606,15 +17465,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16644,7 +17503,21 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "TimePickerSelect",
+          "typeName": "TimePickerSelectContext",
+          "properties": [
+            {
+              "name": "selectedValue",
+              "type": "import(\"svelte/store\").Writable<number | string>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ToastNotification",
@@ -16786,27 +17659,27 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "caption",
           "default": false,
           "fallback": "{caption}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "subtitle",
           "default": false,
           "fallback": "{subtitle}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "title",
           "default": false,
           "fallback": "{title}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -16841,7 +17714,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Toggle",
@@ -16948,6 +17822,7 @@
           "kind": "let",
           "description": "Specify a name attribute for the checkbox input",
           "type": "string",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -16973,19 +17848,19 @@
           "name": "labelA",
           "default": false,
           "fallback": "{labelA}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "labelB",
           "default": false,
           "fallback": "{labelB}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17040,7 +17915,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ToggleSkeleton",
@@ -17089,7 +17965,7 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17119,7 +17995,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Toolbar",
@@ -17141,9 +18018,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -17152,7 +18029,27 @@
       "rest_props": {
         "type": "Element",
         "name": "section"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Toolbar",
+          "typeName": "ToolbarContext",
+          "properties": [
+            {
+              "name": "overflowVisible",
+              "type": "import(\"svelte/store\").Writable<boolean>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "setOverflowVisible",
+              "type": "(visible: boolean) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "ToolbarBatchActions",
@@ -17163,7 +18060,6 @@
           "kind": "let",
           "description": "Override the total items selected text",
           "type": "(totalSelected: number) => string",
-          "value": "(\n  totalSelected,\n) =>\n  `${totalSelected} item${totalSelected === 1 ? \"\" : \"s\"} selected`",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -17175,6 +18071,7 @@
           "kind": "let",
           "description": "Use a boolean to show or hide the toolbar",
           "type": "undefined | boolean",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -17197,15 +18094,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "cancel",
           "default": false,
           "fallback": "Cancel",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17220,7 +18117,8 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ToolbarContent",
@@ -17229,14 +18127,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "ToolbarMenu",
@@ -17245,9 +18144,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -17260,7 +18159,8 @@
       "extends": {
         "interface": "OverflowMenuProps",
         "import": "\"../OverflowMenu/OverflowMenu.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ToolbarMenuItem",
@@ -17269,9 +18169,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17295,7 +18195,8 @@
       "extends": {
         "interface": "OverflowMenuItemProps",
         "import": "\"../OverflowMenu/OverflowMenuItem.svelte\""
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "ToolbarSearch",
@@ -17402,8 +18303,9 @@
       "slots": [],
       "events": [
         {
-          "type": "dispatched",
+          "type": "forwarded",
           "name": "clear",
+          "element": "Search",
           "detail": "null"
         },
         {
@@ -17447,7 +18349,8 @@
       "rest_props": {
         "type": "Element",
         "name": "input"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "Tooltip",
@@ -17506,6 +18409,7 @@
           "kind": "let",
           "description": "Specify the icon to render for the tooltip button.\nDefault to `<Information />`",
           "type": "any",
+          "value": "Information",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -17624,21 +18528,21 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "slot_props": "{}"
-        },
-        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} name={iconName} />",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "triggerText",
           "default": false,
           "fallback": "{triggerText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17668,7 +18572,21 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      }
+      },
+      "contexts": [
+        {
+          "key": "Tooltip",
+          "typeName": "TooltipContext",
+          "properties": [
+            {
+              "name": "tooltipOpen",
+              "type": "import(\"svelte/store\").Writable<boolean>",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "TooltipDefinition",
@@ -17750,15 +18668,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         },
         {
           "name": "tooltip",
           "default": false,
           "fallback": "{tooltipText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17803,7 +18721,8 @@
       "rest_props": {
         "type": "Element",
         "name": "span"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TooltipFooter",
@@ -17825,14 +18744,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
       "typedefs": [],
-      "generics": null
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "TooltipIcon",
@@ -17855,6 +18775,7 @@
           "kind": "let",
           "description": "Specify the icon to render",
           "type": "any",
+          "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -17925,16 +18846,16 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
-          "default": true,
-          "fallback": "<svelte:component this={icon} />",
-          "slot_props": "{}"
-        },
-        {
           "name": "tooltipText",
           "default": false,
           "fallback": "{tooltipText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "fallback": "<svelte:component this={icon} />",
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -17969,7 +18890,8 @@
       "rest_props": {
         "type": "Element",
         "name": "button"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "TreeView",
@@ -18064,7 +18986,6 @@
           "kind": "function",
           "description": "Programmatically expand all nodes",
           "type": "() => void",
-          "value": "() => {\n  expandedIds = [...nodeIds];\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -18076,7 +18997,6 @@
           "kind": "function",
           "description": "Programmatically collapse all nodes",
           "type": "() => void",
-          "value": "() => {\n  expandedIds = [];\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -18088,7 +19008,6 @@
           "kind": "function",
           "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {\n  expandedIds = flattenedNodes\n    .filter(\n      (node) =>\n        filterNode(node) ||\n        node.nodes?.some(\n          (child) =>\n            filterNode(child) &&\n            child.nodes,\n        ),\n    )\n    .map((node) => node.id);\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -18100,7 +19019,6 @@
           "kind": "function",
           "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided",
           "type": "(filterId?: (node: TreeNode) => boolean) => void",
-          "value": "() => {\n  expandedIds = flattenedNodes\n    .filter(\n      (node) =>\n        expandedIds.includes(node.id) &&\n        !filterNode(node),\n    )\n    .map((node) => node.id);\n}",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -18110,9 +19028,8 @@
         {
           "name": "showNode",
           "kind": "function",
-          "description": "Programmatically show a node by `id`.\nThe matching node will be expanded, selected, and focused",
-          "type": "(id: TreeNodeId) => void",
-          "value": "() => {\n  for (const child of nodes) {\n    const nodes = findNodeById(\n      child,\n      id,\n    );\n    if (nodes) {\n      const ids = nodes.map(\n        (node) => node.id,\n      );\n      const nodeIds = new Set(ids);\n      expandNodes((node) =>\n        nodeIds.has(node.id),\n      );\n      const lastId =\n        ids[ids.length - 1];\n      activeId = lastId;\n      selectedIds = [lastId];\n      tick().then(() => {\n        ref\n          ?.querySelector(\n            `[id=\"${lastId}\"]`,\n          )\n          ?.focus();\n      });\n      break;\n    }\n  }\n}",
+          "description": "Programmatically show a node by `id`.\nBy default, the matching node will be expanded, selected, and focused.\nUse the options parameter to customize this behavior.",
+          "type": "(id: TreeNodeId, options?: ShowNodeOptions) => void",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -18123,7 +19040,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
           "fallback": "{node.text}",
           "slot_props": "{\n  node: {\n    id: TreeNodeId;\n    text: string;\n    expanded: boolean;\n    leaf: boolean;\n    disabled: boolean;\n    selected: boolean;\n  };\n}"
@@ -18132,24 +19049,24 @@
           "name": "labelText",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "TreeNode & {\n  expanded: boolean;\n  leaf: boolean;\n}"
+          "detail": "{\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n  expanded: boolean;\n  leaf: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "toggle",
-          "detail": "TreeNode & {\n  expanded: boolean;\n  leaf: boolean;\n}"
+          "detail": "{\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n  expanded: boolean;\n  leaf: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "focus",
-          "detail": "TreeNode & {\n  expanded: boolean;\n  leaf: boolean;\n}"
+          "detail": "{\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n  expanded: boolean;\n  leaf: boolean;\n}"
         },
         {
           "type": "forwarded",
@@ -18164,16 +19081,77 @@
           "ts": "type TreeNodeId = string | number;\n"
         },
         {
-          "type": "{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; }",
+          "type": "{ id: TreeNodeId; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: TreeNode[]; }",
           "name": "TreeNode",
-          "ts": "interface TreeNode {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n}\n"
+          "ts": "type TreeNode = {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: TreeNode[];\n};\n"
+        },
+        {
+          "type": "{ /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean; /** Whether to select the node (default: true) */ select?: boolean; /** Whether to focus the node (default: true) */ focus?: boolean; }",
+          "name": "ShowNodeOptions",
+          "ts": "type ShowNodeOptions = {\n  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;\n  /** Whether to select the node (default: true) */ select?: boolean;\n  /** Whether to focus the node (default: true) */ focus?: boolean;\n};\n"
         }
       ],
       "generics": null,
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": [
+        {
+          "key": "TreeView",
+          "typeName": "TreeViewContext",
+          "properties": [
+            {
+              "name": "activeNodeId",
+              "type": "import(\"svelte/store\").Writable<TreeNodeId>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "selectedNodeIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<TreeNodeId>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "expandedNodeIds",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<TreeNodeId>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "clickNode",
+              "type": "(node: TreeNode) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "selectNode",
+              "type": "(node: TreeNode) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "expandNode",
+              "type": "(node: TreeNode, expanded: boolean) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "focusNode",
+              "type": "(node: TreeNode) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "toggleNode",
+              "type": "(node: TreeNode) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "Truncate",
@@ -18194,9 +19172,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [],
@@ -18205,7 +19183,8 @@
       "rest_props": {
         "type": "Element",
         "name": "p"
-      }
+      },
+      "contexts": []
     },
     {
       "moduleName": "UnorderedList",
@@ -18239,9 +19218,9 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "__default__",
+          "name": null,
           "default": true,
-          "slot_props": "{}"
+          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -18271,7 +19250,8 @@
       "rest_props": {
         "type": "Element",
         "name": "ul"
-      }
+      },
+      "contexts": []
     }
   ]
 }

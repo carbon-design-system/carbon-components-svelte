@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import { Glob } from "bun";
 import { sveld } from "sveld";
 import pkg from "../package.json" with { type: "json" };
@@ -22,7 +21,12 @@ sveld({
 });
 
 const glob = new Glob("**/*.d.ts");
-for (const file of glob.scanSync({ cwd: "./src" })) {
-  console.log("Copying", file, " to types/");
-  fs.copyFileSync(`./src/${file}`, `./types/${file}`);
-}
+const files = Array.from(glob.scanSync({ cwd: "./src" }));
+
+await Promise.all(
+  files.map(async (file) => {
+    console.log("Copying", file, " to types/");
+    const sourceFile = Bun.file(`./src/${file}`);
+    await Bun.write(`./types/${file}`, sourceFile);
+  }),
+);

@@ -18,5 +18,5 @@ export type TabContentProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class TabContent extends SvelteComponentTyped<
   TabContentProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

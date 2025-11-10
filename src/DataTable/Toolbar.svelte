@@ -10,14 +10,22 @@
 
   let ref = null;
 
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
   const overflowVisible = writable(false);
+
+  /**
+   * @type {(visible: boolean) => void}
+   */
+  const setOverflowVisible = (visible) => {
+    overflowVisible.set(visible);
+    if (ref) ref.style.overflow = visible ? "visible" : "inherit";
+  };
 
   setContext("Toolbar", {
     overflowVisible,
-    setOverflowVisible: (visible) => {
-      overflowVisible.set(visible);
-      if (ref) ref.style.overflow = visible ? "visible" : "inherit";
-    },
+    setOverflowVisible,
   });
 </script>
 

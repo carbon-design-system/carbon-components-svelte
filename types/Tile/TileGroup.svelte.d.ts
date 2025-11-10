@@ -1,6 +1,14 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type TileGroupContext = {
+  selectedValue: import("svelte/store").Writable<string | undefined>;
+  groupName: any;
+  groupRequired: any;
+  add: (data: { checked: boolean; value: string }) => void;
+  update: (value: string) => void;
+};
+
 type $RestProps = SvelteHTMLElements["fieldset"];
 
 type $Props = {
@@ -42,5 +50,5 @@ export type TileGroupProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class TileGroup extends SvelteComponentTyped<
   TileGroupProps,
   { select: CustomEvent<string> },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

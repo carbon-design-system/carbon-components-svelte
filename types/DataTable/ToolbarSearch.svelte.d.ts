@@ -80,5 +80,5 @@ export default class ToolbarSearch extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
     paste: WindowEventMap["paste"];
   },
-  {}
+  Record<string, never>
 > {}

@@ -1,11 +1,11 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export interface RecursiveListNode {
-  text?: string;
-  href?: string;
-  html?: string;
-}
+export type RecursiveListNode = {
+  /** Node text content */ text?: string;
+  /** Node link URL */ href?: string;
+  /** Node HTML content */ html?: string;
+};
 
 type $RestProps = SvelteHTMLElements["ul"] & SvelteHTMLElements["ol"];
 
@@ -30,5 +30,5 @@ export type RecursiveListProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class RecursiveList extends SvelteComponentTyped<
   RecursiveListProps,
   Record<string, any>,
-  {}
+  Record<string, never>
 > {}

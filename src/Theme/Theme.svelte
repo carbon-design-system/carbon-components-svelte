@@ -6,7 +6,9 @@
 
   /**
    * @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme
-   * @event {{ theme: CarbonTheme; }} update
+   * @event update
+   * @type {object}
+   * @property {CarbonTheme} theme
    * @slot {{ theme: CarbonTheme; }}
    */
 
@@ -78,9 +80,9 @@
   const dispatch = createEventDispatcher();
 
   $: if (typeof window !== "undefined") {
-    Object.entries(tokens).forEach(([token, value]) => {
+    for (const [token, value] of Object.entries(tokens)) {
       document.documentElement.style.setProperty(`--cds-${token}`, value);
-    });
+    }
 
     if (theme in themes) {
       document.documentElement.setAttribute("theme", theme);

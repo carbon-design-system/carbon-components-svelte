@@ -1,21 +1,29 @@
 <script>
   /**
+   * @generics {Item extends DropdownItem = DropdownItem} Item
+   * @template {DropdownItem} Item
    * @typedef {any} DropdownItemId
    * @typedef {string} DropdownItemText
-   * @typedef {{ id: DropdownItemId; text: DropdownItemText; disabled?: boolean; }} DropdownItem
-   * @event {{ selectedId: DropdownItemId, selectedItem: DropdownItem }} select
-   * @slot {{ item: DropdownItem; index: number; }}
+   * @typedef {object} DropdownItem
+   * @property {DropdownItemId} id
+   * @property {DropdownItemText} text
+   * @property {boolean} [disabled] - Whether the item is disabled
+   * @event select
+   * @type {object}
+   * @property {DropdownItemId} selectedId
+   * @property {Item} selectedItem
+   * @slot {{ item: Item; index: number; }}
    */
 
   /**
    * Set the dropdown items
-   * @type {ReadonlyArray<DropdownItem>}
+   * @type {ReadonlyArray<Item>}
    */
   export let items = [];
 
   /**
    * Override the display of a dropdown item
-   * @type {(item: DropdownItem) => string}
+   * @type {(item: Item) => string}
    */
   export let itemToString = (item) => item.text || item.id;
 

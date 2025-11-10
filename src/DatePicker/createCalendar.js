@@ -17,19 +17,19 @@ function updateClasses(instance) {
     .classList.add("bx--date-picker__month");
 
   weekdayContainer.classList.add("bx--date-picker__weekdays");
-  weekdayContainer.querySelectorAll(".flatpickr-weekday").forEach((node) => {
+  for (const node of weekdayContainer.querySelectorAll(".flatpickr-weekday")) {
     node.classList.add("bx--date-picker__weekday");
-  });
+  }
 
   daysContainer.classList.add("bx--date-picker__days");
-  days.querySelectorAll(".flatpickr-day").forEach((node) => {
+  for (const node of days.querySelectorAll(".flatpickr-day")) {
     node.classList.add("bx--date-picker__day");
     if (node.classList.contains("today") && selectedDates.length > 0) {
       node.classList.add("no-border");
     } else if (node.classList.contains("today") && selectedDates.length === 0) {
       node.classList.remove("no-border");
     }
-  });
+  }
 }
 
 function updateMonthNode(instance) {
@@ -51,11 +51,12 @@ async function createCalendar({ options, base, input, dispatch }) {
   let locale = options.locale;
 
   if (options.locale === "en" && l10n && l10n.en) {
-    l10n.en.weekdays.shorthand.forEach((_, index) => {
+    for (let index = 0; index < l10n.en.weekdays.shorthand.length; index++) {
+      const _ = l10n.en.weekdays.shorthand[index];
       const shorthand = _.slice(0, 2);
       l10n.en.weekdays.shorthand[index] =
         shorthand === "Th" ? "Th" : shorthand.charAt(0);
-    });
+    }
 
     locale = l10n.en;
   }

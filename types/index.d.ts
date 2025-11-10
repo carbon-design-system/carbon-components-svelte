@@ -144,7 +144,7 @@ export { default as TooltipDefinition } from "./TooltipDefinition/TooltipDefinit
 export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon.svelte";
 export { default as TreeView } from "./TreeView/TreeView.svelte";
 export { default as Truncate } from "./Truncate/Truncate.svelte";
-export { default as truncate } from "./Truncate/truncate";
+export { truncate } from "./Truncate/truncate";
 export { default as Content } from "./UIShell/Content.svelte";
 export { default as Header } from "./UIShell/Header.svelte";
 export { default as HeaderAction } from "./UIShell/HeaderAction.svelte";
@@ -166,4 +166,9 @@ export { default as SideNavMenu } from "./UIShell/SideNavMenu.svelte";
 export { default as SideNavMenuItem } from "./UIShell/SideNavMenuItem.svelte";
 export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
-export { default as toHierarchy } from "./utils/toHierarchy";
+export {
+  filterTreeById,
+  filterTreeByText,
+  filterTreeNodes,
+} from "./utils/filterTreeNodes";
+export { toHierarchy } from "./utils/toHierarchy";

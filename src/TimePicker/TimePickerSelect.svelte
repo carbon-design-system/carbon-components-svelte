@@ -30,6 +30,9 @@
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
 
+  /**
+   * @type {import("svelte/store").Writable<number | string>}
+   */
   const selectedValue = writable(value);
 
   setContext("TimePickerSelect", { selectedValue });

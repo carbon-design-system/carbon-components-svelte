@@ -1,6 +1,10 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type TooltipContext = {
+  tooltipOpen: import("svelte/store").Writable<boolean>;
+};
+
 type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
@@ -31,7 +35,7 @@ type $Props = {
   /**
    * Specify the icon to render for the tooltip button.
    * Default to `<Information />`
-   * @default undefined
+   * @default Information
    */
   icon?: any;
 
@@ -102,5 +106,9 @@ export default class Tooltip extends SvelteComponentTyped<
     click: WindowEventMap["click"];
     mousedown: WindowEventMap["mousedown"];
   },
-  { default: {}; icon: {}; triggerText: {} }
+  {
+    icon: Record<string, never>;
+    triggerText: Record<string, never>;
+    default: Record<string, never>;
+  }
 > {}

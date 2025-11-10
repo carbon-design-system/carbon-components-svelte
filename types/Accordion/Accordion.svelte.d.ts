@@ -1,6 +1,10 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { AccordionSkeletonProps } from "./AccordionSkeleton.svelte";
 
+export type AccordionContext = {
+  disableItems: import("svelte/store").Writable<boolean>;
+};
+
 export type AccordionProps = AccordionSkeletonProps & {
   /**
    * Specify alignment of accordion item chevron icon
@@ -35,5 +39,5 @@ export default class Accordion extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

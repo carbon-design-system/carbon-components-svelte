@@ -1,10 +1,16 @@
 <script>
   /**
-   * @typedef {{ href: string; text: string; description?: string; }} HeaderSearchResult
+   * @typedef HeaderSearchResult
+   * @property {string} href
+   * @property {string} text
+   * @property {string} [description]
    * @event {null} active
    * @event {null} inactive
    * @event {null} clear
-   * @event {{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }} select
+   * @event select
+   * @property {string} value
+   * @property {number} selectedResultIndex
+   * @property {HeaderSearchResult} selectedResult
    * @slot {{ result: HeaderSearchResult; index: number }}
    */
 

@@ -135,5 +135,5 @@ export default class Slider extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { labelText: {} }
+  { labelText: Record<string, never> }
 > {}

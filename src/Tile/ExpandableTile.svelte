@@ -57,8 +57,8 @@
     const style = getComputedStyle(ref);
 
     tilePadding =
-      parseInt(style.getPropertyValue("padding-top"), 10) +
-      parseInt(style.getPropertyValue("padding-bottom"), 10);
+      Number.parseInt(style.getPropertyValue("padding-top"), 10) +
+      Number.parseInt(style.getPropertyValue("padding-bottom"), 10);
   });
 </script>
 

@@ -1,6 +1,6 @@
 {
   "name": "carbon-components-svelte",
-  "version": "0.90.1",
+  "version": "0.91.0",
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "type": "module",
@@ -37,7 +37,6 @@
     "build:css": "bun scripts/build-css",
     "build:docs": "bun scripts/build-docs && bun scripts/format-component-api",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
-    "prepare": "lefthook install",
     "release": "standard-version && bun build:docs"
   },
   "dependencies": {
@@ -45,7 +44,7 @@
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.2",
+    "@biomejs/biome": "2.3.4",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/svelte": "^5.2.8",
@@ -58,14 +57,14 @@
     "carbon-preprocess-svelte": "^0.11.11",
     "culls": "^0.1.1",
     "jsdom": "^27.0.1",
-    "lefthook": "^2.0.1",
     "postcss": "^8.5.5",
+    "prettier": "^3.6.2",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
-    "sveld": "^0.22.1",
+    "sveld": "^0.24.2",
     "svelte": "^4.2.20",
     "svelte-check": "^4.2.1",
-    "vitest": "^4.0.4"
+    "vitest": "^4.0.8"
   },
   "standard-version": {
     "skip": {

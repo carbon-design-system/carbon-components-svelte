@@ -1,6 +1,36 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type OverflowMenuContext = {
+  focusedId: import("svelte/store").Writable<string | undefined>;
+  items: import("svelte/store").Writable<
+    ReadonlyArray<{
+      id: string;
+      text: string;
+      primaryFocus: boolean;
+      disabled: boolean;
+      index: number;
+    }>
+  >;
+  add: (data: {
+    id: string;
+    text: string;
+    primaryFocus: boolean;
+    disabled: boolean;
+  }) => void;
+  update: (
+    id: string,
+    item: {
+      id: string;
+      text: string;
+      primaryFocus: boolean;
+      disabled: boolean;
+      index: number;
+    },
+  ) => void;
+  change: (direction: number) => void;
+};
+
 type $RestProps = SvelteHTMLElements["button"];
 
 type $Props = {
@@ -42,8 +72,7 @@ type $Props = {
 
   /**
    * Specify the icon to render.
-   * Defaults to `<OverflowMenuVertical />`
-   * @default undefined
+   * @default OverflowMenuVertical
    */
   icon?: any;
 
@@ -85,12 +114,12 @@ export type OverflowMenuProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class OverflowMenu extends SvelteComponentTyped<
   OverflowMenuProps,
   {
-    close: CustomEvent<null | { index: number; text: string }>;
+    close: CustomEvent<{ index?: number; text?: string }>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     keydown: WindowEventMap["keydown"];
   },
-  { default: {}; menu: {} }
+  { menu: Record<string, never>; default: Record<string, never> }
 > {}

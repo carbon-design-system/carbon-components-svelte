@@ -14,7 +14,6 @@ type $Props = {
 
   /**
    * Override the default translation ids
-   * @default (id) => defaultTranslations[id]
    */
   translateWithId?: (id: ListBoxMenuIconTranslationId) => string;
 
@@ -26,7 +25,7 @@ export type ListBoxMenuIconProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ListBoxMenuIcon extends SvelteComponentTyped<
   ListBoxMenuIconProps,
   { click: WindowEventMap["click"] },
-  {}
+  Record<string, never>
 > {
   /**
    * Default translation ids

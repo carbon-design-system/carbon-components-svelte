@@ -3,6 +3,7 @@ import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/Multi
 import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import MultiSelect from "./MultiSelect.test.svelte";
+import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
 
 const items = [
@@ -652,5 +653,239 @@ describe("MultiSelect", () => {
     const options = screen.getAllByRole("option");
     expect(options[2]).toHaveAttribute("aria-selected", "true");
     expect(input).toHaveFocus();
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2313
+  describe("keyboard navigation (issue #2313)", () => {
+    it("filterable: menu opens when tabbing into field", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+
+      await user.tab();
+      expect(input).toHaveFocus();
+
+      expect(input).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("filterable: first character shows correctly after tabbing", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+
+      await user.tab();
+      expect(input).toHaveFocus();
+
+      await user.type(input, "s");
+      expect(input).toHaveValue("s");
+
+      await user.type(input, "lack");
+      expect(input).toHaveValue("slack");
+
+      expect(screen.getByText("Slack")).toBeInTheDocument();
+      expect(screen.queryByText("Email")).not.toBeInTheDocument();
+    });
+
+    it("filterable: Tab key does not close menu when navigating", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+      expect(input).toHaveAttribute("aria-expanded", "true");
+
+      await user.keyboard("{Tab}");
+      expect(input).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("filterable: focus goes to input, not clear button", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      const clearButton = screen.getAllByRole("button", { name: /clear/i })[0];
+
+      expect(clearButton).toHaveAttribute("tabindex", "-1");
+      await user.tab();
+
+      expect(input).toHaveFocus();
+      expect(clearButton).not.toHaveFocus();
+      expect(input).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("filterable: clear button is not keyboard accessible but works with mouse", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      const clearButton = screen.getAllByRole("button", { name: /clear/i })[0];
+
+      expect(clearButton).toHaveAttribute("tabindex", "-1");
+      await user.click(clearButton);
+
+      await user.click(input);
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "false");
+      expect(options[1]).toHaveAttribute("aria-selected", "false");
+    });
+  });
+
+  describe("Generics", () => {
+    it("should support custom item types with generics", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+        category: string;
+        inStock: boolean;
+      };
+
+      const products: Product[] = [
+        {
+          id: "1",
+          text: "Laptop",
+          price: 999,
+          category: "Electronics",
+          inStock: true,
+        },
+        {
+          id: "2",
+          text: "Phone",
+          price: 599,
+          category: "Electronics",
+          inStock: false,
+        },
+      ];
+
+      expectTypeOf<typeof products>().toEqualTypeOf<Product[]>();
+
+      const itemToString = (item: Product) => `${item.text} - $${item.price}`;
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
+
+      const filterItem = (item: Product, value: string) =>
+        item.category.toLowerCase().includes(value.toLowerCase()) ||
+        item.text.toLowerCase().includes(value.toLowerCase());
+      expectTypeOf(filterItem).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(filterItem).parameter(1).toEqualTypeOf<string>();
+      expectTypeOf(filterItem).returns.toEqualTypeOf<boolean>();
+
+      type SelectEvent = CustomEvent<{
+        selectedIds: string[];
+        selected: Product[];
+        unselected: Product[];
+      }>;
+      expectTypeOf<
+        SelectEvent["detail"]["selected"][0]
+      >().toEqualTypeOf<Product>();
+      expectTypeOf<
+        SelectEvent["detail"]["unselected"][0]
+      >().toEqualTypeOf<Product>();
+    });
+
+    it("should provide type-safe access to custom properties in callbacks", () => {
+      type Tag = {
+        id: number;
+        text: string;
+        color: string;
+        usageCount: number;
+      };
+
+      const itemToString = (item: Tag) => {
+        expectTypeOf(item).toHaveProperty("color");
+        expectTypeOf(item).toHaveProperty("usageCount");
+        return `${item.text} (${item.usageCount})`;
+      };
+
+      const filterItem = (item: Tag, value: string) => {
+        expectTypeOf(item).toHaveProperty("color");
+        expectTypeOf(item).toHaveProperty("usageCount");
+        return (
+          item.color.includes(value) ||
+          item.usageCount > Number.parseInt(value, 10)
+        );
+      };
+
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Tag>();
+      expectTypeOf(filterItem).parameter(0).toEqualTypeOf<Tag>();
+    });
+
+    it("should support slot props with generic item type", () => {
+      type MenuItem = {
+        id: string;
+        text: string;
+        icon: string;
+        shortcut?: string;
+      };
+
+      type SlotProps = { item: MenuItem; index: number };
+
+      const slotItem: MenuItem = {
+        id: "1",
+        text: "Save",
+        icon: "save-icon",
+        shortcut: "Ctrl+S",
+      };
+
+      expectTypeOf<SlotProps["item"]>().toEqualTypeOf<MenuItem>();
+      expectTypeOf(slotItem).toHaveProperty("icon");
+      expectTypeOf(slotItem).toHaveProperty("shortcut");
+    });
+
+    it("should infer generic type from items and support destructuring in slots", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelectGenerics);
+
+      await openMenu();
+
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(3);
+      // Items are sorted alphabetically, so Desk comes first
+      expect(options[0]).toHaveTextContent("Desk");
+      expect(options[0]).toHaveTextContent("$299");
+      expect(options[0]).toHaveTextContent("Furniture");
+
+      await toggleOption("Laptop");
+
+      expect(consoleLog).toHaveBeenCalledWith("selected:", [
+        {
+          id: "1",
+          text: "Laptop",
+          price: 999,
+          category: "Electronics",
+          checked: true,
+        },
+      ]);
+    });
   });
 });

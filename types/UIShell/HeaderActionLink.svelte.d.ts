@@ -36,5 +36,5 @@ export type HeaderActionLinkProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class HeaderActionLink extends SvelteComponentTyped<
   HeaderActionLinkProps,
   { click: WindowEventMap["click"] },
-  { icon: {} }
+  { icon: Record<string, never> }
 > {}

@@ -12,7 +12,7 @@ type $Props = {
 
   /**
    * Specify the icon to render
-   * @default undefined
+   * @default Close
    */
   icon?: any;
 
@@ -41,5 +41,5 @@ export default class NotificationButton extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  {}
+  Record<string, never>
 > {}

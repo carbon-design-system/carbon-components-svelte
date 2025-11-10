@@ -1,6 +1,27 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type TabsContext = {
+  tabs: import("svelte/store").Writable<
+    ReadonlyArray<{
+      id: string;
+      label: string;
+      disabled: boolean;
+      index: number;
+    }>
+  >;
+  contentById: import("svelte/store").Readable<
+    Record<string, { id: string; index: number }>
+  >;
+  selectedTab: import("svelte/store").Writable<string | undefined>;
+  selectedContent: import("svelte/store").Writable<string | undefined>;
+  useAutoWidth: import("svelte/store").Writable<boolean>;
+  add: (data: { id: string; label: string; disabled: boolean }) => void;
+  addContent: (data: { id: string }) => void;
+  update: (id: string) => void;
+  change: (direction: number) => Promise<void>;
+};
+
 type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
@@ -46,5 +67,5 @@ export default class Tabs extends SvelteComponentTyped<
     keypress: WindowEventMap["keypress"];
     click: WindowEventMap["click"];
   },
-  { default: {}; content: {} }
+  { default: Record<string, never>; content: Record<string, never> }
 > {}

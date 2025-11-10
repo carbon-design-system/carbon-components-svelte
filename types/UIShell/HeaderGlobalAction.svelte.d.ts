@@ -24,5 +24,5 @@ export type HeaderGlobalActionProps = ButtonProps & {
 export default class HeaderGlobalAction extends SvelteComponentTyped<
   HeaderGlobalActionProps,
   { click: WindowEventMap["click"] },
-  {}
+  Record<string, never>
 > {}

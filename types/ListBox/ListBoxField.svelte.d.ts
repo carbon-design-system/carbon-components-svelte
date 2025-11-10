@@ -26,7 +26,6 @@ type $Props = {
 
   /**
    * Override the default translation ids
-   * @default (id) => defaultTranslations[id]
    */
   translateWithId?: (id: ListBoxFieldTranslationId) => string;
 
@@ -58,7 +57,7 @@ export default class ListBoxField extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {
   /**
    * Default translation ids

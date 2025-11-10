@@ -36,5 +36,5 @@ export type SideNavMenuItemProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class SideNavMenuItem extends SvelteComponentTyped<
   SideNavMenuItemProps,
   { click: WindowEventMap["click"] },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

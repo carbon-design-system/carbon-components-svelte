@@ -24,5 +24,5 @@ export type SelectItemGroupProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class SelectItemGroup extends SvelteComponentTyped<
   SelectItemGroupProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

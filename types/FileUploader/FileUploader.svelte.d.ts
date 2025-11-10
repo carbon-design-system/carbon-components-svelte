@@ -95,7 +95,7 @@ export default class FileUploader extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     keydown: WindowEventMap["keydown"];
   },
-  { labelDescription: {}; labelTitle: {} }
+  { labelDescription: Record<string, never>; labelTitle: Record<string, never> }
 > {
   /**
    * Programmatically clear the uploaded files

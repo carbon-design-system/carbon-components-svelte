@@ -15,7 +15,13 @@
   import { derived, writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>}
+   */
   const steps = writable([]);
+  /**
+   * @type {import("svelte/store").Readable<Record<string, { id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>}
+   */
   const stepsById = derived(steps, (steps) =>
     steps.reduce((a, c) => {
       a[c.id] = c;
@@ -24,37 +30,54 @@
   );
   const preventChangeOnClickStore = writable(preventChangeOnClick);
 
+  /**
+   * @type {import("svelte/store").Readable<boolean>}
+   */
+  const preventChangeOnClickReadable = {
+    subscribe: preventChangeOnClickStore.subscribe,
+  };
+
+  /**
+   * @type {(step: { id: string; complete: boolean; disabled: boolean }) => void}
+   */
+  const add = (step) => {
+    steps.update((_) => {
+      if (step.id in $stepsById) {
+        return _.map((_step) => {
+          if (_step.id === step.id) return { ..._step, ...step };
+          return _step;
+        });
+      }
+
+      return [
+        ..._,
+        {
+          ...step,
+          index: _.length,
+          current: _.length === currentIndex,
+          complete: step.complete,
+        },
+      ];
+    });
+  };
+
+  /**
+   * @type {(index: number) => void}
+   */
+  const change = (index) => {
+    if (preventChangeOnClick) return;
+    currentIndex = index;
+
+    /** @event {number} change */
+    dispatch("change", index);
+  };
+
   setContext("ProgressIndicator", {
     steps,
     stepsById,
-    preventChangeOnClick: { subscribe: preventChangeOnClickStore.subscribe },
-    add: (step) => {
-      steps.update((_) => {
-        if (step.id in $stepsById) {
-          return _.map((_step) => {
-            if (_step.id === step.id) return { ..._step, ...step };
-            return _step;
-          });
-        }
-
-        return [
-          ..._,
-          {
-            ...step,
-            index: _.length,
-            current: _.length === currentIndex,
-            complete: step.complete,
-          },
-        ];
-      });
-    },
-    change: (index) => {
-      if (preventChangeOnClick) return;
-      currentIndex = index;
-
-      /** @event {number} change */
-      dispatch("change", index);
-    },
+    preventChangeOnClick: preventChangeOnClickReadable,
+    add,
+    change,
   });
 
   $: steps.update((_) =>

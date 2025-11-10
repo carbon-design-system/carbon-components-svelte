@@ -31,23 +31,36 @@
   import { readonly, writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  /**
+   * @type {import("svelte/store").Writable<string | undefined>}
+   */
   const selectedValue = writable(selected);
   const groupName = writable(name);
   const groupRequired = writable(required);
+
+  /**
+   * @type {(data: { checked: boolean; value: string }) => void}
+   */
+  const add = ({ checked, value }) => {
+    if (checked) {
+      selectedValue.set(value);
+    }
+  };
+
+  /**
+   * @type {(value: string) => void}
+   */
+  const update = (value) => {
+    selectedValue.set(value);
+    dispatch("select", value);
+  };
 
   setContext("TileGroup", {
     selectedValue,
     groupName: readonly(groupName),
     groupRequired: readonly(groupRequired),
-    add: ({ checked, value }) => {
-      if (checked) {
-        selectedValue.set(value);
-      }
-    },
-    update: (value) => {
-      selectedValue.set(value);
-      dispatch("select", value);
-    },
+    add,
+    update,
   });
 
   $: selected = $selectedValue;

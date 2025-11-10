@@ -1,6 +1,8 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type BreadcrumbItemContext = Record<string, never>;
+
 type $RestProps = SvelteHTMLElements["li"];
 
 type $Props = {
@@ -29,5 +31,5 @@ export default class BreadcrumbItem extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: { props?: { ["aria-current"]?: string; class: "bx--link" } } }
+  { default: { props?: { "aria-current"?: string; class: "bx--link" } } }
 > {}

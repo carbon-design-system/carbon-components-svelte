@@ -3,10 +3,7 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 export type ColumnSize = boolean | number;
 
-export interface ColumnSizeDescriptor {
-  span?: ColumnSize;
-  offset: number;
-}
+export type ColumnSizeDescriptor = { span?: ColumnSize; offset: number };
 
 export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 

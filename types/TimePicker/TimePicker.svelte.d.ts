@@ -108,5 +108,5 @@ export default class TimePicker extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
     paste: WindowEventMap["paste"];
   },
-  { default: {}; labelText: {} }
+  { labelText: Record<string, never>; default: Record<string, never> }
 > {}

@@ -53,7 +53,12 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type DataTableSkeletonProps = Omit<$RestProps, keyof $Props> & $Props;
+export type DataTableSkeletonProps = Omit<
+  $RestProps,
+  keyof ($Props & DataTableHeader)
+> &
+  $Props &
+  DataTableHeader;
 
 export default class DataTableSkeleton extends SvelteComponentTyped<
   DataTableSkeletonProps,
@@ -63,5 +68,5 @@ export default class DataTableSkeleton extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  {}
+  Record<string, never>
 > {}

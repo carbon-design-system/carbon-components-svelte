@@ -84,8 +84,7 @@ type $Props = {
 
   /**
    * Specify the icon to render.
-   * Defaults to `<Search />`
-   * @default undefined
+   * @default IconSearch
    */
   icon?: any;
 
@@ -124,5 +123,5 @@ export default class Search extends SvelteComponentTyped<
     paste: WindowEventMap["paste"];
     clear: CustomEvent<null>;
   },
-  { labelText: {} }
+  { labelText: Record<string, never> }
 > {}

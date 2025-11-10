@@ -74,6 +74,7 @@
   let trackRef = null;
   let dragging = false;
   let holding = false;
+  let currentEvent = null;
 
   function startDragging() {
     dragging = true;
@@ -86,16 +87,18 @@
   function stopHolding() {
     holding = false;
     dragging = false;
+    currentEvent = null;
   }
 
-  function move() {
+  function move(e) {
     if (holding) {
+      currentEvent = e;
       startDragging();
     }
   }
 
   function calcValue(e) {
-    if (disabled) return;
+    if (disabled || !e) return;
 
     const offsetX = e.touches ? e.touches[0].clientX : e.clientX;
     const { left, width } = trackRef.getBoundingClientRect();
@@ -123,8 +126,8 @@
       value = max;
     }
 
-    if (dragging) {
-      calcValue(event);
+    if (dragging && currentEvent) {
+      calcValue(currentEvent);
       dragging = false;
     }
 

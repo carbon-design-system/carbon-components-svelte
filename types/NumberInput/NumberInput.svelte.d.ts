@@ -114,7 +114,7 @@ type $Props = {
    * Specify the label text
    * @default ""
    */
-  labelText?: string;
+  label?: string;
 
   /**
    * Set to `true` to visually hide the label text
@@ -124,7 +124,6 @@ type $Props = {
 
   /**
    * Override the default translation ids
-   * @default (id) => defaultTranslations[id]
    */
   translateWithId?: (id: NumberInputTranslationId) => string;
 
@@ -166,7 +165,7 @@ export default class NumberInput extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
     paste: WindowEventMap["paste"];
   },
-  { labelText: {} }
+  { label: Record<string, never> }
 > {
   /**
    * Default translation ids

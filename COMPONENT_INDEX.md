@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@0.90.1.
+> 165 components exported from carbon-components-svelte@0.91.0.
 
 ## Components
 
@@ -185,18 +185,18 @@
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `AccordionItem`
 
@@ -211,21 +211,21 @@
 
 ### Slots
 
-| Slot name | Default | Props | Fallback             |
-| :-------- | :------ | :---- | :------------------- |
-| --        | Yes     | --    | --                   |
-| title     | No      | --    | <code>{title}</code> |
+| Slot name | Default | Props                               | Fallback             |
+| :-------- | :------ | :---------------------------------- | :------------------- |
+| title     | No      | <code>Record<string, never> </code> | <code>{title}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                   |
 
 ### Events
 
-| Event name   | Type      | Detail |
-| :----------- | :-------- | :----- |
-| animationend | forwarded | --     |
-| click        | forwarded | --     |
-| mouseover    | forwarded | --     |
-| mouseenter   | forwarded | --     |
-| mouseleave   | forwarded | --     |
-| keydown      | forwarded | --     |
+| Event name   | Type      | Detail | Description |
+| :----------- | :-------- | :----- | :---------- |
+| animationend | forwarded | --     | --          |
+| click        | forwarded | --     | --          |
+| mouseover    | forwarded | --     | --          |
+| mouseenter   | forwarded | --     | --          |
+| mouseleave   | forwarded | --     | --          |
+| keydown      | forwarded | --     | --          |
 
 ## `AccordionSkeleton`
 
@@ -244,12 +244,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `AspectRatio`
 
@@ -261,9 +261,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -280,18 +280,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `BreadcrumbItem`
 
@@ -304,18 +304,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                                                                     | Fallback |
-| :-------- | :------ | :------------------------------------------------------------------------ | :------- |
-| --        | Yes     | <code>{props?: { ["aria-current"]?: string; class: "bx--link"; }} </code> | --       |
+| Slot name | Default | Props                                                                   | Fallback |
+| :-------- | :------ | :---------------------------------------------------------------------- | :------- |
+| --        | Yes     | <code>{props?: { "aria-current"?: string; class: "bx--link"; }} </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `BreadcrumbSkeleton`
 
@@ -332,12 +332,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Breakpoint`
 
@@ -364,9 +364,9 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 
 ### Events
 
-| Event name | Type       | Detail                                                                   |
-| :--------- | :--------- | :----------------------------------------------------------------------- |
-| change     | dispatched | <code>{ size: BreakpointSize; breakpointValue: BreakpointValue; }</code> |
+| Event name | Type       | Detail                                                                   | Description |
+| :--------- | :--------- | :----------------------------------------------------------------------- | :---------- |
+| change     | dispatched | <code>{ size: BreakpointSize; breakpointValue: BreakpointValue; }</code> | --          |
 
 ## `Button`
 
@@ -396,18 +396,18 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 | Slot name | Default | Props                                                                                                                                           | Fallback |
 | :-------- | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------- | :------- |
 | --        | Yes     | <code>{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } } </code> | --       |
-| icon      | No      | --                                                                                                                                              | --       |
+| icon      | No      | <code>{ style: undefined &#124; string; } </code>                                                                                               | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ButtonSet`
 
@@ -419,9 +419,9 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -442,14 +442,14 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Checkbox`
 
@@ -475,22 +475,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail               |
-| :--------- | :--------- | :------------------- |
-| check      | dispatched | <code>boolean</code> |
-| click      | forwarded  | --                   |
-| mouseover  | forwarded  | --                   |
-| mouseenter | forwarded  | --                   |
-| mouseleave | forwarded  | --                   |
-| change     | forwarded  | --                   |
-| focus      | forwarded  | --                   |
-| blur       | forwarded  | --                   |
+| Event name | Type       | Detail               | Description |
+| :--------- | :--------- | :------------------- | :---------- |
+| check      | dispatched | <code>boolean</code> | --          |
+| click      | forwarded  | --                   | --          |
+| mouseover  | forwarded  | --                   | --          |
+| mouseenter | forwarded  | --                   | --          |
+| mouseleave | forwarded  | --                   | --          |
+| change     | forwarded  | --                   | --          |
+| focus      | forwarded  | --                   | --          |
+| blur       | forwarded  | --                   | --          |
 
 ## `CheckboxSkeleton`
 
@@ -504,12 +504,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ClickableTile`
 
@@ -524,63 +524,63 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `CodeSnippet`
 
 ### Props
 
-| Prop name             | Required | Kind             | Reactive | Type                                                 | Default value                                                                                                     | Description                                                                                                                                                                                                           |
-| :-------------------- | :------- | :--------------- | :------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ref                   | No       | <code>let</code> | Yes      | <code>null &#124; HTMLPreElement</code>              | <code>null</code>                                                                                                 | Obtain a reference to the pre HTML element                                                                                                                                                                            |
-| showMoreLess          | No       | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>true</code>                                                                                                 | Set to `false` to hide the show more/less button<br /><br />NOTE: this prop only works with the `type="multi"` variant                                                                                                |
-| expanded              | No       | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                                                                                                | Set to `true` to expand a multi-line code snippet (type="multi")                                                                                                                                                      |
-| type                  | No       | <code>let</code> | No       | <code>"single" &#124; "inline" &#124; "multi"</code> | <code>"single"</code>                                                                                             | Set the type of code snippet                                                                                                                                                                                          |
-| code                  | No       | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                                                                                            | Set the code snippet text.<br />Alternatively, use the default slot (e.g., `&lt;CodeSnippet&gt;{code}&lt;/CodeSnippet&gt;`).<br /><br />NOTE: you _must_ use the `code` prop for the copy-to-clipboard functionality. |
-| copy                  | No       | <code>let</code> | No       | <code>(code: string) => void</code>                  | <code>async (code) => { try { await navigator.clipboard.writeText(code); } catch (e) { console.log(e); } }</code> | By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.<br /><br />Provide a custom function to override this behavior.                                             |
-| hideCopyButton        | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                                                                                                | Set to `true` to hide the copy button                                                                                                                                                                                 |
-| disabled              | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                                                                                                | Set to `true` for the disabled variant.<br />Only applies to the "single", "multi" types                                                                                                                              |
-| wrapText              | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                                                                                                | Set to `true` to wrap the text.<br /><br />NOTE: this prop only works with the `type="multi"` variant                                                                                                                 |
-| light                 | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                                                                                                | Set to `true` to enable the light variant                                                                                                                                                                             |
-| skeleton              | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                                                                                                | Set to `true` to display the skeleton state                                                                                                                                                                           |
-| copyButtonDescription | No       | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                                                                                            | Specify the ARIA label for the copy button icon                                                                                                                                                                       |
-| copyLabel             | No       | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                                                                                            | Specify the ARIA label of the copy button                                                                                                                                                                             |
-| feedback              | No       | <code>let</code> | No       | <code>string</code>                                  | <code>"Copied!"</code>                                                                                            | Specify the feedback text displayed when clicking the snippet                                                                                                                                                         |
-| feedbackTimeout       | No       | <code>let</code> | No       | <code>number</code>                                  | <code>2000</code>                                                                                                 | Set the timeout duration (ms) to display feedback text                                                                                                                                                                |
-| showLessText          | No       | <code>let</code> | No       | <code>string</code>                                  | <code>"Show less"</code>                                                                                          | Specify the show less text.<br /><br />NOTE: this prop only works with the `type="multi"` variant                                                                                                                     |
-| showMoreText          | No       | <code>let</code> | No       | <code>string</code>                                  | <code>"Show more"</code>                                                                                          | Specify the show more text<br /><br />NOTE: this prop only works with the `type="multi"` variant                                                                                                                      |
-| id                    | No       | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code>                                                                  | Set an id for the code element                                                                                                                                                                                        |
+| Prop name             | Required | Kind             | Reactive | Type                                                 | Default value                                    | Description                                                                                                                                                                                                           |
+| :-------------------- | :------- | :--------------- | :------- | ---------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ref                   | No       | <code>let</code> | Yes      | <code>null &#124; HTMLPreElement</code>              | <code>null</code>                                | Obtain a reference to the pre HTML element                                                                                                                                                                            |
+| showMoreLess          | No       | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>true</code>                                | Set to `false` to hide the show more/less button<br /><br />NOTE: this prop only works with the `type="multi"` variant                                                                                                |
+| expanded              | No       | <code>let</code> | Yes      | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to expand a multi-line code snippet (type="multi")                                                                                                                                                      |
+| type                  | No       | <code>let</code> | No       | <code>"single" &#124; "inline" &#124; "multi"</code> | <code>"single"</code>                            | Set the type of code snippet                                                                                                                                                                                          |
+| code                  | No       | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                           | Set the code snippet text.<br />Alternatively, use the default slot (e.g., `&lt;CodeSnippet&gt;{code}&lt;/CodeSnippet&gt;`).<br /><br />NOTE: you _must_ use the `code` prop for the copy-to-clipboard functionality. |
+| copy                  | No       | <code>let</code> | No       | <code>(code: string) => void</code>                  | --                                               | By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.<br /><br />Provide a custom function to override this behavior.                                             |
+| hideCopyButton        | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to hide the copy button                                                                                                                                                                                 |
+| disabled              | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` for the disabled variant.<br />Only applies to the "single", "multi" types                                                                                                                              |
+| wrapText              | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to wrap the text.<br /><br />NOTE: this prop only works with the `type="multi"` variant                                                                                                                 |
+| light                 | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to enable the light variant                                                                                                                                                                             |
+| skeleton              | No       | <code>let</code> | No       | <code>boolean</code>                                 | <code>false</code>                               | Set to `true` to display the skeleton state                                                                                                                                                                           |
+| copyButtonDescription | No       | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                           | Specify the ARIA label for the copy button icon                                                                                                                                                                       |
+| copyLabel             | No       | <code>let</code> | No       | <code>string</code>                                  | <code>undefined</code>                           | Specify the ARIA label of the copy button                                                                                                                                                                             |
+| feedback              | No       | <code>let</code> | No       | <code>string</code>                                  | <code>"Copied!"</code>                           | Specify the feedback text displayed when clicking the snippet                                                                                                                                                         |
+| feedbackTimeout       | No       | <code>let</code> | No       | <code>number</code>                                  | <code>2000</code>                                | Set the timeout duration (ms) to display feedback text                                                                                                                                                                |
+| showLessText          | No       | <code>let</code> | No       | <code>string</code>                                  | <code>"Show less"</code>                         | Specify the show less text.<br /><br />NOTE: this prop only works with the `type="multi"` variant                                                                                                                     |
+| showMoreText          | No       | <code>let</code> | No       | <code>string</code>                                  | <code>"Show more"</code>                         | Specify the show more text<br /><br />NOTE: this prop only works with the `type="multi"` variant                                                                                                                      |
+| id                    | No       | <code>let</code> | No       | <code>string</code>                                  | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the code element                                                                                                                                                                                        |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | <code>{code}</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{code}</code> |
 
 ### Events
 
-| Event name   | Type       | Detail            |
-| :----------- | :--------- | :---------------- |
-| expand       | dispatched | <code>null</code> |
-| collapse     | dispatched | <code>null</code> |
-| copy         | dispatched | <code>null</code> |
-| click        | forwarded  | --                |
-| mouseover    | forwarded  | --                |
-| mouseenter   | forwarded  | --                |
-| mouseleave   | forwarded  | --                |
-| animationend | forwarded  | --                |
+| Event name   | Type       | Detail            | Description |
+| :----------- | :--------- | :---------------- | :---------- |
+| expand       | dispatched | <code>null</code> | --          |
+| collapse     | dispatched | <code>null</code> | --          |
+| copy         | dispatched | <code>null</code> | --          |
+| click        | forwarded  | --                | --          |
+| mouseover    | forwarded  | --                | --          |
+| mouseenter   | forwarded  | --                | --          |
+| mouseleave   | forwarded  | --                | --          |
+| animationend | forwarded  | --                | --          |
 
 ## `CodeSnippetSkeleton`
 
@@ -596,12 +596,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Column`
 
@@ -610,10 +610,7 @@ None.
 ```ts
 export type ColumnSize = boolean | number;
 
-export interface ColumnSizeDescriptor {
-  span?: ColumnSize;
-  offset: number;
-}
+export type ColumnSizeDescriptor = { span?: ColumnSize; offset: number };
 
 export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 ```
@@ -651,65 +648,65 @@ None.
 ```ts
 export type ComboBoxItemId = any;
 
-export interface ComboBoxItem {
+export type ComboBoxItem = {
   id: ComboBoxItemId;
   text: string;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 ```
 
 ### Props
 
-| Prop name                | Required | Kind                  | Reactive | Type                                                                                                  | Default value                                                                                                                                                                                                           | Description                                                                                                                                                                                                                                     |
-| :----------------------- | :------- | :-------------------- | :------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| listRef                  | No       | <code>let</code>      | Yes      | <code>null &#124; HTMLDivElement</code>                                                               | <code>null</code>                                                                                                                                                                                                       | Obtain a reference to the list HTML element                                                                                                                                                                                                     |
-| ref                      | No       | <code>let</code>      | Yes      | <code>null &#124; HTMLInputElement</code>                                                             | <code>null</code>                                                                                                                                                                                                       | Obtain a reference to the input HTML element                                                                                                                                                                                                    |
-| open                     | No       | <code>let</code>      | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to open the combobox menu dropdown                                                                                                                                                                                                |
-| value                    | No       | <code>let</code>      | Yes      | <code>string</code>                                                                                   | <code>""</code>                                                                                                                                                                                                         | Specify the selected combobox value                                                                                                                                                                                                             |
-| selectedId               | No       | <code>let</code>      | Yes      | <code>ComboBoxItemId</code>                                                                           | <code>undefined</code>                                                                                                                                                                                                  | Set the selected item by value id                                                                                                                                                                                                               |
-| items                    | No       | <code>let</code>      | No       | <code>ReadonlyArray<ComboBoxItem></code>                                                              | <code>[]</code>                                                                                                                                                                                                         | Set the combobox items                                                                                                                                                                                                                          |
-| itemToString             | No       | <code>let</code>      | No       | <code>(item: ComboBoxItem) => string</code>                                                           | <code>(item) => item.text &#124;&#124; item.id</code>                                                                                                                                                                   | Override the display of a combobox item                                                                                                                                                                                                         |
-| direction                | No       | <code>let</code>      | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                                                                                                                                                                                                   | Specify the direction of the combobox dropdown menu                                                                                                                                                                                             |
-| size                     | No       | <code>let</code>      | No       | <code>"sm" &#124; "xl"</code>                                                                         | <code>undefined</code>                                                                                                                                                                                                  | Set the size of the combobox                                                                                                                                                                                                                    |
-| disabled                 | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to disable the combobox                                                                                                                                                                                                           |
-| labelText                | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                                                                                                                                                                                         | Specify the title text of the combobox                                                                                                                                                                                                          |
-| hideLabel                | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to visually hide the label text                                                                                                                                                                                                   |
-| placeholder              | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                                                                                                                                                                                         | Specify the placeholder text                                                                                                                                                                                                                    |
-| helperText               | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                                                                                                                                                                                         | Specify the helper text                                                                                                                                                                                                                         |
-| invalidText              | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                                                                                                                                                                                         | Specify the invalid state text                                                                                                                                                                                                                  |
-| invalid                  | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to indicate an invalid state                                                                                                                                                                                                      |
-| warn                     | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to indicate a warning state                                                                                                                                                                                                       |
-| warnText                 | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                                                                                                                                                                                         | Specify the warning state text                                                                                                                                                                                                                  |
-| light                    | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to enable the light variant                                                                                                                                                                                                       |
-| allowCustomValue         | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to allow custom values that are not in the items list.<br />By default, user-entered text is cleared when the combobox loses focus without selecting an item.<br />When enabled, custom text is preserved.                        |
-| clearFilterOnOpen        | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                                                                                                                                                                                                      | Set to `true` to clear the input value when opening the dropdown.<br />This allows users to see all available items instead of only filtered results.<br />The original value is restored if the dropdown is closed without making a selection. |
-| shouldFilterItem         | No       | <code>let</code>      | No       | <code>(item: ComboBoxItem, value: string) => boolean</code>                                           | <code>() => true</code>                                                                                                                                                                                                 | Determine if an item should be filtered given the current combobox value                                                                                                                                                                        |
-| translateWithId          | No       | <code>let</code>      | No       | <code>(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string</code> | <code>undefined</code>                                                                                                                                                                                                  | Override the chevron icon label based on the open state.<br />Defaults to "Open menu" when closed and "Close menu" when open                                                                                                                    |
-| translateWithIdSelection | No       | <code>let</code>      | No       | <code>(id: "clearSelection") => string</code>                                                         | <code>undefined</code>                                                                                                                                                                                                  | Override the label of the clear button when the input has a selection.<br />Defaults to "Clear selected item" since a combo box can only have on selection.                                                                                     |
-| id                       | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>"ccs-" + Math.random().toString(36)</code>                                                                                                                                                                        | Set an id for the list box component                                                                                                                                                                                                            |
-| name                     | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>undefined</code>                                                                                                                                                                                                  | Specify a name attribute for the input                                                                                                                                                                                                          |
-| clear                    | No       | <code>function</code> | No       | <code>(options?: { focus?: boolean; }) => void</code>                                                 | <code>() => { prevSelectedId = null; highlightedIndex = -1; highlightedId = undefined; selectedId = undefined; selectedItem = undefined; open = false; value = ""; if (options?.focus !== false) ref?.focus(); }</code> | Clear the combo box programmatically                                                                                                                                                                                                            |
+| Prop name                | Required | Kind                  | Reactive | Type                                                                                                  | Default value                                    | Description                                                                                                                                                                                                                                     |
+| :----------------------- | :------- | :-------------------- | :------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| listRef                  | No       | <code>let</code>      | Yes      | <code>null &#124; HTMLDivElement</code>                                                               | <code>null</code>                                | Obtain a reference to the list HTML element                                                                                                                                                                                                     |
+| ref                      | No       | <code>let</code>      | Yes      | <code>null &#124; HTMLInputElement</code>                                                             | <code>null</code>                                | Obtain a reference to the input HTML element                                                                                                                                                                                                    |
+| open                     | No       | <code>let</code>      | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to open the combobox menu dropdown                                                                                                                                                                                                |
+| value                    | No       | <code>let</code>      | Yes      | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the selected combobox value                                                                                                                                                                                                             |
+| selectedId               | No       | <code>let</code>      | Yes      | <code>ComboBoxItemId</code>                                                                           | <code>undefined</code>                           | Set the selected item by value id                                                                                                                                                                                                               |
+| items                    | No       | <code>let</code>      | No       | <code>ReadonlyArray<Item></code>                                                                      | <code>[]</code>                                  | Set the combobox items                                                                                                                                                                                                                          |
+| itemToString             | No       | <code>let</code>      | No       | <code>(item: Item) => string</code>                                                                   | --                                               | Override the display of a combobox item                                                                                                                                                                                                         |
+| direction                | No       | <code>let</code>      | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                            | Specify the direction of the combobox dropdown menu                                                                                                                                                                                             |
+| size                     | No       | <code>let</code>      | No       | <code>"sm" &#124; "xl"</code>                                                                         | <code>undefined</code>                           | Set the size of the combobox                                                                                                                                                                                                                    |
+| disabled                 | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to disable the combobox                                                                                                                                                                                                           |
+| titleText                | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the title text of the combobox                                                                                                                                                                                                          |
+| hideLabel                | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to visually hide the label text                                                                                                                                                                                                   |
+| placeholder              | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the placeholder text                                                                                                                                                                                                                    |
+| helperText               | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the helper text                                                                                                                                                                                                                         |
+| invalidText              | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the invalid state text                                                                                                                                                                                                                  |
+| invalid                  | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to indicate an invalid state                                                                                                                                                                                                      |
+| warn                     | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to indicate a warning state                                                                                                                                                                                                       |
+| warnText                 | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the warning state text                                                                                                                                                                                                                  |
+| light                    | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to enable the light variant                                                                                                                                                                                                       |
+| allowCustomValue         | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to allow custom values that are not in the items list.<br />By default, user-entered text is cleared when the combobox loses focus without selecting an item.<br />When enabled, custom text is preserved.                        |
+| clearFilterOnOpen        | No       | <code>let</code>      | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to clear the input value when opening the dropdown.<br />This allows users to see all available items instead of only filtered results.<br />The original value is restored if the dropdown is closed without making a selection. |
+| shouldFilterItem         | No       | <code>let</code>      | No       | <code>(item: Item, value: string) => boolean</code>                                                   | --                                               | Determine if an item should be filtered given the current combobox value                                                                                                                                                                        |
+| translateWithId          | No       | <code>let</code>      | No       | <code>(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string</code> | <code>undefined</code>                           | Override the chevron icon label based on the open state.<br />Defaults to "Open menu" when closed and "Close menu" when open                                                                                                                    |
+| translateWithIdSelection | No       | <code>let</code>      | No       | <code>(id: "clearSelection") => string</code>                                                         | <code>undefined</code>                           | Override the label of the clear button when the input has a selection.<br />Defaults to "Clear selected item" since a combo box can only have on selection.                                                                                     |
+| id                       | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the list box component                                                                                                                                                                                                            |
+| name                     | No       | <code>let</code>      | No       | <code>string</code>                                                                                   | <code>undefined</code>                           | Specify a name attribute for the input                                                                                                                                                                                                          |
+| clear                    | No       | <code>function</code> | No       | <code>(options?: { focus?: boolean; }) => void</code>                                                 | --                                               | Clear the combo box programmatically                                                                                                                                                                                                            |
 
 ### Slots
 
-| Slot name | Default | Props                                               | Fallback                          |
-| :-------- | :------ | :-------------------------------------------------- | :-------------------------------- |
-| --        | Yes     | <code>{ item: ComboBoxItem; index: number } </code> | <code>{itemToString(item)}</code> |
-| labelText | No      | --                                                  | <code>{labelText}</code>          |
+| Slot name | Default | Props                                       | Fallback                          |
+| :-------- | :------ | :------------------------------------------ | :-------------------------------- |
+| --        | Yes     | <code>{ item: Item; index: number } </code> | <code>{itemToString(item)}</code> |
+| titleText | No      | <code>Record<string, never> </code>         | <code>{titleText}</code>          |
 
 ### Events
 
-| Event name | Type       | Detail                                                                  |
-| :--------- | :--------- | :---------------------------------------------------------------------- |
-| select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }</code> |
-| clear      | dispatched | <code>KeyboardEvent &#124; MouseEvent</code>                            |
-| input      | forwarded  | --                                                                      |
-| keydown    | forwarded  | --                                                                      |
-| keyup      | forwarded  | --                                                                      |
-| focus      | forwarded  | --                                                                      |
-| blur       | forwarded  | --                                                                      |
-| paste      | forwarded  | --                                                                      |
-| scroll     | forwarded  | --                                                                      |
+| Event name | Type       | Detail                                                           | Description |
+| :--------- | :--------- | :--------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: Item; }</code> | --          |
+| clear      | forwarded  | --                                                               | --          |
+| input      | forwarded  | --                                                               | --          |
+| keydown    | forwarded  | --                                                               | --          |
+| keyup      | forwarded  | --                                                               | --          |
+| focus      | forwarded  | --                                                               | --          |
+| blur       | forwarded  | --                                                               | --          |
+| paste      | forwarded  | --                                                               | --          |
+| scroll     | forwarded  | --                                                               | --          |
 
 ## `ComposedModal`
 
@@ -727,24 +724,24 @@ export interface ComboBoxItem {
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name            | Type       | Detail                                                                              |
-| :-------------------- | :--------- | :---------------------------------------------------------------------------------- |
-| close                 | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button" }</code> |
-| transitionend         | dispatched | <code>{ open: boolean; }</code>                                                     |
-| keydown               | forwarded  | --                                                                                  |
-| click                 | forwarded  | --                                                                                  |
-| mouseover             | forwarded  | --                                                                                  |
-| mouseenter            | forwarded  | --                                                                                  |
-| mouseleave            | forwarded  | --                                                                                  |
-| submit                | dispatched | <code>null</code>                                                                   |
-| click:button--primary | dispatched | <code>null</code>                                                                   |
-| open                  | dispatched | <code>null</code>                                                                   |
+| Event name            | Type       | Detail                                                                               | Description |
+| :-------------------- | :--------- | :----------------------------------------------------------------------------------- | :---------- |
+| close                 | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button"; }</code> | --          |
+| transitionend         | dispatched | <code>{ open: boolean; }</code>                                                      | --          |
+| keydown               | forwarded  | --                                                                                   | --          |
+| click                 | forwarded  | --                                                                                   | --          |
+| mouseover             | forwarded  | --                                                                                   | --          |
+| mouseenter            | forwarded  | --                                                                                   | --          |
+| mouseleave            | forwarded  | --                                                                                   | --          |
+| submit                | dispatched | <code>null</code>                                                                    | --          |
+| click:button--primary | dispatched | <code>null</code>                                                                    | --          |
+| open                  | dispatched | <code>null</code>                                                                    | --          |
 
 ## `Content`
 
@@ -756,9 +753,9 @@ export interface ComboBoxItem {
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -775,19 +772,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>number</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>number</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `ContextMenu`
 
@@ -803,18 +800,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail                   |
-| :--------- | :--------- | :----------------------- |
-| open       | dispatched | <code>HTMLElement</code> |
-| click      | forwarded  | --                       |
-| keydown    | forwarded  | --                       |
-| close      | dispatched | <code>null</code>        |
+| Event name | Type       | Detail                   | Description |
+| :--------- | :--------- | :----------------------- | :---------- |
+| open       | dispatched | <code>HTMLElement</code> | --          |
+| click      | forwarded  | --                       | --          |
+| keydown    | forwarded  | --                       | --          |
+| close      | dispatched | <code>null</code>        | --          |
 
 ## `ContextMenuDivider`
 
@@ -841,9 +838,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -868,21 +865,21 @@ None.
 
 ### Slots
 
-| Slot name    | Default | Props | Fallback                                            |
-| :----------- | :------ | :---- | :-------------------------------------------------- |
-| --           | Yes     | --    | --                                                  |
-| icon         | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
-| labelText    | No      | --    | <code>{labelText}</code>                            |
-| shortcutText | No      | --    | <code>{shortcutText}</code>                         |
+| Slot name    | Default | Props                               | Fallback                                            |
+| :----------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| icon         | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| labelText    | No      | <code>Record<string, never> </code> | <code>{labelText}</code>                            |
+| --           | Yes     | <code>Record<string, never> </code> | --                                                  |
+| shortcutText | No      | <code>Record<string, never> </code> | <code>{shortcutText}</code>                         |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| keydown    | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| click      | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| keydown    | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| click      | dispatched | <code>null</code> | --          |
 
 ## `ContextMenuRadioGroup`
 
@@ -895,9 +892,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -907,13 +904,13 @@ None.
 
 ### Props
 
-| Prop name       | Required | Kind             | Reactive | Type                                | Default value                                                                                                     | Description                                                                                    |
-| :-------------- | :------- | :--------------- | :------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| feedback        | No       | <code>let</code> | No       | <code>string</code>                 | <code>"Copied!"</code>                                                                                            | Set the feedback text shown after clicking the button                                          |
-| feedbackTimeout | No       | <code>let</code> | No       | <code>number</code>                 | <code>2000</code>                                                                                                 | Set the timeout duration (ms) to display feedback text                                         |
-| iconDescription | No       | <code>let</code> | No       | <code>string</code>                 | <code>"Copy to clipboard"</code>                                                                                  | Set the title and ARIA label for the copy button                                               |
-| text            | Yes      | <code>let</code> | No       | <code>string</code>                 | <code>undefined</code>                                                                                            | Specify the text to copy                                                                       |
-| copy            | No       | <code>let</code> | No       | <code>(text: string) => void</code> | <code>async (text) => { try { await navigator.clipboard.writeText(text); } catch (e) { console.log(e); } }</code> | Override the default copy behavior of using the navigator.clipboard.writeText API to copy text |
+| Prop name       | Required | Kind             | Reactive | Type                                | Default value                    | Description                                                                                    |
+| :-------------- | :------- | :--------------- | :------- | ----------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------- |
+| feedback        | No       | <code>let</code> | No       | <code>string</code>                 | <code>"Copied!"</code>           | Set the feedback text shown after clicking the button                                          |
+| feedbackTimeout | No       | <code>let</code> | No       | <code>number</code>                 | <code>2000</code>                | Set the timeout duration (ms) to display feedback text                                         |
+| iconDescription | No       | <code>let</code> | No       | <code>string</code>                 | <code>"Copy to clipboard"</code> | Set the title and ARIA label for the copy button                                               |
+| text            | Yes      | <code>let</code> | No       | <code>string</code>                 | --                               | Specify the text to copy                                                                       |
+| copy            | No       | <code>let</code> | No       | <code>(text: string) => void</code> | --                               | Override the default copy behavior of using the navigator.clipboard.writeText API to copy text |
 
 ### Slots
 
@@ -921,11 +918,11 @@ None.
 
 ### Events
 
-| Event name   | Type       | Detail            |
-| :----------- | :--------- | :---------------- |
-| click        | forwarded  | --                |
-| animationend | forwarded  | --                |
-| copy         | dispatched | <code>null</code> |
+| Event name   | Type       | Detail            | Description |
+| :----------- | :--------- | :---------------- | :---------- |
+| click        | forwarded  | --                | --          |
+| animationend | forwarded  | --                | --          |
+| copy         | dispatched | <code>null</code> | --          |
 
 ## `DataTable`
 
@@ -937,25 +934,25 @@ export type DataTableKey<Row = DataTableRow> =
 
 export type DataTableValue = any;
 
-export interface DataTableEmptyHeader<Row = DataTableRow> {
+export type DataTableEmptyHeader<Row = DataTableRow> = {
   key: DataTableKey<Row> | (string & {});
-  empty: boolean;
+  /** Whether the header is empty */ empty: boolean;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  columnMenu?: boolean;
+  /** Whether the column menu is enabled */ columnMenu?: boolean;
   width?: string;
   minWidth?: string;
-}
+};
 
-export interface DataTableNonEmptyHeader<Row = DataTableRow> {
+export type DataTableNonEmptyHeader<Row = DataTableRow> = {
   key: DataTableKey<Row>;
   value: DataTableValue;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  columnMenu?: boolean;
+  /** Whether the column menu is enabled */ columnMenu?: boolean;
   width?: string;
   minWidth?: string;
-}
+};
 
 export type DataTableHeader<Row = DataTableRow> =
   | DataTableNonEmptyHeader<Row>
@@ -968,11 +965,11 @@ export interface DataTableRow {
 
 export type DataTableRowId = any;
 
-export interface DataTableCell<Row = DataTableRow> {
+export type DataTableCell<Row = DataTableRow> = {
   key: DataTableKey<Row> | (string & {});
   value: DataTableValue;
   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
-}
+};
 ```
 
 ### Props
@@ -1007,27 +1004,27 @@ export interface DataTableCell<Row = DataTableRow> {
 
 | Slot name    | Default | Props                                                                                                                                  | Fallback                                                                                        |
 | :----------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------- |
-| --           | Yes     | --                                                                                                                                     | --                                                                                              |
 | cell         | No      | <code>{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; } </code> | <code>{cell.display ? cell.display(cell.value, row) : cell.value}</code>                        |
 | cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                                                                     | <code>{header.value}</code>                                                                     |
 | description  | No      | <code>{ props: { class: "bx--data-table-header\_\_description" } } </code>                                                             | <code>&lt;p class:bx--data-table-header\_\_description={true}&gt;{description}&lt;/p&gt;</code> |
 | expanded-row | No      | <code>{ row: Row; rowSelected: boolean; } </code>                                                                                      | --                                                                                              |
 | title        | No      | <code>{ props: { class: "bx--data-table-header\_\_title" } } </code>                                                                   | <code>&lt;h4 class:bx--data-table-header\_\_title={true}&gt;{title}&lt;/h4&gt;</code>           |
+| --           | Yes     | <code>Record<string, never> </code>                                                                                                    | --                                                                                              |
 
 ### Events
 
-| Event name           | Type       | Detail                                                                                                                                                         |
-| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| click                | dispatched | <code>{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }</code>                                                                          |
-| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                                                                            |
-| click:header         | dispatched | <code>{ header: DataTableHeader<Row>; sortDirection?: "ascending" &#124; "descending" &#124; "none"; target: EventTarget; currentTarget: EventTarget; }</code> |
-| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                                                                                    |
-| click:row            | dispatched | <code>{ row: Row; target: EventTarget; currentTarget: EventTarget; }</code>                                                                                    |
-| mouseenter:row       | dispatched | <code>Row</code>                                                                                                                                               |
-| mouseleave:row       | dispatched | <code>Row</code>                                                                                                                                               |
-| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                                                                  |
-| click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                                                                  |
-| click:cell           | dispatched | <code>{ cell: DataTableCell<Row>; target: EventTarget; currentTarget: EventTarget; }</code>                                                                    |
+| Event name           | Type       | Detail                                                                                                        | Description |
+| :------------------- | :--------- | :------------------------------------------------------------------------------------------------------------ | :---------- |
+| click                | dispatched | <code>{ header?: DataTableHeader<Row>; row?: Row; cell?: DataTableCell<Row>; }</code>                         | --          |
+| click:header--expand | dispatched | <code>{ expanded: boolean; }</code>                                                                           | --          |
+| click:header         | dispatched | <code>{ header: DataTableHeader<Row>; sortDirection?: "ascending" &#124; "descending" &#124; "none"; }</code> | --          |
+| click:header--select | dispatched | <code>{ indeterminate: boolean; selected: boolean; }</code>                                                   | --          |
+| click:row            | dispatched | <code>{ row: Row; }</code>                                                                                    | --          |
+| mouseenter:row       | dispatched | <code>Row</code>                                                                                              | --          |
+| mouseleave:row       | dispatched | <code>Row</code>                                                                                              | --          |
+| click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                 | --          |
+| click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                 | --          |
+| click:cell           | dispatched | <code>{ cell: DataTableCell<Row>; }</code>                                                                    | --          |
 
 ## `DataTableSkeleton`
 
@@ -1049,12 +1046,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `DatePicker`
 
@@ -1077,19 +1074,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail                                                                                                                              |
-| :--------- | :--------- | :---------------------------------------------------------------------------------------------------------------------------------- |
-| change     | dispatched | <code>string &#124; { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string &#124; { from: string; to: string; } }</code> |
-| click      | forwarded  | --                                                                                                                                  |
-| mouseover  | forwarded  | --                                                                                                                                  |
-| mouseenter | forwarded  | --                                                                                                                                  |
-| mouseleave | forwarded  | --                                                                                                                                  |
+| Event name | Type       | Detail                                                                                                                              | Description |
+| :--------- | :--------- | :---------------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| change     | dispatched | <code>string &#124; { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string &#124; { from: string; to: string; } }</code> | --          |
+| click      | forwarded  | --                                                                                                                                  | --          |
+| mouseover  | forwarded  | --                                                                                                                                  | --          |
+| mouseenter | forwarded  | --                                                                                                                                  | --          |
+| mouseleave | forwarded  | --                                                                                                                                  | --          |
 
 ## `DatePickerInput`
 
@@ -1116,19 +1113,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| input      | forwarded | --     |
-| keydown    | forwarded | --     |
-| keyup      | forwarded | --     |
-| blur       | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| input      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `DatePickerSkeleton`
 
@@ -1145,12 +1142,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Dropdown`
 
@@ -1161,50 +1158,50 @@ export type DropdownItemId = any;
 
 export type DropdownItemText = string;
 
-export interface DropdownItem {
+export type DropdownItem = {
   id: DropdownItemId;
   text: DropdownItemText;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 ```
 
 ### Props
 
-| Prop name       | Required | Kind             | Reactive | Type                                                                                                  | Default value                                         | Description                                                                                                                  |
-| :-------------- | :------- | :--------------- | :------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                                                            | <code>null</code>                                     | Obtain a reference to the button HTML element                                                                                |
-| open            | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to open the dropdown                                                                                           |
-| selectedId      | Yes      | <code>let</code> | Yes      | <code>DropdownItemId</code>                                                                           | <code>undefined</code>                                | Specify the selected item id                                                                                                 |
-| items           | No       | <code>let</code> | No       | <code>ReadonlyArray<DropdownItem></code>                                                              | <code>[]</code>                                       | Set the dropdown items                                                                                                       |
-| itemToString    | No       | <code>let</code> | No       | <code>(item: DropdownItem) => string</code>                                                           | <code>(item) => item.text &#124;&#124; item.id</code> | Override the display of a dropdown item                                                                                      |
-| type            | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                                | <code>"default"</code>                                | Specify the type of dropdown                                                                                                 |
-| direction       | No       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                                 | Specify the direction of the dropdown menu                                                                                   |
-| size            | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                             | <code>undefined</code>                                | Specify the size of the dropdown field                                                                                       |
-| light           | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to enable the light variant                                                                                    |
-| disabled        | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to disable the dropdown                                                                                        |
-| labelText       | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>""</code>                                       | Specify the title text                                                                                                       |
-| invalid         | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to indicate an invalid state                                                                                   |
-| invalidText     | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>""</code>                                       | Specify the invalid state text                                                                                               |
-| warn            | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to indicate a warning state                                                                                    |
-| warnText        | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>""</code>                                       | Specify the warning state text                                                                                               |
-| helperText      | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>""</code>                                       | Specify the helper text                                                                                                      |
-| label           | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>undefined</code>                                | Specify the list box label                                                                                                   |
-| hideLabel       | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                                    | Set to `true` to visually hide the label text                                                                                |
-| translateWithId | No       | <code>let</code> | No       | <code>(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string</code> | <code>undefined</code>                                | Override the chevron icon label based on the open state.<br />Defaults to "Open menu" when closed and "Close menu" when open |
-| id              | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>"ccs-" + Math.random().toString(36)</code>      | Set an id for the list box component                                                                                         |
-| name            | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>undefined</code>                                | Specify a name attribute for the list box                                                                                    |
+| Prop name       | Required | Kind             | Reactive | Type                                                                                                  | Default value                                    | Description                                                                                                                  |
+| :-------------- | :------- | :--------------- | :------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                                                            | <code>null</code>                                | Obtain a reference to the button HTML element                                                                                |
+| open            | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to open the dropdown                                                                                           |
+| selectedId      | Yes      | <code>let</code> | Yes      | <code>DropdownItemId</code>                                                                           | --                                               | Specify the selected item id                                                                                                 |
+| items           | No       | <code>let</code> | No       | <code>ReadonlyArray<Item></code>                                                                      | <code>[]</code>                                  | Set the dropdown items                                                                                                       |
+| itemToString    | No       | <code>let</code> | No       | <code>(item: Item) => string</code>                                                                   | --                                               | Override the display of a dropdown item                                                                                      |
+| type            | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                                | <code>"default"</code>                           | Specify the type of dropdown                                                                                                 |
+| direction       | No       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                            | Specify the direction of the dropdown menu                                                                                   |
+| size            | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                             | <code>undefined</code>                           | Specify the size of the dropdown field                                                                                       |
+| light           | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to enable the light variant                                                                                    |
+| disabled        | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to disable the dropdown                                                                                        |
+| titleText       | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the title text                                                                                                       |
+| invalid         | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to indicate an invalid state                                                                                   |
+| invalidText     | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the invalid state text                                                                                               |
+| warn            | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to indicate a warning state                                                                                    |
+| warnText        | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the warning state text                                                                                               |
+| helperText      | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>""</code>                                  | Specify the helper text                                                                                                      |
+| label           | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>undefined</code>                           | Specify the list box label                                                                                                   |
+| hideLabel       | No       | <code>let</code> | No       | <code>boolean</code>                                                                                  | <code>false</code>                               | Set to `true` to visually hide the label text                                                                                |
+| translateWithId | No       | <code>let</code> | No       | <code>(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string</code> | <code>undefined</code>                           | Override the chevron icon label based on the open state.<br />Defaults to "Open menu" when closed and "Close menu" when open |
+| id              | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the list box component                                                                                         |
+| name            | No       | <code>let</code> | No       | <code>string</code>                                                                                   | <code>undefined</code>                           | Specify a name attribute for the list box                                                                                    |
 
 ### Slots
 
-| Slot name | Default | Props                                                | Fallback                          |
-| :-------- | :------ | :--------------------------------------------------- | :-------------------------------- |
-| --        | Yes     | <code>{ item: DropdownItem; index: number; } </code> | <code>{itemToString(item)}</code> |
+| Slot name | Default | Props                                        | Fallback                          |
+| :-------- | :------ | :------------------------------------------- | :-------------------------------- |
+| --        | Yes     | <code>{ item: Item; index: number; } </code> | <code>{itemToString(item)}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                                                                  |
-| :--------- | :--------- | :---------------------------------------------------------------------- |
-| select     | dispatched | <code>{ selectedId: DropdownItemId, selectedItem: DropdownItem }</code> |
+| Event name | Type       | Detail                                                           | Description |
+| :--------- | :--------- | :--------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedId: DropdownItemId; selectedItem: Item; }</code> | --          |
 
 ## `DropdownSkeleton`
 
@@ -1220,12 +1217,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ExpandableTile`
 
@@ -1247,20 +1244,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| above     | No      | --    | --       |
-| below     | No      | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| above     | No      | <code>Record<string, never> </code> | --       |
+| below     | No      | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keypress   | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keypress   | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `FileUploader`
 
@@ -1273,7 +1270,7 @@ None.
 | disabled         | No       | <code>let</code>   | No       | <code>boolean</code>                                               | <code>false</code>                      | Set to `true` to disable the file uploader                                                                                                              |
 | accept           | No       | <code>let</code>   | No       | <code>ReadonlyArray<string></code>                                 | <code>[]</code>                         | Specify the accepted file types                                                                                                                         |
 | multiple         | No       | <code>let</code>   | No       | <code>boolean</code>                                               | <code>false</code>                      | Set to `true` to allow multiple files                                                                                                                   |
-| clearFiles       | No       | <code>const</code> | No       | <code>() => void</code>                                            | <code>() => { files = []; }</code>      | Programmatically clear the uploaded files                                                                                                               |
+| clearFiles       | No       | <code>const</code> | No       | <code>() => void</code>                                            | --                                      | Programmatically clear the uploaded files                                                                                                               |
 | labelTitle       | No       | <code>let</code>   | No       | <code>string</code>                                                | <code>""</code>                         | Specify the label title.<br />Alternatively, use the named slot "labelTitle" (e.g., `&lt;span slot="labelTitle"&gt;...&lt;/span&gt;`)                   |
 | labelDescription | No       | <code>let</code>   | No       | <code>string</code>                                                | <code>""</code>                         | Specify the label description.<br />Alternatively, use the named slot "labelDescription" (e.g., `&lt;span slot="labelDescription"&gt;...&lt;/span&gt;`) |
 | kind             | No       | <code>let</code>   | No       | <code>import("../Button/Button.svelte").ButtonProps["kind"]</code> | <code>"primary"</code>                  | Specify the kind of file uploader button                                                                                                                |
@@ -1284,23 +1281,23 @@ None.
 
 ### Slots
 
-| Slot name        | Default | Props | Fallback                        |
-| :--------------- | :------ | :---- | :------------------------------ |
-| labelDescription | No      | --    | <code>{labelDescription}</code> |
-| labelTitle       | No      | --    | <code>{labelTitle}</code>       |
+| Slot name        | Default | Props                               | Fallback                        |
+| :--------------- | :------ | :---------------------------------- | :------------------------------ |
+| labelDescription | No      | <code>Record<string, never> </code> | <code>{labelDescription}</code> |
+| labelTitle       | No      | <code>Record<string, never> </code> | <code>{labelTitle}</code>       |
 
 ### Events
 
-| Event name | Type       | Detail                           |
-| :--------- | :--------- | :------------------------------- |
-| add        | dispatched | <code>ReadonlyArray<File></code> |
-| remove     | dispatched | <code>ReadonlyArray<File></code> |
-| change     | dispatched | <code>ReadonlyArray<File></code> |
-| click      | forwarded  | --                               |
-| mouseover  | forwarded  | --                               |
-| mouseenter | forwarded  | --                               |
-| mouseleave | forwarded  | --                               |
-| keydown    | forwarded  | --                               |
+| Event name | Type       | Detail                           | Description |
+| :--------- | :--------- | :------------------------------- | :---------- |
+| add        | dispatched | <code>ReadonlyArray<File></code> | --          |
+| remove     | dispatched | <code>ReadonlyArray<File></code> | --          |
+| change     | forwarded  | --                               | --          |
+| click      | forwarded  | --                               | --          |
+| mouseover  | forwarded  | --                               | --          |
+| mouseenter | forwarded  | --                               | --          |
+| mouseleave | forwarded  | --                               | --          |
+| keydown    | forwarded  | --                               | --          |
 
 ## `FileUploaderButton`
 
@@ -1324,17 +1321,17 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                           |
-| :--------- | :--------- | :------------------------------- |
-| change     | dispatched | <code>ReadonlyArray<File></code> |
-| keydown    | forwarded  | --                               |
-| click      | forwarded  | --                               |
+| Event name | Type       | Detail                           | Description |
+| :--------- | :--------- | :------------------------------- | :---------- |
+| change     | dispatched | <code>ReadonlyArray<File></code> | --          |
+| keydown    | forwarded  | --                               | --          |
+| click      | forwarded  | --                               | --          |
 
 ## `FileUploaderDropContainer`
 
@@ -1346,7 +1343,7 @@ None.
 | files         | No       | <code>let</code> | Yes      | <code>ReadonlyArray<File></code>                                 | <code>[]</code>                                  | Obtain a reference to the uploaded files                                                             |
 | accept        | No       | <code>let</code> | No       | <code>ReadonlyArray<string></code>                               | <code>[]</code>                                  | Specify the accepted file types                                                                      |
 | multiple      | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                               | Set to `true` to allow multiple files                                                                |
-| validateFiles | No       | <code>let</code> | No       | <code>(files: ReadonlyArray<File>) => ReadonlyArray<File></code> | <code>(files) => files</code>                    | Override the default behavior of validating uploaded files.<br />By default, files are not validated |
+| validateFiles | No       | <code>let</code> | No       | <code>(files: ReadonlyArray<File>) => ReadonlyArray<File></code> | --                                               | Override the default behavior of validating uploaded files.<br />By default, files are not validated |
 | labelText     | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"Add file"</code>                          | Specify the label text                                                                               |
 | role          | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"button"</code>                            | Specify the `role` attribute of the drop container                                                   |
 | disabled      | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                               | Set to `true` to disable the input                                                                   |
@@ -1356,21 +1353,21 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                           |
-| :--------- | :--------- | :------------------------------- |
-| add        | dispatched | <code>ReadonlyArray<File></code> |
-| change     | dispatched | <code>ReadonlyArray<File></code> |
-| dragover   | forwarded  | --                               |
-| dragleave  | forwarded  | --                               |
-| drop       | forwarded  | --                               |
-| keydown    | forwarded  | --                               |
-| click      | forwarded  | --                               |
+| Event name | Type       | Detail                           | Description |
+| :--------- | :--------- | :------------------------------- | :---------- |
+| add        | dispatched | <code>ReadonlyArray<File></code> | --          |
+| change     | dispatched | <code>ReadonlyArray<File></code> | --          |
+| dragover   | forwarded  | --                               | --          |
+| dragleave  | forwarded  | --                               | --          |
+| drop       | forwarded  | --                               | --          |
+| keydown    | forwarded  | --                               | --          |
+| click      | forwarded  | --                               | --          |
 
 ## `FileUploaderItem`
 
@@ -1393,12 +1390,12 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| delete     | dispatched | <code>string</code> |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| delete     | dispatched | <code>string</code> | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `FileUploaderSkeleton`
 
@@ -1412,12 +1409,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Filename`
 
@@ -1435,10 +1432,10 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `FluidForm`
 
@@ -1448,20 +1445,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| submit     | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| submit     | forwarded | --     | --          |
 
 ## `Form`
 
@@ -1473,20 +1470,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| submit     | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| submit     | forwarded | --     | --          |
 
 ## `FormGroup`
 
@@ -1503,18 +1500,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `FormItem`
 
@@ -1524,18 +1521,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `FormLabel`
 
@@ -1547,18 +1544,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Grid`
 
@@ -1600,24 +1597,24 @@ None.
 | platformName            | No       | <code>let</code> | No       | <code>string</code>                        | <code>""</code>        | Specify the platform name.<br />Alternatively, use the named slot "platform" (e.g., `&lt;span slot="platform"&gt;...&lt;/span&gt;`)                                                                                                                                         |
 | persistentHamburgerMenu | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>     | Set to `true` to persist the hamburger menu                                                                                                                                                                                                                                 |
 | expansionBreakpoint     | No       | <code>let</code> | No       | <code>number</code>                        | <code>1056</code>      | The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.<br />1056 represents the "large" breakpoint in pixels from the Carbon Design System:<br />- small: 320<br />- medium: 672<br />- large: 1056<br />- x-large: 1312<br />- max: 1584 |
-| iconMenu                | No       | <code>let</code> | No       | <code>any</code>                           | <code>undefined</code> | Specify the icon to render for the closed state.<br />Defaults to `&lt;Menu size={20} /&gt;`                                                                                                                                                                                |
-| iconClose               | No       | <code>let</code> | No       | <code>any</code>                           | <code>undefined</code> | Specify the icon to render for the opened state.<br />Defaults to `&lt;Close size={20} /&gt;`                                                                                                                                                                               |
+| iconMenu                | No       | <code>let</code> | No       | <code>any</code>                           | <code>Menu</code>      | Specify the icon to render for the closed state.                                                                                                                                                                                                                            |
+| iconClose               | No       | <code>let</code> | No       | <code>any</code>                           | <code>Close</code>     | Specify the icon to render for the opened state.                                                                                                                                                                                                                            |
 | ariaLabelMenu           | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code> | Specify the ARIA label for the hamburger menu.<br />Defaults to "Open menu" or "Close menu" based on `isSideNavOpen` state.                                                                                                                                                 |
 
 ### Slots
 
-| Slot name       | Default | Props | Fallback                     |
-| :-------------- | :------ | :---- | :--------------------------- |
-| --              | Yes     | --    | --                           |
-| company         | No      | --    | <code>{company}&nbsp;</code> |
-| platform        | No      | --    | <code>{platformName}</code>  |
-| skip-to-content | No      | --    | --                           |
+| Slot name       | Default | Props                               | Fallback                     |
+| :-------------- | :------ | :---------------------------------- | :--------------------------- |
+| company         | No      | <code>Record<string, never> </code> | <code>{company}&nbsp;</code> |
+| platform        | No      | <code>Record<string, never> </code> | <code>{platformName}</code>  |
+| skip-to-content | No      | <code>Record<string, never> </code> | --                           |
+| --              | Yes     | <code>Record<string, never> </code> | --                           |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `HeaderAction`
 
@@ -1627,8 +1624,8 @@ None.
 | :------------------------- | :------- | :--------------- | :------- | ----------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | ref                        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                        | <code>null</code>              | Obtain a reference to the button HTML element                                                                                               |
 | isOpen                     | No       | <code>let</code> | Yes      | <code>boolean</code>                                              | <code>false</code>             | Set to `true` to open the panel                                                                                                             |
-| icon                       | No       | <code>let</code> | No       | <code>any</code>                                                  | <code>undefined</code>         | Specify the icon to render when the action panel is closed.<br />Defaults to `&lt;Switcher size={20} /&gt;`                                 |
-| closeIcon                  | No       | <code>let</code> | No       | <code>any</code>                                                  | <code>undefined</code>         | Specify the icon to render when the action panel is open.<br />Defaults to `&lt;Close size={20} /&gt;`                                      |
+| icon                       | No       | <code>let</code> | No       | <code>any</code>                                                  | <code>Switcher</code>          | Specify the icon to render when the action panel is closed.                                                                                 |
+| closeIcon                  | No       | <code>let</code> | No       | <code>any</code>                                                  | <code>Close</code>             | Specify the icon to render when the action panel is open.                                                                                   |
 | text                       | No       | <code>let</code> | No       | <code>string</code>                                               | <code>undefined</code>         | Specify the text displayed next to the icon.<br />Alternatively, use the named slot "text" (e.g., `&lt;div slot="text"&gt;...&lt;/div&gt;`) |
 | iconDescription            | No       | <code>let</code> | No       | <code>string</code>                                               | <code>undefined</code>         | Specify an icon tooltip. The tooltip will not be displayed<br />if either the `text` prop or a named slot="text" is used                    |
 | tooltipAlignment           | No       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                 | <code>"center"</code>          | Set the alignment of the tooltip relative to the icon.<br />Only applies when `iconDescription` is provided                                 |
@@ -1637,20 +1634,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                           |
-| :-------- | :------ | :---- | :------------------------------------------------------------------------------------------------- |
-| --        | Yes     | --    | --                                                                                                 |
-| closeIcon | No      | --    | <code>&lt;svelte:component this={closeIcon} size={20} /&gt;</code>                                 |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} size={20} /&gt;</code>                                      |
-| text      | No      | --    | <code>{#if text}&lt;span class:bx--header\_\_action-text={true}&gt;{text}&lt;/span&gt;{/if}</code> |
+| Slot name | Default | Props                               | Fallback                                                                                           |
+| :-------- | :------ | :---------------------------------- | :------------------------------------------------------------------------------------------------- |
+| closeIcon | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={closeIcon} size={20} /&gt;</code>                                 |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} size={20} /&gt;</code>                                      |
+| text      | No      | <code>Record<string, never> </code> | <code>{#if text}&lt;span class:bx--header\_\_action-text={true}&gt;{text}&lt;/span&gt;{/if}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                                                                                                 |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| open       | dispatched | <code>null</code> |
-| close      | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| open       | dispatched | <code>null</code> | --          |
+| close      | dispatched | <code>null</code> | --          |
+| click      | forwarded  | --                | --          |
 
 ## `HeaderActionLink`
 
@@ -1665,15 +1662,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                      |
-| :-------- | :------ | :---- | :------------------------------------------------------------ |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} size={20} /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                                      |
+| :-------- | :------ | :---------------------------------- | :------------------------------------------------------------ |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} size={20} /&gt;</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `HeaderGlobalAction`
 
@@ -1691,9 +1688,9 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `HeaderNav`
 
@@ -1703,9 +1700,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -1724,22 +1721,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | <code>{text}</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{text}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keyup      | forwarded | --     |
-| keydown    | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
 
 ## `HeaderNavMenu`
 
@@ -1754,22 +1751,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| keydown    | forwarded | --     |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| keydown    | forwarded | --     | --          |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
 
 ## `HeaderPanelDivider`
 
@@ -1779,9 +1776,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -1798,15 +1795,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `HeaderPanelLinks`
 
@@ -1816,9 +1813,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -1829,11 +1826,11 @@ None.
 ### Types
 
 ```ts
-export interface HeaderSearchResult {
+export type HeaderSearchResult = {
   href: string;
   text: string;
   description?: string;
-}
+};
 ```
 
 ### Props
@@ -1854,18 +1851,18 @@ export interface HeaderSearchResult {
 
 ### Events
 
-| Event name | Type       | Detail                                                                                          |
-| :--------- | :--------- | :---------------------------------------------------------------------------------------------- |
-| active     | dispatched | <code>null</code>                                                                               |
-| inactive   | dispatched | <code>null</code>                                                                               |
-| clear      | dispatched | <code>null</code>                                                                               |
-| select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult }</code> |
-| change     | forwarded  | --                                                                                              |
-| input      | forwarded  | --                                                                                              |
-| focus      | forwarded  | --                                                                                              |
-| blur       | forwarded  | --                                                                                              |
-| keydown    | forwarded  | --                                                                                              |
-| paste      | forwarded  | --                                                                                              |
+| Event name | Type       | Detail                                                                                           | Description |
+| :--------- | :--------- | :----------------------------------------------------------------------------------------------- | :---------- |
+| active     | dispatched | <code>null</code>                                                                                | --          |
+| inactive   | dispatched | <code>null</code>                                                                                | --          |
+| clear      | dispatched | <code>null</code>                                                                                | --          |
+| select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult; }</code> | --          |
+| change     | forwarded  | --                                                                                               | --          |
+| input      | forwarded  | --                                                                                               | --          |
+| focus      | forwarded  | --                                                                                               | --          |
+| blur       | forwarded  | --                                                                                               | --          |
+| keydown    | forwarded  | --                                                                                               | --          |
+| paste      | forwarded  | --                                                                                               | --          |
 
 ## `HeaderUtilities`
 
@@ -1875,9 +1872,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -1887,30 +1884,30 @@ None.
 
 ### Props
 
-| Prop name | Required | Kind               | Reactive | Type                                                                                                            | Default value                                                                                                                                                                                                                | Description                                                                                                                 |
-| :-------- | :------- | :----------------- | :------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| error     | No       | <code>let</code>   | Yes      | <code>boolean</code>                                                                                            | <code>false</code>                                                                                                                                                                                                           | Set to `true` if an error occurs when loading the image                                                                     |
-| loaded    | No       | <code>let</code>   | Yes      | <code>boolean</code>                                                                                            | <code>false</code>                                                                                                                                                                                                           | Set to `true` when the image is loaded                                                                                      |
-| loading   | No       | <code>let</code>   | Yes      | <code>boolean</code>                                                                                            | <code>false</code>                                                                                                                                                                                                           | Set to `true` when `loaded` is `true` and `error` is false                                                                  |
-| src       | No       | <code>let</code>   | No       | <code>string</code>                                                                                             | <code>""</code>                                                                                                                                                                                                              | Specify the image source                                                                                                    |
-| alt       | No       | <code>let</code>   | No       | <code>string</code>                                                                                             | <code>""</code>                                                                                                                                                                                                              | Specify the image alt text                                                                                                  |
-| ratio     | No       | <code>let</code>   | No       | <code>"2x1" &#124; "16x9" &#124; "4x3" &#124; "1x1" &#124; "3x4" &#124; "3x2" &#124; "9x16" &#124; "1x2"</code> | <code>undefined</code>                                                                                                                                                                                                       | Specify the aspect ratio for the image wrapper                                                                              |
-| fadeIn    | No       | <code>let</code>   | No       | <code>boolean</code>                                                                                            | <code>false</code>                                                                                                                                                                                                           | Set to `true` to fade in the image on load<br />The duration uses the `fast-02` value following Carbon guidelines on motion |
-| loadImage | No       | <code>const</code> | No       | <code>(url?: string) => void</code>                                                                             | <code>(url) => { if (image != null) image = null; loaded = false; error = false; image = new Image(); image.src = url &#124;&#124; src; image.onload = () => (loaded = true); image.onerror = () => (error = true); }</code> | Method invoked to load the image provided a `src` value                                                                     |
+| Prop name | Required | Kind               | Reactive | Type                                                                                                            | Default value          | Description                                                                                                                 |
+| :-------- | :------- | :----------------- | :------- | --------------------------------------------------------------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| error     | No       | <code>let</code>   | Yes      | <code>boolean</code>                                                                                            | <code>false</code>     | Set to `true` if an error occurs when loading the image                                                                     |
+| loaded    | No       | <code>let</code>   | Yes      | <code>boolean</code>                                                                                            | <code>false</code>     | Set to `true` when the image is loaded                                                                                      |
+| loading   | No       | <code>let</code>   | Yes      | <code>boolean</code>                                                                                            | <code>false</code>     | Set to `true` when `loaded` is `true` and `error` is false                                                                  |
+| src       | No       | <code>let</code>   | No       | <code>string</code>                                                                                             | <code>""</code>        | Specify the image source                                                                                                    |
+| alt       | No       | <code>let</code>   | No       | <code>string</code>                                                                                             | <code>""</code>        | Specify the image alt text                                                                                                  |
+| ratio     | No       | <code>let</code>   | No       | <code>"2x1" &#124; "16x9" &#124; "4x3" &#124; "1x1" &#124; "3x4" &#124; "3x2" &#124; "9x16" &#124; "1x2"</code> | <code>undefined</code> | Specify the aspect ratio for the image wrapper                                                                              |
+| fadeIn    | No       | <code>let</code>   | No       | <code>boolean</code>                                                                                            | <code>false</code>     | Set to `true` to fade in the image on load<br />The duration uses the `fast-02` value following Carbon guidelines on motion |
+| loadImage | No       | <code>const</code> | No       | <code>(url?: string) => void</code>                                                                             | --                     | Method invoked to load the image provided a `src` value                                                                     |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| error     | No      | --    | --       |
-| loading   | No      | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| error     | No      | <code>Record<string, never> </code> | --       |
+| loading   | No      | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| load       | dispatched | <code>null</code> |
-| error      | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| load       | dispatched | <code>null</code> | --          |
+| error      | dispatched | <code>null</code> | --          |
 
 ## `InlineLoading`
 
@@ -1929,13 +1926,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| success    | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| click      | forwarded  | --                | --          |
+| mouseover  | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| success    | dispatched | <code>null</code> | --          |
 
 ## `InlineNotification`
 
@@ -1955,22 +1952,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                |
-| :-------- | :------ | :---- | :---------------------- |
-| --        | Yes     | --    | --                      |
-| actions   | No      | --    | --                      |
-| subtitle  | No      | --    | <code>{subtitle}</code> |
-| title     | No      | --    | <code>{title}</code>    |
+| Slot name | Default | Props                               | Fallback                |
+| :-------- | :------ | :---------------------------------- | :---------------------- |
+| actions   | No      | <code>Record<string, never> </code> | --                      |
+| subtitle  | No      | <code>Record<string, never> </code> | <code>{subtitle}</code> |
+| title     | No      | <code>Record<string, never> </code> | <code>{title}</code>    |
+| --        | Yes     | <code>Record<string, never> </code> | --                      |
 
 ### Events
 
-| Event name | Type       | Detail                            |
-| :--------- | :--------- | :-------------------------------- |
-| close      | dispatched | <code>{ timeout: boolean }</code> |
-| click      | forwarded  | --                                |
-| mouseover  | forwarded  | --                                |
-| mouseenter | forwarded  | --                                |
-| mouseleave | forwarded  | --                                |
+| Event name | Type       | Detail                             | Description |
+| :--------- | :--------- | :--------------------------------- | :---------- |
+| close      | dispatched | <code>{ timeout: boolean; }</code> | --          |
+| click      | forwarded  | --                                 | --          |
+| mouseover  | forwarded  | --                                 | --          |
+| mouseenter | forwarded  | --                                 | --          |
+| mouseleave | forwarded  | --                                 | --          |
 
 ## `Link`
 
@@ -1988,19 +1985,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                            |
-| :-------- | :------ | :---- | :-------------------------------------------------- |
-| --        | Yes     | --    | --                                                  |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                            |
+| :-------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | --                                                  |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ListBox`
 
@@ -2020,16 +2017,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| keydown    | forwarded | --     |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| keydown    | forwarded | --     | --          |
+| click      | forwarded | --     | --          |
 
 ## `ListBoxField`
 
@@ -2048,26 +2045,26 @@ export type ListBoxFieldTranslationId = "close" | "open";
 | role            | No       | <code>let</code>   | No       | <code>string</code>                                    | <code>"combobox"</code>                          | Specify the role attribute                       |
 | tabindex        | No       | <code>let</code>   | No       | <code>string</code>                                    | <code>"-1"</code>                                | Specify the tabindex                             |
 | translationIds  | No       | <code>const</code> | No       | <code>{ close: "close", open: "open" }</code>          | <code>{ close: "close", open: "open" }</code>    | Default translation ids                          |
-| translateWithId | No       | <code>let</code>   | No       | <code>(id: ListBoxFieldTranslationId) => string</code> | <code>(id) => defaultTranslations[id]</code>     | Override the default translation ids             |
+| translateWithId | No       | <code>let</code>   | No       | <code>(id: ListBoxFieldTranslationId) => string</code> | --                                               | Override the default translation ids             |
 | id              | No       | <code>let</code>   | No       | <code>string</code>                                    | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element              |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
 
 ## `ListBoxMenu`
 
@@ -2080,15 +2077,15 @@ export type ListBoxFieldTranslationId = "close" | "open";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| scroll     | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| scroll     | forwarded | --     | --          |
 
 ## `ListBoxMenuIcon`
 
@@ -2104,7 +2101,7 @@ export type ListBoxMenuIconTranslationId = "close" | "open";
 | :-------------- | :------- | :----------------- | :------- | --------------------------------------------------------- | --------------------------------------------- | -------------------------------------------- |
 | open            | No       | <code>let</code>   | No       | <code>boolean</code>                                      | <code>false</code>                            | Set to `true` to open the list box menu icon |
 | translationIds  | No       | <code>const</code> | No       | <code>{ close: "close", open: "open" }</code>             | <code>{ close: "close", open: "open" }</code> | Default translation ids                      |
-| translateWithId | No       | <code>let</code>   | No       | <code>(id: ListBoxMenuIconTranslationId) => string</code> | <code>(id) => defaultTranslations[id]</code>  | Override the default translation ids         |
+| translateWithId | No       | <code>let</code>   | No       | <code>(id: ListBoxMenuIconTranslationId) => string</code> | --                                            | Override the default translation ids         |
 
 ### Slots
 
@@ -2112,9 +2109,9 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `ListBoxMenuItem`
 
@@ -2128,17 +2125,17 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ListBoxSelection`
 
@@ -2156,7 +2153,7 @@ export type ListBoxSelectionTranslationId = "clearAll" | "clearSelection";
 | selectionCount  | No       | <code>let</code>   | No       | <code>number</code>                                                      | <code>undefined</code>                                                   | Specify the number of selected items             |
 | disabled        | No       | <code>let</code>   | No       | <code>boolean</code>                                                     | <code>false</code>                                                       | Set to `true` to disable the list box selection  |
 | translationIds  | No       | <code>const</code> | No       | <code>{ clearAll: "clearAll", clearSelection: "clearSelection", }</code> | <code>{ clearAll: "clearAll", clearSelection: "clearSelection", }</code> | Default translation ids                          |
-| translateWithId | No       | <code>let</code>   | No       | <code>(id: ListBoxSelectionTranslationId) => string</code>               | <code>(id) => defaultTranslations[id]</code>                             | Override the default translation ids             |
+| translateWithId | No       | <code>let</code>   | No       | <code>(id: ListBoxSelectionTranslationId) => string</code>               | --                                                                       | Override the default translation ids             |
 
 ### Slots
 
@@ -2164,9 +2161,9 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                       |
-| :--------- | :--------- | :------------------------------------------- |
-| clear      | dispatched | <code>KeyboardEvent &#124; MouseEvent</code> |
+| Event name | Type       | Detail                                       | Description |
+| :--------- | :--------- | :------------------------------------------- | :---------- |
+| clear      | dispatched | <code>KeyboardEvent &#124; MouseEvent</code> | --          |
 
 ## `ListItem`
 
@@ -2176,18 +2173,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Loading`
 
@@ -2212,12 +2209,12 @@ None.
 
 ### Props
 
-| Prop name | Required | Kind                  | Reactive | Type                    | Default value                                        | Description                                                     |
-| :-------- | :------- | :-------------------- | :------- | ----------------------- | ---------------------------------------------------- | --------------------------------------------------------------- |
-| value     | No       | <code>let</code>      | Yes      | <code>any</code>        | <code>""</code>                                      | Provide a value to persist                                      |
-| key       | No       | <code>let</code>      | No       | <code>string</code>     | <code>"local-storage-key"</code>                     | Specify the local storage key                                   |
-| clearItem | No       | <code>function</code> | No       | <code>() => void</code> | <code>() => { localStorage.removeItem(key); }</code> | Remove the persisted key value from the browser's local storage |
-| clearAll  | No       | <code>function</code> | No       | <code>() => void</code> | <code>() => { localStorage.clear(); }</code>         | Clear all key values from the browser's local storage           |
+| Prop name | Required | Kind                  | Reactive | Type                    | Default value                    | Description                                                     |
+| :-------- | :------- | :-------------------- | :------- | ----------------------- | -------------------------------- | --------------------------------------------------------------- |
+| value     | No       | <code>let</code>      | Yes      | <code>any</code>        | <code>""</code>                  | Provide a value to persist                                      |
+| key       | No       | <code>let</code>      | No       | <code>string</code>     | <code>"local-storage-key"</code> | Specify the local storage key                                   |
+| clearItem | No       | <code>function</code> | No       | <code>() => void</code> | --                               | Remove the persisted key value from the browser's local storage |
+| clearAll  | No       | <code>function</code> | No       | <code>() => void</code> | --                               | Clear all key values from the browser's local storage           |
 
 ### Slots
 
@@ -2225,10 +2222,10 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                       |
-| :--------- | :--------- | :------------------------------------------- |
-| save       | dispatched | <code>null</code>                            |
-| update     | dispatched | <code>{ prevValue: any; value: any; }</code> |
+| Event name | Type       | Detail                                       | Description |
+| :--------- | :--------- | :------------------------------------------- | :---------- |
+| save       | dispatched | <code>null</code>                            | --          |
+| update     | dispatched | <code>{ prevValue: any; value: any; }</code> | --          |
 
 ## `Modal`
 
@@ -2260,27 +2257,27 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                    |
-| :-------- | :------ | :---- | :-------------------------- |
-| --        | Yes     | --    | --                          |
-| heading   | No      | --    | <code>{modalHeading}</code> |
-| label     | No      | --    | <code>{modalLabel}</code>   |
+| Slot name | Default | Props                               | Fallback                    |
+| :-------- | :------ | :---------------------------------- | :-------------------------- |
+| heading   | No      | <code>Record<string, never> </code> | <code>{modalHeading}</code> |
+| label     | No      | <code>Record<string, never> </code> | <code>{modalLabel}</code>   |
+| --        | Yes     | <code>Record<string, never> </code> | --                          |
 
 ### Events
 
-| Event name              | Type       | Detail                                                                              |
-| :---------------------- | :--------- | :---------------------------------------------------------------------------------- |
-| close                   | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button" }</code> |
-| transitionend           | dispatched | <code>{ open: boolean; }</code>                                                     |
-| click:button--secondary | dispatched | <code>{ text: string; }</code>                                                      |
-| keydown                 | forwarded  | --                                                                                  |
-| click                   | forwarded  | --                                                                                  |
-| mouseover               | forwarded  | --                                                                                  |
-| mouseenter              | forwarded  | --                                                                                  |
-| mouseleave              | forwarded  | --                                                                                  |
-| submit                  | dispatched | <code>null</code>                                                                   |
-| click:button--primary   | dispatched | <code>null</code>                                                                   |
-| open                    | dispatched | <code>null</code>                                                                   |
+| Event name              | Type       | Detail                                                                               | Description |
+| :---------------------- | :--------- | :----------------------------------------------------------------------------------- | :---------- |
+| close                   | dispatched | <code>{ trigger: "escape-key" &#124; "outside-click" &#124; "close-button"; }</code> | --          |
+| transitionend           | dispatched | <code>{ open: boolean; }</code>                                                      | --          |
+| click:button--secondary | dispatched | <code>{ text: string; }</code>                                                       | --          |
+| keydown                 | forwarded  | --                                                                                   | --          |
+| click                   | forwarded  | --                                                                                   | --          |
+| mouseover               | forwarded  | --                                                                                   | --          |
+| mouseenter              | forwarded  | --                                                                                   | --          |
+| mouseleave              | forwarded  | --                                                                                   | --          |
+| submit                  | dispatched | <code>null</code>                                                                    | --          |
+| click:button--primary   | dispatched | <code>null</code>                                                                    | --          |
+| open                    | dispatched | <code>null</code>                                                                    | --          |
 
 ## `ModalBody`
 
@@ -2293,9 +2290,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -2318,15 +2315,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name              | Type       | Detail                         |
-| :---------------------- | :--------- | :----------------------------- |
-| click:button--secondary | dispatched | <code>{ text: string; }</code> |
+| Event name              | Type       | Detail                         | Description |
+| :---------------------- | :--------- | :----------------------------- | :---------- |
+| click:button--secondary | dispatched | <code>{ text: string; }</code> | --          |
 
 ## `ModalHeader`
 
@@ -2344,15 +2341,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `MultiSelect`
 
@@ -2363,72 +2360,72 @@ export type MultiSelectItemId = any;
 
 export type MultiSelectItemText = string;
 
-export interface MultiSelectItem {
+export type MultiSelectItem = {
   id: MultiSelectItemId;
   text: MultiSelectItemText;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 ```
 
 ### Props
 
-| Prop name                | Required | Kind             | Reactive | Type                                                                                                       | Default value                                                                              | Description                                                                                                                                                           |
-| :----------------------- | :------- | :--------------- | :------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| highlightedId            | No       | <code>let</code> | Yes      | <code>null &#124; MultiSelectItemId</code>                                                                 | <code>null</code>                                                                          | Id of the highlighted ListBoxMenuItem                                                                                                                                 |
-| selectionRef             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                    | <code>null</code>                                                                          | Obtain a reference to the selection element                                                                                                                           |
-| fieldRef                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                    | <code>null</code>                                                                          | Obtain a reference to the field box element                                                                                                                           |
-| multiSelectRef           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                    | <code>null</code>                                                                          | Obtain a reference to the outer div element                                                                                                                           |
-| inputRef                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                                  | <code>null</code>                                                                          | Obtain a reference to the input HTML element                                                                                                                          |
-| open                     | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                       | <code>false</code>                                                                         | Set to `true` to open the dropdown                                                                                                                                    |
-| value                    | No       | <code>let</code> | Yes      | <code>string</code>                                                                                        | <code>""</code>                                                                            | Specify the multiselect value                                                                                                                                         |
-| selectedIds              | No       | <code>let</code> | Yes      | <code>ReadonlyArray<MultiSelectItemId></code>                                                              | <code>[]</code>                                                                            | Set the selected ids                                                                                                                                                  |
-| items                    | No       | <code>let</code> | No       | <code>ReadonlyArray<MultiSelectItem></code>                                                                | <code>[]</code>                                                                            | Set the multiselect items                                                                                                                                             |
-| itemToString             | No       | <code>let</code> | No       | <code>(item: MultiSelectItem) => any</code>                                                                | <code>(item) => item.text &#124;&#124; item.id</code>                                      | Override the display of a multiselect item                                                                                                                            |
-| itemToInput              | No       | <code>let</code> | No       | <code>(item: MultiSelectItem) => { name?: string; labelText?: any; title?: string; value?: string }</code> | <code>(\_item) => {}</code>                                                                | Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.                                         |
-| size                     | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                                  | <code>undefined</code>                                                                     | Set the size of the combobox                                                                                                                                          |
-| type                     | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                                     | <code>"default"</code>                                                                     | Specify the type of multiselect                                                                                                                                       |
-| direction                | No       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                                         | <code>"bottom"</code>                                                                      | Specify the direction of the multiselect dropdown menu                                                                                                                |
-| selectionFeedback        | No       | <code>let</code> | No       | <code>"top" &#124; "fixed" &#124; "top-after-reopen"</code>                                                | <code>"top-after-reopen"</code>                                                            | Specify the selection feedback after selecting items                                                                                                                  |
-| disabled                 | No       | <code>let</code> | No       | <code>boolean</code>                                                                                       | <code>false</code>                                                                         | Set to `true` to disable the dropdown                                                                                                                                 |
-| filterable               | No       | <code>let</code> | No       | <code>boolean</code>                                                                                       | <code>false</code>                                                                         | Set to `true` to filter items                                                                                                                                         |
-| filterItem               | No       | <code>let</code> | No       | <code>(item: MultiSelectItem, value: string) => boolean</code>                                             | <code>(item, value) => item.text.toLowerCase().includes(value.trim().toLowerCase())</code> | Override the filtering logic<br />The default filtering is an exact string comparison                                                                                 |
-| light                    | No       | <code>let</code> | No       | <code>boolean</code>                                                                                       | <code>false</code>                                                                         | Set to `true` to enable the light variant                                                                                                                             |
-| locale                   | No       | <code>let</code> | No       | <code>string</code>                                                                                        | <code>"en"</code>                                                                          | Specify the locale                                                                                                                                                    |
-| placeholder              | No       | <code>let</code> | No       | <code>string</code>                                                                                        | <code>""</code>                                                                            | Specify the placeholder text                                                                                                                                          |
-| sortItem                 | No       | <code>let</code> | No       | <code>((a: MultiSelectItem, b: MultiSelectItem) => MultiSelectItem) &#124; (() => void)</code>             | <code>(a, b) => a.text.localeCompare(b.text, locale, { numeric: true })</code>             | Override the sorting logic<br />The default sorting compare the item text value                                                                                       |
-| translateWithId          | No       | <code>let</code> | No       | <code>(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string</code>      | <code>undefined</code>                                                                     | Override the chevron icon label based on the open state.<br />Defaults to "Open menu" when closed and "Close menu" when open                                          |
-| translateWithIdSelection | No       | <code>let</code> | No       | <code>(id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string</code>    | <code>undefined</code>                                                                     | Override the label of the clear button when the input has a selection.<br />Defaults to "Clear selected item" and "Clear all items" if more than one item is selected |
-| labelText                | No       | <code>let</code> | No       | <code>string</code>                                                                                        | <code>""</code>                                                                            | Specify the label text                                                                                                                                                |
-| useTitleInItem           | No       | <code>let</code> | No       | <code>boolean</code>                                                                                       | <code>false</code>                                                                         | Set to `true` to pass the item to `itemToString` in the checkbox                                                                                                      |
-| invalid                  | No       | <code>let</code> | No       | <code>boolean</code>                                                                                       | <code>false</code>                                                                         | Set to `true` to indicate an invalid state                                                                                                                            |
-| invalidText              | No       | <code>let</code> | No       | <code>string</code>                                                                                        | <code>""</code>                                                                            | Specify the invalid state text                                                                                                                                        |
-| warn                     | No       | <code>let</code> | No       | <code>boolean</code>                                                                                       | <code>false</code>                                                                         | Set to `true` to indicate a warning state                                                                                                                             |
-| warnText                 | No       | <code>let</code> | No       | <code>string</code>                                                                                        | <code>""</code>                                                                            | Specify the warning state text                                                                                                                                        |
-| helperText               | No       | <code>let</code> | No       | <code>string</code>                                                                                        | <code>""</code>                                                                            | Specify the helper text                                                                                                                                               |
-| label                    | No       | <code>let</code> | No       | <code>string</code>                                                                                        | <code>""</code>                                                                            | Specify the list box label                                                                                                                                            |
-| hideLabel                | No       | <code>let</code> | No       | <code>boolean</code>                                                                                       | <code>false</code>                                                                         | Set to `true` to visually hide the label text                                                                                                                         |
-| id                       | No       | <code>let</code> | No       | <code>string</code>                                                                                        | <code>"ccs-" + Math.random().toString(36)</code>                                           | Set an id for the list box component                                                                                                                                  |
-| name                     | No       | <code>let</code> | No       | <code>string</code>                                                                                        | <code>undefined</code>                                                                     | Specify a name attribute for the select                                                                                                                               |
+| Prop name                | Required | Kind             | Reactive | Type                                                                                                    | Default value                                    | Description                                                                                                                                                           |
+| :----------------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| highlightedId            | No       | <code>let</code> | Yes      | <code>null &#124; MultiSelectItemId</code>                                                              | <code>null</code>                                | Id of the highlighted ListBoxMenuItem                                                                                                                                 |
+| selectionRef             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                 | <code>null</code>                                | Obtain a reference to the selection element                                                                                                                           |
+| fieldRef                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                 | <code>null</code>                                | Obtain a reference to the field box element                                                                                                                           |
+| multiSelectRef           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                 | <code>null</code>                                | Obtain a reference to the outer div element                                                                                                                           |
+| inputRef                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                               | <code>null</code>                                | Obtain a reference to the input HTML element                                                                                                                          |
+| open                     | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                    | <code>false</code>                               | Set to `true` to open the dropdown                                                                                                                                    |
+| value                    | No       | <code>let</code> | Yes      | <code>string</code>                                                                                     | <code>""</code>                                  | Specify the multiselect value                                                                                                                                         |
+| selectedIds              | No       | <code>let</code> | Yes      | <code>ReadonlyArray<MultiSelectItemId></code>                                                           | <code>[]</code>                                  | Set the selected ids                                                                                                                                                  |
+| items                    | No       | <code>let</code> | No       | <code>ReadonlyArray<Item></code>                                                                        | <code>[]</code>                                  | Set the multiselect items                                                                                                                                             |
+| itemToString             | No       | <code>let</code> | No       | <code>(item: Item) => any</code>                                                                        | --                                               | Override the display of a multiselect item                                                                                                                            |
+| itemToInput              | No       | <code>let</code> | No       | <code>(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }</code>         | --                                               | Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.                                         |
+| size                     | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code>                                                               | <code>undefined</code>                           | Set the size of the combobox                                                                                                                                          |
+| type                     | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                                  | <code>"default"</code>                           | Specify the type of multiselect                                                                                                                                       |
+| direction                | No       | <code>let</code> | No       | <code>"bottom" &#124; "top"</code>                                                                      | <code>"bottom"</code>                            | Specify the direction of the multiselect dropdown menu                                                                                                                |
+| selectionFeedback        | No       | <code>let</code> | No       | <code>"top" &#124; "fixed" &#124; "top-after-reopen"</code>                                             | <code>"top-after-reopen"</code>                  | Specify the selection feedback after selecting items                                                                                                                  |
+| disabled                 | No       | <code>let</code> | No       | <code>boolean</code>                                                                                    | <code>false</code>                               | Set to `true` to disable the dropdown                                                                                                                                 |
+| filterable               | No       | <code>let</code> | No       | <code>boolean</code>                                                                                    | <code>false</code>                               | Set to `true` to filter items                                                                                                                                         |
+| filterItem               | No       | <code>let</code> | No       | <code>(item: Item, value: string) => boolean</code>                                                     | --                                               | Override the filtering logic<br />The default filtering is an exact string comparison                                                                                 |
+| light                    | No       | <code>let</code> | No       | <code>boolean</code>                                                                                    | <code>false</code>                               | Set to `true` to enable the light variant                                                                                                                             |
+| locale                   | No       | <code>let</code> | No       | <code>string</code>                                                                                     | <code>"en"</code>                                | Specify the locale                                                                                                                                                    |
+| placeholder              | No       | <code>let</code> | No       | <code>string</code>                                                                                     | <code>""</code>                                  | Specify the placeholder text                                                                                                                                          |
+| sortItem                 | No       | <code>let</code> | No       | <code>((a: Item, b: Item) => Item) &#124; (() => void)</code>                                           | --                                               | Override the sorting logic<br />The default sorting compare the item text value                                                                                       |
+| translateWithId          | No       | <code>let</code> | No       | <code>(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string</code>   | <code>undefined</code>                           | Override the chevron icon label based on the open state.<br />Defaults to "Open menu" when closed and "Close menu" when open                                          |
+| translateWithIdSelection | No       | <code>let</code> | No       | <code>(id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string</code> | <code>undefined</code>                           | Override the label of the clear button when the input has a selection.<br />Defaults to "Clear selected item" and "Clear all items" if more than one item is selected |
+| titleText                | No       | <code>let</code> | No       | <code>string</code>                                                                                     | <code>""</code>                                  | Specify the title text                                                                                                                                                |
+| useTitleInItem           | No       | <code>let</code> | No       | <code>boolean</code>                                                                                    | <code>false</code>                               | Set to `true` to pass the item to `itemToString` in the checkbox                                                                                                      |
+| invalid                  | No       | <code>let</code> | No       | <code>boolean</code>                                                                                    | <code>false</code>                               | Set to `true` to indicate an invalid state                                                                                                                            |
+| invalidText              | No       | <code>let</code> | No       | <code>string</code>                                                                                     | <code>""</code>                                  | Specify the invalid state text                                                                                                                                        |
+| warn                     | No       | <code>let</code> | No       | <code>boolean</code>                                                                                    | <code>false</code>                               | Set to `true` to indicate a warning state                                                                                                                             |
+| warnText                 | No       | <code>let</code> | No       | <code>string</code>                                                                                     | <code>""</code>                                  | Specify the warning state text                                                                                                                                        |
+| helperText               | No       | <code>let</code> | No       | <code>string</code>                                                                                     | <code>""</code>                                  | Specify the helper text                                                                                                                                               |
+| label                    | No       | <code>let</code> | No       | <code>string</code>                                                                                     | <code>""</code>                                  | Specify the list box label                                                                                                                                            |
+| hideLabel                | No       | <code>let</code> | No       | <code>boolean</code>                                                                                    | <code>false</code>                               | Set to `true` to visually hide the label text                                                                                                                         |
+| id                       | No       | <code>let</code> | No       | <code>string</code>                                                                                     | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the list box component                                                                                                                                  |
+| name                     | No       | <code>let</code> | No       | <code>string</code>                                                                                     | <code>undefined</code>                           | Specify a name attribute for the select                                                                                                                               |
 
 ### Slots
 
-| Slot name | Default | Props                                                  | Fallback                          |
-| :-------- | :------ | :----------------------------------------------------- | :-------------------------------- |
-| --        | Yes     | <code>{ item: MultiSelectItem; index: number } </code> | <code>{itemToString(item)}</code> |
-| labelText | No      | --                                                     | <code>{labelText}</code>          |
+| Slot name | Default | Props                                       | Fallback                          |
+| :-------- | :------ | :------------------------------------------ | :-------------------------------- |
+| --        | Yes     | <code>{ item: Item; index: number } </code> | <code>{itemToString(item)}</code> |
+| titleText | No      | <code>Record<string, never> </code>         | <code>{titleText}</code>          |
 
 ### Events
 
-| Event name | Type       | Detail                                                                                                         |
-| :--------- | :--------- | :------------------------------------------------------------------------------------------------------------- |
-| select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: MultiSelectItem[]; unselected: MultiSelectItem[]; }</code> |
-| clear      | dispatched | <code>null</code>                                                                                              |
-| blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                                         |
-| keydown    | forwarded  | --                                                                                                             |
-| input      | forwarded  | --                                                                                                             |
-| keyup      | forwarded  | --                                                                                                             |
-| focus      | forwarded  | --                                                                                                             |
-| paste      | forwarded  | --                                                                                                             |
+| Event name | Type       | Detail                                                                                   | Description |
+| :--------- | :--------- | :--------------------------------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: Item[]; unselected: Item[]; }</code> | --          |
+| clear      | forwarded  | --                                                                                       | --          |
+| blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                   | --          |
+| keydown    | forwarded  | --                                                                                       | --          |
+| input      | forwarded  | --                                                                                       | --          |
+| keyup      | forwarded  | --                                                                                       | --          |
+| focus      | forwarded  | --                                                                                       | --          |
+| paste      | forwarded  | --                                                                                       | --          |
 
 ## `NotificationActionButton`
 
@@ -2438,18 +2435,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `NotificationButton`
 
@@ -2458,7 +2455,7 @@ None.
 | Prop name        | Required | Kind             | Reactive | Type                                 | Default value             | Description                         |
 | :--------------- | :------- | :--------------- | :------- | ------------------------------------ | ------------------------- | ----------------------------------- |
 | notificationType | No       | <code>let</code> | No       | <code>"toast" &#124; "inline"</code> | <code>"toast"</code>      | Set the type of notification        |
-| icon             | No       | <code>let</code> | No       | <code>any</code>                     | <code>undefined</code>    | Specify the icon to render          |
+| icon             | No       | <code>let</code> | No       | <code>any</code>                     | <code>Close</code>        | Specify the icon to render          |
 | title            | No       | <code>let</code> | No       | <code>string</code>                  | <code>undefined</code>    | Specify the title of the icon       |
 | iconDescription  | No       | <code>let</code> | No       | <code>string</code>                  | <code>"Close icon"</code> | Specify the ARIA label for the icon |
 
@@ -2468,22 +2465,22 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `NotificationIcon`
 
 ### Props
 
-| Prop name        | Required | Kind             | Reactive | Type                                                                                                           | Default value          | Description                           |
-| :--------------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------- | ---------------------- | ------------------------------------- |
-| kind             | No       | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code>   | Specify the kind of notification icon |
-| notificationType | No       | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                                                                           | <code>"toast"</code>   | Set the type of notification          |
-| iconDescription  | Yes      | <code>let</code> | No       | --                                                                                                             | <code>undefined</code> | Specify the ARIA label for the icon   |
+| Prop name        | Required | Kind             | Reactive | Type                                                                                                           | Default value        | Description                           |
+| :--------------- | :------- | :--------------- | :------- | -------------------------------------------------------------------------------------------------------------- | -------------------- | ------------------------------------- |
+| kind             | No       | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code> | Specify the kind of notification icon |
+| notificationType | No       | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                                                                           | <code>"toast"</code> | Set the type of notification          |
+| iconDescription  | Yes      | <code>let</code> | No       | --                                                                                                             | --                   | Specify the ARIA label for the icon   |
 
 ### Slots
 
@@ -2523,34 +2520,34 @@ export type NumberInputTranslationId = "increment" | "decrement";
 | warn            | No       | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to indicate a warning state                                                                                                                      |
 | warnText        | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the warning state text                                                                                                                                 |
 | helperText      | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the helper text                                                                                                                                        |
-| labelText       | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the label text                                                                                                                                         |
+| label           | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>""</code>                                                  | Specify the label text                                                                                                                                         |
 | hideLabel       | No       | <code>let</code>   | No       | <code>boolean</code>                                            | <code>false</code>                                               | Set to `true` to visually hide the label text                                                                                                                  |
-| translateWithId | No       | <code>let</code>   | No       | <code>(id: NumberInputTranslationId) => string</code>           | <code>(id) => defaultTranslations[id]</code>                     | Override the default translation ids                                                                                                                           |
+| translateWithId | No       | <code>let</code>   | No       | <code>(id: NumberInputTranslationId) => string</code>           | --                                                               | Override the default translation ids                                                                                                                           |
 | translationIds  | No       | <code>const</code> | No       | <code>{ increment: "increment"; decrement: "decrement" }</code> | <code>{ increment: "increment", decrement: "decrement", }</code> | Default translation ids                                                                                                                                        |
 | id              | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>"ccs-" + Math.random().toString(36)</code>                 | Set an id for the input element                                                                                                                                |
 | name            | No       | <code>let</code>   | No       | <code>string</code>                                             | <code>undefined</code>                                           | Specify a name attribute for the input                                                                                                                         |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback             |
+| :-------- | :------ | :---------------------------------- | :------------------- |
+| label     | No      | <code>Record<string, never> </code> | <code>{label}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                          |
-| :--------- | :--------- | :------------------------------ |
-| change     | dispatched | <code>null &#124; number</code> |
-| input      | dispatched | <code>null &#124; number</code> |
-| click      | forwarded  | --                              |
-| mouseover  | forwarded  | --                              |
-| mouseenter | forwarded  | --                              |
-| mouseleave | forwarded  | --                              |
-| keydown    | forwarded  | --                              |
-| keyup      | forwarded  | --                              |
-| focus      | forwarded  | --                              |
-| blur       | forwarded  | --                              |
-| paste      | forwarded  | --                              |
+| Event name | Type       | Detail                          | Description |
+| :--------- | :--------- | :------------------------------ | :---------- |
+| change     | dispatched | <code>null &#124; number</code> | --          |
+| input      | dispatched | <code>null &#124; number</code> | --          |
+| click      | forwarded  | --                              | --          |
+| mouseover  | forwarded  | --                              | --          |
+| mouseenter | forwarded  | --                              | --          |
+| mouseleave | forwarded  | --                              | --          |
+| keydown    | forwarded  | --                              | --          |
+| keyup      | forwarded  | --                              | --          |
+| focus      | forwarded  | --                              | --          |
+| blur       | forwarded  | --                              | --          |
+| paste      | forwarded  | --                              | --          |
 
 ## `NumberInputSkeleton`
 
@@ -2566,12 +2563,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `OrderedList`
 
@@ -2585,18 +2582,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `OutboundLink`
 
@@ -2606,55 +2603,55 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `OverflowMenu`
 
 ### Props
 
-| Prop name        | Required | Kind             | Reactive | Type                                       | Default value                                    | Description                                                                   |
-| :--------------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ----------------------------------------------------------------------------- |
-| menuRef          | No       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>  | <code>null</code>                                | Obtain a reference to the overflow menu element                               |
-| buttonRef        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the trigger button element                              |
-| icon             | No       | <code>let</code> | Yes      | <code>any</code>                           | <code>undefined</code>                           | Specify the icon to render.<br />Defaults to `&lt;OverflowMenuVertical /&gt;` |
-| open             | No       | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to open the menu                                                |
-| size             | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>              | <code>undefined</code>                           | Specify the size of the overflow menu                                         |
-| direction        | No       | <code>let</code> | No       | <code>"top" &#124; "bottom"</code>         | <code>"bottom"</code>                            | Specify the direction of the overflow menu relative to the button             |
-| light            | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to enable the light variant                                     |
-| flipped          | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to flip the menu relative to the button                         |
-| menuOptionsClass | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code>                           | Specify the menu options class                                                |
-| iconClass        | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code>                           | Specify the icon class                                                        |
-| iconDescription  | No       | <code>let</code> | No       | <code>string</code>                        | <code>"Open and close list of options"</code>    | Specify the ARIA label for the icon                                           |
-| id               | No       | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                              |
+| Prop name        | Required | Kind             | Reactive | Type                                       | Default value                                    | Description                                                       |
+| :--------------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ----------------------------------------------------------------- |
+| menuRef          | No       | <code>let</code> | Yes      | <code>null &#124; HTMLUListElement</code>  | <code>null</code>                                | Obtain a reference to the overflow menu element                   |
+| buttonRef        | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code> | <code>null</code>                                | Obtain a reference to the trigger button element                  |
+| icon             | No       | <code>let</code> | Yes      | <code>any</code>                           | <code>OverflowMenuVertical</code>                | Specify the icon to render.                                       |
+| open             | No       | <code>let</code> | Yes      | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to open the menu                                    |
+| size             | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>              | <code>undefined</code>                           | Specify the size of the overflow menu                             |
+| direction        | No       | <code>let</code> | No       | <code>"top" &#124; "bottom"</code>         | <code>"bottom"</code>                            | Specify the direction of the overflow menu relative to the button |
+| light            | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to enable the light variant                         |
+| flipped          | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to flip the menu relative to the button             |
+| menuOptionsClass | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code>                           | Specify the menu options class                                    |
+| iconClass        | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code>                           | Specify the icon class                                            |
+| iconDescription  | No       | <code>let</code> | No       | <code>string</code>                        | <code>"Open and close list of options"</code>    | Specify the ARIA label for the icon                               |
+| id               | No       | <code>let</code> | No       | <code>string</code>                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the button element                                  |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                                                                                                             |
-| :-------- | :------ | :---- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| --        | Yes     | --    | --                                                                                                                                                                                   |
-| menu      | No      | --    | <code>&lt;svelte:component<br /> this={icon}<br /> aria-label={iconDescription}<br /> title={iconDescription}<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                                                                                                                                                             |
+| :-------- | :------ | :---------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| menu      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component<br /> this={icon}<br /> aria-label={iconDescription}<br /> title={iconDescription}<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                                                                                                                                                                                   |
 
 ### Events
 
-| Event name | Type       | Detail                                                    |
-| :--------- | :--------- | :-------------------------------------------------------- |
-| close      | dispatched | <code>null &#124; { index: number; text: string; }</code> |
-| click      | forwarded  | --                                                        |
-| mouseover  | forwarded  | --                                                        |
-| mouseenter | forwarded  | --                                                        |
-| mouseleave | forwarded  | --                                                        |
-| keydown    | forwarded  | --                                                        |
+| Event name | Type       | Detail                                          | Description |
+| :--------- | :--------- | :---------------------------------------------- | :---------- |
+| close      | dispatched | <code>{ index?: number; text?: string; }</code> | --          |
+| click      | forwarded  | --                                              | --          |
+| mouseover  | forwarded  | --                                              | --          |
+| mouseenter | forwarded  | --                                              | --          |
+| mouseleave | forwarded  | --                                              | --          |
+| keydown    | forwarded  | --                                              | --          |
 
 ## `OverflowMenuItem`
 
@@ -2674,40 +2671,40 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                                                                                          |
-| :-------- | :------ | :---- | :---------------------------------------------------------------------------------------------------------------- |
-| --        | Yes     | --    | <code>&lt;div class:bx--overflow-menu-options\_\_option-content={true}&gt;<br /> {text}<br /> &lt;/div&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                                                                                          |
+| :-------- | :------ | :---------------------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | <code>&lt;div class:bx--overflow-menu-options\_\_option-content={true}&gt;<br /> {text}<br /> &lt;/div&gt;</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `Pagination`
 
 ### Props
 
-| Prop name             | Required | Kind             | Reactive | Type                                                             | Default value                                                                                                                                  | Description                                                                                                                                                                                                                                                                                                                                         |
-| :-------------------- | :------- | :--------------- | :------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| pageSize              | No       | <code>let</code> | Yes      | <code>number</code>                                              | <code>10</code>                                                                                                                                | Specify the number of items to display in a page                                                                                                                                                                                                                                                                                                    |
-| page                  | No       | <code>let</code> | Yes      | <code>number</code>                                              | <code>1</code>                                                                                                                                 | Specify the current page index                                                                                                                                                                                                                                                                                                                      |
-| totalItems            | No       | <code>let</code> | No       | <code>number</code>                                              | <code>0</code>                                                                                                                                 | Specify the total number of items                                                                                                                                                                                                                                                                                                                   |
-| pageWindow            | No       | <code>let</code> | No       | <code>number</code>                                              | <code>1000</code>                                                                                                                              | If `totalItems` is a large number, it can affect the<br />rendering performance of this component since its value<br />is used to calculate the number of pages in the native<br />select dropdown. This value creates a small window of<br />pages rendered around the current page. By default,<br />a maximum of 1000 select items are rendered. |
-| disabled              | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                                                                                             | Set to `true` to disable the pagination                                                                                                                                                                                                                                                                                                             |
-| forwardText           | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"Next page"</code>                                                                                                                       | Specify the forward button text                                                                                                                                                                                                                                                                                                                     |
-| backwardText          | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"Previous page"</code>                                                                                                                   | Specify the backward button text                                                                                                                                                                                                                                                                                                                    |
-| itemsPerPageText      | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"Items per page:"</code>                                                                                                                 | Specify the items per page text                                                                                                                                                                                                                                                                                                                     |
-| itemText              | No       | <code>let</code> | No       | <code>(min: number, max: number) => string</code>                | <code>(min, max) => \`${min.toLocaleString()}–${max.toLocaleString()} item${max === 1 ? "" : "s"}\`</code>                                     | Override the item text                                                                                                                                                                                                                                                                                                                              |
-| itemRangeText         | No       | <code>let</code> | No       | <code>(min: number, max: number, total: number) => string</code> | <code>(min, max, total) => \`${min.toLocaleString()}–${max.toLocaleString()} of ${total.toLocaleString()} item${max === 1 ? "" : "s"}\`</code> | Override the item range text                                                                                                                                                                                                                                                                                                                        |
-| pageInputDisabled     | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                                                                                             | Set to `true` to disable the page input                                                                                                                                                                                                                                                                                                             |
-| pageSizeInputDisabled | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                                                                                             | Set to `true` to disable the page size input                                                                                                                                                                                                                                                                                                        |
-| pageSizes             | No       | <code>let</code> | No       | <code>ReadonlyArray<number></code>                               | <code>[10]</code>                                                                                                                              | Specify the available page sizes                                                                                                                                                                                                                                                                                                                    |
-| pagesUnknown          | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                                                                                                                             | Set to `true` if the number of pages is unknown                                                                                                                                                                                                                                                                                                     |
-| pageText              | No       | <code>let</code> | No       | <code>(page: number) => string</code>                            | <code>(page) => \`page ${page.toLocaleString()}\`</code>                                                                                       | Override the page text                                                                                                                                                                                                                                                                                                                              |
-| pageRangeText         | No       | <code>let</code> | No       | <code>(current: number, total: number) => string</code>          | <code>(\_current, total) => \`of ${total.toLocaleString()} page${total === 1 ? "" : "s"}\`</code>                                              | Override the page range text                                                                                                                                                                                                                                                                                                                        |
-| id                    | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"ccs-" + Math.random().toString(36)</code>                                                                                               | Set an id for the top-level element                                                                                                                                                                                                                                                                                                                 |
+| Prop name             | Required | Kind             | Reactive | Type                                                             | Default value                                    | Description                                                                                                                                                                                                                                                                                                                                         |
+| :-------------------- | :------- | :--------------- | :------- | ---------------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| pageSize              | No       | <code>let</code> | Yes      | <code>number</code>                                              | <code>10</code>                                  | Specify the number of items to display in a page                                                                                                                                                                                                                                                                                                    |
+| page                  | No       | <code>let</code> | Yes      | <code>number</code>                                              | <code>1</code>                                   | Specify the current page index                                                                                                                                                                                                                                                                                                                      |
+| totalItems            | No       | <code>let</code> | No       | <code>number</code>                                              | <code>0</code>                                   | Specify the total number of items                                                                                                                                                                                                                                                                                                                   |
+| pageWindow            | No       | <code>let</code> | No       | <code>number</code>                                              | <code>1000</code>                                | If `totalItems` is a large number, it can affect the<br />rendering performance of this component since its value<br />is used to calculate the number of pages in the native<br />select dropdown. This value creates a small window of<br />pages rendered around the current page. By default,<br />a maximum of 1000 select items are rendered. |
+| disabled              | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                               | Set to `true` to disable the pagination                                                                                                                                                                                                                                                                                                             |
+| forwardText           | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"Next page"</code>                         | Specify the forward button text                                                                                                                                                                                                                                                                                                                     |
+| backwardText          | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"Previous page"</code>                     | Specify the backward button text                                                                                                                                                                                                                                                                                                                    |
+| itemsPerPageText      | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"Items per page:"</code>                   | Specify the items per page text                                                                                                                                                                                                                                                                                                                     |
+| itemText              | No       | <code>let</code> | No       | <code>(min: number, max: number) => string</code>                | --                                               | Override the item text                                                                                                                                                                                                                                                                                                                              |
+| itemRangeText         | No       | <code>let</code> | No       | <code>(min: number, max: number, total: number) => string</code> | --                                               | Override the item range text                                                                                                                                                                                                                                                                                                                        |
+| pageInputDisabled     | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                               | Set to `true` to disable the page input                                                                                                                                                                                                                                                                                                             |
+| pageSizeInputDisabled | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                               | Set to `true` to disable the page size input                                                                                                                                                                                                                                                                                                        |
+| pageSizes             | No       | <code>let</code> | No       | <code>ReadonlyArray<number></code>                               | <code>[10]</code>                                | Specify the available page sizes                                                                                                                                                                                                                                                                                                                    |
+| pagesUnknown          | No       | <code>let</code> | No       | <code>boolean</code>                                             | <code>false</code>                               | Set to `true` if the number of pages is unknown                                                                                                                                                                                                                                                                                                     |
+| pageText              | No       | <code>let</code> | No       | <code>(page: number) => string</code>                            | --                                               | Override the page text                                                                                                                                                                                                                                                                                                                              |
+| pageRangeText         | No       | <code>let</code> | No       | <code>(current: number, total: number) => string</code>          | --                                               | Override the page range text                                                                                                                                                                                                                                                                                                                        |
+| id                    | No       | <code>let</code> | No       | <code>string</code>                                              | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element                                                                                                                                                                                                                                                                                                                 |
 
 ### Slots
 
@@ -2715,12 +2712,12 @@ None.
 
 ### Events
 
-| Event name             | Type       | Detail                                            |
-| :--------------------- | :--------- | :------------------------------------------------ |
-| change                 | dispatched | <code>{ page?: number; pageSize?: number }</code> |
-| click:button--previous | dispatched | <code>{ page: number; }</code>                    |
-| click:button--next     | dispatched | <code>{ page: number; }</code>                    |
-| update                 | dispatched | <code>{ pageSize: number; page: number; }</code>  |
+| Event name             | Type       | Detail                                             | Description                           |
+| :--------------------- | :--------- | :------------------------------------------------- | :------------------------------------ |
+| change                 | dispatched | <code>{ page?: number; pageSize?: number; }</code> | Dispatched after any user interaction |
+| click:button--previous | dispatched | <code>{ page: number; }</code>                     | Dispatched after any user interaction |
+| click:button--next     | dispatched | <code>{ page: number; }</code>                     | Dispatched after any user interaction |
+| update                 | dispatched | <code>{ pageSize: number; page: number; }</code>   | Dispatched after any user interaction |
 
 ## `PaginationNav`
 
@@ -2742,11 +2739,11 @@ None.
 
 ### Events
 
-| Event name             | Type       | Detail                         |
-| :--------------------- | :--------- | :----------------------------- |
-| change                 | dispatched | <code>{ page: number; }</code> |
-| click:button--previous | dispatched | <code>{ page: number; }</code> |
-| click:button--next     | dispatched | <code>{ page: number; }</code> |
+| Event name             | Type       | Detail                         | Description                        |
+| :--------------------- | :--------- | :----------------------------- | :--------------------------------- |
+| change                 | dispatched | <code>{ page: number; }</code> | Fires after every user interaction |
+| click:button--previous | dispatched | <code>{ page: number; }</code> | --                                 |
+| click:button--next     | dispatched | <code>{ page: number; }</code> | --                                 |
 
 ## `PaginationSkeleton`
 
@@ -2760,12 +2757,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `PasswordInput`
 
@@ -2797,25 +2794,25 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| keydown    | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
+| input      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `Popover`
 
@@ -2833,15 +2830,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name    | Type       | Detail                                |
-| :------------ | :--------- | :------------------------------------ |
-| click:outside | dispatched | <code>{ target: HTMLElement; }</code> |
+| Event name    | Type       | Detail                                | Description |
+| :------------ | :--------- | :------------------------------------ | :---------- |
+| click:outside | dispatched | <code>{ target: HTMLElement; }</code> | --          |
 
 ## `ProgressBar`
 
@@ -2861,9 +2858,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -2882,19 +2879,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>number</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>number</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `ProgressIndicatorSkeleton`
 
@@ -2911,12 +2908,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ProgressStep`
 
@@ -2941,13 +2938,13 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `RadioButton`
 
@@ -2968,17 +2965,17 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| change     | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
 
 ## `RadioButtonGroup`
 
@@ -2999,20 +2996,20 @@ None.
 
 ### Slots
 
-| Slot name  | Default | Props | Fallback                  |
-| :--------- | :------ | :---- | :------------------------ |
-| --         | Yes     | --    | --                        |
-| legendText | No      | --    | <code>{legendText}</code> |
+| Slot name  | Default | Props                               | Fallback                  |
+| :--------- | :------ | :---------------------------------- | :------------------------ |
+| legendText | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
+| --         | Yes     | <code>Record<string, never> </code> | --                        |
 
 ### Events
 
-| Event name | Type       | Detail                            |
-| :--------- | :--------- | :-------------------------------- |
-| change     | dispatched | <code>string &#124; number</code> |
-| click      | forwarded  | --                                |
-| mouseover  | forwarded  | --                                |
-| mouseenter | forwarded  | --                                |
-| mouseleave | forwarded  | --                                |
+| Event name | Type       | Detail                            | Description |
+| :--------- | :--------- | :-------------------------------- | :---------- |
+| change     | dispatched | <code>string &#124; number</code> | --          |
+| click      | forwarded  | --                                | --          |
+| mouseover  | forwarded  | --                                | --          |
+| mouseenter | forwarded  | --                                | --          |
+| mouseleave | forwarded  | --                                | --          |
 
 ## `RadioButtonSkeleton`
 
@@ -3026,12 +3023,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `RadioTile`
 
@@ -3051,31 +3048,31 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| change     | forwarded | --     |
-| keydown    | forwarded | --     |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| change     | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `RecursiveList`
 
 ### Types
 
 ```ts
-export interface RecursiveListNode {
-  text?: string;
-  href?: string;
-  html?: string;
-}
+export type RecursiveListNode = {
+  /** Node text content */ text?: string;
+  /** Node link URL */ href?: string;
+  /** Node HTML content */ html?: string;
+};
 ```
 
 ### Props
@@ -3121,49 +3118,49 @@ None.
 
 ### Props
 
-| Prop name            | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                                     |
-| :------------------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------- |
-| ref                  | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element                    |
-| expanded             | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true to expand the search input                         |
-| value                | No       | <code>let</code> | Yes      | <code>any</code>                          | <code>""</code>                                  | Specify the value of the search input                           |
-| size                 | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code>                                | Specify the size of the search input                            |
-| searchClass          | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the class name passed to the outer div element          |
-| skeleton             | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state                     |
-| light                | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant                       |
-| disabled             | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the search input                       |
-| expandable           | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the expandable variant                  |
-| placeholder          | No       | <code>let</code> | No       | <code>string</code>                       | <code>"Search..."</code>                         | Specify the `placeholder` attribute of the search input         |
-| autocomplete         | No       | <code>let</code> | No       | <code>"on" &#124; "off"</code>            | <code>"off"</code>                               | Specify the `autocomplete` attribute                            |
-| autofocus            | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to auto focus the search element                  |
-| closeButtonLabelText | No       | <code>let</code> | No       | <code>string</code>                       | <code>"Clear search input"</code>                | Specify the close button label text                             |
-| labelText            | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                                          |
-| icon                 | No       | <code>let</code> | No       | <code>any</code>                          | <code>undefined</code>                           | Specify the icon to render.<br />Defaults to `&lt;Search /&gt;` |
-| id                   | No       | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                                 |
+| Prop name            | Required | Kind             | Reactive | Type                                      | Default value                                    | Description                                             |
+| :------------------- | :------- | :--------------- | :------- | ----------------------------------------- | ------------------------------------------------ | ------------------------------------------------------- |
+| ref                  | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>                                | Obtain a reference to the input HTML element            |
+| expanded             | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code>                               | Set to `true to expand the search input                 |
+| value                | No       | <code>let</code> | Yes      | <code>any</code>                          | <code>""</code>                                  | Specify the value of the search input                   |
+| size                 | No       | <code>let</code> | No       | <code>"sm" &#124; "lg" &#124; "xl"</code> | <code>"xl"</code>                                | Specify the size of the search input                    |
+| searchClass          | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the class name passed to the outer div element  |
+| skeleton             | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to display the skeleton state             |
+| light                | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the light variant               |
+| disabled             | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to disable the search input               |
+| expandable           | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to enable the expandable variant          |
+| placeholder          | No       | <code>let</code> | No       | <code>string</code>                       | <code>"Search..."</code>                         | Specify the `placeholder` attribute of the search input |
+| autocomplete         | No       | <code>let</code> | No       | <code>"on" &#124; "off"</code>            | <code>"off"</code>                               | Specify the `autocomplete` attribute                    |
+| autofocus            | No       | <code>let</code> | No       | <code>boolean</code>                      | <code>false</code>                               | Set to `true` to auto focus the search element          |
+| closeButtonLabelText | No       | <code>let</code> | No       | <code>string</code>                       | <code>"Clear search input"</code>                | Specify the close button label text                     |
+| labelText            | No       | <code>let</code> | No       | <code>string</code>                       | <code>""</code>                                  | Specify the label text                                  |
+| icon                 | No       | <code>let</code> | No       | <code>any</code>                          | <code>IconSearch</code>                          | Specify the icon to render.                             |
+| id                   | No       | <code>let</code> | No       | <code>string</code>                       | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element                         |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| expand     | dispatched | <code>null</code> |
-| collapse   | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| change     | forwarded  | --                |
-| input      | forwarded  | --                |
-| focus      | forwarded  | --                |
-| blur       | forwarded  | --                |
-| keydown    | forwarded  | --                |
-| keyup      | forwarded  | --                |
-| paste      | forwarded  | --                |
-| clear      | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| expand     | dispatched | <code>null</code> | --          |
+| collapse   | dispatched | <code>null</code> | --          |
+| click      | forwarded  | --                | --          |
+| mouseover  | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| change     | forwarded  | --                | --          |
+| input      | forwarded  | --                | --          |
+| focus      | forwarded  | --                | --          |
+| blur       | forwarded  | --                | --          |
+| keydown    | forwarded  | --                | --          |
+| keyup      | forwarded  | --                | --          |
+| paste      | forwarded  | --                | --          |
+| clear      | dispatched | <code>null</code> | --          |
 
 ## `SearchSkeleton`
 
@@ -3179,12 +3176,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Select`
 
@@ -3212,20 +3209,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| --        | Yes     | --    | --                       |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
-| Event name | Type       | Detail                            |
-| :--------- | :--------- | :-------------------------------- |
-| update     | dispatched | <code>string &#124; number</code> |
-| change     | forwarded  | --                                |
-| input      | forwarded  | --                                |
-| focus      | forwarded  | --                                |
-| blur       | forwarded  | --                                |
+| Event name | Type       | Detail                            | Description         |
+| :--------- | :--------- | :-------------------------------- | :------------------ |
+| update     | dispatched | <code>string &#124; number</code> | The selected value. |
+| change     | forwarded  | --                                | --                  |
+| input      | forwarded  | --                                | --                  |
+| focus      | forwarded  | --                                | --                  |
+| blur       | forwarded  | --                                | --                  |
 
 ## `SelectItem`
 
@@ -3259,9 +3256,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3281,12 +3278,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `SelectableTile`
 
@@ -3307,21 +3304,21 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| select     | dispatched | <code>string</code> |
-| deselect   | dispatched | <code>string</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
-| keydown    | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| select     | dispatched | <code>string</code> | --          |
+| deselect   | dispatched | <code>string</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
+| keydown    | forwarded  | --                  | --          |
 
 ## `SideNav`
 
@@ -3337,17 +3334,17 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name    | Type       | Detail            |
-| :------------ | :--------- | :---------------- |
-| open          | dispatched | <code>null</code> |
-| close         | dispatched | <code>null</code> |
-| click:overlay | dispatched | <code>null</code> |
+| Event name    | Type       | Detail            | Description |
+| :------------ | :--------- | :---------------- | :---------- |
+| open          | dispatched | <code>null</code> | --          |
+| close         | dispatched | <code>null</code> | --          |
+| click:overlay | dispatched | <code>null</code> | --          |
 
 ## `SideNavDivider`
 
@@ -3371,9 +3368,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3393,16 +3390,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                            |
-| :-------- | :------ | :---- | :-------------------------------------------------- |
-| --        | Yes     | --    | <code>{text}</code>                                 |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                            |
+| :-------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{text}</code>                                 |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `SideNavMenu`
 
@@ -3417,16 +3414,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                                            |
-| :-------- | :------ | :---- | :-------------------------------------------------- |
-| --        | Yes     | --    | --                                                  |
-| icon      | No      | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| Slot name | Default | Props                               | Fallback                                            |
+| :-------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                                                  |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `SideNavMenuItem`
 
@@ -3441,15 +3438,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | <code>{text}</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{text}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `SkeletonPlaceholder`
 
@@ -3463,12 +3460,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `SkeletonText`
 
@@ -3487,12 +3484,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `SkipToContent`
 
@@ -3505,15 +3502,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                          |
-| :-------- | :------ | :---- | :-------------------------------- |
-| --        | Yes     | --    | <code>Skip to main content</code> |
+| Slot name | Default | Props                               | Fallback                          |
+| :-------- | :------ | :---------------------------------- | :-------------------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | <code>Skip to main content</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `Slider`
 
@@ -3543,20 +3540,20 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>number</code> |
-| input      | dispatched | <code>number</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>number</code> | --          |
+| input      | dispatched | <code>number</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `SliderSkeleton`
 
@@ -3572,12 +3569,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `StructuredList`
 
@@ -3592,19 +3589,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>string</code> |
-| click      | forwarded  | --                  |
-| mouseover  | forwarded  | --                  |
-| mouseenter | forwarded  | --                  |
-| mouseleave | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>string</code> | --          |
+| click      | forwarded  | --                  | --          |
+| mouseover  | forwarded  | --                  | --          |
+| mouseenter | forwarded  | --                  | --          |
+| mouseleave | forwarded  | --                  | --          |
 
 ## `StructuredListBody`
 
@@ -3614,18 +3611,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `StructuredListCell`
 
@@ -3638,18 +3635,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `StructuredListHead`
 
@@ -3659,18 +3656,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `StructuredListInput`
 
@@ -3705,19 +3702,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `StructuredListSkeleton`
 
@@ -3733,12 +3730,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Switch`
 
@@ -3754,19 +3751,19 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | <code>{text}</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{text}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `Tab`
 
@@ -3783,18 +3780,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback             |
-| :-------- | :------ | :---- | :------------------- |
-| --        | Yes     | --    | <code>{label}</code> |
+| Slot name | Default | Props                               | Fallback             |
+| :-------- | :------ | :---------------------------------- | :------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | <code>{label}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TabContent`
 
@@ -3806,9 +3803,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3829,9 +3826,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3845,9 +3842,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3861,18 +3858,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TableContainer`
 
@@ -3887,9 +3884,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -3903,18 +3900,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TableHeader`
 
@@ -3926,23 +3923,23 @@ None.
 | sortDirection   | No       | <code>let</code> | No       | <code>"none" &#124; "ascending" &#124; "descending"</code> | <code>"none"</code>                              | Specify the sort direction             |
 | active          | No       | <code>let</code> | No       | <code>boolean</code>                                       | <code>false</code>                               | Set to `true` if the column sorting    |
 | scope           | No       | <code>let</code> | No       | <code>string</code>                                        | <code>"col"</code>                               | Specify the `scope` attribute          |
-| translateWithId | No       | <code>let</code> | No       | <code>() => string</code>                                  | <code>() => ""</code>                            | Override the default id translations   |
+| translateWithId | No       | <code>let</code> | No       | <code>() => string</code>                                  | --                                               | Override the default id translations   |
 | id              | No       | <code>let</code> | No       | <code>string</code>                                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element    |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| click      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| click      | forwarded | --     | --          |
 
 ## `TableRow`
 
@@ -3952,18 +3949,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Tabs`
 
@@ -3979,18 +3976,18 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
-| content   | No      | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
+| content   | No      | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| change     | dispatched | <code>number</code> |
-| keypress   | forwarded  | --                  |
-| click      | forwarded  | --                  |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| change     | dispatched | <code>number</code> | --          |
+| keypress   | forwarded  | --                  | --          |
+| click      | forwarded  | --                  | --          |
 
 ## `TabsSkeleton`
 
@@ -4007,12 +4004,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Tag`
 
@@ -4035,17 +4032,17 @@ None.
 | Slot name | Default | Props                                                  | Fallback                                            |
 | :-------- | :------ | :----------------------------------------------------- | :-------------------------------------------------- |
 | --        | Yes     | <code>{ props: { class: "bx--tag\_\_label" } } </code> | --                                                  |
-| icon      | No      | --                                                     | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| icon      | No      | <code>Record<string, never> </code>                    | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| close      | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| click      | forwarded  | --                | --          |
+| mouseover  | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| close      | dispatched | <code>null</code> | --          |
 
 ## `TagSkeleton`
 
@@ -4061,12 +4058,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TextArea`
 
@@ -4095,25 +4092,25 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| keydown    | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
+| input      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `TextAreaSkeleton`
 
@@ -4129,12 +4126,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TextInput`
 
@@ -4163,25 +4160,25 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                                        |
-| :--------- | :--------- | :-------------------------------------------- |
-| change     | dispatched | <code>null &#124; number &#124; string</code> |
-| input      | dispatched | <code>null &#124; number &#124; string</code> |
-| click      | forwarded  | --                                            |
-| mouseover  | forwarded  | --                                            |
-| mouseenter | forwarded  | --                                            |
-| mouseleave | forwarded  | --                                            |
-| keydown    | forwarded  | --                                            |
-| keyup      | forwarded  | --                                            |
-| focus      | forwarded  | --                                            |
-| blur       | forwarded  | --                                            |
-| paste      | forwarded  | --                                            |
+| Event name | Type       | Detail                                        | Description |
+| :--------- | :--------- | :-------------------------------------------- | :---------- |
+| change     | dispatched | <code>null &#124; number &#124; string</code> | --          |
+| input      | dispatched | <code>null &#124; number &#124; string</code> | --          |
+| click      | forwarded  | --                                            | --          |
+| mouseover  | forwarded  | --                                            | --          |
+| mouseenter | forwarded  | --                                            | --          |
+| mouseleave | forwarded  | --                                            | --          |
+| keydown    | forwarded  | --                                            | --          |
+| keyup      | forwarded  | --                                            | --          |
+| focus      | forwarded  | --                                            | --          |
+| blur       | forwarded  | --                                            | --          |
+| paste      | forwarded  | --                                            | --          |
 
 ## `TextInputSkeleton`
 
@@ -4197,12 +4194,12 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Theme`
 
@@ -4232,9 +4229,9 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Events
 
-| Event name | Type       | Detail                               |
-| :--------- | :--------- | :----------------------------------- |
-| update     | dispatched | <code>{ theme: CarbonTheme; }</code> |
+| Event name | Type       | Detail                               | Description |
+| :--------- | :--------- | :----------------------------------- | :---------- |
+| update     | dispatched | <code>{ theme: CarbonTheme; }</code> | --          |
 
 ## `Tile`
 
@@ -4246,18 +4243,18 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `TileGroup`
 
@@ -4273,15 +4270,15 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type       | Detail              |
-| :--------- | :--------- | :------------------ |
-| select     | dispatched | <code>string</code> |
+| Event name | Type       | Detail              | Description |
+| :--------- | :--------- | :------------------ | :---------- |
+| select     | dispatched | <code>string</code> | --          |
 
 ## `TimePicker`
 
@@ -4306,26 +4303,26 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| --        | Yes     | --    | --                       |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| change     | forwarded | --     |
-| input      | forwarded | --     |
-| keydown    | forwarded | --     |
-| keyup      | forwarded | --     |
-| focus      | forwarded | --     |
-| blur       | forwarded | --     |
-| paste      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
+| input      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `TimePickerSelect`
 
@@ -4343,19 +4340,19 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| --        | Yes     | --    | --                       |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --        | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `ToastNotification`
 
@@ -4377,22 +4374,22 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                |
-| :-------- | :------ | :---- | :---------------------- |
-| --        | Yes     | --    | --                      |
-| caption   | No      | --    | <code>{caption}</code>  |
-| subtitle  | No      | --    | <code>{subtitle}</code> |
-| title     | No      | --    | <code>{title}</code>    |
+| Slot name | Default | Props                               | Fallback                |
+| :-------- | :------ | :---------------------------------- | :---------------------- |
+| caption   | No      | <code>Record<string, never> </code> | <code>{caption}</code>  |
+| subtitle  | No      | <code>Record<string, never> </code> | <code>{subtitle}</code> |
+| title     | No      | <code>Record<string, never> </code> | <code>{title}</code>    |
+| --        | Yes     | <code>Record<string, never> </code> | --                      |
 
 ### Events
 
-| Event name | Type       | Detail                            |
-| :--------- | :--------- | :-------------------------------- |
-| close      | dispatched | <code>{ timeout: boolean }</code> |
-| click      | forwarded  | --                                |
-| mouseover  | forwarded  | --                                |
-| mouseenter | forwarded  | --                                |
-| mouseleave | forwarded  | --                                |
+| Event name | Type       | Detail                             | Description |
+| :--------- | :--------- | :--------------------------------- | :---------- |
+| close      | dispatched | <code>{ timeout: boolean; }</code> | --          |
+| click      | forwarded  | --                                 | --          |
+| mouseover  | forwarded  | --                                 | --          |
+| mouseenter | forwarded  | --                                 | --          |
+| mouseleave | forwarded  | --                                 | --          |
 
 ## `Toggle`
 
@@ -4413,25 +4410,25 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelA    | No      | --    | <code>{labelA}</code>    |
-| labelB    | No      | --    | <code>{labelB}</code>    |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelA    | No      | <code>Record<string, never> </code> | <code>{labelA}</code>    |
+| labelB    | No      | <code>Record<string, never> </code> | <code>{labelB}</code>    |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                             |
-| :--------- | :--------- | :--------------------------------- |
-| toggle     | dispatched | <code>{ toggled: boolean; }</code> |
-| click      | forwarded  | --                                 |
-| mouseover  | forwarded  | --                                 |
-| mouseenter | forwarded  | --                                 |
-| mouseleave | forwarded  | --                                 |
-| change     | forwarded  | --                                 |
-| keyup      | forwarded  | --                                 |
-| focus      | forwarded  | --                                 |
-| blur       | forwarded  | --                                 |
+| Event name | Type       | Detail                             | Description |
+| :--------- | :--------- | :--------------------------------- | :---------- |
+| toggle     | dispatched | <code>{ toggled: boolean; }</code> | --          |
+| click      | forwarded  | --                                 | --          |
+| mouseover  | forwarded  | --                                 | --          |
+| mouseenter | forwarded  | --                                 | --          |
+| mouseleave | forwarded  | --                                 | --          |
+| change     | forwarded  | --                                 | --          |
+| keyup      | forwarded  | --                                 | --          |
+| focus      | forwarded  | --                                 | --          |
+| blur       | forwarded  | --                                 | --          |
 
 ## `ToggleSkeleton`
 
@@ -4445,18 +4442,18 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                 |
-| :-------- | :------ | :---- | :----------------------- |
-| labelText | No      | --    | <code>{labelText}</code> |
+| Slot name | Default | Props                               | Fallback                 |
+| :-------- | :------ | :---------------------------------- | :----------------------- |
+| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
 
 ## `Toolbar`
 
@@ -4468,9 +4465,9 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4480,24 +4477,24 @@ None.
 
 ### Props
 
-| Prop name           | Required | Kind             | Reactive | Type                                           | Default value                                                                                       | Description                                                                                                       |
-| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| active              | No       | <code>let</code> | Yes      | <code>undefined &#124; boolean</code>          | <code>undefined</code>                                                                              | Use a boolean to show or hide the toolbar                                                                         |
-| formatTotalSelected | No       | <code>let</code> | No       | <code>(totalSelected: number) => string</code> | <code>(totalSelected) => \`${totalSelected} item${totalSelected === 1 ? "" : "s"} selected\`</code> | Override the total items selected text                                                                            |
-| selectedIds         | No       | <code>let</code> | No       | <code>ReadonlyArray<any></code>                | <code>[]</code>                                                                                     | Specify the selected IDs for standalone usage.<br />This is unnecessary if using this component with `DataTable`. |
+| Prop name           | Required | Kind             | Reactive | Type                                           | Default value          | Description                                                                                                       |
+| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| active              | No       | <code>let</code> | Yes      | <code>undefined &#124; boolean</code>          | <code>undefined</code> | Use a boolean to show or hide the toolbar                                                                         |
+| formatTotalSelected | No       | <code>let</code> | No       | <code>(totalSelected: number) => string</code> | --                     | Override the total items selected text                                                                            |
+| selectedIds         | No       | <code>let</code> | No       | <code>ReadonlyArray<any></code>                | <code>[]</code>        | Specify the selected IDs for standalone usage.<br />This is unnecessary if using this component with `DataTable`. |
 
 ### Slots
 
-| Slot name | Default | Props | Fallback            |
-| :-------- | :------ | :---- | :------------------ |
-| --        | Yes     | --    | --                  |
-| cancel    | No      | --    | <code>Cancel</code> |
+| Slot name | Default | Props                               | Fallback            |
+| :-------- | :------ | :---------------------------------- | :------------------ |
+| --        | Yes     | <code>Record<string, never> </code> | --                  |
+| cancel    | No      | <code>Record<string, never> </code> | <code>Cancel</code> |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| cancel     | dispatched | <code>null</code> |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| cancel     | dispatched | <code>null</code> | --          |
 
 ## `ToolbarContent`
 
@@ -4507,9 +4504,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4523,9 +4520,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4539,16 +4536,16 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| keydown    | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
 
 ## `ToolbarSearch`
 
@@ -4571,16 +4568,16 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| clear      | dispatched | <code>null</code> |
-| change     | forwarded  | --                |
-| input      | forwarded  | --                |
-| focus      | forwarded  | --                |
-| blur       | forwarded  | --                |
-| keyup      | forwarded  | --                |
-| keydown    | forwarded  | --                |
-| paste      | forwarded  | --                |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| clear      | forwarded | --     | --          |
+| change     | forwarded | --     | --          |
+| input      | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
+| blur       | forwarded | --     | --          |
+| keyup      | forwarded | --     | --          |
+| keydown    | forwarded | --     | --          |
+| paste      | forwarded | --     | --          |
 
 ## `Tooltip`
 
@@ -4595,7 +4592,7 @@ None.
 | align           | No       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                            | Set the alignment of the tooltip relative to the icon                                      |
 | direction       | No       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                            | Set the direction of the tooltip relative to the button                                    |
 | hideIcon        | No       | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                               | Set to `true` to hide the tooltip icon                                                     |
-| icon            | No       | <code>let</code> | No       | <code>any</code>                                                | <code>undefined</code>                           | Specify the icon to render for the tooltip button.<br />Default to `&lt;Information /&gt;` |
+| icon            | No       | <code>let</code> | No       | <code>any</code>                                                | <code>Information</code>                         | Specify the icon to render for the tooltip button.<br />Default to `&lt;Information /&gt;` |
 | iconDescription | No       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the ARIA label for the tooltip button                                              |
 | iconName        | No       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                  | Specify the icon name attribute                                                            |
 | tabindex        | No       | <code>let</code> | No       | <code>string</code>                                             | <code>"0"</code>                                 | Set the button tabindex                                                                    |
@@ -4605,20 +4602,20 @@ None.
 
 ### Slots
 
-| Slot name   | Default | Props | Fallback                                                            |
-| :---------- | :------ | :---- | :------------------------------------------------------------------ |
-| --          | Yes     | --    | --                                                                  |
-| icon        | No      | --    | <code>&lt;svelte:component this={icon} name={iconName} /&gt;</code> |
-| triggerText | No      | --    | <code>{triggerText}</code>                                          |
+| Slot name   | Default | Props                               | Fallback                                                            |
+| :---------- | :------ | :---------------------------------- | :------------------------------------------------------------------ |
+| icon        | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} name={iconName} /&gt;</code> |
+| triggerText | No      | <code>Record<string, never> </code> | <code>{triggerText}</code>                                          |
+| --          | Yes     | <code>Record<string, never> </code> | --                                                                  |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| open       | dispatched | <code>null</code> |
-| close      | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
-| mousedown  | forwarded  | --                |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| open       | dispatched | <code>null</code> | --          |
+| close      | dispatched | <code>null</code> | --          |
+| click      | forwarded  | --                | --          |
+| mousedown  | forwarded  | --                | --          |
 
 ## `TooltipDefinition`
 
@@ -4635,22 +4632,22 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback                   |
-| :-------- | :------ | :---- | :------------------------- |
-| --        | Yes     | --    | --                         |
-| tooltip   | No      | --    | <code>{tooltipText}</code> |
+| Slot name | Default | Props                               | Fallback                   |
+| :-------- | :------ | :---------------------------------- | :------------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | --                         |
+| tooltip   | No      | <code>Record<string, never> </code> | <code>{tooltipText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail            |
-| :--------- | :--------- | :---------------- |
-| open       | dispatched | <code>null</code> |
-| close      | dispatched | <code>null</code> |
-| click      | forwarded  | --                |
-| mouseover  | forwarded  | --                |
-| mouseenter | forwarded  | --                |
-| mouseleave | forwarded  | --                |
-| focus      | forwarded  | --                |
+| Event name | Type       | Detail            | Description |
+| :--------- | :--------- | :---------------- | :---------- |
+| open       | dispatched | <code>null</code> | --          |
+| close      | dispatched | <code>null</code> | --          |
+| click      | forwarded  | --                | --          |
+| mouseover  | forwarded  | --                | --          |
+| mouseenter | forwarded  | --                | --          |
+| mouseleave | forwarded  | --                | --          |
+| focus      | forwarded  | --                | --          |
 
 ## `TooltipFooter`
 
@@ -4662,9 +4659,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4686,20 +4683,20 @@ None.
 
 ### Slots
 
-| Slot name   | Default | Props | Fallback                                            |
-| :---------- | :------ | :---- | :-------------------------------------------------- |
-| --          | Yes     | --    | <code>&lt;svelte:component this={icon} /&gt;</code> |
-| tooltipText | No      | --    | <code>{tooltipText}</code>                          |
+| Slot name   | Default | Props                               | Fallback                                            |
+| :---------- | :------ | :---------------------------------- | :-------------------------------------------------- |
+| tooltipText | No      | <code>Record<string, never> </code> | <code>{tooltipText}</code>                          |
+| --          | Yes     | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
-| focus      | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |
+| focus      | forwarded | --     | --          |
 
 ## `TreeView`
 
@@ -4708,47 +4705,53 @@ None.
 ```ts
 export type TreeNodeId = string | number;
 
-export interface TreeNode {
+export type TreeNode = {
   id: TreeNodeId;
   text: any;
   icon?: any;
-  disabled?: boolean;
+  /** Whether the node is disabled */ disabled?: boolean;
   nodes?: TreeNode[];
-}
+};
+
+export type ShowNodeOptions = {
+  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;
+  /** Whether to select the node (default: true) */ select?: boolean;
+  /** Whether to focus the node (default: true) */ focus?: boolean;
+};
 ```
 
 ### Props
 
-| Prop name     | Required | Kind                  | Reactive | Type                                                          | Default value                                                                                                                                                                                                                                                                                                                                                                                     | Description                                                                                          |
-| :------------ | :------- | :-------------------- | :------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| expandedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                        | <code>[]</code>                                                                                                                                                                                                                                                                                                                                                                                   | Set the node ids to be expanded                                                                      |
-| selectedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                        | <code>[]</code>                                                                                                                                                                                                                                                                                                                                                                                   | Set the node ids to be selected                                                                      |
-| activeId      | No       | <code>let</code>      | Yes      | <code>TreeNodeId</code>                                       | <code>""</code>                                                                                                                                                                                                                                                                                                                                                                                   | Set the current active node id<br />Only one node can be active                                      |
-| nodes         | No       | <code>let</code>      | No       | <code>Array<TreeNode></code>                                  | <code>[]</code>                                                                                                                                                                                                                                                                                                                                                                                   | Provide an array of nodes to render                                                                  |
-| size          | No       | <code>let</code>      | No       | <code>"default" &#124; "compact"</code>                       | <code>"default"</code>                                                                                                                                                                                                                                                                                                                                                                            | Specify the TreeView size                                                                            |
-| labelText     | No       | <code>let</code>      | No       | <code>string</code>                                           | <code>""</code>                                                                                                                                                                                                                                                                                                                                                                                   | Specify the label text                                                                               |
-| hideLabel     | No       | <code>let</code>      | No       | <code>boolean</code>                                          | <code>false</code>                                                                                                                                                                                                                                                                                                                                                                                | Set to `true` to visually hide the label text                                                        |
-| expandAll     | No       | <code>function</code> | No       | <code>() => void</code>                                       | <code>() => { expandedIds = [...nodeIds]; }</code>                                                                                                                                                                                                                                                                                                                                                | Programmatically expand all nodes                                                                    |
-| collapseAll   | No       | <code>function</code> | No       | <code>() => void</code>                                       | <code>() => { expandedIds = []; }</code>                                                                                                                                                                                                                                                                                                                                                          | Programmatically collapse all nodes                                                                  |
-| expandNodes   | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code> | <code>() => { expandedIds = flattenedNodes .filter( (node) => filterNode(node) &#124;&#124; node.nodes?.some((child) => filterNode(child) && child.nodes), ) .map((node) => node.id); }</code>                                                                                                                                                                                                    | Programmatically expand a subset of nodes.<br />Expands all nodes if no argument is provided         |
-| collapseNodes | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code> | <code>() => { expandedIds = flattenedNodes .filter((node) => expandedIds.includes(node.id) && !filterNode(node)) .map((node) => node.id); }</code>                                                                                                                                                                                                                                                | Programmatically collapse a subset of nodes.<br />Collapses all nodes if no argument is provided     |
-| showNode      | No       | <code>function</code> | No       | <code>(id: TreeNodeId) => void</code>                         | <code>() => { for (const child of nodes) { const nodes = findNodeById(child, id); if (nodes) { const ids = nodes.map((node) => node.id); const nodeIds = new Set(ids); expandNodes((node) => nodeIds.has(node.id)); const lastId = ids[ids.length - 1]; activeId = lastId; selectedIds = [lastId]; tick().then(() => { ref?.querySelector(\`[id="${lastId}"]\`)?.focus(); }); break; } } }</code> | Programmatically show a node by `id`.<br />The matching node will be expanded, selected, and focused |
+| Prop name     | Required | Kind                  | Reactive | Type                                                             | Default value          | Description                                                                                                                                                                  |
+| :------------ | :------- | :-------------------- | :------- | ---------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| expandedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                           | <code>[]</code>        | Set the node ids to be expanded                                                                                                                                              |
+| selectedIds   | No       | <code>let</code>      | Yes      | <code>ReadonlyArray<TreeNodeId></code>                           | <code>[]</code>        | Set the node ids to be selected                                                                                                                                              |
+| activeId      | No       | <code>let</code>      | Yes      | <code>TreeNodeId</code>                                          | <code>""</code>        | Set the current active node id<br />Only one node can be active                                                                                                              |
+| nodes         | No       | <code>let</code>      | No       | <code>Array<TreeNode></code>                                     | <code>[]</code>        | Provide an array of nodes to render                                                                                                                                          |
+| size          | No       | <code>let</code>      | No       | <code>"default" &#124; "compact"</code>                          | <code>"default"</code> | Specify the TreeView size                                                                                                                                                    |
+| labelText     | No       | <code>let</code>      | No       | <code>string</code>                                              | <code>""</code>        | Specify the label text                                                                                                                                                       |
+| hideLabel     | No       | <code>let</code>      | No       | <code>boolean</code>                                             | <code>false</code>     | Set to `true` to visually hide the label text                                                                                                                                |
+| expandAll     | No       | <code>function</code> | No       | <code>() => void</code>                                          | --                     | Programmatically expand all nodes                                                                                                                                            |
+| collapseAll   | No       | <code>function</code> | No       | <code>() => void</code>                                          | --                     | Programmatically collapse all nodes                                                                                                                                          |
+| expandNodes   | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code>    | --                     | Programmatically expand a subset of nodes.<br />Expands all nodes if no argument is provided                                                                                 |
+| collapseNodes | No       | <code>function</code> | No       | <code>(filterId?: (node: TreeNode) => boolean) => void</code>    | --                     | Programmatically collapse a subset of nodes.<br />Collapses all nodes if no argument is provided                                                                             |
+| showNode      | No       | <code>function</code> | No       | <code>(id: TreeNodeId, options?: ShowNodeOptions) => void</code> | --                     | Programmatically show a node by `id`.<br />By default, the matching node will be expanded, selected, and focused.<br />Use the options parameter to customize this behavior. |
 
 ### Slots
 
 | Slot name | Default | Props                                                                                                                             | Fallback                 |
 | :-------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------- | :----------------------- |
 | --        | Yes     | <code>{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } } </code> | <code>{node.text}</code> |
-| labelText | No      | --                                                                                                                                | <code>{labelText}</code> |
+| labelText | No      | <code>Record<string, never> </code>                                                                                               | <code>{labelText}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                                                        |
-| :--------- | :--------- | :------------------------------------------------------------ |
-| select     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
-| toggle     | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
-| focus      | dispatched | <code>TreeNode & { expanded: boolean; leaf: boolean; }</code> |
-| keydown    | forwarded  | --                                                            |
+| Event name | Type       | Detail                                                                                                                            | Description |
+| :--------- | :--------- | :-------------------------------------------------------------------------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; expanded: boolean; leaf: boolean; }</code> | --          |
+| toggle     | dispatched | <code>{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; expanded: boolean; leaf: boolean; }</code> | --          |
+| focus      | dispatched | <code>{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; expanded: boolean; leaf: boolean; }</code> | --          |
+| keydown    | forwarded  | --                                                                                                                                | --          |
 
 ## `Truncate`
 
@@ -4760,9 +4763,9 @@ export interface TreeNode {
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
@@ -4779,15 +4782,15 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props | Fallback |
-| :-------- | :------ | :---- | :------- |
-| --        | Yes     | --    | --       |
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
 
 ### Events
 
-| Event name | Type      | Detail |
-| :--------- | :-------- | :----- |
-| click      | forwarded | --     |
-| mouseover  | forwarded | --     |
-| mouseenter | forwarded | --     |
-| mouseleave | forwarded | --     |
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
+| mouseover  | forwarded | --     | --          |
+| mouseenter | forwarded | --     | --          |
+| mouseleave | forwarded | --     | --          |

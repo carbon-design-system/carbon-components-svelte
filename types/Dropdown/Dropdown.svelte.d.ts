@@ -5,26 +5,25 @@ export type DropdownItemId = any;
 
 export type DropdownItemText = string;
 
-export interface DropdownItem {
+export type DropdownItem = {
   id: DropdownItemId;
   text: DropdownItemText;
-  disabled?: boolean;
-}
+  /** Whether the item is disabled */ disabled?: boolean;
+};
 
 type $RestProps = SvelteHTMLElements["div"];
 
-type $Props = {
+type $Props<Item> = {
   /**
    * Set the dropdown items
    * @default []
    */
-  items?: ReadonlyArray<DropdownItem>;
+  items?: ReadonlyArray<Item>;
 
   /**
    * Override the display of a dropdown item
-   * @default (item) => item.text || item.id
    */
-  itemToString?: (item: DropdownItem) => string;
+  itemToString?: (item: Item) => string;
 
   /**
    * Specify the selected item id
@@ -146,15 +145,13 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type DropdownProps = Omit<$RestProps, keyof $Props> & $Props;
+export type DropdownProps<Item> = Omit<$RestProps, keyof $Props<Item>> &
+  $Props<Item>;
 
-export default class Dropdown extends SvelteComponentTyped<
-  DropdownProps,
-  {
-    select: CustomEvent<{
-      selectedId: DropdownItemId;
-      selectedItem: DropdownItem;
-    }>;
-  },
-  { default: { item: DropdownItem; index: number } }
+export default class Dropdown<
+  Item extends DropdownItem = DropdownItem,
+> extends SvelteComponentTyped<
+  DropdownProps<Item>,
+  { select: CustomEvent<{ selectedId: DropdownItemId; selectedItem: Item }> },
+  { default: { item: Item; index: number } }
 > {}

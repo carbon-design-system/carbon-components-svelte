@@ -18,31 +18,57 @@
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
 
+  /**
+   * @type {import("svelte/store").Writable<Record<string, boolean>>}
+   */
   const selectedItems = writable({});
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>}
+   */
   const menuItems = writable([]);
 
   let menuRef = null;
 
+  /**
+   * @type {(item: { id: string; isSelected: boolean }) => void}
+   */
+  const updateSelectedItems = (item) => {
+    selectedItems.update((_items) => ({
+      ..._items,
+      [item.id]: item.isSelected,
+    }));
+  };
+
+  /**
+   * @type {(element: HTMLElement) => void}
+   */
+  const registerMenuItem = (element) => {
+    menuItems.update((items) => [...items, element]);
+  };
+
+  /**
+   * @type {(element: HTMLElement) => void}
+   */
+  const unregisterMenuItem = (element) => {
+    menuItems.update((items) => items.filter((item) => item !== element));
+  };
+
+  /**
+   * @type {() => Promise<void>}
+   */
+  const closeMenu = async () => {
+    expanded = false;
+    await tick();
+    ref?.focus();
+  };
+
   setContext("HeaderNavMenu", {
     selectedItems,
     menuItems,
-    updateSelectedItems(item) {
-      selectedItems.update((_items) => ({
-        ..._items,
-        [item.id]: item.isSelected,
-      }));
-    },
-    registerMenuItem(element) {
-      menuItems.update((items) => [...items, element]);
-    },
-    unregisterMenuItem(element) {
-      menuItems.update((items) => items.filter((item) => item !== element));
-    },
-    async closeMenu() {
-      expanded = false;
-      await tick();
-      ref?.focus();
-    },
+    updateSelectedItems,
+    registerMenuItem,
+    unregisterMenuItem,
+    closeMenu,
   });
 
   $: isCurrentSubmenu =

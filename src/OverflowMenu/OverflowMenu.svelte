@@ -1,6 +1,8 @@
 <script>
   /**
-   * @event {null | { index: number; text: string; }} close
+   * @event close
+   * @property {number} [index]
+   * @property {string} [text]
    */
 
   /**
@@ -32,7 +34,6 @@
 
   /**
    * Specify the icon to render.
-   * Defaults to `<OverflowMenuVertical />`
    * @type {any}
    */
   export let icon = OverflowMenuVertical;
@@ -67,8 +68,14 @@
 
   const ctxBreadcrumbItem = getContext("BreadcrumbItem");
   const dispatch = createEventDispatcher();
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
+   */
   const items = writable([]);
   const currentId = writable(undefined);
+  /**
+   * @type {import("svelte/store").Writable<string | undefined>}
+   */
   const focusedId = writable(undefined);
   const currentIndex = writable(-1);
 
@@ -79,26 +86,45 @@
     icon = OverflowMenuHorizontal;
   }
 
-  setContext("OverflowMenu", {
-    focusedId,
-    items,
-    add: ({ id, text, primaryFocus, disabled }) => {
-      items.update((_) => {
-        if (primaryFocus) {
-          currentIndex.set(_.length);
-        }
+  /**
+   * @type {(data: { id: string; text: string; primaryFocus: boolean; disabled: boolean }) => void}
+   */
+  const add = ({ id, text, primaryFocus, disabled }) => {
+    items.update((_) => {
+      if (primaryFocus) {
+        currentIndex.set(_.length);
+      }
 
-        return [..._, { id, text, primaryFocus, disabled, index: _.length }];
-      });
-    },
-    update: (id, item) => {
-      currentId.set(id);
+      return [..._, { id, text, primaryFocus, disabled, index: _.length }];
+    });
+  };
 
-      dispatch("close", { index: item.index, text: item.text });
-      open = false;
-    },
-    change: (direction) => {
-      let index = $currentIndex + direction;
+  /**
+   * @type {(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }) => void}
+   */
+  const update = (id, item) => {
+    currentId.set(id);
+
+    dispatch("close", { index: item.index, text: item.text });
+    open = false;
+  };
+
+  /**
+   * @type {(direction: number) => void}
+   */
+  const change = (direction) => {
+    let index = $currentIndex + direction;
+
+    if (index < 0) {
+      index = $items.length - 1;
+    } else if (index >= $items.length) {
+      index = 0;
+    }
+
+    let disabled = $items[index].disabled;
+
+    while (disabled) {
+      index = index + direction;
 
       if (index < 0) {
         index = $items.length - 1;
@@ -106,22 +132,18 @@
         index = 0;
       }
 
-      let disabled = $items[index].disabled;
+      disabled = $items[index].disabled;
+    }
 
-      while (disabled) {
-        index = index + direction;
+    currentIndex.set(index);
+  };
 
-        if (index < 0) {
-          index = $items.length - 1;
-        } else if (index >= $items.length) {
-          index = 0;
-        }
-
-        disabled = $items[index].disabled;
-      }
-
-      currentIndex.set(index);
-    },
+  setContext("OverflowMenu", {
+    focusedId,
+    items,
+    add,
+    update,
+    change,
   });
 
   afterUpdate(() => {

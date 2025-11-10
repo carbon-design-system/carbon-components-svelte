@@ -2,7 +2,10 @@
   /**
    * @typedef {"sm" | "md" | "lg" | "xlg" | "max"} BreakpointSize
    * @typedef {320 | 672 | 1056 | 1312 | 1584} BreakpointValue
-   * @event {{ size: BreakpointSize; breakpointValue: BreakpointValue; }} change
+   * @event change
+   * @type {object}
+   * @property {BreakpointSize} size
+   * @property {BreakpointValue} breakpointValue
    * @slot {{ size: BreakpointSize; sizes: Record<BreakpointSize, boolean>; }}
    */
 

@@ -144,15 +144,19 @@ export default class Modal extends SvelteComponentTyped<
       trigger: "escape-key" | "outside-click" | "close-button";
     }>;
     transitionend: CustomEvent<{ open: boolean }>;
-    ["click:button--secondary"]: CustomEvent<{ text: string }>;
+    "click:button--secondary": CustomEvent<{ text: string }>;
     keydown: WindowEventMap["keydown"];
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     submit: CustomEvent<null>;
-    ["click:button--primary"]: CustomEvent<null>;
+    "click:button--primary": CustomEvent<null>;
     open: CustomEvent<null>;
   },
-  { default: {}; heading: {}; label: {} }
+  {
+    heading: Record<string, never>;
+    label: Record<string, never>;
+    default: Record<string, never>;
+  }
 > {}

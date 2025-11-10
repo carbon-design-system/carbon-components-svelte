@@ -74,7 +74,7 @@
   export let helperText = "";
 
   /** Specify the label text */
-  export let labelText = "";
+  export let label = "";
 
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
@@ -161,7 +161,7 @@
 
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: error =
+  $: hasError =
     (invalid && !readonly) ||
     (!allowEmpty && value == null) ||
     value > max ||
@@ -230,7 +230,7 @@
   on:mouseleave
 >
   <div
-    data-invalid={error || undefined}
+    data-invalid={hasError || undefined}
     class:bx--number={true}
     class:bx--number--helpertext={true}
     class:bx--number--readonly={readonly}
@@ -240,14 +240,14 @@
     class:bx--number--sm={size === "sm"}
     class:bx--number--xl={size === "xl"}
   >
-    {#if $$slots.labelText || labelText}
+    {#if $$slots.label || label}
       <label
         for={id}
         class:bx--label={true}
         class:bx--label--disabled={disabled}
         class:bx--visually-hidden={hideLabel}
       >
-        <slot name="labelText">{labelText}</slot>
+        <slot name="label">{label}</slot>
       </label>
     {/if}
     <div
@@ -261,9 +261,9 @@
           type="text"
           inputmode="decimal"
           aria-describedby={errorId}
-          data-invalid={error || undefined}
-          aria-invalid={error || undefined}
-          aria-label={labelText ? undefined : ariaLabel}
+          data-invalid={hasError || undefined}
+          aria-invalid={hasError || undefined}
+          aria-label={label ? undefined : ariaLabel}
           {disabled}
           {id}
           {name}
@@ -284,9 +284,9 @@
           type="number"
           pattern="[0-9]*"
           aria-describedby={errorId}
-          data-invalid={error || undefined}
-          aria-invalid={error || undefined}
-          aria-label={labelText ? undefined : ariaLabel}
+          data-invalid={hasError || undefined}
+          aria-invalid={hasError || undefined}
+          aria-label={label ? undefined : ariaLabel}
           {disabled}
           {id}
           {name}
@@ -353,7 +353,7 @@
         </div>
       {/if}
     </div>
-    {#if !error && !warn && helperText}
+    {#if !hasError && !warn && helperText}
       <div
         class:bx--form__helper-text={true}
         class:bx--form__helper-text--disabled={disabled}
@@ -361,12 +361,12 @@
         {helperText}
       </div>
     {/if}
-    {#if error}
+    {#if hasError}
       <div id={errorId} class:bx--form-requirement={true}>
         {invalidText}
       </div>
     {/if}
-    {#if !error && warn}
+    {#if !hasError && warn}
       <div id={errorId} class:bx--form-requirement={true}>{warnText}</div>
     {/if}
   </div>

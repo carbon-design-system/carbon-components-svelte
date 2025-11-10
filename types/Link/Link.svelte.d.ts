@@ -60,5 +60,5 @@ export default class Link extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {}; icon: {} }
+  { default: Record<string, never>; icon: Record<string, never> }
 > {}

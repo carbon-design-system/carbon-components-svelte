@@ -1,6 +1,15 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type HeaderNavMenuContext = {
+  selectedItems: import("svelte/store").Writable<Record<string, boolean>>;
+  menuItems: import("svelte/store").Writable<ReadonlyArray<HTMLElement>>;
+  updateSelectedItems: (item: { id: string; isSelected: boolean }) => void;
+  registerMenuItem: (element: HTMLElement) => void;
+  unregisterMenuItem: (element: HTMLElement) => void;
+  closeMenu: () => Promise<void>;
+};
+
 type $RestProps = SvelteHTMLElements["a"];
 
 type $Props = {
@@ -45,5 +54,5 @@ export default class HeaderNavMenu extends SvelteComponentTyped<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

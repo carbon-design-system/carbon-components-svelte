@@ -27,5 +27,5 @@ export type AspectRatioProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class AspectRatio extends SvelteComponentTyped<
   AspectRatioProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

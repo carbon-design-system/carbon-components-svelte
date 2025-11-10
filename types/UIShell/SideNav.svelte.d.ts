@@ -50,7 +50,7 @@ export default class SideNav extends SvelteComponentTyped<
   {
     open: CustomEvent<null>;
     close: CustomEvent<null>;
-    ["click:overlay"]: CustomEvent<null>;
+    "click:overlay": CustomEvent<null>;
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

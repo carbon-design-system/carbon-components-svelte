@@ -106,6 +106,33 @@ describe("ContextMenu", () => {
     menus[0].appendChild(nestedMenu);
   });
 
+  it("should set level to 1 when ctx is null (root menu)", () => {
+    render(ContextMenu, { props: { open: true } });
+
+    const menus = screen.getAllByRole("menu");
+    expect(menus[0]).toHaveAttribute("data-level", "1");
+  });
+
+  it("should set level to 2 when ctx exists (nested menu)", async () => {
+    render(ContextMenu, {
+      props: {
+        open: true,
+        withSubmenu: true,
+        x: 100,
+        y: 100,
+      },
+    });
+
+    const submenuTrigger = screen.getByText("Option with submenu");
+    await user.hover(submenuTrigger);
+
+    const submenu = screen
+      .getAllByRole("menu")
+      .find((menu) => menu.getAttribute("data-level") === "2");
+    assert(submenu);
+    expect(submenu).toHaveAttribute("data-level", "2");
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1848
   it("should not close parent menu when clicking submenu trigger", async () => {
     const consoleLog = vi.spyOn(console, "log");
@@ -172,7 +199,7 @@ describe("ContextMenu", () => {
       .find((menu) => menu.getAttribute("data-level") === "2");
     assert(submenu);
 
-    const submenuX = parseInt(submenu.style.left, 10);
+    const submenuX = Number.parseInt(submenu.style.left, 10);
     const submenuWidth = submenu.getBoundingClientRect().width;
 
     // Submenu should not overflow the right edge of viewport
@@ -210,9 +237,9 @@ describe("ContextMenu", () => {
       .find((menu) => menu.getAttribute("data-level") === "1");
     assert(rootMenu);
 
-    const rootX = parseInt(rootMenu.style.left, 10);
+    const rootX = Number.parseInt(rootMenu.style.left, 10);
     const rootWidth = rootMenu.getBoundingClientRect().width;
-    const submenuX = parseInt(submenu.style.left, 10);
+    const submenuX = Number.parseInt(submenu.style.left, 10);
 
     // Submenu should be positioned to the right of the parent menu.
     expect(submenuX).toBeGreaterThanOrEqual(rootX + rootWidth);
@@ -243,7 +270,7 @@ describe("ContextMenu", () => {
       .find((menu) => menu.getAttribute("data-level") === "2");
     assert(submenu);
 
-    const submenuX = parseInt(submenu.style.left, 10);
+    const submenuX = Number.parseInt(submenu.style.left, 10);
     // Submenu should be positioned at or near 0 (left edge of viewport).
     expect(submenuX).toBeGreaterThanOrEqual(0);
   });

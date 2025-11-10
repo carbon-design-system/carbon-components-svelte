@@ -29,11 +29,44 @@
 <script>
   /**
    * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: any; icon?: any; disabled?: boolean; nodes?: TreeNode[]; }} TreeNode
+   * @typedef {object} TreeNode
+   * @property {TreeNodeId} id
+   * @property {any} text
+   * @property {any} [icon]
+   * @property {boolean} [disabled] - Whether the node is disabled
+   * @property {TreeNode[]} [nodes]
+   * @typedef {object} ShowNodeOptions
+   * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
+   * @property {boolean} [select] - Whether to select the node (default: true)
+   * @property {boolean} [focus] - Whether to focus the node (default: true)
    * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
-   * @event {TreeNode & { expanded: boolean; leaf: boolean; }} select
-   * @event {TreeNode & { expanded: boolean; leaf: boolean; }} toggle
-   * @event {TreeNode & { expanded: boolean; leaf: boolean; }} focus
+   * @event select
+   * @type {object}
+   * @property {TreeNodeId} id
+   * @property {any} text
+   * @property {any} [icon]
+   * @property {boolean} [disabled]
+   * @property {TreeNode[]} [nodes]
+   * @property {boolean} expanded
+   * @property {boolean} leaf
+   * @event toggle
+   * @type {object}
+   * @property {TreeNodeId} id
+   * @property {any} text
+   * @property {any} [icon]
+   * @property {boolean} [disabled]
+   * @property {TreeNode[]} [nodes]
+   * @property {boolean} expanded
+   * @property {boolean} leaf
+   * @event focus
+   * @type {object}
+   * @property {TreeNodeId} id
+   * @property {any} text
+   * @property {any} [icon]
+   * @property {boolean} [disabled]
+   * @property {TreeNode[]} [nodes]
+   * @property {boolean} expanded
+   * @property {boolean} leaf
    */
 
   /**
@@ -117,10 +150,13 @@
 
   /**
    * Programmatically show a node by `id`.
-   * The matching node will be expanded, selected, and focused
-   * @type {(id: TreeNodeId) => void}
+   * By default, the matching node will be expanded, selected, and focused.
+   * Use the options parameter to customize this behavior.
+   * @type {(id: TreeNodeId, options?: ShowNodeOptions) => void}
    */
-  export function showNode(id) {
+  export function showNode(id, options = {}) {
+    const { expand = true, select = true, focus = true } = options;
+
     for (const child of nodes) {
       const nodes = findNodeById(child, id);
 
@@ -128,16 +164,22 @@
         const ids = nodes.map((node) => node.id);
         const nodeIds = new Set(ids);
 
-        expandNodes((node) => nodeIds.has(node.id));
+        if (expand) {
+          expandNodes((node) => nodeIds.has(node.id));
+        }
 
         const lastId = ids[ids.length - 1];
 
-        activeId = lastId;
-        selectedIds = [lastId];
+        if (select) {
+          activeId = lastId;
+          selectedIds = [lastId];
+        }
 
-        tick().then(() => {
-          ref?.querySelector(`[id="${lastId}"]`)?.focus();
-        });
+        if (focus) {
+          tick().then(() => {
+            ref?.querySelector(`[id="${lastId}"]`)?.focus();
+          });
+        }
 
         break;
       }
@@ -150,34 +192,68 @@
 
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
+  /**
+   * @type {import("svelte/store").Writable<TreeNodeId>}
+   */
   const activeNodeId = writable(activeId);
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>}
+   */
   const selectedNodeIds = writable(selectedIds);
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>}
+   */
   const expandedNodeIds = writable(expandedIds);
 
   let ref = null;
   let treeWalker = null;
 
+  /**
+   * @type {(node: TreeNode) => void}
+   */
+  const clickNode = (node) => {
+    activeId = node.id;
+    selectedIds = [node.id];
+    dispatch("select", node);
+  };
+
+  /**
+   * @type {(node: TreeNode) => void}
+   */
+  const selectNode = (node) => {
+    selectedIds = [node.id];
+  };
+
+  /**
+   * @type {(node: TreeNode, expanded: boolean) => void}
+   */
+  const expandNode = (node, expanded) => {
+    if (expanded) {
+      expandedIds = [...expandedIds, node.id];
+    } else {
+      expandedIds = expandedIds.filter((_id) => _id !== node.id);
+    }
+  };
+
+  /**
+   * @type {(node: TreeNode) => void}
+   */
+  const focusNode = (node) => dispatch("focus", node);
+
+  /**
+   * @type {(node: TreeNode) => void}
+   */
+  const toggleNode = (node) => dispatch("toggle", node);
+
   setContext("TreeView", {
     activeNodeId,
     selectedNodeIds,
     expandedNodeIds,
-    clickNode: (node) => {
-      activeId = node.id;
-      selectedIds = [node.id];
-      dispatch("select", node);
-    },
-    selectNode: (node) => {
-      selectedIds = [node.id];
-    },
-    expandNode: (node, expanded) => {
-      if (expanded) {
-        expandedIds = [...expandedIds, node.id];
-      } else {
-        expandedIds = expandedIds.filter((_id) => _id !== node.id);
-      }
-    },
-    focusNode: (node) => dispatch("focus", node),
-    toggleNode: (node) => dispatch("toggle", node),
+    clickNode,
+    selectNode,
+    expandNode,
+    focusNode,
+    toggleNode,
   });
 
   function handleKeyDown(e) {

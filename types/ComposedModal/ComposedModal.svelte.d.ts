@@ -1,6 +1,13 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type ComposedModalContext = {
+  closeModal: () => void;
+  submit: () => void;
+  declareRef: (ref: HTMLButtonElement) => void;
+  updateLabel: (value: string | undefined) => void;
+};
+
 type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
@@ -64,8 +71,8 @@ export default class ComposedModal extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
     submit: CustomEvent<null>;
-    ["click:button--primary"]: CustomEvent<null>;
+    "click:button--primary": CustomEvent<null>;
     open: CustomEvent<null>;
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

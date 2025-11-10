@@ -12,15 +12,13 @@ type $Props = {
 
   /**
    * Specify the icon to render when the action panel is closed.
-   * Defaults to `<Switcher size={20} />`
-   * @default undefined
+   * @default Switcher
    */
   icon?: any;
 
   /**
    * Specify the icon to render when the action panel is open.
-   * Defaults to `<Close size={20} />`
-   * @default undefined
+   * @default Close
    */
   closeIcon?: any;
 
@@ -76,5 +74,10 @@ export default class HeaderAction extends SvelteComponentTyped<
     close: CustomEvent<null>;
     click: WindowEventMap["click"];
   },
-  { default: {}; closeIcon: {}; icon: {}; text: {} }
+  {
+    closeIcon: Record<string, never>;
+    icon: Record<string, never>;
+    text: Record<string, never>;
+    default: Record<string, never>;
+  }
 > {}

@@ -1,6 +1,21 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type DatePickerContext = {
+  range: import("svelte/store").Readable<boolean>;
+  inputValue: import("svelte/store").Writable<number | string>;
+  inputValueFrom: import("svelte/store").Writable<string>;
+  inputValueTo: import("svelte/store").Writable<string>;
+  inputIds: import("svelte/store").Readable<ReadonlyArray<string>>;
+  hasCalendar: import("svelte/store").Readable<boolean>;
+  add: (data: { id: string; labelText: string }) => void;
+  declareRef: (data: { id: string; ref: HTMLInputElement }) => void;
+  updateValue: (data: { type: "input" | "change"; value: string }) => void;
+  blurInput: (relatedTarget: EventTarget | null) => void;
+  openCalendar: () => void;
+  focusCalendar: () => void;
+};
+
 type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
@@ -101,5 +116,5 @@ export default class DatePicker extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

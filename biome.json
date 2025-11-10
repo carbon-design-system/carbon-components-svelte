@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.4/schema.json",
   "formatter": {
     "enabled": true,
     "indentStyle": "space"
@@ -12,27 +12,68 @@
   "files": {
     "includes": [
       "**",
-      "!**/.*",
-      "!**/build",
-      "!**/dist",
-      "!**/css/*.css",
-      "!**/docs/src/pages/index.svelte",
-      "!**/docs/src/COMPONENT_API.json"
+      "!!**/.*/**/*",
+      "!!**/build/**/*",
+      "!!**/dist/**/*",
+      "!!**/css/*.css",
+      "!!**/docs/src/pages/index.svelte",
+      "!!**/docs/src/COMPONENT_API.json"
     ]
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
+      "performance": {
+        "noAccumulatingSpread": "error",
+        "noAwaitInLoops": "error",
+        "noDelete": "error",
+        "noDynamicNamespaceImportAccess": "error",
+        "noNamespaceImport": "error",
+        "noReExportAll": "error",
+        "useTopLevelRegex": "error"
+      },
       "complexity": {
-        "noBannedTypes": "off",
-        "noImportantStyles": "off",
-        "useLiteralKeys": "off"
+        "noCommaOperator": "error",
+        "noForEach": "error",
+        "noUselessConstructor": "error",
+        "noUselessEmptyExport": "error",
+        "noUselessFragments": "error",
+        "noUselessLabel": "error",
+        "noUselessLoneBlockStatements": "error",
+        "noUselessRename": "error",
+        "noUselessSwitchCase": "error",
+        "noUselessTypeConstraint": "error",
+        "useArrowFunction": "error",
+        "useLiteralKeys": "error",
+        "noImportantStyles": "off"
       },
       "suspicious": {
         "noExplicitAny": "off"
       },
       "style": {
+        "noImplicitBoolean": "error",
+        "noNegationElse": "error",
+        "noParameterAssign": "error",
+        "noRestrictedGlobals": "error",
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "vitest": {
+                "message": "Vitest functions are automatically imported."
+              }
+            }
+          }
+        },
+        "noUnusedTemplateLiteral": "error",
+        "useDefaultParameterLast": "error",
+        "useExponentiationOperator": "error",
+        "useNamingConvention": "error",
+        "useNodejsImportProtocol": "error",
+        "useNumberNamespace": "error",
+        "useSingleVarDeclarator": "error",
+        "noCommonJs": "error",
         "noDescendingSpecificity": "off"
       }
     }
@@ -68,11 +109,24 @@
       }
     },
     {
-      "includes": ["types/**/*.d.ts", "src/**/*.d.ts"],
+      "includes": ["**/*.test.ts"],
       "linter": {
         "rules": {
-          "correctness": {
-            "noUnusedImports": "off"
+          "performance": {
+            "useTopLevelRegex": "off"
+          },
+          "complexity": {
+            "noForEach": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["docs/src/**/*.{svelte,svx}"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
           }
         }
       }

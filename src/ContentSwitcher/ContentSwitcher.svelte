@@ -16,6 +16,9 @@
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
+  /**
+   * @type {import("svelte/store").Writable<string | null>}
+   */
   const currentId = writable(null);
 
   $: currentIndex = -1;
@@ -25,29 +28,44 @@
     currentId.set(switches[currentIndex].id);
   }
 
+  /**
+   * @type {(data: { id: string; text: string; selected: boolean }) => void}
+   */
+  const add = ({ id, text, selected }) => {
+    if (selected) {
+      selectedIndex = switches.length;
+    }
+
+    switches = [...switches, { id, text, selected }];
+  };
+
+  /**
+   * @type {(id: string) => void}
+   */
+  const update = (id) => {
+    selectedIndex = switches.map(({ id }) => id).indexOf(id);
+  };
+
+  /**
+   * @type {(direction: number) => void}
+   */
+  const change = (direction) => {
+    let index = currentIndex + direction;
+
+    if (index < 0) {
+      index = switches.length - 1;
+    } else if (index >= switches.length) {
+      index = 0;
+    }
+
+    selectedIndex = index;
+  };
+
   setContext("ContentSwitcher", {
     currentId,
-    add: ({ id, text, selected }) => {
-      if (selected) {
-        selectedIndex = switches.length;
-      }
-
-      switches = [...switches, { id, text, selected }];
-    },
-    update: (id) => {
-      selectedIndex = switches.map(({ id }) => id).indexOf(id);
-    },
-    change: (direction) => {
-      let index = currentIndex + direction;
-
-      if (index < 0) {
-        index = switches.length - 1;
-      } else if (index >= switches.length) {
-        index = 0;
-      }
-
-      selectedIndex = index;
-    },
+    add,
+    update,
+    change,
   });
 
   afterUpdate(() => {

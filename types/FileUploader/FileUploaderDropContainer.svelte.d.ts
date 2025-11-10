@@ -25,7 +25,6 @@ type $Props = {
   /**
    * Override the default behavior of validating uploaded files.
    * By default, files are not validated
-   * @default (files) => files
    */
   validateFiles?: (files: ReadonlyArray<File>) => ReadonlyArray<File>;
 
@@ -88,5 +87,5 @@ export default class FileUploaderDropContainer extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
     click: WindowEventMap["click"];
   },
-  { labelText: {} }
+  { labelText: Record<string, never> }
 > {}

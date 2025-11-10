@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { mdsvex } from "mdsvex";
 import { format } from "prettier";
 import Prism from "prismjs";
@@ -7,13 +8,19 @@ import slug from "remark-slug";
 import { parse, walk } from "svelte/compiler";
 import visit from "unist-util-visit";
 import pkg from "../package.json" with { type: "json" };
-import component_api from "./src/COMPONENT_API.json" with { type: "json" };
+import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
 import "prism-svelte";
 
-const component_api_by_name = component_api.components.reduce((a, c) => {
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const componentApiByName = componentApi.components.reduce((a, c) => {
   a[c.moduleName] = true;
   return a;
 }, {});
+
+const ICON_NAME_REGEX = /[A-Z][a-z]*/;
+const NODE_MODULES_REGEX = /node_modules/;
+const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
 
 function createImports(source) {
   const inlineComponents = new Set();
@@ -22,7 +29,7 @@ function createImports(source) {
 
   // heuristic to guess if the inline component or expression name is a Carbon icon
   const isIcon = (text) =>
-    /[A-Z][a-z]*/.test(text) && !(text in component_api_by_name);
+    ICON_NAME_REGEX.test(text) && !(text in componentApiByName);
 
   walk(parse(source), {
     enter(node) {
@@ -45,21 +52,18 @@ function createImports(source) {
     },
   });
 
-  const action_imports = Array.from(actions.keys());
-  const ccs_imports = [
-    ...Array.from(inlineComponents.keys()),
-    ...action_imports,
-  ];
-  const icon_imports = Array.from(icons.keys());
+  const actionImports = Array.from(actions.keys());
+  const ccsImports = [...Array.from(inlineComponents.keys()), ...actionImports];
+  const iconImports = Array.from(icons.keys());
 
-  if (ccs_imports.length === 0) return "";
+  if (ccsImports.length === 0) return "";
 
   return `
   <script>
-    import {${ccs_imports.join(",")}} from "carbon-components-svelte";
+    import {${ccsImports.join(",")}} from "carbon-components-svelte";
     ${
       icons.size > 0
-        ? icon_imports
+        ? iconImports
             .map(
               (icon) =>
                 `import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
@@ -98,11 +102,11 @@ function plugin() {
       walk(parse(node.value), {
         enter(node) {
           if (node.name === "FileSource") {
-            node.attributes.forEach((attribute) => {
+            for (const attribute of node.attributes) {
               if (attribute.name === "src") {
                 src += attribute.value[0].raw;
               }
-            });
+            }
           }
         },
       });
@@ -142,7 +146,7 @@ export default {
   preprocess: [
     {
       markup: ({ filename, content }) => {
-        if (/node_modules/.test(filename) || !filename.endsWith(".svelte"))
+        if (NODE_MODULES_REGEX.test(filename) || !filename.endsWith(".svelte"))
           return;
         return {
           code: content.replace(
@@ -156,13 +160,13 @@ export default {
       smartypants: false,
       remarkPlugins: [plugin, slug, carbonify],
       layout: {
-        _: path.join("src/layouts/ComponentLayout.svelte"),
+        _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
       },
     }),
     {
       markup({ content, filename }) {
-        if (/node_modules/.test(filename)) return null;
-        if (!filename.match(/pages\/(components)/)) return null;
+        if (NODE_MODULES_REGEX.test(filename)) return null;
+        if (!filename.match(PAGES_COMPONENTS_REGEX)) return null;
 
         const toc = [];
 

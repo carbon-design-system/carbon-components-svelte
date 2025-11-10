@@ -24,5 +24,5 @@ export type HeaderPanelLinkProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class HeaderPanelLink extends SvelteComponentTyped<
   HeaderPanelLinkProps,
   { click: WindowEventMap["click"] },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

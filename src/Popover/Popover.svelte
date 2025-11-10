@@ -1,6 +1,7 @@
 <script>
   /**
-   * @event {{ target: HTMLElement; }} click:outside
+   * @event click:outside
+   * @property {HTMLElement} target
    */
 
   /** Set to `true` to display the popover */

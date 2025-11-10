@@ -73,6 +73,9 @@
   import Information from "../icons/Information.svelte";
 
   const dispatch = createEventDispatcher();
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
   const tooltipOpen = writable(open);
 
   setContext("Tooltip", { tooltipOpen });

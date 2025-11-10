@@ -5,7 +5,7 @@ on:
 
 jobs:
   release:
-    runs-on: macos-latest-xlarge
+    runs-on: macos-15
     permissions:
       contents: read
       id-token: write
@@ -16,14 +16,8 @@ jobs:
           node-version: 22
           registry-url: "https://registry.npmjs.org"
 
-      - name: Install dependencies
-        run: bun ci
-
-      - name: Build docs
-        run: bun build:docs
-
       - name: Prune package.json
-        run: bunx culls --preserve=svelte
+        run: npx culls --preserve=svelte
 
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}

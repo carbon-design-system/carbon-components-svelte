@@ -1,7 +1,9 @@
 <script>
   /**
-   * @event {{ trigger: "escape-key" | "outside-click" | "close-button" }} close
-   * @event {{ open: boolean; }} transitionend
+   * @event close
+   * @property {"escape-key" | "outside-click" | "close-button"} trigger
+   * @event transitionend
+   * @property {boolean} open
    */
 
   /**
@@ -59,20 +61,40 @@
     }
   }
 
+  /**
+   * @type {() => void}
+   */
+  const closeModal = () => {
+    close("close-button");
+  };
+
+  /**
+   * @type {() => void}
+   */
+  const submit = () => {
+    dispatch("submit");
+    dispatch("click:button--primary");
+  };
+
+  /**
+   * @type {(ref: HTMLButtonElement) => void}
+   */
+  const declareRef = (ref) => {
+    buttonRef = ref;
+  };
+
+  /**
+   * @type {(value: string | undefined) => void}
+   */
+  const updateLabel = (value) => {
+    label.set(value);
+  };
+
   setContext("ComposedModal", {
-    closeModal: () => {
-      close("close-button");
-    },
-    submit: () => {
-      dispatch("submit");
-      dispatch("click:button--primary");
-    },
-    declareRef: (ref) => {
-      buttonRef = ref;
-    },
-    updateLabel: (value) => {
-      label.set(value);
-    },
+    closeModal,
+    submit,
+    declareRef,
+    updateLabel,
   });
 
   function focus(element) {

@@ -119,7 +119,12 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type ButtonProps = Omit<$RestProps, keyof $Props> & $Props;
+export type ButtonProps = Omit<
+  $RestProps,
+  keyof ($Props & ButtonSkeletonProps)
+> &
+  $Props &
+  ButtonSkeletonProps;
 
 export default class Button extends SvelteComponentTyped<
   ButtonProps,
@@ -143,6 +148,6 @@ export default class Button extends SvelteComponentTyped<
         [key: string]: any;
       };
     };
-    icon: {};
+    icon: { style: undefined | string };
   }
 > {}

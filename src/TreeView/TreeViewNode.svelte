@@ -1,8 +1,7 @@
 <script context="module">
   /**
    * Computes the depth of a tree leaf node relative to <ul role="tree" />
-   * @param {HTMLLIElement} node
-   * @returns {number} depth
+   * @type {(node: HTMLLIElement) => number}
    */
   export function computeTreeLeafDepth(node) {
     let depth = 0;

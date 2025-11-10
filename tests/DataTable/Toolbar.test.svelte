@@ -22,7 +22,7 @@
     <slot />
   </Toolbar>
 {:else if testComponent === "ToolbarContent"}
-  <ToolbarContent {...$$restProps}>
+  <ToolbarContent>
     {#if slotContent}{slotContent}{/if}
     <slot />
   </ToolbarContent>

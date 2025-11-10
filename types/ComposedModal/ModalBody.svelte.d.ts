@@ -24,5 +24,5 @@ export type ModalBodyProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ModalBody extends SvelteComponentTyped<
   ModalBodyProps,
   Record<string, any>,
-  { default: {} }
+  { default: Record<string, never> }
 > {}

@@ -30,7 +30,6 @@ type $Props = {
 
   /**
    * Override the default id translations
-   * @default () => ""
    */
   translateWithId?: () => string;
 
@@ -53,5 +52,5 @@ export default class TableHeader extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
     click: WindowEventMap["click"];
   },
-  { default: {} }
+  { default: Record<string, never> }
 > {}

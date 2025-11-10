@@ -1,21 +1,29 @@
 <script>
   /**
+   * @generics {Item extends ComboBoxItem = ComboBoxItem} Item
+   * @template {ComboBoxItem} Item
    * @typedef {any} ComboBoxItemId
-   * @typedef {{ id: ComboBoxItemId; text: string; disabled?: boolean; }} ComboBoxItem
-   * @event {{ selectedId: ComboBoxItemId; selectedItem: ComboBoxItem }} select
+   * @typedef {object} ComboBoxItem
+   * @property {ComboBoxItemId} id
+   * @property {string} text
+   * @property {boolean} [disabled] - Whether the item is disabled
+   * @event select
+   * @type {object}
+   * @property {ComboBoxItemId} selectedId
+   * @property {Item} selectedItem
    * @event {KeyboardEvent | MouseEvent} clear
-   * @slot {{ item: ComboBoxItem; index: number }}
+   * @slot {{ item: Item; index: number }}
    */
 
   /**
    * Set the combobox items
-   * @type {ReadonlyArray<ComboBoxItem>}
+   * @type {ReadonlyArray<Item>}
    */
   export let items = [];
 
   /**
    * Override the display of a combobox item
-   * @type {(item: ComboBoxItem) => string}
+   * @type {(item: Item) => string}
    */
   export let itemToString = (item) => item.text || item.id;
 
@@ -89,7 +97,7 @@
 
   /**
    * Determine if an item should be filtered given the current combobox value
-   * @type {(item: ComboBoxItem, value: string) => boolean}
+   * @type {(item: Item, value: string) => boolean}
    */
   export let shouldFilterItem = () => true;
 
@@ -144,7 +152,7 @@
 
   function change(dir) {
     let index = highlightedIndex + dir;
-    let _items = !filteredItems?.length ? items : filteredItems;
+    let _items = filteredItems?.length ? filteredItems : items;
     if (_items.length === 0) return;
     if (index < 0) {
       index = _items.length - 1;
@@ -197,15 +205,7 @@
     } else {
       highlightedIndex = -1;
       filteredItems = [];
-      if (!selectedItem) {
-        selectedId = undefined;
-        // Only reset value if the input is not focused and allowCustomValue is false
-        if (!ref.contains(document.activeElement) && !allowCustomValue) {
-          value = "";
-        }
-        highlightedIndex = -1;
-        highlightedId = undefined;
-      } else {
+      if (selectedItem) {
         // Only set value if the input is not focused
         if (!ref.contains(document.activeElement)) {
           // Restore the value if clearFilterOnOpen was used and no new selection was made
@@ -217,6 +217,14 @@
           }
           valueBeforeOpen = "";
         }
+      } else {
+        selectedId = undefined;
+        // Only reset value if the input is not focused and allowCustomValue is false
+        if (!ref.contains(document.activeElement) && !allowCustomValue) {
+          value = "";
+        }
+        highlightedIndex = -1;
+        highlightedId = undefined;
       }
     }
   });

@@ -3,13 +3,29 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 export type TreeNodeId = string | number;
 
-export interface TreeNode {
+export type TreeNode = {
   id: TreeNodeId;
   text: any;
   icon?: any;
-  disabled?: boolean;
+  /** Whether the node is disabled */ disabled?: boolean;
   nodes?: TreeNode[];
-}
+};
+
+export type ShowNodeOptions = {
+  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;
+  /** Whether to select the node (default: true) */ select?: boolean;
+  /** Whether to focus the node (default: true) */ focus?: boolean;
+};
+export type TreeViewContext = {
+  activeNodeId: import("svelte/store").Writable<TreeNodeId>;
+  selectedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
+  expandedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
+  clickNode: (node: TreeNode) => void;
+  selectNode: (node: TreeNode) => void;
+  expandNode: (node: TreeNode, expanded: boolean) => void;
+  focusNode: (node: TreeNode) => void;
+  toggleNode: (node: TreeNode) => void;
+};
 
 type $RestProps = SvelteHTMLElements["ul"];
 
@@ -65,9 +81,33 @@ export type TreeViewProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class TreeView extends SvelteComponentTyped<
   TreeViewProps,
   {
-    select: CustomEvent<TreeNode & { expanded: boolean; leaf: boolean }>;
-    toggle: CustomEvent<TreeNode & { expanded: boolean; leaf: boolean }>;
-    focus: CustomEvent<TreeNode & { expanded: boolean; leaf: boolean }>;
+    select: CustomEvent<{
+      id: TreeNodeId;
+      text: any;
+      icon?: any;
+      disabled?: boolean;
+      nodes?: TreeNode[];
+      expanded: boolean;
+      leaf: boolean;
+    }>;
+    toggle: CustomEvent<{
+      id: TreeNodeId;
+      text: any;
+      icon?: any;
+      disabled?: boolean;
+      nodes?: TreeNode[];
+      expanded: boolean;
+      leaf: boolean;
+    }>;
+    focus: CustomEvent<{
+      id: TreeNodeId;
+      text: any;
+      icon?: any;
+      disabled?: boolean;
+      nodes?: TreeNode[];
+      expanded: boolean;
+      leaf: boolean;
+    }>;
     keydown: WindowEventMap["keydown"];
   },
   {
@@ -81,7 +121,7 @@ export default class TreeView extends SvelteComponentTyped<
         selected: boolean;
       };
     };
-    labelText: {};
+    labelText: Record<string, never>;
   }
 > {
   /**
@@ -108,7 +148,8 @@ export default class TreeView extends SvelteComponentTyped<
 
   /**
    * Programmatically show a node by `id`.
-   * The matching node will be expanded, selected, and focused
+   * By default, the matching node will be expanded, selected, and focused.
+   * Use the options parameter to customize this behavior.
    */
-  showNode: (id: TreeNodeId) => void;
+  showNode: (id: TreeNodeId, options?: ShowNodeOptions) => void;
 }

@@ -108,8 +108,32 @@ Use `TreeView.showNode` to expand, select, and focus a specific node.
 
 <FileSource src="/framed/TreeView/TreeViewShowNode" />
 
+## Show node with options
+
+Configure `TreeView.showNode` behavior using optional parameters. By default, all three actions occur (`expand`, `select`, `focus`), but you can disable any combination. This is useful for expanding nodes without selecting them, or selecting without expanding.
+
+<FileSource src="/framed/TreeView/TreeViewShowNodeOptions" />
+
 ## Flat data structure
 
 Convert flat data to a hierarchical structure using the `toHierarchy` utility.
 
 <FileSource src="/framed/TreeView/TreeViewFlatArray" />
+
+## Filter by text with search input
+
+Combine a `Search` input with `filterTreeByText` to create an interactive searchable tree. Type to filter nodes by name (case-insensitive substring matching). By default, matching nodes and their ancestors are included to maintain valid tree structure.
+
+<FileSource src="/framed/TreeView/TreeViewFilter" />
+
+## Filter by ID
+
+Use `filterTreeById` to filter nodes by their ID. Accepts either a single ID or an array of IDs. Click the buttons to filter by a single ID or multiple IDs. Matching nodes and their ancestors are included by default.
+
+<FileSource src="/framed/TreeView/TreeViewFilterById" />
+
+## Filter with custom predicate
+
+Use `filterTreeNodes` with a predicate function to implement custom filtering logic. The example demonstrates filtering by file extension, filtering leaf nodes only, and using the `includeChildren` option to include all descendants of matching nodes. By default, matching nodes and their ancestors are included.
+
+<FileSource src="/framed/TreeView/TreeViewFilterNodes" />
