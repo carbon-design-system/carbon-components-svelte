@@ -353,4 +353,26 @@ describe("Modal", () => {
     expect(closeHandler).toHaveBeenCalledTimes(3);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
+
+  it("is inert when closed", async () => {
+    const { container, component } = render(ModalTest, {
+      props: {
+        open: false,
+        modalHeading: "Inert Test",
+      },
+    });
+
+    const modalOverlay = container.querySelector(".bx--modal");
+    assert(modalOverlay);
+    expect(modalOverlay).toHaveAttribute("inert");
+
+    component.$set({ open: true });
+    await tick();
+
+    expect(modalOverlay).not.toHaveAttribute("inert");
+    component.$set({ open: false });
+    await tick();
+
+    expect(modalOverlay).toHaveAttribute("inert");
+  });
 });
