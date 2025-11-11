@@ -140,6 +140,7 @@
   class:bx--modal={true}
   class:is-visible={open}
   class:bx--modal--danger={danger}
+  inert={open ? undefined : true}
   {...$$restProps}
   on:keydown
   on:keydown={(e) => {
