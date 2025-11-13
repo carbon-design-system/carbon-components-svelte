@@ -13,9 +13,7 @@ describe("ComboBox", () => {
   };
 
   const getClearButton = () => {
-    const button = screen.getByRole("button", { name: "Clear selected item" });
-    assert(button instanceof HTMLButtonElement);
-    return button;
+    return screen.getByRole("button", { name: "Clear selected item" });
   };
 
   beforeEach(() => {
