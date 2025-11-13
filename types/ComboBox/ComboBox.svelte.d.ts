@@ -130,7 +130,14 @@ type $Props<Item> = {
   clearFilterOnOpen?: boolean;
 
   /**
-   * Determine if an item should be filtered given the current combobox value
+   * Set to `true` to enable autocomplete with typeahead
+   * @default false
+   */
+  typeahead?: boolean;
+
+  /**
+   * Determine if an item should be filtered given the current combobox value.
+   * Will be ignored if `typeahead` is enabled.
    */
   shouldFilterItem?: (item: Item, value: string) => boolean;
 

@@ -57,6 +57,10 @@ See how the combobox responds to user input and selection changes.
 
 <FileSource src="/framed/ComboBox/ReactiveComboBox" />
 
+## Autocomplete with typeahead
+
+<FileSource src="/framed/ComboBox/TypeaheadComboBox" />
+
 ## Clear selection
 
 Use `bind:this` to access the component instance and call `ComboBox.clear()` to programmatically clear the selection.

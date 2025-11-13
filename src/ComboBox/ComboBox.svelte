@@ -95,8 +95,12 @@
    */
   export let clearFilterOnOpen = false;
 
+  /** Set to `true` to enable autocomplete with typeahead */
+  export let typeahead = false;
+
   /**
-   * Determine if an item should be filtered given the current combobox value
+   * Determine if an item should be filtered given the current combobox value.
+   * Will be ignored if `typeahead` is enabled.
    * @type {(item: Item, value: string) => boolean}
    */
   export let shouldFilterItem = () => true;
@@ -149,6 +153,25 @@
   let prevSelectedId = null;
   let highlightedIndex = -1;
   let valueBeforeOpen = "";
+  let prevInputLength = 0;
+
+  /**
+   * @param {Item} item
+   * @param {string} inputValue
+   * @returns {boolean}
+   */
+  function autocompleteCustomFilter(item, inputValue) {
+    if (inputValue.length === 0) {
+      return true;
+    }
+
+    const lowercaseItem = item.text.toLowerCase();
+    const lowercaseInput = inputValue.toLowerCase();
+
+    return lowercaseItem.startsWith(lowercaseInput);
+  }
+
+  $: filterFn = typeahead ? autocompleteCustomFilter : shouldFilterItem;
 
   function change(dir) {
     let index = highlightedIndex + dir;
@@ -201,7 +224,7 @@
         value = "";
       }
 
-      filteredItems = items.filter((item) => shouldFilterItem(item, value));
+      filteredItems = items.filter((item) => filterFn(item, value));
     } else {
       highlightedIndex = -1;
       filteredItems = [];
@@ -251,7 +274,25 @@
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
-  $: filteredItems = items.filter((item) => shouldFilterItem(item, value));
+  $: filteredItems = items.filter((item) => filterFn(item, value));
+
+  $: if (typeahead) {
+    const showNewSuggestion = 
+      value.length > prevInputLength && filteredItems.length > 0;
+
+    prevInputLength = value.length;
+
+    if (ref && showNewSuggestion) {
+      const suggestion = itemToString(filteredItems[0]).slice(value.length);
+      const selectionStart = value.length;
+      const selectionEnd = selectionStart + suggestion.length;
+        
+      tick().then(() => {
+        ref.value = value + suggestion;
+        ref.setSelectionRange(selectionStart, selectionEnd);
+      });
+    }
+  }
 </script>
 
 <svelte:window
