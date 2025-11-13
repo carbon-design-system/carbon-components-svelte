@@ -29,6 +29,7 @@
     undefined;
   export let allowCustomValue = false;
   export let clearFilterOnOpen = false;
+  export let typeahead = false;
 </script>
 
 <ComboBox
@@ -51,6 +52,7 @@
   {translateWithIdSelection}
   {allowCustomValue}
   {clearFilterOnOpen}
+  {typeahead}
   on:select={(e) => {
     console.log("select", e.detail);
   }}
