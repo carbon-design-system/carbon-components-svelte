@@ -10,8 +10,8 @@
     "Banana",
     "Blackberry",
     "Blueberry",
-    "Cantaloupe"
-  ].map(item => ({ id: item, text: item}));
+    "Cantaloupe",
+  ].map((item) => ({ id: item, text: item }));
 </script>
 
 <ComboBox

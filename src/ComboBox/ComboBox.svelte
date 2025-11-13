@@ -277,7 +277,7 @@
   $: filteredItems = items.filter((item) => filterFn(item, value));
 
   $: if (typeahead) {
-    const showNewSuggestion = 
+    const showNewSuggestion =
       value.length > prevInputLength && filteredItems.length > 0;
 
     prevInputLength = value.length;
@@ -286,7 +286,7 @@
       const suggestion = itemToString(filteredItems[0]).slice(value.length);
       const selectionStart = value.length;
       const selectionEnd = selectionStart + suggestion.length;
-        
+
       tick().then(() => {
         ref.value = value + suggestion;
         ref.setSelectionRange(selectionStart, selectionEnd);
