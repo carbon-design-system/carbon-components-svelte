@@ -6,9 +6,17 @@ import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
 import ComboBoxGenerics from "./ComboBoxGenerics.test.svelte";
 
 describe("ComboBox", () => {
-  const getInput = () => screen.getByRole("combobox");
-  const getClearButton = () =>
-    screen.getByRole("button", { name: "Clear selected item" });
+  const getInput = () => {
+    const input = screen.getByRole("combobox");
+    assert(input instanceof HTMLInputElement);
+    return input;
+  };
+
+  const getClearButton = () => {
+    const button = screen.getByRole("button", { name: "Clear selected item" });
+    assert(button instanceof HTMLButtonElement);
+    return button;
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -541,6 +549,242 @@ describe("ComboBox", () => {
     // - input is not focused (ref.contains(document.activeElement) is false)
     // - allowCustomValue is false
     expect(input).toHaveValue("");
+  });
+
+  describe("Typeahead", () => {
+    it("should autocomplete with typeahead when typing", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Apricot", price: 200 },
+            { id: "3", text: "Banana", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "Ap");
+
+      // Should show "Apple" with "ple" highlighted
+      expect(input).toHaveValue("Apple");
+      expect(input.selectionStart).toBe(2);
+      expect(input.selectionEnd).toBe(5);
+    });
+
+    it("should filter items using prefix matching when typeahead is enabled", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+            { id: "3", text: "Cherry", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "B");
+
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(1);
+      expect(options[0]).toHaveTextContent("Banana");
+    });
+
+    it("should ignore shouldFilterItem when typeahead is enabled", async () => {
+      const customFilter = vi.fn(() => true);
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+          shouldFilterItem: customFilter,
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "A");
+
+      // shouldFilterItem should not be called when typeahead is enabled
+      expect(customFilter).not.toHaveBeenCalled();
+    });
+
+    it("should use case-insensitive prefix matching with typeahead", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "apricot", price: 200 },
+            { id: "3", text: "AVOCADO", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "a");
+
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(3);
+      expect(options[0]).toHaveTextContent("Apple");
+      expect(options[1]).toHaveTextContent("apricot");
+      expect(options[2]).toHaveTextContent("AVOCADO");
+    });
+
+    it("should not autocomplete when deleting characters", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Apricot", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "A");
+      expect(input).toHaveValue("Apple");
+
+      // Delete all characters
+      await user.clear(input);
+      await user.type(input, "A");
+
+      // Type another character
+      await user.keyboard("p");
+      expect(input).toHaveValue("Apple");
+
+      // Now delete the suggestion and one character
+      await user.keyboard("{Backspace}");
+      await user.keyboard("{Backspace}");
+
+      // Should have just "A" after deleting
+      expect(input).toHaveValue("A");
+    });
+
+    it("should show all items when input is empty with typeahead", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+            { id: "3", text: "Cherry", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(3);
+    });
+
+    it("should update autocomplete suggestion as user types", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Apricot", price: 200 },
+            { id: "3", text: "Avocado", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "A");
+      expect(input).toHaveValue("Apple");
+
+      // Clear and type "Ap" - should suggest "Apple"
+      await user.clear(input);
+      await user.type(input, "Ap");
+      expect(input).toHaveValue("Apple");
+
+      // Clear and type "Apr" - should suggest "Apricot"
+      await user.clear(input);
+      await user.type(input, "Apr");
+      expect(input).toHaveValue("Apricot");
+    });
+
+    it("should allow selecting autocompleted item", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "A");
+      expect(input).toHaveValue("Apple");
+
+      await user.keyboard("{Enter}");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "1",
+        selectedItem: { id: "1", text: "Apple", price: 100 },
+      });
+    });
+
+    it("should not show suggestion when no items match prefix", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "Z");
+
+      expect(input).toHaveValue("Z");
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+    });
+
+    it("should work with typeahead and keyboard navigation", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Apricot", price: 200 },
+            { id: "3", text: "Avocado", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "A");
+      expect(input).toHaveValue("Apple");
+
+      // Navigate down to next item
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{Enter}");
+
+      expect(input).toHaveValue("Apricot");
+    });
   });
 
   describe("Generics", () => {
