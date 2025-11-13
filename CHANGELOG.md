@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.92.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.91.0...v0.92.0) (2025-11-13)
+
+### ⚠ BREAKING CHANGES
+
+- **number-input:** rename `label` to `labelText`
+- **multi-select:** rename `titleText` to `labelText`
+- **dropdown:** rename `titleText` to `labelText`
+- **combo-box:** rename `titleText` to `labelText`
+
+### Features
+
+- **combo-box:** add `typeahead` prop for autocomplete ([#2340](https://github.com/carbon-design-system/carbon-components-svelte/issues/2340)) ([40ab3b7](https://github.com/carbon-design-system/carbon-components-svelte/commit/40ab3b71791dc35714cf7e16f50abff5095f9362)), closes [#2275](https://github.com/carbon-design-system/carbon-components-svelte/issues/2275)
+
+### Bug Fixes
+
+- **composed-modal:** make closed modal inert ([1002ad3](https://github.com/carbon-design-system/carbon-components-svelte/commit/1002ad39c807df0b0ba093e6f75fc8333a8368ae)), closes [#2338](https://github.com/carbon-design-system/carbon-components-svelte/issues/2338)
+- **modal:** make closed modal inert ([8e32236](https://github.com/carbon-design-system/carbon-components-svelte/commit/8e32236e9e92ba9168ff0248cb45ad3e46c275a8)), closes [#2338](https://github.com/carbon-design-system/carbon-components-svelte/issues/2338)
+
 ### [0.91.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.90.2...v0.91.0) (2025-11-10)
 
 ### Features
