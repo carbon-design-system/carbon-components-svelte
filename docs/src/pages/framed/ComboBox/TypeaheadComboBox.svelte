@@ -22,6 +22,6 @@
   {items}
 />
 <br />
-<Button on:click={() => (selectedId = undefined)}
-  >Set to undefined (unselected)</Button
->
+<Button on:click={() => (selectedId = undefined)}>
+  Set to undefined (unselected)
+</Button>

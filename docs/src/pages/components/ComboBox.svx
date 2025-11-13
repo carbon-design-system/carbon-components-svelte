@@ -59,6 +59,12 @@ See how the combobox responds to user input and selection changes.
 
 ## Autocomplete with typeahead
 
+Set `typeahead` to `true` to enable autocomplete with typeahead functionality. As users type, the input automatically suggests and completes matching items.
+
+The typeahead feature uses prefix matching (case-insensitive) to filter items that start with the entered text. When a match is found, the suggestion is displayed with the untyped portion highlighted, allowing users to accept it or continue typing.
+
+Note that when `typeahead` is enabled, the `shouldFilterItem` prop is ignored as the typeahead functionality provides its own filtering logic.
+
 <FileSource src="/framed/ComboBox/TypeaheadComboBox" />
 
 ## Clear selection
