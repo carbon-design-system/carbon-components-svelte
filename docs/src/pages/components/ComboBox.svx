@@ -115,6 +115,12 @@ Set `allowCustomValue` to `true` to let users enter custom text that isn't in th
 
 <FileSource src="/framed/ComboBox/AllowCustomValue" />
 
+## Virtualized (large lists)
+
+Enable virtualization for large lists to improve performance. Only visible items are rendered in the DOM.
+
+<FileSource src="/framed/ComboBox/VirtualizedComboBox" />
+
 ## Top direction
 
 Set `direction` to `"top"` to make the dropdown menu appear above the input.
