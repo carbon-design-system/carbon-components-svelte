@@ -37,6 +37,36 @@
     Date: "JavaScript Date",
   };
 
+  // Regex to extract code blocks from @example annotations
+  // Pattern: ```svelte\n...code...\n``` or ```svelte\n...code...```
+  // The regex uses [\s\S]*? to match any character including newlines (non-greedy)
+  const EXAMPLE_CODE_BLOCK_REGEX = /```svelte\s*\n([\s\S]*?)```/;
+
+  /**
+   * Parse description to extract main text and example code
+   * @param {string} description - The full description string
+   * @returns {{ mainDescription: string, exampleCode: string | null }}
+   */
+  function parseDescription(description) {
+    if (!description) {
+      return { mainDescription: "", exampleCode: null };
+    }
+
+    const exampleIndex = description.indexOf("@example");
+    if (exampleIndex === -1) {
+      return { mainDescription: description, exampleCode: null };
+    }
+
+    const mainDescription = description.slice(0, exampleIndex).trim();
+    const exampleSection = description.slice(exampleIndex);
+
+    // Extract code block from example section
+    const codeBlockMatch = exampleSection.match(EXAMPLE_CODE_BLOCK_REGEX);
+    const exampleCode = codeBlockMatch ? codeBlockMatch[1].trim() : null;
+
+    return { mainDescription, exampleCode };
+  }
+
   $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
   $: forwarded_events = component.events.filter(
     (event) => event.type === "forwarded",
@@ -136,17 +166,38 @@
             </StructuredListCell>
             <StructuredListCell>
               {#if prop.description}
-                {#each prop.description.split("\n") as line}
-                  <div class="description">
-                    {@html line
-                      .replace(/\</g, "&lt;")
-                      .replace(/\>/g, "&gt;")
-                      .replace(/`(.*?)`/g, "<code>$1</code>") +
-                      (line.trim().endsWith(".") || line.trim() === ""
-                        ? ""
-                        : ".")}
+                {@const parsed = parseDescription(prop.description)}
+                {#if parsed.mainDescription}
+                  {#each parsed.mainDescription.split("\n") as line}
+                    <div class="description">
+                      {@html line
+                        .replace(/\</g, "&lt;")
+                        .replace(/\>/g, "&gt;")
+                        .replace(/`(.*?)`/g, "<code>$1</code>") +
+                        (line.trim().endsWith(".") || line.trim() === ""
+                          ? ""
+                          : ".")}
+                    </div>
+                  {/each}
+                {/if}
+                {#if parsed.exampleCode}
+                  <div
+                    style:margin-top="var(--cds-layout-02)"
+                    style:margin-bottom="var(--cds-spacing-03)"
+                  >
+                    <strong>Example</strong>
                   </div>
-                {/each}
+                  <div
+                    style:margin-bottom="var(--cds-layout-02)"
+                    style:max-width="85%"
+                  >
+                    <svelte:component
+                      this={AsyncPreviewTypeScript}
+                      type="multi"
+                      code={parsed.exampleCode}
+                    />
+                  </div>
+                {/if}
               {/if}
               <div
                 style:margin-top="var(--cds-layout-02)"
