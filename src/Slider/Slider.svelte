@@ -144,8 +144,8 @@
 </script>
 
 <svelte:window
-  on:mousemove={move}
-  on:touchmove={move}
+  on:mousemove|passive={move}
+  on:touchmove|passive={move}
   on:mouseup={stopHolding}
   on:touchend={stopHolding}
   on:touchcancel={stopHolding}
