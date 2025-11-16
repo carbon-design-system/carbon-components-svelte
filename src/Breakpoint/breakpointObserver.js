@@ -39,7 +39,7 @@ export function breakpointObserver() {
     }
 
     for (const [_size, queryList] of matchers) {
-      queryList.addEventListener("change", handleChange);
+      queryList.addEventListener("change", handleChange, { passive: true });
     }
 
     return () => {
