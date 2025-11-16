@@ -212,8 +212,6 @@
       });
     }
 
-    window.addEventListener("mousemove", handleGlobalMouseMove);
-
     return () => {
       unsubPosition();
       unsubMenuOffsetX();
@@ -221,7 +219,6 @@
       if (unsubCurrentId) unsubCurrentId();
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
       if (typeof timeoutClose === "number") clearTimeout(timeoutClose);
-      window.removeEventListener("mousemove", handleGlobalMouseMove);
     };
   });
 
@@ -273,6 +270,8 @@
     }
   }
 </script>
+
+<svelte:window on:mousemove|passive={handleGlobalMouseMove} />
 
 <li
   bind:this={ref}
