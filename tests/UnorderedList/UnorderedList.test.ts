@@ -77,21 +77,22 @@ describe("UnorderedList", () => {
       expect(mock).toHaveBeenCalled();
     });
 
-    test.each(["mouseover", "mouseenter", "mouseleave"])(
-      "should emit %s event",
-      (eventName) => {
-        const { component } = render(UnorderedList);
-        const list = screen.getByRole("list");
+    test.each([
+      "mouseover",
+      "mouseenter",
+      "mouseleave",
+    ])("should emit %s event", (eventName) => {
+      const { component } = render(UnorderedList);
+      const list = screen.getByRole("list");
 
-        const mock = vi.fn();
-        component.$on(eventName, mock);
+      const mock = vi.fn();
+      component.$on(eventName, mock);
 
-        const event = new MouseEvent(eventName);
-        list.dispatchEvent(event);
+      const event = new MouseEvent(eventName);
+      list.dispatchEvent(event);
 
-        expect(mock).toHaveBeenCalled();
-      },
-    );
+      expect(mock).toHaveBeenCalled();
+    });
   });
 
   describe("accessibility", () => {
