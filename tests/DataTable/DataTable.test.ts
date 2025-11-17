@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
+import type { ComponentEvents } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DataTable from "./DataTable.test.svelte";
@@ -1156,5 +1158,58 @@ describe("DataTable", () => {
     expect(detail).toHaveProperty("target");
     expect(detail).toHaveProperty("currentTarget");
     expect(detail).toHaveProperty("row");
+  });
+
+  // Regression test for issue https://github.com/carbon-design-system/carbon-components-svelte/issues/2344
+  describe("TypeScript event type definitions", () => {
+    it("click:row event type includes target and currentTarget", () => {
+      type Events = ComponentEvents<DataTableComponent<(typeof rows)[number]>>;
+      type ClickRowEventType = Events["click:row"];
+      type ClickRowEvent = ClickRowEventType extends CustomEvent<infer T>
+        ? T
+        : never;
+
+      expectTypeOf<ClickRowEvent>().toHaveProperty("row");
+      expectTypeOf<ClickRowEvent>().toHaveProperty("target");
+      expectTypeOf<ClickRowEvent>().toHaveProperty("currentTarget");
+      expectTypeOf<ClickRowEvent["target"]>().toEqualTypeOf<EventTarget>();
+      expectTypeOf<
+        ClickRowEvent["currentTarget"]
+      >().toEqualTypeOf<EventTarget>();
+    });
+
+    it("click:cell event type includes target and currentTarget", () => {
+      type Events = ComponentEvents<DataTableComponent<(typeof rows)[number]>>;
+      type ClickCellEventType = Events["click:cell"];
+      type ClickCellEvent = ClickCellEventType extends CustomEvent<infer T>
+        ? T
+        : never;
+
+      expectTypeOf<ClickCellEvent>().toHaveProperty("cell");
+      expectTypeOf<ClickCellEvent>().toHaveProperty("target");
+      expectTypeOf<ClickCellEvent>().toHaveProperty("currentTarget");
+      expectTypeOf<ClickCellEvent["target"]>().toEqualTypeOf<EventTarget>();
+      expectTypeOf<
+        ClickCellEvent["currentTarget"]
+      >().toEqualTypeOf<EventTarget>();
+    });
+
+    it("click:header event type includes target and currentTarget", () => {
+      type Events = ComponentEvents<DataTableComponent<(typeof rows)[number]>>;
+      type ClickHeaderEventType = Events["click:header"];
+      type ClickHeaderEvent = ClickHeaderEventType extends CustomEvent<infer T>
+        ? T
+        : never;
+
+      expectTypeOf<ClickHeaderEvent>().toHaveProperty("header");
+      expectTypeOf<ClickHeaderEvent>().toHaveProperty("target");
+      expectTypeOf<ClickHeaderEvent>().toHaveProperty("currentTarget");
+      expectTypeOf<ClickHeaderEvent["target"]>().toEqualTypeOf<EventTarget>();
+      expectTypeOf<
+        ClickHeaderEvent["currentTarget"]
+      >().toEqualTypeOf<EventTarget>();
+
+      expectTypeOf<ClickHeaderEvent>().toHaveProperty("sortDirection");
+    });
   });
 });
