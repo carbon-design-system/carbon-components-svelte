@@ -22,7 +22,8 @@ describe("TextInput", () => {
   });
 
   it("should handle different sizes", () => {
-    (["sm", "xl"] as const).forEach((size) => {
+    const sizes = ["sm", "xl"] as const;
+    for (const size of sizes) {
       const { container } = render(TextInput, {
         props: { size },
       });
@@ -30,7 +31,7 @@ describe("TextInput", () => {
       const input = container.querySelector("input");
       expect(input).toHaveClass(`bx--text-input--${size}`);
       container.remove();
-    });
+    }
   });
 
   it("should handle light variant", () => {

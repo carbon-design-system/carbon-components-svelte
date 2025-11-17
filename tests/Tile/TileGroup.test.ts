@@ -32,27 +32,27 @@ describe("TileGroup", () => {
     expect(fieldset).toBeDisabled();
 
     const radios = screen.getAllByRole("radio");
-    radios.forEach((radio) => {
+    for (const radio of radios) {
       expect(radio).toBeDisabled();
-    });
+    }
   });
 
   it("should handle required state", () => {
     render(TileGroup, { props: { required: true } });
 
     const radios = screen.getAllByRole("radio");
-    radios.forEach((radio) => {
+    for (const radio of radios) {
       expect(radio).toBeRequired();
-    });
+    }
   });
 
   it("should handle custom name", () => {
     render(TileGroup, { props: { name: "custom-group" } });
 
     const radios = screen.getAllByRole("radio");
-    radios.forEach((radio) => {
+    for (const radio of radios) {
       expect(radio).toHaveAttribute("name", "custom-group");
-    });
+    }
   });
 
   it("should handle initial selected value", () => {

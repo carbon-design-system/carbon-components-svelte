@@ -127,7 +127,7 @@ describe("Modal", () => {
     } as const;
 
     // Test specific sizes
-    (Object.keys(sizeMappings) as Size[]).forEach((size) => {
+    for (const size of Object.keys(sizeMappings) as Size[]) {
       const { unmount } = render(ModalTest, {
         props: {
           open: true,
@@ -139,7 +139,7 @@ describe("Modal", () => {
       const modal = screen.getByRole("dialog");
       expect(modal).toHaveClass(sizeMappings[size]);
       unmount();
-    });
+    }
 
     // Test default (medium) size
     const { unmount } = render(ModalTest, {

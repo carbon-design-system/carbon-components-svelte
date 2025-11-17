@@ -32,7 +32,7 @@ describe("ToastNotification", () => {
       "warning-alt",
     ] as const;
 
-    kinds.forEach((kind) => {
+    for (const kind of kinds) {
       const { container } = render(ToastNotification, {
         props: { kind },
       });
@@ -41,7 +41,7 @@ describe("ToastNotification", () => {
         container.querySelector(`.bx--toast-notification--${kind}`),
       ).toBeInTheDocument();
       container.remove();
-    });
+    }
   });
 
   it("should handle low contrast variant", () => {

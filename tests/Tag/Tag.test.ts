@@ -14,7 +14,7 @@ describe("Tag", () => {
     expect(basicTag.parentElement).toHaveClass("my-class");
     expect(basicTag.parentElement).toHaveStyle({ margin: "1rem" });
 
-    [
+    const colors = [
       "red",
       "magenta",
       "purple",
@@ -27,10 +27,11 @@ describe("Tag", () => {
       "warm-gray",
       "high-contrast",
       "outline",
-    ].forEach((color) => {
+    ];
+    for (const color of colors) {
       const tag = screen.getByText(color);
       expect(tag.parentElement).toHaveClass(`bx--tag--${color}`);
-    });
+    }
   });
 
   it("renders and handles filterable tag correctly", async () => {

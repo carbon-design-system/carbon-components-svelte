@@ -20,10 +20,10 @@ describe("Button", () => {
       "danger-ghost",
     ];
 
-    kinds.forEach((kind) => {
+    for (const kind of kinds) {
       const button = screen.getByText(kind);
       expect(button.closest("button")).toHaveClass(`bx--btn--${kind}`);
-    });
+    }
   });
 
   it("should render with different sizes", () => {
@@ -36,9 +36,9 @@ describe("Button", () => {
 
     for (const [size, className] of Object.entries(sizes)) {
       const buttons = screen.getAllByText(new RegExp(`${size}`, "i"));
-      buttons.forEach((button) => {
+      for (const button of buttons) {
         expect(button.closest("button")).toHaveClass(className);
-      });
+      }
     }
   });
 
@@ -84,9 +84,9 @@ describe("Button", () => {
     const skeletons = document.querySelectorAll(".bx--skeleton");
     expect(skeletons).toHaveLength(3);
 
-    skeletons.forEach((skeleton) => {
+    for (const skeleton of skeletons) {
       expect(skeleton).toHaveClass("bx--btn");
-    });
+    }
   });
 
   it("should handle click events", async () => {

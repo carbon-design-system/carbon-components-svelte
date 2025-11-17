@@ -9,9 +9,9 @@ describe("FileUploader", () => {
 
   function simulateFileSelection(input: HTMLInputElement, files: File[]) {
     const dataTransfer = new DataTransfer();
-    files.forEach((file) => {
+    for (const file of files) {
       dataTransfer.items.add(file);
-    });
+    }
 
     Object.defineProperty(input, "files", {
       value: dataTransfer.files,

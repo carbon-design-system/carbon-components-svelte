@@ -49,7 +49,7 @@ describe("Column", () => {
   describe("Aspect ratio", () => {
     const ratios = ["2x1", "16x9", "9x16", "1x2", "4x3", "3x4", "1x1"] as const;
 
-    ratios.forEach((ratio) => {
+    for (const ratio of ratios) {
       it(`should apply ${ratio} aspect ratio`, () => {
         render(Column, {
           props: { aspectRatio: ratio },
@@ -61,13 +61,13 @@ describe("Column", () => {
           `bx--aspect-ratio--${ratio}`,
         );
       });
-    });
+    }
   });
 
   describe("Breakpoints", () => {
     const breakpoints = ["sm", "md", "lg", "xlg", "max"] as const;
 
-    breakpoints.forEach((bp) => {
+    for (const bp of breakpoints) {
       it(`should handle boolean ${bp} breakpoint`, () => {
         render(Column, {
           props: { [bp]: true },
@@ -103,7 +103,7 @@ describe("Column", () => {
         assert(column);
         expect(column).toHaveClass(`bx--col-${bp}`, `bx--offset-${bp}-2`);
       });
-    });
+    }
   });
 
   it("should combine multiple breakpoint classes", () => {

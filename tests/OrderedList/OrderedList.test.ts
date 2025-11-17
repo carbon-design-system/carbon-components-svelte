@@ -35,10 +35,10 @@ describe("OrderedList", () => {
     expect(mainList).toHaveClass("bx--list--nested");
 
     const nestedLists = lists.slice(1);
-    nestedLists.forEach((list) => {
+    for (const list of nestedLists) {
       expect(list).toHaveClass("bx--list--ordered");
       expect(list).toHaveClass("bx--list--nested");
-    });
+    }
 
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(9); // 3 main items + (2 nested items × 3)
@@ -69,10 +69,10 @@ describe("OrderedList", () => {
     expect(lists[0]).toHaveClass("bx--list--ordered--native");
     expect(lists[0]).not.toHaveClass("bx--list--ordered");
 
-    lists.slice(1).forEach((list) => {
+    for (const list of lists.slice(1)) {
       expect(list).toHaveClass("bx--list--ordered bx--list--nested");
       expect(list).not.toHaveClass("bx--list--ordered--native");
-    });
+    }
   });
 
   it("should support expressive styles", () => {
@@ -92,9 +92,9 @@ describe("OrderedList", () => {
 
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(customItems.length);
-    items.forEach((item, index) => {
-      expect(item).toHaveTextContent(customItems[index]);
-    });
+    for (let index = 0; index < items.length; index++) {
+      expect(items[index]).toHaveTextContent(customItems[index]);
+    }
   });
 
   describe("events", () => {
@@ -135,9 +135,9 @@ describe("OrderedList", () => {
       expect(list.tagName).toBe("OL");
 
       const items = screen.getAllByRole("listitem");
-      items.forEach((item) => {
+      for (const item of items) {
         expect(item.tagName).toBe("LI");
-      });
+      }
     });
 
     it("should maintain list structure with nested items", () => {
@@ -149,13 +149,13 @@ describe("OrderedList", () => {
       });
 
       const lists = screen.getAllByRole("list");
-      lists.forEach((list) => {
+      for (const list of lists) {
         expect(list.tagName).toBe("OL");
         expect(list.children).toBeTruthy();
-        Array.from(list.children).forEach((child) => {
+        for (const child of Array.from(list.children)) {
           expect(child.tagName).toBe("LI");
-        });
-      });
+        }
+      }
     });
 
     it("should maintain correct order with native styles", () => {

@@ -61,7 +61,7 @@ describe("ComposedModal", () => {
   it("should handle size variants", () => {
     const sizes = ["xs", "sm", "lg"] as const;
 
-    sizes.forEach((size) => {
+    for (const size of sizes) {
       const { unmount } = render(ComposedModalTest, {
         props: {
           open: true,
@@ -73,7 +73,7 @@ describe("ComposedModal", () => {
       const modal = screen.getByRole("dialog");
       expect(modal).toHaveClass(`bx--modal-container--${size}`);
       unmount();
-    });
+    }
   });
 
   it("should handle danger variant", () => {

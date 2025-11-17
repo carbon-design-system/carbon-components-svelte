@@ -21,7 +21,8 @@ describe("TimePicker", () => {
   });
 
   it("should handle different sizes", () => {
-    (["sm", "xl"] as const).forEach((size) => {
+    const sizes = ["sm", "xl"] as const;
+    for (const size of sizes) {
       const { container } = render(TimePicker, {
         props: { size },
       });
@@ -30,7 +31,7 @@ describe("TimePicker", () => {
         `bx--time-picker--${size}`,
       );
       container.remove();
-    });
+    }
   });
 
   it("should handle light variant", () => {

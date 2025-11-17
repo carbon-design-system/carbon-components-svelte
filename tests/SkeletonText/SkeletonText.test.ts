@@ -21,9 +21,9 @@ describe("SkeletonText", () => {
 
     const elements = screen.getAllByRole("paragraph");
     expect(elements).toHaveLength(3); // default lines is 3
-    elements.forEach((element) => {
+    for (const element of elements) {
       expect(element).toHaveClass("bx--skeleton__text");
-    });
+    }
   });
 
   it("should render paragraph with custom line count", () => {
@@ -44,13 +44,13 @@ describe("SkeletonText", () => {
     render(SkeletonText, { props: { paragraph: true, width: "200px" } });
 
     const elements = screen.getAllByRole("paragraph");
-    elements.forEach((element) => {
+    for (const element of elements) {
       const width = element.style.width;
       expect(width).toMatch(/^\d+px$/);
       const numWidth = Number.parseInt(width, 10);
       expect(numWidth).toBeGreaterThanOrEqual(125); // 200 - 75
       expect(numWidth).toBeLessThanOrEqual(200);
-    });
+    }
   });
 
   it("should handle mouse events", async () => {

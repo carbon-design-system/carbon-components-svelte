@@ -18,9 +18,9 @@ describe("DataTableSearch", () => {
   const allRowsRendered = () => {
     const tableRows = getTableRows();
     expect(tableRows).toHaveLength(5);
-    tableRows.forEach((row) => {
+    for (const row of tableRows) {
       expect(row).toHaveTextContent(/Round robin|DNS delegation/);
-    });
+    }
 
     expect(screen.getByText("1–5 of 10 items")).toBeInTheDocument();
     expect(screen.getByText("of 2 pages")).toBeInTheDocument();
@@ -53,9 +53,9 @@ describe("DataTableSearch", () => {
 
     const tableRows = getTableRows();
     expect(tableRows).toHaveLength(5);
-    tableRows.forEach((row) => {
+    for (const row of tableRows) {
       expect(row).toHaveTextContent("DNS");
-    });
+    }
 
     await user.keyboard("{Tab}{Enter}");
     expect(searchInput).toHaveValue("");
@@ -91,9 +91,9 @@ describe("DataTableSearch", () => {
 
     const tableRows = getTableRows();
     expect(tableRows).toHaveLength(5);
-    tableRows.forEach((row) => {
+    for (const row of tableRows) {
       expect(row).toHaveTextContent("DNS");
-    });
+    }
 
     await user.keyboard("{Tab}{Enter}");
     expect(searchInput).toHaveValue("");
@@ -123,9 +123,9 @@ describe("DataTableSearch", () => {
 
     let tableRows = getTableRows();
     expect(tableRows).toHaveLength(5);
-    tableRows.forEach((row) => {
+    for (const row of tableRows) {
       expect(row).toHaveTextContent("Round");
-    });
+    }
 
     await user.click(
       screen.getByRole("button", { name: "Clear search input" }),
@@ -178,10 +178,10 @@ describe("DataTableSearch", () => {
 
     const tableRows = getTableRows();
     expect(tableRows).toHaveLength(2);
-    tableRows.forEach((row) => {
+    for (const row of tableRows) {
       expect(row).toHaveTextContent("Round");
       expect(row).toHaveTextContent(/Load Balancer 6|Load Balancer 8/);
-    });
+    }
   });
 
   it("re-filters rows when toggled", async () => {
@@ -211,9 +211,9 @@ describe("DataTableSearch", () => {
 
     const tableRows = getTableRows();
     expect(tableRows).toHaveLength(2);
-    tableRows.forEach((row) => {
+    for (const row of tableRows) {
       expect(row).toHaveTextContent("Round!");
-    });
+    }
 
     await user.click(toggleButton);
     expect(searchInput).toHaveValue("round");
