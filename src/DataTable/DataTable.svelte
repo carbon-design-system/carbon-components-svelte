@@ -42,6 +42,8 @@
    * @type {object}
    * @property {DataTableHeader<Row>} header
    * @property {"ascending" | "descending" | "none"} [sortDirection]
+   * @property {EventTarget} target
+   * @property {EventTarget} currentTarget
    * @event click:header--select
    * @type {object}
    * @property {boolean} indeterminate
@@ -49,6 +51,8 @@
    * @event click:row
    * @type {object}
    * @property {Row} row
+   * @property {EventTarget} target
+   * @property {EventTarget} currentTarget
    * @event {Row} mouseenter:row
    * @event {Row} mouseleave:row
    * @event click:row--expand
@@ -62,6 +66,8 @@
    * @event click:cell
    * @type {object}
    * @property {DataTableCell<Row>} cell
+   * @property {EventTarget} target
+   * @property {EventTarget} currentTarget
    * @restProps {div}
    */
 
