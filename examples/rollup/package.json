@@ -9,7 +9,7 @@
     "carbon-components-svelte": "^0.88.4"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^26.0.3",
+    "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^15.3.1",
     "@rollup/plugin-terser": "^0.4.4",
     "carbon-preprocess-svelte": "^0.11.11",
