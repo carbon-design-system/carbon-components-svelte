@@ -87,9 +87,9 @@ describe("Tabs", () => {
     });
 
     const tabs = container.querySelectorAll(".bx--tabs__nav-item");
-    tabs.forEach((tab) => {
+    for (const tab of tabs) {
       expect(tab).not.toHaveStyle({ width: "10rem" });
-    });
+    }
   });
 
   it("should show dropdown on trigger click", async () => {
@@ -305,13 +305,13 @@ describe("TabsSkeleton", () => {
     const navItems = container.querySelectorAll(
       ".bx--tabs--scrollable__nav-item",
     );
-    navItems.forEach((item) => {
+    for (const item of navItems) {
       const link = item.querySelector(".bx--tabs__nav-link");
       const span = link?.querySelector("span");
 
       expect(link).toBeInTheDocument();
       expect(span).toBeInTheDocument();
-    });
+    }
   });
 
   it("should handle zero count", () => {

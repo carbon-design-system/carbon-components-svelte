@@ -111,9 +111,9 @@ describe("StructuredList", () => {
           cell.textContent?.startsWith("Row") && cell.textContent?.length === 5,
       );
 
-    noWrapCells.forEach((cell) => {
+    for (const cell of noWrapCells) {
       expect(cell).toHaveClass("bx--structured-list-td");
-    });
+    }
   });
 
   it("should emit change event on selection", async () => {

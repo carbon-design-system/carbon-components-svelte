@@ -119,9 +119,9 @@ describe("ProgressIndicator", () => {
       });
 
       const disabledSteps = screen.getAllByRole("listitem").slice(1);
-      disabledSteps.forEach((step) => {
+      for (const step of disabledSteps) {
         expect(step).toHaveClass("bx--progress-step--disabled");
-      });
+      }
     });
   });
 

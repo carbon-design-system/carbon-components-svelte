@@ -29,18 +29,18 @@ describe("RadioButtonGroup", () => {
     render(RadioButtonGroup, { props: { required: true } });
 
     const radios = screen.getAllByRole("radio");
-    radios.forEach((radio) => {
+    for (const radio of radios) {
       expect(radio).toBeRequired();
-    });
+    }
   });
 
   it("should handle custom name", () => {
     render(RadioButtonGroup, { props: { name: "custom-group" } });
 
     const radios = screen.getAllByRole("radio");
-    radios.forEach((radio) => {
+    for (const radio of radios) {
       expect(radio).toHaveAttribute("name", "custom-group");
-    });
+    }
   });
 
   it("should handle legend text", () => {

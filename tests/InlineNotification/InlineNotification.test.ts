@@ -23,16 +23,15 @@ describe("InlineNotification", () => {
   });
 
   it("should handle different kinds", () => {
-    (
-      [
-        "error",
-        "info",
-        "info-square",
-        "success",
-        "warning",
-        "warning-alt",
-      ] as const
-    ).forEach((kind) => {
+    const kinds = [
+      "error",
+      "info",
+      "info-square",
+      "success",
+      "warning",
+      "warning-alt",
+    ] as const;
+    for (const kind of kinds) {
       const { container } = render(InlineNotification, {
         props: { kind },
       });
@@ -41,7 +40,7 @@ describe("InlineNotification", () => {
         container.querySelector(`.bx--inline-notification--${kind}`),
       ).toBeInTheDocument();
       container.remove();
-    });
+    }
   });
 
   it("should handle low contrast variant", () => {

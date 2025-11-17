@@ -17,7 +17,7 @@ describe("Table Sub-Components", () => {
     it("should handle size variants", () => {
       const sizes = ["compact", "short", "medium", "tall"] as const;
 
-      sizes.forEach((size) => {
+      for (const size of sizes) {
         const { container, unmount } = render(TableSubComponents, {
           props: { testComponent: "Table", size },
         });
@@ -27,7 +27,7 @@ describe("Table Sub-Components", () => {
           size === "medium" ? "bx--data-table--md" : `bx--data-table--${size}`;
         expect(table).toHaveClass(expectedClass);
         unmount();
-      });
+      }
     });
 
     it("should handle zebra prop", () => {

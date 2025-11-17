@@ -34,10 +34,10 @@ describe("UnorderedList", () => {
     expect(mainList).toHaveClass("bx--list--nested");
 
     const nestedLists = lists.slice(1);
-    nestedLists.forEach((list) => {
+    for (const list of nestedLists) {
       expect(list).toHaveClass("bx--list--unordered");
       expect(list).toHaveClass("bx--list--nested");
-    });
+    }
 
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(9); // 3 main items + (2 nested items × 3)
@@ -60,9 +60,9 @@ describe("UnorderedList", () => {
 
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(customItems.length);
-    items.forEach((item, index) => {
-      expect(item).toHaveTextContent(customItems[index]);
-    });
+    for (let index = 0; index < items.length; index++) {
+      expect(items[index]).toHaveTextContent(customItems[index]);
+    }
   });
 
   describe("events", () => {
@@ -103,9 +103,9 @@ describe("UnorderedList", () => {
       expect(list.tagName).toBe("UL");
 
       const items = screen.getAllByRole("listitem");
-      items.forEach((item) => {
+      for (const item of items) {
         expect(item.tagName).toBe("LI");
-      });
+      }
     });
 
     it("should maintain list structure with nested items", () => {
@@ -117,13 +117,13 @@ describe("UnorderedList", () => {
       });
 
       const lists = screen.getAllByRole("list");
-      lists.forEach((list) => {
+      for (const list of lists) {
         expect(list.tagName).toBe("UL");
         expect(list.children).toBeTruthy();
-        Array.from(list.children).forEach((child) => {
+        for (const child of Array.from(list.children)) {
           expect(child.tagName).toBe("LI");
-        });
-      });
+        }
+      }
     });
   });
 });

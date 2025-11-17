@@ -27,7 +27,8 @@ describe("NumberInput", () => {
   });
 
   it("should handle different sizes", () => {
-    (["sm", "xl"] as const).forEach((size) => {
+    const sizes = ["sm", "xl"] as const;
+    for (const size of sizes) {
       const { container } = render(NumberInput, {
         props: { size },
       });
@@ -35,7 +36,7 @@ describe("NumberInput", () => {
       const input = container.querySelector("input");
       expect(input?.closest(".bx--number")).toHaveClass(`bx--number--${size}`);
       container.remove();
-    });
+    }
   });
 
   it("should handle light variant", () => {
@@ -139,9 +140,10 @@ describe("NumberInput", () => {
       props: { iconDescription: "Custom description" },
     });
 
-    screen.getAllByRole("button").forEach((button) => {
+    const buttons = screen.getAllByRole("button");
+    for (const button of buttons) {
       expect(button).toHaveAttribute("title", "Custom description");
-    });
+    }
   });
 
   it("should handle custom slots", () => {
@@ -510,9 +512,9 @@ describe("NumberInput", () => {
     render(NumberInput);
 
     const buttons = screen.getAllByRole("button");
-    buttons.forEach((button) => {
+    for (const button of buttons) {
       expect(button).toHaveAttribute("type", "button");
-    });
+    }
   });
 
   it("should disable stepper buttons when input is disabled", () => {

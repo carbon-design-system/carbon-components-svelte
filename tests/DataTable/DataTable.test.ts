@@ -48,9 +48,9 @@ describe("DataTable", () => {
   it("renders with default props", async () => {
     const { container } = render(DataTable);
     // Check if table headers are rendered
-    headers.forEach((header) => {
+    for (const header of headers) {
       expect(screen.getByText(header.value)).toBeInTheDocument();
-    });
+    }
 
     // Check if table has correct structure
     const table = container.querySelector("table");
@@ -62,7 +62,7 @@ describe("DataTable", () => {
     expect(tableRows).toHaveLength(3);
 
     // Check if all rows contain the expected data
-    rows.forEach((row) => {
+    for (const row of rows) {
       const rowElement = screen.getByText(row.name).closest("tr");
       expect(rowElement).toBeInTheDocument();
       assert(rowElement);
@@ -84,7 +84,7 @@ describe("DataTable", () => {
         (cell) => cell.textContent?.trim() === row.rule,
       );
       expect(ruleCell).toBeInTheDocument();
-    });
+    }
   });
 
   it("renders with title and description", () => {
@@ -662,10 +662,10 @@ describe("DataTable", () => {
 
     // Verify empty column cells exist in each row
     const tableRows = container.querySelectorAll("tbody tr");
-    tableRows.forEach((row) => {
+    for (const row of tableRows) {
       const cells = row.querySelectorAll("td");
       expect(cells.length).toBe(5);
-    });
+    }
   });
 
   // Pagination tests
