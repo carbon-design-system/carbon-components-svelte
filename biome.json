@@ -77,7 +77,8 @@
         "noDescendingSpecificity": "off"
       },
       "nursery": {
-        "useFind": "error"
+        "useFind": "error",
+        "noForIn": "error"
       }
     }
   },
