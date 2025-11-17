@@ -33,6 +33,13 @@
         "noReExportAll": "error",
         "useTopLevelRegex": "error"
       },
+      "correctness": {
+        "noUnreachable": "error",
+        "noUnusedFunctionParameters": "error",
+        "noUnusedImports": "error",
+        "noUnusedLabels": "error",
+        "noUnusedVariables": "error"
+      },
       "complexity": {
         "noCommaOperator": "error",
         "noForEach": "error",
