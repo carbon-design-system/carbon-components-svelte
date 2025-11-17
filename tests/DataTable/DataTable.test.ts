@@ -202,13 +202,18 @@ describe("DataTable", () => {
   it("handles sorting with custom display and sort methods", async () => {
     const customHeaders = [
       { key: "name", value: "Name" },
-      { key: "cost", value: "Cost", display: (cost: number) => `${cost} €` },
+      {
+        key: "cost",
+        value: "Cost",
+        display: (cost: string | number | boolean) => `${cost} €`,
+      },
       {
         key: "expireDate",
         value: "Expire date",
-        display: (date: string) => new Date(date).toLocaleString(),
-        sort: (a: string, b: string) =>
-          new Date(a).getTime() - new Date(b).getTime(),
+        display: (date: string | number | boolean) =>
+          new Date(date as string).toLocaleString(),
+        sort: (a: string | number | boolean, b: string | number | boolean) =>
+          new Date(a as string).getTime() - new Date(b as string).getTime(),
       },
     ];
 
@@ -617,7 +622,7 @@ describe("DataTable", () => {
       {
         key: "port",
         value: "Port",
-        display: (value: number) => `Port ${value}`,
+        display: (value: string | number | boolean) => `Port ${value}`,
       },
     ];
 

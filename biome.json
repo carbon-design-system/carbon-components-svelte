@@ -49,7 +49,7 @@
         "noImportantStyles": "off"
       },
       "suspicious": {
-        "noExplicitAny": "off"
+        "noExplicitAny": "error"
       },
       "style": {
         "noImplicitBoolean": "error",
@@ -121,6 +121,16 @@
           },
           "complexity": {
             "noForEach": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
           }
         }
       }

@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import type { DataTableRow } from "carbon-components-svelte/DataTable/DataTable.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import DataTableSearch from "./DataTableSearch.test.svelte";
@@ -154,7 +155,7 @@ describe("DataTableSearch", () => {
 
   it("can filter with a custom filter function", async () => {
     const props = {
-      shouldFilterRows: (row: any, value: any) => {
+      shouldFilterRows: (row: DataTableRow, value: string | number) => {
         return (
           /(6|8)$/.test(row.name) &&
           row.rule.toLowerCase().includes(value.toString().toLowerCase())
