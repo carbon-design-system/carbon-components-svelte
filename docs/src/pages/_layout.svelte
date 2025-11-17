@@ -51,9 +51,9 @@
   let innerWidth = 2048;
 
   $: isMobile = innerWidth < 1056;
-  $: components = $layout.children.filter(
+  $: components = $layout.children.find(
     (child) => child.title === "components",
-  )[0];
+  );
 
   $beforeUrlChange(() => {
     if (isMobile) isSideNavOpen = false;
