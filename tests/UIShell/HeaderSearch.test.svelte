@@ -2,7 +2,7 @@
 
 <script lang="ts">
   import { HeaderSearch } from "carbon-components-svelte";
-  import type { ComponentProps } from "svelte";
+  import type { ComponentEvents, ComponentProps } from "svelte";
 
   export let active = false;
   export let value = "";
@@ -13,7 +13,8 @@
   let activeEvent = false;
   let inactiveEvent = false;
   let clearEvent = false;
-  let selectEvent: any = null;
+  let selectEvent: ComponentEvents<HeaderSearch>["select"]["detail"] | null =
+    null;
 
   function handleActive() {
     activeEvent = true;
@@ -27,7 +28,7 @@
     clearEvent = true;
   }
 
-  function handleSelect(event: any) {
+  function handleSelect(event: ComponentEvents<HeaderSearch>["select"]) {
     selectEvent = event.detail;
   }
 </script>

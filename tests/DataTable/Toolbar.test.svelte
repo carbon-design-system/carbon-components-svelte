@@ -12,7 +12,7 @@
     | "ToolbarBatchActions" = "Toolbar";
   export let size: ComponentProps<Toolbar>["size"] = "default";
   export let slotContent = "";
-  export let selectedIds: ReadonlyArray<any> = [];
+  export let selectedIds: ReadonlyArray<string> = [];
   export let active: boolean | undefined = undefined;
 </script>
 

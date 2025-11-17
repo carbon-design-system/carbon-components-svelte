@@ -3,7 +3,7 @@
 
   type BaseRow = {
     id: string;
-    [key: string]: any;
+    [key: string]: string | number | boolean | Record<string, unknown>;
   };
 
   type DataTableHeader = {
@@ -11,8 +11,13 @@
     value: string;
     width?: string;
     minWidth?: string;
-    display?: (value: any) => string;
-    sort?: false | ((a: any, b: any) => number);
+    display?: (value: string | number | boolean) => string;
+    sort?:
+      | false
+      | ((
+          a: string | number | boolean,
+          b: string | number | boolean,
+        ) => number);
   };
 
   export let headers: readonly DataTableHeader[] = [
