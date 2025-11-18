@@ -24,7 +24,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          npm publish --provenance --access public
+          npm publish --provenance --access public --tag stable-0-91
 
       - name: Publish package (next)
         if: ${{ contains(github.ref, '-next') }}
