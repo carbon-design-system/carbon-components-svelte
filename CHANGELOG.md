@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.91.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.91.0...v0.91.1) (2025-11-18)
+
+### Bug Fixes
+
+- **data-table:** restore `target` and `currentTarget` types ([#2345](https://github.com/carbon-design-system/carbon-components-svelte/issues/2345)) ([1894602](https://github.com/carbon-design-system/carbon-components-svelte/commit/18946020b538e0355ec2e028abeabb0ffb1b6660)), closes [#2344](https://github.com/carbon-design-system/carbon-components-svelte/issues/2344)
+
 ### [0.91.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.90.2...v0.91.0) (2025-11-10)
 
 ### Features
