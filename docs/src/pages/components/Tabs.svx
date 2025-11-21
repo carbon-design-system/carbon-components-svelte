@@ -45,6 +45,14 @@ Use `bind:selected` to create a two-way binding with the selected tab index. Thi
 
 <FileSource src="/framed/Tabs/TabsReactive" />
 
+## Conditional tabs
+
+Tabs can be conditionally rendered using Svelte's `{#if}` blocks. The component automatically maintains correct indices even when tabs are dynamically added or removed.
+
+If the current selected tab is removed, the next tab will be selected.
+
+<FileSource src="/framed/Tabs/TabsConditional" />
+
 ## Disabled tabs
 
 Set `disabled` to `true` on a `Tab` component to prevent interaction. Keyboard navigation will skip disabled tabs.
