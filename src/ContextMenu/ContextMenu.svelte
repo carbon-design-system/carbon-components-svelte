@@ -166,7 +166,9 @@
   }}
   on:click={(e) => {
     if (!open) return;
-    close();
+    if (ref && !ref.contains(e.target)) {
+      close();
+    }
   }}
   on:keydown={(e) => {
     if (open && e.key === "Escape") close();
