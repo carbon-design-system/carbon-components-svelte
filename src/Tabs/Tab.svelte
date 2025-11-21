@@ -26,11 +26,18 @@
   /** Obtain a reference to the anchor HTML element */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
 
-  const { selectedTab, useAutoWidth, add, update, change } = getContext("Tabs");
+  const { selectedTab, useAutoWidth, add, remove, update, change } =
+    getContext("Tabs");
 
   add({ id, label, disabled });
+
+  onMount(() => {
+    return () => {
+      remove(id);
+    };
+  });
 
   $: selected = $selectedTab === id;
 </script>

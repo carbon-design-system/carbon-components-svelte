@@ -72,14 +72,40 @@
    * @type {(data: { id: string; label: string; disabled: boolean }) => void}
    */
   const add = (data) => {
-    tabs.update((_) => [..._, { ...data, index: _.length }]);
+    tabs.update((_) => {
+      const newTabs = [..._, { ...data, index: _.length }];
+      return newTabs.map((tab, index) => ({ ...tab, index }));
+    });
+  };
+
+  /**
+   * @type {(id: string) => void}
+   */
+  const remove = (id) => {
+    tabs.update((_) => {
+      const filtered = _.filter((tab) => tab.id !== id);
+      return filtered.map((tab, index) => ({ ...tab, index }));
+    });
   };
 
   /**
    * @type {(data: { id: string }) => void}
    */
   const addContent = (data) => {
-    content.update((_) => [..._, { ...data, index: _.length }]);
+    content.update((_) => {
+      const newContent = [..._, { ...data, index: _.length }];
+      return newContent.map((item, index) => ({ ...item, index }));
+    });
+  };
+
+  /**
+   * @type {(id: string) => void}
+   */
+  const removeContent = (id) => {
+    content.update((_) => {
+      const filtered = _.filter((item) => item.id !== id);
+      return filtered.map((item, index) => ({ ...item, index }));
+    });
   };
 
   /**
@@ -130,12 +156,51 @@
     selectedContent,
     useAutoWidth,
     add,
+    remove,
     addContent,
+    removeContent,
     update,
     change,
   });
 
   afterUpdate(() => {
+    // We need to use the DOM order of the tabs to update
+    // the indices of the tabs in the store. This is because
+    // the current implementation uses an implicit index approach
+    // where order matters. A more robust solution would be to
+    // require explicit keys specified by the consumer.
+    if (refTabList) {
+      const domTabs = Array.from(refTabList.querySelectorAll("[role='tab']"));
+      const domIds = domTabs.map((el) => el.id);
+
+      tabs.update((currentTabs) => {
+        const tabsMap = new Map(currentTabs.map((tab) => [tab.id, tab]));
+
+        const reorderedTabs = domIds
+          .map((id) => tabsMap.get(id))
+          .filter((tab) => tab !== undefined)
+          .map((tab, index) => ({ ...tab, index }));
+
+        return reorderedTabs;
+      });
+    }
+
+    const contentElements = Array.from(
+      document.querySelectorAll("[role='tabpanel']"),
+    );
+    const contentIds = contentElements.map((el) => el.id);
+
+    content.update((currentContent) => {
+      const contentMap = new Map(currentContent.map((c) => [c.id, c]));
+
+      const reorderedContent = contentIds
+        .map((id) => contentMap.get(id))
+        .filter((c) => c !== undefined)
+        .map((c, index) => ({ ...c, index }));
+
+      return reorderedContent;
+    });
+
     selected = currentIndex;
 
     if (prevIndex > -1 && prevIndex !== currentIndex) {

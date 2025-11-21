@@ -15878,8 +15878,20 @@
               "optional": false
             },
             {
+              "name": "remove",
+              "type": "(id: string) => void",
+              "description": "",
+              "optional": false
+            },
+            {
               "name": "addContent",
               "type": "(data: { id: string }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "removeContent",
+              "type": "(id: string) => void",
               "description": "",
               "optional": false
             },
