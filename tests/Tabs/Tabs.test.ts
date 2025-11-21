@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import Tab from "./Tab.test.svelte";
 import Tabs from "./Tabs.test.svelte";
+import TabsDynamic from "./TabsDynamic.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 
 describe("Tabs", () => {
@@ -154,6 +155,97 @@ describe("Tabs", () => {
     trigger.focus();
     await user.keyboard("{Enter}");
     expect(container.querySelector(".bx--tabs__nav--hidden")).toBeNull();
+  });
+
+  it("should maintain correct indices when tabs are dynamically removed and re-added", async () => {
+    render(TabsDynamic, { props: { showTab1: true } });
+
+    // Initial state: Tab 1, Tab 2, Tab 3
+    expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Tab 2" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Tab 3" })).toBeInTheDocument();
+
+    // Toggle Tab 1 off
+    const toggleButton = screen.getByTestId("toggle-tab1");
+    await user.click(toggleButton);
+
+    // Tab 1 should be removed
+    expect(
+      screen.queryByRole("tab", { name: "Tab 1" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Tab 2" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Tab 3" })).toBeInTheDocument();
+
+    // Toggle Tab 1 back on
+    await user.click(toggleButton);
+
+    // Tab 1 should be back at index 0
+    expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
+
+    // Click Tab 1 and verify it has the correct index (0)
+    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    await user.click(tab1);
+
+    const selectedIndex = screen.getByTestId("selected-index");
+    expect(selectedIndex).toHaveTextContent("0");
+  });
+
+  it("should update selected index when active tab is removed", async () => {
+    render(TabsDynamic, {
+      props: { selected: 1, showTab1: true, showTab2: true },
+    });
+
+    // Initial state: Tab 1 (0), Tab 2 (1), Tab 3 (2) - Tab 2 is selected
+    const selectedIndex = screen.getByTestId("selected-index");
+    expect(selectedIndex).toHaveTextContent("1");
+
+    // Toggle Tab 2 off (the currently selected tab)
+    const toggleTab2Button = screen.getByTestId("toggle-tab2");
+    await user.click(toggleTab2Button);
+
+    // Tab 2 should be removed
+    expect(
+      screen.queryByRole("tab", { name: "Tab 2" }),
+    ).not.toBeInTheDocument();
+
+    // Only Tab 1 and Tab 3 should remain
+    expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Tab 3" })).toBeInTheDocument();
+  });
+
+  it("should handle multiple tabs being toggled in sequence", async () => {
+    render(TabsDynamic, { props: { showTab1: true, showTab2: true } });
+
+    const toggleTab1 = screen.getByTestId("toggle-tab1");
+    const toggleTab2 = screen.getByTestId("toggle-tab2");
+
+    // Remove Tab 1
+    await user.click(toggleTab1);
+    expect(
+      screen.queryByRole("tab", { name: "Tab 1" }),
+    ).not.toBeInTheDocument();
+
+    // Remove Tab 2
+    await user.click(toggleTab2);
+    expect(
+      screen.queryByRole("tab", { name: "Tab 2" }),
+    ).not.toBeInTheDocument();
+
+    // Only Tab 3 should remain and it should be at index 0
+    expect(screen.getByRole("tab", { name: "Tab 3" })).toBeInTheDocument();
+    const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+    await user.click(tab3);
+
+    const selectedIndex = screen.getByTestId("selected-index");
+    expect(selectedIndex).toHaveTextContent("0");
+
+    // Add Tab 1 back - it should get index 0 and Tab 3 should move to index 1
+    await user.click(toggleTab1);
+    expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
+
+    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    await user.click(tab1);
+    expect(selectedIndex).toHaveTextContent("0");
   });
 });
 

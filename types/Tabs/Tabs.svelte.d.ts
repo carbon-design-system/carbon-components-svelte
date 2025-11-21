@@ -17,7 +17,9 @@ export type TabsContext = {
   selectedContent: import("svelte/store").Writable<string | undefined>;
   useAutoWidth: import("svelte/store").Writable<boolean>;
   add: (data: { id: string; label: string; disabled: boolean }) => void;
+  remove: (id: string) => void;
   addContent: (data: { id: string }) => void;
+  removeContent: (id: string) => void;
   update: (id: string) => void;
   change: (direction: number) => Promise<void>;
 };
