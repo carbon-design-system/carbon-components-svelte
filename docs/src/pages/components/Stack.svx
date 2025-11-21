@@ -1,0 +1,276 @@
+<script>
+  import { Stack, UnorderedList, ListItem } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+`Stack` is a utility component that can be used to create a stack of elements with a consistent gap between them. It supports both vertical and horizontal orientations.
+
+It uses layout tokens from the Carbon Design System to define the gap between elements. The default gap is `1`, which is equivalent to `0.125rem` (`2px`).
+
+The `gap` scale can be set from `1` to `13`:
+
+<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem><strong>1</strong>: 0.125rem (2px)</ListItem>
+  <ListItem><strong>2</strong>: 0.25rem (4px)</ListItem>
+  <ListItem><strong>3</strong>: 0.5rem (8px)</ListItem>
+  <ListItem><strong>4</strong>: 0.75rem (12px)</ListItem>
+  <ListItem><strong>5</strong>: 1rem (16px)</ListItem>
+  <ListItem><strong>6</strong>: 1.5rem (24px)</ListItem>
+  <ListItem><strong>7</strong>: 2rem (32px)</ListItem>
+  <ListItem><strong>8</strong>: 2.5rem (40px)</ListItem>
+  <ListItem><strong>9</strong>: 3rem (48px)</ListItem>
+  <ListItem><strong>10</strong>: 4rem (64px)</ListItem>
+  <ListItem><strong>11</strong>: 5rem (80px)</ListItem>
+  <ListItem><strong>12</strong>: 6rem (96px)</ListItem>
+  <ListItem><strong>13</strong>: 10rem (160px)</ListItem>
+</UnorderedList>
+
+Alternatively, you can specify an arbitrary `gap` value (e.g., `200px`).
+
+## Vertical (gap 1)
+
+By default, the `Stack` component has a vertical orientation and a gap scale of `1`.
+
+<Stack>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 2)
+
+<Stack gap={2}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 3)
+
+<Stack gap={3}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 4)
+
+<Stack gap={4}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 5)
+
+<Stack gap={5}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 6)
+
+<Stack gap={6}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 7)
+
+<Stack gap={7}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 8)
+
+<Stack gap={8}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 9)
+
+<Stack gap={9}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 10)
+
+<Stack gap={10}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 11)
+
+<Stack gap={11}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 12)
+
+<Stack gap={12}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (gap 13)
+
+<Stack gap={13}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (custom value)
+
+<Stack gap="22px">
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Vertical (custom element)
+
+By default, the `Stack` component uses a `div` element. You can specify a different element using the `tag` prop.
+
+<Stack tag="ul" gap={3}>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</Stack>
+
+## Horizontal (gap 1)
+
+Set the `orientation` prop to `horizontal` to create a horizontal stack.
+
+<Stack orientation="horizontal">
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 2)
+
+<Stack orientation="horizontal" gap={2}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 3)
+
+<Stack orientation="horizontal" gap={3}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 4)
+
+<Stack orientation="horizontal" gap={4}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 5)
+
+<Stack orientation="horizontal" gap={5}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 6)
+
+<Stack orientation="horizontal" gap={6}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 7)
+
+<Stack orientation="horizontal" gap={7}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 8)
+
+<Stack orientation="horizontal" gap={8}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 9)
+
+<Stack orientation="horizontal" gap={9}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 10)
+
+<Stack orientation="horizontal" gap={10}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 11)
+
+<Stack orientation="horizontal" gap={11}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 12)
+
+<Stack orientation="horizontal" gap={12}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (gap 13)
+
+<Stack orientation="horizontal" gap={13}>
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (custom value)
+
+<Stack orientation="horizontal" gap="22px">
+  <p>Item 1</p>
+  <p>Item 2</p>
+  <p>Item 3</p>
+</Stack>
+
+## Horizontal (custom element)
+
+By default, the `Stack` component uses a `div` element. You can specify a different element using the `tag` prop.
+
+<Stack orientation="horizontal" tag="ul" gap={3}>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</Stack>

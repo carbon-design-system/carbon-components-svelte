@@ -1,6 +1,6 @@
 # Component Index
 
-> 165 components exported from carbon-components-svelte@0.92.0.
+> 166 components exported from carbon-components-svelte@0.92.0.
 
 ## Components
 
@@ -123,6 +123,7 @@
 - [`SkipToContent`](#skiptocontent)
 - [`Slider`](#slider)
 - [`SliderSkeleton`](#sliderskeleton)
+- [`Stack`](#stack)
 - [`StructuredList`](#structuredlist)
 - [`StructuredListBody`](#structuredlistbody)
 - [`StructuredListCell`](#structuredlistcell)
@@ -3576,6 +3577,32 @@ None.
 | mouseover  | forwarded | --     | --          |
 | mouseenter | forwarded | --     | --          |
 | mouseleave | forwarded | --     | --          |
+
+## `Stack`
+
+### Types
+
+```ts
+export type StackScale = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
+```
+
+### Props
+
+| Prop name   | Required | Kind             | Reactive | Type                                        | Default value           | Description                                                                                                                                                                                             |
+| :---------- | :------- | :--------------- | :------- | ------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| gap         | No       | <code>let</code> | No       | <code>StackScale &#124; string</code>       | <code>1</code>          | Specify the gap between items in the stack.<br />The scale maps to Carbon layout values.<br />Alternatively, specify a custom value (e.g., "200px" or "1.5rem").<br />Custom values _must_ be a string. |
+| orientation | No       | <code>let</code> | No       | <code>"vertical" &#124; "horizontal"</code> | <code>"vertical"</code> | Specify the orientation of the stack.                                                                                                                                                                   |
+| tag         | No       | <code>let</code> | No       | <code>keyof HTMLElementTagNameMap</code>    | <code>"div"</code>      | Specify the tag name                                                                                                                                                                                    |
+
+### Slots
+
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
+
+### Events
+
+None.
 
 ## `StructuredList`
 
