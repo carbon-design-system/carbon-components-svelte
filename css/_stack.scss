@@ -1,0 +1,93 @@
+// Stack component styles for carbon-components-svelte
+// The Stack component is a layout utility that provides consistent
+// spacing between stacked elements (vertically or horizontally).
+
+@import 'carbon-components/scss/globals/scss/vars';
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
+
+/// Stack component
+/// @access private
+/// @group components
+@mixin stack {
+  .#{$prefix}--stack {
+    display: flex;
+  }
+
+  .#{$prefix}--stack-vertical {
+    flex-direction: column;
+  }
+
+  .#{$prefix}--stack-horizontal {
+    flex-direction: row;
+  }
+
+  // Stack scale maps to @carbon/layout values
+  // Scale 1: 0.125rem (2px)
+  .#{$prefix}--stack-scale-1 {
+    gap: 0.125rem;
+  }
+
+  // Scale 2: 0.25rem (4px)
+  .#{$prefix}--stack-scale-2 {
+    gap: 0.25rem;
+  }
+
+  // Scale 3: 0.5rem (8px)
+  .#{$prefix}--stack-scale-3 {
+    gap: 0.5rem;
+  }
+
+  // Scale 4: 0.75rem (12px)
+  .#{$prefix}--stack-scale-4 {
+    gap: 0.75rem;
+  }
+
+  // Scale 5: 1rem (16px)
+  .#{$prefix}--stack-scale-5 {
+    gap: 1rem;
+  }
+
+  // Scale 6: 1.5rem (24px)
+  .#{$prefix}--stack-scale-6 {
+    gap: 1.5rem;
+  }
+
+  // Scale 7: 2rem (32px)
+  .#{$prefix}--stack-scale-7 {
+    gap: 2rem;
+  }
+
+  // Scale 8: 2.5rem (40px)
+  .#{$prefix}--stack-scale-8 {
+    gap: 2.5rem;
+  }
+
+  // Scale 9: 3rem (48px)
+  .#{$prefix}--stack-scale-9 {
+    gap: 3rem;
+  }
+
+  // Scale 10: 4rem (64px)
+  .#{$prefix}--stack-scale-10 {
+    gap: 4rem;
+  }
+
+  // Scale 11: 5rem (80px)
+  .#{$prefix}--stack-scale-11 {
+    gap: 5rem;
+  }
+
+  // Scale 12: 6rem (96px)
+  .#{$prefix}--stack-scale-12 {
+    gap: 6rem;
+  }
+
+  // Scale 13: 10rem (160px)
+  .#{$prefix}--stack-scale-13 {
+    gap: 10rem;
+  }
+}
+
+@include exports('stack') {
+  @include stack;
+}
