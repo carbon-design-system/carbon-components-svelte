@@ -5159,30 +5159,6 @@
           "reactive": true
         },
         {
-          "name": "role",
-          "kind": "let",
-          "description": "Specify the label role",
-          "type": "string",
-          "value": "\"button\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "tabindex",
-          "kind": "let",
-          "description": "Specify `tabindex` attribute",
-          "type": "string",
-          "value": "\"0\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "id",
           "kind": "let",
           "description": "Set an id for the input element",
@@ -5237,7 +5213,7 @@
         {
           "type": "forwarded",
           "name": "keydown",
-          "element": "label"
+          "element": "button"
         },
         {
           "type": "forwarded",

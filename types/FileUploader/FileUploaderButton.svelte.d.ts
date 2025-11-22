@@ -53,18 +53,6 @@ type $Props = {
   labelText?: string;
 
   /**
-   * Specify the label role
-   * @default "button"
-   */
-  role?: string;
-
-  /**
-   * Specify `tabindex` attribute
-   * @default "0"
-   */
-  tabindex?: string;
-
-  /**
    * Set an id for the input element
    * @default "ccs-" + Math.random().toString(36)
    */

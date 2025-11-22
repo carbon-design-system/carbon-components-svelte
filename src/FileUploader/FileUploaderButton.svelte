@@ -39,12 +39,6 @@
   /** Specify the label text */
   export let labelText = "Add file";
 
-  /** Specify the label role */
-  export let role = "button";
-
-  /** Specify `tabindex` attribute */
-  export let tabindex = "0";
-
   /** Set an id for the input element */
   export let id = "ccs-" + Math.random().toString(36);
 
@@ -79,12 +73,10 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<label
-  aria-disabled={disabled}
-  for={id}
-  tabindex={disabled ? "-1" : tabindex}
+<button
+  type="button"
+  on:click={() => ref?.click()}
+  {disabled}
   class:bx--btn={true}
   class:bx--btn--disabled={disabled}
   class:bx--btn--primary={kind === "primary"}
@@ -99,18 +91,11 @@
   class:bx--btn--lg={size === "lg"}
   class:bx--btn--xl={size === "xl"}
   on:keydown
-  on:keydown={({ key }) => {
-    if (key === " " || key === "Enter") {
-      ref.click();
-    }
-  }}
 >
-  <span {role}>
-    <slot name="labelText">
-      {labelText}
-    </slot>
-  </span>
-</label>
+  <slot name="labelText">
+    {labelText}
+  </slot>
+</button>
 <input
   bind:this={ref}
   type="file"
@@ -120,6 +105,7 @@
   {id}
   {multiple}
   {name}
+  aria-label={labelText}
   class:bx--visually-hidden={true}
   {...$$restProps}
   on:change|stopPropagation={({ target }) => {
@@ -133,6 +119,6 @@
   }}
   on:click
   on:click={({ target }) => {
-    target.value = null;
+    target.value = "";
   }}
 />

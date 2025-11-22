@@ -1316,8 +1316,6 @@ None.
 | disableLabelChanges | No       | <code>let</code> | No       | <code>boolean</code>                                               | <code>false</code>                               | Set to `true` to disable label changes       |
 | kind                | No       | <code>let</code> | No       | <code>import("../Button/Button.svelte").ButtonProps["kind"]</code> | <code>"primary"</code>                           | Specify the kind of file uploader button     |
 | size                | No       | <code>let</code> | No       | <code>import("../Button/Button.svelte").ButtonProps["size"]</code> | <code>"small"</code>                             | Specify the size of the file uploader button |
-| role                | No       | <code>let</code> | No       | <code>string</code>                                                | <code>"button"</code>                            | Specify the label role                       |
-| tabindex            | No       | <code>let</code> | No       | <code>string</code>                                                | <code>"0"</code>                                 | Specify `tabindex` attribute                 |
 | id                  | No       | <code>let</code> | No       | <code>string</code>                                                | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the input element              |
 | name                | No       | <code>let</code> | No       | <code>string</code>                                                | <code>""</code>                                  | Specify a name attribute for the input       |
 
