@@ -21,6 +21,8 @@ const componentApiByName = componentApi.components.reduce((a, c) => {
 const ICON_NAME_REGEX = /[A-Z][a-z]*/;
 const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
+const GIT_PREFIX_REGEX = /^git\+/;
+const GIT_SUFFIX_REGEX = /\.git$/;
 
 function createImports(source) {
   const inlineComponents = new Set();
@@ -148,11 +150,14 @@ export default {
       markup: ({ filename, content }) => {
         if (NODE_MODULES_REGEX.test(filename) || !filename.endsWith(".svelte"))
           return;
+        const repoUrl = pkg.repository?.url ?? "";
+        const normalizedRepoUrl = repoUrl
+          .replace(GIT_PREFIX_REGEX, "")
+          .replace(GIT_SUFFIX_REGEX, "");
         return {
-          code: content.replace(
-            /process.env.VERSION/g,
-            JSON.stringify(pkg.version),
-          ),
+          code: content
+            .replace(/process.env.VERSION/g, JSON.stringify(pkg.version))
+            .replace(/"REPO_URL"/g, JSON.stringify(normalizedRepoUrl)),
         };
       },
     },
