@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
 
 describe("OverflowMenu", () => {
@@ -286,5 +287,40 @@ describe("OverflowMenu", () => {
     await user.click(document.body);
 
     expect(spy).toHaveBeenCalledWith("close", null);
+  });
+
+  it("supports preventDefault on item to prevent menu from closing", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(OverflowMenuPreventDefault);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+    expect(menuButton).toHaveAttribute("aria-expanded", "true");
+
+    const menuItems = screen.getAllByRole("menuitem");
+    await user.click(menuItems[0]);
+
+    expect(consoleLog).toHaveBeenCalledWith("click", "Manage credentials");
+    expect(consoleLog).not.toHaveBeenCalledWith("close", {
+      index: 0,
+      text: "Manage credentials",
+    });
+
+    expect(menuButton).toHaveAttribute("aria-expanded", "true");
+    expect(screen.queryByRole("menu")).toBeInTheDocument();
+  });
+
+  it("closes menu normally when preventDefault is not called", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+    expect(menuButton).toHaveAttribute("aria-expanded", "true");
+
+    const menuItems = screen.getAllByRole("menuitem");
+    await user.click(menuItems[0]);
+
+    expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 });

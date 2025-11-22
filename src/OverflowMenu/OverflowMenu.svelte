@@ -105,8 +105,14 @@
   const update = (id, item) => {
     currentId.set(id);
 
-    dispatch("close", { index: item.index, text: item.text });
-    open = false;
+    const shouldContinue = dispatch(
+      "close",
+      { index: item.index, text: item.text },
+      { cancelable: true },
+    );
+    if (shouldContinue) {
+      open = false;
+    }
   };
 
   /**
@@ -199,8 +205,10 @@
   on:click={({ target }) => {
     if (buttonRef && buttonRef.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
-      dispatch("close");
-      open = false;
+      const shouldContinue = dispatch("close", null, { cancelable: true });
+      if (shouldContinue) {
+        open = false;
+      }
     }
   }}
 />
@@ -224,7 +232,12 @@
   on:click={({ target }) => {
     if (!(menuRef && menuRef.contains(target))) {
       open = !open;
-      if (!open) dispatch("close");
+      if (!open) {
+        const shouldContinue = dispatch("close", null, { cancelable: true });
+        if (!shouldContinue) {
+          open = true;
+        }
+      }
     }
   }}
   on:mouseover
@@ -237,9 +250,11 @@
         e.preventDefault();
       } else if (e.key === "Escape") {
         e.stopPropagation();
-        dispatch("close");
-        open = false;
-        buttonRef.focus();
+        const shouldContinue = dispatch("close", null, { cancelable: true });
+        if (shouldContinue) {
+          open = false;
+          buttonRef.focus();
+        }
       }
     }
   }}

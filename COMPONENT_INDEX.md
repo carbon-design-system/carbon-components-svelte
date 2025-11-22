@@ -2677,10 +2677,10 @@ None.
 
 ### Events
 
-| Event name | Type      | Detail | Description |
-| :--------- | :-------- | :----- | :---------- |
-| click      | forwarded | --     | --          |
-| keydown    | forwarded | --     | --          |
+| Event name | Type       | Detail                  | Description |
+| :--------- | :--------- | :---------------------- | :---------- |
+| click      | dispatched | <code>MouseEvent</code> | --          |
+| keydown    | forwarded  | --                      | --          |
 
 ## `Pagination`
 
