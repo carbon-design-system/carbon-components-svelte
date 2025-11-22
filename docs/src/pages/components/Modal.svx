@@ -4,6 +4,10 @@
 
 The `Modal` component provides a focused dialog for user interactions, confirmations, or data entry. It supports various sizes, states, and customization options to create accessible and user-friendly modal experiences.
 
+**Modal vs ComposedModal**
+
+`Modal` is an all-in-one component configured through props, making it ideal for standard modal dialogs. For more complex layouts or fine-grained control, use [ComposedModal](/components/ComposedModal) instead.
+
 ## Default
 
 Display a modal dialog with a header, content area, and footer by default.
