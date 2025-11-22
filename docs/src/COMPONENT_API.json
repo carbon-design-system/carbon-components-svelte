@@ -15661,10 +15661,22 @@
           "reactive": false
         },
         {
+          "name": "translationIds",
+          "kind": "const",
+          "description": "Default translation ids",
+          "type": "{     columnSortAscending: \"columnSortAscending\",     columnSortDescending: \"columnSortDescending\",   }",
+          "value": "{\n  columnSortAscending:\n    \"columnSortAscending\",\n  columnSortDescending:\n    \"columnSortDescending\",\n}",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": true,
+          "reactive": false
+        },
+        {
           "name": "translateWithId",
           "kind": "let",
-          "description": "Override the default id translations",
-          "type": "() => string",
+          "description": "Override the default translation ids",
+          "type": "(id: TableHeaderTranslationId) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,
@@ -15714,7 +15726,13 @@
           "element": "button"
         }
       ],
-      "typedefs": [],
+      "typedefs": [
+        {
+          "type": "\"columnSortAscending\" | \"columnSortDescending\"",
+          "name": "TableHeaderTranslationId",
+          "ts": "type TableHeaderTranslationId =\n  | \"columnSortAscending\"\n  | \"columnSortDescending\";\n"
+        }
+      ],
       "generics": null,
       "rest_props": {
         "type": "Element",

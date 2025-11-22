@@ -1,6 +1,10 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type TableHeaderTranslationId =
+  | "columnSortAscending"
+  | "columnSortDescending";
+
 type $RestProps = SvelteHTMLElements["th"];
 
 type $Props = {
@@ -29,9 +33,9 @@ type $Props = {
   scope?: string;
 
   /**
-   * Override the default id translations
+   * Override the default translation ids
    */
-  translateWithId?: () => string;
+  translateWithId?: (id: TableHeaderTranslationId) => string;
 
   /**
    * Set an id for the top-level element
@@ -53,4 +57,12 @@ export default class TableHeader extends SvelteComponentTyped<
     click: WindowEventMap["click"];
   },
   { default: Record<string, never> }
-> {}
+> {
+  /**
+   * Default translation ids
+   */
+  translationIds: {
+    columnSortAscending: "columnSortAscending";
+    columnSortDescending: "columnSortDescending";
+  };
+}
