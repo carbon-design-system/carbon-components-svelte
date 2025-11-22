@@ -181,6 +181,12 @@
   /** Set to `number` to set current page */
   export let page = 0;
 
+  /**
+   * Override the default table header translation ids
+   * @type {(id: import("./TableHeader.svelte").TableHeaderTranslationId) => string}
+   */
+  export let tableHeaderTranslateWithId = undefined;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
@@ -482,6 +488,9 @@
               sortable={sortable && header.sort !== false}
               sortDirection={sortKey === header.key ? sortDirection : "none"}
               active={sortKey === header.key}
+              {...(tableHeaderTranslateWithId
+                ? { translateWithId: tableHeaderTranslateWithId }
+                : {})}
               on:click={(e) => {
                 dispatch("click", { header });
 

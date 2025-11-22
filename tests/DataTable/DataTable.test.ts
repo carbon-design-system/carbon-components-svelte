@@ -1165,6 +1165,94 @@ describe("DataTable", () => {
     expect(detail).toHaveProperty("row");
   });
 
+  it("uses default table header translations", async () => {
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers,
+        rows,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+    const headerButton = nameHeader.closest("button");
+    assert(headerButton);
+
+    const sortIcon = headerButton.querySelector(".bx--table-sort__icon");
+    assert(sortIcon);
+    expect(sortIcon).toHaveAttribute(
+      "aria-label",
+      "Sort rows by this header in ascending order",
+    );
+  });
+
+  it("applies custom table header translations", async () => {
+    const customTranslator = (id: string) => {
+      const translations: Record<string, string> = {
+        columnSortAscending: "Trier par ordre croissant",
+        columnSortDescending: "Trier par ordre décroissant",
+      };
+      return translations[id] || id;
+    };
+
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers,
+        rows,
+        tableHeaderTranslateWithId: customTranslator,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+    const headerButton = nameHeader.closest("button");
+    assert(headerButton);
+
+    const sortIcon = headerButton.querySelector(".bx--table-sort__icon");
+    assert(sortIcon);
+    expect(sortIcon).toHaveAttribute("aria-label", "Trier par ordre croissant");
+
+    await user.click(nameHeader);
+    expect(sortIcon).toHaveAttribute(
+      "aria-label",
+      "Trier par ordre décroissant",
+    );
+  });
+
+  it("updates aria-label based on sort state", async () => {
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers,
+        rows,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+    const headerButton = nameHeader.closest("button");
+    assert(headerButton);
+
+    const sortIcon = headerButton.querySelector(".bx--table-sort__icon");
+    assert(sortIcon);
+
+    expect(sortIcon).toHaveAttribute(
+      "aria-label",
+      "Sort rows by this header in ascending order",
+    );
+
+    await user.click(nameHeader);
+    expect(sortIcon).toHaveAttribute(
+      "aria-label",
+      "Sort rows by this header in descending order",
+    );
+
+    await user.click(nameHeader);
+    expect(sortIcon).toHaveAttribute(
+      "aria-label",
+      "Sort rows by this header in ascending order",
+    );
+  });
+
   // Regression test for issue https://github.com/carbon-design-system/carbon-components-svelte/issues/2344
   describe("TypeScript event type definitions", () => {
     it("click:row event type includes target and currentTarget", () => {

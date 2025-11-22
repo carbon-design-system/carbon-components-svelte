@@ -70,6 +70,8 @@
   export let expandedRowIds: string[] = [];
   export let pageSize = 0;
   export let page = 0;
+  export let tableHeaderTranslateWithId: ((id: string) => string) | undefined =
+    undefined;
 </script>
 
 <DataTable
@@ -93,6 +95,7 @@
   {expandedRowIds}
   {pageSize}
   {page}
+  {tableHeaderTranslateWithId}
   on:click={(e) => {
     console.log("click", e.detail);
   }}
