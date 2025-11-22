@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.93.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.92.0...v0.93.0) (2025-11-22)
+
+### ⚠ BREAKING CHANGES
+
+- **number-input:** remove unused `iconDescription` prop (#2354)
+- **file-uploader:** use `button` for accessibility ([#2351](https://github.com/carbon-design-system/carbon-components-svelte/issues/2351)) ([ace3376](https://github.com/carbon-design-system/carbon-components-svelte/commit/ace3376b3f9efeab3f3bd1b6f6a5abab84623ee0))
+
+### Features
+
+- **data-table:** add `tableHeaderTranslateWithId` prop ([864d687](https://github.com/carbon-design-system/carbon-components-svelte/commit/864d6875bc8384f52bcdb9d1f66c05feb621ccfc))
+- **overflow-menu:** support `e.preventDefault` on item click ([#2360](https://github.com/carbon-design-system/carbon-components-svelte/issues/2360)) ([e63b7d8](https://github.com/carbon-design-system/carbon-components-svelte/commit/e63b7d893abbc8fd3eadac1eb54d6559c606494a))
+- **stack:** add `Stack` component ([#2352](https://github.com/carbon-design-system/carbon-components-svelte/issues/2352)) ([bf3b93a](https://github.com/carbon-design-system/carbon-components-svelte/commit/bf3b93ae2de210f8a3d1bcf618ac9966b72aa07e)), closes [#2278](https://github.com/carbon-design-system/carbon-components-svelte/issues/2278)
+- **types:** add `[@example](https://github.com/example)` tags for accessors ([0192d0e](https://github.com/carbon-design-system/carbon-components-svelte/commit/0192d0e9938a5c48d7f08c7bfaed54b3d8a2b8d8))
+
+### Bug Fixes
+
+- **context-menu:** close on any click instead of only outside clicks ([#2349](https://github.com/carbon-design-system/carbon-components-svelte/issues/2349)) ([a980071](https://github.com/carbon-design-system/carbon-components-svelte/commit/a9800715ca8a8cc0fa84ae97d386dd456b4b7024)), closes [#578](https://github.com/carbon-design-system/carbon-components-svelte/issues/578)
+- **data-table:** restore `target` and `currentTarget` types ([#2345](https://github.com/carbon-design-system/carbon-components-svelte/issues/2345)) ([6b11d7a](https://github.com/carbon-design-system/carbon-components-svelte/commit/6b11d7a2f37d2670847b33c96570415f5c48807f)), closes [#2344](https://github.com/carbon-design-system/carbon-components-svelte/issues/2344)
+- **dropdown:** support typeahead when menu is open ([#2357](https://github.com/carbon-design-system/carbon-components-svelte/issues/2357)) ([f2b5056](https://github.com/carbon-design-system/carbon-components-svelte/commit/f2b50563d4a91af4a38c4164821fbf9306261cf3)), closes [#1975](https://github.com/carbon-design-system/carbon-components-svelte/issues/1975)
+- **number-input:** remove unused `iconDescription` prop ([#2354](https://github.com/carbon-design-system/carbon-components-svelte/issues/2354)) ([7e5d437](https://github.com/carbon-design-system/carbon-components-svelte/commit/7e5d437f66f968ab1c6cef409f9733a9d170daf4))
+- **table-header:** implement `translateWithId` ([c4eed4d](https://github.com/carbon-design-system/carbon-components-svelte/commit/c4eed4dda7fff44e50c7a4f711cd4a40172394d2))
+- **tabs:** resolve index de-sync from dynamic tab rendering ([8a2d0ae](https://github.com/carbon-design-system/carbon-components-svelte/commit/8a2d0ae2a74bba7626b0e59e6586237b18115207)), closes [#1537](https://github.com/carbon-design-system/carbon-components-svelte/issues/1537)
+- **toolbar:** prevent keyboard focus on hidden toolbar elements ([#2359](https://github.com/carbon-design-system/carbon-components-svelte/issues/2359)) ([bdaf6b5](https://github.com/carbon-design-system/carbon-components-svelte/commit/bdaf6b558d8c94909c7592fdcc1946a40a31bb19)), closes [#663](https://github.com/carbon-design-system/carbon-components-svelte/issues/663)
+
 ## [0.92.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.91.0...v0.92.0) (2025-11-13)
 
 ### ⚠ BREAKING CHANGES
