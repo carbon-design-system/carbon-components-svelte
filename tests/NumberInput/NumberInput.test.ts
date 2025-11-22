@@ -134,18 +134,6 @@ describe("NumberInput", () => {
     ).not.toBeInTheDocument();
   });
 
-  // TODO(bug): The icon descriptions are not being applied.
-  it.skip("should handle custom icon descriptions", () => {
-    render(NumberInput, {
-      props: { iconDescription: "Custom description" },
-    });
-
-    const buttons = screen.getAllByRole("button");
-    for (const button of buttons) {
-      expect(button).toHaveAttribute("title", "Custom description");
-    }
-  });
-
   it("should handle custom slots", () => {
     render(NumberInputCustom);
 
@@ -316,16 +304,19 @@ describe("NumberInput", () => {
     ).toBeInTheDocument();
   });
 
-  it("should use iconDescription as fallback for button labels", () => {
+  it("should use translateWithId to customize button labels", () => {
     render(NumberInput, {
       props: {
-        translateWithId: () => "",
-        iconDescription: "Adjust value",
+        translateWithId: (id: string) => {
+          if (id === "increment") return "Plus";
+          if (id === "decrement") return "Minus";
+          return id;
+        },
       },
     });
 
-    const buttons = screen.getAllByRole("button", { name: "Adjust value" });
-    expect(buttons).toHaveLength(2); // Both increment and decrement buttons
+    expect(screen.getByRole("button", { name: "Plus" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Minus" })).toBeInTheDocument();
   });
 
   it("should have translationIds constant", () => {

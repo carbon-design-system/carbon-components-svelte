@@ -80,12 +80,6 @@ type $Props = {
   hideSteppers?: boolean;
 
   /**
-   * Specify the ARIA label for the increment icons
-   * @default ""
-   */
-  iconDescription?: string;
-
-  /**
    * Set to `true` to indicate an invalid state
    * @default false
    */

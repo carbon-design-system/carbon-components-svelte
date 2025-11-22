@@ -13,7 +13,6 @@
   export let allowDecimal = false;
   export let disabled = false;
   export let hideSteppers = false;
-  export let iconDescription = "";
   export let invalid = false;
   export let invalidText = "";
   export let warn = false;
@@ -41,7 +40,6 @@
   {allowDecimal}
   {disabled}
   {hideSteppers}
-  {iconDescription}
   {invalid}
   {invalidText}
   {warn}

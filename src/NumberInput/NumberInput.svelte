@@ -60,9 +60,6 @@
   /** Set to `true` to hide the input stepper buttons */
   export let hideSteppers = false;
 
-  /** Specify the ARIA label for the increment icons */
-  export let iconDescription = "";
-
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
@@ -328,8 +325,8 @@
           <button
             type="button"
             tabindex="-1"
-            title={decrementLabel || iconDescription}
-            aria-label={decrementLabel || iconDescription}
+            title={decrementLabel}
+            aria-label={decrementLabel}
             class:bx--number__control-btn={true}
             class:down-icon={true}
             on:click={() => {
@@ -343,8 +340,8 @@
           <button
             type="button"
             tabindex="-1"
-            title={incrementLabel || iconDescription}
-            aria-label={incrementLabel || iconDescription}
+            title={incrementLabel}
+            aria-label={incrementLabel}
             class:bx--number__control-btn={true}
             class:up-icon={true}
             on:click={() => {
