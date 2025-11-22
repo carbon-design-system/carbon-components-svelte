@@ -20,6 +20,8 @@
   import ComponentApi from "../components/ComponentApi.svelte";
   import { theme } from "../store";
 
+  const REPO_URL = "REPO_URL";
+
   export let component = $page.title;
   export let components = [component];
   export let unreleased = false;
@@ -60,10 +62,7 @@
     return filePath;
   }
 
-  // TODO: [refactor] read from package.json value
-  $: sourceCode = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${formatSourceURL(
-    multiple,
-  )}`;
+  $: sourceCode = `${REPO_URL}/tree/master/${formatSourceURL(multiple)}`;
 </script>
 
 <svelte:head>
