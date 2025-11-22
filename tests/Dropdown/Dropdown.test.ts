@@ -465,4 +465,128 @@ describe("Dropdown", () => {
       });
     });
   });
+
+  it("should support typeahead when typing with menu open", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Banana" },
+          { id: "2", text: "Cherry" },
+          { id: "3", text: "Date" },
+        ],
+        selectedId: "0",
+      },
+    });
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    // Type 'b' to find Banana
+    await user.keyboard("b");
+
+    // Banana should be highlighted (not selected)
+    const bananaOption = screen.getByRole("option", { name: "Banana" });
+    expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+    // Selected item should still be Apple
+    expect(button).toHaveTextContent("Apple");
+
+    // Press Enter to select Banana
+    await user.keyboard("{Enter}");
+    expect(button).toHaveTextContent("Banana");
+  });
+
+  it("should support typeahead with multiple characters", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Apricot" },
+          { id: "2", text: "Banana" },
+        ],
+        selectedId: "0",
+      },
+    });
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    // Type 'apr' to find Apricot
+    await user.keyboard("apr");
+
+    const apricotOption = screen.getByRole("option", { name: "Apricot" });
+    expect(apricotOption).toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
+  it("should skip disabled items in typeahead search", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Banana", disabled: true },
+          { id: "2", text: "Blueberry" },
+        ],
+        selectedId: "0",
+      },
+    });
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    // Type 'b' - should skip Banana and find Blueberry
+    await user.keyboard("b");
+
+    const blueberryText = screen.getByText("Blueberry");
+    const blueberryOption = blueberryText.closest(".bx--list-box__menu-item");
+    expect(blueberryOption).toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
+  it("should be case-insensitive in typeahead search", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Banana" },
+        ],
+        selectedId: "0",
+      },
+    });
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    // Type 'B' (uppercase) to find Banana
+    await user.keyboard("B");
+
+    const bananaText = screen.getByText("Banana");
+    const bananaOption = bananaText.closest(".bx--list-box__menu-item");
+    expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
+  it("should wrap around to beginning in typeahead search", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Banana" },
+          { id: "2", text: "Cherry" },
+        ],
+        selectedId: "2",
+      },
+    });
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    // Navigate down to beyond the last item, which should wrap
+    await user.keyboard("{ArrowDown}");
+
+    // Now type 'b' - should wrap around to find Banana
+    await user.keyboard("b");
+
+    const bananaText = screen.getByText("Banana");
+    const bananaOption = bananaText.closest(".bx--list-box__menu-item");
+    expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
+  });
 });
