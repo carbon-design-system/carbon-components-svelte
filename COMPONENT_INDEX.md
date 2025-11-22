@@ -3943,16 +3943,25 @@ None.
 
 ## `TableHeader`
 
+### Types
+
+```ts
+export type TableHeaderTranslationId =
+  | "columnSortAscending"
+  | "columnSortDescending";
+```
+
 ### Props
 
-| Prop name       | Required | Kind             | Reactive | Type                                                       | Default value                                    | Description                            |
-| :-------------- | :------- | :--------------- | :------- | ---------------------------------------------------------- | ------------------------------------------------ | -------------------------------------- |
-| sortable        | No       | <code>let</code> | No       | <code>boolean</code>                                       | <code>false</code>                               | Set to `true` for the sortable variant |
-| sortDirection   | No       | <code>let</code> | No       | <code>"none" &#124; "ascending" &#124; "descending"</code> | <code>"none"</code>                              | Specify the sort direction             |
-| active          | No       | <code>let</code> | No       | <code>boolean</code>                                       | <code>false</code>                               | Set to `true` if the column sorting    |
-| scope           | No       | <code>let</code> | No       | <code>string</code>                                        | <code>"col"</code>                               | Specify the `scope` attribute          |
-| translateWithId | No       | <code>let</code> | No       | <code>() => string</code>                                  | --                                               | Override the default id translations   |
-| id              | No       | <code>let</code> | No       | <code>string</code>                                        | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the top-level element    |
+| Prop name       | Required | Kind               | Reactive | Type                                                                                                       | Default value                                                                                              | Description                            |
+| :-------------- | :------- | :----------------- | :------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| sortable        | No       | <code>let</code>   | No       | <code>boolean</code>                                                                                       | <code>false</code>                                                                                         | Set to `true` for the sortable variant |
+| sortDirection   | No       | <code>let</code>   | No       | <code>"none" &#124; "ascending" &#124; "descending"</code>                                                 | <code>"none"</code>                                                                                        | Specify the sort direction             |
+| active          | No       | <code>let</code>   | No       | <code>boolean</code>                                                                                       | <code>false</code>                                                                                         | Set to `true` if the column sorting    |
+| scope           | No       | <code>let</code>   | No       | <code>string</code>                                                                                        | <code>"col"</code>                                                                                         | Specify the `scope` attribute          |
+| translationIds  | No       | <code>const</code> | No       | <code>{ columnSortAscending: "columnSortAscending", columnSortDescending: "columnSortDescending", }</code> | <code>{ columnSortAscending: "columnSortAscending", columnSortDescending: "columnSortDescending", }</code> | Default translation ids                |
+| translateWithId | No       | <code>let</code>   | No       | <code>(id: TableHeaderTranslationId) => string</code>                                                      | --                                                                                                         | Override the default translation ids   |
+| id              | No       | <code>let</code>   | No       | <code>string</code>                                                                                        | <code>"ccs-" + Math.random().toString(36)</code>                                                           | Set an id for the top-level element    |
 
 ### Slots
 
