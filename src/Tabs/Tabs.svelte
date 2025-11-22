@@ -67,6 +67,7 @@
   const selectedContent = writable(undefined);
 
   let refTabList = null;
+  let refRoot = null;
 
   /**
    * @type {(data: { id: string; label: string; disabled: boolean }) => void}
@@ -175,28 +176,30 @@
 
       tabs.update((currentTabs) => {
         const tabsMap = new Map(currentTabs.map((tab) => [tab.id, tab]));
-
         const reorderedTabs = domIds
-          .map((id) => tabsMap.get(id))
-          .filter((tab) => tab !== undefined)
-          .map((tab, index) => ({ ...tab, index }));
+          .map((id, index) => {
+            const tab = tabsMap.get(id);
+            return tab ? { ...tab, index } : undefined;
+          })
+          .filter(Boolean);
 
         return reorderedTabs;
       });
     }
 
-    const contentElements = Array.from(
-      document.querySelectorAll("[role='tabpanel']"),
-    );
+    const contentElements = refRoot?.parentElement
+      ? Array.from(refRoot.parentElement.querySelectorAll("[role='tabpanel']"))
+      : [];
     const contentIds = contentElements.map((el) => el.id);
 
     content.update((currentContent) => {
       const contentMap = new Map(currentContent.map((c) => [c.id, c]));
-
       const reorderedContent = contentIds
-        .map((id) => contentMap.get(id))
-        .filter((c) => c !== undefined)
-        .map((c, index) => ({ ...c, index }));
+        .map((id, index) => {
+          const c = contentMap.get(id);
+          return c ? { ...c, index } : undefined;
+        })
+        .filter(Boolean);
 
       return reorderedContent;
     });
@@ -233,6 +236,7 @@
 </script>
 
 <div
+  bind:this={refRoot}
   role="navigation"
   class:bx--tabs={true}
   class:bx--tabs--container={type === "container"}
