@@ -69,6 +69,7 @@
 
     prevActive = active;
   }
+  $: inertProps = showActions ? {} : { inert: true };
 
   let overflowVisible = false;
 
@@ -99,6 +100,7 @@
   <div
     class:bx--batch-actions={true}
     class:bx--batch-actions--active={showActions}
+    {...inertProps}
     {...$$restProps}
   >
     <div class:bx--batch-summary={true}>
