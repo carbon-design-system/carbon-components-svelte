@@ -165,4 +165,74 @@ describe("DataTableBatchSelectionToolbar", () => {
       screen.getByRole("checkbox", { name: "Select all rows" }),
     ).toHaveFocus();
   });
+
+  it("applies inert to batch actions when no rows are selected", () => {
+    const { container } = render(DataTableBatchSelectionToolbar, {
+      props: {
+        selectedRowIds: [],
+      },
+    });
+
+    const batchActions = container.querySelector(".bx--batch-actions");
+    expect(batchActions).toHaveAttribute("inert");
+  });
+
+  it("removes inert from batch actions when rows are selected", () => {
+    const { container } = render(DataTableBatchSelectionToolbar, {
+      props: {
+        selectedRowIds: ["a", "b"],
+      },
+    });
+
+    const batchActions = container.querySelector(".bx--batch-actions");
+    expect(batchActions).not.toHaveAttribute("inert");
+  });
+
+  it("applies inert to toolbar content when rows are selected", async () => {
+    const { container } = render(DataTableBatchSelectionToolbar, {
+      props: {
+        selectedRowIds: ["a", "b"],
+      },
+    });
+
+    const toolbarContent = container.querySelector(".bx--toolbar-content");
+    expect(toolbarContent).toHaveAttribute("inert");
+  });
+
+  it("removes inert from toolbar content when no rows are selected", () => {
+    const { container } = render(DataTableBatchSelectionToolbar, {
+      props: {
+        selectedRowIds: [],
+      },
+    });
+
+    const toolbarContent = container.querySelector(".bx--toolbar-content");
+    expect(toolbarContent).not.toHaveAttribute("inert");
+  });
+
+  it("toggles inert attributes when selection changes", async () => {
+    const { container, component } = render(DataTableBatchSelectionToolbar, {
+      props: {
+        selectedRowIds: [],
+      },
+    });
+
+    const batchActions = container.querySelector(".bx--batch-actions");
+    const toolbarContent = container.querySelector(".bx--toolbar-content");
+
+    expect(batchActions).toHaveAttribute("inert");
+    expect(toolbarContent).not.toHaveAttribute("inert");
+
+    component.$set({ selectedRowIds: ["a", "b"] });
+    await tick();
+
+    expect(batchActions).not.toHaveAttribute("inert");
+    expect(toolbarContent).toHaveAttribute("inert");
+
+    component.$set({ selectedRowIds: [] });
+    await tick();
+
+    expect(batchActions).toHaveAttribute("inert");
+    expect(toolbarContent).not.toHaveAttribute("inert");
+  });
 });
