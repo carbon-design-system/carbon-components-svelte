@@ -9890,18 +9890,6 @@
           "reactive": false
         },
         {
-          "name": "iconDescription",
-          "kind": "let",
-          "description": "Specify the ARIA label for the increment icons",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
           "name": "invalid",
           "kind": "let",
           "description": "Set to `true` to indicate an invalid state",
