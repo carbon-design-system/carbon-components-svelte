@@ -29,10 +29,11 @@
 
   metatags.title = $page.title;
 
-  // TODO: `find` is not supported in IE
-  $: api_components = components.map((i) =>
-    COMPONENT_API.components.find((_) => _.moduleName === i),
+  const componentMap = new Map(
+    COMPONENT_API.components.map((c) => [c.moduleName, c]),
   );
+
+  $: api_components = components.map((i) => componentMap.get(i));
   $: multiple = api_components.length > 1;
 
   onMount(() => {
