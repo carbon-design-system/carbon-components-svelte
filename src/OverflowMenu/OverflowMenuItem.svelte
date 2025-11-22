@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {MouseEvent} click
+   */
+
+  /**
    * Specify the item text.
    * Alternatively, use the default slot
    */
@@ -29,8 +33,9 @@
   /** Obtain a reference to the HTML element */
   export let ref = null;
 
-  import { afterUpdate, getContext } from "svelte";
+  import { afterUpdate, createEventDispatcher, getContext } from "svelte";
 
+  const dispatch = createEventDispatcher();
   const { focusedId, add, update, change, items } = getContext("OverflowMenu");
 
   $: item = $items.find((_) => _.id === id);
@@ -52,6 +57,17 @@
     href: href ? href : undefined,
     title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
   };
+
+  function handleClick(e) {
+    e.stopPropagation();
+
+    const shouldContinue = dispatch("click", e, { cancelable: true });
+
+    // Only update (close menu) if preventDefault was not called.
+    if (shouldContinue) {
+      update(id, item);
+    }
+  }
 </script>
 
 <li
@@ -69,11 +85,7 @@
     <a
       bind:this={ref}
       {...buttonProps}
-      on:click
-      on:click={(e) => {
-        e.stopPropagation();
-        update(id, item);
-      }}
+      on:click={handleClick}
       on:keydown
       on:keydown={({ key }) => {
         if (key === "ArrowDown") {
@@ -93,11 +105,7 @@
     <button
       bind:this={ref}
       {...buttonProps}
-      on:click
-      on:click={(e) => {
-        e.stopPropagation();
-        update(id, item);
-      }}
+      on:click={handleClick}
       on:keydown
       on:keydown={({ key }) => {
         if (key === "ArrowDown") {

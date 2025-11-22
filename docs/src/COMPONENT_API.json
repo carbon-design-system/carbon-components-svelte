@@ -10639,9 +10639,9 @@
       ],
       "events": [
         {
-          "type": "forwarded",
+          "type": "dispatched",
           "name": "click",
-          "element": "a"
+          "detail": "MouseEvent"
         },
         {
           "type": "forwarded",
