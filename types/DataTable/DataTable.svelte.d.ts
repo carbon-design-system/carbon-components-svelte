@@ -201,6 +201,14 @@ type $Props<Row> = {
    */
   page?: number;
 
+  /**
+   * Override the default table header translation ids
+   * @default undefined
+   */
+  tableHeaderTranslateWithId?: (
+    id: import("./TableHeader.svelte").TableHeaderTranslationId,
+  ) => string;
+
   [key: `data-${string}`]: any;
 };
 

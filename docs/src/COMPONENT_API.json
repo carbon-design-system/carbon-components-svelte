@@ -3428,6 +3428,18 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "tableHeaderTranslateWithId",
+          "kind": "let",
+          "description": "Override the default table header translation ids",
+          "type": "(id: import(\"./TableHeader.svelte\").TableHeaderTranslationId) => string",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
         }
       ],
       "moduleExports": [],
