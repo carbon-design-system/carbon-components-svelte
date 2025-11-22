@@ -8,6 +8,10 @@ components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter"]
 
 `ComposedModal` lets you build custom modals by combining `ModalHeader`, `ModalBody`, and `ModalFooter` components. Use it to create focused interactions that require user attention or input.
 
+**ComposedModal vs Modal**
+
+`ComposedModal` provides a composition-based approach with `ModalHeader`, `ModalBody`, and `ModalFooter` sub-components for maximum flexibility. For simpler use cases, use [Modal](/components/Modal) instead. Both components share the same events and accessibility features.
+
 ## Composed modal
 
 Create a modal with a header, body, and footer. Each section can be customized independently.
