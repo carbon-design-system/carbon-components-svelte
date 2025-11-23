@@ -61,7 +61,7 @@
     "prettier": "^3.6.2",
     "sass": "^1.49.11",
     "standard-version": "^9.5.0",
-    "sveld": "^0.24.2",
+    "sveld": "^0.24.3",
     "svelte": "^4.2.20",
     "svelte-check": "^4.2.1",
     "vitest": "^4.0.13"
