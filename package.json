@@ -9,21 +9,21 @@
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "svelte": "./src/index.js"
+      "svelte": "./src/index.js",
+      "types": "./types/index.d.ts"
     },
     "./css/*": "./css/*",
     "./src/*.svelte": {
-      "types": "./types/*.svelte.d.ts",
-      "import": "./src/*.svelte"
+      "import": "./src/*.svelte",
+      "types": "./types/*.svelte.d.ts"
     },
     "./src/*.js": {
-      "types": "./types/*.d.ts",
-      "import": "./src/*.js"
+      "import": "./src/*.js",
+      "types": "./types/*.d.ts"
     },
     "./src/*": {
-      "types": "./types/*.d.ts",
-      "import": "./src/*.js"
+      "import": "./src/*.js",
+      "types": "./types/*.d.ts"
     }
   },
   "sideEffects": [
