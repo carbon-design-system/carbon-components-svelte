@@ -64,3 +64,31 @@ Set `render` to `"select"` to display a dropdown menu for selecting from all ava
 Customize the select dropdown using the `select` prop. You can specify which themes to include, customize labels, and adjust other select properties.
 
 <FileSource src="/framed/Theme/ThemeSelectCustom" />
+
+## Exported themes constant
+
+The `themes` constant is exported from the Theme component, providing programmatic access to all available theme keys and their human-readable labels.
+
+`themes` must be imported directly from the Theme component file and used in a `script context="module"` block in Svelte components.
+
+```html
+<script context="module">
+  import { themes } from "carbon-components-svelte/src/Theme/Theme.svelte";
+
+  // themes = {
+  //   white: "White",
+  //   g10: "Gray 10",
+  //   g80: "Gray 80",
+  //   g90: "Gray 90",
+  //   g100: "Gray 100"
+  // }
+
+  // Get all theme keys programmatically
+  const themeKeys = Object.keys(themes); // ["white", "g10", "g80", "g90", "g100"]
+
+  // Build custom theme selectors with correct labels
+  Object.entries(themes).forEach(([key, label]) => {
+    console.log(`${key}: ${label}`); // "white: White", etc.
+  });
+</script>
+```
