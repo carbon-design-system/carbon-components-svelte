@@ -9,6 +9,7 @@ on:
     paths-ignore:
       - "**.md"
       - "examples/**"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -61,7 +62,7 @@ jobs:
       - run: bun test:types
 
   deploy-docs:
-    if: github.ref == 'refs/heads/master'
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master'
     needs: [lint, test, types]
     runs-on: macos-15
     steps:
