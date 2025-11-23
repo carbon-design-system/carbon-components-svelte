@@ -88,3 +88,9 @@ Include utility components in the header using `HeaderUtilities`.
 Create a header with a persistent hamburger menu state.
 
 <FileSource src="/framed/UIShell/PersistedHamburgerMenu" />
+
+## Header with toast notification
+
+Integrate toasts with the UI Shell. This example triggers a toast, which appears in the top right corner, below the header.
+
+<FileSource src="/framed/UIShell/HeaderWithToast" />
