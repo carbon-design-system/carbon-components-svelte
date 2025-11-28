@@ -204,7 +204,9 @@
       return reorderedContent;
     });
 
-    selected = currentIndex;
+    if (selected !== currentIndex) {
+      selected = currentIndex;
+    }
 
     if (prevIndex > -1 && prevIndex !== currentIndex) {
       dispatch("change", currentIndex);
