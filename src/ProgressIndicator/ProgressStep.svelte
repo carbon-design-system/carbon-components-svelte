@@ -40,7 +40,6 @@
     if (value[id]) {
       step = value[id];
       current = step.current;
-      complete = step.complete;
     }
   });
 

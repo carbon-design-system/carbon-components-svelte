@@ -2922,7 +2922,7 @@ None.
 | Prop name      | Required | Kind             | Reactive | Type                 | Default value                                    | Description                                |
 | :------------- | :------- | :--------------- | :------- | -------------------- | ------------------------------------------------ | ------------------------------------------ |
 | current        | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` to use the current variant   |
-| complete       | No       | <code>let</code> | Yes      | <code>boolean</code> | <code>false</code>                               | Set to `true` for the complete variant     |
+| complete       | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` for the complete variant     |
 | disabled       | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to disable the progress step |
 | invalid        | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>                               | Set to `true` to indicate an invalid state |
 | description    | No       | <code>let</code> | No       | <code>string</code>  | <code>""</code>                                  | Specify the step description               |
