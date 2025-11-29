@@ -4,50 +4,57 @@ import FormLabelTest from "./FormLabel.test.svelte";
 
 describe("FormLabel", () => {
   it("should render with default props", () => {
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         slotContent: "Label text",
       },
     });
 
-    const label = container.querySelector(".bx--label");
+    const labelText = screen.getByText("Label text");
+    const label = labelText.closest("label");
     expect(label).toBeInTheDocument();
-    expect(screen.getByText("Label text")).toBeInTheDocument();
+    expect(label).toHaveClass("bx--label");
   });
 
   it("should render as label element", () => {
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         slotContent: "Label",
       },
     });
 
-    const label = container.querySelector(".bx--label");
-    expect(label?.tagName).toBe("LABEL");
+    const labelText = screen.getByText("Label");
+    const label = labelText.closest("label");
+    assert(label);
+    expect(label.tagName).toBe("LABEL");
   });
 
   it("should generate default id", () => {
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         slotContent: "Label",
       },
     });
 
-    const label = container.querySelector(".bx--label");
-    const forAttr = label?.getAttribute("for");
+    const labelText = screen.getByText("Label");
+    const label = labelText.closest("label");
+    assert(label);
+    const forAttr = label.getAttribute("for");
     expect(forAttr).toBeTruthy();
     expect(forAttr).toMatch(/^ccs-/);
   });
 
   it("should handle custom id", () => {
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         id: "custom-input-id",
         slotContent: "Label",
       },
     });
 
-    const label = container.querySelector(".bx--label");
+    const labelText = screen.getByText("Label");
+    const label = labelText.closest("label");
+    assert(label);
     expect(label).toHaveAttribute("for", "custom-input-id");
   });
 
@@ -63,13 +70,14 @@ describe("FormLabel", () => {
 
   it("should handle click events", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         slotContent: "Clickable label",
       },
     });
 
-    const label = container.querySelector(".bx--label");
+    const labelText = screen.getByText("Clickable label");
+    const label = labelText.closest("label");
     assert(label);
     await user.click(label);
 
@@ -78,13 +86,14 @@ describe("FormLabel", () => {
 
   it("should handle mouseover event", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         slotContent: "Hoverable label",
       },
     });
 
-    const label = container.querySelector(".bx--label");
+    const labelText = screen.getByText("Hoverable label");
+    const label = labelText.closest("label");
     assert(label);
     await user.hover(label);
 
@@ -93,13 +102,14 @@ describe("FormLabel", () => {
 
   it("should handle mouseenter event", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         slotContent: "Label",
       },
     });
 
-    const label = container.querySelector(".bx--label");
+    const labelText = screen.getByText("Label");
+    const label = labelText.closest("label");
     assert(label);
     await user.hover(label);
 
@@ -108,13 +118,14 @@ describe("FormLabel", () => {
 
   it("should handle mouseleave event", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         slotContent: "Label",
       },
     });
 
-    const label = container.querySelector(".bx--label");
+    const labelText = screen.getByText("Label");
+    const label = labelText.closest("label");
     assert(label);
     await user.hover(label);
     await user.unhover(label);
@@ -123,27 +134,29 @@ describe("FormLabel", () => {
   });
 
   it("should apply custom attributes", () => {
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         "data-testid": "custom-label",
         slotContent: "Label",
       },
     });
 
-    const label = container.querySelector("[data-testid='custom-label']");
+    const label = screen.getByTestId("custom-label");
     expect(label).toBeInTheDocument();
     expect(label).toHaveClass("bx--label");
   });
 
   it("should apply custom class via restProps", () => {
-    const { container } = render(FormLabelTest, {
+    render(FormLabelTest, {
       props: {
         class: "custom-label-class",
         slotContent: "Label",
       },
     });
 
-    const label = container.querySelector(".bx--label");
+    const labelText = screen.getByText("Label");
+    const label = labelText.closest("label");
+    assert(label);
     expect(label).toHaveClass("custom-label-class");
   });
 
@@ -160,7 +173,9 @@ describe("FormLabel", () => {
     input.id = "test-input";
     container.appendChild(input);
 
-    const label = container.querySelector(".bx--label");
+    const labelText = screen.getByText("Test Label");
+    const label = labelText.closest("label");
+    assert(label);
     expect(label).toHaveAttribute("for", "test-input");
   });
 
