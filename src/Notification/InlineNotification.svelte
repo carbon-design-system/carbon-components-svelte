@@ -94,12 +94,16 @@
         iconDescription={statusIconDescription}
       />
       <div class:bx--inline-notification__text-wrapper={true}>
-        <p class:bx--inline-notification__title={true}>
-          <slot name="title">{title}</slot>
-        </p>
-        <div class:bx--inline-notification__subtitle={true}>
-          <slot name="subtitle">{subtitle}</slot>
-        </div>
+        {#if title || $$slots.title}
+          <p class:bx--inline-notification__title={true}>
+            <slot name="title">{title}</slot>
+          </p>
+        {/if}
+        {#if subtitle || $$slots.subtitle}
+          <div class:bx--inline-notification__subtitle={true}>
+            <slot name="subtitle">{subtitle}</slot>
+          </div>
+        {/if}
         <slot />
       </div>
     </div>
