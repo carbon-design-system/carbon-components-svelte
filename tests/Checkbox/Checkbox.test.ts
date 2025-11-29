@@ -19,13 +19,13 @@ describe("Checkbox", () => {
     const checkbox = screen.getByTestId("checkbox");
     expect(checkbox).toBeInTheDocument();
 
-    const input = checkbox.querySelector("input[type='checkbox']");
-    assert(input);
+    const input = screen.getByRole("checkbox");
     expect(input).not.toBeChecked();
     expect(input).not.toBeDisabled();
     expect(input).not.toHaveAttribute("indeterminate");
 
-    const label = checkbox.querySelector("label");
+    const labelText = screen.getByText("Checkbox label");
+    const label = labelText.closest("label");
     assert(label);
     expect(label).toHaveTextContent("Checkbox label");
     const hiddenElement = label.querySelector(".bx--visually-hidden");
@@ -35,10 +35,7 @@ describe("Checkbox", () => {
   it("renders checked state", () => {
     render(Checkbox, { checked: true });
 
-    const input = screen
-      .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']");
-    assert(input);
+    const input = screen.getByRole("checkbox");
     expect(input).toBeChecked();
   });
 
@@ -46,10 +43,7 @@ describe("Checkbox", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Checkbox);
 
-    const input = screen
-      .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']");
-    assert(input);
+    const input = screen.getByRole("checkbox");
     await user.click(input);
     expect(consoleLog).toHaveBeenCalledWith("check");
     expect(consoleLog).toHaveBeenCalledWith("click");
@@ -59,10 +53,7 @@ describe("Checkbox", () => {
   it("renders indeterminate state", () => {
     render(Checkbox, { indeterminate: true });
 
-    const input = screen
-      .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']");
-    assert(input);
+    const input = screen.getByRole("checkbox");
     assert(input instanceof HTMLInputElement);
     expect(input.indeterminate).toBe(true);
   });
@@ -70,17 +61,15 @@ describe("Checkbox", () => {
   it("renders disabled state", () => {
     render(Checkbox, { disabled: true });
 
-    const input = screen
-      .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']");
-    assert(input);
+    const input = screen.getByRole("checkbox");
     expect(input).toBeDisabled();
   });
 
   it("renders with hidden label", () => {
     render(Checkbox, { hideLabel: true });
 
-    const label = screen.getByTestId("checkbox").querySelector("label");
+    const labelText = screen.getByText("Checkbox label");
+    const label = labelText.closest("label");
     assert(label);
     const hiddenElement = label.querySelector(".bx--visually-hidden");
     expect(hiddenElement).toBeInTheDocument();
@@ -89,8 +78,7 @@ describe("Checkbox", () => {
   it("renders with custom label text", () => {
     render(Checkbox, { labelText: "Custom label" });
 
-    const label = screen.getByTestId("checkbox").querySelector("label");
-    assert(label);
+    const label = screen.getByText("Custom label");
     expect(label).toHaveTextContent("Custom label");
   });
 
@@ -111,18 +99,9 @@ describe("Checkbox", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(CheckboxGroup);
 
-    const checkbox1 = screen
-      .getByTestId("checkbox-1")
-      .querySelector("input[type='checkbox']");
-    const checkbox2 = screen
-      .getByTestId("checkbox-2")
-      .querySelector("input[type='checkbox']");
-    const checkbox3 = screen
-      .getByTestId("checkbox-3")
-      .querySelector("input[type='checkbox']");
-    assert(checkbox1);
-    assert(checkbox2);
-    assert(checkbox3);
+    const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
+    const checkbox2 = screen.getByRole("checkbox", { name: "Option 2" });
+    const checkbox3 = screen.getByRole("checkbox", { name: "Option 3" });
 
     expect(checkbox1).not.toBeChecked();
     expect(checkbox2).toBeChecked();
@@ -157,19 +136,9 @@ describe("Checkbox", () => {
     expect(screen.getByTestId("checkbox-1")).toBeInTheDocument();
     expect(screen.getByTestId("checkbox-2")).toBeInTheDocument();
 
-    const appleCheckbox = screen
-      .getByTestId("checkbox-0")
-      .querySelector("input[type='checkbox']");
-    const bananaCheckbox = screen
-      .getByTestId("checkbox-1")
-      .querySelector("input[type='checkbox']");
-    const coconutCheckbox = screen
-      .getByTestId("checkbox-2")
-      .querySelector("input[type='checkbox']");
-
-    assert(appleCheckbox);
-    assert(bananaCheckbox);
-    assert(coconutCheckbox);
+    const appleCheckbox = screen.getByRole("checkbox", { name: "Apple" });
+    const bananaCheckbox = screen.getByRole("checkbox", { name: "Banana" });
+    const coconutCheckbox = screen.getByRole("checkbox", { name: "Coconut" });
 
     expect(appleCheckbox).toBeChecked();
     expect(bananaCheckbox).toBeChecked();
@@ -184,10 +153,7 @@ describe("Checkbox", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MultipleCheckboxes);
 
-    const coconutCheckbox = screen
-      .getByTestId("checkbox-2")
-      .querySelector("input[type='checkbox']");
-    assert(coconutCheckbox);
+    const coconutCheckbox = screen.getByRole("checkbox", { name: "Coconut" });
 
     await user.click(coconutCheckbox);
 
@@ -211,19 +177,9 @@ describe("Checkbox", () => {
     expect(consoleLog).toHaveBeenCalledWith("set to banana");
     expect(consoleLog).toHaveBeenCalledWith("group changed:", ["Banana"]);
 
-    const appleCheckbox = screen
-      .getByTestId("checkbox-0")
-      .querySelector("input[type='checkbox']");
-    const bananaCheckbox = screen
-      .getByTestId("checkbox-1")
-      .querySelector("input[type='checkbox']");
-    const coconutCheckbox = screen
-      .getByTestId("checkbox-2")
-      .querySelector("input[type='checkbox']");
-
-    assert(appleCheckbox);
-    assert(bananaCheckbox);
-    assert(coconutCheckbox);
+    const appleCheckbox = screen.getByRole("checkbox", { name: "Apple" });
+    const bananaCheckbox = screen.getByRole("checkbox", { name: "Banana" });
+    const coconutCheckbox = screen.getByRole("checkbox", { name: "Coconut" });
 
     expect(appleCheckbox).not.toBeChecked();
     expect(bananaCheckbox).toBeChecked();
@@ -238,10 +194,7 @@ describe("Checkbox", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MultipleCheckboxes);
 
-    const bananaCheckbox = screen
-      .getByTestId("checkbox-1")
-      .querySelector("input[type='checkbox']");
-    assert(bananaCheckbox);
+    const bananaCheckbox = screen.getByRole("checkbox", { name: "Banana" });
 
     await user.click(bananaCheckbox);
 
@@ -258,15 +211,8 @@ describe("Checkbox", () => {
     expect(screen.getByTestId("checkbox-a")).toBeInTheDocument();
     expect(screen.getByTestId("checkbox-b")).toBeInTheDocument();
 
-    const checkboxA = screen
-      .getByTestId("checkbox-a")
-      .querySelector("input[type='checkbox']");
-    const checkboxB = screen
-      .getByTestId("checkbox-b")
-      .querySelector("input[type='checkbox']");
-
-    assert(checkboxA);
-    assert(checkboxB);
+    const checkboxA = screen.getByRole("checkbox", { name: "A" });
+    const checkboxB = screen.getByRole("checkbox", { name: "B" });
 
     expect(checkboxA).not.toBeChecked();
     expect(checkboxB).not.toBeChecked();
@@ -280,10 +226,7 @@ describe("Checkbox", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MultipleCheckboxesObject);
 
-    const checkboxA = screen
-      .getByTestId("checkbox-a")
-      .querySelector("input[type='checkbox']");
-    assert(checkboxA);
+    const checkboxA = screen.getByRole("checkbox", { name: "A" });
 
     await user.click(checkboxA);
 
@@ -301,14 +244,8 @@ describe("Checkbox", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MultipleCheckboxesObject);
 
-    const checkboxA = screen
-      .getByTestId("checkbox-a")
-      .querySelector("input[type='checkbox']");
-    const checkboxB = screen
-      .getByTestId("checkbox-b")
-      .querySelector("input[type='checkbox']");
-    assert(checkboxA);
-    assert(checkboxB);
+    const checkboxA = screen.getByRole("checkbox", { name: "A" });
+    const checkboxB = screen.getByRole("checkbox", { name: "B" });
 
     await user.click(checkboxA);
     expect(checkboxA).toBeChecked();
@@ -337,14 +274,8 @@ describe("Checkbox", () => {
       },
     });
 
-    const checkboxA = screen
-      .getByTestId("checkbox-a")
-      .querySelector("input[type='checkbox']");
-    const checkboxB = screen
-      .getByTestId("checkbox-b")
-      .querySelector("input[type='checkbox']");
-    assert(checkboxA);
-    assert(checkboxB);
+    const checkboxA = screen.getByRole("checkbox", { name: "A" });
+    const checkboxB = screen.getByRole("checkbox", { name: "B" });
 
     expect(checkboxA).toBeChecked();
     expect(checkboxB).toBeChecked();
@@ -375,14 +306,8 @@ describe("Checkbox", () => {
       },
     });
 
-    const checkboxA = screen
-      .getByTestId("checkbox-a")
-      .querySelector("input[type='checkbox']");
-    const checkboxB = screen
-      .getByTestId("checkbox-b")
-      .querySelector("input[type='checkbox']");
-    assert(checkboxA);
-    assert(checkboxB);
+    const checkboxA = screen.getByRole("checkbox", { name: "A" });
+    const checkboxB = screen.getByRole("checkbox", { name: "B" });
 
     expect(checkboxA).toBeChecked();
     expect(checkboxB).not.toBeChecked();
@@ -395,20 +320,14 @@ describe("Checkbox", () => {
   it("renders readonly state with aria-readonly attribute", () => {
     render(CheckboxReadonly, { readonly: true });
 
-    const input = screen
-      .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']");
-    assert(input);
+    const input = screen.getByRole("checkbox");
     expect(input).toHaveAttribute("aria-readonly", "true");
   });
 
   it("prevents state change when readonly and unchecked", async () => {
     render(CheckboxReadonly, { checked: false, readonly: true });
 
-    const input = screen
-      .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']");
-    assert(input);
+    const input = screen.getByRole("checkbox");
     expect(input).not.toBeChecked();
 
     await user.click(input);
@@ -418,10 +337,7 @@ describe("Checkbox", () => {
   it("prevents state change when readonly and checked", async () => {
     render(CheckboxReadonly, { checked: true, readonly: true });
 
-    const input = screen
-      .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']");
-    assert(input);
+    const input = screen.getByRole("checkbox");
     expect(input).toBeChecked();
 
     await user.click(input);
@@ -431,10 +347,7 @@ describe("Checkbox", () => {
   it("allows state change when not readonly", async () => {
     render(CheckboxReadonly, { checked: false, readonly: false });
 
-    const input = screen
-      .getByTestId("checkbox")
-      .querySelector("input[type='checkbox']");
-    assert(input);
+    const input = screen.getByRole("checkbox");
     expect(input).not.toBeChecked();
 
     await user.click(input);
@@ -443,16 +356,14 @@ describe("Checkbox", () => {
 
   it("should render helper text when provided", () => {
     render(Checkbox, { helperText: "Helper text message" });
-    const wrapper = screen.getByTestId("checkbox");
-    const helperElement = wrapper.querySelector(".bx--form__helper-text");
-    assert(helperElement);
+    const helperElement = screen.getByText("Helper text message");
     expect(helperElement).toHaveTextContent("Helper text message");
+    expect(helperElement).toHaveClass("bx--form__helper-text");
   });
 
   it("should not render helper text by default", () => {
     render(Checkbox);
-    const wrapper = screen.getByTestId("checkbox");
-    const helperElement = wrapper.querySelector(".bx--form__helper-text");
+    const helperElement = screen.queryByText("Helper text message");
     expect(helperElement).not.toBeInTheDocument();
   });
 });
