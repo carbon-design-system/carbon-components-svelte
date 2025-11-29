@@ -42,8 +42,7 @@ describe("Tag", () => {
     const filterableTag = screen.getByText("Filterable");
     expect(filterableTag).toHaveClass("bx--tag--filter");
 
-    const closeButton = filterableTag.querySelector("button");
-    assert(closeButton);
+    const closeButton = screen.getByRole("button", { name: /clear filter/i });
     expect(closeButton).toHaveClass("bx--tag__close-icon");
     expect(closeButton).toHaveAttribute("title", "Clear filter");
 
@@ -56,9 +55,9 @@ describe("Tag", () => {
     render(Tag);
 
     const iconTag = screen.getByText("Custom icon");
-    const iconContainer = iconTag.parentElement?.querySelector(
-      ".bx--tag__custom-icon",
-    );
+    const tagElement = iconTag.closest(".bx--tag");
+    assert(tagElement);
+    const iconContainer = tagElement.querySelector(".bx--tag__custom-icon");
     expect(iconContainer).toBeInTheDocument();
   });
 
@@ -98,7 +97,7 @@ describe("Tag", () => {
     const disabledTag = screen.getByText("Disabled filterable");
     expect(disabledTag).toHaveClass("bx--tag--disabled");
 
-    const closeButton = disabledTag.querySelector("button");
+    const closeButton = screen.getByRole("button", { name: /custom title/i });
     expect(closeButton).toBeDisabled();
     expect(closeButton).toHaveAttribute("title", "Custom title");
   });
@@ -141,9 +140,9 @@ describe("Tag", () => {
     render(Tag);
 
     const iconTag = screen.getByText("Icon slot");
-    const iconContainer = iconTag.parentElement?.querySelector(
-      ".bx--tag__custom-icon",
-    );
+    const tagElement = iconTag.closest(".bx--tag");
+    assert(tagElement);
+    const iconContainer = tagElement.querySelector(".bx--tag__custom-icon");
     expect(iconContainer).toBeInTheDocument();
   });
 });
