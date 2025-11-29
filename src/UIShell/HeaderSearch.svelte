@@ -1,6 +1,8 @@
 <script>
   /**
-   * @typedef HeaderSearchResult
+   * @generics {Result extends HeaderSearchResult = HeaderSearchResult} Result
+   * @template {HeaderSearchResult} Result
+   * @typedef {object} HeaderSearchResult
    * @property {string} href
    * @property {string} text
    * @property {string} [description]
@@ -8,10 +10,11 @@
    * @event {null} inactive
    * @event {null} clear
    * @event select
+   * @type {object}
    * @property {string} value
    * @property {number} selectedResultIndex
-   * @property {HeaderSearchResult} selectedResult
-   * @slot {{ result: HeaderSearchResult; index: number }}
+   * @property {Result} selectedResult
+   * @slot {{ result: Result; index: number }}
    */
 
   /** Specify the search input value */
@@ -25,7 +28,7 @@
 
   /**
    * Render a list of search results
-   * @type {ReadonlyArray<HeaderSearchResult>}
+   * @type {ReadonlyArray<Result>}
    */
   export let results = [];
 

@@ -9,7 +9,7 @@ export type HeaderSearchResult = {
 
 type $RestProps = SvelteHTMLElements["input"];
 
-type $Props = {
+type $Props<Result> = {
   /**
    * Specify the search input value
    * @default ""
@@ -32,7 +32,7 @@ type $Props = {
    * Render a list of search results
    * @default []
    */
-  results?: ReadonlyArray<HeaderSearchResult>;
+  results?: ReadonlyArray<Result>;
 
   /**
    * Specify the selected result index
@@ -43,10 +43,13 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type HeaderSearchProps = Omit<$RestProps, keyof $Props> & $Props;
+export type HeaderSearchProps<Result> = Omit<$RestProps, keyof $Props<Result>> &
+  $Props<Result>;
 
-export default class HeaderSearch extends SvelteComponentTyped<
-  HeaderSearchProps,
+export default class HeaderSearch<
+  Result extends HeaderSearchResult = HeaderSearchResult,
+> extends SvelteComponentTyped<
+  HeaderSearchProps<Result>,
   {
     active: CustomEvent<null>;
     inactive: CustomEvent<null>;
@@ -54,7 +57,7 @@ export default class HeaderSearch extends SvelteComponentTyped<
     select: CustomEvent<{
       value: string;
       selectedResultIndex: number;
-      selectedResult: HeaderSearchResult;
+      selectedResult: Result;
     }>;
     change: WindowEventMap["change"];
     input: WindowEventMap["input"];
@@ -63,5 +66,5 @@ export default class HeaderSearch extends SvelteComponentTyped<
     keydown: WindowEventMap["keydown"];
     paste: WindowEventMap["paste"];
   },
-  { default: { result: HeaderSearchResult; index: number } }
+  { default: { result: Result; index: number } }
 > {}

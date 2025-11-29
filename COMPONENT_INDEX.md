@@ -1837,34 +1837,34 @@ export type HeaderSearchResult = {
 
 ### Props
 
-| Prop name           | Required | Kind             | Reactive | Type                                           | Default value      | Description                                        |
-| :------------------ | :------- | :--------------- | :------- | ---------------------------------------------- | ------------------ | -------------------------------------------------- |
-| selectedResultIndex | No       | <code>let</code> | Yes      | <code>number</code>                            | <code>0</code>     | Specify the selected result index                  |
-| ref                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>      | <code>null</code>  | Obtain a reference to the input HTML element       |
-| active              | No       | <code>let</code> | Yes      | <code>boolean</code>                           | <code>false</code> | Set to `true` to activate and focus the search bar |
-| value               | No       | <code>let</code> | Yes      | <code>string</code>                            | <code>""</code>    | Specify the search input value                     |
-| results             | No       | <code>let</code> | No       | <code>ReadonlyArray<HeaderSearchResult></code> | <code>[]</code>    | Render a list of search results                    |
+| Prop name           | Required | Kind             | Reactive | Type                                      | Default value      | Description                                        |
+| :------------------ | :------- | :--------------- | :------- | ----------------------------------------- | ------------------ | -------------------------------------------------- |
+| selectedResultIndex | No       | <code>let</code> | Yes      | <code>number</code>                       | <code>0</code>     | Specify the selected result index                  |
+| ref                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code> | <code>null</code>  | Obtain a reference to the input HTML element       |
+| active              | No       | <code>let</code> | Yes      | <code>boolean</code>                      | <code>false</code> | Set to `true` to activate and focus the search bar |
+| value               | No       | <code>let</code> | Yes      | <code>string</code>                       | <code>""</code>    | Specify the search input value                     |
+| results             | No       | <code>let</code> | No       | <code>ReadonlyArray<Result></code>        | <code>[]</code>    | Render a list of search results                    |
 
 ### Slots
 
-| Slot name | Default | Props                                                       | Fallback                                                                                                                                                                          |
-| :-------- | :------ | :---------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| --        | Yes     | <code>{ result: HeaderSearchResult; index: number } </code> | <code>{result.text}<br /> {#if result.description}&lt;span<br /> class:bx--header-search-menu-description={true}<br /> &gt;– {result.description}&lt;/span<br /> &gt;{/if}</code> |
+| Slot name | Default | Props                                           | Fallback                                                                                                                                                                          |
+| :-------- | :------ | :---------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --        | Yes     | <code>{ result: Result; index: number } </code> | <code>{result.text}<br /> {#if result.description}&lt;span<br /> class:bx--header-search-menu-description={true}<br /> &gt;– {result.description}&lt;/span<br /> &gt;{/if}</code> |
 
 ### Events
 
-| Event name | Type       | Detail                                                                                           | Description |
-| :--------- | :--------- | :----------------------------------------------------------------------------------------------- | :---------- |
-| active     | dispatched | <code>null</code>                                                                                | --          |
-| inactive   | dispatched | <code>null</code>                                                                                | --          |
-| clear      | dispatched | <code>null</code>                                                                                | --          |
-| select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: HeaderSearchResult; }</code> | --          |
-| change     | forwarded  | --                                                                                               | --          |
-| input      | forwarded  | --                                                                                               | --          |
-| focus      | forwarded  | --                                                                                               | --          |
-| blur       | forwarded  | --                                                                                               | --          |
-| keydown    | forwarded  | --                                                                                               | --          |
-| paste      | forwarded  | --                                                                                               | --          |
+| Event name | Type       | Detail                                                                               | Description |
+| :--------- | :--------- | :----------------------------------------------------------------------------------- | :---------- |
+| active     | dispatched | <code>null</code>                                                                    | --          |
+| inactive   | dispatched | <code>null</code>                                                                    | --          |
+| clear      | dispatched | <code>null</code>                                                                    | --          |
+| select     | dispatched | <code>{ value: string; selectedResultIndex: number; selectedResult: Result; }</code> | --          |
+| change     | forwarded  | --                                                                                   | --          |
+| input      | forwarded  | --                                                                                   | --          |
+| focus      | forwarded  | --                                                                                   | --          |
+| blur       | forwarded  | --                                                                                   | --          |
+| keydown    | forwarded  | --                                                                                   | --          |
+| paste      | forwarded  | --                                                                                   | --          |
 
 ## `HeaderUtilities`
 
