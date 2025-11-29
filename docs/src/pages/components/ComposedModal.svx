@@ -18,6 +18,12 @@ Create a modal with a header, body, and footer. Each section can be customized i
 
 <FileSource src="/framed/Modal/ComposedModal" />
 
+## With Portal
+
+Wrap `ComposedModal` in a `Portal` to ensure it renders above all z-index stacking contexts and parent overflow constraints, preventing visual clipping and layering issues.
+
+<FileSource src="/framed/Portal/ComposedModalPortal" />
+
 ## Prevent default close behavior
 
 The modal dispatches a cancelable `close` event, allowing you to prevent the modal from closing using `e.preventDefault()`. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"`, `"outside-click"`, or `"close-button"`.

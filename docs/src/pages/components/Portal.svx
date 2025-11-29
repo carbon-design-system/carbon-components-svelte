@@ -1,0 +1,30 @@
+<script>
+  import { Portal } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+The `Portal` component renders its content directly into `document.body`, allowing you to escape parent overflow constraints and z-index stacking contexts.
+
+## Default Portal
+
+Render content in a portal. This is useful for modals, tooltips, and menus that need to escape parent containers.
+
+<FileSource src="/framed/Portal/BasicPortal" />
+
+## Multiple Portals
+
+Each portal instance is independent and creates its own element in `document.body`. Each portal is automatically cleaned up when it is removed.
+
+<FileSource src="/framed/Portal/MultiplePortals" />
+
+## Custom Tag
+
+Use the `tag` prop to specify a custom HTML element. By default, Portal uses a `div` element.
+
+<FileSource src="/framed/Portal/CustomTagPortal" />
+
+## Modal with Portal
+
+Wrap `Modal` in a `Portal` to escape parent containers with `overflow: hidden` or z-index stacking contexts. This ensures the modal appears above all content and isn't clipped by parent boundaries.
+
+<FileSource src="/framed/Portal/ModalPortal" />
