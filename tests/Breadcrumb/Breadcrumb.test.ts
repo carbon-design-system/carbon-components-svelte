@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
 import BreadcrumbNoTrailingSlash from "./Breadcrumb.noTrailingSlash.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
@@ -11,7 +11,7 @@ describe("Breadcrumb", () => {
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
     expect(nav).toBeInTheDocument();
 
-    const list = nav.querySelector("ol");
+    const list = within(nav).getByRole("list");
     expect(list).toHaveClass("bx--breadcrumb");
     expect(list).not.toHaveClass("bx--breadcrumb--no-trailing-slash");
 
@@ -36,7 +36,7 @@ describe("Breadcrumb", () => {
     render(BreadcrumbNoTrailingSlash);
 
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
-    const list = nav.querySelector("ol");
+    const list = within(nav).getByRole("list");
     expect(list).toHaveClass("bx--breadcrumb--no-trailing-slash");
 
     const items = screen.getAllByRole("listitem");
