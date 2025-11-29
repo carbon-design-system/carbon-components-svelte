@@ -373,9 +373,7 @@ describe("MultiSelect", () => {
       });
 
       await openMenu();
-      const emailOption = screen
-        .getByText("Email")
-        .closest(".bx--list-box__menu-item");
+      const emailOption = screen.getByRole("option", { name: "Email" });
       expect(emailOption).toHaveAttribute("disabled");
     });
   });
@@ -518,11 +516,9 @@ describe("MultiSelect", () => {
       render(MultiSelect, { props });
 
       await openMenu();
-      const checkbox = screen.getByText("Slack");
-      const checkboxWrapper = checkbox.closest(".bx--checkbox-wrapper");
-      const checkboxInput = checkboxWrapper?.querySelector("input");
-      expect(checkboxInput).toHaveAttribute("name", "contact_0");
-      expect(checkboxInput).toHaveAttribute("value", "slack");
+      const checkbox = screen.getByRole("checkbox", { name: "Slack" });
+      expect(checkbox).toHaveAttribute("name", "contact_0");
+      expect(checkbox).toHaveAttribute("value", "slack");
     });
   });
 
@@ -629,8 +625,7 @@ describe("MultiSelect", () => {
       },
     });
     await openMenu();
-    const disabledOption = screen.getByText("B").closest("[role='option']");
-    assert(disabledOption);
+    const disabledOption = screen.getByRole("option", { name: "B" });
 
     await user.click(disabledOption);
     expect(disabledOption).toHaveAttribute("aria-selected", "false");
