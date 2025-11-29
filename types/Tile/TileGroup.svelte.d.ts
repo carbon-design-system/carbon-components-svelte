@@ -3,8 +3,8 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 export type TileGroupContext = {
   selectedValue: import("svelte/store").Writable<T | undefined>;
-  groupName: any;
-  groupRequired: any;
+  groupName: import("svelte/store").Readable<string | undefined>;
+  groupRequired: import("svelte/store").Readable<boolean | undefined>;
   add: (data: { checked: boolean; value: T }) => void;
   update: (value: T) => void;
 };
