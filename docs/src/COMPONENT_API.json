@@ -13746,7 +13746,8 @@
             },
             {
               "name": "groupName",
-              "type": "any",
+              "type": "import(\"svelte/store\").Readable<string | undefined>",
+              "description": "",
               "optional": false
             },
             {
@@ -17325,12 +17326,14 @@
             },
             {
               "name": "groupName",
-              "type": "any",
+              "type": "import(\"svelte/store\").Readable<string | undefined>",
+              "description": "",
               "optional": false
             },
             {
               "name": "groupRequired",
-              "type": "any",
+              "type": "import(\"svelte/store\").Readable<boolean | undefined>",
+              "description": "",
               "optional": false
             },
             {

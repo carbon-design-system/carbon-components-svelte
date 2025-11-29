@@ -36,6 +36,10 @@
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const groupName = writable(name);
+  /**
+   * @type {import("svelte/store").Readable<string | undefined>}
+   */
+  const groupNameReadonly = readonly(groupName);
 
   /**
    * @type {(data: { selected: boolean; value: T }) => void}
@@ -65,14 +69,14 @@
 
   setContext("SelectableTileGroup", {
     selectedValues,
-    groupName: readonly(groupName),
+    groupName: groupNameReadonly,
     add,
     update,
   });
 
   $: selected = $selectedValues;
   $: selectedValues.set(selected);
-  $: $groupName = name;
+  $: groupName.set(name);
 </script>
 
 <fieldset {disabled} class:bx--tile-group={true} {...$$restProps}>

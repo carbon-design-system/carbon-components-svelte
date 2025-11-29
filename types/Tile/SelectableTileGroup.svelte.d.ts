@@ -3,7 +3,7 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 export type SelectableTileGroupContext = {
   selectedValues: import("svelte/store").Writable<T[]>;
-  groupName: any;
+  groupName: import("svelte/store").Readable<string | undefined>;
   add: (data: { selected: boolean; value: T }) => void;
   update: (data: { value: T; selected: boolean }) => void;
 };
