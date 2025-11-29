@@ -36,6 +36,13 @@ Customize the notification content using slots for more flexibility.
   <strong slot="subtitle">An internal server error occurred.</strong>
 </InlineNotification>
 
+## Optional title and subtitle
+
+Title and subtitle are optional and only render when provided.
+
+<InlineNotification subtitle="An internal server error occurred." />
+<InlineNotification title="An error occurred." />
+
 ## Accessible icon descriptions
 
 Make notifications more accessible by providing custom descriptions for icons.
