@@ -212,7 +212,7 @@ describe("ComposedModal", () => {
   });
 
   it("should handle form content", () => {
-    const { container } = render(ComposedModalTest, {
+    render(ComposedModalTest, {
       props: {
         open: true,
         headerTitle: "Test Modal",
@@ -220,7 +220,8 @@ describe("ComposedModal", () => {
       },
     });
 
-    const modalBody = container.querySelector(".bx--modal-content");
+    const modal = screen.getByRole("dialog");
+    const modalBody = modal.querySelector(".bx--modal-content");
     expect(modalBody).toHaveClass("bx--modal-content--with-form");
   });
 
@@ -287,7 +288,7 @@ describe("ComposedModal", () => {
       },
     });
 
-    const modalWrapper = document.querySelector("[data-testid='custom-modal']");
+    const modalWrapper = screen.getByTestId("custom-modal");
     expect(modalWrapper).toBeInTheDocument();
   });
 

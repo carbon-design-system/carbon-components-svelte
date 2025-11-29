@@ -114,14 +114,15 @@ describe("ModalFooter", () => {
   });
 
   it("should handle three-button layout", () => {
-    const { container } = render(ModalFooterTest, {
+    render(ModalFooterTest, {
       props: {
         primaryButtonText: "Save",
         secondaryButtons: [{ text: "Cancel" }, { text: "Reset" }],
       },
     });
 
-    const modalFooter = container.querySelector(".bx--modal-footer");
+    const primaryButton = screen.getByRole("button", { name: "Save" });
+    const modalFooter = primaryButton.closest(".bx--modal-footer");
     expect(modalFooter).toHaveClass("bx--modal-footer--three-button");
   });
 
@@ -179,15 +180,13 @@ describe("ModalFooter", () => {
   });
 
   it("should apply custom attributes", () => {
-    const { container } = render(ModalFooterTest, {
+    render(ModalFooterTest, {
       props: {
         "data-testid": "custom-footer",
       },
     });
 
-    const modalFooter = container.querySelector(
-      "[data-testid='custom-footer']",
-    );
+    const modalFooter = screen.getByTestId("custom-footer");
     expect(modalFooter).toBeInTheDocument();
   });
 
