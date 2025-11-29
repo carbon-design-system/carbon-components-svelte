@@ -7,7 +7,9 @@ components: ["ToastNotification"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`ToastNotification` displays non-modal, time-based messages that appear at the top of the screen and automatically disappear. It supports various notification types, custom content, and accessibility features.
+A toast notification displays non-modal, time-based messages that appear at the top of the screen and automatically disappear. It supports various notification types, custom content, and accessibility features.
+
+For an imperative API to manage multiple toast notifications with automatic queue management, see [NotificationQueue](NotificationQueue).
 
 See [detailed usage](https://carbondesignsystem.com/components/notification/usage).  
 See also: [InlineNotification](InlineNotification)

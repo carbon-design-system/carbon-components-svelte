@@ -7,7 +7,7 @@ components: ["InlineNotification", "NotificationActionButton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `InlineNotification` component displays contextual messages inline with content. It supports various types of notifications (error, warning, success, info) and can include actions. Use it to provide feedback or important information to users.
+An inline notification displays contextual messages inline with content. It supports various types of notifications (error, warning, success, info) and can include actions. Use it to provide feedback or important information to users.
 
 See [detailed usage](https://carbondesignsystem.com/components/notification/usage).  
 See also: [ToastNotification](ToastNotification)
