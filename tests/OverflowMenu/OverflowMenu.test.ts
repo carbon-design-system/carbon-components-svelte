@@ -84,32 +84,29 @@ describe("OverflowMenu", () => {
   });
 
   it("uses CSS custom properties for performance optimization", async () => {
-    const { container } = render(OverflowMenu);
+    render(OverflowMenu);
 
     const styleTags = document.querySelectorAll("style");
     const initialStyleCount = styleTags.length;
     expect(styleTags.length).toBe(initialStyleCount);
 
     await user.click(screen.getByRole("button"));
-    expect(container.querySelector(".bx--overflow-menu-options")).toHaveStyle(
-      "--overflow-menu-options-after-width: 2rem",
-    );
+    const menu = screen.getByRole("menu");
+    expect(menu).toHaveStyle("--overflow-menu-options-after-width: 2rem");
     expect(styleTags.length).toBe(initialStyleCount);
   });
 
   it("stress test: multiple instances don't create individual style tags", async () => {
-    const { container: container1 } = render(OverflowMenu);
-    const { container: container2 } = render(OverflowMenu);
-    const { container: container3 } = render(OverflowMenu);
+    render(OverflowMenu);
+    render(OverflowMenu);
+    render(OverflowMenu);
 
     const styleTagsBefore = document.querySelectorAll("style").length;
-    const menuButtons1 = container1.querySelectorAll("button");
-    const menuButtons2 = container2.querySelectorAll("button");
-    const menuButtons3 = container3.querySelectorAll("button");
+    const menuButtons = screen.getAllByRole("button");
 
-    await user.click(menuButtons1[0]);
-    await user.click(menuButtons2[0]);
-    await user.click(menuButtons3[0]);
+    await user.click(menuButtons[0]);
+    await user.click(menuButtons[1]);
+    await user.click(menuButtons[2]);
 
     const styleTagsAfter = document.querySelectorAll("style").length;
 
@@ -117,11 +114,7 @@ describe("OverflowMenu", () => {
     expect(styleTagsAfter).toBe(styleTagsBefore);
 
     // Verify all menus have CSS custom property set.
-    const allMenus = [
-      ...container1.querySelectorAll(".bx--overflow-menu-options"),
-      ...container2.querySelectorAll(".bx--overflow-menu-options"),
-      ...container3.querySelectorAll(".bx--overflow-menu-options"),
-    ];
+    const allMenus = screen.getAllByRole("menu");
 
     expect(allMenus.length).toBeGreaterThan(0);
     for (const menu of allMenus) {
@@ -187,14 +180,16 @@ describe("OverflowMenu", () => {
   it("applies custom icon class", () => {
     render(OverflowMenu, { props: { iconClass: "custom-icon-class" } });
 
-    const icon = screen.getByRole("button").querySelector("svg");
+    const button = screen.getByRole("button");
+    const icon = button.querySelector("svg");
     expect(icon).toHaveClass("custom-icon-class");
   });
 
   it("uses custom icon description", () => {
     render(OverflowMenu, { props: { iconDescription: "Custom description" } });
 
-    const icon = screen.getByRole("button").querySelector("svg");
+    const button = screen.getByRole("button");
+    const icon = button.querySelector("svg");
     expect(icon).toHaveAttribute("aria-label", "Custom description");
   });
 
