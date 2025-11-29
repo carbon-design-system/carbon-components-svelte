@@ -3,26 +3,28 @@ import ModalBodyTest from "./ModalBody.test.svelte";
 
 describe("ModalBody", () => {
   it("should render with default props", () => {
-    const { container } = render(ModalBodyTest, {
+    render(ModalBodyTest, {
       props: {
         slotContent: "Modal content",
       },
     });
 
-    const modalBody = container.querySelector(".bx--modal-content");
+    const content = screen.getByText("Modal content");
+    const modalBody = content.closest(".bx--modal-content");
     expect(modalBody).toBeInTheDocument();
     expect(screen.getByText("Modal content")).toBeInTheDocument();
   });
 
   it("should handle hasForm prop", () => {
-    const { container } = render(ModalBodyTest, {
+    render(ModalBodyTest, {
       props: {
         hasForm: true,
         slotContent: "Form content",
       },
     });
 
-    const modalBody = container.querySelector(".bx--modal-content");
+    const content = screen.getByText("Form content");
+    const modalBody = content.closest(".bx--modal-content");
     expect(modalBody).toHaveClass("bx--modal-content--with-form");
   });
 
@@ -40,28 +42,31 @@ describe("ModalBody", () => {
   });
 
   it("should render overflow indicator when hasScrollingContent is true", () => {
-    const { container } = render(ModalBodyTest, {
+    render(ModalBodyTest, {
       props: {
         hasScrollingContent: true,
         slotContent: "Content",
       },
     });
 
-    const indicator = container.querySelector(
+    const modalBody = screen.getByRole("region");
+    const indicator = modalBody.parentElement?.querySelector(
       ".bx--modal-content--overflow-indicator",
     );
     expect(indicator).toBeInTheDocument();
   });
 
   it("should not render overflow indicator when hasScrollingContent is false", () => {
-    const { container } = render(ModalBodyTest, {
+    render(ModalBodyTest, {
       props: {
         hasScrollingContent: false,
         slotContent: "Content",
       },
     });
 
-    const indicator = container.querySelector(
+    const content = screen.getByText("Content");
+    const modalBody = content.closest(".bx--modal-content");
+    const indicator = modalBody?.parentElement?.querySelector(
       ".bx--modal-content--overflow-indicator",
     );
     expect(indicator).not.toBeInTheDocument();
@@ -79,14 +84,15 @@ describe("ModalBody", () => {
   });
 
   it("should not have tabindex when hasScrollingContent is false", () => {
-    const { container } = render(ModalBodyTest, {
+    render(ModalBodyTest, {
       props: {
         hasScrollingContent: false,
         slotContent: "Content",
       },
     });
 
-    const modalBody = container.querySelector(".bx--modal-content");
+    const content = screen.getByText("Content");
+    const modalBody = content.closest(".bx--modal-content");
     expect(modalBody).not.toHaveAttribute("tabindex");
   });
 
@@ -101,14 +107,14 @@ describe("ModalBody", () => {
   });
 
   it("should apply custom attributes", () => {
-    const { container } = render(ModalBodyTest, {
+    render(ModalBodyTest, {
       props: {
         "data-testid": "custom-body",
         slotContent: "Content",
       },
     });
 
-    const modalBody = container.querySelector("[data-testid='custom-body']");
+    const modalBody = screen.getByTestId("custom-body");
     expect(modalBody).toBeInTheDocument();
   });
 

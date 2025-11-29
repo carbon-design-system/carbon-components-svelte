@@ -4,9 +4,10 @@ import ModalHeaderTest from "./ModalHeader.test.svelte";
 
 describe("ModalHeader", () => {
   it("should render with default props", () => {
-    const { container } = render(ModalHeaderTest);
+    render(ModalHeaderTest);
 
-    const modalHeader = container.querySelector(".bx--modal-header");
+    const closeButton = screen.getByRole("button", { name: "Close" });
+    const modalHeader = closeButton.closest(".bx--modal-header");
     expect(modalHeader).toBeInTheDocument();
   });
 
@@ -125,13 +126,14 @@ describe("ModalHeader", () => {
   });
 
   it("should apply custom close icon class", () => {
-    const { container } = render(ModalHeaderTest, {
+    render(ModalHeaderTest, {
       props: {
         closeIconClass: "custom-icon-class",
       },
     });
 
-    const closeIcon = container.querySelector(".bx--modal-close__icon");
+    const closeButton = screen.getByRole("button", { name: "Close" });
+    const closeIcon = closeButton.querySelector(".bx--modal-close__icon");
     expect(closeIcon).toHaveClass("custom-icon-class");
   });
 
@@ -146,53 +148,57 @@ describe("ModalHeader", () => {
   });
 
   it("should apply custom attributes", () => {
-    const { container } = render(ModalHeaderTest, {
+    render(ModalHeaderTest, {
       props: {
         "data-testid": "custom-header",
       },
     });
 
-    const modalHeader = container.querySelector(
-      "[data-testid='custom-header']",
-    );
+    const modalHeader = screen.getByTestId("custom-header");
     expect(modalHeader).toBeInTheDocument();
   });
 
   it("should not render title when empty", () => {
-    const { container } = render(ModalHeaderTest, {
+    render(ModalHeaderTest, {
       props: {
         title: "",
       },
     });
 
-    const title = container.querySelector(".bx--modal-header__heading");
+    const closeButton = screen.getByRole("button", { name: "Close" });
+    const modalHeader = closeButton.closest(".bx--modal-header");
+    const title = modalHeader?.querySelector(".bx--modal-header__heading");
     expect(title).not.toBeInTheDocument();
   });
 
   it("should not render label when empty", () => {
-    const { container } = render(ModalHeaderTest, {
+    render(ModalHeaderTest, {
       props: {
         label: "",
       },
     });
 
-    const label = container.querySelector(".bx--modal-header__label");
+    const closeButton = screen.getByRole("button", { name: "Close" });
+    const modalHeader = closeButton.closest(".bx--modal-header");
+    const label = modalHeader?.querySelector(".bx--modal-header__label");
     expect(label).not.toBeInTheDocument();
   });
 
   it("should render close icon with correct size", () => {
-    const { container } = render(ModalHeaderTest);
+    render(ModalHeaderTest);
 
-    const svg = container.querySelector(".bx--modal-close__icon");
+    const closeButton = screen.getByRole("button", { name: "Close" });
+    const svg = closeButton.querySelector(".bx--modal-close__icon");
     expect(svg).toBeInTheDocument();
     expect(svg).toHaveAttribute("width", "20");
     expect(svg).toHaveAttribute("height", "20");
   });
 
   it("should have aria-hidden on close icon", () => {
-    const { container } = render(ModalHeaderTest);
+    render(ModalHeaderTest);
 
-    const svg = container.querySelector(".bx--modal-close__icon");
+    const closeButton = screen.getByRole("button", { name: "Close" });
+    const svg = closeButton.querySelector(".bx--modal-close__icon");
     expect(svg).toBeInTheDocument();
     expect(svg).toHaveAttribute("aria-hidden", "true");
   });
