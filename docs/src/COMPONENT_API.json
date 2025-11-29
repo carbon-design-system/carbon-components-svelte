@@ -11833,7 +11833,7 @@
           "isFunctionDeclaration": false,
           "isRequired": false,
           "constant": false,
-          "reactive": true
+          "reactive": false
         },
         {
           "name": "current",

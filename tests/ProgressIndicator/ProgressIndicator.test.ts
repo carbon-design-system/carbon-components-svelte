@@ -1,6 +1,8 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import ProgressIndicator from "./ProgressIndicator.test.svelte";
+import ProgressIndicatorIssue1249 from "./ProgressIndicatorIssue1249.test.svelte";
+import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";
 
 describe("ProgressIndicator", () => {
   describe("Default (horizontal)", () => {
@@ -242,6 +244,59 @@ describe("ProgressIndicator", () => {
 
       await user.keyboard(" ");
       expect(consoleLog).toHaveBeenCalledWith("change", 0);
+    });
+  });
+
+  describe("Reactive complete prop (#1249)", () => {
+    it("should update complete state immediately without delay", async () => {
+      const { component } = render(ProgressIndicatorReactive, {
+        step1Complete: false,
+        step2Complete: false,
+      });
+
+      const listItems = screen.getAllByRole("listitem");
+
+      expect(listItems[0]).not.toHaveClass("bx--progress-step--complete");
+      expect(listItems[1]).not.toHaveClass("bx--progress-step--complete");
+
+      component.$set({ step1Complete: true });
+      await waitFor(() => {
+        expect(listItems[0]).toHaveClass("bx--progress-step--complete");
+      });
+      expect(listItems[1]).not.toHaveClass("bx--progress-step--complete");
+
+      component.$set({ step2Complete: true });
+      await waitFor(() => {
+        expect(listItems[1]).toHaveClass("bx--progress-step--complete");
+      });
+
+      await component.$set({ step1Complete: false });
+      await waitFor(() => {
+        expect(listItems[0]).not.toHaveClass("bx--progress-step--complete");
+      });
+      expect(listItems[1]).toHaveClass("bx--progress-step--complete");
+    });
+
+    it("should update step 3 on first button click (issue #1249 repro)", async () => {
+      render(ProgressIndicatorIssue1249);
+
+      const listItems = screen.getAllByRole("listitem");
+
+      // After onMount, steps 1 and 2 should be complete.
+      await waitFor(() => {
+        expect(listItems[0]).toHaveClass("bx--progress-step--complete");
+        expect(listItems[1]).toHaveClass("bx--progress-step--complete");
+      });
+      expect(listItems[2]).not.toHaveClass("bx--progress-step--complete");
+
+      // Step 3 should become complete immediately.
+      const button = screen.getByText("Click me twice");
+      await user.click(button);
+
+      // Before the fix, this would fail. Step 3 wouldn't update until second click.
+      await waitFor(() => {
+        expect(listItems[2]).toHaveClass("bx--progress-step--complete");
+      });
     });
   });
 });
