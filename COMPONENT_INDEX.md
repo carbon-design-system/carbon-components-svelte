@@ -1,6 +1,6 @@
 # Component Index
 
-> 166 components exported from carbon-components-svelte@0.93.0.
+> 167 components exported from carbon-components-svelte@0.93.0.
 
 ## Components
 
@@ -112,6 +112,7 @@
 - [`SelectItemGroup`](#selectitemgroup)
 - [`SelectSkeleton`](#selectskeleton)
 - [`SelectableTile`](#selectabletile)
+- [`SelectableTileGroup`](#selectabletilegroup)
 - [`SideNav`](#sidenav)
 - [`SideNavDivider`](#sidenavdivider)
 - [`SideNavItems`](#sidenavitems)
@@ -3319,6 +3320,30 @@ None.
 | mouseenter | forwarded  | --                  | --          |
 | mouseleave | forwarded  | --                  | --          |
 | keydown    | forwarded  | --                  | --          |
+
+## `SelectableTileGroup`
+
+### Props
+
+| Prop name | Required | Kind             | Reactive | Type                                 | Default value          | Description                                      |
+| :-------- | :------- | :--------------- | :------- | ------------------------------------ | ---------------------- | ------------------------------------------------ |
+| selected  | No       | <code>let</code> | Yes      | <code>T[]</code>                     | <code>[]</code>        | Specify the selected tile values                 |
+| disabled  | No       | <code>let</code> | No       | <code>boolean</code>                 | <code>false</code>     | Set to `true` to disable the tile group          |
+| name      | No       | <code>let</code> | No       | <code>string &#124; undefined</code> | <code>undefined</code> | Specify a name attribute for the checkbox inputs |
+| legend    | No       | <code>let</code> | No       | <code>string</code>                  | <code>""</code>        | Specify the legend text                          |
+
+### Slots
+
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
+
+### Events
+
+| Event name | Type       | Detail         | Description |
+| :--------- | :--------- | :------------- | :---------- |
+| select     | dispatched | <code>T</code> | --          |
+| deselect   | dispatched | <code>T</code> | --          |
 
 ## `SideNav`
 

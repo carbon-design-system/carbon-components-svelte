@@ -1,5 +1,5 @@
 {
-  "total": 166,
+  "total": 167,
   "components": [
     {
       "moduleName": "Accordion",
@@ -13650,6 +13650,120 @@
         "name": "label"
       },
       "contexts": []
+    },
+    {
+      "moduleName": "SelectableTileGroup",
+      "filePath": "src/Tile/SelectableTileGroup.svelte",
+      "props": [
+        {
+          "name": "selected",
+          "kind": "let",
+          "description": "Specify the selected tile values",
+          "type": "T[]",
+          "value": "[]",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the tile group",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "name",
+          "kind": "let",
+          "description": "Specify a name attribute for the checkbox inputs",
+          "type": "string | undefined",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "legend",
+          "kind": "let",
+          "description": "Specify the legend text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        }
+      ],
+      "events": [
+        {
+          "type": "dispatched",
+          "name": "select",
+          "detail": "T"
+        },
+        {
+          "type": "dispatched",
+          "name": "deselect",
+          "detail": "T"
+        }
+      ],
+      "typedefs": [],
+      "generics": [
+        "T",
+        "T extends string = string"
+      ],
+      "rest_props": {
+        "type": "Element",
+        "name": "fieldset"
+      },
+      "contexts": [
+        {
+          "key": "SelectableTileGroup",
+          "typeName": "SelectableTileGroupContext",
+          "properties": [
+            {
+              "name": "selectedValues",
+              "type": "import(\"svelte/store\").Writable<T[]>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "groupName",
+              "type": "any",
+              "optional": false
+            },
+            {
+              "name": "add",
+              "type": "(data: { selected: boolean; value: T }) => void",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "update",
+              "type": "(data: { value: T; selected: boolean }) => void",
+              "description": "",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "SideNav",

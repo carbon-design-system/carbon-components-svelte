@@ -133,6 +133,7 @@ export { default as ClickableTile } from "./Tile/ClickableTile.svelte";
 export { default as ExpandableTile } from "./Tile/ExpandableTile.svelte";
 export { default as RadioTile } from "./Tile/RadioTile.svelte";
 export { default as SelectableTile } from "./Tile/SelectableTile.svelte";
+export { default as SelectableTileGroup } from "./Tile/SelectableTileGroup.svelte";
 export { default as Tile } from "./Tile/Tile.svelte";
 export { default as TileGroup } from "./Tile/TileGroup.svelte";
 export { default as TimePicker } from "./TimePicker/TimePicker.svelte";
