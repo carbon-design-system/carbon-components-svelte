@@ -1,5 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 
+export declare const themes: Record<CarbonTheme, string>;
+
 export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 export type ThemeProps = {

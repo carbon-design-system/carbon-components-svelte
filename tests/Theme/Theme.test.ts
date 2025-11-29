@@ -1,10 +1,13 @@
 import { render, screen } from "@testing-library/svelte";
 import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";
+import { themes } from "carbon-components-svelte/Theme/Theme.svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import Theme from "./Theme.test.svelte";
 import ThemeSelect from "./ThemeSelect.test.svelte";
 import ThemeSelectCustom from "./ThemeSelectCustom.test.svelte";
+import ThemeSelectDynamic from "./ThemeSelectDynamic.test.svelte";
+import ThemeSelectExported from "./ThemeSelectExported.svelte";
 import ThemeToggle from "./ThemeToggle.test.svelte";
 import ThemeToggleCustom from "./ThemeToggleCustom.test.svelte";
 
@@ -188,5 +191,39 @@ describe("Theme", () => {
     expect(select).toHaveTextContent("White");
     expect(select).toHaveValue("white");
     expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
+  });
+
+  it("should allow using exported themes const to build custom select", async () => {
+    const customThemeKeys = Object.keys(themes) as CarbonTheme[];
+
+    render(ThemeSelectDynamic, {
+      props: {
+        themes: customThemeKeys,
+        labelText: "Available themes",
+      },
+    });
+
+    const select = screen.getByLabelText("Available themes");
+    expect(select).toBeInTheDocument();
+
+    await Object.entries(themes).reduce(async (promise, [key, label]) => {
+      await promise;
+      const themeKey = key as CarbonTheme;
+      await user.selectOptions(select, themeKey);
+      expect(select).toHaveTextContent(label);
+      expect(select).toHaveValue(themeKey);
+    }, Promise.resolve());
+  });
+
+  it("should allow using subset of exported themes", async () => {
+    render(ThemeSelectExported);
+
+    const select = screen.getByLabelText("Light themes");
+
+    await user.selectOptions(select, "white");
+    expect(select).toHaveTextContent(themes.white);
+
+    await user.selectOptions(select, "g10");
+    expect(select).toHaveTextContent(themes.g10);
   });
 });
