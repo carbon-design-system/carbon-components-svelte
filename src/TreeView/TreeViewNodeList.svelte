@@ -5,7 +5,7 @@
    * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
    */
 
-  /** @type {Array<TreeNode & { nodes?: TreeNode[] }>} */
+  /** @type {ReadonlyArray<TreeNode & { nodes?: TreeNode[] }>} */
   export let nodes = [];
   export let root = false;
 

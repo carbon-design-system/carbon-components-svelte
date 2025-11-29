@@ -2,9 +2,10 @@
   /**
    * Depth-first search to find a node by id; returns an array
    * of nodes from the initial node to the matching leaf.
-   * @param {TreeNode} node
-   * @param {TreeNodeId} id
-   * @returns {null | TreeNode[]}
+   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @param {TNode | null} node
+   * @param {string | number} id
+   * @returns {null | TNode[]}
    */
   function findNodeById(node, id) {
     if (node === null) return null;
@@ -28,6 +29,8 @@
 
 <script>
   /**
+   * @generics {Node extends TreeNode = TreeNode} Node
+   * @template {TreeNode} Node
    * @typedef {string | number} TreeNodeId
    * @typedef {object} TreeNode
    * @property {TreeNodeId} id
@@ -41,37 +44,16 @@
    * @property {boolean} [focus] - Whether to focus the node (default: true)
    * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
    * @event select
-   * @type {object}
-   * @property {TreeNodeId} id
-   * @property {any} text
-   * @property {any} [icon]
-   * @property {boolean} [disabled]
-   * @property {TreeNode[]} [nodes]
-   * @property {boolean} expanded
-   * @property {boolean} leaf
+   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    * @event toggle
-   * @type {object}
-   * @property {TreeNodeId} id
-   * @property {any} text
-   * @property {any} [icon]
-   * @property {boolean} [disabled]
-   * @property {TreeNode[]} [nodes]
-   * @property {boolean} expanded
-   * @property {boolean} leaf
+   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    * @event focus
-   * @type {object}
-   * @property {TreeNodeId} id
-   * @property {any} text
-   * @property {any} [icon]
-   * @property {boolean} [disabled]
-   * @property {TreeNode[]} [nodes]
-   * @property {boolean} expanded
-   * @property {boolean} leaf
+   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    */
 
   /**
    * Provide an array of nodes to render
-   * @type {Array<TreeNode>}
+   * @type {ReadonlyArray<Node>}
    */
   export let nodes = [];
 
@@ -135,8 +117,8 @@
   /**
    * Programmatically expand a subset of nodes.
    * Expands all nodes if no argument is provided
-   * @type {(filterId?: (node: TreeNode) => boolean) => void}
-   * @param {function(node: TreeNode): boolean} [filterNode] - Filter function that returns `true` for nodes to expand. If not provided, expands all nodes.
+   * @type {(filterNode?: (node: Node) => boolean) => void}
+   * @param {function(node: Node): boolean} [filterNode] - Filter function that returns `true` for nodes to expand. If not provided, expands all nodes.
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -158,8 +140,8 @@
   /**
    * Programmatically collapse a subset of nodes.
    * Collapses all nodes if no argument is provided
-   * @type {(filterId?: (node: TreeNode) => boolean) => void}
-   * @param {function(node: TreeNode): boolean} [filterNode] - Filter function that returns `true` for nodes to collapse. If not provided, collapses all nodes.
+   * @type {(filterNode?: (node: Node) => boolean) => void}
+   * @param {function(node: Node): boolean} [filterNode] - Filter function that returns `true` for nodes to collapse. If not provided, collapses all nodes.
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -324,8 +306,8 @@
 
   /**
    * Recursively flattens a tree of nodes into a single array
-   * @param {Array<TreeNode & { nodes?: TreeNode[] }>} nodes
-   * @returns {Array<TreeNode>}
+   * @param {ReadonlyArray<Node & { nodes?: Node[] }>} nodes
+   * @returns {Array<Node>}
    */
   function traverse(nodes) {
     return nodes.reduce((acc, node) => {

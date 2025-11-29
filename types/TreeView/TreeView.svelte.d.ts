@@ -29,12 +29,12 @@ export type TreeViewContext = {
 
 type $RestProps = SvelteHTMLElements["ul"];
 
-type $Props = {
+type $Props<Node> = {
   /**
    * Provide an array of nodes to render
    * @default []
    */
-  nodes?: Array<TreeNode>;
+  nodes?: ReadonlyArray<Node>;
 
   /**
    * Set the current active node id
@@ -76,38 +76,23 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type TreeViewProps = Omit<$RestProps, keyof $Props> & $Props;
+export type TreeViewProps<Node> = Omit<$RestProps, keyof $Props<Node>> &
+  $Props<Node>;
 
-export default class TreeView extends SvelteComponentTyped<
-  TreeViewProps,
+export default class TreeView<
+  Node extends TreeNode = TreeNode,
+> extends SvelteComponentTyped<
+  TreeViewProps<Node>,
   {
-    select: CustomEvent<{
-      id: TreeNodeId;
-      text: any;
-      icon?: any;
-      disabled?: boolean;
-      nodes?: TreeNode[];
-      expanded: boolean;
-      leaf: boolean;
-    }>;
-    toggle: CustomEvent<{
-      id: TreeNodeId;
-      text: any;
-      icon?: any;
-      disabled?: boolean;
-      nodes?: TreeNode[];
-      expanded: boolean;
-      leaf: boolean;
-    }>;
-    focus: CustomEvent<{
-      id: TreeNodeId;
-      text: any;
-      icon?: any;
-      disabled?: boolean;
-      nodes?: TreeNode[];
-      expanded: boolean;
-      leaf: boolean;
-    }>;
+    select: CustomEvent<
+      Node & { expanded: boolean; leaf: boolean; selected: boolean }
+    >;
+    toggle: CustomEvent<
+      Node & { expanded: boolean; leaf: boolean; selected: boolean }
+    >;
+    focus: CustomEvent<
+      Node & { expanded: boolean; leaf: boolean; selected: boolean }
+    >;
     keydown: WindowEventMap["keydown"];
   },
   {
@@ -155,7 +140,7 @@ export default class TreeView extends SvelteComponentTyped<
    * </button>
    * ```
    */
-  expandNodes: (filterId?: (node: TreeNode) => boolean) => void;
+  expandNodes: (filterNode?: (node: Node) => boolean) => void;
 
   /**
    * Programmatically collapse a subset of nodes.
@@ -168,7 +153,7 @@ export default class TreeView extends SvelteComponentTyped<
    * </button>
    * ```
    */
-  collapseNodes: (filterId?: (node: TreeNode) => boolean) => void;
+  collapseNodes: (filterNode?: (node: Node) => boolean) => void;
 
   /**
    * Programmatically show a node by `id`.

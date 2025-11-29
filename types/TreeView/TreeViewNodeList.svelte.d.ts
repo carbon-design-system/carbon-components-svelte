@@ -13,7 +13,7 @@ export type TreeViewNodeListProps = {
   /**
    * @default []
    */
-  nodes?: Array<TreeNode & { nodes?: TreeNode[] }>;
+  nodes?: ReadonlyArray<TreeNode & { nodes?: TreeNode[] }>;
 
   /**
    * @default false
