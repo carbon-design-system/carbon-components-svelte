@@ -54,7 +54,6 @@
     "autoprefixer": "^10.4.21",
     "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^13.4.0",
-    "carbon-preprocess-svelte": "^0.11.11",
     "culls": "^0.1.1",
     "jsdom": "^27.0.1",
     "postcss": "^8.5.5",
