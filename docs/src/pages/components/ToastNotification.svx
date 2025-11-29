@@ -49,6 +49,15 @@ Customize the notification content using slots for more flexibility.
   <strong slot="caption">{new Date().toLocaleString()}</strong>
 </ToastNotification>
 
+## Optional subtitle and caption
+
+Subtitle and caption are optional and only render when provided.
+
+<ToastNotification subtitle="An internal server error occurred." />
+<ToastNotification title="Error" subtitle="An internal server error occurred." />
+<ToastNotification subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
+<ToastNotification title="Success" caption="{new Date().toLocaleString()}" />
+
 ## Accessible icon descriptions
 
 Provide custom descriptions for icons to improve accessibility.
