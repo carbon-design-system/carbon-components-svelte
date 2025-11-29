@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import SelectFalsy from "./Select.falsy.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
@@ -13,20 +13,15 @@ describe("Select", () => {
   it("renders with default props", () => {
     render(Select);
 
-    const select = screen.getByTestId("select");
-    expect(select).toBeInTheDocument();
-
-    const label = select.querySelector("label");
-    assert(label);
-    expect(label).toHaveTextContent("Select label");
+    const label = screen.getByText("Select label");
+    expect(label).toBeInTheDocument();
     expect(label).not.toHaveClass("bx--visually-hidden");
 
-    const selectElement = select.querySelector("select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
     expect(selectElement).not.toBeDisabled();
     expect(selectElement).not.toHaveAttribute("aria-invalid");
 
-    const options = selectElement.querySelectorAll("option");
+    const options = within(selectElement).getAllByRole("option");
     expect(options).toHaveLength(3);
     expect(options[0]).toHaveValue("option-1");
     expect(options[0]).toHaveTextContent("Option 1");
@@ -35,8 +30,7 @@ describe("Select", () => {
   it("renders with selected value", () => {
     render(Select, { selected: "option-2" });
 
-    const selectElement = screen.getByTestId("select").querySelector("select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
     expect(selectElement).toHaveValue("option-2");
   });
 
@@ -44,8 +38,7 @@ describe("Select", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Select);
 
-    const selectElement = screen.getByTestId("select").querySelector("select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
     await user.selectOptions(selectElement, "option-2");
 
     expect(consoleLog).toHaveBeenCalledWith("change");
@@ -56,91 +49,78 @@ describe("Select", () => {
 
   it("renders default size", () => {
     render(Select);
-    const selectElement = screen.getByTestId("select").querySelector("select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
     expect(selectElement).not.toHaveClass("bx--select-input--sm");
     expect(selectElement).not.toHaveClass("bx--select-input--xl");
   });
 
   it("renders small size variant", () => {
     render(Select, { size: "sm" });
-    const selectElement = screen.getByTestId("select").querySelector("select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
     expect(selectElement).toHaveClass("bx--select-input--sm");
     expect(selectElement).not.toHaveClass("bx--select-input--xl");
   });
 
   it("renders extra large size variant", () => {
     render(Select, { size: "xl" });
-    const selectElement = screen.getByTestId("select").querySelector("select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
     expect(selectElement).not.toHaveClass("bx--select-input--sm");
     expect(selectElement).toHaveClass("bx--select-input--xl");
   });
 
   it("renders default variant", () => {
     render(Select);
-    const selectWrapper = screen
-      .getByTestId("select")
-      .querySelector(".bx--select");
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
     expect(selectWrapper).not.toHaveClass("bx--select--inline");
   });
 
   it("renders inline variant", () => {
     render(Select, { inline: true });
-    const selectWrapper = screen
-      .getByTestId("select")
-      .querySelector(".bx--select");
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
     expect(selectWrapper).toHaveClass("bx--select--inline");
   });
 
   it("renders default theme", () => {
     render(Select);
-    const selectWrapper = screen
-      .getByTestId("select")
-      .querySelector(".bx--select");
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
     expect(selectWrapper).not.toHaveClass("bx--select--light");
   });
 
   it("renders light theme", () => {
     render(Select, { light: true });
-    const selectWrapper = screen
-      .getByTestId("select")
-      .querySelector(".bx--select");
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
     expect(selectWrapper).toHaveClass("bx--select--light");
   });
 
   it("renders enabled by default", () => {
     render(Select);
-    const selectElement = screen.getByTestId("select").querySelector("select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
     expect(selectElement).not.toBeDisabled();
   });
 
   it("renders disabled state", () => {
     render(Select, { disabled: true });
-    const selectElement = screen.getByTestId("select").querySelector("select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
     expect(selectElement).toBeDisabled();
   });
 
   it("renders valid by default", () => {
     render(Select);
-    const wrapper = screen.getByTestId("select");
-    const selectElement = wrapper.querySelector("select");
-    const selectWrapper = wrapper.querySelector(".bx--select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
 
     expect(selectWrapper).not.toHaveClass("bx--select--invalid");
     expect(selectElement).not.toHaveAttribute("aria-invalid");
-    expect(
-      wrapper.querySelector(".bx--form-requirement"),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/invalid/i)).not.toBeInTheDocument();
   });
 
   it("renders invalid state", () => {
@@ -149,29 +129,25 @@ describe("Select", () => {
       invalidText: "Invalid selection",
     });
 
-    const wrapper = screen.getByTestId("select");
-    const selectElement = wrapper.querySelector("select");
-    const selectWrapper = wrapper.querySelector(".bx--select");
-    assert(selectElement);
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
 
     expect(selectWrapper).toHaveClass("bx--select--invalid");
     expect(selectElement).toHaveAttribute("aria-invalid", "true");
-    expect(wrapper.querySelector(".bx--form-requirement")).toHaveTextContent(
+    expect(screen.getByText("Invalid selection")).toHaveTextContent(
       "Invalid selection",
     );
   });
 
   it("renders without warning by default", () => {
     render(Select);
-    const wrapper = screen.getByTestId("select");
-    const selectWrapper = wrapper.querySelector(".bx--select");
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
 
     expect(selectWrapper).not.toHaveClass("bx--select--warning");
-    expect(
-      wrapper.querySelector(".bx--form-requirement"),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/warning/i)).not.toBeInTheDocument();
   });
 
   it("renders warning state", () => {
@@ -180,50 +156,43 @@ describe("Select", () => {
       warnText: "Warning message",
     });
 
-    const wrapper = screen.getByTestId("select");
-    const selectWrapper = wrapper.querySelector(".bx--select");
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
     assert(selectWrapper);
     expect(selectWrapper).toHaveClass("bx--select--warning");
-    expect(wrapper.querySelector(".bx--form-requirement")).toHaveTextContent(
+    expect(screen.getByText("Warning message")).toHaveTextContent(
       "Warning message",
     );
   });
 
   it("renders without helper text by default", () => {
     render(Select);
-    expect(
-      screen.getByTestId("select").querySelector(".bx--form__helper-text"),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/helper/i)).not.toBeInTheDocument();
   });
 
   it("renders helper text when provided", () => {
     render(Select, { helperText: "Helper text" });
-    const helperElement = screen
-      .getByTestId("select")
-      .querySelector(".bx--form__helper-text");
-    assert(helperElement);
+    const helperElement = screen.getByText("Helper text");
     expect(helperElement).toHaveTextContent("Helper text");
   });
 
   it("renders visible label by default", () => {
     render(Select);
-    const label = screen.getByTestId("select").querySelector("label");
-    assert(label);
+    const label = screen.getByText("Select label");
     expect(label).not.toHaveClass("bx--visually-hidden");
   });
 
   it("renders with hidden label", () => {
     render(Select, { hideLabel: true });
-    const label = screen.getByTestId("select").querySelector("label");
-    assert(label);
+    const label = screen.getByText("Select label");
     expect(label).toHaveClass("bx--visually-hidden");
   });
 
   it("renders with SelectItemGroup", () => {
     render(SelectGroup);
 
-    const select = screen.getByTestId("select-group");
-    const selectElement = select.querySelector("select");
+    const optgroup = document.querySelector('optgroup[label="Category 1"]');
+    const selectElement = optgroup?.closest("select");
     assert(selectElement);
     const optgroups = selectElement.querySelectorAll("optgroup");
 
@@ -231,6 +200,7 @@ describe("Select", () => {
     expect(optgroups[0]).toHaveAttribute("label", "Category 1");
     expect(optgroups[1]).toHaveAttribute("label", "Category 2");
 
+    // Options in native select elements need querySelectorAll
     const options = selectElement.querySelectorAll("option");
     expect(options).toHaveLength(5);
     expect(options[0]).toHaveAttribute("disabled");
@@ -262,8 +232,6 @@ describe("Select", () => {
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1977
   it("should not render label element when labelText is empty string", () => {
     render(Select, { props: { labelText: "" } });
-    const wrapper = screen.getByTestId("select");
-    const label = wrapper.querySelector("label");
-    expect(label).not.toBeInTheDocument();
+    expect(screen.queryByText("Select label")).not.toBeInTheDocument();
   });
 });
