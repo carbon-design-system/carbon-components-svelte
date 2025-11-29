@@ -81,6 +81,7 @@ export { default as InlineNotification } from "./Notification/InlineNotification
 export { default as NotificationActionButton } from "./Notification/NotificationActionButton.svelte";
 export { default as NotificationButton } from "./Notification/NotificationButton.svelte";
 export { default as NotificationIcon } from "./Notification/NotificationIcon.svelte";
+export { default as NotificationQueue } from "./Notification/NotificationQueue.svelte";
 export { default as ToastNotification } from "./Notification/ToastNotification.svelte";
 export { default as NumberInput } from "./NumberInput/NumberInput.svelte";
 export { default as NumberInputSkeleton } from "./NumberInput/NumberInputSkeleton.svelte";
