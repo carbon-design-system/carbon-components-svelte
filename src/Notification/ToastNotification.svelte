@@ -111,11 +111,9 @@
   >
     <NotificationIcon {kind} iconDescription={statusIconDescription} />
     <div class:bx--toast-notification__details={true}>
-      {#if title || $$slots.title}
-        <h3 class:bx--toast-notification__title={true}>
-          <slot name="title">{title}</slot>
-        </h3>
-      {/if}
+      <h3 class:bx--toast-notification__title={true}>
+        <slot name="title">{title}</slot>
+      </h3>
       {#if subtitle || $$slots.subtitle}
         <div class:bx--toast-notification__subtitle={true}>
           <slot name="subtitle">{subtitle}</slot>
