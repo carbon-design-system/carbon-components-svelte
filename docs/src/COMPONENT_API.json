@@ -7032,7 +7032,7 @@
           "name": "results",
           "kind": "let",
           "description": "Render a list of search results",
-          "type": "ReadonlyArray<HeaderSearchResult>",
+          "type": "ReadonlyArray<Result>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -7059,7 +7059,7 @@
           "name": null,
           "default": true,
           "fallback": "{result.text}\n              {#if result.description}<span\n                  class:bx--header-search-menu-description={true}\n                  >– {result.description}</span\n                >{/if}",
-          "slot_props": "{\n  result: HeaderSearchResult;\n  index: number;\n}"
+          "slot_props": "{\n  result: Result;\n  index: number;\n}"
         }
       ],
       "events": [
@@ -7081,7 +7081,7 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  value: string;\n  selectedResultIndex: number;\n  selectedResult: HeaderSearchResult;\n}"
+          "detail": "{\n  value: string;\n  selectedResultIndex: number;\n  selectedResult: Result;\n}"
         },
         {
           "type": "forwarded",
@@ -7121,7 +7121,10 @@
           "ts": "type HeaderSearchResult = {\n  href: string;\n  text: string;\n  description?: string;\n};\n"
         }
       ],
-      "generics": null,
+      "generics": [
+        "Result",
+        "Result extends HeaderSearchResult = HeaderSearchResult"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "input"
