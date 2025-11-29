@@ -19132,7 +19132,7 @@
           "name": "nodes",
           "kind": "let",
           "description": "Provide an array of nodes to render",
-          "type": "Array<TreeNode>",
+          "type": "ReadonlyArray<Node>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -19238,11 +19238,11 @@
           "name": "expandNodes",
           "kind": "function",
           "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.expandNodes((node) => node.id.startsWith('folder-'))}>\n  Expand Folders\n</button>\n```",
-          "type": "(filterId?: (node: TreeNode) => boolean) => void",
+          "type": "(filterNode?: (node: Node) => boolean) => void",
           "params": [
             {
               "name": "filterNode",
-              "type": "function(node: TreeNode): boolean",
+              "type": "function(node: Node): boolean",
               "description": "Filter function that returns `true` for nodes to expand. If not provided, expands all nodes.",
               "optional": true
             }
@@ -19257,11 +19257,11 @@
           "name": "collapseNodes",
           "kind": "function",
           "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.collapseNodes((node) => node.id.startsWith('folder-'))}>\n  Collapse Folders\n</button>\n```",
-          "type": "(filterId?: (node: TreeNode) => boolean) => void",
+          "type": "(filterNode?: (node: Node) => boolean) => void",
           "params": [
             {
               "name": "filterNode",
-              "type": "function(node: TreeNode): boolean",
+              "type": "function(node: Node): boolean",
               "description": "Filter function that returns `true` for nodes to collapse. If not provided, collapses all nodes.",
               "optional": true
             }
@@ -19317,17 +19317,17 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n  expanded: boolean;\n  leaf: boolean;\n}"
+          "detail": "Node & {\n  expanded: boolean;\n  leaf: boolean;\n  selected: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "toggle",
-          "detail": "{\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n  expanded: boolean;\n  leaf: boolean;\n}"
+          "detail": "Node & {\n  expanded: boolean;\n  leaf: boolean;\n  selected: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "focus",
-          "detail": "{\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  disabled?: boolean;\n  nodes?: TreeNode[];\n  expanded: boolean;\n  leaf: boolean;\n}"
+          "detail": "Node & {\n  expanded: boolean;\n  leaf: boolean;\n  selected: boolean;\n}"
         },
         {
           "type": "forwarded",
@@ -19342,9 +19342,9 @@
           "ts": "type TreeNodeId = string | number;\n"
         },
         {
-          "type": "{ id: TreeNodeId; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: TreeNode[]; }",
+          "type": "{ id: TreeNodeId; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: Node[]; }",
           "name": "TreeNode",
-          "ts": "type TreeNode = {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: TreeNode[];\n};\n"
+          "ts": "type TreeNode = {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: Node[];\n};\n"
         },
         {
           "type": "{ /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean; /** Whether to select the node (default: true) */ select?: boolean; /** Whether to focus the node (default: true) */ focus?: boolean; }",
@@ -19352,7 +19352,10 @@
           "ts": "type ShowNodeOptions = {\n  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;\n  /** Whether to select the node (default: true) */ select?: boolean;\n  /** Whether to focus the node (default: true) */ focus?: boolean;\n};\n"
         }
       ],
-      "generics": null,
+      "generics": [
+        "Node",
+        "Node extends TreeNode = TreeNode"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "ul"
@@ -19382,31 +19385,31 @@
             },
             {
               "name": "clickNode",
-              "type": "(node: TreeNode) => void",
+              "type": "(node: Node) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "selectNode",
-              "type": "(node: TreeNode) => void",
+              "type": "(node: Node) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "expandNode",
-              "type": "(node: TreeNode, expanded: boolean) => void",
+              "type": "(node: Node, expanded: boolean) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "focusNode",
-              "type": "(node: TreeNode) => void",
+              "type": "(node: Node) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "toggleNode",
-              "type": "(node: TreeNode) => void",
+              "type": "(node: Node) => void",
               "description": "",
               "optional": false
             }
