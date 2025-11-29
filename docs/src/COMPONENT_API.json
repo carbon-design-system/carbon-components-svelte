@@ -1,5 +1,5 @@
 {
-  "total": 167,
+  "total": 168,
   "components": [
     {
       "moduleName": "Accordion",
@@ -9741,6 +9741,147 @@
       "slots": [],
       "events": [],
       "typedefs": [],
+      "generics": null,
+      "contexts": []
+    },
+    {
+      "moduleName": "NotificationQueue",
+      "filePath": "src/Notification/NotificationQueue.svelte",
+      "props": [
+        {
+          "name": "position",
+          "kind": "let",
+          "description": "Specify the position of the notification queue",
+          "type": "\"top-right\" | \"bottom-right\"",
+          "value": "\"top-right\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "offsetTop",
+          "kind": "let",
+          "description": "Specify the top offset (CSS value)",
+          "type": "string",
+          "value": "\"3rem\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "offsetBottom",
+          "kind": "let",
+          "description": "Specify the bottom offset (CSS value)",
+          "type": "string",
+          "value": "\"1rem\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "offsetRight",
+          "kind": "let",
+          "description": "Specify the right offset (CSS value)",
+          "type": "string",
+          "value": "\"1rem\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "zIndex",
+          "kind": "let",
+          "description": "Specify the z-index of the notification queue.\nBy default, this matches the z-index of modals.",
+          "type": "number",
+          "value": "9000",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "maxNotifications",
+          "kind": "let",
+          "description": "Specify the maximum number of notifications to display.\nWhen this limit is exceeded, the oldest notification is automatically removed.",
+          "type": "number",
+          "value": "3",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "add",
+          "kind": "function",
+          "description": "Add a notification to the queue.\nIf a notification with the same id exists, the call is ignored.",
+          "type": "() => any",
+          "params": [
+            {
+              "name": "notification",
+              "type": "NotificationData",
+              "description": "",
+              "optional": false
+            }
+          ],
+          "returnType": "string",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "remove",
+          "kind": "function",
+          "description": "Remove a notification by id.",
+          "type": "() => any",
+          "params": [
+            {
+              "name": "id",
+              "type": "string",
+              "description": "",
+              "optional": false
+            }
+          ],
+          "returnType": "boolean",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "clear",
+          "kind": "function",
+          "description": "Clear all notifications.",
+          "type": "() => any",
+          "isFunction": true,
+          "isFunctionDeclaration": true,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [],
+      "events": [],
+      "typedefs": [
+        {
+          "type": "{ /** Optional id for deduplication */ id?: string; kind?: \"error\" | \"info\" | \"info-square\" | \"success\" | \"warning\" | \"warning-alt\"; title?: string; subtitle?: string; caption?: string; timeout?: number; lowContrast?: boolean; closeButtonDescription?: string; statusIconDescription?: string; hideCloseButton?: boolean; }",
+          "name": "NotificationData",
+          "ts": "type NotificationData = {\n  /** Optional id for deduplication */ id?: string;\n  kind?:\n    | \"error\"\n    | \"info\"\n    | \"info-square\"\n    | \"success\"\n    | \"warning\"\n    | \"warning-alt\";\n  title?: string;\n  subtitle?: string;\n  caption?: string;\n  timeout?: number;\n  lowContrast?: boolean;\n  closeButtonDescription?: string;\n  statusIconDescription?: string;\n  hideCloseButton?: boolean;\n};\n"
+        }
+      ],
       "generics": null,
       "contexts": []
     },

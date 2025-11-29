@@ -1,6 +1,6 @@
 # Component Index
 
-> 167 components exported from carbon-components-svelte@0.93.0.
+> 168 components exported from carbon-components-svelte@0.93.0.
 
 ## Components
 
@@ -84,6 +84,7 @@
 - [`NotificationActionButton`](#notificationactionbutton)
 - [`NotificationButton`](#notificationbutton)
 - [`NotificationIcon`](#notificationicon)
+- [`NotificationQueue`](#notificationqueue)
 - [`NumberInput`](#numberinput)
 - [`NumberInputSkeleton`](#numberinputskeleton)
 - [`OrderedList`](#orderedlist)
@@ -2483,6 +2484,53 @@ None.
 | kind             | No       | <code>let</code> | No       | <code>"error" &#124; "info" &#124; "info-square" &#124; "success" &#124; "warning" &#124; "warning-alt"</code> | <code>"error"</code> | Specify the kind of notification icon |
 | notificationType | No       | <code>let</code> | No       | <code>"toast" &#124; "inline"</code>                                                                           | <code>"toast"</code> | Set the type of notification          |
 | iconDescription  | Yes      | <code>let</code> | No       | --                                                                                                             | --                   | Specify the ARIA label for the icon   |
+
+### Slots
+
+None.
+
+### Events
+
+None.
+
+## `NotificationQueue`
+
+### Types
+
+```ts
+export type NotificationData = {
+  /** Optional id for deduplication */ id?: string;
+  kind?:
+    | "error"
+    | "info"
+    | "info-square"
+    | "success"
+    | "warning"
+    | "warning-alt";
+  title?: string;
+  subtitle?: string;
+  caption?: string;
+  timeout?: number;
+  lowContrast?: boolean;
+  closeButtonDescription?: string;
+  statusIconDescription?: string;
+  hideCloseButton?: boolean;
+};
+```
+
+### Props
+
+| Prop name        | Required | Kind                  | Reactive | Type                                           | Default value            | Description                                                                                                                                 |
+| :--------------- | :------- | :-------------------- | :------- | ---------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| position         | No       | <code>let</code>      | No       | <code>"top-right" &#124; "bottom-right"</code> | <code>"top-right"</code> | Specify the position of the notification queue                                                                                              |
+| offsetTop        | No       | <code>let</code>      | No       | <code>string</code>                            | <code>"3rem"</code>      | Specify the top offset (CSS value)                                                                                                          |
+| offsetBottom     | No       | <code>let</code>      | No       | <code>string</code>                            | <code>"1rem"</code>      | Specify the bottom offset (CSS value)                                                                                                       |
+| offsetRight      | No       | <code>let</code>      | No       | <code>string</code>                            | <code>"1rem"</code>      | Specify the right offset (CSS value)                                                                                                        |
+| zIndex           | No       | <code>let</code>      | No       | <code>number</code>                            | <code>9000</code>        | Specify the z-index of the notification queue.<br />By default, this matches the z-index of modals.                                         |
+| maxNotifications | No       | <code>let</code>      | No       | <code>number</code>                            | <code>3</code>           | Specify the maximum number of notifications to display.<br />When this limit is exceeded, the oldest notification is automatically removed. |
+| add              | No       | <code>function</code> | No       | <code>() => any</code>                         | --                       | Add a notification to the queue.<br />If a notification with the same id exists, the call is ignored.                                       |
+| remove           | No       | <code>function</code> | No       | <code>() => any</code>                         | --                       | Remove a notification by id.                                                                                                                |
+| clear            | No       | <code>function</code> | No       | <code>() => any</code>                         | --                       | Clear all notifications.                                                                                                                    |
 
 ### Slots
 
