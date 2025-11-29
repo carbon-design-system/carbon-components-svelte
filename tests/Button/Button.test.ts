@@ -102,7 +102,7 @@ describe("Button", () => {
   it("should render with icon", () => {
     render(Button);
 
-    const buttonWithIcon = screen.getByText("With icon");
+    const buttonWithIcon = screen.getByRole("button", { name: "With icon" });
     const icon = buttonWithIcon.querySelector(".bx--btn__icon");
     expect(icon).toBeInTheDocument();
   });
@@ -121,7 +121,7 @@ describe("Button", () => {
 
     // Should still have accessible text for screen readers.
     const assistiveText = iconButton.querySelector(".bx--assistive-text");
-    expect(assistiveText).toBeInTheDocument();
+    assert(assistiveText);
     expect(assistiveText).toHaveTextContent("Add item");
   });
 });
