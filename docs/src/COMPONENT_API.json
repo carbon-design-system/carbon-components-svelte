@@ -1,5 +1,5 @@
 {
-  "total": 168,
+  "total": 169,
   "components": [
     {
       "moduleName": "Accordion",
@@ -11647,6 +11647,40 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
+      },
+      "contexts": []
+    },
+    {
+      "moduleName": "Portal",
+      "filePath": "src/Portal/Portal.svelte",
+      "props": [
+        {
+          "name": "tag",
+          "kind": "let",
+          "description": "Specify the tag name.",
+          "type": "keyof HTMLElementTagNameMap",
+          "value": "\"div\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        }
+      ],
+      "events": [],
+      "typedefs": [],
+      "generics": null,
+      "rest_props": {
+        "type": "Element",
+        "name": "svelte:element"
       },
       "contexts": []
     },

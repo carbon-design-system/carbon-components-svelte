@@ -1,6 +1,6 @@
 # Component Index
 
-> 168 components exported from carbon-components-svelte@0.94.0.
+> 169 components exported from carbon-components-svelte@0.94.0.
 
 ## Components
 
@@ -96,6 +96,7 @@
 - [`PaginationSkeleton`](#paginationskeleton)
 - [`PasswordInput`](#passwordinput)
 - [`Popover`](#popover)
+- [`Portal`](#portal)
 - [`ProgressBar`](#progressbar)
 - [`ProgressIndicator`](#progressindicator)
 - [`ProgressIndicatorSkeleton`](#progressindicatorskeleton)
@@ -2889,6 +2890,24 @@ None.
 | Event name    | Type       | Detail                                | Description |
 | :------------ | :--------- | :------------------------------------ | :---------- |
 | click:outside | dispatched | <code>{ target: HTMLElement; }</code> | --          |
+
+## `Portal`
+
+### Props
+
+| Prop name | Required | Kind             | Reactive | Type                                     | Default value      | Description           |
+| :-------- | :------- | :--------------- | :------- | ---------------------------------------- | ------------------ | --------------------- |
+| tag       | No       | <code>let</code> | No       | <code>keyof HTMLElementTagNameMap</code> | <code>"div"</code> | Specify the tag name. |
+
+### Slots
+
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
+
+### Events
+
+None.
 
 ## `ProgressBar`
 
