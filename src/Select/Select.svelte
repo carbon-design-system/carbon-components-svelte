@@ -1,11 +1,14 @@
 <script>
   /**
-   * @event {string | number} update The selected value.
+   * @generics {Value extends string | number = string | number} Value
+   * @template {string | number} Value
+   * @typedef {string | number} SelectValue
+   * @event {Value} update The selected value.
    */
 
   /**
    * Specify the selected item value
-   * @type {string | number}
+   * @type {Value | undefined}
    */
   export let selected = undefined;
 

@@ -13030,7 +13030,7 @@
           "name": "selected",
           "kind": "let",
           "description": "Specify the selected item value",
-          "type": "string | number",
+          "type": "Value | undefined",
           "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -13249,7 +13249,7 @@
         {
           "type": "dispatched",
           "name": "update",
-          "detail": "string | number",
+          "detail": "Value",
           "description": "The selected value."
         },
         {
@@ -13273,8 +13273,17 @@
           "element": "select"
         }
       ],
-      "typedefs": [],
-      "generics": null,
+      "typedefs": [
+        {
+          "type": "string | number",
+          "name": "SelectValue",
+          "ts": "type SelectValue = string | number;\n"
+        }
+      ],
+      "generics": [
+        "Value",
+        "Value extends string | number = string | number"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "select"
