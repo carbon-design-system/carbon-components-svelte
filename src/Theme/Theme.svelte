@@ -1,3 +1,14 @@
+<script context="module">
+  /** @type {Record<CarbonTheme, string>} */
+  export const themes = {
+    white: "White",
+    g10: "Gray 10",
+    g80: "Gray 80",
+    g90: "Gray 90",
+    g100: "Gray 100",
+  };
+</script>
+
 <script>
   /**
    * Dynamic, client-side theming using CSS variables
@@ -47,15 +58,6 @@
     labelB: "",
     labelText: "Dark mode",
     hideLabel: false,
-  };
-
-  /** @type {Record<CarbonTheme, string>} */
-  const themes = {
-    white: "White",
-    g10: "Gray 10",
-    g80: "Gray 80",
-    g90: "Gray 90",
-    g100: "Gray 100",
   };
 
   /** @type {CarbonTheme} */

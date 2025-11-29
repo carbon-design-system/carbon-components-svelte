@@ -17017,7 +17017,19 @@
           "reactive": false
         }
       ],
-      "moduleExports": [],
+      "moduleExports": [
+        {
+          "name": "themes",
+          "kind": "const",
+          "type": "Record<CarbonTheme, string>",
+          "value": "{     white: \"White\",     g10: \"Gray 10\",     g80: \"Gray 80\",     g90: \"Gray 90\",     g100: \"Gray 100\",   }",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": true,
+          "reactive": false
+        }
+      ],
       "slots": [
         {
           "name": null,
