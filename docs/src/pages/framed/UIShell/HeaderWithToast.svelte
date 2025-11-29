@@ -6,22 +6,23 @@
     Content,
     Grid,
     Header,
-    HeaderGlobalAction,
-    HeaderUtilities,
+    NotificationQueue,
     Row,
     SkipToContent,
     Stack,
-    ToastNotification,
   } from "carbon-components-svelte";
-  import Notification from "carbon-icons-svelte/lib/Notification.svelte";
-  import { fade } from "svelte/transition";
 
-  let showToast = false;
-  let toastPosition = "top";
+  let queue;
+  let queuePosition = "top-right";
 
-  const triggerToast = (position = "top") => {
-    toastPosition = position;
-    showToast = true;
+  const triggerToast = (position) => {
+    queuePosition = position;
+    queue.add({
+      kind: "success",
+      title: "Success",
+      subtitle: "Your action was completed successfully.",
+      timeout: 5000,
+    });
   };
 </script>
 
@@ -29,33 +30,9 @@
   <svelte:fragment slot="skip-to-content">
     <SkipToContent />
   </svelte:fragment>
-  <HeaderUtilities>
-    <HeaderGlobalAction
-      iconDescription="Show notification"
-      tooltipAlignment="end"
-      icon={Notification}
-      on:click={triggerToast}
-    />
-  </HeaderUtilities>
 </Header>
 
-{#if showToast}
-  <div
-    transition:fade
-    style="position: fixed; {toastPosition === 'top' ? 'top: 3rem;' : 'bottom: 1rem;'} right: 1rem; z-index: 9000; min-width: 288px;"
-  >
-    <ToastNotification
-      kind="success"
-      title="Success"
-      subtitle="Your action was completed successfully."
-      caption={new Date().toLocaleString()}
-      timeout={5000}
-      on:close={() => {
-        showToast = false;
-      }}
-    />
-  </div>
-{/if}
+<NotificationQueue bind:this={queue} position={queuePosition} />
 
 <Content>
   <Grid>
@@ -63,15 +40,12 @@
       <Column>
         <Stack gap={6}>
           <h1>Welcome</h1>
-          <p>
-            Click the notification icon in the header or use the buttons below to
-            trigger toast notifications in different positions.
-          </p>
+          <p>Click the buttons below to trigger toast notifications in different positions.</p>
           <ButtonSet>
-            <Button on:click={() => triggerToast("top")}>
+            <Button on:click={() => triggerToast("top-right")}>
               Top right
             </Button>
-            <Button on:click={() => triggerToast("bottom")}>
+            <Button on:click={() => triggerToast("bottom-right")}>
               Bottom right
             </Button>
           </ButtonSet>
