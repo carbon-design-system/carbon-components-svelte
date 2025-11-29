@@ -5,16 +5,17 @@ export type RecursiveListNode = {
   /** Node text content */ text?: string;
   /** Node link URL */ href?: string;
   /** Node HTML content */ html?: string;
+  /** Child nodes */ nodes?: RecursiveListNode[];
 };
 
 type $RestProps = SvelteHTMLElements["ul"] & SvelteHTMLElements["ol"];
 
-type $Props = {
+type $Props<Node> = {
   /**
    * Specify the nodes to render
    * @default []
    */
-  nodes?: Array<RecursiveListNode & { nodes?: RecursiveListNode[] }>;
+  nodes?: ReadonlyArray<Node & { nodes?: Node[] }>;
 
   /**
    * Specify the type of list to render
@@ -25,10 +26,13 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type RecursiveListProps = Omit<$RestProps, keyof $Props> & $Props;
+export type RecursiveListProps<Node> = Omit<$RestProps, keyof $Props<Node>> &
+  $Props<Node>;
 
-export default class RecursiveList extends SvelteComponentTyped<
-  RecursiveListProps,
+export default class RecursiveList<
+  Node extends RecursiveListNode = RecursiveListNode,
+> extends SvelteComponentTyped<
+  RecursiveListProps<Node>,
   Record<string, any>,
   Record<string, never>
 > {}
