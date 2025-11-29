@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
@@ -17,10 +17,8 @@ describe("Dropdown", () => {
     });
 
     expect(screen.getByText("Contact")).toBeInTheDocument();
-    const button = screen.getByRole("button");
-    expect(button.querySelector(".bx--list-box__label")).toHaveTextContent(
-      "Slack",
-    );
+    const button = screen.getByLabelText("Contact");
+    expect(within(button).getByText("Slack")).toBeInTheDocument();
   });
 
   it("should handle custom item display text", () => {
@@ -34,10 +32,8 @@ describe("Dropdown", () => {
 
     render(Dropdown, { props });
 
-    const button = screen.getByRole("button");
-    expect(button.querySelector(".bx--list-box__label")).toHaveTextContent(
-      "Slack (0)",
-    );
+    const button = screen.getByLabelText("Contact");
+    expect(within(button).getByText("Slack (0)")).toBeInTheDocument();
   });
 
   it("should handle hidden label", () => {
@@ -52,6 +48,9 @@ describe("Dropdown", () => {
 
     const label = screen.getByText("Contact");
     expect(label).toHaveClass("bx--visually-hidden");
+    // Even with hidden label, the button should still be accessible via labelText
+    const button = screen.getByLabelText("Contact");
+    expect(button).toBeInTheDocument();
   });
 
   it("should handle light variant", () => {
@@ -242,7 +241,7 @@ describe("Dropdown", () => {
   it("should handle custom slot content", async () => {
     render(DropdownSlot);
 
-    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByLabelText("Custom slot dropdown"));
 
     const customItems = screen.getAllByTestId("custom-item");
     expect(customItems).toHaveLength(3);
@@ -357,8 +356,8 @@ describe("Dropdown", () => {
 
     const button = screen.getByRole("button");
     expect(
-      button.querySelector(".bx--list-box__menu-icon svg"),
-    ).toHaveAttribute("aria-label", "Open dropdown");
+      within(button).getByRole("img", { name: "Open dropdown" }),
+    ).toBeInTheDocument();
   });
 
   describe("Generics", () => {
@@ -446,7 +445,7 @@ describe("Dropdown", () => {
       const consoleLog = vi.spyOn(console, "log");
       render(DropdownGenerics);
 
-      const button = screen.getByRole("button");
+      const button = screen.getByLabelText("Products");
       await user.click(button);
 
       const options = screen.getAllByRole("option");
