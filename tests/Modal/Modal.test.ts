@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import ModalTest from "./Modal.test.svelte";
+import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
 
 describe("Modal", () => {
   beforeEach(() => {
@@ -374,5 +375,84 @@ describe("Modal", () => {
     await tick();
 
     expect(modalOverlay).toHaveAttribute("inert");
+  });
+
+  // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1392
+  describe("focus trap with Dropdown and TextInput (issue #1392)", () => {
+    it("should tab from Dropdown to TextInput (forward navigation)", async () => {
+      render(ModalFocusTrapTest, {
+        props: { open: true },
+      });
+
+      await tick();
+
+      const dropdownButton = screen.getByLabelText("Select source");
+      const loginInput = screen.getByLabelText("Login");
+
+      dropdownButton.focus();
+      expect(dropdownButton).toHaveFocus();
+
+      await user.keyboard("{Tab}");
+      await tick();
+
+      expect(loginInput).toHaveFocus();
+    });
+
+    it("should shift-tab from TextInput to Dropdown (reverse navigation)", async () => {
+      render(ModalFocusTrapTest, {
+        props: { open: true },
+      });
+
+      await tick();
+
+      const dropdownButton = screen.getByLabelText("Select source");
+      const loginInput = screen.getByLabelText("Login");
+
+      loginInput.focus();
+      expect(loginInput).toHaveFocus();
+
+      await user.keyboard("{Shift>}{Tab}{/Shift}");
+      await tick();
+
+      expect(dropdownButton).toHaveFocus();
+    });
+
+    it("should tab through all inputs in order", async () => {
+      render(ModalFocusTrapTest, {
+        props: { open: true },
+      });
+
+      await tick();
+
+      const dropdownButton = screen.getByLabelText("Select source");
+      const loginInput = screen.getByLabelText("Login");
+      const passwordInput = screen.getByLabelText("Password");
+      const cancelButton = screen.getByRole("button", { name: "Cancel" });
+      const okButton = screen.getByRole("button", { name: "OK" });
+
+      // Start from dropdown.
+      dropdownButton.focus();
+      expect(dropdownButton).toHaveFocus();
+
+      // Tab to login input.
+      await user.keyboard("{Tab}");
+      await tick();
+      expect(loginInput).toHaveFocus();
+
+      // Tab to password input.
+      await user.keyboard("{Tab}");
+      await tick();
+      expect(passwordInput).toHaveFocus();
+
+      // Tab to Cancel button.
+      await user.keyboard("{Tab}");
+      await tick();
+      expect(cancelButton).toHaveFocus();
+
+      // Tab to OK button.
+      await user.keyboard("{Tab}");
+      await tick();
+      expect(okButton).toHaveFocus();
+    });
   });
 });
