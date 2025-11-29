@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ListBoxSelection from "./ListBoxSelection.test.svelte";
@@ -14,11 +14,14 @@ describe("ListBoxSelection", () => {
   });
 
   it("should render multi selection tag when selectionCount is provided", () => {
-    render(ListBoxSelection, { props: { selectionCount: 3 } });
+    const { container } = render(ListBoxSelection, {
+      props: { selectionCount: 3 },
+    });
 
     expect(screen.getByText("3")).toBeInTheDocument();
-    expect(document.querySelector(".bx--tag")).toBeInTheDocument();
-    expect(document.querySelector(".bx--tag--filter")).toBeInTheDocument();
+    const tag = container.querySelector(".bx--tag");
+    expect(tag).toBeInTheDocument();
+    expect(tag).toHaveClass("bx--tag--filter");
   });
 
   it("should handle disabled state for single selection", () => {
@@ -36,14 +39,14 @@ describe("ListBoxSelection", () => {
   });
 
   it("should handle disabled state for multi selection", () => {
-    render(ListBoxSelection, {
+    const { container } = render(ListBoxSelection, {
       props: {
         selectionCount: 2,
         disabled: true,
       },
     });
 
-    const tag = document.querySelector(".bx--tag");
+    const tag = container.querySelector(".bx--tag");
     expect(tag).toHaveClass("bx--tag--disabled");
   });
 
@@ -66,9 +69,10 @@ describe("ListBoxSelection", () => {
 
     component.$on("clear", clearHandler);
 
-    const closeIcon = document.querySelector(".bx--tag__close-icon");
-    assert(closeIcon);
-    await user.click(closeIcon);
+    const closeButton = screen.getByRole("button", {
+      name: "Clear all selected items",
+    });
+    await user.click(closeButton);
 
     expect(clearHandler).toHaveBeenCalled();
   });
@@ -97,9 +101,10 @@ describe("ListBoxSelection", () => {
 
     component.$on("clear", clearHandler);
 
-    const closeIcon = document.querySelector(".bx--tag__close-icon");
-    assert(closeIcon);
-    await user.click(closeIcon);
+    const closeButton = screen.getByRole("button", {
+      name: "Clear all selected items",
+    });
+    await user.click(closeButton);
 
     expect(clearHandler).not.toHaveBeenCalled();
   });
@@ -138,9 +143,10 @@ describe("ListBoxSelection", () => {
 
     component.$on("clear", clearHandler);
 
-    const closeIcon = document.querySelector(".bx--tag__close-icon");
-    assert(closeIcon);
-    closeIcon.dispatchEvent(
+    const closeButton = screen.getByRole("button", {
+      name: "Clear all selected items",
+    });
+    closeButton.dispatchEvent(
       new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
     );
 
@@ -155,9 +161,10 @@ describe("ListBoxSelection", () => {
 
     component.$on("clear", clearHandler);
 
-    const closeIcon = document.querySelector(".bx--tag__close-icon");
-    assert(closeIcon);
-    closeIcon.dispatchEvent(
+    const closeButton = screen.getByRole("button", {
+      name: "Clear all selected items",
+    });
+    closeButton.dispatchEvent(
       new KeyboardEvent("keydown", { key: " ", bubbles: true }),
     );
 
@@ -182,17 +189,17 @@ describe("ListBoxSelection", () => {
     expect(button).toHaveAttribute("title", "Remove item");
 
     component.selectionCount = 3;
-    await user.click(document.body); // trigger update
+    await user.click(document.body);
 
-    const closeIcon = document.querySelector(".bx--tag__close-icon");
-    expect(closeIcon).toHaveAttribute("aria-label", "Remove all");
-    expect(closeIcon).toHaveAttribute("title", "Remove all");
+    const closeButton = screen.getByRole("button", { name: "Remove all" });
+    expect(closeButton).toHaveAttribute("aria-label", "Remove all");
+    expect(closeButton).toHaveAttribute("title", "Remove all");
   });
 
   it("should show selection count in tag label", () => {
     render(ListBoxSelection, { props: { selectionCount: 5 } });
 
-    const label = document.querySelector(".bx--tag__label");
+    const label = screen.getByText("5");
     expect(label).toHaveTextContent("5");
     expect(label).toHaveAttribute("title", "5");
   });
@@ -200,7 +207,10 @@ describe("ListBoxSelection", () => {
   it("should render close icon", () => {
     render(ListBoxSelection);
 
-    const svg = screen.getByRole("button").querySelector("svg");
+    const button = screen.getByRole("button");
+    const svg =
+      within(button).queryByRole("img", { hidden: true }) ||
+      button.querySelector("svg");
     expect(svg).toBeInTheDocument();
   });
 
