@@ -87,11 +87,11 @@ describe("RadioButtonGroup", () => {
   });
 
   it("should handle custom id", () => {
-    const { container } = render(RadioButtonGroup, {
+    render(RadioButtonGroup, {
       props: { id: "custom-id" },
     });
 
-    const formItem = container.querySelector("#custom-id");
+    const formItem = document.getElementById("custom-id");
     expect(formItem).toBeInTheDocument();
   });
 
@@ -113,11 +113,13 @@ describe("RadioButtonGroup", () => {
   });
 
   it("should apply custom class", () => {
-    const { container } = render(RadioButtonGroup, {
+    render(RadioButtonGroup, {
       props: { customClass: "custom-group" },
     });
 
-    const formItem = container.querySelector(".bx--form-item");
+    const fieldset = screen.getByRole("group");
+    const formItem = fieldset.closest(".bx--form-item");
+    assert(formItem);
     expect(formItem).toHaveClass("custom-group");
   });
 
@@ -137,20 +139,14 @@ describe("RadioButtonGroup", () => {
 
   it("should render helper text when provided", () => {
     render(RadioButtonGroup, { props: { helperText: "Helper text message" } });
-    const helperElement = screen
-      .getByRole("group")
-      .closest(".bx--form-item")
-      ?.querySelector(".bx--form__helper-text");
-    assert(helperElement);
+    const helperElement = screen.getByText("Helper text message");
     expect(helperElement).toHaveTextContent("Helper text message");
+    expect(helperElement).toHaveClass("bx--form__helper-text");
   });
 
   it("should not render helper text by default", () => {
     render(RadioButtonGroup);
-    const helperElement = screen
-      .getByRole("group")
-      .closest(".bx--form-item")
-      ?.querySelector(".bx--form__helper-text");
+    const helperElement = screen.queryByText("Helper text message");
     expect(helperElement).not.toBeInTheDocument();
   });
 });
