@@ -1,9 +1,9 @@
 ---
-components: ["SelectableTile"]
+components: ["SelectableTileGroup", "SelectableTile"]
 ---
 
 <script>
-  import { SelectableTile } from "carbon-components-svelte";
+  import { SelectableTileGroup, SelectableTile } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -13,46 +13,58 @@ components: ["SelectableTile"]
 
 Group multiple selectable tiles together for multi-selection scenarios.
 
-<div role="group" aria-label="selectable tiles">
-  <SelectableTile selected>
+<SelectableTileGroup legend="Select options" name="options" selected={["option1", "option2"]}>
+  <SelectableTile value="option1">
     Multi-select Tile
   </SelectableTile>
-  <SelectableTile selected>
+  <SelectableTile value="option2">
     Multi-select Tile
   </SelectableTile>
-  <SelectableTile>
+  <SelectableTile value="option3">
     Multi-select Tile
   </SelectableTile>
-</div>
+</SelectableTileGroup>
+
+## Reactive (one-way binding)
+
+Update the selected values using the `select` and `deselect` events.
+
+<FileSource src="/framed/SelectableTile/SelectableTileReactiveOneWay" />
+
+## Reactive (two-way binding)
+
+Bind to the `selected` prop for simpler state management.
+
+<FileSource src="/framed/SelectableTile/SelectableTileReactive" />
 
 ## Light variant
 
 Use the light variant for light backgrounds.
 
-<div role="group" aria-label="selectable tiles">
-  <SelectableTile light selected>
+<SelectableTileGroup legend="Select options" name="options-light" selected={["option1", "option2"]}>
+  <SelectableTile light value="option1">
     Multi-select Tile
   </SelectableTile>
-  <SelectableTile light selected>
+  <SelectableTile light value="option2">
     Multi-select Tile
   </SelectableTile>
-  <SelectableTile light>
+  <SelectableTile light value="option3">
     Multi-select Tile
   </SelectableTile>
-</div>
+</SelectableTileGroup>
 
 ## Disabled state
 
-Disable tiles to prevent interaction.
+Disable specific tiles to prevent interaction.
 
-<div role="group" aria-label="selectable tiles">
-  <SelectableTile selected>
+<SelectableTileGroup legend="Select options" name="options-disabled" selected={["option1"]}>
+  <SelectableTile value="option1">
     Multi-select Tile
   </SelectableTile>
-  <SelectableTile disabled>
+  <SelectableTile disabled value="option2">
     Multi-select Tile
   </SelectableTile>
-  <SelectableTile disabled>
+  <SelectableTile disabled value="option3">
     Multi-select Tile
   </SelectableTile>
-</div>
+</SelectableTileGroup>
