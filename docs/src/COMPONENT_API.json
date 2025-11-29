@@ -17231,7 +17231,7 @@
           "name": "selected",
           "kind": "let",
           "description": "Specify the selected tile value",
-          "type": "string",
+          "type": "T | undefined",
           "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -17300,11 +17300,14 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "string"
+          "detail": "T"
         }
       ],
       "typedefs": [],
-      "generics": null,
+      "generics": [
+        "T",
+        "T extends string = string"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "fieldset"
@@ -17316,7 +17319,7 @@
           "properties": [
             {
               "name": "selectedValue",
-              "type": "import(\"svelte/store\").Writable<string | undefined>",
+              "type": "import(\"svelte/store\").Writable<T | undefined>",
               "description": "",
               "optional": false
             },
@@ -17332,13 +17335,13 @@
             },
             {
               "name": "add",
-              "type": "(data: { checked: boolean; value: string }) => void",
+              "type": "(data: { checked: boolean; value: T }) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "update",
-              "type": "(value: string) => void",
+              "type": "(value: T) => void",
               "description": "",
               "optional": false
             }

@@ -2,21 +2,21 @@ import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
 export type TileGroupContext = {
-  selectedValue: import("svelte/store").Writable<string | undefined>;
+  selectedValue: import("svelte/store").Writable<T | undefined>;
   groupName: any;
   groupRequired: any;
-  add: (data: { checked: boolean; value: string }) => void;
-  update: (value: string) => void;
+  add: (data: { checked: boolean; value: T }) => void;
+  update: (value: T) => void;
 };
 
 type $RestProps = SvelteHTMLElements["fieldset"];
 
-type $Props = {
+type $Props<T> = {
   /**
    * Specify the selected tile value
    * @default undefined
    */
-  selected?: string;
+  selected?: T | undefined;
 
   /**
    * Set to `true` to disable the tile group
@@ -45,10 +45,12 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type TileGroupProps = Omit<$RestProps, keyof $Props> & $Props;
+export type TileGroupProps<T> = Omit<$RestProps, keyof $Props<T>> & $Props<T>;
 
-export default class TileGroup extends SvelteComponentTyped<
-  TileGroupProps,
-  { select: CustomEvent<string> },
+export default class TileGroup<
+  T extends string = string,
+> extends SvelteComponentTyped<
+  TileGroupProps<T>,
+  { select: CustomEvent<T> },
   { default: Record<string, never> }
 > {}

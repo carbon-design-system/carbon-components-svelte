@@ -1,11 +1,13 @@
 <script>
   /**
-   * @event {string} select
+   * @generics {T extends string = string} T
+   * @template {string} T
+   * @event {T} select
    */
 
   /**
    * Specify the selected tile value
-   * @type {string}
+   * @type {T | undefined}
    */
   export let selected = undefined;
 
@@ -32,14 +34,14 @@
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<string | undefined>}
+   * @type {import("svelte/store").Writable<T | undefined>}
    */
   const selectedValue = writable(selected);
   const groupName = writable(name);
   const groupRequired = writable(required);
 
   /**
-   * @type {(data: { checked: boolean; value: string }) => void}
+   * @type {(data: { checked: boolean; value: T }) => void}
    */
   const add = ({ checked, value }) => {
     if (checked) {
@@ -48,7 +50,7 @@
   };
 
   /**
-   * @type {(value: string) => void}
+   * @type {(value: T) => void}
    */
   const update = (value) => {
     selectedValue.set(value);
