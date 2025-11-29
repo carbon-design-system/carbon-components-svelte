@@ -29,13 +29,13 @@ describe("NumberInput", () => {
   it("should handle different sizes", () => {
     const sizes = ["sm", "xl"] as const;
     for (const size of sizes) {
-      const { container } = render(NumberInput, {
+      const { unmount } = render(NumberInput, {
         props: { size },
       });
 
-      const input = container.querySelector("input");
-      expect(input?.closest(".bx--number")).toHaveClass(`bx--number--${size}`);
-      container.remove();
+      const input = screen.getByLabelText("Clusters");
+      expect(input.closest(".bx--number")).toHaveClass(`bx--number--${size}`);
+      unmount();
     }
   });
 
@@ -272,8 +272,8 @@ describe("NumberInput", () => {
   });
 
   it("should have paste event listener", () => {
-    const { container } = render(NumberInput);
-    const input = container.querySelector("input");
+    render(NumberInput);
+    const input = screen.getByLabelText("Clusters");
 
     expect(input).toBeInTheDocument();
   });
@@ -362,13 +362,13 @@ describe("NumberInput", () => {
   });
 
   it("should support aria-label override via restProps", () => {
-    const { container } = render(NumberInput, {
+    render(NumberInput, {
       props: {
         labelText: "",
       },
     });
 
-    const input = container.querySelector("input");
+    const input = screen.getByRole("spinbutton");
     expect(input).toHaveAttribute(
       "aria-label",
       "Numeric input field with increment and decrement buttons",
@@ -376,34 +376,46 @@ describe("NumberInput", () => {
   });
 
   it("should render readonly icon when readonly", () => {
-    const { container } = render(NumberInput, {
+    render(NumberInput, {
       props: { readonly: true },
     });
 
+    const input = screen.getByLabelText("Clusters");
+    const numberWrapper = input.closest(".bx--number");
+    // Icon is decorative (aria-hidden) so we check by class within the wrapper
     expect(
-      container.querySelector(".bx--text-input__readonly-icon"),
+      numberWrapper?.querySelector(".bx--text-input__readonly-icon"),
     ).toBeInTheDocument();
   });
 
   it("should render invalid icon when invalid", () => {
-    const { container } = render(NumberInput, {
+    render(NumberInput, {
       props: { invalid: true, invalidText: "Invalid" },
     });
 
-    expect(container.querySelector(".bx--number__invalid")).toBeInTheDocument();
+    const input = screen.getByLabelText("Clusters");
+    const numberWrapper = input.closest(".bx--number");
+    // Icon is decorative (aria-hidden) so we check by class within the wrapper
+    expect(
+      numberWrapper?.querySelector(".bx--number__invalid"),
+    ).toBeInTheDocument();
   });
 
   it("should render warning icon when warn and not invalid", () => {
-    const { container } = render(NumberInput, {
+    render(NumberInput, {
       props: { warn: true, warnText: "Warning" },
     });
 
-    const icon = container.querySelector(".bx--number__invalid--warning");
-    expect(icon).toBeInTheDocument();
+    const input = screen.getByLabelText("Clusters");
+    const numberWrapper = input.closest(".bx--number");
+    // Icon is decorative (aria-hidden) so we check by class within the wrapper
+    expect(
+      numberWrapper?.querySelector(".bx--number__invalid--warning"),
+    ).toBeInTheDocument();
   });
 
   it("should not render warning icon when both invalid and warn", () => {
-    const { container } = render(NumberInput, {
+    render(NumberInput, {
       props: {
         invalid: true,
         invalidText: "Invalid",
@@ -412,14 +424,16 @@ describe("NumberInput", () => {
       },
     });
 
-    const warningIcon = container.querySelector(
-      ".bx--number__invalid--warning",
-    );
-    expect(warningIcon).not.toBeInTheDocument();
+    const input = screen.getByLabelText("Clusters");
+    const numberWrapper = input.closest(".bx--number");
+    // When invalid, only invalid icon should be present, not warning icon
+    expect(
+      numberWrapper?.querySelector(".bx--number__invalid--warning"),
+    ).not.toBeInTheDocument();
   });
 
   it("should not render icons when readonly", () => {
-    const { container } = render(NumberInput, {
+    render(NumberInput, {
       props: {
         readonly: true,
         invalid: true,
@@ -427,17 +441,20 @@ describe("NumberInput", () => {
       },
     });
 
+    const input = screen.getByLabelText("Clusters");
+    const numberWrapper = input.closest(".bx--number");
+    // Should have readonly icon but not invalid icon
     expect(
-      container.querySelector(".bx--number__invalid"),
+      numberWrapper?.querySelector(".bx--number__invalid"),
     ).not.toBeInTheDocument();
   });
 
   it("should bind ref to input element", () => {
-    const { container } = render(NumberInput, {
+    render(NumberInput, {
       props: { ref: null },
     });
 
-    const input = container.querySelector("input");
+    const input = screen.getByLabelText("Clusters");
     expect(input).toBeInTheDocument();
   });
 
@@ -651,13 +668,13 @@ describe("NumberInput", () => {
   });
 
   it("should support restProps passthrough", () => {
-    const { container } = render(NumberInput, {
+    render(NumberInput, {
       props: {
         title: "Custom title",
       },
     });
 
-    const input = container.querySelector("input");
+    const input = screen.getByLabelText("Clusters");
     expect(input).toHaveAttribute("title", "Custom title");
   });
 
@@ -678,9 +695,9 @@ describe("NumberInput", () => {
   });
 
   it("should render value as empty string when null", () => {
-    const { container } = render(NumberInput, { props: { value: null } });
+    render(NumberInput, { props: { value: null } });
 
-    const input = container.querySelector("input");
+    const input = screen.getByLabelText("Clusters");
     expect(input).toHaveValue(null);
   });
 
