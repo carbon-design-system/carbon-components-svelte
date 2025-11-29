@@ -36,9 +36,9 @@ describe("RadioButton", () => {
   it("should handle label position", () => {
     render(RadioButton, { props: { labelPosition: "left" } });
 
-    expect(
-      screen.getByText("Option 1").closest(".bx--radio-button-wrapper"),
-    ).toHaveClass("bx--radio-button-wrapper--label-left");
+    const label = screen.getByLabelText("Option 1");
+    const wrapper = label.closest(".bx--radio-button-wrapper");
+    expect(wrapper).toHaveClass("bx--radio-button-wrapper--label-left");
   });
 
   it("should handle hidden label", () => {
@@ -50,16 +50,12 @@ describe("RadioButton", () => {
   it("should handle custom id", () => {
     render(RadioButton, { props: { id: "custom-id" } });
 
-    expect(screen.getByRole("radio")).toHaveAttribute("id", "custom-id");
+    const input = screen.getByRole("radio");
+    expect(input).toHaveAttribute("id", "custom-id");
 
-    const radioButton = screen
-      .getByText("Option 1")
-      .closest(".bx--radio-button-wrapper");
-    assert(radioButton);
-    expect(radioButton.querySelector("label")).toHaveAttribute(
-      "for",
-      "custom-id",
-    );
+    const labelText = screen.getByText("Option 1");
+    const label = labelText.closest("label");
+    expect(label).toHaveAttribute("for", "custom-id");
   });
 
   it("should handle custom name", () => {
@@ -128,9 +124,8 @@ describe("RadioButton", () => {
   it("should apply custom class", () => {
     render(RadioButton, { props: { customClass: "custom-radio" } });
 
-    const wrapper = screen
-      .getByRole("radio")
-      .closest(".bx--radio-button-wrapper");
+    const label = screen.getByLabelText("Option 1");
+    const wrapper = label.closest(".bx--radio-button-wrapper");
     expect(wrapper).toHaveClass("custom-radio");
   });
 
