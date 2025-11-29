@@ -37,12 +37,26 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
+  import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
 
   const dispatch = createEventDispatcher();
 
-  $: if (!disabled) dispatch(selected ? "select" : "deselect", id);
+  const ctx = getContext("SelectableTileGroup");
+  const hasGroup = ctx !== undefined;
+  const {
+    add = () => {},
+    update = () => {},
+    selectedValues = readable([]),
+    groupName = readable(undefined),
+  } = ctx ?? {};
+
+  add({ value, selected });
+
+  $: if (hasGroup) {
+    selected = $selectedValues.includes(value);
+  }
 </script>
 
 <input
@@ -53,9 +67,24 @@
   checked={selected}
   {id}
   {value}
-  {name}
+  name={$groupName ?? name}
   {title}
   {disabled}
+  on:change={() => {
+    if (disabled) return;
+    if (!ref) return;
+    const newSelected = ref.checked;
+    selected = newSelected;
+    if (hasGroup) {
+      update({ value, selected: newSelected });
+    } else {
+      if (newSelected) {
+        dispatch("select", id);
+      } else {
+        dispatch("deselect", id);
+      }
+    }
+  }}
 />
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -72,7 +101,22 @@
   on:click
   on:click|preventDefault={() => {
     if (disabled) return;
-    selected = !selected;
+    const newSelected = !selected;
+    selected = newSelected;
+
+    if (ref) {
+      ref.checked = newSelected;
+    }
+
+    if (hasGroup) {
+      update({ value, selected: newSelected });
+    } else {
+      if (newSelected) {
+        dispatch("select", id);
+      } else {
+        dispatch("deselect", id);
+      }
+    }
   }}
   on:mouseover
   on:mouseenter
@@ -82,7 +126,9 @@
     if (disabled) return;
     if (e.key === " " || e.key === "Enter") {
       e.preventDefault();
-      selected = !selected;
+      if (ref) {
+        ref.click();
+      }
     }
   }}
 >
