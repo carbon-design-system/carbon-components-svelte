@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/svelte";
 import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
-import type { ComponentEvents } from "svelte";
+import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DataTable from "./DataTable.test.svelte";
@@ -1362,6 +1362,65 @@ describe("DataTable", () => {
       >().toEqualTypeOf<EventTarget>();
 
       expectTypeOf<ClickHeaderEvent>().toHaveProperty("sortDirection");
+    });
+  });
+
+  describe("Generics", () => {
+    it("should support generic types with ComponentProps and ComponentEvents", () => {
+      type CustomRow = {
+        id: string;
+        name: string;
+        age: number;
+        email: string;
+        status: "active" | "inactive";
+      };
+
+      type ComponentType = DataTableComponent<CustomRow>;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["rows"]>>().toEqualTypeOf<
+        readonly CustomRow[]
+      >();
+
+      type ClickRowEvent = Events["click:row"];
+      type ClickRowEventDetail = ClickRowEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      expectTypeOf<ClickRowEventDetail["row"]>().toEqualTypeOf<CustomRow>();
+
+      type ClickCellEvent = Events["click:cell"];
+      type ClickCellEventDetail = ClickCellEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      expectTypeOf<ClickCellEventDetail["cell"]>().toHaveProperty("key");
+      expectTypeOf<ClickCellEventDetail["cell"]>().toHaveProperty("value");
+
+      type ClickEvent = Events["click"];
+      type ClickEventDetail = ClickEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      expectTypeOf<ClickEventDetail["row"]>().toEqualTypeOf<
+        CustomRow | undefined
+      >();
+    });
+
+    it("should default to DataTableRow when generic is not specified", () => {
+      type ComponentType = DataTableComponent;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["rows"]>>().toHaveProperty("length");
+
+      type RowElement = NonNullable<Props["rows"]>[number];
+      expectTypeOf<RowElement>().toHaveProperty("id");
+
+      type ClickRowEvent = Events["click:row"];
+      type ClickRowEventDetail = ClickRowEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      expectTypeOf<ClickRowEventDetail>().toHaveProperty("row");
+      expectTypeOf<ClickRowEventDetail["row"]>().toHaveProperty("id");
     });
   });
 });
