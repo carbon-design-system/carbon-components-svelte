@@ -10,7 +10,7 @@ describe("Modal", () => {
   });
 
   it("renders with default props", async () => {
-    const { container } = render(ModalTest, {
+    render(ModalTest, {
       props: {
         open: true,
         modalHeading: "Test Modal",
@@ -20,7 +20,7 @@ describe("Modal", () => {
     });
 
     // Check if modal container is rendered
-    const modalContainer = container.querySelector(".bx--modal-container");
+    const modalContainer = screen.getByRole("dialog");
     expect(modalContainer).toBeInTheDocument();
 
     // Check if modal heading is rendered
@@ -242,6 +242,8 @@ describe("Modal", () => {
 
     // Verify close button is in header
     const closeButton = screen.getByLabelText("Close the modal");
+    const heading = screen.getByText("Passive Modal");
+    expect(heading.closest(".bx--modal-header")).toBeInTheDocument();
     expect(closeButton.closest(".bx--modal-header")).toBeInTheDocument();
 
     // Verify no footer is present
