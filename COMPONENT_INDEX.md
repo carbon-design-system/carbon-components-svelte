@@ -1,6 +1,6 @@
 # Component Index
 
-> 169 components exported from carbon-components-svelte@0.94.0.
+> 170 components exported from carbon-components-svelte@0.94.0.
 
 ## Components
 
@@ -45,6 +45,7 @@
 - [`FileUploaderItem`](#fileuploaderitem)
 - [`FileUploaderSkeleton`](#fileuploaderskeleton)
 - [`Filename`](#filename)
+- [`FloatingPortal`](#floatingportal)
 - [`FluidForm`](#fluidform)
 - [`Form`](#form)
 - [`FormGroup`](#formgroup)
@@ -1440,6 +1441,27 @@ None.
 | :--------- | :-------- | :----- | :---------- |
 | click      | forwarded | --     | --          |
 | keydown    | forwarded | --     | --          |
+
+## `FloatingPortal`
+
+### Props
+
+| Prop name  | Required | Kind             | Reactive | Type                                                                                                                                                                                                                        | Default value         | Description                                                        |
+| :--------- | :------- | :--------------- | :------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------------ |
+| reference  | No       | <code>let</code> | No       | <code>HTMLElement &#124; null</code>                                                                                                                                                                                        | <code>null</code>     | Reference element to position the portal relative to               |
+| placement  | No       | <code>let</code> | No       | <code>"top" &#124; "top-start" &#124; "top-end" &#124; "right" &#124; "right-start" &#124; "right-end" &#124; "bottom" &#124; "bottom-start" &#124; "bottom-end" &#124; "left" &#124; "left-start" &#124; "left-end"</code> | <code>"bottom"</code> | Placement of the floating portal relative to the reference element |
+| offset     | No       | <code>let</code> | No       | <code>number</code>                                                                                                                                                                                                         | <code>0</code>        | Offset in pixels from the reference element                        |
+| autoUpdate | No       | <code>let</code> | No       | <code>boolean</code>                                                                                                                                                                                                        | <code>true</code>     | Set to `true` to enable auto-update positioning on scroll/resize   |
+
+### Slots
+
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
+
+### Events
+
+None.
 
 ## `FluidForm`
 
