@@ -1,7 +1,6 @@
 <script context="module">
   /**
    * Computes the depth of a tree leaf node relative to <ul role="tree" />
-   * @type {(node: HTMLLIElement) => number}
    * @param {HTMLLIElement} node - The list item element representing the tree node
    * @returns {number} The depth of the node (0-based, where 0 is the root level)
    * @example
