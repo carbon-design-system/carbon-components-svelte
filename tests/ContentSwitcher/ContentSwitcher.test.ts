@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
@@ -47,12 +47,12 @@ describe("ContentSwitcher", () => {
     expect(tablists[1]).toHaveClass("bx--content-switcher--xl");
     expect(tablists[1]).not.toHaveClass("bx--content-switcher--sm");
 
-    const smallTabs = tablists[0].querySelectorAll('[role="tab"]');
+    const smallTabs = within(tablists[0]).getAllByRole("tab");
     expect(smallTabs).toHaveLength(2);
     expect(smallTabs[0]).toHaveTextContent("Small 1");
     expect(smallTabs[1]).toHaveTextContent("Small 2");
 
-    const xlTabs = tablists[1].querySelectorAll('[role="tab"]');
+    const xlTabs = within(tablists[1]).getAllByRole("tab");
     expect(xlTabs).toHaveLength(2);
     expect(xlTabs[0]).toHaveTextContent("XL 1");
     expect(xlTabs[1]).toHaveTextContent("XL 2");
@@ -166,11 +166,11 @@ describe("ContentSwitcher", () => {
   });
 
   it("should apply custom class", () => {
-    const { container } = render(ContentSwitcher, {
+    render(ContentSwitcher, {
       props: { customClass: "custom-switcher" },
     });
 
-    const switcher = container.querySelector(".bx--content-switcher");
+    const switcher = screen.getByRole("tablist");
     expect(switcher).toHaveClass("custom-switcher");
   });
 
@@ -186,10 +186,9 @@ describe("ContentSwitcher", () => {
 
   it("should handle mouse events", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(ContentSwitcher);
+    render(ContentSwitcher);
 
-    const switcher = container.querySelector(".bx--content-switcher");
-    assert(switcher);
+    const switcher = screen.getByRole("tablist");
     await user.hover(switcher);
 
     expect(consoleLog).toHaveBeenCalledWith("mouseenter");
@@ -201,10 +200,9 @@ describe("ContentSwitcher", () => {
 
   it("should handle click events on container", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(ContentSwitcher);
+    render(ContentSwitcher);
 
-    const switcher = container.querySelector(".bx--content-switcher");
-    assert(switcher);
+    const switcher = screen.getByRole("tablist");
     await user.click(switcher);
 
     expect(consoleLog).toHaveBeenCalledWith("click");
