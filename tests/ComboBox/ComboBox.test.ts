@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
-import type { ComponentProps } from "svelte";
+import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
@@ -903,6 +904,60 @@ describe("ComboBox", () => {
         price: 999,
         category: "Electronics",
       });
+    });
+
+    it("should support generic types with ComponentProps and ComponentEvents", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+        category: string;
+        inStock: boolean;
+      };
+
+      type ComponentType = ComboBoxComponent<Product>;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      type ItemsProp = NonNullable<Props["items"]>;
+      expectTypeOf<ItemsProp>().toEqualTypeOf<readonly Product[]>();
+
+      const itemToString = (item: Product) => item.text;
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
+
+      const shouldFilterItem = (item: Product, value: string) =>
+        item.category.includes(value);
+      expectTypeOf(shouldFilterItem).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(shouldFilterItem).parameter(1).toEqualTypeOf<string>();
+      expectTypeOf(shouldFilterItem).returns.toEqualTypeOf<boolean>();
+
+      type SelectEvent = Events["select"];
+      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      type SelectedItem = SelectEventDetail["selectedItem"];
+      expectTypeOf<SelectedItem>().toEqualTypeOf<Product>();
+    });
+
+    it("should default to ComboBoxItem when generic is not specified", () => {
+      type ComponentType = ComboBoxComponent;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["items"]>>().toHaveProperty("length");
+
+      type ItemElement = NonNullable<Props["items"]>[number];
+      expectTypeOf<ItemElement>().toHaveProperty("id");
+      expectTypeOf<ItemElement>().toHaveProperty("text");
+
+      type SelectEvent = Events["select"];
+      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      type SelectedItem = SelectEventDetail["selectedItem"];
+      expectTypeOf<SelectedItem>().toHaveProperty("id");
+      expectTypeOf<SelectedItem>().toHaveProperty("text");
     });
   });
 });
