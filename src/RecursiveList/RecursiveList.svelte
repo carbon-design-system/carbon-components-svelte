@@ -1,15 +1,18 @@
 <script>
   /**
-   * @typedef RecursiveListNode
+   * @generics {Node extends RecursiveListNode = RecursiveListNode} Node
+   * @template {RecursiveListNode} Node
+   * @typedef {object} RecursiveListNode
    * @property {string} [text] - Node text content
    * @property {string} [href] - Node link URL
    * @property {string} [html] - Node HTML content
+   * @property {RecursiveListNode[]} [nodes] - Child nodes
    * @restProps {ul | ol}
    */
 
   /**
    * Specify the nodes to render
-   * @type {Array<RecursiveListNode & { nodes?: RecursiveListNode[]; }>}
+   * @type {ReadonlyArray<Node & { nodes?: Node[] }>}
    */
   export let nodes = [];
 

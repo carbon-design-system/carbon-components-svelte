@@ -12537,7 +12537,7 @@
           "name": "nodes",
           "kind": "let",
           "description": "Specify the nodes to render",
-          "type": "Array<RecursiveListNode & { nodes?: RecursiveListNode[]; }>",
+          "type": "ReadonlyArray<Node & { nodes?: Node[] }>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -12563,12 +12563,15 @@
       "events": [],
       "typedefs": [
         {
-          "type": "{ /** Node text content */ text?: string; /** Node link URL */ href?: string; /** Node HTML content */ html?: string; }",
+          "type": "{ /** Node text content */ text?: string; /** Node link URL */ href?: string; /** Node HTML content */ html?: string; /** Child nodes */ nodes?: RecursiveListNode[]; }",
           "name": "RecursiveListNode",
-          "ts": "type RecursiveListNode = {\n  /** Node text content */ text?: string;\n  /** Node link URL */ href?: string;\n  /** Node HTML content */ html?: string;\n};\n"
+          "ts": "type RecursiveListNode = {\n  /** Node text content */ text?: string;\n  /** Node link URL */ href?: string;\n  /** Node HTML content */ html?: string;\n  /** Child nodes */ nodes?: RecursiveListNode[];\n};\n"
         }
       ],
-      "generics": null,
+      "generics": [
+        "Node",
+        "Node extends RecursiveListNode = RecursiveListNode"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "ul | ol"
@@ -19342,9 +19345,9 @@
           "ts": "type TreeNodeId = string | number;\n"
         },
         {
-          "type": "{ id: TreeNodeId; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: Node[]; }",
+          "type": "{ id: TreeNodeId; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: TreeNode[]; }",
           "name": "TreeNode",
-          "ts": "type TreeNode = {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: Node[];\n};\n"
+          "ts": "type TreeNode = {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: TreeNode[];\n};\n"
         },
         {
           "type": "{ /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean; /** Whether to select the node (default: true) */ select?: boolean; /** Whether to focus the node (default: true) */ focus?: boolean; }",
@@ -19385,31 +19388,31 @@
             },
             {
               "name": "clickNode",
-              "type": "(node: Node) => void",
+              "type": "(node: TreeNode) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "selectNode",
-              "type": "(node: Node) => void",
+              "type": "(node: TreeNode) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "expandNode",
-              "type": "(node: Node, expanded: boolean) => void",
+              "type": "(node: TreeNode, expanded: boolean) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "focusNode",
-              "type": "(node: Node) => void",
+              "type": "(node: TreeNode) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "toggleNode",
-              "type": "(node: Node) => void",
+              "type": "(node: TreeNode) => void",
               "description": "",
               "optional": false
             }

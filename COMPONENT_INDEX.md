@@ -3073,15 +3073,16 @@ export type RecursiveListNode = {
   /** Node text content */ text?: string;
   /** Node link URL */ href?: string;
   /** Node HTML content */ html?: string;
+  /** Child nodes */ nodes?: RecursiveListNode[];
 };
 ```
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                                                                     | Default value            | Description                        |
-| :-------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------ | ------------------------ | ---------------------------------- |
-| nodes     | No       | <code>let</code> | No       | <code>Array<RecursiveListNode & { nodes?: RecursiveListNode[]; }></code> | <code>[]</code>          | Specify the nodes to render        |
-| type      | No       | <code>let</code> | No       | <code>"unordered" &#124; "ordered" &#124; "ordered-native"</code>        | <code>"unordered"</code> | Specify the type of list to render |
+| Prop name | Required | Kind             | Reactive | Type                                                              | Default value            | Description                        |
+| :-------- | :------- | :--------------- | :------- | ----------------------------------------------------------------- | ------------------------ | ---------------------------------- |
+| nodes     | No       | <code>let</code> | No       | <code>ReadonlyArray<Node & { nodes?: Node[] }></code>             | <code>[]</code>          | Specify the nodes to render        |
+| type      | No       | <code>let</code> | No       | <code>"unordered" &#124; "ordered" &#124; "ordered-native"</code> | <code>"unordered"</code> | Specify the type of list to render |
 
 ### Slots
 
@@ -4770,7 +4771,7 @@ export type TreeNode = {
   text: any;
   icon?: any;
   /** Whether the node is disabled */ disabled?: boolean;
-  nodes?: Node[];
+  nodes?: TreeNode[];
 };
 
 export type ShowNodeOptions = {
