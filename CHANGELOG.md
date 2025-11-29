@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.94.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.93.0...v0.94.0) (2025-11-29)
+
+### ⚠ BREAKING CHANGES
+
+- **progress-step:** remove one-update delay for `complete` prop (#2368)
+
+### Features
+
+- **header-search:** support TypeScript generics ([5d0468a](https://github.com/carbon-design-system/carbon-components-svelte/commit/5d0468aed5e62a3275ecefe99edf859ac3f753ef))
+- **notification:** add `NotificationQueue` component ([9560791](https://github.com/carbon-design-system/carbon-components-svelte/commit/956079131853ceae6852fb1ad7b26e776a354dbd)), closes [#2283](https://github.com/carbon-design-system/carbon-components-svelte/issues/2283)
+- **recursive-list:** support TypeScript generics ([b200828](https://github.com/carbon-design-system/carbon-components-svelte/commit/b2008288364a16c8e5690b1c4ce70405cc0c468d))
+- **selectable-tile:** add `SelectableTileGroup` component ([6ba0fdf](https://github.com/carbon-design-system/carbon-components-svelte/commit/6ba0fdf97fcc2e1283b32c0c8f04bea45cd3198b))
+- **select:** support TypeScript generics ([d57b375](https://github.com/carbon-design-system/carbon-components-svelte/commit/d57b3754de9721a38cbb09f703e76a9327c678d3))
+- **theme:** export `themes` constant ([776e471](https://github.com/carbon-design-system/carbon-components-svelte/commit/776e4715e858e88fe57afd4c9d9c7962f3167b38)), closes [#939](https://github.com/carbon-design-system/carbon-components-svelte/issues/939)
+- **tile-group:** make `selectedValue` and `selected` generic ([#2374](https://github.com/carbon-design-system/carbon-components-svelte/issues/2374)) ([209cc02](https://github.com/carbon-design-system/carbon-components-svelte/commit/209cc02fb53e744f7dd2b3142249d5b9425bdf29))
+- **tree-view:** support TypeScript generics ([9efbbda](https://github.com/carbon-design-system/carbon-components-svelte/commit/9efbbda3c3e4faaf4ebec839dfae42e17aa85233))
+
+### Bug Fixes
+
+- **inline-notification:** conditionally render title/subtitle ([751190c](https://github.com/carbon-design-system/carbon-components-svelte/commit/751190cee9d2d3b5ed8d564551b5c67d37182e25)), closes [#2379](https://github.com/carbon-design-system/carbon-components-svelte/issues/2379)
+- **toast-notification:** conditionally render subtitle/caption ([f4d2091](https://github.com/carbon-design-system/carbon-components-svelte/commit/f4d209121496dfad733d658e9615cadafc96acea))
+- **modal:** improve focus trap for `Dropdown` and other components ([#2369](https://github.com/carbon-design-system/carbon-components-svelte/issues/2369)) ([d11e3ac](https://github.com/carbon-design-system/carbon-components-svelte/commit/d11e3ac9ad9da9875bed68b716cc82f231a6f959)), closes [#1392](https://github.com/carbon-design-system/carbon-components-svelte/issues/1392)
+- **tabs:** avoid infinite update loop in Svelte 5 ([#2367](https://github.com/carbon-design-system/carbon-components-svelte/issues/2367)) ([413aab5](https://github.com/carbon-design-system/carbon-components-svelte/commit/413aab54fc66fda1d5282a0d0bcc60af2dc8c89b)), closes [#2366](https://github.com/carbon-design-system/carbon-components-svelte/issues/2366)
+- **tile-group:** improve context types for `SelectableTileGroup` and `TileGroup` ([#2375](https://github.com/carbon-design-system/carbon-components-svelte/issues/2375)) ([ff144d2](https://github.com/carbon-design-system/carbon-components-svelte/commit/ff144d272ddb9fb1b9d4f75c3098316afd0b50ec))
+
 ## [0.93.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.92.0...v0.93.0) (2025-11-22)
 
 ### ⚠ BREAKING CHANGES
