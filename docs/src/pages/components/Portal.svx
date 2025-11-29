@@ -28,3 +28,15 @@ Use the `tag` prop to specify a custom HTML element. By default, Portal uses a `
 Wrap `Modal` in a `Portal` to escape parent containers with `overflow: hidden` or z-index stacking contexts. This ensures the modal appears above all content and isn't clipped by parent boundaries.
 
 <FileSource src="/framed/Portal/ModalPortal" />
+
+## Floating portal
+
+The `FloatingPortal` component automatically positions content relative to a reference element using [Floating UI](https://floating-ui.com/). This is useful for dropdowns, popovers, and tooltips.
+
+<FileSource src="/framed/Portal/FloatingPortal" />
+
+## Floating portal placement
+
+Control the placement of the floating portal using the `placement` prop.
+
+<FileSource src="/framed/Portal/FloatingPortalPlacement" />
