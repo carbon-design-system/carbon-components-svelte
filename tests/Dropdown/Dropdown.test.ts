@@ -1,4 +1,7 @@
 import { render, screen, within } from "@testing-library/svelte";
+import type DropdownComponent from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
@@ -462,6 +465,54 @@ describe("Dropdown", () => {
         price: 999,
         category: "Electronics",
       });
+    });
+
+    it("should support generic types with ComponentProps and ComponentEvents", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+        category: string;
+        inStock: boolean;
+      };
+
+      type ComponentType = DropdownComponent<Product>;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["items"]>>().toEqualTypeOf<
+        readonly Product[]
+      >();
+
+      const itemToString = (item: Product) => item.text;
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
+
+      type SelectEvent = Events["select"];
+      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      expectTypeOf<
+        SelectEventDetail["selectedItem"]
+      >().toEqualTypeOf<Product>();
+    });
+
+    it("should default to DropdownItem when generic is not specified", () => {
+      type ComponentType = DropdownComponent;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["items"]>>().toEqualTypeOf<
+        readonly DropdownItem[]
+      >();
+
+      type SelectEvent = Events["select"];
+      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      expectTypeOf<
+        SelectEventDetail["selectedItem"]
+      >().toEqualTypeOf<DropdownItem>();
     });
   });
 
