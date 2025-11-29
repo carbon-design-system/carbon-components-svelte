@@ -245,8 +245,7 @@ describe("ComboBox", () => {
     render(ComboBoxCustom);
 
     await user.click(getInput());
-    const disabledOption = screen.getByText(/Fax/).closest('[role="option"]');
-    assert(disabledOption);
+    const disabledOption = screen.getByRole("option", { name: /Fax/ });
     expect(disabledOption).toHaveAttribute("disabled", "true");
     expect(disabledOption).toHaveAttribute("aria-disabled", "true");
 
