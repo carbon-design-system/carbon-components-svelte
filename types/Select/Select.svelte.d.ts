@@ -1,6 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
+export type SelectValue = string | number;
 export type SelectContext = {
   selectedValue: import("svelte/store").Writable<string | number | undefined>;
   /** Use the first `SelectItem` value as the
@@ -10,12 +11,12 @@ default value if `selected` is `undefined`. */
 
 type $RestProps = SvelteHTMLElements["select"];
 
-type $Props = {
+type $Props<Value> = {
   /**
    * Specify the selected item value
    * @default undefined
    */
-  selected?: string | number;
+  selected?: Value | undefined;
 
   /**
    * Set the size of the select input
@@ -116,12 +117,15 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type SelectProps = Omit<$RestProps, keyof $Props> & $Props;
+export type SelectProps<Value> = Omit<$RestProps, keyof $Props<Value>> &
+  $Props<Value>;
 
-export default class Select extends SvelteComponentTyped<
-  SelectProps,
+export default class Select<
+  Value extends string | number = string | number,
+> extends SvelteComponentTyped<
+  SelectProps<Value>,
   {
-    /** The selected value. */ update: CustomEvent<string | number>;
+    /** The selected value. */ update: CustomEvent<Value>;
     change: WindowEventMap["change"];
     input: WindowEventMap["input"];
     focus: WindowEventMap["focus"];

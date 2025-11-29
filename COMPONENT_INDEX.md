@@ -3187,12 +3187,18 @@ None.
 
 ## `Select`
 
+### Types
+
+```ts
+export type SelectValue = string | number;
+```
+
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                       | Default value                                    | Description                                     |
 | :---------- | :------- | :--------------- | :------- | ------------------------------------------ | ------------------------------------------------ | ----------------------------------------------- |
 | ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLSelectElement</code> | <code>null</code>                                | Obtain a reference to the select HTML element   |
-| selected    | No       | <code>let</code> | Yes      | <code>string &#124; number</code>          | <code>undefined</code>                           | Specify the selected item value                 |
+| selected    | No       | <code>let</code> | Yes      | <code>Value &#124; undefined</code>        | <code>undefined</code>                           | Specify the selected item value                 |
 | size        | No       | <code>let</code> | No       | <code>"sm" &#124; "xl"</code>              | <code>undefined</code>                           | Set the size of the select input                |
 | inline      | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to use the inline variant         |
 | light       | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>                               | Set to `true` to enable the light variant       |
@@ -3218,13 +3224,13 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                            | Description         |
-| :--------- | :--------- | :-------------------------------- | :------------------ |
-| update     | dispatched | <code>string &#124; number</code> | The selected value. |
-| change     | forwarded  | --                                | --                  |
-| input      | forwarded  | --                                | --                  |
-| focus      | forwarded  | --                                | --                  |
-| blur       | forwarded  | --                                | --                  |
+| Event name | Type       | Detail             | Description         |
+| :--------- | :--------- | :----------------- | :------------------ |
+| update     | dispatched | <code>Value</code> | The selected value. |
+| change     | forwarded  | --                 | --                  |
+| input      | forwarded  | --                 | --                  |
+| focus      | forwarded  | --                 | --                  |
+| blur       | forwarded  | --                 | --                  |
 
 ## `SelectItem`
 
