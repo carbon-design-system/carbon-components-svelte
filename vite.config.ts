@@ -47,9 +47,6 @@ function generateAliasesFromExports() {
 export default defineConfig({
   root: "./tests",
   plugins: [svelte({ preprocess: [vitePreprocess()] })],
-  optimizeDeps: {
-    exclude: ["carbon-components-svelte", "carbon-icons-svelte"],
-  },
   resolve: {
     conditions: ["browser"],
     alias: generateAliasesFromExports(),
