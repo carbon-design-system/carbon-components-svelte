@@ -111,15 +111,21 @@
   >
     <NotificationIcon {kind} iconDescription={statusIconDescription} />
     <div class:bx--toast-notification__details={true}>
-      <h3 class:bx--toast-notification__title={true}>
-        <slot name="title">{title}</slot>
-      </h3>
-      <div class:bx--toast-notification__subtitle={true}>
-        <slot name="subtitle">{subtitle}</slot>
-      </div>
-      <div class:bx--toast-notification__caption={true}>
-        <slot name="caption">{caption}</slot>
-      </div>
+      {#if title || $$slots.title}
+        <h3 class:bx--toast-notification__title={true}>
+          <slot name="title">{title}</slot>
+        </h3>
+      {/if}
+      {#if subtitle || $$slots.subtitle}
+        <div class:bx--toast-notification__subtitle={true}>
+          <slot name="subtitle">{subtitle}</slot>
+        </div>
+      {/if}
+      {#if caption || $$slots.caption}
+        <div class:bx--toast-notification__caption={true}>
+          <slot name="caption">{caption}</slot>
+        </div>
+      {/if}
       <slot />
     </div>
     {#if !hideCloseButton}
