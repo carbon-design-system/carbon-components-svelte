@@ -24,13 +24,13 @@ describe("TextInput", () => {
   it("should handle different sizes", () => {
     const sizes = ["sm", "xl"] as const;
     for (const size of sizes) {
-      const { container } = render(TextInput, {
+      const { unmount } = render(TextInput, {
         props: { size },
       });
 
-      const input = container.querySelector("input");
+      const input = screen.getByLabelText("User name");
       expect(input).toHaveClass(`bx--text-input--${size}`);
-      container.remove();
+      unmount();
     }
   });
 
@@ -244,8 +244,8 @@ describe("TextInput", () => {
   });
 
   it("should have paste event listener", () => {
-    const { container } = render(TextInput);
-    const input = container.querySelector("input");
+    render(TextInput);
+    const input = screen.getByLabelText("User name");
 
     expect(input).toBeInTheDocument();
   });
@@ -259,23 +259,23 @@ describe("TextInput", () => {
   });
 
   it("should render fluid mode with invalid state", () => {
-    const { container } = render(TextInputFluid, {
+    render(TextInputFluid, {
       props: { invalid: true, invalidText: "Invalid input" },
     });
 
-    const requirement = container.querySelector(".bx--form-requirement");
+    const requirement = screen.getByText("Invalid input");
     expect(requirement).toBeInTheDocument();
-    expect(requirement).toHaveTextContent("Invalid input");
+    expect(requirement).toHaveClass("bx--form-requirement");
   });
 
   it("should render fluid mode with warning state", () => {
-    const { container } = render(TextInputFluid, {
+    render(TextInputFluid, {
       props: { warn: true, warnText: "Warning message" },
     });
 
-    const requirement = container.querySelector(".bx--form-requirement");
+    const requirement = screen.getByText("Warning message");
     expect(requirement).toBeInTheDocument();
-    expect(requirement).toHaveTextContent("Warning message");
+    expect(requirement).toHaveClass("bx--form-requirement");
   });
 
   it("should not render helper text in fluid mode when not inline", () => {
@@ -345,38 +345,46 @@ describe("TextInput", () => {
   });
 
   it("should render readonly icon when readonly", () => {
-    const { container } = render(TextInput, {
+    render(TextInput, {
       props: { readonly: true },
     });
 
+    const input = screen.getByLabelText("User name");
+    const fieldWrapper = input.closest(".bx--text-input__field-wrapper");
+    // Icon is decorative (aria-hidden) so we check by class within the wrapper
     expect(
-      container.querySelector(".bx--text-input__readonly-icon"),
+      fieldWrapper?.querySelector(".bx--text-input__readonly-icon"),
     ).toBeInTheDocument();
   });
 
   it("should render invalid icon when invalid", () => {
-    const { container } = render(TextInput, {
+    render(TextInput, {
       props: { invalid: true, invalidText: "Invalid" },
     });
 
+    const input = screen.getByLabelText("User name");
+    const fieldWrapper = input.closest(".bx--text-input__field-wrapper");
+    // Icon is decorative (aria-hidden) so we check by class within the wrapper
     expect(
-      container.querySelector(".bx--text-input__invalid-icon"),
+      fieldWrapper?.querySelector(".bx--text-input__invalid-icon"),
     ).toBeInTheDocument();
   });
 
   it("should render warning icon when warn and not invalid", () => {
-    const { container } = render(TextInput, {
+    render(TextInput, {
       props: { warn: true, warnText: "Warning" },
     });
 
-    const icon = container.querySelector(
-      ".bx--text-input__invalid-icon--warning",
-    );
-    expect(icon).toBeInTheDocument();
+    const input = screen.getByLabelText("User name");
+    const fieldWrapper = input.closest(".bx--text-input__field-wrapper");
+    // Icon is decorative (aria-hidden) so we check by class within the wrapper
+    expect(
+      fieldWrapper?.querySelector(".bx--text-input__invalid-icon--warning"),
+    ).toBeInTheDocument();
   });
 
   it("should not render warning icon when both invalid and warn", () => {
-    const { container } = render(TextInput, {
+    render(TextInput, {
       props: {
         invalid: true,
         invalidText: "Invalid",
@@ -385,10 +393,12 @@ describe("TextInput", () => {
       },
     });
 
-    const warningIcon = container.querySelector(
-      ".bx--text-input__invalid-icon--warning",
-    );
-    expect(warningIcon).not.toBeInTheDocument();
+    const input = screen.getByLabelText("User name");
+    const fieldWrapper = input.closest(".bx--text-input__field-wrapper");
+    // When invalid, only invalid icon should be present, not warning icon
+    expect(
+      fieldWrapper?.querySelector(".bx--text-input__invalid-icon--warning"),
+    ).not.toBeInTheDocument();
   });
 
   it("should apply inline-sm class when inline and size is sm", () => {
@@ -430,11 +440,11 @@ describe("TextInput", () => {
   });
 
   it("should bind ref to input element", () => {
-    const { container } = render(TextInput, {
+    render(TextInput, {
       props: { ref: null },
     });
 
-    const input = container.querySelector("input");
+    const input = screen.getByLabelText("User name");
     expect(input).toBeInTheDocument();
   });
 
@@ -452,10 +462,10 @@ describe("TextInput", () => {
   });
 
   it("should support restProps on input element", () => {
-    const { container } = render(TextInput);
+    render(TextInput);
 
     // The input element should exist and be able to receive additional props via restProps
-    const input = container.querySelector("input");
+    const input = screen.getByLabelText("User name");
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute("type", "text");
   });
