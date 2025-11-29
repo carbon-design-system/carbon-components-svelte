@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
+import type MultiSelectComponent from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
-import type { ComponentProps } from "svelte";
+import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
@@ -881,6 +882,64 @@ describe("MultiSelect", () => {
           checked: true,
         },
       ]);
+    });
+
+    it("should support generic types with ComponentProps and ComponentEvents", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+        category: string;
+        inStock: boolean;
+      };
+
+      type ComponentType = MultiSelectComponent<Product>;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["items"]>>().toEqualTypeOf<
+        readonly Product[]
+      >();
+
+      const itemToString = (item: Product) => item.text;
+      expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
+      expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
+
+      const itemToInput = (item: Product) => ({
+        name: item.id,
+        value: item.id,
+      });
+      expectTypeOf(itemToInput).parameter(0).toEqualTypeOf<Product>();
+
+      type SelectEvent = Events["select"];
+      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      expectTypeOf<SelectEventDetail["selected"][0]>().toEqualTypeOf<Product>();
+      expectTypeOf<
+        SelectEventDetail["unselected"][0]
+      >().toEqualTypeOf<Product>();
+    });
+
+    it("should default to MultiSelectItem when generic is not specified", () => {
+      type ComponentType = MultiSelectComponent;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["items"]>>().toEqualTypeOf<
+        readonly MultiSelectItem[]
+      >();
+
+      type SelectEvent = Events["select"];
+      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+      expectTypeOf<
+        SelectEventDetail["selected"][0]
+      >().toEqualTypeOf<MultiSelectItem>();
+      expectTypeOf<
+        SelectEventDetail["unselected"][0]
+      >().toEqualTypeOf<MultiSelectItem>();
     });
   });
 });
