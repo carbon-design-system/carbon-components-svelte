@@ -2,7 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { svelte, vitePreprocess } from "@sveltejs/vite-plugin-svelte";
-import { optimizeImports } from "carbon-preprocess-svelte";
 import { defineConfig } from "vitest/config";
 import pkg from "./package.json";
 
@@ -47,7 +46,7 @@ function generateAliasesFromExports() {
 
 export default defineConfig({
   root: "./tests",
-  plugins: [svelte({ preprocess: [vitePreprocess(), optimizeImports()] })],
+  plugins: [svelte({ preprocess: [vitePreprocess()] })],
   optimizeDeps: {
     exclude: ["carbon-components-svelte", "carbon-icons-svelte"],
   },
