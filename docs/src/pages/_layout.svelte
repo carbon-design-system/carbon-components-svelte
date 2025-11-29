@@ -153,6 +153,7 @@
         bind:value
         bind:active
         placeholder="Search"
+        spellcheck="false"
         {results}
         on:select={(e) => {
           $goto(e.detail.selectedResult.href);
