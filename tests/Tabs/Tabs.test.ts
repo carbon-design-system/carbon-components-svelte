@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import Tab from "./Tab.test.svelte";
 import Tabs from "./Tabs.test.svelte";
@@ -75,49 +75,53 @@ describe("Tabs", () => {
   });
 
   it("should render container type tabs", () => {
-    const { container } = render(Tabs, {
+    render(Tabs, {
       props: { type: "container" },
     });
 
-    expect(container.querySelector(".bx--tabs--container")).not.toBeNull();
+    const tabsContainer = screen.getByRole("navigation");
+    expect(tabsContainer).toHaveClass("bx--tabs--container");
   });
 
   it("should support auto width", () => {
-    const { container } = render(Tabs, {
+    render(Tabs, {
       props: { autoWidth: true },
     });
 
-    const tabs = container.querySelectorAll(".bx--tabs__nav-item");
+    const tabs = screen.getAllByRole("tab");
     for (const tab of tabs) {
-      expect(tab).not.toHaveStyle({ width: "10rem" });
+      const navItem = tab.closest(".bx--tabs__nav-item");
+      expect(navItem).not.toHaveStyle({ width: "10rem" });
     }
   });
 
   it("should show dropdown on trigger click", async () => {
-    const { container } = render(Tabs);
+    render(Tabs);
 
-    const trigger = container.querySelector(".bx--tabs-trigger");
-    assert(trigger);
+    const trigger = screen.getByRole("listbox");
     await user.click(trigger);
-    expect(container.querySelector(".bx--tabs__nav--hidden")).toBeNull();
+    const tablist = screen.getByRole("tablist");
+    expect(tablist).not.toHaveClass("bx--tabs__nav--hidden");
   });
 
   it("should update trigger text when tab changes", async () => {
-    const { container } = render(Tabs);
+    render(Tabs);
 
     const tab3 = screen.getByText("Tab 3");
     await user.click(tab3);
 
-    const triggerText = container.querySelector(".bx--tabs-trigger-text");
+    const trigger = screen.getByRole("listbox");
+    const triggerText = within(trigger).getByRole("link");
     expect(triggerText).toHaveTextContent("Tab 3");
   });
 
   it("should support custom trigger href", () => {
-    const { container } = render(Tabs, {
+    render(Tabs, {
       props: { triggerHref: "#custom" },
     });
 
-    const triggerLink = container.querySelector(".bx--tabs-trigger-text");
+    const trigger = screen.getByRole("listbox");
+    const triggerLink = within(trigger).getByRole("link");
     expect(triggerLink).toHaveAttribute("href", "#custom");
   });
 
@@ -130,31 +134,31 @@ describe("Tabs", () => {
   });
 
   it("should apply custom class", () => {
-    const { container } = render(Tabs, {
+    render(Tabs, {
       props: { customClass: "custom-tabs" },
     });
 
-    const tabs = container.querySelector(".bx--tabs");
-    expect(tabs).toHaveClass("custom-tabs");
+    const tabsContainer = screen.getByRole("navigation");
+    expect(tabsContainer).toHaveClass("custom-tabs");
   });
 
   it("should apply custom aria-label", () => {
-    const { container } = render(Tabs, {
+    render(Tabs, {
       props: { ariaLabel: "Custom label" },
     });
 
-    const trigger = container.querySelector(".bx--tabs-trigger");
+    const trigger = screen.getByRole("listbox", { name: "Custom label" });
     expect(trigger).toHaveAttribute("aria-label", "Custom label");
   });
 
   it("should handle keypress on dropdown trigger", async () => {
-    const { container } = render(Tabs);
+    render(Tabs);
 
-    const trigger = container.querySelector(".bx--tabs-trigger");
-    assert(trigger instanceof HTMLElement);
+    const trigger = screen.getByRole("listbox");
     trigger.focus();
     await user.keyboard("{Enter}");
-    expect(container.querySelector(".bx--tabs__nav--hidden")).toBeNull();
+    const tablist = screen.getByRole("tablist");
+    expect(tablist).not.toHaveClass("bx--tabs__nav--hidden");
   });
 
   it("should maintain correct indices when tabs are dynamically removed and re-added", async () => {
