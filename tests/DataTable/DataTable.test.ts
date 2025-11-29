@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
 import type { ComponentEvents } from "svelte";
 import { tick } from "svelte";
@@ -46,19 +46,21 @@ describe("DataTable", () => {
 
   // Basic rendering and structure tests
   it("renders with default props", async () => {
-    const { container } = render(DataTable);
+    render(DataTable);
     // Check if table headers are rendered
     for (const header of headers) {
       expect(screen.getByText(header.value)).toBeInTheDocument();
     }
 
     // Check if table has correct structure
-    const table = container.querySelector("table");
+    const table = screen.getByRole("table");
     expect(table).toBeInTheDocument();
     expect(table).toHaveClass("bx--data-table");
 
     // Check if table has correct number of rows
-    const tableRows = container.querySelectorAll("tbody tr");
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
     expect(tableRows).toHaveLength(3);
 
     // Check if all rows contain the expected data
@@ -67,7 +69,7 @@ describe("DataTable", () => {
       expect(rowElement).toBeInTheDocument();
       assert(rowElement);
 
-      const cells = rowElement.querySelectorAll("td");
+      const cells = within(rowElement).getAllByRole("cell");
       expect(cells.length).toBe(4);
 
       const protocolCell = Array.from(cells).find(
@@ -104,14 +106,15 @@ describe("DataTable", () => {
   });
 
   it("handles empty table state", () => {
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         headers,
         rows: [],
       },
     });
 
-    const tableBody = container.querySelector("tbody");
+    const table = screen.getByRole("table");
+    const tableBody = table.querySelector("tbody");
     assert(tableBody);
     expect(tableBody.children.length).toBe(0);
   });
@@ -119,14 +122,14 @@ describe("DataTable", () => {
   it("handles table with only one column", () => {
     const singleColumnHeaders = [{ key: "name", value: "Name" }];
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         headers: singleColumnHeaders,
         rows: rows.map(({ id, name }) => ({ id, name })),
       },
     });
 
-    const columns = container.querySelectorAll("th");
+    const columns = screen.getAllByRole("columnheader");
     expect(columns.length).toBe(1);
     expect(columns[0]).toHaveTextContent("Name");
   });
@@ -142,21 +145,23 @@ describe("DataTable", () => {
       },
     ];
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         headers,
         rows: longContentRows,
       },
     });
 
-    const longCell = container.querySelector("td");
-    assert(longCell);
+    const table = screen.getByRole("table");
+    const longCell = within(table).getByRole("cell", {
+      name: /very long name/i,
+    });
     expect(longCell).toBeInTheDocument();
   });
 
   // Sorting tests
   it("handles sorting functionality", async () => {
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         sortable: true,
         headers,
@@ -165,7 +170,7 @@ describe("DataTable", () => {
     });
 
     // Get all header cells
-    const headerCells = container.querySelectorAll("th");
+    const headerCells = screen.getAllByRole("columnheader");
     expect(headerCells.length).toBe(4);
 
     // Test sorting by name (ascending)
@@ -173,14 +178,25 @@ describe("DataTable", () => {
     await user.click(nameHeader);
 
     // Verify rows are sorted by name ascending
-    const rowsAfterNameSort = container.querySelectorAll("tbody tr");
-    const firstRowName = rowsAfterNameSort[0].querySelector("td");
+    const rowsAfterNameSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const firstRowName = within(rowsAfterNameSort[0]).getByRole("cell", {
+      name: "Load Balancer 1",
+    });
     expect(firstRowName).toHaveTextContent("Load Balancer 1");
 
     // Test sorting by name (descending)
     await user.click(nameHeader);
-    const rowsAfterNameDescSort = container.querySelectorAll("tbody tr");
-    const firstRowNameDesc = rowsAfterNameDescSort[0].querySelector("td");
+    const rowsAfterNameDescSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const firstRowNameDesc = within(rowsAfterNameDescSort[0]).getByRole(
+      "cell",
+      {
+        name: "Load Balancer 3",
+      },
+    );
     expect(firstRowNameDesc).toHaveTextContent("Load Balancer 3");
 
     // Test sorting by port (ascending)
@@ -188,14 +204,20 @@ describe("DataTable", () => {
     await user.click(portHeader);
 
     // Verify rows are sorted by port ascending
-    const rowsAfterPortSort = container.querySelectorAll("tbody tr");
-    const firstRowPort = rowsAfterPortSort[0].querySelectorAll("td")[2];
+    const rowsAfterPortSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const firstRowPort = within(rowsAfterPortSort[0]).getAllByRole("cell")[2];
     expect(firstRowPort).toHaveTextContent("80");
 
     // Test sorting by port (descending)
     await user.click(portHeader);
-    const rowsAfterPortDescSort = container.querySelectorAll("tbody tr");
-    const firstRowPortDesc = rowsAfterPortDescSort[0].querySelectorAll("td")[2];
+    const rowsAfterPortDescSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const firstRowPortDesc = within(rowsAfterPortDescSort[0]).getAllByRole(
+      "cell",
+    )[2];
     expect(firstRowPortDesc).toHaveTextContent("3000");
   });
 
@@ -238,7 +260,7 @@ describe("DataTable", () => {
       },
     ];
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         sortable: true,
         headers: customHeaders,
@@ -247,7 +269,13 @@ describe("DataTable", () => {
     });
 
     // Verify custom display formatting
-    const costCells = container.querySelectorAll("td:nth-child(2)");
+    const _table = screen.getByRole("table");
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const costCells = tableRows.map(
+      (row) => within(row).getAllByRole("cell")[1],
+    );
     expect(costCells[0]).toHaveTextContent("100 €");
     expect(costCells[1]).toHaveTextContent("200 €");
 
@@ -256,13 +284,19 @@ describe("DataTable", () => {
     await user.click(dateHeader);
 
     // Verify rows are sorted by date ascending
-    const rowsAfterDateSort = container.querySelectorAll("tbody tr");
-    expect(rowsAfterDateSort[0].querySelector("td")).toHaveTextContent(
-      "Load Balancer 2",
-    );
-    expect(rowsAfterDateSort[2].querySelector("td")).toHaveTextContent(
-      "Load Balancer 3",
-    );
+    const rowsAfterDateSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(
+      within(rowsAfterDateSort[0]).getByRole("cell", {
+        name: "Load Balancer 2",
+      }),
+    ).toHaveTextContent("Load Balancer 2");
+    expect(
+      within(rowsAfterDateSort[2]).getByRole("cell", {
+        name: "Load Balancer 3",
+      }),
+    ).toHaveTextContent("Load Balancer 3");
   });
 
   it("handles sorting with nested object values", async () => {
@@ -290,7 +324,7 @@ describe("DataTable", () => {
       },
     ];
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         sortable: true,
         headers: nestedHeaders,
@@ -303,16 +337,18 @@ describe("DataTable", () => {
     await user.click(portHeader);
 
     // Verify rows are sorted by port ascending
-    const rowsAfterPortSort = container.querySelectorAll("tbody tr");
-    expect(rowsAfterPortSort[0].querySelectorAll("td")[2]).toHaveTextContent(
-      "80",
-    );
-    expect(rowsAfterPortSort[1].querySelectorAll("td")[2]).toHaveTextContent(
-      "443",
-    );
-    expect(rowsAfterPortSort[2].querySelectorAll("td")[2]).toHaveTextContent(
-      "3000",
-    );
+    const rowsAfterPortSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(
+      within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
+    ).toHaveTextContent("80");
+    expect(
+      within(rowsAfterPortSort[1]).getAllByRole("cell")[2],
+    ).toHaveTextContent("443");
+    expect(
+      within(rowsAfterPortSort[2]).getAllByRole("cell")[2],
+    ).toHaveTextContent("3000");
   });
 
   it("handles disabled sorting on specific columns", async () => {
@@ -322,7 +358,7 @@ describe("DataTable", () => {
       { key: "port", value: "Port" },
     ];
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         sortable: true,
         headers: customHeaders,
@@ -334,11 +370,13 @@ describe("DataTable", () => {
     await user.click(protocolHeader);
 
     // Verify no sorting occurred
-    const firstRow = container.querySelector("tbody tr:first-child");
-    assert(firstRow);
-    expect(firstRow.querySelector("td:first-child")).toHaveTextContent(
-      "Load Balancer 3",
-    );
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const firstRow = tableRows[0];
+    expect(
+      within(firstRow).getByRole("cell", { name: "Load Balancer 3" }),
+    ).toHaveTextContent("Load Balancer 3");
   });
 
   it("handles table with numeric sorting", async () => {
@@ -350,7 +388,7 @@ describe("DataTable", () => {
 
     const numericHeaders = [{ key: "value", value: "Value" }];
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         sortable: true,
         headers: numericHeaders,
@@ -361,7 +399,10 @@ describe("DataTable", () => {
     const valueHeader = screen.getByText("Value");
     await user.click(valueHeader);
 
-    const sortedCells = container.querySelectorAll("td");
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const sortedCells = tableRows.map((row) => within(row).getByRole("cell"));
     expect(sortedCells[0]).toHaveTextContent("2");
     expect(sortedCells[1]).toHaveTextContent("10");
     expect(sortedCells[2]).toHaveTextContent("20");
@@ -378,7 +419,7 @@ describe("DataTable", () => {
     });
 
     // Verify checkboxes are present in each row
-    const checkboxes = container.querySelectorAll("input[type='checkbox']");
+    const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes.length).toBe(3);
 
     // Select first row
@@ -399,10 +440,9 @@ describe("DataTable", () => {
     });
 
     // Verify batch selection checkbox is present
-    const batchCheckbox = container.querySelector(
-      ".bx--table-column-checkbox input[type='checkbox']",
-    );
-    assert(batchCheckbox);
+    const batchCheckbox = screen.getByRole("checkbox", {
+      name: /select all/i,
+    });
 
     // Click batch selection checkbox
     await user.click(batchCheckbox);
@@ -433,7 +473,7 @@ describe("DataTable", () => {
       },
     });
 
-    const radioButtons = container.querySelectorAll("input[type='radio']");
+    const radioButtons = screen.getAllByRole("radio");
     expect(radioButtons.length).toBe(3);
 
     await user.click(radioButtons[0]);
@@ -455,16 +495,17 @@ describe("DataTable", () => {
 
     // Verify non-selectable row doesn't have a checkbox
     const nonSelectableRow = container.querySelector("tr[data-row='b']");
-    const nonSelectableCheckbox = nonSelectableRow?.querySelector(
-      "input[type='checkbox']",
-    );
+    assert(nonSelectableRow instanceof HTMLTableRowElement);
+    const nonSelectableCheckbox =
+      within(nonSelectableRow).queryByRole("checkbox");
     expect(nonSelectableCheckbox).not.toBeInTheDocument();
 
     // Verify non-expandable row doesn't have an expand button
     const nonExpandableRow = container.querySelector("tr[data-row='c']");
-    const nonExpandableButton = nonExpandableRow?.querySelector(
-      ".bx--table-expand__button",
-    );
+    assert(nonExpandableRow instanceof HTMLTableRowElement);
+    const nonExpandableButton = within(nonExpandableRow).queryByRole("button", {
+      name: /expand/i,
+    });
     expect(nonExpandableButton).not.toBeInTheDocument();
   });
 
@@ -479,9 +520,7 @@ describe("DataTable", () => {
     });
 
     // Verify expand button is present in each row
-    const expandButtons = container.querySelectorAll(
-      ".bx--table-expand__button",
-    );
+    const expandButtons = screen.getAllByRole("button", { name: /expand/i });
     expect(expandButtons.length).toBe(3);
 
     // Click expand button on first row
@@ -521,7 +560,7 @@ describe("DataTable", () => {
 
   // Styling and layout tests
   it("applies zebra stripe styling", async () => {
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         zebra: true,
         headers,
@@ -530,7 +569,7 @@ describe("DataTable", () => {
     });
 
     // Verify zebra stripe classes are applied
-    const table = container.querySelector("table");
+    const table = screen.getByRole("table");
     expect(table).toHaveClass("bx--data-table--zebra");
   });
 
@@ -544,7 +583,7 @@ describe("DataTable", () => {
     };
 
     for (const [size, expectedClass] of Object.entries(sizeMappings)) {
-      const { container } = render(DataTable, {
+      const { unmount } = render(DataTable, {
         props: {
           size: size as Size,
           headers,
@@ -553,8 +592,9 @@ describe("DataTable", () => {
       });
 
       // Verify size class is applied
-      const table = container.querySelector("table");
+      const table = screen.getByRole("table");
       expect(table).toHaveClass(expectedClass);
+      unmount();
     }
   });
 
@@ -566,7 +606,7 @@ describe("DataTable", () => {
       { key: "rule", value: "Rule" },
     ] as const;
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         headers: customHeaders,
         rows,
@@ -574,20 +614,22 @@ describe("DataTable", () => {
     });
 
     // Verify table has fixed layout
-    const table = container.querySelector("table");
+    const table = screen.getByRole("table");
     expect(table).toHaveStyle({ "table-layout": "fixed" });
 
     // Verify name column has correct width
-    const nameHeader = container.querySelector("th:first-child");
+    const nameHeader = screen.getByRole("columnheader", { name: "Name" });
     expect(nameHeader).toHaveStyle({ width: "200px" });
 
     // Verify protocol column has correct min-width
-    const protocolHeader = container.querySelector("th:nth-child(2)");
+    const protocolHeader = screen.getByRole("columnheader", {
+      name: "Protocol",
+    });
     expect(protocolHeader).toHaveStyle({ "min-width": "100px" });
   });
 
   it("applies sticky header", async () => {
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         stickyHeader: true,
         headers,
@@ -595,7 +637,7 @@ describe("DataTable", () => {
       },
     });
 
-    const table = container.querySelector("table");
+    const table = screen.getByRole("table");
     expect(table).toHaveClass("bx--data-table--sticky-header");
   });
 
@@ -611,7 +653,7 @@ describe("DataTable", () => {
     const tableContainer = container.querySelector(".bx--data-table-container");
     expect(tableContainer).toHaveClass("bx--data-table-container--static");
 
-    const table = container.querySelector("table");
+    const table = screen.getByRole("table");
     expect(table).toHaveClass("bx--data-table--static");
   });
 
@@ -626,14 +668,19 @@ describe("DataTable", () => {
       },
     ];
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         headers: customHeaders,
         rows,
       },
     });
 
-    const portCells = container.querySelectorAll("td:nth-child(2)");
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const portCells = tableRows.map(
+      (row) => within(row).getAllByRole("cell")[1],
+    );
     expect(portCells[0]).toHaveTextContent("Port 3000");
     expect(portCells[1]).toHaveTextContent("Port 443");
     expect(portCells[2]).toHaveTextContent("Port 80");
@@ -648,7 +695,7 @@ describe("DataTable", () => {
       { key: "actions", value: "", empty: true },
     ] as const;
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         headers: emptyColumnHeaders,
         rows,
@@ -661,9 +708,11 @@ describe("DataTable", () => {
     expect(headerCells[4]).toHaveTextContent("");
 
     // Verify empty column cells exist in each row
-    const tableRows = container.querySelectorAll("tbody tr");
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
     for (const row of tableRows) {
-      const cells = row.querySelectorAll("td");
+      const cells = within(row).getAllByRole("cell");
       expect(cells.length).toBe(5);
     }
   });
@@ -678,7 +727,7 @@ describe("DataTable", () => {
       rule: i % 2 ? "Round robin" : "DNS delegation",
     }));
 
-    const { container, component } = render(DataTable, {
+    const { component } = render(DataTable, {
       props: {
         headers,
         rows: paginatedRows,
@@ -688,49 +737,55 @@ describe("DataTable", () => {
     });
 
     // Verify only 5 rows are displayed on first page
-    const firstPageRows = container.querySelectorAll("tbody tr");
+    const firstPageRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
     expect(firstPageRows.length).toBe(5);
-    expect(firstPageRows[0].querySelector("td")).toHaveTextContent(
-      "Load Balancer 1",
-    );
-    expect(firstPageRows[4].querySelector("td")).toHaveTextContent(
-      "Load Balancer 5",
-    );
+    expect(
+      within(firstPageRows[0]).getByRole("cell", { name: "Load Balancer 1" }),
+    ).toHaveTextContent("Load Balancer 1");
+    expect(
+      within(firstPageRows[4]).getByRole("cell", { name: "Load Balancer 5" }),
+    ).toHaveTextContent("Load Balancer 5");
 
     // Update page to 2
     component.$set({ page: 2 });
     await tick();
 
     // Verify 5 rows are displayed on second page
-    const secondPageRows = container.querySelectorAll("tbody tr");
+    const secondPageRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
     expect(secondPageRows.length).toBe(5);
-    expect(secondPageRows[0].querySelector("td")).toHaveTextContent(
-      "Load Balancer 6",
-    );
-    expect(secondPageRows[4].querySelector("td")).toHaveTextContent(
-      "Load Balancer 10",
-    );
+    expect(
+      within(secondPageRows[0]).getByRole("cell", { name: "Load Balancer 6" }),
+    ).toHaveTextContent("Load Balancer 6");
+    expect(
+      within(secondPageRows[4]).getByRole("cell", { name: "Load Balancer 10" }),
+    ).toHaveTextContent("Load Balancer 10");
 
     // Update page to 3
     component.$set({ page: 3 });
     await tick();
 
     // Verify remaining rows are displayed on third page
-    const thirdPageRows = container.querySelectorAll("tbody tr");
+    const thirdPageRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
     expect(thirdPageRows.length).toBe(5);
-    expect(thirdPageRows[0].querySelector("td")).toHaveTextContent(
-      "Load Balancer 11",
-    );
-    expect(thirdPageRows[4].querySelector("td")).toHaveTextContent(
-      "Load Balancer 15",
-    );
+    expect(
+      within(thirdPageRows[0]).getByRole("cell", { name: "Load Balancer 11" }),
+    ).toHaveTextContent("Load Balancer 11");
+    expect(
+      within(thirdPageRows[4]).getByRole("cell", { name: "Load Balancer 15" }),
+    ).toHaveTextContent("Load Balancer 15");
   });
 
   // Event handling tests
   it("emits proper events", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         headers,
         rows,
@@ -743,13 +798,14 @@ describe("DataTable", () => {
     await user.click(nameHeader);
 
     // Click row
-    const firstRow = container.querySelector("tbody tr");
-    assert(firstRow);
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const firstRow = tableRows[0];
     await user.click(firstRow);
 
     // Click cell
-    const firstCell = container.querySelector("td");
-    assert(firstCell);
+    const firstCell = within(firstRow).getAllByRole("cell")[0];
     await user.click(firstCell);
 
     // Verify events were logged
@@ -760,15 +816,17 @@ describe("DataTable", () => {
 
   it("handles row hover events", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         headers,
         rows,
       },
     });
 
-    const firstRow = container.querySelector("tbody tr");
-    assert(firstRow);
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const firstRow = tableRows[0];
     await user.hover(firstRow);
     await user.unhover(firstRow);
 
@@ -1131,7 +1189,7 @@ describe("DataTable", () => {
   });
 
   it("allows filtering click:row events based on target element", async () => {
-    const { container } = render(DataTable, {
+    render(DataTable, {
       props: {
         headers: headers,
         rows: [
@@ -1144,12 +1202,13 @@ describe("DataTable", () => {
     const consoleLog = vi.spyOn(console, "log");
 
     // Add a button to the empty cell using slot
-    const firstRow = container.querySelector("tbody tr");
-    const emptyCell = firstRow?.querySelector("td:last-child");
-    assert(emptyCell);
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    const firstRow = tableRows[0];
+    const _emptyCell = within(firstRow).getAllByRole("cell").slice(-1)[0];
 
     // Click on the row but not on an interactive element
-    assert(firstRow);
     await user.click(firstRow);
 
     // Should have dispatched click:row
