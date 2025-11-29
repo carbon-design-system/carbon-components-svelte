@@ -281,20 +281,22 @@ describe("Pagination", () => {
   });
 
   it("should apply custom id", () => {
-    const { container } = render(Pagination, {
+    render(Pagination, {
       props: { id: "custom-pagination-id" },
     });
 
-    const pagination = container.querySelector("#custom-pagination-id");
+    const pagination = document.getElementById("custom-pagination-id");
     expect(pagination).toBeInTheDocument();
   });
 
   it("should apply custom class", () => {
-    const { container } = render(Pagination, {
+    render(Pagination, {
       props: { customClass: "custom-pagination" },
     });
 
-    const pagination = container.querySelector(".bx--pagination");
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+    const pagination = nextButton.closest(".bx--pagination");
+    assert(pagination);
     expect(pagination).toHaveClass("custom-pagination");
   });
 
