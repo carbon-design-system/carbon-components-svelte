@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 
 export declare const themes: Record<CarbonTheme, string>;
 

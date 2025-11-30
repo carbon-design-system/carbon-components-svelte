@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 
 export type NotificationData = {
   /** Optional id for deduplication */ id?: string;

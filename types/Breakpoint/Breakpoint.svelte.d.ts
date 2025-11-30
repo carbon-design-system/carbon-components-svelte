@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 
 export type BreakpointSize = "sm" | "md" | "lg" | "xlg" | "max";
 

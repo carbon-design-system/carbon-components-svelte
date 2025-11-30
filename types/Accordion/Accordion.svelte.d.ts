@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 import type { AccordionSkeletonProps } from "./AccordionSkeleton.svelte";
 
 export type AccordionContext = {

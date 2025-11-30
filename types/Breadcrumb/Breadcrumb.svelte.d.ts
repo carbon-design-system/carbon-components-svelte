@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 import type { BreadcrumbSkeletonProps } from "./BreadcrumbSkeleton.svelte";
 
 export type BreadcrumbProps = BreadcrumbSkeletonProps & {
