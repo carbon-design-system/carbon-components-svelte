@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 
 export type ContextMenuRadioGroupContext = {
   currentId: import("svelte/store").Writable<string>;

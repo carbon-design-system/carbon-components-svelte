@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 
 export type ContextMenuGroupContext = {
   currentIds: import("svelte/store").Writable<ReadonlyArray<string>>;

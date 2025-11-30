@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 
 /**
  * Computes the depth of a tree leaf node relative to <ul role="tree" />

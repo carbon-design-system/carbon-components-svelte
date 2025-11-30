@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 import type { LinkProps } from "./Link.svelte";
 
 export type OutboundLinkProps = LinkProps & {};
