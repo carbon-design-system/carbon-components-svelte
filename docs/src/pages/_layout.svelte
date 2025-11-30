@@ -19,6 +19,7 @@
     SideNavItems,
     SideNavMenuItem,
     SkipToContent,
+    Stack,
     Tag,
     Theme,
   } from "carbon-components-svelte";
@@ -29,7 +30,7 @@
 
   const miniSearch = new MiniSearch({
     fields: ["text", "description"],
-    storeFields: ["text", "description", "href"],
+    storeFields: ["text", "description", "href", "isComponent"],
     searchOptions: {
       prefix: true,
       boost: { description: 2 },
@@ -155,10 +156,27 @@
         placeholder="Search"
         spellcheck="false"
         {results}
+        let:result
         on:select={(e) => {
           $goto(e.detail.selectedResult.href);
         }}
-      />
+      >
+        <Stack
+          gap={3}
+          orientation="horizontal"
+          style="display: flex; align-items: center;"
+        >
+          {result.text}
+          {#if result.description && !result.isComponent}
+            <span class="bx--header-search-menu-description">
+              {result.description}
+            </span>
+          {/if}
+          {#if result.isComponent}
+            <Tag size="sm" type="blue" style="margin: 0">Component</Tag>
+          {/if}
+        </Stack>
+      </HeaderSearch>
       <HeaderActionLink
         icon={LogoGithub}
         href="https://github.com/carbon-design-system/carbon-components-svelte"
