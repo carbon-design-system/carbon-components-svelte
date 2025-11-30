@@ -175,16 +175,16 @@ describe("NumberInput", () => {
     expect(input).toHaveValue(null);
   });
 
-  it("should handle min/max validation", async () => {
+  it("should accept values outside min/max range without showing invalid state", async () => {
+    // Per issue #1180, NumberInput should not automatically show invalid state
+    // based on min/max constraints - it should require explicit invalid={true}
     render(NumberInput, { props: { min: 4, max: 20 } });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "25");
     expect(screen.getByTestId("value").textContent).toBe("25");
-    expect(screen.getByRole("spinbutton")).toHaveAttribute(
-      "aria-invalid",
-      "true",
-    );
+    // Should NOT show invalid state since invalid prop is false
+    expect(screen.getByRole("spinbutton")).not.toHaveAttribute("aria-invalid");
   });
 
   it("should not show helper text when invalid", () => {
@@ -449,6 +449,54 @@ describe("NumberInput", () => {
     ).not.toBeInTheDocument();
   });
 
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1180
+  it("should not show invalid state when value exceeds max but invalid prop is false", async () => {
+    // NumberInput should be consistent with TextInput - only show invalid state when invalid={true}
+    render(NumberInput, { props: { max: 10, value: 15 } });
+
+    const input = screen.getByRole("spinbutton");
+    // Should NOT show invalid state since invalid prop is false
+    expect(input).not.toHaveAttribute("aria-invalid");
+    expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1180
+  it("should not show invalid state when value is below min but invalid prop is false", () => {
+    render(NumberInput, { props: { min: 5, value: 2 } });
+
+    const input = screen.getByRole("spinbutton");
+    // Should NOT show invalid state since invalid prop is false
+    expect(input).not.toHaveAttribute("aria-invalid");
+    expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
+  });
+
+  it("should show invalid state when invalid prop is true and invalidText is provided", () => {
+    // NumberInput should require both invalid=true AND invalidText to show invalid state
+    render(NumberInput, {
+      props: { invalid: true, invalidText: "This field is invalid" },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input.closest(".bx--number")).toHaveAttribute(
+      "data-invalid",
+      "true",
+    );
+    expect(screen.getByText("This field is invalid")).toBeInTheDocument();
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1180
+  it("should not show invalid state when invalid prop is true but invalidText is empty", () => {
+    render(NumberInput, {
+      props: { invalid: true, invalidText: "" },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    // Should NOT show invalid state since invalidText is empty
+    expect(input).not.toHaveAttribute("aria-invalid");
+    expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
+  });
+
   it("should bind ref to input element", () => {
     render(NumberInput, {
       props: { ref: null },
@@ -615,15 +663,14 @@ describe("NumberInput", () => {
     expect(inputHandler.mock.calls[0][0].detail).toBe(null);
   });
 
-  it("should set error state when value is null and allowEmpty is false", () => {
+  it("should not show invalid state when value is null and allowEmpty is false without invalid prop", () => {
+    // Per issue #1180, NumberInput should only show invalid state when invalid={true}
     render(NumberInput, { props: { value: null, allowEmpty: false } });
 
     const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("aria-invalid", "true");
-    expect(input.closest(".bx--number")).toHaveAttribute(
-      "data-invalid",
-      "true",
-    );
+    // Should NOT automatically show invalid state - requires explicit invalid={true}
+    expect(input).not.toHaveAttribute("aria-invalid");
+    expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
   });
 
   it("should not set error state when value is null and allowEmpty is true", () => {
@@ -633,20 +680,24 @@ describe("NumberInput", () => {
     expect(input).not.toHaveAttribute("aria-invalid");
   });
 
-  it("should set error state when value exceeds max", async () => {
+  it("should not show invalid state when value exceeds max without invalid prop", async () => {
+    // Per issue #1180, NumberInput should only show invalid state when invalid={true}
     render(NumberInput, { props: { max: 10 } });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "15");
 
-    expect(input).toHaveAttribute("aria-invalid", "true");
+    // Should NOT automatically show invalid state - requires explicit invalid={true}
+    expect(input).not.toHaveAttribute("aria-invalid");
   });
 
-  it("should set error state when value is below min", async () => {
+  it("should not show invalid state when value is below min without invalid prop", async () => {
+    // Per issue #1180, NumberInput should only show invalid state when invalid={true}
     render(NumberInput, { props: { min: 5, value: 3 } });
 
     const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("aria-invalid", "true");
+    // Should NOT automatically show invalid state - requires explicit invalid={true}
+    expect(input).not.toHaveAttribute("aria-invalid");
   });
 
   it("should not set error state when readonly and invalid", () => {
