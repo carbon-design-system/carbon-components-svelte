@@ -53,6 +53,13 @@
   /** Set to `true` if the modal contains form elements */
   export let hasForm = false;
 
+  /**
+   * Specify the ID of a form element to associate with the primary button.
+   * This enables the primary button to submit the form from outside the form element.
+   * @type {string}
+   */
+  export let formId = undefined;
+
   /** Set to `true` if the modal contains scrolling content */
   export let hasScrollingContent = false;
 
@@ -105,6 +112,7 @@
   const dispatch = createEventDispatcher();
 
   let buttonRef = null;
+  let primaryButtonRef = null;
   let innerModal = null;
   let opened = false;
   let didClickInnerModal = false;
@@ -225,8 +233,12 @@
         e.key === "Enter" &&
         !primaryButtonDisabled
       ) {
-        dispatch("submit");
-        dispatch("click:button--primary");
+        if (formId && primaryButtonRef) {
+          primaryButtonRef.click();
+        } else {
+          dispatch("submit");
+          dispatch("click:button--primary");
+        }
       }
     }
   }}
@@ -342,9 +354,12 @@
           </Button>
         {/if}
         <Button
+          bind:ref={primaryButtonRef}
           kind={danger ? "danger" : "primary"}
           disabled={primaryButtonDisabled}
           icon={primaryButtonIcon}
+          type={formId ? "submit" : "button"}
+          form={formId}
           on:click={() => {
             dispatch("submit");
             dispatch("click:button--primary");

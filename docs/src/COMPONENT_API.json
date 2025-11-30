@@ -8549,6 +8549,18 @@
           "reactive": false
         },
         {
+          "name": "formId",
+          "kind": "let",
+          "description": "Specify the ID of a form element to associate with the primary button.\nThis enables the primary button to submit the form from outside the form element.",
+          "type": "string",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "hasScrollingContent",
           "kind": "let",
           "description": "Set to `true` if the modal contains scrolling content",
