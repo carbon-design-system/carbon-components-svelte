@@ -32,7 +32,7 @@
   "scripts": {
     "test": "vitest",
     "test:src-types": "tsgo",
-    "test:types": "svelte-check --workspace tests",
+    "test:types": "svelte-check --workspace tests --fail-on-warnings",
     "lint": "biome check --write .",
     "build:css": "bun scripts/build-css",
     "build:docs": "bun scripts/build-docs && bun scripts/format-component-api",
