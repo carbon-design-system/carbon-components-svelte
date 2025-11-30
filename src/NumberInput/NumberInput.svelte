@@ -124,7 +124,8 @@
 
   function updateValue(isIncrementing) {
     if (allowDecimal) {
-      const currentValue = value ?? 0;
+      // When allowEmpty is false and value is null, use default value
+      const currentValue = value ?? (allowEmpty ? 0 : getDefaultValue());
       let newValue;
 
       if (isIncrementing) {
@@ -149,6 +150,15 @@
       dispatch("input", value);
       dispatch("change", value);
     } else {
+      // When allowEmpty is false and value is null, set to default value first
+      if (!allowEmpty && value === null) {
+        const defaultValue = getDefaultValue();
+        if (ref) {
+          ref.value = defaultValue.toString();
+        }
+        value = defaultValue;
+      }
+
       if (isIncrementing) {
         ref.stepUp();
       } else {
@@ -191,6 +201,11 @@
     return Number.isNaN(num) ? null : num;
   }
 
+  function getDefaultValue() {
+    // When allowEmpty is false, use min if defined, otherwise 0
+    return min !== undefined ? min : 0;
+  }
+
   function onInput({ target }) {
     if (allowDecimal) {
       inputValue = target.value;
@@ -203,7 +218,25 @@
   }
 
   function onChange({ target }) {
-    dispatch("change", parse(target.value));
+    let parsedValue = parse(target.value);
+
+    // If allowEmpty is false and value would be null, use default value
+    // This prevents the input from staying empty when allowEmpty is false
+    if (!allowEmpty && parsedValue === null && target.value === "") {
+      parsedValue = getDefaultValue();
+      // Update the input to show the default value
+      if (allowDecimal) {
+        inputValue = parsedValue.toString();
+        value = parsedValue;
+      } else if (ref) {
+        ref.value = parsedValue.toString();
+        value = parsedValue;
+      }
+    } else {
+      value = parsedValue;
+    }
+
+    dispatch("change", value);
   }
 
   function onKeyDown(event) {
