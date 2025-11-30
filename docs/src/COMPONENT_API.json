@@ -1,5 +1,5 @@
 {
-  "total": 169,
+  "total": 170,
   "components": [
     {
       "moduleName": "Accordion",
@@ -5661,6 +5661,72 @@
         "type": "Element",
         "name": "div | button | svg"
       },
+      "contexts": []
+    },
+    {
+      "moduleName": "FloatingPortal",
+      "filePath": "src/Portal/FloatingPortal.svelte",
+      "props": [
+        {
+          "name": "reference",
+          "kind": "let",
+          "description": "Reference element to position the portal relative to",
+          "type": "HTMLElement | null",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "placement",
+          "kind": "let",
+          "description": "Placement of the floating portal relative to the reference element",
+          "type": "\"top\" | \"top-start\" | \"top-end\" | \"right\" | \"right-start\" | \"right-end\" | \"bottom\" | \"bottom-start\" | \"bottom-end\" | \"left\" | \"left-start\" | \"left-end\"",
+          "value": "\"bottom\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "offset",
+          "kind": "let",
+          "description": "Offset in pixels from the reference element",
+          "type": "number",
+          "value": "0",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "autoUpdate",
+          "kind": "let",
+          "description": "Set to `true` to enable auto-update positioning on scroll/resize",
+          "type": "boolean",
+          "value": "true",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        }
+      ],
+      "events": [],
+      "typedefs": [],
+      "generics": null,
       "contexts": []
     },
     {
