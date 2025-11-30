@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.93.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.93.0...v0.93.1) (2025-11-30)
+
+### Bug Fixes
+
+- **tabs:** avoid infinite update loop in Svelte 5 ([#2394](https://github.com/carbon-design-system/carbon-components-svelte/issues/2394)) ([61c1afc](https://github.com/carbon-design-system/carbon-components-svelte/commit/61c1afc638a9b4a16780f247ef1d3f87762ae30b)), closes [#2366](https://github.com/carbon-design-system/carbon-components-svelte/issues/2366)
+
 ## [0.93.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.92.0...v0.93.0) (2025-11-22)
 
 ### ⚠ BREAKING CHANGES
