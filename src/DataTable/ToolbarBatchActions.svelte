@@ -4,14 +4,14 @@
    */
 
   /**
-   * Override the total items selected text
+   * Override the total items selected text.
    * @type {(totalSelected: number) => string}
    */
   export let formatTotalSelected = (totalSelected) =>
     `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
 
   /**
-   * Use a boolean to show or hide the toolbar
+   * Use a boolean to show or hide the toolbar.
    * @type {undefined | boolean}
    */
   export let active = undefined;

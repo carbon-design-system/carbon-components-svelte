@@ -7,7 +7,7 @@
   export let sortable = false;
 
   /**
-   * Specify the sort direction
+   * Specify the sort direction.
    * @type {"none" | "ascending" | "descending"}
    */
   export let sortDirection = "none";
@@ -25,7 +25,7 @@
   };
 
   /**
-   * Override the default translation ids
+   * Override the default translation ids.
    * @type {(id: TableHeaderTranslationId) => string}
    */
   export let translateWithId = (id) => defaultTranslations[id];

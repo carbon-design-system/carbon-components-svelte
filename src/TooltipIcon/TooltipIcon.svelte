@@ -1,12 +1,12 @@
 <script>
   /**
    * Specify the tooltip text.
-   * Alternatively, use the "tooltipText" slot
+   * Alternatively, use the "tooltipText" slot.
    */
   export let tooltipText = "";
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @type {any}
    */
   export let icon = undefined;
@@ -15,13 +15,13 @@
   export let disabled = false;
 
   /**
-   * Set the alignment of the tooltip relative to the icon
+   * Set the alignment of the tooltip relative to the icon.
    * @type {"start" | "center" | "end"}
    */
   export let align = "center";
 
   /**
-   * Set the direction of the tooltip relative to the icon
+   * Set the direction of the tooltip relative to the icon.
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let direction = "bottom";

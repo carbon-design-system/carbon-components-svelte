@@ -11,7 +11,7 @@ type $Props = {
   primaryButtonText?: string;
 
   /**
-   * Specify the primary button icon
+   * Specify the primary button icon.
    * @default undefined
    */
   primaryButtonIcon?: any;
@@ -23,7 +23,7 @@ type $Props = {
   primaryButtonDisabled?: boolean;
 
   /**
-   * Specify a class for the primary button
+   * Specify a class for the primary button.
    * @default undefined
    */
   primaryClass?: string;
@@ -35,14 +35,14 @@ type $Props = {
   secondaryButtonText?: string;
 
   /**
-   * 2-tuple prop to render two secondary buttons for a 3 button modal
-   * supersedes `secondaryButtonText`
+   * 2-tuple prop to render two secondary buttons for a 3 button modal.
+   * Supersedes `secondaryButtonText`.
    * @default []
    */
   secondaryButtons?: [] | [{ text: string }, { text: string }];
 
   /**
-   * Specify a class for the secondary button
+   * Specify a class for the secondary button.
    * @default undefined
    */
   secondaryClass?: string;

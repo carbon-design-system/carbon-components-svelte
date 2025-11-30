@@ -5,13 +5,13 @@ type $RestProps = SvelteHTMLElements["span"];
 
 type $Props = {
   /**
-   * Specify the file uploader status
+   * Specify the file uploader status.
    * @default "uploading"
    */
   status?: "uploading" | "edit" | "complete";
 
   /**
-   * Specify the size of button skeleton
+   * Specify the size of button skeleton.
    * @default "default"
    */
   size?: "default" | "field" | "small";

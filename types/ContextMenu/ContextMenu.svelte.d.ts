@@ -14,14 +14,14 @@ type $RestProps = SvelteHTMLElements["ul"];
 type $Props = {
   /**
    * Specify an element or list of elements to trigger the context menu.
-   * If no element is specified, the context menu applies to the entire window
+   * If no element is specified, the context menu applies to the entire window.
    * @default null
    */
   target?: null | ReadonlyArray<null | HTMLElement>;
 
   /**
-   * Set to `true` to open the menu
-   * Either `x` and `y` must be greater than zero
+   * Set to `true` to open the menu.
+   * Either `x` and `y` must be greater than zero.
    * @default false
    */
   open?: boolean;

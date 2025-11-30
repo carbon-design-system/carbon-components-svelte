@@ -7,7 +7,7 @@
   export let selectedIndex = 0;
 
   /**
-   * Specify the size of the content switcher
+   * Specify the size of the content switcher.
    * @type {"sm" | "xl"}
    */
   export let size = undefined;

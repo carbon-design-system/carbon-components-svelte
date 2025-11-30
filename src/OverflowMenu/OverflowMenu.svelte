@@ -6,13 +6,13 @@
    */
 
   /**
-   * Specify the size of the overflow menu
+   * Specify the size of the overflow menu.
    * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
   /**
-   * Specify the direction of the overflow menu relative to the button
+   * Specify the direction of the overflow menu relative to the button.
    * @type {"top" | "bottom"}
    */
   export let direction = "bottom";
@@ -27,7 +27,7 @@
   export let flipped = false;
 
   /**
-   * Specify the menu options class
+   * Specify the menu options class.
    * @type {string}
    */
   export let menuOptionsClass = undefined;
@@ -39,7 +39,7 @@
   export let icon = OverflowMenuVertical;
 
   /**
-   * Specify the icon class
+   * Specify the icon class.
    * @type {string}
    */
   export let iconClass = undefined;

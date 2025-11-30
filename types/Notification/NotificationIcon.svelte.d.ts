@@ -2,7 +2,7 @@ import type { SvelteComponentTyped } from "svelte";
 
 export type NotificationIconProps = {
   /**
-   * Specify the kind of notification icon
+   * Specify the kind of notification icon.
    * @default "error"
    */
   kind?:
@@ -14,7 +14,7 @@ export type NotificationIconProps = {
     | "warning-alt";
 
   /**
-   * Set the type of notification
+   * Set the type of notification.
    * @default "toast"
    */
   notificationType?: "toast" | "inline";

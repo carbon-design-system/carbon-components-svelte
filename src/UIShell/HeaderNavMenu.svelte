@@ -6,7 +6,7 @@
   export let href = "/";
 
   /**
-   * Specify the text
+   * Specify the text.
    * @type {string}
    */
   export let text = undefined;

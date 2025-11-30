@@ -1,6 +1,6 @@
 <script>
   /**
-   * Set the type of code snippet
+   * Set the type of code snippet.
    * @type {"single" | "multi"}
    */
   export let type = "single";

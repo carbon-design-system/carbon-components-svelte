@@ -11,19 +11,19 @@ type $Props = {
   tooltipText?: string;
 
   /**
-   * Set to `true` to open the tooltip
+   * Set to `true` to open the tooltip.
    * @default false
    */
   open?: boolean;
 
   /**
-   * Set the alignment of the tooltip relative to the icon
+   * Set the alignment of the tooltip relative to the icon.
    * @default "center"
    */
   align?: "start" | "center" | "end";
 
   /**
-   * Set the direction of the tooltip relative to the icon
+   * Set the direction of the tooltip relative to the icon.
    * @default "bottom"
    */
   direction?: "top" | "bottom";

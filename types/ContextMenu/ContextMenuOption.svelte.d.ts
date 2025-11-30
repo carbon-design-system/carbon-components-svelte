@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["li"];
 
 type $Props = {
   /**
-   * Specify the kind of option
+   * Specify the kind of option.
    * @default "default"
    */
   kind?: "default" | "danger";
@@ -23,15 +23,15 @@ type $Props = {
   indented?: boolean;
 
   /**
-   * Specify the icon to render
-   * Icon is rendered to the left of the label text
+   * Specify the icon to render.
+   * Icon is rendered to the left of the label text.
    * @default undefined
    */
   icon?: any;
 
   /**
    * Specify the label text.
-   * Alternatively, use the "labelText" slot
+   * Alternatively, use the "labelText" slot.
    * @example
    * ```svelte
    * <ContextMenuOption>
@@ -49,15 +49,15 @@ type $Props = {
   selected?: boolean;
 
   /**
-   * Set to `true` to enable the selectable variant
-   * Automatically set to `true` if `selected` is `true`
+   * Set to `true` to enable the selectable variant.
+   * Automatically set to `true` if `selected` is `true`.
    * @default false
    */
   selectable?: boolean;
 
   /**
    * Specify the shortcut text.
-   * Alternatively, use the "shortcutText" slot
+   * Alternatively, use the "shortcutText" slot.
    * @example
    * ```svelte
    * <ContextMenuOption>
@@ -69,8 +69,8 @@ type $Props = {
   shortcutText?: string;
 
   /**
-   * Specify the id
-   * It's recommended to provide an id as a value to bind to within a selectable/radio menu group
+   * Specify the id.
+   * It's recommended to provide an id as a value to bind to within a selectable/radio menu group.
    * @default "ccs-" + Math.random().toString(36)
    */
   id?: string;

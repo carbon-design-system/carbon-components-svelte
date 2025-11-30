@@ -5,12 +5,12 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Override the total items selected text
+   * Override the total items selected text.
    */
   formatTotalSelected?: (totalSelected: number) => string;
 
   /**
-   * Use a boolean to show or hide the toolbar
+   * Use a boolean to show or hide the toolbar.
    * @default undefined
    */
   active?: undefined | boolean;

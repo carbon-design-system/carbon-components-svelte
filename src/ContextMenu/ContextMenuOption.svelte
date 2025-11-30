@@ -1,6 +1,6 @@
 <script>
   /**
-   * Specify the kind of option
+   * Specify the kind of option.
    * @type {"default" | "danger"}
    */
   export let kind = "default";
@@ -12,15 +12,15 @@
   export let indented = false;
 
   /**
-   * Specify the icon to render
-   * Icon is rendered to the left of the label text
+   * Specify the icon to render.
+   * Icon is rendered to the left of the label text.
    * @type {any}
    */
   export let icon = undefined;
 
   /**
    * Specify the label text.
-   * Alternatively, use the "labelText" slot
+   * Alternatively, use the "labelText" slot.
    * @example
    * ```svelte
    * <ContextMenuOption>
@@ -34,14 +34,14 @@
   export let selected = false;
 
   /**
-   * Set to `true` to enable the selectable variant
-   * Automatically set to `true` if `selected` is `true`
+   * Set to `true` to enable the selectable variant.
+   * Automatically set to `true` if `selected` is `true`.
    */
   export let selectable = false;
 
   /**
    * Specify the shortcut text.
-   * Alternatively, use the "shortcutText" slot
+   * Alternatively, use the "shortcutText" slot.
    * @example
    * ```svelte
    * <ContextMenuOption>
@@ -52,8 +52,8 @@
   export let shortcutText = "";
 
   /**
-   * Specify the id
-   * It's recommended to provide an id as a value to bind to within a selectable/radio menu group
+   * Specify the id.
+   * It's recommended to provide an id as a value to bind to within a selectable/radio menu group.
    */
   export let id = "ccs-" + Math.random().toString(36);
 

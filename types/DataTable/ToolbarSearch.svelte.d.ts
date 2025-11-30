@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["input"];
 
 type $Props = {
   /**
-   * Specify the value of the search input
+   * Specify the value of the search input.
    * @default ""
    */
   value?: number | string;
@@ -46,7 +46,7 @@ type $Props = {
       ) => boolean);
 
   /**
-   * The filtered row ids
+   * The filtered row ids.
    * @default []
    */
   filteredRowIds?: ReadonlyArray<import("./DataTable.svelte").DataTableRowId>;
@@ -58,7 +58,7 @@ type $Props = {
   tabindex?: string;
 
   /**
-   * Obtain a reference to the input HTML element
+   * Obtain a reference to the input HTML element.
    * @default null
    */
   ref?: null | HTMLInputElement;

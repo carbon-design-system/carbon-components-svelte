@@ -23,13 +23,13 @@ type $Props = {
   iconDescription?: string;
 
   /**
-   * Specify the text to copy
+   * Specify the text to copy.
    * @default undefined
    */
   text: string;
 
   /**
-   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
+   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text.
    */
   copy?: (text: string) => void;
 

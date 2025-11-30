@@ -53,7 +53,7 @@ type $Props = {
   id?: string;
 
   /**
-   * Specify a name attribute for the radio tile input
+   * Specify a name attribute for the radio tile input.
    * @default undefined
    */
   name?: string;

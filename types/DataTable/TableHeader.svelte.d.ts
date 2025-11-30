@@ -15,7 +15,7 @@ type $Props = {
   sortable?: boolean;
 
   /**
-   * Specify the sort direction
+   * Specify the sort direction.
    * @default "none"
    */
   sortDirection?: "none" | "ascending" | "descending";
@@ -33,7 +33,7 @@ type $Props = {
   scope?: string;
 
   /**
-   * Override the default translation ids
+   * Override the default translation ids.
    */
   translateWithId?: (id: TableHeaderTranslationId) => string;
 

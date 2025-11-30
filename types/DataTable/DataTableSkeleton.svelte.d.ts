@@ -7,8 +7,8 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the number of columns
-   * Superseded by `headers` if `headers` is a non-empty array
+   * Specify the number of columns.
+   * Superseded by `headers` if `headers` is a non-empty array.
    * @default 5
    */
   columns?: number;
@@ -20,7 +20,7 @@ type $Props = {
   rows?: number;
 
   /**
-   * Set the size of the data table
+   * Set the size of the data table.
    * @default undefined
    */
   size?: "compact" | "short" | "tall";
@@ -38,8 +38,8 @@ type $Props = {
   showHeader?: boolean;
 
   /**
-   * Set the column headers
-   * Supersedes `columns` if value is a non-empty array
+   * Set the column headers.
+   * Supersedes `columns` if value is a non-empty array.
    * @default []
    */
   headers?: ReadonlyArray<string | Partial<DataTableHeader>>;

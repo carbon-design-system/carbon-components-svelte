@@ -11,7 +11,7 @@
   export let disabled = false;
 
   /**
-   * Set the `href`
+   * Set the `href`.
    * @type {string}
    */
   export let href = undefined;

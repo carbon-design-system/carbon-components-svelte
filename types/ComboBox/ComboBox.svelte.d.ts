@@ -13,18 +13,18 @@ type $RestProps = SvelteHTMLElements["input"];
 
 type $Props<Item> = {
   /**
-   * Set the combobox items
+   * Set the combobox items.
    * @default []
    */
   items?: ReadonlyArray<Item>;
 
   /**
-   * Override the display of a combobox item
+   * Override the display of a combobox item.
    */
   itemToString?: (item: Item) => string;
 
   /**
-   * Set the selected item by value id
+   * Set the selected item by value id.
    * @default undefined
    */
   selectedId?: ComboBoxItemId;
@@ -36,13 +36,13 @@ type $Props<Item> = {
   value?: string;
 
   /**
-   * Specify the direction of the combobox dropdown menu
+   * Specify the direction of the combobox dropdown menu.
    * @default "bottom"
    */
   direction?: "bottom" | "top";
 
   /**
-   * Set the size of the combobox
+   * Set the size of the combobox.
    * @default undefined
    */
   size?: "sm" | "xl";
@@ -143,7 +143,7 @@ type $Props<Item> = {
 
   /**
    * Override the chevron icon label based on the open state.
-   * Defaults to "Open menu" when closed and "Close menu" when open
+   * Defaults to "Open menu" when closed and "Close menu" when open.
    * @default undefined
    */
   translateWithId?: (
@@ -164,7 +164,7 @@ type $Props<Item> = {
   id?: string;
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @default undefined
    */
   name?: string;
@@ -176,7 +176,7 @@ type $Props<Item> = {
   ref?: null | HTMLInputElement;
 
   /**
-   * Obtain a reference to the list HTML element
+   * Obtain a reference to the list HTML element.
    * @default null
    */
   listRef?: null | HTMLDivElement;

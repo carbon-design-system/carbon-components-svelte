@@ -4,7 +4,7 @@
    */
 
   /**
-   * Specify the selected structured list row value
+   * Specify the selected structured list row value.
    * @type {string}
    */
   export let selected = undefined;

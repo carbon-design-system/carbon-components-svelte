@@ -6,7 +6,7 @@ type $RestProps = SvelteHTMLElements["li"];
 type $Props = {
   /**
    * Specify the tab label.
-   * Alternatively, use the default slot
+   * Alternatively, use the default slot.
    * @example
    * ```svelte
    * <Tab>

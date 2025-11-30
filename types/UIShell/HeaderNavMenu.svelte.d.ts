@@ -26,7 +26,7 @@ type $Props = {
   href?: string;
 
   /**
-   * Specify the text
+   * Specify the text.
    * @default undefined
    */
   text?: string;

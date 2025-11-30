@@ -7,14 +7,14 @@ type $RestProps = SvelteHTMLElements["input"];
 
 type $Props = {
   /**
-   * Set the size of the input
+   * Set the size of the input.
    * @default undefined
    */
   size?: "sm" | "xl";
 
   /**
    * Specify the input value.
-   * Use `null` to denote "no value"
+   * Use `null` to denote "no value".
    * @default null
    */
   value?: null | number;
@@ -26,13 +26,13 @@ type $Props = {
   step?: number;
 
   /**
-   * Specify the maximum value
+   * Specify the maximum value.
    * @default undefined
    */
   max?: number;
 
   /**
-   * Specify the minimum value
+   * Specify the minimum value.
    * @default undefined
    */
   min?: number;
@@ -57,7 +57,7 @@ type $Props = {
 
   /**
    * Set to `true` to preserve decimal input formatting.
-   * When enabled, uses type="text" with inputmode="decimal" instead of type="number"
+   * When enabled, uses type="text" with inputmode="decimal" instead of type="number".
    * @example
    * ```svelte
    * <NumberInput allowDecimal={true} value="1.0" />
@@ -122,7 +122,7 @@ type $Props = {
   hideLabel?: boolean;
 
   /**
-   * Override the default translation ids
+   * Override the default translation ids.
    */
   translateWithId?: (id: NumberInputTranslationId) => string;
 
@@ -133,7 +133,7 @@ type $Props = {
   id?: string;
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @default undefined
    */
   name?: string;
@@ -167,7 +167,7 @@ export default class NumberInput extends SvelteComponentTyped<
   { labelText: Record<string, never> }
 > {
   /**
-   * Default translation ids
+   * Default translation ids.
    */
   translationIds: { increment: "increment"; decrement: "decrement" };
 }

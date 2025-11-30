@@ -4,27 +4,27 @@
    */
 
   /**
-   * Specify the date picker type
+   * Specify the date picker type.
    * @type {"simple" | "single" | "range"}
    */
   export let datePickerType = "simple";
 
   /**
-   * Specify the date picker input value
+   * Specify the date picker input value.
    * @type {number | string}
    */
   export let value = "";
 
   /**
-   * Specify the date picker start date value (from)
-   * Only works with the "range" date picker type
+   * Specify the date picker start date value (from).
+   * Only works with the "range" date picker type.
    * @type {string}
    */
   export let valueFrom = "";
 
   /**
-   * Specify the date picker end date value (to)
-   * Only works with the "range" date picker type
+   * Specify the date picker end date value (to).
+   * Only works with the "range" date picker type.
    * @type {string}
    */
   export let valueTo = "";
@@ -33,19 +33,19 @@
   export let dateFormat = "m/d/Y";
 
   /**
-   * Specify the maximum date
+   * Specify the maximum date.
    * @type {null | string | Date}
    */
   export let maxDate = null;
 
   /**
-   * Specify the minimum date
+   * Specify the minimum date.
    * @type {null | string | Date}
    */
   export let minDate = null;
 
   /**
-   * Specify the locale
+   * Specify the locale.
    * @type {import("flatpickr/dist/types/locale").CustomLocale | import("flatpickr/dist/types/locale").key}
    */
   export let locale = "en";

@@ -6,7 +6,7 @@
    */
 
   /**
-   * Set the type of code snippet
+   * Set the type of code snippet.
    * @type {"single" | "inline" | "multi"}
    */
   export let type = "single";
@@ -46,14 +46,14 @@
 
   /**
    * Set to `true` for the disabled variant.
-   * Only applies to the "single", "multi" types
+   * Only applies to the "single", "multi" types.
    */
   export let disabled = false;
 
   /**
    * Set to `true` to wrap the text.
    *
-   * NOTE: this prop only works with the `type="multi"` variant
+   * NOTE: this prop only works with the `type="multi"` variant.
    */
   export let wrapText = false;
 
@@ -64,13 +64,13 @@
   export let skeleton = false;
 
   /**
-   * Specify the ARIA label for the copy button icon
+   * Specify the ARIA label for the copy button icon.
    * @type {string}
    */
   export let copyButtonDescription = undefined;
 
   /**
-   * Specify the ARIA label of the copy button
+   * Specify the ARIA label of the copy button.
    * @type {string}
    */
   export let copyLabel = undefined;
@@ -84,21 +84,21 @@
   /**
    * Specify the show less text.
    *
-   * NOTE: this prop only works with the `type="multi"` variant
+   * NOTE: this prop only works with the `type="multi"` variant.
    */
   export let showLessText = "Show less";
 
   /**
-   * Specify the show more text
+   * Specify the show more text.
    *
-   * NOTE: this prop only works with the `type="multi"` variant
+   * NOTE: this prop only works with the `type="multi"` variant.
    */
   export let showMoreText = "Show more";
 
   /**
-   * Set to `false` to hide the show more/less button
+   * Set to `false` to hide the show more/less button.
    *
-   * NOTE: this prop only works with the `type="multi"` variant
+   * NOTE: this prop only works with the `type="multi"` variant.
    */
   export let showMoreLess = true;
 

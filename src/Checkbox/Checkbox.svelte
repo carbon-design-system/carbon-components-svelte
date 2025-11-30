@@ -5,7 +5,7 @@
    */
 
   /**
-   * Specify the value of the checkbox
+   * Specify the value of the checkbox.
    * @type {any}
    */
   export let value = "";
@@ -14,7 +14,7 @@
   export let checked = false;
 
   /**
-   * Specify the bound group
+   * Specify the bound group.
    * @type {ReadonlyArray<any>}
    */
   export let group = undefined;
@@ -47,7 +47,7 @@
   export let name = "";
 
   /**
-   * Specify the title attribute for the label element
+   * Specify the title attribute for the label element.
    * @type {string}
    */
   export let title = undefined;

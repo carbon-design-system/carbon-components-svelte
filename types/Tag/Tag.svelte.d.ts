@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"] & SvelteHTMLElements["span"];
 
 type $Props = {
   /**
-   * Specify the type of tag
+   * Specify the type of tag.
    * @default undefined
    */
   type?:
@@ -58,7 +58,7 @@ type $Props = {
   title?: string;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @default undefined
    */
   icon?: any;

@@ -6,13 +6,13 @@
    */
 
   /**
-   * Specify the value of the search input
+   * Specify the value of the search input.
    * @type {any}
    */
   export let value = "";
 
   /**
-   * Specify the size of the search input
+   * Specify the size of the search input.
    * @type {"sm" | "lg" | "xl"}
    */
   export let size = "xl";
@@ -39,7 +39,7 @@
   export let placeholder = "Search...";
 
   /**
-   * Specify the `autocomplete` attribute
+   * Specify the `autocomplete` attribute.
    * @type {"on" | "off"}
    */
   export let autocomplete = "off";

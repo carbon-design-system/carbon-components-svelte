@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the title of the accordion item heading.
-   * Alternatively, use the "title" slot
+   * Alternatively, use the "title" slot.
    * @example
    * ```svelte
    * <AccordionItem>

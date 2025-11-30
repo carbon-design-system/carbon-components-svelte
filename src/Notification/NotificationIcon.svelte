@@ -1,12 +1,12 @@
 <script>
   /**
-   * Specify the kind of notification icon
+   * Specify the kind of notification icon.
    * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
    */
   export let kind = "error";
 
   /**
-   * Set the type of notification
+   * Set the type of notification.
    * @type {"toast" | "inline"}
    */
   export let notificationType = "toast";

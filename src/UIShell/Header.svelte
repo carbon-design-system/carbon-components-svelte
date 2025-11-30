@@ -6,13 +6,13 @@
   export let isSideNavOpen = false;
 
   /**
-   * Specify the ARIA label for the header
+   * Specify the ARIA label for the header.
    * @type {string}
    */
   export let uiShellAriaLabel = undefined;
 
   /**
-   * Specify the `href` attribute
+   * Specify the `href` attribute.
    * @type {string}
    */
   export let href = undefined;
@@ -20,7 +20,7 @@
   /**
    * Specify the company name.
    *
-   * Alternatively, use the named slot "company"
+   * Alternatively, use the named slot "company".
    * @type {string}
    * @example
    * ```svelte
@@ -33,7 +33,7 @@
 
   /**
    * Specify the platform name.
-   * Alternatively, use the named slot "platform"
+   * Alternatively, use the named slot "platform".
    * @example
    * ```svelte
    * <Header>
@@ -53,7 +53,7 @@
    * - medium: 672
    * - large: 1056
    * - x-large: 1312
-   * - max: 1584
+   * - max: 1584.
    */
   export let expansionBreakpoint = 1056;
 

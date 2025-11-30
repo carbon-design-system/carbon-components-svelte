@@ -24,7 +24,7 @@ type $Props = {
 
   /**
    * Specify the text displayed next to the icon.
-   * Alternatively, use the named slot "text"
+   * Alternatively, use the named slot "text".
    * @example
    * ```svelte
    * <HeaderAction>
@@ -37,14 +37,14 @@ type $Props = {
 
   /**
    * Specify an icon tooltip. The tooltip will not be displayed
-   * if either the `text` prop or a named slot="text" is used
+   * if either the `text` prop or a named slot="text" is used.
    * @default undefined
    */
   iconDescription?: string;
 
   /**
    * Set the alignment of the tooltip relative to the icon.
-   * Only applies when `iconDescription` is provided
+   * Only applies when `iconDescription` is provided.
    * @default "center"
    */
   tooltipAlignment?: "start" | "center" | "end";
@@ -57,7 +57,7 @@ type $Props = {
 
   /**
    * Customize the panel transition (i.e., `transition:slide`).
-   * Set to `false` to disable the transition
+   * Set to `false` to disable the transition.
    * @default { duration: 200 }
    */
   transition?: false | import("svelte/transition").SlideParams;

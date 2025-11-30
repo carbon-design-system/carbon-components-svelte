@@ -6,13 +6,13 @@ type $RestProps = SvelteHTMLElements["button"];
 type $Props = {
   /**
    * Specify the tooltip text.
-   * Alternatively, use the "tooltipText" slot
+   * Alternatively, use the "tooltipText" slot.
    * @default ""
    */
   tooltipText?: string;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @default undefined
    */
   icon?: any;
@@ -24,13 +24,13 @@ type $Props = {
   disabled?: boolean;
 
   /**
-   * Set the alignment of the tooltip relative to the icon
+   * Set the alignment of the tooltip relative to the icon.
    * @default "center"
    */
   align?: "start" | "center" | "end";
 
   /**
-   * Set the direction of the tooltip relative to the icon
+   * Set the direction of the tooltip relative to the icon.
    * @default "bottom"
    */
   direction?: "top" | "right" | "bottom" | "left";

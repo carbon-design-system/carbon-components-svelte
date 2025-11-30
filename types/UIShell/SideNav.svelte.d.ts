@@ -17,7 +17,7 @@ type $Props = {
   rail?: boolean;
 
   /**
-   * Specify the ARIA label for the nav
+   * Specify the ARIA label for the nav.
    * @default undefined
    */
   ariaLabel?: string;
@@ -35,7 +35,7 @@ type $Props = {
    * - medium: 672
    * - large: 1056
    * - x-large: 1312
-   * - max: 1584
+   * - max: 1584.
    * @default 1056
    */
   expansionBreakpoint?: number;

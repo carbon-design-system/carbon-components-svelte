@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Set the type of code snippet
+   * Set the type of code snippet.
    * @default "single"
    */
   type?: "single" | "multi";

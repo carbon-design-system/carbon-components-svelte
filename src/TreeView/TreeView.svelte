@@ -52,32 +52,32 @@
    */
 
   /**
-   * Provide an array of nodes to render
+   * Provide an array of nodes to render.
    * @type {ReadonlyArray<Node>}
    */
   export let nodes = [];
 
   /**
-   * Set the current active node id
-   * Only one node can be active
+   * Set the current active node id.
+   * Only one node can be active.
    * @type {TreeNodeId}
    */
   export let activeId = "";
 
   /**
-   * Set the node ids to be selected
+   * Set the node ids to be selected.
    * @type {ReadonlyArray<TreeNodeId>}
    */
   export let selectedIds = [];
 
   /**
-   * Set the node ids to be expanded
+   * Set the node ids to be expanded.
    * @type {ReadonlyArray<TreeNodeId>}
    */
   export let expandedIds = [];
 
   /**
-   * Specify the TreeView size
+   * Specify the TreeView size.
    * @type {"default" | "compact"}
    */
   export let size = "default";

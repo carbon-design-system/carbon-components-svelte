@@ -5,13 +5,13 @@ type $RestProps = SvelteHTMLElements["a"];
 
 type $Props = {
   /**
-   * Specify the `href` attribute
+   * Specify the `href` attribute.
    * @default undefined
    */
   href?: string;
 
   /**
-   * Specify the text
+   * Specify the text.
    * @default undefined
    */
   text?: string;

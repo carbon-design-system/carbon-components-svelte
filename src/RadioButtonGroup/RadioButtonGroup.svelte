@@ -4,7 +4,7 @@
    */
 
   /**
-   * Set the selected radio button value
+   * Set the selected radio button value.
    * @type {string | number}
    */
   export let selected = undefined;
@@ -13,13 +13,13 @@
   export let disabled = false;
 
   /**
-   * Set to `true` to require the selection of a radio button
+   * Set to `true` to require the selection of a radio button.
    * @type {boolean}
    */
   export let required = undefined;
 
   /**
-   * Specify a name attribute for the radio button inputs
+   * Specify a name attribute for the radio button inputs.
    * @type {string}
    */
   export let name = undefined;
@@ -34,19 +34,19 @@
   export let helperText = "";
 
   /**
-   * Specify the label position
+   * Specify the label position.
    * @type {"right" | "left"}
    */
   export let labelPosition = "right";
 
   /**
-   * Specify the orientation of the radio buttons
+   * Specify the orientation of the radio buttons.
    * @type {"horizontal" | "vertical"}
    */
   export let orientation = "horizontal";
 
   /**
-   * Set an id for the container div element
+   * Set an id for the container div element.
    * @type {string}
    */
   export let id = undefined;

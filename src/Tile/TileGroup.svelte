@@ -6,7 +6,7 @@
    */
 
   /**
-   * Specify the selected tile value
+   * Specify the selected tile value.
    * @type {T | undefined}
    */
   export let selected = undefined;
@@ -15,13 +15,13 @@
   export let disabled = false;
 
   /**
-   * Set to `true` to require the selection of a radio button
+   * Set to `true` to require the selection of a radio button.
    * @type {boolean}
    */
   export let required = undefined;
 
   /**
-   * Specify a name attribute for the radio button inputs
+   * Specify a name attribute for the radio button inputs.
    * @type {string}
    */
   export let name = undefined;

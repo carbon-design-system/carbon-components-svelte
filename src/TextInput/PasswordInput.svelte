@@ -1,18 +1,18 @@
 <script>
   /**
-   * Set the size of the input
+   * Set the size of the input.
    * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
   /**
-   * Specify the input value
+   * Specify the input value.
    * @type {number | string}
    */
   export let value = "";
 
   /**
-   * Set to `"text"` to toggle the password visibility
+   * Set to `"text"` to toggle the password visibility.
    * @type {"text" | "password"}
    */
   export let type = "password";
@@ -27,13 +27,13 @@
   export let showPasswordLabel = "Show password";
 
   /**
-   * Set the alignment of the tooltip relative to the icon
+   * Set the alignment of the tooltip relative to the icon.
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
 
   /**
-   * Set the position of the tooltip relative to the icon
+   * Set the position of the tooltip relative to the icon.
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
@@ -72,7 +72,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @type {string}
    */
   export let name = undefined;

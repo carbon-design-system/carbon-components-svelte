@@ -1,6 +1,6 @@
 <script>
   /**
-   * Specify the ARIA label for the button
+   * Specify the ARIA label for the button.
    * @type {string}
    */
   export let ariaLabel = undefined;

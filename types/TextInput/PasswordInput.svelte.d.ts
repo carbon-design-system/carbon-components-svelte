@@ -5,19 +5,19 @@ type $RestProps = SvelteHTMLElements["input"];
 
 type $Props = {
   /**
-   * Set the size of the input
+   * Set the size of the input.
    * @default undefined
    */
   size?: "sm" | "xl";
 
   /**
-   * Specify the input value
+   * Specify the input value.
    * @default ""
    */
   value?: number | string;
 
   /**
-   * Set to `"text"` to toggle the password visibility
+   * Set to `"text"` to toggle the password visibility.
    * @default "password"
    */
   type?: "text" | "password";
@@ -41,13 +41,13 @@ type $Props = {
   showPasswordLabel?: string;
 
   /**
-   * Set the alignment of the tooltip relative to the icon
+   * Set the alignment of the tooltip relative to the icon.
    * @default "center"
    */
   tooltipAlignment?: "start" | "center" | "end";
 
   /**
-   * Set the position of the tooltip relative to the icon
+   * Set the position of the tooltip relative to the icon.
    * @default "bottom"
    */
   tooltipPosition?: "top" | "right" | "bottom" | "left";
@@ -119,7 +119,7 @@ type $Props = {
   id?: string;
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @default undefined
    */
   name?: string;

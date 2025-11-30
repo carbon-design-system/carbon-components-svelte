@@ -9,32 +9,32 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Set the alignment of the tooltip relative to the icon
+   * Set the alignment of the tooltip relative to the icon.
    * @default "center"
    */
   align?: "start" | "center" | "end";
 
   /**
-   * Set the direction of the tooltip relative to the button
+   * Set the direction of the tooltip relative to the button.
    * @default "bottom"
    */
   direction?: "top" | "right" | "bottom" | "left";
 
   /**
-   * Set to `true` to open the tooltip
+   * Set to `true` to open the tooltip.
    * @default false
    */
   open?: boolean;
 
   /**
-   * Set to `true` to hide the tooltip icon
+   * Set to `true` to hide the tooltip icon.
    * @default false
    */
   hideIcon?: boolean;
 
   /**
    * Specify the icon to render for the tooltip button.
-   * Default to `<Information />`
+   * Defaults to `<Information />`.
    * @default Information
    */
   icon?: any;
@@ -58,13 +58,13 @@ type $Props = {
   tabindex?: string;
 
   /**
-   * Set an id for the tooltip
+   * Set an id for the tooltip.
    * @default "ccs-" + Math.random().toString(36)
    */
   tooltipId?: string;
 
   /**
-   * Set an id for the tooltip button
+   * Set an id for the tooltip button.
    * @default "ccs-" + Math.random().toString(36)
    */
   triggerId?: string;

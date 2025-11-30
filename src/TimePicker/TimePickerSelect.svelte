@@ -1,6 +1,6 @@
 <script>
   /**
-   * Specify the select value
+   * Specify the select value.
    * @type {number | string}
    */
   export let value = "";
@@ -18,7 +18,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the select element
+   * Specify a name attribute for the select element.
    * @type {string}
    */
   export let name = undefined;

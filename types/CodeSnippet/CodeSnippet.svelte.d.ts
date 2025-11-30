@@ -2,7 +2,7 @@ import type { SvelteComponentTyped } from "svelte";
 
 export type CodeSnippetProps = {
   /**
-   * Set the type of code snippet
+   * Set the type of code snippet.
    * @default "single"
    */
   type?: "single" | "inline" | "multi";
@@ -41,7 +41,7 @@ export type CodeSnippetProps = {
 
   /**
    * Set to `true` for the disabled variant.
-   * Only applies to the "single", "multi" types
+   * Only applies to the "single", "multi" types.
    * @default false
    */
   disabled?: boolean;
@@ -49,7 +49,7 @@ export type CodeSnippetProps = {
   /**
    * Set to `true` to wrap the text.
    *
-   * NOTE: this prop only works with the `type="multi"` variant
+   * NOTE: this prop only works with the `type="multi"` variant.
    * @default false
    */
   wrapText?: boolean;
@@ -67,13 +67,13 @@ export type CodeSnippetProps = {
   skeleton?: boolean;
 
   /**
-   * Specify the ARIA label for the copy button icon
+   * Specify the ARIA label for the copy button icon.
    * @default undefined
    */
   copyButtonDescription?: string;
 
   /**
-   * Specify the ARIA label of the copy button
+   * Specify the ARIA label of the copy button.
    * @default undefined
    */
   copyLabel?: string;
@@ -93,23 +93,23 @@ export type CodeSnippetProps = {
   /**
    * Specify the show less text.
    *
-   * NOTE: this prop only works with the `type="multi"` variant
+   * NOTE: this prop only works with the `type="multi"` variant.
    * @default "Show less"
    */
   showLessText?: string;
 
   /**
-   * Specify the show more text
+   * Specify the show more text.
    *
-   * NOTE: this prop only works with the `type="multi"` variant
+   * NOTE: this prop only works with the `type="multi"` variant.
    * @default "Show more"
    */
   showMoreText?: string;
 
   /**
-   * Set to `false` to hide the show more/less button
+   * Set to `false` to hide the show more/less button.
    *
-   * NOTE: this prop only works with the `type="multi"` variant
+   * NOTE: this prop only works with the `type="multi"` variant.
    * @default true
    */
   showMoreLess?: boolean;

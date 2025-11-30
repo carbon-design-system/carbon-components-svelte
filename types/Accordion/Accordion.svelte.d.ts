@@ -7,13 +7,13 @@ export type AccordionContext = {
 
 export type AccordionProps = AccordionSkeletonProps & {
   /**
-   * Specify alignment of accordion item chevron icon
+   * Specify alignment of accordion item chevron icon.
    * @default "end"
    */
   align?: "start" | "end";
 
   /**
-   * Specify the size of the accordion
+   * Specify the size of the accordion.
    * @default undefined
    */
   size?: "sm" | "xl";

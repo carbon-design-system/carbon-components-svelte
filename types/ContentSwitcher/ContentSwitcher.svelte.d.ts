@@ -18,7 +18,7 @@ type $Props = {
   selectedIndex?: number;
 
   /**
-   * Specify the size of the content switcher
+   * Specify the size of the content switcher.
    * @default undefined
    */
   size?: "sm" | "xl";

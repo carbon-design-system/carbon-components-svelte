@@ -14,7 +14,7 @@
    */
 
   /**
-   * Specify the position of the notification queue
+   * Specify the position of the notification queue.
    * @type {"top-right" | "bottom-right"}
    */
   export let position = "top-right";

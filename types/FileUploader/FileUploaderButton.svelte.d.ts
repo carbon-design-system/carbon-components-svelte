@@ -5,13 +5,13 @@ type $RestProps = SvelteHTMLElements["input"];
 
 type $Props = {
   /**
-   * Specify the accepted file types
+   * Specify the accepted file types.
    * @default []
    */
   accept?: ReadonlyArray<string>;
 
   /**
-   * Obtain a reference to the uploaded files
+   * Obtain a reference to the uploaded files.
    * @default []
    */
   files?: ReadonlyArray<File>;
@@ -35,13 +35,13 @@ type $Props = {
   disableLabelChanges?: boolean;
 
   /**
-   * Specify the kind of file uploader button
+   * Specify the kind of file uploader button.
    * @default "primary"
    */
   kind?: import("../Button/Button.svelte").ButtonProps["kind"];
 
   /**
-   * Specify the size of the file uploader button
+   * Specify the size of the file uploader button.
    * @default "small"
    */
   size?: import("../Button/Button.svelte").ButtonProps["size"];

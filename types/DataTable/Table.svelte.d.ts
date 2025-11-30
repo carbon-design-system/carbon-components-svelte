@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["section"];
 
 type $Props = {
   /**
-   * Set the size of the table
+   * Set the size of the table.
    * @default undefined
    */
   size?: "compact" | "short" | "medium" | "tall";
@@ -35,7 +35,7 @@ type $Props = {
   stickyHeader?: boolean;
 
   /**
-   * Set the style attribute on the `table` element
+   * Set the style attribute on the `table` element.
    * @default undefined
    */
   tableStyle?: string;

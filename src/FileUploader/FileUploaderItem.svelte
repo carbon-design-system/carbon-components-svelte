@@ -4,13 +4,13 @@
    */
 
   /**
-   * Specify the file uploader status
+   * Specify the file uploader status.
    * @type {"uploading" | "edit" | "complete"}
    */
   export let status = "uploading";
 
   /**
-   * Specify the size of button skeleton
+   * Specify the size of button skeleton.
    * @type {"default" | "field" | "small"}
    */
   export let size = "default";

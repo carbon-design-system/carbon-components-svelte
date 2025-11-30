@@ -1,12 +1,12 @@
 <script>
   /**
-   * Set the size of the list box
+   * Set the size of the list box.
    * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
   /**
-   * Set the type of the list box
+   * Set the type of the list box.
    * @type {"default" | "inline"}
    */
   export let type = "default";

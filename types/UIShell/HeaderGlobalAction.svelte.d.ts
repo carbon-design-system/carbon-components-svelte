@@ -9,13 +9,13 @@ export type HeaderGlobalActionProps = ButtonProps & {
   isActive?: boolean;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @default undefined
    */
   icon?: any;
 
   /**
-   * Obtain a reference to the HTML button element
+   * Obtain a reference to the HTML button element.
    * @default null
    */
   ref?: HTMLButtonElement;

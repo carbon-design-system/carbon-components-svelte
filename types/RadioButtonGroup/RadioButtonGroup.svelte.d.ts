@@ -13,7 +13,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Set the selected radio button value
+   * Set the selected radio button value.
    * @default undefined
    */
   selected?: string | number;
@@ -25,13 +25,13 @@ type $Props = {
   disabled?: boolean;
 
   /**
-   * Set to `true` to require the selection of a radio button
+   * Set to `true` to require the selection of a radio button.
    * @default undefined
    */
   required?: boolean;
 
   /**
-   * Specify a name attribute for the radio button inputs
+   * Specify a name attribute for the radio button inputs.
    * @default undefined
    */
   name?: string;
@@ -55,19 +55,19 @@ type $Props = {
   helperText?: string;
 
   /**
-   * Specify the label position
+   * Specify the label position.
    * @default "right"
    */
   labelPosition?: "right" | "left";
 
   /**
-   * Specify the orientation of the radio buttons
+   * Specify the orientation of the radio buttons.
    * @default "horizontal"
    */
   orientation?: "horizontal" | "vertical";
 
   /**
-   * Set an id for the container div element
+   * Set an id for the container div element.
    * @default undefined
    */
   id?: string;

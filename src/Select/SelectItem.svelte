@@ -1,12 +1,12 @@
 <script>
   /**
-   * Specify the option value
+   * Specify the option value.
    * @type {string | number}
    */
   export let value = "";
 
   /**
-   * Specify the option text
+   * Specify the option text.
    * If not specified, the value will be used as the text.
    * @type {string}
    */
@@ -21,13 +21,13 @@
   let className = undefined;
 
   /**
-   * Specify the class of the `option` element
+   * Specify the class of the `option` element.
    * @type {string}
    */
   export { className as class };
 
   /**
-   * Specify the style of the `option` element
+   * Specify the style of the `option` element.
    * @type {string}
    */
   export let style = undefined;

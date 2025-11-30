@@ -5,13 +5,13 @@ type $RestProps = SvelteHTMLElements["input"];
 
 type $Props = {
   /**
-   * Specify the value of the search input
+   * Specify the value of the search input.
    * @default ""
    */
   value?: any;
 
   /**
-   * Specify the size of the search input
+   * Specify the size of the search input.
    * @default "xl"
    */
   size?: "sm" | "lg" | "xl";
@@ -59,7 +59,7 @@ type $Props = {
   placeholder?: string;
 
   /**
-   * Specify the `autocomplete` attribute
+   * Specify the `autocomplete` attribute.
    * @default "off"
    */
   autocomplete?: "on" | "off";

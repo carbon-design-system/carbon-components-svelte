@@ -5,7 +5,7 @@
 
   /**
    * Specify the item text.
-   * Alternatively, use the default slot
+   * Alternatively, use the default slot.
    */
   export let text = "Provide text";
 

@@ -4,7 +4,7 @@
    */
 
   /**
-   * Specify the toggle size
+   * Specify the toggle size.
    * @type {"default" | "sm"}
    */
   export let size = "default";
@@ -31,7 +31,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the checkbox input
+   * Specify a name attribute for the checkbox input.
    * @type {string}
    */
   export let name = undefined;

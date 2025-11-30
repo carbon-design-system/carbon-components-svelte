@@ -6,14 +6,14 @@
    */
 
   /**
-   * Set the size of the input
+   * Set the size of the input.
    * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
   /**
    * Specify the input value.
-   * Use `null` to denote "no value"
+   * Use `null` to denote "no value".
    * @type {null | number}
    */
   export let value = null;
@@ -22,13 +22,13 @@
   export let step = 1;
 
   /**
-   * Specify the maximum value
+   * Specify the maximum value.
    * @type {number}
    */
   export let max = undefined;
 
   /**
-   * Specify the minimum value
+   * Specify the minimum value.
    * @type {number}
    */
   export let min = undefined;
@@ -44,7 +44,7 @@
 
   /**
    * Set to `true` to preserve decimal input formatting.
-   * When enabled, uses type="text" with inputmode="decimal" instead of type="number"
+   * When enabled, uses type="text" with inputmode="decimal" instead of type="number".
    * @type {boolean}
    * @example
    * ```svelte
@@ -82,13 +82,13 @@
   export let hideLabel = false;
 
   /**
-   * Override the default translation ids
+   * Override the default translation ids.
    * @type {(id: NumberInputTranslationId) => string}
    */
   export let translateWithId = (id) => defaultTranslations[id];
 
   /**
-   * Default translation ids
+   * Default translation ids.
    * @type {{ increment: "increment"; decrement: "decrement" }}
    */
   export const translationIds = {
@@ -100,7 +100,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @type {string}
    */
   export let name = undefined;

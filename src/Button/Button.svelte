@@ -7,13 +7,13 @@
    */
 
   /**
-   * Specify the kind of button
+   * Specify the kind of button.
    * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost"}
    */
   export let kind = "primary";
 
   /**
-   * Specify the size of button
+   * Specify the size of button.
    * @type {"default" | "field" | "small" | "lg" | "xl"}
    */
   export let size = "default";
@@ -22,13 +22,13 @@
   export let expressive = false;
 
   /**
-   * Set to `true` to enable the selected state for an icon-only, ghost button
+   * Set to `true` to enable the selected state for an icon-only, ghost button.
    */
   export let isSelected = false;
 
   /**
-   * Specify the icon to render
-   * Alternatively, use the named slot "icon"
+   * Specify the icon to render.
+   * Alternatively, use the named slot "icon".
    *
    * @type {any}
    * @example
@@ -41,20 +41,20 @@
   export let icon = undefined;
 
   /**
-   * Specify the ARIA label for the button icon
+   * Specify the ARIA label for the button icon.
    * @type {string}
    */
   export let iconDescription = undefined;
 
   /**
    * Set the alignment of the tooltip relative to the icon.
-   * Only applies to icon-only buttons
+   * Only applies to icon-only buttons.
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
 
   /**
-   * Set the position of the tooltip relative to the icon
+   * Set the position of the tooltip relative to the icon.
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
@@ -67,8 +67,8 @@
   export let hideTooltip = false;
 
   /**
-   * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot
+   * Set to `true` to render a custom HTML element.
+   * Props are destructured as `props` in the default slot.
    * @example
    * ```svelte
    * <Button let:props>
@@ -85,7 +85,7 @@
   export let disabled = false;
 
   /**
-   * Set the `href` to use an anchor link
+   * Set the `href` to use an anchor link.
    * @type {string}
    */
   export let href = undefined;

@@ -52,12 +52,12 @@ type $Props = {
   itemsPerPageText?: string;
 
   /**
-   * Override the item text
+   * Override the item text.
    */
   itemText?: (min: number, max: number) => string;
 
   /**
-   * Override the item range text
+   * Override the item range text.
    */
   itemRangeText?: (min: number, max: number, total: number) => string;
 
@@ -80,7 +80,7 @@ type $Props = {
   pageSize?: number;
 
   /**
-   * Specify the available page sizes
+   * Specify the available page sizes.
    * @default [10]
    */
   pageSizes?: ReadonlyArray<number>;
@@ -92,12 +92,12 @@ type $Props = {
   pagesUnknown?: boolean;
 
   /**
-   * Override the page text
+   * Override the page text.
    */
   pageText?: (page: number) => string;
 
   /**
-   * Override the page range text
+   * Override the page range text.
    */
   pageRangeText?: (current: number, total: number) => string;
 
@@ -115,13 +115,13 @@ export type PaginationProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class Pagination extends SvelteComponentTyped<
   PaginationProps,
   {
-    /** Dispatched after any user interaction */
+    /** Dispatched after any user interaction. */
     change: CustomEvent<{ page?: number; pageSize?: number }>;
-    /** Dispatched after any user interaction */
+    /** Dispatched after any user interaction. */
     "click:button--previous": CustomEvent<{ page: number }>;
-    /** Dispatched after any user interaction */
+    /** Dispatched after any user interaction. */
     "click:button--next": CustomEvent<{ page: number }>;
-    /** Dispatched after any user interaction */
+    /** Dispatched after any user interaction. */
     update: CustomEvent<{ pageSize: number; page: number }>;
   },
   Record<string, never>

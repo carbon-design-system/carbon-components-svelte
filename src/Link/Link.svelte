@@ -1,12 +1,12 @@
 <script>
   /**
-   * Specify the size of the link
+   * Specify the size of the link.
    * @type {"sm" | "lg"}
    */
   export let size = undefined;
 
   /**
-   * Specify the href value
+   * Specify the href value.
    * @type {string}
    */
   export let href = undefined;
@@ -15,8 +15,8 @@
   export let inline = false;
 
   /**
-   * Specify the icon to render
-   * `inline` must be `false`
+   * Specify the icon to render.
+   * `inline` must be `false`.
    * @type {any}
    */
   export let icon = undefined;

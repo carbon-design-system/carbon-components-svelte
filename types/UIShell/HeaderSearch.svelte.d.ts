@@ -29,13 +29,13 @@ type $Props<Result> = {
   ref?: null | HTMLInputElement;
 
   /**
-   * Render a list of search results
+   * Render a list of search results.
    * @default []
    */
   results?: ReadonlyArray<Result>;
 
   /**
-   * Specify the selected result index
+   * Specify the selected result index.
    * @default 0
    */
   selectedResultIndex?: number;

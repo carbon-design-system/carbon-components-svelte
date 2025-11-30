@@ -21,7 +21,7 @@ export type NotificationData = {
 
 export type NotificationQueueProps = {
   /**
-   * Specify the position of the notification queue
+   * Specify the position of the notification queue.
    * @default "top-right"
    */
   position?: "top-right" | "bottom-right";

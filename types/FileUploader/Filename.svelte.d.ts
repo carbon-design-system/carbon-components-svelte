@@ -7,7 +7,7 @@ type $RestProps = SvelteHTMLElements["div"] &
 
 type $Props = {
   /**
-   * Specify the file name status
+   * Specify the file name status.
    * @default "uploading"
    */
   status?: "uploading" | "edit" | "complete";

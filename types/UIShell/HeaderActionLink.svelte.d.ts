@@ -11,13 +11,13 @@ type $Props = {
   linkIsActive?: boolean;
 
   /**
-   * Specify the `href` attribute
+   * Specify the `href` attribute.
    * @default undefined
    */
   href?: string;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @default undefined
    */
   icon?: any;

@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the value of the checkbox
+   * Specify the value of the checkbox.
    * @default ""
    */
   value?: any;
@@ -17,7 +17,7 @@ type $Props = {
   checked?: boolean;
 
   /**
-   * Specify the bound group
+   * Specify the bound group.
    * @default undefined
    */
   group?: ReadonlyArray<any>;
@@ -77,7 +77,7 @@ type $Props = {
   name?: string;
 
   /**
-   * Specify the title attribute for the label element
+   * Specify the title attribute for the label element.
    * @default undefined
    */
   title?: string;

@@ -1,12 +1,12 @@
 <script>
   /**
-   * Specify the size of the input
+   * Specify the size of the input.
    * @type {"sm" | "xl"}
    */
   export let size = undefined;
 
   /**
-   * Specify the input value
+   * Specify the input value.
    * @type {string}
    */
   export let value = "";
@@ -42,7 +42,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @type {string}
    */
   export let name = undefined;

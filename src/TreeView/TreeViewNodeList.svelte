@@ -15,7 +15,7 @@
   export let disabled = false;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @type {any}
    */
   export let icon = undefined;

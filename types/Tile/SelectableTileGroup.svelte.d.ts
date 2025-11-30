@@ -12,7 +12,7 @@ type $RestProps = SvelteHTMLElements["fieldset"];
 
 type $Props<T> = {
   /**
-   * Specify the selected tile values
+   * Specify the selected tile values.
    * @default []
    */
   selected?: T[];
@@ -24,7 +24,7 @@ type $Props<T> = {
   disabled?: boolean;
 
   /**
-   * Specify a name attribute for the checkbox inputs
+   * Specify a name attribute for the checkbox inputs.
    * @default undefined
    */
   name?: string | undefined;

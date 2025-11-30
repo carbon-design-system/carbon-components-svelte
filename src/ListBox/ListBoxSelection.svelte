@@ -8,7 +8,7 @@
    */
 
   /**
-   * Specify the number of selected items
+   * Specify the number of selected items.
    * @type {number}
    */
   export let selectionCount = undefined;
@@ -23,7 +23,7 @@
   };
 
   /**
-   * Override the default translation ids
+   * Override the default translation ids.
    * @type {(id: ListBoxSelectionTranslationId) => string}
    */
   export let translateWithId = (id) => defaultTranslations[id];

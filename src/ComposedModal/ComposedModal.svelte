@@ -7,7 +7,7 @@
    */
 
   /**
-   * Set the size of the composed modal
+   * Set the size of the composed modal.
    * @type {"xs" | "sm" | "lg"}
    */
   export let size = undefined;
@@ -25,7 +25,7 @@
   export let containerClass = "";
 
   /**
-   * Specify a selector to be focused when opening the modal
+   * Specify a selector to be focused when opening the modal.
    * @type {null | string}
    */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";

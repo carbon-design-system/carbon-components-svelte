@@ -5,7 +5,7 @@
    */
 
   /**
-   * Specify the kind of notification
+   * Specify the kind of notification.
    * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
    */
   export let kind = "error";
@@ -29,7 +29,7 @@
   export let caption = "";
 
   /**
-   * Specify the ARIA label for the status icon
+   * Specify the ARIA label for the status icon.
    * @type {string}
    * */
   export let statusIconDescription = kind + " icon";

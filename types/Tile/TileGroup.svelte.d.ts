@@ -13,7 +13,7 @@ type $RestProps = SvelteHTMLElements["fieldset"];
 
 type $Props<T> = {
   /**
-   * Specify the selected tile value
+   * Specify the selected tile value.
    * @default undefined
    */
   selected?: T | undefined;
@@ -25,13 +25,13 @@ type $Props<T> = {
   disabled?: boolean;
 
   /**
-   * Set to `true` to require the selection of a radio button
+   * Set to `true` to require the selection of a radio button.
    * @default undefined
    */
   required?: boolean;
 
   /**
-   * Specify a name attribute for the radio button inputs
+   * Specify a name attribute for the radio button inputs.
    * @default undefined
    */
   name?: string;

@@ -9,7 +9,7 @@ type $RestProps = SvelteHTMLElements["button"] &
 
 type $Props = {
   /**
-   * Specify the kind of button
+   * Specify the kind of button.
    * @default "primary"
    */
   kind?:
@@ -22,7 +22,7 @@ type $Props = {
     | "danger-ghost";
 
   /**
-   * Specify the size of button
+   * Specify the size of button.
    * @default "default"
    */
   size?: "default" | "field" | "small" | "lg" | "xl";
@@ -34,14 +34,14 @@ type $Props = {
   expressive?: boolean;
 
   /**
-   * Set to `true` to enable the selected state for an icon-only, ghost button
+   * Set to `true` to enable the selected state for an icon-only, ghost button.
    * @default false
    */
   isSelected?: boolean;
 
   /**
-   * Specify the icon to render
-   * Alternatively, use the named slot "icon"
+   * Specify the icon to render.
+   * Alternatively, use the named slot "icon".
    * @example
    * ```svelte
    * <Button>
@@ -53,20 +53,20 @@ type $Props = {
   icon?: any;
 
   /**
-   * Specify the ARIA label for the button icon
+   * Specify the ARIA label for the button icon.
    * @default undefined
    */
   iconDescription?: string;
 
   /**
    * Set the alignment of the tooltip relative to the icon.
-   * Only applies to icon-only buttons
+   * Only applies to icon-only buttons.
    * @default "center"
    */
   tooltipAlignment?: "start" | "center" | "end";
 
   /**
-   * Set the position of the tooltip relative to the icon
+   * Set the position of the tooltip relative to the icon.
    * @default "bottom"
    */
   tooltipPosition?: "top" | "right" | "bottom" | "left";
@@ -80,8 +80,8 @@ type $Props = {
   hideTooltip?: boolean;
 
   /**
-   * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot
+   * Set to `true` to render a custom HTML element.
+   * Props are destructured as `props` in the default slot.
    * @example
    * ```svelte
    * <Button let:props>
@@ -105,7 +105,7 @@ type $Props = {
   disabled?: boolean;
 
   /**
-   * Set the `href` to use an anchor link
+   * Set the `href` to use an anchor link.
    * @default undefined
    */
   href?: string;

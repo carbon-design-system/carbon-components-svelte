@@ -7,7 +7,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the number of selected items
+   * Specify the number of selected items.
    * @default undefined
    */
   selectionCount?: number;
@@ -19,7 +19,7 @@ type $Props = {
   disabled?: boolean;
 
   /**
-   * Override the default translation ids
+   * Override the default translation ids.
    */
   translateWithId?: (id: ListBoxSelectionTranslationId) => string;
 

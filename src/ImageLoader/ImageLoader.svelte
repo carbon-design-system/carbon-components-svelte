@@ -5,39 +5,39 @@
    */
 
   /**
-   * Specify the image source
+   * Specify the image source.
    */
   export let src = "";
 
   /**
-   * Specify the image alt text
+   * Specify the image alt text.
    */
   export let alt = "";
 
   /**
-   * Specify the aspect ratio for the image wrapper
+   * Specify the aspect ratio for the image wrapper.
    * @type {"2x1" | "16x9" | "4x3" | "1x1" | "3x4" | "3x2" | "9x16" | "1x2"}
    */
   export let ratio = undefined;
 
   /**
-   * Set to `true` when `loaded` is `true` and `error` is false
+   * Set to `true` when `loaded` is `true` and `error` is false.
    */
   export let loading = false;
 
   /**
-   * Set to `true` when the image is loaded
+   * Set to `true` when the image is loaded.
    */
   export let loaded = false;
 
   /**
-   * Set to `true` if an error occurs when loading the image
+   * Set to `true` if an error occurs when loading the image.
    */
   export let error = false;
 
   /**
-   * Set to `true` to fade in the image on load
-   * The duration uses the `fast-02` value following Carbon guidelines on motion
+   * Set to `true` to fade in the image on load.
+   * The duration uses the `fast-02` value following Carbon guidelines on motion.
    */
   export let fadeIn = false;
 

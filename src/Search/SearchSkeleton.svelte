@@ -1,6 +1,6 @@
 <script>
   /**
-   * Specify the size of the search input
+   * Specify the size of the search input.
    * @type {"sm" | "lg" | "xl"}
    */
   export let size = "xl";

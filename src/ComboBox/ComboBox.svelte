@@ -16,19 +16,19 @@
    */
 
   /**
-   * Set the combobox items
+   * Set the combobox items.
    * @type {ReadonlyArray<Item>}
    */
   export let items = [];
 
   /**
-   * Override the display of a combobox item
+   * Override the display of a combobox item.
    * @type {(item: Item) => string}
    */
   export let itemToString = (item) => item.text || item.id;
 
   /**
-   * Set the selected item by value id
+   * Set the selected item by value id.
    * @type {ComboBoxItemId}
    */
   export let selectedId = undefined;
@@ -37,13 +37,13 @@
   export let value = "";
 
   /**
-   * Specify the direction of the combobox dropdown menu
+   * Specify the direction of the combobox dropdown menu.
    * @type {"bottom" | "top"}
    */
   export let direction = "bottom";
 
   /**
-   * Set the size of the combobox
+   * Set the size of the combobox.
    * @type {"sm" | "xl"}
    */
   export let size = undefined;
@@ -107,7 +107,7 @@
 
   /**
    * Override the chevron icon label based on the open state.
-   * Defaults to "Open menu" when closed and "Close menu" when open
+   * Defaults to "Open menu" when closed and "Close menu" when open.
    * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
    */
   export let translateWithId = undefined;
@@ -123,7 +123,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @type {string}
    */
   export let name = undefined;
@@ -132,7 +132,7 @@
   export let ref = null;
 
   /**
-   * Obtain a reference to the list HTML element
+   * Obtain a reference to the list HTML element.
    * @type {null | HTMLDivElement}
    */
   export let listRef = null;

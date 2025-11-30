@@ -1,6 +1,6 @@
 <script>
   /**
-   * Specify the toggle size
+   * Specify the toggle size.
    * @type {"default" | "sm"}
    */
   export let size = "default";

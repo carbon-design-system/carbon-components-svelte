@@ -53,7 +53,7 @@ type $Props = {
   id?: string;
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @default ""
    */
   name?: string;

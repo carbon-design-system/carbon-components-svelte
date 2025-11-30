@@ -1,6 +1,6 @@
 <script>
   /**
-   * Specify the toolbar size
+   * Specify the toolbar size.
    * @type {"sm" | "default"}
    */
   export let size = "default";

@@ -6,7 +6,7 @@
    */
 
   /**
-   * Specify the file uploader status
+   * Specify the file uploader status.
    * @type {"uploading" | "edit" | "complete"}
    */
   export let status = "uploading";
@@ -15,13 +15,13 @@
   export let disabled = false;
 
   /**
-   * Specify the accepted file types
+   * Specify the accepted file types.
    * @type {ReadonlyArray<string>}
    */
   export let accept = [];
 
   /**
-   * Obtain a reference to the uploaded files
+   * Obtain a reference to the uploaded files.
    * @type {ReadonlyArray<File>}
    */
   export let files = [];
@@ -30,7 +30,7 @@
   export let multiple = false;
 
   /**
-   * Programmatically clear the uploaded files
+   * Programmatically clear the uploaded files.
    * @type {() => void}
    * @example
    * ```svelte
@@ -44,7 +44,7 @@
 
   /**
    * Specify the label title.
-   * Alternatively, use the named slot "labelTitle"
+   * Alternatively, use the named slot "labelTitle".
    * @example
    * ```svelte
    * <FileUploader>
@@ -56,7 +56,7 @@
 
   /**
    * Specify the label description.
-   * Alternatively, use the named slot "labelDescription"
+   * Alternatively, use the named slot "labelDescription".
    * @example
    * ```svelte
    * <FileUploader>
@@ -67,13 +67,13 @@
   export let labelDescription = "";
 
   /**
-   * Specify the kind of file uploader button
+   * Specify the kind of file uploader button.
    * @type {import("../Button/Button.svelte").ButtonProps["kind"]}
    */
   export let kind = "primary";
 
   /**
-   * Specify the size of the file uploader button
+   * Specify the size of the file uploader button.
    * @type {import("../Button/Button.svelte").ButtonProps["size"]}
    */
   export let size = "small";
