@@ -1,7 +1,7 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
+import type { HTMLAttributes } from "svelte/elements";
 
-type $RestProps = SvelteHTMLElements["svelte:element"];
+type $RestProps = HTMLAttributes<HTMLElement>;
 
 type $Props = {
   /**
