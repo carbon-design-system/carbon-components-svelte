@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the switch text.
-   * Alternatively, use the "text" slot
+   * Alternatively, use the "text" slot.
    * @example
    * ```svelte
    * <Switch>

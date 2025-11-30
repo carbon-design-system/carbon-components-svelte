@@ -1,6 +1,6 @@
 <script>
   /**
-   * Dispatched after any user interaction
+   * Dispatched after any user interaction.
    * @event change
    * @type {object}
    * @property {number} [page]
@@ -46,14 +46,14 @@
   export let itemsPerPageText = "Items per page:";
 
   /**
-   * Override the item text
+   * Override the item text.
    * @type {(min: number, max: number) => string}
    */
   export let itemText = (min, max) =>
     `${min.toLocaleString()}–${max.toLocaleString()} item${max === 1 ? "" : "s"}`;
 
   /**
-   * Override the item range text
+   * Override the item range text.
    * @type {(min: number, max: number, total: number) => string}
    */
   export let itemRangeText = (min, max, total) =>
@@ -69,7 +69,7 @@
   export let pageSize = 10;
 
   /**
-   * Specify the available page sizes
+   * Specify the available page sizes.
    * @type {ReadonlyArray<number>}
    */
   export let pageSizes = [10];
@@ -78,13 +78,13 @@
   export let pagesUnknown = false;
 
   /**
-   * Override the page text
+   * Override the page text.
    * @type {(page: number) => string}
    */
   export let pageText = (page) => `page ${page.toLocaleString()}`;
 
   /**
-   * Override the page range text
+   * Override the page range text.
    * @type {(current: number, total: number) => string}
    */
   export let pageRangeText = (_current, total) =>
@@ -106,10 +106,10 @@
    * Returns a subset of page numbers centered around the current page to prevent
    * performance issues with large datasets. Creates a capped window of pages
    * instead of potentially thousands, improving render speed and memory usage.
-   * @param {number} currentPage - The current page number
-   * @param {number} totalPages - Total number of pages
-   * @param {number} window - How many pages to show before/after current page
-   * @returns {number[]} Array of page numbers to display
+   * @param {number} currentPage - The current page number.
+   * @param {number} totalPages - Total number of pages.
+   * @param {number} window - How many pages to show before/after current page.
+   * @returns {number[]} Array of page numbers to display.
    */
   function getWindowedPages(currentPage, totalPages, window) {
     const start = Math.max(1, currentPage - window);

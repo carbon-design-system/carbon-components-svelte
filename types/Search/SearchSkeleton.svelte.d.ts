@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the size of the search input
+   * Specify the size of the search input.
    * @default "xl"
    */
   size?: "sm" | "lg" | "xl";

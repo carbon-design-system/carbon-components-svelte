@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the aspect ratio
+   * Specify the aspect ratio.
    * @default "2x1"
    */
   ratio?:

@@ -17,13 +17,13 @@ type $Props = {
   isSideNavOpen?: boolean;
 
   /**
-   * Specify the ARIA label for the header
+   * Specify the ARIA label for the header.
    * @default undefined
    */
   uiShellAriaLabel?: string;
 
   /**
-   * Specify the `href` attribute
+   * Specify the `href` attribute.
    * @default undefined
    */
   href?: string;
@@ -31,7 +31,7 @@ type $Props = {
   /**
    * Specify the company name.
    *
-   * Alternatively, use the named slot "company"
+   * Alternatively, use the named slot "company".
    * @example
    * ```svelte
    * <Header>
@@ -44,7 +44,7 @@ type $Props = {
 
   /**
    * Specify the platform name.
-   * Alternatively, use the named slot "platform"
+   * Alternatively, use the named slot "platform".
    * @example
    * ```svelte
    * <Header>
@@ -68,7 +68,7 @@ type $Props = {
    * - medium: 672
    * - large: 1056
    * - x-large: 1312
-   * - max: 1584
+   * - max: 1584.
    * @default 1056
    */
   expansionBreakpoint?: number;

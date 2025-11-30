@@ -5,13 +5,13 @@ type $RestProps = SvelteHTMLElements["a"];
 
 type $Props = {
   /**
-   * Specify the size of the link
+   * Specify the size of the link.
    * @default undefined
    */
   size?: "sm" | "lg";
 
   /**
-   * Specify the href value
+   * Specify the href value.
    * @default undefined
    */
   href?: string;
@@ -23,8 +23,8 @@ type $Props = {
   inline?: boolean;
 
   /**
-   * Specify the icon to render
-   * `inline` must be `false`
+   * Specify the icon to render.
+   * `inline` must be `false`.
    * @default undefined
    */
   icon?: any;

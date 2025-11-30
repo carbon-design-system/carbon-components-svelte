@@ -12,7 +12,7 @@
   export let rail = false;
 
   /**
-   * Specify the ARIA label for the nav
+   * Specify the ARIA label for the nav.
    * @type {string}
    */
   export let ariaLabel = undefined;
@@ -27,7 +27,7 @@
    * - medium: 672
    * - large: 1056
    * - x-large: 1312
-   * - max: 1584
+   * - max: 1584.
    */
   export let expansionBreakpoint = 1056;
 

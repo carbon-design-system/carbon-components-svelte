@@ -17,7 +17,7 @@ type $Props = {
   indeterminate?: boolean;
 
   /**
-   * Specify the title attribute for the label element
+   * Specify the title attribute for the label element.
    * @default undefined
    */
   title?: string;

@@ -4,7 +4,7 @@
    */
 
   /**
-   * Specify the file name status
+   * Specify the file name status.
    * @type {"uploading" | "edit" | "complete"}
    */
   export let status = "uploading";

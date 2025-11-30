@@ -12,7 +12,7 @@
    */
 
   /**
-   * Set the size of the modal
+   * Set the size of the modal.
    * @type {"xs" | "sm" | "lg"}
    */
   export let size = undefined;
@@ -30,19 +30,19 @@
   export let passiveModal = false;
 
   /**
-   * Specify the modal heading
+   * Specify the modal heading.
    * @type {string}
    */
   export let modalHeading = undefined;
 
   /**
-   * Specify the modal label
+   * Specify the modal label.
    * @type {string}
    */
   export let modalLabel = undefined;
 
   /**
-   * Specify the ARIA label for the modal
+   * Specify the ARIA label for the modal.
    * @type {string}
    */
   export let modalAriaLabel = undefined;
@@ -70,14 +70,14 @@
   export let primaryButtonDisabled = false;
 
   /**
-   * Specify the primary button icon
+   * Specify the primary button icon.
    * @type {any}
    */
   export let primaryButtonIcon = undefined;
 
   /**
    * Set to `true` for the "submit" and "click:button--primary" events
-   * to be dispatched when pressing "Enter"
+   * to be dispatched when pressing "Enter".
    */
   export let shouldSubmitOnEnter = true;
 
@@ -85,8 +85,8 @@
   export let secondaryButtonText = "";
 
   /**
-   * 2-tuple prop to render two secondary buttons for a 3 button modal
-   * supersedes `secondaryButtonText`
+   * 2-tuple prop to render two secondary buttons for a 3 button modal.
+   * Supersedes `secondaryButtonText`.
    * @type {[{ text: string; }, { text: string; }]}
    */
   export let secondaryButtons = [];

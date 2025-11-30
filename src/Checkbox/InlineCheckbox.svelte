@@ -6,7 +6,7 @@
   export let indeterminate = false;
 
   /**
-   * Specify the title attribute for the label element
+   * Specify the title attribute for the label element.
    * @type {string}
    */
   export let title = undefined;

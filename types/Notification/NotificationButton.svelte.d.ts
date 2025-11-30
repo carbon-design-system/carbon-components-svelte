@@ -5,19 +5,19 @@ type $RestProps = SvelteHTMLElements["button"];
 
 type $Props = {
   /**
-   * Set the type of notification
+   * Set the type of notification.
    * @default "toast"
    */
   notificationType?: "toast" | "inline";
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @default Close
    */
   icon?: any;
 
   /**
-   * Specify the title of the icon
+   * Specify the title of the icon.
    * @default undefined
    */
   title?: string;

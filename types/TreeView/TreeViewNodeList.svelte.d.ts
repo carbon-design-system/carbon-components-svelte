@@ -36,7 +36,7 @@ export type TreeViewNodeListProps = {
   disabled?: boolean;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @default undefined
    */
   icon?: any;

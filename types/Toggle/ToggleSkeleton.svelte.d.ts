@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the toggle size
+   * Specify the toggle size.
    * @default "default"
    */
   size?: "default" | "sm";

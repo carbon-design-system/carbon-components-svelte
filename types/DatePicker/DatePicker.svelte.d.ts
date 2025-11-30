@@ -20,27 +20,27 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the date picker type
+   * Specify the date picker type.
    * @default "simple"
    */
   datePickerType?: "simple" | "single" | "range";
 
   /**
-   * Specify the date picker input value
+   * Specify the date picker input value.
    * @default ""
    */
   value?: number | string;
 
   /**
-   * Specify the date picker start date value (from)
-   * Only works with the "range" date picker type
+   * Specify the date picker start date value (from).
+   * Only works with the "range" date picker type.
    * @default ""
    */
   valueFrom?: string;
 
   /**
-   * Specify the date picker end date value (to)
-   * Only works with the "range" date picker type
+   * Specify the date picker end date value (to).
+   * Only works with the "range" date picker type.
    * @default ""
    */
   valueTo?: string;
@@ -52,19 +52,19 @@ type $Props = {
   dateFormat?: string;
 
   /**
-   * Specify the maximum date
+   * Specify the maximum date.
    * @default null
    */
   maxDate?: null | string | Date;
 
   /**
-   * Specify the minimum date
+   * Specify the minimum date.
    * @default null
    */
   minDate?: null | string | Date;
 
   /**
-   * Specify the locale
+   * Specify the locale.
    * @default "en"
    */
   locale?:

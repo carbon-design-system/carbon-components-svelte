@@ -11,7 +11,7 @@ type $Props = {
   count?: number;
 
   /**
-   * Specify the type of tabs
+   * Specify the type of tabs.
    * @default "default"
    */
   type?: "default" | "container";

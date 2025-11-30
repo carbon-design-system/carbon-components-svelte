@@ -6,13 +6,13 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 export type ThemeProps = {
   /**
-   * Set the current Carbon theme
+   * Set the current Carbon theme.
    * @default "white"
    */
   theme?: CarbonTheme;
 
   /**
-   * Customize a theme with your own tokens
+   * Customize a theme with your own tokens.
    * @see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme
    * @default {}
    */
@@ -31,13 +31,13 @@ export type ThemeProps = {
   persistKey?: string;
 
   /**
-   * Render a toggle or select dropdown to control the theme
+   * Render a toggle or select dropdown to control the theme.
    * @default undefined
    */
   render?: "toggle" | "select";
 
   /**
-   * Override the default toggle props
+   * Override the default toggle props.
    * @default { themes: ["white", "g100"], labelA: "", labelB: "", labelText: "Dark mode", hideLabel: false, }
    */
   toggle?: import("../Toggle/Toggle.svelte").ToggleProps & {
@@ -45,7 +45,7 @@ export type ThemeProps = {
   };
 
   /**
-   * Override the default select props
+   * Override the default select props.
    * @default { themes: themeKeys, labelText: "Themes", hideLabel: false, }
    */
   select?: import("../Select/Select.svelte").SelectProps & {

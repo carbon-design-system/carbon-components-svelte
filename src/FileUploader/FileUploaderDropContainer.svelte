@@ -5,13 +5,13 @@
    */
 
   /**
-   * Specify the accepted file types
+   * Specify the accepted file types.
    * @type {ReadonlyArray<string>}
    */
   export let accept = [];
 
   /**
-   * Obtain a reference to the uploaded files
+   * Obtain a reference to the uploaded files.
    * @type {ReadonlyArray<File>}
    */
   export let files = [];
@@ -21,7 +21,7 @@
 
   /**
    * Override the default behavior of validating uploaded files.
-   * By default, files are not validated
+   * By default, files are not validated.
    * @type {(files: ReadonlyArray<File>) => ReadonlyArray<File>}
    */
   export let validateFiles = (files) => files;

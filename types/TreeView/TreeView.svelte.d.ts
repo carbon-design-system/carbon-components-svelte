@@ -31,32 +31,32 @@ type $RestProps = SvelteHTMLElements["ul"];
 
 type $Props<Node> = {
   /**
-   * Provide an array of nodes to render
+   * Provide an array of nodes to render.
    * @default []
    */
   nodes?: ReadonlyArray<Node>;
 
   /**
-   * Set the current active node id
-   * Only one node can be active
+   * Set the current active node id.
+   * Only one node can be active.
    * @default ""
    */
   activeId?: TreeNodeId;
 
   /**
-   * Set the node ids to be selected
+   * Set the node ids to be selected.
    * @default []
    */
   selectedIds?: ReadonlyArray<TreeNodeId>;
 
   /**
-   * Set the node ids to be expanded
+   * Set the node ids to be expanded.
    * @default []
    */
   expandedIds?: ReadonlyArray<TreeNodeId>;
 
   /**
-   * Specify the TreeView size
+   * Specify the TreeView size.
    * @default "default"
    */
   size?: "default" | "compact";

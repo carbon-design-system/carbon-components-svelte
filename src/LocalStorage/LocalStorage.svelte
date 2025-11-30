@@ -7,12 +7,12 @@
    */
 
   /**
-   * Specify the local storage key
+   * Specify the local storage key.
    */
   export let key = "local-storage-key";
 
   /**
-   * Provide a value to persist
+   * Provide a value to persist.
    * @type {any}
    */
   export let value = "";

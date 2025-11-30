@@ -12,7 +12,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Set the size of the composed modal
+   * Set the size of the composed modal.
    * @default undefined
    */
   size?: "xs" | "sm" | "lg";
@@ -42,7 +42,7 @@ type $Props = {
   containerClass?: string;
 
   /**
-   * Specify a selector to be focused when opening the modal
+   * Specify a selector to be focused when opening the modal.
    * @default "[data-modal-primary-focus]"
    */
   selectorPrimaryFocus?: null | string;

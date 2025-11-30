@@ -3,7 +3,7 @@
   export let count = 4;
 
   /**
-   * Specify the type of tabs
+   * Specify the type of tabs.
    * @type {"default" | "container"}
    */
   export let type = "default";

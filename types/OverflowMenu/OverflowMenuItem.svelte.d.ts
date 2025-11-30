@@ -6,7 +6,7 @@ type $RestProps = SvelteHTMLElements["li"];
 type $Props = {
   /**
    * Specify the item text.
-   * Alternatively, use the default slot
+   * Alternatively, use the default slot.
    * @default "Provide text"
    */
   text?: string;

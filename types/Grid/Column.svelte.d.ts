@@ -11,8 +11,8 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Set to `true` to render a custom HTML element
-   * Props are destructured as `props` in the default slot
+   * Set to `true` to render a custom HTML element.
+   * Props are destructured as `props` in the default slot.
    * @example
    * ```svelte
    * <Column let:props>
@@ -48,37 +48,37 @@ type $Props = {
   padding?: boolean;
 
   /**
-   * Specify the aspect ratio of the column
+   * Specify the aspect ratio of the column.
    * @default undefined
    */
   aspectRatio?: "2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1";
 
   /**
-   * Set the small breakpoint
+   * Set the small breakpoint.
    * @default undefined
    */
   sm?: ColumnBreakpoint;
 
   /**
-   * Set the medium breakpoint
+   * Set the medium breakpoint.
    * @default undefined
    */
   md?: ColumnBreakpoint;
 
   /**
-   * Set the large breakpoint
+   * Set the large breakpoint.
    * @default undefined
    */
   lg?: ColumnBreakpoint;
 
   /**
-   * Set the extra large breakpoint
+   * Set the extra large breakpoint.
    * @default undefined
    */
   xlg?: ColumnBreakpoint;
 
   /**
-   * Set the maximum breakpoint
+   * Set the maximum breakpoint.
    * @default undefined
    */
   max?: ColumnBreakpoint;

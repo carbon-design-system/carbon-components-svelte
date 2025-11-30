@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["input"];
 
 type $Props = {
   /**
-   * Set the size of the input
+   * Set the size of the input.
    * @default undefined
    */
   size?: "sm" | "xl";
@@ -49,7 +49,7 @@ type $Props = {
   id?: string;
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @default undefined
    */
   name?: string;

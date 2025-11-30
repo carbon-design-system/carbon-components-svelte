@@ -23,7 +23,7 @@ type $Props = {
   caret?: boolean;
 
   /**
-   * Specify the alignment of the caret
+   * Specify the alignment of the caret.
    * @default "top"
    */
   align?:

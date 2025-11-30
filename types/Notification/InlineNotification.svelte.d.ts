@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the kind of notification
+   * Specify the kind of notification.
    * @default "error"
    */
   kind?:
@@ -53,7 +53,7 @@ type $Props = {
   hideCloseButton?: boolean;
 
   /**
-   * Specify the ARIA label for the status icon
+   * Specify the ARIA label for the status icon.
    * @default kind + " icon"
    */
   statusIconDescription?: string;

@@ -2,7 +2,7 @@
   /** @restProps {div | span} */
 
   /**
-   * Specify the type of tag
+   * Specify the type of tag.
    * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast" | "outline"}
    */
   export let type = undefined;
@@ -26,7 +26,7 @@
   export let title = "Clear filter";
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @type {any}
    */
   export let icon = undefined;

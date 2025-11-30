@@ -13,7 +13,7 @@ type $Props = {
   open?: boolean;
 
   /**
-   * Override the default translation ids
+   * Override the default translation ids.
    */
   translateWithId?: (id: ListBoxMenuIconTranslationId) => string;
 

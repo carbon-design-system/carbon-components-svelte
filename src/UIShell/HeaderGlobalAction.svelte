@@ -7,12 +7,12 @@
   export let isActive = false;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @type {any}
    */
   export let icon = undefined;
 
-  /** Obtain a reference to the HTML button element
+  /** Obtain a reference to the HTML button element.
    * @type {HTMLButtonElement}
    */
   export let ref = null;

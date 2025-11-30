@@ -11,13 +11,13 @@ type $Props = {
   isSelected?: boolean;
 
   /**
-   * Specify the `href` attribute
+   * Specify the `href` attribute.
    * @default undefined
    */
   href?: string;
 
   /**
-   * Specify the item text
+   * Specify the item text.
    * @default undefined
    */
   text?: string;

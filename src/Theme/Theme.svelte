@@ -11,8 +11,8 @@
 
 <script>
   /**
-   * Dynamic, client-side theming using CSS variables
-   * Only works with `carbon-components-svelte/css/all.css`
+   * Dynamic, client-side theming using CSS variables.
+   * Only works with `carbon-components-svelte/css/all.css`.
    */
 
   /**
@@ -24,13 +24,13 @@
    */
 
   /**
-   * Set the current Carbon theme
+   * Set the current Carbon theme.
    * @type {CarbonTheme}
    */
   export let theme = "white";
 
   /**
-   * Customize a theme with your own tokens
+   * Customize a theme with your own tokens.
    * @see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme
    * @type {{ [token: string]: any; }}
    */
@@ -43,13 +43,13 @@
   export let persistKey = "theme";
 
   /**
-   * Render a toggle or select dropdown to control the theme
+   * Render a toggle or select dropdown to control the theme.
    * @type {"toggle" | "select"}
    */
   export let render = undefined;
 
   /**
-   * Override the default toggle props
+   * Override the default toggle props.
    * @type {import("../Toggle/Toggle.svelte").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }}
    */
   export let toggle = {
@@ -64,7 +64,7 @@
   const themeKeys = Object.keys(themes);
 
   /**
-   * Override the default select props
+   * Override the default select props.
    * @type {import("../Select/Select.svelte").SelectProps & { themes?: CarbonTheme[]; }}
    */
   export let select = {

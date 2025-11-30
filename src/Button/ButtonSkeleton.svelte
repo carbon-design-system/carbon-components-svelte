@@ -1,12 +1,12 @@
 <script>
   /**
-   * Set the `href` to use an anchor link
+   * Set the `href` to use an anchor link.
    * @type {string}
    */
   export let href = undefined;
 
   /**
-   * Specify the size of button skeleton
+   * Specify the size of button skeleton.
    * @type {"default" | "field" | "small" | "lg" | "xl"}
    */
   export let size = "default";

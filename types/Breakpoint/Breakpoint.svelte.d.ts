@@ -6,13 +6,13 @@ export type BreakpointValue = 320 | 672 | 1056 | 1312 | 1584;
 
 export type BreakpointProps = {
   /**
-   * Determine the current Carbon grid breakpoint size
+   * Determine the current Carbon grid breakpoint size.
    * @default undefined
    */
   size?: BreakpointSize;
 
   /**
-   * Carbon grid sizes as an object
+   * Carbon grid sizes as an object.
    * @default { sm: false, md: false, lg: false, xlg: false, max: false, }
    */
   sizes?: Record<BreakpointSize, boolean>;

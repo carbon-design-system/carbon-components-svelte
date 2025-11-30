@@ -9,7 +9,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the select value
+   * Specify the select value.
    * @default ""
    */
   value?: number | string;
@@ -39,7 +39,7 @@ type $Props = {
   id?: string;
 
   /**
-   * Specify a name attribute for the select element
+   * Specify a name attribute for the select element.
    * @default undefined
    */
   name?: string;

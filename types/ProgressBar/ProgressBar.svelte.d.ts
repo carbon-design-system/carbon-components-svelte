@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the current value
+   * Specify the current value.
    * @default undefined
    */
   value?: number;
@@ -17,19 +17,19 @@ type $Props = {
   max?: number;
 
   /**
-   * Specify the kind of progress bar
+   * Specify the kind of progress bar.
    * @default "default"
    */
   kind?: "default" | "inline" | "indented";
 
   /**
-   * Specify the status
+   * Specify the status.
    * @default "active"
    */
   status?: "active" | "finished" | "error";
 
   /**
-   * Specify the size
+   * Specify the size.
    * @default "md"
    */
   size?: "sm" | "md";

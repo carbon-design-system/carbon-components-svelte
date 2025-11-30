@@ -7,7 +7,7 @@
   export let selected = 0;
 
   /**
-   * Specify the type of tabs
+   * Specify the type of tabs.
    * @type {"default" | "container"}
    */
   export let type = "default";
@@ -16,7 +16,7 @@
   export let autoWidth = false;
 
   /**
-   * Specify the ARIA label for the chevron icon
+   * Specify the ARIA label for the chevron icon.
    * @type {string}
    */
   export let iconDescription = "Show menu options";

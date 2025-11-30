@@ -4,7 +4,7 @@
    */
 
   /**
-   * Set the `href` to use an anchor link
+   * Set the `href` to use an anchor link.
    * @type {string}
    */
   export let href = undefined;

@@ -10,7 +10,7 @@ type $RestProps = SvelteHTMLElements["section"];
 
 type $Props = {
   /**
-   * Specify the toolbar size
+   * Specify the toolbar size.
    * @default "default"
    */
   size?: "sm" | "default";

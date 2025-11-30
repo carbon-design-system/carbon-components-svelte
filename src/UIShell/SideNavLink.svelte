@@ -3,19 +3,19 @@
   export let isSelected = false;
 
   /**
-   * Specify the `href` attribute
+   * Specify the `href` attribute.
    * @type {string}
    */
   export let href = undefined;
 
   /**
-   * Specify the text
+   * Specify the text.
    * @type {string}
    */
   export let text = undefined;
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @type {any}
    */
   export let icon = undefined;

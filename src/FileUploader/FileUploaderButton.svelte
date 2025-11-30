@@ -4,13 +4,13 @@
    */
 
   /**
-   * Specify the accepted file types
+   * Specify the accepted file types.
    * @type {ReadonlyArray<string>}
    */
   export let accept = [];
 
   /**
-   * Obtain a reference to the uploaded files
+   * Obtain a reference to the uploaded files.
    * @type {ReadonlyArray<File>}
    */
   export let files = [];
@@ -25,13 +25,13 @@
   export let disableLabelChanges = false;
 
   /**
-   * Specify the kind of file uploader button
+   * Specify the kind of file uploader button.
    * @type {import("../Button/Button.svelte").ButtonProps["kind"]}
    */
   export let kind = "primary";
 
   /**
-   * Specify the size of the file uploader button
+   * Specify the size of the file uploader button.
    * @type {import("../Button/Button.svelte").ButtonProps["size"]}
    */
   export let size = "small";

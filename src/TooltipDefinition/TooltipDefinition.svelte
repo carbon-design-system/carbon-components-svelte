@@ -8,18 +8,18 @@
   export let tooltipText = "";
 
   /**
-   * Set to `true` to open the tooltip
+   * Set to `true` to open the tooltip.
    */
   export let open = false;
 
   /**
-   * Set the alignment of the tooltip relative to the icon
+   * Set the alignment of the tooltip relative to the icon.
    * @type {"start" | "center" | "end"}
    */
   export let align = "center";
 
   /**
-   * Set the direction of the tooltip relative to the icon
+   * Set the direction of the tooltip relative to the icon.
    * @type {"top" | "bottom"}
    */
   export let direction = "bottom";

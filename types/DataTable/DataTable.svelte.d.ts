@@ -58,20 +58,20 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props<Row> = {
   /**
-   * Specify the data table headers
+   * Specify the data table headers.
    * @default []
    */
   headers?: ReadonlyArray<DataTableHeader<Row>>;
 
   /**
-   * Specify the rows the data table should render
-   * keys defined in `headers` are used for the row ids
+   * Specify the rows the data table should render.
+   * Keys defined in `headers` are used for the row ids.
    * @default []
    */
   rows?: ReadonlyArray<Row>;
 
   /**
-   * Set the size of the data table
+   * Set the size of the data table.
    * @default undefined
    */
   size?: "compact" | "short" | "medium" | "tall";
@@ -110,38 +110,38 @@ type $Props<Row> = {
   sortable?: boolean;
 
   /**
-   * Specify the header key to sort by
+   * Specify the header key to sort by.
    * @default null
    */
   sortKey?: DataTableKey<Row>;
 
   /**
-   * Specify the sort direction
+   * Specify the sort direction.
    * @default "none"
    */
   sortDirection?: "none" | "ascending" | "descending";
 
   /**
-   * Set to `true` for the expandable variant
-   * Automatically set to `true` if `batchExpansion` is `true`
+   * Set to `true` for the expandable variant.
+   * Automatically set to `true` if `batchExpansion` is `true`.
    * @default false
    */
   expandable?: boolean;
 
   /**
-   * Set to `true` to enable batch expansion
+   * Set to `true` to enable batch expansion.
    * @default false
    */
   batchExpansion?: boolean;
 
   /**
-   * Specify the row ids to be expanded
+   * Specify the row ids to be expanded.
    * @default []
    */
   expandedRowIds?: ReadonlyArray<DataTableRowId>;
 
   /**
-   * Specify the ids for rows that should not be expandable
+   * Specify the ids for rows that should not be expandable.
    * @default []
    */
   nonExpandableRowIds?: ReadonlyArray<DataTableRowId>;
@@ -153,8 +153,8 @@ type $Props<Row> = {
   radio?: boolean;
 
   /**
-   * Set to `true` for the selectable variant
-   * Automatically set to `true` if `radio` or `batchSelection` are `true`
+   * Set to `true` for the selectable variant.
+   * Automatically set to `true` if `radio` or `batchSelection` are `true`.
    * @default false
    */
   selectable?: boolean;
@@ -166,13 +166,13 @@ type $Props<Row> = {
   batchSelection?: boolean;
 
   /**
-   * Specify the row ids to be selected
+   * Specify the row ids to be selected.
    * @default []
    */
   selectedRowIds?: ReadonlyArray<DataTableRowId>;
 
   /**
-   * Specify the ids of rows that should not be selectable
+   * Specify the ids of rows that should not be selectable.
    * @default []
    */
   nonSelectableRowIds?: ReadonlyArray<DataTableRowId>;
@@ -202,7 +202,7 @@ type $Props<Row> = {
   page?: number;
 
   /**
-   * Override the default table header translation ids
+   * Override the default table header translation ids.
    * @default undefined
    */
   tableHeaderTranslateWithId?: (

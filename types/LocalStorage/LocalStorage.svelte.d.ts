@@ -2,13 +2,13 @@ import type { SvelteComponentTyped } from "svelte";
 
 export type LocalStorageProps = {
   /**
-   * Specify the local storage key
+   * Specify the local storage key.
    * @default "local-storage-key"
    */
   key?: string;
 
   /**
-   * Provide a value to persist
+   * Provide a value to persist.
    * @default ""
    */
   value?: any;

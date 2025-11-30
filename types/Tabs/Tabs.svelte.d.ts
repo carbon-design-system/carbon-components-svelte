@@ -34,7 +34,7 @@ type $Props = {
   selected?: number;
 
   /**
-   * Specify the type of tabs
+   * Specify the type of tabs.
    * @default "default"
    */
   type?: "default" | "container";
@@ -46,7 +46,7 @@ type $Props = {
   autoWidth?: boolean;
 
   /**
-   * Specify the ARIA label for the chevron icon
+   * Specify the ARIA label for the chevron icon.
    * @default "Show menu options"
    */
   iconDescription?: string;

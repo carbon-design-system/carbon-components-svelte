@@ -20,7 +20,7 @@
   export let rows = 4;
 
   /**
-   * Specify the max character count
+   * Specify the max character count.
    * @type {number}
    */
   export let maxCount = undefined;
@@ -59,7 +59,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @type {string}
    */
   export let name = undefined;

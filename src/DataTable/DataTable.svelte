@@ -72,20 +72,20 @@
    */
 
   /**
-   * Specify the data table headers
+   * Specify the data table headers.
    * @type {ReadonlyArray<DataTableHeader<Row>>}
    */
   export let headers = [];
 
   /**
-   * Specify the rows the data table should render
-   * keys defined in `headers` are used for the row ids
+   * Specify the rows the data table should render.
+   * Keys defined in `headers` are used for the row ids.
    * @type {ReadonlyArray<Row>}
    */
   export let rows = [];
 
   /**
-   * Set the size of the data table
+   * Set the size of the data table.
    * @type {"compact" | "short" | "medium" | "tall"}
    */
   export let size = undefined;
@@ -111,36 +111,36 @@
   export let sortable = false;
 
   /**
-   * Specify the header key to sort by
+   * Specify the header key to sort by.
    * @type {DataTableKey<Row>}
    */
   export let sortKey = null;
 
   /**
-   * Specify the sort direction
+   * Specify the sort direction.
    * @type {"none" | "ascending" | "descending"}
    */
   export let sortDirection = "none";
 
   /**
-   * Set to `true` for the expandable variant
-   * Automatically set to `true` if `batchExpansion` is `true`
+   * Set to `true` for the expandable variant.
+   * Automatically set to `true` if `batchExpansion` is `true`.
    */
   export let expandable = false;
 
   /**
-   * Set to `true` to enable batch expansion
+   * Set to `true` to enable batch expansion.
    */
   export let batchExpansion = false;
 
   /**
-   * Specify the row ids to be expanded
+   * Specify the row ids to be expanded.
    * @type {ReadonlyArray<DataTableRowId>}
    */
   export let expandedRowIds = [];
 
   /**
-   * Specify the ids for rows that should not be expandable
+   * Specify the ids for rows that should not be expandable.
    * @type {ReadonlyArray<DataTableRowId>}
    */
   export let nonExpandableRowIds = [];
@@ -149,8 +149,8 @@
   export let radio = false;
 
   /**
-   * Set to `true` for the selectable variant
-   * Automatically set to `true` if `radio` or `batchSelection` are `true`
+   * Set to `true` for the selectable variant.
+   * Automatically set to `true` if `radio` or `batchSelection` are `true`.
    */
   export let selectable = false;
 
@@ -158,13 +158,13 @@
   export let batchSelection = false;
 
   /**
-   * Specify the row ids to be selected
+   * Specify the row ids to be selected.
    * @type {ReadonlyArray<DataTableRowId>}
    */
   export let selectedRowIds = [];
 
   /**
-   * Specify the ids of rows that should not be selectable
+   * Specify the ids of rows that should not be selectable.
    * @type {ReadonlyArray<DataTableRowId>}
    */
   export let nonSelectableRowIds = [];
@@ -182,7 +182,7 @@
   export let page = 0;
 
   /**
-   * Override the default table header translation ids
+   * Override the default table header translation ids.
    * @type {(id: import("./TableHeader.svelte").TableHeaderTranslationId) => string}
    */
   export let tableHeaderTranslateWithId = undefined;

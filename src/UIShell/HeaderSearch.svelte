@@ -27,12 +27,12 @@
   export let ref = null;
 
   /**
-   * Render a list of search results
+   * Render a list of search results.
    * @type {ReadonlyArray<Result>}
    */
   export let results = [];
 
-  /** Specify the selected result index */
+  /** Specify the selected result index. */
   export let selectedResultIndex = 0;
 
   import { createEventDispatcher, tick } from "svelte";

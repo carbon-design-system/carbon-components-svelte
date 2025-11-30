@@ -22,7 +22,7 @@ type $Props = {
   orientation?: "vertical" | "horizontal";
 
   /**
-   * Specify the tag name
+   * Specify the tag name.
    * @default "div"
    */
   tag?: keyof HTMLElementTagNameMap;

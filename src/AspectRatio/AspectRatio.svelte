@@ -1,6 +1,6 @@
 <script>
   /**
-   * Specify the aspect ratio
+   * Specify the aspect ratio.
    * @type {"2x1" | "2x3" | "16x9" | "4x3" | "1x1" | "3x4" | "3x2" | "9x16" | "1x2"}
    */
   export let ratio = "2x1";

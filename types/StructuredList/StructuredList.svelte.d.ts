@@ -10,7 +10,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the selected structured list row value
+   * Specify the selected structured list row value.
    * @default undefined
    */
   selected?: string;

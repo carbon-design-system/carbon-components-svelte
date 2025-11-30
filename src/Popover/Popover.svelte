@@ -14,7 +14,7 @@
   export let caret = false;
 
   /**
-   * Specify the alignment of the caret
+   * Specify the alignment of the caret.
    * @type {"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"}
    */
   export let align = "top";

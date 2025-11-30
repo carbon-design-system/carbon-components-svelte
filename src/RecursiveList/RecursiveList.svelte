@@ -11,13 +11,13 @@
    */
 
   /**
-   * Specify the nodes to render
+   * Specify the nodes to render.
    * @type {ReadonlyArray<Node & { nodes?: Node[] }>}
    */
   export let nodes = [];
 
   /**
-   * Specify the type of list to render
+   * Specify the type of list to render.
    * @type {"unordered" | "ordered" | "ordered-native"}
    */
   export let type = "unordered";

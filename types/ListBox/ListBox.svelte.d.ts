@@ -5,13 +5,13 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Set the size of the list box
+   * Set the size of the list box.
    * @default undefined
    */
   size?: "sm" | "xl";
 
   /**
-   * Set the type of the list box
+   * Set the type of the list box.
    * @default "default"
    */
   type?: "default" | "inline";

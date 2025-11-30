@@ -9,13 +9,13 @@
   export let iconDescription = "Copy to clipboard";
 
   /**
-   * Specify the text to copy
+   * Specify the text to copy.
    * @type {string}
    */
   export let text;
 
   /**
-   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text
+   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text.
    * @type {(text: string) => void}
    */
   export let copy = async (text) => {

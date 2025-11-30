@@ -5,7 +5,7 @@
    */
 
   /**
-   * Specify the value of the search input
+   * Specify the value of the search input.
    * @type {number | string}
    */
   export let value = "";
@@ -32,7 +32,7 @@
   export let shouldFilterRows = false;
 
   /**
-   * The filtered row ids
+   * The filtered row ids.
    * @type {ReadonlyArray<import("./DataTable.svelte").DataTableRowId>}
    */
   export let filteredRowIds = [];
@@ -41,7 +41,7 @@
   export let tabindex = "0";
 
   /**
-   * Obtain a reference to the input HTML element
+   * Obtain a reference to the input HTML element.
    * @type {null | HTMLInputElement}
    */
   export let ref = null;

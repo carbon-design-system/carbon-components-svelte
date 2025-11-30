@@ -16,37 +16,37 @@
    */
 
   /**
-   * Set the dropdown items
+   * Set the dropdown items.
    * @type {ReadonlyArray<Item>}
    */
   export let items = [];
 
   /**
-   * Override the display of a dropdown item
+   * Override the display of a dropdown item.
    * @type {(item: Item) => string}
    */
   export let itemToString = (item) => item.text || item.id;
 
   /**
-   * Specify the selected item id
+   * Specify the selected item id.
    * @type {DropdownItemId}
    */
   export let selectedId;
 
   /**
-   * Specify the type of dropdown
+   * Specify the type of dropdown.
    * @type {"default" | "inline"}
    */
   export let type = "default";
 
   /**
-   * Specify the direction of the dropdown menu
+   * Specify the direction of the dropdown menu.
    * @type {"bottom" | "top"}
    */
   export let direction = "bottom";
 
   /**
-   * Specify the size of the dropdown field
+   * Specify the size of the dropdown field.
    * @type {"sm" | "lg" | "xl"}
    */
   export let size = undefined;
@@ -79,7 +79,7 @@
   export let helperText = "";
 
   /**
-   * Specify the list box label
+   * Specify the list box label.
    * @type {string}
    */
   export let label = undefined;
@@ -89,7 +89,7 @@
 
   /**
    * Override the chevron icon label based on the open state.
-   * Defaults to "Open menu" when closed and "Close menu" when open
+   * Defaults to "Open menu" when closed and "Close menu" when open.
    * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
    */
   export let translateWithId = undefined;
@@ -98,7 +98,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the list box
+   * Specify a name attribute for the list box.
    * @type {string}
    */
   export let name = undefined;

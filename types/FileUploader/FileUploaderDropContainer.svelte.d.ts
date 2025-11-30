@@ -5,13 +5,13 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the accepted file types
+   * Specify the accepted file types.
    * @default []
    */
   accept?: ReadonlyArray<string>;
 
   /**
-   * Obtain a reference to the uploaded files
+   * Obtain a reference to the uploaded files.
    * @default []
    */
   files?: ReadonlyArray<File>;
@@ -24,7 +24,7 @@ type $Props = {
 
   /**
    * Override the default behavior of validating uploaded files.
-   * By default, files are not validated
+   * By default, files are not validated.
    */
   validateFiles?: (files: ReadonlyArray<File>) => ReadonlyArray<File>;
 

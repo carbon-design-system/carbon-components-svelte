@@ -24,7 +24,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the radio tile input
+   * Specify a name attribute for the radio tile input.
    * @type {string}
    */
   export let name = undefined;

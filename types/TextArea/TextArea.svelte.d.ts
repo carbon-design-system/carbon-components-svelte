@@ -31,7 +31,7 @@ type $Props = {
   rows?: number;
 
   /**
-   * Specify the max character count
+   * Specify the max character count.
    * @default undefined
    */
   maxCount?: number;
@@ -103,7 +103,7 @@ type $Props = {
   id?: string;
 
   /**
-   * Specify a name attribute for the input
+   * Specify a name attribute for the input.
    * @default undefined
    */
   name?: string;

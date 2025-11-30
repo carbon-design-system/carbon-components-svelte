@@ -1,6 +1,6 @@
 <script>
   /**
-   * Specify the value of the radio button
+   * Specify the value of the radio button.
    * @type {string | number}
    */
   export let value = "";
@@ -15,7 +15,7 @@
   export let required = false;
 
   /**
-   * Specify the label position
+   * Specify the label position.
    * @type {"right" | "left"}
    */
   export let labelPosition = "right";
@@ -30,7 +30,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the radio button input
+   * Specify a name attribute for the radio button input.
    * @type {string}
    */
   export let name = undefined;

@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Specify the file uploader status
+   * Specify the file uploader status.
    * @default "uploading"
    */
   status?: "uploading" | "edit" | "complete";
@@ -17,13 +17,13 @@ type $Props = {
   disabled?: boolean;
 
   /**
-   * Specify the accepted file types
+   * Specify the accepted file types.
    * @default []
    */
   accept?: ReadonlyArray<string>;
 
   /**
-   * Obtain a reference to the uploaded files
+   * Obtain a reference to the uploaded files.
    * @default []
    */
   files?: ReadonlyArray<File>;
@@ -36,7 +36,7 @@ type $Props = {
 
   /**
    * Specify the label title.
-   * Alternatively, use the named slot "labelTitle"
+   * Alternatively, use the named slot "labelTitle".
    * @example
    * ```svelte
    * <FileUploader>
@@ -49,7 +49,7 @@ type $Props = {
 
   /**
    * Specify the label description.
-   * Alternatively, use the named slot "labelDescription"
+   * Alternatively, use the named slot "labelDescription".
    * @example
    * ```svelte
    * <FileUploader>
@@ -61,13 +61,13 @@ type $Props = {
   labelDescription?: string;
 
   /**
-   * Specify the kind of file uploader button
+   * Specify the kind of file uploader button.
    * @default "primary"
    */
   kind?: import("../Button/Button.svelte").ButtonProps["kind"];
 
   /**
-   * Specify the size of the file uploader button
+   * Specify the size of the file uploader button.
    * @default "small"
    */
   size?: import("../Button/Button.svelte").ButtonProps["size"];
@@ -110,7 +110,7 @@ export default class FileUploader extends SvelteComponentTyped<
   { labelDescription: Record<string, never>; labelTitle: Record<string, never> }
 > {
   /**
-   * Programmatically clear the uploaded files
+   * Programmatically clear the uploaded files.
    * @example
    * ```svelte
    * <FileUploader bind:this={uploader} bind:files={files} />

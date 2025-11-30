@@ -2,13 +2,13 @@ import type { SvelteComponentTyped } from "svelte";
 
 export type SelectItemProps = {
   /**
-   * Specify the option value
+   * Specify the option value.
    * @default ""
    */
   value?: string | number;
 
   /**
-   * Specify the option text
+   * Specify the option text.
    * If not specified, the value will be used as the text.
    * @default undefined
    */
@@ -27,13 +27,13 @@ export type SelectItemProps = {
   disabled?: boolean;
 
   /**
-   * Specify the class of the `option` element
+   * Specify the class of the `option` element.
    * @default undefined
    */
   class?: string;
 
   /**
-   * Specify the style of the `option` element
+   * Specify the style of the `option` element.
    * @default undefined
    */
   style?: string;

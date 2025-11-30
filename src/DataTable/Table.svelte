@@ -1,6 +1,6 @@
 <script>
   /**
-   * Set the size of the table
+   * Set the size of the table.
    * @type {"compact" | "short" | "medium" | "tall"}
    */
   export let size = undefined;
@@ -18,7 +18,7 @@
   export let stickyHeader = false;
 
   /**
-   * Set the style attribute on the `table` element
+   * Set the style attribute on the `table` element.
    * @type {string}
    */
   export let tableStyle = undefined;

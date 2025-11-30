@@ -5,20 +5,20 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Set the loading status
+   * Set the loading status.
    * @default "active"
    */
   status?: "active" | "inactive" | "finished" | "error";
 
   /**
-   * Set the loading description
+   * Set the loading description.
    * @default undefined
    */
   description?: string;
 
   /**
    * Specify a description for the loading icon.
-   * Defaults to the `status` prop for the "error" and "finished" states
+   * Defaults to the `status` prop for the "error" and "finished" states.
    * @default undefined
    */
   iconDescription?: string;

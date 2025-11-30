@@ -7,7 +7,7 @@
    */
 
   /**
-   * Specify the selected tile values
+   * Specify the selected tile values.
    * @type {T[]}
    */
   export let selected = [];
@@ -16,7 +16,7 @@
   export let disabled = false;
 
   /**
-   * Specify a name attribute for the checkbox inputs
+   * Specify a name attribute for the checkbox inputs.
    * @type {string | undefined}
    */
   export let name = undefined;

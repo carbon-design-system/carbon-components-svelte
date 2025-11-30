@@ -5,32 +5,32 @@
    */
 
   /**
-   * Set the alignment of the tooltip relative to the icon
+   * Set the alignment of the tooltip relative to the icon.
    * @type {"start" | "center" | "end"}
    */
   export let align = "center";
 
   /**
-   * Set the direction of the tooltip relative to the button
+   * Set the direction of the tooltip relative to the button.
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let direction = "bottom";
 
   /**
-   * Set to `true` to open the tooltip
+   * Set to `true` to open the tooltip.
    * @type {boolean}
    */
   export let open = false;
 
   /**
-   * Set to `true` to hide the tooltip icon
+   * Set to `true` to hide the tooltip icon.
    * @type {boolean}
    */
   export let hideIcon = false;
 
   /**
    * Specify the icon to render for the tooltip button.
-   * Default to `<Information />`
+   * Defaults to `<Information />`.
    * @type {any}
    */
   export let icon = Information;
@@ -45,13 +45,13 @@
   export let tabindex = "0";
 
   /**
-   * Set an id for the tooltip
+   * Set an id for the tooltip.
    * @type {string}
    */
   export let tooltipId = "ccs-" + Math.random().toString(36);
 
   /**
-   * Set an id for the tooltip button
+   * Set an id for the tooltip button.
    * @type {string}
    */
   export let triggerId = "ccs-" + Math.random().toString(36);

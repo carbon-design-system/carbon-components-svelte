@@ -15,36 +15,36 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props<Item> = {
   /**
-   * Set the dropdown items
+   * Set the dropdown items.
    * @default []
    */
   items?: ReadonlyArray<Item>;
 
   /**
-   * Override the display of a dropdown item
+   * Override the display of a dropdown item.
    */
   itemToString?: (item: Item) => string;
 
   /**
-   * Specify the selected item id
+   * Specify the selected item id.
    * @default undefined
    */
   selectedId: DropdownItemId;
 
   /**
-   * Specify the type of dropdown
+   * Specify the type of dropdown.
    * @default "default"
    */
   type?: "default" | "inline";
 
   /**
-   * Specify the direction of the dropdown menu
+   * Specify the direction of the dropdown menu.
    * @default "bottom"
    */
   direction?: "bottom" | "top";
 
   /**
-   * Specify the size of the dropdown field
+   * Specify the size of the dropdown field.
    * @default undefined
    */
   size?: "sm" | "lg" | "xl";
@@ -104,7 +104,7 @@ type $Props<Item> = {
   helperText?: string;
 
   /**
-   * Specify the list box label
+   * Specify the list box label.
    * @default undefined
    */
   label?: string;
@@ -117,7 +117,7 @@ type $Props<Item> = {
 
   /**
    * Override the chevron icon label based on the open state.
-   * Defaults to "Open menu" when closed and "Close menu" when open
+   * Defaults to "Open menu" when closed and "Close menu" when open.
    * @default undefined
    */
   translateWithId?: (
@@ -131,7 +131,7 @@ type $Props<Item> = {
   id?: string;
 
   /**
-   * Specify a name attribute for the list box
+   * Specify a name attribute for the list box.
    * @default undefined
    */
   name?: string;

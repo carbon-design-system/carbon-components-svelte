@@ -8,7 +8,7 @@
         {
           "name": "align",
           "kind": "let",
-          "description": "Specify alignment of accordion item chevron icon",
+          "description": "Specify alignment of accordion item chevron icon.",
           "type": "\"start\" | \"end\"",
           "value": "\"end\"",
           "isFunction": false,
@@ -20,7 +20,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the accordion",
+          "description": "Specify the size of the accordion.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -116,7 +116,7 @@
         {
           "name": "title",
           "kind": "let",
-          "description": "Specify the title of the accordion item heading.\nAlternatively, use the \"title\" slot\n@example \n```svelte\n<AccordionItem>\n  <div slot=\"title\">Custom Title</div>\n</AccordionItem>\n```",
+          "description": "Specify the title of the accordion item heading.\nAlternatively, use the \"title\" slot.\n@example \n```svelte\n<AccordionItem>\n  <div slot=\"title\">Custom Title</div>\n</AccordionItem>\n```",
           "type": "string",
           "value": "\"title\"",
           "isFunction": false,
@@ -235,7 +235,7 @@
         {
           "name": "align",
           "kind": "let",
-          "description": "Specify alignment of accordion item chevron icon",
+          "description": "Specify alignment of accordion item chevron icon.",
           "type": "\"start\" | \"end\"",
           "value": "\"end\"",
           "isFunction": false,
@@ -247,7 +247,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the accordion",
+          "description": "Specify the size of the accordion.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -308,7 +308,7 @@
         {
           "name": "ratio",
           "kind": "let",
-          "description": "Specify the aspect ratio",
+          "description": "Specify the aspect ratio.",
           "type": "\"2x1\" | \"2x3\" | \"16x9\" | \"4x3\" | \"1x1\" | \"3x4\" | \"3x2\" | \"9x16\" | \"1x2\"",
           "value": "\"2x1\"",
           "isFunction": false,
@@ -413,7 +413,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Set the `href` to use an anchor link",
+          "description": "Set the `href` to use an anchor link.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -547,7 +547,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Determine the current Carbon grid breakpoint size",
+          "description": "Determine the current Carbon grid breakpoint size.",
           "type": "BreakpointSize",
           "value": "undefined",
           "isFunction": false,
@@ -559,7 +559,7 @@
         {
           "name": "sizes",
           "kind": "let",
-          "description": "Carbon grid sizes as an object",
+          "description": "Carbon grid sizes as an object.",
           "type": "Record<BreakpointSize, boolean>",
           "value": "{\n  sm: false,\n  md: false,\n  lg: false,\n  xlg: false,\n  max: false,\n}",
           "isFunction": false,
@@ -606,7 +606,7 @@
         {
           "name": "kind",
           "kind": "let",
-          "description": "Specify the kind of button",
+          "description": "Specify the kind of button.",
           "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"danger\" | \"danger-tertiary\" | \"danger-ghost\"",
           "value": "\"primary\"",
           "isFunction": false,
@@ -618,7 +618,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of button",
+          "description": "Specify the size of button.",
           "type": "\"default\" | \"field\" | \"small\" | \"lg\" | \"xl\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -642,7 +642,7 @@
         {
           "name": "isSelected",
           "kind": "let",
-          "description": "Set to `true` to enable the selected state for an icon-only, ghost button",
+          "description": "Set to `true` to enable the selected state for an icon-only, ghost button.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -654,7 +654,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render\nAlternatively, use the named slot \"icon\"\n@example \n```svelte\n<Button>\n  <Icon slot=\"icon\" size={20} />\n</Button>\n```",
+          "description": "Specify the icon to render.\nAlternatively, use the named slot \"icon\".\n@example \n```svelte\n<Button>\n  <Icon slot=\"icon\" size={20} />\n</Button>\n```",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -666,7 +666,7 @@
         {
           "name": "iconDescription",
           "kind": "let",
-          "description": "Specify the ARIA label for the button icon",
+          "description": "Specify the ARIA label for the button icon.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -678,7 +678,7 @@
         {
           "name": "tooltipAlignment",
           "kind": "let",
-          "description": "Set the alignment of the tooltip relative to the icon.\nOnly applies to icon-only buttons",
+          "description": "Set the alignment of the tooltip relative to the icon.\nOnly applies to icon-only buttons.",
           "type": "\"start\" | \"center\" | \"end\"",
           "value": "\"center\"",
           "isFunction": false,
@@ -690,7 +690,7 @@
         {
           "name": "tooltipPosition",
           "kind": "let",
-          "description": "Set the position of the tooltip relative to the icon",
+          "description": "Set the position of the tooltip relative to the icon.",
           "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
           "value": "\"bottom\"",
           "isFunction": false,
@@ -714,7 +714,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot\n@example \n```svelte\n<Button let:props>\n  <div {...props}>Custom Element</div>\n</Button>\n```",
+          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example \n```svelte\n<Button let:props>\n  <div {...props}>Custom Element</div>\n</Button>\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -750,7 +750,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Set the `href` to use an anchor link",
+          "description": "Set the `href` to use an anchor link.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -894,7 +894,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Set the `href` to use an anchor link",
+          "description": "Set the `href` to use an anchor link.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -906,7 +906,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of button skeleton",
+          "description": "Specify the size of button skeleton.",
           "type": "\"default\" | \"field\" | \"small\" | \"lg\" | \"xl\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -965,7 +965,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the value of the checkbox",
+          "description": "Specify the value of the checkbox.",
           "type": "any",
           "value": "\"\"",
           "isFunction": false,
@@ -989,7 +989,7 @@
         {
           "name": "group",
           "kind": "let",
-          "description": "Specify the bound group",
+          "description": "Specify the bound group.",
           "type": "ReadonlyArray<any>",
           "value": "undefined",
           "isFunction": false,
@@ -1109,7 +1109,7 @@
         {
           "name": "title",
           "kind": "let",
-          "description": "Specify the title attribute for the label element",
+          "description": "Specify the title attribute for the label element.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -1281,7 +1281,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Set the `href`",
+          "description": "Set the `href`.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -1341,7 +1341,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Set the type of code snippet",
+          "description": "Set the type of code snippet.",
           "type": "\"single\" | \"inline\" | \"multi\"",
           "value": "\"single\"",
           "isFunction": false,
@@ -1400,7 +1400,7 @@
         {
           "name": "disabled",
           "kind": "let",
-          "description": "Set to `true` for the disabled variant.\nOnly applies to the \"single\", \"multi\" types",
+          "description": "Set to `true` for the disabled variant.\nOnly applies to the \"single\", \"multi\" types.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -1412,7 +1412,7 @@
         {
           "name": "wrapText",
           "kind": "let",
-          "description": "Set to `true` to wrap the text.\n\nNOTE: this prop only works with the `type=\"multi\"` variant",
+          "description": "Set to `true` to wrap the text.\n\nNOTE: this prop only works with the `type=\"multi\"` variant.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -1448,7 +1448,7 @@
         {
           "name": "copyButtonDescription",
           "kind": "let",
-          "description": "Specify the ARIA label for the copy button icon",
+          "description": "Specify the ARIA label for the copy button icon.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -1460,7 +1460,7 @@
         {
           "name": "copyLabel",
           "kind": "let",
-          "description": "Specify the ARIA label of the copy button",
+          "description": "Specify the ARIA label of the copy button.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -1496,7 +1496,7 @@
         {
           "name": "showLessText",
           "kind": "let",
-          "description": "Specify the show less text.\n\nNOTE: this prop only works with the `type=\"multi\"` variant",
+          "description": "Specify the show less text.\n\nNOTE: this prop only works with the `type=\"multi\"` variant.",
           "type": "string",
           "value": "\"Show less\"",
           "isFunction": false,
@@ -1508,7 +1508,7 @@
         {
           "name": "showMoreText",
           "kind": "let",
-          "description": "Specify the show more text\n\nNOTE: this prop only works with the `type=\"multi\"` variant",
+          "description": "Specify the show more text.\n\nNOTE: this prop only works with the `type=\"multi\"` variant.",
           "type": "string",
           "value": "\"Show more\"",
           "isFunction": false,
@@ -1520,7 +1520,7 @@
         {
           "name": "showMoreLess",
           "kind": "let",
-          "description": "Set to `false` to hide the show more/less button\n\nNOTE: this prop only works with the `type=\"multi\"` variant",
+          "description": "Set to `false` to hide the show more/less button.\n\nNOTE: this prop only works with the `type=\"multi\"` variant.",
           "type": "boolean",
           "value": "true",
           "isFunction": false,
@@ -1620,7 +1620,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Set the type of code snippet",
+          "description": "Set the type of code snippet.",
           "type": "\"single\" | \"multi\"",
           "value": "\"single\"",
           "isFunction": false,
@@ -1669,7 +1669,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot\n@example \n```svelte\n<Column let:props>\n  <article {...props}>Content</article>\n</Column>\n```",
+          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example \n```svelte\n<Column let:props>\n  <article {...props}>Content</article>\n</Column>\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -1729,7 +1729,7 @@
         {
           "name": "aspectRatio",
           "kind": "let",
-          "description": "Specify the aspect ratio of the column",
+          "description": "Specify the aspect ratio of the column.",
           "type": "\"2x1\" | \"16x9\" | \"9x16\" | \"1x2\" | \"4x3\" | \"3x4\" | \"1x1\"",
           "value": "undefined",
           "isFunction": false,
@@ -1741,7 +1741,7 @@
         {
           "name": "sm",
           "kind": "let",
-          "description": "Set the small breakpoint",
+          "description": "Set the small breakpoint.",
           "type": "ColumnBreakpoint",
           "value": "undefined",
           "isFunction": false,
@@ -1753,7 +1753,7 @@
         {
           "name": "md",
           "kind": "let",
-          "description": "Set the medium breakpoint",
+          "description": "Set the medium breakpoint.",
           "type": "ColumnBreakpoint",
           "value": "undefined",
           "isFunction": false,
@@ -1765,7 +1765,7 @@
         {
           "name": "lg",
           "kind": "let",
-          "description": "Set the large breakpoint",
+          "description": "Set the large breakpoint.",
           "type": "ColumnBreakpoint",
           "value": "undefined",
           "isFunction": false,
@@ -1777,7 +1777,7 @@
         {
           "name": "xlg",
           "kind": "let",
-          "description": "Set the extra large breakpoint",
+          "description": "Set the extra large breakpoint.",
           "type": "ColumnBreakpoint",
           "value": "undefined",
           "isFunction": false,
@@ -1789,7 +1789,7 @@
         {
           "name": "max",
           "kind": "let",
-          "description": "Set the maximum breakpoint",
+          "description": "Set the maximum breakpoint.",
           "type": "ColumnBreakpoint",
           "value": "undefined",
           "isFunction": false,
@@ -1839,7 +1839,7 @@
         {
           "name": "items",
           "kind": "let",
-          "description": "Set the combobox items",
+          "description": "Set the combobox items.",
           "type": "ReadonlyArray<Item>",
           "value": "[]",
           "isFunction": false,
@@ -1851,7 +1851,7 @@
         {
           "name": "itemToString",
           "kind": "let",
-          "description": "Override the display of a combobox item",
+          "description": "Override the display of a combobox item.",
           "type": "(item: Item) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -1862,7 +1862,7 @@
         {
           "name": "selectedId",
           "kind": "let",
-          "description": "Set the selected item by value id",
+          "description": "Set the selected item by value id.",
           "type": "ComboBoxItemId",
           "value": "undefined",
           "isFunction": false,
@@ -1886,7 +1886,7 @@
         {
           "name": "direction",
           "kind": "let",
-          "description": "Specify the direction of the combobox dropdown menu",
+          "description": "Specify the direction of the combobox dropdown menu.",
           "type": "\"bottom\" | \"top\"",
           "value": "\"bottom\"",
           "isFunction": false,
@@ -1898,7 +1898,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the combobox",
+          "description": "Set the size of the combobox.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -2089,7 +2089,7 @@
         {
           "name": "translateWithId",
           "kind": "let",
-          "description": "Override the chevron icon label based on the open state.\nDefaults to \"Open menu\" when closed and \"Close menu\" when open",
+          "description": "Override the chevron icon label based on the open state.\nDefaults to \"Open menu\" when closed and \"Close menu\" when open.",
           "type": "(id: import(\"../ListBox/ListBoxMenuIcon.svelte\").ListBoxMenuIconTranslationId) => string",
           "value": "undefined",
           "isFunction": false,
@@ -2125,7 +2125,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the input",
+          "description": "Specify a name attribute for the input.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -2149,7 +2149,7 @@
         {
           "name": "listRef",
           "kind": "let",
-          "description": "Obtain a reference to the list HTML element",
+          "description": "Obtain a reference to the list HTML element.",
           "type": "null | HTMLDivElement",
           "value": "null",
           "isFunction": false,
@@ -2270,7 +2270,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the composed modal",
+          "description": "Set the size of the composed modal.",
           "type": "\"xs\" | \"sm\" | \"lg\"",
           "value": "undefined",
           "isFunction": false,
@@ -2330,7 +2330,7 @@
         {
           "name": "selectorPrimaryFocus",
           "kind": "let",
-          "description": "Specify a selector to be focused when opening the modal",
+          "description": "Specify a selector to be focused when opening the modal.",
           "type": "null | string",
           "value": "\"[data-modal-primary-focus]\"",
           "isFunction": false,
@@ -2504,7 +2504,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the content switcher",
+          "description": "Specify the size of the content switcher.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -2595,7 +2595,7 @@
         {
           "name": "target",
           "kind": "let",
-          "description": "Specify an element or list of elements to trigger the context menu.\nIf no element is specified, the context menu applies to the entire window",
+          "description": "Specify an element or list of elements to trigger the context menu.\nIf no element is specified, the context menu applies to the entire window.",
           "type": "null | ReadonlyArray<null | HTMLElement>",
           "value": "null",
           "isFunction": false,
@@ -2607,7 +2607,7 @@
         {
           "name": "open",
           "kind": "let",
-          "description": "Set to `true` to open the menu\nEither `x` and `y` must be greater than zero",
+          "description": "Set to `true` to open the menu.\nEither `x` and `y` must be greater than zero.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -2812,7 +2812,7 @@
         {
           "name": "kind",
           "kind": "let",
-          "description": "Specify the kind of option",
+          "description": "Specify the kind of option.",
           "type": "\"default\" | \"danger\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -2848,7 +2848,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render\nIcon is rendered to the left of the label text",
+          "description": "Specify the icon to render.\nIcon is rendered to the left of the label text.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -2860,7 +2860,7 @@
         {
           "name": "labelText",
           "kind": "let",
-          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot\n@example \n```svelte\n<ContextMenuOption>\n  <span slot=\"labelText\">Custom Label</span>\n</ContextMenuOption>\n```",
+          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot.\n@example \n```svelte\n<ContextMenuOption>\n  <span slot=\"labelText\">Custom Label</span>\n</ContextMenuOption>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -2884,7 +2884,7 @@
         {
           "name": "selectable",
           "kind": "let",
-          "description": "Set to `true` to enable the selectable variant\nAutomatically set to `true` if `selected` is `true`",
+          "description": "Set to `true` to enable the selectable variant.\nAutomatically set to `true` if `selected` is `true`.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -2896,7 +2896,7 @@
         {
           "name": "shortcutText",
           "kind": "let",
-          "description": "Specify the shortcut text.\nAlternatively, use the \"shortcutText\" slot\n@example \n```svelte\n<ContextMenuOption>\n  <span slot=\"shortcutText\">Ctrl+K</span>\n</ContextMenuOption>\n```",
+          "description": "Specify the shortcut text.\nAlternatively, use the \"shortcutText\" slot.\n@example \n```svelte\n<ContextMenuOption>\n  <span slot=\"shortcutText\">Ctrl+K</span>\n</ContextMenuOption>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -2908,7 +2908,7 @@
         {
           "name": "id",
           "kind": "let",
-          "description": "Specify the id\nIt's recommended to provide an id as a value to bind to within a selectable/radio menu group",
+          "description": "Specify the id.\nIt's recommended to provide an id as a value to bind to within a selectable/radio menu group.",
           "type": "string",
           "value": "\"ccs-\" + Math.random().toString(36)",
           "isFunction": false,
@@ -3102,7 +3102,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text to copy",
+          "description": "Specify the text to copy.",
           "type": "string",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -3113,7 +3113,7 @@
         {
           "name": "copy",
           "kind": "let",
-          "description": "Override the default copy behavior of using the navigator.clipboard.writeText API to copy text",
+          "description": "Override the default copy behavior of using the navigator.clipboard.writeText API to copy text.",
           "type": "(text: string) => void",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -3156,7 +3156,7 @@
         {
           "name": "headers",
           "kind": "let",
-          "description": "Specify the data table headers",
+          "description": "Specify the data table headers.",
           "type": "ReadonlyArray<DataTableHeader<Row>>",
           "value": "[]",
           "isFunction": false,
@@ -3168,7 +3168,7 @@
         {
           "name": "rows",
           "kind": "let",
-          "description": "Specify the rows the data table should render\nkeys defined in `headers` are used for the row ids",
+          "description": "Specify the rows the data table should render.\nKeys defined in `headers` are used for the row ids.",
           "type": "ReadonlyArray<Row>",
           "value": "[]",
           "isFunction": false,
@@ -3180,7 +3180,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the data table",
+          "description": "Set the size of the data table.",
           "type": "\"compact\" | \"short\" | \"medium\" | \"tall\"",
           "value": "undefined",
           "isFunction": false,
@@ -3252,7 +3252,7 @@
         {
           "name": "sortKey",
           "kind": "let",
-          "description": "Specify the header key to sort by",
+          "description": "Specify the header key to sort by.",
           "type": "DataTableKey<Row>",
           "value": "null",
           "isFunction": false,
@@ -3264,7 +3264,7 @@
         {
           "name": "sortDirection",
           "kind": "let",
-          "description": "Specify the sort direction",
+          "description": "Specify the sort direction.",
           "type": "\"none\" | \"ascending\" | \"descending\"",
           "value": "\"none\"",
           "isFunction": false,
@@ -3276,7 +3276,7 @@
         {
           "name": "expandable",
           "kind": "let",
-          "description": "Set to `true` for the expandable variant\nAutomatically set to `true` if `batchExpansion` is `true`",
+          "description": "Set to `true` for the expandable variant.\nAutomatically set to `true` if `batchExpansion` is `true`.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -3288,7 +3288,7 @@
         {
           "name": "batchExpansion",
           "kind": "let",
-          "description": "Set to `true` to enable batch expansion",
+          "description": "Set to `true` to enable batch expansion.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -3300,7 +3300,7 @@
         {
           "name": "expandedRowIds",
           "kind": "let",
-          "description": "Specify the row ids to be expanded",
+          "description": "Specify the row ids to be expanded.",
           "type": "ReadonlyArray<DataTableRowId>",
           "value": "[]",
           "isFunction": false,
@@ -3312,7 +3312,7 @@
         {
           "name": "nonExpandableRowIds",
           "kind": "let",
-          "description": "Specify the ids for rows that should not be expandable",
+          "description": "Specify the ids for rows that should not be expandable.",
           "type": "ReadonlyArray<DataTableRowId>",
           "value": "[]",
           "isFunction": false,
@@ -3336,7 +3336,7 @@
         {
           "name": "selectable",
           "kind": "let",
-          "description": "Set to `true` for the selectable variant\nAutomatically set to `true` if `radio` or `batchSelection` are `true`",
+          "description": "Set to `true` for the selectable variant.\nAutomatically set to `true` if `radio` or `batchSelection` are `true`.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -3360,7 +3360,7 @@
         {
           "name": "selectedRowIds",
           "kind": "let",
-          "description": "Specify the row ids to be selected",
+          "description": "Specify the row ids to be selected.",
           "type": "ReadonlyArray<DataTableRowId>",
           "value": "[]",
           "isFunction": false,
@@ -3372,7 +3372,7 @@
         {
           "name": "nonSelectableRowIds",
           "kind": "let",
-          "description": "Specify the ids of rows that should not be selectable",
+          "description": "Specify the ids of rows that should not be selectable.",
           "type": "ReadonlyArray<DataTableRowId>",
           "value": "[]",
           "isFunction": false,
@@ -3432,7 +3432,7 @@
         {
           "name": "tableHeaderTranslateWithId",
           "kind": "let",
-          "description": "Override the default table header translation ids",
+          "description": "Override the default table header translation ids.",
           "type": "(id: import(\"./TableHeader.svelte\").TableHeaderTranslationId) => string",
           "value": "undefined",
           "isFunction": false,
@@ -3621,7 +3621,7 @@
         {
           "name": "columns",
           "kind": "let",
-          "description": "Specify the number of columns\nSuperseded by `headers` if `headers` is a non-empty array",
+          "description": "Specify the number of columns.\nSuperseded by `headers` if `headers` is a non-empty array.",
           "type": "number",
           "value": "5",
           "isFunction": false,
@@ -3645,7 +3645,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the data table",
+          "description": "Set the size of the data table.",
           "type": "\"compact\" | \"short\" | \"tall\"",
           "value": "undefined",
           "isFunction": false,
@@ -3681,7 +3681,7 @@
         {
           "name": "headers",
           "kind": "let",
-          "description": "Set the column headers\nSupersedes `columns` if value is a non-empty array",
+          "description": "Set the column headers.\nSupersedes `columns` if value is a non-empty array.",
           "type": "ReadonlyArray<string | Partial<DataTableHeader>>",
           "value": "[]",
           "isFunction": false,
@@ -3746,7 +3746,7 @@
         {
           "name": "datePickerType",
           "kind": "let",
-          "description": "Specify the date picker type",
+          "description": "Specify the date picker type.",
           "type": "\"simple\" | \"single\" | \"range\"",
           "value": "\"simple\"",
           "isFunction": false,
@@ -3758,7 +3758,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the date picker input value",
+          "description": "Specify the date picker input value.",
           "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
@@ -3770,7 +3770,7 @@
         {
           "name": "valueFrom",
           "kind": "let",
-          "description": "Specify the date picker start date value (from)\nOnly works with the \"range\" date picker type",
+          "description": "Specify the date picker start date value (from).\nOnly works with the \"range\" date picker type.",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -3782,7 +3782,7 @@
         {
           "name": "valueTo",
           "kind": "let",
-          "description": "Specify the date picker end date value (to)\nOnly works with the \"range\" date picker type",
+          "description": "Specify the date picker end date value (to).\nOnly works with the \"range\" date picker type.",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -3806,7 +3806,7 @@
         {
           "name": "maxDate",
           "kind": "let",
-          "description": "Specify the maximum date",
+          "description": "Specify the maximum date.",
           "type": "null | string | Date",
           "value": "null",
           "isFunction": false,
@@ -3818,7 +3818,7 @@
         {
           "name": "minDate",
           "kind": "let",
-          "description": "Specify the minimum date",
+          "description": "Specify the minimum date.",
           "type": "null | string | Date",
           "value": "null",
           "isFunction": false,
@@ -3830,7 +3830,7 @@
         {
           "name": "locale",
           "kind": "let",
-          "description": "Specify the locale",
+          "description": "Specify the locale.",
           "type": "import(\"flatpickr/dist/types/locale\").CustomLocale | import(\"flatpickr/dist/types/locale\").key",
           "value": "\"en\"",
           "isFunction": false,
@@ -4017,7 +4017,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the input",
+          "description": "Set the size of the input.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -4185,7 +4185,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Set a name for the input element",
+          "description": "Set a name for the input element.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -4319,7 +4319,7 @@
         {
           "name": "items",
           "kind": "let",
-          "description": "Set the dropdown items",
+          "description": "Set the dropdown items.",
           "type": "ReadonlyArray<Item>",
           "value": "[]",
           "isFunction": false,
@@ -4331,7 +4331,7 @@
         {
           "name": "itemToString",
           "kind": "let",
-          "description": "Override the display of a dropdown item",
+          "description": "Override the display of a dropdown item.",
           "type": "(item: Item) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -4342,7 +4342,7 @@
         {
           "name": "selectedId",
           "kind": "let",
-          "description": "Specify the selected item id",
+          "description": "Specify the selected item id.",
           "type": "DropdownItemId",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -4353,7 +4353,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Specify the type of dropdown",
+          "description": "Specify the type of dropdown.",
           "type": "\"default\" | \"inline\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -4365,7 +4365,7 @@
         {
           "name": "direction",
           "kind": "let",
-          "description": "Specify the direction of the dropdown menu",
+          "description": "Specify the direction of the dropdown menu.",
           "type": "\"bottom\" | \"top\"",
           "value": "\"bottom\"",
           "isFunction": false,
@@ -4377,7 +4377,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the dropdown field",
+          "description": "Specify the size of the dropdown field.",
           "type": "\"sm\" | \"lg\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -4497,7 +4497,7 @@
         {
           "name": "label",
           "kind": "let",
-          "description": "Specify the list box label",
+          "description": "Specify the list box label.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -4521,7 +4521,7 @@
         {
           "name": "translateWithId",
           "kind": "let",
-          "description": "Override the chevron icon label based on the open state.\nDefaults to \"Open menu\" when closed and \"Close menu\" when open",
+          "description": "Override the chevron icon label based on the open state.\nDefaults to \"Open menu\" when closed and \"Close menu\" when open.",
           "type": "(id: import(\"../ListBox/ListBoxMenuIcon.svelte\").ListBoxMenuIconTranslationId) => string",
           "value": "undefined",
           "isFunction": false,
@@ -4545,7 +4545,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the list box",
+          "description": "Specify a name attribute for the list box.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -4851,7 +4851,7 @@
         {
           "name": "status",
           "kind": "let",
-          "description": "Specify the file uploader status",
+          "description": "Specify the file uploader status.",
           "type": "\"uploading\" | \"edit\" | \"complete\"",
           "value": "\"uploading\"",
           "isFunction": false,
@@ -4875,7 +4875,7 @@
         {
           "name": "accept",
           "kind": "let",
-          "description": "Specify the accepted file types",
+          "description": "Specify the accepted file types.",
           "type": "ReadonlyArray<string>",
           "value": "[]",
           "isFunction": false,
@@ -4887,7 +4887,7 @@
         {
           "name": "files",
           "kind": "let",
-          "description": "Obtain a reference to the uploaded files",
+          "description": "Obtain a reference to the uploaded files.",
           "type": "ReadonlyArray<File>",
           "value": "[]",
           "isFunction": false,
@@ -4911,7 +4911,7 @@
         {
           "name": "clearFiles",
           "kind": "const",
-          "description": "Programmatically clear the uploaded files\n@example \n```svelte\n<FileUploader bind:this={uploader} bind:files={files} />\n<button on:click={() => uploader.clearFiles()}>Clear Files</button>\n```",
+          "description": "Programmatically clear the uploaded files.\n@example \n```svelte\n<FileUploader bind:this={uploader} bind:files={files} />\n<button on:click={() => uploader.clearFiles()}>Clear Files</button>\n```",
           "type": "() => void",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -4922,7 +4922,7 @@
         {
           "name": "labelTitle",
           "kind": "let",
-          "description": "Specify the label title.\nAlternatively, use the named slot \"labelTitle\"\n@example \n```svelte\n<FileUploader>\n  <span slot=\"labelTitle\">Custom Label</span>\n</FileUploader>\n```",
+          "description": "Specify the label title.\nAlternatively, use the named slot \"labelTitle\".\n@example \n```svelte\n<FileUploader>\n  <span slot=\"labelTitle\">Custom Label</span>\n</FileUploader>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -4934,7 +4934,7 @@
         {
           "name": "labelDescription",
           "kind": "let",
-          "description": "Specify the label description.\nAlternatively, use the named slot \"labelDescription\"\n@example \n```svelte\n<FileUploader>\n  <span slot=\"labelDescription\">Custom description text</span>\n</FileUploader>\n```",
+          "description": "Specify the label description.\nAlternatively, use the named slot \"labelDescription\".\n@example \n```svelte\n<FileUploader>\n  <span slot=\"labelDescription\">Custom description text</span>\n</FileUploader>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -4946,7 +4946,7 @@
         {
           "name": "kind",
           "kind": "let",
-          "description": "Specify the kind of file uploader button",
+          "description": "Specify the kind of file uploader button.",
           "type": "import(\"../Button/Button.svelte\").ButtonProps[\"kind\"]",
           "value": "\"primary\"",
           "isFunction": false,
@@ -4958,7 +4958,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the file uploader button",
+          "description": "Specify the size of the file uploader button.",
           "type": "import(\"../Button/Button.svelte\").ButtonProps[\"size\"]",
           "value": "\"small\"",
           "isFunction": false,
@@ -5077,7 +5077,7 @@
         {
           "name": "accept",
           "kind": "let",
-          "description": "Specify the accepted file types",
+          "description": "Specify the accepted file types.",
           "type": "ReadonlyArray<string>",
           "value": "[]",
           "isFunction": false,
@@ -5089,7 +5089,7 @@
         {
           "name": "files",
           "kind": "let",
-          "description": "Obtain a reference to the uploaded files",
+          "description": "Obtain a reference to the uploaded files.",
           "type": "ReadonlyArray<File>",
           "value": "[]",
           "isFunction": false,
@@ -5137,7 +5137,7 @@
         {
           "name": "kind",
           "kind": "let",
-          "description": "Specify the kind of file uploader button",
+          "description": "Specify the kind of file uploader button.",
           "type": "import(\"../Button/Button.svelte\").ButtonProps[\"kind\"]",
           "value": "\"primary\"",
           "isFunction": false,
@@ -5149,7 +5149,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the file uploader button",
+          "description": "Specify the size of the file uploader button.",
           "type": "import(\"../Button/Button.svelte\").ButtonProps[\"size\"]",
           "value": "\"small\"",
           "isFunction": false,
@@ -5248,7 +5248,7 @@
         {
           "name": "accept",
           "kind": "let",
-          "description": "Specify the accepted file types",
+          "description": "Specify the accepted file types.",
           "type": "ReadonlyArray<string>",
           "value": "[]",
           "isFunction": false,
@@ -5260,7 +5260,7 @@
         {
           "name": "files",
           "kind": "let",
-          "description": "Obtain a reference to the uploaded files",
+          "description": "Obtain a reference to the uploaded files.",
           "type": "ReadonlyArray<File>",
           "value": "[]",
           "isFunction": false,
@@ -5284,7 +5284,7 @@
         {
           "name": "validateFiles",
           "kind": "let",
-          "description": "Override the default behavior of validating uploaded files.\nBy default, files are not validated",
+          "description": "Override the default behavior of validating uploaded files.\nBy default, files are not validated.",
           "type": "(files: ReadonlyArray<File>) => ReadonlyArray<File>",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -5438,7 +5438,7 @@
         {
           "name": "status",
           "kind": "let",
-          "description": "Specify the file uploader status",
+          "description": "Specify the file uploader status.",
           "type": "\"uploading\" | \"edit\" | \"complete\"",
           "value": "\"uploading\"",
           "isFunction": false,
@@ -5450,7 +5450,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of button skeleton",
+          "description": "Specify the size of button skeleton.",
           "type": "\"default\" | \"field\" | \"small\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -5607,7 +5607,7 @@
         {
           "name": "status",
           "kind": "let",
-          "description": "Specify the file name status",
+          "description": "Specify the file name status.",
           "type": "\"uploading\" | \"edit\" | \"complete\"",
           "value": "\"uploading\"",
           "isFunction": false,
@@ -6012,7 +6012,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot\n@example \n```svelte\n<Grid let:props>\n  <header {...props}>Content</header>\n</Grid>\n```",
+          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example \n```svelte\n<Grid let:props>\n  <header {...props}>Content</header>\n</Grid>\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -6154,7 +6154,7 @@
         {
           "name": "uiShellAriaLabel",
           "kind": "let",
-          "description": "Specify the ARIA label for the header",
+          "description": "Specify the ARIA label for the header.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6166,7 +6166,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Specify the `href` attribute",
+          "description": "Specify the `href` attribute.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6178,7 +6178,7 @@
         {
           "name": "company",
           "kind": "let",
-          "description": "Specify the company name.\n\nAlternatively, use the named slot \"company\"\n@example \n```svelte\n<Header>\n  <span slot=\"company\">IBM</span>\n</Header>\n```",
+          "description": "Specify the company name.\n\nAlternatively, use the named slot \"company\".\n@example \n```svelte\n<Header>\n  <span slot=\"company\">IBM</span>\n</Header>\n```",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6190,7 +6190,7 @@
         {
           "name": "platformName",
           "kind": "let",
-          "description": "Specify the platform name.\nAlternatively, use the named slot \"platform\"\n@example \n```svelte\n<Header>\n  <span slot=\"platform\">Platform Name</span>\n</Header>\n```",
+          "description": "Specify the platform name.\nAlternatively, use the named slot \"platform\".\n@example \n```svelte\n<Header>\n  <span slot=\"platform\">Platform Name</span>\n</Header>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -6214,7 +6214,7 @@
         {
           "name": "expansionBreakpoint",
           "kind": "let",
-          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\n- small: 320\n- medium: 672\n- large: 1056\n- x-large: 1312\n- max: 1584",
+          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\n- small: 320\n- medium: 672\n- large: 1056\n- x-large: 1312\n- max: 1584.",
           "type": "number",
           "value": "1056",
           "isFunction": false,
@@ -6355,7 +6355,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text displayed next to the icon.\nAlternatively, use the named slot \"text\"\n@example \n```svelte\n<HeaderAction>\n  <div slot=\"text\">Custom Text</div>\n</HeaderAction>\n```",
+          "description": "Specify the text displayed next to the icon.\nAlternatively, use the named slot \"text\".\n@example \n```svelte\n<HeaderAction>\n  <div slot=\"text\">Custom Text</div>\n</HeaderAction>\n```",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6367,7 +6367,7 @@
         {
           "name": "iconDescription",
           "kind": "let",
-          "description": "Specify an icon tooltip. The tooltip will not be displayed\nif either the `text` prop or a named slot=\"text\" is used",
+          "description": "Specify an icon tooltip. The tooltip will not be displayed\nif either the `text` prop or a named slot=\"text\" is used.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6379,7 +6379,7 @@
         {
           "name": "tooltipAlignment",
           "kind": "let",
-          "description": "Set the alignment of the tooltip relative to the icon.\nOnly applies when `iconDescription` is provided",
+          "description": "Set the alignment of the tooltip relative to the icon.\nOnly applies when `iconDescription` is provided.",
           "type": "\"start\" | \"center\" | \"end\"",
           "value": "\"center\"",
           "isFunction": false,
@@ -6403,7 +6403,7 @@
         {
           "name": "transition",
           "kind": "let",
-          "description": "Customize the panel transition (i.e., `transition:slide`).\nSet to `false` to disable the transition",
+          "description": "Customize the panel transition (i.e., `transition:slide`).\nSet to `false` to disable the transition.",
           "type": "false | import(\"svelte/transition\").SlideParams",
           "value": "{ duration: 200 }",
           "isFunction": false,
@@ -6495,7 +6495,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Specify the `href` attribute",
+          "description": "Specify the `href` attribute.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6507,7 +6507,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -6572,7 +6572,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -6584,7 +6584,7 @@
         {
           "name": "ref",
           "kind": "let",
-          "description": "Obtain a reference to the HTML button element",
+          "description": "Obtain a reference to the HTML button element.",
           "type": "HTMLButtonElement",
           "value": "null",
           "isFunction": false,
@@ -6643,7 +6643,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Specify the `href` attribute",
+          "description": "Specify the `href` attribute.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6655,7 +6655,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text",
+          "description": "Specify the text.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6779,7 +6779,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text",
+          "description": "Specify the text.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6926,7 +6926,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Specify the `href` attribute",
+          "description": "Specify the `href` attribute.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -7031,7 +7031,7 @@
         {
           "name": "results",
           "kind": "let",
-          "description": "Render a list of search results",
+          "description": "Render a list of search results.",
           "type": "ReadonlyArray<Result>",
           "value": "[]",
           "isFunction": false,
@@ -7043,7 +7043,7 @@
         {
           "name": "selectedResultIndex",
           "kind": "let",
-          "description": "Specify the selected result index",
+          "description": "Specify the selected result index.",
           "type": "number",
           "value": "0",
           "isFunction": false,
@@ -7155,7 +7155,7 @@
         {
           "name": "src",
           "kind": "let",
-          "description": "Specify the image source",
+          "description": "Specify the image source.",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -7167,7 +7167,7 @@
         {
           "name": "alt",
           "kind": "let",
-          "description": "Specify the image alt text",
+          "description": "Specify the image alt text.",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -7179,7 +7179,7 @@
         {
           "name": "ratio",
           "kind": "let",
-          "description": "Specify the aspect ratio for the image wrapper",
+          "description": "Specify the aspect ratio for the image wrapper.",
           "type": "\"2x1\" | \"16x9\" | \"4x3\" | \"1x1\" | \"3x4\" | \"3x2\" | \"9x16\" | \"1x2\"",
           "value": "undefined",
           "isFunction": false,
@@ -7191,7 +7191,7 @@
         {
           "name": "loading",
           "kind": "let",
-          "description": "Set to `true` when `loaded` is `true` and `error` is false",
+          "description": "Set to `true` when `loaded` is `true` and `error` is false.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -7203,7 +7203,7 @@
         {
           "name": "loaded",
           "kind": "let",
-          "description": "Set to `true` when the image is loaded",
+          "description": "Set to `true` when the image is loaded.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -7215,7 +7215,7 @@
         {
           "name": "error",
           "kind": "let",
-          "description": "Set to `true` if an error occurs when loading the image",
+          "description": "Set to `true` if an error occurs when loading the image.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -7227,7 +7227,7 @@
         {
           "name": "fadeIn",
           "kind": "let",
-          "description": "Set to `true` to fade in the image on load\nThe duration uses the `fast-02` value following Carbon guidelines on motion",
+          "description": "Set to `true` to fade in the image on load.\nThe duration uses the `fast-02` value following Carbon guidelines on motion.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -7296,7 +7296,7 @@
         {
           "name": "status",
           "kind": "let",
-          "description": "Set the loading status",
+          "description": "Set the loading status.",
           "type": "\"active\" | \"inactive\" | \"finished\" | \"error\"",
           "value": "\"active\"",
           "isFunction": false,
@@ -7308,7 +7308,7 @@
         {
           "name": "description",
           "kind": "let",
-          "description": "Set the loading description",
+          "description": "Set the loading description.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -7320,7 +7320,7 @@
         {
           "name": "iconDescription",
           "kind": "let",
-          "description": "Specify a description for the loading icon.\nDefaults to the `status` prop for the \"error\" and \"finished\" states",
+          "description": "Specify a description for the loading icon.\nDefaults to the `status` prop for the \"error\" and \"finished\" states.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -7386,7 +7386,7 @@
         {
           "name": "kind",
           "kind": "let",
-          "description": "Specify the kind of notification",
+          "description": "Specify the kind of notification.",
           "type": "\"error\" | \"info\" | \"info-square\" | \"success\" | \"warning\" | \"warning-alt\"",
           "value": "\"error\"",
           "isFunction": false,
@@ -7470,7 +7470,7 @@
         {
           "name": "statusIconDescription",
           "kind": "let",
-          "description": "Specify the ARIA label for the status icon",
+          "description": "Specify the ARIA label for the status icon.",
           "type": "string",
           "value": "kind + \" icon\"",
           "isFunction": false,
@@ -7559,7 +7559,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the link",
+          "description": "Specify the size of the link.",
           "type": "\"sm\" | \"lg\"",
           "value": "undefined",
           "isFunction": false,
@@ -7571,7 +7571,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Specify the href value",
+          "description": "Specify the href value.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -7595,7 +7595,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render\n`inline` must be `false`",
+          "description": "Specify the icon to render.\n`inline` must be `false`.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -7692,7 +7692,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the list box",
+          "description": "Set the size of the list box.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -7704,7 +7704,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Set the type of the list box",
+          "description": "Set the type of the list box.",
           "type": "\"default\" | \"inline\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -7881,7 +7881,7 @@
         {
           "name": "translateWithId",
           "kind": "let",
-          "description": "Override the default translation ids",
+          "description": "Override the default translation ids.",
           "type": "(id: ListBoxFieldTranslationId) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -8056,7 +8056,7 @@
         {
           "name": "translateWithId",
           "kind": "let",
-          "description": "Override the default translation ids",
+          "description": "Override the default translation ids.",
           "type": "(id: ListBoxMenuIconTranslationId) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -8169,7 +8169,7 @@
         {
           "name": "selectionCount",
           "kind": "let",
-          "description": "Specify the number of selected items",
+          "description": "Specify the number of selected items.",
           "type": "number",
           "value": "undefined",
           "isFunction": false,
@@ -8205,7 +8205,7 @@
         {
           "name": "translateWithId",
           "kind": "let",
-          "description": "Override the default translation ids",
+          "description": "Override the default translation ids.",
           "type": "(id: ListBoxSelectionTranslationId) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -8362,7 +8362,7 @@
         {
           "name": "key",
           "kind": "let",
-          "description": "Specify the local storage key",
+          "description": "Specify the local storage key.",
           "type": "string",
           "value": "\"local-storage-key\"",
           "isFunction": false,
@@ -8374,7 +8374,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Provide a value to persist",
+          "description": "Provide a value to persist.",
           "type": "any",
           "value": "\"\"",
           "isFunction": false,
@@ -8431,7 +8431,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the modal",
+          "description": "Set the size of the modal.",
           "type": "\"xs\" | \"sm\" | \"lg\"",
           "value": "undefined",
           "isFunction": false,
@@ -8491,7 +8491,7 @@
         {
           "name": "modalHeading",
           "kind": "let",
-          "description": "Specify the modal heading",
+          "description": "Specify the modal heading.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -8503,7 +8503,7 @@
         {
           "name": "modalLabel",
           "kind": "let",
-          "description": "Specify the modal label",
+          "description": "Specify the modal label.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -8515,7 +8515,7 @@
         {
           "name": "modalAriaLabel",
           "kind": "let",
-          "description": "Specify the ARIA label for the modal",
+          "description": "Specify the ARIA label for the modal.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -8599,7 +8599,7 @@
         {
           "name": "primaryButtonIcon",
           "kind": "let",
-          "description": "Specify the primary button icon",
+          "description": "Specify the primary button icon.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -8611,7 +8611,7 @@
         {
           "name": "shouldSubmitOnEnter",
           "kind": "let",
-          "description": "Set to `true` for the \"submit\" and \"click:button--primary\" events\nto be dispatched when pressing \"Enter\"",
+          "description": "Set to `true` for the \"submit\" and \"click:button--primary\" events\nto be dispatched when pressing \"Enter\".",
           "type": "boolean",
           "value": "true",
           "isFunction": false,
@@ -8635,7 +8635,7 @@
         {
           "name": "secondaryButtons",
           "kind": "let",
-          "description": "2-tuple prop to render two secondary buttons for a 3 button modal\nsupersedes `secondaryButtonText`",
+          "description": "2-tuple prop to render two secondary buttons for a 3 button modal.\nSupersedes `secondaryButtonText`.",
           "type": "[{ text: string; }, { text: string; }]",
           "value": "[]",
           "isFunction": false,
@@ -8843,7 +8843,7 @@
         {
           "name": "primaryButtonIcon",
           "kind": "let",
-          "description": "Specify the primary button icon",
+          "description": "Specify the primary button icon.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -8867,7 +8867,7 @@
         {
           "name": "primaryClass",
           "kind": "let",
-          "description": "Specify a class for the primary button",
+          "description": "Specify a class for the primary button.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -8891,7 +8891,7 @@
         {
           "name": "secondaryButtons",
           "kind": "let",
-          "description": "2-tuple prop to render two secondary buttons for a 3 button modal\nsupersedes `secondaryButtonText`",
+          "description": "2-tuple prop to render two secondary buttons for a 3 button modal.\nSupersedes `secondaryButtonText`.",
           "type": "[] | [{ text: string; }, { text: string; }]",
           "value": "[]",
           "isFunction": false,
@@ -8903,7 +8903,7 @@
         {
           "name": "secondaryClass",
           "kind": "let",
-          "description": "Specify a class for the secondary button",
+          "description": "Specify a class for the secondary button.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -9067,7 +9067,7 @@
         {
           "name": "items",
           "kind": "let",
-          "description": "Set the multiselect items",
+          "description": "Set the multiselect items.",
           "type": "ReadonlyArray<Item>",
           "value": "[]",
           "isFunction": false,
@@ -9079,7 +9079,7 @@
         {
           "name": "itemToString",
           "kind": "let",
-          "description": "Override the display of a multiselect item",
+          "description": "Override the display of a multiselect item.",
           "type": "(item: Item) => any",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -9101,7 +9101,7 @@
         {
           "name": "selectedIds",
           "kind": "let",
-          "description": "Set the selected ids",
+          "description": "Set the selected ids.",
           "type": "ReadonlyArray<MultiSelectItemId>",
           "value": "[]",
           "isFunction": false,
@@ -9125,7 +9125,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the combobox",
+          "description": "Set the size of the combobox.",
           "type": "\"sm\" | \"lg\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -9137,7 +9137,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Specify the type of multiselect",
+          "description": "Specify the type of multiselect.",
           "type": "\"default\" | \"inline\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -9149,7 +9149,7 @@
         {
           "name": "direction",
           "kind": "let",
-          "description": "Specify the direction of the multiselect dropdown menu",
+          "description": "Specify the direction of the multiselect dropdown menu.",
           "type": "\"bottom\" | \"top\"",
           "value": "\"bottom\"",
           "isFunction": false,
@@ -9161,7 +9161,7 @@
         {
           "name": "selectionFeedback",
           "kind": "let",
-          "description": "Specify the selection feedback after selecting items",
+          "description": "Specify the selection feedback after selecting items.",
           "type": "\"top\" | \"fixed\" | \"top-after-reopen\"",
           "value": "\"top-after-reopen\"",
           "isFunction": false,
@@ -9197,7 +9197,7 @@
         {
           "name": "filterItem",
           "kind": "let",
-          "description": "Override the filtering logic\nThe default filtering is an exact string comparison",
+          "description": "Override the filtering logic.\nThe default filtering is an exact string comparison.",
           "type": "(item: Item, value: string) => boolean",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -9256,7 +9256,7 @@
         {
           "name": "sortItem",
           "kind": "let",
-          "description": "Override the sorting logic\nThe default sorting compare the item text value",
+          "description": "Override the sorting logic.\nThe default sorting compare the item text value.",
           "type": "((a: Item, b: Item) => Item) | (() => void)",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -9267,7 +9267,7 @@
         {
           "name": "translateWithId",
           "kind": "let",
-          "description": "Override the chevron icon label based on the open state.\nDefaults to \"Open menu\" when closed and \"Close menu\" when open",
+          "description": "Override the chevron icon label based on the open state.\nDefaults to \"Open menu\" when closed and \"Close menu\" when open.",
           "type": "(id: import(\"../ListBox/ListBoxMenuIcon.svelte\").ListBoxMenuIconTranslationId) => string",
           "value": "undefined",
           "isFunction": false,
@@ -9279,7 +9279,7 @@
         {
           "name": "translateWithIdSelection",
           "kind": "let",
-          "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\" and \"Clear all items\" if more than one item is selected",
+          "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\" and \"Clear all items\" if more than one item is selected.",
           "type": "(id: import(\"../ListBox/ListBoxSelection.svelte\").ListBoxSelectionTranslationId) => string",
           "value": "undefined",
           "isFunction": false,
@@ -9411,7 +9411,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the select",
+          "description": "Specify a name attribute for the select.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -9447,7 +9447,7 @@
         {
           "name": "fieldRef",
           "kind": "let",
-          "description": "Obtain a reference to the field box element",
+          "description": "Obtain a reference to the field box element.",
           "type": "null | HTMLDivElement",
           "value": "null",
           "isFunction": false,
@@ -9459,7 +9459,7 @@
         {
           "name": "selectionRef",
           "kind": "let",
-          "description": "Obtain a reference to the selection element",
+          "description": "Obtain a reference to the selection element.",
           "type": "null | HTMLDivElement",
           "value": "null",
           "isFunction": false,
@@ -9471,7 +9471,7 @@
         {
           "name": "highlightedId",
           "kind": "let",
-          "description": "Id of the highlighted ListBoxMenuItem",
+          "description": "Id of the highlighted ListBoxMenuItem.",
           "type": "null | MultiSelectItemId",
           "value": "null",
           "isFunction": false,
@@ -9632,7 +9632,7 @@
         {
           "name": "notificationType",
           "kind": "let",
-          "description": "Set the type of notification",
+          "description": "Set the type of notification.",
           "type": "\"toast\" | \"inline\"",
           "value": "\"toast\"",
           "isFunction": false,
@@ -9644,7 +9644,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render.",
           "type": "any",
           "value": "Close",
           "isFunction": false,
@@ -9656,7 +9656,7 @@
         {
           "name": "title",
           "kind": "let",
-          "description": "Specify the title of the icon",
+          "description": "Specify the title of the icon.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -9717,7 +9717,7 @@
         {
           "name": "kind",
           "kind": "let",
-          "description": "Specify the kind of notification icon",
+          "description": "Specify the kind of notification icon.",
           "type": "\"error\" | \"info\" | \"info-square\" | \"success\" | \"warning\" | \"warning-alt\"",
           "value": "\"error\"",
           "isFunction": false,
@@ -9729,7 +9729,7 @@
         {
           "name": "notificationType",
           "kind": "let",
-          "description": "Set the type of notification",
+          "description": "Set the type of notification.",
           "type": "\"toast\" | \"inline\"",
           "value": "\"toast\"",
           "isFunction": false,
@@ -9763,7 +9763,7 @@
         {
           "name": "position",
           "kind": "let",
-          "description": "Specify the position of the notification queue",
+          "description": "Specify the position of the notification queue.",
           "type": "\"top-right\" | \"bottom-right\"",
           "value": "\"top-right\"",
           "isFunction": false,
@@ -9904,7 +9904,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the input",
+          "description": "Set the size of the input.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -9916,7 +9916,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the input value.\nUse `null` to denote \"no value\"",
+          "description": "Specify the input value.\nUse `null` to denote \"no value\".",
           "type": "null | number",
           "value": "null",
           "isFunction": false,
@@ -9940,7 +9940,7 @@
         {
           "name": "max",
           "kind": "let",
-          "description": "Specify the maximum value",
+          "description": "Specify the maximum value.",
           "type": "number",
           "value": "undefined",
           "isFunction": false,
@@ -9952,7 +9952,7 @@
         {
           "name": "min",
           "kind": "let",
-          "description": "Specify the minimum value",
+          "description": "Specify the minimum value.",
           "type": "number",
           "value": "undefined",
           "isFunction": false,
@@ -10000,7 +10000,7 @@
         {
           "name": "allowDecimal",
           "kind": "let",
-          "description": "Set to `true` to preserve decimal input formatting.\nWhen enabled, uses type=\"text\" with inputmode=\"decimal\" instead of type=\"number\"\n@example \n```svelte\n<NumberInput allowDecimal={true} value=\"1.0\" />\n<NumberInput allowDecimal={true} value=\"2.00\" />\n```",
+          "description": "Set to `true` to preserve decimal input formatting.\nWhen enabled, uses type=\"text\" with inputmode=\"decimal\" instead of type=\"number\".\n@example \n```svelte\n<NumberInput allowDecimal={true} value=\"1.0\" />\n<NumberInput allowDecimal={true} value=\"2.00\" />\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -10120,7 +10120,7 @@
         {
           "name": "translateWithId",
           "kind": "let",
-          "description": "Override the default translation ids",
+          "description": "Override the default translation ids.",
           "type": "(id: NumberInputTranslationId) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -10131,7 +10131,7 @@
         {
           "name": "translationIds",
           "kind": "const",
-          "description": "Default translation ids",
+          "description": "Default translation ids.",
           "type": "{ increment: \"increment\"; decrement: \"decrement\" }",
           "value": "{\n  increment: \"increment\",\n  decrement: \"decrement\",\n}",
           "isFunction": false,
@@ -10155,7 +10155,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the input",
+          "description": "Specify a name attribute for the input.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -10438,7 +10438,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the overflow menu",
+          "description": "Specify the size of the overflow menu.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -10450,7 +10450,7 @@
         {
           "name": "direction",
           "kind": "let",
-          "description": "Specify the direction of the overflow menu relative to the button",
+          "description": "Specify the direction of the overflow menu relative to the button.",
           "type": "\"top\" | \"bottom\"",
           "value": "\"bottom\"",
           "isFunction": false,
@@ -10498,7 +10498,7 @@
         {
           "name": "menuOptionsClass",
           "kind": "let",
-          "description": "Specify the menu options class",
+          "description": "Specify the menu options class.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -10522,7 +10522,7 @@
         {
           "name": "iconClass",
           "kind": "let",
-          "description": "Specify the icon class",
+          "description": "Specify the icon class.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -10678,7 +10678,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the item text.\nAlternatively, use the default slot",
+          "description": "Specify the item text.\nAlternatively, use the default slot.",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
@@ -10904,7 +10904,7 @@
         {
           "name": "itemText",
           "kind": "let",
-          "description": "Override the item text",
+          "description": "Override the item text.",
           "type": "(min: number, max: number) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -10915,7 +10915,7 @@
         {
           "name": "itemRangeText",
           "kind": "let",
-          "description": "Override the item range text",
+          "description": "Override the item range text.",
           "type": "(min: number, max: number, total: number) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -10962,7 +10962,7 @@
         {
           "name": "pageSizes",
           "kind": "let",
-          "description": "Specify the available page sizes",
+          "description": "Specify the available page sizes.",
           "type": "ReadonlyArray<number>",
           "value": "[10]",
           "isFunction": false,
@@ -10986,7 +10986,7 @@
         {
           "name": "pageText",
           "kind": "let",
-          "description": "Override the page text",
+          "description": "Override the page text.",
           "type": "(page: number) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -10997,7 +10997,7 @@
         {
           "name": "pageRangeText",
           "kind": "let",
-          "description": "Override the page range text",
+          "description": "Override the page range text.",
           "type": "(current: number, total: number) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -11025,25 +11025,25 @@
           "type": "dispatched",
           "name": "change",
           "detail": "{\n  page?: number;\n  pageSize?: number;\n}",
-          "description": "Dispatched after any user interaction"
+          "description": "Dispatched after any user interaction."
         },
         {
           "type": "dispatched",
           "name": "click:button--previous",
           "detail": "{ page: number }",
-          "description": "Dispatched after any user interaction"
+          "description": "Dispatched after any user interaction."
         },
         {
           "type": "dispatched",
           "name": "click:button--next",
           "detail": "{ page: number }",
-          "description": "Dispatched after any user interaction"
+          "description": "Dispatched after any user interaction."
         },
         {
           "type": "dispatched",
           "name": "update",
           "detail": "{\n  pageSize: number;\n  page: number;\n}",
-          "description": "Dispatched after any user interaction"
+          "description": "Dispatched after any user interaction."
         }
       ],
       "typedefs": [],
@@ -11214,7 +11214,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the input",
+          "description": "Set the size of the input.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -11226,7 +11226,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the input value",
+          "description": "Specify the input value.",
           "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
@@ -11238,7 +11238,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Set to `\"text\"` to toggle the password visibility",
+          "description": "Set to `\"text\"` to toggle the password visibility.",
           "type": "\"text\" | \"password\"",
           "value": "\"password\"",
           "isFunction": false,
@@ -11286,7 +11286,7 @@
         {
           "name": "tooltipAlignment",
           "kind": "let",
-          "description": "Set the alignment of the tooltip relative to the icon",
+          "description": "Set the alignment of the tooltip relative to the icon.",
           "type": "\"start\" | \"center\" | \"end\"",
           "value": "\"center\"",
           "isFunction": false,
@@ -11298,7 +11298,7 @@
         {
           "name": "tooltipPosition",
           "kind": "let",
-          "description": "Set the position of the tooltip relative to the icon",
+          "description": "Set the position of the tooltip relative to the icon.",
           "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
           "value": "\"bottom\"",
           "isFunction": false,
@@ -11442,7 +11442,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the input",
+          "description": "Specify a name attribute for the input.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -11581,7 +11581,7 @@
         {
           "name": "align",
           "kind": "let",
-          "description": "Specify the alignment of the caret",
+          "description": "Specify the alignment of the caret.",
           "type": "\"top\" | \"top-left\" | \"top-right\" | \"bottom\" | \"bottom-left\" | \"bottom-right\" | \"left\" | \"left-bottom\" | \"left-top\" | \"right\" | \"right-bottom\" | \"right-top\"",
           "value": "\"top\"",
           "isFunction": false,
@@ -11657,7 +11657,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the current value",
+          "description": "Specify the current value.",
           "type": "number",
           "value": "undefined",
           "isFunction": false,
@@ -11681,7 +11681,7 @@
         {
           "name": "kind",
           "kind": "let",
-          "description": "Specify the kind of progress bar",
+          "description": "Specify the kind of progress bar.",
           "type": "\"default\" | \"inline\" | \"indented\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -11693,7 +11693,7 @@
         {
           "name": "status",
           "kind": "let",
-          "description": "Specify the status",
+          "description": "Specify the status.",
           "type": "\"active\" | \"finished\" | \"error\"",
           "value": "\"active\"",
           "isFunction": false,
@@ -11705,7 +11705,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size",
+          "description": "Specify the size.",
           "type": "\"sm\" | \"md\"",
           "value": "\"md\"",
           "isFunction": false,
@@ -12127,7 +12127,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the value of the radio button",
+          "description": "Specify the value of the radio button.",
           "type": "string | number",
           "value": "\"\"",
           "isFunction": false,
@@ -12175,7 +12175,7 @@
         {
           "name": "labelPosition",
           "kind": "let",
-          "description": "Specify the label position",
+          "description": "Specify the label position.",
           "type": "\"right\" | \"left\"",
           "value": "\"right\"",
           "isFunction": false,
@@ -12223,7 +12223,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the radio button input",
+          "description": "Specify a name attribute for the radio button input.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -12286,7 +12286,7 @@
         {
           "name": "selected",
           "kind": "let",
-          "description": "Set the selected radio button value",
+          "description": "Set the selected radio button value.",
           "type": "string | number",
           "value": "undefined",
           "isFunction": false,
@@ -12310,7 +12310,7 @@
         {
           "name": "required",
           "kind": "let",
-          "description": "Set to `true` to require the selection of a radio button",
+          "description": "Set to `true` to require the selection of a radio button.",
           "type": "boolean",
           "value": "undefined",
           "isFunction": false,
@@ -12322,7 +12322,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the radio button inputs",
+          "description": "Specify a name attribute for the radio button inputs.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -12370,7 +12370,7 @@
         {
           "name": "labelPosition",
           "kind": "let",
-          "description": "Specify the label position",
+          "description": "Specify the label position.",
           "type": "\"right\" | \"left\"",
           "value": "\"right\"",
           "isFunction": false,
@@ -12382,7 +12382,7 @@
         {
           "name": "orientation",
           "kind": "let",
-          "description": "Specify the orientation of the radio buttons",
+          "description": "Specify the orientation of the radio buttons.",
           "type": "\"horizontal\" | \"vertical\"",
           "value": "\"horizontal\"",
           "isFunction": false,
@@ -12394,7 +12394,7 @@
         {
           "name": "id",
           "kind": "let",
-          "description": "Set an id for the container div element",
+          "description": "Set an id for the container div element.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -12627,7 +12627,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the radio tile input",
+          "description": "Specify a name attribute for the radio tile input.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -12692,7 +12692,7 @@
         {
           "name": "nodes",
           "kind": "let",
-          "description": "Specify the nodes to render",
+          "description": "Specify the nodes to render.",
           "type": "ReadonlyArray<Node & { nodes?: Node[] }>",
           "value": "[]",
           "isFunction": false,
@@ -12704,7 +12704,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Specify the type of list to render",
+          "description": "Specify the type of list to render.",
           "type": "\"unordered\" | \"ordered\" | \"ordered-native\"",
           "value": "\"unordered\"",
           "isFunction": false,
@@ -12741,7 +12741,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element\nProps are destructured as `props` in the default slot\n@example \n```svelte\n<Row let:props>\n  <section {...props}>Content</section>\n</Row>\n```",
+          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example \n```svelte\n<Row let:props>\n  <section {...props}>Content</section>\n</Row>\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -12847,7 +12847,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the value of the search input",
+          "description": "Specify the value of the search input.",
           "type": "any",
           "value": "\"\"",
           "isFunction": false,
@@ -12859,7 +12859,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the search input",
+          "description": "Specify the size of the search input.",
           "type": "\"sm\" | \"lg\" | \"xl\"",
           "value": "\"xl\"",
           "isFunction": false,
@@ -12955,7 +12955,7 @@
         {
           "name": "autocomplete",
           "kind": "let",
-          "description": "Specify the `autocomplete` attribute",
+          "description": "Specify the `autocomplete` attribute.",
           "type": "\"on\" | \"off\"",
           "value": "\"off\"",
           "isFunction": false,
@@ -13133,7 +13133,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the search input",
+          "description": "Specify the size of the search input.",
           "type": "\"sm\" | \"lg\" | \"xl\"",
           "value": "\"xl\"",
           "isFunction": false,
@@ -13182,7 +13182,7 @@
         {
           "name": "selected",
           "kind": "let",
-          "description": "Specify the selected item value",
+          "description": "Specify the selected item value.",
           "type": "Value | undefined",
           "value": "undefined",
           "isFunction": false,
@@ -13194,7 +13194,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the select input",
+          "description": "Set the size of the select input.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -13254,7 +13254,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the select element",
+          "description": "Specify a name attribute for the select element.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -13469,7 +13469,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the option value",
+          "description": "Specify the option value.",
           "type": "string | number",
           "value": "\"\"",
           "isFunction": false,
@@ -13481,7 +13481,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the option text\nIf not specified, the value will be used as the text.",
+          "description": "Specify the option text.\nIf not specified, the value will be used as the text.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -13517,7 +13517,7 @@
         {
           "name": "class",
           "kind": "let",
-          "description": "Specify the class of the `option` element",
+          "description": "Specify the class of the `option` element.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -13529,7 +13529,7 @@
         {
           "name": "style",
           "kind": "let",
-          "description": "Specify the style of the `option` element",
+          "description": "Specify the style of the `option` element.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -13744,7 +13744,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the input",
+          "description": "Specify a name attribute for the input.",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -13826,7 +13826,7 @@
         {
           "name": "selected",
           "kind": "let",
-          "description": "Specify the selected tile values",
+          "description": "Specify the selected tile values.",
           "type": "T[]",
           "value": "[]",
           "isFunction": false,
@@ -13850,7 +13850,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the checkbox inputs",
+          "description": "Specify a name attribute for the checkbox inputs.",
           "type": "string | undefined",
           "value": "undefined",
           "isFunction": false,
@@ -13965,7 +13965,7 @@
         {
           "name": "ariaLabel",
           "kind": "let",
-          "description": "Specify the ARIA label for the nav",
+          "description": "Specify the ARIA label for the nav.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -13989,7 +13989,7 @@
         {
           "name": "expansionBreakpoint",
           "kind": "let",
-          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\n- small: 320\n- medium: 672\n- large: 1056\n- x-large: 1312\n- max: 1584",
+          "description": "The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.\n1056 represents the \"large\" breakpoint in pixels from the Carbon Design System:\n- small: 320\n- medium: 672\n- large: 1056\n- x-large: 1312\n- max: 1584.",
           "type": "number",
           "value": "1056",
           "isFunction": false,
@@ -14083,7 +14083,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Specify the `href` attribute",
+          "description": "Specify the `href` attribute.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -14095,7 +14095,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text",
+          "description": "Specify the text.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -14107,7 +14107,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -14178,7 +14178,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text",
+          "description": "Specify the text.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -14190,7 +14190,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -14260,7 +14260,7 @@
         {
           "name": "href",
           "kind": "let",
-          "description": "Specify the `href` attribute",
+          "description": "Specify the `href` attribute.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -14272,7 +14272,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the item text",
+          "description": "Specify the item text.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -14679,7 +14679,7 @@
         {
           "name": "labelText",
           "kind": "let",
-          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot\n@example \n```svelte\n<Slider>\n  <span slot=\"labelText\">Custom Label</span>\n</Slider>\n```",
+          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot.\n@example \n```svelte\n<Slider>\n  <span slot=\"labelText\">Custom Label</span>\n</Slider>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -14854,7 +14854,7 @@
         {
           "name": "tag",
           "kind": "let",
-          "description": "Specify the tag name",
+          "description": "Specify the tag name.",
           "type": "keyof HTMLElementTagNameMap",
           "value": "\"div\"",
           "isFunction": false,
@@ -14895,7 +14895,7 @@
         {
           "name": "selected",
           "kind": "let",
-          "description": "Specify the selected structured list row value",
+          "description": "Specify the selected structured list row value.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -15382,7 +15382,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the switch text.\nAlternatively, use the \"text\" slot\n@example \n```svelte\n<Switch>\n  <span slot=\"text\">Custom Text</span>\n</Switch>\n```",
+          "description": "Specify the switch text.\nAlternatively, use the \"text\" slot.\n@example \n```svelte\n<Switch>\n  <span slot=\"text\">Custom Text</span>\n</Switch>\n```",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
@@ -15491,7 +15491,7 @@
         {
           "name": "label",
           "kind": "let",
-          "description": "Specify the tab label.\nAlternatively, use the default slot\n@example \n```svelte\n<Tab>\n  <span>Label</span>\n</Tab>\n```",
+          "description": "Specify the tab label.\nAlternatively, use the default slot.\n@example \n```svelte\n<Tab>\n  <span>Label</span>\n</Tab>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -15641,7 +15641,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the table",
+          "description": "Set the size of the table.",
           "type": "\"compact\" | \"short\" | \"medium\" | \"tall\"",
           "value": "undefined",
           "isFunction": false,
@@ -15701,7 +15701,7 @@
         {
           "name": "tableStyle",
           "kind": "let",
-          "description": "Set the style attribute on the `table` element",
+          "description": "Set the style attribute on the `table` element.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -15922,7 +15922,7 @@
         {
           "name": "sortDirection",
           "kind": "let",
-          "description": "Specify the sort direction",
+          "description": "Specify the sort direction.",
           "type": "\"none\" | \"ascending\" | \"descending\"",
           "value": "\"none\"",
           "isFunction": false,
@@ -15970,7 +15970,7 @@
         {
           "name": "translateWithId",
           "kind": "let",
-          "description": "Override the default translation ids",
+          "description": "Override the default translation ids.",
           "type": "(id: TableHeaderTranslationId) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -16096,7 +16096,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Specify the type of tabs",
+          "description": "Specify the type of tabs.",
           "type": "\"default\" | \"container\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -16120,7 +16120,7 @@
         {
           "name": "iconDescription",
           "kind": "let",
-          "description": "Specify the ARIA label for the chevron icon",
+          "description": "Specify the ARIA label for the chevron icon.",
           "type": "string",
           "value": "\"Show menu options\"",
           "isFunction": false,
@@ -16272,7 +16272,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Specify the type of tabs",
+          "description": "Specify the type of tabs.",
           "type": "\"default\" | \"container\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -16321,7 +16321,7 @@
         {
           "name": "type",
           "kind": "let",
-          "description": "Specify the type of tag",
+          "description": "Specify the type of tag.",
           "type": "\"red\" | \"magenta\" | \"purple\" | \"blue\" | \"cyan\" | \"teal\" | \"green\" | \"gray\" | \"cool-gray\" | \"warm-gray\" | \"high-contrast\" | \"outline\"",
           "value": "undefined",
           "isFunction": false,
@@ -16404,7 +16404,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -16578,7 +16578,7 @@
         {
           "name": "maxCount",
           "kind": "let",
-          "description": "Specify the max character count",
+          "description": "Specify the max character count.",
           "type": "number",
           "value": "undefined",
           "isFunction": false,
@@ -16722,7 +16722,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the input",
+          "description": "Specify a name attribute for the input.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -16874,7 +16874,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Set the size of the input",
+          "description": "Set the size of the input.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -16958,7 +16958,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the input",
+          "description": "Specify a name attribute for the input.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -17218,7 +17218,7 @@
         {
           "name": "theme",
           "kind": "let",
-          "description": "Set the current Carbon theme",
+          "description": "Set the current Carbon theme.",
           "type": "CarbonTheme",
           "value": "\"white\"",
           "isFunction": false,
@@ -17230,7 +17230,7 @@
         {
           "name": "tokens",
           "kind": "let",
-          "description": "Customize a theme with your own tokens\n@see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme",
+          "description": "Customize a theme with your own tokens.\n@see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme",
           "type": "{ [token: string]: any; }",
           "value": "{}",
           "isFunction": false,
@@ -17266,7 +17266,7 @@
         {
           "name": "render",
           "kind": "let",
-          "description": "Render a toggle or select dropdown to control the theme",
+          "description": "Render a toggle or select dropdown to control the theme.",
           "type": "\"toggle\" | \"select\"",
           "value": "undefined",
           "isFunction": false,
@@ -17278,7 +17278,7 @@
         {
           "name": "toggle",
           "kind": "let",
-          "description": "Override the default toggle props",
+          "description": "Override the default toggle props.",
           "type": "import(\"../Toggle/Toggle.svelte\").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }",
           "value": "{\n  themes: [\"white\", \"g100\"],\n  labelA: \"\",\n  labelB: \"\",\n  labelText: \"Dark mode\",\n  hideLabel: false,\n}",
           "isFunction": false,
@@ -17290,7 +17290,7 @@
         {
           "name": "select",
           "kind": "let",
-          "description": "Override the default select props",
+          "description": "Override the default select props.",
           "type": "import(\"../Select/Select.svelte\").SelectProps & { themes?: CarbonTheme[]; }",
           "value": "{\n  themes: themeKeys,\n  labelText: \"Themes\",\n  hideLabel: false,\n}",
           "isFunction": false,
@@ -17399,7 +17399,7 @@
         {
           "name": "selected",
           "kind": "let",
-          "description": "Specify the selected tile value",
+          "description": "Specify the selected tile value.",
           "type": "T | undefined",
           "value": "undefined",
           "isFunction": false,
@@ -17423,7 +17423,7 @@
         {
           "name": "required",
           "kind": "let",
-          "description": "Set to `true` to require the selection of a radio button",
+          "description": "Set to `true` to require the selection of a radio button.",
           "type": "boolean",
           "value": "undefined",
           "isFunction": false,
@@ -17435,7 +17435,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the radio button inputs",
+          "description": "Specify a name attribute for the radio button inputs.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -17527,7 +17527,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the size of the input",
+          "description": "Specify the size of the input.",
           "type": "\"sm\" | \"xl\"",
           "value": "undefined",
           "isFunction": false,
@@ -17539,7 +17539,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the input value",
+          "description": "Specify the input value.",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -17671,7 +17671,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the input",
+          "description": "Specify a name attribute for the input.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -17779,7 +17779,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the select value",
+          "description": "Specify the select value.",
           "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
@@ -17839,7 +17839,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the select element",
+          "description": "Specify a name attribute for the select element.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -17925,7 +17925,7 @@
         {
           "name": "kind",
           "kind": "let",
-          "description": "Specify the kind of notification",
+          "description": "Specify the kind of notification.",
           "type": "\"error\" | \"info\" | \"info-square\" | \"success\" | \"warning\" | \"warning-alt\"",
           "value": "\"error\"",
           "isFunction": false,
@@ -18009,7 +18009,7 @@
         {
           "name": "statusIconDescription",
           "kind": "let",
-          "description": "Specify the ARIA label for the status icon",
+          "description": "Specify the ARIA label for the status icon.",
           "type": "string",
           "value": "kind + \" icon\"",
           "isFunction": false,
@@ -18123,7 +18123,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the toggle size",
+          "description": "Specify the toggle size.",
           "type": "\"default\" | \"sm\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -18219,7 +18219,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the checkbox input",
+          "description": "Specify a name attribute for the checkbox input.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -18324,7 +18324,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the toggle size",
+          "description": "Specify the toggle size.",
           "type": "\"default\" | \"sm\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -18404,7 +18404,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the toolbar size",
+          "description": "Specify the toolbar size.",
           "type": "\"sm\" | \"default\"",
           "value": "\"default\"",
           "isFunction": false,
@@ -18457,7 +18457,7 @@
         {
           "name": "formatTotalSelected",
           "kind": "let",
-          "description": "Override the total items selected text",
+          "description": "Override the total items selected text.",
           "type": "(totalSelected: number) => string",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -18468,7 +18468,7 @@
         {
           "name": "active",
           "kind": "let",
-          "description": "Use a boolean to show or hide the toolbar",
+          "description": "Use a boolean to show or hide the toolbar.",
           "type": "undefined | boolean",
           "value": "undefined",
           "isFunction": false,
@@ -18604,7 +18604,7 @@
         {
           "name": "value",
           "kind": "let",
-          "description": "Specify the value of the search input",
+          "description": "Specify the value of the search input.",
           "type": "number | string",
           "value": "\"\"",
           "isFunction": false,
@@ -18664,7 +18664,7 @@
         {
           "name": "filteredRowIds",
           "kind": "let",
-          "description": "The filtered row ids",
+          "description": "The filtered row ids.",
           "type": "ReadonlyArray<import(\"./DataTable.svelte\").DataTableRowId>",
           "value": "[]",
           "isFunction": false,
@@ -18688,7 +18688,7 @@
         {
           "name": "ref",
           "kind": "let",
-          "description": "Obtain a reference to the input HTML element",
+          "description": "Obtain a reference to the input HTML element.",
           "type": "null | HTMLInputElement",
           "value": "null",
           "isFunction": false,
@@ -18758,7 +18758,7 @@
         {
           "name": "align",
           "kind": "let",
-          "description": "Set the alignment of the tooltip relative to the icon",
+          "description": "Set the alignment of the tooltip relative to the icon.",
           "type": "\"start\" | \"center\" | \"end\"",
           "value": "\"center\"",
           "isFunction": false,
@@ -18770,7 +18770,7 @@
         {
           "name": "direction",
           "kind": "let",
-          "description": "Set the direction of the tooltip relative to the button",
+          "description": "Set the direction of the tooltip relative to the button.",
           "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
           "value": "\"bottom\"",
           "isFunction": false,
@@ -18782,7 +18782,7 @@
         {
           "name": "open",
           "kind": "let",
-          "description": "Set to `true` to open the tooltip",
+          "description": "Set to `true` to open the tooltip.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -18794,7 +18794,7 @@
         {
           "name": "hideIcon",
           "kind": "let",
-          "description": "Set to `true` to hide the tooltip icon",
+          "description": "Set to `true` to hide the tooltip icon.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -18806,7 +18806,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render for the tooltip button.\nDefault to `<Information />`",
+          "description": "Specify the icon to render for the tooltip button.\nDefaults to `<Information />`.",
           "type": "any",
           "value": "Information",
           "isFunction": false,
@@ -18854,7 +18854,7 @@
         {
           "name": "tooltipId",
           "kind": "let",
-          "description": "Set an id for the tooltip",
+          "description": "Set an id for the tooltip.",
           "type": "string",
           "value": "\"ccs-\" + Math.random().toString(36)",
           "isFunction": false,
@@ -18866,7 +18866,7 @@
         {
           "name": "triggerId",
           "kind": "let",
-          "description": "Set an id for the tooltip button",
+          "description": "Set an id for the tooltip button.",
           "type": "string",
           "value": "\"ccs-\" + Math.random().toString(36)",
           "isFunction": false,
@@ -19006,7 +19006,7 @@
         {
           "name": "open",
           "kind": "let",
-          "description": "Set to `true` to open the tooltip",
+          "description": "Set to `true` to open the tooltip.",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -19018,7 +19018,7 @@
         {
           "name": "align",
           "kind": "let",
-          "description": "Set the alignment of the tooltip relative to the icon",
+          "description": "Set the alignment of the tooltip relative to the icon.",
           "type": "\"start\" | \"center\" | \"end\"",
           "value": "\"center\"",
           "isFunction": false,
@@ -19030,7 +19030,7 @@
         {
           "name": "direction",
           "kind": "let",
-          "description": "Set the direction of the tooltip relative to the icon",
+          "description": "Set the direction of the tooltip relative to the icon.",
           "type": "\"top\" | \"bottom\"",
           "value": "\"bottom\"",
           "isFunction": false,
@@ -19160,7 +19160,7 @@
         {
           "name": "tooltipText",
           "kind": "let",
-          "description": "Specify the tooltip text.\nAlternatively, use the \"tooltipText\" slot",
+          "description": "Specify the tooltip text.\nAlternatively, use the \"tooltipText\" slot.",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -19172,7 +19172,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render",
+          "description": "Specify the icon to render.",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -19196,7 +19196,7 @@
         {
           "name": "align",
           "kind": "let",
-          "description": "Set the alignment of the tooltip relative to the icon",
+          "description": "Set the alignment of the tooltip relative to the icon.",
           "type": "\"start\" | \"center\" | \"end\"",
           "value": "\"center\"",
           "isFunction": false,
@@ -19208,7 +19208,7 @@
         {
           "name": "direction",
           "kind": "let",
-          "description": "Set the direction of the tooltip relative to the icon",
+          "description": "Set the direction of the tooltip relative to the icon.",
           "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
           "value": "\"bottom\"",
           "isFunction": false,
@@ -19299,7 +19299,7 @@
         {
           "name": "nodes",
           "kind": "let",
-          "description": "Provide an array of nodes to render",
+          "description": "Provide an array of nodes to render.",
           "type": "ReadonlyArray<Node>",
           "value": "[]",
           "isFunction": false,
@@ -19311,7 +19311,7 @@
         {
           "name": "activeId",
           "kind": "let",
-          "description": "Set the current active node id\nOnly one node can be active",
+          "description": "Set the current active node id.\nOnly one node can be active.",
           "type": "TreeNodeId",
           "value": "\"\"",
           "isFunction": false,
@@ -19323,7 +19323,7 @@
         {
           "name": "selectedIds",
           "kind": "let",
-          "description": "Set the node ids to be selected",
+          "description": "Set the node ids to be selected.",
           "type": "ReadonlyArray<TreeNodeId>",
           "value": "[]",
           "isFunction": false,
@@ -19335,7 +19335,7 @@
         {
           "name": "expandedIds",
           "kind": "let",
-          "description": "Set the node ids to be expanded",
+          "description": "Set the node ids to be expanded.",
           "type": "ReadonlyArray<TreeNodeId>",
           "value": "[]",
           "isFunction": false,
@@ -19347,7 +19347,7 @@
         {
           "name": "size",
           "kind": "let",
-          "description": "Specify the TreeView size",
+          "description": "Specify the TreeView size.",
           "type": "\"default\" | \"compact\"",
           "value": "\"default\"",
           "isFunction": false,

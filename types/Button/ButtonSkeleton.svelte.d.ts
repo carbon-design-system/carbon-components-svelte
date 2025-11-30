@@ -5,13 +5,13 @@ type $RestProps = SvelteHTMLElements["a"];
 
 type $Props = {
   /**
-   * Set the `href` to use an anchor link
+   * Set the `href` to use an anchor link.
    * @default undefined
    */
   href?: string;
 
   /**
-   * Specify the size of button skeleton
+   * Specify the size of button skeleton.
    * @default "default"
    */
   size?: "default" | "field" | "small" | "lg" | "xl";

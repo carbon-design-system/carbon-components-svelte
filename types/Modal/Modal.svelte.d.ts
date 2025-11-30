@@ -5,7 +5,7 @@ type $RestProps = SvelteHTMLElements["div"];
 
 type $Props = {
   /**
-   * Set the size of the modal
+   * Set the size of the modal.
    * @default undefined
    */
   size?: "xs" | "sm" | "lg";
@@ -35,19 +35,19 @@ type $Props = {
   passiveModal?: boolean;
 
   /**
-   * Specify the modal heading
+   * Specify the modal heading.
    * @default undefined
    */
   modalHeading?: string;
 
   /**
-   * Specify the modal label
+   * Specify the modal label.
    * @default undefined
    */
   modalLabel?: string;
 
   /**
-   * Specify the ARIA label for the modal
+   * Specify the ARIA label for the modal.
    * @default undefined
    */
   modalAriaLabel?: string;
@@ -90,14 +90,14 @@ type $Props = {
   primaryButtonDisabled?: boolean;
 
   /**
-   * Specify the primary button icon
+   * Specify the primary button icon.
    * @default undefined
    */
   primaryButtonIcon?: any;
 
   /**
    * Set to `true` for the "submit" and "click:button--primary" events
-   * to be dispatched when pressing "Enter"
+   * to be dispatched when pressing "Enter".
    * @default true
    */
   shouldSubmitOnEnter?: boolean;
@@ -109,8 +109,8 @@ type $Props = {
   secondaryButtonText?: string;
 
   /**
-   * 2-tuple prop to render two secondary buttons for a 3 button modal
-   * supersedes `secondaryButtonText`
+   * 2-tuple prop to render two secondary buttons for a 3 button modal.
+   * Supersedes `secondaryButtonText`.
    * @default []
    */
   secondaryButtons?: [{ text: string }, { text: string }];

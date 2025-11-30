@@ -16,7 +16,7 @@
   export const translationIds = { close: "close", open: "open" };
 
   /**
-   * Override the default translation ids
+   * Override the default translation ids.
    * @type {(id: ListBoxFieldTranslationId) => string}
    */
   export let translateWithId = (id) => defaultTranslations[id];

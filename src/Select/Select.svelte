@@ -7,13 +7,13 @@
    */
 
   /**
-   * Specify the selected item value
+   * Specify the selected item value.
    * @type {Value | undefined}
    */
   export let selected = undefined;
 
   /**
-   * Set the size of the select input
+   * Set the size of the select input.
    * @type {"sm" | "xl"}
    */
   export let size = undefined;
@@ -31,7 +31,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the select element
+   * Specify a name attribute for the select element.
    * @type {string}
    */
   export let name = undefined;

@@ -30,11 +30,10 @@
    * Specify the orientation of the stack.
    * @type {"vertical" | "horizontal"}
    */
-
   export let orientation = "vertical";
 
   /**
-   * Specify the tag name
+   * Specify the tag name.
    * @type {keyof HTMLElementTagNameMap}
    */
   export let tag = "div";

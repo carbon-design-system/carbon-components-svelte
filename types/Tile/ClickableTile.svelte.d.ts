@@ -23,7 +23,7 @@ type $Props = {
   disabled?: boolean;
 
   /**
-   * Set the `href`
+   * Set the `href`.
    * @default undefined
    */
   href?: string;

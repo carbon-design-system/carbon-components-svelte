@@ -12,13 +12,13 @@ type $RestProps = SvelteHTMLElements["ul"] & SvelteHTMLElements["ol"];
 
 type $Props<Node> = {
   /**
-   * Specify the nodes to render
+   * Specify the nodes to render.
    * @default []
    */
   nodes?: ReadonlyArray<Node & { nodes?: Node[] }>;
 
   /**
-   * Specify the type of list to render
+   * Specify the type of list to render.
    * @default "unordered"
    */
   type?: "unordered" | "ordered" | "ordered-native";

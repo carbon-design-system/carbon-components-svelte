@@ -2,8 +2,8 @@
   /** @extends {"./DataTable.svelte"} DataTableHeader */
 
   /**
-   * Specify the number of columns
-   * Superseded by `headers` if `headers` is a non-empty array
+   * Specify the number of columns.
+   * Superseded by `headers` if `headers` is a non-empty array.
    */
   export let columns = 5;
 
@@ -11,7 +11,7 @@
   export let rows = 5;
 
   /**
-   * Set the size of the data table
+   * Set the size of the data table.
    * @type {"compact" | "short" | "tall"}
    */
   export let size = undefined;
@@ -23,8 +23,8 @@
   export let showHeader = true;
 
   /**
-   * Set the column headers
-   * Supersedes `columns` if value is a non-empty array
+   * Set the column headers.
+   * Supersedes `columns` if value is a non-empty array.
    * @type {ReadonlyArray<string | Partial<DataTableHeader>>}
    */
   export let headers = [];

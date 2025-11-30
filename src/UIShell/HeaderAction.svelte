@@ -21,7 +21,7 @@
 
   /**
    * Specify the text displayed next to the icon.
-   * Alternatively, use the named slot "text"
+   * Alternatively, use the named slot "text".
    * @type {string}
    * @example
    * ```svelte
@@ -34,14 +34,14 @@
 
   /**
    * Specify an icon tooltip. The tooltip will not be displayed
-   * if either the `text` prop or a named slot="text" is used
+   * if either the `text` prop or a named slot="text" is used.
    * @type {string}
    */
   export let iconDescription = undefined;
 
   /**
    * Set the alignment of the tooltip relative to the icon.
-   * Only applies when `iconDescription` is provided
+   * Only applies when `iconDescription` is provided.
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -51,7 +51,7 @@
 
   /**
    * Customize the panel transition (i.e., `transition:slide`).
-   * Set to `false` to disable the transition
+   * Set to `false` to disable the transition.
    * @type {false | import("svelte/transition").SlideParams}
    */
   export let transition = { duration: 200 };

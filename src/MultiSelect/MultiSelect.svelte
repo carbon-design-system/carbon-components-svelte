@@ -19,13 +19,13 @@
    */
 
   /**
-   * Set the multiselect items
+   * Set the multiselect items.
    * @type {ReadonlyArray<Item>}
    */
   export let items = [];
 
   /**
-   * Override the display of a multiselect item
+   * Override the display of a multiselect item.
    * @type {(item: Item) => any}
    */
   export let itemToString = (item) => item.text || item.id;
@@ -37,7 +37,7 @@
   export let itemToInput = (_item) => {};
 
   /**
-   * Set the selected ids
+   * Set the selected ids.
    * @type {ReadonlyArray<MultiSelectItemId>}
    */
   export let selectedIds = [];
@@ -46,25 +46,25 @@
   export let value = "";
 
   /**
-   * Set the size of the combobox
+   * Set the size of the combobox.
    * @type {"sm" | "lg" | "xl"}
    */
   export let size = undefined;
 
   /**
-   * Specify the type of multiselect
+   * Specify the type of multiselect.
    * @type {"default" | "inline"}
    */
   export let type = "default";
 
   /**
-   * Specify the direction of the multiselect dropdown menu
+   * Specify the direction of the multiselect dropdown menu.
    * @type {"bottom" | "top"}
    */
   export let direction = "bottom";
 
   /**
-   * Specify the selection feedback after selecting items
+   * Specify the selection feedback after selecting items.
    * @type {"top" | "fixed" | "top-after-reopen"}
    */
   export let selectionFeedback = "top-after-reopen";
@@ -76,8 +76,8 @@
   export let filterable = false;
 
   /**
-   * Override the filtering logic
-   * The default filtering is an exact string comparison
+   * Override the filtering logic.
+   * The default filtering is an exact string comparison.
    * @type {(item: Item, value: string) => boolean}
    */
   export let filterItem = (item, value) =>
@@ -96,8 +96,8 @@
   export let placeholder = "";
 
   /**
-   * Override the sorting logic
-   * The default sorting compare the item text value
+   * Override the sorting logic.
+   * The default sorting compare the item text value.
    * @type {((a: Item, b: Item) => Item) | (() => void)}
    */
   export let sortItem = (a, b) =>
@@ -105,14 +105,14 @@
 
   /**
    * Override the chevron icon label based on the open state.
-   * Defaults to "Open menu" when closed and "Close menu" when open
+   * Defaults to "Open menu" when closed and "Close menu" when open.
    * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
    */
   export let translateWithId = undefined;
 
   /**
    * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected
+   * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected.
    * @type {(id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string}
    */
   export let translateWithIdSelection = undefined;
@@ -148,7 +148,7 @@
   export let id = "ccs-" + Math.random().toString(36);
 
   /**
-   * Specify a name attribute for the select
+   * Specify a name attribute for the select.
    * @type {string}
    */
   export let name = undefined;
@@ -160,19 +160,19 @@
   export let multiSelectRef = null;
 
   /**
-   * Obtain a reference to the field box element
+   * Obtain a reference to the field box element.
    * @type {null | HTMLDivElement}
    */
   export let fieldRef = null;
 
   /**
-   * Obtain a reference to the selection element
+   * Obtain a reference to the selection element.
    * @type {null | HTMLDivElement}
    */
   export let selectionRef = null;
 
   /**
-   * Id of the highlighted ListBoxMenuItem
+   * Id of the highlighted ListBoxMenuItem.
    * @type {null | MultiSelectItemId}
    */
   export let highlightedId = null;

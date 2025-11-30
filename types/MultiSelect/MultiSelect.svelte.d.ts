@@ -21,13 +21,13 @@ type $RestProps = SvelteHTMLElements["input"];
 
 type $Props<Item> = {
   /**
-   * Set the multiselect items
+   * Set the multiselect items.
    * @default []
    */
   items?: ReadonlyArray<Item>;
 
   /**
-   * Override the display of a multiselect item
+   * Override the display of a multiselect item.
    */
   itemToString?: (item: Item) => any;
 
@@ -42,7 +42,7 @@ type $Props<Item> = {
   };
 
   /**
-   * Set the selected ids
+   * Set the selected ids.
    * @default []
    */
   selectedIds?: ReadonlyArray<MultiSelectItemId>;
@@ -54,25 +54,25 @@ type $Props<Item> = {
   value?: string;
 
   /**
-   * Set the size of the combobox
+   * Set the size of the combobox.
    * @default undefined
    */
   size?: "sm" | "lg" | "xl";
 
   /**
-   * Specify the type of multiselect
+   * Specify the type of multiselect.
    * @default "default"
    */
   type?: "default" | "inline";
 
   /**
-   * Specify the direction of the multiselect dropdown menu
+   * Specify the direction of the multiselect dropdown menu.
    * @default "bottom"
    */
   direction?: "bottom" | "top";
 
   /**
-   * Specify the selection feedback after selecting items
+   * Specify the selection feedback after selecting items.
    * @default "top-after-reopen"
    */
   selectionFeedback?: "top" | "fixed" | "top-after-reopen";
@@ -90,8 +90,8 @@ type $Props<Item> = {
   filterable?: boolean;
 
   /**
-   * Override the filtering logic
-   * The default filtering is an exact string comparison
+   * Override the filtering logic.
+   * The default filtering is an exact string comparison.
    */
   filterItem?: (item: Item, value: string) => boolean;
 
@@ -120,14 +120,14 @@ type $Props<Item> = {
   placeholder?: string;
 
   /**
-   * Override the sorting logic
-   * The default sorting compare the item text value
+   * Override the sorting logic.
+   * The default sorting compare the item text value.
    */
   sortItem?: ((a: Item, b: Item) => Item) | (() => void);
 
   /**
    * Override the chevron icon label based on the open state.
-   * Defaults to "Open menu" when closed and "Close menu" when open
+   * Defaults to "Open menu" when closed and "Close menu" when open.
    * @default undefined
    */
   translateWithId?: (
@@ -136,7 +136,7 @@ type $Props<Item> = {
 
   /**
    * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected
+   * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected.
    * @default undefined
    */
   translateWithIdSelection?: (
@@ -204,7 +204,7 @@ type $Props<Item> = {
   id?: string;
 
   /**
-   * Specify a name attribute for the select
+   * Specify a name attribute for the select.
    * @default undefined
    */
   name?: string;
@@ -222,19 +222,19 @@ type $Props<Item> = {
   multiSelectRef?: null | HTMLDivElement;
 
   /**
-   * Obtain a reference to the field box element
+   * Obtain a reference to the field box element.
    * @default null
    */
   fieldRef?: null | HTMLDivElement;
 
   /**
-   * Obtain a reference to the selection element
+   * Obtain a reference to the selection element.
    * @default null
    */
   selectionRef?: null | HTMLDivElement;
 
   /**
-   * Id of the highlighted ListBoxMenuItem
+   * Id of the highlighted ListBoxMenuItem.
    * @default null
    */
   highlightedId?: null | MultiSelectItemId;

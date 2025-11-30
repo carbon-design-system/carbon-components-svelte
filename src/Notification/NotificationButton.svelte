@@ -1,18 +1,18 @@
 <script>
   /**
-   * Set the type of notification
+   * Set the type of notification.
    * @type {"toast" | "inline"}
    */
   export let notificationType = "toast";
 
   /**
-   * Specify the icon to render
+   * Specify the icon to render.
    * @type {any}
    */
   export let icon = Close;
 
   /**
-   * Specify the title of the icon
+   * Specify the title of the icon.
    * @type {string}
    */
   export let title = undefined;

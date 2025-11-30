@@ -1,6 +1,6 @@
 <script>
   /**
-   * Specify the current value
+   * Specify the current value.
    * @type {number}
    */
   export let value = undefined;
@@ -9,19 +9,19 @@
   export let max = 100;
 
   /**
-   * Specify the kind of progress bar
+   * Specify the kind of progress bar.
    * @type {"default" | "inline" | "indented"}
    */
   export let kind = "default";
 
   /**
-   * Specify the status
+   * Specify the status.
    * @type {"active" | "finished" | "error"}
    */
   export let status = "active";
 
   /**
-   * Specify the size
+   * Specify the size.
    * @type {"sm" | "md"}
    */
   export let size = "md";

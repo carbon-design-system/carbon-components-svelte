@@ -8,7 +8,7 @@
   export let primaryButtonText = "";
 
   /**
-   * Specify the primary button icon
+   * Specify the primary button icon.
    * @type {any}
    */
   export let primaryButtonIcon = undefined;
@@ -17,7 +17,7 @@
   export let primaryButtonDisabled = false;
 
   /**
-   * Specify a class for the primary button
+   * Specify a class for the primary button.
    * @type {string}
    */
   export let primaryClass = undefined;
@@ -26,14 +26,14 @@
   export let secondaryButtonText = "";
 
   /**
-   * 2-tuple prop to render two secondary buttons for a 3 button modal
-   * supersedes `secondaryButtonText`
+   * 2-tuple prop to render two secondary buttons for a 3 button modal.
+   * Supersedes `secondaryButtonText`.
    * @type {[] | [{ text: string; }, { text: string; }]}
    */
   export let secondaryButtons = [];
 
   /**
-   * Specify a class for the secondary button
+   * Specify a class for the secondary button.
    * @type {string}
    */
   export let secondaryClass = undefined;

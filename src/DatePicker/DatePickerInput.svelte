@@ -1,6 +1,6 @@
 <script>
   /**
-   * Set the size of the input
+   * Set the size of the input.
    * @type {"sm" | "xl"}
    */
   export let size = undefined;
@@ -45,7 +45,7 @@
   export let warnText = "";
 
   /**
-   * Set a name for the input element
+   * Set a name for the input element.
    * @type {string}
    */
   export let name = undefined;
