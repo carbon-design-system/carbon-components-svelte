@@ -16,8 +16,8 @@
   });
 
   $: selected = $selectedContent === id;
-  $: index = $contentById[id].index;
-  $: tabId = $tabs[index].id;
+  $: index = $contentById[id]?.index ?? 0;
+  $: tabId = $tabs[index]?.id;
 </script>
 
 <div
