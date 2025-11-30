@@ -680,6 +680,79 @@ describe("NumberInput", () => {
     expect(input).not.toHaveAttribute("aria-invalid");
   });
 
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/pull/2384
+  it("should default to 0 when allowEmpty is false and input is cleared", async () => {
+    render(NumberInput, { props: { allowEmpty: false, value: 5 } });
+
+    const input = screen.getByRole("spinbutton");
+    await user.clear(input);
+    await user.tab();
+
+    // Value should default to 0 when allowEmpty is false
+    expect(screen.getByTestId("value").textContent).toBe("0");
+    expect(input).toHaveValue(0);
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/pull/2384
+  it("should default to min when allowEmpty is false, min is defined, and input is cleared", async () => {
+    render(NumberInput, {
+      props: { allowEmpty: false, min: 4, value: 10 },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    await user.clear(input);
+    await user.tab();
+
+    // Value should default to min (4) when allowEmpty is false and min is defined
+    expect(screen.getByTestId("value").textContent).toBe("4");
+    expect(input).toHaveValue(4);
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/pull/2384
+  it("should use default value when allowEmpty is false and incrementing from null", async () => {
+    render(NumberInput, {
+      props: { allowEmpty: false, value: null, min: 5 },
+    });
+
+    const incrementButton = screen.getByRole("button", {
+      name: "Increment number",
+    });
+
+    await user.click(incrementButton);
+
+    // Should use min (5) as starting point, then increment to 6
+    expect(screen.getByTestId("value").textContent).toBe("6");
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/pull/2384
+  it("should use default value when allowEmpty is false and decrementing from null", async () => {
+    render(NumberInput, {
+      props: { allowEmpty: false, value: null },
+    });
+
+    const decrementButton = screen.getByRole("button", {
+      name: "Decrement number",
+    });
+
+    await user.click(decrementButton);
+
+    // Should use 0 as default, then decrement to -1
+    expect(screen.getByTestId("value").textContent).toBe("-1");
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/pull/2384
+  it("should preserve null value when allowEmpty is true and input is cleared", async () => {
+    render(NumberInput, { props: { allowEmpty: true, value: 5 } });
+
+    const input = screen.getByRole("spinbutton");
+    await user.clear(input);
+    await user.tab();
+
+    // Value should remain null when allowEmpty is true
+    expect(screen.getByTestId("value").textContent).toBe("null");
+    expect(input).toHaveValue(null);
+  });
+
   it("should not show invalid state when value exceeds max without invalid prop", async () => {
     // Per issue #1180, NumberInput should only show invalid state when invalid={true}
     render(NumberInput, { props: { max: 10 } });
