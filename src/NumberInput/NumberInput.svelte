@@ -163,11 +163,7 @@
 
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: hasError =
-    (invalid && !readonly) ||
-    (!allowEmpty && value == null) ||
-    value > max ||
-    (typeof value === "number" && value < min);
+  $: hasError = invalid && invalidText && !readonly;
   $: errorId = `error-${id}`;
   $: ariaLabel =
     $$props["aria-label"] ||
