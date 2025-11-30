@@ -168,17 +168,12 @@
               {#if prop.description}
                 {@const parsed = parseDescription(prop.description)}
                 {#if parsed.mainDescription}
-                  {#each parsed.mainDescription.split("\n") as line}
-                    <div class="description">
-                      {@html line
-                        .replace(/\</g, "&lt;")
-                        .replace(/\>/g, "&gt;")
-                        .replace(/`(.*?)`/g, "<code>$1</code>") +
-                        (line.trim().endsWith(".") || line.trim() === ""
-                          ? ""
-                          : ".")}
-                    </div>
-                  {/each}
+                  <div class="description">
+                    {@html parsed.mainDescription
+                      .replace(/\</g, "&lt;")
+                      .replace(/\>/g, "&gt;")
+                      .replace(/`(.*?)`/g, "<code>$1</code>")}
+                  </div>
                 {/if}
                 {#if parsed.exampleCode}
                   <div
