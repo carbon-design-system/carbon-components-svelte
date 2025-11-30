@@ -69,44 +69,40 @@
   let refTabList = null;
   let refRoot = null;
 
+  // Flag to trigger DOM reordering only when tabs change.
+  // This is necessary to avoid infinite loops in Svelte 5.
+  let needsDomSync = false;
+
   /**
    * @type {(data: { id: string; label: string; disabled: boolean }) => void}
    */
   const add = (data) => {
-    tabs.update((_) => {
-      const newTabs = [..._, { ...data, index: _.length }];
-      return newTabs.map((tab, index) => ({ ...tab, index }));
-    });
+    needsDomSync = true;
+    tabs.update((_) => [..._, { ...data, index: _.length }]);
   };
 
   /**
    * @type {(id: string) => void}
    */
   const remove = (id) => {
-    tabs.update((_) => {
-      const filtered = _.filter((tab) => tab.id !== id);
-      return filtered.map((tab, index) => ({ ...tab, index }));
-    });
+    needsDomSync = true;
+    tabs.update((_) => _.filter((tab) => tab.id !== id));
   };
 
   /**
    * @type {(data: { id: string }) => void}
    */
   const addContent = (data) => {
-    content.update((_) => {
-      const newContent = [..._, { ...data, index: _.length }];
-      return newContent.map((item, index) => ({ ...item, index }));
-    });
+    needsDomSync = true;
+    content.update((_) => [..._, { ...data, index: _.length }]);
   };
 
   /**
    * @type {(id: string) => void}
    */
   const removeContent = (id) => {
-    content.update((_) => {
-      const filtered = _.filter((item) => item.id !== id);
-      return filtered.map((item, index) => ({ ...item, index }));
-    });
+    needsDomSync = true;
+    content.update((_) => _.filter((item) => item.id !== id));
   };
 
   /**
@@ -165,44 +161,41 @@
   });
 
   afterUpdate(() => {
-    // We need to use the DOM order of the tabs to update
-    // the indices of the tabs in the store. This is because
-    // the current implementation uses an implicit index approach
-    // where order matters. A more robust solution would be to
-    // require explicit keys specified by the consumer.
-    if (refTabList) {
+    // Sync DOM order with stores only when tabs are added/removed.
+    // This avoids infinite loops in Svelte 5 by not running on every update.
+    if (needsDomSync && refTabList) {
+      needsDomSync = false;
+
       const domTabs = Array.from(refTabList.querySelectorAll("[role='tab']"));
-      const domIds = domTabs.map((el) => el.id);
+      const domTabIds = domTabs.map((el) => el.id);
 
       tabs.update((currentTabs) => {
         const tabsMap = new Map(currentTabs.map((tab) => [tab.id, tab]));
-        const reorderedTabs = domIds
+        return domTabIds
           .map((id, index) => {
             const tab = tabsMap.get(id);
             return tab ? { ...tab, index } : undefined;
           })
           .filter(Boolean);
+      });
 
-        return reorderedTabs;
+      const contentElements = refRoot?.parentElement
+        ? Array.from(
+            refRoot.parentElement.querySelectorAll("[role='tabpanel']"),
+          )
+        : [];
+      const contentIds = contentElements.map((el) => el.id);
+
+      content.update((currentContent) => {
+        const contentMap = new Map(currentContent.map((c) => [c.id, c]));
+        return contentIds
+          .map((id, index) => {
+            const c = contentMap.get(id);
+            return c ? { ...c, index } : undefined;
+          })
+          .filter(Boolean);
       });
     }
-
-    const contentElements = refRoot?.parentElement
-      ? Array.from(refRoot.parentElement.querySelectorAll("[role='tabpanel']"))
-      : [];
-    const contentIds = contentElements.map((el) => el.id);
-
-    content.update((currentContent) => {
-      const contentMap = new Map(currentContent.map((c) => [c.id, c]));
-      const reorderedContent = contentIds
-        .map((id, index) => {
-          const c = contentMap.get(id);
-          return c ? { ...c, index } : undefined;
-        })
-        .filter(Boolean);
-
-      return reorderedContent;
-    });
 
     if (selected !== currentIndex) {
       selected = currentIndex;
