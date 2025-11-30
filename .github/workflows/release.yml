@@ -10,7 +10,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v6
         with:
           node-version: 22
@@ -24,7 +24,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          npm publish --provenance --access public
+          npm publish --provenance --access public --tag stable-0-94
 
       - name: Publish package (next)
         if: ${{ contains(github.ref, '-next') }}
