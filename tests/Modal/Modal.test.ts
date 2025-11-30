@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import { user } from "../setup-tests";
 import ModalTest from "./Modal.test.svelte";
 import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
+import ModalFormIdTest from "./ModalFormId.test.svelte";
 
 describe("Modal", () => {
   beforeEach(() => {
@@ -455,6 +456,118 @@ describe("Modal", () => {
       await user.keyboard("{Tab}");
       await tick();
       expect(okButton).toHaveFocus();
+    });
+  });
+
+  // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/310
+  describe("formId prop (issue #310)", () => {
+    it("should submit the form when clicking the primary button with formId set", async () => {
+      const formSubmitHandler = vi.fn();
+      render(ModalFormIdTest, {
+        props: {
+          open: true,
+          formId: "test-form",
+          onFormSubmit: formSubmitHandler,
+        },
+      });
+
+      const primaryButton = screen.getByRole("button", { name: "Submit" });
+      await user.click(primaryButton);
+
+      expect(formSubmitHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("should NOT submit the form when clicking the primary button without formId", async () => {
+      const formSubmitHandler = vi.fn();
+      render(ModalFormIdTest, {
+        props: {
+          open: true,
+          formId: undefined,
+          onFormSubmit: formSubmitHandler,
+        },
+      });
+
+      const primaryButton = screen.getByRole("button", { name: "Submit" });
+      await user.click(primaryButton);
+
+      // Without formId, the form should not be submitted
+      expect(formSubmitHandler).not.toHaveBeenCalled();
+    });
+
+    it("should submit the form when pressing Enter with formId and shouldSubmitOnEnter", async () => {
+      const formSubmitHandler = vi.fn();
+      render(ModalFormIdTest, {
+        props: {
+          open: true,
+          formId: "test-form",
+          shouldSubmitOnEnter: true,
+          onFormSubmit: formSubmitHandler,
+        },
+      });
+
+      // Focus an input in the modal and press Enter
+      const usernameInput = screen.getByTestId("username-input");
+      usernameInput.focus();
+      await user.keyboard("{Enter}");
+
+      expect(formSubmitHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("should NOT submit the form when pressing Enter without formId", async () => {
+      const formSubmitHandler = vi.fn();
+      render(ModalFormIdTest, {
+        props: {
+          open: true,
+          formId: undefined,
+          shouldSubmitOnEnter: true,
+          onFormSubmit: formSubmitHandler,
+        },
+      });
+
+      // Focus an input in the modal and press Enter
+      const usernameInput = screen.getByTestId("username-input");
+      usernameInput.focus();
+      await user.keyboard("{Enter}");
+
+      // Without formId, the form should not be submitted
+      expect(formSubmitHandler).not.toHaveBeenCalled();
+    });
+
+    it("should set form attribute on primary button when formId is provided", async () => {
+      render(ModalFormIdTest, {
+        props: {
+          open: true,
+          formId: "test-form",
+        },
+      });
+
+      const primaryButton = screen.getByRole("button", { name: "Submit" });
+      expect(primaryButton).toHaveAttribute("type", "submit");
+      expect(primaryButton).toHaveAttribute("form", "test-form");
+    });
+
+    it("should still dispatch Modal submit and click:button--primary events with formId", async () => {
+      const formSubmitHandler = vi.fn();
+      const { component } = render(ModalFormIdTest, {
+        props: {
+          open: true,
+          formId: "test-form",
+          onFormSubmit: formSubmitHandler,
+        },
+      });
+
+      const submitHandler = vi.fn();
+      const clickPrimaryHandler = vi.fn();
+      component.$on("submit", submitHandler);
+      component.$on("click:button--primary", clickPrimaryHandler);
+
+      const primaryButton = screen.getByRole("button", { name: "Submit" });
+      await user.click(primaryButton);
+
+      // Both Modal events and form submission should occur
+      expect(submitHandler).toHaveBeenCalledTimes(1);
+      expect(clickPrimaryHandler).toHaveBeenCalledTimes(1);
+      expect(formSubmitHandler).toHaveBeenCalledTimes(1);
     });
   });
 });

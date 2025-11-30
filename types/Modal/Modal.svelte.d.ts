@@ -65,6 +65,13 @@ type $Props = {
   hasForm?: boolean;
 
   /**
+   * Specify the ID of a form element to associate with the primary button.
+   * This enables the primary button to submit the form from outside the form element.
+   * @default undefined
+   */
+  formId?: string;
+
+  /**
    * Set to `true` if the modal contains scrolling content
    * @default false
    */
