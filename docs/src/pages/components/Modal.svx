@@ -34,6 +34,12 @@ Create a non-interactive modal for displaying information. This variant lacks ac
 
 <FileSource src="/framed/Modal/PassiveModal" />
 
+## With form submission
+
+Connect the modal's primary button to a form using the `formId` prop. This enables native form submission even though the button is outside the form element. Clicking the primary button or pressing Enter will trigger the form's submit event.
+
+<FileSource src="/framed/Modal/ModalWithForm" />
+
 ## Has scrolling content
 
 Enable vertical scrolling for modals with lengthy content. This ensures all content remains accessible while maintaining a reasonable modal height.
