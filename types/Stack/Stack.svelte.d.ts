@@ -1,9 +1,9 @@
 import type { SvelteComponentTyped } from "svelte";
-import type { SvelteHTMLElements } from "svelte/elements";
+import type { HTMLAttributes } from "svelte/elements";
 
 export type StackScale = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
 
-type $RestProps = SvelteHTMLElements["svelte:element"];
+type $RestProps = HTMLAttributes<HTMLElement>;
 
 type $Props = {
   /**
