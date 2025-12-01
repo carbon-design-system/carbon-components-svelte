@@ -168,15 +168,14 @@ describe("Dropdown", () => {
   });
 
   it("should handle item selection", async () => {
-    const { component } = render(Dropdown, {
+    const selectHandler = vi.fn();
+    render(Dropdown, {
       props: {
         items,
         selectedId: "0",
+        onselect: selectHandler,
       },
     });
-
-    const selectHandler = vi.fn();
-    component.$on("select", selectHandler);
 
     const button = screen.getByRole("button");
     await user.click(button);

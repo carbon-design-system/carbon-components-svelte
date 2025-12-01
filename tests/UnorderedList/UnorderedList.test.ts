@@ -67,26 +67,22 @@ describe("UnorderedList", () => {
 
   describe("events", () => {
     it("should emit click event", async () => {
-      const { component } = render(UnorderedList);
-      const list = screen.getByRole("list");
-
       const mock = vi.fn();
-      component.$on("click", mock);
+      render(UnorderedList, { props: { onclick: mock } });
+      const list = screen.getByRole("list");
 
       await user.click(list);
       expect(mock).toHaveBeenCalled();
     });
 
     test.each([
-      "mouseover",
-      "mouseenter",
-      "mouseleave",
-    ])("should emit %s event", (eventName) => {
-      const { component } = render(UnorderedList);
-      const list = screen.getByRole("list");
-
+      ["mouseover", "onmouseover"],
+      ["mouseenter", "onmouseenter"],
+      ["mouseleave", "onmouseleave"],
+    ])("should emit %s event", (eventName, propName) => {
       const mock = vi.fn();
-      component.$on(eventName, mock);
+      render(UnorderedList, { props: { [propName]: mock } });
+      const list = screen.getByRole("list");
 
       const event = new MouseEvent(eventName);
       list.dispatchEvent(event);

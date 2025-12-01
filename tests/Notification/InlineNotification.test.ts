@@ -156,10 +156,8 @@ describe("InlineNotification", () => {
 
   it("should dispatch close event when close button is clicked", async () => {
     vi.useRealTimers();
-    const { component } = render(InlineNotificationTest);
-
     const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
+    render(InlineNotificationTest, { props: { onclose: closeHandler } });
 
     const closeButton = screen.getByLabelText("Close notification");
     await user.click(closeButton);
@@ -170,12 +168,10 @@ describe("InlineNotification", () => {
   });
 
   it("should auto-close after timeout", async () => {
-    const { component } = render(InlineNotificationTest, {
-      props: { timeout: 1000 },
-    });
-
     const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
+    render(InlineNotificationTest, {
+      props: { timeout: 1000, onclose: closeHandler },
+    });
 
     expect(closeHandler).not.toHaveBeenCalled();
 
@@ -214,12 +210,10 @@ describe("InlineNotification", () => {
 
   it("should prevent close when event is cancelled", async () => {
     vi.useRealTimers();
-    const { component } = render(InlineNotificationTest);
-
     const closeHandler = vi.fn((e) => {
       e.preventDefault();
     });
-    component.$on("close", closeHandler);
+    render(InlineNotificationTest, { props: { onclose: closeHandler } });
 
     const closeButton = screen.getByLabelText("Close notification");
     await user.click(closeButton);

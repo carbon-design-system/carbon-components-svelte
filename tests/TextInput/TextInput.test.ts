@@ -199,9 +199,8 @@ describe("TextInput", () => {
   });
 
   it("should dispatch keydown event", async () => {
-    const { component } = render(TextInput);
     const mockHandler = vi.fn();
-    component.$on("keydown", mockHandler);
+    render(TextInput, { props: { onkeydown: mockHandler } });
 
     const input = screen.getByRole("textbox");
     await user.type(input, "{Enter}");
@@ -210,9 +209,8 @@ describe("TextInput", () => {
   });
 
   it("should dispatch keyup event", async () => {
-    const { component } = render(TextInput);
     const mockHandler = vi.fn();
-    component.$on("keyup", mockHandler);
+    render(TextInput, { props: { onkeyup: mockHandler } });
 
     const input = screen.getByRole("textbox");
     await user.type(input, "a");
@@ -221,9 +219,8 @@ describe("TextInput", () => {
   });
 
   it("should dispatch focus event", async () => {
-    const { component } = render(TextInput);
     const mockHandler = vi.fn();
-    component.$on("focus", mockHandler);
+    render(TextInput, { props: { onfocus: mockHandler } });
 
     const input = screen.getByRole("textbox");
     await user.click(input);
@@ -232,9 +229,8 @@ describe("TextInput", () => {
   });
 
   it("should dispatch blur event", async () => {
-    const { component } = render(TextInput);
     const mockHandler = vi.fn();
-    component.$on("blur", mockHandler);
+    render(TextInput, { props: { onblur: mockHandler } });
 
     const input = screen.getByRole("textbox");
     await user.click(input);
@@ -512,9 +508,8 @@ describe("TextInput", () => {
   });
 
   it("should dispatch change event with parsed value", async () => {
-    const { component } = render(TextInput);
     const mockHandler = vi.fn();
-    component.$on("change", mockHandler);
+    render(TextInput, { props: { onchange: mockHandler } });
 
     const input = screen.getByRole("textbox");
     await user.type(input, "test");
@@ -525,11 +520,10 @@ describe("TextInput", () => {
   });
 
   it("should dispatch change event with number value for number type", async () => {
-    const { component } = render(TextInput, {
-      props: { type: "number" },
-    });
     const mockHandler = vi.fn();
-    component.$on("change", mockHandler);
+    render(TextInput, {
+      props: { type: "number", onchange: mockHandler },
+    });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "123");
@@ -540,11 +534,10 @@ describe("TextInput", () => {
   });
 
   it("should dispatch change event with null for empty number input", async () => {
-    const { component } = render(TextInput, {
-      props: { type: "number", value: 123 },
-    });
     const mockHandler = vi.fn();
-    component.$on("change", mockHandler);
+    render(TextInput, {
+      props: { type: "number", value: 123, onchange: mockHandler },
+    });
 
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
@@ -555,9 +548,8 @@ describe("TextInput", () => {
   });
 
   it("should dispatch input event with parsed value", async () => {
-    const { component } = render(TextInput);
     const mockHandler = vi.fn();
-    component.$on("input", mockHandler);
+    render(TextInput, { props: { oninput: mockHandler } });
 
     const input = screen.getByRole("textbox");
     await user.type(input, "a");
@@ -567,11 +559,10 @@ describe("TextInput", () => {
   });
 
   it("should dispatch input event with number value for number type", async () => {
-    const { component } = render(TextInput, {
-      props: { type: "number" },
-    });
     const mockHandler = vi.fn();
-    component.$on("input", mockHandler);
+    render(TextInput, {
+      props: { type: "number", oninput: mockHandler },
+    });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "5");

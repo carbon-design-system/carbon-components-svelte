@@ -33,12 +33,10 @@ describe("ListBoxMenu", () => {
   });
 
   it("should handle scroll events", async () => {
-    const { component } = render(ListBoxMenu, {
-      props: { slotContent: "Scrollable menu" },
-    });
     const scrollHandler = vi.fn();
-
-    component.$on("scroll", scrollHandler);
+    render(ListBoxMenu, {
+      props: { slotContent: "Scrollable menu", onscroll: scrollHandler },
+    });
 
     const menu = screen
       .getByText("Scrollable menu")

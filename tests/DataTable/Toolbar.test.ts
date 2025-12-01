@@ -175,21 +175,20 @@ describe("DataTable Toolbar", () => {
     });
 
     it("should dispatch cancel event when cancel button is clicked", async () => {
-      const { component } = render(Toolbar, {
+      let cancelFired = false;
+      render(Toolbar, {
         props: {
           testComponent: "ToolbarBatchActions",
           selectedIds: [1, 2],
+          oncancel: () => {
+            cancelFired = true;
+          },
         },
       });
 
       const cancelButton = screen.getByText("Cancel");
-      let cancelFired = false;
 
-      component.$on("cancel", () => {
-        cancelFired = true;
-      });
-
-      await cancelButton.click();
+      cancelButton.click();
       expect(cancelFired).toBe(true);
     });
   });

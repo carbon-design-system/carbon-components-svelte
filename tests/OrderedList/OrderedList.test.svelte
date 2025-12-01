@@ -1,5 +1,3 @@
-<svelte:options accessors />
-
 <script lang="ts">
   import { ListItem, OrderedList } from "carbon-components-svelte";
 
@@ -8,6 +6,12 @@
   export let expressive = false;
   export let items: string[] = ["Item 1", "Item 2", "Item 3"];
   export let nestedItems: string[] = [];
+  export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
+  export let onmouseover: ((event: MouseEvent) => void) | undefined = undefined;
+  export let onmouseenter: ((event: MouseEvent) => void) | undefined =
+    undefined;
+  export let onmouseleave: ((event: MouseEvent) => void) | undefined =
+    undefined;
 </script>
 
 <div data-testid="list-wrapper">
@@ -15,10 +19,10 @@
     {nested}
     {native}
     {expressive}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
+    on:click={onclick}
+    on:mouseover={onmouseover}
+    on:mouseenter={onmouseenter}
+    on:mouseleave={onmouseleave}
   >
     {#each items as item}
       <ListItem>

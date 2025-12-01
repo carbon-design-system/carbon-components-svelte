@@ -23,6 +23,7 @@
   export let warnText = "";
   export let helperText = "";
   export let hideLabel = false;
+  export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <DatePicker
@@ -37,7 +38,7 @@
   {short}
   {light}
   {flatpickrProps}
-  on:change
+  on:change={onchange}
 >
   <DatePickerInput
     labelText="Date"

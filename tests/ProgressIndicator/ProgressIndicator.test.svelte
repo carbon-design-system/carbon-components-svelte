@@ -12,6 +12,7 @@
     invalid?: boolean;
     disabled?: boolean;
   }> = [];
+  export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <ProgressIndicator
@@ -19,9 +20,9 @@
   {vertical}
   {spaceEqually}
   {preventChangeOnClick}
-  on:change={(e) => {
+  on:change={onchange || ((e) => {
     console.log("change", e.detail);
-  }}
+  })}
 >
   {#each steps as step}
     <ProgressStep

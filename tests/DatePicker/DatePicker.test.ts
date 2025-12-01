@@ -110,11 +110,12 @@ describe("DatePicker", () => {
 
   it("dispatches change event when manually typing in simple mode", async () => {
     const changeHandler = vi.fn();
-    const { component } = render(DatePicker, {
-      datePickerType: "simple",
+    render(DatePicker, {
+      props: {
+        datePickerType: "simple",
+        onchange: changeHandler,
+      },
     });
-
-    component.$on("change", changeHandler);
 
     const input = screen.getByLabelText("Date");
     await user.type(input, "01/15/2024");
@@ -126,11 +127,12 @@ describe("DatePicker", () => {
 
   it("dispatches change event when manually typing in single mode", async () => {
     const changeHandler = vi.fn();
-    const { component } = render(DatePicker, {
-      datePickerType: "single",
+    render(DatePicker, {
+      props: {
+        datePickerType: "single",
+        onchange: changeHandler,
+      },
     });
-
-    component.$on("change", changeHandler);
 
     const input = screen.getByLabelText("Date");
     await user.type(input, "01/15/2024");
@@ -146,12 +148,13 @@ describe("DatePicker", () => {
   // and https://github.com/carbon-design-system/carbon-components-svelte/issues/950
   it("dispatches change event when manually clearing in single mode", async () => {
     const changeHandler = vi.fn();
-    const { component } = render(DatePicker, {
-      datePickerType: "single",
-      value: "01/15/2024",
+    render(DatePicker, {
+      props: {
+        datePickerType: "single",
+        value: "01/15/2024",
+        onchange: changeHandler,
+      },
     });
-
-    component.$on("change", changeHandler);
 
     const input = screen.getByLabelText("Date");
     await user.clear(input);
@@ -165,9 +168,11 @@ describe("DatePicker", () => {
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1862
   it("allows clearing range dates by setting valueFrom and valueTo to empty strings", async () => {
-    const { component } = render(DatePickerRange, {
-      valueFrom: "01/15/2024",
-      valueTo: "01/20/2024",
+    const { rerender } = render(DatePickerRange, {
+      props: {
+        valueFrom: "01/15/2024",
+        valueTo: "01/20/2024",
+      },
     });
 
     const inputStart = screen.getByLabelText("Start date");
@@ -181,7 +186,7 @@ describe("DatePicker", () => {
     expect(inputEnd).toHaveValue("01/20/2024");
 
     // Clear the dates by setting both values to empty strings
-    component.$set({ valueFrom: "", valueTo: "" });
+    rerender({ valueFrom: "", valueTo: "" });
     await tick();
 
     expect(inputStart).toHaveValue("");

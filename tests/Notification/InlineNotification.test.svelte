@@ -13,6 +13,8 @@
   export let closeButtonDescription: ComponentProps<InlineNotification>["closeButtonDescription"] =
     "Close notification";
   export let hideCloseButton: ComponentProps<InlineNotification>["hideCloseButton"] = false;
+  export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
 </script>
 
 <InlineNotification
@@ -25,7 +27,7 @@
   {statusIconDescription}
   {closeButtonDescription}
   {hideCloseButton}
-  on:close
-  on:click
+  on:close={onclose}
+  on:click={onclick}
   {...$$restProps}
 />

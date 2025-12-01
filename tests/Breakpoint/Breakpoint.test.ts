@@ -53,8 +53,9 @@ describe("Breakpoint", () => {
       };
     });
 
-    const { component } = render(Breakpoint);
-    component.$on("change", mockChangeHandler);
+    const { rerender } = render(Breakpoint, {
+      props: { onchange: mockChangeHandler },
+    });
 
     expect(screen.getByTestId("current-size").textContent).toBe("lg");
     mockChangeHandler.mockClear();
@@ -75,7 +76,7 @@ describe("Breakpoint", () => {
 
     expect(mockChangeHandler).toHaveBeenCalled();
 
-    component.$set({
+    rerender({
       size: "xlg",
       sizes: {
         sm: false,
@@ -84,6 +85,7 @@ describe("Breakpoint", () => {
         xlg: true,
         max: false,
       },
+      onchange: mockChangeHandler,
     });
 
     expect(screen.getByTestId("current-size").textContent).toBe("xlg");

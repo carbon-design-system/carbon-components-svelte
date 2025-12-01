@@ -7,9 +7,10 @@
   export let id: ComponentProps<ListBoxMenu>["id"] = undefined;
   export let ref: ComponentProps<ListBoxMenu>["ref"] = null;
   export let slotContent = "";
+  export let onscroll: ((event: Event) => void) | undefined = undefined;
 </script>
 
-<ListBoxMenu {id} bind:ref on:scroll {...$$restProps}>
+<ListBoxMenu {id} bind:ref on:scroll={onscroll} {...$$restProps}>
   {#if slotContent}
     {slotContent}
   {/if}

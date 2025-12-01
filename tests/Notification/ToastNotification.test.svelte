@@ -15,6 +15,8 @@
     "Close notification";
   export let hideCloseButton: ComponentProps<ToastNotification>["hideCloseButton"] = false;
   export let fullWidth: ComponentProps<ToastNotification>["fullWidth"] = false;
+  export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
 </script>
 
 <ToastNotification
@@ -29,7 +31,7 @@
   {closeButtonDescription}
   {hideCloseButton}
   {fullWidth}
-  on:close
-  on:click
+  on:close={onclose}
+  on:click={onclick}
   {...$$restProps}
 />

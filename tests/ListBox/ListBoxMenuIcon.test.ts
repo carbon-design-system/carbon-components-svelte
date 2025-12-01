@@ -71,10 +71,8 @@ describe("ListBoxMenuIcon", () => {
   });
 
   it("should handle click events", async () => {
-    const { component } = render(ListBoxMenuIcon);
     const clickHandler = vi.fn();
-
-    component.$on("click", clickHandler);
+    render(ListBoxMenuIcon, { props: { onclick: clickHandler } });
 
     const icon = document.querySelector(".bx--list-box__menu-icon");
     assert(icon);

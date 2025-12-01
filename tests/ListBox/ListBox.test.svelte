@@ -12,6 +12,9 @@
   export let warn: ComponentProps<ListBox>["warn"] = false;
   export let warnText: ComponentProps<ListBox>["warnText"] = "";
   export let slotContent = "";
+  export let onkeydown: ((event: KeyboardEvent) => void) | undefined =
+    undefined;
+  export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
 </script>
 
 <ListBox
@@ -24,8 +27,8 @@
   {invalidText}
   {warn}
   {warnText}
-  on:keydown
-  on:click
+  on:keydown={onkeydown}
+  on:click={onclick}
   {...$$restProps}
 >
   {#if slotContent}

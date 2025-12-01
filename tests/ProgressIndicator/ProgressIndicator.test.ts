@@ -59,19 +59,20 @@ describe("ProgressIndicator", () => {
     });
 
     it("should not update currentIndex when preventChangeOnClick is true", async () => {
-      const { component } = render(ProgressIndicator, {
-        currentIndex: 2,
-        preventChangeOnClick: true,
-        steps: [
-          { label: "Step 1", description: "First step", complete: true },
-          { label: "Step 2", description: "Second step", complete: true },
-          { label: "Step 3", description: "Third step", complete: true },
-          { label: "Step 4", description: "Fourth step", complete: false },
-        ],
-      });
-
       const changeHandler = vi.fn();
-      component.$on("change", changeHandler);
+      render(ProgressIndicator, {
+        props: {
+          currentIndex: 2,
+          preventChangeOnClick: true,
+          steps: [
+            { label: "Step 1", description: "First step", complete: true },
+            { label: "Step 2", description: "Second step", complete: true },
+            { label: "Step 3", description: "Third step", complete: true },
+            { label: "Step 4", description: "Fourth step", complete: false },
+          ],
+          onchange: changeHandler,
+        },
+      });
 
       // Click on a completed step
       await user.click(screen.getByText("Step 1"));
@@ -249,9 +250,11 @@ describe("ProgressIndicator", () => {
 
   describe("Reactive complete prop (#1249)", () => {
     it("should update complete state immediately without delay", async () => {
-      const { component } = render(ProgressIndicatorReactive, {
-        step1Complete: false,
-        step2Complete: false,
+      const { rerender } = render(ProgressIndicatorReactive, {
+        props: {
+          step1Complete: false,
+          step2Complete: false,
+        },
       });
 
       const listItems = screen.getAllByRole("listitem");
@@ -259,18 +262,18 @@ describe("ProgressIndicator", () => {
       expect(listItems[0]).not.toHaveClass("bx--progress-step--complete");
       expect(listItems[1]).not.toHaveClass("bx--progress-step--complete");
 
-      component.$set({ step1Complete: true });
+      rerender({ step1Complete: true, step2Complete: false });
       await waitFor(() => {
         expect(listItems[0]).toHaveClass("bx--progress-step--complete");
       });
       expect(listItems[1]).not.toHaveClass("bx--progress-step--complete");
 
-      component.$set({ step2Complete: true });
+      rerender({ step1Complete: true, step2Complete: true });
       await waitFor(() => {
         expect(listItems[1]).toHaveClass("bx--progress-step--complete");
       });
 
-      await component.$set({ step1Complete: false });
+      rerender({ step1Complete: false, step2Complete: true });
       await waitFor(() => {
         expect(listItems[0]).not.toHaveClass("bx--progress-step--complete");
       });

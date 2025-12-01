@@ -51,10 +51,8 @@ describe("ListBoxSelection", () => {
   });
 
   it("should dispatch clear event on single selection click", async () => {
-    const { component } = render(ListBoxSelection);
     const clearHandler = vi.fn();
-
-    component.$on("clear", clearHandler);
+    render(ListBoxSelection, { props: { onclear: clearHandler } });
 
     await user.click(screen.getByRole("button"));
 
@@ -62,12 +60,10 @@ describe("ListBoxSelection", () => {
   });
 
   it("should dispatch clear event on multi selection click", async () => {
-    const { component } = render(ListBoxSelection, {
-      props: { selectionCount: 2 },
-    });
     const clearHandler = vi.fn();
-
-    component.$on("clear", clearHandler);
+    render(ListBoxSelection, {
+      props: { selectionCount: 2, onclear: clearHandler },
+    });
 
     const closeButton = screen.getByRole("button", {
       name: "Clear all selected items",
@@ -78,12 +74,10 @@ describe("ListBoxSelection", () => {
   });
 
   it("should not dispatch clear event when disabled (single)", async () => {
-    const { component } = render(ListBoxSelection, {
-      props: { disabled: true },
-    });
     const clearHandler = vi.fn();
-
-    component.$on("clear", clearHandler);
+    render(ListBoxSelection, {
+      props: { disabled: true, onclear: clearHandler },
+    });
 
     await user.click(screen.getByRole("button"));
 
@@ -91,15 +85,14 @@ describe("ListBoxSelection", () => {
   });
 
   it("should not dispatch clear event when disabled (multi)", async () => {
-    const { component } = render(ListBoxSelection, {
+    const clearHandler = vi.fn();
+    render(ListBoxSelection, {
       props: {
         selectionCount: 2,
         disabled: true,
+        onclear: clearHandler,
       },
     });
-    const clearHandler = vi.fn();
-
-    component.$on("clear", clearHandler);
 
     const closeButton = screen.getByRole("button", {
       name: "Clear all selected items",
@@ -110,10 +103,8 @@ describe("ListBoxSelection", () => {
   });
 
   it("should handle keyboard Enter on single selection", async () => {
-    const { component } = render(ListBoxSelection);
     const clearHandler = vi.fn();
-
-    component.$on("clear", clearHandler);
+    render(ListBoxSelection, { props: { onclear: clearHandler } });
 
     const button = screen.getByRole("button");
     button.focus();
@@ -123,10 +114,8 @@ describe("ListBoxSelection", () => {
   });
 
   it("should handle keyboard Space on single selection", async () => {
-    const { component } = render(ListBoxSelection);
     const clearHandler = vi.fn();
-
-    component.$on("clear", clearHandler);
+    render(ListBoxSelection, { props: { onclear: clearHandler } });
 
     const button = screen.getByRole("button");
     button.focus();
@@ -136,12 +125,10 @@ describe("ListBoxSelection", () => {
   });
 
   it("should handle keyboard Enter on multi selection", async () => {
-    const { component } = render(ListBoxSelection, {
-      props: { selectionCount: 2 },
-    });
     const clearHandler = vi.fn();
-
-    component.$on("clear", clearHandler);
+    render(ListBoxSelection, {
+      props: { selectionCount: 2, onclear: clearHandler },
+    });
 
     const closeButton = screen.getByRole("button", {
       name: "Clear all selected items",
@@ -154,12 +141,10 @@ describe("ListBoxSelection", () => {
   });
 
   it("should handle keyboard Space on multi selection", async () => {
-    const { component } = render(ListBoxSelection, {
-      props: { selectionCount: 2 },
-    });
     const clearHandler = vi.fn();
-
-    component.$on("clear", clearHandler);
+    render(ListBoxSelection, {
+      props: { selectionCount: 2, onclear: clearHandler },
+    });
 
     const closeButton = screen.getByRole("button", {
       name: "Clear all selected items",

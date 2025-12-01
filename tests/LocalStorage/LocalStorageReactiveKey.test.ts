@@ -11,36 +11,43 @@ describe("LocalStorage - reactive key", () => {
     setMockItem("key-a", "value-a");
     setMockItem("key-b", "value-b");
 
-    const { component } = render(LocalStorageReactiveKey, {
-      props: { storageKey: "key-a" },
+    const currentValue = "";
+    const { rerender } = render(LocalStorageReactiveKey, {
+      props: { storageKey: "key-a", currentValue },
     });
 
     await tick();
-    expect(component.currentValue).toBe("value-a");
+    const valueDisplay = document.querySelector('[data-testid="value"]');
+    expect(valueDisplay?.textContent).toBe("value-a");
 
-    component.$set({ storageKey: "key-b" });
+    rerender({ storageKey: "key-b" });
     await tick();
 
-    expect(component.currentValue).toBe("value-b");
+    expect(valueDisplay?.textContent).toBe("value-b");
   });
 
   it("should not overwrite new key with old value when key changes", async () => {
     setMockItem("user-1-settings", JSON.stringify({ theme: "dark" }));
     setMockItem("user-2-settings", JSON.stringify({ theme: "light" }));
 
-    const { component } = render(LocalStorageReactiveKey, {
+    const { rerender } = render(LocalStorageReactiveKey, {
       props: {
         storageKey: "user-1-settings",
       },
     });
 
     await tick();
-    expect(component.currentValue).toEqual({ theme: "dark" });
+    const valueDisplay = document.querySelector('[data-testid="value"]');
+    expect(JSON.parse(valueDisplay?.textContent || "{}")).toEqual({
+      theme: "dark",
+    });
 
-    component.$set({ storageKey: "user-2-settings" });
+    rerender({ storageKey: "user-2-settings" });
     await tick();
 
-    expect(component.currentValue).toEqual({ theme: "light" });
+    expect(JSON.parse(valueDisplay?.textContent || "{}")).toEqual({
+      theme: "light",
+    });
     expect(localStorage.setItem).toHaveBeenLastCalledWith(
       "user-2-settings",
       JSON.stringify({ theme: "light" }),
@@ -50,16 +57,17 @@ describe("LocalStorage - reactive key", () => {
   it("should persist current value when switching to new key with no stored value", async () => {
     setMockItem("existing-key", "existing-value");
 
-    const { component } = render(LocalStorageReactiveKey, {
+    const { rerender } = render(LocalStorageReactiveKey, {
       props: {
         storageKey: "existing-key",
       },
     });
 
     await tick();
-    expect(component.currentValue).toBe("existing-value");
+    const valueDisplay = document.querySelector('[data-testid="value"]');
+    expect(valueDisplay?.textContent).toBe("existing-value");
 
-    component.$set({ storageKey: "new-key" });
+    rerender({ storageKey: "new-key" });
     await tick();
 
     expect(localStorage.setItem).toHaveBeenCalledWith(

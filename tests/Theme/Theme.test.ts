@@ -66,9 +66,9 @@ describe("Theme", () => {
   });
 
   it("should update theme attribute when theme changes", async () => {
-    const { component } = render(Theme);
+    const { rerender } = render(Theme);
 
-    component.$set({ theme: "g100" });
+    rerender({ theme: "g100" });
     await tick();
 
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g100");
@@ -112,9 +112,9 @@ describe("Theme", () => {
 
   it("should warn on invalid theme", async () => {
     const consoleWarn = vi.spyOn(console, "warn");
-    const { component } = render(Theme);
+    const { rerender } = render(Theme);
 
-    component.$set({ theme: "invalid" as unknown as CarbonTheme });
+    rerender({ theme: "invalid" as unknown as CarbonTheme });
     await tick();
 
     expect(consoleWarn).toHaveBeenCalledWith(

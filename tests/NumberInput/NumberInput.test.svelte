@@ -26,6 +26,14 @@
   export let name: ComponentProps<NumberInput>["name"] = undefined;
   export let ref: ComponentProps<NumberInput>["ref"] = null;
   export let title: ComponentProps<NumberInput>["title"] = undefined;
+  export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
+  export let oninput: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onkeydown: ((event: KeyboardEvent) => void) | undefined =
+    undefined;
+  export let onkeyup: ((event: KeyboardEvent) => void) | undefined = undefined;
+  export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
+  export let onblur: ((event: FocusEvent) => void) | undefined = undefined;
+  export let onpaste: ((event: ClipboardEvent) => void) | undefined = undefined;
 </script>
 
 <NumberInput
@@ -52,13 +60,13 @@
   {name}
   {ref}
   {title}
-  on:change
-  on:input
-  on:keydown
-  on:keyup
-  on:focus
-  on:blur
-  on:paste
+  on:change={onchange}
+  on:input={oninput}
+  on:keydown={onkeydown}
+  on:keyup={onkeyup}
+  on:focus={onfocus}
+  on:blur={onblur}
+  on:paste={onpaste}
 />
 
 <div data-testid="value">{value}</div>
