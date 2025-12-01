@@ -1,6 +1,10 @@
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vitest/config";
-import { generateAliasesFromExports, getDirname } from "../vite.config";
+import {
+  generateAliasesFromExports,
+  getDirname,
+  testConfig,
+} from "../tests/utils";
 
 const __dirname = getDirname(import.meta.url);
 
@@ -17,11 +21,7 @@ export default defineConfig({
     },
   },
   test: {
-    globals: true,
-    environment: "jsdom",
-    clearMocks: true,
-    // Suppress `console` output in CI.
-    silent: !!process.env.CI,
+    ...testConfig,
     include: ["../tests/**/*.test.ts"],
     setupFiles: ["./setup-tests.ts"],
   },

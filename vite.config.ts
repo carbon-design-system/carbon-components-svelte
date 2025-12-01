@@ -1,77 +1,22 @@
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { svelte, vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vitest/config";
-import pkg from "./package.json";
+import {
+  generateAliasesFromExports,
+  getDirname,
+  testConfig,
+} from "./tests/utils";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-/**
- * Gets the directory name from import.meta.url (ESM equivalent of __dirname).
- * @param url - The import.meta.url from the calling file
- * @returns The directory path
- */
-export function getDirname(url: string): string {
-  return path.dirname(fileURLToPath(url));
-}
-
-/**
- * Generates Vite aliases from package.json exports for component subpath imports.
- * Resolves imports like `carbon-components-svelte/Theme/Theme.svelte` to
- * `./src/Theme/Theme.svelte` since these subpaths aren't in package.json
- * exports and Vite needs runtime resolution (tsconfig only handles types).
- *
- * @param baseDir - Base directory for resolving src path (defaults to __dirname)
- * @param srcRelativePath - Relative path to src directory from baseDir (defaults to "./src")
- */
-export function generateAliasesFromExports(
-  baseDir: string = __dirname,
-  srcRelativePath: string = "./src",
-) {
-  const aliases: Record<string, string> = {};
-  const exports = pkg.exports;
-
-  const srcSvelteExport = exports["./src/*.svelte"];
-  if (!srcSvelteExport) return aliases;
-
-  const srcDir = path.resolve(baseDir, srcRelativePath);
-  if (!fs.existsSync(srcDir)) return aliases;
-
-  function scanDirectory(dir: string, basePath: string = "") {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name);
-      const relativePath = path.join(basePath, entry.name);
-
-      if (entry.isDirectory()) {
-        scanDirectory(fullPath, relativePath);
-      } else if (entry.isFile() && entry.name.endsWith(".svelte")) {
-        const importPath = relativePath;
-        const aliasKey = `${pkg.name}/${importPath}`;
-        aliases[aliasKey] = path.resolve(baseDir, srcRelativePath, importPath);
-      }
-    }
-  }
-
-  scanDirectory(srcDir);
-  return aliases;
-}
+const __dirname = getDirname(import.meta.url);
 
 export default defineConfig({
   root: "./tests",
   plugins: [svelte({ preprocess: [vitePreprocess()] })],
   resolve: {
     conditions: ["browser"],
-    alias: generateAliasesFromExports(),
+    alias: generateAliasesFromExports(__dirname),
   },
   test: {
-    globals: true,
-    environment: "jsdom",
-    clearMocks: true,
-    // Suppress `console` output in CI.
-    silent: !!process.env.CI,
+    ...testConfig,
     setupFiles: ["./tests/setup-tests.ts"],
   },
 });
