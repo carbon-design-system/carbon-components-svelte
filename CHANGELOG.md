@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.95.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.94.0...v0.95.0) (2025-12-01)
+
+### Features
+
+- **modal:** add `formId` prop to enable native form submission ([2a5c274](https://github.com/carbon-design-system/carbon-components-svelte/commit/2a5c27451c115c1cb5422493a92f0bc67b26e8d2)), closes [#310](https://github.com/carbon-design-system/carbon-components-svelte/issues/310)
+- **portal:** add `Portal` component ([4982e26](https://github.com/carbon-design-system/carbon-components-svelte/commit/4982e26c624e9c8d9e8167e21247ee520a38ae48)), closes [#2280](https://github.com/carbon-design-system/carbon-components-svelte/issues/2280)
+
+### Bug Fixes
+
+- **number-input:** only show invalid state when `invalid` and `invalidText` are set ([#2384](https://github.com/carbon-design-system/carbon-components-svelte/issues/2384)) ([e06340c](https://github.com/carbon-design-system/carbon-components-svelte/commit/e06340c3776aefdae3f77f92eb04da3864a1ce41)), closes [#1180](https://github.com/carbon-design-system/carbon-components-svelte/issues/1180)
+- **tabs:** avoid infinite update loop in Svelte 5 ([#2394](https://github.com/carbon-design-system/carbon-components-svelte/issues/2394)) ([65316af](https://github.com/carbon-design-system/carbon-components-svelte/commit/65316af5e508576e2f9ebe8dd7e2a08aca5376af)), closes [#2366](https://github.com/carbon-design-system/carbon-components-svelte/issues/2366)
+
 ## [0.94.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.93.0...v0.94.0) (2025-11-29)
 
 ### ⚠ BREAKING CHANGES
