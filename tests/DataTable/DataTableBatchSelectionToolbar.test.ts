@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { isSvelte5, user } from "../setup-tests";
 import DataTableBatchSelectionToolbar from "./DataTableBatchSelectionToolbar.test.svelte";
 
 describe("DataTableBatchSelectionToolbar", () => {
@@ -46,9 +46,16 @@ describe("DataTableBatchSelectionToolbar", () => {
     // Click cancel button
     const cancelButton = screen.getByText("Cancel");
     await user.click(cancelButton);
+    await tick();
 
-    // Verify selected rows are cleared
-    expect(component.$$.ctx[component.$$.props.selectedRowIds]).toEqual([]);
+    if (isSvelte5) {
+      // Verify selected rows are cleared by checking the displayed value (Svelte 5)
+      const selectedIdsElement = screen.getByTestId("selected-ids");
+      expect(selectedIdsElement.textContent).toBe("[]");
+    } else {
+      // Verify selected rows are cleared using internal API (Svelte 4)
+      expect(component.$$.ctx[component.$$.props.selectedRowIds]).toEqual([]);
+    }
   });
 
   it("handles custom batch actions", async () => {
@@ -99,12 +106,19 @@ describe("DataTableBatchSelectionToolbar", () => {
     // Click cancel button
     const cancelButton = screen.getByText("Cancel");
     await user.click(cancelButton);
+    await tick();
 
-    // Verify selected rows are not cleared
-    expect(component.$$.ctx[component.$$.props.selectedRowIds]).toEqual([
-      "a",
-      "b",
-    ]);
+    if (isSvelte5) {
+      // Verify selected rows are not cleared by checking the displayed value (Svelte 5)
+      const selectedIdsElement = screen.getByTestId("selected-ids");
+      expect(selectedIdsElement.textContent).toBe('["a","b"]');
+    } else {
+      // Verify selected rows are not cleared using internal API (Svelte 4)
+      expect(component.$$.ctx[component.$$.props.selectedRowIds]).toEqual([
+        "a",
+        "b",
+      ]);
+    }
   });
 
   it("handles multiple batch actions", async () => {

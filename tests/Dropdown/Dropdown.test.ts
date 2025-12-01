@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/svelte";
 import type DropdownComponent from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { isSvelte5, user } from "../setup-tests";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
@@ -336,7 +336,12 @@ describe("Dropdown", () => {
 
     const button = screen.getByRole("button");
     expect(button).toBeEnabled();
-    expect(button).toHaveTextContent("undefined");
+    if (isSvelte5) {
+      // In Svelte 5, empty items with undefined selectedId shows "Open menu" instead of "undefined"
+      expect(button).toHaveTextContent("Open menu");
+    } else {
+      expect(button).toHaveTextContent("undefined");
+    }
   });
 
   it("should handle translateWithId prop", () => {
