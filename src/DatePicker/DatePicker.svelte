@@ -290,7 +290,9 @@
       // date picker works inside a modal
       static: true,
       ...flatpickrProps,
-    });
+    })
+      .then(() => {})
+      .catch(() => {});
   }
 </script>
 
