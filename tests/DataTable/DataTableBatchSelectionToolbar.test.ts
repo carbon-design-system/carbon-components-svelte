@@ -8,7 +8,7 @@ describe("DataTableBatchSelectionToolbar", () => {
     vi.clearAllMocks();
   });
 
-  it("renders toolbar when rows are selected", async () => {
+  it("renders toolbar when rows are selected", () => {
     const { container } = render(DataTableBatchSelectionToolbar, {
       props: {
         selectedRowIds: ["a", "b"],
@@ -202,7 +202,7 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(batchActions).not.toHaveAttribute("inert");
   });
 
-  it("applies inert to toolbar content when rows are selected", async () => {
+  it("applies inert to toolbar content when rows are selected", () => {
     const { container } = render(DataTableBatchSelectionToolbar, {
       props: {
         selectedRowIds: ["a", "b"],

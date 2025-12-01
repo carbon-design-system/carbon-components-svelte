@@ -94,7 +94,7 @@ describe("ContextMenu", () => {
     });
   });
 
-  it("should handle nested menus", async () => {
+  it("should handle nested menus", () => {
     render(ContextMenu, { props: { open: true } });
 
     const menus = screen.getAllByRole("menu");

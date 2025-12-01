@@ -118,7 +118,7 @@ describe("Toggle", () => {
     expect(toggle).toHaveAttribute("name", "custom-name-toggle");
   });
 
-  it("prevents default on enter key", async () => {
+  it("prevents default on enter key", () => {
     render(Toggle);
 
     const toggle = getToggle("Default toggle");
@@ -220,7 +220,7 @@ describe("Toggle", () => {
     expect(toggle).toHaveAttribute("id", "custom-id");
   });
 
-  it("handles focus and blur events", async () => {
+  it("handles focus and blur events", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Toggle);
 

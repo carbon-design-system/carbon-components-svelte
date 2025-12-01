@@ -124,7 +124,7 @@ describe("ListBoxSelection", () => {
     expect(clearHandler).toHaveBeenCalled();
   });
 
-  it("should handle keyboard Enter on multi selection", async () => {
+  it("should handle keyboard Enter on multi selection", () => {
     const clearHandler = vi.fn();
     render(ListBoxSelection, {
       props: { selectionCount: 2, onclear: clearHandler },
@@ -140,7 +140,7 @@ describe("ListBoxSelection", () => {
     expect(clearHandler).toHaveBeenCalled();
   });
 
-  it("should handle keyboard Space on multi selection", async () => {
+  it("should handle keyboard Space on multi selection", () => {
     const clearHandler = vi.fn();
     render(ListBoxSelection, {
       props: { selectionCount: 2, onclear: clearHandler },
@@ -238,7 +238,7 @@ describe("ListBoxSelection", () => {
     expect(keydownHandler).not.toHaveBeenCalled();
   });
 
-  it("should prevent default on click", async () => {
+  it("should prevent default on click", () => {
     render(ListBoxSelection);
 
     const button = screen.getByRole("button");

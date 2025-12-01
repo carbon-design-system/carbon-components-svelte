@@ -10,7 +10,7 @@ describe("Modal", () => {
     vi.clearAllMocks();
   });
 
-  it("renders with default props", async () => {
+  it("renders with default props", () => {
     render(ModalTest, {
       props: {
         open: true,
@@ -189,7 +189,7 @@ describe("Modal", () => {
     expect(modalBody).toHaveClass("bx--modal-scroll-content");
   });
 
-  it("should focus close button when open", async () => {
+  it("should focus close button when open", () => {
     render(ModalTest, {
       props: {
         open: true,
@@ -200,7 +200,7 @@ describe("Modal", () => {
     expect(closeButton).toHaveFocus();
   });
 
-  it("respects the selectorPrimaryFocus prop", async () => {
+  it("respects the selectorPrimaryFocus prop", () => {
     render(ModalTest, {
       props: {
         open: true,
@@ -543,7 +543,7 @@ describe("Modal", () => {
       expect(formSubmitHandler).not.toHaveBeenCalled();
     });
 
-    it("should set form attribute on primary button when formId is provided", async () => {
+    it("should set form attribute on primary button when formId is provided", () => {
       render(ModalFormIdTest, {
         props: {
           open: true,

@@ -174,7 +174,7 @@ describe("DataTable Toolbar", () => {
       expect(screen.getByText("Custom cancel")).toBeInTheDocument();
     });
 
-    it("should dispatch cancel event when cancel button is clicked", async () => {
+    it("should dispatch cancel event when cancel button is clicked", () => {
       let cancelFired = false;
       render(Toolbar, {
         props: {

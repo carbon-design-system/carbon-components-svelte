@@ -88,7 +88,7 @@ describe("InlineLoading", () => {
     expect(icon).toHaveTextContent("Operation completed successfully");
   });
 
-  it("dispatches success event after delay when finished", async () => {
+  it("dispatches success event after delay when finished", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(InlineLoading);
 
@@ -101,7 +101,7 @@ describe("InlineLoading", () => {
     expect(consoleLog).toHaveBeenCalledWith("success");
   });
 
-  it("supports custom success delay", async () => {
+  it("supports custom success delay", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(InlineLoading);
 

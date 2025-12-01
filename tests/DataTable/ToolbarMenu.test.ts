@@ -23,7 +23,7 @@ describe("DataTable Toolbar Menu", () => {
       expect(icon).toBeInTheDocument();
     });
 
-    it("should be flipped when open", async () => {
+    it("should be flipped when open", () => {
       const { container } = render(ToolbarMenuTest, {
         props: { testComponent: "ToolbarMenu", menuProps: { open: true } },
       });
