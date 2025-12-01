@@ -8,19 +8,34 @@ import pkg from "./package.json";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
+ * Gets the directory name from import.meta.url (ESM equivalent of __dirname).
+ * @param url - The import.meta.url from the calling file
+ * @returns The directory path
+ */
+export function getDirname(url: string): string {
+  return path.dirname(fileURLToPath(url));
+}
+
+/**
  * Generates Vite aliases from package.json exports for component subpath imports.
  * Resolves imports like `carbon-components-svelte/Theme/Theme.svelte` to
  * `./src/Theme/Theme.svelte` since these subpaths aren't in package.json
  * exports and Vite needs runtime resolution (tsconfig only handles types).
+ *
+ * @param baseDir - Base directory for resolving src path (defaults to __dirname)
+ * @param srcRelativePath - Relative path to src directory from baseDir (defaults to "./src")
  */
-function generateAliasesFromExports() {
+export function generateAliasesFromExports(
+  baseDir: string = __dirname,
+  srcRelativePath: string = "./src",
+) {
   const aliases: Record<string, string> = {};
   const exports = pkg.exports;
 
   const srcSvelteExport = exports["./src/*.svelte"];
   if (!srcSvelteExport) return aliases;
 
-  const srcDir = path.resolve(__dirname, "./src");
+  const srcDir = path.resolve(baseDir, srcRelativePath);
   if (!fs.existsSync(srcDir)) return aliases;
 
   function scanDirectory(dir: string, basePath: string = "") {
@@ -35,7 +50,7 @@ function generateAliasesFromExports() {
       } else if (entry.isFile() && entry.name.endsWith(".svelte")) {
         const importPath = relativePath;
         const aliasKey = `${pkg.name}/${importPath}`;
-        aliases[aliasKey] = path.resolve(__dirname, "./src", importPath);
+        aliases[aliasKey] = path.resolve(baseDir, srcRelativePath, importPath);
       }
     }
   }
