@@ -7,6 +7,7 @@
     "ignoreDeprecations": "5.0",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
+    "resolveJsonModule": true,
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
