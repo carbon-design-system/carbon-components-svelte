@@ -27,6 +27,8 @@
   export let controlled = false;
 </script>
 
+<div data-testid="selected-ids">{JSON.stringify(selectedRowIds)}</div>
+
 <DataTable batchSelection {headers} {rows} {selectedRowIds}>
   <Toolbar>
     <ToolbarBatchActions

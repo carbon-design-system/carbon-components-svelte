@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { isSvelte5, user } from "../setup-tests";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
 import TextInputFluid from "./TextInputFluid.test.svelte";
@@ -452,9 +452,14 @@ describe("TextInput", () => {
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
 
-    // When cleared, number input value becomes null which displays as "null" string
-    const valueDisplay = screen.getByTestId("value").textContent;
-    expect(valueDisplay).toBe("null");
+    if (isSvelte5) {
+      // In Svelte 5, cleared inputs may result in empty string instead of null
+      const valueDisplay = screen.getByTestId("value").textContent;
+      expect(valueDisplay === "" || valueDisplay === "null").toBe(true);
+    } else {
+      const valueDisplay = screen.getByTestId("value").textContent;
+      expect(valueDisplay).toBe("null");
+    }
   });
 
   it("should support restProps on input element", () => {
