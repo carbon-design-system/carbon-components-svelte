@@ -56,7 +56,8 @@
         "noImportantStyles": "off"
       },
       "suspicious": {
-        "noExplicitAny": "error"
+        "noExplicitAny": "error",
+        "useAwait": "error"
       },
       "style": {
         "noImplicitBoolean": "error",
