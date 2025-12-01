@@ -2,7 +2,7 @@ import { Glob } from "bun";
 import { sveld } from "sveld";
 import pkg from "../package.json" with { type: "json" };
 
-sveld({
+await sveld({
   glob: true,
   markdown: true,
   markdownOptions: {
