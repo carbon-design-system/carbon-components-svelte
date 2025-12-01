@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "test:types": "svelte-check --workspace ../tests --fail-on-warnings"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^6.2.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/svelte": "^5.2.9",
+    "@testing-library/user-event": "^14.6.1",
+    "jsdom": "^27.2.0",
+    "svelte": "^5.45.2",
+    "svelte-check": "^4.3.4",
+    "vitest": "^4.0.14"
+  }
+}
