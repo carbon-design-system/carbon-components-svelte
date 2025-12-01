@@ -32,7 +32,9 @@ jobs:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
-      - run: bun run test
+
+      - name: Test Svelte 4
+        run: bun run test
 
   test-svelte5:
     runs-on: macos-15
@@ -40,7 +42,9 @@ jobs:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
-      - run: |
+
+      - name: Test Svelte 5
+        run: |
           cd tests-svelte5
           bun ci
           bun run test
