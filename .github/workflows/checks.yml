@@ -14,16 +14,13 @@ on:
 permissions:
   contents: read
 
-env:
-  IBM_TELEMETRY_DISABLED: true
-
 jobs:
   lint:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
-      - run: bun ci
+      - run: IBM_TELEMETRY_DISABLED=true bun ci
       - run: bunx biome ci --error-on-warnings
 
   test:
