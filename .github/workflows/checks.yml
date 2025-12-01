@@ -34,6 +34,18 @@ jobs:
       - run: bun ci
       - run: bun run test
 
+  test-svelte5:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+      - run: bun ci
+      - run: |
+          cd tests-svelte5
+          bun ci
+          bun run test
+          bun run test:types
+
   types:
     runs-on: macos-15
     steps:
