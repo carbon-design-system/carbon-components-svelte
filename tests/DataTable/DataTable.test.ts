@@ -45,7 +45,7 @@ describe("DataTable", () => {
   ];
 
   // Basic rendering and structure tests
-  it("renders with default props", async () => {
+  it("renders with default props", () => {
     render(DataTable);
     // Check if table headers are rendered
     for (const header of headers) {
@@ -481,7 +481,7 @@ describe("DataTable", () => {
     expect(selectedRow).toBeInTheDocument();
   });
 
-  it("handles non-selectable and non-expandable rows", async () => {
+  it("handles non-selectable and non-expandable rows", () => {
     const { container } = render(DataTable, {
       props: {
         selectable: true,
@@ -559,7 +559,7 @@ describe("DataTable", () => {
   });
 
   // Styling and layout tests
-  it("applies zebra stripe styling", async () => {
+  it("applies zebra stripe styling", () => {
     render(DataTable, {
       props: {
         zebra: true,
@@ -573,7 +573,7 @@ describe("DataTable", () => {
     expect(table).toHaveClass("bx--data-table--zebra");
   });
 
-  it("applies different size variants", async () => {
+  it("applies different size variants", () => {
     type Size = "compact" | "short" | "medium" | "tall";
     const sizeMappings: Record<Size, string> = {
       compact: "bx--data-table--compact",
@@ -598,7 +598,7 @@ describe("DataTable", () => {
     }
   });
 
-  it("applies custom column widths", async () => {
+  it("applies custom column widths", () => {
     const customHeaders = [
       { key: "name", value: "Name", width: "200px" },
       { key: "protocol", value: "Protocol", minWidth: "100px" },
@@ -628,7 +628,7 @@ describe("DataTable", () => {
     expect(protocolHeader).toHaveStyle({ "min-width": "100px" });
   });
 
-  it("applies sticky header", async () => {
+  it("applies sticky header", () => {
     render(DataTable, {
       props: {
         stickyHeader: true,
@@ -899,7 +899,7 @@ describe("DataTable", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should handle empty headers correctly", async () => {
+  it("should handle empty headers correctly", () => {
     const rows = [
       {
         id: "a",
@@ -962,7 +962,7 @@ describe("DataTable", () => {
   });
 
   // Slot prop tests
-  it("passes rowSelected and rowExpanded props to cell slot", async () => {
+  it("passes rowSelected and rowExpanded props to cell slot", () => {
     const { container } = render(DataTable, {
       props: {
         selectable: true,
@@ -982,7 +982,7 @@ describe("DataTable", () => {
     expect(expandedRow).toHaveClass("bx--expandable-row");
   });
 
-  it("passes rowSelected prop to expanded-row slot", async () => {
+  it("passes rowSelected prop to expanded-row slot", () => {
     const { container } = render(DataTable, {
       props: {
         selectable: true,
@@ -1224,7 +1224,7 @@ describe("DataTable", () => {
     expect(detail).toHaveProperty("row");
   });
 
-  it("uses default table header translations", async () => {
+  it("uses default table header translations", () => {
     render(DataTable, {
       props: {
         sortable: true,

@@ -81,7 +81,7 @@ describe("ListBoxMenuIcon", () => {
     expect(clickHandler).toHaveBeenCalled();
   });
 
-  it("should prevent default on click", async () => {
+  it("should prevent default on click", () => {
     render(ListBoxMenuIcon);
 
     const icon = document.querySelector(".bx--list-box__menu-icon");

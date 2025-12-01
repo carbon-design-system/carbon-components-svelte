@@ -19,7 +19,7 @@ describe("ImageLoader", () => {
     expect(img).toBeDefined();
   });
 
-  it("shows loading state and transitions to loaded state", async () => {
+  it("shows loading state and transitions to loaded state", () => {
     render(ImageLoader);
 
     const loadingIndicator = screen.getByTestId("loading-state");
@@ -37,7 +37,7 @@ describe("ImageLoader", () => {
     }
   });
 
-  it("handles error state correctly", async () => {
+  it("handles error state correctly", () => {
     render(ImageLoader);
 
     const wrapper = screen.getByTestId("error-loader");
@@ -65,7 +65,7 @@ describe("ImageLoader", () => {
     expect(aspectRatioWrapper).toHaveClass("bx--aspect-ratio--16x9");
   });
 
-  it("supports fade in animation", async () => {
+  it("supports fade in animation", () => {
     render(ImageLoader);
 
     const wrapper = screen.getByTestId("loader-with-fade");
@@ -106,7 +106,7 @@ describe("ImageLoader", () => {
     }
   });
 
-  it("dispatches load and error events", async () => {
+  it("dispatches load and error events", () => {
     const load = vi.fn();
     const error = vi.fn();
 

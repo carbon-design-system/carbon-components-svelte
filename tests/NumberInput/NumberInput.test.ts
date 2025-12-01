@@ -446,7 +446,7 @@ describe("NumberInput", () => {
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1180
-  it("should not show invalid state when value exceeds max but invalid prop is false", async () => {
+  it("should not show invalid state when value exceeds max but invalid prop is false", () => {
     // NumberInput should be consistent with TextInput - only show invalid state when invalid={true}
     render(NumberInput, { props: { max: 10, value: 15 } });
 
@@ -765,7 +765,7 @@ describe("NumberInput", () => {
     expect(input).not.toHaveAttribute("aria-invalid");
   });
 
-  it("should not show invalid state when value is below min without invalid prop", async () => {
+  it("should not show invalid state when value is below min without invalid prop", () => {
     // Per issue #1180, NumberInput should only show invalid state when invalid={true}
     render(NumberInput, { props: { min: 5, value: 3 } });
 

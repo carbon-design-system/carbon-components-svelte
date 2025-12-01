@@ -128,7 +128,7 @@ describe("Accordion", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("is all disabled", async () => {
+  it("is all disabled", () => {
     render(AccordionDisabled);
 
     itemIsDisabled(/Natural Language Classifier/);
@@ -136,7 +136,7 @@ describe("Accordion", () => {
     itemIsDisabled(/Language Translator/);
   });
 
-  it("renders skeleton", async () => {
+  it("renders skeleton", () => {
     render(AccordionSkeleton);
 
     const items = screen.getAllByRole("listitem");

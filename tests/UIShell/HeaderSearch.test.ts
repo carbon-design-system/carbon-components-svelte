@@ -395,7 +395,7 @@ describe("HeaderSearch", () => {
       document.body.removeChild(outsideElement);
     });
 
-    it("should not deactivate when clicking inside", async () => {
+    it("should not deactivate when clicking inside", () => {
       render(HeaderSearchTest, { props: { active: true } });
 
       const searchContainer = screen.getByRole("search");

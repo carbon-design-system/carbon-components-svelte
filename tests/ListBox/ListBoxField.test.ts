@@ -208,7 +208,7 @@ describe("ListBoxField", () => {
     expect(keydownHandler).toHaveBeenCalled();
   });
 
-  it("should handle focus and blur events", async () => {
+  it("should handle focus and blur events", () => {
     const focusHandler = vi.fn();
     const blurHandler = vi.fn();
     render(ListBoxField, {

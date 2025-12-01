@@ -43,7 +43,7 @@ describe("ClickableTile", () => {
     expect(tile).not.toHaveClass("bx--tile--is-clicked");
   });
 
-  it("should respect disabled state", async () => {
+  it("should respect disabled state", () => {
     render(ClickableTile);
 
     const disabledTile = screen.getByTestId("disabled-test");

@@ -32,7 +32,7 @@ describe("ListBoxMenu", () => {
     expect(screen.getByText("Custom menu items")).toBeInTheDocument();
   });
 
-  it("should handle scroll events", async () => {
+  it("should handle scroll events", () => {
     const scrollHandler = vi.fn();
     render(ListBoxMenu, {
       props: { slotContent: "Scrollable menu", onscroll: scrollHandler },

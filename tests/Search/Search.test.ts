@@ -28,7 +28,7 @@ describe("Search", () => {
     expect(consoleLog).toHaveBeenCalledTimes(1);
   });
 
-  it("renders disabled state", async () => {
+  it("renders disabled state", () => {
     render(Search);
 
     const search = getSearchInput("Disabled search");
