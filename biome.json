@@ -86,7 +86,8 @@
       },
       "nursery": {
         "useFind": "error",
-        "noForIn": "error"
+        "noForIn": "error",
+        "noFloatingPromises": "error"
       }
     }
   },
