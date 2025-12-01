@@ -21,6 +21,14 @@
   export let inline = false;
   export let readonly = false;
   export let type: ComponentProps<TextInput>["type"] = "text";
+  export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
+  export let oninput: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onkeydown: ((event: KeyboardEvent) => void) | undefined =
+    undefined;
+  export let onkeyup: ((event: KeyboardEvent) => void) | undefined = undefined;
+  export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
+  export let onblur: ((event: FocusEvent) => void) | undefined = undefined;
+  export let onpaste: ((event: ClipboardEvent) => void) | undefined = undefined;
 </script>
 
 <TextInput
@@ -43,13 +51,13 @@
   {inline}
   {readonly}
   {type}
-  on:change
-  on:input
-  on:keydown
-  on:keyup
-  on:focus
-  on:blur
-  on:paste
+  on:change={onchange}
+  on:input={oninput}
+  on:keydown={onkeydown}
+  on:keyup={onkeyup}
+  on:focus={onfocus}
+  on:blur={onblur}
+  on:paste={onpaste}
 />
 
 <div data-testid="value">{value}</div>

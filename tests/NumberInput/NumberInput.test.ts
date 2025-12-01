@@ -227,9 +227,8 @@ describe("NumberInput", () => {
   });
 
   it("should dispatch keydown event", async () => {
-    const { component } = render(NumberInput);
     const mockHandler = vi.fn();
-    component.$on("keydown", mockHandler);
+    render(NumberInput, { props: { onkeydown: mockHandler } });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "{Enter}");
@@ -238,9 +237,8 @@ describe("NumberInput", () => {
   });
 
   it("should dispatch keyup event", async () => {
-    const { component } = render(NumberInput);
     const mockHandler = vi.fn();
-    component.$on("keyup", mockHandler);
+    render(NumberInput, { props: { onkeyup: mockHandler } });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "5");
@@ -249,9 +247,8 @@ describe("NumberInput", () => {
   });
 
   it("should dispatch focus event", async () => {
-    const { component } = render(NumberInput);
     const mockHandler = vi.fn();
-    component.$on("focus", mockHandler);
+    render(NumberInput, { props: { onfocus: mockHandler } });
 
     const input = screen.getByRole("spinbutton");
     await user.click(input);
@@ -260,9 +257,8 @@ describe("NumberInput", () => {
   });
 
   it("should dispatch blur event", async () => {
-    const { component } = render(NumberInput);
     const mockHandler = vi.fn();
-    component.$on("blur", mockHandler);
+    render(NumberInput, { props: { onblur: mockHandler } });
 
     const input = screen.getByRole("spinbutton");
     await user.click(input);
@@ -609,9 +605,8 @@ describe("NumberInput", () => {
   });
 
   it("should dispatch change event on typing", async () => {
-    const { component } = render(NumberInput);
     const mockHandler = vi.fn();
-    component.$on("change", mockHandler);
+    render(NumberInput, { props: { onchange: mockHandler } });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "5");
@@ -622,9 +617,8 @@ describe("NumberInput", () => {
   });
 
   it("should dispatch input event on typing", async () => {
-    const { component } = render(NumberInput);
     const mockHandler = vi.fn();
-    component.$on("input", mockHandler);
+    render(NumberInput, { props: { oninput: mockHandler } });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "7");
@@ -634,11 +628,11 @@ describe("NumberInput", () => {
   });
 
   it("should dispatch both change and input events on stepper click", async () => {
-    const { component } = render(NumberInput);
     const changeHandler = vi.fn();
     const inputHandler = vi.fn();
-    component.$on("change", changeHandler);
-    component.$on("input", inputHandler);
+    render(NumberInput, {
+      props: { onchange: changeHandler, oninput: inputHandler },
+    });
 
     const incrementButton = screen.getByRole("button", {
       name: "Increment number",
@@ -652,9 +646,10 @@ describe("NumberInput", () => {
   });
 
   it("should dispatch events with null when clearing input", async () => {
-    const { component } = render(NumberInput, { props: { value: 10 } });
     const inputHandler = vi.fn();
-    component.$on("input", inputHandler);
+    render(NumberInput, {
+      props: { value: 10, oninput: inputHandler },
+    });
 
     const input = screen.getByRole("spinbutton");
     await user.clear(input);

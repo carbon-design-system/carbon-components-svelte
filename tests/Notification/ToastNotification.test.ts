@@ -188,10 +188,8 @@ describe("ToastNotification", () => {
 
   it("should dispatch close event when close button is clicked", async () => {
     vi.useRealTimers();
-    const { component } = render(ToastNotificationTest);
-
     const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
+    render(ToastNotificationTest, { props: { onclose: closeHandler } });
 
     const closeButton = screen.getByLabelText("Close notification");
     await user.click(closeButton);
@@ -202,12 +200,10 @@ describe("ToastNotification", () => {
   });
 
   it("should auto-close after timeout", async () => {
-    const { component } = render(ToastNotificationTest, {
-      props: { timeout: 1000 },
-    });
-
     const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
+    render(ToastNotificationTest, {
+      props: { timeout: 1000, onclose: closeHandler },
+    });
 
     expect(closeHandler).not.toHaveBeenCalled();
 
@@ -255,12 +251,10 @@ describe("ToastNotification", () => {
 
   it("should prevent close when event is cancelled", async () => {
     vi.useRealTimers();
-    const { component } = render(ToastNotificationTest);
-
     const closeHandler = vi.fn((e) => {
       e.preventDefault();
     });
-    component.$on("close", closeHandler);
+    render(ToastNotificationTest, { props: { onclose: closeHandler } });
 
     const closeButton = screen.getByLabelText("Close notification");
     await user.click(closeButton);

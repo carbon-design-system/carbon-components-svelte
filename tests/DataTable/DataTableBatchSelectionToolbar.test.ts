@@ -68,7 +68,7 @@ describe("DataTableBatchSelectionToolbar", () => {
   });
 
   it("handles controlled active state", async () => {
-    const { container, component } = render(DataTableBatchSelectionToolbar, {
+    const { container, rerender } = render(DataTableBatchSelectionToolbar, {
       props: {
         selectedRowIds: ["a", "b"],
         active: false,
@@ -80,7 +80,7 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(toolbar).not.toHaveClass("bx--batch-actions--active");
 
     // Update active state
-    component.$set({ active: true });
+    rerender({ active: true });
     await tick();
 
     // Verify toolbar is now active
@@ -127,7 +127,7 @@ describe("DataTableBatchSelectionToolbar", () => {
   });
 
   it("updates selected count when selection changes", async () => {
-    const { component } = render(DataTableBatchSelectionToolbar, {
+    const { rerender } = render(DataTableBatchSelectionToolbar, {
       props: {
         selectedRowIds: ["a"],
       },
@@ -137,7 +137,7 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(screen.getByText("1 item selected")).toBeInTheDocument();
 
     // Update selection
-    component.$set({ selectedRowIds: ["a", "b", "c"] });
+    rerender({ selectedRowIds: ["a", "b", "c"] });
     await tick();
 
     // Verify updated count
@@ -211,7 +211,7 @@ describe("DataTableBatchSelectionToolbar", () => {
   });
 
   it("toggles inert attributes when selection changes", async () => {
-    const { container, component } = render(DataTableBatchSelectionToolbar, {
+    const { container, rerender } = render(DataTableBatchSelectionToolbar, {
       props: {
         selectedRowIds: [],
       },
@@ -223,13 +223,13 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(batchActions).toHaveAttribute("inert");
     expect(toolbarContent).not.toHaveAttribute("inert");
 
-    component.$set({ selectedRowIds: ["a", "b"] });
+    rerender({ selectedRowIds: ["a", "b"] });
     await tick();
 
     expect(batchActions).not.toHaveAttribute("inert");
     expect(toolbarContent).toHaveAttribute("inert");
 
-    component.$set({ selectedRowIds: [] });
+    rerender({ selectedRowIds: [] });
     await tick();
 
     expect(batchActions).toHaveAttribute("inert");

@@ -14,6 +14,7 @@
   export let slotContent = "";
   export let selectedIds: ReadonlyArray<string> = [];
   export let active: boolean | undefined = undefined;
+  export let oncancel: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 {#if testComponent === "Toolbar"}
@@ -28,7 +29,7 @@
   </ToolbarContent>
 {:else if testComponent === "ToolbarBatchActions"}
   <Toolbar>
-    <ToolbarBatchActions {selectedIds} {active} on:cancel {...$$restProps}>
+    <ToolbarBatchActions {selectedIds} {active} on:cancel={oncancel} {...$$restProps}>
       {#if slotContent}{slotContent}{/if}
       <slot />
     </ToolbarBatchActions>

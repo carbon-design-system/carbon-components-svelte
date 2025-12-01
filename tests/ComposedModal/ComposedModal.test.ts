@@ -37,24 +37,23 @@ describe("ComposedModal", () => {
   });
 
   it("should handle open state", async () => {
-    const { component } = render(ComposedModalTest, {
+    const openHandler = vi.fn();
+    const closeHandler = vi.fn();
+    const { rerender } = render(ComposedModalTest, {
       props: {
         open: false,
         headerTitle: "Test Modal",
+        onopen: openHandler,
+        onclose: closeHandler,
       },
     });
 
-    const openHandler = vi.fn();
-    const closeHandler = vi.fn();
-    component.$on("open", openHandler);
-    component.$on("close", closeHandler);
-
-    component.$set({ open: true });
+    rerender({ open: true });
     await tick();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(openHandler).toHaveBeenCalledTimes(1);
 
-    component.$set({ open: false });
+    rerender({ open: false });
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
@@ -305,15 +304,14 @@ describe("ComposedModal", () => {
   });
 
   it("dispatches close event with outside-click trigger", async () => {
-    const { container, component } = render(ComposedModalTest, {
+    const closeHandler = vi.fn();
+    const { container } = render(ComposedModalTest, {
       props: {
         open: true,
         headerTitle: "Outside Click Test",
+        onclose: closeHandler,
       },
     });
-
-    const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
 
     const modalOverlay = container.querySelector(".bx--modal");
     assert(modalOverlay);
@@ -327,15 +325,14 @@ describe("ComposedModal", () => {
   });
 
   it("dispatches close event with close-button trigger", async () => {
-    const { component } = render(ComposedModalTest, {
+    const closeHandler = vi.fn();
+    render(ComposedModalTest, {
       props: {
         open: true,
         headerTitle: "Close Button Test",
+        onclose: closeHandler,
       },
     });
-
-    const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
 
     const closeButton = screen.getByLabelText("Close");
     await user.click(closeButton);
@@ -348,17 +345,16 @@ describe("ComposedModal", () => {
   });
 
   it("prevents closing when preventDefault is called on close event", async () => {
-    const { container, component } = render(ComposedModalTest, {
-      props: {
-        open: true,
-        headerTitle: "Prevent Close Test",
-      },
-    });
-
     const closeHandler = vi.fn((e) => {
       e.preventDefault();
     });
-    component.$on("close", closeHandler);
+    const { container } = render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Prevent Close Test",
+        onclose: closeHandler,
+      },
+    });
 
     // Close via outside click.
     const modalOverlay = container.querySelector(".bx--modal");
@@ -377,7 +373,7 @@ describe("ComposedModal", () => {
   });
 
   it("is inert when closed", async () => {
-    const { container, component } = render(ComposedModalTest, {
+    const { container, rerender } = render(ComposedModalTest, {
       props: {
         open: false,
         headerTitle: "Inert Test",
@@ -388,11 +384,11 @@ describe("ComposedModal", () => {
     assert(modalOverlay);
     expect(modalOverlay).toHaveAttribute("inert");
 
-    component.$set({ open: true });
+    rerender({ open: true });
     await tick();
 
     expect(modalOverlay).not.toHaveAttribute("inert");
-    component.$set({ open: false });
+    rerender({ open: false });
     await tick();
 
     expect(modalOverlay).toHaveAttribute("inert");

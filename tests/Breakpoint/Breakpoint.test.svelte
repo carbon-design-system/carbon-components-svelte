@@ -1,6 +1,9 @@
 <script lang="ts">
   import { Breakpoint } from "carbon-components-svelte";
-  import type { BreakpointSize } from "carbon-components-svelte/Breakpoint/breakpoints";
+  import type {
+    BreakpointSize,
+    BreakpointValue,
+  } from "carbon-components-svelte/Breakpoint/breakpoints";
 
   export let size: BreakpointSize | undefined = undefined;
   export let sizes: Record<BreakpointSize, boolean> = {
@@ -10,12 +13,20 @@
     xlg: false,
     max: false,
   };
+  export let onchange:
+    | ((
+        event: CustomEvent<{
+          size: BreakpointSize;
+          breakpointValue: BreakpointValue;
+        }>,
+      ) => void)
+    | undefined = undefined;
 </script>
 
 <Breakpoint
   bind:size
   bind:sizes
-  on:change
+  on:change={onchange}
   let:size={currentSize}
   let:sizes={currentSizes}
 >

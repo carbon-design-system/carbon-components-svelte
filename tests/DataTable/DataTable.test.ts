@@ -727,7 +727,7 @@ describe("DataTable", () => {
       rule: i % 2 ? "Round robin" : "DNS delegation",
     }));
 
-    const { component } = render(DataTable, {
+    const { rerender } = render(DataTable, {
       props: {
         headers,
         rows: paginatedRows,
@@ -749,7 +749,7 @@ describe("DataTable", () => {
     ).toHaveTextContent("Load Balancer 5");
 
     // Update page to 2
-    component.$set({ page: 2 });
+    rerender({ headers, rows: paginatedRows, pageSize: 5, page: 2 });
     await tick();
 
     // Verify 5 rows are displayed on second page
@@ -765,7 +765,7 @@ describe("DataTable", () => {
     ).toHaveTextContent("Load Balancer 10");
 
     // Update page to 3
-    component.$set({ page: 3 });
+    rerender({ page: 3 });
     await tick();
 
     // Verify remaining rows are displayed on third page
@@ -1007,12 +1007,12 @@ describe("DataTable", () => {
   });
 
   it("updates rowSelected slot prop when selection changes", async () => {
-    const { container, component } = render(DataTable, {
+    const { container, rerender } = render(DataTable, {
       props: {
         selectable: true,
         expandable: true,
         selectedRowIds: [],
-        expandedRowIds: ["a"],
+        expandedRowIds: [],
         headers,
         rows,
       },
@@ -1023,7 +1023,7 @@ describe("DataTable", () => {
     expect(selectedRow).not.toBeInTheDocument();
 
     // Select row 'a'
-    component.$set({ selectedRowIds: ["a"] });
+    rerender({ selectedRowIds: ["a"] });
     await tick();
 
     // Verify row is now selected
@@ -1032,7 +1032,7 @@ describe("DataTable", () => {
   });
 
   it("updates rowExpanded slot prop when expansion changes", async () => {
-    const { container, component } = render(DataTable, {
+    const { container, rerender } = render(DataTable, {
       props: {
         selectable: true,
         expandable: true,
@@ -1050,7 +1050,7 @@ describe("DataTable", () => {
     expect(expandedContent).not.toBeInTheDocument();
 
     // Expand row 'a'
-    component.$set({ expandedRowIds: ["a"] });
+    rerender({ expandedRowIds: ["a"] });
     await tick();
 
     // Verify row is now expanded

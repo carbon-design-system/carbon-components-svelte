@@ -1,5 +1,3 @@
-<svelte:options accessors />
-
 <script lang="ts">
   import { Theme } from "carbon-components-svelte";
   import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";

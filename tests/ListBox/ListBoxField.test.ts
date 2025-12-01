@@ -173,12 +173,10 @@ describe("ListBoxField", () => {
   });
 
   it("should handle click events", async () => {
-    const { component } = render(ListBoxField, {
-      props: { slotContent: "Clickable field" },
-    });
     const clickHandler = vi.fn();
-
-    component.$on("click", clickHandler);
+    render(ListBoxField, {
+      props: { slotContent: "Clickable field", onclick: clickHandler },
+    });
 
     const field = screen
       .getByText("Clickable field")
@@ -190,12 +188,14 @@ describe("ListBoxField", () => {
   });
 
   it("should handle keydown events", async () => {
-    const { component } = render(ListBoxField, {
-      props: { slotContent: "Keyboard field", tabindex: "0" },
-    });
     const keydownHandler = vi.fn();
-
-    component.$on("keydown", keydownHandler);
+    render(ListBoxField, {
+      props: {
+        slotContent: "Keyboard field",
+        tabindex: "0",
+        onkeydown: keydownHandler,
+      },
+    });
 
     const field = screen
       .getByText("Keyboard field")
@@ -209,14 +209,16 @@ describe("ListBoxField", () => {
   });
 
   it("should handle focus and blur events", async () => {
-    const { component } = render(ListBoxField, {
-      props: { slotContent: "Focus field", tabindex: "0" },
-    });
     const focusHandler = vi.fn();
     const blurHandler = vi.fn();
-
-    component.$on("focus", focusHandler);
-    component.$on("blur", blurHandler);
+    render(ListBoxField, {
+      props: {
+        slotContent: "Focus field",
+        tabindex: "0",
+        onfocus: focusHandler,
+        onblur: blurHandler,
+      },
+    });
 
     const field = screen
       .getByText("Focus field")
@@ -231,16 +233,17 @@ describe("ListBoxField", () => {
   });
 
   it("should handle mouse events", async () => {
-    const { component } = render(ListBoxField, {
-      props: { slotContent: "Mouse field" },
-    });
     const mouseoverHandler = vi.fn();
     const mouseenterHandler = vi.fn();
     const mouseleaveHandler = vi.fn();
-
-    component.$on("mouseover", mouseoverHandler);
-    component.$on("mouseenter", mouseenterHandler);
-    component.$on("mouseleave", mouseleaveHandler);
+    render(ListBoxField, {
+      props: {
+        slotContent: "Mouse field",
+        onmouseover: mouseoverHandler,
+        onmouseenter: mouseenterHandler,
+        onmouseleave: mouseleaveHandler,
+      },
+    });
 
     const field = screen
       .getByText("Mouse field")

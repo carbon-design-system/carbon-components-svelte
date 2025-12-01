@@ -89,12 +89,10 @@ describe("ListBoxMenuItem", () => {
   });
 
   it("should handle click events", async () => {
-    const { component } = render(ListBoxMenuItem, {
-      props: { slotContent: "Clickable item" },
-    });
     const clickHandler = vi.fn();
-
-    component.$on("click", clickHandler);
+    render(ListBoxMenuItem, {
+      props: { slotContent: "Clickable item", onclick: clickHandler },
+    });
 
     const menuItem = screen
       .getByText("Clickable item")
@@ -106,15 +104,14 @@ describe("ListBoxMenuItem", () => {
   });
 
   it("should not trigger click on disabled item", async () => {
-    const { component } = render(ListBoxMenuItem, {
+    const clickHandler = vi.fn();
+    render(ListBoxMenuItem, {
       props: {
         disabled: true,
         slotContent: "Disabled clickable",
+        onclick: clickHandler,
       },
     });
-    const clickHandler = vi.fn();
-
-    component.$on("click", clickHandler);
 
     const menuItem = screen
       .getByText("Disabled clickable")
@@ -128,12 +125,10 @@ describe("ListBoxMenuItem", () => {
   });
 
   it("should handle mouseenter events", async () => {
-    const { component } = render(ListBoxMenuItem, {
-      props: { slotContent: "Hover item" },
-    });
     const mouseenterHandler = vi.fn();
-
-    component.$on("mouseenter", mouseenterHandler);
+    render(ListBoxMenuItem, {
+      props: { slotContent: "Hover item", onmouseenter: mouseenterHandler },
+    });
 
     const menuItem = screen
       .getByText("Hover item")
@@ -145,12 +140,10 @@ describe("ListBoxMenuItem", () => {
   });
 
   it("should handle mouseleave events", async () => {
-    const { component } = render(ListBoxMenuItem, {
-      props: { slotContent: "Unhover item" },
-    });
     const mouseleaveHandler = vi.fn();
-
-    component.$on("mouseleave", mouseleaveHandler);
+    render(ListBoxMenuItem, {
+      props: { slotContent: "Unhover item", onmouseleave: mouseleaveHandler },
+    });
 
     const menuItem = screen
       .getByText("Unhover item")

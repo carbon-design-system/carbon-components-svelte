@@ -12,6 +12,16 @@
   export let id: ComponentProps<ListBoxField>["id"] = undefined;
   export let ref: ComponentProps<ListBoxField>["ref"] = null;
   export let slotContent = "";
+  export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
+  export let onmouseover: ((event: MouseEvent) => void) | undefined = undefined;
+  export let onmouseenter: ((event: MouseEvent) => void) | undefined =
+    undefined;
+  export let onmouseleave: ((event: MouseEvent) => void) | undefined =
+    undefined;
+  export let onkeydown: ((event: KeyboardEvent) => void) | undefined =
+    undefined;
+  export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
+  export let onblur: ((event: FocusEvent) => void) | undefined = undefined;
 </script>
 
 <ListBoxField
@@ -21,13 +31,13 @@
   {translateWithId}
   {id}
   bind:ref
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
-  on:keydown
-  on:focus
-  on:blur
+  on:click={onclick}
+  on:mouseover={onmouseover}
+  on:mouseenter={onmouseenter}
+  on:mouseleave={onmouseleave}
+  on:keydown={onkeydown}
+  on:focus={onfocus}
+  on:blur={onblur}
   {...$$restProps}
 >
   {#if slotContent}

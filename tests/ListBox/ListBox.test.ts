@@ -111,10 +111,8 @@ describe("ListBox", () => {
   });
 
   it("should handle keydown events", async () => {
-    const { component } = render(ListBox);
     const keydownHandler = vi.fn();
-
-    component.$on("keydown", keydownHandler);
+    render(ListBox, { props: { onkeydown: keydownHandler } });
 
     const listbox = screen.getByRole("listbox");
     await user.click(listbox);
@@ -147,10 +145,8 @@ describe("ListBox", () => {
   });
 
   it("should handle click events", async () => {
-    const { component } = render(ListBox);
     const clickHandler = vi.fn();
-
-    component.$on("click", clickHandler);
+    render(ListBox, { props: { onclick: clickHandler } });
 
     const listbox = screen.getByRole("listbox");
     await user.click(listbox);

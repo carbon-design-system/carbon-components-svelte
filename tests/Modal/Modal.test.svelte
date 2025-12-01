@@ -22,6 +22,11 @@
   export let danger = false;
   export let alert = false;
   export let passiveModal = false;
+  export let onopen: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onsubmit: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onclickbuttonprimary: ((event: CustomEvent) => void) | undefined =
+    undefined;
 </script>
 
 <Modal
@@ -44,10 +49,10 @@
   {danger}
   {alert}
   {passiveModal}
-  on:open
-  on:close
-  on:submit={() => console.log("submit")}
-  on:click:button--primary={() => console.log("click:button--primary")}
+  on:open={onopen}
+  on:close={onclose}
+  on:submit={onsubmit || (() => console.log("submit"))}
+  on:click:button--primary={onclickbuttonprimary || (() => console.log("click:button--primary"))}
   on:click:button--secondary={(e) =>
     console.log("click:button--secondary", e.detail)}
   on:transitionend={(e) => console.log("transitionend", e.detail)}

@@ -24,6 +24,8 @@
   export let footerPrimaryButtonDisabled = false;
   export let footerSecondaryButtonText = "";
   export let footerDanger = false;
+  export let onopen: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <ComposedModal
@@ -33,8 +35,8 @@
   {preventCloseOnClickOutside}
   {containerClass}
   {selectorPrimaryFocus}
-  on:open
-  on:close
+  on:open={onopen}
+  on:close={onclose}
   on:submit={() => console.log("submit")}
   on:click:button--primary={() => console.log("click:button--primary")}
   on:transitionend={(e) => console.log("transitionend", e.detail)}

@@ -24,6 +24,7 @@
   export let id: ComponentProps<Dropdown>["id"] = "test-dropdown";
   export let name: ComponentProps<Dropdown>["name"] = undefined;
   export let ref: ComponentProps<Dropdown>["ref"] = null;
+  export let onselect: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <Dropdown
@@ -48,6 +49,6 @@
   {id}
   {name}
   bind:ref
-  on:select
+  on:select={onselect}
   {...$$restProps}
 />

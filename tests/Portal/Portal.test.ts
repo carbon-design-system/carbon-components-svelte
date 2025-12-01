@@ -100,7 +100,7 @@ describe("Portal", () => {
   });
 
   it("handles conditional rendering", async () => {
-    const { component } = render(PortalTest, {
+    const { rerender } = render(PortalTest, {
       props: { showPortal: false },
     });
 
@@ -110,7 +110,7 @@ describe("Portal", () => {
     let portalElement = document.querySelector("[data-portal]");
     expect(portalElement).not.toBeInTheDocument();
 
-    component.$set({ showPortal: true });
+    rerender({ showPortal: true });
 
     portalContent = await screen.findByText("Portal content");
     expect(portalContent).toBeInTheDocument();
@@ -118,7 +118,7 @@ describe("Portal", () => {
     portalElement = portalContent.closest("[data-portal]");
     expect(portalElement).toBeInTheDocument();
 
-    component.$set({ showPortal: false });
+    rerender({ showPortal: false });
     await tick();
 
     portalContent = screen.queryByText("Portal content");

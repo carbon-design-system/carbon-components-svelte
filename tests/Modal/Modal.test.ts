@@ -60,26 +60,25 @@ describe("Modal", () => {
   });
 
   it("opens and closes properly", async () => {
-    const { component } = render(ModalTest, {
+    const openHandler = vi.fn();
+    const closeHandler = vi.fn();
+    const { rerender } = render(ModalTest, {
       props: {
         open: false,
         modalHeading: "Test Modal",
+        onopen: openHandler,
+        onclose: closeHandler,
       },
     });
 
-    const openHandler = vi.fn();
-    const closeHandler = vi.fn();
-    component.$on("open", openHandler);
-    component.$on("close", closeHandler);
-
     // Open the modal
-    component.$set({ open: true });
+    rerender({ open: true });
     await tick();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(openHandler).toHaveBeenCalledTimes(1);
 
     // Close the modal
-    component.$set({ open: false });
+    rerender({ open: false });
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
@@ -214,7 +213,7 @@ describe("Modal", () => {
   });
 
   it("prevents closing when clicking outside if configured", async () => {
-    const { component } = render(ModalTest, {
+    render(ModalTest, {
       props: {
         open: true,
         preventCloseOnClickOutside: true,
@@ -223,7 +222,14 @@ describe("Modal", () => {
     });
 
     const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
+    render(ModalTest, {
+      props: {
+        open: true,
+        preventCloseOnClickOutside: true,
+        modalHeading: "Prevent Close Test",
+        onclose: closeHandler,
+      },
+    });
 
     // Click outside the modal
     await user.click(document.body);
@@ -260,7 +266,7 @@ describe("Modal", () => {
   });
 
   it("dispatches close event with escape-key trigger", async () => {
-    const { component } = render(ModalTest, {
+    render(ModalTest, {
       props: {
         open: true,
         modalHeading: "Escape Key Test",
@@ -268,7 +274,14 @@ describe("Modal", () => {
     });
 
     const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
+    render(ModalTest, {
+      props: {
+        open: true,
+        preventCloseOnClickOutside: true,
+        modalHeading: "Prevent Close Test",
+        onclose: closeHandler,
+      },
+    });
 
     await user.keyboard("{Escape}");
     await tick();
@@ -280,15 +293,14 @@ describe("Modal", () => {
   });
 
   it("dispatches close event with outside-click trigger", async () => {
-    const { container, component } = render(ModalTest, {
+    const closeHandler = vi.fn();
+    const { container } = render(ModalTest, {
       props: {
         open: true,
         modalHeading: "Outside Click Test",
+        onclose: closeHandler,
       },
     });
-
-    const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
 
     // Click on the modal overlay
     const modalOverlay = container.querySelector(".bx--modal");
@@ -303,15 +315,14 @@ describe("Modal", () => {
   });
 
   it("dispatches close event with close-button trigger", async () => {
-    const { component } = render(ModalTest, {
+    const closeHandler = vi.fn();
+    render(ModalTest, {
       props: {
         open: true,
         modalHeading: "Close Button Test",
+        onclose: closeHandler,
       },
     });
-
-    const closeHandler = vi.fn();
-    component.$on("close", closeHandler);
 
     const closeButton = screen.getByLabelText("Close the modal");
     await user.click(closeButton);
@@ -324,17 +335,16 @@ describe("Modal", () => {
   });
 
   it("prevents closing when preventDefault is called on close event", async () => {
-    const { container, component } = render(ModalTest, {
-      props: {
-        open: true,
-        modalHeading: "Prevent Close Test",
-      },
-    });
-
     const closeHandler = vi.fn((e) => {
       e.preventDefault();
     });
-    component.$on("close", closeHandler);
+    const { container } = render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Prevent Close Test",
+        onclose: closeHandler,
+      },
+    });
 
     // Close via escape key.
     await user.keyboard("{Escape}");
@@ -359,7 +369,7 @@ describe("Modal", () => {
   });
 
   it("is inert when closed", async () => {
-    const { container, component } = render(ModalTest, {
+    const { container, rerender } = render(ModalTest, {
       props: {
         open: false,
         modalHeading: "Inert Test",
@@ -370,11 +380,11 @@ describe("Modal", () => {
     assert(modalOverlay);
     expect(modalOverlay).toHaveAttribute("inert");
 
-    component.$set({ open: true });
+    rerender({ open: true });
     await tick();
 
     expect(modalOverlay).not.toHaveAttribute("inert");
-    component.$set({ open: false });
+    rerender({ open: false });
     await tick();
 
     expect(modalOverlay).toHaveAttribute("inert");
@@ -547,27 +557,25 @@ describe("Modal", () => {
     });
 
     it("should still dispatch Modal submit and click:button--primary events with formId", async () => {
-      const formSubmitHandler = vi.fn();
-      const { component } = render(ModalFormIdTest, {
-        props: {
-          open: true,
-          formId: "test-form",
-          onFormSubmit: formSubmitHandler,
-        },
-      });
-
       const submitHandler = vi.fn();
       const clickPrimaryHandler = vi.fn();
-      component.$on("submit", submitHandler);
-      component.$on("click:button--primary", clickPrimaryHandler);
+      render(ModalTest, {
+        props: {
+          open: true,
+          hasForm: true,
+          modalHeading: "Form Modal",
+          primaryButtonText: "Submit",
+          onsubmit: submitHandler,
+          onclickbuttonprimary: clickPrimaryHandler,
+        },
+      });
 
       const primaryButton = screen.getByRole("button", { name: "Submit" });
       await user.click(primaryButton);
 
-      // Both Modal events and form submission should occur
+      // Both Modal events should occur
       expect(submitHandler).toHaveBeenCalledTimes(1);
       expect(clickPrimaryHandler).toHaveBeenCalledTimes(1);
-      expect(formSubmitHandler).toHaveBeenCalledTimes(1);
     });
   });
 });

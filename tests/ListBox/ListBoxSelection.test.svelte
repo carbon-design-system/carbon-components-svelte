@@ -10,6 +10,7 @@
   export let translateWithId: ComponentProps<ListBoxSelection>["translateWithId"] =
     undefined;
   export let ref: ComponentProps<ListBoxSelection>["ref"] = null;
+  export let onclear: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <ListBoxSelection
@@ -17,6 +18,6 @@
   {disabled}
   {translateWithId}
   bind:ref
-  on:clear
+  on:clear={onclear}
   {...$$restProps}
 />
