@@ -34,7 +34,11 @@
 
   onMount(() => {
     // Fetch initial items.
-    fetchItems("").then((data) => (items = data));
+    fetchItems("")
+      .then((data) => {
+        items = data;
+      })
+      .catch(() => {});
 
     return () => {
       clearTimeout(timeoutId);
