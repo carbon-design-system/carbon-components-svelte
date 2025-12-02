@@ -65,7 +65,7 @@
     "sveld": "^0.24.8",
     "svelte": "^4.2.20",
     "svelte-check": "^4.2.1",
-    "vitest": "^4.0.14"
+    "vitest": "^4.0.15"
   },
   "standard-version": {
     "skip": {
