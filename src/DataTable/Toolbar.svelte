@@ -16,6 +16,11 @@
   const overflowVisible = writable(false);
 
   /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const batchActionsActive = writable(false);
+
+  /**
    * @type {(visible: boolean) => void}
    */
   const setOverflowVisible = (visible) => {
@@ -26,6 +31,7 @@
   setContext("Toolbar", {
     overflowVisible,
     setOverflowVisible,
+    batchActionsActive,
   });
 </script>
 

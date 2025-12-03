@@ -4,6 +4,7 @@ import type { SvelteHTMLElements } from "svelte/elements";
 export type ToolbarContext = {
   overflowVisible: import("svelte/store").Writable<boolean>;
   setOverflowVisible: (visible: boolean) => void;
+  batchActionsActive: import("svelte/store").Writable<boolean>;
 };
 
 type $RestProps = SvelteHTMLElements["section"];
