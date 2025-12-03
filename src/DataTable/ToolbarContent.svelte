@@ -1,18 +1,17 @@
 <script>
   import { getContext } from "svelte";
 
-  const ctx = getContext("DataTable") ?? {};
+  const ctx = getContext("Toolbar") ?? {};
 
-  let batchSelectedIds = [];
+  let batchActionsActive = false;
 
-  if (ctx?.batchSelectedIds) {
-    ctx.batchSelectedIds.subscribe((value) => {
-      batchSelectedIds = value;
+  if (ctx?.batchActionsActive) {
+    ctx.batchActionsActive.subscribe((value) => {
+      batchActionsActive = value;
     });
   }
 
-  $: hasBatchSelection = batchSelectedIds.length > 0;
-  $: inertProps = hasBatchSelection ? { inert: true } : {};
+  $: inertProps = batchActionsActive ? { inert: true } : {};
 </script>
 
 <div class:bx--toolbar-content={true} {...inertProps}>

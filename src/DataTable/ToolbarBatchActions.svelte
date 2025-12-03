@@ -82,6 +82,10 @@
     });
   }
 
+  $: if (ctxToolbar?.batchActionsActive) {
+    ctxToolbar.batchActionsActive.set(showActions);
+  }
+
   onMount(() => {
     return () => {
       unsubscribe?.();
