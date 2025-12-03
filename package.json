@@ -33,6 +33,8 @@
     "test": "vitest",
     "test:src-types": "tsgo",
     "test:types": "svelte-check --workspace tests --fail-on-warnings",
+    "test:svelte3": "cd tests-svelte3 && bunx vitest",
+    "test:types:svelte3": "cd tests-svelte3 && bun run test:types",
     "test:svelte5": "cd tests-svelte5 && bunx vitest",
     "test:types:svelte5": "cd tests-svelte5 && bun run test:types",
     "lint": "biome check --write .",
