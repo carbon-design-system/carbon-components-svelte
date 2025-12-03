@@ -18145,6 +18145,12 @@
               "type": "(visible: boolean) => void",
               "description": "",
               "optional": false
+            },
+            {
+              "name": "batchActionsActive",
+              "type": "import(\"svelte/store\").Writable<boolean>",
+              "description": "",
+              "optional": false
             }
           ]
         }
