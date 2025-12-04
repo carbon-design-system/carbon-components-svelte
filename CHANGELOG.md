@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.93.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.93.1...v0.93.2) (2025-12-04)
+
+### Bug Fixes
+
+- **toolbar:** omit `inert` when batch actions are not present ([2dc3156](https://github.com/carbon-design-system/carbon-components-svelte/commit/2dc3156e699dd8a13c2ef4e086e6e13c2e2dd175)), closes [#2404](https://github.com/carbon-design-system/carbon-components-svelte/issues/2404)
+
 ### [0.93.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.93.0...v0.93.1) (2025-11-30)
 
 ### Bug Fixes
