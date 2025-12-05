@@ -3,5 +3,5 @@
 </script>
 
 <FileUploaderButton labelText="Default label">
-  <span slot="labelText">Custom label content</span>
+  <span slot="labelChildren">Custom label content</span>
 </FileUploaderButton>
