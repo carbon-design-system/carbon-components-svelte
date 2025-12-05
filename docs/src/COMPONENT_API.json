@@ -18395,7 +18395,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
