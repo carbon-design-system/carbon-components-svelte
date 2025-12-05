@@ -82,14 +82,14 @@
   class:bx--date-picker-container={true}
   class:bx--date-picker--nolabel={!labelText}
 >
-  {#if labelText || $$slots.labelText}
+  {#if labelText || $$slots.labelChildren}
     <label
       for={id}
       class:bx--label={true}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
     >
-      <slot name="labelText">
+      <slot name="labelChildren">
         {labelText}
       </slot>
     </label>
