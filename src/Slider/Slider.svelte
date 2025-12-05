@@ -58,7 +58,7 @@
    * @example
    * ```svelte
    * <Slider>
-   *   <span slot="labelText">Custom Label</span>
+   *   <span slot="labelChildren">Custom Label</span>
    * </Slider>
    * ```
    */
@@ -168,7 +168,7 @@
     class:bx--label--disabled={disabled}
     class:bx--visually-hidden={hideLabel}
   >
-    <slot name="labelText">
+    <slot name="labelChildren">
       {labelText}
     </slot>
   </label>
