@@ -694,10 +694,10 @@ export type ComboBoxItem = {
 
 ### Slots
 
-| Slot name | Default | Props                                       | Fallback                          |
-| :-------- | :------ | :------------------------------------------ | :-------------------------------- |
-| --        | Yes     | <code>{ item: Item; index: number } </code> | <code>{itemToString(item)}</code> |
-| labelText | No      | <code>Record<string, never> </code>         | <code>{labelText}</code>          |
+| Slot name     | Default | Props                                       | Fallback                          |
+| :------------ | :------ | :------------------------------------------ | :-------------------------------- |
+| --            | Yes     | <code>{ item: Item; index: number } </code> | <code>{itemToString(item)}</code> |
+| labelChildren | No      | <code>Record<string, never> </code>         | <code>{labelText}</code>          |
 
 ### Events
 
