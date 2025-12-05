@@ -3,5 +3,5 @@
 </script>
 
 <Checkbox data-testid="checkbox-slot">
-  <span slot="labelText" data-testid="custom-label">Custom label content</span>
+  <span slot="labelChildren" data-testid="custom-label">Custom label content</span>
 </Checkbox>
