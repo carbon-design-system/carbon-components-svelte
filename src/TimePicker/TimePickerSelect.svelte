@@ -52,9 +52,9 @@
   on:mouseenter
   on:mouseleave
 >
-  {#if labelText || $$slots.labelText}
+  {#if labelText || $$slots.labelChildren}
     <label for={id} class:bx--label={true} class:bx--visually-hidden={true}>
-      <slot name="labelText">
+      <slot name="labelChildren">
         {labelText}
       </slot>
     </label>
