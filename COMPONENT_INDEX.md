@@ -2580,9 +2580,9 @@ export type NumberInputTranslationId = "increment" | "decrement";
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
