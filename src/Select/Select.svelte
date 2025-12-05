@@ -143,14 +143,14 @@
     class:bx--select--disabled={disabled}
     class:bx--select--warning={warn}
   >
-    {#if !noLabel && (labelText || $$slots.labelText)}
+    {#if !noLabel && (labelText || $$slots.labelChildren)}
       <label
         for={id}
         class:bx--label={true}
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
       >
-        <slot name="labelText">
+        <slot name="labelChildren">
           {labelText}
         </slot>
       </label>

@@ -132,5 +132,5 @@ export default class Select<
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  { labelText: Record<string, never>; default: Record<string, never> }
+  { labelChildren: Record<string, never>; default: Record<string, never> }
 > {}

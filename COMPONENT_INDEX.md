@@ -3285,10 +3285,10 @@ export type SelectValue = string | number;
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
-| --        | Yes     | <code>Record<string, never> </code> | --                       |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --            | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
