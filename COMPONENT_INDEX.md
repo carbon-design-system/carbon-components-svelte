@@ -4438,10 +4438,10 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
-| --        | Yes     | <code>Record<string, never> </code> | --                       |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --            | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
