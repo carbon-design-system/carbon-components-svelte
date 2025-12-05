@@ -46,7 +46,7 @@
       console.log("input", e.detail);
     }}
   >
-    <span slot="labelText">Slot Label</span>
+    <span slot="labelChildren">Slot Label</span>
   </Slider>
 {:else}
   <Slider
