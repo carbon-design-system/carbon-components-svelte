@@ -77,7 +77,7 @@
     class:bx--progress-bar__label={true}
     class:bx--visually-hidden={hideLabel}
   >
-    <slot name="labelText">
+    <slot name="labelChildren">
       {labelText}
     </slot>
     {#if status === "error" || status === "finished"}
