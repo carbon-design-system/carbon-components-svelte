@@ -164,7 +164,7 @@ export default class NumberInput extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
     paste: WindowEventMap["paste"];
   },
-  { labelText: Record<string, never> }
+  { labelChildren: Record<string, never> }
 > {
   /**
    * Default translation ids.
