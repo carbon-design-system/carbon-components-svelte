@@ -106,7 +106,7 @@ export default class TreeView<
         selected: boolean;
       };
     };
-    labelText: Record<string, never>;
+    labelChildren: Record<string, never>;
   }
 > {
   /**
