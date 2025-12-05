@@ -63,7 +63,7 @@
 <Toggle class="custom-class" labelText="Custom class toggle" />
 
 <Toggle labelText="Slots toggle">
-  <span slot="labelText">Label slot</span>
+  <span slot="labelChildren">Label slot</span>
   <span slot="labelA">Off slot</span>
   <span slot="labelB">On slot</span>
 </Toggle>

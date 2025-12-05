@@ -85,6 +85,6 @@ export default class Toggle extends SvelteComponentTyped<
   {
     labelA: Record<string, never>;
     labelB: Record<string, never>;
-    labelText: Record<string, never>;
+    labelChildren: Record<string, never>;
   }
 > {}

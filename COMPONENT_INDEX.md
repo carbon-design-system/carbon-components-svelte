@@ -4545,11 +4545,11 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelA    | No      | <code>Record<string, never> </code> | <code>{labelA}</code>    |
-| labelB    | No      | <code>Record<string, never> </code> | <code>{labelB}</code>    |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelA        | No      | <code>Record<string, never> </code> | <code>{labelA}</code>    |
+| labelB        | No      | <code>Record<string, never> </code> | <code>{labelB}</code>    |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
