@@ -7,7 +7,7 @@
 </script>
 
 <TimePicker labelText="Custom label">
-  <span slot="labelText">Custom Label Text</span>
+  <span slot="labelChildren">Custom Label Text</span>
   <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
