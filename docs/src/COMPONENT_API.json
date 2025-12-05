@@ -2187,7 +2187,7 @@
           "slot_props": "{\n  item: Item;\n  index: number;\n}"
         },
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
