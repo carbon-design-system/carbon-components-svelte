@@ -19515,7 +19515,7 @@
           "slot_props": "{\n  node: {\n    id: TreeNodeId;\n    text: string;\n    expanded: boolean;\n    leaf: boolean;\n    disabled: boolean;\n    selected: boolean;\n  };\n}"
         },
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
