@@ -84,7 +84,7 @@
   on:mouseleave
   class:bx--form-item={true}
 >
-  {#if labelText || $$slots.labelText}
+  {#if labelText || $$slots.labelChildren}
     <div class:bx--text-area__label-wrapper={true}>
       <label
         for={id}
@@ -92,7 +92,7 @@
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
       >
-        <slot name="labelText">
+        <slot name="labelChildren">
           {labelText}
         </slot>
       </label>
