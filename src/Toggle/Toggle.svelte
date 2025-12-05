@@ -87,7 +87,7 @@
     class:bx--toggle-input__label={true}
   >
     <span class:bx--visually-hidden={hideLabel}>
-      <slot name="labelText">
+      <slot name="labelChildren">
         {labelText}
       </slot>
     </span>

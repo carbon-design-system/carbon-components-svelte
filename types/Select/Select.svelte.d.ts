@@ -125,12 +125,11 @@ export default class Select<
 > extends SvelteComponentTyped<
   SelectProps<Value>,
   {
-    /** The selected value. */
-    update: CustomEvent<Value>;
+    /** The selected value. */ update: CustomEvent<Value>;
     change: WindowEventMap["change"];
     input: WindowEventMap["input"];
     focus: WindowEventMap["focus"];
     blur: WindowEventMap["blur"];
   },
-  { labelText: Record<string, never>; default: Record<string, never> }
+  { labelChildren: Record<string, never>; default: Record<string, never> }
 > {}

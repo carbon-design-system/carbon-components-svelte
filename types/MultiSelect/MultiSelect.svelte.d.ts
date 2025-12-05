@@ -263,5 +263,8 @@ export default class MultiSelect<
     focus: WindowEventMap["focus"];
     paste: WindowEventMap["paste"];
   },
-  { default: { item: Item; index: number }; labelText: Record<string, never> }
+  {
+    default: { item: Item; index: number };
+    labelChildren: Record<string, never>;
+  }
 > {}

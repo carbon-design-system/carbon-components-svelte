@@ -3,5 +3,5 @@
 </script>
 
 <TextArea labelText="Custom label">
-  <span slot="labelText">Custom Label Text</span>
+  <span slot="labelChildren">Custom Label Text</span>
 </TextArea>

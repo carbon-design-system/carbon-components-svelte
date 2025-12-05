@@ -66,5 +66,5 @@ export type ProgressBarProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class ProgressBar extends SvelteComponentTyped<
   ProgressBarProps,
   Record<string, any>,
-  { labelText: Record<string, never> }
+  { labelChildren: Record<string, never> }
 > {}

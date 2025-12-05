@@ -76,5 +76,5 @@ export default class RadioButton extends SvelteComponentTyped<
     blur: WindowEventMap["blur"];
     change: WindowEventMap["change"];
   },
-  { labelText: Record<string, never> }
+  { labelChildren: Record<string, never> }
 > {}

@@ -271,14 +271,14 @@
     class:bx--number--sm={size === "sm"}
     class:bx--number--xl={size === "xl"}
   >
-    {#if $$slots.labelText || labelText}
+    {#if $$slots.labelChildren || labelText}
       <label
         for={id}
         class:bx--label={true}
         class:bx--label--disabled={disabled}
         class:bx--visually-hidden={hideLabel}
       >
-        <slot name="labelText">{labelText}</slot>
+        <slot name="labelChildren">{labelText}</slot>
       </label>
     {/if}
     <div

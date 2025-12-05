@@ -118,7 +118,7 @@
       class:bx--label--inline--sm={inline && size === "sm"}
       class:bx--label--inline--xl={inline && size === "xl"}
     >
-      <slot name="labelText">
+      <slot name="labelChildren">
         {labelText}
       </slot>
     </label>
@@ -133,7 +133,7 @@
       </div>
     {/if}
   {/if}
-  {#if !inline && (labelText || $$slots.labelText)}
+  {#if !inline && (labelText || $$slots.labelChildren)}
     <label
       for={id}
       class:bx--label={true}
@@ -143,7 +143,7 @@
       class:bx--label--inline--sm={inline && size === "sm"}
       class:bx--label--inline--xl={inline && size === "xl"}
     >
-      <slot name="labelText">
+      <slot name="labelChildren">
         {labelText}
       </slot>
     </label>

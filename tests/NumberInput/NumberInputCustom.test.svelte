@@ -3,5 +3,5 @@
 </script>
 
 <NumberInput labelText="Custom label" value={0}>
-  <span slot="labelText">Custom Label Text</span>
+  <span slot="labelChildren">Custom Label Text</span>
 </NumberInput>

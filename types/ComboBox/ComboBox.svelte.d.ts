@@ -202,7 +202,10 @@ export default class ComboBox<
     paste: WindowEventMap["paste"];
     scroll: WindowEventMap["scroll"];
   },
-  { default: { item: Item; index: number }; labelText: Record<string, never> }
+  {
+    default: { item: Item; index: number };
+    labelChildren: Record<string, never>;
+  }
 > {
   /**
    * Clear the combo box programmatically

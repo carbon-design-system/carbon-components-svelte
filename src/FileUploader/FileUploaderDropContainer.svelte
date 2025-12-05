@@ -102,7 +102,7 @@
       class:bx--file__drop-container={true}
       class:bx--file__drop-container--drag-over={over}
     >
-      <slot name="labelText">
+      <slot name="labelChildren">
         {labelText}
       </slot>
     </div>

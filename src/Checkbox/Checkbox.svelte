@@ -134,7 +134,7 @@
         class:bx--checkbox-label-text={true}
         class:bx--visually-hidden={hideLabel}
       >
-        <slot name="labelText">
+        <slot name="labelChildren">
           {labelText}
         </slot>
       </span>

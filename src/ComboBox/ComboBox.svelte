@@ -312,14 +312,14 @@
 />
 
 <div class:bx--list-box__wrapper={true}>
-  {#if labelText || $$slots.labelText}
+  {#if labelText || $$slots.labelChildren}
     <label
       for={id}
       class:bx--label={true}
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
     >
-      <slot name="labelText">
+      <slot name="labelChildren">
         {labelText}
       </slot>
     </label>

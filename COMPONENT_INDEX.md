@@ -479,9 +479,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -694,10 +694,10 @@ export type ComboBoxItem = {
 
 ### Slots
 
-| Slot name | Default | Props                                       | Fallback                          |
-| :-------- | :------ | :------------------------------------------ | :-------------------------------- |
-| --        | Yes     | <code>{ item: Item; index: number } </code> | <code>{itemToString(item)}</code> |
-| labelText | No      | <code>Record<string, never> </code>         | <code>{labelText}</code>          |
+| Slot name     | Default | Props                                       | Fallback                          |
+| :------------ | :------ | :------------------------------------------ | :-------------------------------- |
+| --            | Yes     | <code>{ item: Item; index: number } </code> | <code>{itemToString(item)}</code> |
+| labelChildren | No      | <code>Record<string, never> </code>         | <code>{labelText}</code>          |
 
 ### Events
 
@@ -855,27 +855,27 @@ None.
 
 ### Props
 
-| Prop name    | Required | Kind             | Reactive | Type                                   | Default value                                    | Description                                                                                                                                                                                                                              |
-| :----------- | :------- | :--------------- | :------- | -------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ref          | No       | <code>let</code> | Yes      | <code>null &#124; HTMLLIElement</code> | <code>null</code>                                | Obtain a reference to the list item HTML element                                                                                                                                                                                         |
-| selectable   | No       | <code>let</code> | Yes      | <code>boolean</code>                   | <code>false</code>                               | Set to `true` to enable the selectable variant.<br />Automatically set to `true` if `selected` is `true`.                                                                                                                                |
-| selected     | No       | <code>let</code> | Yes      | <code>boolean</code>                   | <code>false</code>                               | Set to `true` to use the selected variant                                                                                                                                                                                                |
-| icon         | No       | <code>let</code> | Yes      | <code>any</code>                       | <code>undefined</code>                           | Specify the icon to render.<br />Icon is rendered to the left of the label text.                                                                                                                                                         |
-| indented     | No       | <code>let</code> | Yes      | <code>boolean</code>                   | <code>false</code>                               | Set to `true` to indent the label                                                                                                                                                                                                        |
-| kind         | No       | <code>let</code> | No       | <code>"default" &#124; "danger"</code> | <code>"default"</code>                           | Specify the kind of option.                                                                                                                                                                                                              |
-| disabled     | No       | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>                               | Set to `true` to enable the disabled state                                                                                                                                                                                               |
-| labelText    | No       | <code>let</code> | No       | <code>string</code>                    | <code>""</code>                                  | Specify the label text.<br />Alternatively, use the "labelText" slot.<br />@example <br />`svelte<br />&lt;ContextMenuOption&gt;<br />  &lt;span slot="labelText"&gt;Custom Label&lt;/span&gt;<br />&lt;/ContextMenuOption&gt;<br />`    |
-| shortcutText | No       | <code>let</code> | No       | <code>string</code>                    | <code>""</code>                                  | Specify the shortcut text.<br />Alternatively, use the "shortcutText" slot.<br />@example <br />`svelte<br />&lt;ContextMenuOption&gt;<br />  &lt;span slot="shortcutText"&gt;Ctrl+K&lt;/span&gt;<br />&lt;/ContextMenuOption&gt;<br />` |
-| id           | No       | <code>let</code> | No       | <code>string</code>                    | <code>"ccs-" + Math.random().toString(36)</code> | Specify the id.<br />It's recommended to provide an id as a value to bind to within a selectable/radio menu group.                                                                                                                       |
+| Prop name    | Required | Kind             | Reactive | Type                                   | Default value                                    | Description                                                                                                                                                                                                                                   |
+| :----------- | :------- | :--------------- | :------- | -------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ref          | No       | <code>let</code> | Yes      | <code>null &#124; HTMLLIElement</code> | <code>null</code>                                | Obtain a reference to the list item HTML element                                                                                                                                                                                              |
+| selectable   | No       | <code>let</code> | Yes      | <code>boolean</code>                   | <code>false</code>                               | Set to `true` to enable the selectable variant.<br />Automatically set to `true` if `selected` is `true`.                                                                                                                                     |
+| selected     | No       | <code>let</code> | Yes      | <code>boolean</code>                   | <code>false</code>                               | Set to `true` to use the selected variant                                                                                                                                                                                                     |
+| icon         | No       | <code>let</code> | Yes      | <code>any</code>                       | <code>undefined</code>                           | Specify the icon to render.<br />Icon is rendered to the left of the label text.                                                                                                                                                              |
+| indented     | No       | <code>let</code> | Yes      | <code>boolean</code>                   | <code>false</code>                               | Set to `true` to indent the label                                                                                                                                                                                                             |
+| kind         | No       | <code>let</code> | No       | <code>"default" &#124; "danger"</code> | <code>"default"</code>                           | Specify the kind of option.                                                                                                                                                                                                                   |
+| disabled     | No       | <code>let</code> | No       | <code>boolean</code>                   | <code>false</code>                               | Set to `true` to enable the disabled state                                                                                                                                                                                                    |
+| labelText    | No       | <code>let</code> | No       | <code>string</code>                    | <code>""</code>                                  | Specify the label text.<br />Alternatively, use the "labelChildren" slot.<br />@example <br />`svelte<br />&lt;ContextMenuOption&gt;<br />  &lt;span slot="labelChildren"&gt;Custom Label&lt;/span&gt;<br />&lt;/ContextMenuOption&gt;<br />` |
+| shortcutText | No       | <code>let</code> | No       | <code>string</code>                    | <code>""</code>                                  | Specify the shortcut text.<br />Alternatively, use the "shortcutText" slot.<br />@example <br />`svelte<br />&lt;ContextMenuOption&gt;<br />  &lt;span slot="shortcutText"&gt;Ctrl+K&lt;/span&gt;<br />&lt;/ContextMenuOption&gt;<br />`      |
+| id           | No       | <code>let</code> | No       | <code>string</code>                    | <code>"ccs-" + Math.random().toString(36)</code> | Specify the id.<br />It's recommended to provide an id as a value to bind to within a selectable/radio menu group.                                                                                                                            |
 
 ### Slots
 
-| Slot name    | Default | Props                               | Fallback                                            |
-| :----------- | :------ | :---------------------------------- | :-------------------------------------------------- |
-| icon         | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
-| labelText    | No      | <code>Record<string, never> </code> | <code>{labelText}</code>                            |
-| --           | Yes     | <code>Record<string, never> </code> | --                                                  |
-| shortcutText | No      | <code>Record<string, never> </code> | <code>{shortcutText}</code>                         |
+| Slot name     | Default | Props                               | Fallback                                            |
+| :------------ | :------ | :---------------------------------- | :-------------------------------------------------- |
+| icon          | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code>                            |
+| --            | Yes     | <code>Record<string, never> </code> | --                                                  |
+| shortcutText  | No      | <code>Record<string, never> </code> | <code>{shortcutText}</code>                         |
 
 ### Events
 
@@ -1119,9 +1119,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -1325,9 +1325,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -1357,9 +1357,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -2414,10 +2414,10 @@ export type MultiSelectItem = {
 
 ### Slots
 
-| Slot name | Default | Props                                       | Fallback                          |
-| :-------- | :------ | :------------------------------------------ | :-------------------------------- |
-| --        | Yes     | <code>{ item: Item; index: number } </code> | <code>{itemToString(item)}</code> |
-| labelText | No      | <code>Record<string, never> </code>         | <code>{labelText}</code>          |
+| Slot name     | Default | Props                                       | Fallback                          |
+| :------------ | :------ | :------------------------------------------ | :-------------------------------- |
+| --            | Yes     | <code>{ item: Item; index: number } </code> | <code>{itemToString(item)}</code> |
+| labelChildren | No      | <code>Record<string, never> </code>         | <code>{labelText}</code>          |
 
 ### Events
 
@@ -2580,9 +2580,9 @@ export type NumberInputTranslationId = "increment" | "decrement";
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -2845,9 +2845,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -2927,9 +2927,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -3034,9 +3034,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -3209,9 +3209,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -3285,10 +3285,10 @@ export type SelectValue = string | number;
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
-| --        | Yes     | <code>Record<string, never> </code> | --                       |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --            | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
@@ -3616,33 +3616,33 @@ None.
 
 ### Props
 
-| Prop name      | Required | Kind             | Reactive | Type                                    | Default value                                    | Description                                                                                                                                                                                                     |
-| :------------- | :------- | :--------------- | :------- | --------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ref            | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code> | <code>null</code>                                | Obtain a reference to the HTML element                                                                                                                                                                          |
-| value          | No       | <code>let</code> | Yes      | <code>number</code>                     | <code>0</code>                                   | Specify the value of the slider                                                                                                                                                                                 |
-| max            | No       | <code>let</code> | No       | <code>number</code>                     | <code>100</code>                                 | Set the maximum slider value                                                                                                                                                                                    |
-| maxLabel       | No       | <code>let</code> | No       | <code>string</code>                     | <code>""</code>                                  | Specify the label for the max value                                                                                                                                                                             |
-| min            | No       | <code>let</code> | No       | <code>number</code>                     | <code>0</code>                                   | Set the minimum slider value                                                                                                                                                                                    |
-| minLabel       | No       | <code>let</code> | No       | <code>string</code>                     | <code>""</code>                                  | Specify the label for the min value                                                                                                                                                                             |
-| step           | No       | <code>let</code> | No       | <code>number</code>                     | <code>1</code>                                   | Set the step value                                                                                                                                                                                              |
-| stepMultiplier | No       | <code>let</code> | No       | <code>number</code>                     | <code>4</code>                                   | Set the step multiplier value                                                                                                                                                                                   |
-| required       | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to require a value                                                                                                                                                                                |
-| inputType      | No       | <code>let</code> | No       | <code>string</code>                     | <code>"number"</code>                            | Specify the input type                                                                                                                                                                                          |
-| disabled       | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to disable the slider                                                                                                                                                                             |
-| light          | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to enable the light variant                                                                                                                                                                       |
-| hideTextInput  | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to hide the text input                                                                                                                                                                            |
-| fullWidth      | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` for the slider to span<br />the full width of its containing element.                                                                                                                             |
-| id             | No       | <code>let</code> | No       | <code>string</code>                     | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the slider div element                                                                                                                                                                            |
-| invalid        | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to indicate an invalid state                                                                                                                                                                      |
-| labelText      | No       | <code>let</code> | No       | <code>string</code>                     | <code>""</code>                                  | Specify the label text.<br />Alternatively, use the "labelText" slot.<br />@example <br />`svelte<br />&lt;Slider&gt;<br />  &lt;span slot="labelText"&gt;Custom Label&lt;/span&gt;<br />&lt;/Slider&gt;<br />` |
-| hideLabel      | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to visually hide the label text                                                                                                                                                                   |
-| name           | No       | <code>let</code> | No       | <code>string</code>                     | <code>""</code>                                  | Set a name for the slider element                                                                                                                                                                               |
+| Prop name      | Required | Kind             | Reactive | Type                                    | Default value                                    | Description                                                                                                                                                                                                             |
+| :------------- | :------- | :--------------- | :------- | --------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ref            | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code> | <code>null</code>                                | Obtain a reference to the HTML element                                                                                                                                                                                  |
+| value          | No       | <code>let</code> | Yes      | <code>number</code>                     | <code>0</code>                                   | Specify the value of the slider                                                                                                                                                                                         |
+| max            | No       | <code>let</code> | No       | <code>number</code>                     | <code>100</code>                                 | Set the maximum slider value                                                                                                                                                                                            |
+| maxLabel       | No       | <code>let</code> | No       | <code>string</code>                     | <code>""</code>                                  | Specify the label for the max value                                                                                                                                                                                     |
+| min            | No       | <code>let</code> | No       | <code>number</code>                     | <code>0</code>                                   | Set the minimum slider value                                                                                                                                                                                            |
+| minLabel       | No       | <code>let</code> | No       | <code>string</code>                     | <code>""</code>                                  | Specify the label for the min value                                                                                                                                                                                     |
+| step           | No       | <code>let</code> | No       | <code>number</code>                     | <code>1</code>                                   | Set the step value                                                                                                                                                                                                      |
+| stepMultiplier | No       | <code>let</code> | No       | <code>number</code>                     | <code>4</code>                                   | Set the step multiplier value                                                                                                                                                                                           |
+| required       | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to require a value                                                                                                                                                                                        |
+| inputType      | No       | <code>let</code> | No       | <code>string</code>                     | <code>"number"</code>                            | Specify the input type                                                                                                                                                                                                  |
+| disabled       | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to disable the slider                                                                                                                                                                                     |
+| light          | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to enable the light variant                                                                                                                                                                               |
+| hideTextInput  | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to hide the text input                                                                                                                                                                                    |
+| fullWidth      | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` for the slider to span<br />the full width of its containing element.                                                                                                                                     |
+| id             | No       | <code>let</code> | No       | <code>string</code>                     | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the slider div element                                                                                                                                                                                    |
+| invalid        | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to indicate an invalid state                                                                                                                                                                              |
+| labelText      | No       | <code>let</code> | No       | <code>string</code>                     | <code>""</code>                                  | Specify the label text.<br />Alternatively, use the "labelChildren" slot.<br />@example <br />`svelte<br />&lt;Slider&gt;<br />  &lt;span slot="labelChildren"&gt;Custom Label&lt;/span&gt;<br />&lt;/Slider&gt;<br />` |
+| hideLabel      | No       | <code>let</code> | No       | <code>boolean</code>                    | <code>false</code>                               | Set to `true` to visually hide the label text                                                                                                                                                                           |
+| name           | No       | <code>let</code> | No       | <code>string</code>                     | <code>""</code>                                  | Set a name for the slider element                                                                                                                                                                                       |
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -4227,9 +4227,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -4295,9 +4295,9 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -4438,10 +4438,10 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
-| --        | Yes     | <code>Record<string, never> </code> | --                       |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --            | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
@@ -4475,10 +4475,10 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
-| --        | Yes     | <code>Record<string, never> </code> | --                       |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --            | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
@@ -4545,11 +4545,11 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelA    | No      | <code>Record<string, never> </code> | <code>{labelA}</code>    |
-| labelB    | No      | <code>Record<string, never> </code> | <code>{labelB}</code>    |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelA        | No      | <code>Record<string, never> </code> | <code>{labelA}</code>    |
+| labelB        | No      | <code>Record<string, never> </code> | <code>{labelB}</code>    |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -4577,9 +4577,9 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                 |
-| :-------- | :------ | :---------------------------------- | :----------------------- |
-| labelText | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -4874,10 +4874,10 @@ export type ShowNodeOptions = {
 
 ### Slots
 
-| Slot name | Default | Props                                                                                                                             | Fallback                 |
-| :-------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------- | :----------------------- |
-| --        | Yes     | <code>{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } } </code> | <code>{node.text}</code> |
-| labelText | No      | <code>Record<string, never> </code>                                                                                               | <code>{labelText}</code> |
+| Slot name     | Default | Props                                                                                                                             | Fallback                 |
+| :------------ | :------ | :-------------------------------------------------------------------------------------------------------------------------------- | :----------------------- |
+| --            | Yes     | <code>{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } } </code> | <code>{node.text}</code> |
+| labelChildren | No      | <code>Record<string, never> </code>                                                                                               | <code>{labelText}</code> |
 
 ### Events
 

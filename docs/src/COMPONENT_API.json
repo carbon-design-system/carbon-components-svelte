@@ -1146,7 +1146,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -2187,7 +2187,7 @@
           "slot_props": "{\n  item: Item;\n  index: number;\n}"
         },
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -2860,7 +2860,7 @@
         {
           "name": "labelText",
           "kind": "let",
-          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot.\n@example \n```svelte\n<ContextMenuOption>\n  <span slot=\"labelText\">Custom Label</span>\n</ContextMenuOption>\n```",
+          "description": "Specify the label text.\nAlternatively, use the \"labelChildren\" slot.\n@example \n```svelte\n<ContextMenuOption>\n  <span slot=\"labelChildren\">Custom Label</span>\n</ContextMenuOption>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -2939,7 +2939,7 @@
           "slot_props": "Record<string, never>"
         },
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -4210,7 +4210,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -5210,7 +5210,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -5380,7 +5380,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -9490,7 +9490,7 @@
           "slot_props": "{\n  item: Item;\n  index: number;\n}"
         },
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -10180,7 +10180,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -11467,7 +11467,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -11800,7 +11800,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -12282,7 +12282,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -13074,7 +13074,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -13421,7 +13421,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -14713,7 +14713,7 @@
         {
           "name": "labelText",
           "kind": "let",
-          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot.\n@example \n```svelte\n<Slider>\n  <span slot=\"labelText\">Custom Label</span>\n</Slider>\n```",
+          "description": "Specify the label text.\nAlternatively, use the \"labelChildren\" slot.\n@example \n```svelte\n<Slider>\n  <span slot=\"labelChildren\">Custom Label</span>\n</Slider>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -14762,7 +14762,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -16781,7 +16781,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -17125,7 +17125,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -17730,7 +17730,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -17898,7 +17898,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -18290,7 +18290,7 @@
           "slot_props": "Record<string, never>"
         },
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -18395,7 +18395,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
@@ -19515,7 +19515,7 @@
           "slot_props": "{\n  node: {\n    id: TreeNodeId;\n    text: string;\n    expanded: boolean;\n    leaf: boolean;\n    disabled: boolean;\n    selected: boolean;\n  };\n}"
         },
         {
-          "name": "labelText",
+          "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
           "slot_props": "Record<string, never>"

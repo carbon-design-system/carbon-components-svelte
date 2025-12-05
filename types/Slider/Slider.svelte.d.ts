@@ -97,11 +97,11 @@ type $Props = {
 
   /**
    * Specify the label text.
-   * Alternatively, use the "labelText" slot.
+   * Alternatively, use the "labelChildren" slot.
    * @example
    * ```svelte
    * <Slider>
-   *   <span slot="labelText">Custom Label</span>
+   *   <span slot="labelChildren">Custom Label</span>
    * </Slider>
    * ```
    * @default ""
@@ -141,5 +141,5 @@ export default class Slider extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { labelText: Record<string, never> }
+  { labelChildren: Record<string, never> }
 > {}

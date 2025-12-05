@@ -339,7 +339,7 @@
 {#if !hideLabel}
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <label id={labelId} class:bx--label={true}>
-    <slot name="labelText">{labelText}</slot>
+    <slot name="labelChildren">{labelText}</slot>
   </label>
 {/if}
 

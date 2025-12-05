@@ -92,7 +92,7 @@
   class:bx--btn--xl={size === "xl"}
   on:keydown
 >
-  <slot name="labelText">
+  <slot name="labelChildren">
     {labelText}
   </slot>
 </button>
