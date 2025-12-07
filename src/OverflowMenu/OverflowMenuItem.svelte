@@ -6,6 +6,12 @@
   /**
    * Specify the item text.
    * Alternatively, use the default slot.
+   * @example
+   * ```svelte
+   * <OverflowMenuItem>
+   *   <span>Custom Text</span>
+   * </OverflowMenuItem>
+   * ```
    */
   export let text = "Provide text";
 

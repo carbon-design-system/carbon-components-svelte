@@ -10678,7 +10678,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the item text.\nAlternatively, use the default slot.",
+          "description": "Specify the item text.\nAlternatively, use the default slot.\n@example \n```svelte\n<OverflowMenuItem>\n  <span>Custom Text</span>\n</OverflowMenuItem>\n```",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
