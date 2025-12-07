@@ -15416,7 +15416,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the switch text.\nAlternatively, use the \"text\" slot.\n@example \n```svelte\n<Switch>\n  <span slot=\"text\">Custom Text</span>\n</Switch>\n```",
+          "description": "Specify the switch text.\nAlternatively, use the default slot.\n@example \n```svelte\n<Switch>\n  <span>Custom Text</span>\n</Switch>\n```",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
