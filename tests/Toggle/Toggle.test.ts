@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import Toggle from "./Toggle.test.svelte";
+import ToggleSkeletonSlot from "./ToggleSkeleton.slot.test.svelte";
 
 describe("Toggle", () => {
   const getToggle = (label: string) =>
@@ -276,5 +277,12 @@ describe("Toggle", () => {
     expect(component.ref).toBeInstanceOf(HTMLInputElement);
     assert(component.ref);
     expect(component.ref.type).toBe("checkbox");
+  });
+
+  it("supports custom label slot for ToggleSkeleton", () => {
+    render(ToggleSkeletonSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

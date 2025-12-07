@@ -3,6 +3,7 @@ import { user } from "../setup-tests";
 import SelectFalsy from "./Select.falsy.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
 import SelectSkeleton from "./Select.skeleton.test.svelte";
+import SelectSlot from "./Select.slot.test.svelte";
 import Select from "./Select.test.svelte";
 
 describe("Select", () => {
@@ -308,5 +309,12 @@ describe("Select Generics", () => {
 
     type SelectedPropType = UnionValue | undefined;
     expectTypeOf<SelectedPropType>().toEqualTypeOf<UnionValue | undefined>();
+  });
+
+  it("supports custom label slot", () => {
+    render(SelectSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

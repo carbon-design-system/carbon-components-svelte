@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import TimePicker from "./TimePicker.test.svelte";
 import TimePickerCustom from "./TimePickerCustom.test.svelte";
+import TimePickerSelectSlot from "./TimePickerSelect.slot.test.svelte";
 
 describe("TimePicker", () => {
   it("should render with default props", () => {
@@ -179,5 +180,12 @@ describe("TimePicker", () => {
     expect(selects).toHaveLength(2);
     expect(selects[0]).toHaveValue("pm");
     expect(selects[1]).toHaveValue("pdt");
+  });
+
+  it("supports custom label slot for TimePickerSelect", () => {
+    render(TimePickerSelectSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

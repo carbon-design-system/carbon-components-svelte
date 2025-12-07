@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import FileUploader from "./FileUploader.test.svelte";
+import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
+import FileUploaderDropContainerSlot from "./FileUploaderDropContainer.slot.test.svelte";
 
 describe("FileUploader", () => {
   beforeEach(() => {
@@ -179,5 +181,19 @@ describe("FileUploader", () => {
     expect(event.detail).toHaveLength(2);
     expect(event.detail[0].name).toBe("file1.txt");
     expect(event.detail[1].name).toBe("file2.txt");
+  });
+
+  it("supports custom label slot for FileUploaderButton", () => {
+    render(FileUploaderButtonSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
+  });
+
+  it("supports custom label slot for FileUploaderDropContainer", () => {
+    render(FileUploaderDropContainerSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import ProgressBarSlot from "./ProgressBar.slot.test.svelte";
 import ProgressBar from "./ProgressBar.test.svelte";
 
 describe("ProgressBar", () => {
@@ -81,5 +82,12 @@ describe("ProgressBar", () => {
       "progressbar",
     );
     expect(underZero).toHaveAttribute("aria-valuenow", "0");
+  });
+
+  it("supports custom label slot", () => {
+    render(ProgressBarSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

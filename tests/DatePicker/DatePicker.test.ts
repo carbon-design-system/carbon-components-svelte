@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DatePicker from "./DatePicker.test.svelte";
+import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
 
 describe("DatePicker", () => {
@@ -191,5 +192,12 @@ describe("DatePicker", () => {
 
     expect(inputStart).toHaveValue("");
     expect(inputEnd).toHaveValue("");
+  });
+
+  it("supports custom label slot for DatePickerInput", () => {
+    render(DatePickerInputSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });
