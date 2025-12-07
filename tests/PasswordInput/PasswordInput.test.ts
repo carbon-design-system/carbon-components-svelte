@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import PasswordInputSlot from "./PasswordInput.slot.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
 
 describe("PasswordInput", () => {
@@ -192,5 +193,12 @@ describe("PasswordInput", () => {
       await user.tab();
       expect(consoleLog).toHaveBeenCalledWith("blur");
     });
+  });
+
+  it("supports custom label slot", () => {
+    render(PasswordInputSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import ContextMenu from "./ContextMenu.test.svelte";
+import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
 
 describe("ContextMenu", () => {
   beforeEach(() => {
@@ -273,5 +274,12 @@ describe("ContextMenu", () => {
     const submenuX = Number.parseInt(submenu.style.left, 10);
     // Submenu should be positioned at or near 0 (left edge of viewport).
     expect(submenuX).toBeGreaterThanOrEqual(0);
+  });
+
+  it("supports custom label slot for ContextMenuOption", () => {
+    render(ContextMenuOptionSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

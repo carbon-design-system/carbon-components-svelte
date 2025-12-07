@@ -3,6 +3,7 @@ import type MultiSelectComponent from "carbon-components-svelte/MultiSelect/Mult
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../setup-tests";
+import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
@@ -941,5 +942,12 @@ describe("MultiSelect", () => {
         SelectEventDetail["unselected"][0]
       >().toEqualTypeOf<MultiSelectItem>();
     });
+  });
+
+  it("supports custom label slot", () => {
+    render(MultiSelectLabelSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

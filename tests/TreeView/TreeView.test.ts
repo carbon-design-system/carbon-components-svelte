@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type { ComponentType as SvelteComponentType } from "svelte";
 import { user } from "../setup-tests";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
+import TreeViewSlot from "./TreeView.slot.test.svelte";
 import TreeView from "./TreeView.test.svelte";
 
 const testCases = [
@@ -289,5 +290,12 @@ describe("TreeView Generics", () => {
     expectTypeOf(nodeWithIcon.icon).toEqualTypeOf<
       SvelteComponentType | undefined
     >();
+  });
+
+  it("supports custom label slot", () => {
+    render(TreeViewSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

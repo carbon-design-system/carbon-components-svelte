@@ -3,6 +3,7 @@ import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.s
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { isSvelte5, user } from "../setup-tests";
+import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
 import ComboBoxGenerics from "./ComboBoxGenerics.test.svelte";
@@ -983,5 +984,12 @@ describe("ComboBox", () => {
       expectTypeOf<SelectedItem>().toHaveProperty("id");
       expectTypeOf<SelectedItem>().toHaveProperty("text");
     });
+  });
+
+  it("supports custom label slot", () => {
+    render(ComboBoxSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });

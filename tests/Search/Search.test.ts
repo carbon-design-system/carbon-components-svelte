@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";
 import SearchSkeleton from "./SearchSkeleton.test.svelte";
@@ -78,5 +79,12 @@ describe("Search", () => {
 
     // Small (sm) skeleton
     expect(skeletons[2]).toHaveClass("bx--search--sm");
+  });
+
+  it("supports custom label slot", () => {
+    render(SearchSlot);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 });
