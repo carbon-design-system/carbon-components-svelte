@@ -6176,7 +6176,7 @@
           "reactive": false
         },
         {
-          "name": "company",
+          "name": "companyName",
           "kind": "let",
           "description": "Specify the company name.\n\nAlternatively, use the named slot \"company\".\n@example \n```svelte\n<Header>\n  <span slot=\"company\">IBM</span>\n</Header>\n```",
           "type": "string",
@@ -6277,7 +6277,7 @@
         {
           "name": "company",
           "default": false,
-          "fallback": "{company}&nbsp;",
+          "fallback": "{companyName}&nbsp;",
           "slot_props": "Record<string, never>"
         },
         {

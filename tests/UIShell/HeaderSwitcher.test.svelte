@@ -22,7 +22,7 @@
   let isOpen = false;
 </script>
 
-<Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
   <div slot="skip-to-content">
     <SkipToContent />
   </div>

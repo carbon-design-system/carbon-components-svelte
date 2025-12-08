@@ -14,7 +14,7 @@
   let isSideNavOpen = false;
 </script>
 
-<Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
   <svelte:fragment slot="skip-to-content">
     <SkipToContent />
   </svelte:fragment>

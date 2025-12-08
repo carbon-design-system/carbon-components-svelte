@@ -13,7 +13,7 @@
   import type { ComponentProps } from "svelte";
 
   export let headerHref: ComponentProps<Header>["href"] = undefined;
-  export let company: ComponentProps<Header>["company"] = undefined;
+  export let companyName: ComponentProps<Header>["companyName"] = undefined;
   export let platformName: ComponentProps<Header>["platformName"] = "";
   export let isSideNavOpen: ComponentProps<Header>["isSideNavOpen"] = false;
   export let persistentHamburgerMenu: ComponentProps<Header>["persistentHamburgerMenu"] = false;
@@ -52,7 +52,7 @@
 {:else}
   <Header
     href={headerHref}
-    {company}
+    {companyName}
     {platformName}
     bind:isSideNavOpen
     {persistentHamburgerMenu}
