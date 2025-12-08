@@ -1597,7 +1597,7 @@ None.
 | expandedByDefault       | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>true</code>      | Set to `false` to hide the side nav by default                                                                                                                                                                                                                               |
 | uiShellAriaLabel        | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code> | Specify the ARIA label for the header.                                                                                                                                                                                                                                       |
 | href                    | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code> | Specify the `href` attribute.                                                                                                                                                                                                                                                |
-| company                 | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code> | Specify the company name.<br /><br />Alternatively, use the named slot "company".<br />@example <br />`svelte<br />&lt;Header&gt;<br />  &lt;span slot="company"&gt;IBM&lt;/span&gt;<br />&lt;/Header&gt;<br />`                                                             |
+| companyName             | No       | <code>let</code> | No       | <code>string</code>                        | <code>undefined</code> | Specify the company name.<br /><br />Alternatively, use the named slot "company".<br />@example <br />`svelte<br />&lt;Header&gt;<br />  &lt;span slot="company"&gt;IBM&lt;/span&gt;<br />&lt;/Header&gt;<br />`                                                             |
 | platformName            | No       | <code>let</code> | No       | <code>string</code>                        | <code>""</code>        | Specify the platform name.<br />Alternatively, use the named slot "platform".<br />@example <br />`svelte<br />&lt;Header&gt;<br />  &lt;span slot="platform"&gt;Platform Name&lt;/span&gt;<br />&lt;/Header&gt;<br />`                                                      |
 | persistentHamburgerMenu | No       | <code>let</code> | No       | <code>boolean</code>                       | <code>false</code>     | Set to `true` to persist the hamburger menu                                                                                                                                                                                                                                  |
 | expansionBreakpoint     | No       | <code>let</code> | No       | <code>number</code>                        | <code>1056</code>      | The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.<br />1056 represents the "large" breakpoint in pixels from the Carbon Design System:<br />- small: 320<br />- medium: 672<br />- large: 1056<br />- x-large: 1312<br />- max: 1584. |
@@ -1607,12 +1607,12 @@ None.
 
 ### Slots
 
-| Slot name       | Default | Props                               | Fallback                     |
-| :-------------- | :------ | :---------------------------------- | :--------------------------- |
-| company         | No      | <code>Record<string, never> </code> | <code>{company}&nbsp;</code> |
-| platform        | No      | <code>Record<string, never> </code> | <code>{platformName}</code>  |
-| skip-to-content | No      | <code>Record<string, never> </code> | --                           |
-| --              | Yes     | <code>Record<string, never> </code> | --                           |
+| Slot name       | Default | Props                               | Fallback                         |
+| :-------------- | :------ | :---------------------------------- | :------------------------------- |
+| company         | No      | <code>Record<string, never> </code> | <code>{companyName}&nbsp;</code> |
+| platform        | No      | <code>Record<string, never> </code> | <code>{platformName}</code>      |
+| skip-to-content | No      | <code>Record<string, never> </code> | --                               |
+| --              | Yes     | <code>Record<string, never> </code> | --                               |
 
 ### Events
 

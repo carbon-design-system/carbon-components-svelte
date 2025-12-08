@@ -29,7 +29,7 @@
    * </Header>
    * ```
    */
-  export let company = undefined;
+  export let companyName = undefined;
 
   /**
    * Specify the platform name.
@@ -90,8 +90,8 @@
     expandedByDefault &&
     winWidth >= expansionBreakpoint &&
     !persistentHamburgerMenu;
-  $: ariaLabel = company
-    ? `${company} `
+  $: ariaLabel = companyName
+    ? `${companyName} `
     : "" + (uiShellAriaLabel || $$props["aria-label"] || platformName);
   $: hamburgerAriaLabel =
     ariaLabelMenu ?? (isSideNavOpen ? "Close menu" : "Open menu");
@@ -116,9 +116,9 @@
     {...$$restProps}
     on:click
   >
-    {#if company || $$slots.company}
+    {#if companyName || $$slots.company}
       <span class:bx--header__name--prefix={true}
-        ><slot name="company">{company}&nbsp;</slot></span
+        ><slot name="company">{companyName}&nbsp;</slot></span
       >
     {/if}
     <slot name="platform">{platformName}</slot>

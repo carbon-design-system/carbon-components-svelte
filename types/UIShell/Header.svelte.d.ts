@@ -40,7 +40,7 @@ type $Props = {
    * ```
    * @default undefined
    */
-  company?: string;
+  companyName?: string;
 
   /**
    * Specify the platform name.

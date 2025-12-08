@@ -21,7 +21,7 @@
 
 <Header
   persistentHamburgerMenu={true}
-  company="IBM"
+  companyName="IBM"
   platformName="Carbon Svelte"
   bind:isSideNavOpen
 >

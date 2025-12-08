@@ -7,7 +7,7 @@
   } from "carbon-components-svelte";
 </script>
 
-<Header company="Test" platformName="Test">
+<Header companyName="Test" platformName="Test">
   <HeaderNav>
     <HeaderNavItem href="/" text="Link 1" />
     <HeaderNavItem href="/" text="Link 2" />

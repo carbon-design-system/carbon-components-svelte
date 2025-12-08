@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import HeaderSlot from "./Header.slot.test.svelte";
 import UiShell from "./UIShell.test.svelte";
 
 describe("UIShell", () => {
@@ -16,7 +17,7 @@ describe("UIShell", () => {
     });
 
     it("should render with company name", () => {
-      render(UiShell, { props: { company: "IBM" } });
+      render(UiShell, { props: { companyName: "IBM" } });
 
       expect(screen.getByText(/IBM/)).toBeInTheDocument();
     });
@@ -41,6 +42,13 @@ describe("UIShell", () => {
 
       expect(screen.getByText("Custom Company")).toBeInTheDocument();
       expect(screen.getByText("Custom Platform")).toBeInTheDocument();
+    });
+
+    it("supports custom company slot", () => {
+      render(HeaderSlot);
+
+      const customCompany = screen.getByText("Custom company content");
+      expect(customCompany).toBeInTheDocument();
     });
 
     it("should apply custom class to Header link", () => {
