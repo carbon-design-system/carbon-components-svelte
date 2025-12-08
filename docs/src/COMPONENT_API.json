@@ -6355,7 +6355,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text displayed next to the icon.\nAlternatively, use the named slot \"text\".\n@example \n```svelte\n<HeaderAction>\n  <div slot=\"text\">Custom Text</div>\n</HeaderAction>\n```",
+          "description": "Specify the text displayed next to the icon.\nAlternatively, use the named slot \"textChildren\".\n@example \n```svelte\n<HeaderAction>\n  <div slot=\"textChildren\">Custom Text</div>\n</HeaderAction>\n```",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6367,7 +6367,7 @@
         {
           "name": "iconDescription",
           "kind": "let",
-          "description": "Specify an icon tooltip. The tooltip will not be displayed\nif either the `text` prop or a named slot=\"text\" is used.",
+          "description": "Specify an icon tooltip. The tooltip will not be displayed\nif either the `text` prop or a named slot=\"textChildren\" is used.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6440,7 +6440,7 @@
           "slot_props": "Record<string, never>"
         },
         {
-          "name": "text",
+          "name": "textChildren",
           "default": false,
           "fallback": "{#if text}<span class:bx--header__action-text={true}>{text}</span>{/if}",
           "slot_props": "Record<string, never>"

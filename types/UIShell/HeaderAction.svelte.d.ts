@@ -24,11 +24,11 @@ type $Props = {
 
   /**
    * Specify the text displayed next to the icon.
-   * Alternatively, use the named slot "text".
+   * Alternatively, use the named slot "textChildren".
    * @example
    * ```svelte
    * <HeaderAction>
-   *   <div slot="text">Custom Text</div>
+   *   <div slot="textChildren">Custom Text</div>
    * </HeaderAction>
    * ```
    * @default undefined
@@ -37,7 +37,7 @@ type $Props = {
 
   /**
    * Specify an icon tooltip. The tooltip will not be displayed
-   * if either the `text` prop or a named slot="text" is used.
+   * if either the `text` prop or a named slot="textChildren" is used.
    * @default undefined
    */
   iconDescription?: string;
@@ -83,7 +83,7 @@ export default class HeaderAction extends SvelteComponentTyped<
   {
     closeIcon: Record<string, never>;
     icon: Record<string, never>;
-    text: Record<string, never>;
+    textChildren: Record<string, never>;
     default: Record<string, never>;
   }
 > {}
