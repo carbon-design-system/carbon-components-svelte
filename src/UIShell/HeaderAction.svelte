@@ -21,12 +21,12 @@
 
   /**
    * Specify the text displayed next to the icon.
-   * Alternatively, use the named slot "text".
+   * Alternatively, use the named slot "textChildren".
    * @type {string}
    * @example
    * ```svelte
    * <HeaderAction>
-   *   <div slot="text">Custom Text</div>
+   *   <div slot="textChildren">Custom Text</div>
    * </HeaderAction>
    * ```
    */
@@ -34,7 +34,7 @@
 
   /**
    * Specify an icon tooltip. The tooltip will not be displayed
-   * if either the `text` prop or a named slot="text" is used.
+   * if either the `text` prop or a named slot="textChildren" is used.
    * @type {string}
    */
   export let iconDescription = undefined;
@@ -68,7 +68,7 @@
 
   let refPanel = null;
 
-  $: hasIconOnly = iconDescription && !(text || $$slots.text);
+  $: hasIconOnly = iconDescription && !(text || $$slots.textChildren);
   $: buttonClass = [
     hasIconOnly && "bx--btn bx--btn--primary",
     hasIconOnly && "bx--tooltip__trigger bx--tooltip--a11y",
@@ -120,7 +120,7 @@
       <svelte:component this={icon} size={20} />
     </slot>
   {/if}
-  <slot name="text">
+  <slot name="textChildren">
     {#if text}<span class:bx--header__action-text={true}>{text}</span>{/if}
   </slot>
 </button>
