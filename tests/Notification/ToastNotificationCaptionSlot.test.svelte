@@ -3,5 +3,5 @@
 </script>
 
 <ToastNotification on:close on:click>
-  <span slot="caption">Slot caption</span>
+  <span slot="captionChildren">Slot caption</span>
 </ToastNotification>

@@ -3,7 +3,7 @@
 </script>
 
 <ToastNotification kind="warning">
-  <strong slot="title">Custom Title:</strong>
-  <strong slot="subtitle">Custom subtitle content.</strong>
-  <strong slot="caption">Custom caption content.</strong>
+  <strong slot="titleChildren">Custom Title:</strong>
+  <strong slot="subtitleChildren">Custom subtitle content.</strong>
+  <strong slot="captionChildren">Custom caption content.</strong>
 </ToastNotification>

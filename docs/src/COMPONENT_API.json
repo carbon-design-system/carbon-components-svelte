@@ -18116,19 +18116,19 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "caption",
+          "name": "captionChildren",
           "default": false,
           "fallback": "{caption}",
           "slot_props": "Record<string, never>"
         },
         {
-          "name": "subtitle",
+          "name": "subtitleChildren",
           "default": false,
           "fallback": "{subtitle}",
           "slot_props": "Record<string, never>"
         },
         {
-          "name": "title",
+          "name": "titleChildren",
           "default": false,
           "fallback": "{title}",
           "slot_props": "Record<string, never>"
