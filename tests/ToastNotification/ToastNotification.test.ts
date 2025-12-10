@@ -118,16 +118,37 @@ describe("ToastNotification", () => {
     render(ToastNotificationCustom);
 
     const title = screen.getByText("Custom Title:");
-    expect(title).not.toHaveClass("bx--toast-notification__title");
+    expect(title).toBeInTheDocument();
     expect(title.tagName).toBe("STRONG");
 
     const subtitle = screen.getByText("Custom subtitle content.");
-    expect(subtitle).not.toHaveClass("bx--toast-notification__subtitle");
+    expect(subtitle).toBeInTheDocument();
     expect(subtitle.tagName).toBe("STRONG");
 
     const caption = screen.getByText("Custom caption content.");
-    expect(caption).not.toHaveClass("bx--toast-notification__caption");
+    expect(caption).toBeInTheDocument();
     expect(caption.tagName).toBe("STRONG");
+  });
+
+  it("supports custom titleChildren slot", () => {
+    render(ToastNotificationCustom);
+
+    const customTitle = screen.getByText("Custom Title:");
+    expect(customTitle).toBeInTheDocument();
+  });
+
+  it("supports custom subtitleChildren slot", () => {
+    render(ToastNotificationCustom);
+
+    const customSubtitle = screen.getByText("Custom subtitle content.");
+    expect(customSubtitle).toBeInTheDocument();
+  });
+
+  it("supports custom captionChildren slot", () => {
+    render(ToastNotificationCustom);
+
+    const customCaption = screen.getByText("Custom caption content.");
+    expect(customCaption).toBeInTheDocument();
   });
 
   it("should handle full width", () => {

@@ -116,16 +116,16 @@
     <NotificationIcon {kind} iconDescription={statusIconDescription} />
     <div class:bx--toast-notification__details={true}>
       <h3 class:bx--toast-notification__title={true}>
-        <slot name="title">{title}</slot>
+        <slot name="titleChildren">{title}</slot>
       </h3>
-      {#if subtitle || $$slots.subtitle}
+      {#if subtitle || $$slots.subtitleChildren}
         <div class:bx--toast-notification__subtitle={true}>
-          <slot name="subtitle">{subtitle}</slot>
+          <slot name="subtitleChildren">{subtitle}</slot>
         </div>
       {/if}
-      {#if caption || $$slots.caption}
+      {#if caption || $$slots.captionChildren}
         <div class:bx--toast-notification__caption={true}>
-          <slot name="caption">{caption}</slot>
+          <slot name="captionChildren">{caption}</slot>
         </div>
       {/if}
       <slot />

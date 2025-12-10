@@ -170,6 +170,27 @@ describe("ToastNotification", () => {
     expect(captionElement).toHaveTextContent("Slot caption");
   });
 
+  it("supports custom titleChildren slot", () => {
+    render(ToastNotificationTitleSlotTest);
+
+    const customTitle = screen.getByText("Slot title");
+    expect(customTitle).toBeInTheDocument();
+  });
+
+  it("supports custom subtitleChildren slot", () => {
+    render(ToastNotificationSubtitleSlotTest);
+
+    const customSubtitle = screen.getByText("Slot subtitle");
+    expect(customSubtitle).toBeInTheDocument();
+  });
+
+  it("supports custom captionChildren slot", () => {
+    render(ToastNotificationCaptionSlotTest);
+
+    const customCaption = screen.getByText("Slot caption");
+    expect(customCaption).toBeInTheDocument();
+  });
+
   it("should render close button by default", () => {
     render(ToastNotificationTest);
 

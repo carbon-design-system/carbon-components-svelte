@@ -52,9 +52,9 @@ Set `fullWidth` to `true` for the notification to span the full width of its con
 Customize the notification content using slots for more flexibility.
 
 <ToastNotification>
-  <strong slot="title">Error: </strong>
-  <strong slot="subtitle">An internal server error occurred.</strong>
-  <strong slot="caption">{new Date().toLocaleString()}</strong>
+  <strong slot="titleChildren">Error: </strong>
+  <strong slot="subtitleChildren">An internal server error occurred.</strong>
+  <strong slot="captionChildren">{new Date().toLocaleString()}</strong>
 </ToastNotification>
 
 ## Optional subtitle and caption
