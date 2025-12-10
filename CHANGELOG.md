@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.93.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.93.2...v0.93.3) (2025-12-10)
+
+### Bug Fixes
+
+- **stack:** include styles for individual themes ([d71cc7a](https://github.com/carbon-design-system/carbon-components-svelte/commit/d71cc7acfef99d240ebb8f0f6554500e143d08b4)), closes [#2417](https://github.com/carbon-design-system/carbon-components-svelte/issues/2417)
+
 ### [0.93.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.93.1...v0.93.2) (2025-12-04)
 
 ### Bug Fixes
