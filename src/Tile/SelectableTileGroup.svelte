@@ -22,7 +22,7 @@
   export let name = undefined;
 
   /** Specify the legend text */
-  export let legend = "";
+  export let legendText = "";
 
   import { createEventDispatcher, setContext } from "svelte";
   import { readonly, writable } from "svelte/store";
@@ -80,8 +80,8 @@
 </script>
 
 <fieldset {disabled} class:bx--tile-group={true} {...$$restProps}>
-  {#if legend}
-    <legend class:bx--label={true}>{legend}</legend>
+  {#if legendText}
+    <legend class:bx--label={true}>{legendText}</legend>
   {/if}
   <div>
     <slot />

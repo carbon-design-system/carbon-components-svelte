@@ -3401,12 +3401,12 @@ None.
 
 ### Props
 
-| Prop name | Required | Kind             | Reactive | Type                                 | Default value          | Description                                       |
-| :-------- | :------- | :--------------- | :------- | ------------------------------------ | ---------------------- | ------------------------------------------------- |
-| selected  | No       | <code>let</code> | Yes      | <code>T[]</code>                     | <code>[]</code>        | Specify the selected tile values.                 |
-| disabled  | No       | <code>let</code> | No       | <code>boolean</code>                 | <code>false</code>     | Set to `true` to disable the tile group           |
-| name      | No       | <code>let</code> | No       | <code>string &#124; undefined</code> | <code>undefined</code> | Specify a name attribute for the checkbox inputs. |
-| legend    | No       | <code>let</code> | No       | <code>string</code>                  | <code>""</code>        | Specify the legend text                           |
+| Prop name  | Required | Kind             | Reactive | Type                                 | Default value          | Description                                       |
+| :--------- | :------- | :--------------- | :------- | ------------------------------------ | ---------------------- | ------------------------------------------------- |
+| selected   | No       | <code>let</code> | Yes      | <code>T[]</code>                     | <code>[]</code>        | Specify the selected tile values.                 |
+| disabled   | No       | <code>let</code> | No       | <code>boolean</code>                 | <code>false</code>     | Set to `true` to disable the tile group           |
+| name       | No       | <code>let</code> | No       | <code>string &#124; undefined</code> | <code>undefined</code> | Specify a name attribute for the checkbox inputs. |
+| legendText | No       | <code>let</code> | No       | <code>string</code>                  | <code>""</code>        | Specify the legend text                           |
 
 ### Slots
 
