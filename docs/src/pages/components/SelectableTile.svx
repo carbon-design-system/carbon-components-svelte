@@ -1,9 +1,9 @@
 ---
-components: ["SelectableTileGroup", "SelectableTile"]
+components: ["SelectableTileGroup", "SelectableTile", "Tooltip"]
 ---
 
 <script>
-  import { SelectableTileGroup, SelectableTile } from "carbon-components-svelte";
+  import { SelectableTileGroup, SelectableTile, Tooltip, Stack } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -65,6 +65,30 @@ Disable specific tiles to prevent interaction.
     Multi-select Tile
   </SelectableTile>
   <SelectableTile disabled value="option3">
+    Multi-select Tile
+  </SelectableTile>
+</SelectableTileGroup>
+
+## Legend text slot
+
+Use the named slot `legendChildren` to customize the legend text with additional content.
+
+<SelectableTileGroup name="options-legend-slot" selected={["option1"]}>
+  <Stack slot="legendChildren" orientation="horizontal">
+    Select options
+    <Tooltip>
+      <p>
+        You can select multiple options at once.
+      </p>
+    </Tooltip>
+  </Stack>
+  <SelectableTile value="option1">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option2">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option3">
     Multi-select Tile
   </SelectableTile>
 </SelectableTileGroup>
