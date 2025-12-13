@@ -152,7 +152,7 @@ type $Props<Item> = {
 
   /**
    * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item" since a combo box can only have on selection.
+   * Defaults to "Clear selected item" since a combo box can only have one selection.
    * @default undefined
    */
   translateWithIdSelection?: (id: "clearSelection") => string;

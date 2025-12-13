@@ -2101,7 +2101,7 @@
         {
           "name": "translateWithIdSelection",
           "kind": "let",
-          "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\" since a combo box can only have on selection.",
+          "description": "Override the label of the clear button when the input has a selection.\nDefaults to \"Clear selected item\" since a combo box can only have one selection.",
           "type": "(id: \"clearSelection\") => string",
           "value": "undefined",
           "isFunction": false,
