@@ -2764,12 +2764,12 @@ None.
 
 ### Events
 
-| Event name             | Type       | Detail                                             | Description                            |
-| :--------------------- | :--------- | :------------------------------------------------- | :------------------------------------- |
-| change                 | dispatched | <code>{ page?: number; pageSize?: number; }</code> | Dispatched after any user interaction. |
-| click:button--previous | dispatched | <code>{ page: number; }</code>                     | Dispatched after any user interaction. |
-| click:button--next     | dispatched | <code>{ page: number; }</code>                     | Dispatched after any user interaction. |
-| update                 | dispatched | <code>{ pageSize: number; page: number; }</code>   | Dispatched after any user interaction. |
+| Event name             | Type       | Detail                                             | Description                                                                     |
+| :--------------------- | :--------- | :------------------------------------------------- | :------------------------------------------------------------------------------ |
+| change                 | dispatched | <code>{ page?: number; pageSize?: number; }</code> | Dispatched when the user changes the page or page size through any interaction. |
+| click:button--previous | dispatched | <code>{ page: number; }</code>                     | Dispatched when the user clicks the previous page button.                       |
+| click:button--next     | dispatched | <code>{ page: number; }</code>                     | Dispatched when the user clicks the next page button.                           |
+| update                 | dispatched | <code>{ pageSize: number; page: number; }</code>   | Dispatched reactively whenever the page or page size changes.                   |
 
 ## `PaginationNav`
 

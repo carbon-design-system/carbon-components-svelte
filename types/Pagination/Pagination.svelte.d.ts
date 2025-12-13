@@ -115,13 +115,13 @@ export type PaginationProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class Pagination extends SvelteComponentTyped<
   PaginationProps,
   {
-    /** Dispatched after any user interaction. */
+    /** Dispatched when the user changes the page or page size through any interaction. */
     change: CustomEvent<{ page?: number; pageSize?: number }>;
-    /** Dispatched after any user interaction. */
+    /** Dispatched when the user clicks the previous page button. */
     "click:button--previous": CustomEvent<{ page: number }>;
-    /** Dispatched after any user interaction. */
+    /** Dispatched when the user clicks the next page button. */
     "click:button--next": CustomEvent<{ page: number }>;
-    /** Dispatched after any user interaction. */
+    /** Dispatched reactively whenever the page or page size changes. */
     update: CustomEvent<{ pageSize: number; page: number }>;
   },
   Record<string, never>
