@@ -16,6 +16,6 @@
 </script>
 
 <DataTable {headers} {rows}>
-  <h2 slot="title" let:props {...props}>Custom Title</h2>
-  <div slot="description" let:props {...props}>Custom Description</div>
+  <h2 slot="titleChildren" let:props {...props}>Custom Title</h2>
+  <div slot="descriptionChildren" let:props {...props}>Custom Description</div>
 </DataTable>
