@@ -269,8 +269,8 @@ Use slots to customize the elements and styles. The original classes can be dest
     },
   ]}"
 >
-    <h1 slot="title" let:props {...props}>Load balancers</h1>
-    <span slot="description" let:props {...props} style="font-size: 1rem">Your organization's active load balancers.</span>
+    <h1 slot="titleChildren" let:props {...props}>Load balancers</h1>
+    <span slot="descriptionChildren" let:props {...props} style="font-size: 1rem">Your organization's active load balancers.</span>
 </DataTable>
 
 ## Static width
