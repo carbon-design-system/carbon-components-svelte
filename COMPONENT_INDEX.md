@@ -4411,19 +4411,20 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 ### Props
 
-| Prop name  | Required | Kind             | Reactive | Type                            | Default value          | Description                                               |
-| :--------- | :------- | :--------------- | :------- | ------------------------------- | ---------------------- | --------------------------------------------------------- |
-| selected   | No       | <code>let</code> | Yes      | <code>T &#124; undefined</code> | <code>undefined</code> | Specify the selected tile value.                          |
-| disabled   | No       | <code>let</code> | No       | <code>boolean</code>            | <code>false</code>     | Set to `true` to disable the tile group                   |
-| required   | No       | <code>let</code> | No       | <code>boolean</code>            | <code>undefined</code> | Set to `true` to require the selection of a radio button. |
-| name       | No       | <code>let</code> | No       | <code>string</code>             | <code>undefined</code> | Specify a name attribute for the radio button inputs.     |
-| legendText | No       | <code>let</code> | No       | <code>string</code>             | <code>""</code>        | Specify the legend text                                   |
+| Prop name  | Required | Kind             | Reactive | Type                            | Default value          | Description                                                                                                                                                                                                                             |
+| :--------- | :------- | :--------------- | :------- | ------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| selected   | No       | <code>let</code> | Yes      | <code>T &#124; undefined</code> | <code>undefined</code> | Specify the selected tile value.                                                                                                                                                                                                        |
+| disabled   | No       | <code>let</code> | No       | <code>boolean</code>            | <code>false</code>     | Set to `true` to disable the tile group                                                                                                                                                                                                 |
+| required   | No       | <code>let</code> | No       | <code>boolean</code>            | <code>undefined</code> | Set to `true` to require the selection of a radio button.                                                                                                                                                                               |
+| name       | No       | <code>let</code> | No       | <code>string</code>             | <code>undefined</code> | Specify a name attribute for the radio button inputs.                                                                                                                                                                                   |
+| legendText | No       | <code>let</code> | No       | <code>string</code>             | <code>""</code>        | Specify the legend text.<br />Alternatively, use the named slot "legendChildren".<br />@example <br />`svelte<br />&lt;TileGroup&gt;<br />  &lt;span slot="legendChildren"&gt;Custom Legend&lt;/span&gt;<br />&lt;/TileGroup&gt;<br />` |
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback |
-| :-------- | :------ | :---------------------------------- | :------- |
-| --        | Yes     | <code>Record<string, never> </code> | --       |
+| Slot name      | Default | Props                               | Fallback                  |
+| :------------- | :------ | :---------------------------------- | :------------------------ |
+| legendChildren | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
+| --             | Yes     | <code>Record<string, never> </code> | --                        |
 
 ### Events
 
