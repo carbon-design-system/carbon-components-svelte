@@ -37,7 +37,17 @@ type $Props = {
   name?: string;
 
   /**
-   * Specify the legend text
+   * Specify the legend text.
+   * Alternatively, use the named slot "legendChildren".
+   * @example
+   * ```svelte
+   * <RadioButtonGroup>
+   *   <span slot="legendChildren">Custom Legend</span>
+   *   <RadioButton labelText="Option 1" value="1" />
+   *   <RadioButton labelText="Option 2" value="2" />
+   *   <RadioButton labelText="Option 3" value="3" />
+   * </RadioButtonGroup>
+   * ```
    * @default ""
    */
   legendText?: string;
@@ -86,5 +96,5 @@ export default class RadioButtonGroup extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { legendText: Record<string, never>; default: Record<string, never> }
+  { legendChildren: Record<string, never>; default: Record<string, never> }
 > {}

@@ -12380,7 +12380,7 @@
         {
           "name": "legendText",
           "kind": "let",
-          "description": "Specify the legend text",
+          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example \n```svelte\n<RadioButtonGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n  <RadioButton labelText=\"Option 1\" value=\"1\" />\n  <RadioButton labelText=\"Option 2\" value=\"2\" />\n  <RadioButton labelText=\"Option 3\" value=\"3\" />\n</RadioButtonGroup>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -12453,7 +12453,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "legendText",
+          "name": "legendChildren",
           "default": false,
           "fallback": "{legendText}",
           "slot_props": "Record<string, never>"
