@@ -49,6 +49,8 @@
 
   /** Obtain a reference to the input HTML element */
   export let ref = null;
+
+  import Stack from "../Stack/Stack.svelte";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -82,32 +84,34 @@
           </slot>
         </label>
       {/if}
-      <input
-        bind:this={ref}
-        bind:value
-        type="text"
-        data-invalid={invalid || undefined}
-        {pattern}
-        {placeholder}
-        {maxlength}
-        {id}
-        {name}
-        {disabled}
-        {...$$restProps}
-        class:bx--time-picker__input-field={true}
-        class:bx--text-input={true}
-        class:bx--text-input--light={light}
-        class:bx--text-input--invalid={invalid}
-        on:change
-        on:input
-        on:keydown
-        on:keyup
-        on:focus
-        on:blur
-        on:paste
-      />
+      <Stack orientation="horizontal" gap={0}>
+        <input
+          bind:this={ref}
+          bind:value
+          type="text"
+          data-invalid={invalid || undefined}
+          {pattern}
+          {placeholder}
+          {maxlength}
+          {id}
+          {name}
+          {disabled}
+          {...$$restProps}
+          class:bx--time-picker__input-field={true}
+          class:bx--text-input={true}
+          class:bx--text-input--light={light}
+          class:bx--text-input--invalid={invalid}
+          on:change
+          on:input
+          on:keydown
+          on:keyup
+          on:focus
+          on:blur
+          on:paste
+        />
+        <slot />
+      </Stack>
     </div>
-    <slot />
   </div>
   {#if invalid}
     <div class:bx--form-requirement={true}>{invalidText}</div>
