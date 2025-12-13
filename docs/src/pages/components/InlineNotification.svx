@@ -27,6 +27,12 @@ The component is controlled, allowing you to prevent the default close behavior 
   // custom close logic (e.g., transitions)
 }} />
 
+## Reusable notification
+
+Control the notification visibility by binding to the `open` prop. This allows you to show, hide, and reuse the same notification component with different messages. The `open` prop defaults to `true`.
+
+<FileSource src="/framed/InlineNotification/InlineNotificationReusable" />
+
 ## Slottable title and subtitle
 
 Customize the notification content using slots for more flexibility.
