@@ -1957,12 +1957,12 @@ None.
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback                |
-| :-------- | :------ | :---------------------------------- | :---------------------- |
-| actions   | No      | <code>Record<string, never> </code> | --                      |
-| subtitle  | No      | <code>Record<string, never> </code> | <code>{subtitle}</code> |
-| title     | No      | <code>Record<string, never> </code> | <code>{title}</code>    |
-| --        | Yes     | <code>Record<string, never> </code> | --                      |
+| Slot name        | Default | Props                               | Fallback                |
+| :--------------- | :------ | :---------------------------------- | :---------------------- |
+| actions          | No      | <code>Record<string, never> </code> | --                      |
+| subtitleChildren | No      | <code>Record<string, never> </code> | <code>{subtitle}</code> |
+| titleChildren    | No      | <code>Record<string, never> </code> | <code>{title}</code>    |
+| --               | Yes     | <code>Record<string, never> </code> | --                      |
 
 ### Events
 

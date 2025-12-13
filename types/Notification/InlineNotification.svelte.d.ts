@@ -86,8 +86,8 @@ export default class InlineNotification extends SvelteComponentTyped<
   },
   {
     actions: Record<string, never>;
-    subtitle: Record<string, never>;
-    title: Record<string, never>;
+    subtitleChildren: Record<string, never>;
+    titleChildren: Record<string, never>;
     default: Record<string, never>;
   }
 > {}

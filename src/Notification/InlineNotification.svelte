@@ -101,14 +101,14 @@
         iconDescription={statusIconDescription}
       />
       <div class:bx--inline-notification__text-wrapper={true}>
-        {#if title || $$slots.title}
+        {#if title || $$slots.titleChildren}
           <p class:bx--inline-notification__title={true}>
-            <slot name="title">{title}</slot>
+            <slot name="titleChildren">{title}</slot>
           </p>
         {/if}
-        {#if subtitle || $$slots.subtitle}
+        {#if subtitle || $$slots.subtitleChildren}
           <div class:bx--inline-notification__subtitle={true}>
-            <slot name="subtitle">{subtitle}</slot>
+            <slot name="subtitleChildren">{subtitle}</slot>
           </div>
         {/if}
         <slot />
