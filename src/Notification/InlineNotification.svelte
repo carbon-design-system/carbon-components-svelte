@@ -37,13 +37,17 @@
   /** Specify the ARIA label for the close button */
   export let closeButtonDescription = "Close notification";
 
+  /**
+   * Set to `true` to show the notification, `false` to hide it.
+   */
+  export let open = true;
+
   import { createEventDispatcher, onMount } from "svelte";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
 
   const dispatch = createEventDispatcher();
 
-  let open = true;
   let timeoutId = undefined;
 
   function close(closeFromTimeout) {
@@ -57,11 +61,14 @@
     }
   }
 
-  onMount(() => {
-    if (timeout) {
-      timeoutId = setTimeout(() => close(true), timeout);
-    }
+  $: if (open && timeout) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => close(true), timeout);
+  } else {
+    clearTimeout(timeoutId);
+  }
 
+  onMount(() => {
     return () => {
       clearTimeout(timeoutId);
     };
