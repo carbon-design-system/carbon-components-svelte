@@ -40,7 +40,7 @@ type $Props<T> = {
    * Specify the legend text
    * @default ""
    */
-  legend?: string;
+  legendText?: string;
 
   [key: `data-${string}`]: any;
 };

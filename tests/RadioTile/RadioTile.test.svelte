@@ -15,7 +15,7 @@
 </script>
 
 <TileGroup
-  legend="Test group"
+  legendText="Test group"
   name="test-group"
   selected={checked ? value : undefined}
 >

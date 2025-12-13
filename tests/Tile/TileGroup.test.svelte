@@ -8,7 +8,7 @@
   export let disabled: ComponentProps<TileGroup>["disabled"] = false;
   export let required: ComponentProps<TileGroup>["required"] = undefined;
   export let name: ComponentProps<TileGroup>["name"] = undefined;
-  export let legend: ComponentProps<TileGroup>["legend"] = "";
+  export let legendText: ComponentProps<TileGroup>["legendText"] = "";
   export let customClass = "";
 </script>
 
@@ -17,7 +17,7 @@
   {disabled}
   {required}
   {name}
-  {legend}
+  {legendText}
   class={customClass}
   on:select={(e) => {
     console.log("select", e.detail);

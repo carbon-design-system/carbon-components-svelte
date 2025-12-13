@@ -17491,7 +17491,7 @@
           "reactive": false
         },
         {
-          "name": "legend",
+          "name": "legendText",
           "kind": "let",
           "description": "Specify the legend text",
           "type": "string",
