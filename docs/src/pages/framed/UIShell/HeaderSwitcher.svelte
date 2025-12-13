@@ -82,7 +82,7 @@
           Select a transition option below and click on the App Switcher icon in
           the top right.
         </p>
-        <TileGroup legend="App switcher transitions" bind:selected>
+        <TileGroup legendText="App switcher transitions" bind:selected>
           {#each Object.keys(transitions) as key}
             <RadioTile value={key}>{transitions[key].text}</RadioTile>
           {/each}

@@ -13,7 +13,7 @@ components: ["TileGroup", "RadioTile"]
 
 Create a group of radio tiles with a shared name and legend.
 
-<TileGroup legend="Service pricing tiers" name="plan" selected="standard">
+<TileGroup legendText="Service pricing tiers" name="plan" selected="standard">
   <RadioTile value="lite">
     Lite plan
   </RadioTile>
@@ -41,7 +41,7 @@ Bind to the `selected` prop for simpler state management.
 
 Use the light variant for light backgrounds.
 
-<TileGroup legend="Service pricing tiers" name="plan-light" selected="standard">
+<TileGroup legendText="Service pricing tiers" name="plan-light" selected="standard">
   <RadioTile light value="lite">
     Lite plan
   </RadioTile>
@@ -57,7 +57,7 @@ Use the light variant for light backgrounds.
 
 Disable specific tiles to prevent selection.
 
-<TileGroup legend="Service pricing tiers" name="plan-disabled" selected="standard">
+<TileGroup legendText="Service pricing tiers" name="plan-disabled" selected="standard">
   <RadioTile value="lite" disabled>
     Lite plan
   </RadioTile>

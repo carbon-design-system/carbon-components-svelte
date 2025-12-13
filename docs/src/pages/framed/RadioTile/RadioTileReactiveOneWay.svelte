@@ -7,7 +7,7 @@
 </script>
 
 <TileGroup
-  legend="Service pricing tiers"
+  legendText="Service pricing tiers"
   name="plan"
   on:select={({ detail }) => (selected = detail)}
 >

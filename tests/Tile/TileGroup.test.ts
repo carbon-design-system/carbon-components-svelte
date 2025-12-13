@@ -21,7 +21,7 @@ describe("TileGroup", () => {
   });
 
   it("should render with legend", () => {
-    render(TileGroup, { props: { legend: "Select an option" } });
+    render(TileGroup, { props: { legendText: "Select an option" } });
 
     expect(screen.getByText("Select an option")).toBeInTheDocument();
     expect(screen.getByText("Select an option")).toHaveClass("bx--label");
