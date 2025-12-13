@@ -13908,7 +13908,7 @@
         {
           "name": "legendText",
           "kind": "let",
-          "description": "Specify the legend text",
+          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example \n```svelte\n<SelectableTileGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n</SelectableTileGroup>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -13920,6 +13920,12 @@
       ],
       "moduleExports": [],
       "slots": [
+        {
+          "name": "legendChildren",
+          "default": false,
+          "fallback": "{legendText}",
+          "slot_props": "Record<string, never>"
+        },
         {
           "name": null,
           "default": true,

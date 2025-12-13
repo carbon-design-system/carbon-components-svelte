@@ -3401,18 +3401,19 @@ None.
 
 ### Props
 
-| Prop name  | Required | Kind             | Reactive | Type                                 | Default value          | Description                                       |
-| :--------- | :------- | :--------------- | :------- | ------------------------------------ | ---------------------- | ------------------------------------------------- |
-| selected   | No       | <code>let</code> | Yes      | <code>T[]</code>                     | <code>[]</code>        | Specify the selected tile values.                 |
-| disabled   | No       | <code>let</code> | No       | <code>boolean</code>                 | <code>false</code>     | Set to `true` to disable the tile group           |
-| name       | No       | <code>let</code> | No       | <code>string &#124; undefined</code> | <code>undefined</code> | Specify a name attribute for the checkbox inputs. |
-| legendText | No       | <code>let</code> | No       | <code>string</code>                  | <code>""</code>        | Specify the legend text                           |
+| Prop name  | Required | Kind             | Reactive | Type                                 | Default value          | Description                                                                                                                                                                                                                                                 |
+| :--------- | :------- | :--------------- | :------- | ------------------------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| selected   | No       | <code>let</code> | Yes      | <code>T[]</code>                     | <code>[]</code>        | Specify the selected tile values.                                                                                                                                                                                                                           |
+| disabled   | No       | <code>let</code> | No       | <code>boolean</code>                 | <code>false</code>     | Set to `true` to disable the tile group                                                                                                                                                                                                                     |
+| name       | No       | <code>let</code> | No       | <code>string &#124; undefined</code> | <code>undefined</code> | Specify a name attribute for the checkbox inputs.                                                                                                                                                                                                           |
+| legendText | No       | <code>let</code> | No       | <code>string</code>                  | <code>""</code>        | Specify the legend text.<br />Alternatively, use the named slot "legendChildren".<br />@example <br />`svelte<br />&lt;SelectableTileGroup&gt;<br />  &lt;span slot="legendChildren"&gt;Custom Legend&lt;/span&gt;<br />&lt;/SelectableTileGroup&gt;<br />` |
 
 ### Slots
 
-| Slot name | Default | Props                               | Fallback |
-| :-------- | :------ | :---------------------------------- | :------- |
-| --        | Yes     | <code>Record<string, never> </code> | --       |
+| Slot name      | Default | Props                               | Fallback                  |
+| :------------- | :------ | :---------------------------------- | :------------------------ |
+| legendChildren | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
+| --             | Yes     | <code>Record<string, never> </code> | --                        |
 
 ### Events
 
