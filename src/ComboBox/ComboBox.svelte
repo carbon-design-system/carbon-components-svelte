@@ -114,7 +114,7 @@
 
   /**
    * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item" since a combo box can only have on selection.
+   * Defaults to "Clear selected item" since a combo box can only have one selection.
    * @type {(id: "clearSelection") => string}
    */
   export let translateWithIdSelection = undefined;
