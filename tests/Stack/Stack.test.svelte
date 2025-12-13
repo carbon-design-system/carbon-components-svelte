@@ -44,3 +44,11 @@
 <Stack tag="ol" gap={13} orientation="horizontal">
   <li>combined-props</li>
 </Stack>
+
+<Stack gap={0}>
+  <p>gap-0</p>
+</Stack>
+
+<Stack orientation="horizontal" gap={0}>
+  <span>horizontal-gap-0</span>
+</Stack>

@@ -1,6 +1,7 @@
 <script>
   /**
    * The stack scale maps to the following `@carbon/layout` values:
+   * - 0 --> 0 (no gap)
    * - 1 --> 0.125rem
    * - 2 --> 0.25rem
    * - 3 --> 0.5rem
@@ -14,12 +15,13 @@
    * - 11 --> 5rem
    * - 12 --> 6rem
    * - 13 --> 10rem
-   * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} StackScale
+   * @typedef {0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} StackScale
    */
 
   /**
    * Specify the gap between items in the stack.
    * The scale maps to Carbon layout values.
+   * Use 0 to omit any gap class.
    * Alternatively, specify a custom value (e.g., "200px" or "1.5rem").
    * Custom values *must* be a string.
    * @type {StackScale | string}

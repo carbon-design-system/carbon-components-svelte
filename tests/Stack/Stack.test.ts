@@ -101,4 +101,26 @@ describe("Stack", () => {
       expect(stackElement).not.toHaveClass(`bx--stack-scale-${gap}`);
     }
   });
+
+  it("should omit gap class when gap is 0", () => {
+    render(Stack);
+
+    const verticalElement = screen.getByText("gap-0");
+    const verticalStackElement = verticalElement.parentElement;
+    expect(verticalStackElement).toHaveClass("bx--stack");
+    expect(verticalStackElement).toHaveClass("bx--stack-vertical");
+
+    for (let gap = 0; gap <= 13; gap++) {
+      expect(verticalStackElement).not.toHaveClass(`bx--stack-scale-${gap}`);
+    }
+
+    const horizontalElement = screen.getByText("horizontal-gap-0");
+    const horizontalStackElement = horizontalElement.parentElement;
+    expect(horizontalStackElement).toHaveClass("bx--stack");
+    expect(horizontalStackElement).toHaveClass("bx--stack-horizontal");
+
+    for (let gap = 0; gap <= 13; gap++) {
+      expect(horizontalStackElement).not.toHaveClass(`bx--stack-scale-${gap}`);
+    }
+  });
 });

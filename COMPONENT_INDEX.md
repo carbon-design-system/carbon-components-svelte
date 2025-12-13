@@ -3682,16 +3682,30 @@ None.
 ### Types
 
 ```ts
-export type StackScale = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
+export type StackScale =
+  | 0
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13;
 ```
 
 ### Props
 
-| Prop name   | Required | Kind             | Reactive | Type                                        | Default value           | Description                                                                                                                                                                                             |
-| :---------- | :------- | :--------------- | :------- | ------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| gap         | No       | <code>let</code> | No       | <code>StackScale &#124; string</code>       | <code>1</code>          | Specify the gap between items in the stack.<br />The scale maps to Carbon layout values.<br />Alternatively, specify a custom value (e.g., "200px" or "1.5rem").<br />Custom values _must_ be a string. |
-| orientation | No       | <code>let</code> | No       | <code>"vertical" &#124; "horizontal"</code> | <code>"vertical"</code> | Specify the orientation of the stack.                                                                                                                                                                   |
-| tag         | No       | <code>let</code> | No       | <code>keyof HTMLElementTagNameMap</code>    | <code>"div"</code>      | Specify the tag name.                                                                                                                                                                                   |
+| Prop name   | Required | Kind             | Reactive | Type                                        | Default value           | Description                                                                                                                                                                                                                               |
+| :---------- | :------- | :--------------- | :------- | ------------------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| gap         | No       | <code>let</code> | No       | <code>StackScale &#124; string</code>       | <code>1</code>          | Specify the gap between items in the stack.<br />The scale maps to Carbon layout values.<br />Use 0 to omit any gap class.<br />Alternatively, specify a custom value (e.g., "200px" or "1.5rem").<br />Custom values _must_ be a string. |
+| orientation | No       | <code>let</code> | No       | <code>"vertical" &#124; "horizontal"</code> | <code>"vertical"</code> | Specify the orientation of the stack.                                                                                                                                                                                                     |
+| tag         | No       | <code>let</code> | No       | <code>keyof HTMLElementTagNameMap</code>    | <code>"div"</code>      | Specify the tag name.                                                                                                                                                                                                                     |
 
 ### Slots
 
