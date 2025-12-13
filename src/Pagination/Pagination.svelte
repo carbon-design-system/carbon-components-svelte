@@ -1,17 +1,20 @@
 <script>
   /**
-   * Dispatched after any user interaction.
+   * Dispatched when the user changes the page or page size through any interaction.
    * @event change
    * @type {object}
    * @property {number} [page]
    * @property {number} [pageSize]
    * @event click:button--previous
+   * Dispatched when the user clicks the previous page button.
    * @type {object}
    * @property {number} page
    * @event click:button--next
+   * Dispatched when the user clicks the next page button.
    * @type {object}
    * @property {number} page
    * @event update
+   * Dispatched reactively whenever the page or page size changes.
    * @type {object}
    * @property {number} pageSize
    * @property {number} page

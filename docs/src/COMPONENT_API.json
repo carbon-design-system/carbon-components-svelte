@@ -11037,25 +11037,25 @@
           "type": "dispatched",
           "name": "change",
           "detail": "{\n  page?: number;\n  pageSize?: number;\n}",
-          "description": "Dispatched after any user interaction."
+          "description": "Dispatched when the user changes the page or page size through any interaction."
         },
         {
           "type": "dispatched",
           "name": "click:button--previous",
           "detail": "{ page: number }",
-          "description": "Dispatched after any user interaction."
+          "description": "Dispatched when the user clicks the previous page button."
         },
         {
           "type": "dispatched",
           "name": "click:button--next",
           "detail": "{ page: number }",
-          "description": "Dispatched after any user interaction."
+          "description": "Dispatched when the user clicks the next page button."
         },
         {
           "type": "dispatched",
           "name": "update",
           "detail": "{\n  pageSize: number;\n  page: number;\n}",
-          "description": "Dispatched after any user interaction."
+          "description": "Dispatched reactively whenever the page or page size changes."
         }
       ],
       "typedefs": [],
