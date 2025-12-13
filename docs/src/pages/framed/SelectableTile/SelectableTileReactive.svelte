@@ -10,7 +10,7 @@
   let selected = [values[0], values[1]];
 </script>
 
-<SelectableTileGroup legend="Service pricing tiers" name="plan" bind:selected>
+<SelectableTileGroup legendText="Service pricing tiers" name="plan" bind:selected>
   {#each values as value}
     <SelectableTile {value}>{value}</SelectableTile>
   {/each}

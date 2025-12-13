@@ -10,7 +10,7 @@
 </script>
 
 <SelectableTileGroup
-  legend="Service pricing tiers"
+  legendText="Service pricing tiers"
   name="plan"
   on:select={({ detail }) => (selected = [...selected, detail])}
   on:deselect={({ detail }) => (selected = selected.filter((v) => v !== detail))}
