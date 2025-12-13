@@ -387,16 +387,16 @@
 </script>
 
 <TableContainer {useStaticWidth} {...$$restProps}>
-  {#if title || $$slots.title || description || $$slots.description}
+  {#if title || $$slots.titleChildren || description || $$slots.descriptionChildren}
     <div class:bx--data-table-header={true}>
-      {#if title || $$slots.title}
-        <slot name="title" props={{ class: "bx--data-table-header__title" }}>
+      {#if title || $$slots.titleChildren}
+        <slot name="titleChildren" props={{ class: "bx--data-table-header__title" }}>
           <h4 class:bx--data-table-header__title={true}>{title}</h4>
         </slot>
       {/if}
-      {#if description || $$slots.description}
+      {#if description || $$slots.descriptionChildren}
         <slot
-          name="description"
+          name="descriptionChildren"
           props={{ class: "bx--data-table-header__description" }}
         >
           <p class:bx--data-table-header__description={true}>{description}</p>

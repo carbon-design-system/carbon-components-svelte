@@ -261,9 +261,11 @@ export default class DataTable<
       rowExpanded: boolean;
     };
     "cell-header": { header: DataTableNonEmptyHeader };
-    description: { props: { class: "bx--data-table-header__description" } };
+    descriptionChildren: {
+      props: { class: "bx--data-table-header__description" };
+    };
     "expanded-row": { row: Row; rowSelected: boolean };
-    title: { props: { class: "bx--data-table-header__title" } };
+    titleChildren: { props: { class: "bx--data-table-header__title" } };
     default: Record<string, never>;
   }
 > {}

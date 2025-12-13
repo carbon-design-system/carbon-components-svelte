@@ -1008,14 +1008,14 @@ export type DataTableCell<Row = DataTableRow> = {
 
 ### Slots
 
-| Slot name    | Default | Props                                                                                                                                  | Fallback                                                                                        |
-| :----------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------- |
-| cell         | No      | <code>{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; } </code> | <code>{cell.display ? cell.display(cell.value, row) : cell.value}</code>                        |
-| cell-header  | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                                                                     | <code>{header.value}</code>                                                                     |
-| description  | No      | <code>{ props: { class: "bx--data-table-header\_\_description" } } </code>                                                             | <code>&lt;p class:bx--data-table-header\_\_description={true}&gt;{description}&lt;/p&gt;</code> |
-| expanded-row | No      | <code>{ row: Row; rowSelected: boolean; } </code>                                                                                      | --                                                                                              |
-| title        | No      | <code>{ props: { class: "bx--data-table-header\_\_title" } } </code>                                                                   | <code>&lt;h4 class:bx--data-table-header\_\_title={true}&gt;{title}&lt;/h4&gt;</code>           |
-| --           | Yes     | <code>Record<string, never> </code>                                                                                                    | --                                                                                              |
+| Slot name           | Default | Props                                                                                                                                  | Fallback                                                                                        |
+| :------------------ | :------ | :------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------- |
+| cell                | No      | <code>{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; } </code> | <code>{cell.display ? cell.display(cell.value, row) : cell.value}</code>                        |
+| cell-header         | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                                                                     | <code>{header.value}</code>                                                                     |
+| descriptionChildren | No      | <code>{ props: { class: "bx--data-table-header\_\_description" } } </code>                                                             | <code>&lt;p class:bx--data-table-header\_\_description={true}&gt;{description}&lt;/p&gt;</code> |
+| expanded-row        | No      | <code>{ row: Row; rowSelected: boolean; } </code>                                                                                      | --                                                                                              |
+| titleChildren       | No      | <code>{ props: { class: "bx--data-table-header\_\_title" } } </code>                                                                   | <code>&lt;h4 class:bx--data-table-header\_\_title={true}&gt;{title}&lt;/h4&gt;</code>           |
+| --                  | Yes     | <code>Record<string, never> </code>                                                                                                    | --                                                                                              |
 
 ### Events
 

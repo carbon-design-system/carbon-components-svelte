@@ -3457,7 +3457,7 @@
           "slot_props": "{\n  header: DataTableNonEmptyHeader;\n}"
         },
         {
-          "name": "description",
+          "name": "descriptionChildren",
           "default": false,
           "fallback": "<p class:bx--data-table-header__description={true}>{description}</p>",
           "slot_props": "{\n  props: {\n    class: \"bx--data-table-header__description\";\n  };\n}"
@@ -3468,7 +3468,7 @@
           "slot_props": "{\n  row: Row;\n  rowSelected: boolean;\n}"
         },
         {
-          "name": "title",
+          "name": "titleChildren",
           "default": false,
           "fallback": "<h4 class:bx--data-table-header__title={true}>{title}</h4>",
           "slot_props": "{\n  props: {\n    class: \"bx--data-table-header__title\";\n  };\n}"
