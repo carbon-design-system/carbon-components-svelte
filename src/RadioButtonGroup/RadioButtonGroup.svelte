@@ -24,7 +24,19 @@
    */
   export let name = undefined;
 
-  /** Specify the legend text */
+  /**
+   * Specify the legend text.
+   * Alternatively, use the named slot "legendChildren".
+   * @example
+   * ```svelte
+   * <RadioButtonGroup>
+   *   <span slot="legendChildren">Custom Legend</span>
+   *   <RadioButton labelText="Option 1" value="1" />
+   *   <RadioButton labelText="Option 2" value="2" />
+   *   <RadioButton labelText="Option 3" value="3" />
+   * </RadioButtonGroup>
+   * ```
+   */
   export let legendText = "";
 
   /** Set to `true` to visually hide the legend */
@@ -126,9 +138,9 @@
     class:bx--radio-button-group--label-right={labelPosition === "right"}
     {disabled}
   >
-    {#if legendText || $$slots.legendText}
+    {#if legendText || $$slots.legendChildren}
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>
-        <slot name="legendText">{legendText}</slot>
+        <slot name="legendChildren">{legendText}</slot>
       </legend>
     {/if}
     <slot />

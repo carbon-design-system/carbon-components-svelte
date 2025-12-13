@@ -30,7 +30,14 @@ type $Props<T> = {
   name?: string | undefined;
 
   /**
-   * Specify the legend text
+   * Specify the legend text.
+   * Alternatively, use the named slot "legendChildren".
+   * @example
+   * ```svelte
+   * <SelectableTileGroup>
+   *   <span slot="legendChildren">Custom Legend</span>
+   * </SelectableTileGroup>
+   * ```
    * @default ""
    */
   legend?: string;
@@ -46,5 +53,5 @@ export default class SelectableTileGroup<
 > extends SvelteComponentTyped<
   SelectableTileGroupProps<T>,
   { select: CustomEvent<T>; deselect: CustomEvent<T> },
-  { default: Record<string, never> }
+  { legendChildren: Record<string, never>; default: Record<string, never> }
 > {}

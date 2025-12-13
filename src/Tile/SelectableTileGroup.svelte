@@ -21,7 +21,16 @@
    */
   export let name = undefined;
 
-  /** Specify the legend text */
+  /**
+   * Specify the legend text.
+   * Alternatively, use the named slot "legendChildren".
+   * @example
+   * ```svelte
+   * <SelectableTileGroup>
+   *   <span slot="legendChildren">Custom Legend</span>
+   * </SelectableTileGroup>
+   * ```
+   */
   export let legend = "";
 
   import { createEventDispatcher, setContext } from "svelte";
@@ -80,8 +89,10 @@
 </script>
 
 <fieldset {disabled} class:bx--tile-group={true} {...$$restProps}>
-  {#if legend}
-    <legend class:bx--label={true}>{legend}</legend>
+  {#if legend || $$slots.legendChildren}
+    <legend class:bx--label={true}>
+      <slot name="legendChildren">{legend}</slot>
+    </legend>
   {/if}
   <div>
     <slot />

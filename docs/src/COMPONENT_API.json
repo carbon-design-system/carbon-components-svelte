@@ -12380,7 +12380,7 @@
         {
           "name": "legendText",
           "kind": "let",
-          "description": "Specify the legend text",
+          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example \n```svelte\n<RadioButtonGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n  <RadioButton labelText=\"Option 1\" value=\"1\" />\n  <RadioButton labelText=\"Option 2\" value=\"2\" />\n  <RadioButton labelText=\"Option 3\" value=\"3\" />\n</RadioButtonGroup>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -12453,7 +12453,7 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "legendText",
+          "name": "legendChildren",
           "default": false,
           "fallback": "{legendText}",
           "slot_props": "Record<string, never>"
@@ -13908,7 +13908,7 @@
         {
           "name": "legend",
           "kind": "let",
-          "description": "Specify the legend text",
+          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example \n```svelte\n<SelectableTileGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n</SelectableTileGroup>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -13920,6 +13920,12 @@
       ],
       "moduleExports": [],
       "slots": [
+        {
+          "name": "legendChildren",
+          "default": false,
+          "fallback": "{legend}",
+          "slot_props": "Record<string, never>"
+        },
         {
           "name": null,
           "default": true,
@@ -17493,7 +17499,7 @@
         {
           "name": "legend",
           "kind": "let",
-          "description": "Specify the legend text",
+          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example \n```svelte\n<TileGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n</TileGroup>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -17505,6 +17511,12 @@
       ],
       "moduleExports": [],
       "slots": [
+        {
+          "name": "legendChildren",
+          "default": false,
+          "fallback": "{legend}",
+          "slot_props": "Record<string, never>"
+        },
         {
           "name": null,
           "default": true,
