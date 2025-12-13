@@ -3,7 +3,7 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
 ---
 
 <script>
-  import { RadioButton, RadioButtonSkeleton, RadioButtonGroup, Tooltip } from "carbon-components-svelte";
+  import { RadioButton, RadioButtonSkeleton, RadioButtonGroup, Tooltip, Stack } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -39,17 +39,15 @@ Visually hide the legend while maintaining accessibility.
 
 ## Legend text slot
 
-Customize the legend text with additional content.
+Use the named slot `legendChildren` to customize the legend text with additional content.
 
 <RadioButtonGroup name="plan-legend-slot" selected="standard">
-  <div slot="legendText" style:display="flex">
-    Storage tier (disk)
+  <Stack slot="legendChildren" orientation="horizontal">
+    <span>Storage tier (disk)</span>
     <Tooltip>
-      <p>
-        Storage tiers may vary based on geolocation.
-      </p>
+      <p>Storage tiers may vary based on geolocation.</p>
     </Tooltip>
-  </div>
+  </Stack>
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
