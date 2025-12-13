@@ -6,8 +6,8 @@
 </script>
 
 <InlineNotification kind="warning">
-  <strong slot="title">Custom Title:</strong>
-  <strong slot="subtitle">Custom subtitle content.</strong>
+  <strong slot="titleChildren">Custom Title:</strong>
+  <strong slot="subtitleChildren">Custom subtitle content.</strong>
   <svelte:fragment slot="actions">
     <NotificationActionButton>Learn more</NotificationActionButton>
   </svelte:fragment>

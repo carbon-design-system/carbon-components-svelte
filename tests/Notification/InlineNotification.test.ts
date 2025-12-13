@@ -133,6 +133,20 @@ describe("InlineNotification", () => {
     expect(subtitleElement).toHaveTextContent("Slot subtitle");
   });
 
+  it("supports custom titleChildren slot", () => {
+    render(InlineNotificationTitleSlotTest);
+
+    const customTitle = screen.getByText("Slot title");
+    expect(customTitle).toBeInTheDocument();
+  });
+
+  it("supports custom subtitleChildren slot", () => {
+    render(InlineNotificationSubtitleSlotTest);
+
+    const customSubtitle = screen.getByText("Slot subtitle");
+    expect(customSubtitle).toBeInTheDocument();
+  });
+
   it("should render close button by default", () => {
     render(InlineNotificationTest);
 
