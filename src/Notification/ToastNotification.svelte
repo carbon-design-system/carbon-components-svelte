@@ -46,13 +46,17 @@
    */
   export let fullWidth = false;
 
+  /**
+   * Set to `true` to show the notification, `false` to hide it.
+   */
+  export let open = true;
+
   import { createEventDispatcher, onMount } from "svelte";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
 
   const dispatch = createEventDispatcher();
 
-  let open = true;
   let timeoutId = undefined;
 
   function close(closeFromTimeout) {
@@ -77,13 +81,13 @@
 
   $: if (typeof window !== "undefined") {
     /**
-     * Clear the timer if {@link timeout} changes.
+     * Clear the timer if {@link timeout} or {@link open} changes.
      * If set to `0`, no new timeout is started.
      * Else, a new timeout is started if {@link open} is not set to `false`.
      */
     clearTimeout(timeoutId);
 
-    /** Only start the timer of {@link open} has not been set to `false`. */
+    /** Only start the timer if {@link open} has not been set to `false`. */
     if (open && timeout) {
       timeoutId = setTimeout(() => close(true), timeout);
     }
