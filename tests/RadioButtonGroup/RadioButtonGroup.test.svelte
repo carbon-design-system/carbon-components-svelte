@@ -36,7 +36,7 @@
       console.log("change", e.detail);
     }}
   >
-    <span slot="legendText">Custom Legend</span>
+    <span slot="legendChildren">Custom Legend</span>
     <RadioButton labelText="Option 1" value="1" />
     <RadioButton labelText="Option 2" value="2" />
     <RadioButton labelText="Option 3" value="3" />
