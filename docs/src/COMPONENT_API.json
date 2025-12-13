@@ -14876,7 +14876,7 @@
         {
           "name": "gap",
           "kind": "let",
-          "description": "Specify the gap between items in the stack.\nThe scale maps to Carbon layout values.\nAlternatively, specify a custom value (e.g., \"200px\" or \"1.5rem\").\nCustom values *must* be a string.",
+          "description": "Specify the gap between items in the stack.\nThe scale maps to Carbon layout values.\nUse 0 to omit any gap class.\nAlternatively, specify a custom value (e.g., \"200px\" or \"1.5rem\").\nCustom values *must* be a string.",
           "type": "StackScale | string",
           "value": "1",
           "isFunction": false,
@@ -14921,10 +14921,10 @@
       "events": [],
       "typedefs": [
         {
-          "type": "1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13",
+          "type": "0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13",
           "name": "StackScale",
-          "description": "The stack scale maps to the following `@carbon/layout` values:\n- 1 --> 0.125rem\n- 2 --> 0.25rem\n- 3 --> 0.5rem\n- 4 --> 0.75rem\n- 5 --> 1rem\n- 6 --> 1.5rem\n- 7 --> 2rem\n- 8 --> 2.5rem\n- 9 --> 3rem\n- 10 --> 4rem\n- 11 --> 5rem\n- 12 --> 6rem\n- 13 --> 10rem",
-          "ts": "type StackScale =\n  | 1\n  | 2\n  | 3\n  | 4\n  | 5\n  | 6\n  | 7\n  | 8\n  | 9\n  | 10\n  | 11\n  | 12\n  | 13;\n"
+          "description": "The stack scale maps to the following `@carbon/layout` values:\n- 0 --> 0 (no gap)\n- 1 --> 0.125rem\n- 2 --> 0.25rem\n- 3 --> 0.5rem\n- 4 --> 0.75rem\n- 5 --> 1rem\n- 6 --> 1.5rem\n- 7 --> 2rem\n- 8 --> 2.5rem\n- 9 --> 3rem\n- 10 --> 4rem\n- 11 --> 5rem\n- 12 --> 6rem\n- 13 --> 10rem",
+          "ts": "type StackScale =\n  | 0\n  | 1\n  | 2\n  | 3\n  | 4\n  | 5\n  | 6\n  | 7\n  | 8\n  | 9\n  | 10\n  | 11\n  | 12\n  | 13;\n"
         }
       ],
       "generics": null,

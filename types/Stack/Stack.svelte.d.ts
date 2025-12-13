@@ -1,7 +1,21 @@
 import { SvelteComponentTyped } from "svelte";
 import type { HTMLAttributes } from "svelte/elements";
 
-export type StackScale = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
+export type StackScale =
+  | 0
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13;
 
 type $RestProps = HTMLAttributes<HTMLElement>;
 
@@ -9,6 +23,7 @@ type $Props = {
   /**
    * Specify the gap between items in the stack.
    * The scale maps to Carbon layout values.
+   * Use 0 to omit any gap class.
    * Alternatively, specify a custom value (e.g., "200px" or "1.5rem").
    * Custom values *must* be a string.
    * @default 1
