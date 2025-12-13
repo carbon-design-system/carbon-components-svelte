@@ -7490,6 +7490,18 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "open",
+          "kind": "let",
+          "description": "Set to `true` to show the notification, `false` to hide it.",
+          "type": "boolean",
+          "value": "true",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
         }
       ],
       "moduleExports": [],

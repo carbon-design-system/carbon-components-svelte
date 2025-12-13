@@ -64,6 +64,12 @@ type $Props = {
    */
   closeButtonDescription?: string;
 
+  /**
+   * Set to `true` to show the notification, `false` to hide it.
+   * @default true
+   */
+  open?: boolean;
+
   [key: `data-${string}`]: any;
 };
 
