@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.96.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.95.1...v0.96.0) (2025-12-14)
+
+### ⚠ BREAKING CHANGES
+
+- **radio-button-group:** change `legendText` slot to `legendChildren`
+- **tile-group:** rename `legend` to `legendText`
+- **selectable-tile-group:** rename `legend` to `legendText`
+- **data-table:** change `title`/`description` slots to `titleChildren`, `descriptionChildren`
+- **inline-notification:** change `title`/`subtitle`/`caption` slot names to `titleChildren`/`subtitleChildren`/`captionChildren`
+- **toast-notification:** change `title`/`subtitle`/`caption` slot names to `titleChildren`/`subtitleChildren`/`captionChildren`
+- **header:** change `company` prop to `companyText`
+- **header-action:** change `text` slot to `textChildren`
+- **context-menu-option:** change `labelText` slot to `labelChildren`
+- **file-uploader-drop-container:** change `labelText` slot to `labelChildren`
+- **file-uploader-button:** change `labelText` slot to `labelChildren`
+- **number-input:** change `labelText` slot to `labelChildren`
+- **text-area:** change `labelText` slot to `labelChildren`
+- **text-input:** change `labelText` slot to `labelChildren`
+- **password-input:** change `labelText` slot to `labelChildren`
+- **date-picker-input:** change `labelText` slot to `labelChildren`
+- **toggle-skeleton:** change `labelText` slot to `labelChildren`
+- **toggle:** change `labelText` slot to `labelChildren`
+- **search:** change `labelText` slot to `labelChildren`
+- **multi-select:** change `labelText` slot to `labelChildren`
+- **select:** change `labelText` slot to `labelChildren`
+- **combo-box:** change `labelText` slot to `labelChildren`
+- **progress-bar:** change `labelText` slot to `labelChildren`
+- **slider:** change `labelText` slot to `labelChildren`
+- **checkbox:** change `labelText` slot to `labelChildren`
+- **tree-view:** change `labelText` slot to `labelChildren`
+- **radio-button:** change `labelText` slot to `labelChildren`
+- **time-picker:** change `labelText` slot to `labelChildren`
+- **time-picker-select:** change `labelText` slot to `labelChildren`
+
+### Features
+
+- **inline-notification:** add `open` prop ([63058c6](https://github.com/carbon-design-system/carbon-components-svelte/commit/63058c6b3f12f9b4ced0c5123b02569273fda60b)), closes [#630](https://github.com/carbon-design-system/carbon-components-svelte/issues/630)
+- **selectable-tile-group:** add `legendChildren` slot ([ddb6abd](https://github.com/carbon-design-system/carbon-components-svelte/commit/ddb6abd78b1912b30b7764a4ed3c4beb03c81536))
+- **stack:** support `gap={0}` ([e374436](https://github.com/carbon-design-system/carbon-components-svelte/commit/e374436204adac6cae8a665b4eaa39efd8c6616e)), closes [#2426](https://github.com/carbon-design-system/carbon-components-svelte/issues/2426)
+- **tile-group:** add `legendChildren` slot ([4ff133b](https://github.com/carbon-design-system/carbon-components-svelte/commit/4ff133b202c45a47f7e287d4479d8bccdfc35566))
+- **toast-notification:** add `open` prop ([d703135](https://github.com/carbon-design-system/carbon-components-svelte/commit/d70313509920c11687bf91b5709e470d8cbe259b))
+
+### Bug Fixes
+
+- **pagination:** update JSDoc descriptions for dispatched events ([4588944](https://github.com/carbon-design-system/carbon-components-svelte/commit/4588944c4c394cf45ebc61c40dfa85288df4d30d))
+- **stack:** include styles for individual themes ([397ccba](https://github.com/carbon-design-system/carbon-components-svelte/commit/397ccbaf33fa9f9720eaece4096d8e508df7da62)), closes [#2417](https://github.com/carbon-design-system/carbon-components-svelte/issues/2417)
+- **time-picker:** allow longer labels ([3d1d187](https://github.com/carbon-design-system/carbon-components-svelte/commit/3d1d1876e0ad43ea268be713df4a91e682165f73)), closes [#1749](https://github.com/carbon-design-system/carbon-components-svelte/issues/1749)
+
 ### [0.95.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.95.0...v0.95.1) (2025-12-04)
 
 ### Bug Fixes
