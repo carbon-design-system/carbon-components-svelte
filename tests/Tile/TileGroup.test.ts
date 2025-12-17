@@ -172,9 +172,8 @@ describe("TileGroup", () => {
       >();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<CustomValue>();
     });
 
@@ -186,9 +185,8 @@ describe("TileGroup", () => {
       expectTypeOf<Props["selected"]>().toEqualTypeOf<string | undefined>();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<string>();
     });
 
@@ -207,9 +205,8 @@ describe("TileGroup", () => {
       type ComponentType = TileGroupComponent<Status>;
       type Events = ComponentEvents<ComponentType>;
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
 
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<
         Parameters<typeof handleSelect>[0]
@@ -252,9 +249,8 @@ describe("TileGroup", () => {
       >();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<InferredType>();
     });
   });

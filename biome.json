@@ -17,7 +17,8 @@
       "!!**/dist/**/*",
       "!!**/css/*.css",
       "!!**/docs/src/pages/index.svelte",
-      "!!**/docs/src/COMPONENT_API.json"
+      "!!**/docs/src/COMPONENT_API.json",
+      "!!src/TreeView/TreeViewNode.svelte"
     ]
   },
   "linter": {
