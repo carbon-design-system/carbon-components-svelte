@@ -1,7 +1,7 @@
 <script context="module">
   /**
    * Computes the depth of a tree leaf node relative to <ul role="tree" />
-   * @param {HTMLLIElement} node - The list item element representing the tree node
+   * @param {HTMLLIElement | null} node - The list item element representing the tree node
    * @returns {number} The depth of the node (0-based, where 0 is the root level)
    * @example
    * ```svelte
@@ -17,11 +17,20 @@
 
     if (node == null) return depth;
 
+    // Count the node itself if it's an LI
+    if (node instanceof HTMLElement && node.tagName === "LI") {
+      depth++;
+    }
+
     let parentNode = node.parentNode;
 
-    while (parentNode != null && parentNode.getAttribute("role") !== "tree") {
-      parentNode = parentNode.parentNode;
+    while (
+      parentNode != null &&
+      parentNode instanceof HTMLElement &&
+      parentNode.getAttribute("role") !== "tree"
+    ) {
       if (parentNode.tagName === "LI") depth++;
+      parentNode = parentNode.parentNode;
     }
 
     return depth;
@@ -29,13 +38,17 @@
 
   /**
    * Finds the nearest parent tree node
-   * @param {HTMLElement} node
+   * @param {HTMLElement | null} node
    * @returns {null | HTMLElement}
    */
   function findParentTreeNode(node) {
+    if (node == null || !(node instanceof HTMLElement)) return null;
     if (node.classList.contains("bx--tree-parent-node")) return node;
     if (node.classList.contains("bx--tree")) return null;
-    return findParentTreeNode(node.parentNode);
+    if (node.parentNode instanceof HTMLElement) {
+      return findParentTreeNode(node.parentNode);
+    }
+    return null;
   }
 </script>
 
