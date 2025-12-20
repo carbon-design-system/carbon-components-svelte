@@ -188,7 +188,7 @@
   on:change|stopPropagation={({ target }) => {
     files = multiple ? [...files, ...target.files] : [...target.files];
 
-    if (files && !disableLabelChanges) {
+    if (files && files.length > 0 && !disableLabelChanges) {
       labelText = files.length > 1 ? `${files.length} files` : files[0].name;
     }
 
