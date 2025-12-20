@@ -70,6 +70,39 @@ type $Props = {
    */
   ref?: null | HTMLInputElement;
 
+  /**
+   * Specify the icon to render.
+   * @default undefined
+   */
+  icon?: any;
+
+  /**
+   * Specify the ARIA label for the button icon.
+   * @default undefined
+   */
+  iconDescription?: string;
+
+  /**
+   * Set the alignment of the tooltip relative to the icon.
+   * Only applies to icon-only buttons.
+   * @default "center"
+   */
+  tooltipAlignment?: "start" | "center" | "end";
+
+  /**
+   * Set the position of the tooltip relative to the icon.
+   * @default "bottom"
+   */
+  tooltipPosition?: "top" | "right" | "bottom" | "left";
+
+  /**
+   * Set to `true` to hide the tooltip while maintaining accessibility.
+   * Only applies to icon-only buttons.
+   * When `true`, the tooltip is visually hidden but the `iconDescription` remains accessible to screen readers.
+   * @default false
+   */
+  hideTooltip?: boolean;
+
   [key: `data-${string}`]: any;
 };
 
