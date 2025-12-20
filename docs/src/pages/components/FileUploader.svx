@@ -3,7 +3,9 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
 ---
 
 <script>
-  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, UnorderedList, ListItem } from "carbon-components-svelte";
+  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, UnorderedList, ListItem, InlineNotification, Stack } from "carbon-components-svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -34,6 +36,45 @@ a small primary button.
 <FileUploaderButton kind="tertiary" size="default" />
 <FileUploaderButton kind="danger" size="lg" />
 <FileUploaderButton kind="danger-tertiary" size="xl" />
+
+## Button with icon
+
+Add an icon to the file uploader button using the `icon` prop.
+
+<FileUploaderButton icon={Add} labelText="Add file" />
+<FileUploaderButton icon={DocumentAdd} labelText="Upload document" kind="secondary" />
+
+## Icon-only button
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    Provide an <strong>iconDescription</strong> for accessibility. This text will be used as the button's tooltip and screen reader label. Set <strong>labelText=""</strong> to render an icon-only button.
+  </div>
+</InlineNotification>
+
+<FileUploaderButton labelText="" iconDescription="Add file" icon={Add} />
+<FileUploaderButton labelText="" iconDescription="Upload document" icon={DocumentAdd} kind="secondary" />
+
+## Icon-only button (custom tooltip position)
+
+Control the tooltip position and alignment with `tooltipPosition` and `tooltipAlignment`.
+
+<FileUploaderButton labelText="" tooltipPosition="right" tooltipAlignment="end" iconDescription="Add file" icon={Add} />
+
+## Icon-only button (hidden tooltip)
+
+Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers.
+
+<InlineNotification svx-ignore lowContrast title="Use case:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed (e.g., toolbars). The <strong>iconDescription</strong> remains accessible to screen readers.
+  </div>
+</InlineNotification>
+
+<Stack orientation="horizontal" gap={2}>
+  <FileUploaderButton labelText="" hideTooltip iconDescription="Add file" icon={Add} />
+  <FileUploaderButton labelText="" hideTooltip iconDescription="Upload document" icon={DocumentAdd} kind="secondary" />
+</Stack>
 
 ## File uploader
 
