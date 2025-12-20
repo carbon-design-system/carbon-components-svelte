@@ -86,6 +86,46 @@
   .#{$prefix}--stack-scale-13 {
     gap: 10rem;
   }
+
+  .#{$prefix}--stack-align-start {
+    align-items: flex-start;
+  }
+
+  .#{$prefix}--stack-align-center {
+    align-items: center;
+  }
+
+  .#{$prefix}--stack-align-end {
+    align-items: flex-end;
+  }
+
+  .#{$prefix}--stack-align-baseline {
+    align-items: baseline;
+  }
+
+  .#{$prefix}--stack-justify-start {
+    justify-content: flex-start;
+  }
+
+  .#{$prefix}--stack-justify-center {
+    justify-content: center;
+  }
+
+  .#{$prefix}--stack-justify-end {
+    justify-content: flex-end;
+  }
+
+  .#{$prefix}--stack-justify-space-between {
+    justify-content: space-between;
+  }
+
+  .#{$prefix}--stack-justify-space-around {
+    justify-content: space-around;
+  }
+
+  .#{$prefix}--stack-justify-space-evenly {
+    justify-content: space-evenly;
+  }
 }
 
 @include exports('stack') {
