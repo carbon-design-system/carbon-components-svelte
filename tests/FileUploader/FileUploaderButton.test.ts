@@ -114,7 +114,8 @@ describe("FileUploaderButton", () => {
     });
   });
 
-  it.skip("should reset label text when files are cleared", async () => {
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2436
+  it("should reset label text when files are cleared", async () => {
     const { container } = render(FileUploaderButton, {
       props: { labelText: "Add file" },
     });
