@@ -11,7 +11,9 @@ import { SvelteComponentTyped } from "svelte";
  * <li bind:this={nodeElement}>Node at depth {depth}</li>
  * ```
  */
-export declare function computeTreeLeafDepth(node: HTMLLIElement): number;
+export declare function computeTreeLeafDepth(
+  node: HTMLLIElement | null,
+): number;
 export type TreeNodeId = string | number;
 
 export type TreeViewNodeProps = {
