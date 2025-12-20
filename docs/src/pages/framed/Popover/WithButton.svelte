@@ -15,6 +15,6 @@
       open = ref.contains(detail.target);
     }}
   >
-    <div style="padding: var(--cds-spacing-05)">Content</div>
+    Content
   </Popover>
 </div>

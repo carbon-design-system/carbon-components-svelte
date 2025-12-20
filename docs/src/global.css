@@ -169,22 +169,25 @@ html[theme="g90"] .code-override {
   }
 }
 
-.preview-viewer > .bx--aspect-ratio,
-.preview-viewer [data-outline] {
+.preview-viewer > .bx--aspect-ratio {
   outline: 1px solid var(--cds-interactive-04);
 }
 
-[data-outline] {
-  position: relative;
-}
-
-[data-outline] ~ [data-outline] {
-  margin-top: var(--cds-spacing-08);
-}
-
+[data-component="Popover"] .preview-viewer > div:not(.bx--stack),
 [data-component="Stack"] .preview-viewer .bx--stack > * {
-  outline: 1px solid var(--cds-interactive-04);
   padding: 0.125rem 0.25rem;
+  outline: 1px solid var(--cds-interactive-04);
+}
+
+[data-component="Popover"] .preview-viewer > div:not(.bx--stack),
+[data-component="Popover"] .preview-viewer > .bx--stack > div {
+  position: relative;
+  padding: 0.125rem 0.25rem;
+  outline: 1px solid var(--cds-interactive-04);
+}
+
+[data-component="Popover"] .preview-viewer .bx--popover-contents {
+  padding: var(--cds-spacing-03);
 }
 
 #select-theme {
