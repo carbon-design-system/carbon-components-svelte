@@ -1,5 +1,5 @@
 <script>
-  import { Popover } from "carbon-components-svelte";
+  import { Popover, Stack } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -9,10 +9,10 @@
 
 Create a basic popover with absolute positioning.
 
-<div data-outline>
+<div>
     Parent
     <Popover open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        Content
     </Popover>
 </div>
 
@@ -20,10 +20,10 @@ Create a basic popover with absolute positioning.
 
 Set `relative` to `true` to position the popover relative to its parent element.
 
-<div data-outline>
+<div>
     Parent
     <Popover relative open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        Content
     </Popover>
 </div>
 
@@ -31,10 +31,10 @@ Set `relative` to `true` to position the popover relative to its parent element.
 
 Enable automatic closing when clicking outside the popover using `closeOnOutsideClick`.
 
-<div data-outline>
+<div>
     Parent
     <Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        Content
     </Popover>
 </div>
 
@@ -44,81 +44,83 @@ Customize the popover alignment using the `align` prop. Valid values include: `"
 
 The default `align` value is `"top"`.
 
-<div data-outline>
+<Stack gap={10}>
+<div>
     Parent
     <Popover open align="top-left">
-        <div style="padding: var(--cds-spacing-05)">top-left</div>
+        top-left
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="top-right">
-        <div style="padding: var(--cds-spacing-05)">top-right</div>
+        top-right
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="bottom">
-        <div style="padding: var(--cds-spacing-05)">bottom</div>
+        bottom
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="bottom-left">
-        <div style="padding: var(--cds-spacing-05)">bottom-left</div>
+        bottom-left
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="bottom-right">
-        <div style="padding: var(--cds-spacing-05)">bottom-right</div>
+        <div>bottom-right</div>
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="left">
-        <div style="padding: var(--cds-spacing-05)">left</div>
+        left
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="left-bottom">
-        <div style="padding: var(--cds-spacing-05)">left-bottom</div>
+        left-bottom
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="left-right">
-        <div style="padding: var(--cds-spacing-05)">left-right</div>
+        left-right
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="right">
-        <div style="padding: var(--cds-spacing-05)">right</div>
+        right
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="right-bottom">
-        <div style="padding: var(--cds-spacing-05)">right-bottom</div>
+        right-bottom
     </Popover>
 </div>
-<div data-outline>
+<div>
     Parent
     <Popover open align="right-top">
-        <div style="padding: var(--cds-spacing-05)">right-top</div>
+        right-top
     </Popover>
 </div>
+</Stack>
 
 ## With caret
 
 Add a caret indicator to the popover using the `caret` prop.
 
-<div data-outline>
+<div>
     Parent
     <Popover caret open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        Content
     </Popover>
 </div>
 
@@ -126,10 +128,10 @@ Add a caret indicator to the popover using the `caret` prop.
 
 By default, the caret is aligned "top". Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"` or `"right-top"`.
 
-<div data-outline>
+<div>
     Parent
     <Popover caret align="top-left" open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        Content
     </Popover>
 </div>
 
@@ -137,10 +139,10 @@ By default, the caret is aligned "top". Possible `align` values include `"top"`,
 
 Enable the light variant for use on dark backgrounds.
 
-<div data-outline>
+<div>
     Parent
     <Popover light open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        Content
     </Popover>
 </div>
 
@@ -148,10 +150,10 @@ Enable the light variant for use on dark backgrounds.
 
 Enable the high contrast variant for improved visibility.
 
-<div data-outline>
+<div>
     Parent
     <Popover highContrast open>
-        <div style="padding: var(--cds-spacing-05)">Content</div>
+        Content
     </Popover>
 </div>
 
