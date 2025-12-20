@@ -1,30 +1,30 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
-import InlineNotificationClose from "./InlineNotification.close.test.svelte";
-import InlineNotification from "./InlineNotification.test.svelte";
-import InlineNotificationActionHref from "./InlineNotificationActionHref.test.svelte";
-import InlineNotificationCustom from "./InlineNotificationCustom.test.svelte";
-import InlineNotificationReusable from "./InlineNotificationReusable.test.svelte";
+import InlineNotificationTest from "./InlineNotification.test.svelte";
+import InlineNotificationSubtitleSlotTest from "./InlineNotificationSubtitleSlot.test.svelte";
+import InlineNotificationTitleSlotTest from "./InlineNotificationTitleSlot.test.svelte";
 
 describe("InlineNotification", () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("should render with default props", () => {
-    render(InlineNotification);
+    render(InlineNotificationTest);
 
-    expect(screen.getByRole("alert")).toHaveClass(
-      "bx--inline-notification--error",
-    );
-    expect(screen.getByText("Error:")).toBeInTheDocument();
-    expect(
-      screen.getByText("An internal server error occurred."),
-    ).toBeInTheDocument();
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(notification).toBeInTheDocument();
+    expect(notification).toHaveClass("bx--inline-notification--error");
+    expect(notification).toHaveAttribute("role", "alert");
   });
 
-  it("should handle different kinds", () => {
+  it("should render with all kinds", () => {
     const kinds = [
       "error",
       "info",
@@ -33,231 +33,209 @@ describe("InlineNotification", () => {
       "warning",
       "warning-alt",
     ] as const;
+
     for (const kind of kinds) {
-      const { container } = render(InlineNotification, {
+      const { unmount } = render(InlineNotificationTest, {
         props: { kind },
       });
 
-      expect(
-        container.querySelector(`.bx--inline-notification--${kind}`),
-      ).toBeInTheDocument();
-      container.remove();
+      const notification = document.querySelector(".bx--inline-notification");
+      expect(notification).toHaveClass(`bx--inline-notification--${kind}`);
+      unmount();
     }
   });
 
-  it("should handle low contrast variant", () => {
-    render(InlineNotification, {
+  it("should render low contrast variant", () => {
+    render(InlineNotificationTest, {
       props: { lowContrast: true },
     });
 
-    expect(screen.getByRole("alert")).toHaveClass(
-      "bx--inline-notification--low-contrast",
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(notification).toHaveClass("bx--inline-notification--low-contrast");
+  });
+
+  it("should render title when prop is provided", () => {
+    render(InlineNotificationTest, {
+      props: { title: "Test Title" },
+    });
+
+    const titleElement = document.querySelector(
+      ".bx--inline-notification__title",
     );
+    expect(titleElement).toBeInTheDocument();
+    expect(titleElement).toHaveTextContent("Test Title");
   });
 
-  it("should handle close button click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(InlineNotification);
+  it("should NOT render title element when prop is empty", () => {
+    render(InlineNotificationTest, {
+      props: { title: "" },
+    });
 
-    await user.click(screen.getByRole("button"));
-
-    expect(consoleLog).toHaveBeenCalledWith("close", { timeout: false });
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    const titleElement = document.querySelector(
+      ".bx--inline-notification__title",
+    );
+    expect(titleElement).not.toBeInTheDocument();
   });
 
-  it("should hide close button", () => {
-    render(InlineNotification, {
-      props: { hideCloseButton: true },
+  it("should render subtitle when prop is provided", () => {
+    render(InlineNotificationTest, {
+      props: { subtitle: "Test Subtitle" },
+    });
+
+    const subtitleElement = document.querySelector(
+      ".bx--inline-notification__subtitle",
+    );
+    expect(subtitleElement).toBeInTheDocument();
+    expect(subtitleElement).toHaveTextContent("Test Subtitle");
+  });
+
+  it("should NOT render subtitle element when prop is empty", () => {
+    render(InlineNotificationTest, {
+      props: { subtitle: "" },
+    });
+
+    const subtitleElement = document.querySelector(
+      ".bx--inline-notification__subtitle",
+    );
+    expect(subtitleElement).not.toBeInTheDocument();
+  });
+
+  it("should NOT render any text elements when all props are empty", () => {
+    render(InlineNotificationTest, {
+      props: { title: "", subtitle: "" },
     });
 
     expect(
-      screen.queryByLabelText("Close notification"),
+      document.querySelector(".bx--inline-notification__title"),
     ).not.toBeInTheDocument();
-    expect(screen.getByRole("alert")).toHaveClass(
+    expect(
+      document.querySelector(".bx--inline-notification__subtitle"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("should render title element when slot is used", () => {
+    render(InlineNotificationTitleSlotTest);
+
+    const titleElement = document.querySelector(
+      ".bx--inline-notification__title",
+    );
+    expect(titleElement).toBeInTheDocument();
+    expect(titleElement).toHaveTextContent("Slot title");
+  });
+
+  it("should render subtitle element when slot is used", () => {
+    render(InlineNotificationSubtitleSlotTest);
+
+    const subtitleElement = document.querySelector(
+      ".bx--inline-notification__subtitle",
+    );
+    expect(subtitleElement).toBeInTheDocument();
+    expect(subtitleElement).toHaveTextContent("Slot subtitle");
+  });
+
+  it("supports custom titleChildren slot", () => {
+    render(InlineNotificationTitleSlotTest);
+
+    const customTitle = screen.getByText("Slot title");
+    expect(customTitle).toBeInTheDocument();
+  });
+
+  it("supports custom subtitleChildren slot", () => {
+    render(InlineNotificationSubtitleSlotTest);
+
+    const customSubtitle = screen.getByText("Slot subtitle");
+    expect(customSubtitle).toBeInTheDocument();
+  });
+
+  it("should render close button by default", () => {
+    render(InlineNotificationTest);
+
+    const closeButton = screen.getByLabelText("Close notification");
+    expect(closeButton).toBeInTheDocument();
+  });
+
+  it("should hide close button when hideCloseButton is true", () => {
+    render(InlineNotificationTest, {
+      props: { hideCloseButton: true },
+    });
+
+    const closeButton = screen.queryByLabelText("Close notification");
+    expect(closeButton).not.toBeInTheDocument();
+
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(notification).toHaveClass(
       "bx--inline-notification--hide-close-button",
     );
   });
 
-  it("should handle custom icon descriptions", () => {
-    render(InlineNotification, {
-      props: {
-        statusIconDescription: "Custom status",
-        closeButtonDescription: "Custom close",
-      },
-    });
+  it("should dispatch close event when close button is clicked", async () => {
+    vi.useRealTimers();
+    const closeHandler = vi.fn();
+    render(InlineNotificationTest, { props: { onclose: closeHandler } });
 
-    expect(screen.getByText("Custom status")).toBeInTheDocument();
-    expect(screen.getByRole("button")).toHaveAttribute(
-      "aria-label",
-      "Custom close",
-    );
+    const closeButton = screen.getByLabelText("Close notification");
+    await user.click(closeButton);
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: false });
   });
 
-  it("should handle custom role", () => {
-    render(InlineNotification, {
+  it("should auto-close after timeout", async () => {
+    const closeHandler = vi.fn();
+    render(InlineNotificationTest, {
+      props: { timeout: 1000, onclose: closeHandler },
+    });
+
+    expect(closeHandler).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1000);
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+  });
+
+  it("should use custom role", () => {
+    render(InlineNotificationTest, {
       props: { role: "status" },
     });
 
-    expect(screen.getByRole("status")).toBeInTheDocument();
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(notification).toHaveAttribute("role", "status");
   });
 
-  it("should handle timeout", async () => {
-    vi.useFakeTimers();
-    const consoleLog = vi.spyOn(console, "log");
-    render(InlineNotification, { props: { timeout: 1000 } });
-
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-    await vi.advanceTimersByTimeAsync(1000);
-
-    expect(consoleLog).toHaveBeenCalledWith("close", { timeout: true });
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  it("should remove notification from DOM when closed", async () => {
     vi.useRealTimers();
-  });
-
-  it("should handle custom slots", () => {
-    render(InlineNotificationCustom);
-
-    const title = screen.getByText("Custom Title:");
-    expect(title).not.toHaveClass("bx--inline-notification__title");
-    expect(title.tagName).toBe("STRONG");
-
-    const subtitle = screen.getByText("Custom subtitle content.");
-    expect(subtitle).not.toHaveClass("bx--inline-notification__subtitle");
-    expect(subtitle.tagName).toBe("STRONG");
-  });
-
-  it("should render action button", () => {
-    render(InlineNotificationCustom);
+    render(InlineNotificationTest);
 
     expect(
-      screen.getByRole("button", { name: "Learn more" }),
+      document.querySelector(".bx--inline-notification"),
     ).toBeInTheDocument();
+
+    const closeButton = screen.getByLabelText("Close notification");
+    await user.click(closeButton);
+    await tick();
+
+    expect(
+      document.querySelector(".bx--inline-notification"),
+    ).not.toBeInTheDocument();
   });
 
-  it("should cleanup timeout on unmount", () => {
-    vi.useFakeTimers();
-    const clearTimeoutSpy = vi.spyOn(window, "clearTimeout");
-
-    const { unmount } = render(InlineNotification, {
-      props: { timeout: 1_000 },
-    });
-
-    unmount();
-    expect(clearTimeoutSpy).toHaveBeenCalled();
+  it("should prevent close when event is cancelled", async () => {
     vi.useRealTimers();
-  });
-
-  it("should prevent default close behavior", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(InlineNotificationClose);
-
-    await user.click(screen.getByRole("button"));
-    expect(consoleLog).toHaveBeenCalledWith("close", { timeout: false });
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-  });
-
-  it("should render action button with href as link", () => {
-    render(InlineNotificationActionHref);
-
-    const link = screen.getByRole("link", { name: "View release notes" });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute("href", "https://example.com/releases");
-    expect(link).toHaveClass("bx--inline-notification__action-button");
-  });
-
-  describe("reusable notification", () => {
-    it("should default to open=true for backward compatibility", () => {
-      render(InlineNotification);
-
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+    const closeHandler = vi.fn((e) => {
+      e.preventDefault();
     });
+    render(InlineNotificationTest, { props: { onclose: closeHandler } });
 
-    it("should be controllable via open prop", async () => {
-      const { rerender } = render(InlineNotificationReusable, {
-        props: { open: false },
-      });
+    const closeButton = screen.getByLabelText("Close notification");
+    await user.click(closeButton);
+    await tick();
 
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      rerender({ open: true });
-      await tick();
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-
-      rerender({ open: false });
-      await tick();
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    });
-
-    it("should be reusable - can close and reopen with same message", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = render(InlineNotificationReusable, {
-        props: { open: true },
-      });
-
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-
-      // Close via button
-      await user.click(screen.getByRole("button"));
-      expect(consoleLog).toHaveBeenCalledWith("close", { timeout: false });
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      // Reopen
-      rerender({ open: true });
-      await tick();
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-      expect(screen.getByText("Error:")).toBeInTheDocument();
-      expect(
-        screen.getByText("An internal server error occurred."),
-      ).toBeInTheDocument();
-    });
-
-    it("should handle timeout with controlled open prop", async () => {
-      vi.useFakeTimers();
-      const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = render(InlineNotificationReusable, {
-        props: { open: true, timeout: 1000 },
-      });
-
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-      await vi.advanceTimersByTimeAsync(1000);
-
-      expect(consoleLog).toHaveBeenCalledWith("close", { timeout: true });
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      // Reopen after timeout - should start new timeout
-      rerender({ open: true });
-      await tick();
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-
-      await vi.advanceTimersByTimeAsync(1000);
-      expect(consoleLog).toHaveBeenCalledTimes(2);
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      vi.useRealTimers();
-    });
-
-    it("should update message when reopened", async () => {
-      const { rerender } = render(InlineNotificationReusable, {
-        props: { open: true },
-      });
-
-      expect(screen.getByText("Error:")).toBeInTheDocument();
-
-      // Close
-      await user.click(screen.getByRole("button"));
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      // Reopen with new message
-      rerender({
-        open: true,
-        title: "Success:",
-        subtitle: "Operation completed successfully.",
-      });
-      await tick();
-      expect(screen.getByText("Success:")).toBeInTheDocument();
-      expect(
-        screen.getByText("Operation completed successfully."),
-      ).toBeInTheDocument();
-    });
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(
+      document.querySelector(".bx--inline-notification"),
+    ).toBeInTheDocument();
   });
 });

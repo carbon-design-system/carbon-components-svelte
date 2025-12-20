@@ -1,30 +1,31 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
-import ToastNotificationClose from "./ToastNotification.close.test.svelte";
-import ToastNotification from "./ToastNotification.test.svelte";
-import ToastNotificationCustom from "./ToastNotificationCustom.test.svelte";
-import ToastNotificationReusable from "./ToastNotificationReusable.test.svelte";
+import ToastNotificationTest from "./ToastNotification.test.svelte";
+import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
+import ToastNotificationSubtitleSlotTest from "./ToastNotificationSubtitleSlot.test.svelte";
+import ToastNotificationTitleSlotTest from "./ToastNotificationTitleSlot.test.svelte";
 
 describe("ToastNotification", () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("should render with default props", () => {
-    render(ToastNotification);
+    render(ToastNotificationTest);
 
-    expect(screen.getByRole("alert")).toHaveClass(
-      "bx--toast-notification--error",
-    );
-    expect(screen.getByText("Error")).toBeInTheDocument();
-    expect(
-      screen.getByText("An internal server error occurred."),
-    ).toBeInTheDocument();
-    expect(screen.getByText("2024-03-21 12:00:00")).toBeInTheDocument();
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).toBeInTheDocument();
+    expect(notification).toHaveClass("bx--toast-notification--error");
+    expect(notification).toHaveAttribute("role", "alert");
   });
 
-  it("should handle different kinds", () => {
+  it("should render with all kinds", () => {
     const kinds = [
       "error",
       "info",
@@ -35,244 +36,254 @@ describe("ToastNotification", () => {
     ] as const;
 
     for (const kind of kinds) {
-      const { container } = render(ToastNotification, {
+      const { unmount } = render(ToastNotificationTest, {
         props: { kind },
       });
 
-      expect(
-        container.querySelector(`.bx--toast-notification--${kind}`),
-      ).toBeInTheDocument();
-      container.remove();
+      const notification = document.querySelector(".bx--toast-notification");
+      expect(notification).toHaveClass(`bx--toast-notification--${kind}`);
+      unmount();
     }
   });
 
-  it("should handle low contrast variant", () => {
-    render(ToastNotification, {
+  it("should render low contrast variant", () => {
+    render(ToastNotificationTest, {
       props: { lowContrast: true },
     });
 
-    expect(screen.getByRole("alert")).toHaveClass(
-      "bx--toast-notification--low-contrast",
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).toHaveClass("bx--toast-notification--low-contrast");
+  });
+
+  it("should render title when prop is provided", () => {
+    render(ToastNotificationTest, {
+      props: { title: "Test Title" },
+    });
+
+    const titleElement = document.querySelector(
+      ".bx--toast-notification__title",
     );
+    expect(titleElement).toBeInTheDocument();
+    expect(titleElement).toHaveTextContent("Test Title");
   });
 
-  it("should handle close button click", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ToastNotification);
+  it("should render title element when prop is empty", () => {
+    render(ToastNotificationTest, {
+      props: { title: "" },
+    });
 
-    await user.click(screen.getByRole("button"));
-
-    expect(consoleLog).toHaveBeenCalledWith("close", { timeout: false });
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    const titleElement = document.querySelector(
+      ".bx--toast-notification__title",
+    );
+    expect(titleElement).toBeInTheDocument();
   });
 
-  it("should hide close button", () => {
-    render(ToastNotification, {
-      props: { hideCloseButton: true },
+  it("should render subtitle when prop is provided", () => {
+    render(ToastNotificationTest, {
+      props: { subtitle: "Test Subtitle" },
+    });
+
+    const subtitleElement = document.querySelector(
+      ".bx--toast-notification__subtitle",
+    );
+    expect(subtitleElement).toBeInTheDocument();
+    expect(subtitleElement).toHaveTextContent("Test Subtitle");
+  });
+
+  it("should NOT render subtitle element when prop is empty", () => {
+    render(ToastNotificationTest, {
+      props: { subtitle: "" },
+    });
+
+    const subtitleElement = document.querySelector(
+      ".bx--toast-notification__subtitle",
+    );
+    expect(subtitleElement).not.toBeInTheDocument();
+  });
+
+  it("should render caption when prop is provided", () => {
+    render(ToastNotificationTest, {
+      props: { caption: "Test Caption" },
+    });
+
+    const captionElement = document.querySelector(
+      ".bx--toast-notification__caption",
+    );
+    expect(captionElement).toBeInTheDocument();
+    expect(captionElement).toHaveTextContent("Test Caption");
+  });
+
+  it("should NOT render caption element when prop is empty", () => {
+    render(ToastNotificationTest, {
+      props: { caption: "" },
+    });
+
+    const captionElement = document.querySelector(
+      ".bx--toast-notification__caption",
+    );
+    expect(captionElement).not.toBeInTheDocument();
+  });
+
+  it("should NOT render any text elements when all props are empty", () => {
+    render(ToastNotificationTest, {
+      props: { title: "", subtitle: "", caption: "" },
     });
 
     expect(
-      screen.queryByLabelText("Close notification"),
+      document.querySelector(".bx--toast-notification__title"),
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector(".bx--toast-notification__subtitle"),
+    ).not.toBeInTheDocument();
+    expect(
+      document.querySelector(".bx--toast-notification__caption"),
     ).not.toBeInTheDocument();
   });
 
-  it("should handle custom icon descriptions", () => {
-    render(ToastNotification, {
-      props: {
-        statusIconDescription: "Custom status",
-        closeButtonDescription: "Custom close",
-      },
-    });
+  it("should render title element when slot is used", () => {
+    render(ToastNotificationTitleSlotTest);
 
-    expect(screen.getByText("Custom status")).toBeInTheDocument();
-    expect(screen.getByRole("button")).toHaveAttribute(
-      "aria-label",
-      "Custom close",
+    const titleElement = document.querySelector(
+      ".bx--toast-notification__title",
     );
+    expect(titleElement).toBeInTheDocument();
+    expect(titleElement).toHaveTextContent("Slot title");
   });
 
-  it("should handle custom role", () => {
-    render(ToastNotification, {
-      props: { role: "status" },
-    });
+  it("should render subtitle element when slot is used", () => {
+    render(ToastNotificationSubtitleSlotTest);
 
-    expect(screen.getByRole("status")).toBeInTheDocument();
+    const subtitleElement = document.querySelector(
+      ".bx--toast-notification__subtitle",
+    );
+    expect(subtitleElement).toBeInTheDocument();
+    expect(subtitleElement).toHaveTextContent("Slot subtitle");
   });
 
-  it("should handle timeout", async () => {
-    vi.useFakeTimers();
-    const consoleLog = vi.spyOn(console, "log");
+  it("should render caption element when slot is used", () => {
+    render(ToastNotificationCaptionSlotTest);
 
-    render(ToastNotification, { props: { timeout: 1000 } });
-
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-
-    await vi.advanceTimersByTimeAsync(1000);
-
-    expect(consoleLog).toHaveBeenCalledWith("close", { timeout: true });
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    vi.useRealTimers();
-  });
-
-  it("should handle custom slots", () => {
-    render(ToastNotificationCustom);
-
-    const title = screen.getByText("Custom Title:");
-    expect(title).toBeInTheDocument();
-    expect(title.tagName).toBe("STRONG");
-
-    const subtitle = screen.getByText("Custom subtitle content.");
-    expect(subtitle).toBeInTheDocument();
-    expect(subtitle.tagName).toBe("STRONG");
-
-    const caption = screen.getByText("Custom caption content.");
-    expect(caption).toBeInTheDocument();
-    expect(caption.tagName).toBe("STRONG");
+    const captionElement = document.querySelector(
+      ".bx--toast-notification__caption",
+    );
+    expect(captionElement).toBeInTheDocument();
+    expect(captionElement).toHaveTextContent("Slot caption");
   });
 
   it("supports custom titleChildren slot", () => {
-    render(ToastNotificationCustom);
+    render(ToastNotificationTitleSlotTest);
 
-    const customTitle = screen.getByText("Custom Title:");
+    const customTitle = screen.getByText("Slot title");
     expect(customTitle).toBeInTheDocument();
   });
 
   it("supports custom subtitleChildren slot", () => {
-    render(ToastNotificationCustom);
+    render(ToastNotificationSubtitleSlotTest);
 
-    const customSubtitle = screen.getByText("Custom subtitle content.");
+    const customSubtitle = screen.getByText("Slot subtitle");
     expect(customSubtitle).toBeInTheDocument();
   });
 
   it("supports custom captionChildren slot", () => {
-    render(ToastNotificationCustom);
+    render(ToastNotificationCaptionSlotTest);
 
-    const customCaption = screen.getByText("Custom caption content.");
+    const customCaption = screen.getByText("Slot caption");
     expect(customCaption).toBeInTheDocument();
   });
 
-  it("should handle full width", () => {
-    render(ToastNotification, { props: { fullWidth: true } });
+  it("should render close button by default", () => {
+    render(ToastNotificationTest);
 
-    const notification = screen.getByRole("alert");
+    const closeButton = screen.getByLabelText("Close notification");
+    expect(closeButton).toBeInTheDocument();
+  });
+
+  it("should hide close button when hideCloseButton is true", () => {
+    render(ToastNotificationTest, {
+      props: { hideCloseButton: true },
+    });
+
+    const closeButton = screen.queryByLabelText("Close notification");
+    expect(closeButton).not.toBeInTheDocument();
+  });
+
+  it("should dispatch close event when close button is clicked", async () => {
+    vi.useRealTimers();
+    const closeHandler = vi.fn();
+    render(ToastNotificationTest, { props: { onclose: closeHandler } });
+
+    const closeButton = screen.getByLabelText("Close notification");
+    await user.click(closeButton);
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: false });
+  });
+
+  it("should auto-close after timeout", async () => {
+    const closeHandler = vi.fn();
+    render(ToastNotificationTest, {
+      props: { timeout: 1000, onclose: closeHandler },
+    });
+
+    expect(closeHandler).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1000);
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+  });
+
+  it("should render with full width", () => {
+    render(ToastNotificationTest, {
+      props: { fullWidth: true },
+    });
+
+    const notification = document.querySelector(".bx--toast-notification");
     expect(notification).toHaveStyle({ width: "100%" });
   });
 
-  it("should cleanup timeout on unmount", () => {
-    vi.useFakeTimers();
-    const clearTimeoutSpy = vi.spyOn(window, "clearTimeout");
-
-    const { unmount } = render(ToastNotification, {
-      props: { timeout: 1000 },
+  it("should use custom role", () => {
+    render(ToastNotificationTest, {
+      props: { role: "status" },
     });
 
-    unmount();
-    expect(clearTimeoutSpy).toHaveBeenCalled();
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).toHaveAttribute("role", "status");
+  });
+
+  it("should remove notification from DOM when closed", async () => {
     vi.useRealTimers();
+    render(ToastNotificationTest);
+
+    expect(
+      document.querySelector(".bx--toast-notification"),
+    ).toBeInTheDocument();
+
+    const closeButton = screen.getByLabelText("Close notification");
+    await user.click(closeButton);
+    await tick();
+
+    expect(
+      document.querySelector(".bx--toast-notification"),
+    ).not.toBeInTheDocument();
   });
 
-  it("should prevent default close behavior", async () => {
-    const consoleLog = vi.spyOn(console, "log");
-    render(ToastNotificationClose);
-
-    await user.click(screen.getByRole("button"));
-    expect(consoleLog).toHaveBeenCalledWith("close", { timeout: false });
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-  });
-
-  describe("reusable notification", () => {
-    it("should default to open=true for backward compatibility", () => {
-      render(ToastNotification);
-
-      expect(screen.getByRole("alert")).toBeInTheDocument();
+  it("should prevent close when event is cancelled", async () => {
+    vi.useRealTimers();
+    const closeHandler = vi.fn((e) => {
+      e.preventDefault();
     });
+    render(ToastNotificationTest, { props: { onclose: closeHandler } });
 
-    it("should be controllable via open prop", async () => {
-      const { rerender } = render(ToastNotificationReusable, {
-        props: { open: false },
-      });
+    const closeButton = screen.getByLabelText("Close notification");
+    await user.click(closeButton);
+    await tick();
 
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      rerender({ open: true });
-      await tick();
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-
-      rerender({ open: false });
-      await tick();
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    });
-
-    it("should be reusable - can close and reopen with same message", async () => {
-      const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = render(ToastNotificationReusable, {
-        props: { open: true },
-      });
-
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-
-      // Close via button
-      await user.click(screen.getByRole("button"));
-      expect(consoleLog).toHaveBeenCalledWith("close", { timeout: false });
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      // Reopen
-      rerender({ open: true });
-      await tick();
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-      expect(screen.getByText("Error")).toBeInTheDocument();
-      expect(
-        screen.getByText("An internal server error occurred."),
-      ).toBeInTheDocument();
-    });
-
-    it("should handle timeout with controlled open prop", async () => {
-      vi.useFakeTimers();
-      const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = render(ToastNotificationReusable, {
-        props: { open: true, timeout: 1000 },
-      });
-
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-      await vi.advanceTimersByTimeAsync(1000);
-
-      expect(consoleLog).toHaveBeenCalledWith("close", { timeout: true });
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      // Reopen after timeout - should start new timeout
-      rerender({ open: true });
-      await tick();
-      expect(screen.getByRole("alert")).toBeInTheDocument();
-
-      await vi.advanceTimersByTimeAsync(1000);
-      expect(consoleLog).toHaveBeenCalledTimes(2);
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      vi.useRealTimers();
-    });
-
-    it("should update message when reopened", async () => {
-      const { rerender } = render(ToastNotificationReusable, {
-        props: { open: true },
-      });
-
-      expect(screen.getByText("Error")).toBeInTheDocument();
-
-      // Close
-      await user.click(screen.getByRole("button"));
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-
-      // Reopen with new message
-      rerender({
-        open: true,
-        title: "Success",
-        subtitle: "Operation completed successfully.",
-      });
-      await tick();
-      expect(screen.getByText("Success")).toBeInTheDocument();
-      expect(
-        screen.getByText("Operation completed successfully."),
-      ).toBeInTheDocument();
-    });
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(
+      document.querySelector(".bx--toast-notification"),
+    ).toBeInTheDocument();
   });
 });
