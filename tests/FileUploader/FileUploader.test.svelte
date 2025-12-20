@@ -15,8 +15,26 @@
     | ((e: CustomEvent<ReadonlyArray<File>>) => void)
     | undefined = undefined;
 
+  export let disabled: ComponentProps<FileUploader>["disabled"] = false;
+  export let accept: ComponentProps<FileUploader>["accept"] = [];
+  export let multiple: ComponentProps<FileUploader>["multiple"] = true;
+  export let status: ComponentProps<FileUploader>["status"] = "edit";
+  export let labelTitle: ComponentProps<FileUploader>["labelTitle"] = "";
+  export let labelDescription: ComponentProps<FileUploader>["labelDescription"] =
+    "";
+  export let buttonLabel: ComponentProps<FileUploader>["buttonLabel"] =
+    "Add files";
+  export let name: ComponentProps<FileUploader>["name"] = "";
+
+  // Allow initial files to be set
+  $: if (typeof $$props.files !== "undefined" && $$props.files !== files) {
+    files = $$props.files;
+  }
+
   export function getInputElement() {
-    return document.querySelector('input[type="file"]') as HTMLInputElement;
+    const input = document.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    return input;
   }
 
   export function clearFiles() {
@@ -31,9 +49,14 @@
 <form data-testid="file-form">
   <FileUploader
     bind:this={fileUploader}
-    multiple
-    status="edit"
-    buttonLabel="Add files"
+    {multiple}
+    {status}
+    {buttonLabel}
+    {disabled}
+    {accept}
+    {labelTitle}
+    {labelDescription}
+    {name}
     bind:files
     on:add={onAdd}
     on:remove={onRemove}
