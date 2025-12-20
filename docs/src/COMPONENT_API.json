@@ -14964,6 +14964,30 @@
           "reactive": false
         },
         {
+          "name": "align",
+          "kind": "let",
+          "description": "Specify the cross-axis alignment of items in the stack.",
+          "type": "\"start\" | \"center\" | \"end\" | \"stretch\" | \"baseline\"",
+          "value": "\"stretch\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "justify",
+          "kind": "let",
+          "description": "Specify the main-axis alignment of items in the stack.",
+          "type": "\"start\" | \"center\" | \"end\" | \"space-between\" | \"space-around\" | \"space-evenly\"",
+          "value": "\"start\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "tag",
           "kind": "let",
           "description": "Specify the tag name.",

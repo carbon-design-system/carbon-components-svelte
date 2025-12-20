@@ -54,6 +54,24 @@ type $Props = {
   orientation?: "vertical" | "horizontal";
 
   /**
+   * Specify the cross-axis alignment of items in the stack.
+   * @default "stretch"
+   */
+  align?: "start" | "center" | "end" | "stretch" | "baseline";
+
+  /**
+   * Specify the main-axis alignment of items in the stack.
+   * @default "start"
+   */
+  justify?:
+    | "start"
+    | "center"
+    | "end"
+    | "space-between"
+    | "space-around"
+    | "space-evenly";
+
+  /**
    * Specify the tag name.
    * @default "div"
    */

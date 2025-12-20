@@ -35,6 +35,18 @@
   export let orientation = "vertical";
 
   /**
+   * Specify the cross-axis alignment of items in the stack.
+   * @type {"start" | "center" | "end" | "stretch" | "baseline"}
+   */
+  export let align = "stretch";
+
+  /**
+   * Specify the main-axis alignment of items in the stack.
+   * @type {"start" | "center" | "end" | "space-between" | "space-around" | "space-evenly"}
+   */
+  export let justify = "start";
+
+  /**
    * Specify the tag name.
    * @type {keyof HTMLElementTagNameMap}
    */
@@ -59,6 +71,16 @@
   class:bx--stack-scale-11={gap === 11}
   class:bx--stack-scale-12={gap === 12}
   class:bx--stack-scale-13={gap === 13}
+  class:bx--stack-align-start={align === "start"}
+  class:bx--stack-align-center={align === "center"}
+  class:bx--stack-align-end={align === "end"}
+  class:bx--stack-align-baseline={align === "baseline"}
+  class:bx--stack-justify-start={justify === "start"}
+  class:bx--stack-justify-center={justify === "center"}
+  class:bx--stack-justify-end={justify === "end"}
+  class:bx--stack-justify-space-between={justify === "space-between"}
+  class:bx--stack-justify-space-around={justify === "space-around"}
+  class:bx--stack-justify-space-evenly={justify === "space-evenly"}
   style:gap={typeof gap === "string" ? gap : undefined}
   {...$$restProps}
 >
