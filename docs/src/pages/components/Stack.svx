@@ -33,123 +33,147 @@ Alternatively, you can specify an arbitrary `gap` value (e.g., `200px`). You can
 Setting `gap` to `0` omits any gap class, resulting in no spacing between items.
 
 <Stack gap={0}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 1)
 
-By default, the `Stack` component has a vertical orientation and a gap scale of `1`.
+By default, the `Stack` component has a vertical orientation and a gap scale of `1` (2px).
 
 <Stack>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 2)
 
+Gap scale of `2` (4px).
+
 <Stack gap={2}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 3)
 
+Gap scale of `3` (8px).
+
 <Stack gap={3}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 4)
 
+Gap scale of `4` (12px).
+
 <Stack gap={4}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 5)
 
+Gap scale of `5` (16px).
+
 <Stack gap={5}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 6)
 
+Gap scale of `6` (24px).
+
 <Stack gap={6}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 7)
 
+Gap scale of `7` (32px).
+
 <Stack gap={7}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 8)
 
+Gap scale of `8` (40px).
+
 <Stack gap={8}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 9)
 
+Gap scale of `9` (48px).
+
 <Stack gap={9}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 10)
 
+Gap scale of `10` (64px).
+
 <Stack gap={10}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 11)
 
+Gap scale of `11` (80px).
+
 <Stack gap={11}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 12)
 
+Gap scale of `12` (96px).
+
 <Stack gap={12}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (gap 13)
 
+Gap scale of `13` (160px).
+
 <Stack gap={13}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (custom value)
 
 <Stack gap="22px">
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Vertical (custom element)
@@ -167,123 +191,147 @@ By default, the `Stack` component uses a `div` element. You can specify a differ
 Setting `gap` to `0` omits any gap class, resulting in no spacing between items.
 
 <Stack orientation="horizontal" gap={0}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 1)
 
-Set the `orientation` prop to `horizontal` to create a horizontal stack.
+Set the `orientation` prop to `horizontal` to create a horizontal stack. Gap scale of `1` (2px).
 
 <Stack orientation="horizontal">
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 2)
 
+Gap scale of `2` (4px).
+
 <Stack orientation="horizontal" gap={2}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 3)
 
+Gap scale of `3` (8px).
+
 <Stack orientation="horizontal" gap={3}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 4)
 
+Gap scale of `4` (12px).
+
 <Stack orientation="horizontal" gap={4}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 5)
 
+Gap scale of `5` (16px).
+
 <Stack orientation="horizontal" gap={5}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 6)
 
+Gap scale of `6` (24px).
+
 <Stack orientation="horizontal" gap={6}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 7)
 
+Gap scale of `7` (32px).
+
 <Stack orientation="horizontal" gap={7}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 8)
 
+Gap scale of `8` (40px).
+
 <Stack orientation="horizontal" gap={8}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 9)
 
+Gap scale of `9` (48px).
+
 <Stack orientation="horizontal" gap={9}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 10)
 
+Gap scale of `10` (64px).
+
 <Stack orientation="horizontal" gap={10}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 11)
 
+Gap scale of `11` (80px).
+
 <Stack orientation="horizontal" gap={11}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 12)
 
+Gap scale of `12` (96px).
+
 <Stack orientation="horizontal" gap={12}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (gap 13)
 
+Gap scale of `13` (160px).
+
 <Stack orientation="horizontal" gap={13}>
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (custom value)
 
 <Stack orientation="horizontal" gap="22px">
-  <p>Item 1</p>
-  <p>Item 2</p>
-  <p>Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Horizontal (custom element)
@@ -411,9 +459,9 @@ Distributes items evenly with equal space around each item.
 Distributes items evenly with equal space between each item.
 
 <Stack orientation="horizontal" justify="space-evenly">
-  <p >Item 1</p>
-  <p >Item 2</p>
-  <p >Item 3</p>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ## Combined align and justify
