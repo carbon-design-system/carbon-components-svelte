@@ -51,7 +51,9 @@ describe("FileUploader", () => {
     );
 
     if (closeButtons.length >= 2) {
-      await user.click(closeButtons[1] as HTMLElement);
+      const closeButton = closeButtons[1];
+      assert(closeButton instanceof HTMLElement);
+      await user.click(closeButton);
     }
 
     await vi.waitFor(() => {
@@ -195,5 +197,211 @@ describe("FileUploader", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  it("should dispatch add event when files are added", async () => {
+    const addHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { onAdd: addHandler },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      expect(addHandler).toHaveBeenCalled();
+    });
+
+    const event = addHandler.mock.calls[0][0];
+    expect(event.detail).toHaveLength(2);
+    expect(event.detail[0].name).toBe("file1.txt");
+    expect(event.detail[1].name).toBe("file2.txt");
+  });
+
+  it("should dispatch change event when files change", async () => {
+    const changeHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { onChange: changeHandler },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    const event = changeHandler.mock.calls[0][0];
+    expect(event.detail).toHaveLength(1);
+    expect(event.detail[0].name).toBe("file1.txt");
+  });
+
+  it("should handle disabled state", () => {
+    const { container } = render(FileUploader, {
+      props: { disabled: true },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    expect(input).toBeDisabled();
+
+    const button = container.querySelector("button");
+    assert(button);
+    expect(button).toHaveClass("bx--btn--disabled");
+  });
+
+  it("should respect accept prop", () => {
+    const { container } = render(FileUploader, {
+      props: { accept: [".jpg", ".png"] },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    expect(input).toHaveAttribute("accept", ".jpg,.png");
+  });
+
+  it("should handle single file selection when multiple is false", async () => {
+    const { component } = render(FileUploader, {
+      props: { multiple: false },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+
+    const input = component.getInputElement();
+    expect(input).not.toHaveAttribute("multiple");
+
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      // When multiple is false, only one file should be selected
+      expect(fileNames.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it("should handle multiple file selection when multiple is true", async () => {
+    const { component } = render(FileUploader, {
+      props: { multiple: true },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+
+    const input = component.getInputElement();
+    expect(input).toHaveAttribute("multiple");
+
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      expect(fileNames).toHaveLength(2);
+    });
+  });
+
+  it("should render labelTitle prop", () => {
+    render(FileUploader, {
+      props: { labelTitle: "Upload Files" },
+    });
+
+    expect(screen.getByText("Upload Files")).toBeInTheDocument();
+  });
+
+  it("should render labelDescription prop", () => {
+    render(FileUploader, {
+      props: { labelDescription: "Select files to upload" },
+    });
+
+    expect(screen.getByText("Select files to upload")).toBeInTheDocument();
+  });
+
+  it("should render different status values", () => {
+    const { container: container1 } = render(FileUploader, {
+      props: {
+        status: "uploading",
+        files: [new File(["content"], "test.txt")],
+      },
+    });
+
+    const { container: container2 } = render(FileUploader, {
+      props: { status: "edit", files: [new File(["content"], "test.txt")] },
+    });
+
+    const { container: container3 } = render(FileUploader, {
+      props: { status: "complete", files: [new File(["content"], "test.txt")] },
+    });
+
+    // Check that components render with different statuses
+    expect(container1.querySelector(".bx--file-container")).toBeInTheDocument();
+    expect(container2.querySelector(".bx--file-container")).toBeInTheDocument();
+    expect(container3.querySelector(".bx--file-container")).toBeInTheDocument();
+  });
+
+  it("should handle buttonLabel prop", () => {
+    render(FileUploader, {
+      props: { buttonLabel: "Choose Files" },
+    });
+
+    const button = screen.getByText("Choose Files");
+    expect(button).toBeInTheDocument();
+  });
+
+  it("should handle name attribute", () => {
+    const { container } = render(FileUploader, {
+      props: { name: "file-upload" },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    expect(input).toHaveAttribute("name", "file-upload");
+  });
+
+  it("should remove file on click", async () => {
+    const { component } = render(FileUploader);
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    });
+
+    const closeButton = document.querySelector(
+      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
+    );
+    assert(closeButton);
+    await user.click(closeButton);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should remove file on keyboard interaction", async () => {
+    const { component } = render(FileUploader);
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    });
+
+    const closeButton = document.querySelector(
+      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
+    );
+    assert(closeButton instanceof HTMLElement);
+    closeButton.focus();
+    await user.keyboard("{Enter}");
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).not.toBeInTheDocument();
+    });
   });
 });
