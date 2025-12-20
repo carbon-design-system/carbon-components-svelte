@@ -182,6 +182,11 @@ html[theme="g90"] .code-override {
   margin-top: var(--cds-spacing-08);
 }
 
+[data-component="Stack"] .preview-viewer .bx--stack > * {
+  outline: 1px solid var(--cds-interactive-04);
+  padding: 0.125rem 0.25rem;
+}
+
 #select-theme {
   width: auto;
 }
