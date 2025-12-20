@@ -73,7 +73,7 @@
   />
 </svelte:head>
 
-<Content data-components>
+<Content data-components data-component={component}>
   <Grid class="fix-overflow">
     <Row>
       <Column>
