@@ -295,3 +295,132 @@ By default, the `Stack` component uses a `div` element. You can specify a differ
   <li>Item 2</li>
   <li>Item 3</li>
 </Stack>
+
+## Horizontal align start
+
+Aligns items to the start of the cross-axis. For horizontal stacks, this aligns items to the top. The default `align` value is `"stretch"`, which stretches items to fill the container height.
+
+<Stack orientation="horizontal" align="start" gap={2} style="height: 120px">
+  <div  style="height: 40px">Short</div>
+  <div  style="height: 80px">Taller item</div>
+  <div  style="height: 50px">Short</div>
+</Stack>
+
+## Horizontal align center
+
+Aligns items to the center of the cross-axis. For horizontal stacks, this centers items vertically.
+
+<Stack orientation="horizontal" align="center" gap={2} style="height: 120px">
+  <div  style="height: 40px; min-width: 60px">Short</div>
+  <div  style="height: 80px; min-width: 80px">Taller item</div>
+  <div  style="height: 50px; min-width: 60px">Short</div>
+</Stack>
+
+## Horizontal align end
+
+Aligns items to the end of the cross-axis. For horizontal stacks, this aligns items to the bottom.
+
+<Stack orientation="horizontal" align="end" gap={2} style="height: 120px">
+  <div  style="height: 40px">Short</div>
+  <div  style="height: 80px">Taller item</div>
+  <div  style="height: 50px">Short</div>
+</Stack>
+
+## Horizontal align baseline
+
+Aligns items along their baseline.
+
+<Stack orientation="horizontal" align="baseline" gap={2}>
+  <div  style="font-size: 2rem; line-height: 1">Large</div>
+  <div  style="font-size: 1rem; line-height: 1">Medium</div>
+  <div  style="font-size: 0.75rem; line-height: 1">Small</div>
+</Stack>
+
+## Vertical align start
+
+For vertical stacks, `align="start"` aligns items to the start of the cross-axis (left).
+
+<Stack orientation="vertical" align="start" gap={2}>
+  <div  style="width: 80px">Narrow</div>
+  <div  style="width: 150px">Wider item</div>
+  <div  style="width: 100px">Medium</div>
+</Stack>
+
+## Vertical align center
+
+For vertical stacks, `align="center"` centers items horizontally.
+
+<Stack orientation="vertical" align="center" gap={2}>
+  <div  style="width: 80px">Narrow</div>
+  <div  style="width: 150px">Wider item</div>
+  <div  style="width: 100px">Medium</div>
+</Stack>
+
+## Vertical align end
+
+For vertical stacks, `align="end"` aligns items to the end of the cross-axis (right).
+
+<Stack orientation="vertical" align="end" gap={2}>
+  <div  style="width: 80px">Narrow</div>
+  <div  style="width: 150px">Wider item</div>
+  <div  style="width: 100px">Medium</div>
+</Stack>
+
+## Horizontal justify center
+
+Aligns items to the center of the main axis. The default `justify` value is `"start"`, which aligns items to the start of the main axis.
+
+<Stack orientation="horizontal" justify="center" gap={2}>
+  <div >Item 1</div>
+  <div >Item 2</div>
+  <div >Item 3</div>
+</Stack>
+
+## Horizontal justify end
+
+Aligns items to the end of the main axis.
+
+<Stack orientation="horizontal" justify="end" gap={2}>
+  <div >Item 1</div>
+  <div >Item 2</div>
+  <div >Item 3</div>
+</Stack>
+
+## Horizontal justify space-between
+
+Distributes items evenly with the first item at the start and the last item at the end.
+
+<Stack orientation="horizontal" justify="space-between">
+  <div >Item 1</div>
+  <div >Item 2</div>
+  <div >Item 3</div>
+</Stack>
+
+## Horizontal justify space-around
+
+Distributes items evenly with equal space around each item.
+
+<Stack orientation="horizontal" justify="space-around">
+  <div >Item 1</div>
+  <div >Item 2</div>
+  <div >Item 3</div>
+</Stack>
+
+## Horizontal justify space-evenly
+
+Distributes items evenly with equal space between each item.
+
+<Stack orientation="horizontal" justify="space-evenly">
+  <p >Item 1</p>
+  <p >Item 2</p>
+  <p >Item 3</p>
+</Stack>
+
+## Combined align and justify
+
+Use both `align` and `justify` to center content on both axes.
+
+<Stack align="center" justify="center" gap={4}>
+  <div >Centered</div>
+  <div >Content</div>
+</Stack>
