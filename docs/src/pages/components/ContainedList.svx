@@ -1,0 +1,150 @@
+---
+components: ["ContainedList", "ContainedListItem"]
+---
+
+<script>
+  import { Button, Search, ContainedList, ContainedListItem } from "carbon-components-svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import Close from "carbon-icons-svelte/lib/Close.svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+`ContainedList` provides a structured way to display a list of items within a container. It supports various sizes, interactive items, icons, actions, and search functionality. The component is useful for displaying hierarchical or grouped content with consistent spacing and styling.
+
+## Default
+
+Display a basic contained list with a header label and list items. The default size is `md`.
+
+<ContainedList labelText="List title">
+  <ContainedListItem>Item 1</ContainedListItem>
+  <ContainedListItem>Item 2</ContainedListItem>
+  <ContainedListItem>Item 3</ContainedListItem>
+</ContainedList>
+
+## Custom label
+
+Use the `labelChildren` slot to provide custom label content instead of using the `labelText` prop.
+
+<ContainedList>
+  <span slot="labelChildren" style:font-weight="normal">Custom label</span>
+  <ContainedListItem>Item 1</ContainedListItem>
+  <ContainedListItem>Item 2</ContainedListItem>
+  <ContainedListItem>Item 3</ContainedListItem>
+</ContainedList>
+
+## Small size
+
+Use the `sm` size variant for more compact list items with reduced padding and height.
+
+<ContainedList labelText="List title" size="sm">
+  <ContainedListItem>Item 1</ContainedListItem>
+  <ContainedListItem>Item 2</ContainedListItem>
+  <ContainedListItem>Item 3</ContainedListItem>
+</ContainedList>
+
+## Large size
+
+Use the `lg` size variant for larger list items with increased padding and height.
+
+<ContainedList labelText="List title" size="lg">
+  <ContainedListItem>Item 1</ContainedListItem>
+  <ContainedListItem>Item 2</ContainedListItem>
+  <ContainedListItem>Item 3</ContainedListItem>
+</ContainedList>
+
+## Extra-large size
+
+Use the `xl` size variant for the largest list items with maximum padding and height.
+
+<ContainedList labelText="List title" size="xl">
+  <ContainedListItem>Item 1</ContainedListItem>
+  <ContainedListItem>Item 2</ContainedListItem>
+  <ContainedListItem>Item 3</ContainedListItem>
+</ContainedList>
+
+## Inset rulers
+
+Set the `inset` prop to `true` to make the divider lines between list items inset from the edges, creating a more refined visual appearance.
+
+<ContainedList labelText="List title" inset>
+  <ContainedListItem>Item 1</ContainedListItem>
+  <ContainedListItem>Item 2</ContainedListItem>
+  <ContainedListItem>Item 3</ContainedListItem>
+</ContainedList>
+
+## Disclosed variant
+
+Set `kind="disclosed"` to use a more compact header style with sticky positioning. When scrolling, the list header will stick to the top of the container, making it useful for long lists where you want to keep the context visible. The header in the disclosed variant has a fixed height.
+
+<div style:height="200px" style:overflow-y="auto">
+  <ContainedList labelText="List title 1" kind="disclosed">
+    {#each Array.from({ length: 6 }) as i}
+      <ContainedListItem>Item</ContainedListItem>
+    {/each}
+  </ContainedList>
+  <ContainedList labelText="List title 2" kind="disclosed">
+    {#each Array.from({ length: 6 }) as i}
+      <ContainedListItem>Item</ContainedListItem>
+    {/each}
+  </ContainedList>
+</div>
+
+## With icons
+
+Add icons to list items by passing an icon component to the `icon` prop. Icons are displayed to the left of the item content.
+
+<ContainedList labelText="List title">
+  <ContainedListItem icon={Add}>Item 1</ContainedListItem>
+  <ContainedListItem icon={Add}>Item 2</ContainedListItem>
+  <ContainedListItem icon={Add}>Item 3</ContainedListItem>
+</ContainedList>
+
+## With expandable search
+
+Use the `action` slot on `ContainedList` to add interactive elements like an expandable search component. The search will be positioned in the header and can be used to filter list items.
+
+<ContainedList labelText="List title">
+  <Search slot="action" expandable />
+  <ContainedListItem>Item 1</ContainedListItem>
+  <ContainedListItem>Item 2</ContainedListItem>
+  <ContainedListItem>Item 3</ContainedListItem>
+</ContainedList>
+
+## With persistent search
+
+Pass the `Search` component as a direct child (not in the `action` slot) to create a persistent search that appears below the title. The search input is styled specifically for use within the list and is adapted to work with the sticky list headers.
+
+<FileSource src="/framed/ContainedList/PersistentSearch" />
+
+## Interactive items
+
+Set the `interactive` prop to `true` on `ContainedListItem` to render the item as a clickable button element. This enables keyboard navigation and click event handling. You can also set `disabled` to prevent interaction.
+
+<ContainedList labelText="List title">
+  <ContainedListItem interactive on:click={() => console.log('click')}>
+    Item 1
+  </ContainedListItem>
+  <ContainedListItem interactive disabled>Item 2</ContainedListItem>
+  <ContainedListItem interactive>Item 3</ContainedListItem>
+</ContainedList>
+
+## Interactive items with actions
+
+Add interactive elements to individual list items using the `action` slot on `ContainedListItem`. This is useful for adding buttons, icons, or other controls that appear on the right side of each item. Actions are positioned absolutely and don't interfere with the item's clickable area.
+
+<ContainedList labelText="List title">
+  <ContainedListItem interactive on:click={() => console.log('click')}>
+    Item 1
+    <Button
+      slot="action"
+      kind="ghost"
+      iconDescription="Dismiss"
+      icon={Close}
+      on:click={() => console.log('click close')}
+    />
+  </ContainedListItem>
+  <ContainedListItem interactive disabled>Item 2</ContainedListItem>
+  <ContainedListItem interactive>
+    Item 3
+  </ContainedListItem>
+</ContainedList>
