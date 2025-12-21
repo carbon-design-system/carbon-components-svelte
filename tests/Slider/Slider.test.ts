@@ -129,6 +129,76 @@ describe("Slider", () => {
     expect(label).toHaveClass("bx--label--disabled");
   });
 
+  it("should handle readonly state", () => {
+    render(Slider, {
+      props: { readonly: true },
+    });
+
+    const slider = screen.getByRole("slider");
+    const sliderElement = slider.parentElement;
+    const container = sliderElement?.parentElement;
+    const inputs = screen.getAllByLabelText("Test Slider");
+    const input = inputs.find((el) => el.tagName === "INPUT");
+
+    assert(sliderElement);
+    assert(container);
+    assert(input);
+    expect(sliderElement).toHaveClass("bx--slider--readonly");
+    expect(container).toHaveClass("bx--slider-container--readonly");
+    expect(input).toHaveAttribute("readonly");
+    expect(slider).not.toHaveAttribute("tabindex");
+  });
+
+  it("should not allow keyboard interaction when readonly", async () => {
+    render(Slider, {
+      props: { readonly: true, value: 50 },
+    });
+
+    const slider = screen.getByRole("slider");
+    await user.tab();
+    expect(slider).not.toHaveFocus();
+  });
+
+  it("should not allow mouse dragging when readonly", async () => {
+    render(Slider, {
+      props: { readonly: true, value: 50 },
+    });
+
+    const slider = screen.getByRole("slider");
+    const initialValue = slider.getAttribute("aria-valuenow");
+
+    const container = screen.getByRole("presentation");
+    await user.click(container);
+
+    // Value should not change
+    expect(slider.getAttribute("aria-valuenow")).toBe(initialValue);
+  });
+
+  it("should not allow input value changes when readonly", () => {
+    render(Slider, {
+      props: { readonly: true },
+    });
+
+    const inputs = screen.getAllByLabelText("Test Slider");
+    const input = inputs.find((el) => el.tagName === "INPUT");
+    assert(input);
+
+    expect(input).toHaveAttribute("readonly");
+    // Input should be readonly and not allow changes
+    expect(input).toHaveProperty("readOnly", true);
+  });
+
+  it("should hide thumb visually when readonly", () => {
+    render(Slider, {
+      props: { readonly: true },
+    });
+
+    const slider = screen.getByRole("slider");
+    const sliderElement = slider.parentElement;
+    assert(sliderElement);
+    expect(sliderElement).toHaveClass("bx--slider--readonly");
+  });
+
   it("should handle invalid state", () => {
     render(Slider, {
       props: { invalid: true },

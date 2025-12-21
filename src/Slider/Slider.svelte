@@ -34,6 +34,9 @@
   /** Set to `true` to disable the slider */
   export let disabled = false;
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
   /** Set to `true` to enable the light variant */
   export let light = false;
 
@@ -86,10 +89,12 @@
   let currentEvent = null;
 
   function startDragging() {
+    if (disabled || readonly) return;
     dragging = true;
   }
 
   function startHolding() {
+    if (disabled || readonly) return;
     holding = true;
   }
 
@@ -107,7 +112,7 @@
   }
 
   function calcValue(e) {
-    if (disabled || !e) return;
+    if (disabled || readonly || !e) return;
 
     const offsetX = e.touches ? e.touches[0].clientX : e.clientX;
     const { left, width } = trackRef.getBoundingClientRect();
@@ -142,7 +147,7 @@
       dragging = false;
     }
 
-    if (!holding && !disabled) {
+    if (!holding && !disabled && !readonly) {
       dispatch("change", value);
     }
   }
@@ -177,7 +182,11 @@
       {labelText}
     </slot>
   </label>
-  <div class:bx--slider-container={true} style:width={fullWidth && "100%"}>
+  <div
+    class:bx--slider-container={true}
+    class:bx--slider-container--readonly={readonly}
+    style:width={fullWidth && "100%"}
+  >
     <span class:bx--slider__range-label={true}>{minLabel || min}</span>
     <div
       bind:this={ref}
@@ -185,11 +194,13 @@
       tabindex="-1"
       class:bx--slider={true}
       class:bx--slider--disabled={disabled}
+      class:bx--slider--readonly={readonly}
       style:max-width={fullWidth ? "none" : undefined}
       on:mousedown={startDragging}
       on:mousedown={startHolding}
       on:touchstart={startHolding}
       on:keydown={({ shiftKey, key }) => {
+        if (disabled || readonly) return;
         const keys = {
           ArrowDown: -1,
           ArrowLeft: -1,
@@ -206,7 +217,7 @@
     >
       <div
         role="slider"
-        tabindex="0"
+        tabindex={readonly || disabled ? undefined : 0}
         class:bx--slider__thumb={true}
         style:left="{left}%"
         aria-valuemax={max}
@@ -236,12 +247,15 @@
       aria-labelledby={$$props["aria-label"] ? undefined : labelId}
       aria-label={$$props["aria-label"] || "Slider number input"}
       {disabled}
+      {readonly}
       {required}
       {min}
       {max}
       {step}
       on:change={({ target }) => {
-        value = Number(target.value);
+        if (!readonly) {
+          value = Number(target.value);
+        }
       }}
       data-invalid={invalid || null}
       aria-invalid={invalid || null}

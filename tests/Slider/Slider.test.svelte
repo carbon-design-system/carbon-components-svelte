@@ -1,9 +1,10 @@
 <script lang="ts">
   import { Slider } from "carbon-components-svelte";
 
-  let value = 0;
+  export let value = 0;
 
   export let disabled = false;
+  export let readonly = false;
   export let invalid = false;
   export let required = false;
   export let minLabel = "";
@@ -31,6 +32,7 @@
     {max}
     {step}
     {disabled}
+    {readonly}
     {invalid}
     {invalidText}
     {required}
@@ -61,6 +63,7 @@
     {max}
     {step}
     {disabled}
+    {readonly}
     {invalid}
     {invalidText}
     {required}
