@@ -1,0 +1,63 @@
+---
+components: ["Heading", "Section"]
+---
+
+<script>
+  import { Heading, Section } from "carbon-components-svelte";
+  import Preview from "../../components/Preview.svelte";
+</script>
+
+`Heading` and `Section` components work together to automatically manage semantic heading hierarchy in your application. The `Heading` component automatically adjusts its heading level (h1–h6) based on the nesting depth of `Section` components, ensuring proper document structure and accessibility without manual level management.
+
+## Default
+
+A top-level `Heading` inside a `Section` renders as an `h1` element. This provides a semantic starting point for your document structure.
+
+<Section>
+  <Heading>Heading 1</Heading>
+</Section>
+
+## Nested sections
+
+As you nest `Section` components, the `Heading` levels automatically increment to maintain proper hierarchy. Each nested section increases the heading level by one (h1 → h2 → h3, etc.). Heading levels are automatically capped at `h6` to ensure valid HTML structure, even if you nest deeper than six levels.
+
+<Section>
+  <Heading>Heading 1</Heading>
+  <Section>
+    <Heading>Heading 2</Heading>
+    <Section>
+      <Heading>Heading 3</Heading>
+      <Section>
+        <Heading>Heading 4</Heading>
+        <Section>
+          <Heading>Heading 5</Heading>
+          <Section>
+            <Heading>Heading 6</Heading>
+            <Section>
+              <Heading>Capped at Heading 6</Heading>
+            </Section>
+          </Section>
+        </Section>
+      </Section>
+    </Section>
+  </Section>
+</Section>
+
+## Custom level
+
+Use the `level` prop on `Section` to specify a custom starting heading level. This is useful when you need to start a section at a specific level, such as when embedding content that should begin at a higher heading level. Child sections will continue to increment from this custom level.
+
+<Section level={5}>
+  <Heading>Starts at Heading 5</Heading>
+  <Section>
+    <Heading>Heading 6</Heading>
+  </Section>
+</Section>
+
+## Custom section element
+
+By default, `Section` renders a semantic `<section>` element. Use the `tag` prop to render a different HTML element while maintaining the heading level context functionality. This is useful when you need to use a different semantic element (like `<div>`, `<article>`, or `<aside>`) but still want automatic heading level management.
+
+<Section tag="div">
+  <Heading>Heading 1</Heading>
+</Section>
