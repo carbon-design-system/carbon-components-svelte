@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.98.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.97.0...v0.98.0) (2025-12-21)
+
+### Features
+
+- **contained-list:** add `ContainedList` and `ContainedListItem` ([836f5e7](https://github.com/carbon-design-system/carbon-components-svelte/commit/836f5e7095b5d198422dcbfc2a0acc0c17de0235))
+- **file-uploader:** add `maxFileSize` prop ([0eb5f9d](https://github.com/carbon-design-system/carbon-components-svelte/commit/0eb5f9ddcc4a761c9eaef076c7599c805bb1ef79))
+- **heading:** add `Heading` and `Section` components ([c028489](https://github.com/carbon-design-system/carbon-components-svelte/commit/c0284894cff73dfc9d69298369b00d66fbc24ddc))
+- **slider:** support warning state ([303ec5c](https://github.com/carbon-design-system/carbon-components-svelte/commit/303ec5c6b3dca2138c2875203705fbd23dde0c91)), closes [#2444](https://github.com/carbon-design-system/carbon-components-svelte/issues/2444)
+
+### Bug Fixes
+
+- **radio-tile:** forward `aria-*` attributes to input element ([489fd2c](https://github.com/carbon-design-system/carbon-components-svelte/commit/489fd2cebc40e7eb99089f25eff71cce4c515623))
+
 ### [0.97.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.96.0...v0.97.0) (2025-12-21)
 
 ### Features
