@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @restProps {label}
+   */
+
   /** Set to `true` to check the tile */
   export let checked = false;
 
@@ -33,6 +37,15 @@
   import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
 
+  // aria attributes should go to the input element, not the label.
+  $: ariaDescribedBy = $$restProps["aria-describedby"];
+  $: ariaLabelledBy = $$restProps["aria-labelledby"];
+  $: labelRestProps = Object.fromEntries(
+    Object.entries($$restProps).filter(
+      ([key]) => key !== "aria-describedby" && key !== "aria-labelledby",
+    ),
+  );
+
   const { add, update, selectedValue, groupName, groupRequired } = getContext(
     "TileGroup",
   ) ?? {
@@ -56,6 +69,8 @@
   tabindex={disabled ? undefined : tabindex}
   {disabled}
   required={$groupRequired ?? required}
+  aria-describedby={ariaDescribedBy}
+  aria-labelledby={ariaLabelledBy}
   class:bx--tile-input={true}
   on:change
   on:change={() => {
@@ -80,7 +95,7 @@
   class:bx--tile--is-selected={checked}
   class:bx--tile--light={light}
   class:bx--tile--disabled={disabled}
-  {...$$restProps}
+  {...labelRestProps}
   on:click
   on:mouseover
   on:mouseenter
