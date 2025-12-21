@@ -39,12 +39,6 @@ Use the inline variant to display the label and input on the same line by settin
 
 <TextInput inline labelText="User name" placeholder="Enter user name..." />
 
-## Read-only variant
-
-Display a non-editable value by setting `readonly` to `true`.
-
-<TextInput readonly labelText="User name" value="IBM" />
-
 ## Extra-large size
 
 Use the extra-large size for more prominent inputs by setting `size` to `"xl"`.
@@ -74,6 +68,12 @@ Indicate a warning state with a message by setting `warn` to `true` and providin
 Disable the input to prevent user interaction by setting `disabled` to `true`.
 
 <TextInput disabled labelText="User name" placeholder="Enter user name..." />
+
+## Read-only state
+
+Display a non-editable value by setting `readonly` to `true`.
+
+<TextInput readonly labelText="User name" value="IBM" />
 
 ## Skeleton
 
