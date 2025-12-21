@@ -29,9 +29,29 @@
   .#{$prefix}--slider__validation-msg--invalid {
     color: $text-error;
   }
+
+  //----------------------------------------------
+  // Readonly state
+  // ---------------------------------------------
+  .#{$prefix}--slider--readonly.#{$prefix}--slider {
+    cursor: default;
+  }
+
+  .#{$prefix}--slider-container--readonly .#{$prefix}--slider__thumb {
+    height: 0;
+    width: 0;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  .#{$prefix}--slider-container--readonly .#{$prefix}--slider-text-input {
+    background-color: transparent;
+  }
 }
 
 @include exports('slider-validation') {
   @include slider-validation;
 }
-

@@ -65,6 +65,12 @@ type $Props = {
   disabled?: boolean;
 
   /**
+   * Set to `true` to use the read-only variant
+   * @default false
+   */
+  readonly?: boolean;
+
+  /**
    * Set to `true` to enable the light variant
    * @default false
    */
