@@ -1,5 +1,5 @@
 {
-  "total": 171,
+  "total": 173,
   "components": [
     {
       "moduleName": "Accordion",
@@ -7374,6 +7374,29 @@
       "contexts": []
     },
     {
+      "moduleName": "Heading",
+      "filePath": "src/Heading/Heading.svelte",
+      "props": [],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        }
+      ],
+      "events": [],
+      "typedefs": [
+        {
+          "type": "1 | 2 | 3 | 4 | 5 | 6",
+          "name": "SectionLevel",
+          "ts": "type SectionLevel =\n  | 1\n  | 2\n  | 3\n  | 4\n  | 5\n  | 6;\n"
+        }
+      ],
+      "generics": null,
+      "contexts": []
+    },
+    {
       "moduleName": "ImageLoader",
       "filePath": "src/ImageLoader/ImageLoader.svelte",
       "props": [
@@ -13445,6 +13468,66 @@
         "name": "div"
       },
       "contexts": []
+    },
+    {
+      "moduleName": "Section",
+      "filePath": "src/Heading/Section.svelte",
+      "props": [
+        {
+          "name": "level",
+          "kind": "let",
+          "description": "Specify the heading level the section should start at.\nWhen nested, child sections automatically increment from this level.\nLevels are capped at 6 (h6).\n@default 1\n@example \n```svelte\n<Section level={5}>\n  <Heading>Starts at Heading 5</Heading>\n  <Section>\n    <Heading>Heading 6</Heading>\n  </Section>\n</Section>\n```",
+          "type": "SectionLevel",
+          "value": "1",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "tag",
+          "kind": "let",
+          "description": "Specify the HTML tag name to render instead of the default `section` element.\nUseful when you need to use a different semantic element while maintaining\nthe heading level context functionality.\n@default section\n@example \n```svelte\n<Section tag=\"div\">\n  <Heading>Heading 1</Heading>\n</Section>\n```\n\n@example \n```svelte\n<Section tag=\"article\">\n  <Heading>Article Heading</Heading>\n</Section>\n```",
+          "type": "keyof HTMLElementTagNameMap",
+          "value": "\"section\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        }
+      ],
+      "events": [],
+      "typedefs": [
+        {
+          "type": "1 | 2 | 3 | 4 | 5 | 6",
+          "name": "SectionLevel",
+          "ts": "type SectionLevel =\n  | 1\n  | 2\n  | 3\n  | 4\n  | 5\n  | 6;\n"
+        }
+      ],
+      "generics": null,
+      "contexts": [
+        {
+          "key": "Section",
+          "typeName": "SectionContext",
+          "properties": [
+            {
+              "name": "$internalLevel",
+              "type": "any",
+              "optional": false
+            }
+          ]
+        }
+      ]
     },
     {
       "moduleName": "Select",
