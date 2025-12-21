@@ -1,0 +1,37 @@
+// This file adds slider validation message styles from carbon-components v11+
+// to ensure compatibility with carbon-components v10.58.12.
+// The validation message feature provides consistency with other input components.
+
+//
+// Copyright IBM Corp. 2016, 2023
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@import 'carbon-components/scss/globals/scss/vars';
+@import 'carbon-components/scss/globals/scss/helper-mixins';
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
+
+/// Slider validation message styles
+/// @access private
+/// @group slider
+@mixin slider-validation {
+  //----------------------------------------------
+  // Validation message
+  // ---------------------------------------------
+  .#{$prefix}--slider__validation-msg.#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: 100%;
+  }
+
+  .#{$prefix}--slider__validation-msg--invalid {
+    color: $text-error;
+  }
+}
+
+@include exports('slider-validation') {
+  @include slider-validation;
+}
+
