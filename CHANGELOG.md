@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.97.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.96.0...v0.97.0) (2025-12-21)
+
+### Features
+
+- **file-uploader-button:** support `icon` ([eed238c](https://github.com/carbon-design-system/carbon-components-svelte/commit/eed238c2a2a2c3047c030c58f22a2707a395c59d)), closes [#2433](https://github.com/carbon-design-system/carbon-components-svelte/issues/2433)
+- **slider:** support `invalidText` ([9588710](https://github.com/carbon-design-system/carbon-components-svelte/commit/9588710de94231f3389e8d924f739ad9f86bc410)), closes [#2445](https://github.com/carbon-design-system/carbon-components-svelte/issues/2445)
+- **slider:** support `readOnly` ([494cb55](https://github.com/carbon-design-system/carbon-components-svelte/commit/494cb55ee510d0026892b1f40844cd7bee59ede7)), closes [#2443](https://github.com/carbon-design-system/carbon-components-svelte/issues/2443)
+- **stack:** add `align` and `justify` props ([9044402](https://github.com/carbon-design-system/carbon-components-svelte/commit/90444027b9d4870f078411e0482ab4e6d28692c0))
+
+### Bug Fixes
+
+- **file-uploader-button:** prevent crash when `files` is cleared ([5ce7a04](https://github.com/carbon-design-system/carbon-components-svelte/commit/5ce7a04f1a518c7ca414df378d1ba85182d584a9)), closes [#2436](https://github.com/carbon-design-system/carbon-components-svelte/issues/2436)
+- **slider:** fix typo in `labelText` prop description ([e4f4ed0](https://github.com/carbon-design-system/carbon-components-svelte/commit/e4f4ed0a9d216420778432cbf3f514ca6e1cfd85))
+- **tree-view-node:** make `findParentTreeNode` and `computeTreeLeafDepth` stricter ([d91295b](https://github.com/carbon-design-system/carbon-components-svelte/commit/d91295b1c6156e3d9a1df2c77b2dda35c58af50e))
+
 ## [0.96.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.95.1...v0.96.0) (2025-12-14)
 
 ### ⚠ BREAKING CHANGES
