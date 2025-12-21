@@ -1317,9 +1317,8 @@ describe("DataTable", () => {
     it("click:row event type includes target and currentTarget", () => {
       type Events = ComponentEvents<DataTableComponent<(typeof rows)[number]>>;
       type ClickRowEventType = Events["click:row"];
-      type ClickRowEvent = ClickRowEventType extends CustomEvent<infer T>
-        ? T
-        : never;
+      type ClickRowEvent =
+        ClickRowEventType extends CustomEvent<infer T> ? T : never;
 
       expectTypeOf<ClickRowEvent>().toHaveProperty("row");
       expectTypeOf<ClickRowEvent>().toHaveProperty("target");
@@ -1333,9 +1332,8 @@ describe("DataTable", () => {
     it("click:cell event type includes target and currentTarget", () => {
       type Events = ComponentEvents<DataTableComponent<(typeof rows)[number]>>;
       type ClickCellEventType = Events["click:cell"];
-      type ClickCellEvent = ClickCellEventType extends CustomEvent<infer T>
-        ? T
-        : never;
+      type ClickCellEvent =
+        ClickCellEventType extends CustomEvent<infer T> ? T : never;
 
       expectTypeOf<ClickCellEvent>().toHaveProperty("cell");
       expectTypeOf<ClickCellEvent>().toHaveProperty("target");
@@ -1349,9 +1347,8 @@ describe("DataTable", () => {
     it("click:header event type includes target and currentTarget", () => {
       type Events = ComponentEvents<DataTableComponent<(typeof rows)[number]>>;
       type ClickHeaderEventType = Events["click:header"];
-      type ClickHeaderEvent = ClickHeaderEventType extends CustomEvent<infer T>
-        ? T
-        : never;
+      type ClickHeaderEvent =
+        ClickHeaderEventType extends CustomEvent<infer T> ? T : never;
 
       expectTypeOf<ClickHeaderEvent>().toHaveProperty("header");
       expectTypeOf<ClickHeaderEvent>().toHaveProperty("target");
@@ -1384,22 +1381,19 @@ describe("DataTable", () => {
       >();
 
       type ClickRowEvent = Events["click:row"];
-      type ClickRowEventDetail = ClickRowEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type ClickRowEventDetail =
+        ClickRowEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<ClickRowEventDetail["row"]>().toEqualTypeOf<CustomRow>();
 
       type ClickCellEvent = Events["click:cell"];
-      type ClickCellEventDetail = ClickCellEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type ClickCellEventDetail =
+        ClickCellEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<ClickCellEventDetail["cell"]>().toHaveProperty("key");
       expectTypeOf<ClickCellEventDetail["cell"]>().toHaveProperty("value");
 
       type ClickEvent = Events["click"];
-      type ClickEventDetail = ClickEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type ClickEventDetail =
+        ClickEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<ClickEventDetail["row"]>().toEqualTypeOf<
         CustomRow | undefined
       >();
@@ -1416,9 +1410,8 @@ describe("DataTable", () => {
       expectTypeOf<RowElement>().toHaveProperty("id");
 
       type ClickRowEvent = Events["click:row"];
-      type ClickRowEventDetail = ClickRowEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type ClickRowEventDetail =
+        ClickRowEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<ClickRowEventDetail>().toHaveProperty("row");
       expectTypeOf<ClickRowEventDetail["row"]>().toHaveProperty("id");
     });
