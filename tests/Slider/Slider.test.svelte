@@ -19,16 +19,20 @@
   export let inputType = "number";
   export let customClass = "";
   export let useSlot = false;
+  export let invalidText = "";
+  export let id: string | undefined = undefined;
 </script>
 
 {#if useSlot}
   <Slider
     bind:value
+    id={id}
     {min}
     {max}
     {step}
     {disabled}
     {invalid}
+    {invalidText}
     {required}
     {minLabel}
     {maxLabel}
@@ -52,11 +56,13 @@
   <Slider
     bind:value
     labelText="Test Slider"
+    id={id}
     {min}
     {max}
     {step}
     {disabled}
     {invalid}
+    {invalidText}
     {required}
     {minLabel}
     {maxLabel}

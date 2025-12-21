@@ -52,6 +52,9 @@
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
+  /** Specify the invalid state text */
+  export let invalidText = "";
+
   /**
    * Specify the label text.
    * Alternatively, use the "labelChildren" slot.
@@ -123,6 +126,8 @@
   }
 
   $: labelId = `label-${id}`;
+  $: errorId = `error-${id}`;
+  $: inputId = `input-${id}`;
   $: range = max - min;
   $: left = ((value - min) / range) * 100;
   $: {
@@ -162,7 +167,7 @@
   on:mouseleave
 >
   <label
-    for={id}
+    for={inputId}
     id={labelId}
     class:bx--label={true}
     class:bx--label--disabled={disabled}
@@ -208,6 +213,8 @@
         aria-valuemin={min}
         aria-valuenow={value}
         aria-labelledby={labelId}
+        aria-describedby={invalid ? errorId : undefined}
+        aria-invalid={invalid || undefined}
         {id}
       ></div>
       <div bind:this={trackRef} class:bx--slider__track={true}></div>
@@ -219,7 +226,7 @@
     <span class:bx--slider__range-label={true}>{maxLabel || max}</span>
     <input
       type={hideTextInput ? "hidden" : inputType}
-      id="input-{id}"
+      id={inputId}
       {name}
       class:bx--text-input={true}
       class:bx--slider-text-input={true}
@@ -238,6 +245,17 @@
       }}
       data-invalid={invalid || null}
       aria-invalid={invalid || null}
+      aria-describedby={invalid ? errorId : undefined}
     />
   </div>
+  {#if invalid}
+    <div
+      id={errorId}
+      class:bx--slider__validation-msg={true}
+      class:bx--slider__validation-msg--invalid={true}
+      class:bx--form-requirement={true}
+    >
+      {invalidText}
+    </div>
+  {/if}
 </div>

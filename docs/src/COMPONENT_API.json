@@ -14789,6 +14789,18 @@
           "reactive": false
         },
         {
+          "name": "invalidText",
+          "kind": "let",
+          "description": "Specify the invalid state text",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "labelText",
           "kind": "let",
           "description": "Specify the label text.\nAlternatively, use the \"labelChildren\" slot.\n@example \n```svelte\n<Slider>\n  <span slot=\"labelChildren\">Custom Label</span>\n</Slider>\n```",

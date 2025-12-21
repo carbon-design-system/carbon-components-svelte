@@ -15,6 +15,42 @@ describe("Slider", () => {
     expect(screen.getByRole("spinbutton")).toHaveValue(0);
   });
 
+  it("should associate label with input via for attribute", () => {
+    render(Slider);
+
+    const label = screen.getByText("Test Slider").closest("label");
+    const input = screen.getByRole("spinbutton");
+
+    assert(label);
+    const inputId = input.getAttribute("id");
+    expect(label).toHaveAttribute("for", inputId);
+    expect(inputId).toMatch(/^input-/);
+  });
+
+  it("should find input by label text using getByLabelText", () => {
+    render(Slider);
+
+    const inputs = screen.getAllByLabelText("Test Slider");
+    const input = inputs.find((el) => el.tagName === "INPUT");
+    expect(input).toBeDefined();
+    assert(input);
+    expect(input).toHaveAttribute("type", "number");
+  });
+
+  it("should focus input when label is clicked", async () => {
+    render(Slider);
+
+    const label = screen.getByText("Test Slider").closest("label");
+    const inputs = screen.getAllByLabelText("Test Slider");
+    const input = inputs.find((el) => el.tagName === "INPUT");
+
+    assert(label);
+    assert(input);
+    await user.click(label);
+
+    expect(input).toHaveFocus();
+  });
+
   it("should handle value changes through input", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Slider);
@@ -64,7 +100,9 @@ describe("Slider", () => {
       props: { hideTextInput: true },
     });
 
-    const spinbutton = screen.getByLabelText("Slider number input");
+    const inputs = screen.getAllByLabelText("Test Slider");
+    const spinbutton = inputs.find((el) => el.tagName === "INPUT");
+    assert(spinbutton);
     expect(spinbutton).toHaveAttribute("type", "hidden");
   });
 
@@ -100,6 +138,57 @@ describe("Slider", () => {
     expect(input).toHaveClass("bx--text-input--invalid");
     expect(input).toHaveAttribute("data-invalid", "true");
     expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("should display invalid text when invalid is true", () => {
+    render(Slider, {
+      props: { invalid: true, invalidText: "Please select a valid value" },
+    });
+
+    const invalidText = screen.getByText("Please select a valid value");
+    expect(invalidText).toBeInTheDocument();
+    expect(invalidText).toHaveClass("bx--slider__validation-msg");
+    expect(invalidText).toHaveClass("bx--slider__validation-msg--invalid");
+    expect(invalidText).toHaveClass("bx--form-requirement");
+  });
+
+  it("should not display invalid text when invalid is false", () => {
+    render(Slider, {
+      props: { invalid: false, invalidText: "Please select a valid value" },
+    });
+
+    const invalidText = screen.queryByText("Please select a valid value");
+    expect(invalidText).not.toBeInTheDocument();
+  });
+
+  it("should associate invalid text with slider via aria-describedby", () => {
+    render(Slider, {
+      props: { invalid: true, invalidText: "Error message" },
+    });
+
+    const slider = screen.getByRole("slider");
+    const input = screen.getByRole("spinbutton");
+    const invalidText = screen.getByText("Error message");
+
+    const errorId = invalidText.getAttribute("id");
+    expect(errorId).toBeTruthy();
+
+    expect(slider).toHaveAttribute("aria-describedby", errorId);
+    expect(input).toHaveAttribute("aria-describedby", errorId);
+    expect(slider).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("should not set aria-describedby when invalid is false", () => {
+    render(Slider, {
+      props: { invalid: false, invalidText: "Error message" },
+    });
+
+    const slider = screen.getByRole("slider");
+    const input = screen.getByRole("spinbutton");
+
+    expect(slider).not.toHaveAttribute("aria-describedby");
+    expect(input).not.toHaveAttribute("aria-describedby");
   });
 
   it("should handle custom labels", () => {
@@ -232,6 +321,24 @@ describe("Slider", () => {
     });
 
     expect(screen.getByText("Slot Label")).toBeInTheDocument();
+    const inputs = screen.getAllByLabelText("Slot Label");
+    const input = inputs.find((el) => el.tagName === "INPUT");
+    expect(input).toBeDefined();
+  });
+
+  it("should maintain label association with custom id", () => {
+    render(Slider, {
+      props: { id: "custom-slider-id" },
+    });
+
+    const label = screen.getByText("Test Slider").closest("label");
+    const inputs = screen.getAllByLabelText("Test Slider");
+    const input = inputs.find((el) => el.tagName === "INPUT");
+
+    assert(label);
+    assert(input);
+    expect(label).toHaveAttribute("for", "input-custom-slider-id");
+    expect(input).toHaveAttribute("id", "input-custom-slider-id");
   });
 
   it("should handle arrow up key", async () => {

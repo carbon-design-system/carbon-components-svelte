@@ -96,6 +96,12 @@ type $Props = {
   invalid?: boolean;
 
   /**
+   * Specify the invalid state text
+   * @default ""
+   */
+  invalidText?: string;
+
+  /**
    * Specify the label text.
    * Alternatively, use the "labelChildren" slot.
    * @example
