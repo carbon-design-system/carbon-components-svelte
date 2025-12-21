@@ -53,9 +53,15 @@ Use the light variant for light backgrounds.
 
 ## Invalid state
 
-Indicate an invalid state with the `invalid` prop.
+Indicate an invalid state with the `invalid` prop. The invalid state takes precedence over the [warning state](#warning-state) when both are set.
 
 <Slider invalid invalidText="Please select a value between 10 and 990 MB" labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+
+## Warning state
+
+Indicate a warning state with the `warn` prop. The warning icon appears next to the input field, and a warning message is displayed below the slider.
+
+<Slider warn warnText="Value must be an increment of 5" labelText="Slider (must be an increment of 5)" min={0} max={100} value={51} step={5} />
 
 ## Disabled state
 
