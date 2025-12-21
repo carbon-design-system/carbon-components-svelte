@@ -14791,7 +14791,7 @@
         {
           "name": "labelText",
           "kind": "let",
-          "description": "Specify the label text.\nAlternatively, use the \"labelText\" slot.\n@example \n```svelte\n<Slider>\n  <span slot=\"labelChildren\">Custom Label</span>\n</Slider>\n```",
+          "description": "Specify the label text.\nAlternatively, use the \"labelChildren\" slot.\n@example \n```svelte\n<Slider>\n  <span slot=\"labelChildren\">Custom Label</span>\n</Slider>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
