@@ -261,6 +261,107 @@ describe("Slider", () => {
     expect(input).not.toHaveAttribute("aria-describedby");
   });
 
+  it("should handle warn state", () => {
+    render(Slider, {
+      props: { warn: true },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveClass("bx--slider-text-input--warn");
+    expect(input).toHaveAttribute("data-warn", "true");
+  });
+
+  it("should display warn text when warn is true", () => {
+    render(Slider, {
+      props: { warn: true, warnText: "Warning message goes here" },
+    });
+
+    const warnText = screen.getByText("Warning message goes here");
+    expect(warnText).toBeInTheDocument();
+    expect(warnText).toHaveClass("bx--slider__validation-msg");
+    expect(warnText).toHaveClass("bx--form-requirement");
+  });
+
+  it("should not display warn text when warn is false", () => {
+    render(Slider, {
+      props: { warn: false, warnText: "Warning message goes here" },
+    });
+
+    const warnText = screen.queryByText("Warning message goes here");
+    expect(warnText).not.toBeInTheDocument();
+  });
+
+  it("should associate warn text with slider via aria-describedby", () => {
+    render(Slider, {
+      props: { warn: true, warnText: "Warning message" },
+    });
+
+    const slider = screen.getByRole("slider");
+    const input = screen.getByRole("spinbutton");
+    const warnText = screen.getByText("Warning message");
+
+    const warnId = warnText.getAttribute("id");
+    expect(warnId).toBeTruthy();
+
+    expect(slider).toHaveAttribute("aria-describedby", warnId);
+    expect(input).toHaveAttribute("aria-describedby", warnId);
+  });
+
+  it("should not set aria-describedby when warn is false", () => {
+    render(Slider, {
+      props: { warn: false, warnText: "Warning message" },
+    });
+
+    const slider = screen.getByRole("slider");
+    const input = screen.getByRole("spinbutton");
+
+    expect(slider).not.toHaveAttribute("aria-describedby");
+    expect(input).not.toHaveAttribute("aria-describedby");
+  });
+
+  it("should prioritize invalid over warn state", () => {
+    render(Slider, {
+      props: {
+        invalid: true,
+        warn: true,
+        invalidText: "Error message",
+        warnText: "Warning message",
+      },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    const errorText = screen.getByText("Error message");
+    const warnText = screen.queryByText("Warning message");
+
+    expect(input).toHaveClass("bx--text-input--invalid");
+    expect(input).toHaveAttribute("data-invalid", "true");
+    expect(input).not.toHaveAttribute("data-warn");
+    expect(errorText).toBeInTheDocument();
+    expect(warnText).not.toBeInTheDocument();
+  });
+
+  it("should show warn icon when warn is true and invalid is false", () => {
+    const { container } = render(Slider, {
+      props: { warn: true, invalid: false },
+    });
+
+    const icon = container.querySelector(
+      ".bx--slider__invalid-icon.bx--slider__invalid-icon--warning",
+    );
+    expect(icon).toBeInTheDocument();
+  });
+
+  it("should not show warn icon when invalid is true", () => {
+    const { container } = render(Slider, {
+      props: { warn: true, invalid: true },
+    });
+
+    const warnIcon = container.querySelector(
+      ".bx--slider__invalid-icon--warning",
+    );
+    expect(warnIcon).not.toBeInTheDocument();
+  });
+
   it("should handle custom labels", () => {
     render(Slider, {
       props: {

@@ -58,6 +58,12 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
+  /** Set to `true` to indicate a warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /**
    * Specify the label text.
    * Alternatively, use the "labelChildren" slot.
@@ -80,6 +86,8 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -132,6 +140,7 @@
 
   $: labelId = `label-${id}`;
   $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
   $: inputId = `input-${id}`;
   $: range = max - min;
   $: left = ((value - min) / range) * 100;
@@ -224,7 +233,11 @@
         aria-valuemin={min}
         aria-valuenow={value}
         aria-labelledby={labelId}
-        aria-describedby={invalid ? errorId : undefined}
+        aria-describedby={invalid
+          ? errorId
+          : warn
+            ? warnId
+            : undefined}
         aria-invalid={invalid || undefined}
         {id}
       ></div>
@@ -235,32 +248,47 @@
       ></div>
     </div>
     <span class:bx--slider__range-label={true}>{maxLabel || max}</span>
-    <input
-      type={hideTextInput ? "hidden" : inputType}
-      id={inputId}
-      {name}
-      class:bx--text-input={true}
-      class:bx--slider-text-input={true}
-      class:bx--text-input--light={light}
-      class:bx--text-input--invalid={invalid}
-      {value}
-      aria-labelledby={$$props["aria-label"] ? undefined : labelId}
-      aria-label={$$props["aria-label"] || "Slider number input"}
-      {disabled}
-      {readonly}
-      {required}
-      {min}
-      {max}
-      {step}
-      on:change={({ target }) => {
-        if (!readonly) {
-          value = Number(target.value);
-        }
-      }}
-      data-invalid={invalid || null}
-      aria-invalid={invalid || null}
-      aria-describedby={invalid ? errorId : undefined}
-    />
+    <div class:bx--slider-text-input-wrapper={true}>
+      {#if invalid}
+        <WarningFilled class="bx--slider__invalid-icon" />
+      {:else if warn}
+        <WarningAltFilled
+          class="bx--slider__invalid-icon bx--slider__invalid-icon--warning"
+        />
+      {/if}
+      <input
+        type={hideTextInput ? "hidden" : inputType}
+        id={inputId}
+        {name}
+        class:bx--text-input={true}
+        class:bx--slider-text-input={true}
+        class:bx--text-input--light={light}
+        class:bx--text-input--invalid={invalid}
+        class:bx--slider-text-input--warn={warn}
+        {value}
+        aria-labelledby={$$props["aria-label"] ? undefined : labelId}
+        aria-label={$$props["aria-label"] || "Slider number input"}
+        {disabled}
+        {readonly}
+        {required}
+        {min}
+        {max}
+        {step}
+        on:change={({ target }) => {
+          if (!readonly) {
+            value = Number(target.value);
+          }
+        }}
+        data-invalid={invalid || null}
+        data-warn={warn && !invalid || null}
+        aria-invalid={invalid || null}
+        aria-describedby={invalid
+          ? errorId
+          : warn
+            ? warnId
+            : undefined}
+      />
+    </div>
   </div>
   {#if invalid}
     <div
@@ -270,6 +298,15 @@
       class:bx--form-requirement={true}
     >
       {invalidText}
+    </div>
+  {/if}
+  {#if warn && !invalid}
+    <div
+      id={warnId}
+      class:bx--slider__validation-msg={true}
+      class:bx--form-requirement={true}
+    >
+      {warnText}
     </div>
   {/if}
 </div>
