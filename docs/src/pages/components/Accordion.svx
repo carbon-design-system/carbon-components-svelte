@@ -163,6 +163,12 @@ This prevents users from expanding or collapsing any items in the accordion.
   </AccordionItem>
 </Accordion>
 
+## Batch disable
+
+Programmatically toggle the disabled state of all accordion items using the `disabled` prop. In this example, disabling all items also collapses them.
+
+<FileSource src="/framed/Accordion/BatchDisableAccordion" />
+
 ## Disabled (item)
 
 Individual accordion items can be disabled by setting the `disabled` prop on
