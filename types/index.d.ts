@@ -20,6 +20,8 @@ export { default as ComposedModal } from "./ComposedModal/ComposedModal.svelte";
 export { default as ModalBody } from "./ComposedModal/ModalBody.svelte";
 export { default as ModalFooter } from "./ComposedModal/ModalFooter.svelte";
 export { default as ModalHeader } from "./ComposedModal/ModalHeader.svelte";
+export { default as ContainedList } from "./ContainedList/ContainedList.svelte";
+export { default as ContainedListItem } from "./ContainedList/ContainedListItem.svelte";
 export { default as ContentSwitcher } from "./ContentSwitcher/ContentSwitcher.svelte";
 export { default as Switch } from "./ContentSwitcher/Switch.svelte";
 export { default as ContextMenu } from "./ContextMenu/ContextMenu.svelte";

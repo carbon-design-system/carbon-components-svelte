@@ -1,6 +1,6 @@
 # Component Index
 
-> 169 components exported from carbon-components-svelte@0.97.0.
+> 171 components exported from carbon-components-svelte@0.97.0.
 
 ## Components
 
@@ -23,6 +23,8 @@
 - [`Column`](#column)
 - [`ComboBox`](#combobox)
 - [`ComposedModal`](#composedmodal)
+- [`ContainedList`](#containedlist)
+- [`ContainedListItem`](#containedlistitem)
 - [`Content`](#content)
 - [`ContentSwitcher`](#contentswitcher)
 - [`ContextMenu`](#contextmenu)
@@ -747,6 +749,53 @@ export type ComboBoxItem = {
 | submit                | dispatched | <code>null</code>                                                                    | --          |
 | click:button--primary | dispatched | <code>null</code>                                                                    | --          |
 | open                  | dispatched | <code>null</code>                                                                    | --          |
+
+## `ContainedList`
+
+### Props
+
+| Prop name | Required | Kind             | Reactive | Type                                                  | Default value                                    | Description                                                                     |
+| :-------- | :------- | :--------------- | :------- | ----------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------- |
+| kind      | No       | <code>let</code> | No       | <code>"on-page" &#124; "disclosed"</code>             | <code>"on-page"</code>                           | Specify the kind of contained list.                                             |
+| labelText | No       | <code>let</code> | No       | <code>string</code>                                   | <code>""</code>                                  | Specify the label text.<br />Alternatively, use the named slot "labelChildren". |
+| size      | No       | <code>let</code> | No       | <code>"sm" &#124; "md" &#124; "lg" &#124; "xl"</code> | <code>"md"</code>                                | Specify the size of the list.                                                   |
+| inset     | No       | <code>let</code> | No       | <code>boolean</code>                                  | <code>false</code>                               | Set to `true` for lines between list items to be inset                          |
+| id        | No       | <code>let</code> | No       | <code>string</code>                                   | <code>"ccs-" + Math.random().toString(36)</code> | Set an id for the list element                                                  |
+
+### Slots
+
+| Slot name     | Default | Props                               | Fallback                 |
+| :------------ | :------ | :---------------------------------- | :----------------------- |
+| action        | No      | <code>Record<string, never> </code> | --                       |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
+| --            | Yes     | <code>Record<string, never> </code> | --                       |
+
+### Events
+
+None.
+
+## `ContainedListItem`
+
+### Props
+
+| Prop name   | Required | Kind             | Reactive | Type                 | Default value          | Description                                                                        |
+| :---------- | :------- | :--------------- | :------- | -------------------- | ---------------------- | ---------------------------------------------------------------------------------- |
+| interactive | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to render a `button` element instead of a `div`                      |
+| disabled    | No       | <code>let</code> | No       | <code>boolean</code> | <code>false</code>     | Set to `true` to disable the list item                                             |
+| icon        | No       | <code>let</code> | No       | <code>any</code>     | <code>undefined</code> | Specify the icon to render.<br />Icon is rendered to the left of the item content. |
+
+### Slots
+
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
+| action    | No      | <code>Record<string, never> </code> | --       |
+
+### Events
+
+| Event name | Type      | Detail | Description |
+| :--------- | :-------- | :----- | :---------- |
+| click      | forwarded | --     | --          |
 
 ## `Content`
 
