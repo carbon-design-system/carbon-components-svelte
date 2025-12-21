@@ -958,9 +958,8 @@ describe("ComboBox", () => {
       expectTypeOf(shouldFilterItem).returns.toEqualTypeOf<boolean>();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       type SelectedItem = SelectEventDetail["selectedItem"];
       expectTypeOf<SelectedItem>().toEqualTypeOf<Product>();
     });
@@ -977,9 +976,8 @@ describe("ComboBox", () => {
       expectTypeOf<ItemElement>().toHaveProperty("text");
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       type SelectedItem = SelectEventDetail["selectedItem"];
       expectTypeOf<SelectedItem>().toHaveProperty("id");
       expectTypeOf<SelectedItem>().toHaveProperty("text");

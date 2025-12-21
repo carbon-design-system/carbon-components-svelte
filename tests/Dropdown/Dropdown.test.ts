@@ -493,9 +493,8 @@ describe("Dropdown", () => {
       expectTypeOf(itemToString).returns.toEqualTypeOf<string>();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<
         SelectEventDetail["selectedItem"]
       >().toEqualTypeOf<Product>();
@@ -511,9 +510,8 @@ describe("Dropdown", () => {
       >();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<
         SelectEventDetail["selectedItem"]
       >().toEqualTypeOf<DropdownItem>();
