@@ -23,6 +23,19 @@ type $Props = {
   accept?: ReadonlyArray<string>;
 
   /**
+   * Specify the maximum file size in bytes.
+   * Files exceeding this limit will be filtered out.
+   * File sizes use binary (base 2) units: 1024 bytes = 1 KiB, not 1000 bytes.
+   * @example
+   * ```svelte
+   * <!-- 5 MB = 5 × 1024 × 1024 = 5,242,880 bytes -->
+   * <FileUploader maxFileSize={5 * 1024 * 1024} />
+   * ```
+   * @default undefined
+   */
+  maxFileSize?: number | undefined;
+
+  /**
    * Obtain a reference to the uploaded files.
    * @default []
    */

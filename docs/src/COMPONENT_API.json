@@ -4885,6 +4885,18 @@
           "reactive": false
         },
         {
+          "name": "maxFileSize",
+          "kind": "let",
+          "description": "Specify the maximum file size in bytes.\nFiles exceeding this limit will be filtered out.\nFile sizes use binary (base 2) units: 1024 bytes = 1 KiB, not 1000 bytes.\n@example \n```svelte\n<!-- 5 MB = 5 × 1024 × 1024 = 5,242,880 bytes -->\n<FileUploader maxFileSize={5 * 1024 * 1024} />\n```",
+          "type": "number | undefined",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "files",
           "kind": "let",
           "description": "Obtain a reference to the uploaded files.",
@@ -5031,9 +5043,8 @@
           "detail": "ReadonlyArray<File>"
         },
         {
-          "type": "forwarded",
+          "type": "dispatched",
           "name": "change",
-          "element": "FileUploaderButton",
           "detail": "ReadonlyArray<File>"
         },
         {

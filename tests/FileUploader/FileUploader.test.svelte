@@ -25,6 +25,8 @@
   export let buttonLabel: ComponentProps<FileUploader>["buttonLabel"] =
     "Add files";
   export let name: ComponentProps<FileUploader>["name"] = "";
+  export let maxFileSize: ComponentProps<FileUploader>["maxFileSize"] =
+    undefined;
 
   // Allow initial files to be set
   $: if (typeof $$props.files !== "undefined" && $$props.files !== files) {
@@ -57,6 +59,7 @@
     {labelTitle}
     {labelDescription}
     {name}
+    {maxFileSize}
     bind:files
     on:add={onAdd}
     on:remove={onRemove}

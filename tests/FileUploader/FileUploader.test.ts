@@ -404,4 +404,153 @@ describe("FileUploader", () => {
       expect(screen.queryByText("file1.txt")).not.toBeInTheDocument();
     });
   });
+
+  it("should accept files under maxFileSize limit", async () => {
+    const { component } = render(FileUploader, {
+      props: { maxFileSize: 1000 },
+    });
+
+    const smallFile = new File(["x".repeat(500)], "small.txt", {
+      type: "text/plain",
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [smallFile]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("small.txt")).toBeInTheDocument();
+    });
+
+    assert(input.files);
+    expect(input.files).toHaveLength(1);
+    expect(input.files[0].name).toBe("small.txt");
+  });
+
+  it("should filter out files exceeding maxFileSize limit", async () => {
+    const { component } = render(FileUploader, {
+      props: { maxFileSize: 1000 },
+    });
+
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [largeFile]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("large.txt")).not.toBeInTheDocument();
+    });
+
+    assert(input.files);
+    expect(input.files).toHaveLength(0);
+  });
+
+  it("should filter files when multiple files are selected and some exceed limit", async () => {
+    const { component } = render(FileUploader, {
+      props: { maxFileSize: 1000, multiple: true },
+    });
+
+    const smallFile1 = new File(["x".repeat(500)], "small1.txt", {
+      type: "text/plain",
+    });
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+    const smallFile2 = new File(["x".repeat(300)], "small2.txt", {
+      type: "text/plain",
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [smallFile1, largeFile, smallFile2]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("small1.txt")).toBeInTheDocument();
+      expect(screen.queryByText("small2.txt")).toBeInTheDocument();
+      expect(screen.queryByText("large.txt")).not.toBeInTheDocument();
+    });
+
+    assert(input.files);
+    expect(input.files).toHaveLength(2);
+    expect(input.files[0].name).toBe("small1.txt");
+    expect(input.files[1].name).toBe("small2.txt");
+  });
+
+  it("should accept files at exactly maxFileSize limit", async () => {
+    const { component } = render(FileUploader, {
+      props: { maxFileSize: 1000 },
+    });
+
+    const exactSizeFile = new File(["x".repeat(1000)], "exact.txt", {
+      type: "text/plain",
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [exactSizeFile]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("exact.txt")).toBeInTheDocument();
+    });
+
+    assert(input.files);
+    expect(input.files).toHaveLength(1);
+    expect(input.files[0].name).toBe("exact.txt");
+  });
+
+  it("should not filter files when maxFileSize is undefined", async () => {
+    const { component } = render(FileUploader, {
+      props: { maxFileSize: undefined },
+    });
+
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [largeFile]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("large.txt")).toBeInTheDocument();
+    });
+
+    assert(input.files);
+    expect(input.files).toHaveLength(1);
+    expect(input.files[0].name).toBe("large.txt");
+  });
+
+  it("should dispatch change event with filtered files when maxFileSize is set", async () => {
+    const changeHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { maxFileSize: 1000, multiple: false, onChange: changeHandler },
+    });
+
+    const smallFile = new File(["x".repeat(500)], "small.txt", {
+      type: "text/plain",
+    });
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [smallFile]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    const event1 = changeHandler.mock.calls[0][0];
+    expect(event1.detail).toHaveLength(1);
+    expect(event1.detail[0].name).toBe("small.txt");
+
+    changeHandler.mockClear();
+
+    simulateFileSelection(input, [largeFile]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    const event2 = changeHandler.mock.calls[0][0];
+    expect(event2.detail).toHaveLength(0);
+  });
 });
