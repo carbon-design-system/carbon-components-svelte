@@ -6,6 +6,7 @@
   export let disabled = false;
   export let readonly = false;
   export let invalid = false;
+  export let warn = false;
   export let required = false;
   export let minLabel = "";
   export let maxLabel = "";
@@ -21,6 +22,7 @@
   export let customClass = "";
   export let useSlot = false;
   export let invalidText = "";
+  export let warnText = "";
   export let id: string | undefined = undefined;
 </script>
 
@@ -35,6 +37,8 @@
     {readonly}
     {invalid}
     {invalidText}
+    {warn}
+    {warnText}
     {required}
     {minLabel}
     {maxLabel}
@@ -66,6 +70,8 @@
     {readonly}
     {invalid}
     {invalidText}
+    {warn}
+    {warnText}
     {required}
     {minLabel}
     {maxLabel}

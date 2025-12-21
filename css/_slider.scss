@@ -18,6 +18,41 @@
 /// @group slider
 @mixin slider-validation {
   //----------------------------------------------
+  // Input wrapper and icons
+  // ---------------------------------------------
+  .#{$prefix}--slider-text-input-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .#{$prefix}--slider-text-input-wrapper
+    .#{$prefix}--slider-text-input.#{$prefix}--text-input--invalid,
+  .#{$prefix}--slider-text-input-wrapper
+    .#{$prefix}--slider-text-input--warn {
+    width: 6rem;
+    padding-right: 3rem;
+    text-align: left;
+  }
+
+  .#{$prefix}--slider__invalid-icon {
+    position: absolute;
+    fill: $support-error;
+    // top/transform used to center invalid icon in IE11
+    top: 50%;
+    right: $spacing-05;
+    transform: translateY(-50%);
+  }
+
+  .#{$prefix}--slider__invalid-icon.#{$prefix}--slider__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--slider__invalid-icon--warning path[data-icon-path="inner-path"] {
+    fill: $inverse-01;
+    opacity: 1;
+  }
+
+  //----------------------------------------------
   // Validation message
   // ---------------------------------------------
   .#{$prefix}--slider__validation-msg.#{$prefix}--form-requirement {

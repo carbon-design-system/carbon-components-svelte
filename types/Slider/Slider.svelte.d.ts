@@ -108,6 +108,18 @@ type $Props = {
   invalidText?: string;
 
   /**
+   * Set to `true` to indicate a warning state
+   * @default false
+   */
+  warn?: boolean;
+
+  /**
+   * Specify the warning state text
+   * @default ""
+   */
+  warnText?: string;
+
+  /**
    * Specify the label text.
    * Alternatively, use the "labelChildren" slot.
    * @example
