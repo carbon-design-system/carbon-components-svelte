@@ -55,7 +55,7 @@ Use the light variant for light backgrounds.
 
 Indicate an invalid state with the `invalid` prop.
 
-<Slider invalid labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+<Slider invalid invalidText="Please select a value between 10 and 990 MB" labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
 ## Disabled state
 
