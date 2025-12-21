@@ -63,6 +63,12 @@ Disable the slider to prevent interaction.
 
 <Slider disabled labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
+## Read-only state
+
+Set the slider to read-only to display a value without allowing changes.
+
+<Slider readonly labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+
 ## Skeleton
 
 Show a loading state with the skeleton variant.
