@@ -1,6 +1,6 @@
 # Component Index
 
-> 171 components exported from carbon-components-svelte@0.97.0.
+> 173 components exported from carbon-components-svelte@0.97.0.
 
 ## Components
 
@@ -65,6 +65,7 @@
 - [`HeaderPanelLinks`](#headerpanellinks)
 - [`HeaderSearch`](#headersearch)
 - [`HeaderUtilities`](#headerutilities)
+- [`Heading`](#heading)
 - [`ImageLoader`](#imageloader)
 - [`InlineLoading`](#inlineloading)
 - [`InlineNotification`](#inlinenotification)
@@ -111,6 +112,7 @@
 - [`Row`](#row)
 - [`Search`](#search)
 - [`SearchSkeleton`](#searchskeleton)
+- [`Section`](#section)
 - [`Select`](#select)
 - [`SelectItem`](#selectitem)
 - [`SelectItemGroup`](#selectitemgroup)
@@ -1939,6 +1941,28 @@ None.
 
 None.
 
+## `Heading`
+
+### Types
+
+```ts
+export type SectionLevel = 1 | 2 | 3 | 4 | 5 | 6;
+```
+
+### Props
+
+None.
+
+### Slots
+
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
+
+### Events
+
+None.
+
 ## `ImageLoader`
 
 ### Props
@@ -3308,6 +3332,31 @@ None.
 | mouseover  | forwarded | --     | --          |
 | mouseenter | forwarded | --     | --          |
 | mouseleave | forwarded | --     | --          |
+
+## `Section`
+
+### Types
+
+```ts
+export type SectionLevel = 1 | 2 | 3 | 4 | 5 | 6;
+```
+
+### Props
+
+| Prop name | Required | Kind             | Reactive | Type                                     | Default value          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| :-------- | :------- | :--------------- | :------- | ---------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| level     | No       | <code>let</code> | No       | <code>SectionLevel</code>                | <code>1</code>         | Specify the heading level the section should start at.<br />When nested, child sections automatically increment from this level.<br />Levels are capped at 6 (h6).<br />@default 1<br />@example <br />`svelte<br />&lt;Section level={5}&gt;<br />  &lt;Heading&gt;Starts at Heading 5&lt;/Heading&gt;<br />  &lt;Section&gt;<br />    &lt;Heading&gt;Heading 6&lt;/Heading&gt;<br />  &lt;/Section&gt;<br />&lt;/Section&gt;<br />`                                                                                             |
+| tag       | No       | <code>let</code> | No       | <code>keyof HTMLElementTagNameMap</code> | <code>"section"</code> | Specify the HTML tag name to render instead of the default `section` element.<br />Useful when you need to use a different semantic element while maintaining<br />the heading level context functionality.<br />@default section<br />@example <br />`svelte<br />&lt;Section tag="div"&gt;<br />  &lt;Heading&gt;Heading 1&lt;/Heading&gt;<br />&lt;/Section&gt;<br />`<br /><br />@example <br />`svelte<br />&lt;Section tag="article"&gt;<br />  &lt;Heading&gt;Article Heading&lt;/Heading&gt;<br />&lt;/Section&gt;<br />` |
+
+### Slots
+
+| Slot name | Default | Props                               | Fallback |
+| :-------- | :------ | :---------------------------------- | :------- |
+| --        | Yes     | <code>Record<string, never> </code> | --       |
+
+### Events
+
+None.
 
 ## `Select`
 
