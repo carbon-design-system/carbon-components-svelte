@@ -97,6 +97,26 @@ Remove uploaded files from the `FileUploader` component in two ways:
 
 <FileSource src="/framed/FileUploader/FileUploaderClearFiles" />
 
+## Maximum file size
+
+Limit the size of uploaded files using the `maxFileSize` prop. Files exceeding the
+limit (in bytes) will be automatically filtered out.
+
+The `maxFileSize` prop accepts values in bytes. File sizes use binary (base 2)
+units, where 1024 bytes = 1 KiB (kibibyte), not 1000 bytes. This matches how
+operating systems and file systems measure file sizes.
+
+This example accepts files up to 1 MB (1,048,576 bytes):
+
+<FileUploader
+  multiple
+  maxFileSize={1024 * 1024}
+  labelTitle="Upload files"
+  buttonLabel="Add files"
+  labelDescription="Maximum file size: 1 MB"
+  status="edit"
+/>
+
 ## File uploader (disabled state)
 
 Disable the file uploader by setting the `disabled` prop to `true`. This prevents
