@@ -1,5 +1,5 @@
 {
-  "total": 169,
+  "total": 171,
   "components": [
     {
       "moduleName": "Accordion",
@@ -2450,6 +2450,160 @@
           ]
         }
       ]
+    },
+    {
+      "moduleName": "ContainedList",
+      "filePath": "src/ContainedList/ContainedList.svelte",
+      "props": [
+        {
+          "name": "kind",
+          "kind": "let",
+          "description": "Specify the kind of contained list.",
+          "type": "\"on-page\" | \"disclosed\"",
+          "value": "\"on-page\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "labelText",
+          "kind": "let",
+          "description": "Specify the label text.\nAlternatively, use the named slot \"labelChildren\".",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the size of the list.",
+          "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+          "value": "\"md\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "inset",
+          "kind": "let",
+          "description": "Set to `true` for lines between list items to be inset",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "id",
+          "kind": "let",
+          "description": "Set an id for the list element",
+          "type": "string",
+          "value": "\"ccs-\" + Math.random().toString(36)",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": "action",
+          "default": false,
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": "labelChildren",
+          "default": false,
+          "fallback": "{labelText}",
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        }
+      ],
+      "events": [],
+      "typedefs": [],
+      "generics": null,
+      "contexts": []
+    },
+    {
+      "moduleName": "ContainedListItem",
+      "filePath": "src/ContainedList/ContainedListItem.svelte",
+      "props": [
+        {
+          "name": "interactive",
+          "kind": "let",
+          "description": "Set to `true` to render a `button` element instead of a `div`",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the list item",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "icon",
+          "kind": "let",
+          "description": "Specify the icon to render.\nIcon is rendered to the left of the item content.",
+          "type": "any",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": "action",
+          "default": false,
+          "slot_props": "Record<string, never>"
+        }
+      ],
+      "events": [
+        {
+          "type": "forwarded",
+          "name": "click",
+          "element": "svelte:element"
+        }
+      ],
+      "typedefs": [],
+      "generics": null,
+      "contexts": []
     },
     {
       "moduleName": "Content",
