@@ -5,12 +5,6 @@
 
 `RecursiveList` provides a flexible way to render hierarchical data structures using either unordered or ordered lists. It supports nested nodes, links, and HTML content, making it ideal for displaying complex data hierarchies.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    In version 0.86.0, the <strong>children</strong> prop was renamed to <strong>nodes</strong> for <Link target="_blank" href="https://svelte.dev/docs/svelte/v5-migration-guide#The-children-prop-is-reserved">Svelte 5 compatibility</Link>.
-  </div>
-</InlineNotification>
-
 <InlineNotification svx-ignore lowContrast title="Warning:" kind="warning" hideCloseButton>
   <div class="body-short-01">
     HTML content provided via the <code>html</code> prop is not sanitized.

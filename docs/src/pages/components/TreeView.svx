@@ -10,12 +10,6 @@
 Create a basic tree view using the `nodes` prop. Each node requires an `id` and `text`, with optional properties for `disabled`, `icon`, and child `nodes`.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    In version 0.86.0, the <strong>children</strong> prop was renamed to <strong>nodes</strong> for <Link target="_blank" href="https://svelte.dev/docs/svelte/v5-migration-guide#The-children-prop-is-reserved">Svelte 5 compatibility</Link>.
-  </div>
-</InlineNotification>
-
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">Every node must have a unique id.</div>
 </InlineNotification>
 
