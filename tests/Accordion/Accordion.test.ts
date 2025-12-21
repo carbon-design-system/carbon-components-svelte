@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
 import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
@@ -134,6 +135,113 @@ describe("Accordion", () => {
     itemIsDisabled(/Natural Language Classifier/);
     itemIsDisabled(/Natural Language Understanding/);
     itemIsDisabled(/Language Translator/);
+  });
+
+  it("disables all items when Accordion disabled prop is true", () => {
+    render(AccordionDisabled);
+
+    const item1 = screen.getByRole("button", {
+      name: /Natural Language Classifier/,
+    });
+    const item2 = screen.getByRole("button", {
+      name: /Natural Language Understanding/,
+    });
+    const item3 = screen.getByRole("button", { name: /Language Translator/ });
+
+    expect(item1).toBeDisabled();
+    expect(item2).toBeDisabled();
+    expect(item3).toBeDisabled();
+  });
+
+  it("prevents items from being clicked when Accordion is disabled", async () => {
+    render(AccordionDisabled);
+
+    const item1 = screen.getByRole("button", {
+      name: /Natural Language Classifier/,
+    });
+
+    await user.click(item1);
+
+    itemIsCollapsed(/Natural Language Classifier/);
+    expect(
+      screen.queryByText(
+        "Natural Language Classifier uses advanced natural language processing",
+      ),
+    ).not.toBeInTheDocument();
+  });
+
+  it("programmatically toggles disabled state and collapses items", async () => {
+    render(AccordionBatchDisable);
+
+    expect(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    ).not.toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: /Natural Language Understanding/ }),
+    ).not.toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: /Language Translator/ }),
+    ).not.toBeDisabled();
+
+    const expandButton = screen.getByRole("button", { name: /Expand all/i });
+    await user.click(expandButton);
+
+    itemIsExpanded(/Natural Language Classifier/);
+    itemIsExpanded(/Natural Language Understanding/);
+    itemIsExpanded(/Language Translator/);
+
+    const disableButton = screen.getByRole("button", { name: /Disable all/i });
+    await user.click(disableButton);
+
+    itemIsDisabled(/Natural Language Classifier/);
+    itemIsDisabled(/Natural Language Understanding/);
+    itemIsDisabled(/Language Translator/);
+
+    itemIsCollapsed(/Natural Language Classifier/);
+    itemIsCollapsed(/Natural Language Understanding/);
+    itemIsCollapsed(/Language Translator/);
+
+    expect(
+      screen.queryByText(
+        "Natural Language Classifier uses advanced natural language processing",
+      ),
+    ).not.toBeInTheDocument();
+
+    const item1 = screen.getByRole("button", {
+      name: /Natural Language Classifier/,
+    });
+    await user.click(item1);
+
+    itemIsCollapsed(/Natural Language Classifier/);
+
+    const enableButton = screen.getByRole("button", { name: /Enable all/i });
+    await user.click(enableButton);
+
+    expect(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    ).not.toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: /Natural Language Understanding/ }),
+    ).not.toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: /Language Translator/ }),
+    ).not.toBeDisabled();
+  });
+
+  it("prevents expand/collapse when disabled", async () => {
+    render(AccordionBatchDisable);
+
+    const disableButton = screen.getByRole("button", { name: /Disable all/i });
+    await user.click(disableButton);
+
+    const expandButton = screen.getByRole("button", { name: /Expand all/i });
+    expect(expandButton).toBeDisabled();
+
+    await user.click(expandButton);
+
+    itemIsCollapsed(/Natural Language Classifier/);
+    itemIsCollapsed(/Natural Language Understanding/);
+    itemIsCollapsed(/Language Translator/);
   });
 
   it("renders skeleton", () => {
