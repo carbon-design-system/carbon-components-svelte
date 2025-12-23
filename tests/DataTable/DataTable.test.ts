@@ -1,5 +1,7 @@
 import { render, screen, within } from "@testing-library/svelte";
 import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
+import type { DataTableKey } from "carbon-components-svelte/DataTable/DataTable.svelte";
+import type { PropertyPath } from "carbon-components-svelte/DataTable/DataTableTypes";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
@@ -1421,6 +1423,261 @@ describe("DataTable", () => {
         : never;
       expectTypeOf<ClickRowEventDetail>().toHaveProperty("row");
       expectTypeOf<ClickRowEventDetail["row"]>().toHaveProperty("id");
+    });
+
+    it("should validate PropertyPath type with flat objects", () => {
+      type FlatRow = {
+        id: string;
+        name: string;
+        age: number;
+        active: boolean;
+      };
+
+      type Paths = PropertyPath<FlatRow>;
+      expectTypeOf<Paths>().toEqualTypeOf<"id" | "name" | "age" | "active">();
+
+      const validPath1: Paths = "id";
+      const validPath2: Paths = "name";
+      const validPath3: Paths = "age";
+      expectTypeOf<typeof validPath1>().toEqualTypeOf<"id">();
+      expectTypeOf<typeof validPath2>().toEqualTypeOf<"name">();
+      expectTypeOf<typeof validPath3>().toEqualTypeOf<"age">();
+    });
+
+    it("should validate PropertyPath type with nested objects", () => {
+      type NestedRow = {
+        id: string;
+        user: {
+          name: string;
+          email: string;
+        };
+        contact: {
+          company: string;
+          address: {
+            city: string;
+            country: string;
+          };
+        };
+      };
+
+      type Paths = PropertyPath<NestedRow>;
+
+      const validPath1: Paths = "id";
+      const validPath2: Paths = "user";
+      const validPath3: Paths = "user.name";
+      const validPath4: Paths = "contact";
+      const validPath5: Paths = "contact.company";
+      const validPath6: Paths = "contact.address";
+
+      expectTypeOf<typeof validPath1>().toEqualTypeOf<"id">();
+      expectTypeOf<typeof validPath2>().toEqualTypeOf<"user">();
+      expectTypeOf<typeof validPath3>().toEqualTypeOf<"user.name">();
+      expectTypeOf<typeof validPath4>().toEqualTypeOf<"contact">();
+      expectTypeOf<typeof validPath5>().toEqualTypeOf<"contact.company">();
+      expectTypeOf<typeof validPath6>().toEqualTypeOf<"contact.address">();
+
+      expectTypeOf<Extract<Paths, "id">>().toEqualTypeOf<"id">();
+      expectTypeOf<Extract<Paths, "user">>().toEqualTypeOf<"user">();
+      expectTypeOf<Extract<Paths, "user.name">>().toEqualTypeOf<"user.name">();
+      expectTypeOf<Extract<Paths, "contact">>().toEqualTypeOf<"contact">();
+      expectTypeOf<
+        Extract<Paths, "contact.company">
+      >().toEqualTypeOf<"contact.company">();
+      expectTypeOf<
+        Extract<Paths, "contact.address">
+      >().toEqualTypeOf<"contact.address">();
+    });
+
+    it("should validate DataTableKey type with nested objects", () => {
+      type NestedRow = {
+        id: string;
+        contact: {
+          company: string;
+          address: {
+            city: string;
+          };
+        };
+      };
+
+      type Keys = DataTableKey<NestedRow>;
+
+      const validKey1: Keys = "id";
+      const validKey2: Keys = "contact";
+      const validKey3: Keys = "contact.company";
+      const validKey4: Keys = "contact.address";
+
+      expectTypeOf<typeof validKey1>().toEqualTypeOf<"id">();
+      expectTypeOf<typeof validKey2>().toEqualTypeOf<"contact">();
+      expectTypeOf<typeof validKey3>().toEqualTypeOf<"contact.company">();
+      expectTypeOf<typeof validKey4>().toEqualTypeOf<"contact.address">();
+
+      type PropertyPaths = PropertyPath<NestedRow>;
+      expectTypeOf<Keys>().toEqualTypeOf<PropertyPaths>();
+    });
+
+    it("should validate headers with nested property paths", () => {
+      type NestedRow = {
+        id: string;
+        user: {
+          name: string;
+          email: string;
+        };
+        contact: {
+          company: string;
+        };
+      };
+
+      type ComponentType = DataTableComponent<NestedRow>;
+      type Props = ComponentProps<ComponentType>;
+      type Headers = NonNullable<Props["headers"]>;
+
+      // Headers should accept nested paths as keys
+      const validHeaders: Headers = [
+        { key: "id", value: "ID" },
+        { key: "user.name", value: "Name" },
+        { key: "contact.company", value: "Company" },
+      ] as const;
+
+      // Verify headers accept nested property paths as keys
+      type HeaderKeyType = DataTableKey<NestedRow> | (string & {});
+      expectTypeOf<
+        (typeof validHeaders)[0]["key"]
+      >().toEqualTypeOf<HeaderKeyType>();
+      expectTypeOf<
+        (typeof validHeaders)[1]["key"]
+      >().toEqualTypeOf<HeaderKeyType>();
+      expectTypeOf<
+        (typeof validHeaders)[2]["key"]
+      >().toEqualTypeOf<HeaderKeyType>();
+    });
+
+    it("should validate cell key types in events with nested paths", () => {
+      type NestedRow = {
+        id: string;
+        user: {
+          name: string;
+          email: string;
+        };
+        contact: {
+          company: string;
+        };
+      };
+
+      type ComponentType = DataTableComponent<NestedRow>;
+      type Events = ComponentEvents<ComponentType>;
+      type ClickCellEvent = Events["click:cell"];
+      type ClickCellEventDetail = ClickCellEvent extends CustomEvent<infer T>
+        ? T
+        : never;
+
+      // Cell key should accept nested paths
+      type CellKey = ClickCellEventDetail["cell"]["key"];
+      type ExpectedCellKey = DataTableKey<NestedRow> | (string & {});
+
+      // Verify CellKey matches expected type
+      expectTypeOf<CellKey>().toEqualTypeOf<ExpectedCellKey>();
+
+      // Verify specific nested paths are valid cell keys
+      expectTypeOf<Extract<CellKey, "id">>().toEqualTypeOf<"id">();
+      expectTypeOf<
+        Extract<CellKey, "user.name">
+      >().toEqualTypeOf<"user.name">();
+      expectTypeOf<
+        Extract<CellKey, "contact.company">
+      >().toEqualTypeOf<"contact.company">();
+    });
+
+    it("should validate PropertyPath depth limit", () => {
+      type DeepRow = {
+        level1: {
+          level2: {
+            level3: {
+              level4: {
+                level5: {
+                  level6: {
+                    level7: {
+                      level8: {
+                        level9: {
+                          level10: {
+                            level11: string;
+                          };
+                        };
+                      };
+                    };
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+
+      type Paths = PropertyPath<DeepRow>;
+
+      expectTypeOf<Extract<Paths, "level1">>().toEqualTypeOf<"level1">();
+      expectTypeOf<
+        Extract<Paths, "level1.level2">
+      >().toEqualTypeOf<"level1.level2">();
+      // TODO: path depth should support 10 levels
+      expectTypeOf<
+        Extract<Paths, "level1.level2.level3">
+      >().not.toEqualTypeOf<"level1.level2.level3">();
+      expectTypeOf<
+        Extract<Paths, "level1.level2.level3.level4">
+      >().not.toEqualTypeOf<"level1.level2.level3.level4">();
+      expectTypeOf<
+        Extract<Paths, "level1.level2.level3.level4.level5">
+      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5">();
+      expectTypeOf<
+        Extract<Paths, "level1.level2.level3.level4.level5.level6">
+      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6">();
+      expectTypeOf<
+        Extract<Paths, "level1.level2.level3.level4.level5.level6.level7">
+      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6.level7">();
+      expectTypeOf<
+        Extract<
+          Paths,
+          "level1.level2.level3.level4.level5.level6.level7.level8"
+        >
+      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6.level7.level8">();
+      expectTypeOf<
+        Extract<
+          Paths,
+          "level1.level2.level3.level4.level5.level6.level7.level8.level9"
+        >
+      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6.level7.level8.level9">();
+      expectTypeOf<
+        Extract<
+          Paths,
+          "level1.level2.level3.level4.level5.level6.level7.level8.level9.level10"
+        >
+      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6.level7.level8.level9.level10">();
+    });
+
+    it("should validate PropertyPath with arrays and primitives", () => {
+      type MixedRow = {
+        id: string;
+        tags: string[];
+        metadata: {
+          count: number;
+          active: boolean;
+        };
+      };
+
+      type Paths = PropertyPath<MixedRow>;
+
+      // Arrays should be treated as objects, so "tags" is valid but not "tags.0"
+      const validPath1: Paths = "id";
+      const validPath2: Paths = "tags";
+      const validPath3: Paths = "metadata";
+      const validPath4: Paths = "metadata.count";
+      const validPath5: Paths = "metadata.active";
+
+      expectTypeOf<typeof validPath1>().toEqualTypeOf<"id">();
+      expectTypeOf<typeof validPath2>().toEqualTypeOf<"tags">();
+      expectTypeOf<typeof validPath3>().toEqualTypeOf<"metadata">();
+      expectTypeOf<typeof validPath4>().toEqualTypeOf<"metadata.count">();
+      expectTypeOf<typeof validPath5>().toEqualTypeOf<"metadata.active">();
     });
   });
 });
