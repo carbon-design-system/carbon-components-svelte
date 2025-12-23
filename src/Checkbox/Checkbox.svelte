@@ -65,7 +65,17 @@
 
   $: useGroup = Array.isArray(group);
   $: if (useGroup) checked = group.includes(value);
-  $: dispatch("check", checked);
+
+  // Track previous checked value to avoid duplicate dispatches in Svelte 5
+  // The reactive statement will only dispatch when checked changes externally (e.g., via bind:checked)
+  let previousChecked = checked;
+  $: {
+    const hasChanged = previousChecked !== checked;
+    if (hasChanged) {
+      previousChecked = checked;
+      dispatch("check", checked);
+    }
+  }
 
   let refLabel = null;
 
@@ -121,7 +131,11 @@
             ? group.filter((_value) => _value !== value)
             : [...group, value];
         } else {
-          checked = !checked;
+          const newChecked = !checked;
+          previousChecked = newChecked;
+          checked = newChecked;
+          // Dispatch directly for user-initiated changes to avoid duplicate events in Svelte 5
+          dispatch("check", newChecked);
         }
       }}
       on:change

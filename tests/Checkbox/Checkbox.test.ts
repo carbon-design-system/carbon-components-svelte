@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { isSvelte5, user } from "../setup-tests";
+import { user } from "../setup-tests";
 import CheckboxGroup from "./Checkbox.group.test.svelte";
 import CheckboxReadonly from "./Checkbox.readonly.test.svelte";
 import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
@@ -51,13 +51,7 @@ describe("Checkbox", () => {
     await user.click(input);
     expect(consoleLog).toHaveBeenCalledWith("check");
     expect(consoleLog).toHaveBeenCalledWith("click");
-    // TODO(svelte-5): Investigate multiple event emissions - check event may be emitted multiple times in Svelte 5, verify if this is expected framework behavior or component bug
-    if (isSvelte5) {
-      // Svelte 5 may emit check event multiple times
-      expect(consoleLog.mock.calls.length).toBeGreaterThanOrEqual(2);
-    } else {
-      expect(consoleLog).toHaveBeenCalledTimes(2);
-    }
+    expect(consoleLog).toHaveBeenCalledTimes(2);
   });
 
   it("emits exactly one check event per click", async () => {
@@ -120,12 +114,7 @@ describe("Checkbox", () => {
     const checkCalls = consoleLog.mock.calls.filter(
       (call) => call[0] === "check",
     );
-    if (isSvelte5) {
-      // Svelte 5 may emit check event multiple times
-      expect(checkCalls.length).toBeGreaterThanOrEqual(3);
-    } else {
-      expect(checkCalls).toHaveLength(3);
-    }
+    expect(checkCalls).toHaveLength(3);
   });
 
   it("renders indeterminate state", () => {
@@ -213,13 +202,7 @@ describe("Checkbox", () => {
       (call) => call[0] === "check" && call[1] === "option-1",
     );
     expect(checkCalls1).toHaveLength(1);
-
-    if (isSvelte5) {
-      // Svelte 5 may emit check event multiple times
-      expect(checkCalls1[0][3]).toBeGreaterThanOrEqual(2);
-    } else {
-      expect(checkCalls1[0][3]).toBe(1);
-    }
+    expect(checkCalls1[0][3]).toBe(1);
 
     consoleLog.mockClear();
     await user.click(checkbox2);
@@ -234,12 +217,7 @@ describe("Checkbox", () => {
       (call) => call[0] === "check" && call[1] === "option-3",
     );
     expect(checkCalls3).toHaveLength(1);
-    if (isSvelte5) {
-      // Svelte 5 may emit check event multiple times
-      expect(checkCalls3[0][3]).toBeGreaterThanOrEqual(2);
-    } else {
-      expect(checkCalls3[0][3]).toBe(1);
-    }
+    expect(checkCalls3[0][3]).toBe(1);
   });
 
   it("handles rapid group checkbox interactions without duplicate events", async () => {
