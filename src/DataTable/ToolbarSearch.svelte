@@ -48,6 +48,7 @@
 
   import { afterUpdate, getContext, onMount, tick } from "svelte";
   import Search from "../Search/Search.svelte";
+  import { rowsEqual } from "./data-table-utils.js";
 
   const ctx = getContext("DataTable") ?? {};
 
@@ -58,7 +59,7 @@
     unsubscribe = ctx?.tableRows.subscribe((tableRows) => {
       // Only update if the rows have actually changed.
       // This approach works in both Svelte 4 and Svelte 5.
-      if (JSON.stringify(tableRows) !== JSON.stringify(rows)) {
+      if (!rowsEqual(tableRows, rows)) {
         rows = tableRows;
       }
     });
