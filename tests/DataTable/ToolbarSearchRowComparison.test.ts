@@ -96,7 +96,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     });
   });
 
-  it.skip("handles null/undefined values in rows", async () => {
+  it("handles null/undefined values in rows", async () => {
     const rowsWithNull = [
       { id: 1, name: "Row 1", value: null },
       { id: 2, name: "Row 2", value: undefined },
@@ -118,14 +118,13 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const updateCount = getUpdateCount();
-      expect(updateCount).toBeGreaterThan(initialUpdateCount);
+      expect(getUpdateCount()).toBe(initialUpdateCount);
       const filteredIds = getFilteredIds();
       expect(filteredIds.length).toBeGreaterThan(0);
     });
   });
 
-  it.skip("handles NaN and Infinity values in rows", async () => {
+  it("handles NaN and Infinity values in rows", async () => {
     const initialRows = [
       { id: 1, name: "Row 1", count: Number.NaN },
       { id: 2, name: "Row 2", value: Number.POSITIVE_INFINITY },
@@ -147,8 +146,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const updateCount = getUpdateCount();
-      expect(updateCount).toBeGreaterThan(initialUpdateCount);
+      expect(getUpdateCount()).toBe(initialUpdateCount);
       const filteredIds = getFilteredIds();
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
@@ -401,7 +399,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     });
   });
 
-  it.skip("handles RegExp objects in rows", async () => {
+  it("handles RegExp objects in rows", async () => {
     const initialRows = [
       { id: 1, name: "Row 1", pattern: /abc/ },
       { id: 2, name: "Row 2", pattern: /xyz/ },
@@ -422,14 +420,13 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const updateCount = getUpdateCount();
-      expect(updateCount).toBeGreaterThan(initialUpdateCount);
+      expect(getUpdateCount()).toBe(initialUpdateCount);
       const filteredIds = getFilteredIds();
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
 
-  it.skip("handles Date objects in rows", async () => {
+  it("handles Date objects in rows", async () => {
     const initialRows = [
       { id: 1, name: "Row 1", date: new Date("2024-01-01") },
       { id: 2, name: "Row 2", date: new Date("2024-01-02") },
@@ -450,14 +447,13 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const updateCount = getUpdateCount();
-      expect(updateCount).toBeGreaterThan(initialUpdateCount);
+      expect(getUpdateCount()).toBe(initialUpdateCount);
       const filteredIds = getFilteredIds();
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
 
-  it.skip("handles function properties in rows", async () => {
+  it("handles function properties in rows", async () => {
     const initialRows = [
       { id: 1, name: "Row 1", handler: () => console.log("old") },
       { id: 2, name: "Row 2", handler: () => console.log("old2") },
@@ -478,14 +474,13 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const updateCount = getUpdateCount();
-      expect(updateCount).toBeGreaterThan(initialUpdateCount);
+      expect(getUpdateCount()).toBe(initialUpdateCount);
       const filteredIds = getFilteredIds();
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
 
-  it.skip("handles Symbol properties in rows", async () => {
+  it("handles Symbol properties in rows", async () => {
     const sym = Symbol("test");
     const initialRows = [
       { id: 1, name: "Row 1", [sym]: "value1" },
@@ -507,15 +502,14 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const updateCount = getUpdateCount();
-      expect(updateCount).toBeGreaterThan(initialUpdateCount);
+      expect(getUpdateCount()).toBe(initialUpdateCount);
       const filteredIds = getFilteredIds();
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
 
   // TODO: unsip once proper deep comparison is implemented.
-  it.skip("handles circular references in rows", async () => {
+  it("handles circular references in rows", async () => {
     type RowWithRef = {
       id: number;
       name: string;
