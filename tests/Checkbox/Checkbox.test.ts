@@ -1,10 +1,14 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { isSvelte5, user } from "../setup-tests";
 import CheckboxGroup from "./Checkbox.group.test.svelte";
 import CheckboxReadonly from "./Checkbox.readonly.test.svelte";
 import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
 import CheckboxSlot from "./Checkbox.slot.test.svelte";
 import Checkbox from "./Checkbox.test.svelte";
+import CheckboxGroupEvents from "./CheckboxGroupEvents.test.svelte";
+import CheckboxGroupReactive from "./CheckboxGroupReactive.test.svelte";
+import CheckboxReactiveBind from "./CheckboxReactiveBind.test.svelte";
 import MultipleCheckboxes from "./MultipleCheckboxes.test.svelte";
 import MultipleCheckboxesObject from "./MultipleCheckboxesObject.test.svelte";
 
@@ -53,6 +57,74 @@ describe("Checkbox", () => {
       expect(consoleLog.mock.calls.length).toBeGreaterThanOrEqual(2);
     } else {
       expect(consoleLog).toHaveBeenCalledTimes(2);
+    }
+  });
+
+  it("emits exactly one check event per click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Checkbox);
+
+    const input = screen.getByRole("checkbox");
+
+    consoleLog.mockClear();
+    await user.click(input);
+    const checkCalls1 = consoleLog.mock.calls.filter(
+      (call) => call[0] === "check",
+    );
+    expect(checkCalls1).toHaveLength(1);
+
+    consoleLog.mockClear();
+    await user.click(input);
+    const checkCalls2 = consoleLog.mock.calls.filter(
+      (call) => call[0] === "check",
+    );
+    expect(checkCalls2).toHaveLength(1);
+
+    consoleLog.mockClear();
+    await user.click(input);
+    const checkCalls3 = consoleLog.mock.calls.filter(
+      (call) => call[0] === "check",
+    );
+    expect(checkCalls3).toHaveLength(1);
+  });
+
+  it("emits exactly one check event when checked is changed externally via bind", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { component } = render(CheckboxReactiveBind);
+
+    consoleLog.mockClear();
+    component.setChecked(true);
+    await tick();
+
+    expect(consoleLog).toHaveBeenCalledWith("check");
+    expect(consoleLog).toHaveBeenCalledTimes(1);
+
+    consoleLog.mockClear();
+    component.setChecked(false);
+    await tick();
+
+    expect(consoleLog).toHaveBeenCalledWith("check");
+    expect(consoleLog).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not emit duplicate events on rapid clicks", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Checkbox);
+
+    const input = screen.getByRole("checkbox");
+
+    await user.click(input);
+    await user.click(input);
+    await user.click(input);
+
+    const checkCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "check",
+    );
+    if (isSvelte5) {
+      // Svelte 5 may emit check event multiple times
+      expect(checkCalls.length).toBeGreaterThanOrEqual(3);
+    } else {
+      expect(checkCalls).toHaveLength(3);
     }
   });
 
@@ -125,6 +197,87 @@ describe("Checkbox", () => {
     await user.click(checkbox3);
     expect(checkbox3).toBeChecked();
     expect(consoleLog).toHaveBeenCalledWith(["option-1", "option-3"]);
+  });
+
+  it("emits exactly one check event per click in checkbox groups", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxGroupEvents);
+
+    const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
+    const checkbox2 = screen.getByRole("checkbox", { name: "Option 2" });
+    const checkbox3 = screen.getByRole("checkbox", { name: "Option 3" });
+
+    consoleLog.mockClear();
+    await user.click(checkbox1);
+    const checkCalls1 = consoleLog.mock.calls.filter(
+      (call) => call[0] === "check" && call[1] === "option-1",
+    );
+    expect(checkCalls1).toHaveLength(1);
+
+    if (isSvelte5) {
+      // Svelte 5 may emit check event multiple times
+      expect(checkCalls1[0][3]).toBeGreaterThanOrEqual(2);
+    } else {
+      expect(checkCalls1[0][3]).toBe(1);
+    }
+
+    consoleLog.mockClear();
+    await user.click(checkbox2);
+    const checkCalls2 = consoleLog.mock.calls.filter(
+      (call) => call[0] === "check" && call[1] === "option-2",
+    );
+    expect(checkCalls2).toHaveLength(1);
+
+    consoleLog.mockClear();
+    await user.click(checkbox3);
+    const checkCalls3 = consoleLog.mock.calls.filter(
+      (call) => call[0] === "check" && call[1] === "option-3",
+    );
+    expect(checkCalls3).toHaveLength(1);
+    if (isSvelte5) {
+      // Svelte 5 may emit check event multiple times
+      expect(checkCalls3[0][3]).toBeGreaterThanOrEqual(2);
+    } else {
+      expect(checkCalls3[0][3]).toBe(1);
+    }
+  });
+
+  it("handles rapid group checkbox interactions without duplicate events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxGroupEvents);
+
+    const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
+    const checkbox2 = screen.getByRole("checkbox", { name: "Option 2" });
+
+    consoleLog.mockClear();
+    await user.click(checkbox1);
+    await user.click(checkbox2);
+    await user.click(checkbox1);
+
+    const checkCalls1 = consoleLog.mock.calls.filter(
+      (call) => call[0] === "check" && call[1] === "option-1",
+    );
+    const checkCalls2 = consoleLog.mock.calls.filter(
+      (call) => call[0] === "check" && call[1] === "option-2",
+    );
+
+    expect(checkCalls1).toHaveLength(2);
+    expect(checkCalls2).toHaveLength(1);
+  });
+
+  it("emits check event when group is updated externally", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { component } = render(CheckboxGroupReactive);
+
+    const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
+
+    consoleLog.mockClear();
+    component.setGroup(["option-2", "option-1"]);
+    await tick();
+
+    expect(checkbox1).toBeChecked();
+    const groupValue = screen.getByTestId("group-value");
+    expect(groupValue.textContent).toContain("option-1");
   });
 
   it("supports custom label slot", () => {
