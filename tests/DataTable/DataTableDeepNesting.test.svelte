@@ -21,8 +21,7 @@
       key: "level1.level2.level3.name",
       value: "Level 3 (4 levels)",
     },
-    // TODO: remove casting after PropertyPath depth extends beyond 2 levels.
-  ] as const as ReadonlyArray<DataTableHeader<DataTableRow>>;
+  ] as const;
 
   const rows = [
     {

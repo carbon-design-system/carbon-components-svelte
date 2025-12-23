@@ -1593,19 +1593,7 @@ describe("DataTable", () => {
           level2: {
             level3: {
               level4: {
-                level5: {
-                  level6: {
-                    level7: {
-                      level8: {
-                        level9: {
-                          level10: {
-                            level11: string;
-                          };
-                        };
-                      };
-                    };
-                  };
-                };
+                level5: string;
               };
             };
           };
@@ -1618,40 +1606,15 @@ describe("DataTable", () => {
       expectTypeOf<
         Extract<Paths, "level1.level2">
       >().toEqualTypeOf<"level1.level2">();
-      // TODO: path depth should support 10 levels
       expectTypeOf<
         Extract<Paths, "level1.level2.level3">
-      >().not.toEqualTypeOf<"level1.level2.level3">();
+      >().toEqualTypeOf<"level1.level2.level3">();
       expectTypeOf<
         Extract<Paths, "level1.level2.level3.level4">
-      >().not.toEqualTypeOf<"level1.level2.level3.level4">();
+      >().toEqualTypeOf<"level1.level2.level3.level4">();
       expectTypeOf<
         Extract<Paths, "level1.level2.level3.level4.level5">
-      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5">();
-      expectTypeOf<
-        Extract<Paths, "level1.level2.level3.level4.level5.level6">
-      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6">();
-      expectTypeOf<
-        Extract<Paths, "level1.level2.level3.level4.level5.level6.level7">
-      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6.level7">();
-      expectTypeOf<
-        Extract<
-          Paths,
-          "level1.level2.level3.level4.level5.level6.level7.level8"
-        >
-      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6.level7.level8">();
-      expectTypeOf<
-        Extract<
-          Paths,
-          "level1.level2.level3.level4.level5.level6.level7.level8.level9"
-        >
-      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6.level7.level8.level9">();
-      expectTypeOf<
-        Extract<
-          Paths,
-          "level1.level2.level3.level4.level5.level6.level7.level8.level9.level10"
-        >
-      >().not.toEqualTypeOf<"level1.level2.level3.level4.level5.level6.level7.level8.level9.level10">();
+      >().toEqualTypeOf<never>();
     });
 
     it("should validate PropertyPath with arrays and primitives", () => {
