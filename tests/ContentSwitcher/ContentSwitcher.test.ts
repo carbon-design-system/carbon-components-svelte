@@ -113,6 +113,7 @@ describe("ContentSwitcher", () => {
     const tabs = screen.getAllByRole("tab");
     expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
 
+    // TODO(svelte-5): Investigate focus management difference - focus behavior may differ in Svelte 5, verify if this is expected framework behavior or component issue
     if (isSvelte5) {
       // In Svelte 5, focus behavior may differ - just verify the first tab is selected
       // Focus management in Svelte 5 may work differently, so we skip the focus check

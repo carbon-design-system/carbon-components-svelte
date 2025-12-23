@@ -47,6 +47,7 @@ describe("Checkbox", () => {
     await user.click(input);
     expect(consoleLog).toHaveBeenCalledWith("check");
     expect(consoleLog).toHaveBeenCalledWith("click");
+    // TODO(svelte-5): Investigate multiple event emissions - check event may be emitted multiple times in Svelte 5, verify if this is expected framework behavior or component bug
     if (isSvelte5) {
       // Svelte 5 may emit check event multiple times
       expect(consoleLog.mock.calls.length).toBeGreaterThanOrEqual(2);

@@ -452,6 +452,7 @@ describe("TextInput", () => {
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
 
+    // TODO(svelte-5): Investigate inconsistent value handling - cleared number inputs may result in empty string instead of null in Svelte 5
     if (isSvelte5) {
       // In Svelte 5, cleared inputs may result in empty string instead of null
       const valueDisplay = screen.getByTestId("value").textContent;

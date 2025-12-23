@@ -743,6 +743,7 @@ describe("NumberInput", () => {
     await user.clear(input);
     await user.tab();
 
+    // TODO(svelte-5): Investigate inconsistent value representation - cleared inputs may display as empty string instead of "null" in Svelte 5
     if (isSvelte5) {
       // In Svelte 5, cleared inputs may result in empty string instead of null
       const valueText = screen.getByTestId("value").textContent;
@@ -789,6 +790,7 @@ describe("NumberInput", () => {
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
 
+    // TODO(svelte-5): Investigate inconsistent value representation - cleared inputs may display as empty string instead of "null" in Svelte 5
     if (isSvelte5) {
       // In Svelte 5, cleared inputs may result in empty string instead of null
       const valueText = screen.getByTestId("value").textContent;

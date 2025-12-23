@@ -127,6 +127,7 @@ describe("ComboBox", () => {
     await tick();
 
     expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
+    // TODO(svelte-5): Investigate reactive binding timing issue - input value may not update immediately after clear event in Svelte 5
     if (isSvelte5) {
       // In Svelte 5, the clear event handler in the test component sets value="" and selectedId=undefined
       // but the input value binding may not update immediately. The key behavior is that clear was called.
