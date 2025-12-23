@@ -6,8 +6,8 @@ type Join<K, P> = K extends string | number
     : never
   : never;
 
-// For performance, the maximum traversal depth is 10.
-export type PropertyPath<T, D extends number = 10> = [D] extends [never]
+// For performance, the maximum traversal depth is 3.
+export type PropertyPath<T, D extends number = 3> = [D] extends [never]
   ? never
   : T extends object
     ? {

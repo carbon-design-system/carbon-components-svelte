@@ -27,11 +27,8 @@
     { key: "name", value: "Product Name" },
     { key: "price", value: "Price" },
     { key: "category.name", value: "Category" },
-    // @ts-expect-error - PropertyPath depth limit is 2
     { key: "category.department.name", value: "Department" },
-    // @ts-expect-error - PropertyPath depth limit is 2
     { key: "category.department.location.city", value: "City" },
-    // @ts-expect-error - PropertyPath depth limit is 2
     { key: "category.department.location.country", value: "Country" },
     { key: "inStock", value: "In Stock" },
   ] as const;
