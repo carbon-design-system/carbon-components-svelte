@@ -137,6 +137,8 @@ export function rowsEqual(a, b) {
 }
 
 const PATH_SPLIT_REGEX = /[.[\]'"]/;
+const MAX_PATH_CACHE_SIZE = 1000;
+const pathCache = new Map();
 
 /**
  * Resolves a nested property path in an object.
@@ -148,10 +150,23 @@ const PATH_SPLIT_REGEX = /[.[\]'"]/;
  */
 export function resolvePath(object, path) {
   if (path in object) return object[path];
-  return path
-    .split(PATH_SPLIT_REGEX)
-    .filter((p) => p)
-    .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
+
+  let segments = pathCache.get(path);
+  if (!segments) {
+    segments = path.split(PATH_SPLIT_REGEX).filter((p) => p);
+    if (segments.length > 1) {
+      if (pathCache.size >= MAX_PATH_CACHE_SIZE) {
+        const firstKey = pathCache.keys().next().value;
+        pathCache.delete(firstKey);
+      }
+      pathCache.set(path, segments);
+    }
+  }
+
+  return segments.reduce(
+    (o, p) => (o && typeof o === "object" ? o[p] : o),
+    object,
+  );
 }
 
 /**

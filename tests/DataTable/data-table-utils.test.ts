@@ -613,6 +613,57 @@ describe("resolvePath", () => {
     expect(resolvePath(obj, "key.with.dots")).toBe("value1");
   });
 
+  it("caches parsed path segments for performance", () => {
+    const obj = {
+      contact: {
+        company: "Acme Corp",
+      },
+    };
+    const path = "contact.company";
+
+    const result1 = resolvePath(obj, path);
+    expect(result1).toBe("Acme Corp");
+
+    const result2 = resolvePath(obj, path);
+    expect(result2).toBe("Acme Corp");
+    const obj2 = {
+      contact: {
+        company: "Other Corp",
+      },
+    };
+    const result3 = resolvePath(obj2, path);
+    expect(result3).toBe("Other Corp");
+  });
+
+  it("handles cache size limit to prevent memory leaks", () => {
+    const paths = Array.from(
+      { length: 1000 + 1 },
+      (_, i) => `level${i}.nested.value`,
+    );
+
+    for (const path of paths) {
+      const parts = path.split(".");
+      const obj: Record<string, unknown> = {};
+      let current: Record<string, unknown> = obj;
+      for (let i = 0; i < parts.length - 1; i++) {
+        current[parts[i]] = {};
+        current = current[parts[i]] as Record<string, unknown>;
+      }
+      current[parts[parts.length - 1]] = "test";
+      expect(resolvePath(obj, path)).toBe("test");
+    }
+
+    const firstPath = paths[0];
+    const firstObj = {
+      level0: {
+        nested: {
+          value: "test",
+        },
+      },
+    };
+    expect(resolvePath(firstObj, firstPath)).toBe("test");
+  });
+
   it("handles deeply nested paths", () => {
     const obj = {
       level1: {
