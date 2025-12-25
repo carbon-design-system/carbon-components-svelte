@@ -98,7 +98,9 @@
    * ```
    */
   export function expandAll() {
-    expandedIds = [...nodeIds];
+    expandedIdsSet = new Set(nodeIds);
+    expandedIds = Array.from(expandedIdsSet);
+    lastExpandedIdsRef = expandedIds;
   }
 
   /**
@@ -111,7 +113,9 @@
    * ```
    */
   export function collapseAll() {
+    expandedIdsSet.clear();
     expandedIds = [];
+    lastExpandedIdsRef = expandedIds;
   }
 
   /**
@@ -128,13 +132,16 @@
    * ```
    */
   export function expandNodes(filterNode = (node) => false) {
-    expandedIds = flattenedNodes
+    const nodesToExpand = flattenedNodes
       .filter(
         (node) =>
           filterNode(node) ||
           node.nodes?.some((child) => filterNode(child) && child.nodes),
       )
       .map((node) => node.id);
+    nodesToExpand.forEach((id) => expandedIdsSet.add(id));
+    expandedIds = Array.from(expandedIdsSet);
+    lastExpandedIdsRef = expandedIds;
   }
 
   /**
@@ -151,9 +158,13 @@
    * ```
    */
   export function collapseNodes(filterNode = (node) => true) {
-    expandedIds = flattenedNodes
-      .filter((node) => expandedIds.includes(node.id) && !filterNode(node))
-      .map((node) => node.id);
+    flattenedNodes.forEach((node) => {
+      if (expandedIdsSet.has(node.id) && filterNode(node)) {
+        expandedIdsSet.delete(node.id);
+      }
+    });
+    expandedIds = Array.from(expandedIdsSet);
+    lastExpandedIdsRef = expandedIds;
   }
 
   /**
@@ -228,8 +239,36 @@
    */
   const expandedNodeIds = writable(expandedIds);
 
+  /**
+   * @type {HTMLElement | null}
+   */
   let ref = null;
+  /**
+   * @type {TreeWalker | null}
+   */
   let treeWalker = null;
+
+  /**
+   * @type {ReadonlyArray<Node> | null}
+   */
+  let cachedNodes = null;
+  /**
+   * @type {Array<Node> | null}
+   */
+  let cachedFlattenedNodes = null;
+  /**
+   * @type {Array<TreeNodeId> | null}
+   */
+  let cachedNodeIds = null;
+
+  /**
+   * @type {Set<TreeNodeId>}
+   */
+  let expandedIdsSet = new Set(expandedIds);
+  /**
+   * @type {ReadonlyArray<TreeNodeId>}
+   */
+  let lastExpandedIdsRef = expandedIds;
 
   /**
    * @type {(node: TreeNode) => void}
@@ -252,10 +291,12 @@
    */
   const expandNode = (node, expanded) => {
     if (expanded) {
-      expandedIds = [...expandedIds, node.id];
+      expandedIdsSet.add(node.id);
     } else {
-      expandedIds = expandedIds.filter((_id) => _id !== node.id);
+      expandedIdsSet.delete(node.id);
     }
+    expandedIds = Array.from(expandedIdsSet);
+    lastExpandedIdsRef = expandedIds;
   };
 
   /**
@@ -278,6 +319,22 @@
     focusNode,
     toggleNode,
   });
+
+  /**
+   * Creates a TreeWalker instance for keyboard navigation.
+   * @param {HTMLElement} root - The root element to traverse
+   * @returns {TreeWalker} A TreeWalker configured to navigate tree nodes
+   */
+  function createTreeWalkerInstance(root) {
+    return document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
+      acceptNode: (node) => {
+        if (node.classList.contains("bx--tree-node--disabled"))
+          return NodeFilter.FILTER_REJECT;
+        if (node.matches("li.bx--tree-node")) return NodeFilter.FILTER_ACCEPT;
+        return NodeFilter.FILTER_SKIP;
+      },
+    });
+  }
 
   function handleKeyDown(e) {
     if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
@@ -302,6 +359,10 @@
     if (firstFocusableNode != null) {
       firstFocusableNode.tabIndex = "0";
     }
+
+    if (ref && !treeWalker) {
+      treeWalker = createTreeWalkerInstance(ref);
+    }
   });
 
   /**
@@ -319,20 +380,27 @@
     }, []);
   }
 
-  $: flattenedNodes = traverse(nodes);
-  $: nodeIds = flattenedNodes.map((node) => node.id);
+  $: if (nodes !== cachedNodes) {
+    cachedNodes = nodes;
+    cachedFlattenedNodes = traverse(nodes);
+    cachedNodeIds = cachedFlattenedNodes.map((node) => node.id);
+  }
+
+  $: flattenedNodes = cachedFlattenedNodes ?? [];
+  $: nodeIds = cachedNodeIds ?? [];
   $: activeNodeId.set(activeId);
   $: selectedNodeIds.set(selectedIds);
-  $: expandedNodeIds.set(expandedIds);
-  $: if (ref) {
-    treeWalker = document.createTreeWalker(ref, NodeFilter.SHOW_ELEMENT, {
-      acceptNode: (node) => {
-        if (node.classList.contains("bx--tree-node--disabled"))
-          return NodeFilter.FILTER_REJECT;
-        if (node.matches("li.bx--tree-node")) return NodeFilter.FILTER_ACCEPT;
-        return NodeFilter.FILTER_SKIP;
-      },
-    });
+
+  $: {
+    if (expandedIds !== lastExpandedIdsRef) {
+      expandedIdsSet = new Set(expandedIds);
+      lastExpandedIdsRef = expandedIds;
+    }
+    expandedNodeIds.set(expandedIds);
+  }
+
+  $: if (ref && (nodes !== cachedNodes || !treeWalker)) {
+    treeWalker = createTreeWalkerInstance(ref);
   }
 </script>
 
