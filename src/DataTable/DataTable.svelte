@@ -192,6 +192,12 @@
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
+  import {
+    compareValues,
+    formatHeaderWidth,
+    getDisplayedRows,
+    resolvePath,
+  } from "./data-table-utils.js";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
   import TableCell from "./TableCell.svelte";
@@ -199,8 +205,6 @@
   import TableHead from "./TableHead.svelte";
   import TableHeader from "./TableHeader.svelte";
   import TableRow from "./TableRow.svelte";
-
-  const PATH_SPLIT_REGEX = /[.[\]'"]/;
 
   const sortDirectionMap = {
     none: "ascending",
@@ -228,13 +232,6 @@
     a[c.key] = c.key;
     return a;
   }, {});
-  const resolvePath = (object, path) => {
-    if (path in object) return object[path];
-    return path
-      .split(PATH_SPLIT_REGEX)
-      .filter((p) => p)
-      .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
-  };
 
   /**
    * @type {() => void}
@@ -342,48 +339,18 @@
       sortedRows = $tableRows;
     } else {
       sortedRows = [...$tableRows].sort((a, b) => {
-        const itemA = ascending
-          ? resolvePath(a, sortKey)
-          : resolvePath(b, sortKey);
-        const itemB = ascending
-          ? resolvePath(b, sortKey)
-          : resolvePath(a, sortKey);
-
-        if (sortingHeader?.sort) return sortingHeader.sort(itemA, itemB);
-
-        if (typeof itemA === "number" && typeof itemB === "number")
-          return itemA - itemB;
-
-        if ([itemA, itemB].every((item) => !item && item !== 0)) return 0;
-        if (!itemA && itemA !== 0) return ascending ? 1 : -1;
-        if (!itemB && itemB !== 0) return ascending ? -1 : 1;
-
-        return itemA
-          .toString()
-          .localeCompare(itemB.toString(), "en", { numeric: true });
+        const itemA = resolvePath(a, sortKey);
+        const itemB = resolvePath(b, sortKey);
+        return compareValues(itemA, itemB, ascending, sortingHeader?.sort);
       });
     }
   }
-  const getDisplayedRows = (rows, page, pageSize) =>
-    page && pageSize
-      ? rows.slice((page - 1) * pageSize, page * pageSize)
-      : rows;
   $: displayedRows = getDisplayedRows($tableRows, page, pageSize);
   $: displayedSortedRows = getDisplayedRows(sortedRows, page, pageSize);
 
   $: hasCustomHeaderWidth = headers.some(
     (header) => header.width || header.minWidth,
   );
-
-  /** @type {(header: DataTableHeader) => undefined | string} */
-  const formatHeaderWidth = (header) => {
-    const styles = [
-      header.width && `width: ${header.width}`,
-      header.minWidth && `min-width: ${header.minWidth}`,
-    ].filter(Boolean);
-    if (styles.length === 0) return undefined;
-    return styles.join(";");
-  };
 </script>
 
 <TableContainer {useStaticWidth} {...$$restProps}>
