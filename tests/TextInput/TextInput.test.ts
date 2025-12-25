@@ -452,11 +452,12 @@ describe("TextInput", () => {
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
 
-    // TODO(svelte-5): Investigate inconsistent value handling - cleared number inputs may result in empty string instead of null in Svelte 5
+    // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
+    // See: https://svelte.dev/docs/svelte/v5-migration-guide
+    // The actual bound value is still null, but DOM text interpolation renders it as "".
     if (isSvelte5) {
-      // In Svelte 5, cleared inputs may result in empty string instead of null
       const valueDisplay = screen.getByTestId("value").textContent;
-      expect(valueDisplay === "" || valueDisplay === "null").toBe(true);
+      expect(valueDisplay).toBe("");
     } else {
       const valueDisplay = screen.getByTestId("value").textContent;
       expect(valueDisplay).toBe("null");
