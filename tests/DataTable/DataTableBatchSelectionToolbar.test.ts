@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { isSvelte5, user } from "../setup-tests";
+import { user } from "../setup-tests";
 import DataTableBatchSelectionToolbar from "./DataTableBatchSelectionToolbar.test.svelte";
 
 describe("DataTableBatchSelectionToolbar", () => {
@@ -37,7 +37,7 @@ describe("DataTableBatchSelectionToolbar", () => {
   });
 
   it("handles cancel action", async () => {
-    const { component } = render(DataTableBatchSelectionToolbar, {
+    render(DataTableBatchSelectionToolbar, {
       props: {
         selectedRowIds: ["a", "b"],
       },
@@ -46,16 +46,12 @@ describe("DataTableBatchSelectionToolbar", () => {
     // Click cancel button
     const cancelButton = screen.getByText("Cancel");
     await user.click(cancelButton);
+    // Wait for binding updates to complete
     await tick();
 
-    if (isSvelte5) {
-      // Verify selected rows are cleared by checking the displayed value (Svelte 5)
-      const selectedIdsElement = screen.getByTestId("selected-ids");
-      expect(selectedIdsElement.textContent).toBe("[]");
-    } else {
-      // Verify selected rows are cleared using internal API (Svelte 4)
-      expect(component.$$.ctx[component.$$.props.selectedRowIds]).toEqual([]);
-    }
+    // Verify selected rows are cleared by checking the displayed value
+    const selectedIdsElement = screen.getByTestId("selected-ids");
+    expect(selectedIdsElement.textContent).toBe("[]");
   });
 
   it("handles custom batch actions", async () => {
@@ -95,7 +91,7 @@ describe("DataTableBatchSelectionToolbar", () => {
   });
 
   it("prevents default cancel behavior when controlled", async () => {
-    const { component } = render(DataTableBatchSelectionToolbar, {
+    render(DataTableBatchSelectionToolbar, {
       props: {
         selectedRowIds: ["a", "b"],
         active: true,
@@ -108,17 +104,9 @@ describe("DataTableBatchSelectionToolbar", () => {
     await user.click(cancelButton);
     await tick();
 
-    if (isSvelte5) {
-      // Verify selected rows are not cleared by checking the displayed value (Svelte 5)
-      const selectedIdsElement = screen.getByTestId("selected-ids");
-      expect(selectedIdsElement.textContent).toBe('["a","b"]');
-    } else {
-      // Verify selected rows are not cleared using internal API (Svelte 4)
-      expect(component.$$.ctx[component.$$.props.selectedRowIds]).toEqual([
-        "a",
-        "b",
-      ]);
-    }
+    // Verify selected rows are not cleared by checking the displayed value
+    const selectedIdsElement = screen.getByTestId("selected-ids");
+    expect(selectedIdsElement.textContent).toBe('["a","b"]');
   });
 
   it("handles multiple batch actions", async () => {
