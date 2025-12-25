@@ -2162,7 +2162,7 @@
           "name": "clear",
           "kind": "function",
           "description": "Clear the combo box programmatically\n@example \n```svelte\n<ComboBox bind:this={comboBox} items={items} />\n<button on:click={() => comboBox.clear()}>Clear</button>\n<button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>\n```",
-          "type": "(options?: { focus?: boolean; }) => void",
+          "type": "(options?: { focus?: boolean; }) => Promise<void>",
           "params": [
             {
               "name": "options",
