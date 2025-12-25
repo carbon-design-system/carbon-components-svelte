@@ -1,15 +1,11 @@
 <script lang="ts">
-  import { Button, TreeView } from "carbon-components-svelte";
+  import { TreeView } from "carbon-components-svelte";
   import type { TreeNodeId } from "carbon-components-svelte/TreeView/TreeView.svelte";
-  import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
-  import type { ComponentProps } from "svelte";
 
-  let treeview: TreeView;
-  let activeId: TreeNodeId = "";
-  let selectedIds: TreeNodeId[] = [];
-  let expandedIds: TreeNodeId[] = [];
-  let nodes: ComponentProps<TreeView>["nodes"] = [
-    { id: 0, text: "AI / Machine learning", icon: Analytics },
+  export let activeId: TreeNodeId = 0;
+  export let selectedIds: TreeNodeId[] = [0, 7, 9];
+  export let nodes = [
+    { id: 0, text: "AI / Machine learning" },
     {
       id: 1,
       text: "Analytics",
@@ -48,43 +44,15 @@
       nodes: [{ id: 15, text: "IBM API Connect", disabled: true }],
     },
   ];
-
-  $: console.log("selectedIds", selectedIds);
 </script>
 
 <TreeView
-  bind:this={treeview}
-  size="compact"
   labelText="Cloud Products"
   {nodes}
   bind:activeId
   bind:selectedIds
-  bind:expandedIds
   on:select={({ detail }) => console.log("select", detail)}
   on:toggle={({ detail }) => console.log("toggle", detail)}
   on:focus={({ detail }) => console.log("focus", detail)}
-  let:node
->
-  {node.text}
-</TreeView>
+/>
 
-<Button on:click={treeview.expandAll}>Expand all</Button>
-<Button on:click={treeview.collapseAll}>Collapse all</Button>
-<Button
-  on:click={() => {
-    treeview.expandNodes((node) => {
-      return /^IBM/.test(node.text);
-    });
-  }}
->
-  Expand some nodes
-</Button>
-<Button
-  on:click={() => {
-    treeview.collapseNodes((node) => {
-      return /^IBM/.test(node.text);
-    });
-  }}
->
-  Collapse some nodes
-</Button>
