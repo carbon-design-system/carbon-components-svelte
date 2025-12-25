@@ -27,6 +27,9 @@
    */
   const selectedValue = writable(selected);
 
+  let prevSelectedValue = undefined;
+  let isInitialRender = true;
+
   /**
    * @type {(value: string) => void}
    */
@@ -40,7 +43,13 @@
   });
 
   $: selected = $selectedValue;
-  $: dispatch("change", $selectedValue);
+  $: {
+    if (!isInitialRender && prevSelectedValue !== $selectedValue) {
+      dispatch("change", $selectedValue);
+    }
+    prevSelectedValue = $selectedValue;
+    isInitialRender = false;
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
