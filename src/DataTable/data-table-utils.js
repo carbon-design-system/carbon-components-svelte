@@ -135,3 +135,90 @@ export function rowsEqual(a, b) {
 
   return true;
 }
+
+const PATH_SPLIT_REGEX = /[.[\]'"]/;
+
+/**
+ * Resolves a nested property path in an object.
+ * Supports both direct property access and nested paths like "contact.company".
+ * @template {Record<string, unknown>} T
+ * @param {T} object - The object to resolve the path from
+ * @param {string} path - The property path (e.g., "name" or "contact.company")
+ * @returns {unknown} The resolved value, or undefined if the path doesn't exist
+ */
+export function resolvePath(object, path) {
+  if (path in object) return object[path];
+  return path
+    .split(PATH_SPLIT_REGEX)
+    .filter((p) => p)
+    .reduce((o, p) => (o && typeof o === "object" ? o[p] : o), object);
+}
+
+/**
+ * Paginates an array of rows based on page number and page size.
+ * @template {Record<string, unknown>} Row
+ * @param {ReadonlyArray<Row>} rows - The rows to paginate
+ * @param {number} page - The current page number (1-indexed)
+ * @param {number} pageSize - The number of items per page
+ * @returns {ReadonlyArray<Row>} The paginated rows, or all rows if pagination is disabled
+ */
+export function getDisplayedRows(rows, page, pageSize) {
+  if (page && pageSize) {
+    return rows.slice((page - 1) * pageSize, page * pageSize);
+  }
+  return rows;
+}
+
+/**
+ * Formats header width styles for table headers.
+ * Combines width and minWidth into a CSS style string.
+ * @template {object} Header
+ * @param {Header & { width?: string | null | number; minWidth?: string | null | number; [key: string]: unknown }} header - The header object
+ * @returns {string | undefined} The formatted style string, or undefined if no width styles
+ */
+export function formatHeaderWidth(header) {
+  const styles = [
+    header.width && `width: ${header.width}`,
+    header.minWidth && `min-width: ${header.minWidth}`,
+  ].filter(Boolean);
+  if (styles.length === 0) return undefined;
+  return styles.join(";");
+}
+
+/**
+ * Compares two values for sorting in a data table.
+ * Handles numbers, strings, null/undefined values, and custom sort functions.
+ * @template T
+ * @param {T} itemA - First value to compare
+ * @param {T} itemB - Second value to compare
+ * @param {boolean} ascending - Whether to sort in ascending order
+ * @param {((a: T, b: T) => number) | false | undefined} customSort - Optional custom sort function
+ * @returns {number} Negative if a < b (ascending) or a > b (descending), positive if a > b (ascending) or a < b (descending), 0 if equal
+ */
+export function compareValues(itemA, itemB, ascending, customSort) {
+  if (customSort) return customSort(itemA, itemB);
+
+  let result;
+
+  // Fast path: numeric comparison
+  if (typeof itemA === "number" && typeof itemB === "number") {
+    result = itemA - itemB;
+  } else {
+    // Handle null/undefined values
+    if ([itemA, itemB].every((item) => !item && item !== 0)) {
+      result = 0;
+    } else if (!itemA && itemA !== 0) {
+      result = 1;
+    } else if (!itemB && itemB !== 0) {
+      result = -1;
+    } else {
+      // String comparison with locale-aware numeric sorting
+      result = String(itemA).localeCompare(String(itemB), "en", {
+        numeric: true,
+      });
+    }
+  }
+
+  // Reverse result for descending order
+  return ascending ? result : -result;
+}

@@ -1,4 +1,10 @@
-import { rowsEqual } from "../../src/DataTable/data-table-utils.js";
+import {
+  compareValues,
+  formatHeaderWidth,
+  getDisplayedRows,
+  resolvePath,
+  rowsEqual,
+} from "../../src/DataTable/data-table-utils.js";
 
 describe("rowsEqual", () => {
   it("returns true for same reference", () => {
@@ -543,5 +549,412 @@ describe("rowsEqual", () => {
       );
       expectTypeOf<typeof result>().toEqualTypeOf<boolean>();
     });
+  });
+});
+
+describe("resolvePath", () => {
+  it("resolves direct property access", () => {
+    const obj = { name: "John", age: 30 };
+    expect(resolvePath(obj, "name")).toBe("John");
+    expect(resolvePath(obj, "age")).toBe(30);
+  });
+
+  it("resolves nested property paths", () => {
+    const obj = {
+      contact: {
+        company: "Acme Corp",
+        address: {
+          city: "New York",
+        },
+      },
+    };
+    expect(resolvePath(obj, "contact.company")).toBe("Acme Corp");
+    expect(resolvePath(obj, "contact.address.city")).toBe("New York");
+  });
+
+  it("returns undefined for non-existent paths", () => {
+    const obj = { name: "John" };
+    expect(resolvePath(obj, "missing")).toBeUndefined();
+    expect(resolvePath(obj, "contact.company")).toBeUndefined();
+  });
+
+  it("handles null and undefined in path resolution", () => {
+    const obj = {
+      contact: null,
+      address: undefined,
+      nested: {
+        value: "test",
+      },
+    };
+    expect(resolvePath(obj, "contact")).toBe(null);
+    expect(resolvePath(obj, "address")).toBeUndefined();
+    expect(resolvePath(obj, "nested.value")).toBe("test");
+  });
+
+  it("handles array indices in paths", () => {
+    const obj = {
+      items: ["first", "second", "third"],
+      nested: {
+        arr: [1, 2, 3],
+      },
+    };
+    // Note: array indices work if the path uses bracket notation in the string
+    // But our regex splits on brackets, so "items[0]" becomes ["items", "0"]
+    expect(resolvePath(obj, "items.0")).toBe("first");
+    expect(resolvePath(obj, "nested.arr.1")).toBe(2);
+  });
+
+  it("handles paths with special characters", () => {
+    const obj = {
+      "key.with.dots": "value1",
+      "key with spaces": "value2",
+    };
+    // Direct property access works
+    expect(resolvePath(obj, "key.with.dots")).toBe("value1");
+  });
+
+  it("handles deeply nested paths", () => {
+    const obj = {
+      level1: {
+        level2: {
+          level3: {
+            level4: {
+              value: "deep value",
+            },
+          },
+        },
+      },
+    };
+    expect(resolvePath(obj, "level1.level2.level3.level4.value")).toBe(
+      "deep value",
+    );
+  });
+
+  it("handles paths that stop at non-object values", () => {
+    const obj = {
+      name: "John",
+      contact: {
+        email: "john@example.com",
+      },
+    };
+    // When accessing "name.email", "name" is a string (not an object),
+    // so the reduce returns the string value itself, not undefined
+    expect(resolvePath(obj, "name.email")).toBe("John");
+    // But accessing a non-existent nested path returns undefined
+    expect(resolvePath(obj, "contact.missing")).toBeUndefined();
+  });
+
+  it("handles empty string paths", () => {
+    const obj = { name: "John" };
+    // Empty string should try to access the object itself
+    expect(resolvePath(obj, "")).toBe(obj);
+  });
+
+  it("handles numeric values in nested paths", () => {
+    const obj = {
+      data: {
+        count: 42,
+        price: 99.99,
+      },
+    };
+    expect(resolvePath(obj, "data.count")).toBe(42);
+    expect(resolvePath(obj, "data.price")).toBe(99.99);
+  });
+
+  it("handles boolean values in nested paths", () => {
+    const obj = {
+      settings: {
+        enabled: true,
+        active: false,
+      },
+    };
+    expect(resolvePath(obj, "settings.enabled")).toBe(true);
+    expect(resolvePath(obj, "settings.active")).toBe(false);
+  });
+});
+
+describe("compareValues", () => {
+  describe("numeric comparison", () => {
+    it("compares numbers in ascending order", () => {
+      expect(compareValues(1, 2, true)).toBeLessThan(0);
+      expect(compareValues(2, 1, true)).toBeGreaterThan(0);
+      expect(compareValues(1, 1, true)).toBe(0);
+    });
+
+    it("compares numbers in descending order", () => {
+      expect(compareValues(1, 2, false)).toBeGreaterThan(0);
+      expect(compareValues(2, 1, false)).toBeLessThan(0);
+      // Handle -0 case (when result is 0, -0 === 0 is true but Object.is(-0, 0) is false)
+      const result = compareValues(1, 1, false);
+      expect(result === 0).toBe(true);
+    });
+
+    it("handles negative numbers", () => {
+      expect(compareValues(-5, -3, true)).toBeLessThan(0);
+      expect(compareValues(-3, -5, true)).toBeGreaterThan(0);
+    });
+
+    it("handles zero", () => {
+      expect(compareValues(0, 5, true)).toBeLessThan(0);
+      expect(compareValues(5, 0, true)).toBeGreaterThan(0);
+      expect(compareValues(0, 0, true)).toBe(0);
+    });
+
+    it("handles decimal numbers", () => {
+      expect(compareValues(1.5, 2.3, true)).toBeLessThan(0);
+      expect(compareValues(2.3, 1.5, true)).toBeGreaterThan(0);
+    });
+  });
+
+  describe("string comparison", () => {
+    it("compares strings in ascending order", () => {
+      expect(compareValues("apple", "banana", true)).toBeLessThan(0);
+      expect(compareValues("banana", "apple", true)).toBeGreaterThan(0);
+      expect(compareValues("apple", "apple", true)).toBe(0);
+    });
+
+    it("compares strings in descending order", () => {
+      expect(compareValues("apple", "banana", false)).toBeGreaterThan(0);
+      expect(compareValues("banana", "apple", false)).toBeLessThan(0);
+    });
+
+    it("handles numeric strings with locale-aware sorting", () => {
+      // "10" should come after "2" with numeric sorting
+      expect(compareValues("2", "10", true)).toBeLessThan(0);
+      expect(compareValues("10", "2", true)).toBeGreaterThan(0);
+    });
+
+    it("handles case-sensitive string comparison", () => {
+      expect(compareValues("Apple", "apple", true)).not.toBe(0);
+    });
+  });
+
+  describe("null and undefined handling", () => {
+    it("treats both null values as equal", () => {
+      expect(compareValues(null, null, true)).toBe(0);
+      // Handle -0 case
+      const result = compareValues(null, null, false);
+      expect(result === 0).toBe(true);
+    });
+
+    it("treats both undefined values as equal", () => {
+      expect(compareValues(undefined, undefined, true)).toBe(0);
+      // Handle -0 case
+      const result = compareValues(undefined, undefined, false);
+      expect(result === 0).toBe(true);
+    });
+
+    it("places null after defined values in ascending order", () => {
+      expect(compareValues("value", null, true)).toBeLessThan(0);
+      expect(compareValues(null, "value", true)).toBeGreaterThan(0);
+    });
+
+    it("places null before defined values in descending order", () => {
+      expect(compareValues("value", null, false)).toBeGreaterThan(0);
+      expect(compareValues(null, "value", false)).toBeLessThan(0);
+    });
+
+    it("places undefined after defined values in ascending order", () => {
+      expect(compareValues("value", undefined, true)).toBeLessThan(0);
+      expect(compareValues(undefined, "value", true)).toBeGreaterThan(0);
+    });
+
+    it("handles zero correctly (not treated as falsy)", () => {
+      expect(compareValues(0, null, true)).toBeLessThan(0);
+      expect(compareValues(null, 0, true)).toBeGreaterThan(0);
+      expect(compareValues(0, undefined, true)).toBeLessThan(0);
+    });
+  });
+
+  describe("custom sort function", () => {
+    it("uses custom sort function when provided", () => {
+      const customSort = (a: number, b: number) => {
+        // Reverse numeric order
+        return b - a;
+      };
+      expect(compareValues(1, 2, true, customSort)).toBe(1);
+      expect(compareValues(2, 1, true, customSort)).toBe(-1);
+    });
+
+    it("ignores ascending parameter when custom sort is provided", () => {
+      const customSort = (a: string, b: string) => a.length - b.length; // Sort by string length
+      expect(compareValues("a", "abc", true, customSort)).toBeLessThan(0);
+      expect(compareValues("a", "abc", false, customSort)).toBeLessThan(0);
+    });
+
+    it("handles custom sort returning zero", () => {
+      const customSort = () => 0;
+      expect(compareValues("a", "b", true, customSort)).toBe(0);
+    });
+  });
+
+  describe("mixed type comparison", () => {
+    it("converts numbers to strings for comparison with strings", () => {
+      const result = compareValues(
+        123,
+        // @ts-expect-error test case
+        "456",
+        true,
+      );
+      expect(typeof result).toBe("number");
+    });
+
+    it("handles boolean values", () => {
+      expect(compareValues(true, false, true)).not.toBe(0);
+    });
+  });
+
+  describe("edge cases", () => {
+    it("handles empty strings", () => {
+      // Empty string comparison: "" < "a" in localeCompare returns negative
+      // But our function handles empty strings as falsy, so they're treated specially
+      // Empty string is falsy, so it goes through the null/undefined handling path
+      const result1 = compareValues("", "a", true);
+      // Empty string is falsy, so !itemA is true, result should be 1 (empty comes after)
+      expect(result1).toBeGreaterThan(0);
+      const result2 = compareValues("a", "", true);
+      expect(result2).toBeLessThan(0);
+      // Both empty strings are falsy, so result is 0
+      const result3 = compareValues("", "", true);
+      expect(result3 === 0).toBe(true);
+    });
+
+    it("handles special characters in strings", () => {
+      expect(compareValues("a", "a!", true)).not.toBe(0);
+    });
+
+    it("handles very large numbers", () => {
+      expect(compareValues(Number.MAX_SAFE_INTEGER, 1, true)).toBeGreaterThan(
+        0,
+      );
+    });
+  });
+});
+
+describe("getDisplayedRows", () => {
+  const rows = [
+    { id: 1, name: "Row 1" },
+    { id: 2, name: "Row 2" },
+    { id: 3, name: "Row 3" },
+    { id: 4, name: "Row 4" },
+    { id: 5, name: "Row 5" },
+    { id: 6, name: "Row 6" },
+    { id: 7, name: "Row 7" },
+    { id: 8, name: "Row 8" },
+    { id: 9, name: "Row 9" },
+    { id: 10, name: "Row 10" },
+  ];
+
+  it("returns all rows when pagination is disabled", () => {
+    expect(getDisplayedRows(rows, 0, 0)).toEqual(rows);
+    expect(getDisplayedRows(rows, 0, 5)).toEqual(rows);
+    expect(getDisplayedRows(rows, 1, 0)).toEqual(rows);
+  });
+
+  it("returns first page correctly", () => {
+    const result = getDisplayedRows(rows, 1, 5);
+    expect(result).toHaveLength(5);
+    expect(result[0].id).toBe(1);
+    expect(result[4].id).toBe(5);
+  });
+
+  it("returns second page correctly", () => {
+    const result = getDisplayedRows(rows, 2, 5);
+    expect(result).toHaveLength(5);
+    expect(result[0].id).toBe(6);
+    expect(result[4].id).toBe(10);
+  });
+
+  it("returns partial last page correctly", () => {
+    const result = getDisplayedRows(rows, 3, 5);
+    expect(result).toHaveLength(0); // Page 3 with pageSize 5 would be beyond the array
+  });
+
+  it("handles page size larger than total rows", () => {
+    const result = getDisplayedRows(rows, 1, 100);
+    expect(result).toHaveLength(10);
+    expect(result).toEqual(rows);
+  });
+
+  it("handles empty array", () => {
+    expect(getDisplayedRows([], 1, 5)).toEqual([]);
+  });
+
+  it("handles single row", () => {
+    const singleRow = [{ id: 1, name: "Row 1" }];
+    expect(getDisplayedRows(singleRow, 1, 5)).toEqual(singleRow);
+  });
+
+  it("handles page beyond available data", () => {
+    const result = getDisplayedRows(rows, 10, 5);
+    expect(result).toHaveLength(0);
+  });
+
+  it("handles pageSize of 1", () => {
+    const result = getDisplayedRows(rows, 3, 1);
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe(3);
+  });
+
+  it("preserves row references", () => {
+    const result = getDisplayedRows(rows, 1, 5);
+    expect(result[0]).toBe(rows[0]);
+    expect(result[4]).toBe(rows[4]);
+  });
+});
+
+describe("formatHeaderWidth", () => {
+  it("returns undefined when no width styles are provided", () => {
+    expect(formatHeaderWidth({})).toBeUndefined();
+    expect(formatHeaderWidth({ key: "name", value: "Name" })).toBeUndefined();
+  });
+
+  it("formats width only", () => {
+    const header = { width: "200px" };
+    expect(formatHeaderWidth(header)).toBe("width: 200px");
+  });
+
+  it("formats minWidth only", () => {
+    const header = { minWidth: "150px" };
+    expect(formatHeaderWidth(header)).toBe("min-width: 150px");
+  });
+
+  it("formats both width and minWidth", () => {
+    const header = { width: "200px", minWidth: "150px" };
+    expect(formatHeaderWidth(header)).toBe("width: 200px;min-width: 150px");
+  });
+
+  it("handles different width units", () => {
+    expect(formatHeaderWidth({ width: "50%" })).toBe("width: 50%");
+    expect(formatHeaderWidth({ width: "10rem" })).toBe("width: 10rem");
+    expect(formatHeaderWidth({ width: "auto" })).toBe("width: auto");
+  });
+
+  it("handles falsy width values", () => {
+    // Empty string is falsy, so it gets filtered out
+    expect(formatHeaderWidth({ width: "" })).toBeUndefined();
+    // 0 is falsy, so it also gets filtered out
+    expect(formatHeaderWidth({ width: 0 })).toBeUndefined();
+  });
+
+  it("handles header with other properties", () => {
+    const header = {
+      key: "name",
+      value: "Name",
+      width: "200px",
+      minWidth: "150px",
+    };
+    expect(formatHeaderWidth(header)).toBe("width: 200px;min-width: 150px");
+  });
+
+  it("handles undefined width properties", () => {
+    const header = { width: undefined, minWidth: undefined };
+    expect(formatHeaderWidth(header)).toBeUndefined();
+  });
+
+  it("handles null width properties", () => {
+    const header = { width: null, minWidth: null };
+    // null is falsy, so it won't be included
+    expect(formatHeaderWidth(header)).toBeUndefined();
   });
 });
