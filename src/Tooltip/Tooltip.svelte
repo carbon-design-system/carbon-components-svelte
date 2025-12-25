@@ -78,6 +78,8 @@
    */
   const tooltipOpen = writable(open);
 
+  let prevOpen = undefined;
+
   setContext("Tooltip", { tooltipOpen });
 
   function onKeydown(e) {
@@ -175,7 +177,12 @@
   });
 
   $: tooltipOpen.set(open);
-  $: dispatch(open ? "open" : "close");
+  $: {
+    if (prevOpen !== undefined) {
+      dispatch(open ? "open" : "close");
+    }
+    prevOpen = open;
+  }
   $: buttonProps = {
     role: "button",
     "aria-haspopup": "true",
