@@ -5,7 +5,7 @@ export type ContentSwitcherContext = {
   currentId: import("svelte/store").Writable<string | null>;
   add: (data: { id: string; text: string; selected: boolean }) => void;
   update: (id: string) => void;
-  change: (direction: number) => void;
+  change: (direction: number) => Promise<void>;
 };
 
 type $RestProps = SvelteHTMLElements["div"];

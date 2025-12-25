@@ -12,7 +12,7 @@
    */
   export let size = undefined;
 
-  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
+  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
@@ -20,6 +20,9 @@
    * @type {import("svelte/store").Writable<string | null>}
    */
   const currentId = writable(null);
+
+  /** @type {HTMLDivElement | null} */
+  let refContainer = null;
 
   $: currentIndex = -1;
   $: switches = [];
@@ -47,9 +50,9 @@
   };
 
   /**
-   * @type {(direction: number) => void}
+   * @type {(direction: number) => Promise<void>}
    */
-  const change = (direction) => {
+  const change = async (direction) => {
     let index = currentIndex + direction;
 
     if (index < 0) {
@@ -59,6 +62,14 @@
     }
 
     selectedIndex = index;
+
+    await tick();
+    const tabs = refContainer?.querySelectorAll("[role='tab']");
+    const tab = tabs?.[index];
+
+    if (tab instanceof HTMLElement) {
+      tab.focus();
+    }
   };
 
   setContext("ContentSwitcher", {
@@ -78,6 +89,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-interactive-supports-focus -->
 <div
+  bind:this={refContainer}
   role="tablist"
   class:bx--content-switcher={true}
   class:bx--content-switcher--sm={size === "sm"}

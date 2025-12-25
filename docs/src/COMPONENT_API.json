@@ -2734,7 +2734,7 @@
             },
             {
               "name": "change",
-              "type": "(direction: number) => void",
+              "type": "(direction: number) => Promise<void>",
               "description": "",
               "optional": false
             }
