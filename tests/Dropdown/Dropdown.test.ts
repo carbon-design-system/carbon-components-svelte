@@ -336,8 +336,11 @@ describe("Dropdown", () => {
 
     const button = screen.getByRole("button");
     expect(button).toBeEnabled();
+    // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
+    // See: https://svelte.dev/docs/svelte/v5-migration-guide
+    // When label is undefined, it renders as "" instead of "undefined", so the button's
+    // accessible name falls back to the aria-label from ListBoxMenuIcon ("Open menu").
     if (isSvelte5) {
-      // In Svelte 5, empty items with undefined selectedId shows "Open menu" instead of "undefined"
       expect(button).toHaveTextContent("Open menu");
     } else {
       expect(button).toHaveTextContent("undefined");
