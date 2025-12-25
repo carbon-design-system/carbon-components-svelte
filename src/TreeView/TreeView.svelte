@@ -192,17 +192,20 @@
     const { expand = true, select = true, focus = true } = options;
 
     for (const child of nodes) {
-      const nodes = findNodeById(child, id);
+      const path = findNodeById(child, id);
 
-      if (nodes) {
-        const ids = nodes.map((node) => node.id);
-        const nodeIds = new Set(ids);
+      if (path) {
+        const ids = path.map((node) => node.id);
+        const lastId = ids[ids.length - 1];
 
         if (expand) {
-          expandNodes((node) => nodeIds.has(node.id));
+          const ancestorIds = ids.slice(0, -1);
+          for (const ancestorId of ancestorIds) {
+            expandedIdsSet.add(ancestorId);
+          }
+          expandedIds = Array.from(expandedIdsSet);
+          lastExpandedIdsRef = expandedIds;
         }
-
-        const lastId = ids[ids.length - 1];
 
         if (select) {
           activeId = lastId;
@@ -388,14 +391,14 @@
 
   $: flattenedNodes = cachedFlattenedNodes ?? [];
   $: nodeIds = cachedNodeIds ?? [];
-  $: activeNodeId.set(activeId);
-  $: selectedNodeIds.set(selectedIds);
 
   $: {
     if (expandedIds !== lastExpandedIdsRef) {
       expandedIdsSet = new Set(expandedIds);
       lastExpandedIdsRef = expandedIds;
     }
+    activeNodeId.set(activeId);
+    selectedNodeIds.set(selectedIds);
     expandedNodeIds.set(expandedIds);
   }
 
