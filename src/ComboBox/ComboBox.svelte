@@ -264,6 +264,8 @@
 
   $: if (selectedId !== undefined) {
     if (prevSelectedId !== selectedId) {
+      // Only dispatch select event if not initial render (prevSelectedId was not null)
+      const isInitialRender = prevSelectedId === null;
       prevSelectedId = selectedId;
       if (filteredItems?.length === 1 && open) {
         selectedId = filteredItems[0].id;
@@ -273,7 +275,9 @@
       } else {
         selectedItem = items.find((item) => item.id === selectedId);
       }
-      dispatch("select", { selectedId, selectedItem });
+      if (!isInitialRender) {
+        dispatch("select", { selectedId, selectedItem });
+      }
     }
   } else {
     prevSelectedId = selectedId;
