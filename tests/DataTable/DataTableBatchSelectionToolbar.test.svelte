@@ -6,6 +6,7 @@
     ToolbarBatchActions,
     ToolbarContent,
   } from "carbon-components-svelte";
+  import { tick } from "svelte";
 
   const headers = [
     { key: "name", value: "Name" },
@@ -33,9 +34,10 @@
   <Toolbar>
     <ToolbarBatchActions
       {active}
-      on:cancel={() => {
+      on:cancel={async () => {
         if (!controlled) {
           selectedRowIds = [];
+          await tick();
         }
       }}
     >
