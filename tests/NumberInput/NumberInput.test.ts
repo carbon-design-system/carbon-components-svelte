@@ -743,11 +743,12 @@ describe("NumberInput", () => {
     await user.clear(input);
     await user.tab();
 
-    // TODO(svelte-5): Investigate inconsistent value representation - cleared inputs may display as empty string instead of "null" in Svelte 5
+    // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
+    // See: https://svelte.dev/docs/svelte/v5-migration-guide
+    // The actual bound value is still null, but DOM text interpolation renders it as "".
     if (isSvelte5) {
-      // In Svelte 5, cleared inputs may result in empty string instead of null
       const valueText = screen.getByTestId("value").textContent;
-      expect(valueText === "" || valueText === "null").toBe(true);
+      expect(valueText).toBe("");
       expect(input).toHaveValue(null);
     } else {
       expect(screen.getByTestId("value").textContent).toBe("null");
@@ -790,11 +791,12 @@ describe("NumberInput", () => {
     const input = screen.getByRole("spinbutton");
     await user.clear(input);
 
-    // TODO(svelte-5): Investigate inconsistent value representation - cleared inputs may display as empty string instead of "null" in Svelte 5
+    // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
+    // See: https://svelte.dev/docs/svelte/v5-migration-guide
+    // The actual bound value is still null, but DOM text interpolation renders it as "".
     if (isSvelte5) {
-      // In Svelte 5, cleared inputs may result in empty string instead of null
       const valueText = screen.getByTestId("value").textContent;
-      expect(valueText === "" || valueText === "null").toBe(true);
+      expect(valueText).toBe("");
     } else {
       expect(screen.getByTestId("value").textContent).toBe("null");
     }
