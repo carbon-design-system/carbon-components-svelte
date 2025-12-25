@@ -216,5 +216,5 @@ export default class ComboBox<
    * <button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>
    * ```
    */
-  clear: (options?: { focus?: boolean }) => void;
+  clear: (options?: { focus?: boolean }) => Promise<void>;
 }

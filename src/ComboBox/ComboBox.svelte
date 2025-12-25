@@ -201,7 +201,7 @@
 
   /**
    * Clear the combo box programmatically
-   * @type {(options?: { focus?: boolean; }) => void}
+   * @type {(options?: { focus?: boolean; }) => Promise<void>}
    * @param {object} [options] - Configuration options for clearing
    * @param {boolean} [options.focus=true] - Whether to focus the combo box after clearing
    * @example
@@ -211,7 +211,7 @@
    * <button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>
    * ```
    */
-  export function clear(options = {}) {
+  export async function clear(options = {}) {
     prevSelectedId = null;
     highlightedIndex = -1;
     highlightedId = undefined;
@@ -219,6 +219,8 @@
     selectedItem = undefined;
     open = false;
     value = "";
+    // Ensure binding updates are complete before focusing.
+    await tick();
     if (options?.focus !== false) ref?.focus();
   }
 
