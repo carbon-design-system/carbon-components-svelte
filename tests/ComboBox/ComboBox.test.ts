@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { isSvelte5, user } from "../setup-tests";
+import { user } from "../setup-tests";
 import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
@@ -88,10 +88,6 @@ describe("ComboBox", () => {
       },
     });
 
-    if (isSvelte5) {
-      // Svelte 5 may emit select event on initial render, so clear the mock
-      consoleLog.mockClear();
-    }
     expect(consoleLog).not.toHaveBeenCalled();
     expect(getInput()).toHaveValue("Email");
 
@@ -113,10 +109,6 @@ describe("ComboBox", () => {
       },
     });
 
-    if (isSvelte5) {
-      // Svelte 5 may emit select event on initial render, so clear the mock
-      consoleLog.mockClear();
-    }
     expect(consoleLog).not.toHaveBeenCalled();
     expect(getInput()).toHaveValue("Email");
 
@@ -248,10 +240,6 @@ describe("ComboBox", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ComboBox, { props: { selectedId: "1" } });
 
-    if (isSvelte5) {
-      // Svelte 5 may emit select event on initial render, so clear the mock
-      consoleLog.mockClear();
-    }
     expect(consoleLog).not.toBeCalled();
     await user.click(getClearButton());
 
