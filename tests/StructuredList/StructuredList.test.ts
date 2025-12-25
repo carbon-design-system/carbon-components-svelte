@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { isSvelte5, user } from "../setup-tests";
+import { user } from "../setup-tests";
 import StructuredList from "./StructuredList.test.svelte";
 import StructuredListCustom from "./StructuredListCustom.test.svelte";
 
@@ -120,12 +120,7 @@ describe("StructuredList", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(StructuredList, { props: { selection: true } });
 
-    if (isSvelte5) {
-      // Svelte 5 may emit change event on initial render, so clear the mock
-      consoleLog.mockClear();
-    } else {
-      expect(consoleLog).not.toHaveBeenCalled();
-    }
+    expect(consoleLog).not.toHaveBeenCalled();
 
     await user.click(screen.getAllByRole("radio")[1]);
     expect(consoleLog).toHaveBeenCalledWith("change", "row-2-value");
