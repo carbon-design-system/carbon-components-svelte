@@ -2,6 +2,8 @@ import { render, screen } from "@testing-library/svelte";
 import type { ComponentType as SvelteComponentType } from "svelte";
 import { user } from "../setup-tests";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
+import TreeViewMultiselect from "./TreeView.multiselect.test.svelte";
+import TreeViewProps from "./TreeView.props.test.svelte";
 import TreeViewSlot from "./TreeView.slot.test.svelte";
 import TreeView from "./TreeView.test.svelte";
 
@@ -80,6 +82,284 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(
       screen.getByText("IBM Analytics Engine").parentNode?.parentNode,
     ).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("can collapse all nodes", async () => {
+    render(component);
+
+    const expandAllButton = screen.getByText("Expand all");
+    await user.click(expandAllButton);
+    expect(getAllExpandedItems().length).toBeGreaterThan(0);
+
+    const collapseAllButton = screen.getByText("Collapse all");
+    await user.click(collapseAllButton);
+
+    noExpandedItems();
+  });
+
+  it("can collapse some nodes", async () => {
+    render(component);
+
+    const expandAllButton = screen.getByText("Expand all");
+    await user.click(expandAllButton);
+    const initialExpandedCount = getAllExpandedItems().length;
+    expect(initialExpandedCount).toBeGreaterThan(0);
+
+    const collapseSomeNodesButton = screen.getByText("Collapse some nodes");
+    await user.click(collapseSomeNodesButton);
+
+    const expandedCount = getAllExpandedItems().length;
+    expect(expandedCount).toBeLessThan(initialExpandedCount);
+    expect(expandedCount).toBeGreaterThan(0);
+  });
+
+  it("dispatches toggle event when node is toggled", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(component);
+
+    const analyticsItems = screen.getAllByRole("treeitem", {
+      name: /Analytics/,
+      selected: false,
+    });
+    const analyticsNode = analyticsItems[0];
+    const toggleButton = analyticsNode.querySelector(
+      ".bx--tree-parent-node__toggle",
+    );
+
+    expect(toggleButton).toBeInTheDocument();
+
+    await user.click(toggleButton as HTMLElement);
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "toggle",
+      expect.objectContaining({
+        id: 1,
+        text: "Analytics",
+        leaf: false,
+      }),
+    );
+  });
+
+  it("dispatches focus event when node receives focus", () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(component);
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    firstItem.focus();
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "focus",
+      expect.objectContaining({
+        id: 0,
+        text: "AI / Machine learning",
+        leaf: true,
+      }),
+    );
+  });
+
+  it("handles disabled nodes correctly", async () => {
+    render(component);
+
+    const disabledNode = screen.getByRole("treeitem", {
+      name: /Integration/,
+    });
+    expect(disabledNode).toHaveAttribute("aria-disabled", "true");
+    expect(disabledNode).toHaveClass("bx--tree-node--disabled");
+
+    await user.click(disabledNode);
+    expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
+  });
+
+  it("navigates with ArrowDown key", async () => {
+    render(component);
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    firstItem.focus();
+
+    await user.keyboard("{ArrowDown}");
+
+    const analyticsItems = screen.getAllByRole("treeitem", {
+      name: /Analytics/,
+      selected: false,
+    });
+    const nextItem = analyticsItems[0];
+    expect(nextItem).toHaveFocus();
+  });
+
+  it("navigates with ArrowUp key", async () => {
+    render(component);
+
+    const analyticsItems = screen.getAllByRole("treeitem", {
+      name: /Analytics/,
+      selected: false,
+    });
+    const secondItem = analyticsItems[0];
+    secondItem.focus();
+
+    await user.keyboard("{ArrowUp}");
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    expect(firstItem).toHaveFocus();
+  });
+
+  it("skips disabled nodes in keyboard navigation", async () => {
+    render(component);
+
+    const expandAllButton = screen.getByText("Expand all");
+    await user.click(expandAllButton);
+
+    const databasesNodes = screen.getAllByRole("treeitem", {
+      name: /Databases/,
+      selected: false,
+    });
+    const databasesNode = databasesNodes[0];
+    databasesNode.focus();
+
+    await user.keyboard("{ArrowDown}");
+
+    const disabledNode = screen.getByRole("treeitem", {
+      name: /Integration/,
+    });
+    expect(disabledNode).not.toHaveFocus();
+  });
+
+  it("expands parent node with ArrowRight key", async () => {
+    render(component);
+
+    const analyticsItems = screen.getAllByRole("treeitem", {
+      name: /Analytics/,
+      selected: false,
+    });
+    const analyticsNode = analyticsItems[0];
+    analyticsNode.focus();
+
+    await user.keyboard("{ArrowRight}");
+
+    expect(analyticsNode).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("collapses parent node with ArrowLeft key", async () => {
+    render(component);
+
+    const analyticsItems = screen.getAllByRole("treeitem", {
+      name: /Analytics/,
+      selected: false,
+    });
+    const analyticsNode = analyticsItems[0];
+    analyticsNode.focus();
+
+    await user.keyboard("{ArrowRight}");
+    expect(analyticsNode).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{ArrowLeft}");
+    expect(analyticsNode).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("selects node with Enter key", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(component);
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    firstItem.focus();
+
+    await user.keyboard("{Enter}");
+
+    expect(consoleLog).toHaveBeenCalledWith("selectedIds", [0]);
+    expect(consoleLog).toHaveBeenCalledWith(
+      "select",
+      expect.objectContaining({
+        id: 0,
+        text: "AI / Machine learning",
+      }),
+    );
+  });
+
+  it("selects node with Space key", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(component);
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    firstItem.focus();
+
+    await user.keyboard(" ");
+
+    expect(consoleLog).toHaveBeenCalledWith("selectedIds", [0]);
+    expect(consoleLog).toHaveBeenCalledWith(
+      "select",
+      expect.objectContaining({
+        id: 0,
+        text: "AI / Machine learning",
+      }),
+    );
+  });
+});
+
+describe("TreeView Props", () => {
+  it("applies default size class", () => {
+    render(TreeViewProps);
+
+    const tree = screen.getByRole("tree");
+    expect(tree).toHaveClass("bx--tree--default");
+  });
+
+  it("applies compact size class", () => {
+    render(TreeViewProps, { size: "compact" });
+
+    const tree = screen.getByRole("tree");
+    expect(tree).toHaveClass("bx--tree--compact");
+  });
+
+  it("displays label text", () => {
+    render(TreeViewProps, { labelText: "Test Label" });
+
+    const label = screen.getByText("Test Label");
+    expect(label).toBeInTheDocument();
+    expect(label).toHaveClass("bx--label");
+  });
+
+  it("hides label when hideLabel is true", () => {
+    render(TreeViewProps, { labelText: "Test Label", hideLabel: true });
+
+    expect(screen.queryByText("Test Label")).not.toBeInTheDocument();
+    const tree = screen.getByRole("tree");
+    expect(tree).toHaveAttribute("aria-label", "Test Label");
+  });
+
+  it("sets activeId correctly", () => {
+    render(TreeViewProps, { activeId: 1 });
+
+    const node2 = screen.getByRole("treeitem", { name: /Node 2/ });
+    expect(node2).toHaveAttribute("aria-current", "true");
+    expect(node2).toHaveClass("bx--tree-node--active");
+  });
+
+  it("handles multiple selectedIds", () => {
+    render(TreeViewMultiselect, { selectedIds: [0, 7, 9] });
+
+    const tree = screen.getByRole("tree");
+    expect(tree).toHaveAttribute("aria-multiselectable", "true");
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+    expect(blockchainItem).toHaveAttribute("aria-selected", "true");
+    expect(databasesItem).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("handles empty nodes array", () => {
+    render(TreeViewProps, { nodes: [] });
+
+    const tree = screen.getByRole("tree");
+    expect(tree).toBeInTheDocument();
+    expect(screen.queryAllByRole("treeitem")).toHaveLength(0);
   });
 });
 
@@ -190,7 +470,6 @@ describe("TreeView Generics", () => {
         CustomNode & { expanded: boolean; leaf: boolean; selected: boolean }
       >();
 
-    // Verify the event detail type matches what the handler expects
     type SelectEventDetail = CustomNode & {
       expanded: boolean;
       leaf: boolean;

@@ -49,6 +49,7 @@
 </TreeView>
 
 <Button on:click={treeview.expandAll}>Expand all</Button>
+<Button on:click={treeview.collapseAll}>Collapse all</Button>
 <Button
   on:click={() => {
     treeview.expandNodes((node) => {
@@ -57,4 +58,13 @@
   }}
 >
   Expand some nodes
+</Button>
+<Button
+  on:click={() => {
+    treeview.collapseNodes((node) => {
+      return /^IBM/.test(node.text);
+    });
+  }}
+>
+  Collapse some nodes
 </Button>
