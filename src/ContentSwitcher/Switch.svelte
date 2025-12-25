@@ -23,7 +23,7 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  import { afterUpdate, getContext, onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
 
   const ctx = getContext("ContentSwitcher");
 
@@ -31,12 +31,6 @@
 
   const unsubscribe = ctx.currentId.subscribe((currentId) => {
     selected = currentId === id;
-  });
-
-  afterUpdate(() => {
-    if (selected) {
-      ref.focus();
-    }
   });
 
   onMount(() => {
