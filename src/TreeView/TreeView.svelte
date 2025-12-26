@@ -229,69 +229,44 @@
 
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
-  /**
-   * @type {import("svelte/store").Writable<TreeNodeId>}
-   */
+  
+  /** @type {import("svelte/store").Writable<TreeNodeId>} */
   const activeNodeId = writable(activeId);
-  /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>}
-   */
+  /** @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>} */
   const selectedNodeIds = writable(selectedIds);
-  /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>}
-   */
+  /** @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>} */
   const expandedNodeIds = writable(expandedIds);
 
-  /**
-   * @type {HTMLElement | null}
-   */
+  /** @type {HTMLElement | null} */
   let ref = null;
-  /**
-   * @type {TreeWalker | null}
-   */
+  /** @type {TreeWalker | null} */
   let treeWalker = null;
 
-  /**
-   * @type {ReadonlyArray<Node> | null}
-   */
+  /** @type {ReadonlyArray<Node> | null} */
   let cachedNodes = null;
-  /**
-   * @type {Array<Node> | null}
-   */
+  /** @type {Array<Node> | null} */
   let cachedFlattenedNodes = null;
-  /**
-   * @type {Array<TreeNodeId> | null}
-   */
+  /** @type {Array<TreeNodeId> | null} */
   let cachedNodeIds = null;
 
-  /**
-   * @type {Set<TreeNodeId>}
-   */
+  /** @type {Set<TreeNodeId>} */
   let expandedIdsSet = new Set(expandedIds);
-  /**
-   * @type {ReadonlyArray<TreeNodeId>}
-   */
+  /** @type {ReadonlyArray<TreeNodeId>} */
   let lastExpandedIdsRef = expandedIds;
 
-  /**
-   * @type {(node: TreeNode) => void}
-   */
+  /** @type {(node: TreeNode) => void} */
   const clickNode = (node) => {
     activeId = node.id;
     selectedIds = [node.id];
     dispatch("select", node);
   };
 
-  /**
-   * @type {(node: TreeNode) => void}
-   */
+  /** @type {(node: TreeNode) => void} */
   const selectNode = (node) => {
     selectedIds = [node.id];
   };
 
-  /**
-   * @type {(node: TreeNode, expanded: boolean) => void}
-   */
+  /** @type {(node: TreeNode, expanded: boolean) => void} */
   const expandNode = (node, expanded) => {
     if (expanded) {
       expandedIdsSet.add(node.id);
@@ -302,14 +277,10 @@
     lastExpandedIdsRef = expandedIds;
   };
 
-  /**
-   * @type {(node: TreeNode) => void}
-   */
+  /** @type {(node: TreeNode) => void} */
   const focusNode = (node) => dispatch("focus", node);
 
-  /**
-   * @type {(node: TreeNode) => void}
-   */
+  /** @type {(node: TreeNode) => void} */
   const toggleNode = (node) => dispatch("toggle", node);
 
   setContext("TreeView", {
