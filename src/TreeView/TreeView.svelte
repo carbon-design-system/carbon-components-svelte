@@ -25,6 +25,38 @@
 
     return null;
   }
+
+  /**
+   * Creates a TreeWalker instance for keyboard navigation.
+   * @param {HTMLElement} root - The root element to traverse
+   * @returns {TreeWalker} A TreeWalker configured to navigate tree nodes
+   */
+  function createTreeWalkerInstance(root) {
+    return document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
+      acceptNode: (node) => {
+        if (node.classList.contains("bx--tree-node--disabled"))
+          return NodeFilter.FILTER_REJECT;
+        if (node.matches("li.bx--tree-node")) return NodeFilter.FILTER_ACCEPT;
+        return NodeFilter.FILTER_SKIP;
+      },
+    });
+  }
+
+  /**
+   * Recursively flattens a tree of nodes into a single array
+   * @template {object} Node
+   * @param {ReadonlyArray<Node & { nodes?: Node[] }>} nodes
+   * @returns {Array<Node>}
+   */
+  function traverse(nodes) {
+    return nodes.reduce((acc, node) => {
+      acc.push(node);
+      if (Array.isArray(node.nodes) && node.nodes.length > 0) {
+        acc.push(...traverse(node.nodes));
+      }
+      return acc;
+    }, []);
+  }
 </script>
 
 <script>
@@ -294,22 +326,6 @@
     toggleNode,
   });
 
-  /**
-   * Creates a TreeWalker instance for keyboard navigation.
-   * @param {HTMLElement} root - The root element to traverse
-   * @returns {TreeWalker} A TreeWalker configured to navigate tree nodes
-   */
-  function createTreeWalkerInstance(root) {
-    return document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
-      acceptNode: (node) => {
-        if (node.classList.contains("bx--tree-node--disabled"))
-          return NodeFilter.FILTER_REJECT;
-        if (node.matches("li.bx--tree-node")) return NodeFilter.FILTER_ACCEPT;
-        return NodeFilter.FILTER_SKIP;
-      },
-    });
-  }
-
   function handleKeyDown(e) {
     if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
 
@@ -338,21 +354,6 @@
       treeWalker = createTreeWalkerInstance(ref);
     }
   });
-
-  /**
-   * Recursively flattens a tree of nodes into a single array
-   * @param {ReadonlyArray<Node & { nodes?: Node[] }>} nodes
-   * @returns {Array<Node>}
-   */
-  function traverse(nodes) {
-    return nodes.reduce((acc, node) => {
-      acc.push(node);
-      if (Array.isArray(node.nodes) && node.nodes.length > 0) {
-        acc.push(...traverse(node.nodes));
-      }
-      return acc;
-    }, []);
-  }
 
   $: if (nodes !== cachedNodes) {
     cachedNodes = nodes;
