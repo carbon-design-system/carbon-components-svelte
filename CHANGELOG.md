@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.98.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.0...v0.98.1) (2025-12-26)
+
+### Bug Fixes
+
+- **checkbox:** prevent duplicate "check" event dispatches in Svelte 5 ([7b85c5f](https://github.com/carbon-design-system/carbon-components-svelte/commit/7b85c5f4a117c8cb9f3f8882bf6dae6f63adc9b7)), closes [#2467](https://github.com/carbon-design-system/carbon-components-svelte/issues/2467)
+- **combo-box:** ensure bind:value syncs when clearing via keyboard ([4f052e5](https://github.com/carbon-design-system/carbon-components-svelte/commit/4f052e55e29fe1e537b7448342639832ded82552)), closes [#2470](https://github.com/carbon-design-system/carbon-components-svelte/issues/2470)
+- **combo-box:** prevent dispatching initial "select" event in Svelte 5 ([38c428d](https://github.com/carbon-design-system/carbon-components-svelte/commit/38c428d8ba1bd94c3194b8321a968c550670ff58)), closes [#2472](https://github.com/carbon-design-system/carbon-components-svelte/issues/2472)
+- **content-switcher:** fix focus management for Svelte 5 compatibility ([521d628](https://github.com/carbon-design-system/carbon-components-svelte/commit/521d628a688af462913527d035ebee37f5c0bad0)), closes [#2468](https://github.com/carbon-design-system/carbon-components-svelte/issues/2468)
+- **data-table:** `PropertyPath` depth limit supports 4 levels ([dd0b142](https://github.com/carbon-design-system/carbon-components-svelte/commit/dd0b142723430fd6fba262f71bce51f83bbf0f6b))
+- **structured-list:** prevent dispatching initial "change" event in Svelte 5 ([5291165](https://github.com/carbon-design-system/carbon-components-svelte/commit/5291165ec8a994d7f9c4b7458d0fa15374ea502d)), closes [#2478](https://github.com/carbon-design-system/carbon-components-svelte/issues/2478)
+- **toolbar-search:** replace `JSON.stringify` with custom deep comparison for filtered rows ([14a565b](https://github.com/carbon-design-system/carbon-components-svelte/commit/14a565b4e6b41de0f73751e3fb3589934054dd3e))
+- **tooltip:** prevent dispatching initial "close" event in Svelte 5 ([5abd2ba](https://github.com/carbon-design-system/carbon-components-svelte/commit/5abd2ba788090df1720402023b78f60a4aa12ff6)), closes [#2475](https://github.com/carbon-design-system/carbon-components-svelte/issues/2475)
+
+### Performance
+
+- **data-table:** optimize `resolvePath` utility ([41b7b6b](https://github.com/carbon-design-system/carbon-components-svelte/commit/41b7b6b9e1b4e925341da9cd75779ec79c83cc63))
+- **tree-view:** optimize node traversal ([7eeb844](https://github.com/carbon-design-system/carbon-components-svelte/commit/7eeb844ca69f48fa68733c67937ceaa1030add5c))
+- **tree-view:** optimize `showNode` and batch active/selected updates ([e537ba3](https://github.com/carbon-design-system/carbon-components-svelte/commit/e537ba357978051a3ae3390e1ebd2a261d224684))
+
 ### [0.98.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.97.0...v0.98.0) (2025-12-21)
 
 ### Features
