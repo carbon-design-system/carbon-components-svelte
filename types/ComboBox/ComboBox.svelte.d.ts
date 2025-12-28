@@ -208,7 +208,8 @@ export default class ComboBox<
   }
 > {
   /**
-   * Clear the combo box programmatically
+   * Clear the combo box programmatically.
+   * By default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.
    * @example
    * ```svelte
    * <ComboBox bind:this={comboBox} items={items} />

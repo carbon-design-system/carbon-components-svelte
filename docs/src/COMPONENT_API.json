@@ -2161,16 +2161,8 @@
         {
           "name": "clear",
           "kind": "function",
-          "description": "Clear the combo box programmatically\n@example \n```svelte\n<ComboBox bind:this={comboBox} items={items} />\n<button on:click={() => comboBox.clear()}>Clear</button>\n<button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>\n```",
+          "description": "Clear the combo box programmatically.\nBy default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.\n@example \n```svelte\n<ComboBox bind:this={comboBox} items={items} />\n<button on:click={() => comboBox.clear()}>Clear</button>\n<button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>\n```",
           "type": "(options?: { focus?: boolean; }) => Promise<void>",
-          "params": [
-            {
-              "name": "options",
-              "type": "object",
-              "description": "Configuration options for clearing",
-              "optional": true
-            }
-          ],
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
