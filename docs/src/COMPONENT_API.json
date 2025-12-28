@@ -7479,16 +7479,8 @@
         {
           "name": "loadImage",
           "kind": "const",
-          "description": "Method invoked to load the image provided a `src` value\n@example \n```svelte\n<ImageLoader bind:this={loader} src=\"default.jpg\" />\n<button on:click={() => loader.loadImage(\"new-image.jpg\")}>\n  Load New Image\n</button>\n```",
+          "description": "Method invoked to load the image provided a `src` value.\nIf no URL is provided, uses the component's `src` prop.\n@example \n```svelte\n<ImageLoader bind:this={loader} src=\"default.jpg\" />\n<button on:click={() => loader.loadImage(\"new-image.jpg\")}>\n  Load New Image\n</button>\n```",
           "type": "(url?: string) => void",
-          "params": [
-            {
-              "name": "url",
-              "type": "string",
-              "description": "Optional URL to load. If not provided, uses the component's `src` prop",
-              "optional": true
-            }
-          ],
           "isFunction": true,
           "isFunctionDeclaration": false,
           "isRequired": false,

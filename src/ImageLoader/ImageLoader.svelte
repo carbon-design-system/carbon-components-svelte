@@ -42,9 +42,9 @@
   export let fadeIn = false;
 
   /**
-   * Method invoked to load the image provided a `src` value
+   * Method invoked to load the image provided a `src` value.
+   * If no URL is provided, uses the component's `src` prop.
    * @type {(url?: string) => void}
-   * @param {string} [url] - Optional URL to load. If not provided, uses the component's `src` prop
    * @example
    * ```svelte
    * <ImageLoader bind:this={loader} src="default.jpg" />

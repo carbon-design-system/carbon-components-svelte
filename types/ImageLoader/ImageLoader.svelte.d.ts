@@ -58,7 +58,8 @@ export default class ImageLoader extends SvelteComponentTyped<
   { error: Record<string, never>; loading: Record<string, never> }
 > {
   /**
-   * Method invoked to load the image provided a `src` value
+   * Method invoked to load the image provided a `src` value.
+   * If no URL is provided, uses the component's `src` prop.
    * @example
    * ```svelte
    * <ImageLoader bind:this={loader} src="default.jpg" />
