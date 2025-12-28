@@ -67,11 +67,13 @@ export default class NotificationQueue extends SvelteComponentTyped<
   /**
    * Add a notification to the queue.
    * If a notification with the same id exists, the call is ignored.
+   * Returns the notification id (either the provided id or a generated one).
    */
   add: (notification: NotificationData) => string;
 
   /**
    * Remove a notification by id.
+   * Returns true if the notification was found and removed, false otherwise.
    */
   remove: (id: string) => boolean;
 
