@@ -19843,16 +19843,8 @@
         {
           "name": "expandNodes",
           "kind": "function",
-          "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.expandNodes((node) => node.id.startsWith('folder-'))}>\n  Expand Folders\n</button>\n```",
+          "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided.\nFilter function should return `true` for nodes to expand. If not provided, expands all nodes.\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.expandNodes((node) => node.id.startsWith('folder-'))}>\n  Expand Folders\n</button>\n```",
           "type": "(filterNode?: (node: Node) => boolean) => void",
-          "params": [
-            {
-              "name": "filterNode",
-              "type": "function(node: Node): boolean",
-              "description": "Filter function that returns `true` for nodes to expand. If not provided, expands all nodes.",
-              "optional": true
-            }
-          ],
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -19862,16 +19854,8 @@
         {
           "name": "collapseNodes",
           "kind": "function",
-          "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.collapseNodes((node) => node.id.startsWith('folder-'))}>\n  Collapse Folders\n</button>\n```",
+          "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided.\nFilter function should return `true` for nodes to collapse. If not provided, collapses all nodes.\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.collapseNodes((node) => node.id.startsWith('folder-'))}>\n  Collapse Folders\n</button>\n```",
           "type": "(filterNode?: (node: Node) => boolean) => void",
-          "params": [
-            {
-              "name": "filterNode",
-              "type": "function(node: Node): boolean",
-              "description": "Filter function that returns `true` for nodes to collapse. If not provided, collapses all nodes.",
-              "optional": true
-            }
-          ],
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -19883,20 +19867,6 @@
           "kind": "function",
           "description": "Programmatically show a node by `id`.\nBy default, the matching node will be expanded, selected, and focused.\nUse the options parameter to customize this behavior.\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.showNode('node-123')}>\n  Show Node\n</button>\n<button on:click={() => treeView.showNode('node-123', { expand: false, focus: false })}>\n  Show Node (No Expand/Focus)\n</button>\n```",
           "type": "(id: TreeNodeId, options?: ShowNodeOptions) => void",
-          "params": [
-            {
-              "name": "id",
-              "type": "TreeNodeId",
-              "description": "The unique identifier of the node to show",
-              "optional": false
-            },
-            {
-              "name": "options",
-              "type": "ShowNodeOptions",
-              "description": "Configuration options for showing the node",
-              "optional": true
-            }
-          ],
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
