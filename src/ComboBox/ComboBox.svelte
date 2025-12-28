@@ -200,10 +200,9 @@
   }
 
   /**
-   * Clear the combo box programmatically
+   * Clear the combo box programmatically.
+   * By default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.
    * @type {(options?: { focus?: boolean; }) => Promise<void>}
-   * @param {object} [options] - Configuration options for clearing
-   * @param {boolean} [options.focus=true] - Whether to focus the combo box after clearing
    * @example
    * ```svelte
    * <ComboBox bind:this={comboBox} items={items} />
