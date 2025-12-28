@@ -152,9 +152,9 @@
 
   /**
    * Programmatically expand a subset of nodes.
-   * Expands all nodes if no argument is provided
+   * Expands all nodes if no argument is provided.
+   * Filter function should return `true` for nodes to expand. If not provided, expands all nodes.
    * @type {(filterNode?: (node: Node) => boolean) => void}
-   * @param {function(node: Node): boolean} [filterNode] - Filter function that returns `true` for nodes to expand. If not provided, expands all nodes.
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -178,9 +178,9 @@
 
   /**
    * Programmatically collapse a subset of nodes.
-   * Collapses all nodes if no argument is provided
+   * Collapses all nodes if no argument is provided.
+   * Filter function should return `true` for nodes to collapse. If not provided, collapses all nodes.
    * @type {(filterNode?: (node: Node) => boolean) => void}
-   * @param {function(node: Node): boolean} [filterNode] - Filter function that returns `true` for nodes to collapse. If not provided, collapses all nodes.
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -204,11 +204,6 @@
    * By default, the matching node will be expanded, selected, and focused.
    * Use the options parameter to customize this behavior.
    * @type {(id: TreeNodeId, options?: ShowNodeOptions) => void}
-   * @param {TreeNodeId} id - The unique identifier of the node to show
-   * @param {ShowNodeOptions} [options] - Configuration options for showing the node
-   * @param {boolean} [options.expand=true] - Whether to expand the node and its ancestors
-   * @param {boolean} [options.select=true] - Whether to select the node
-   * @param {boolean} [options.focus=true] - Whether to focus the node
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />

@@ -131,7 +131,8 @@ export default class TreeView<
 
   /**
    * Programmatically expand a subset of nodes.
-   * Expands all nodes if no argument is provided
+   * Expands all nodes if no argument is provided.
+   * Filter function should return `true` for nodes to expand. If not provided, expands all nodes.
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -144,7 +145,8 @@ export default class TreeView<
 
   /**
    * Programmatically collapse a subset of nodes.
-   * Collapses all nodes if no argument is provided
+   * Collapses all nodes if no argument is provided.
+   * Filter function should return `true` for nodes to collapse. If not provided, collapses all nodes.
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
