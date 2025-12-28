@@ -52,8 +52,8 @@
   /**
    * Add a notification to the queue.
    * If a notification with the same id exists, the call is ignored.
-   * @param {NotificationData} notification
-   * @returns {string} The notification id
+   * Returns the notification id (either the provided id or a generated one).
+   * @type {(notification: NotificationData) => string}
    */
   export function add(notification) {
     const id = notification.id ?? generateId();
@@ -83,8 +83,8 @@
 
   /**
    * Remove a notification by id.
-   * @param {string} id
-   * @returns {boolean} True if the notification was found and removed
+   * Returns true if the notification was found and removed, false otherwise.
+   * @type {(id: string) => boolean}
    */
   export function remove(id) {
     const index = notifications.findIndex((n) => n.id === id);

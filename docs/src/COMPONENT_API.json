@@ -10095,17 +10095,8 @@
         {
           "name": "add",
           "kind": "function",
-          "description": "Add a notification to the queue.\nIf a notification with the same id exists, the call is ignored.",
-          "type": "() => any",
-          "params": [
-            {
-              "name": "notification",
-              "type": "NotificationData",
-              "description": "",
-              "optional": false
-            }
-          ],
-          "returnType": "string",
+          "description": "Add a notification to the queue.\nIf a notification with the same id exists, the call is ignored.\nReturns the notification id (either the provided id or a generated one).",
+          "type": "(notification: NotificationData) => string",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -10115,17 +10106,8 @@
         {
           "name": "remove",
           "kind": "function",
-          "description": "Remove a notification by id.",
-          "type": "() => any",
-          "params": [
-            {
-              "name": "id",
-              "type": "string",
-              "description": "",
-              "optional": false
-            }
-          ],
-          "returnType": "boolean",
+          "description": "Remove a notification by id.\nReturns true if the notification was found and removed, false otherwise.",
+          "type": "(id: string) => boolean",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
