@@ -913,9 +913,8 @@ describe("MultiSelect", () => {
       expectTypeOf(itemToInput).parameter(0).toEqualTypeOf<Product>();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail["selected"][0]>().toEqualTypeOf<Product>();
       expectTypeOf<
         SelectEventDetail["unselected"][0]
@@ -932,9 +931,8 @@ describe("MultiSelect", () => {
       >();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<
         SelectEventDetail["selected"][0]
       >().toEqualTypeOf<MultiSelectItem>();
