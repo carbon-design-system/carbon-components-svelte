@@ -21,7 +21,7 @@
   export let inset = false;
 
   /** Set an id for the list element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   $: labelId = `label-${id}`;
 </script>

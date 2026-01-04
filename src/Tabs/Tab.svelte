@@ -21,7 +21,7 @@
   export let tabindex = "0";
 
   /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /** Obtain a reference to the anchor HTML element */
   export let ref = null;

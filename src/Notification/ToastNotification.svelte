@@ -32,7 +32,7 @@
    * Specify the ARIA label for the status icon.
    * @type {string}
    * */
-  export let statusIconDescription = kind + " icon";
+  export let statusIconDescription = `${kind} icon`;
 
   /** Specify the ARIA label for the close button */
   export let closeButtonDescription = "Close notification";

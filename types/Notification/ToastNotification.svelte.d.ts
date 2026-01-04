@@ -54,7 +54,7 @@ type $Props = {
 
   /**
    * Specify the ARIA label for the status icon.
-   * @default kind + " icon"
+   * @default `${kind} icon`
    */
   statusIconDescription?: string;
 

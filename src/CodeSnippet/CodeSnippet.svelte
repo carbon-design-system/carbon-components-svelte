@@ -103,7 +103,7 @@
   export let showMoreLess = true;
 
   /** Set an id for the code element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /** Obtain a reference to the pre HTML element */
   export let ref = null;
@@ -127,7 +127,7 @@
 
   $: expandText = expanded ? showLessText : showMoreText;
   $: minHeight = expanded ? 16 * 15 : 48;
-  $: maxHeight = expanded ? "none" : 16 * 15 + "px";
+  $: maxHeight = expanded ? "none" : `${16 * 15}px`;
 
   // Show more/less only applies to multi-line code snippets
   $: if (type !== "multi") showMoreLess = false;

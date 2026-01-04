@@ -24,7 +24,7 @@ type $Props = {
 
   /**
    * Set an id for the input label
-   * @default "ccs-" + Math.random().toString(36)
+   * @default `ccs-${Math.random().toString(36)}`
    */
   id?: string;
 

@@ -48,13 +48,13 @@
    * Set an id for the tooltip.
    * @type {string}
    */
-  export let tooltipId = "ccs-" + Math.random().toString(36);
+  export let tooltipId = `ccs-${Math.random().toString(36)}`;
 
   /**
    * Set an id for the tooltip button.
    * @type {string}
    */
-  export let triggerId = "ccs-" + Math.random().toString(36);
+  export let triggerId = `ccs-${Math.random().toString(36)}`;
 
   /** Set the tooltip button text */
   export let triggerText = "";
@@ -171,8 +171,8 @@
           break;
       }
 
-      refTooltip.style.left = offsetX + "px";
-      refTooltip.style.marginTop = offsetY + "px";
+      refTooltip.style.left = `${offsetX}px`;
+      refTooltip.style.marginTop = `${offsetY}px`;
     }
   });
 

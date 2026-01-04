@@ -32,7 +32,7 @@
   export let icon = undefined;
 
   /** Set an id for the filterable tag */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   import { createEventDispatcher } from "svelte";
   import Close from "../icons/Close.svelte";

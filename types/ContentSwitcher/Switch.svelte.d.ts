@@ -31,7 +31,7 @@ type $Props = {
 
   /**
    * Set an id for the button element
-   * @default "ccs-" + Math.random().toString(36)
+   * @default `ccs-${Math.random().toString(36)}`
    */
   id?: string;
 

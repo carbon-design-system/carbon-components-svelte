@@ -116,7 +116,7 @@ export type CodeSnippetProps = {
 
   /**
    * Set an id for the code element
-   * @default "ccs-" + Math.random().toString(36)
+   * @default `ccs-${Math.random().toString(36)}`
    */
   id?: string;
 

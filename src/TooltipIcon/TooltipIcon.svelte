@@ -27,7 +27,7 @@
   export let direction = "bottom";
 
   /** Set an id for the span element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /** Obtain a reference to the button HTML element */
   export let ref = null;

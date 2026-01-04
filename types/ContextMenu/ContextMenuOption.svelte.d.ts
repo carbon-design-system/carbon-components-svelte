@@ -71,7 +71,7 @@ type $Props = {
   /**
    * Specify the id.
    * It's recommended to provide an id as a value to bind to within a selectable/radio menu group.
-   * @default "ccs-" + Math.random().toString(36)
+   * @default `ccs-${Math.random().toString(36)}`
    */
   id?: string;
 

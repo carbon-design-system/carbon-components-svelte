@@ -8,7 +8,7 @@
   export let menuOptionsClass: string | undefined = undefined;
   export let iconClass: string | undefined = undefined;
   export let iconDescription: string = "Open and close list of options";
-  export let id: string = "ccs-" + Math.random().toString(36);
+  export let id: string = `ccs-${Math.random().toString(36)}`;
 </script>
 
 <OverflowMenu

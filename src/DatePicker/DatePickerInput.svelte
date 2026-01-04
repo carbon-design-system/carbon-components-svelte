@@ -24,7 +24,7 @@
   export let iconDescription = "";
 
   /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /** Specify the label text */
   export let labelText = "";

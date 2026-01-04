@@ -93,7 +93,7 @@ type $Props<Row> = {
    * in a selectable data table (radio or checkbox).
    * When the table is inside a form, this name will
    * be included in the form data on submit.
-   * @default "ccs-" + Math.random().toString(36)
+   * @default `ccs-${Math.random().toString(36)}`
    */
   inputName?: string;
 

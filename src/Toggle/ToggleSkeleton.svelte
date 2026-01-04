@@ -9,7 +9,7 @@
   export let labelText = "";
 
   /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

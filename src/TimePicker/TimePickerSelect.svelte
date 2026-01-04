@@ -15,7 +15,7 @@
   export let labelText = "";
 
   /** Set an id for the select element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /**
    * Specify a name attribute for the select element.

@@ -12,7 +12,7 @@ type $Props = {
 
   /**
    * Set an id to be used by the label element
-   * @default "ccs-" + Math.random().toString(36)
+   * @default `ccs-${Math.random().toString(36)}`
    */
   id?: string;
 

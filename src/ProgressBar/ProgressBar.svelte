@@ -36,7 +36,7 @@
   export let helperText = "";
 
   /** Set an id for the progress bar element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
@@ -46,7 +46,7 @@
     finished: CheckmarkFilled,
   };
 
-  let helperId = "ccs-" + Math.random().toString(36);
+  let helperId = `ccs-${Math.random().toString(36)}`;
 
   $: indeterminate = value === undefined && status === "active";
   let capped;
