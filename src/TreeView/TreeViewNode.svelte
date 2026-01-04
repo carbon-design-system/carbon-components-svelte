@@ -1,8 +1,8 @@
 <script context="module">
   /**
-   * Computes the depth of a tree leaf node relative to <ul role="tree" />
-   * @param {HTMLLIElement | null} node - The list item element representing the tree node
-   * @returns {number} The depth of the node (0-based, where 0 is the root level)
+   * Computes the depth of a tree leaf node relative to <ul role="tree" />.
+   * Returns the depth of the node (0-based, where 0 is the root level).
+   * @type {(node: HTMLLIElement | null) => number}
    * @example
    * ```svelte
    * import { computeTreeLeafDepth } from 'carbon-components-svelte/TreeView/TreeViewNode.svelte';
