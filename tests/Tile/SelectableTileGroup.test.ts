@@ -211,15 +211,13 @@ describe("SelectableTileGroup", () => {
       >();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<CustomValue>();
 
       type DeselectEvent = Events["deselect"];
-      type DeselectEventDetail = DeselectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type DeselectEventDetail =
+        DeselectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<DeselectEventDetail>().toEqualTypeOf<CustomValue>();
     });
 
@@ -231,15 +229,13 @@ describe("SelectableTileGroup", () => {
       expectTypeOf<Props["selected"]>().toEqualTypeOf<string[] | undefined>();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<string>();
 
       type DeselectEvent = Events["deselect"];
-      type DeselectEventDetail = DeselectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type DeselectEventDetail =
+        DeselectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<DeselectEventDetail>().toEqualTypeOf<string>();
     });
 
@@ -258,9 +254,8 @@ describe("SelectableTileGroup", () => {
       type ComponentType = SelectableTileGroupComponent<Status>;
       type Events = ComponentEvents<ComponentType>;
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
 
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<
         Parameters<typeof handleSelect>[0]
@@ -303,15 +298,13 @@ describe("SelectableTileGroup", () => {
       >();
 
       type SelectEvent = Events["select"];
-      type SelectEventDetail = SelectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<InferredType>();
 
       type DeselectEvent = Events["deselect"];
-      type DeselectEventDetail = DeselectEvent extends CustomEvent<infer T>
-        ? T
-        : never;
+      type DeselectEventDetail =
+        DeselectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<DeselectEventDetail>().toEqualTypeOf<InferredType>();
     });
   });
