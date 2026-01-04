@@ -72,6 +72,12 @@ Set multiple initially selected nodes using the `selectedIds` prop.
 
 <FileSource src="/framed/TreeView/TreeViewMultiselect" />
 
+## Auto-collapse siblings
+
+Enable the `autoCollapse` prop to automatically collapse sibling nodes when expanding a node. When enabled, only one node at each level can be expanded at a time, creating an accordion-like behavior.
+
+<FileSource src="/framed/TreeView/TreeViewAutoCollapse" />
+
 ## Expand all nodes
 
 Programmatically expand all nodes using the `TreeView.expandAll()` method.
