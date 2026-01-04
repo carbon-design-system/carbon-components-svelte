@@ -97,7 +97,7 @@
   };
 
   /** Set an id for the input element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /**
    * Specify a name attribute for the input.

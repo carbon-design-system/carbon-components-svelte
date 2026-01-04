@@ -31,7 +31,7 @@
   export let translateWithId = (id) => defaultTranslations[id];
 
   /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";

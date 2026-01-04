@@ -55,7 +55,7 @@
    * Specify the id.
    * It's recommended to provide an id as a value to bind to within a selectable/radio menu group.
    */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /** Obtain a reference to the list item HTML element */
   export let ref = null;

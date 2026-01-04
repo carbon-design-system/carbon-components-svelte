@@ -53,7 +53,7 @@
   export let title = undefined;
 
   /** Set an id for the input label */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /** Obtain a reference to the input HTML element */
   export let ref = null;

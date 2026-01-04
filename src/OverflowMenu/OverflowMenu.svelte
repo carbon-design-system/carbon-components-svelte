@@ -48,7 +48,7 @@
   export let iconDescription = "Open and close list of options";
 
   /** Set an id for the button element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /** Obtain a reference to the trigger button element */
   export let buttonRef = null;
@@ -170,14 +170,14 @@
 
       if (direction === "top") {
         menuRef.style.top = "auto";
-        menuRef.style.bottom = height + "px";
+        menuRef.style.bottom = `${height}px`;
       } else if (direction === "bottom") {
-        menuRef.style.top = height + "px";
+        menuRef.style.top = `${height}px`;
       }
 
       if (ctxBreadcrumbItem) {
-        menuRef.style.top = height + 10 + "px";
-        menuRef.style.left = -11 + "px";
+        menuRef.style.top = `${height + 10}px`;
+        menuRef.style.left = `${-11}px`;
       }
     }
 
@@ -198,7 +198,7 @@
   // Use CSS custom properties instead of dynamic style injection for better
   // performance. The previous approach created individual `style` tags per
   // instance, causing overhead when many OverflowMenu components are rendered.
-  $: overflowMenuOptionsAfterWidth = buttonWidth ? buttonWidth + "px" : "2rem";
+  $: overflowMenuOptionsAfterWidth = buttonWidth ? `${buttonWidth}px` : "2rem";
 </script>
 
 <svelte:window

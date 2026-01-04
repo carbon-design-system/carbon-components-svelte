@@ -120,7 +120,7 @@
   export let translateWithIdSelection = undefined;
 
   /** Set an id for the list box component */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /**
    * Specify a name attribute for the input.

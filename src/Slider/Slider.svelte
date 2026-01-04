@@ -50,7 +50,7 @@
   export let fullWidth = false;
 
   /** Set an id for the slider div element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;

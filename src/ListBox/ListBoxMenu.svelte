@@ -1,6 +1,6 @@
 <script>
   /** Set an id for the top-level element */
-  export let id = "ccs-" + Math.random().toString(36);
+  export let id = `ccs-${Math.random().toString(36)}`;
 
   /** Obtain a reference to the HTML element */
   export let ref = null;

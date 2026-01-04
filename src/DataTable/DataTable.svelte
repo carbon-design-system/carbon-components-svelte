@@ -102,7 +102,7 @@
    * When the table is inside a form, this name will
    * be included in the form data on submit.
    */
-  export let inputName = "ccs-" + Math.random().toString(36);
+  export let inputName = `ccs-${Math.random().toString(36)}`;
 
   /** Set to `true` to use zebra styles */
   export let zebra = false;
@@ -223,7 +223,7 @@
 
   // Internal ID prefix for radio buttons, checkboxes, etc.
   // since there may be multiple `DataTable` instances that have overlapping row ids.
-  const id = "ccs-" + Math.random().toString(36);
+  const id = `ccs-${Math.random().toString(36)}`;
 
   // Store a copy of the original rows for filter restoration.
   $: originalRows = [...rows];
@@ -272,7 +272,7 @@
         return searchableKeys.some((key) => {
           const _value = resolvePath(row, key);
           if (typeof _value === "string" || typeof _value === "number") {
-            return (_value + "")?.toLowerCase().includes(value);
+            return `${_value}`?.toLowerCase().includes(value);
           }
           return false;
         });

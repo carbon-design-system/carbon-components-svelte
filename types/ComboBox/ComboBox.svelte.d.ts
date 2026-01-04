@@ -159,7 +159,7 @@ type $Props<Item> = {
 
   /**
    * Set an id for the list box component
-   * @default "ccs-" + Math.random().toString(36)
+   * @default `ccs-${Math.random().toString(36)}`
    */
   id?: string;
 

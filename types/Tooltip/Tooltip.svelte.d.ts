@@ -59,13 +59,13 @@ type $Props = {
 
   /**
    * Set an id for the tooltip.
-   * @default "ccs-" + Math.random().toString(36)
+   * @default `ccs-${Math.random().toString(36)}`
    */
   tooltipId?: string;
 
   /**
    * Set an id for the tooltip button.
-   * @default "ccs-" + Math.random().toString(36)
+   * @default `ccs-${Math.random().toString(36)}`
    */
   triggerId?: string;
 

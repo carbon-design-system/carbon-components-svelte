@@ -115,8 +115,7 @@
           },
           "style": {
             "useConst": "off",
-            "useImportType": "off",
-            "useTemplate": "off"
+            "useImportType": "off"
           }
         }
       }
@@ -146,7 +145,8 @@
       "linter": {
         "rules": {
           "style": {
-            "useNamingConvention": "off"
+            "useNamingConvention": "off",
+            "useTemplate": "off"
           }
         }
       }
