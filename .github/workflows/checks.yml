@@ -45,7 +45,7 @@ jobs:
 
       - name: Test Svelte 3
         run: |
-          cd tests-svelte3
+          cd packages/tests-svelte3
           bun run test
           bun run test:types
 
@@ -58,7 +58,7 @@ jobs:
 
       - name: Test Svelte 5
         run: |
-          cd tests-svelte5
+          cd packages/tests-svelte5
           bun run test
           bun run test:types
 

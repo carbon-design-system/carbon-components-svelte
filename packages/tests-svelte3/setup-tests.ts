@@ -8,4 +8,4 @@ export {
   SVELTE_VERSION,
   setupLocalStorageMock,
   user,
-} from "../tests/utils/setup-shared";
+} from "../../tests/utils/setup-shared";

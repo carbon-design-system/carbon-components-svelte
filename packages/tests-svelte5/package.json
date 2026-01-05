@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:types": "svelte-check --workspace ../tests --fail-on-warnings"
+    "test:types": "svelte-check --workspace ../../tests --fail-on-warnings"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.1",

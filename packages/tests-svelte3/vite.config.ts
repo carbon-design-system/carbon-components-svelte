@@ -4,24 +4,24 @@ import {
   generateAliasesFromExports,
   getDirname,
   testConfig,
-} from "../tests/utils";
+} from "../../tests/utils";
 
 const __dirname = getDirname(import.meta.url);
 
 export default defineConfig({
   resolve: {
     conditions: ["browser"],
-    alias: generateAliasesFromExports(__dirname, "../src"),
+    alias: generateAliasesFromExports(__dirname, "../../src"),
   },
   plugins: [svelte({ preprocess: [vitePreprocess()] })],
   server: {
     fs: {
-      allow: [".."],
+      allow: ["../.."],
     },
   },
   test: {
     ...testConfig,
-    include: ["../tests/**/*.test.ts"],
+    include: ["../../tests/**/*.test.ts"],
     setupFiles: ["./setup-tests.ts"],
   },
 });
