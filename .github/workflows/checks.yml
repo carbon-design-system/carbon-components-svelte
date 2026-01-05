@@ -41,11 +41,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
-      - run: bun ci
-
       - name: Test Svelte 3
         run: |
           cd packages/tests-svelte3
+          bun ci
           bun run test
           bun run test:types
 
@@ -54,11 +53,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
-      - run: bun ci
-
       - name: Test Svelte 5
         run: |
           cd packages/tests-svelte5
+          bun ci
           bun run test
           bun run test:types
 
