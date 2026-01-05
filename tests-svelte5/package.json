@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:types": "svelte-check --workspace ../tests --fail-on-warnings"
+    "test:types": "svelte-check-rs --workspace ../tests --fail-on-warnings"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^14.6.1",
     "jsdom": "^27.2.0",
     "svelte": "^5.45.2",
-    "svelte-check": "^4.3.5",
+    "svelte-check-rs": "^0.4.1",
     "vitest": "^4.0.17"
   }
 }
