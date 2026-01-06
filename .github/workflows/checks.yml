@@ -26,7 +26,7 @@ jobs:
       - run: bun ci
       - run: bunx biome ci --error-on-warnings
 
-  test:
+  test-svelte4:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -34,7 +34,9 @@ jobs:
       - run: bun ci
 
       - name: Test Svelte 4
-        run: bun run test
+        run: |
+          bun run test
+          bun run test:types
 
   test-svelte3:
     runs-on: macos-15
@@ -90,7 +92,7 @@ jobs:
 
   deploy-docs:
     if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master'
-    needs: [lint, test, types]
+    needs: [lint, test-svelte4, types]
     runs-on: macos-15
     steps:
       - name: Trigger deploy
