@@ -34,9 +34,10 @@ jobs:
       - run: bun ci
 
       - name: Test Svelte 4
-        run: |
-          bun run test
-          bun run test:types
+        run: bun run test
+
+      - name: Test Svelte 4 Types
+        run: bun run test:types
 
   test-svelte3:
     runs-on: macos-15
@@ -45,11 +46,19 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
 
-      - name: Test Svelte 3
+      - name: Setup Svelte 3
         run: |
           cd tests-svelte3
           bun ci
+
+      - name: Test Svelte 3
+        run: |
+          cd tests-svelte3
           bun run test
+
+      - name: Test Svelte 3 Types
+        run: |
+          cd tests-svelte3
           bun run test:types
 
   test-svelte5:
@@ -59,11 +68,19 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
 
-      - name: Test Svelte 5
+      - name: Setup Svelte 5
         run: |
           cd tests-svelte5
           bun ci
+
+      - name: Test Svelte 5
+        run: |
+          cd tests-svelte5
           bun run test
+
+      - name: Test Svelte 5 Types
+        run: |
+          cd tests-svelte5
           bun run test:types
 
   types:
