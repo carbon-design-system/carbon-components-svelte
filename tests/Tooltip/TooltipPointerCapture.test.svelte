@@ -1,8 +1,14 @@
 <script lang="ts">
   import { Tooltip } from "carbon-components-svelte";
+  import { onMount } from "svelte";
+
+  let input: HTMLInputElement | null = null;
+
+  onMount(() => {
+    input?.focus();
+  });
 </script>
 
 <Tooltip iconDescription="Information">
-  <!-- svelte-ignore a11y-autofocus -->
-  <input type="text" autofocus />
+  <input type="text" bind:this={input} />
 </Tooltip>
