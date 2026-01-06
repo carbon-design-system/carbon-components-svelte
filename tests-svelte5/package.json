@@ -3,7 +3,8 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:types": "svelte-check --workspace ../tests --fail-on-warnings && svelte-check --workspace ./svelte5 --fail-on-warnings"
+    "test:types": "bun --bun svelte-fast-check --workspace ../tests --fail-on-warnings --project ../tests/tsconfig.json",
+    "posttest:types": "bun --bun svelte-fast-check --workspace ./svelte5 --fail-on-warnings --project ./svelte5/tsconfig.json"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
@@ -11,9 +12,10 @@
     "@testing-library/svelte": "^5.2.9",
     "@testing-library/user-event": "^14.6.1",
     "@typescript/native-preview": "^7.0.0-dev.20251205.1",
+    "carbon-components-svelte": "file:..",
     "jsdom": "^27.2.0",
     "svelte": "^5.45.2",
-    "svelte-check": "^4.3.5",
+    "svelte-fast-check": "^0.4.5",
     "vitest": "^4.0.17"
   }
 }
