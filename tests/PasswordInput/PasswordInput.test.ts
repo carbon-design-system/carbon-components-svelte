@@ -104,6 +104,29 @@ describe("PasswordInput", () => {
       expect(toggleButton).toHaveClass("bx--btn--disabled");
     });
 
+    it("should handle readonly state and allow visibility toggle", async () => {
+      render(PasswordInput, {
+        labelText: "Password",
+        readonly: true,
+        value: "readonly-password",
+      });
+
+      const input = screen.getByLabelText("Password");
+      expect(input).toHaveAttribute("readonly");
+      expect(input).toHaveValue("readonly-password");
+
+      const toggleButton = screen.getByRole("button");
+      expect(toggleButton).not.toBeDisabled();
+
+      expect(input).toHaveAttribute("type", "password");
+
+      await user.click(screen.getByText("Show password"));
+      expect(input).toHaveAttribute("type", "text");
+
+      await user.click(screen.getByText("Hide password"));
+      expect(input).toHaveAttribute("type", "password");
+    });
+
     it("should handle helper text", () => {
       render(PasswordInput, {
         labelText: "Password",
