@@ -491,6 +491,24 @@ describe("MultiSelect", () => {
       expect(options[1]).toHaveAttribute("aria-selected", "false");
       expect(options[2]).toHaveAttribute("aria-selected", "false");
     });
+
+    it("options have correct aria-checked state for screen reader announcement", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          selectedIds: ["0"],
+        },
+      });
+
+      await openMenu();
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-checked", "true");
+      expect(options[1]).toHaveAttribute("aria-checked", "false");
+      expect(options[2]).toHaveAttribute("aria-checked", "false");
+
+      await toggleOption("Email");
+      expect(options[1]).toHaveAttribute("aria-checked", "true");
+    });
   });
 
   describe("custom formatting", () => {
