@@ -546,6 +546,7 @@
             role="option"
             aria-labelledby="checkbox-{item.id}"
             aria-selected={item.checked}
+            aria-checked={item.checked}
             active={item.checked}
             highlighted={highlightedIndex === i}
             disabled={item.disabled}
