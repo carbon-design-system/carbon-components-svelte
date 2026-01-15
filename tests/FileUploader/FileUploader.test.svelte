@@ -34,8 +34,9 @@
   }
 
   export function getInputElement() {
-    const input = document.querySelector('input[type="file"]');
-    assert(input instanceof HTMLInputElement);
+    const input = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
     return input;
   }
 
