@@ -3,7 +3,7 @@
   import type {
     BreakpointSize,
     BreakpointValue,
-  } from "carbon-components-svelte/Breakpoint/breakpoints";
+  } from "carbon-components-svelte/Breakpoint/Breakpoint.svelte";
 
   export let size: BreakpointSize | undefined = undefined;
   export let sizes: Record<BreakpointSize, boolean> = {
