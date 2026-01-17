@@ -19945,31 +19945,31 @@
             },
             {
               "name": "clickNode",
-              "type": "(node: TreeNode) => void",
+              "type": "(node: Node) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "selectNode",
-              "type": "(node: TreeNode) => void",
+              "type": "(node: Node) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "expandNode",
-              "type": "(node: TreeNode, expanded: boolean) => void",
+              "type": "(node: Node, expanded: boolean) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "focusNode",
-              "type": "(node: TreeNode) => void",
+              "type": "(node: Node) => void",
               "description": "",
               "optional": false
             },
             {
               "name": "toggleNode",
-              "type": "(node: TreeNode) => void",
+              "type": "(node: Node) => void",
               "description": "",
               "optional": false
             }
