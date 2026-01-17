@@ -139,6 +139,10 @@ type $Props = {
    */
   ref?: null | HTMLDivElement;
 
+  heading?: () => void;
+
+  label?: () => void;
+
   [key: `data-${string}`]: any;
 };
 

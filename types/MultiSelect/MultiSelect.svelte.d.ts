@@ -239,6 +239,8 @@ type $Props<Item> = {
    */
   highlightedId?: null | MultiSelectItemId;
 
+  labelChildren?: () => void;
+
   [key: `data-${string}`]: any;
 };
 

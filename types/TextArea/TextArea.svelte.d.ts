@@ -114,6 +114,8 @@ type $Props = {
    */
   ref?: null | HTMLTextAreaElement;
 
+  labelChildren?: () => void;
+
   [key: `data-${string}`]: any;
 };
 
