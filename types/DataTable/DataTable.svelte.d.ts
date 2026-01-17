@@ -42,7 +42,8 @@ export type DataTableCell<Row = DataTableRow> = {
   value: DataTableValue;
   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
 };
-export type DataTableContext = {
+
+export type DataTableContext<Row extends DataTableRow = DataTableRow> = {
   batchSelectedIds: import("svelte/store").Writable<
     ReadonlyArray<DataTableRowId>
   >;

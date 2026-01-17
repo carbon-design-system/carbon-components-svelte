@@ -1,7 +1,7 @@
 import { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export type SelectableTileGroupContext = {
+export type SelectableTileGroupContext<T extends string = string> = {
   selectedValues: import("svelte/store").Writable<T[]>;
   groupName: import("svelte/store").Readable<string | undefined>;
   add: (data: { selected: boolean; value: T }) => void;

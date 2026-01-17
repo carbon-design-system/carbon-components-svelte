@@ -1,6 +1,7 @@
 import { SvelteComponentTyped } from "svelte";
 
 export type SectionLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
 export type SectionContext = {
   $internalLevel: any;
 };
