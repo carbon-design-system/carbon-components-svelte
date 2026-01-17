@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.98.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.3...v0.98.4) (2026-01-17)
+
+### Bug Fixes
+
+* **types:** generate default slot props for Svelte 5 `#snippet` usage ([6f5eb78](https://github.com/carbon-design-system/carbon-components-svelte/commit/6f5eb78873d68c0dfbc76a419fdb40e64aded890)), closes [#2505](https://github.com/carbon-design-system/carbon-components-svelte/issues/2505)
+
 ### [0.98.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.2...v0.98.3) (2026-01-17)
 
 ### Bug Fixes
