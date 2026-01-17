@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * Deep equality check for values (nested objects and arrays).
  * @param {*} a - First value to compare

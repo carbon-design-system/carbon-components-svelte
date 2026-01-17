@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * Filter tree nodes by a predicate function.
  * Returns a new tree containing only matching nodes and their ancestors.

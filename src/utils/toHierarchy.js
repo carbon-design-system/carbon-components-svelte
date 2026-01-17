@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * Create a nested array from a flat array.
  * @typedef {Object} NodeLike

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "noEmit": true,
+    "checkJs": true,
     "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
