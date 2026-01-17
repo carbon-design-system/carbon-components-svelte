@@ -21,11 +21,11 @@ export type TreeViewContext<Node extends TreeNode = TreeNode> = {
   activeNodeId: import("svelte/store").Writable<TreeNodeId>;
   selectedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
   expandedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
-  clickNode: (node: TreeNode) => void;
-  selectNode: (node: TreeNode) => void;
-  expandNode: (node: TreeNode, expanded: boolean) => void;
-  focusNode: (node: TreeNode) => void;
-  toggleNode: (node: TreeNode) => void;
+  clickNode: (node: Node) => void;
+  selectNode: (node: Node) => void;
+  expandNode: (node: Node, expanded: boolean) => void;
+  focusNode: (node: Node) => void;
+  toggleNode: (node: Node) => void;
 };
 
 type $RestProps = SvelteHTMLElements["ul"];

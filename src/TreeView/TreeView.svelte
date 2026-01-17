@@ -281,19 +281,19 @@
   /** @type {ReadonlyArray<TreeNodeId>} */
   let lastExpandedIdsRef = expandedIds;
 
-  /** @type {(node: TreeNode) => void} */
+  /** @type {(node: Node) => void} */
   const clickNode = (node) => {
     activeId = node.id;
     selectedIds = [node.id];
     dispatch("select", node);
   };
 
-  /** @type {(node: TreeNode) => void} */
+  /** @type {(node: Node) => void} */
   const selectNode = (node) => {
     selectedIds = [node.id];
   };
 
-  /** @type {(node: TreeNode, expanded: boolean) => void} */
+  /** @type {(node: Node, expanded: boolean) => void} */
   const expandNode = (node, expanded) => {
     if (expanded) {
       expandedIdsSet.add(node.id);
@@ -304,10 +304,10 @@
     lastExpandedIdsRef = expandedIds;
   };
 
-  /** @type {(node: TreeNode) => void} */
+  /** @type {(node: Node) => void} */
   const focusNode = (node) => dispatch("focus", node);
 
-  /** @type {(node: TreeNode) => void} */
+  /** @type {(node: Node) => void} */
   const toggleNode = (node) => dispatch("toggle", node);
 
   setContext("TreeView", {
