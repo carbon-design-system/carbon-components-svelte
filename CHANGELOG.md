@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.98.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.4...v0.98.5) (2026-01-17)
+
+### Bug Fixes
+
+* **tree-view:** accessors use generic `Node` type ([0bfdfb0](https://github.com/carbon-design-system/carbon-components-svelte/commit/0bfdfb081cc725540abd763394c4f86122baf1cf))
+* **types:** context types support generics ([9066426](https://github.com/carbon-design-system/carbon-components-svelte/commit/90664262cfe505d2ed1d222fbb1c6de591eaaa39))
+* **types:** fix `truncate` function type ([fee3592](https://github.com/carbon-design-system/carbon-components-svelte/commit/fee3592297df95335890e79e85500a594d32e4f7))
+
 ### [0.98.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.3...v0.98.4) (2026-01-17)
 
 ### Bug Fixes
