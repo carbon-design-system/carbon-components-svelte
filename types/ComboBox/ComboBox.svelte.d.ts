@@ -181,6 +181,8 @@ type $Props<Item> = {
    */
   listRef?: null | HTMLDivElement;
 
+  labelChildren?: () => void;
+
   [key: `data-${string}`]: any;
 };
 

@@ -103,6 +103,8 @@ type $Props = {
    */
   hideTooltip?: boolean;
 
+  labelChildren?: () => void;
+
   [key: `data-${string}`]: any;
 };
 

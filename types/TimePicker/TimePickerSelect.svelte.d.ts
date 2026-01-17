@@ -50,6 +50,8 @@ type $Props = {
    */
   ref?: null | HTMLSelectElement;
 
+  labelChildren?: () => void;
+
   [key: `data-${string}`]: any;
 };
 

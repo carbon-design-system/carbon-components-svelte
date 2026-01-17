@@ -68,6 +68,8 @@ type $Props = {
    */
   preventCloseOnClickOutside?: boolean;
 
+  textChildren?: () => void;
+
   [key: `data-${string}`]: any;
 };
 
