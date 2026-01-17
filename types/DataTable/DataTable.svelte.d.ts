@@ -209,6 +209,16 @@ type $Props<Row> = {
     id: import("./TableHeader.svelte").TableHeaderTranslationId,
   ) => string;
 
+  cell?: () => void;
+
+  "cell-header"?: () => void;
+
+  descriptionChildren?: () => void;
+
+  "expanded-row"?: () => void;
+
+  titleChildren?: () => void;
+
   [key: `data-${string}`]: any;
 };
 

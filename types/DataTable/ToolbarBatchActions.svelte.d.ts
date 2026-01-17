@@ -22,6 +22,8 @@ type $Props = {
    */
   selectedIds?: ReadonlyArray<any>;
 
+  cancel?: () => void;
+
   [key: `data-${string}`]: any;
 };
 

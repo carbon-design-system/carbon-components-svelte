@@ -98,6 +98,12 @@ type $Props = {
    */
   ariaLabelMenu?: string;
 
+  company?: () => void;
+
+  platform?: () => void;
+
+  "skip-to-content"?: () => void;
+
   [key: `data-${string}`]: any;
 };
 

@@ -31,6 +31,10 @@ export type ContainedListProps = {
    * @default `ccs-${Math.random().toString(36)}`
    */
   id?: string;
+
+  action?: () => void;
+
+  labelChildren?: () => void;
 };
 
 export default class ContainedList extends SvelteComponentTyped<

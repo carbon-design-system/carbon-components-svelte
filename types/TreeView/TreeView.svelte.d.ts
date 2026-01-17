@@ -73,6 +73,8 @@ type $Props<Node> = {
    */
   hideLabel?: boolean;
 
+  labelChildren?: () => void;
+
   [key: `data-${string}`]: any;
 };
 
