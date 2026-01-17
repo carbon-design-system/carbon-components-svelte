@@ -74,6 +74,13 @@ type $Props<Node> = {
    */
   hideLabel?: boolean;
 
+  /**
+   * Set to `true` to automatically collapse sibling nodes when expanding a node.
+   * When enabled, only one node at each level can be expanded at a time.
+   * @default false
+   */
+  autoCollapse?: boolean;
+
   labelChildren?: (this: void) => void;
 
   children?: (

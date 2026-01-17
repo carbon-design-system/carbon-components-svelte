@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type { ComponentType as SvelteComponentType } from "svelte";
 import { user } from "../setup-tests";
+import TreeViewAutoCollapse from "./TreeView.autoCollapse.test.svelte";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
 import TreeViewMultiselect from "./TreeView.multiselect.test.svelte";
 import TreeViewProps from "./TreeView.props.test.svelte";
@@ -576,5 +577,99 @@ describe("TreeView Generics", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+});
+
+describe("TreeView autoCollapse", () => {
+  const getToggleButton = (node: HTMLElement) => {
+    return node.querySelector(".bx--tree-parent-node__toggle") as HTMLElement;
+  };
+
+  const getAllExpandedItems = () => {
+    return screen.queryAllByRole("treeitem", { expanded: true });
+  };
+
+  it("collapses sibling nodes when autoCollapse is true", async () => {
+    render(TreeViewAutoCollapse, { autoCollapse: true });
+
+    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
+    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+
+    await user.click(getToggleButton(folder1));
+    expect(folder1).toHaveAttribute("aria-expanded", "true");
+    expect(getAllExpandedItems()).toHaveLength(1);
+
+    await user.click(getToggleButton(folder2));
+    expect(folder2).toHaveAttribute("aria-expanded", "true");
+    expect(folder1).toHaveAttribute("aria-expanded", "false");
+    expect(getAllExpandedItems()).toHaveLength(1);
+  });
+
+  it("keeps siblings expanded when autoCollapse is false", async () => {
+    render(TreeViewAutoCollapse, { autoCollapse: false });
+
+    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
+    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+
+    await user.click(getToggleButton(folder1));
+    expect(folder1).toHaveAttribute("aria-expanded", "true");
+    expect(getAllExpandedItems()).toHaveLength(1);
+
+    await user.click(getToggleButton(folder2));
+    expect(folder2).toHaveAttribute("aria-expanded", "true");
+    expect(folder1).toHaveAttribute("aria-expanded", "true");
+    expect(getAllExpandedItems()).toHaveLength(2);
+  });
+
+  it("only collapses siblings at the same level, not parent or cousins", async () => {
+    render(TreeViewAutoCollapse, { autoCollapse: true });
+
+    const folder3 = screen.getByRole("treeitem", { name: /^Folder 3$/ });
+
+    await user.click(getToggleButton(folder3));
+    expect(folder3).toHaveAttribute("aria-expanded", "true");
+
+    const subfolder1 = screen.getByRole("treeitem", { name: /^Subfolder 1$/ });
+    await user.click(getToggleButton(subfolder1));
+    expect(subfolder1).toHaveAttribute("aria-expanded", "true");
+    expect(folder3).toHaveAttribute("aria-expanded", "true");
+
+    const subfolder2 = screen.getByRole("treeitem", { name: /^Subfolder 2$/ });
+    await user.click(getToggleButton(subfolder2));
+    expect(subfolder2).toHaveAttribute("aria-expanded", "true");
+    expect(subfolder1).toHaveAttribute("aria-expanded", "false");
+    expect(folder3).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("works with keyboard navigation (ArrowRight to expand)", async () => {
+    render(TreeViewAutoCollapse, { autoCollapse: true });
+
+    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
+    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+
+    folder1.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(folder1).toHaveAttribute("aria-expanded", "true");
+
+    folder2.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(folder2).toHaveAttribute("aria-expanded", "true");
+    expect(folder1).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("works when expanding via Enter/Space key", async () => {
+    render(TreeViewAutoCollapse, { autoCollapse: true });
+
+    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
+    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+
+    folder1.focus();
+    await user.keyboard("{Enter}");
+    expect(folder1).toHaveAttribute("aria-expanded", "true");
+
+    folder2.focus();
+    await user.keyboard(" ");
+    expect(folder2).toHaveAttribute("aria-expanded", "true");
+    expect(folder1).toHaveAttribute("aria-expanded", "false");
   });
 });

@@ -19822,6 +19822,18 @@
           "reactive": false
         },
         {
+          "name": "autoCollapse",
+          "kind": "let",
+          "description": "Set to `true` to automatically collapse sibling nodes when expanding a node.\nWhen enabled, only one node at each level can be expanded at a time.",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "expandAll",
           "kind": "function",
           "description": "Programmatically expand all nodes\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.expandAll()}>Expand All</button>\n```",
