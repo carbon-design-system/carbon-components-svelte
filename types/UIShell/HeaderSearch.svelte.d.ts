@@ -40,6 +40,8 @@ type $Props<Result> = {
    */
   selectedResultIndex?: number;
 
+  children?: (this: void, ...args: [{ result: Result; index: number }]) => void;
+
   [key: `data-${string}`]: any;
 };
 

@@ -47,6 +47,8 @@ type $Props = {
    */
   ref?: null | HTMLButtonElement;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

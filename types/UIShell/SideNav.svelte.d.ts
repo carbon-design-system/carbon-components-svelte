@@ -40,6 +40,8 @@ type $Props = {
    */
   expansionBreakpoint?: number;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

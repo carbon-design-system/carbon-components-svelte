@@ -21,6 +21,8 @@ export type ContainedListItemProps = {
   icon?: any;
 
   action?: (this: void) => void;
+
+  children?: (this: void) => void;
 };
 
 export default class ContainedListItem extends SvelteComponentTyped<

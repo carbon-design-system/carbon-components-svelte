@@ -17,6 +17,8 @@ export type ContextMenuGroupProps = {
    * @default ""
    */
   labelText?: string;
+
+  children?: (this: void) => void;
 };
 
 export default class ContextMenuGroup extends SvelteComponentTyped<
