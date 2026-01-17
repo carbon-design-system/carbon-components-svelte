@@ -1,6 +1,8 @@
 import { SvelteComponentTyped } from "svelte";
 
-export type HeaderPanelLinksProps = Record<string, never>;
+export type HeaderPanelLinksProps = {
+  children?: (this: void) => void;
+};
 
 export default class HeaderPanelLinks extends SvelteComponentTyped<
   HeaderPanelLinksProps,

@@ -40,6 +40,22 @@ export type TreeViewNodeListProps = {
    * @default undefined
    */
   icon?: any;
+
+  children?: (
+    this: void,
+    ...args: [
+      {
+        node: {
+          id: TreeNodeId;
+          text: string;
+          expanded: boolean;
+          leaf: boolean;
+          disabled: boolean;
+          selected: boolean;
+        };
+      },
+    ]
+  ) => void;
 };
 
 export default class TreeViewNodeList extends SvelteComponentTyped<

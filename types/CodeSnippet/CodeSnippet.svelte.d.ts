@@ -125,6 +125,8 @@ export type CodeSnippetProps = {
    * @default null
    */
   ref?: null | HTMLPreElement;
+
+  children?: (this: void) => void;
 };
 
 export default class CodeSnippet extends SvelteComponentTyped<

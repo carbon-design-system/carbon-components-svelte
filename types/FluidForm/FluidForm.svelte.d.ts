@@ -8,6 +8,8 @@ export type FormContext = {
 type $RestProps = SvelteHTMLElements["form"];
 
 type $Props = {
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

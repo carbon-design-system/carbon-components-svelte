@@ -29,6 +29,8 @@ export type AccordionProps = AccordionSkeletonProps & {
    * @default false
    */
   skeleton?: boolean;
+
+  children?: (this: void) => void;
 };
 
 export default class Accordion extends SvelteComponentTyped<

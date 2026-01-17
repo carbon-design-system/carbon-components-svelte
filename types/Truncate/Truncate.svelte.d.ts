@@ -9,6 +9,8 @@ type $Props = {
    */
   clamp?: "end" | "front";
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

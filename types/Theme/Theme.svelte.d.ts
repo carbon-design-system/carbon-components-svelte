@@ -51,6 +51,8 @@ export type ThemeProps = {
   select?: import("../Select/Select.svelte").SelectProps & {
     themes?: CarbonTheme[];
   };
+
+  children?: (this: void, ...args: [{ theme: CarbonTheme }]) => void;
 };
 
 export default class Theme extends SvelteComponentTyped<

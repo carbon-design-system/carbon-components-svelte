@@ -243,6 +243,8 @@ type $Props<Row> = {
     ...args: [{ props: { class: "bx--data-table-header__title" } }]
   ) => void;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

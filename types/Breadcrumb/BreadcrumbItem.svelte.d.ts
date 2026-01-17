@@ -18,6 +18,11 @@ type $Props = {
    */
   isCurrentPage?: boolean;
 
+  children?: (
+    this: void,
+    ...args: [{ props?: { "aria-current"?: string; class: "bx--link" } }]
+  ) => void;
+
   [key: `data-${string}`]: any;
 };
 
