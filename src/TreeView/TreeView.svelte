@@ -57,6 +57,50 @@
       return acc;
     }, []);
   }
+
+  /**
+   * Finds sibling node IDs for a given node ID within a tree structure.
+   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @param {ReadonlyArray<TNode>} nodes - The tree nodes to search
+   * @param {string | number} id - The ID of the node to find siblings for
+   * @returns {Array<string | number>} Array of sibling IDs (excluding the node itself)
+   */
+  function findSiblingIds(nodes, id) {
+    for (const node of nodes) {
+      if (node.id === id) {
+        const siblings = [];
+        for (const n of nodes) {
+          if (n.id !== id) {
+            siblings.push(n.id);
+          }
+        }
+        return siblings;
+      }
+    }
+
+    for (const node of nodes) {
+      if (Array.isArray(node.nodes)) {
+        for (const child of node.nodes) {
+          if (child.id === id) {
+            const siblings = [];
+            for (const n of node.nodes) {
+              if (n.id !== id) {
+                siblings.push(n.id);
+              }
+            }
+            return siblings;
+          }
+        }
+
+        const result = findSiblingIds(node.nodes, id);
+        if (result.length > 0) {
+          return result;
+        }
+      }
+    }
+
+    return [];
+  }
 </script>
 
 <script>
@@ -121,6 +165,12 @@
   export let hideLabel = false;
 
   /**
+   * Set to `true` to automatically collapse sibling nodes when expanding a node.
+   * When enabled, only one node at each level can be expanded at a time.
+   */
+  export let autoCollapse = false;
+
+  /**
    * Programmatically expand all nodes
    * @type {() => void}
    * @example
@@ -168,7 +218,7 @@
       .filter(
         (node) =>
           filterNode(node) ||
-          node.nodes?.some((child) => filterNode(child) && child.nodes),
+          node.nodes?.some((child) => filterNode(child) && child.nodes)
       )
       .map((node) => node.id);
     nodesToExpand.forEach((id) => expandedIdsSet.add(id));
@@ -256,7 +306,7 @@
 
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
-  
+
   /** @type {import("svelte/store").Writable<TreeNodeId>} */
   const activeNodeId = writable(activeId);
   /** @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>} */
@@ -296,6 +346,12 @@
   /** @type {(node: Node, expanded: boolean) => void} */
   const expandNode = (node, expanded) => {
     if (expanded) {
+      if (autoCollapse) {
+        const siblingIds = findSiblingIds(nodes, node.id);
+        for (const siblingId of siblingIds) {
+          expandedIdsSet.delete(siblingId);
+        }
+      }
       expandedIdsSet.add(node.id);
     } else {
       expandedIdsSet.delete(node.id);
@@ -338,7 +394,7 @@
 
   onMount(() => {
     const firstFocusableNode = ref.querySelector(
-      "li.bx--tree-node:not(.bx--tree-node--disabled)",
+      "li.bx--tree-node:not(.bx--tree-node--disabled)"
     );
 
     if (firstFocusableNode != null) {
