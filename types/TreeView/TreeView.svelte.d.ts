@@ -16,7 +16,8 @@ export type ShowNodeOptions = {
   /** Whether to select the node (default: true) */ select?: boolean;
   /** Whether to focus the node (default: true) */ focus?: boolean;
 };
-export type TreeViewContext = {
+
+export type TreeViewContext<Node extends TreeNode = TreeNode> = {
   activeNodeId: import("svelte/store").Writable<TreeNodeId>;
   selectedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
   expandedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;

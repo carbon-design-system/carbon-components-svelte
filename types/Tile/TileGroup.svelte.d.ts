@@ -1,7 +1,7 @@
 import { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export type TileGroupContext = {
+export type TileGroupContext<T extends string = string> = {
   selectedValue: import("svelte/store").Writable<T | undefined>;
   groupName: import("svelte/store").Readable<string | undefined>;
   groupRequired: import("svelte/store").Readable<boolean | undefined>;
