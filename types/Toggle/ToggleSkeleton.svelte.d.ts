@@ -22,6 +22,8 @@ type $Props = {
    */
   id?: string;
 
+  labelChildren?: () => void;
+
   [key: `data-${string}`]: any;
 };
 
