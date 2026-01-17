@@ -106,7 +106,7 @@ type $Props = {
    */
   menuRef?: null | HTMLUListElement;
 
-  menu?: () => void;
+  menu?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

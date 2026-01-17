@@ -81,7 +81,7 @@ type $Props = {
    */
   ref?: null | HTMLLIElement;
 
-  labelChildren?: () => void;
+  labelChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };
