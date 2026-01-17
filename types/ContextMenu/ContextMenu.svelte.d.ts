@@ -44,6 +44,8 @@ type $Props = {
    */
   ref?: null | HTMLUListElement;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

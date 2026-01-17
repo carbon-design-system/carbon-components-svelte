@@ -12,6 +12,8 @@ export type PaginationItemProps = {
    * @default false
    */
   active?: boolean;
+
+  children?: (this: void) => void;
 };
 
 export default class PaginationItem extends SvelteComponentTyped<

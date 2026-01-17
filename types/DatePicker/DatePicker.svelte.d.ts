@@ -96,6 +96,8 @@ type $Props = {
    */
   flatpickrProps?: import("flatpickr/dist/types/options").Options;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

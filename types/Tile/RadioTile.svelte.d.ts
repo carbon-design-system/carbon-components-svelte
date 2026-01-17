@@ -58,6 +58,8 @@ type $Props = {
    */
   name?: string;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

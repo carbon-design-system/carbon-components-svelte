@@ -16,6 +16,8 @@ type $Props = {
    */
   hasScrollingContent?: boolean;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

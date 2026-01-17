@@ -19,6 +19,8 @@ type $Props = {
     | "9x16"
     | "1x2";
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

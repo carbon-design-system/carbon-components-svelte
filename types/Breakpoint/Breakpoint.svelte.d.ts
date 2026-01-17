@@ -16,6 +16,11 @@ export type BreakpointProps = {
    * @default { sm: false, md: false, lg: false, xlg: false, max: false, }
    */
   sizes?: Record<BreakpointSize, boolean>;
+
+  children?: (
+    this: void,
+    ...args: [{ size: BreakpointSize; sizes: Record<BreakpointSize, boolean> }]
+  ) => void;
 };
 
 export default class Breakpoint extends SvelteComponentTyped<

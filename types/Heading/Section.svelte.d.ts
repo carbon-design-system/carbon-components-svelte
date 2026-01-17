@@ -45,6 +45,8 @@ export type SectionProps = {
    * @default "section"
    */
   tag?: keyof HTMLElementTagNameMap;
+
+  children?: (this: void) => void;
 };
 
 export default class Section extends SvelteComponentTyped<

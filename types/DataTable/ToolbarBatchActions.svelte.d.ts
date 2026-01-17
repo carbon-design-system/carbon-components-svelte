@@ -24,6 +24,8 @@ type $Props = {
 
   cancel?: (this: void) => void;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

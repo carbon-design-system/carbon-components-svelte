@@ -75,6 +75,22 @@ type $Props<Node> = {
 
   labelChildren?: (this: void) => void;
 
+  children?: (
+    this: void,
+    ...args: [
+      {
+        node: {
+          id: TreeNodeId;
+          text: string;
+          expanded: boolean;
+          leaf: boolean;
+          disabled: boolean;
+          selected: boolean;
+        };
+      },
+    ]
+  ) => void;
+
   [key: `data-${string}`]: any;
 };
 

@@ -93,6 +93,8 @@ type $Props = {
    */
   refIcon?: null | HTMLDivElement;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 
