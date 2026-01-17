@@ -122,8 +122,8 @@ type $Props = {
   /**
    * Specify the label text.
    * Alternatively, use the "labelChildren" slot.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Slider>
    *   <span slot="labelChildren">Custom Label</span>
    * </Slider>
@@ -150,7 +150,7 @@ type $Props = {
    */
   ref?: null | HTMLDivElement;
 
-  labelChildren?: () => void;
+  labelChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

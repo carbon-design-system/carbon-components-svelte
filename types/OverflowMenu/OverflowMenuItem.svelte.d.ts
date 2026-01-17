@@ -7,8 +7,8 @@ type $Props = {
   /**
    * Specify the item text.
    * Alternatively, use the default slot.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <OverflowMenuItem>
    *   <span>Custom Text</span>
    * </OverflowMenuItem>

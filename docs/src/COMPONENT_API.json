@@ -116,7 +116,7 @@
         {
           "name": "title",
           "kind": "let",
-          "description": "Specify the title of the accordion item heading.\nAlternatively, use the \"title\" slot.\n@example \n```svelte\n<AccordionItem>\n  <div slot=\"title\">Custom Title</div>\n</AccordionItem>\n```",
+          "description": "Specify the title of the accordion item heading.\nAlternatively, use the \"title\" slot.\n@example ```svelte \n\n<AccordionItem>\n  <div slot=\"title\">Custom Title</div>\n</AccordionItem>\n```",
           "type": "string",
           "value": "\"title\"",
           "isFunction": false,
@@ -654,7 +654,7 @@
         {
           "name": "icon",
           "kind": "let",
-          "description": "Specify the icon to render.\nAlternatively, use the named slot \"icon\".\n@example \n```svelte\n<Button>\n  <Icon slot=\"icon\" size={20} />\n</Button>\n```",
+          "description": "Specify the icon to render.\nAlternatively, use the named slot \"icon\".\n@example ```svelte \n\n<Button>\n  <Icon slot=\"icon\" size={20} />\n</Button>\n```",
           "type": "any",
           "value": "undefined",
           "isFunction": false,
@@ -714,7 +714,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example \n```svelte\n<Button let:props>\n  <div {...props}>Custom Element</div>\n</Button>\n```",
+          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example ```svelte \n\n<Button let:props>\n  <div {...props}>Custom Element</div>\n</Button>\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -1353,7 +1353,7 @@
         {
           "name": "code",
           "kind": "let",
-          "description": "Set the code snippet text.\nAlternatively, use the default slot.\n\nNOTE: you *must* use the `code` prop for the copy-to-clipboard functionality.\n@example \n```svelte\n<CodeSnippet>{code}</CodeSnippet>\n```",
+          "description": "Set the code snippet text.\nAlternatively, use the default slot.\n\nNOTE: you *must* use the `code` prop for the copy-to-clipboard functionality.\n@example ```svelte \n\n<CodeSnippet>{code}</CodeSnippet>\n```",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -1669,7 +1669,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example \n```svelte\n<Column let:props>\n  <article {...props}>Content</article>\n</Column>\n```",
+          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example ```svelte \n\n<Column let:props>\n  <article {...props}>Content</article>\n</Column>\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -2161,7 +2161,7 @@
         {
           "name": "clear",
           "kind": "function",
-          "description": "Clear the combo box programmatically.\nBy default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.\n@example \n```svelte\n<ComboBox bind:this={comboBox} items={items} />\n<button on:click={() => comboBox.clear()}>Clear</button>\n<button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>\n```",
+          "description": "Clear the combo box programmatically.\nBy default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.\n@example ```svelte \n\n<ComboBox bind:this={comboBox} items={items} />\n<button on:click={() => comboBox.clear()}>Clear</button>\n<button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>\n```",
           "type": "(options?: { focus?: boolean; }) => Promise<void>",
           "isFunction": true,
           "isFunctionDeclaration": true,
@@ -3006,7 +3006,7 @@
         {
           "name": "labelText",
           "kind": "let",
-          "description": "Specify the label text.\nAlternatively, use the \"labelChildren\" slot.\n@example \n```svelte\n<ContextMenuOption>\n  <span slot=\"labelChildren\">Custom Label</span>\n</ContextMenuOption>\n```",
+          "description": "Specify the label text.\nAlternatively, use the \"labelChildren\" slot.\n@example ```svelte \n\n<ContextMenuOption>\n  <span slot=\"labelChildren\">Custom Label</span>\n</ContextMenuOption>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -3042,7 +3042,7 @@
         {
           "name": "shortcutText",
           "kind": "let",
-          "description": "Specify the shortcut text.\nAlternatively, use the \"shortcutText\" slot.\n@example \n```svelte\n<ContextMenuOption>\n  <span slot=\"shortcutText\">Ctrl+K</span>\n</ContextMenuOption>\n```",
+          "description": "Specify the shortcut text.\nAlternatively, use the \"shortcutText\" slot.\n@example ```svelte \n\n<ContextMenuOption>\n  <span slot=\"shortcutText\">Ctrl+K</span>\n</ContextMenuOption>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -5033,7 +5033,7 @@
         {
           "name": "maxFileSize",
           "kind": "let",
-          "description": "Specify the maximum file size in bytes.\nFiles exceeding this limit will be filtered out.\nFile sizes use binary (base 2) units: 1024 bytes = 1 KiB, not 1000 bytes.\n@example \n```svelte\n<!-- 5 MB = 5 × 1024 × 1024 = 5,242,880 bytes -->\n<FileUploader maxFileSize={5 * 1024 * 1024} />\n```",
+          "description": "Specify the maximum file size in bytes.\nFiles exceeding this limit will be filtered out.\nFile sizes use binary (base 2) units: 1024 bytes = 1 KiB, not 1000 bytes.\n@example ```svelte \n\n<!-- 5 MB = 5 × 1024 × 1024 = 5,242,880 bytes -->\n<FileUploader maxFileSize={5 * 1024 * 1024} />\n```",
           "type": "number | undefined",
           "value": "undefined",
           "isFunction": false,
@@ -5069,7 +5069,7 @@
         {
           "name": "clearFiles",
           "kind": "const",
-          "description": "Programmatically clear the uploaded files.\n@example \n```svelte\n<FileUploader bind:this={uploader} bind:files={files} />\n<button on:click={() => uploader.clearFiles()}>Clear Files</button>\n```",
+          "description": "Programmatically clear the uploaded files.\n@example ```svelte \n\n<FileUploader bind:this={uploader} bind:files={files} />\n<button on:click={() => uploader.clearFiles()}>Clear Files</button>\n```",
           "type": "() => void",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -5080,7 +5080,7 @@
         {
           "name": "labelTitle",
           "kind": "let",
-          "description": "Specify the label title.\nAlternatively, use the named slot \"labelTitle\".\n@example \n```svelte\n<FileUploader>\n  <span slot=\"labelTitle\">Custom Label</span>\n</FileUploader>\n```",
+          "description": "Specify the label title.\nAlternatively, use the named slot \"labelTitle\".\n@example ```svelte \n\n<FileUploader>\n  <span slot=\"labelTitle\">Custom Label</span>\n</FileUploader>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -5092,7 +5092,7 @@
         {
           "name": "labelDescription",
           "kind": "let",
-          "description": "Specify the label description.\nAlternatively, use the named slot \"labelDescription\".\n@example \n```svelte\n<FileUploader>\n  <span slot=\"labelDescription\">Custom description text</span>\n</FileUploader>\n```",
+          "description": "Specify the label description.\nAlternatively, use the named slot \"labelDescription\".\n@example ```svelte \n\n<FileUploader>\n  <span slot=\"labelDescription\">Custom description text</span>\n</FileUploader>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -6229,7 +6229,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example \n```svelte\n<Grid let:props>\n  <header {...props}>Content</header>\n</Grid>\n```",
+          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example ```svelte \n\n<Grid let:props>\n  <header {...props}>Content</header>\n</Grid>\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -6395,7 +6395,7 @@
         {
           "name": "companyName",
           "kind": "let",
-          "description": "Specify the company name.\n\nAlternatively, use the named slot \"company\".\n@example \n```svelte\n<Header>\n  <span slot=\"company\">IBM</span>\n</Header>\n```",
+          "description": "Specify the company name.\n\nAlternatively, use the named slot \"company\".\n@example ```svelte \n\n<Header>\n  <span slot=\"company\">IBM</span>\n</Header>\n```",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -6407,7 +6407,7 @@
         {
           "name": "platformName",
           "kind": "let",
-          "description": "Specify the platform name.\nAlternatively, use the named slot \"platform\".\n@example \n```svelte\n<Header>\n  <span slot=\"platform\">Platform Name</span>\n</Header>\n```",
+          "description": "Specify the platform name.\nAlternatively, use the named slot \"platform\".\n@example ```svelte \n\n<Header>\n  <span slot=\"platform\">Platform Name</span>\n</Header>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -6572,7 +6572,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the text displayed next to the icon.\nAlternatively, use the named slot \"textChildren\".\n@example \n```svelte\n<HeaderAction>\n  <div slot=\"textChildren\">Custom Text</div>\n</HeaderAction>\n```",
+          "description": "Specify the text displayed next to the icon.\nAlternatively, use the named slot \"textChildren\".\n@example ```svelte \n\n<HeaderAction>\n  <div slot=\"textChildren\">Custom Text</div>\n</HeaderAction>\n```",
           "type": "string",
           "value": "undefined",
           "isFunction": false,
@@ -7479,7 +7479,7 @@
         {
           "name": "loadImage",
           "kind": "const",
-          "description": "Method invoked to load the image provided a `src` value.\nIf no URL is provided, uses the component's `src` prop.\n@example \n```svelte\n<ImageLoader bind:this={loader} src=\"default.jpg\" />\n<button on:click={() => loader.loadImage(\"new-image.jpg\")}>\n  Load New Image\n</button>\n```",
+          "description": "Method invoked to load the image provided a `src` value.\nIf no URL is provided, uses the component's `src` prop.\n@example ```svelte \n\n<ImageLoader bind:this={loader} src=\"default.jpg\" />\n<button on:click={() => loader.loadImage(\"new-image.jpg\")}>\n  Load New Image\n</button>\n```",
           "type": "(url?: string) => void",
           "isFunction": true,
           "isFunctionDeclaration": false,
@@ -8630,7 +8630,7 @@
         {
           "name": "clearItem",
           "kind": "function",
-          "description": "Remove the persisted key value from the browser's local storage\n@example \n```svelte\n<LocalStorage bind:this={storage} key=\"my-key\" bind:value={data} />\n<button on:click={() => storage.clearItem()}>Clear Item</button>\n```",
+          "description": "Remove the persisted key value from the browser's local storage\n@example ```svelte \n\n<LocalStorage bind:this={storage} key=\"my-key\" bind:value={data} />\n<button on:click={() => storage.clearItem()}>Clear Item</button>\n```",
           "type": "() => void",
           "isFunction": true,
           "isFunctionDeclaration": true,
@@ -8641,7 +8641,7 @@
         {
           "name": "clearAll",
           "kind": "function",
-          "description": "Clear all key values from the browser's local storage\n@example \n```svelte\n<LocalStorage bind:this={storage} key=\"my-key\" bind:value={data} />\n<button on:click={() => storage.clearAll()}>Clear All Storage</button>\n```",
+          "description": "Clear all key values from the browser's local storage\n@example ```svelte \n\n<LocalStorage bind:this={storage} key=\"my-key\" bind:value={data} />\n<button on:click={() => storage.clearAll()}>Clear All Storage</button>\n```",
           "type": "() => void",
           "isFunction": true,
           "isFunctionDeclaration": true,
@@ -10226,7 +10226,7 @@
         {
           "name": "allowDecimal",
           "kind": "let",
-          "description": "Set to `true` to preserve decimal input formatting.\nWhen enabled, uses type=\"text\" with inputmode=\"decimal\" instead of type=\"number\".\n@example \n```svelte\n<NumberInput allowDecimal={true} value=\"1.0\" />\n<NumberInput allowDecimal={true} value=\"2.00\" />\n```",
+          "description": "Set to `true` to preserve decimal input formatting.\nWhen enabled, uses type=\"text\" with inputmode=\"decimal\" instead of type=\"number\".\n@example ```svelte \n\n<NumberInput allowDecimal={true} value=\"1.0\" />\n<NumberInput allowDecimal={true} value=\"2.00\" />\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -10904,7 +10904,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the item text.\nAlternatively, use the default slot.\n@example \n```svelte\n<OverflowMenuItem>\n  <span>Custom Text</span>\n</OverflowMenuItem>\n```",
+          "description": "Specify the item text.\nAlternatively, use the default slot.\n@example ```svelte \n\n<OverflowMenuItem>\n  <span>Custom Text</span>\n</OverflowMenuItem>\n```",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
@@ -12594,7 +12594,7 @@
         {
           "name": "legendText",
           "kind": "let",
-          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example \n```svelte\n<RadioButtonGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n  <RadioButton labelText=\"Option 1\" value=\"1\" />\n  <RadioButton labelText=\"Option 2\" value=\"2\" />\n  <RadioButton labelText=\"Option 3\" value=\"3\" />\n</RadioButtonGroup>\n```",
+          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example ```svelte \n\n<RadioButtonGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n  <RadioButton labelText=\"Option 1\" value=\"1\" />\n  <RadioButton labelText=\"Option 2\" value=\"2\" />\n  <RadioButton labelText=\"Option 3\" value=\"3\" />\n</RadioButtonGroup>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -13001,7 +13001,7 @@
         {
           "name": "as",
           "kind": "let",
-          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example \n```svelte\n<Row let:props>\n  <section {...props}>Content</section>\n</Row>\n```",
+          "description": "Set to `true` to render a custom HTML element.\nProps are destructured as `props` in the default slot.\n@example ```svelte \n\n<Row let:props>\n  <section {...props}>Content</section>\n</Row>\n```",
           "type": "boolean",
           "value": "false",
           "isFunction": false,
@@ -13442,7 +13442,7 @@
         {
           "name": "level",
           "kind": "let",
-          "description": "Specify the heading level the section should start at.\nWhen nested, child sections automatically increment from this level.\nLevels are capped at 6 (h6).\n@default 1\n@example \n```svelte\n<Section level={5}>\n  <Heading>Starts at Heading 5</Heading>\n  <Section>\n    <Heading>Heading 6</Heading>\n  </Section>\n</Section>\n```",
+          "description": "Specify the heading level the section should start at.\nWhen nested, child sections automatically increment from this level.\nLevels are capped at 6 (h6).\n@default 1\n@example ```svelte \n\n<Section level={5}>\n  <Heading>Starts at Heading 5</Heading>\n  <Section>\n    <Heading>Heading 6</Heading>\n  </Section>\n</Section>\n```",
           "type": "SectionLevel",
           "value": "1",
           "isFunction": false,
@@ -13454,7 +13454,7 @@
         {
           "name": "tag",
           "kind": "let",
-          "description": "Specify the HTML tag name to render instead of the default `section` element.\nUseful when you need to use a different semantic element while maintaining\nthe heading level context functionality.\n@default section\n@example \n```svelte\n<Section tag=\"div\">\n  <Heading>Heading 1</Heading>\n</Section>\n```\n\n@example \n```svelte\n<Section tag=\"article\">\n  <Heading>Article Heading</Heading>\n</Section>\n```",
+          "description": "Specify the HTML tag name to render instead of the default `section` element.\nUseful when you need to use a different semantic element while maintaining\nthe heading level context functionality.\n@default section\n@example ```svelte \n\n<Section tag=\"div\">\n  <Heading>Heading 1</Heading>\n</Section>\n```\n\n@example ```svelte \n\n<Section tag=\"article\">\n  <Heading>Article Heading</Heading>\n</Section>\n```",
           "type": "keyof HTMLElementTagNameMap",
           "value": "\"section\"",
           "isFunction": false,
@@ -14182,7 +14182,7 @@
         {
           "name": "legendText",
           "kind": "let",
-          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example \n```svelte\n<SelectableTileGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n</SelectableTileGroup>\n```",
+          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example ```svelte \n\n<SelectableTileGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n</SelectableTileGroup>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -15053,7 +15053,7 @@
         {
           "name": "labelText",
           "kind": "let",
-          "description": "Specify the label text.\nAlternatively, use the \"labelChildren\" slot.\n@example \n```svelte\n<Slider>\n  <span slot=\"labelChildren\">Custom Label</span>\n</Slider>\n```",
+          "description": "Specify the label text.\nAlternatively, use the \"labelChildren\" slot.\n@example ```svelte \n\n<Slider>\n  <span slot=\"labelChildren\">Custom Label</span>\n</Slider>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -15780,7 +15780,7 @@
         {
           "name": "text",
           "kind": "let",
-          "description": "Specify the switch text.\nAlternatively, use the default slot.\n@example \n```svelte\n<Switch>\n  <span>Custom Text</span>\n</Switch>\n```",
+          "description": "Specify the switch text.\nAlternatively, use the default slot.\n@example ```svelte \n\n<Switch>\n  <span>Custom Text</span>\n</Switch>\n```",
           "type": "string",
           "value": "\"Provide text\"",
           "isFunction": false,
@@ -15889,7 +15889,7 @@
         {
           "name": "label",
           "kind": "let",
-          "description": "Specify the tab label.\nAlternatively, use the default slot.\n@example \n```svelte\n<Tab>\n  <span>Label</span>\n</Tab>\n```",
+          "description": "Specify the tab label.\nAlternatively, use the default slot.\n@example ```svelte \n\n<Tab>\n  <span>Label</span>\n</Tab>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -17845,7 +17845,7 @@
         {
           "name": "legendText",
           "kind": "let",
-          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example \n```svelte\n<TileGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n</TileGroup>\n```",
+          "description": "Specify the legend text.\nAlternatively, use the named slot \"legendChildren\".\n@example ```svelte \n\n<TileGroup>\n  <span slot=\"legendChildren\">Custom Legend</span>\n</TileGroup>\n```",
           "type": "string",
           "value": "\"\"",
           "isFunction": false,
@@ -19805,7 +19805,7 @@
         {
           "name": "expandAll",
           "kind": "function",
-          "description": "Programmatically expand all nodes\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.expandAll()}>Expand All</button>\n```",
+          "description": "Programmatically expand all nodes\n@example ```svelte \n\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.expandAll()}>Expand All</button>\n```",
           "type": "() => void",
           "isFunction": true,
           "isFunctionDeclaration": true,
@@ -19816,7 +19816,7 @@
         {
           "name": "collapseAll",
           "kind": "function",
-          "description": "Programmatically collapse all nodes\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.collapseAll()}>Collapse All</button>\n```",
+          "description": "Programmatically collapse all nodes\n@example ```svelte \n\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.collapseAll()}>Collapse All</button>\n```",
           "type": "() => void",
           "isFunction": true,
           "isFunctionDeclaration": true,
@@ -19827,7 +19827,7 @@
         {
           "name": "expandNodes",
           "kind": "function",
-          "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided.\nFilter function should return `true` for nodes to expand. If not provided, expands all nodes.\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.expandNodes((node) => node.id.startsWith('folder-'))}>\n  Expand Folders\n</button>\n```",
+          "description": "Programmatically expand a subset of nodes.\nExpands all nodes if no argument is provided.\nFilter function should return `true` for nodes to expand. If not provided, expands all nodes.\n@example ```svelte \n\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.expandNodes((node) => node.id.startsWith('folder-'))}>\n  Expand Folders\n</button>\n```",
           "type": "(filterNode?: (node: Node) => boolean) => void",
           "isFunction": true,
           "isFunctionDeclaration": true,
@@ -19838,7 +19838,7 @@
         {
           "name": "collapseNodes",
           "kind": "function",
-          "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided.\nFilter function should return `true` for nodes to collapse. If not provided, collapses all nodes.\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.collapseNodes((node) => node.id.startsWith('folder-'))}>\n  Collapse Folders\n</button>\n```",
+          "description": "Programmatically collapse a subset of nodes.\nCollapses all nodes if no argument is provided.\nFilter function should return `true` for nodes to collapse. If not provided, collapses all nodes.\n@example ```svelte \n\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.collapseNodes((node) => node.id.startsWith('folder-'))}>\n  Collapse Folders\n</button>\n```",
           "type": "(filterNode?: (node: Node) => boolean) => void",
           "isFunction": true,
           "isFunctionDeclaration": true,
@@ -19849,7 +19849,7 @@
         {
           "name": "showNode",
           "kind": "function",
-          "description": "Programmatically show a node by `id`.\nBy default, the matching node will be expanded, selected, and focused.\nUse the options parameter to customize this behavior.\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.showNode('node-123')}>\n  Show Node\n</button>\n<button on:click={() => treeView.showNode('node-123', { expand: false, focus: false })}>\n  Show Node (No Expand/Focus)\n</button>\n```",
+          "description": "Programmatically show a node by `id`.\nBy default, the matching node will be expanded, selected, and focused.\nUse the options parameter to customize this behavior.\n@example ```svelte \n\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.showNode('node-123')}>\n  Show Node\n</button>\n<button on:click={() => treeView.showNode('node-123', { expand: false, focus: false })}>\n  Show Node (No Expand/Focus)\n</button>\n```",
           "type": "(id: TreeNodeId, options?: ShowNodeOptions) => void",
           "isFunction": true,
           "isFunctionDeclaration": true,

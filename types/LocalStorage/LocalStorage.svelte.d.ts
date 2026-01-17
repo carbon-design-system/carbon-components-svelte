@@ -24,8 +24,8 @@ export default class LocalStorage extends SvelteComponentTyped<
 > {
   /**
    * Remove the persisted key value from the browser's local storage
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <LocalStorage bind:this={storage} key="my-key" bind:value={data} />
    * <button on:click={() => storage.clearItem()}>Clear Item</button>
    * ```
@@ -34,8 +34,8 @@ export default class LocalStorage extends SvelteComponentTyped<
 
   /**
    * Clear all key values from the browser's local storage
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <LocalStorage bind:this={storage} key="my-key" bind:value={data} />
    * <button on:click={() => storage.clearAll()}>Clear All Storage</button>
    * ```

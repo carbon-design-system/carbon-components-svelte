@@ -39,8 +39,8 @@ type $Props<T> = {
   /**
    * Specify the legend text.
    * Alternatively, use the named slot "legendChildren".
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <TileGroup>
    *   <span slot="legendChildren">Custom Legend</span>
    * </TileGroup>
@@ -49,7 +49,7 @@ type $Props<T> = {
    */
   legendText?: string;
 
-  legendChildren?: () => void;
+  legendChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

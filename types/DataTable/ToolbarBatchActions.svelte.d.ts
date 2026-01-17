@@ -22,7 +22,7 @@ type $Props = {
    */
   selectedIds?: ReadonlyArray<any>;
 
-  cancel?: () => void;
+  cancel?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

@@ -7,8 +7,8 @@ type $Props = {
   /**
    * Specify the tab label.
    * Alternatively, use the default slot.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Tab>
    *   <span>Label</span>
    * </Tab>

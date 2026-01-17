@@ -7,8 +7,8 @@ type $Props = {
   /**
    * Set to `true` to render a custom HTML element.
    * Props are destructured as `props` in the default slot.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Grid let:props>
    *   <header {...props}>Content</header>
    * </Grid>

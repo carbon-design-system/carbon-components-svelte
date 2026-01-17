@@ -58,8 +58,8 @@ type $Props = {
   /**
    * Set to `true` to preserve decimal input formatting.
    * When enabled, uses type="text" with inputmode="decimal" instead of type="number".
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <NumberInput allowDecimal={true} value="1.0" />
    * <NumberInput allowDecimal={true} value="2.00" />
    * ```
@@ -144,7 +144,7 @@ type $Props = {
    */
   ref?: null | HTMLInputElement;
 
-  labelChildren?: () => void;
+  labelChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

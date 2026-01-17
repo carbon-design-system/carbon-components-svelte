@@ -26,8 +26,8 @@ type $Props = {
    * Specify the maximum file size in bytes.
    * Files exceeding this limit will be filtered out.
    * File sizes use binary (base 2) units: 1024 bytes = 1 KiB, not 1000 bytes.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <!-- 5 MB = 5 × 1024 × 1024 = 5,242,880 bytes -->
    * <FileUploader maxFileSize={5 * 1024 * 1024} />
    * ```
@@ -50,8 +50,8 @@ type $Props = {
   /**
    * Specify the label title.
    * Alternatively, use the named slot "labelTitle".
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <FileUploader>
    *   <span slot="labelTitle">Custom Label</span>
    * </FileUploader>
@@ -63,8 +63,8 @@ type $Props = {
   /**
    * Specify the label description.
    * Alternatively, use the named slot "labelDescription".
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <FileUploader>
    *   <span slot="labelDescription">Custom description text</span>
    * </FileUploader>
@@ -124,8 +124,8 @@ export default class FileUploader extends SvelteComponentTyped<
 > {
   /**
    * Programmatically clear the uploaded files.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <FileUploader bind:this={uploader} bind:files={files} />
    * <button on:click={() => uploader.clearFiles()}>Clear Files</button>
    * ```

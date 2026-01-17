@@ -39,8 +39,8 @@ type $Props = {
   /**
    * Specify the legend text.
    * Alternatively, use the named slot "legendChildren".
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <RadioButtonGroup>
    *   <span slot="legendChildren">Custom Legend</span>
    *   <RadioButton labelText="Option 1" value="1" />
@@ -82,7 +82,7 @@ type $Props = {
    */
   id?: string;
 
-  legendChildren?: () => void;
+  legendChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

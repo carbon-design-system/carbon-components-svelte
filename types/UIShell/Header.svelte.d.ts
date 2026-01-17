@@ -32,8 +32,8 @@ type $Props = {
    * Specify the company name.
    *
    * Alternatively, use the named slot "company".
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Header>
    *   <span slot="company">IBM</span>
    * </Header>
@@ -45,8 +45,8 @@ type $Props = {
   /**
    * Specify the platform name.
    * Alternatively, use the named slot "platform".
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Header>
    *   <span slot="platform">Platform Name</span>
    * </Header>
@@ -98,11 +98,11 @@ type $Props = {
    */
   ariaLabelMenu?: string;
 
-  company?: () => void;
+  company?: (this: void) => void;
 
-  platform?: () => void;
+  platform?: (this: void) => void;
 
-  "skip-to-content"?: () => void;
+  "skip-to-content"?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

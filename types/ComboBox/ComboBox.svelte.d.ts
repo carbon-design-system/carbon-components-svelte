@@ -181,7 +181,7 @@ type $Props<Item> = {
    */
   listRef?: null | HTMLDivElement;
 
-  labelChildren?: () => void;
+  labelChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };
@@ -212,8 +212,8 @@ export default class ComboBox<
   /**
    * Clear the combo box programmatically.
    * By default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <ComboBox bind:this={comboBox} items={items} />
    * <button on:click={() => comboBox.clear()}>Clear</button>
    * <button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>

@@ -11,8 +11,8 @@ export type SectionProps = {
    * When nested, child sections automatically increment from this level.
    * Levels are capped at 6 (h6).
    * @default 1
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Section level={5}>
    *   <Heading>Starts at Heading 5</Heading>
    *   <Section>
@@ -29,15 +29,15 @@ export type SectionProps = {
    * Useful when you need to use a different semantic element while maintaining
    * the heading level context functionality.
    * @default section
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Section tag="div">
    *   <Heading>Heading 1</Heading>
    * </Section>
    * ```
    *
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Section tag="article">
    *   <Heading>Article Heading</Heading>
    * </Section>

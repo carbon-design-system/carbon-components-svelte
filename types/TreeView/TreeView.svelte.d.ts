@@ -73,7 +73,7 @@ type $Props<Node> = {
    */
   hideLabel?: boolean;
 
-  labelChildren?: () => void;
+  labelChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };
@@ -113,8 +113,8 @@ export default class TreeView<
 > {
   /**
    * Programmatically expand all nodes
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <TreeView bind:this={treeView} {nodes} />
    * <button on:click={() => treeView.expandAll()}>Expand All</button>
    * ```
@@ -123,8 +123,8 @@ export default class TreeView<
 
   /**
    * Programmatically collapse all nodes
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <TreeView bind:this={treeView} {nodes} />
    * <button on:click={() => treeView.collapseAll()}>Collapse All</button>
    * ```
@@ -135,8 +135,8 @@ export default class TreeView<
    * Programmatically expand a subset of nodes.
    * Expands all nodes if no argument is provided.
    * Filter function should return `true` for nodes to expand. If not provided, expands all nodes.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <TreeView bind:this={treeView} {nodes} />
    * <button on:click={() => treeView.expandNodes((node) => node.id.startsWith('folder-'))}>
    *   Expand Folders
@@ -149,8 +149,8 @@ export default class TreeView<
    * Programmatically collapse a subset of nodes.
    * Collapses all nodes if no argument is provided.
    * Filter function should return `true` for nodes to collapse. If not provided, collapses all nodes.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <TreeView bind:this={treeView} {nodes} />
    * <button on:click={() => treeView.collapseNodes((node) => node.id.startsWith('folder-'))}>
    *   Collapse Folders
@@ -163,8 +163,8 @@ export default class TreeView<
    * Programmatically show a node by `id`.
    * By default, the matching node will be expanded, selected, and focused.
    * Use the options parameter to customize this behavior.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <TreeView bind:this={treeView} {nodes} />
    * <button on:click={() => treeView.showNode('node-123')}>
    *   Show Node

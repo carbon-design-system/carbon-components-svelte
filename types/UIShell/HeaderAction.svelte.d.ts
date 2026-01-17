@@ -25,8 +25,8 @@ type $Props = {
   /**
    * Specify the text displayed next to the icon.
    * Alternatively, use the named slot "textChildren".
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <HeaderAction>
    *   <div slot="textChildren">Custom Text</div>
    * </HeaderAction>
@@ -68,7 +68,7 @@ type $Props = {
    */
   preventCloseOnClickOutside?: boolean;
 
-  textChildren?: () => void;
+  textChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

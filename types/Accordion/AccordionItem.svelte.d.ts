@@ -7,8 +7,8 @@ type $Props = {
   /**
    * Specify the title of the accordion item heading.
    * Alternatively, use the "title" slot.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <AccordionItem>
    *   <div slot="title">Custom Title</div>
    * </AccordionItem>

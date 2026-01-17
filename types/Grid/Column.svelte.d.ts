@@ -13,8 +13,8 @@ type $Props = {
   /**
    * Set to `true` to render a custom HTML element.
    * Props are destructured as `props` in the default slot.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Column let:props>
    *   <article {...props}>Content</article>
    * </Column>

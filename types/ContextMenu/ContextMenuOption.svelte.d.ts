@@ -32,8 +32,8 @@ type $Props = {
   /**
    * Specify the label text.
    * Alternatively, use the "labelChildren" slot.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <ContextMenuOption>
    *   <span slot="labelChildren">Custom Label</span>
    * </ContextMenuOption>
@@ -58,8 +58,8 @@ type $Props = {
   /**
    * Specify the shortcut text.
    * Alternatively, use the "shortcutText" slot.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <ContextMenuOption>
    *   <span slot="shortcutText">Ctrl+K</span>
    * </ContextMenuOption>
@@ -81,7 +81,7 @@ type $Props = {
    */
   ref?: null | HTMLLIElement;
 
-  labelChildren?: () => void;
+  labelChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

@@ -7,8 +7,8 @@ type $Props = {
   /**
    * Specify the switch text.
    * Alternatively, use the default slot.
-   * @example
-   * ```svelte
+   * @example ```svelte
+   *
    * <Switch>
    *   <span>Custom Text</span>
    * </Switch>
