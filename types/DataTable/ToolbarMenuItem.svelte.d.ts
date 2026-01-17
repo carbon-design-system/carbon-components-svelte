@@ -1,7 +1,9 @@
 import { SvelteComponentTyped } from "svelte";
 import type { OverflowMenuItemProps } from "../OverflowMenu/OverflowMenuItem.svelte";
 
-export type ToolbarMenuItemProps = OverflowMenuItemProps & {};
+export type ToolbarMenuItemProps = OverflowMenuItemProps & {
+  children?: (this: void) => void;
+};
 
 export default class ToolbarMenuItem extends SvelteComponentTyped<
   ToolbarMenuItemProps,

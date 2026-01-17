@@ -22,6 +22,8 @@ type $Props = {
    */
   disabled?: boolean;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

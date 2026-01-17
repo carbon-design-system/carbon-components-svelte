@@ -241,6 +241,8 @@ type $Props<Item> = {
 
   labelChildren?: (this: void) => void;
 
+  children?: (this: void, ...args: [{ item: Item; index: number }]) => void;
+
   [key: `data-${string}`]: any;
 };
 

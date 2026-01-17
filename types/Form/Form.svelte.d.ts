@@ -10,6 +10,8 @@ type $Props = {
    */
   ref?: null | HTMLFormElement;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

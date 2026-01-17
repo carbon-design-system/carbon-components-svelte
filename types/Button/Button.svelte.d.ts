@@ -128,6 +128,23 @@ type $Props = {
    */
   ref?: null | HTMLAnchorElement | HTMLButtonElement;
 
+  children?: (
+    this: void,
+    ...args: [
+      {
+        props: {
+          role: "button";
+          type?: string;
+          tabindex: any;
+          disabled: boolean;
+          href?: string;
+          class: string;
+          [key: string]: any;
+        };
+      },
+    ]
+  ) => void;
+
   [key: `data-${string}`]: any;
 };
 
