@@ -70,9 +70,9 @@ type $Props = {
    */
   ref?: null | HTMLButtonElement;
 
-  above?: () => void;
+  above?: (this: void) => void;
 
-  below?: () => void;
+  below?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

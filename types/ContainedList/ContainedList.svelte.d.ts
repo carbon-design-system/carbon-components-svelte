@@ -32,9 +32,9 @@ export type ContainedListProps = {
    */
   id?: string;
 
-  action?: () => void;
+  action?: (this: void) => void;
 
-  labelChildren?: () => void;
+  labelChildren?: (this: void) => void;
 };
 
 export default class ContainedList extends SvelteComponentTyped<

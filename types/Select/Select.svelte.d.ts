@@ -114,7 +114,7 @@ type $Props<Value> = {
    */
   required?: boolean;
 
-  labelChildren?: () => void;
+  labelChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

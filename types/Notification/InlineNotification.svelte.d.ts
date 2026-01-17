@@ -70,11 +70,11 @@ type $Props = {
    */
   open?: boolean;
 
-  actions?: () => void;
+  actions?: (this: void) => void;
 
-  subtitleChildren?: () => void;
+  subtitleChildren?: (this: void) => void;
 
-  titleChildren?: () => void;
+  titleChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };

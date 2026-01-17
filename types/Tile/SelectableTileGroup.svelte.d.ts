@@ -42,7 +42,7 @@ type $Props<T> = {
    */
   legendText?: string;
 
-  legendChildren?: () => void;
+  legendChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };
