@@ -13746,13 +13746,7 @@
           "element": "select"
         }
       ],
-      "typedefs": [
-        {
-          "type": "string | number",
-          "name": "SelectValue",
-          "ts": "type SelectValue = string | number;\n"
-        }
-      ],
+      "typedefs": [],
       "generics": [
         "Value",
         "Value extends string | number = string | number"

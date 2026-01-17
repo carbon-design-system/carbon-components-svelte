@@ -3360,12 +3360,6 @@ None.
 
 ## `Select`
 
-### Types
-
-```ts
-export type SelectValue = string | number;
-```
-
 ### Props
 
 | Prop name   | Required | Kind             | Reactive | Type                                       | Default value                                      | Description                                      |
