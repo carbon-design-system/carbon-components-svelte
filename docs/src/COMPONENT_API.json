@@ -17689,7 +17689,7 @@
           "name": "select",
           "kind": "let",
           "description": "Override the default select props.",
-          "type": "import(\"../Select/Select.svelte\").SelectProps & { themes?: CarbonTheme[]; }",
+          "type": "import(\"../Select/Select.svelte\").SelectProps<CarbonTheme> & { themes?: CarbonTheme[]; }",
           "value": "{\n  themes: themeKeys,\n  labelText: \"Themes\",\n  hideLabel: false,\n}",
           "isFunction": false,
           "isFunctionDeclaration": false,
