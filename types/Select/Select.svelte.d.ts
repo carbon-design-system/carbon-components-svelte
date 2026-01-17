@@ -1,8 +1,6 @@
 import { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export type SelectValue = string | number;
-
 export type SelectContext = {
   selectedValue: import("svelte/store").Writable<string | number | undefined>;
   /** Use the first `SelectItem` value as the
