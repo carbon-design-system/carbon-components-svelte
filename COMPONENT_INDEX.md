@@ -1,6 +1,6 @@
 # Component Index
 
-> 169 components exported from carbon-components-svelte@0.97.2.
+> 169 components exported from carbon-components-svelte@0.97.3.
 
 ## Components
 
