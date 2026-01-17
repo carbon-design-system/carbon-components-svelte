@@ -83,11 +83,11 @@ type $Props = {
    */
   open?: boolean;
 
-  captionChildren?: () => void;
+  captionChildren?: (this: void) => void;
 
-  subtitleChildren?: () => void;
+  subtitleChildren?: (this: void) => void;
 
-  titleChildren?: () => void;
+  titleChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };
