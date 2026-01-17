@@ -209,15 +209,39 @@ type $Props<Row> = {
     id: import("./TableHeader.svelte").TableHeaderTranslationId,
   ) => string;
 
-  cell?: () => void;
+  cell?: (
+    this: void,
+    ...args: [
+      {
+        row: Row;
+        cell: DataTableCell<Row>;
+        rowIndex: number;
+        cellIndex: number;
+        rowSelected: boolean;
+        rowExpanded: boolean;
+      },
+    ]
+  ) => void;
 
-  "cell-header"?: () => void;
+  "cell-header"?: (
+    this: void,
+    ...args: [{ header: DataTableNonEmptyHeader }]
+  ) => void;
 
-  descriptionChildren?: () => void;
+  descriptionChildren?: (
+    this: void,
+    ...args: [{ props: { class: "bx--data-table-header__description" } }]
+  ) => void;
 
-  "expanded-row"?: () => void;
+  "expanded-row"?: (
+    this: void,
+    ...args: [{ row: Row; rowSelected: boolean }]
+  ) => void;
 
-  titleChildren?: () => void;
+  titleChildren?: (
+    this: void,
+    ...args: [{ props: { class: "bx--data-table-header__title" } }]
+  ) => void;
 
   [key: `data-${string}`]: any;
 };

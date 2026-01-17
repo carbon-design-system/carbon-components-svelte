@@ -70,7 +70,7 @@ type $Props = {
    */
   ref?: null | HTMLInputElement;
 
-  labelChildren?: () => void;
+  labelChildren?: (this: void) => void;
 
   [key: `data-${string}`]: any;
 };
