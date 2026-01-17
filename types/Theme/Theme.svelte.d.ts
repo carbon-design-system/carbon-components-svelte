@@ -48,7 +48,7 @@ export type ThemeProps = {
    * Override the default select props.
    * @default { themes: themeKeys, labelText: "Themes", hideLabel: false, }
    */
-  select?: import("../Select/Select.svelte").SelectProps & {
+  select?: import("../Select/Select.svelte").SelectProps<CarbonTheme> & {
     themes?: CarbonTheme[];
   };
 
