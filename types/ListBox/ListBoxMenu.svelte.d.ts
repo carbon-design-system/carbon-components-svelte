@@ -16,6 +16,8 @@ type $Props = {
    */
   ref?: null | HTMLDivElement;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

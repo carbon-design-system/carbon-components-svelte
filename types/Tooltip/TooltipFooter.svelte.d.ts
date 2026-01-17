@@ -6,6 +6,8 @@ export type TooltipFooterProps = {
    * @default "a[href], button:not([disabled])"
    */
   selectorPrimaryFocus?: string;
+
+  children?: (this: void) => void;
 };
 
 export default class TooltipFooter extends SvelteComponentTyped<

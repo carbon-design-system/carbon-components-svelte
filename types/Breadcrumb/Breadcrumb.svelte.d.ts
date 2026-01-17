@@ -13,6 +13,8 @@ export type BreadcrumbProps = BreadcrumbSkeletonProps & {
    * @default false
    */
   skeleton?: boolean;
+
+  children?: (this: void) => void;
 };
 
 export default class Breadcrumb extends SvelteComponentTyped<

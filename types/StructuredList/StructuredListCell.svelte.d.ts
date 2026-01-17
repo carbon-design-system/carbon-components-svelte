@@ -16,6 +16,8 @@ type $Props = {
    */
   noWrap?: boolean;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

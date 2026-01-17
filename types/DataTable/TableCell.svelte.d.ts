@@ -4,6 +4,8 @@ import type { SvelteHTMLElements } from "svelte/elements";
 type $RestProps = SvelteHTMLElements["td"];
 
 type $Props = {
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 

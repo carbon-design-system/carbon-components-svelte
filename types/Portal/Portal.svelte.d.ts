@@ -10,6 +10,8 @@ type $Props = {
    */
   tag?: keyof HTMLElementTagNameMap;
 
+  children?: (this: void) => void;
+
   [key: `data-${string}`]: any;
 };
 
