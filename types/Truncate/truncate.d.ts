@@ -2,11 +2,11 @@ interface TruncateOptions {
   clamp?: "end" | "front";
 }
 
-export function TruncateAction(
+export function truncate(
   node: HTMLElement,
   options?: TruncateOptions,
 ): {
   update: (options?: TruncateOptions) => void;
 };
 
-export default TruncateAction;
+export default truncate;
