@@ -34,6 +34,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   import {
     isSideNavCollapsed,
+    isSideNavMobile,
     isSideNavRail,
     shouldRenderHamburgerMenu,
   } from "./navStore";
@@ -45,10 +46,28 @@
   $: dispatch(isOpen ? "open" : "close");
   $: $isSideNavCollapsed = !isOpen;
   $: $isSideNavRail = rail;
+  $: $isSideNavMobile =
+    winWidth !== undefined && winWidth < expansionBreakpoint;
+
+  // Lock body scroll when SideNav is open on mobile (below breakpoint).
+  // Only applies to non-fixed, non-rail variants.
+  $: if (typeof document !== "undefined") {
+    const shouldLockScroll = isOpen && !fixed && !rail && $isSideNavMobile;
+    document.body.classList.toggle(
+      "bx--body--with-modal-open",
+      shouldLockScroll,
+    );
+  }
 
   onMount(() => {
     shouldRenderHamburgerMenu.set(true);
-    return () => shouldRenderHamburgerMenu.set(false);
+    return () => {
+      shouldRenderHamburgerMenu.set(false);
+      isSideNavMobile.set(false);
+      if (typeof document !== "undefined") {
+        document.body.classList.remove("bx--body--with-modal-open");
+      }
+    };
   });
 </script>
 

@@ -5,3 +5,5 @@ export const shouldRenderHamburgerMenu = writable(false);
 export const isSideNavCollapsed = writable(false);
 
 export const isSideNavRail = writable(false);
+
+export const isSideNavMobile = writable(false);
