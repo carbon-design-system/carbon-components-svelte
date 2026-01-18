@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.98.6](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.5...v0.98.6) (2026-01-18)
+
+### Bug Fixes
+
+* **select:** remove unused `SelectValue` type ([123bf08](https://github.com/carbon-design-system/carbon-components-svelte/commit/123bf081eb823d08308defe32452113517f6c308))
+* **theme:** pass `CarbonTheme` to generic `SelectProps` ([ca62ac9](https://github.com/carbon-design-system/carbon-components-svelte/commit/ca62ac949a05e4c8c302ae21361cb376d007ff64))
+* **ui-shell:** `SideNav` overlays `UIShell` content ([8ed59f1](https://github.com/carbon-design-system/carbon-components-svelte/commit/8ed59f11276eb96c493dab4056d94481ae4a32ef)), closes [#2520](https://github.com/carbon-design-system/carbon-components-svelte/issues/2520) [#1463](https://github.com/carbon-design-system/carbon-components-svelte/issues/1463) [#544](https://github.com/carbon-design-system/carbon-components-svelte/issues/544)
+
 ### [0.98.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.4...v0.98.5) (2026-01-17)
 
 ### Bug Fixes
