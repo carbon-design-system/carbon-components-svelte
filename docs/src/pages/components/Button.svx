@@ -1,5 +1,5 @@
 <script>
-  import { InlineNotification, Button } from "carbon-components-svelte";
+  import { InlineNotification, Button, Stack } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
@@ -98,11 +98,11 @@ Set `hideTooltip` to `true` to visually hide the tooltip while maintaining acces
   </div>
 </InlineNotification>
 
-<div style="display: flex; gap: 8px;">
+<Stack orientation="horizontal" gap={2}>
   <Button hideTooltip iconDescription="Add item" icon={Add} />
   <Button hideTooltip iconDescription="Delete item" icon={TrashCan} kind="danger-tertiary" />
   <Button hideTooltip iconDescription="Login" icon={Login} kind="ghost" />
-</div>
+</Stack>
 
 ## Selected icon-only, ghost button
 

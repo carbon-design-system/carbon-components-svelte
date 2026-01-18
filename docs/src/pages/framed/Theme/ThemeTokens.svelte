@@ -4,6 +4,7 @@
     Checkbox,
     InlineNotification,
     Link,
+    Stack,
     Tag,
     TextInput,
     Theme,
@@ -43,7 +44,7 @@
   }}
 />
 
-<div style="display: flex; flex-direction: column; gap: 1rem;">
+<Stack gap={5}>
   <div>
     <Button>Primary button</Button>
     <Button kind="secondary">Secondary button</Button>
@@ -74,4 +75,4 @@
     hideCloseButton
     lowContrast
   />
-</div>
+</Stack>

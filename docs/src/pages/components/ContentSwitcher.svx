@@ -3,7 +3,7 @@ components: ["ContentSwitcher", "Switch"]
 ---
 
 <script>
-  import { ContentSwitcher, Switch } from "carbon-components-svelte";
+  import { ContentSwitcher, Switch, Stack } from "carbon-components-svelte";
   import Bullhorn from "carbon-icons-svelte/lib/Bullhorn.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
   import Preview from "../../components/Preview.svelte";
@@ -44,14 +44,14 @@ Override the default slot in `Switch` to customize how each option displays.
 
 <ContentSwitcher>
   <Switch>
-    <div style="display: flex; align-items: center;">
-      <Bullhorn style="margin-right: 0.5rem;" /> Latest news
-    </div>
+    <Stack orientation="horizontal" gap={3}>
+      <Bullhorn /> Latest news
+    </Stack>
   </Switch>
   <Switch>
-    <div style="display: flex; align-items: center;">
-      <Analytics style="margin-right: 0.5rem;" /> Trending
-    </div>
+    <Stack orientation="horizontal" gap={3}>
+      <Analytics /> Trending
+    </Stack>
   </Switch>
 </ContentSwitcher>
 
