@@ -128,6 +128,84 @@ describe("UIShell", () => {
       expect(hamburgerButton).toHaveAttribute("aria-label", "Close menu");
       expect(hamburgerButton).toHaveAttribute("title", "Close menu");
     });
+
+    describe("user interaction preservation", () => {
+      const setViewportWidth = (width: number) => {
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value: width,
+        });
+        window.dispatchEvent(new Event("resize"));
+      };
+
+      afterEach(() => {
+        setViewportWidth(1024);
+        document.body.classList.remove("bx--body--with-modal-open");
+      });
+
+      it("should preserve user-opened state after minor width changes on mobile", async () => {
+        setViewportWidth(500); // Mobile viewport
+
+        const { container, component } = render(UiShell, {
+          props: {
+            persistentHamburgerMenu: true,
+            isSideNavOpen: false,
+          },
+        });
+
+        // User clicks hamburger to open
+        const hamburgerButton = container.querySelector(
+          ".bx--header__menu-trigger",
+        );
+        assert(hamburgerButton);
+        await user.click(hamburgerButton);
+
+        expect(component.isSideNavOpen).toBe(true);
+
+        // Simulate minor width change (like mobile address bar hide/show)
+        setViewportWidth(520);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        // SideNav should still be open
+        expect(component.isSideNavOpen).toBe(true);
+      });
+
+      it("should auto-expand when crossing breakpoint to desktop", async () => {
+        setViewportWidth(500); // Start on mobile
+
+        const { component } = render(UiShell, {
+          props: { isSideNavOpen: false },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(component.isSideNavOpen).toBe(false);
+
+        // Cross to desktop
+        setViewportWidth(1200);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        // Should auto-expand on desktop
+        expect(component.isSideNavOpen).toBe(true);
+      });
+
+      it("should auto-collapse when crossing breakpoint to mobile", async () => {
+        setViewportWidth(1200); // Start on desktop
+
+        const { component } = render(UiShell, {
+          props: { isSideNavOpen: true },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        // Cross to mobile
+        setViewportWidth(500);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        // Should auto-collapse on mobile
+        expect(component.isSideNavOpen).toBe(false);
+      });
+    });
   });
 
   describe("HeaderNav", () => {
@@ -159,6 +237,90 @@ describe("UIShell", () => {
 
       const nav = container.querySelector(".bx--side-nav");
       expect(nav).toBeInTheDocument();
+    });
+
+    describe("body scroll lock", () => {
+      const setViewportWidth = (width: number) => {
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value: width,
+        });
+        window.dispatchEvent(new Event("resize"));
+      };
+
+      afterEach(() => {
+        // Reset viewport and cleanup body class
+        setViewportWidth(1024);
+        document.body.classList.remove("bx--body--with-modal-open");
+      });
+
+      it("should add scroll lock class when open on mobile viewport", async () => {
+        setViewportWidth(500); // Mobile viewport
+
+        const { component } = render(UiShell, {
+          props: { sideNavIsOpen: false },
+        });
+
+        expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+
+        component.sideNavIsOpen = true;
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(document.body).toHaveClass("bx--body--with-modal-open");
+      });
+
+      it("should remove scroll lock class when closed on mobile viewport", async () => {
+        setViewportWidth(500); // Mobile viewport
+
+        const { component } = render(UiShell, {
+          props: { sideNavIsOpen: true },
+        });
+
+        expect(document.body).toHaveClass("bx--body--with-modal-open");
+
+        component.sideNavIsOpen = false;
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+      });
+
+      it("should not add scroll lock class on desktop viewport", async () => {
+        setViewportWidth(1200); // Desktop viewport
+
+        const { component } = render(UiShell, {
+          props: { sideNavIsOpen: false },
+        });
+
+        component.sideNavIsOpen = true;
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+      });
+
+      it("should not add scroll lock class for fixed variant", async () => {
+        setViewportWidth(500); // Mobile viewport
+
+        render(UiShell, {
+          props: { sideNavIsOpen: true, sideNavFixed: true },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+      });
+
+      it("should not add scroll lock class for rail variant", async () => {
+        setViewportWidth(500); // Mobile viewport
+
+        render(UiShell, {
+          props: { sideNavIsOpen: true, sideNavRail: true },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+      });
     });
 
     it("should render fixed variant", () => {
@@ -290,6 +452,62 @@ describe("UIShell", () => {
       render(UiShell);
 
       expect(screen.getByText("Content goes here")).toBeInTheDocument();
+    });
+
+    describe("mobile margin behavior", () => {
+      const setViewportWidth = (width: number) => {
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value: width,
+        });
+        window.dispatchEvent(new Event("resize"));
+      };
+
+      afterEach(() => {
+        setViewportWidth(1024);
+      });
+
+      it("should unset left margin on mobile viewport", async () => {
+        setViewportWidth(500); // Mobile viewport
+
+        const { container } = render(UiShell, {
+          props: { sideNavIsOpen: true },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const content = container.querySelector(".bx--content");
+        expect(content).toHaveStyle({ marginLeft: "0px" });
+      });
+
+      it("should not force margin on desktop viewport when SideNav is open", async () => {
+        setViewportWidth(1200); // Desktop viewport
+
+        const { container } = render(UiShell, {
+          props: { sideNavIsOpen: true },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const content = container.querySelector(".bx--content");
+        // On desktop with SideNav open, margin should not be explicitly set to 0
+        // (CSS will handle the margin via .bx--side-nav ~ .bx--content)
+        expect(content).not.toHaveStyle({ marginLeft: "0px" });
+      });
+
+      it("should unset left margin when SideNav is collapsed on desktop", async () => {
+        setViewportWidth(1200); // Desktop viewport
+
+        const { container } = render(UiShell, {
+          props: { sideNavIsOpen: false },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const content = container.querySelector(".bx--content");
+        expect(content).toHaveStyle({ marginLeft: "0px" });
+      });
     });
   });
 });

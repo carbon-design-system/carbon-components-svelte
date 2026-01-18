@@ -84,12 +84,33 @@
   import HamburgerMenu from "./HamburgerMenu.svelte";
   import { shouldRenderHamburgerMenu } from "./navStore";
 
+  /** @type {undefined | number} */
   let winWidth = undefined;
+  let wasAboveBreakpoint = undefined;
+  let userExplicitlySet = false;
 
-  $: isSideNavOpen =
-    expandedByDefault &&
-    winWidth >= expansionBreakpoint &&
-    !persistentHamburgerMenu;
+  $: isAboveBreakpoint =
+    winWidth !== undefined && winWidth >= expansionBreakpoint;
+
+  // Only auto-set isSideNavOpen on initial mount or when crossing the breakpoint threshold.
+  // This prevents mobile browser scroll events (which cause minor width changes
+  // due to address bar hide/show) from unexpectedly closing the nav.
+  $: {
+    const shouldAutoExpand =
+      expandedByDefault && isAboveBreakpoint && !persistentHamburgerMenu;
+
+    if (wasAboveBreakpoint === undefined) {
+      // Initial mount: set based on current viewport
+      isSideNavOpen = shouldAutoExpand;
+    } else if (wasAboveBreakpoint !== isAboveBreakpoint) {
+      // Crossed breakpoint threshold - reset user flag and auto-expand if appropriate
+      userExplicitlySet = false;
+      isSideNavOpen = shouldAutoExpand;
+    }
+
+    wasAboveBreakpoint = isAboveBreakpoint;
+  }
+
   $: ariaLabel = companyName
     ? companyName
     : `${uiShellAriaLabel || $$props["aria-label"] || platformName}`;
@@ -104,6 +125,9 @@
   {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
     <HamburgerMenu
       bind:isOpen={isSideNavOpen}
+      on:click={() => {
+        userExplicitlySet = true;
+      }}
       {iconClose}
       {iconMenu}
       ariaLabel={hamburgerAriaLabel}
