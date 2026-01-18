@@ -12483,7 +12483,7 @@
         {
           "name": "name",
           "kind": "let",
-          "description": "Specify a name attribute for the radio button input.",
+          "description": "Specify a name attribute for the radio button input.\nWhen multiple standalone RadioButton components share the same `name`,\nthey form an implicit group and their `checked` state will be synchronized.",
           "type": "string",
           "value": "undefined",
           "isFunction": false,

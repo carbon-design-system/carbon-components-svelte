@@ -54,6 +54,8 @@ type $Props = {
 
   /**
    * Specify a name attribute for the radio button input.
+   * When multiple standalone RadioButton components share the same `name`,
+   * they form an implicit group and their `checked` state will be synchronized.
    * @default undefined
    */
   name?: string;
