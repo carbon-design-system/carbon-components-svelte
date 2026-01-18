@@ -11,9 +11,9 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
 
 ## Default
 
-`RadioButton` is intended to be used within a `RadioButtonGroup`. See [Standalone usage](#standalone-usage) for individual usage.
-
 Create a group of radio buttons with a shared name and legend.
+
+See [Standalone usage](#standalone-usage) for individual usage or [Implicit grouping](#implicit-grouping) to group multiple standalone radio buttons by name without using a `RadioButtonGroup`.
 
 <RadioButtonGroup legendText="Storage tier (disk)" name="plan" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -26,6 +26,12 @@ Create a group of radio buttons with a shared name and legend.
 Use `RadioButton` individually with a bindable `checked` prop for simple use cases.
 
 <FileSource src="/framed/RadioButton/RadioButtonStandalone" />
+
+## Implicit grouping
+
+Multiple standalone `RadioButton` components sharing the same `name` attribute automatically form a group and synchronize their checked state. This allows you to create radio button groups without using `RadioButtonGroup`.
+
+<FileSource src="/framed/RadioButton/RadioButtonImplicitGroup" />
 
 ## Hidden legend
 
