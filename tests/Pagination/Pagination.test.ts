@@ -8,6 +8,17 @@ describe("Pagination", () => {
     vi.clearAllMocks();
   });
 
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2528
+  it("does not fire update event on initial render", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: { totalItems: 100, page: 1, pageSize: 10 },
+    });
+
+    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+  });
+
   it("should render with default props", () => {
     render(Pagination);
 
