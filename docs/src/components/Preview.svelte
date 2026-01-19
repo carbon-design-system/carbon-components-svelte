@@ -57,7 +57,7 @@
   }
 
   .code-override {
-    border: 1px solid #262626;
+    border: 1px solid var(--cds-ui-03);
   }
 
   .preview-viewer {
