@@ -73,13 +73,26 @@
     hideLabel: false,
   };
 
-  import { createEventDispatcher } from "svelte";
+  import { afterUpdate, createEventDispatcher } from "svelte";
   import LocalStorage from "../LocalStorage/LocalStorage.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
   import Toggle from "../Toggle/Toggle.svelte";
 
   const dispatch = createEventDispatcher();
+
+  let prevTheme = theme;
+  let isInitialRender = true;
+
+  afterUpdate(() => {
+    if (prevTheme !== theme) {
+      prevTheme = theme;
+      if (!isInitialRender) {
+        dispatch("update", { theme });
+      }
+    }
+    isInitialRender = false;
+  });
 
   $: if (typeof window !== "undefined") {
     for (const [token, value] of Object.entries(tokens)) {
@@ -88,7 +101,6 @@
 
     if (theme in themes) {
       document.documentElement.setAttribute("theme", theme);
-      dispatch("update", { theme });
     } else {
       console.warn(
         `[Theme.svelte] invalid theme "${theme}". Value must be one of: ${JSON.stringify(
