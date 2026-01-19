@@ -61,6 +61,40 @@ describe("MultiSelect", () => {
   });
 
   describe("selection behavior", () => {
+    // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
+    it("does not fire select event on initial render", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items,
+          selectedIds: ["0"],
+        },
+      });
+
+      expect(consoleLog).not.toHaveBeenCalled();
+
+      await openMenu();
+      await toggleOption("Email");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: ["0", "1"],
+        selected: [
+          { id: "0", text: "Slack", checked: true },
+          { id: "1", text: "Email", checked: true },
+        ],
+        unselected: [{ id: "2", text: "Fax", checked: false }],
+      });
+    });
+
+    // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
+    it("does not fire select event on initial render without selectedIds", () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: { items },
+      });
+
+      expect(consoleLog).not.toHaveBeenCalled();
+    });
+
     it("handles item selection", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(MultiSelect, {
