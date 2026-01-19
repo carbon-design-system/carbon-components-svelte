@@ -239,6 +239,30 @@ describe("UIShell", () => {
       expect(nav).toBeInTheDocument();
     });
 
+    // Regression test for initial event dispatch in Svelte 5
+    // https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
+    it("does not fire open/close event on initial render", () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(UiShell, {
+        props: { sideNavIsOpen: false },
+      });
+
+      expect(consoleLog).not.toHaveBeenCalledWith("sidenav-open");
+      expect(consoleLog).not.toHaveBeenCalledWith("sidenav-close");
+    });
+
+    // Regression test for initial event dispatch in Svelte 5
+    // https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
+    it("does not fire open/close event on initial render when isOpen is true", () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(UiShell, {
+        props: { sideNavIsOpen: true },
+      });
+
+      expect(consoleLog).not.toHaveBeenCalledWith("sidenav-open");
+      expect(consoleLog).not.toHaveBeenCalledWith("sidenav-close");
+    });
+
     describe("body scroll lock", () => {
       const setViewportWidth = (width: number) => {
         Object.defineProperty(window, "innerWidth", {

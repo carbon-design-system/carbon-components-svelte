@@ -7,6 +7,24 @@ describe("HeaderSearch", () => {
     vi.clearAllMocks();
   });
 
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
+  it("does not fire active/inactive event on initial render", () => {
+    render(HeaderSearchTest);
+
+    expect(screen.getByTestId("active-event")).toHaveTextContent("false");
+    expect(screen.getByTestId("inactive-event")).toHaveTextContent("false");
+  });
+
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
+  it("does not fire active/inactive event on initial render when active is true", () => {
+    render(HeaderSearchTest, { props: { active: true } });
+
+    expect(screen.getByTestId("active-event")).toHaveTextContent("false");
+    expect(screen.getByTestId("inactive-event")).toHaveTextContent("false");
+  });
+
   describe("Rendering", () => {
     it("should render with default props", () => {
       render(HeaderSearchTest);
