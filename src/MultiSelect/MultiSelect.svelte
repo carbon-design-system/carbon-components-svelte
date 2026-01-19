@@ -194,6 +194,7 @@
 
   let highlightedIndex = -1;
   let prevChecked = [];
+  let isInitialRender = true;
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement }) => void}
@@ -245,12 +246,15 @@
     if (checked.length !== prevChecked.length) {
       prevChecked = checked;
       selectedIds = checked.map(({ id }) => id);
-      dispatch("select", {
-        selectedIds,
-        selected: checked,
-        unselected: unchecked,
-      });
+      if (!isInitialRender) {
+        dispatch("select", {
+          selectedIds,
+          selected: checked,
+          unselected: unchecked,
+        });
+      }
     }
+    isInitialRender = false;
 
     if (!open) {
       highlightedIndex = -1;
