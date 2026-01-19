@@ -119,6 +119,7 @@
   /** @type {"fade-in" | "fade-out"} */
   let animation = undefined;
   let timeout = undefined;
+  let prevExpanded = expanded;
 
   function setShowMoreLess() {
     const { height } = ref.getBoundingClientRect();
@@ -140,7 +141,10 @@
     }
   }
 
-  $: if (type === "multi") dispatch(expanded ? "expand" : "collapse");
+  $: if (type === "multi" && prevExpanded !== expanded) {
+    dispatch(expanded ? "expand" : "collapse");
+    prevExpanded = expanded;
+  }
 
   onMount(() => {
     return () => clearTimeout(timeout);
