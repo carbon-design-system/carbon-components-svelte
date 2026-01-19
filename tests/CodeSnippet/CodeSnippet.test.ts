@@ -4,6 +4,7 @@ import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
 import CodeSnippetExpandable from "./CodeSnippetExpandable.test.svelte";
 import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte";
+import CodeSnippetInitialEvent from "./CodeSnippetInitialEvent.test.svelte";
 import CodeSnippetInline from "./CodeSnippetInline.test.svelte";
 import CodeSnippetMultiline from "./CodeSnippetMultiline.test.svelte";
 import CodeSnippetWithCustomCopyText from "./CodeSnippetWithCustomCopyText.test.svelte";
@@ -11,6 +12,24 @@ import CodeSnippetWithHideShowMore from "./CodeSnippetWithHideShowMore.test.svel
 import CodeSnippetWithWrapText from "./CodeSnippetWithWrapText.test.svelte";
 
 describe("CodeSnippet", () => {
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2527
+  test("does not fire expand/collapse event on initial render", () => {
+    render(CodeSnippetInitialEvent);
+
+    expect(screen.getByTestId("expand-event")).toHaveTextContent("false");
+    expect(screen.getByTestId("collapse-event")).toHaveTextContent("false");
+  });
+
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2527
+  test("does not fire expand/collapse event on initial render when expanded is true", () => {
+    render(CodeSnippetInitialEvent, { props: { expanded: true } });
+
+    expect(screen.getByTestId("expand-event")).toHaveTextContent("false");
+    expect(screen.getByTestId("collapse-event")).toHaveTextContent("false");
+  });
+
   test("should render inline variant", () => {
     const { container } = render(CodeSnippetInline);
     expect(container.querySelector(".bx--snippet--inline")).toBeInTheDocument();
