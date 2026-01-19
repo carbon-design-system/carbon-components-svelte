@@ -1,10 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import carbonPreprocess from "carbon-preprocess-svelte";
+import { OptimizeCssPlugin, optimizeImports } from "carbon-preprocess-svelte";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-
-const { OptimizeCssPlugin, optimizeImports } = carbonPreprocess;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
