@@ -60,6 +60,22 @@ describe("Theme", () => {
     localStorageMock = {};
   });
 
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2530
+  it("does not fire update event on initial render", () => {
+    render(Theme);
+
+    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+  });
+
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2530
+  it("does not fire update event on initial render with custom theme", () => {
+    render(Theme, { props: { theme: "g100" } });
+
+    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+  });
+
   it("should set default theme to white", () => {
     render(Theme);
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "white");
