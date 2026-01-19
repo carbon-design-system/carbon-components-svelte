@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.98.7](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.6...v0.98.7) (2026-01-19)
+
+### Bug Fixes
+
+* **multi-select:** prevent dispatching initial "select" event in Svelte 5 ([e4c7797](https://github.com/carbon-design-system/carbon-components-svelte/commit/e4c7797d7ea860f600fb82d3718eeab234cf8c95)), closes [#2525](https://github.com/carbon-design-system/carbon-components-svelte/issues/2525)
+
 ## [0.98.6](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.5...v0.98.6) (2026-01-18)
 
 ### Bug Fixes
