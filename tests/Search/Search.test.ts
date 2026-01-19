@@ -3,6 +3,7 @@ import { user } from "../setup-tests";
 import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";
+import SearchInitialEvent from "./SearchInitialEvent.test.svelte";
 import SearchSkeleton from "./SearchSkeleton.test.svelte";
 
 describe("Search", () => {
@@ -10,6 +11,24 @@ describe("Search", () => {
     screen.getByRole("searchbox", { name: label });
   const getClearButton = (label = "Clear search input") =>
     screen.getByRole("button", { name: label });
+
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2529
+  it("does not fire expand/collapse event on initial render", () => {
+    render(SearchInitialEvent);
+
+    expect(screen.getByTestId("expand-event")).toHaveTextContent("false");
+    expect(screen.getByTestId("collapse-event")).toHaveTextContent("false");
+  });
+
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2529
+  it("does not fire expand/collapse event on initial render when expanded is true", () => {
+    render(SearchInitialEvent, { props: { expanded: true } });
+
+    expect(screen.getByTestId("expand-event")).toHaveTextContent("false");
+    expect(screen.getByTestId("collapse-event")).toHaveTextContent("false");
+  });
 
   it("renders and functions correctly", async () => {
     const consoleLog = vi.spyOn(console, "log");
