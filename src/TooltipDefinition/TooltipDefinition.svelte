@@ -38,7 +38,14 @@
 
   const show = () => (open = true);
 
-  $: dispatch(open ? "open" : "close");
+  let isInitialRender = true;
+
+  $: {
+    if (!isInitialRender) {
+      dispatch(open ? "open" : "close");
+    }
+    isInitialRender = false;
+  }
 </script>
 
 <svelte:window
