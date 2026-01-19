@@ -105,6 +105,9 @@
 
   const dispatch = createEventDispatcher();
 
+  let prevPage = page;
+  let prevPageSize = pageSize;
+
   /**
    * Returns a subset of page numbers centered around the current page to prevent
    * performance issues with large datasets. Creates a capped window of pages
@@ -122,7 +125,11 @@
 
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: if (page > totalPages) page = totalPages;
-  $: dispatch("update", { pageSize, page });
+  $: if (prevPage !== page || prevPageSize !== pageSize) {
+    dispatch("update", { pageSize, page });
+    prevPage = page;
+    prevPageSize = pageSize;
+  }
   $: selectItems = getWindowedPages(page, totalPages, pageWindow);
   $: backButtonDisabled = disabled || page === 1;
   $: forwardButtonDisabled = disabled || page === totalPages;
