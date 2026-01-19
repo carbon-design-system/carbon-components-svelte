@@ -73,9 +73,13 @@
   const dispatch = createEventDispatcher();
 
   let searchRef = null;
+  let prevExpanded = expanded;
 
   $: if (expanded && ref) ref.focus();
-  $: dispatch(expanded ? "expand" : "collapse");
+  $: if (expanded !== prevExpanded) {
+    dispatch(expanded ? "expand" : "collapse");
+    prevExpanded = expanded;
+  }
 </script>
 
 <!-- svelte-ignore a11y-autofocus -->
