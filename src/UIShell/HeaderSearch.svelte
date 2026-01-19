@@ -42,6 +42,7 @@
   const dispatch = createEventDispatcher();
 
   let refSearch = null;
+  let prevActive;
 
   function reset() {
     active = false;
@@ -56,7 +57,12 @@
 
   $: if (active && ref) ref.focus();
   $: if (!active && ref) ref.blur();
-  $: dispatch(active ? "active" : "inactive");
+  $: {
+    if (prevActive !== undefined) {
+      dispatch(active ? "active" : "inactive");
+    }
+    prevActive = active;
+  }
   $: selectedResult = results[selectedResultIndex];
   $: selectedId = selectedResult
     ? `search-menuitem-${selectedResultIndex}`
