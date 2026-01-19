@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.98.8](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.7...v0.98.8) (2026-01-19)
+
+### Bug Fixes
+
+* **code-snippet:** prevent dispatching initial "collapse" event in Svelte 5 ([81758aa](https://github.com/carbon-design-system/carbon-components-svelte/commit/81758aaedc575fade31dccaec942e1b858f51a47)), closes [#2527](https://github.com/carbon-design-system/carbon-components-svelte/issues/2527)
+* **header-search:** prevent dispatching initial "inactive" event in Svelte 5 ([0b63452](https://github.com/carbon-design-system/carbon-components-svelte/commit/0b63452a8e965d4a8d9e4d57ea9c925d0e030141)), closes [#2532](https://github.com/carbon-design-system/carbon-components-svelte/issues/2532)
+* **pagination:** prevent dispatching initial "update" event in Svelte 5 ([ab72262](https://github.com/carbon-design-system/carbon-components-svelte/commit/ab72262494aa78d6693ecb096b9f519aee9c2a25)), closes [#2528](https://github.com/carbon-design-system/carbon-components-svelte/issues/2528)
+* **search:** prevent dispatching initial "collapse" event in Svelte 5 ([7a2ebbe](https://github.com/carbon-design-system/carbon-components-svelte/commit/7a2ebbed6d5627bc58e4af2017a2743977c58445)), closes [#2529](https://github.com/carbon-design-system/carbon-components-svelte/issues/2529)
+* **side-nav:** prevent dispatching initial "close" event in Svelte 5 ([3f2a6fe](https://github.com/carbon-design-system/carbon-components-svelte/commit/3f2a6fee73186c66f2304c25f1f4d0671337c81a)), closes [#2533](https://github.com/carbon-design-system/carbon-components-svelte/issues/2533)
+* **theme:** prevent dispatching initial "update" event in Svelte 5 ([7f3924b](https://github.com/carbon-design-system/carbon-components-svelte/commit/7f3924bd193cda29a55dd1d3e6fd56628e8d843b)), closes [#2530](https://github.com/carbon-design-system/carbon-components-svelte/issues/2530)
+* **tooltip-definition:** prevent dispatching initial "close" event in Svelte 5 ([edf69cf](https://github.com/carbon-design-system/carbon-components-svelte/commit/edf69cfd0a4464b437998bc13318c4bbc37aed54)), closes [#2531](https://github.com/carbon-design-system/carbon-components-svelte/issues/2531)
+
 ### [0.98.7](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.6...v0.98.7) (2026-01-19)
 
 ### Bug Fixes
