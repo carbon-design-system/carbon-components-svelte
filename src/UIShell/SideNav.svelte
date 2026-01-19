@@ -42,8 +42,12 @@
   const dispatch = createEventDispatcher();
 
   let winWidth = undefined;
+  let prevIsOpen = isOpen;
 
-  $: dispatch(isOpen ? "open" : "close");
+  $: if (prevIsOpen !== isOpen) {
+    dispatch(isOpen ? "open" : "close");
+    prevIsOpen = isOpen;
+  }
   $: $isSideNavCollapsed = !isOpen;
   $: $isSideNavRail = rail;
   $: $isSideNavMobile =
