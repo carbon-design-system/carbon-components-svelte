@@ -13,6 +13,24 @@ describe("TooltipDefinition", () => {
     vi.restoreAllMocks();
   });
 
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2531
+  it("does not fire open/close event on initial render", () => {
+    render(TooltipDefinition);
+
+    expect(consoleLog).not.toHaveBeenCalledWith("open");
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+  });
+
+  // Regression test for initial event dispatch in Svelte 5
+  // https://github.com/carbon-design-system/carbon-components-svelte/issues/2531
+  it("does not fire open/close event on initial render when open is true", () => {
+    render(TooltipDefinition, { props: { open: true } });
+
+    expect(consoleLog).not.toHaveBeenCalledWith("open");
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+  });
+
   it("should render with default props", () => {
     render(TooltipDefinition);
 
