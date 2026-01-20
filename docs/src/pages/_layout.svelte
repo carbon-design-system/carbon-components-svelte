@@ -145,7 +145,7 @@
     </svelte:fragment>
 
     <span slot="platform" class="platform-name" class:hidden={active}>
-      Carbon Components Svelte &nbsp;<code class="code-01"
+      Carbon<span class="platform-name-full">&nbsp;Components</span>&nbsp;Svelte &nbsp;<code class="code-01"
         >v{process.env.VERSION || ""}</code
       >
     </span>
@@ -266,6 +266,10 @@
 
   @media (max-width: 580px) {
     .platform-name code {
+      display: none;
+    }
+    
+    .platform-name-full {
       display: none;
     }
   }
