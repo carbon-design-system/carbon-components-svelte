@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { isSvelte5, user } from "../setup-tests";
 import NumberInput from "./NumberInput.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
@@ -519,6 +520,57 @@ describe("NumberInput", () => {
     await user.clear(input);
     await user.type(input, "3.");
     expect(input.value).toBe("3.");
+  });
+
+  it("should allow deleting all characters when allowDecimal is true", async () => {
+    // Regression test: when allowDecimal is true, the user should be able to
+    // delete all characters from the input. A bug existed where the reactive
+    // statement that syncs inputValue from value would reset the input because
+    // bind:value updates inputValue before onInput updates value.
+    render(NumberInput, {
+      props: { allowDecimal: true, allowEmpty: true, value: 1 },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect.assert(input instanceof HTMLInputElement);
+    expect(input.value).toBe("1");
+
+    await user.clear(input);
+    expect(input.value).toBe("");
+
+    // Value should be null when cleared
+    if (isSvelte5) {
+      expect(screen.getByTestId("value").textContent).toBe("");
+    } else {
+      expect(screen.getByTestId("value").textContent).toBe("null");
+    }
+  });
+
+  it("should sync input when value prop changes programmatically in allowDecimal mode", async () => {
+    // When value is changed from the parent (e.g., via bind:value), the input should update.
+    // This tests the reactive statement that syncs inputValue from value.
+    const { rerender } = render(NumberInput, {
+      props: { allowDecimal: true, allowEmpty: true, value: 5 },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect.assert(input instanceof HTMLInputElement);
+    expect(input.value).toBe("5");
+
+    // Simulate parent changing value programmatically
+    rerender({ allowDecimal: true, allowEmpty: true, value: 10 });
+    await tick();
+    expect(input.value).toBe("10");
+
+    // Set to null
+    rerender({ allowDecimal: true, allowEmpty: true, value: null });
+    await tick();
+    expect(input.value).toBe("");
+
+    // Set back to a value
+    rerender({ allowDecimal: true, allowEmpty: true, value: 2.5 });
+    await tick();
+    expect(input.value).toBe("2.5");
   });
 
   it("should use type=text with inputmode=decimal when allowDecimal is true", () => {

@@ -288,7 +288,7 @@
       {#if allowDecimal}
         <input
           bind:this={ref}
-          bind:value={inputValue}
+          value={inputValue}
           type="text"
           inputmode="decimal"
           aria-describedby={errorId}
