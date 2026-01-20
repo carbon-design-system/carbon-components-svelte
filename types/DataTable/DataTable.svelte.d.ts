@@ -224,7 +224,7 @@ type $Props<Row> = {
     ]
   ) => void;
 
-  "cell-header"?: (
+  cellHeader?: (
     this: void,
     ...args: [{ header: DataTableNonEmptyHeader }]
   ) => void;
@@ -297,7 +297,7 @@ export default class DataTable<
       rowSelected: boolean;
       rowExpanded: boolean;
     };
-    "cell-header": { header: DataTableNonEmptyHeader };
+    cellHeader: { header: DataTableNonEmptyHeader };
     descriptionChildren: {
       props: { class: "bx--data-table-header__description" };
     };

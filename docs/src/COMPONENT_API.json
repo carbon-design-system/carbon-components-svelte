@@ -3597,7 +3597,7 @@
           "slot_props": "{\n  row: Row;\n  cell: DataTableCell<Row>;\n  rowIndex: number;\n  cellIndex: number;\n  rowSelected: boolean;\n  rowExpanded: boolean;\n}"
         },
         {
-          "name": "cell-header",
+          "name": "cellHeader",
           "default": false,
           "fallback": "{header.value}",
           "slot_props": "{\n  header: DataTableNonEmptyHeader;\n}"
