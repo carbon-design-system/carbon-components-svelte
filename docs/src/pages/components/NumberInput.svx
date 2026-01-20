@@ -43,7 +43,7 @@ Control the increment/decrement step size using the `step` prop. This example us
 
 Preserve decimal input formatting like "1.0", "2.00", or "3." by setting `allowDecimal` to `true`. This uses `type="text"` with `inputmode="decimal"` instead of `type="number"`, allowing trailing zeros and decimal points to be preserved while typing. This is useful for financial data or precise decimal entry.
 
-<NumberInput allowDecimal value={1.0} helperText="Trailing zeros preserved" step={0.01} labelText="Amount" />
+<FileSource src="/framed/NumberInput/NumberInputDecimal" />
 
 ## Hidden label
 
