@@ -78,7 +78,7 @@ Create a basic table by providing `headers` and `rows` data. Match the `key` in 
 
 ## Slotted cells
 
-Use the `"cell"` slot to customize cell content. Access row and cell data through `let:row` and `let:cell` directives. Use `"cell-header"` slot for header cells.
+Use the `"cell"` slot to customize cell content. Access row and cell data through `let:row` and `let:cell` directives. Use `"cellHeader"` slot for header cells.
 
 <DataTable
   headers="{[
@@ -132,7 +132,7 @@ Use the `"cell"` slot to customize cell content. Access row and cell data throug
     },
   ]}"
 >
- <svelte:fragment slot="cell-header" let:header>
+ <svelte:fragment slot="cellHeader" let:header>
     {#if header.key === 'port'}
       {header.value} (network)
     {:else}

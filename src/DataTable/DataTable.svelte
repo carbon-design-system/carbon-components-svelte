@@ -28,7 +28,7 @@
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: DataTableRow) => DataTableValue} [display]
    * @slot {{ row: Row; rowSelected: boolean; }} expanded-row
-   * @slot {{ header: DataTableNonEmptyHeader; }} cell-header
+   * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
    * @event click
    * @type {object}
@@ -482,7 +482,7 @@
                 }
               }}
             >
-              <slot name="cell-header" {header}>{header.value}</slot>
+              <slot name="cellHeader" {header}>{header.value}</slot>
             </TableHeader>
           {/if}
         {/each}
