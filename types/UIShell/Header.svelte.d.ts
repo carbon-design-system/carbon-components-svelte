@@ -102,7 +102,7 @@ type $Props = {
 
   platform?: (this: void) => void;
 
-  "skip-to-content"?: (this: void) => void;
+  skipToContent?: (this: void) => void;
 
   children?: (this: void) => void;
 
@@ -117,7 +117,7 @@ export default class Header extends SvelteComponentTyped<
   {
     company: Record<string, never>;
     platform: Record<string, never>;
-    "skip-to-content": Record<string, never>;
+    skipToContent: Record<string, never>;
     default: Record<string, never>;
   }
 > {}

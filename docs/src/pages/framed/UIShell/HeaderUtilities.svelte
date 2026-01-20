@@ -22,7 +22,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
-  <svelte:fragment slot="skip-to-content">
+  <svelte:fragment slot="skipToContent">
     <SkipToContent />
   </svelte:fragment>
   <HeaderUtilities>

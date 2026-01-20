@@ -1664,12 +1664,12 @@ None.
 
 ### Slots
 
-| Slot name       | Default | Props                               | Fallback                         |
-| :-------------- | :------ | :---------------------------------- | :------------------------------- |
-| company         | No      | <code>Record<string, never> </code> | <code>{companyName}&nbsp;</code> |
-| platform        | No      | <code>Record<string, never> </code> | <code>{platformName}</code>      |
-| skip-to-content | No      | <code>Record<string, never> </code> | --                               |
-| --              | Yes     | <code>Record<string, never> </code> | --                               |
+| Slot name     | Default | Props                               | Fallback                         |
+| :------------ | :------ | :---------------------------------- | :------------------------------- |
+| company       | No      | <code>Record<string, never> </code> | <code>{companyName}&nbsp;</code> |
+| platform      | No      | <code>Record<string, never> </code> | <code>{platformName}</code>      |
+| skipToContent | No      | <code>Record<string, never> </code> | --                               |
+| --            | Yes     | <code>Record<string, never> </code> | --                               |
 
 ### Events
 

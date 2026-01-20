@@ -25,7 +25,7 @@
   platformName="Carbon Svelte"
   bind:isSideNavOpen
 >
-  <div slot="skip-to-content">
+  <div slot="skipToContent">
     <SkipToContent />
   </div>
 
