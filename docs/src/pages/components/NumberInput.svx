@@ -45,6 +45,12 @@ Preserve decimal input formatting like "1.0", "2.00", or "3." by setting `allowD
 
 <NumberInput allowDecimal value={1.0} helperText="Trailing zeros preserved" step={0.01} labelText="Amount" />
 
+## Localized decimal input
+
+When using the `lang` attribute with locales that use comma as the decimal separator (e.g., German, French, Spanish), set `allowDecimal` to `true` to avoid browser validation issues. Without `allowDecimal`, pressing the period key (`.`) in a `type="number"` input may clear the field due to native browser behavior.
+
+<FileSource src="/framed/NumberInput/NumberInputLocalized" />
+
 ## Hidden label
 
 Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
