@@ -863,4 +863,29 @@ describe("NumberInput", () => {
       container.querySelector(".bx--number--readonly"),
     ).toBeInTheDocument();
   });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2547
+  it("should support lang attribute with allowDecimal for localized decimal input", () => {
+    render(NumberInput, {
+      props: { allowDecimal: true, lang: "de", value: 1.5 },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("lang", "de");
+    expect(input).toHaveAttribute("type", "text");
+    expect(input).toHaveAttribute("inputmode", "decimal");
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2547
+  it("should allow typing with allowDecimal and lang attribute without clearing input", async () => {
+    render(NumberInput, {
+      props: { allowDecimal: true, lang: "de", value: null },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect.assert(input instanceof HTMLInputElement);
+    // With allowDecimal, typing a period should not clear the input (unlike type="number" with lang="de")
+    await user.type(input, "1.5");
+    expect(input.value).toBe("1.5");
+  });
 });
