@@ -6504,7 +6504,7 @@
           "slot_props": "Record<string, never>"
         },
         {
-          "name": "skip-to-content",
+          "name": "skipToContent",
           "default": false,
           "slot_props": "Record<string, never>"
         },
