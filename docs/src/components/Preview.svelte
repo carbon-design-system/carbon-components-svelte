@@ -17,6 +17,7 @@
   {#if framed}
     <div class="framed-header">
       <div
+        class="iframe-label"
         style="margin-left: var(--cds-spacing-05); color: var(--cds-text-02)"
       >
         Content loaded in an iframe
@@ -84,6 +85,12 @@
   .framed-header {
     display: flex;
     align-items: center;
+  }
+
+  @media (max-width: 580px) {
+    .iframe-label {
+      display: none;
+    }
   }
 
   iframe {
