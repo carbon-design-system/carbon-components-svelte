@@ -4991,6 +4991,69 @@
       "contexts": []
     },
     {
+      "moduleName": "Filename",
+      "filePath": "src/FileUploader/Filename.svelte",
+      "props": [
+        {
+          "name": "status",
+          "kind": "let",
+          "description": "Specify the file name status.",
+          "type": "\"uploading\" | \"edit\" | \"complete\"",
+          "value": "\"uploading\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "iconDescription",
+          "kind": "let",
+          "description": "Specify the ARIA label used for the status icons",
+          "type": "string",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "invalid",
+          "kind": "let",
+          "description": "Set to `true` to indicate an invalid state",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [],
+      "events": [
+        {
+          "type": "forwarded",
+          "name": "click",
+          "element": "button"
+        },
+        {
+          "type": "forwarded",
+          "name": "keydown",
+          "element": "button"
+        }
+      ],
+      "typedefs": [],
+      "generics": null,
+      "rest_props": {
+        "type": "Element",
+        "name": "div | button | svg"
+      },
+      "contexts": []
+    },
+    {
       "moduleName": "FileUploader",
       "filePath": "src/FileUploader/FileUploader.svelte",
       "props": [
@@ -5814,69 +5877,6 @@
       "rest_props": {
         "type": "Element",
         "name": "div"
-      },
-      "contexts": []
-    },
-    {
-      "moduleName": "Filename",
-      "filePath": "src/FileUploader/Filename.svelte",
-      "props": [
-        {
-          "name": "status",
-          "kind": "let",
-          "description": "Specify the file name status.",
-          "type": "\"uploading\" | \"edit\" | \"complete\"",
-          "value": "\"uploading\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "iconDescription",
-          "kind": "let",
-          "description": "Specify the ARIA label used for the status icons",
-          "type": "string",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "invalid",
-          "kind": "let",
-          "description": "Set to `true` to indicate an invalid state",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        }
-      ],
-      "moduleExports": [],
-      "slots": [],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "button"
-        },
-        {
-          "type": "forwarded",
-          "name": "keydown",
-          "element": "button"
-        }
-      ],
-      "typedefs": [],
-      "generics": null,
-      "rest_props": {
-        "type": "Element",
-        "name": "div | button | svg"
       },
       "contexts": []
     },
@@ -13777,185 +13777,6 @@
       ]
     },
     {
-      "moduleName": "SelectItem",
-      "filePath": "src/Select/SelectItem.svelte",
-      "props": [
-        {
-          "name": "value",
-          "kind": "let",
-          "description": "Specify the option value.",
-          "type": "string | number",
-          "value": "\"\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "text",
-          "kind": "let",
-          "description": "Specify the option text.\nIf not specified, the value will be used as the text.",
-          "type": "string",
-          "value": "undefined",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "hidden",
-          "kind": "let",
-          "description": "Set to `true` to hide the option",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "disabled",
-          "kind": "let",
-          "description": "Set to `true` to disable the option",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "class",
-          "kind": "let",
-          "description": "Specify the class of the `option` element.",
-          "type": "string",
-          "value": "undefined",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "style",
-          "kind": "let",
-          "description": "Specify the style of the `option` element.",
-          "type": "string",
-          "value": "undefined",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        }
-      ],
-      "moduleExports": [],
-      "slots": [],
-      "events": [],
-      "typedefs": [],
-      "generics": null,
-      "contexts": []
-    },
-    {
-      "moduleName": "SelectItemGroup",
-      "filePath": "src/Select/SelectItemGroup.svelte",
-      "props": [
-        {
-          "name": "disabled",
-          "kind": "let",
-          "description": "Set to `true` to disable the optgroup element",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        },
-        {
-          "name": "label",
-          "kind": "let",
-          "description": "Specify the label attribute of the optgroup element",
-          "type": "string",
-          "value": "\"Provide label\"",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        }
-      ],
-      "moduleExports": [],
-      "slots": [
-        {
-          "name": null,
-          "default": true,
-          "slot_props": "Record<string, never>"
-        }
-      ],
-      "events": [],
-      "typedefs": [],
-      "generics": null,
-      "rest_props": {
-        "type": "Element",
-        "name": "optgroup"
-      },
-      "contexts": []
-    },
-    {
-      "moduleName": "SelectSkeleton",
-      "filePath": "src/Select/SelectSkeleton.svelte",
-      "props": [
-        {
-          "name": "hideLabel",
-          "kind": "let",
-          "description": "Set to `true` to hide the label text",
-          "type": "boolean",
-          "value": "false",
-          "isFunction": false,
-          "isFunctionDeclaration": false,
-          "isRequired": false,
-          "constant": false,
-          "reactive": false
-        }
-      ],
-      "moduleExports": [],
-      "slots": [],
-      "events": [
-        {
-          "type": "forwarded",
-          "name": "click",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseover",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseenter",
-          "element": "div"
-        },
-        {
-          "type": "forwarded",
-          "name": "mouseleave",
-          "element": "div"
-        }
-      ],
-      "typedefs": [],
-      "generics": null,
-      "rest_props": {
-        "type": "Element",
-        "name": "div"
-      },
-      "contexts": []
-    },
-    {
       "moduleName": "SelectableTile",
       "filePath": "src/Tile/SelectableTile.svelte",
       "props": [
@@ -14253,6 +14074,185 @@
           ]
         }
       ]
+    },
+    {
+      "moduleName": "SelectItem",
+      "filePath": "src/Select/SelectItem.svelte",
+      "props": [
+        {
+          "name": "value",
+          "kind": "let",
+          "description": "Specify the option value.",
+          "type": "string | number",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "text",
+          "kind": "let",
+          "description": "Specify the option text.\nIf not specified, the value will be used as the text.",
+          "type": "string",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "hidden",
+          "kind": "let",
+          "description": "Set to `true` to hide the option",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the option",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "class",
+          "kind": "let",
+          "description": "Specify the class of the `option` element.",
+          "type": "string",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "style",
+          "kind": "let",
+          "description": "Specify the style of the `option` element.",
+          "type": "string",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [],
+      "events": [],
+      "typedefs": [],
+      "generics": null,
+      "contexts": []
+    },
+    {
+      "moduleName": "SelectItemGroup",
+      "filePath": "src/Select/SelectItemGroup.svelte",
+      "props": [
+        {
+          "name": "disabled",
+          "kind": "let",
+          "description": "Set to `true` to disable the optgroup element",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "label",
+          "kind": "let",
+          "description": "Specify the label attribute of the optgroup element",
+          "type": "string",
+          "value": "\"Provide label\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [
+        {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        }
+      ],
+      "events": [],
+      "typedefs": [],
+      "generics": null,
+      "rest_props": {
+        "type": "Element",
+        "name": "optgroup"
+      },
+      "contexts": []
+    },
+    {
+      "moduleName": "SelectSkeleton",
+      "filePath": "src/Select/SelectSkeleton.svelte",
+      "props": [
+        {
+          "name": "hideLabel",
+          "kind": "let",
+          "description": "Set to `true` to hide the label text",
+          "type": "boolean",
+          "value": "false",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        }
+      ],
+      "moduleExports": [],
+      "slots": [],
+      "events": [
+        {
+          "type": "forwarded",
+          "name": "click",
+          "element": "div"
+        },
+        {
+          "type": "forwarded",
+          "name": "mouseover",
+          "element": "div"
+        },
+        {
+          "type": "forwarded",
+          "name": "mouseenter",
+          "element": "div"
+        },
+        {
+          "type": "forwarded",
+          "name": "mouseleave",
+          "element": "div"
+        }
+      ],
+      "typedefs": [],
+      "generics": null,
+      "rest_props": {
+        "type": "Element",
+        "name": "div"
+      },
+      "contexts": []
     },
     {
       "moduleName": "SideNav",
