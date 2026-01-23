@@ -1,4 +1,5 @@
 /node_modules
 /dist
+/public/sitemap.xml
 /.routify
 src/SEARCH_INDEX.json
