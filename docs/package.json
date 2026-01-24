@@ -1,11 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "dev": "npm run build:index-docs && run-p dev:*",
+    "dev": "npm run index-docs && run-p dev:*",
     "dev:routify": "cross-env NODE_ENV=development routify run",
     "dev:svite": "vite dev",
-    "build": "run-s build:*",
+    "build": "run-s build:index-docs build:md-docs build:routify build:sitemap build:svite",
+    "index-docs": "node scripts/index-docs.js",
     "build:index-docs": "node scripts/index-docs.js",
+    "build:md-docs": "node scripts/generate-md-docs.js",
     "build:routify": "routify run -b",
     "build:sitemap": "node scripts/generate-sitemap.js",
     "build:svite": "vite build"
