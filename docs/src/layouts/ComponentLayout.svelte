@@ -5,7 +5,6 @@
     Column,
     Content,
     Grid,
-    InlineNotification,
     Link,
     Row,
     Select,
@@ -24,8 +23,6 @@
 
   export let component = $page.title;
   export let components = [component];
-  export let unreleased = false;
-  export let unstable = false;
 
   metatags.title = $page.title;
 
@@ -101,24 +98,6 @@
             Source code
           </Button>
         </div>
-        {#if unreleased}
-          <InlineNotification
-            lowContrast
-            kind="info"
-            title="Unreleased"
-            subtitle="This component has not been released yet."
-            hideCloseButton
-          />
-        {/if}
-        {#if unstable}
-          <InlineNotification
-            lowContrast
-            kind="warning"
-            title="Unstable component"
-            subtitle="Expect the API of this component to change. Use at your own risk."
-            hideCloseButton
-          />
-        {/if}
       </Column>
     </Row>
 
