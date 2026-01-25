@@ -1,14 +1,12 @@
 import { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export type TreeNodeId = string | number;
-
-export type TreeNode = {
-  id: TreeNodeId;
+export type TreeNode<Id = string | number> = {
+  id: Id;
   text: any;
   icon?: any;
   /** Whether the node is disabled */ disabled?: boolean;
-  nodes?: TreeNode[];
+  nodes?: TreeNode<Id>[];
 };
 
 export type ShowNodeOptions = {
@@ -17,10 +15,10 @@ export type ShowNodeOptions = {
   /** Whether to focus the node (default: true) */ focus?: boolean;
 };
 
-export type TreeViewContext<Node extends TreeNode = TreeNode> = {
-  activeNodeId: import("svelte/store").Writable<TreeNodeId>;
-  selectedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
-  expandedNodeIds: import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>;
+export type TreeViewContext<Node extends TreeNode<any> = TreeNode<any>> = {
+  activeNodeId: import("svelte/store").Writable<Node["id"]>;
+  selectedNodeIds: import("svelte/store").Writable<ReadonlyArray<Node["id"]>>;
+  expandedNodeIds: import("svelte/store").Writable<ReadonlyArray<Node["id"]>>;
   clickNode: (node: Node) => void;
   selectNode: (node: Node) => void;
   expandNode: (node: Node, expanded: boolean) => void;
@@ -30,7 +28,7 @@ export type TreeViewContext<Node extends TreeNode = TreeNode> = {
 
 type $RestProps = SvelteHTMLElements["ul"];
 
-type $Props<Node extends TreeNode = TreeNode> = {
+type $Props<Node extends TreeNode<any> = TreeNode<any>> = {
   /**
    * Provide an array of nodes to render.
    * @default []
@@ -42,19 +40,19 @@ type $Props<Node extends TreeNode = TreeNode> = {
    * Only one node can be active.
    * @default ""
    */
-  activeId?: TreeNodeId;
+  activeId?: Node["id"];
 
   /**
    * Set the node ids to be selected.
    * @default []
    */
-  selectedIds?: ReadonlyArray<TreeNodeId>;
+  selectedIds?: ReadonlyArray<Node["id"]>;
 
   /**
    * Set the node ids to be expanded.
    * @default []
    */
-  expandedIds?: ReadonlyArray<TreeNodeId>;
+  expandedIds?: ReadonlyArray<Node["id"]>;
 
   /**
    * Specify the TreeView size.
@@ -88,7 +86,7 @@ type $Props<Node extends TreeNode = TreeNode> = {
     ...args: [
       {
         node: {
-          id: TreeNodeId;
+          id: Node["id"];
           text: string;
           expanded: boolean;
           leaf: boolean;
@@ -102,14 +100,14 @@ type $Props<Node extends TreeNode = TreeNode> = {
   [key: `data-${string}`]: any;
 };
 
-export type TreeViewProps<Node extends TreeNode = TreeNode> = Omit<
+export type TreeViewProps<Node extends TreeNode<any> = TreeNode<any>> = Omit<
   $RestProps,
   keyof $Props<Node>
 > &
   $Props<Node>;
 
 export default class TreeView<
-  Node extends TreeNode = TreeNode,
+  Node extends TreeNode<any> = TreeNode<any>,
 > extends SvelteComponentTyped<
   TreeViewProps<Node>,
   {
@@ -127,7 +125,7 @@ export default class TreeView<
   {
     default: {
       node: {
-        id: TreeNodeId;
+        id: Node["id"];
         text: string;
         expanded: boolean;
         leaf: boolean;
@@ -201,5 +199,5 @@ export default class TreeView<
    * </button>
    * ```
    */
-  showNode: (id: TreeNodeId, options?: ShowNodeOptions) => void;
+  showNode: (id: Node["id"], options?: ShowNodeOptions) => void;
 }

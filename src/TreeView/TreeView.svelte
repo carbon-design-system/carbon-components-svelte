@@ -105,20 +105,19 @@
 
 <script>
   /**
-   * @generics {Node extends TreeNode = TreeNode} Node
-   * @template {TreeNode} Node
-   * @typedef {string | number} TreeNodeId
-   * @typedef {object} TreeNode
-   * @property {TreeNodeId} id
+   * @generics {Node extends TreeNode<any> = TreeNode<any>} Node
+   * @template {TreeNode<any>} Node
+   * @typedef {object} TreeNode<Id=(string|number)>
+   * @property {Id} id
    * @property {any} text
    * @property {any} [icon]
    * @property {boolean} [disabled] - Whether the node is disabled
-   * @property {TreeNode[]} [nodes]
+   * @property {TreeNode<Id>[]} [nodes]
    * @typedef {object} ShowNodeOptions
    * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
    * @property {boolean} [select] - Whether to select the node (default: true)
    * @property {boolean} [focus] - Whether to focus the node (default: true)
-   * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
+   * @slot {{ node: { id: Node["id"]; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
    * @event select
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    * @event toggle
@@ -136,19 +135,19 @@
   /**
    * Set the current active node id.
    * Only one node can be active.
-   * @type {TreeNodeId}
+   * @type {Node["id"]}
    */
   export let activeId = "";
 
   /**
    * Set the node ids to be selected.
-   * @type {ReadonlyArray<TreeNodeId>}
+   * @type {ReadonlyArray<Node["id"]>}
    */
   export let selectedIds = [];
 
   /**
    * Set the node ids to be expanded.
-   * @type {ReadonlyArray<TreeNodeId>}
+   * @type {ReadonlyArray<Node["id"]>}
    */
   export let expandedIds = [];
 
@@ -253,7 +252,7 @@
    * Programmatically show a node by `id`.
    * By default, the matching node will be expanded, selected, and focused.
    * Use the options parameter to customize this behavior.
-   * @type {(id: TreeNodeId, options?: ShowNodeOptions) => void}
+   * @type {(id: Node["id"], options?: ShowNodeOptions) => void}
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -307,11 +306,11 @@
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
 
-  /** @type {import("svelte/store").Writable<TreeNodeId>} */
+  /** @type {import("svelte/store").Writable<Node["id"]>} */
   const activeNodeId = writable(activeId);
-  /** @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>} */
+  /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
   const selectedNodeIds = writable(selectedIds);
-  /** @type {import("svelte/store").Writable<ReadonlyArray<TreeNodeId>>} */
+  /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
   const expandedNodeIds = writable(expandedIds);
 
   /** @type {HTMLElement | null} */
@@ -323,12 +322,12 @@
   let cachedNodes = null;
   /** @type {Array<Node> | null} */
   let cachedFlattenedNodes = null;
-  /** @type {Array<TreeNodeId> | null} */
+  /** @type {Array<Node["id"]> | null} */
   let cachedNodeIds = null;
 
-  /** @type {Set<TreeNodeId>} */
+  /** @type {Set<Node["id"]>} */
   let expandedIdsSet = new Set(expandedIds);
-  /** @type {ReadonlyArray<TreeNodeId>} */
+  /** @type {ReadonlyArray<Node["id"]>} */
   let lastExpandedIdsRef = expandedIds;
 
   /** @type {(node: Node) => void} */

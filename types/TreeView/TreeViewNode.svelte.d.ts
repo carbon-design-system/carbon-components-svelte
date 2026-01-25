@@ -15,10 +15,11 @@ import { SvelteComponentTyped } from "svelte";
 export declare function computeTreeLeafDepth(
   node: HTMLLIElement | null,
 ): number;
-export type TreeNodeId = string | number;
 
-export type TreeViewNodeProps = {
+export type TreeViewNodeProps<Id = string | number> = {
   /**
+   * @generics Id
+   * @template Id
    * @default false
    */
   leaf?: boolean;
@@ -26,7 +27,7 @@ export type TreeViewNodeProps = {
   /**
    * @default ""
    */
-  id?: TreeNodeId;
+  id?: Id;
 
   /**
    * @default ""
@@ -49,7 +50,7 @@ export type TreeViewNodeProps = {
     ...args: [
       {
         node: {
-          id: TreeNodeId;
+          id: Id;
           text: string;
           expanded: false;
           leaf: boolean;
@@ -61,13 +62,15 @@ export type TreeViewNodeProps = {
   ) => void;
 };
 
-export default class TreeViewNode extends SvelteComponentTyped<
-  TreeViewNodeProps,
+export default class TreeViewNode<
+  Id = string | number,
+> extends SvelteComponentTyped<
+  TreeViewNodeProps<Id>,
   Record<string, any>,
   {
     default: {
       node: {
-        id: TreeNodeId;
+        id: Id;
         text: string;
         expanded: false;
         leaf: boolean;

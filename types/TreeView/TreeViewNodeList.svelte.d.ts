@@ -1,19 +1,17 @@
 import { SvelteComponentTyped } from "svelte";
 
-export type TreeNodeId = string | number;
-
-export interface TreeNode {
-  id: TreeNodeId;
+export interface TreeNode<Id> {
+  id: Id;
   text: string;
   disabled?: boolean;
   expanded?: boolean;
 }
 
-export type TreeViewNodeListProps = {
+export type TreeViewNodeListProps<Id = string | number> = {
   /**
    * @default []
    */
-  nodes?: ReadonlyArray<TreeNode & { nodes?: TreeNode[] }>;
+  nodes?: ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>;
 
   /**
    * @default false
@@ -23,7 +21,7 @@ export type TreeViewNodeListProps = {
   /**
    * @default ""
    */
-  id?: string | number;
+  id?: Id;
 
   /**
    * @default ""
@@ -46,7 +44,7 @@ export type TreeViewNodeListProps = {
     ...args: [
       {
         node: {
-          id: TreeNodeId;
+          id: Id;
           text: string;
           expanded: boolean;
           leaf: boolean;
@@ -58,13 +56,15 @@ export type TreeViewNodeListProps = {
   ) => void;
 };
 
-export default class TreeViewNodeList extends SvelteComponentTyped<
-  TreeViewNodeListProps,
+export default class TreeViewNodeList<
+  Id = string | number,
+> extends SvelteComponentTyped<
+  TreeViewNodeListProps<Id>,
   Record<string, any>,
   {
     default: {
       node: {
-        id: TreeNodeId;
+        id: Id;
         text: string;
         expanded: boolean;
         leaf: boolean;

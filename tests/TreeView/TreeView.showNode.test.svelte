@@ -1,12 +1,12 @@
 <script lang="ts">
   import { Button, TreeView } from "carbon-components-svelte";
-  import type { TreeNodeId } from "carbon-components-svelte/TreeView/TreeView.svelte";
+  import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
 
   let treeview: TreeView;
-  let activeId: TreeNodeId = "";
-  let selectedIds: TreeNodeId[] = [];
-  let expandedIds: TreeNodeId[] = [];
+  let activeId: TreeNode["id"] | undefined = undefined;
+  let selectedIds: TreeNode["id"][] = [];
+  let expandedIds: TreeNode["id"][] = [];
   let nodes: ComponentProps<TreeView>["nodes"] = [
     { id: 0, text: "Level 0" },
     {
@@ -54,6 +54,6 @@
 <Button data-testid="focus-only" on:click={() => treeview.showNode(3, { expand: false, select: false })}>
   Focus only
 </Button>
-<Button data-testid="reset" on:click={() => { expandedIds = []; selectedIds = []; activeId = ""; }}>
+<Button data-testid="reset" on:click={() => { expandedIds = []; selectedIds = []; activeId = undefined; }}>
   Reset
 </Button>

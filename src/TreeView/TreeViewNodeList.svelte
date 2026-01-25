@@ -1,15 +1,16 @@
 <script>
   /**
-   * @typedef {string | number} TreeNodeId
-   * @typedef {{ id: TreeNodeId; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode
-   * @slot {{ node: { id: TreeNodeId; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
+   * @generics {Id = (string|number)} Id
+   * @template {string | number} Id
+   * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
+   * @slot {{ node: { id: Id; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
    */
 
-  /** @type {ReadonlyArray<TreeNode & { nodes?: TreeNode[] }>} */
+  /** @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>} */
   export let nodes = [];
   export let root = false;
 
-  /** @type {string | number} */
+  /** @type {Id} */
   export let id = "";
   export let text = "";
   export let disabled = false;

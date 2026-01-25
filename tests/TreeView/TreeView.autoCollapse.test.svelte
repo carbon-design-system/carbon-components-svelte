@@ -1,14 +1,16 @@
 <script lang="ts">
   import { TreeView } from "carbon-components-svelte";
-  import type { TreeNodeId } from "carbon-components-svelte/TreeView/TreeView.svelte";
+  import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
 
   export let autoCollapse = true;
 
+  type TreeViewNodeId = TreeNode<string>["id"];
+
   let treeview: TreeView;
-  let activeId: TreeNodeId = "";
-  let selectedIds: TreeNodeId[] = [];
-  let expandedIds: TreeNodeId[] = [];
+  let activeId: TreeViewNodeId = "";
+  let selectedIds: TreeViewNodeId[] = [];
+  let expandedIds: TreeViewNodeId[] = [];
   let nodes: ComponentProps<TreeView>["nodes"] = [
     {
       id: "folder1",
