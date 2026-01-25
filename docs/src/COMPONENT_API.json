@@ -4484,7 +4484,7 @@
           "name": "selectedId",
           "kind": "let",
           "description": "Specify the selected item id.",
-          "type": "DropdownItemId",
+          "type": "Item[\"id\"]",
           "isFunction": false,
           "isFunctionDeclaration": false,
           "isRequired": true,
@@ -4721,29 +4721,19 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  selectedId: DropdownItemId;\n  selectedItem: Item;\n}"
+          "detail": "{\n  selectedId: Item[\"id\"];\n  selectedItem: Item;\n}"
         }
       ],
       "typedefs": [
         {
-          "type": "any",
-          "name": "DropdownItemId",
-          "ts": "type DropdownItemId = any;\n"
-        },
-        {
-          "type": "string",
-          "name": "DropdownItemText",
-          "ts": "type DropdownItemText = string;\n"
-        },
-        {
-          "type": "{ id: DropdownItemId; text: DropdownItemText; /** Whether the item is disabled */ disabled?: boolean; }",
-          "name": "DropdownItem",
-          "ts": "type DropdownItem = {\n  id: DropdownItemId;\n  text: DropdownItemText;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
+          "type": "{ id: Id; text: string; /** Whether the item is disabled */ disabled?: boolean; }",
+          "name": "DropdownItem<Id=any>",
+          "ts": "type DropdownItem<Id = any> = {\n  id: Id;\n  text: string;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
         }
       ],
       "generics": [
         "Item",
-        "Item extends DropdownItem = DropdownItem"
+        "Item extends DropdownItem<any> = DropdownItem<any>"
       ],
       "rest_props": {
         "type": "Element",

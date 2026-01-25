@@ -1209,13 +1209,9 @@ None.
 ### Types
 
 ```ts
-export type DropdownItemId = any;
-
-export type DropdownItemText = string;
-
-export type DropdownItem = {
-  id: DropdownItemId;
-  text: DropdownItemText;
+export type DropdownItem<Id = any> = {
+  id: Id;
+  text: string;
   /** Whether the item is disabled */ disabled?: boolean;
 };
 ```
@@ -1226,7 +1222,7 @@ export type DropdownItem = {
 | :-------------- | :------- | :--------------- | :------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | ref             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                                                            | <code>null</code>                                  | Obtain a reference to the button HTML element                                                                                 |
 | open            | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                                 | Set to `true` to open the dropdown                                                                                            |
-| selectedId      | Yes      | <code>let</code> | Yes      | <code>DropdownItemId</code>                                                                           | --                                                 | Specify the selected item id.                                                                                                 |
+| selectedId      | Yes      | <code>let</code> | Yes      | <code>Item["id"]</code>                                                                               | --                                                 | Specify the selected item id.                                                                                                 |
 | items           | No       | <code>let</code> | No       | <code>ReadonlyArray<Item></code>                                                                      | <code>[]</code>                                    | Set the dropdown items.                                                                                                       |
 | itemToString    | No       | <code>let</code> | No       | <code>(item: Item) => string</code>                                                                   | --                                                 | Override the display of a dropdown item.                                                                                      |
 | type            | No       | <code>let</code> | No       | <code>"default" &#124; "inline"</code>                                                                | <code>"default"</code>                             | Specify the type of dropdown.                                                                                                 |
@@ -1254,9 +1250,9 @@ export type DropdownItem = {
 
 ### Events
 
-| Event name | Type       | Detail                                                           | Description |
-| :--------- | :--------- | :--------------------------------------------------------------- | :---------- |
-| select     | dispatched | <code>{ selectedId: DropdownItemId; selectedItem: Item; }</code> | --          |
+| Event name | Type       | Detail                                                       | Description |
+| :--------- | :--------- | :----------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedId: Item["id"]; selectedItem: Item; }</code> | --          |
 
 ## `DropdownSkeleton`
 

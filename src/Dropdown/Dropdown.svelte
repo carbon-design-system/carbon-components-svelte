@@ -1,16 +1,14 @@
 <script>
   /**
-   * @generics {Item extends DropdownItem = DropdownItem} Item
-   * @template {DropdownItem} Item
-   * @typedef {any} DropdownItemId
-   * @typedef {string} DropdownItemText
-   * @typedef {object} DropdownItem
-   * @property {DropdownItemId} id
-   * @property {DropdownItemText} text
+   * @generics {Item extends DropdownItem<any> = DropdownItem<any>} Item
+   * @template {DropdownItem<any>} Item
+   * @typedef {object} DropdownItem<Id=any>
+   * @property {Id} id
+   * @property {string} text
    * @property {boolean} [disabled] - Whether the item is disabled
    * @event select
    * @type {object}
-   * @property {DropdownItemId} selectedId
+   * @property {Item["id"]} selectedId
    * @property {Item} selectedItem
    * @slot {{ item: Item; index: number; }}
    */
@@ -29,7 +27,7 @@
 
   /**
    * Specify the selected item id.
-   * @type {DropdownItemId}
+   * @type {Item["id"]}
    */
   export let selectedId;
 
