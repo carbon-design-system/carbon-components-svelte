@@ -203,7 +203,7 @@ function renderPropsSection(component, componentName) {
     return [nameCell, typeCell, mainDescription, defaultCell];
   });
 
-  return `### \`${componentName}\` Props\n\n${renderMarkdownTable(
+  return `### \`${componentName}\` props\n\n${renderMarkdownTable(
     ["Prop", "Type", "Description", "Default"],
     rows,
   )}`;
@@ -225,7 +225,7 @@ function renderTypedefsSection(component, componentName) {
 
   if (!ts) return "";
 
-  return `### \`${componentName}\` Typedefs\n\n\`\`\`ts\n${ts}\n\`\`\``;
+  return `### \`${componentName}\` typedefs\n\n\`\`\`ts\n${ts}\n\`\`\``;
 }
 
 /**
@@ -243,7 +243,7 @@ function renderSlotsSection(component, componentName) {
     return [`\`${name}\``, detail ? `\`${detail}\`` : ""];
   });
 
-  return `### \`${componentName}\` Slots\n\n${renderMarkdownTable(["Slot", "Detail"], rows)}`;
+  return `### \`${componentName}\` slots\n\n${renderMarkdownTable(["Slot", "Detail"], rows)}`;
 }
 
 /**
@@ -260,7 +260,7 @@ function renderEventsSection(component, componentName) {
   const forwardedMd =
     forwarded.length === 0
       ? ""
-      : `### \`${componentName}\` Forwarded events\n\n${renderMarkdownTable(
+      : `### \`${componentName}\` forwarded events\n\n${renderMarkdownTable(
           ["Event"],
           forwarded.map((e) => [`\`on:${e.name}\``]),
         )}`;
@@ -285,7 +285,7 @@ function renderEventsSection(component, componentName) {
   const dispatchedMd =
     dispatched.length === 0
       ? ""
-      : `### \`${componentName}\` Dispatched events\n\n${renderMarkdownTable(
+      : `### \`${componentName}\` dispatched events\n\n${renderMarkdownTable(
           dispatchedHeaders,
           dispatchedRows ?? [],
         )}`;
