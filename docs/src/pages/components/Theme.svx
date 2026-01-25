@@ -3,21 +3,18 @@ components: ["Theme"]
 ---
 
 <script>
-  import { InlineNotification, CodeSnippet } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
-
-  let code = `import "carbon-components-svelte/css/all.css";`;
 </script>
 
-The `Theme` component provides dynamic client-side theming using CSS variables. It supports five Carbon themes: white, g10, g80, g90, and g100, and allows for custom theme token overrides. The component can persist theme preferences using [window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and provides built-in toggle and select controls for theme switching.
+The `Theme` component provides dynamic client-side theming using CSS variables. It supports five themes: `white`, `g10`, `g80`, `g90`, and `g100`, and allows for custom theme token overrides.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">You must use the "all.css" StyleSheet with the <code>Theme</code> component.</div>
-</InlineNotification>
+The component can persist theme preferences using [window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and provides built-in toggle and select controls for theme switching.
 
-The `all.css` StyleSheet uses [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) for dynamic theming.
+You must use the `all.css` StyleSheet for dynamic theming, which uses [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties).
 
-<CodeSnippet svx-ignore {code} />
+```css
+import "carbon-components-svelte/css/all.css";
+```
 
 ## Default
 
