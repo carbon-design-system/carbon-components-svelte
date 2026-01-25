@@ -123,13 +123,4 @@ Set `disabled` to `true` to disable menu items. Use `hasDivider` to add visual s
 
 Use `preventDefault()` on individual `OverflowMenuItem` click events to prevent the menu from closing when that item is clicked. This is useful for scenarios where you want to keep the menu open after performing an action.
 
-<OverflowMenu>
-  <OverflowMenuItem
-    text="Show all files"
-    on:click={(e) => {
-      // Prevent menu from closing for this item.
-      e.preventDefault();
-    }}
-  />
-  <OverflowMenuItem text="Close menu" />
-</OverflowMenu>
+<FileSource src="/framed/OverflowMenu/OverflowMenuPreventDefault" />
