@@ -164,8 +164,9 @@ function parseDescription(description) {
 
 /**
  * @param {any} component
+ * @param {string} componentName
  */
-function renderPropsSection(component) {
+function renderPropsSection(component, componentName) {
   const props = Array.isArray(component.props) ? component.props : [];
   if (props.length === 0) return "";
 
@@ -174,9 +175,6 @@ function renderPropsSection(component) {
     if (a.reactive !== b.reactive) return b.reactive ? 1 : -1;
     return 0;
   });
-
-  /** @type {{ name: string; code: string }[]} */
-  const examples = [];
 
   const rows = sorted.map((prop) => {
     const markers = [
@@ -191,10 +189,7 @@ function renderPropsSection(component) {
       .filter(Boolean)
       .join(" ");
 
-    const { mainDescription, exampleCode } = parseDescription(
-      prop.description ?? "",
-    );
-    if (exampleCode) examples.push({ name: prop.name, code: exampleCode });
+    const { mainDescription } = parseDescription(prop.description ?? "");
 
     const typeCell = prop.type ? `\`${prop.type}\`` : "";
 
@@ -207,26 +202,17 @@ function renderPropsSection(component) {
     return [nameCell, typeCell, mainDescription, defaultCell];
   });
 
-  let out = `### Props\n\n${renderMarkdownTable(
+  return `### \`${componentName}\` Props\n\n${renderMarkdownTable(
     ["Prop", "Type", "Description", "Default"],
     rows,
   )}`;
-
-  if (examples.length > 0) {
-    out += "\n\n#### Prop examples\n";
-    for (const ex of examples) {
-      out += `\n**\`${ex.name}\`**\n\n\`\`\`svelte\n${ex.code}\n\`\`\`\n`;
-    }
-    out = out.trimEnd();
-  }
-
-  return out;
 }
 
 /**
  * @param {any} component
+ * @param {string} componentName
  */
-function renderTypedefsSection(component) {
+function renderTypedefsSection(component, componentName) {
   const typedefs = Array.isArray(component.typedefs) ? component.typedefs : [];
   if (typedefs.length === 0) return "";
 
@@ -238,13 +224,14 @@ function renderTypedefsSection(component) {
 
   if (!ts) return "";
 
-  return `### Typedefs\n\n\`\`\`ts\n${ts}\n\`\`\``;
+  return `### \`${componentName}\` Typedefs\n\n\`\`\`ts\n${ts}\n\`\`\``;
 }
 
 /**
  * @param {any} component
+ * @param {string} componentName
  */
-function renderSlotsSection(component) {
+function renderSlotsSection(component, componentName) {
   const slots = Array.isArray(component.slots) ? component.slots : [];
   if (slots.length === 0) return "";
 
@@ -255,13 +242,14 @@ function renderSlotsSection(component) {
     return [`\`${name}\``, detail ? `\`${detail}\`` : ""];
   });
 
-  return `### Slots\n\n${renderMarkdownTable(["Slot", "Detail"], rows)}`;
+  return `### \`${componentName}\` Slots\n\n${renderMarkdownTable(["Slot", "Detail"], rows)}`;
 }
 
 /**
  * @param {any} component
+ * @param {string} componentName
  */
-function renderEventsSection(component) {
+function renderEventsSection(component, componentName) {
   const events = Array.isArray(component.events) ? component.events : [];
   const forwarded = events.filter((e) => e?.type === "forwarded");
   const dispatched = events.filter((e) => e?.type === "dispatched");
@@ -271,7 +259,7 @@ function renderEventsSection(component) {
   const forwardedMd =
     forwarded.length === 0
       ? ""
-      : `### Forwarded events\n\n${renderMarkdownTable(
+      : `### \`${componentName}\` Forwarded events\n\n${renderMarkdownTable(
           ["Event"],
           forwarded.map((e) => [`\`on:${e.name}\``]),
         )}`;
@@ -296,7 +284,7 @@ function renderEventsSection(component) {
   const dispatchedMd =
     dispatched.length === 0
       ? ""
-      : `### Dispatched events\n\n${renderMarkdownTable(
+      : `### \`${componentName}\` Dispatched events\n\n${renderMarkdownTable(
           dispatchedHeaders,
           dispatchedRows ?? [],
         )}`;
@@ -307,16 +295,17 @@ function renderEventsSection(component) {
 
 /**
  * @param {any} component
+ * @param {string} componentName
  */
-function renderRestPropsSection(component) {
+function renderRestPropsSection(component, componentName) {
   const rest = component?.rest_props;
   if (!rest) return "";
 
   if (rest.type === "Element") {
-    return `### $$restProps\n\n\`${component.moduleName}\` spreads \`$$restProps\` to the \`${rest.name}\` element.`;
+    return `### \`${componentName}\` $$restProps\n\n\`${component.moduleName}\` spreads \`$$restProps\` to the \`${rest.name}\` element.`;
   }
 
-  return `### $$restProps\n\n\`${component.moduleName}\` spreads \`$$restProps\` to the \`${rest.name}\` component.`;
+  return `### \`${componentName}\` $$restProps\n\n\`${component.moduleName}\` spreads \`$$restProps\` to the \`${rest.name}\` component.`;
 }
 
 /**
@@ -325,16 +314,15 @@ function renderRestPropsSection(component) {
 function renderComponentApiMarkdown(moduleName) {
   const entry = componentApiByModuleName.get(moduleName);
   if (!entry) {
-    return `## Component API: ${moduleName}\n\nAPI data not found.`;
+    throw new Error(`API data not found for component: ${moduleName}`);
   }
 
   const sections = [
-    `## Component API: ${moduleName}`,
-    renderPropsSection(entry),
-    renderTypedefsSection(entry),
-    renderSlotsSection(entry),
-    renderEventsSection(entry),
-    renderRestPropsSection(entry),
+    renderPropsSection(entry, moduleName),
+    renderTypedefsSection(entry, moduleName),
+    renderSlotsSection(entry, moduleName),
+    renderEventsSection(entry, moduleName),
+    renderRestPropsSection(entry, moduleName),
   ].filter(Boolean);
 
   return sections.join("\n\n");
@@ -938,11 +926,15 @@ for (const file of files) {
   );
   const fencedBody = fenceInlineSvelte(bodyWithSvxIgnoreConverted);
 
-  const generatedMd =
-    `# ${componentName}\n\n` +
-    fencedBody +
-    "\n\n---\n\n" +
-    componentsForUsage.map(renderComponentApiMarkdown).join("\n\n");
+  const apiSections = componentsForUsage
+    .map(renderComponentApiMarkdown)
+    .filter(Boolean);
+  const apiMarkdown =
+    apiSections.length > 0
+      ? `\n\n---\n\n## Component API\n\n${apiSections.join("\n\n")}`
+      : "";
+
+  const generatedMd = `# ${componentName}\n\n${fencedBody}${apiMarkdown}`;
 
   generatedMdByComponent.push({ componentName, md: generatedMd });
 }
