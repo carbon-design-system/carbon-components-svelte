@@ -40,10 +40,8 @@ const ANY_HTML_TAG_RE = /<\/?[^>]+>/g;
 const TRAILING_WS_BEFORE_NL_RE = /[ \t]+\n/g;
 const MULTI_NL_RE = /\n{3,}/g;
 
-const INLINE_NOTIFICATION_OPEN_TAG_RE = /<InlineNotification\b([^>]*)>/i;
-const INLINE_NOTIFICATION_INNER_START_RE =
-  /^[\s\S]*?<InlineNotification\b[^>]*>/i;
-const INLINE_NOTIFICATION_INNER_END_RE = /<\/InlineNotification>[\s\S]*$/i;
+// Generic regex to match any component with svx-ignore attribute
+const SVX_IGNORE_COMPONENT_RE = /<([A-Z][\w]*)\b[^>]*\bsvx-ignore[^>]*>/i;
 
 const LEADING_SVELTE_SCRIPT_BLOCK_RE = /^\s*<script\b[\s\S]*?<\/script>\s*\n*/i;
 const FILE_SOURCE_SRC_ATTR_RE = /src="([^"]+)"/i;
@@ -368,9 +366,169 @@ function inlineNotificationBodyToMarkdown(html) {
 }
 
 /**
+ * Convert InlineNotification component to markdown admonition
+ * @param {string} openTag
+ * @param {string} innerContent
+ * @returns {string[]}
+ */
+function convertInlineNotification(openTag, innerContent) {
+  const kind = getAttr(openTag, "kind")?.toLowerCase();
+  const title = getAttr(openTag, "title")?.toLowerCase() ?? "";
+
+  let label = "NOTE";
+  if (kind === "warning") label = "WARNING";
+  else if (kind === "error" || kind === "danger") label = "CAUTION";
+  else if (kind === "success") label = "TIP";
+  else if (title.includes("note")) label = "NOTE";
+
+  const mdBody = inlineNotificationBodyToMarkdown(innerContent);
+  const bodyLines = mdBody.length ? mdBody.split("\n") : [];
+
+  const out = [`> [!${label}]`];
+  for (const l of bodyLines) out.push(l.trim() ? `> ${l}` : ">");
+  out.push("");
+  return out;
+}
+
+/**
+ * Convert UnorderedList component to markdown list
+ * @param {string} _openTag
+ * @param {string} innerContent
+ * @returns {string[]}
+ */
+function convertUnorderedList(_openTag, innerContent) {
+  const listItemRe = /<ListItem\b[^>]*>([\s\S]*?)<\/ListItem>/gi;
+  const items = [];
+  let match = listItemRe.exec(innerContent);
+
+  while (match !== null) {
+    let itemText = match[1];
+    // Convert <strong> tags to markdown bold
+    itemText = itemText.replace(STRONG_TAG_CONTENT_RE, (_, t) => {
+      const text = String(t).replace(TAG_STRIP_RE, "").trim();
+      return text ? `**${text}**` : "";
+    });
+    // Strip remaining HTML tags
+    itemText = itemText.replace(ANY_HTML_TAG_RE, "");
+    // Clean up whitespace
+    itemText = itemText.replace(TRAILING_WS_BEFORE_NL_RE, "\n");
+    itemText = itemText.replace(MULTI_NL_RE, "\n\n");
+    itemText = itemText.trim();
+    if (itemText) items.push(`- ${itemText}`);
+    match = listItemRe.exec(innerContent);
+  }
+
+  const out = items.length > 0 ? items : [];
+  if (out.length > 0) out.push("");
+  return out;
+}
+
+/**
+ * Convert CodeSnippet component to markdown code block
+ * @param {string} openTag
+ * @param {string} innerContent
+ * @returns {string[]}
+ */
+function convertCodeSnippet(openTag, innerContent) {
+  // Try to get code from prop first
+  let code = getAttr(openTag, "code");
+
+  // If no code prop, extract from slot content
+  if (!code) {
+    // Strip HTML tags and get text content
+    code = innerContent.replace(ANY_HTML_TAG_RE, "").trim();
+  }
+
+  if (!code) return [];
+
+  // Use empty language for code fence
+  const lang = "";
+
+  const out = [`\`\`\`${lang}`];
+  out.push(...code.split("\n"));
+  out.push("```");
+  out.push("");
+  return out;
+}
+
+/**
+ * Find matching closing tag for a component (handles self-closing tags)
+ * @param {string} componentName
+ * @param {string[]} lines
+ * @param {number} startIdx
+ * @returns {{ endIdx: number; block: string; isSelfClosing: boolean } | null}
+ */
+function findComponentBlock(componentName, lines, startIdx) {
+  const openTagRe = new RegExp(`<${componentName}\\b([^>]*?)(/?)>`, "i");
+  const closeTagRe = new RegExp(`</${componentName}>`, "i");
+
+  const openMatch = lines[startIdx].match(openTagRe);
+  if (!openMatch) return null;
+
+  // Check if it's a self-closing tag
+  const isSelfClosing =
+    openMatch[2] === "/" || lines[startIdx].trimEnd().endsWith("/>");
+
+  if (isSelfClosing) {
+    return {
+      endIdx: startIdx,
+      block: lines[startIdx],
+      isSelfClosing: true,
+    };
+  }
+
+  /** @type {string[]} */
+  const blockLines = [lines[startIdx]];
+  let foundClose = !!lines[startIdx].match(closeTagRe);
+  let depth = 1;
+  let i = startIdx;
+
+  while (depth > 0 && i + 1 < lines.length) {
+    i++;
+    const line = lines[i];
+    blockLines.push(line);
+
+    if (openTagRe.test(line)) depth++;
+    if (closeTagRe.test(line)) {
+      depth--;
+      if (depth === 0) foundClose = true;
+    }
+  }
+
+  if (!foundClose) return null;
+
+  return {
+    endIdx: i,
+    block: blockLines.join("\n"),
+    isSelfClosing: false,
+  };
+}
+
+/**
+ * Extract inner content from component block
+ * @param {string} componentName
+ * @param {string} block
+ * @returns {string}
+ */
+function extractInnerContent(componentName, block) {
+  const openTagRe = new RegExp(`<${componentName}\\b[^>]*>`, "i");
+  const closeTagRe = new RegExp(`</${componentName}>`, "i");
+
+  const openMatch = block.match(openTagRe);
+  if (!openMatch || openMatch.index === undefined) return "";
+
+  const startIdx = openMatch.index + openMatch[0].length;
+  const closeMatch = block.slice(startIdx).match(closeTagRe);
+  if (!closeMatch || closeMatch.index === undefined) return "";
+
+  return block.slice(startIdx, startIdx + closeMatch.index);
+}
+
+/**
+ * Convert svx-ignore components to markdown
  * @param {string} body
  */
-function transformInlineNotifications(body) {
+function transformSvxIgnoreComponents(body) {
   const lines = body.split("\n");
   /** @type {string[]} */
   const out = [];
@@ -392,43 +550,51 @@ function transformInlineNotifications(body) {
       continue;
     }
 
-    if (!line.includes("<InlineNotification")) {
+    // Check if line contains a component with svx-ignore
+    const svxIgnoreMatch = line.match(SVX_IGNORE_COMPONENT_RE);
+    if (!svxIgnoreMatch) {
       out.push(line);
       continue;
     }
 
-    /** @type {string[]} */
-    const blockLines = [line];
-    let foundClose = line.includes("</InlineNotification>");
-    while (!foundClose && i + 1 < lines.length) {
-      i++;
-      blockLines.push(lines[i]);
-      if (lines[i].includes("</InlineNotification>")) foundClose = true;
+    const componentName = svxIgnoreMatch[1];
+    const componentBlock = findComponentBlock(componentName, lines, i);
+
+    if (!componentBlock) {
+      out.push(line);
+      continue;
     }
 
-    const block = blockLines.join("\n");
-    const openTagMatch = block.match(INLINE_NOTIFICATION_OPEN_TAG_RE);
+    // Extract open tag
+    const openTagMatch = componentBlock.block.match(
+      new RegExp(`<${componentName}\\b([^>]*?)(/?)>`, "i"),
+    );
     const openTag = openTagMatch
-      ? `<InlineNotification${openTagMatch[1]}>`
+      ? `<${componentName}${openTagMatch[1]}${openTagMatch[2]}>`
       : "";
-    const kind = getAttr(openTag, "kind")?.toLowerCase();
-    const title = getAttr(openTag, "title")?.toLowerCase() ?? "";
 
-    let label = "NOTE";
-    if (kind === "warning") label = "WARNING";
-    else if (kind === "error" || kind === "danger") label = "CAUTION";
-    else if (kind === "success") label = "TIP";
-    else if (title.includes("note")) label = "NOTE";
+    // Extract inner content (empty for self-closing tags)
+    const innerContent = componentBlock.isSelfClosing
+      ? ""
+      : extractInnerContent(componentName, componentBlock.block);
 
-    const inner = block
-      .replace(INLINE_NOTIFICATION_INNER_START_RE, "")
-      .replace(INLINE_NOTIFICATION_INNER_END_RE, "");
-    const mdBody = inlineNotificationBodyToMarkdown(inner);
-    const bodyLines = mdBody.length ? mdBody.split("\n") : [];
+    // Route to appropriate converter
+    let convertedLines = [];
+    if (componentName === "InlineNotification") {
+      convertedLines = convertInlineNotification(openTag, innerContent);
+    } else if (componentName === "UnorderedList") {
+      convertedLines = convertUnorderedList(openTag, innerContent);
+    } else if (componentName === "CodeSnippet") {
+      convertedLines = convertCodeSnippet(openTag, innerContent);
+    } else {
+      // Unknown component - just skip it (or could output as-is)
+      out.push(line);
+      i = componentBlock.endIdx;
+      continue;
+    }
 
-    out.push(`> [!${label}]`);
-    for (const l of bodyLines) out.push(l.trim() ? `> ${l}` : ">");
-    out.push("");
+    out.push(...convertedLines);
+    i = componentBlock.endIdx;
   }
 
   return out.join("\n");
@@ -767,10 +933,10 @@ for (const file of files) {
   const bodyWithInlinedFileSources = inlineFileSources(
     bodyWithoutLeadingScript,
   );
-  const bodyWithAdmonitions = transformInlineNotifications(
+  const bodyWithSvxIgnoreConverted = transformSvxIgnoreComponents(
     bodyWithInlinedFileSources,
   );
-  const fencedBody = fenceInlineSvelte(bodyWithAdmonitions);
+  const fencedBody = fenceInlineSvelte(bodyWithSvxIgnoreConverted);
 
   const generatedMd =
     `# ${componentName}\n\n` +
