@@ -68,9 +68,9 @@
 
 .prose > pre,
 .code-override .bx--snippet-container pre {
-  font-size: var(--cds-code-02-font-size);
-  line-height: var(--cds-code-02-line-height);
-  letter-spacing: var(--cds-code-02-letter-spacing);
+  font-size: var(--cds-code-01-font-size);
+  line-height: var(--cds-code-01-line-height);
+  letter-spacing: var(--cds-code-01-letter-spacing);
   cursor: text;
 }
 
