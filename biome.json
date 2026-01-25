@@ -141,6 +141,12 @@
       }
     },
     {
+      "includes": ["types/**/*.d.ts"],
+      "formatter": {
+        "enabled": false
+      }
+    },
+    {
       "includes": ["docs/src/**/*.{svelte,svx}"],
       "linter": {
         "rules": {
