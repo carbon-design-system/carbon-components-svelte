@@ -654,10 +654,8 @@ None.
 ### Types
 
 ```ts
-export type ComboBoxItemId = any;
-
-export type ComboBoxItem = {
-  id: ComboBoxItemId;
+export type ComboBoxItem<Id = any> = {
+  id: Id;
   text: string;
   /** Whether the item is disabled */ disabled?: boolean;
 };
@@ -671,7 +669,7 @@ export type ComboBoxItem = {
 | ref                      | No       | <code>let</code>      | Yes      | <code>null &#124; HTMLInputElement</code>                                                             | <code>null</code>                                  | Obtain a reference to the input HTML element                                                                                                                                                                                                                                                                                                                                                                                        |
 | open                     | No       | <code>let</code>      | Yes      | <code>boolean</code>                                                                                  | <code>false</code>                                 | Set to `true` to open the combobox menu dropdown                                                                                                                                                                                                                                                                                                                                                                                    |
 | value                    | No       | <code>let</code>      | Yes      | <code>string</code>                                                                                   | <code>""</code>                                    | Specify the selected combobox value                                                                                                                                                                                                                                                                                                                                                                                                 |
-| selectedId               | No       | <code>let</code>      | Yes      | <code>ComboBoxItemId</code>                                                                           | <code>undefined</code>                             | Set the selected item by value id.                                                                                                                                                                                                                                                                                                                                                                                                  |
+| selectedId               | No       | <code>let</code>      | Yes      | <code>Item["id"]</code>                                                                               | <code>undefined</code>                             | Set the selected item by value id.                                                                                                                                                                                                                                                                                                                                                                                                  |
 | items                    | No       | <code>let</code>      | No       | <code>ReadonlyArray<Item></code>                                                                      | <code>[]</code>                                    | Set the combobox items.                                                                                                                                                                                                                                                                                                                                                                                                             |
 | itemToString             | No       | <code>let</code>      | No       | <code>(item: Item) => string</code>                                                                   | --                                                 | Override the display of a combobox item.                                                                                                                                                                                                                                                                                                                                                                                            |
 | direction                | No       | <code>let</code>      | No       | <code>"bottom" &#124; "top"</code>                                                                    | <code>"bottom"</code>                              | Specify the direction of the combobox dropdown menu.                                                                                                                                                                                                                                                                                                                                                                                |
@@ -705,17 +703,17 @@ export type ComboBoxItem = {
 
 ### Events
 
-| Event name | Type       | Detail                                                           | Description |
-| :--------- | :--------- | :--------------------------------------------------------------- | :---------- |
-| select     | dispatched | <code>{ selectedId: ComboBoxItemId; selectedItem: Item; }</code> | --          |
-| clear      | forwarded  | --                                                               | --          |
-| input      | forwarded  | --                                                               | --          |
-| keydown    | forwarded  | --                                                               | --          |
-| keyup      | forwarded  | --                                                               | --          |
-| focus      | forwarded  | --                                                               | --          |
-| blur       | forwarded  | --                                                               | --          |
-| paste      | forwarded  | --                                                               | --          |
-| scroll     | forwarded  | --                                                               | --          |
+| Event name | Type       | Detail                                                       | Description |
+| :--------- | :--------- | :----------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedId: Item["id"]; selectedItem: Item; }</code> | --          |
+| clear      | forwarded  | --                                                           | --          |
+| input      | forwarded  | --                                                           | --          |
+| keydown    | forwarded  | --                                                           | --          |
+| keyup      | forwarded  | --                                                           | --          |
+| focus      | forwarded  | --                                                           | --          |
+| blur       | forwarded  | --                                                           | --          |
+| paste      | forwarded  | --                                                           | --          |
+| scroll     | forwarded  | --                                                           | --          |
 
 ## `ComposedModal`
 

@@ -1863,7 +1863,7 @@
           "name": "selectedId",
           "kind": "let",
           "description": "Set the selected item by value id.",
-          "type": "ComboBoxItemId",
+          "type": "Item[\"id\"]",
           "value": "undefined",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -2189,7 +2189,7 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  selectedId: ComboBoxItemId;\n  selectedItem: Item;\n}"
+          "detail": "{\n  selectedId: Item[\"id\"];\n  selectedItem: Item;\n}"
         },
         {
           "type": "forwarded",
@@ -2235,19 +2235,14 @@
       ],
       "typedefs": [
         {
-          "type": "any",
-          "name": "ComboBoxItemId",
-          "ts": "type ComboBoxItemId = any;\n"
-        },
-        {
-          "type": "{ id: ComboBoxItemId; text: string; /** Whether the item is disabled */ disabled?: boolean; }",
-          "name": "ComboBoxItem",
-          "ts": "type ComboBoxItem = {\n  id: ComboBoxItemId;\n  text: string;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
+          "type": "{ id: Id; text: string; /** Whether the item is disabled */ disabled?: boolean; }",
+          "name": "ComboBoxItem<Id=any>",
+          "ts": "type ComboBoxItem<Id = any> = {\n  id: Id;\n  text: string;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
         }
       ],
       "generics": [
         "Item",
-        "Item extends ComboBoxItem = ComboBoxItem"
+        "Item extends ComboBoxItem<any> = ComboBoxItem<any>"
       ],
       "rest_props": {
         "type": "Element",

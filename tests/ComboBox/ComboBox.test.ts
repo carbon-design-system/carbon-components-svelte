@@ -984,6 +984,83 @@ describe("ComboBox", () => {
         readonly ComboBoxItem[]
       >();
     });
+
+    describe("Id generic parameter", () => {
+      it("should default Id to any when not specified", () => {
+        type ComponentType = ComboBoxComponent;
+        type Props = ComponentProps<ComponentType>;
+        type Events = ComponentEvents<ComponentType>;
+
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<Props["selectedId"]>().toEqualTypeOf<any | undefined>();
+
+        type SelectEvent = Events["select"];
+        type SelectEventDetail =
+          SelectEvent extends CustomEvent<infer T> ? T : never;
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<SelectEventDetail["selectedId"]>().toEqualTypeOf<any>();
+      });
+
+      it("should support different ID types (string, number, union)", () => {
+        // String ID
+        type StringItem = { id: string; text: string };
+        type StringComponent = ComboBoxComponent<StringItem>;
+        expectTypeOf<
+          ComponentProps<StringComponent>["selectedId"]
+        >().toEqualTypeOf<string | undefined>();
+
+        // Number ID
+        type NumberItem = { id: number; text: string };
+        type NumberComponent = ComboBoxComponent<NumberItem>;
+        expectTypeOf<
+          ComponentProps<NumberComponent>["selectedId"]
+        >().toEqualTypeOf<number | undefined>();
+
+        // Union ID
+        type UnionId = "a" | "b" | "c";
+        type UnionItem = { id: UnionId; text: string };
+        type UnionComponent = ComboBoxComponent<UnionItem>;
+        type UnionEvents = ComponentEvents<UnionComponent>;
+        type UnionSelectDetail =
+          UnionEvents["select"] extends CustomEvent<infer T> ? T : never;
+        expectTypeOf<
+          UnionSelectDetail["selectedId"]
+        >().toEqualTypeOf<UnionId>();
+      });
+
+      it("should work with 'as const' for literal type inference", () => {
+        const items = [
+          { id: "option1", text: "Option 1" },
+          { id: "option2", text: "Option 2" },
+          { id: "option3", text: "Option 3" },
+        ] as const;
+
+        type InferredItem = (typeof items)[number];
+        type InferredId = InferredItem["id"];
+
+        expectTypeOf<InferredId>().toEqualTypeOf<
+          "option1" | "option2" | "option3"
+        >();
+
+        type ComponentType = ComboBoxComponent<InferredItem>;
+        type Props = ComponentProps<ComponentType>;
+        type Events = ComponentEvents<ComponentType>;
+
+        expectTypeOf<Props["selectedId"]>().toEqualTypeOf<
+          InferredId | undefined
+        >();
+
+        type SelectEvent = Events["select"];
+        type SelectEventDetail =
+          SelectEvent extends CustomEvent<infer T> ? T : never;
+        expectTypeOf<
+          SelectEventDetail["selectedId"]
+        >().toEqualTypeOf<InferredId>();
+        expectTypeOf<
+          SelectEventDetail["selectedItem"]
+        >().toEqualTypeOf<InferredItem>();
+      });
+    });
   });
 
   it("supports custom label slot", () => {
