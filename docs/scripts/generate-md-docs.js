@@ -6,6 +6,7 @@ import { parse, walk } from "svelte/compiler";
 
 const COMPONENTS_PATH = "./src/pages/components";
 const RAW_COMPONENTS_OUT_DIR = "./public/components";
+const BASE_URL = "https://svelte.carbondesignsystem.com";
 
 const files = fs.readdirSync(COMPONENTS_PATH);
 
@@ -895,6 +896,24 @@ async function formatMarkdown(markdown) {
   }
 }
 
+/**
+ * Generate llm.txt content from component list
+ * @param {string[]} componentNames
+ * @returns {string}
+ */
+function generateLlmTxt(componentNames) {
+  const sorted = [...componentNames].sort();
+  const links = sorted.map(
+    (name) => `- [${name}](${BASE_URL}/components/${name}.md)`,
+  );
+  return `# Carbon Components Svelte
+
+## Docs
+
+${links.join("\n")}
+`;
+}
+
 // Fresh output every run.
 fs.rmSync(RAW_COMPONENTS_OUT_DIR, { recursive: true, force: true });
 fs.mkdirSync(RAW_COMPONENTS_OUT_DIR, { recursive: true });
@@ -949,3 +968,10 @@ await Promise.all(
     );
   }),
 );
+
+// Generate llms.txt file
+const componentNames = generatedMdByComponent.map(
+  ({ componentName }) => componentName,
+);
+const llmTxtContent = generateLlmTxt(componentNames);
+fs.writeFileSync(path.join("./public", "llms.txt"), llmTxtContent);
