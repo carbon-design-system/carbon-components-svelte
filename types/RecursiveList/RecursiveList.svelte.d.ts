@@ -10,7 +10,7 @@ export type RecursiveListNode = {
 
 type $RestProps = SvelteHTMLElements["ul"] & SvelteHTMLElements["ol"];
 
-type $Props<Node> = {
+type $Props<Node extends RecursiveListNode = RecursiveListNode> = {
   /**
    * Specify the nodes to render.
    * @default []
@@ -26,8 +26,9 @@ type $Props<Node> = {
   [key: `data-${string}`]: any;
 };
 
-export type RecursiveListProps<Node> = Omit<$RestProps, keyof $Props<Node>> &
-  $Props<Node>;
+export type RecursiveListProps<
+  Node extends RecursiveListNode = RecursiveListNode,
+> = Omit<$RestProps, keyof $Props<Node>> & $Props<Node>;
 
 export default class RecursiveList<
   Node extends RecursiveListNode = RecursiveListNode,

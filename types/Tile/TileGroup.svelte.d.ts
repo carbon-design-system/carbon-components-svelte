@@ -11,7 +11,7 @@ export type TileGroupContext<T extends string = string> = {
 
 type $RestProps = SvelteHTMLElements["fieldset"];
 
-type $Props<T> = {
+type $Props<T extends string = string> = {
   /**
    * Specify the selected tile value.
    * @default undefined
@@ -56,7 +56,11 @@ type $Props<T> = {
   [key: `data-${string}`]: any;
 };
 
-export type TileGroupProps<T> = Omit<$RestProps, keyof $Props<T>> & $Props<T>;
+export type TileGroupProps<T extends string = string> = Omit<
+  $RestProps,
+  keyof $Props<T>
+> &
+  $Props<T>;
 
 export default class TileGroup<
   T extends string = string,
