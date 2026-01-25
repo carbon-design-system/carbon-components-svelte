@@ -1,30 +1,6 @@
 <script>
   import { CodeSnippet } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
-
-  let code = `// helpers.js
-  
-export function multiply(a: number, b: number) {
-  return a * b;
-}
-
-export function divide(a: number, b: number) {
-  return a / b;
-}
-
-export function add(a: number, b: number) {
-  return a + b;
-}
-
-export function subtract(a: number, b: number) {
-  return a - b;
-}`;
-
-let comment = `
-> \`carbon-components-svelte\` is a Svelte component library that implements the [Carbon Design System](https://github.com/carbon-design-system), an open source design system by IBM.
-
-> A design system can facilitate frontend development and prototyping because it is encourages reuse, consistency, and extensibility.
-`
 </script>
 
 Code snippets display and copy code examples. They support single-line, multi-line, and inline formats with customizable copy and expand functionality.
@@ -51,7 +27,7 @@ In this example, we use the open source module [clipboard-copy](https://github.c
 
 Pass a no-op function to the `copy` prop to disable copying.
 
-<CodeSnippet code="npm i carbon-components-svelte" copy={() => {}} />
+<FileSource src="/framed/CodeSnippet/CodeSnippetPreventCopy" />
 
 ## Inline
 
@@ -63,13 +39,13 @@ Set `type="inline"` to display code inline with text.
 
 Set `type="multi"` to display multiple lines of code with expand/collapse functionality.
 
-<CodeSnippet type="multi" {code} />
+<FileSource src="/framed/CodeSnippet/CodeSnippetMultiLine" />
 
 ## Expanded by default
 
 Set `expanded` to `true` to show the full multi-line code snippet.
 
-<CodeSnippet type="multi" {code} expanded />
+<FileSource src="/framed/CodeSnippet/CodeSnippetExpanded" />
 
 ## Reactive example
 
@@ -81,39 +57,37 @@ The multi-line code snippet dispatches "expand" and "collapse" events.
 
 Set `feedback` to customize the copy button feedback text.
 
-<CodeSnippet type="multi" {code} feedback="Copied to clipboard" />
+<FileSource src="/framed/CodeSnippet/CodeSnippetFeedback" />
 
 ## Hidden copy button
 
 Set `hideCopyButton` to `true` to hide the copy button.
 
-<CodeSnippet type="multi" {code} hideCopyButton />
+<FileSource src="/framed/CodeSnippet/CodeSnippetHideCopyButton" />
 
 ## Hidden show more button
 
 Set `showMoreLess` to `false` to hide the expand/collapse button on multi-line snippets.
 
-<CodeSnippet type="multi" {code} showMoreLess={false} />
+<FileSource src="/framed/CodeSnippet/CodeSnippetHideShowMore" />
 
 ## Hidden copy, show more buttons
 
 Hide both the copy and expand/collapse buttons.
 
-<CodeSnippet type="multi" {code} hideCopyButton showMoreLess={false} />
+<FileSource src="/framed/CodeSnippet/CodeSnippetHideButtons" />
 
 ## Custom show more/less text
 
 Set `showMoreText` and `showLessText` to customize the expand/collapse button text.
 
-<CodeSnippet type="multi" {code} showMoreText="Expand" showLessText="Collapse" />
+<FileSource src="/framed/CodeSnippet/CodeSnippetCustomText" />
 
 ## Disabled state
 
 Set `disabled` to `true` to disable interaction. This only applies to `"single"` and `"multi"` types.
 
-<CodeSnippet disabled code="npm i carbon-components-svelte" />
-<br />
-<CodeSnippet disabled type="multi" code="{comment}" />
+<FileSource src="/framed/CodeSnippet/CodeSnippetDisabledMulti" />
 
 ## Wrapped text
 
@@ -121,7 +95,7 @@ By default, the code snippet preserves text formatting and does not wrap text.
 
 Set `wrapText` to `true` to wrap long lines in multi-line snippets.
 
-<CodeSnippet wrapText type="multi" code="{comment}" />
+<FileSource src="/framed/CodeSnippet/CodeSnippetWrapText" />
 
 ## Dynamic multi-line code
 
