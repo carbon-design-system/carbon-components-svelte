@@ -8,6 +8,8 @@ components: ["LocalStorage"]
 
 The `LocalStorage` component provides a reactive wrapper around the [Window.localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). It's useful for persisting user preferences and application state across page reloads.
 
+The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event), so changes made in one browser tab are automatically synchronized to other tabs with the same key.
+
 ## Basic example
 
 See how the component maintains state across page reloads. Toggle the switch and refresh the page to see the persisted state.
