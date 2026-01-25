@@ -29,6 +29,8 @@ Create a basic theme component that can be controlled programmatically.
 
 Set `persist` to `true` to save the theme preference in [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). Use `persistKey` to specify a custom storage key.
 
+When `persist` is enabled, theme changes are automatically synchronized across browser tabs. When the theme is changed in one tab, all other tabs with the same `persistKey` will update immediately.
+
 <FileSource src="/framed/Theme/ThemePersist" />
 
 ## Custom theme
