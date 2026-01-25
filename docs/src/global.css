@@ -1,7 +1,3 @@
-html[theme="g90"] .code-override {
-  border: 1px solid var(--cds-ui-03);
-}
-
 .prose > pre,
 .code-override .bx--snippet {
   color-scheme: dark;
@@ -19,6 +15,12 @@ html[theme="g90"] .code-override {
 .prose > pre {
   padding: 1rem;
   margin-bottom: 1rem;
+  overflow: auto;
+}
+
+.prose > pre,
+.code-override {
+  border: 1px solid var(--cds-ui-03);
 }
 
 /* Dark theme code block styles (default for g80, g90, g100) */
