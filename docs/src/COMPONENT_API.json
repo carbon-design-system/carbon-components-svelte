@@ -19069,7 +19069,7 @@
           "name": "shouldFilterRows",
           "kind": "let",
           "description": "Set to `true` to filter table rows using the search value.\n\nIf `true`, the default search excludes `id`, `cells` fields and\nonly does a basic comparison on string and number type cell values.\n\nTo implement your own client-side filtering, pass a function\nthat accepts a row and value and returns a boolean.",
-          "type": "boolean | ((row: import(\"./DataTable.svelte\").DataTableRow, value: number | string) => boolean)",
+          "type": "boolean | ((row: Row, value: number | string) => boolean)",
           "value": "false",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -19081,7 +19081,7 @@
           "name": "filteredRowIds",
           "kind": "let",
           "description": "The filtered row ids.",
-          "type": "ReadonlyArray<import(\"./DataTable.svelte\").DataTableRowId>",
+          "type": "ReadonlyArray<Row[\"id\"]>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -19160,7 +19160,10 @@
         }
       ],
       "typedefs": [],
-      "generics": null,
+      "generics": [
+        "Row",
+        "Row extends import(\"./DataTable.svelte\").DataTableRow<any> = import(\"./DataTable.svelte\").DataTableRow<any>"
+      ],
       "rest_props": {
         "type": "Element",
         "name": "input"

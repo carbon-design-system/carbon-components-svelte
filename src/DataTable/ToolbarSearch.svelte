@@ -1,5 +1,7 @@
 <script>
   /**
+   * @generics {Row extends import("./DataTable.svelte").DataTableRow<any> = import("./DataTable.svelte").DataTableRow<any>} Row
+   * @template {import("./DataTable.svelte").DataTableRow<any>} Row
    * @restProps {input}
    * @event {null} clear
    */
@@ -27,13 +29,13 @@
    *
    * To implement your own client-side filtering, pass a function
    * that accepts a row and value and returns a boolean.
-   * @type {boolean | ((row: import("./DataTable.svelte").DataTableRow, value: number | string) => boolean)}
+   * @type {boolean | ((row: Row, value: number | string) => boolean)}
    */
   export let shouldFilterRows = false;
 
   /**
    * The filtered row ids.
-   * @type {ReadonlyArray<import("./DataTable.svelte").DataTableRowId>}
+   * @type {ReadonlyArray<Row["id"]>}
    */
   export let filteredRowIds = [];
 
