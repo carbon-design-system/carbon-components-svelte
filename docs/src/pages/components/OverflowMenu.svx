@@ -16,7 +16,7 @@ Create a basic overflow menu by wrapping `OverflowMenuItem` components within `O
 
 <OverflowMenu>
   <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
@@ -26,7 +26,7 @@ Set `flipped` to `true` to position the menu to the left of the button.
 
 <OverflowMenu flipped>
   <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
@@ -36,7 +36,7 @@ Set `direction` to `"top"` to position the menu above the button.
 
 <OverflowMenu flipped direction="top">
   <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
@@ -46,7 +46,7 @@ Enable the light variant by setting `light` to `true`.
 
 <OverflowMenu light>
   <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
@@ -56,7 +56,7 @@ Set `size` to `"xl"` for an extra-large overflow menu.
 
 <OverflowMenu size="xl">
   <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
@@ -66,7 +66,7 @@ Set `size` to `"sm"` for a small overflow menu.
 
 <OverflowMenu size="sm">
   <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
@@ -76,7 +76,7 @@ Set `primaryFocus` to `true` on a menu item to focus it when opening the dropdow
 
 <OverflowMenu>
   <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem primaryFocus danger text="Delete service" />
 </OverflowMenu>
 
@@ -86,7 +86,7 @@ Replace the default vertical overflow menu icon with a custom icon.
 
 <OverflowMenu icon={Add}>
   <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
@@ -97,7 +97,7 @@ Use the `menu` slot to customize the trigger button content.
 <OverflowMenu style="width: auto;">
   <div slot="menu" style="padding: 1rem; color: red;">Custom trigger</div>
   <OverflowMenuItem text="Manage credentials" />
-  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" text="API documentation" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
@@ -113,6 +113,7 @@ Set `disabled` to `true` to disable menu items. Use `hasDivider` to add visual s
   <OverflowMenuItem
     hasDivider
     href="https://cloud.ibm.com/docs/api-gateway/"
+    target="_blank"
     text="API documentation"
   />
   <OverflowMenuItem hasDivider danger text="Delete service" />
