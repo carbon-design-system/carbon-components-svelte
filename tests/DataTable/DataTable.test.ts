@@ -1,6 +1,9 @@
 import { render, screen, within } from "@testing-library/svelte";
 import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
-import type { DataTableKey } from "carbon-components-svelte/DataTable/DataTable.svelte";
+import type {
+  DataTableKey,
+  DataTableRow,
+} from "carbon-components-svelte/DataTable/DataTable.svelte";
 import type { PropertyPath } from "carbon-components-svelte/DataTable/DataTableTypes";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
@@ -1633,6 +1636,27 @@ describe("DataTable", () => {
       expectTypeOf<typeof validPath3>().toEqualTypeOf<"metadata">();
       expectTypeOf<typeof validPath4>().toEqualTypeOf<"metadata.count">();
       expectTypeOf<typeof validPath5>().toEqualTypeOf<"metadata.active">();
+    });
+
+    it("should enforce DataTableRow constraint on generic type", () => {
+      type CustomRow = {
+        id: string;
+        name: string;
+        age: number;
+      };
+
+      type ComponentType = DataTableComponent<CustomRow>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["rows"]>>().toEqualTypeOf<
+        readonly CustomRow[]
+      >();
+
+      type BaseComponentType = DataTableComponent<DataTableRow>;
+      type BaseProps = ComponentProps<BaseComponentType>;
+      expectTypeOf<NonNullable<BaseProps["rows"]>>().toEqualTypeOf<
+        readonly DataTableRow[]
+      >();
     });
   });
 });

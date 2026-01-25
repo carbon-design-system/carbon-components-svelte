@@ -1,5 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
-import type { ComponentType as SvelteComponentType } from "svelte";
+import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
+import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
+import type {
+  ComponentProps,
+  ComponentType as SvelteComponentType,
+} from "svelte";
 import { user } from "../setup-tests";
 import TreeViewAutoCollapse from "./TreeView.autoCollapse.test.svelte";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
@@ -569,6 +574,28 @@ describe("TreeView Generics", () => {
     };
     expectTypeOf(nodeWithIcon.icon).toEqualTypeOf<
       SvelteComponentType | undefined
+    >();
+  });
+
+  it("should enforce TreeNode constraint on generic type", () => {
+    type CustomNode = {
+      id: string;
+      text: string;
+      metadata?: { count: number };
+      nodes?: CustomNode[];
+    };
+
+    type ComponentType = TreeViewComponent<CustomNode>;
+    type Props = ComponentProps<ComponentType>;
+
+    expectTypeOf<NonNullable<Props["nodes"]>>().toEqualTypeOf<
+      readonly CustomNode[]
+    >();
+
+    type BaseComponentType = TreeViewComponent<TreeNode>;
+    type BaseProps = ComponentProps<BaseComponentType>;
+    expectTypeOf<NonNullable<BaseProps["nodes"]>>().toEqualTypeOf<
+      readonly TreeNode[]
     >();
   });
 

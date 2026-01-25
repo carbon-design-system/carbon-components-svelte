@@ -1,4 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import type HeaderSearchComponent from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
+import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
 
@@ -610,5 +613,27 @@ describe("HeaderSearch Generics", () => {
       expectTypeOf(slotProps.result.metadata.tags).toEqualTypeOf<string[]>();
       expectTypeOf(slotProps.result.metadata.author).toEqualTypeOf<string>();
     }
+  });
+
+  it("should enforce HeaderSearchResult constraint on generic type", () => {
+    type CustomResult = {
+      href: string;
+      text: string;
+      category?: "document" | "user" | "project";
+      score?: number;
+    };
+
+    type ComponentType = HeaderSearchComponent<CustomResult>;
+    type Props = ComponentProps<ComponentType>;
+
+    expectTypeOf<NonNullable<Props["results"]>>().toEqualTypeOf<
+      readonly CustomResult[]
+    >();
+
+    type BaseComponentType = HeaderSearchComponent<HeaderSearchResult>;
+    type BaseProps = ComponentProps<BaseComponentType>;
+    expectTypeOf<NonNullable<BaseProps["results"]>>().toEqualTypeOf<
+      readonly HeaderSearchResult[]
+    >();
   });
 });

@@ -992,6 +992,27 @@ describe("MultiSelect", () => {
         SelectEventDetail["unselected"][0]
       >().toEqualTypeOf<MultiSelectItem>();
     });
+
+    it("should enforce MultiSelectItem constraint on generic type", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+      };
+
+      type ComponentType = MultiSelectComponent<Product>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["items"]>>().toEqualTypeOf<
+        readonly Product[]
+      >();
+
+      type BaseComponentType = MultiSelectComponent<MultiSelectItem>;
+      type BaseProps = ComponentProps<BaseComponentType>;
+      expectTypeOf<NonNullable<BaseProps["items"]>>().toEqualTypeOf<
+        readonly MultiSelectItem[]
+      >();
+    });
   });
 
   it("supports custom label slot", () => {

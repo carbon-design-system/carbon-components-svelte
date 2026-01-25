@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
@@ -961,6 +962,27 @@ describe("ComboBox", () => {
       type SelectedItem = SelectEventDetail["selectedItem"];
       expectTypeOf<SelectedItem>().toHaveProperty("id");
       expectTypeOf<SelectedItem>().toHaveProperty("text");
+    });
+
+    it("should enforce ComboBoxItem constraint on generic type", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+      };
+
+      type ComponentType = ComboBoxComponent<Product>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["items"]>>().toEqualTypeOf<
+        readonly Product[]
+      >();
+
+      type BaseComponentType = ComboBoxComponent<ComboBoxItem>;
+      type BaseProps = ComponentProps<BaseComponentType>;
+      expectTypeOf<NonNullable<BaseProps["items"]>>().toEqualTypeOf<
+        readonly ComboBoxItem[]
+      >();
     });
   });
 
