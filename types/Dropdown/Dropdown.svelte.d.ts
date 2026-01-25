@@ -1,19 +1,15 @@
 import { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export type DropdownItemId = any;
-
-export type DropdownItemText = string;
-
-export type DropdownItem = {
-  id: DropdownItemId;
-  text: DropdownItemText;
+export type DropdownItem<Id = any> = {
+  id: Id;
+  text: string;
   /** Whether the item is disabled */ disabled?: boolean;
 };
 
 type $RestProps = SvelteHTMLElements["div"];
 
-type $Props<Item extends DropdownItem = DropdownItem> = {
+type $Props<Item extends DropdownItem<any> = DropdownItem<any>> = {
   /**
    * Set the dropdown items.
    * @default []
@@ -29,7 +25,7 @@ type $Props<Item extends DropdownItem = DropdownItem> = {
    * Specify the selected item id.
    * @default undefined
    */
-  selectedId: DropdownItemId;
+  selectedId: Item["id"];
 
   /**
    * Specify the type of dropdown.
@@ -147,16 +143,13 @@ type $Props<Item extends DropdownItem = DropdownItem> = {
   [key: `data-${string}`]: any;
 };
 
-export type DropdownProps<Item extends DropdownItem = DropdownItem> = Omit<
-  $RestProps,
-  keyof $Props<Item>
-> &
-  $Props<Item>;
+export type DropdownProps<Item extends DropdownItem<any> = DropdownItem<any>> =
+  Omit<$RestProps, keyof $Props<Item>> & $Props<Item>;
 
 export default class Dropdown<
-  Item extends DropdownItem = DropdownItem,
+  Item extends DropdownItem<any> = DropdownItem<any>,
 > extends SvelteComponentTyped<
   DropdownProps<Item>,
-  { select: CustomEvent<{ selectedId: DropdownItemId; selectedItem: Item }> },
+  { select: CustomEvent<{ selectedId: Item["id"]; selectedItem: Item }> },
   { default: { item: Item; index: number } }
 > {}
