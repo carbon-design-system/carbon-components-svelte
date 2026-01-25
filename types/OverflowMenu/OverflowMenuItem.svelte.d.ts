@@ -24,6 +24,20 @@ type $Props = {
   href?: string;
 
   /**
+   * Specify the `target` attribute if the item is a link
+   * @default ""
+   */
+  target?: HTMLAnchorElement["target"];
+
+  /**
+   * Specify the `rel` attribute if the item is a link.
+   * By default, `noopener noreferrer` is added if
+   * `target="_blank"` unless `rel` is specified.
+   * @default undefined
+   */
+  rel?: HTMLAnchorElement["rel"];
+
+  /**
    * Set to `true` if the item should be focused when opening the menu
    * @default false
    */

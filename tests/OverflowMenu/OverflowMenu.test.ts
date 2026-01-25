@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
+import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
 
 describe("OverflowMenu", () => {
@@ -229,6 +230,76 @@ describe("OverflowMenu", () => {
       "href",
       "https://cloud.ibm.com/docs/api-gateway/",
     );
+  });
+
+  it("forwards target attribute and adds rel for _blank", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menuItems = screen.getAllByRole("menuitem");
+    const linkItem = menuItems.find(
+      (item) => item.textContent === "API documentation",
+    );
+    expect(linkItem).toHaveAttribute("target", "_blank");
+    expect(linkItem).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("sets noopener noreferrer by default when target is _blank", async () => {
+    render(OverflowMenuRel, { props: { testCase: "default" } });
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const linkItem = screen.getByRole("menuitem");
+    expect(linkItem).toHaveAttribute("target", "_blank");
+    expect(linkItem).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("allows rel prop to override default noopener noreferrer", async () => {
+    render(OverflowMenuRel, { props: { testCase: "override" } });
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const linkItem = screen.getByRole("menuitem");
+    expect(linkItem).toHaveAttribute("target", "_blank");
+    expect(linkItem).toHaveAttribute("rel", "noopener");
+    expect(linkItem).not.toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("allows rel prop to be set to empty string", async () => {
+    render(OverflowMenuRel, { props: { testCase: "empty" } });
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const linkItem = screen.getByRole("menuitem");
+    expect(linkItem).toHaveAttribute("target", "_blank");
+    expect(linkItem).toHaveAttribute("rel", "");
+  });
+
+  it("does not set rel by default when target is not _blank", async () => {
+    render(OverflowMenuRel, { props: { testCase: "no-target" } });
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const linkItem = screen.getByRole("menuitem");
+    expect(linkItem).toHaveAttribute("target", "_self");
+    expect(linkItem).not.toHaveAttribute("rel");
+  });
+
+  it("allows rel prop to be set even when target is not _blank", async () => {
+    render(OverflowMenuRel, { props: { testCase: "custom-rel" } });
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const linkItem = screen.getByRole("menuitem");
+    expect(linkItem).toHaveAttribute("target", "_self");
+    expect(linkItem).toHaveAttribute("rel", "nofollow");
   });
 
   it("returns focus to button after menu closes", async () => {

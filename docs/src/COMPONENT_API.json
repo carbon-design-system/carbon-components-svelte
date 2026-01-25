@@ -10927,6 +10927,30 @@
           "reactive": false
         },
         {
+          "name": "target",
+          "kind": "let",
+          "description": "Specify the `target` attribute if the item is a link",
+          "type": "HTMLAnchorElement[\"target\"]",
+          "value": "\"\"",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "rel",
+          "kind": "let",
+          "description": "Specify the `rel` attribute if the item is a link.\nBy default, `noopener noreferrer` is added if\n`target=\"_blank\"` unless `rel` is specified.",
+          "type": "HTMLAnchorElement[\"rel\"]",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "primaryFocus",
           "kind": "let",
           "description": "Set to `true` if the item should be focused when opening the menu",

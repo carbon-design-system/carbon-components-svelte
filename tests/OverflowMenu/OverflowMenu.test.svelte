@@ -32,6 +32,7 @@
   />
   <OverflowMenuItem
     href="https://cloud.ibm.com/docs/api-gateway/"
+    target="_blank"
     text="API documentation"
     on:click={() => {
       console.log("click", "API documentation");
