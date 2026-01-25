@@ -18,6 +18,20 @@
   /** Specify the `href` attribute if the item is a link */
   export let href = "";
 
+  /**
+   * Specify the `target` attribute if the item is a link
+   * @type {HTMLAnchorElement["target"]}
+   */
+  export let target = "";
+
+  /**
+   * Specify the `rel` attribute if the item is a link.
+   * By default, `noopener noreferrer` is added if
+   * `target="_blank"` unless `rel` is specified.
+   * @type {HTMLAnchorElement["rel"]}
+   */
+  export let rel = undefined;
+
   /** Set to `true` if the item should be focused when opening the menu */
   export let primaryFocus = false;
 
@@ -61,6 +75,13 @@
     class: "bx--overflow-menu-options__btn",
     disabled: href ? undefined : disabled,
     href: href ? href : undefined,
+    target: href && target ? target : undefined,
+    rel:
+      rel !== undefined
+        ? rel
+        : target === "_blank"
+          ? "noopener noreferrer"
+          : undefined,
     title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
   };
 
