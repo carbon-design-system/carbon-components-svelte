@@ -30,12 +30,10 @@ export type DataTableHeader<Row = DataTableRow> =
   | DataTableNonEmptyHeader<Row>
   | DataTableEmptyHeader<Row>;
 
-export interface DataTableRow {
-  id: any;
+export interface DataTableRow<Id = any> {
+  id: Id;
   [key: string]: DataTableValue;
 }
-
-export type DataTableRowId = any;
 
 export type DataTableCell<Row = DataTableRow> = {
   key: DataTableKey<Row> | (string & {});
@@ -44,15 +42,13 @@ export type DataTableCell<Row = DataTableRow> = {
 };
 
 export type DataTableContext<Row extends DataTableRow = DataTableRow> = {
-  batchSelectedIds: import("svelte/store").Writable<
-    ReadonlyArray<DataTableRowId>
-  >;
+  batchSelectedIds: import("svelte/store").Writable<ReadonlyArray<Row["id"]>>;
   tableRows: import("svelte/store").Writable<ReadonlyArray<Row>>;
   resetSelectedRowIds: () => void;
   filterRows: (
     searchValue: string,
     customFilter?: (row: Row, value: string) => boolean,
-  ) => ReadonlyArray<DataTableRowId>;
+  ) => ReadonlyArray<Row["id"]>;
 };
 
 type $RestProps = SvelteHTMLElements["div"];
@@ -139,13 +135,13 @@ type $Props<Row extends DataTableRow = DataTableRow> = {
    * Specify the row ids to be expanded.
    * @default []
    */
-  expandedRowIds?: ReadonlyArray<DataTableRowId>;
+  expandedRowIds?: ReadonlyArray<Row["id"]>;
 
   /**
    * Specify the ids for rows that should not be expandable.
    * @default []
    */
-  nonExpandableRowIds?: ReadonlyArray<DataTableRowId>;
+  nonExpandableRowIds?: ReadonlyArray<Row["id"]>;
 
   /**
    * Set to `true` for the radio selection variant
@@ -170,13 +166,13 @@ type $Props<Row extends DataTableRow = DataTableRow> = {
    * Specify the row ids to be selected.
    * @default []
    */
-  selectedRowIds?: ReadonlyArray<DataTableRowId>;
+  selectedRowIds?: ReadonlyArray<Row["id"]>;
 
   /**
    * Specify the ids of rows that should not be selectable.
    * @default []
    */
-  nonSelectableRowIds?: ReadonlyArray<DataTableRowId>;
+  nonSelectableRowIds?: ReadonlyArray<Row["id"]>;
 
   /**
    * Set to `true` to enable a sticky header

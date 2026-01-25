@@ -1658,5 +1658,74 @@ describe("DataTable", () => {
         readonly DataTableRow[]
       >();
     });
+
+    it("should infer Row ID type from Row generic", () => {
+      // Test with string IDs
+      type StringIdRow = {
+        id: string;
+        name: string;
+      };
+
+      type StringIdProps = ComponentProps<DataTableComponent<StringIdRow>>;
+      expectTypeOf<
+        NonNullable<StringIdProps["selectedRowIds"]>
+      >().toEqualTypeOf<readonly string[]>();
+      expectTypeOf<
+        NonNullable<StringIdProps["expandedRowIds"]>
+      >().toEqualTypeOf<readonly string[]>();
+      expectTypeOf<
+        NonNullable<StringIdProps["nonSelectableRowIds"]>
+      >().toEqualTypeOf<readonly string[]>();
+      expectTypeOf<
+        NonNullable<StringIdProps["nonExpandableRowIds"]>
+      >().toEqualTypeOf<readonly string[]>();
+
+      // Test with number IDs
+      type NumberIdRow = {
+        id: number;
+        name: string;
+      };
+
+      type NumberIdProps = ComponentProps<DataTableComponent<NumberIdRow>>;
+      expectTypeOf<
+        NonNullable<NumberIdProps["selectedRowIds"]>
+      >().toEqualTypeOf<readonly number[]>();
+      expectTypeOf<
+        NonNullable<NumberIdProps["expandedRowIds"]>
+      >().toEqualTypeOf<readonly number[]>();
+    });
+
+    it('should use Row["id"] for literal type unions with as const', () => {
+      const rows = [
+        { id: "row-1", name: "Item 1" },
+        { id: "row-2", name: "Item 2" },
+        { id: "row-3", name: "Item 3" },
+      ] as const;
+
+      type Row = (typeof rows)[number];
+      type RowId = Row["id"];
+
+      // Verify literal union type
+      expectTypeOf<RowId>().toEqualTypeOf<"row-1" | "row-2" | "row-3">();
+
+      type Props = ComponentProps<DataTableComponent<Row>>;
+      expectTypeOf<NonNullable<Props["selectedRowIds"]>>().toEqualTypeOf<
+        readonly ("row-1" | "row-2" | "row-3")[]
+      >();
+    });
+
+    it("should support DataTableRow<Id> generic interface", () => {
+      // Test that DataTableRow accepts a generic Id parameter
+      type StringDataTableRow = DataTableRow<string>;
+      expectTypeOf<StringDataTableRow["id"]>().toEqualTypeOf<string>();
+
+      type NumberDataTableRow = DataTableRow<number>;
+      expectTypeOf<NumberDataTableRow["id"]>().toEqualTypeOf<number>();
+
+      // Default should be any
+      type DefaultDataTableRow = DataTableRow;
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<DefaultDataTableRow["id"]>().toEqualTypeOf<any>();
+    });
   });
 });

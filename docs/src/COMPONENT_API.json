@@ -3442,7 +3442,7 @@
           "name": "expandedRowIds",
           "kind": "let",
           "description": "Specify the row ids to be expanded.",
-          "type": "ReadonlyArray<DataTableRowId>",
+          "type": "ReadonlyArray<Row[\"id\"]>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -3454,7 +3454,7 @@
           "name": "nonExpandableRowIds",
           "kind": "let",
           "description": "Specify the ids for rows that should not be expandable.",
-          "type": "ReadonlyArray<DataTableRowId>",
+          "type": "ReadonlyArray<Row[\"id\"]>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -3502,7 +3502,7 @@
           "name": "selectedRowIds",
           "kind": "let",
           "description": "Specify the row ids to be selected.",
-          "type": "ReadonlyArray<DataTableRowId>",
+          "type": "ReadonlyArray<Row[\"id\"]>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -3514,7 +3514,7 @@
           "name": "nonSelectableRowIds",
           "kind": "let",
           "description": "Specify the ids of rows that should not be selectable.",
-          "type": "ReadonlyArray<DataTableRowId>",
+          "type": "ReadonlyArray<Row[\"id\"]>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -3699,14 +3699,9 @@
           "ts": "type DataTableHeader<\n  Row = DataTableRow,\n> =\n  | DataTableNonEmptyHeader<Row>\n  | DataTableEmptyHeader<Row>;\n"
         },
         {
-          "type": "{ id: any; [key: string]: DataTableValue; }",
-          "name": "DataTableRow",
-          "ts": "interface DataTableRow {\n  id: any;\n  [key: string]: DataTableValue;\n}\n"
-        },
-        {
-          "type": "any",
-          "name": "DataTableRowId",
-          "ts": "type DataTableRowId = any;\n"
+          "type": "{ id: Id; [key: string]: DataTableValue; }",
+          "name": "DataTableRow<Id=any>",
+          "ts": "interface DataTableRow<Id = any> {\n  id: Id;\n  [key: string]: DataTableValue;\n}\n"
         },
         {
           "type": "{ key: DataTableKey<Row> | (string & {}); value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; }",
@@ -3729,7 +3724,7 @@
           "properties": [
             {
               "name": "batchSelectedIds",
-              "type": "import(\"svelte/store\").Writable<ReadonlyArray<DataTableRowId>>",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<Row[\"id\"]>>",
               "description": "",
               "optional": false
             },
@@ -3747,7 +3742,7 @@
             },
             {
               "name": "filterRows",
-              "type": "(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<DataTableRowId>",
+              "type": "(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row[\"id\"]>",
               "description": "",
               "optional": false
             }
