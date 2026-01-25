@@ -18,9 +18,10 @@
     <div class="framed-header">
       <div
         class="iframe-label"
-        style="margin-left: var(--cds-spacing-05); color: var(--cds-text-02)"
+        aria-hidden="true"
+        style="margin-left: var(--cds-spacing-05); color: var(--cds-text-02); user-select: none"
       >
-        Content loaded in an iframe
+        Content loaded in iframe
       </div>
       <Button
         style="margin-left: auto;"
