@@ -1,4 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
+import type RecursiveListComponent from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
+import type { RecursiveListNode } from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
+import type { ComponentProps } from "svelte";
 import RecursiveListHierarchyTest from "./RecursiveList.hierarchy.test.svelte";
 import RecursiveListTest from "./RecursiveList.test.svelte";
 
@@ -194,6 +197,29 @@ describe("RecursiveList Generics", () => {
       | undefined;
     expectTypeOf<NodesPropType>().toEqualTypeOf<
       ReadonlyArray<MinimalNode & { nodes?: MinimalNode[] }> | undefined
+    >();
+  });
+
+  it("should enforce RecursiveListNode constraint on generic type", () => {
+    type CustomNode = {
+      text?: string;
+      href?: string;
+      html?: string;
+      badge?: number;
+      nodes?: CustomNode[];
+    };
+
+    type ComponentType = RecursiveListComponent<CustomNode>;
+    type Props = ComponentProps<ComponentType>;
+
+    expectTypeOf<NonNullable<Props["nodes"]>>().toEqualTypeOf<
+      ReadonlyArray<CustomNode & { nodes?: CustomNode[] }>
+    >();
+
+    type BaseComponentType = RecursiveListComponent<RecursiveListNode>;
+    type BaseProps = ComponentProps<BaseComponentType>;
+    expectTypeOf<NonNullable<BaseProps["nodes"]>>().toEqualTypeOf<
+      ReadonlyArray<RecursiveListNode & { nodes?: RecursiveListNode[] }>
     >();
   });
 });

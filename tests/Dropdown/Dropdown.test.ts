@@ -519,6 +519,27 @@ describe("Dropdown", () => {
         SelectEventDetail["selectedItem"]
       >().toEqualTypeOf<DropdownItem>();
     });
+
+    it("should enforce DropdownItem constraint on generic type", () => {
+      type Product = {
+        id: string;
+        text: string;
+        price: number;
+      };
+
+      type ComponentType = DropdownComponent<Product>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<NonNullable<Props["items"]>>().toEqualTypeOf<
+        readonly Product[]
+      >();
+
+      type BaseComponentType = DropdownComponent<DropdownItem>;
+      type BaseProps = ComponentProps<BaseComponentType>;
+      expectTypeOf<NonNullable<BaseProps["items"]>>().toEqualTypeOf<
+        readonly DropdownItem[]
+      >();
+    });
   });
 
   it("should support typeahead when typing with menu open", async () => {

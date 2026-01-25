@@ -1,4 +1,6 @@
 import { render, screen, within } from "@testing-library/svelte";
+import type SelectComponent from "carbon-components-svelte/Select/Select.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import SelectFalsy from "./Select.falsy.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
@@ -309,6 +311,29 @@ describe("Select Generics", () => {
 
     type SelectedPropType = UnionValue | undefined;
     expectTypeOf<SelectedPropType>().toEqualTypeOf<UnionValue | undefined>();
+  });
+
+  it("should enforce string | number constraint on generic type", () => {
+    type StringLiteral = "option1" | "option2" | "option3";
+    type ComponentType = SelectComponent<StringLiteral>;
+    type Props = ComponentProps<ComponentType>;
+
+    expectTypeOf<Props["selected"]>().toEqualTypeOf<
+      StringLiteral | undefined
+    >();
+
+    type NumberLiteral = 1 | 2 | 3;
+    type NumberComponentType = SelectComponent<NumberLiteral>;
+    type NumberProps = ComponentProps<NumberComponentType>;
+    expectTypeOf<NumberProps["selected"]>().toEqualTypeOf<
+      NumberLiteral | undefined
+    >();
+
+    type BaseComponentType = SelectComponent<string | number>;
+    type BaseProps = ComponentProps<BaseComponentType>;
+    expectTypeOf<BaseProps["selected"]>().toEqualTypeOf<
+      string | number | undefined
+    >();
   });
 
   it("supports custom label slot", () => {
