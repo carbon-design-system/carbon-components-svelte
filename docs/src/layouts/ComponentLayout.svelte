@@ -1,3 +1,7 @@
+<script context="module">
+  const markdownCache = new Map();
+</script>
+
 <script>
   import { metatags, page } from "@sveltech/routify";
   import {
@@ -44,6 +48,12 @@
     if (["white", "g10", "g80", "g90", "g100"].includes(current_theme)) {
       theme.set(current_theme);
     }
+
+    return () => {
+      if (copyTimeout) {
+        clearTimeout(copyTimeout);
+      }
+    };
   });
 
   function formatSourceURL(multiple) {
@@ -70,20 +80,33 @@
   let copying = false;
   let copied = false;
 
+  /** @type {NodeJS.Timeout | null} */
+  let copyTimeout = null;
+
   async function copyMarkdown() {
     if (copying) return;
     copying = true;
-    copied = false;
 
-    const response = await fetch(markdownUrl);
+    let markdown = markdownCache.get(component);
 
-    if (response.ok) {
-      const markdown = await response.text();
+    if (!markdown) {
+      const response = await fetch(markdownUrl);
+
+      if (response.ok) {
+        markdown = await response.text();
+        markdownCache.set(component, markdown);
+      }
+    }
+
+    if (markdown) {
       await navigator.clipboard.writeText(markdown);
-      copied = true;
-      setTimeout(() => {
-        copied = false;
-      }, 2000);
+      if (!copied) {
+        copied = true;
+        copyTimeout = setTimeout(() => {
+          copied = false;
+          copyTimeout = null;
+        }, 2000);
+      }
     }
 
     copying = false;
@@ -120,7 +143,6 @@
               kind="ghost"
               size="field"
               icon={Copy}
-              disabled={copying}
               on:click={copyMarkdown}
             >
               {copied ? "Copied!" : "Copy page"}
