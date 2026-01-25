@@ -1,7 +1,7 @@
 <script>
   /**
    * @event {null} save
-   * @event update
+   * @event update - Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab/window.
    * @property {any} prevValue
    * @property {any} value
    */
@@ -74,6 +74,24 @@
     }
 
     mounted = true;
+
+    function handleStorageChange(event) {
+      if (event.key === key && event.newValue !== null) {
+        try {
+          value = JSON.parse(event.newValue);
+        } catch (e) {
+          value = event.newValue;
+        }
+        dispatch("update", { prevValue, value });
+        prevValue = value;
+      }
+    }
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   });
 
   $: if (mounted && key !== prevKey) {
