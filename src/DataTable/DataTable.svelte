@@ -21,8 +21,7 @@
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
-   * @typedef {{ id: any; [key: string]: DataTableValue; }} DataTableRow
-   * @typedef {any} DataTableRowId
+   * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
    * @typedef {object} DataTableCell<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {DataTableValue} value
@@ -135,13 +134,13 @@
 
   /**
    * Specify the row ids to be expanded.
-   * @type {ReadonlyArray<DataTableRowId>}
+   * @type {ReadonlyArray<Row["id"]>}
    */
   export let expandedRowIds = [];
 
   /**
    * Specify the ids for rows that should not be expandable.
-   * @type {ReadonlyArray<DataTableRowId>}
+   * @type {ReadonlyArray<Row["id"]>}
    */
   export let nonExpandableRowIds = [];
 
@@ -159,13 +158,13 @@
 
   /**
    * Specify the row ids to be selected.
-   * @type {ReadonlyArray<DataTableRowId>}
+   * @type {ReadonlyArray<Row["id"]>}
    */
   export let selectedRowIds = [];
 
   /**
    * Specify the ids of rows that should not be selectable.
-   * @type {ReadonlyArray<DataTableRowId>}
+   * @type {ReadonlyArray<Row["id"]>}
    */
   export let nonSelectableRowIds = [];
 
@@ -213,7 +212,7 @@
   };
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<DataTableRowId>>}
+   * @type {import("svelte/store").Writable<ReadonlyArray<Row["id"]>>}
    */
   const batchSelectedIds = writable([]);
   /**
@@ -243,7 +242,7 @@
   };
 
   /**
-   * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<DataTableRowId>}
+   * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}
    */
   const filterRows = (searchValue, customFilter) => {
     const value = searchValue.trim().toLowerCase();
