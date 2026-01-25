@@ -57,10 +57,6 @@
     max-width: 80rem;
   }
 
-  .code-override {
-    border: 1px solid var(--cds-ui-03);
-  }
-
   .preview-viewer {
     border: 1px solid var(--cds-ui-03);
     border-bottom: 0;
