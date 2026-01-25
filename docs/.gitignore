@@ -2,5 +2,6 @@
 /dist
 /public/sitemap.xml
 /public/components/
+/public/llms.txt
 /.routify
 src/SEARCH_INDEX.json
