@@ -1,16 +1,15 @@
 <script>
   /**
-   * @generics {Item extends MultiSelectItem = MultiSelectItem} Item
-   * @template {MultiSelectItem} Item
-   * @typedef {any} MultiSelectItemId
+   * @generics {Item extends MultiSelectItem<any> = MultiSelectItem<any>} Item
+   * @template {MultiSelectItem<any>} Item
    * @typedef {string} MultiSelectItemText
-   * @typedef {object} MultiSelectItem
-   * @property {MultiSelectItemId} id
+   * @typedef {object} MultiSelectItem<Id=any>
+   * @property {Id} id
    * @property {MultiSelectItemText} text
    * @property {boolean} [disabled] - Whether the item is disabled
    * @event select
    * @type {object}
-   * @property {MultiSelectItemId[]} selectedIds
+   * @property {Item["id"][]} selectedIds
    * @property {Item[]} selected
    * @property {Item[]} unselected
    * @event {null} clear
@@ -38,7 +37,7 @@
 
   /**
    * Set the selected ids.
-   * @type {ReadonlyArray<MultiSelectItemId>}
+   * @type {ReadonlyArray<Item["id"]>}
    */
   export let selectedIds = [];
 
@@ -173,7 +172,7 @@
 
   /**
    * Id of the highlighted ListBoxMenuItem.
-   * @type {null | MultiSelectItemId}
+   * @type {null | Item["id"]}
    */
   export let highlightedId = null;
 

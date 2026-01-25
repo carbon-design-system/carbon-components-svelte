@@ -1013,6 +1013,85 @@ describe("MultiSelect", () => {
         readonly MultiSelectItem[]
       >();
     });
+
+    describe("Id generic parameter", () => {
+      it("should default Id to any when not specified", () => {
+        type ComponentType = MultiSelectComponent;
+        type Props = ComponentProps<ComponentType>;
+        type Events = ComponentEvents<ComponentType>;
+
+        expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+          // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+          readonly any[] | undefined
+        >();
+
+        type SelectEvent = Events["select"];
+        type SelectEventDetail =
+          SelectEvent extends CustomEvent<infer T> ? T : never;
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<SelectEventDetail["selectedIds"]>().toEqualTypeOf<any[]>();
+      });
+
+      it("should support different ID types (string, number, union)", () => {
+        // String ID
+        type StringItem = { id: string; text: string };
+        type StringComponent = MultiSelectComponent<StringItem>;
+        expectTypeOf<
+          ComponentProps<StringComponent>["selectedIds"]
+        >().toEqualTypeOf<readonly string[] | undefined>();
+
+        // Number ID
+        type NumberItem = { id: number; text: string };
+        type NumberComponent = MultiSelectComponent<NumberItem>;
+        expectTypeOf<
+          ComponentProps<NumberComponent>["selectedIds"]
+        >().toEqualTypeOf<readonly number[] | undefined>();
+
+        // Union ID
+        type UnionId = "a" | "b" | "c";
+        type UnionItem = { id: UnionId; text: string };
+        type UnionComponent = MultiSelectComponent<UnionItem>;
+        type UnionEvents = ComponentEvents<UnionComponent>;
+        type UnionSelectDetail =
+          UnionEvents["select"] extends CustomEvent<infer T> ? T : never;
+        expectTypeOf<UnionSelectDetail["selectedIds"]>().toEqualTypeOf<
+          UnionId[]
+        >();
+      });
+
+      it("should work with 'as const' for literal type inference", () => {
+        const items = [
+          { id: "option1", text: "Option 1" },
+          { id: "option2", text: "Option 2" },
+          { id: "option3", text: "Option 3" },
+        ] as const;
+
+        type InferredItem = (typeof items)[number];
+        type InferredId = InferredItem["id"];
+
+        expectTypeOf<InferredId>().toEqualTypeOf<
+          "option1" | "option2" | "option3"
+        >();
+
+        type ComponentType = MultiSelectComponent<InferredItem>;
+        type Props = ComponentProps<ComponentType>;
+        type Events = ComponentEvents<ComponentType>;
+
+        expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+          readonly InferredId[] | undefined
+        >();
+
+        type SelectEvent = Events["select"];
+        type SelectEventDetail =
+          SelectEvent extends CustomEvent<infer T> ? T : never;
+        expectTypeOf<SelectEventDetail["selectedIds"]>().toEqualTypeOf<
+          InferredId[]
+        >();
+        expectTypeOf<
+          SelectEventDetail["selected"][0]
+        >().toEqualTypeOf<InferredItem>();
+      });
+    });
   });
 
   it("supports custom label slot", () => {
