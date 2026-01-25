@@ -9347,7 +9347,7 @@
           "name": "selectedIds",
           "kind": "let",
           "description": "Set the selected ids.",
-          "type": "ReadonlyArray<MultiSelectItemId>",
+          "type": "ReadonlyArray<Item[\"id\"]>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -9717,7 +9717,7 @@
           "name": "highlightedId",
           "kind": "let",
           "description": "Id of the highlighted ListBoxMenuItem.",
-          "type": "null | MultiSelectItemId",
+          "type": "null | Item[\"id\"]",
           "value": "null",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -9745,7 +9745,7 @@
         {
           "type": "dispatched",
           "name": "select",
-          "detail": "{\n  selectedIds: MultiSelectItemId[];\n  selected: Item[];\n  unselected: Item[];\n}"
+          "detail": "{\n  selectedIds: Item[\"id\"][];\n  selected: Item[];\n  unselected: Item[];\n}"
         },
         {
           "type": "forwarded",
@@ -9786,24 +9786,19 @@
       ],
       "typedefs": [
         {
-          "type": "any",
-          "name": "MultiSelectItemId",
-          "ts": "type MultiSelectItemId = any;\n"
-        },
-        {
           "type": "string",
           "name": "MultiSelectItemText",
           "ts": "type MultiSelectItemText = string;\n"
         },
         {
-          "type": "{ id: MultiSelectItemId; text: MultiSelectItemText; /** Whether the item is disabled */ disabled?: boolean; }",
-          "name": "MultiSelectItem",
-          "ts": "type MultiSelectItem = {\n  id: MultiSelectItemId;\n  text: MultiSelectItemText;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
+          "type": "{ id: Id; text: MultiSelectItemText; /** Whether the item is disabled */ disabled?: boolean; }",
+          "name": "MultiSelectItem<Id=any>",
+          "ts": "type MultiSelectItem<Id = any> = {\n  id: Id;\n  text: MultiSelectItemText;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
         }
       ],
       "generics": [
         "Item",
-        "Item extends MultiSelectItem = MultiSelectItem"
+        "Item extends MultiSelectItem<any> = MultiSelectItem<any>"
       ],
       "rest_props": {
         "type": "Element",

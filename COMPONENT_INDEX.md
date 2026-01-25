@@ -2441,12 +2441,10 @@ None.
 ### Types
 
 ```ts
-export type MultiSelectItemId = any;
-
 export type MultiSelectItemText = string;
 
-export type MultiSelectItem = {
-  id: MultiSelectItemId;
+export type MultiSelectItem<Id = any> = {
+  id: Id;
   text: MultiSelectItemText;
   /** Whether the item is disabled */ disabled?: boolean;
 };
@@ -2456,14 +2454,14 @@ export type MultiSelectItem = {
 
 | Prop name                | Required | Kind             | Reactive | Type                                                                                                    | Default value                                      | Description                                                                                                                                                            |
 | :----------------------- | :------- | :--------------- | :------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| highlightedId            | No       | <code>let</code> | Yes      | <code>null &#124; MultiSelectItemId</code>                                                              | <code>null</code>                                  | Id of the highlighted ListBoxMenuItem.                                                                                                                                 |
+| highlightedId            | No       | <code>let</code> | Yes      | <code>null &#124; Item["id"]</code>                                                                     | <code>null</code>                                  | Id of the highlighted ListBoxMenuItem.                                                                                                                                 |
 | selectionRef             | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                 | <code>null</code>                                  | Obtain a reference to the selection element.                                                                                                                           |
 | fieldRef                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                 | <code>null</code>                                  | Obtain a reference to the field box element.                                                                                                                           |
 | multiSelectRef           | No       | <code>let</code> | Yes      | <code>null &#124; HTMLDivElement</code>                                                                 | <code>null</code>                                  | Obtain a reference to the outer div element                                                                                                                            |
 | inputRef                 | No       | <code>let</code> | Yes      | <code>null &#124; HTMLInputElement</code>                                                               | <code>null</code>                                  | Obtain a reference to the input HTML element                                                                                                                           |
 | open                     | No       | <code>let</code> | Yes      | <code>boolean</code>                                                                                    | <code>false</code>                                 | Set to `true` to open the dropdown                                                                                                                                     |
 | value                    | No       | <code>let</code> | Yes      | <code>string</code>                                                                                     | <code>""</code>                                    | Specify the multiselect value                                                                                                                                          |
-| selectedIds              | No       | <code>let</code> | Yes      | <code>ReadonlyArray<MultiSelectItemId></code>                                                           | <code>[]</code>                                    | Set the selected ids.                                                                                                                                                  |
+| selectedIds              | No       | <code>let</code> | Yes      | <code>ReadonlyArray<Item["id"]></code>                                                                  | <code>[]</code>                                    | Set the selected ids.                                                                                                                                                  |
 | items                    | No       | <code>let</code> | No       | <code>ReadonlyArray<Item></code>                                                                        | <code>[]</code>                                    | Set the multiselect items.                                                                                                                                             |
 | itemToString             | No       | <code>let</code> | No       | <code>(item: Item) => any</code>                                                                        | --                                                 | Override the display of a multiselect item.                                                                                                                            |
 | itemToInput              | No       | <code>let</code> | No       | <code>(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }</code>         | --                                                 | Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.                                          |
@@ -2501,16 +2499,16 @@ export type MultiSelectItem = {
 
 ### Events
 
-| Event name | Type       | Detail                                                                                   | Description |
-| :--------- | :--------- | :--------------------------------------------------------------------------------------- | :---------- |
-| select     | dispatched | <code>{ selectedIds: MultiSelectItemId[]; selected: Item[]; unselected: Item[]; }</code> | --          |
-| clear      | forwarded  | --                                                                                       | --          |
-| blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                                   | --          |
-| keydown    | forwarded  | --                                                                                       | --          |
-| input      | forwarded  | --                                                                                       | --          |
-| keyup      | forwarded  | --                                                                                       | --          |
-| focus      | forwarded  | --                                                                                       | --          |
-| paste      | forwarded  | --                                                                                       | --          |
+| Event name | Type       | Detail                                                                            | Description |
+| :--------- | :--------- | :-------------------------------------------------------------------------------- | :---------- |
+| select     | dispatched | <code>{ selectedIds: Item["id"][]; selected: Item[]; unselected: Item[]; }</code> | --          |
+| clear      | forwarded  | --                                                                                | --          |
+| blur       | dispatched | <code>FocusEvent &#124; CustomEvent<FocusEvent></code>                            | --          |
+| keydown    | forwarded  | --                                                                                | --          |
+| input      | forwarded  | --                                                                                | --          |
+| keyup      | forwarded  | --                                                                                | --          |
+| focus      | forwarded  | --                                                                                | --          |
+| paste      | forwarded  | --                                                                                | --          |
 
 ## `NotificationActionButton`
 

@@ -1,12 +1,10 @@
 import { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export type MultiSelectItemId = any;
-
 export type MultiSelectItemText = string;
 
-export type MultiSelectItem = {
-  id: MultiSelectItemId;
+export type MultiSelectItem<Id = any> = {
+  id: Id;
   text: MultiSelectItemText;
   /** Whether the item is disabled */ disabled?: boolean;
 };
@@ -20,7 +18,7 @@ export type MultiSelectContext = {
 
 type $RestProps = SvelteHTMLElements["input"];
 
-type $Props<Item extends MultiSelectItem = MultiSelectItem> = {
+type $Props<Item extends MultiSelectItem<any> = MultiSelectItem<any>> = {
   /**
    * Set the multiselect items.
    * @default []
@@ -46,7 +44,7 @@ type $Props<Item extends MultiSelectItem = MultiSelectItem> = {
    * Set the selected ids.
    * @default []
    */
-  selectedIds?: ReadonlyArray<MultiSelectItemId>;
+  selectedIds?: ReadonlyArray<Item["id"]>;
 
   /**
    * Specify the multiselect value
@@ -238,7 +236,7 @@ type $Props<Item extends MultiSelectItem = MultiSelectItem> = {
    * Id of the highlighted ListBoxMenuItem.
    * @default null
    */
-  highlightedId?: null | MultiSelectItemId;
+  highlightedId?: null | Item["id"];
 
   labelChildren?: (this: void) => void;
 
@@ -247,16 +245,17 @@ type $Props<Item extends MultiSelectItem = MultiSelectItem> = {
   [key: `data-${string}`]: any;
 };
 
-export type MultiSelectProps<Item extends MultiSelectItem = MultiSelectItem> =
-  Omit<$RestProps, keyof $Props<Item>> & $Props<Item>;
+export type MultiSelectProps<
+  Item extends MultiSelectItem<any> = MultiSelectItem<any>,
+> = Omit<$RestProps, keyof $Props<Item>> & $Props<Item>;
 
 export default class MultiSelect<
-  Item extends MultiSelectItem = MultiSelectItem,
+  Item extends MultiSelectItem<any> = MultiSelectItem<any>,
 > extends SvelteComponentTyped<
   MultiSelectProps<Item>,
   {
     select: CustomEvent<{
-      selectedIds: MultiSelectItemId[];
+      selectedIds: Item["id"][];
       selected: Item[];
       unselected: Item[];
     }>;
