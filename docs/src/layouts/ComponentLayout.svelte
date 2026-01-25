@@ -6,14 +6,18 @@
     Content,
     Grid,
     Link,
+    OverflowMenu,
+    OverflowMenuItem,
     Row,
     Select,
     SelectItem,
+    Stack,
     Tab,
     TabContent,
     Tabs,
   } from "carbon-components-svelte";
-  import Code from "carbon-icons-svelte/lib/Code.svelte";
+  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
+  import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
   import { onMount } from "svelte";
   import COMPONENT_API from "../COMPONENT_API.json";
   import ComponentApi from "../components/ComponentApi.svelte";
@@ -61,6 +65,29 @@
   }
 
   $: sourceCode = `${REPO_URL}/tree/master/${formatSourceURL(multiple)}`;
+  $: markdownUrl = `/components/${component}.md`;
+
+  let copying = false;
+  let copied = false;
+
+  async function copyMarkdown() {
+    if (copying) return;
+    copying = true;
+    copied = false;
+
+    const response = await fetch(markdownUrl);
+
+    if (response.ok) {
+      const markdown = await response.text();
+      await navigator.clipboard.writeText(markdown);
+      copied = true;
+      setTimeout(() => {
+        copied = false;
+      }, 2000);
+    }
+
+    copying = false;
+  }
 </script>
 
 <svelte:head>
@@ -88,15 +115,29 @@
             <SelectItem value="g90" text="Gray 90" />
             <SelectItem value="g100" text="Gray 100" />
           </Select>
-          <Button
-            kind="ghost"
-            target="_blank"
-            size="field"
-            href={sourceCode}
-            icon={Code}
-          >
-            Source code
-          </Button>
+          <Stack orientation="horizontal">
+            <Button
+              kind="ghost"
+              size="field"
+              icon={Copy}
+              disabled={copying}
+              on:click={copyMarkdown}
+            >
+              {copied ? "Copied!" : "Copy page"}
+            </Button>
+            <OverflowMenu flipped icon={OverflowMenuVertical} size="field">
+              <OverflowMenuItem
+                text="Source code"
+                href={sourceCode}
+                target="_blank"
+              />
+              <OverflowMenuItem
+                text="View as Markdown"
+                href={markdownUrl}
+                target="_blank"
+              />
+            </OverflowMenu>
+          </Stack>
         </div>
       </Column>
     </Row>
