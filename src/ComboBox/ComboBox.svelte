@@ -1,15 +1,14 @@
 <script>
   /**
-   * @generics {Item extends ComboBoxItem = ComboBoxItem} Item
-   * @template {ComboBoxItem} Item
-   * @typedef {any} ComboBoxItemId
-   * @typedef {object} ComboBoxItem
-   * @property {ComboBoxItemId} id
+   * @generics {Item extends ComboBoxItem<any> = ComboBoxItem<any>} Item
+   * @template {ComboBoxItem<any>} Item
+   * @typedef {object} ComboBoxItem<Id=any>
+   * @property {Id} id
    * @property {string} text
    * @property {boolean} [disabled] - Whether the item is disabled
    * @event select
    * @type {object}
-   * @property {ComboBoxItemId} selectedId
+   * @property {Item["id"]} selectedId
    * @property {Item} selectedItem
    * @event {KeyboardEvent | MouseEvent} clear
    * @slot {{ item: Item; index: number }}
@@ -29,7 +28,7 @@
 
   /**
    * Set the selected item by value id.
-   * @type {ComboBoxItemId}
+   * @type {Item["id"]}
    */
   export let selectedId = undefined;
 

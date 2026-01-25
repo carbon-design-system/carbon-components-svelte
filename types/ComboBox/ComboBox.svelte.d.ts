@@ -1,17 +1,15 @@
 import { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
-export type ComboBoxItemId = any;
-
-export type ComboBoxItem = {
-  id: ComboBoxItemId;
+export type ComboBoxItem<Id = any> = {
+  id: Id;
   text: string;
   /** Whether the item is disabled */ disabled?: boolean;
 };
 
 type $RestProps = SvelteHTMLElements["input"];
 
-type $Props<Item extends ComboBoxItem = ComboBoxItem> = {
+type $Props<Item extends ComboBoxItem<any> = ComboBoxItem<any>> = {
   /**
    * Set the combobox items.
    * @default []
@@ -27,7 +25,7 @@ type $Props<Item extends ComboBoxItem = ComboBoxItem> = {
    * Set the selected item by value id.
    * @default undefined
    */
-  selectedId?: ComboBoxItemId;
+  selectedId?: Item["id"];
 
   /**
    * Specify the selected combobox value
@@ -188,18 +186,15 @@ type $Props<Item extends ComboBoxItem = ComboBoxItem> = {
   [key: `data-${string}`]: any;
 };
 
-export type ComboBoxProps<Item extends ComboBoxItem = ComboBoxItem> = Omit<
-  $RestProps,
-  keyof $Props<Item>
-> &
-  $Props<Item>;
+export type ComboBoxProps<Item extends ComboBoxItem<any> = ComboBoxItem<any>> =
+  Omit<$RestProps, keyof $Props<Item>> & $Props<Item>;
 
 export default class ComboBox<
-  Item extends ComboBoxItem = ComboBoxItem,
+  Item extends ComboBoxItem<any> = ComboBoxItem<any>,
 > extends SvelteComponentTyped<
   ComboBoxProps<Item>,
   {
-    select: CustomEvent<{ selectedId: ComboBoxItemId; selectedItem: Item }>;
+    select: CustomEvent<{ selectedId: Item["id"]; selectedItem: Item }>;
     clear: CustomEvent<KeyboardEvent | MouseEvent>;
     input: WindowEventMap["input"];
     keydown: WindowEventMap["keydown"];

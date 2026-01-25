@@ -5,7 +5,7 @@
     { id: "1", text: "Laptop", price: 999, category: "Electronics" },
     { id: "2", text: "Phone", price: 599, category: "Electronics" },
     { id: "3", text: "Desk", price: 299, category: "Furniture" },
-  ];
+  ] as const;
 </script>
 
 <ComboBox
@@ -17,9 +17,9 @@
   }}
   let:item
 >
-  {@const { text, price, category } = item}
+  {@const { id, text, price, category } = item}
   <div>
-    <strong>{text}</strong> - ${price}
+    <strong>{text}</strong> - ${price} - {id}
     <span>({category})</span>
   </div>
 </ComboBox>
