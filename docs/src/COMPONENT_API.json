@@ -8661,7 +8661,8 @@
         {
           "type": "dispatched",
           "name": "update",
-          "detail": "{\n  prevValue: any;\n  value: any;\n}"
+          "detail": "{\n  prevValue: any;\n  value: any;\n}",
+          "description": "Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab/window."
         }
       ],
       "typedefs": [],

@@ -2306,10 +2306,10 @@ None.
 
 ### Events
 
-| Event name | Type       | Detail                                       | Description |
-| :--------- | :--------- | :------------------------------------------- | :---------- |
-| save       | dispatched | <code>null</code>                            | --          |
-| update     | dispatched | <code>{ prevValue: any; value: any; }</code> | --          |
+| Event name | Type       | Detail                                       | Description                                                                                                                     |
+| :--------- | :--------- | :------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
+| save       | dispatched | <code>null</code>                            | --                                                                                                                              |
+| update     | dispatched | <code>{ prevValue: any; value: any; }</code> | Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab/window. |
 
 ## `Modal`
 
