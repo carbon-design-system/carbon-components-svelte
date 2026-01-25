@@ -1,13 +1,12 @@
 <script lang="ts">
   import { Button, TreeView } from "carbon-components-svelte";
-  import type { TreeNodeId } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
   import type { ComponentProps } from "svelte";
 
   let treeview: TreeView;
-  let activeId: TreeNodeId = "";
-  let selectedIds: TreeNodeId[] = [];
-  let expandedIds: TreeNodeId[] = [];
+  let activeId: string | number = "";
+  let selectedIds: (string | number)[] = [];
+  let expandedIds: (string | number)[] = [];
   let nodes: ComponentProps<TreeView>["nodes"] = [
     { id: 0, text: "AI / Machine learning", icon: Analytics },
     {

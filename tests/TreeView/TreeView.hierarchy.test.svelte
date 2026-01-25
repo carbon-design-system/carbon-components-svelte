@@ -1,13 +1,14 @@
 <script lang="ts">
   import { Button, TreeView, toHierarchy } from "carbon-components-svelte";
-  import type { TreeNodeId } from "carbon-components-svelte/TreeView/TreeView.svelte";
+  import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 
-  let treeview: TreeView;
-  let activeId: TreeNodeId = "";
-  let selectedIds: TreeNodeId[] = [];
-  let expandedIds: TreeNodeId[] = [];
-  let nodes = toHierarchy(
+  type HierarchyNode = TreeNode<number> & { pid?: number };
+  let treeview: TreeView<HierarchyNode>;
+  let activeId: number | undefined = undefined;
+  let selectedIds: number[] = [];
+  let expandedIds: number[] = [];
+  let nodes = toHierarchy<HierarchyNode, "pid">(
     [
       { id: 0, text: "AI / Machine learning", icon: Analytics },
       { id: 1, text: "Analytics" },

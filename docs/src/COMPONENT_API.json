@@ -19731,7 +19731,7 @@
           "name": "activeId",
           "kind": "let",
           "description": "Set the current active node id.\nOnly one node can be active.",
-          "type": "TreeNodeId",
+          "type": "Node[\"id\"]",
           "value": "\"\"",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -19743,7 +19743,7 @@
           "name": "selectedIds",
           "kind": "let",
           "description": "Set the node ids to be selected.",
-          "type": "ReadonlyArray<TreeNodeId>",
+          "type": "ReadonlyArray<Node[\"id\"]>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -19755,7 +19755,7 @@
           "name": "expandedIds",
           "kind": "let",
           "description": "Set the node ids to be expanded.",
-          "type": "ReadonlyArray<TreeNodeId>",
+          "type": "ReadonlyArray<Node[\"id\"]>",
           "value": "[]",
           "isFunction": false,
           "isFunctionDeclaration": false,
@@ -19859,7 +19859,7 @@
           "name": "showNode",
           "kind": "function",
           "description": "Programmatically show a node by `id`.\nBy default, the matching node will be expanded, selected, and focused.\nUse the options parameter to customize this behavior.\n@example \n```svelte\n<TreeView bind:this={treeView} {nodes} />\n<button on:click={() => treeView.showNode('node-123')}>\n  Show Node\n</button>\n<button on:click={() => treeView.showNode('node-123', { expand: false, focus: false })}>\n  Show Node (No Expand/Focus)\n</button>\n```",
-          "type": "(id: TreeNodeId, options?: ShowNodeOptions) => void",
+          "type": "(id: Node[\"id\"], options?: ShowNodeOptions) => void",
           "isFunction": true,
           "isFunctionDeclaration": true,
           "isRequired": false,
@@ -19873,7 +19873,7 @@
           "name": null,
           "default": true,
           "fallback": "{node.text}",
-          "slot_props": "{\n  node: {\n    id: TreeNodeId;\n    text: string;\n    expanded: boolean;\n    leaf: boolean;\n    disabled: boolean;\n    selected: boolean;\n  };\n}"
+          "slot_props": "{\n  node: {\n    id: Node[\"id\"];\n    text: string;\n    expanded: boolean;\n    leaf: boolean;\n    disabled: boolean;\n    selected: boolean;\n  };\n}"
         },
         {
           "name": "labelChildren",
@@ -19906,14 +19906,9 @@
       ],
       "typedefs": [
         {
-          "type": "string | number",
-          "name": "TreeNodeId",
-          "ts": "type TreeNodeId = string | number;\n"
-        },
-        {
-          "type": "{ id: TreeNodeId; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: TreeNode[]; }",
-          "name": "TreeNode",
-          "ts": "type TreeNode = {\n  id: TreeNodeId;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: TreeNode[];\n};\n"
+          "type": "{ id: Id; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: TreeNode<Id>[]; }",
+          "name": "TreeNode<Id=(string|number)>",
+          "ts": "type TreeNode<Id = string | number> = {\n  id: Id;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: TreeNode<Id>[];\n};\n"
         },
         {
           "type": "{ /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean; /** Whether to select the node (default: true) */ select?: boolean; /** Whether to focus the node (default: true) */ focus?: boolean; }",
@@ -19923,7 +19918,7 @@
       ],
       "generics": [
         "Node",
-        "Node extends TreeNode = TreeNode"
+        "Node extends TreeNode<any> = TreeNode<any>"
       ],
       "rest_props": {
         "type": "Element",
@@ -19936,19 +19931,19 @@
           "properties": [
             {
               "name": "activeNodeId",
-              "type": "import(\"svelte/store\").Writable<TreeNodeId>",
+              "type": "import(\"svelte/store\").Writable<Node[\"id\"]>",
               "description": "",
               "optional": false
             },
             {
               "name": "selectedNodeIds",
-              "type": "import(\"svelte/store\").Writable<ReadonlyArray<TreeNodeId>>",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<Node[\"id\"]>>",
               "description": "",
               "optional": false
             },
             {
               "name": "expandedNodeIds",
-              "type": "import(\"svelte/store\").Writable<ReadonlyArray<TreeNodeId>>",
+              "type": "import(\"svelte/store\").Writable<ReadonlyArray<Node[\"id\"]>>",
               "description": "",
               "optional": false
             },

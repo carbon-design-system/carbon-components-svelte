@@ -54,13 +54,14 @@
 
 <script>
   /**
-   * @typedef {string | number} TreeNodeId
-   * @slot {{ node: { id: TreeNodeId; text: string; expanded: false, leaf: boolean; disabled: boolean; selected: boolean; } }}
+   * @generics {Id = (string|number)} Id
+   * @template {string | number} Id
+   * @slot {{ node: { id: Id; text: string; expanded: false, leaf: boolean; disabled: boolean; selected: boolean; } }}
    */
 
   export let leaf = false;
 
-  /** @type {TreeNodeId} */
+  /** @type {Id} */
   export let id = "";
   export let text = "";
   export let disabled = false;

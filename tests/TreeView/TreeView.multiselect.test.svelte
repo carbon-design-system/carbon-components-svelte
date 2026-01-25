@@ -1,9 +1,8 @@
 <script lang="ts">
   import { TreeView } from "carbon-components-svelte";
-  import type { TreeNodeId } from "carbon-components-svelte/TreeView/TreeView.svelte";
 
-  export let activeId: TreeNodeId = 0;
-  export let selectedIds: TreeNodeId[] = [0, 7, 9];
+  export let activeId: number = 0;
+  export let selectedIds: number[] = [0, 7, 9];
   export let nodes = [
     { id: 0, text: "AI / Machine learning" },
     {

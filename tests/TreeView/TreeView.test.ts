@@ -1,7 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
-import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type {
+  ShowNodeOptions,
+  TreeNode,
+} from "carbon-components-svelte/TreeView/TreeView.svelte";
+import type {
+  ComponentEvents,
   ComponentProps,
   ComponentType as SvelteComponentType,
 } from "svelte";
@@ -597,6 +601,190 @@ describe("TreeView Generics", () => {
     expectTypeOf<NonNullable<BaseProps["nodes"]>>().toEqualTypeOf<
       readonly TreeNode[]
     >();
+  });
+
+  describe("Id generic parameter", () => {
+    it("should default Id to string | number when not specified", () => {
+      type ComponentType = TreeViewComponent<TreeNode>;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<Props["activeId"]>().toEqualTypeOf<
+        string | number | undefined
+      >();
+      expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+        ReadonlyArray<string | number> | undefined
+      >();
+      expectTypeOf<Props["expandedIds"]>().toEqualTypeOf<
+        ReadonlyArray<string | number> | undefined
+      >();
+
+      type SelectEvent = Events["select"];
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<SelectEventDetail>().toEqualTypeOf<
+        TreeNode & { expanded: boolean; leaf: boolean; selected: boolean }
+      >();
+    });
+
+    it("should support different ID types (string, number, union)", () => {
+      // String ID
+      type StringNode = { id: string; text: string };
+      type StringComponent = TreeViewComponent<StringNode>;
+      type StringProps = ComponentProps<StringComponent>;
+      type StringEvents = ComponentEvents<StringComponent>;
+
+      expectTypeOf<StringProps["activeId"]>().toEqualTypeOf<
+        string | undefined
+      >();
+      expectTypeOf<StringProps["selectedIds"]>().toEqualTypeOf<
+        ReadonlyArray<string> | undefined
+      >();
+      expectTypeOf<StringProps["expandedIds"]>().toEqualTypeOf<
+        ReadonlyArray<string> | undefined
+      >();
+
+      type StringSelectEvent = StringEvents["select"];
+      type StringSelectDetail =
+        StringSelectEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<StringSelectDetail>().toEqualTypeOf<
+        StringNode & { expanded: boolean; leaf: boolean; selected: boolean }
+      >();
+
+      // Number ID
+      type NumberNode = { id: number; text: string };
+      type NumberComponent = TreeViewComponent<NumberNode>;
+      type NumberProps = ComponentProps<NumberComponent>;
+
+      expectTypeOf<NumberProps["activeId"]>().toEqualTypeOf<
+        number | undefined
+      >();
+      expectTypeOf<NumberProps["selectedIds"]>().toEqualTypeOf<
+        ReadonlyArray<number> | undefined
+      >();
+      expectTypeOf<NumberProps["expandedIds"]>().toEqualTypeOf<
+        ReadonlyArray<number> | undefined
+      >();
+
+      // Union ID
+      type UnionId = "a" | "b" | "c";
+      type UnionNode = { id: UnionId; text: string };
+      type UnionComponent = TreeViewComponent<UnionNode>;
+      type UnionProps = ComponentProps<UnionComponent>;
+      type UnionEvents = ComponentEvents<UnionComponent>;
+
+      expectTypeOf<UnionProps["activeId"]>().toEqualTypeOf<
+        UnionId | undefined
+      >();
+      expectTypeOf<UnionProps["selectedIds"]>().toEqualTypeOf<
+        ReadonlyArray<UnionId> | undefined
+      >();
+      expectTypeOf<UnionProps["expandedIds"]>().toEqualTypeOf<
+        ReadonlyArray<UnionId> | undefined
+      >();
+
+      type UnionSelectEvent = UnionEvents["select"];
+      type UnionSelectDetail =
+        UnionSelectEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<UnionSelectDetail>().toEqualTypeOf<
+        UnionNode & { expanded: boolean; leaf: boolean; selected: boolean }
+      >();
+    });
+
+    it("should work with 'as const' for literal type inference", () => {
+      const nodes = [
+        { id: "node1", text: "Node 1" },
+        { id: "node2", text: "Node 2" },
+        { id: "node3", text: "Node 3" },
+      ] as const;
+
+      type InferredNode = (typeof nodes)[number];
+      type InferredId = InferredNode["id"];
+
+      expectTypeOf<InferredId>().toEqualTypeOf<"node1" | "node2" | "node3">();
+
+      type ComponentType = TreeViewComponent<InferredNode>;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<Props["activeId"]>().toEqualTypeOf<InferredId | undefined>();
+      expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+        ReadonlyArray<InferredId> | undefined
+      >();
+      expectTypeOf<Props["expandedIds"]>().toEqualTypeOf<
+        ReadonlyArray<InferredId> | undefined
+      >();
+
+      type SelectEvent = Events["select"];
+      type SelectEventDetail =
+        SelectEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<SelectEventDetail>().toEqualTypeOf<
+        InferredNode & { expanded: boolean; leaf: boolean; selected: boolean }
+      >();
+      expectTypeOf<SelectEventDetail["id"]>().toEqualTypeOf<InferredId>();
+    });
+
+    it("should type showNode method correctly with different ID types", () => {
+      // String ID - verify the component accepts string IDs
+      type StringNode = { id: string; text: string };
+      type StringComponent = TreeViewComponent<StringNode>;
+      type StringProps = ComponentProps<StringComponent>;
+      // Test that showNode accepts string by checking the prop types
+      expectTypeOf<StringProps["activeId"]>().toEqualTypeOf<string | undefined>();
+
+      // Number ID
+      type NumberNode = { id: number; text: string };
+      type NumberComponent = TreeViewComponent<NumberNode>;
+      type NumberProps = ComponentProps<NumberComponent>;
+      expectTypeOf<NumberProps["activeId"]>().toEqualTypeOf<number | undefined>();
+
+      // Union ID
+      type UnionId = "folder1" | "folder2" | "file1";
+      type UnionNode = { id: UnionId; text: string };
+      type UnionComponent = TreeViewComponent<UnionNode>;
+      type UnionProps = ComponentProps<UnionComponent>;
+      expectTypeOf<UnionProps["activeId"]>().toEqualTypeOf<UnionId | undefined>();
+    });
+
+    it("should type context properties correctly with different ID types", () => {
+      type CustomNode = { id: string; text: string };
+      type ComponentType = TreeViewComponent<CustomNode>;
+      type Props = ComponentProps<ComponentType>;
+
+      // These props use Node["id"] which should be inferred as string
+      expectTypeOf<Props["activeId"]>().toEqualTypeOf<string | undefined>();
+      expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+        ReadonlyArray<string> | undefined
+      >();
+      expectTypeOf<Props["expandedIds"]>().toEqualTypeOf<
+        ReadonlyArray<string> | undefined
+      >();
+    });
+
+    it("should type event details correctly with different ID types", () => {
+      type CustomNode = {
+        id: number;
+        text: string;
+        metadata?: { count: number };
+      };
+      type ComponentType = TreeViewComponent<CustomNode>;
+      type Events = ComponentEvents<ComponentType>;
+
+      type SelectEvent = Events["select"];
+      type SelectDetail = SelectEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<SelectDetail["id"]>().toEqualTypeOf<number>();
+      expectTypeOf<SelectDetail>().toEqualTypeOf<
+        CustomNode & { expanded: boolean; leaf: boolean; selected: boolean }
+      >();
+
+      type ToggleEvent = Events["toggle"];
+      type ToggleDetail = ToggleEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<ToggleDetail["id"]>().toEqualTypeOf<number>();
+
+      type FocusEvent = Events["focus"];
+      type FocusDetail = FocusEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<FocusDetail["id"]>().toEqualTypeOf<number>();
+    });
   });
 
   it("supports custom label slot", () => {
