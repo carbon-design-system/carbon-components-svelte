@@ -3,7 +3,10 @@ import type { SvelteHTMLElements } from "svelte/elements";
 
 type $RestProps = SvelteHTMLElements["input"];
 
-type $Props = {
+type $Props<
+  Row extends import("./DataTable.svelte").DataTableRow<any> =
+    import("./DataTable.svelte").DataTableRow<any>,
+> = {
   /**
    * Specify the value of the search input.
    * @default ""
@@ -38,18 +41,13 @@ type $Props = {
    * that accepts a row and value and returns a boolean.
    * @default false
    */
-  shouldFilterRows?:
-    | boolean
-    | ((
-        row: import("./DataTable.svelte").DataTableRow,
-        value: number | string,
-      ) => boolean);
+  shouldFilterRows?: boolean | ((row: Row, value: number | string) => boolean);
 
   /**
    * The filtered row ids.
    * @default []
    */
-  filteredRowIds?: ReadonlyArray<import("./DataTable.svelte").DataTableRowId>;
+  filteredRowIds?: ReadonlyArray<Row["id"]>;
 
   /**
    * Specify the tabindex
@@ -66,10 +64,16 @@ type $Props = {
   [key: `data-${string}`]: any;
 };
 
-export type ToolbarSearchProps = Omit<$RestProps, keyof $Props> & $Props;
+export type ToolbarSearchProps<
+  Row extends import("./DataTable.svelte").DataTableRow<any> =
+    import("./DataTable.svelte").DataTableRow<any>,
+> = Omit<$RestProps, keyof $Props<Row>> & $Props<Row>;
 
-export default class ToolbarSearch extends SvelteComponentTyped<
-  ToolbarSearchProps,
+export default class ToolbarSearch<
+  Row extends import("./DataTable.svelte").DataTableRow<any> =
+    import("./DataTable.svelte").DataTableRow<any>,
+> extends SvelteComponentTyped<
+  ToolbarSearchProps<Row>,
   {
     clear: CustomEvent<null>;
     change: WindowEventMap["change"];
