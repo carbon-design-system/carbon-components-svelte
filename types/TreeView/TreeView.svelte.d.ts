@@ -30,7 +30,7 @@ export type TreeViewContext<Node extends TreeNode = TreeNode> = {
 
 type $RestProps = SvelteHTMLElements["ul"];
 
-type $Props<Node> = {
+type $Props<Node extends TreeNode = TreeNode> = {
   /**
    * Provide an array of nodes to render.
    * @default []
@@ -102,7 +102,10 @@ type $Props<Node> = {
   [key: `data-${string}`]: any;
 };
 
-export type TreeViewProps<Node> = Omit<$RestProps, keyof $Props<Node>> &
+export type TreeViewProps<Node extends TreeNode = TreeNode> = Omit<
+  $RestProps,
+  keyof $Props<Node>
+> &
   $Props<Node>;
 
 export default class TreeView<

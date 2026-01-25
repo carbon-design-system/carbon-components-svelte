@@ -10,7 +10,7 @@ default value if `selected` is `undefined`. */
 
 type $RestProps = SvelteHTMLElements["select"];
 
-type $Props<Value> = {
+type $Props<Value extends string | number = string | number> = {
   /**
    * Specify the selected item value.
    * @default undefined
@@ -120,7 +120,10 @@ type $Props<Value> = {
   [key: `data-${string}`]: any;
 };
 
-export type SelectProps<Value> = Omit<$RestProps, keyof $Props<Value>> &
+export type SelectProps<Value extends string | number = string | number> = Omit<
+  $RestProps,
+  keyof $Props<Value>
+> &
   $Props<Value>;
 
 export default class Select<

@@ -20,7 +20,7 @@ export type MultiSelectContext = {
 
 type $RestProps = SvelteHTMLElements["input"];
 
-type $Props<Item> = {
+type $Props<Item extends MultiSelectItem = MultiSelectItem> = {
   /**
    * Set the multiselect items.
    * @default []
@@ -247,8 +247,8 @@ type $Props<Item> = {
   [key: `data-${string}`]: any;
 };
 
-export type MultiSelectProps<Item> = Omit<$RestProps, keyof $Props<Item>> &
-  $Props<Item>;
+export type MultiSelectProps<Item extends MultiSelectItem = MultiSelectItem> =
+  Omit<$RestProps, keyof $Props<Item>> & $Props<Item>;
 
 export default class MultiSelect<
   Item extends MultiSelectItem = MultiSelectItem,

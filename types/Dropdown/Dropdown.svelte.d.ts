@@ -13,7 +13,7 @@ export type DropdownItem = {
 
 type $RestProps = SvelteHTMLElements["div"];
 
-type $Props<Item> = {
+type $Props<Item extends DropdownItem = DropdownItem> = {
   /**
    * Set the dropdown items.
    * @default []
@@ -147,7 +147,10 @@ type $Props<Item> = {
   [key: `data-${string}`]: any;
 };
 
-export type DropdownProps<Item> = Omit<$RestProps, keyof $Props<Item>> &
+export type DropdownProps<Item extends DropdownItem = DropdownItem> = Omit<
+  $RestProps,
+  keyof $Props<Item>
+> &
   $Props<Item>;
 
 export default class Dropdown<

@@ -9,7 +9,7 @@ export type HeaderSearchResult = {
 
 type $RestProps = SvelteHTMLElements["input"];
 
-type $Props<Result> = {
+type $Props<Result extends HeaderSearchResult = HeaderSearchResult> = {
   /**
    * Specify the search input value
    * @default ""
@@ -45,8 +45,9 @@ type $Props<Result> = {
   [key: `data-${string}`]: any;
 };
 
-export type HeaderSearchProps<Result> = Omit<$RestProps, keyof $Props<Result>> &
-  $Props<Result>;
+export type HeaderSearchProps<
+  Result extends HeaderSearchResult = HeaderSearchResult,
+> = Omit<$RestProps, keyof $Props<Result>> & $Props<Result>;
 
 export default class HeaderSearch<
   Result extends HeaderSearchResult = HeaderSearchResult,
