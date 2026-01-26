@@ -3583,6 +3583,42 @@
           "reactive": false
         },
         {
+          "name": "virtualize",
+          "kind": "let",
+          "description": "Enable virtualization for large row lists. Virtualization renders only the rows currently visible in the viewport, improving performance for large datasets.\n\nBy default, virtualization is automatically enabled for tables with more than 100 rows.\n\nSet `virtualize={false}` to explicitly disable virtualization, even for large tables.\n\nSet `virtualize={true}` to explicitly enable virtualization with default settings.\n\nProvide an object to customize virtualization behavior:\n- `itemHeight` (default: 48 for medium size, adjusted for size variant): The height in pixels of each row. Specify a custom value when using custom slots with multi-line content or different heights.\n- `maxVisibleRows` (default: 10): The maximum number of rows to display in the viewport. The container height will be calculated as `itemHeight * maxVisibleRows`. Overridden by `containerHeight` if explicitly provided.\n- `containerHeight` (default: calculated from maxVisibleRows): The maximum height in pixels of the table body container. If not provided, calculated from `itemHeight * maxVisibleRows`.\n- `overscan` (default: 3): The number of extra rows to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.\n- `threshold` (default: 100): The minimum number of rows required before virtualization activates. Tables with fewer rows will render all rows normally without virtualization.\n- `maxItems` (default: undefined): The maximum number of rows to render. When undefined, all visible rows are rendered.",
+          "type": "undefined | boolean | { itemHeight?: number, maxVisibleRows?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "tableBodyRef",
+          "kind": "let",
+          "description": "Obtain a reference to the table body HTML element.",
+          "type": "null | HTMLTableSectionElement",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
+          "name": "tableContainerRef",
+          "kind": "let",
+          "description": "Obtain a reference to the scrollable container HTML element (used when stickyHeader is enabled).",
+          "type": "null | HTMLElement",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
+        },
+        {
           "name": "tableHeaderTranslateWithId",
           "kind": "let",
           "description": "Override the default table header translation ids.",
@@ -16171,6 +16207,18 @@
           "isRequired": false,
           "constant": false,
           "reactive": false
+        },
+        {
+          "name": "ref",
+          "kind": "let",
+          "description": "Obtain a reference to the section HTML element (when stickyHeader is enabled) or table HTML element.",
+          "type": "null | HTMLElement",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
         }
       ],
       "moduleExports": [],

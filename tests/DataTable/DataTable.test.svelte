@@ -70,6 +70,19 @@
   export let expandedRowIds: string[] = [];
   export let pageSize = 0;
   export let page = 0;
+  export let sortKey: string | undefined = undefined;
+  export let sortDirection: "none" | "ascending" | "descending" = "none";
+  export let virtualize:
+    | undefined
+    | boolean
+    | {
+        itemHeight?: number;
+        maxVisibleRows?: number;
+        containerHeight?: number;
+        overscan?: number;
+        threshold?: number;
+        maxItems?: number;
+      } = undefined;
   export let tableHeaderTranslateWithId: ((id: string) => string) | undefined =
     undefined;
 </script>
@@ -95,6 +108,9 @@
   {expandedRowIds}
   {pageSize}
   {page}
+  {sortKey}
+  {sortDirection}
+  {virtualize}
   {tableHeaderTranslateWithId}
   on:click={(e) => {
     console.log("click", e.detail);

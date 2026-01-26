@@ -22,10 +22,16 @@
    * @type {string}
    */
   export let tableStyle = undefined;
+
+  /**
+   * Obtain a reference to the section HTML element (when stickyHeader is enabled) or table HTML element.
+   * @type {null | HTMLElement | HTMLTableElement}
+   */
+  export let ref = null;
 </script>
 
 {#if stickyHeader}
-  <section class:bx--data-table_inner-container={true} {...$$restProps}>
+  <section class:bx--data-table_inner-container={true} bind:this={ref} {...$$restProps}>
     <table
       class:bx--data-table={true}
       class:bx--data-table--compact={size === "compact"}

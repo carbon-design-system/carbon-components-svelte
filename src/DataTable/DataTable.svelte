@@ -181,16 +181,49 @@
   export let page = 0;
 
   /**
+   * Enable virtualization for large row lists. Virtualization renders only the rows currently visible in the viewport, improving performance for large datasets.
+   *
+   * By default, virtualization is automatically enabled for tables with more than 100 rows.
+   *
+   * Set `virtualize={false}` to explicitly disable virtualization, even for large tables.
+   *
+   * Set `virtualize={true}` to explicitly enable virtualization with default settings.
+   *
+   * Provide an object to customize virtualization behavior:
+   * - `itemHeight` (default: 48 for medium size, adjusted for size variant): The height in pixels of each row. Specify a custom value when using custom slots with multi-line content or different heights.
+   * - `maxVisibleRows` (default: 10): The maximum number of rows to display in the viewport. The container height will be calculated as `itemHeight * maxVisibleRows`. Overridden by `containerHeight` if explicitly provided.
+   * - `containerHeight` (default: calculated from maxVisibleRows): The maximum height in pixels of the table body container. If not provided, calculated from `itemHeight * maxVisibleRows`.
+   * - `overscan` (default: 3): The number of extra rows to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
+   * - `threshold` (default: 100): The minimum number of rows required before virtualization activates. Tables with fewer rows will render all rows normally without virtualization.
+   * - `maxItems` (default: undefined): The maximum number of rows to render. When undefined, all visible rows are rendered.
+   * @type {undefined | boolean | { itemHeight?: number, maxVisibleRows?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   */
+  export let virtualize = undefined;
+
+  /**
+   * Obtain a reference to the table body HTML element.
+   * @type {null | HTMLTableSectionElement}
+   */
+  export let tableBodyRef = null;
+
+  /**
+   * Obtain a reference to the scrollable container HTML element (used when stickyHeader is enabled).
+   * @type {null | HTMLElement}
+   */
+  export let tableContainerRef = null;
+
+  /**
    * Override the default table header translation ids.
    * @type {(id: import("./TableHeader.svelte").TableHeaderTranslationId) => string}
    */
   export let tableHeaderTranslateWithId = undefined;
 
-  import { createEventDispatcher, setContext } from "svelte";
+  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
+  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
   import {
     compareValues,
     formatHeaderWidth,
@@ -219,6 +252,47 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<Row>>}
    */
   const tableRows = writable(rows);
+
+  /** Default row heights based on size variant */
+  const DEFAULT_ROW_HEIGHTS = {
+    compact: 24,
+    short: 32,
+    medium: 48,
+    tall: 64,
+  };
+
+  let tableBodyScrollTop = 0;
+  let prevExpandedRowIds = [];
+  let tableRef = null;
+  let tableScrollContainerRef = null;
+
+  // Set up scroll listener for sticky header container
+  afterUpdate(() => {
+    if (
+      virtualConfig &&
+      stickyHeader &&
+      tableRef &&
+      calculatedContainerHeight
+    ) {
+      tick().then(() => {
+        // tableRef is the section element when stickyHeader is enabled
+        const container = tableRef;
+        if (container && !tableContainerRef) {
+          tableContainerRef = container;
+        }
+        if (container) {
+          // Apply max-height to container
+          container.style.maxHeight = `${calculatedContainerHeight}px`;
+          container.style.overflowY = "auto";
+          // Set up scroll listener
+          const handleScroll = () => {
+            tableBodyScrollTop = container.scrollTop || 0;
+          };
+          container.addEventListener("scroll", handleScroll);
+        }
+      });
+    }
+  });
 
   // Internal ID prefix for radio buttons, checkboxes, etc.
   // since there may be multiple `DataTable` instances that have overlapping row ids.
@@ -344,19 +418,94 @@
       });
     }
   }
-  $: displayedRows = getDisplayedRows($tableRows, page, pageSize);
-  $: displayedSortedRows = getDisplayedRows(sortedRows, page, pageSize);
+  $: defaultRowHeight = DEFAULT_ROW_HEIGHTS[size] || DEFAULT_ROW_HEIGHTS.medium;
+  $: virtualConfig = virtualize
+    ? {
+        itemHeight: defaultRowHeight,
+        maxVisibleRows: 10,
+        containerHeight: undefined,
+        overscan: 3,
+        threshold: 100,
+        maxItems: undefined,
+        ...(typeof virtualize === "object" ? virtualize : {}),
+      }
+    : null;
+
+  // Calculate containerHeight from maxVisibleRows if not explicitly provided
+  $: calculatedContainerHeight = virtualConfig
+    ? (virtualConfig.containerHeight ??
+      virtualConfig.itemHeight * virtualConfig.maxVisibleRows)
+    : null;
+
+  // When virtualization is enabled, ignore pagination
+  $: displayedRows = virtualConfig
+    ? $tableRows
+    : getDisplayedRows($tableRows, page, pageSize);
+  $: displayedSortedRows = virtualConfig
+    ? sortedRows
+    : getDisplayedRows(sortedRows, page, pageSize);
+
+  // Calculate expanded rows height adjustment
+  $: expandedRowsHeight = virtualConfig
+    ? expandedRowIds.reduce((total, id) => {
+        const rowIndex = (
+          sorting ? displayedSortedRows : displayedRows
+        ).findIndex((r) => r.id === id);
+        if (rowIndex >= 0) {
+          // Estimate: expanded content is roughly 2x row height
+          return total + (virtualConfig.itemHeight || defaultRowHeight) * 2;
+        }
+        return total;
+      }, 0)
+    : 0;
+
+  $: rowsToVirtualize = sorting ? displayedSortedRows : displayedRows;
+  $: virtualData = virtualConfig
+    ? virtualizeUtil({
+        items: rowsToVirtualize,
+        scrollTop: tableBodyScrollTop,
+        itemHeight: virtualConfig.itemHeight,
+        containerHeight: calculatedContainerHeight,
+        overscan: virtualConfig.overscan,
+        threshold: virtualConfig.threshold,
+        maxItems: virtualConfig.maxItems,
+      })
+    : null;
+
+  // Recalculate virtual data when expanded rows change
+  $: if (virtualConfig && prevExpandedRowIds.length !== expandedRowIds.length) {
+    prevExpandedRowIds = [...expandedRowIds];
+    // Trigger recalculation by updating scroll position slightly
+    if (tableBodyRef) {
+      tick().then(() => {
+        if (tableBodyRef) {
+          tableBodyScrollTop = tableBodyRef.scrollTop || 0;
+        }
+      });
+    }
+  }
+
+  $: rowsToRender = virtualData?.isVirtualized
+    ? virtualData.visibleItems
+    : rowsToVirtualize;
 
   $: hasCustomHeaderWidth = headers.some(
     (header) => header.width || header.minWidth,
   );
+
+  // Calculate total columns for spacer rows
+  $: totalColumns =
+    (expandable ? 1 : 0) + (selectable ? 1 : 0) + headers.length;
 </script>
 
 <TableContainer {useStaticWidth} {...$$restProps}>
   {#if title || $$slots.titleChildren || description || $$slots.descriptionChildren}
     <div class:bx--data-table-header={true}>
       {#if title || $$slots.titleChildren}
-        <slot name="titleChildren" props={{ class: "bx--data-table-header__title" }}>
+        <slot
+          name="titleChildren"
+          props={{ class: "bx--data-table-header__title" }}
+        >
           <h4 class:bx--data-table-header__title={true}>{title}</h4>
         </slot>
       {/if}
@@ -371,186 +520,53 @@
     </div>
   {/if}
   <slot />
-  <Table
-    {zebra}
-    {size}
-    {stickyHeader}
-    {sortable}
-    {useStaticWidth}
-    tableStyle={hasCustomHeaderWidth && "table-layout: fixed"}
+  <div
+    bind:this={tableScrollContainerRef}
+    style={virtualConfig && !stickyHeader
+      ? `max-height: ${calculatedContainerHeight}px; overflow-y: auto;`
+      : undefined}
+    on:scroll={(e) => {
+      if (virtualConfig && !stickyHeader) {
+        tableBodyScrollTop = e.target.scrollTop || 0;
+      }
+    }}
   >
-    <TableHead>
-      <TableRow>
-        {#if expandable}
-          <th
-            scope="col"
-            class:bx--table-expand={true}
-            data-previous-value={expanded ? "collapsed" : undefined}
-          >
-            {#if batchExpansion}
-              <button
-                type="button"
-                class:bx--table-expand__button={true}
-                aria-label={expanded ? "Collapse all rows" : "Expand all rows"}
-                aria-controls={expandableRowIds
-                  .map((id) => `expandable-row-${id}`)
-                  .join(" ")}
-                on:click={() => {
-                  expanded = !expanded;
-                  expandedRowIds = expanded ? expandableRowIds : [];
-
-                  dispatch("click:header--expand", { expanded });
-                }}
-              >
-                <ChevronRight
-                  aria-hidden="true"
-                  class="bx--table-expand__svg"
-                />
-              </button>
-            {/if}
-          </th>
-        {/if}
-        {#if selectable && !batchSelection}
-          <th scope="col"></th>
-        {/if}
-        {#if batchSelection && !radio}
-          <th scope="col" class:bx--table-column-checkbox={true}>
-            <InlineCheckbox
-              bind:ref={refSelectAll}
-              aria-label="Select all rows"
-              name="{id}-select-all"
-              value="all"
-              checked={selectAll}
-              {indeterminate}
-              on:change={(e) => {
-                dispatch("click:header--select", {
-                  indeterminate,
-                  selected: !indeterminate && e.target.checked,
-                });
-
-                if (indeterminate) {
-                  e.target.checked = false;
-                  selectAll = false;
-                  selectedRowIds = [];
-                  return;
-                }
-
-                if (e.target.checked) {
-                  selectedRowIds = selectableRowIds;
-                } else {
-                  selectedRowIds = [];
-                }
-              }}
-            />
-          </th>
-        {/if}
-        {#each headers as header (header.key)}
-          {#if header.empty}
-            <th scope="col" style={formatHeaderWidth(header)}></th>
-          {:else}
-            <TableHeader
-              id={header.key}
-              style={formatHeaderWidth(header)}
-              sortable={sortable && header.sort !== false}
-              sortDirection={sortKey === header.key ? sortDirection : "none"}
-              active={sortKey === header.key}
-              {...(tableHeaderTranslateWithId
-                ? { translateWithId: tableHeaderTranslateWithId }
-                : {})}
-              on:click={(e) => {
-                dispatch("click", { header });
-
-                if (header.sort === false) {
-                  dispatch("click:header", {
-                    header,
-                    target: e.target,
-                    currentTarget: e.currentTarget,
-                  });
-                } else {
-                  let currentSortDirection =
-                    sortKey === header.key ? sortDirection : "none";
-                  sortDirection = sortDirectionMap[currentSortDirection];
-                  sortKey =
-                    sortDirection === "none" ? null : thKeys[header.key];
-                  dispatch("click:header", {
-                    header,
-                    sortDirection,
-                    target: e.target,
-                    currentTarget: e.currentTarget,
-                  });
-                }
-              }}
-            >
-              <slot name="cellHeader" {header}>{header.value}</slot>
-            </TableHeader>
-          {/if}
-        {/each}
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {#each sorting ? displayedSortedRows : displayedRows as row, i (row.id)}
-        <TableRow
-          data-row={row.id}
-          data-parent-row={expandable ? true : undefined}
-          class="{selectedRowIds.includes(row.id)
-            ? 'bx--data-table--selected'
-            : ''} {expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable
-            ? 'bx--parent-row'
-            : ''} {expandable && parentRowId === row.id
-            ? 'bx--expandable-row--hover'
-            : ''}"
-          on:click={(e) => {
-            // forgo "click", "click:row" events if target
-            // resembles an overflow menu, a checkbox, or radio button
-            if (
-              [...e.target.classList].some((name) =>
-                /^bx--(overflow-menu|checkbox|radio-button)/.test(name),
-              )
-            ) {
-              return;
-            }
-            dispatch("click", { row });
-            dispatch("click:row", {
-              row,
-              target: e.target,
-              currentTarget: e.currentTarget,
-            });
-          }}
-          on:mouseenter={() => {
-            dispatch("mouseenter:row", row);
-          }}
-          on:mouseleave={() => {
-            dispatch("mouseleave:row", row);
-          }}
-        >
+    <Table
+      bind:ref={tableRef}
+      {zebra}
+      {size}
+      {stickyHeader}
+      {sortable}
+      {useStaticWidth}
+      tableStyle={hasCustomHeaderWidth && "table-layout: fixed"}
+    >
+      <TableHead
+        style={virtualConfig && !stickyHeader
+          ? "position: sticky; top: 0;"
+          : undefined}
+      >
+        <TableRow>
           {#if expandable}
-            <TableCell
-              class="bx--table-expand"
-              headers="expand"
-              data-previous-value={!nonExpandableRowIds.includes(row.id) &&
-              expandedRows[row.id]
-                ? "collapsed"
-                : undefined}
+            <th
+              scope="col"
+              class:bx--table-expand={true}
+              data-previous-value={expanded ? "collapsed" : undefined}
             >
-              {#if !nonExpandableRowIds.includes(row.id)}
+              {#if batchExpansion}
                 <button
                   type="button"
                   class:bx--table-expand__button={true}
-                  aria-controls={`expandable-row-${row.id}`}
-                  aria-label={expandedRows[row.id]
-                    ? "Collapse current row"
-                    : "Expand current row"}
-                  on:click|stopPropagation={() => {
-                    const rowExpanded = !!expandedRows[row.id];
+                  aria-label={expanded
+                    ? "Collapse all rows"
+                    : "Expand all rows"}
+                  aria-controls={expandableRowIds
+                    .map((id) => `expandable-row-${id}`)
+                    .join(" ")}
+                  on:click={() => {
+                    expanded = !expanded;
+                    expandedRowIds = expanded ? expandableRowIds : [];
 
-                    expandedRowIds = rowExpanded
-                      ? expandedRowIds.filter((id) => id !== row.id)
-                      : [...expandedRowIds, row.id];
-
-                    dispatch("click:row--expand", {
-                      row,
-                      expanded: !rowExpanded,
-                    });
+                    dispatch("click:header--expand", { expanded });
                   }}
                 >
                   <ChevronRight
@@ -559,120 +575,512 @@
                   />
                 </button>
               {/if}
-            </TableCell>
+            </th>
           {/if}
-          {#if selectable}
-            <td
-              class:bx--table-column-checkbox={true}
-              class:bx--table-column-radio={radio}
-            >
-              {#if !nonSelectableRowIds.includes(row.id)}
-                {@const inputId = `${id}-${row.id}`}
-                {#if radio}
-                  <RadioButton
-                    id={inputId}
-                    name={inputName}
-                    checked={selectedRowIds.includes(row.id)}
-                    value={row.id}
-                    on:change={() => {
-                      selectedRowIds = [row.id];
-                      dispatch("click:row--select", { row, selected: true });
-                    }}
-                  />
-                {:else}
-                  <InlineCheckbox
-                    id={inputId}
-                    name={inputName}
-                    checked={selectedRowIds.includes(row.id)}
-                    value={row.id}
-                    on:change={() => {
-                      if (selectedRowIds.includes(row.id)) {
-                        selectedRowIds = selectedRowIds.filter(
-                          (id) => id !== row.id,
-                        );
-                        dispatch("click:row--select", { row, selected: false });
-                      } else {
-                        selectedRowIds = [...selectedRowIds, row.id];
-                        dispatch("click:row--select", { row, selected: true });
-                      }
-                    }}
-                  />
-                {/if}
-              {/if}
-            </td>
+          {#if selectable && !batchSelection}
+            <th scope="col"></th>
           {/if}
-          {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
-            {#if cell.empty}
-              <td class:bx--table-column-menu={cell.columnMenu}>
-                <slot
-                  name="cell"
-                  {row}
-                  {cell}
-                  rowIndex={i}
-                  cellIndex={j}
-                  rowSelected={selectedRowIds.includes(row.id)}
-                  rowExpanded={!!expandedRows[row.id]}
-                >
-                  {cell.display ? cell.display(cell.value, row) : cell.value}
-                </slot>
-              </td>
-            {:else}
-              <TableCell
-                on:click={(e) => {
-                  dispatch("click", { row, cell });
-                  dispatch("click:cell", {
-                    cell,
-                    target: e.target,
-                    currentTarget: e.currentTarget,
+          {#if batchSelection && !radio}
+            <th scope="col" class:bx--table-column-checkbox={true}>
+              <InlineCheckbox
+                bind:ref={refSelectAll}
+                aria-label="Select all rows"
+                name="{id}-select-all"
+                value="all"
+                checked={selectAll}
+                {indeterminate}
+                on:change={(e) => {
+                  dispatch("click:header--select", {
+                    indeterminate,
+                    selected: !indeterminate && e.target.checked,
                   });
+
+                  if (indeterminate) {
+                    e.target.checked = false;
+                    selectAll = false;
+                    selectedRowIds = [];
+                    return;
+                  }
+
+                  if (e.target.checked) {
+                    selectedRowIds = selectableRowIds;
+                  } else {
+                    selectedRowIds = [];
+                  }
+                }}
+              />
+            </th>
+          {/if}
+          {#each headers as header (header.key)}
+            {#if header.empty}
+              <th scope="col" style={formatHeaderWidth(header)}></th>
+            {:else}
+              <TableHeader
+                id={header.key}
+                style={formatHeaderWidth(header)}
+                sortable={sortable && header.sort !== false}
+                sortDirection={sortKey === header.key ? sortDirection : "none"}
+                active={sortKey === header.key}
+                {...tableHeaderTranslateWithId
+                  ? { translateWithId: tableHeaderTranslateWithId }
+                  : {}}
+                on:click={(e) => {
+                  dispatch("click", { header });
+
+                  if (header.sort === false) {
+                    dispatch("click:header", {
+                      header,
+                      target: e.target,
+                      currentTarget: e.currentTarget,
+                    });
+                  } else {
+                    let currentSortDirection =
+                      sortKey === header.key ? sortDirection : "none";
+                    sortDirection = sortDirectionMap[currentSortDirection];
+                    sortKey =
+                      sortDirection === "none" ? null : thKeys[header.key];
+                    dispatch("click:header", {
+                      header,
+                      sortDirection,
+                      target: e.target,
+                      currentTarget: e.currentTarget,
+                    });
+                  }
                 }}
               >
-                <slot
-                  name="cell"
-                  {row}
-                  {cell}
-                  rowIndex={i}
-                  cellIndex={j}
-                  rowSelected={selectedRowIds.includes(row.id)}
-                  rowExpanded={!!expandedRows[row.id]}
-                >
-                  {cell.display ? cell.display(cell.value, row) : cell.value}
-                </slot>
-              </TableCell>
+                <slot name="cellHeader" {header}>{header.value}</slot>
+              </TableHeader>
             {/if}
           {/each}
         </TableRow>
+      </TableHead>
+      <TableBody bind:ref={tableBodyRef}>
+        {#if virtualData?.isVirtualized}
+          <!-- Spacer row for offset -->
+          {#if virtualData.startIndex > 0}
+            <tr style="height: {virtualData.offsetY}px;">
+              <td colspan={totalColumns}></td>
+            </tr>
+          {/if}
 
-        {#if expandable}
-          <tr
-            id={`expandable-row-${row.id}`}
-            data-child-row
-            class:bx--expandable-row={true}
-            on:mouseenter={() => {
-              if (nonExpandableRowIds.includes(row.id)) return;
-              parentRowId = row.id;
-            }}
-            on:mouseleave={() => {
-              if (nonExpandableRowIds.includes(row.id)) return;
-              parentRowId = null;
-            }}
-          >
-            {#if expandedRows[row.id] && !nonExpandableRowIds.includes(row.id)}
-              <TableCell
-                colspan={selectable ? headers.length + 2 : headers.length + 1}
+          <!-- Visible rows -->
+          {#each rowsToRender as row, i (row.id)}
+            {@const actualIndex = virtualData.startIndex + i}
+            <TableRow
+              data-row={row.id}
+              data-parent-row={expandable ? true : undefined}
+              class="{selectedRowIds.includes(row.id)
+                ? 'bx--data-table--selected'
+                : ''} {expandedRows[row.id]
+                ? 'bx--expandable-row'
+                : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
+              parentRowId === row.id
+                ? 'bx--expandable-row--hover'
+                : ''}"
+              on:click={(e) => {
+                // forgo "click", "click:row" events if target
+                // resembles an overflow menu, a checkbox, or radio button
+                if (
+                  [...e.target.classList].some((name) =>
+                    /^bx--(overflow-menu|checkbox|radio-button)/.test(name),
+                  )
+                ) {
+                  return;
+                }
+                dispatch("click", { row });
+                dispatch("click:row", {
+                  row,
+                  target: e.target,
+                  currentTarget: e.currentTarget,
+                });
+              }}
+              on:mouseenter={() => {
+                dispatch("mouseenter:row", row);
+              }}
+              on:mouseleave={() => {
+                dispatch("mouseleave:row", row);
+              }}
+            >
+              {#if expandable}
+                <TableCell
+                  class="bx--table-expand"
+                  headers="expand"
+                  data-previous-value={!nonExpandableRowIds.includes(row.id) &&
+                  expandedRows[row.id]
+                    ? "collapsed"
+                    : undefined}
+                >
+                  {#if !nonExpandableRowIds.includes(row.id)}
+                    <button
+                      type="button"
+                      class:bx--table-expand__button={true}
+                      aria-controls={`expandable-row-${row.id}`}
+                      aria-label={expandedRows[row.id]
+                        ? "Collapse current row"
+                        : "Expand current row"}
+                      on:click|stopPropagation={() => {
+                        const rowExpanded = !!expandedRows[row.id];
+
+                        expandedRowIds = rowExpanded
+                          ? expandedRowIds.filter((id) => id !== row.id)
+                          : [...expandedRowIds, row.id];
+
+                        dispatch("click:row--expand", {
+                          row,
+                          expanded: !rowExpanded,
+                        });
+                      }}
+                    >
+                      <ChevronRight
+                        aria-hidden="true"
+                        class="bx--table-expand__svg"
+                      />
+                    </button>
+                  {/if}
+                </TableCell>
+              {/if}
+              {#if selectable}
+                <td
+                  class:bx--table-column-checkbox={true}
+                  class:bx--table-column-radio={radio}
+                >
+                  {#if !nonSelectableRowIds.includes(row.id)}
+                    {@const inputId = `${id}-${row.id}`}
+                    {#if radio}
+                      <RadioButton
+                        id={inputId}
+                        name={inputName}
+                        checked={selectedRowIds.includes(row.id)}
+                        value={row.id}
+                        on:change={() => {
+                          selectedRowIds = [row.id];
+                          dispatch("click:row--select", {
+                            row,
+                            selected: true,
+                          });
+                        }}
+                      />
+                    {:else}
+                      <InlineCheckbox
+                        id={inputId}
+                        name={inputName}
+                        checked={selectedRowIds.includes(row.id)}
+                        value={row.id}
+                        on:change={() => {
+                          if (selectedRowIds.includes(row.id)) {
+                            selectedRowIds = selectedRowIds.filter(
+                              (id) => id !== row.id,
+                            );
+                            dispatch("click:row--select", {
+                              row,
+                              selected: false,
+                            });
+                          } else {
+                            selectedRowIds = [...selectedRowIds, row.id];
+                            dispatch("click:row--select", {
+                              row,
+                              selected: true,
+                            });
+                          }
+                        }}
+                      />
+                    {/if}
+                  {/if}
+                </td>
+              {/if}
+              {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
+                {#if cell.empty}
+                  <td class:bx--table-column-menu={cell.columnMenu}>
+                    <slot
+                      name="cell"
+                      {row}
+                      {cell}
+                      rowIndex={actualIndex}
+                      cellIndex={j}
+                      rowSelected={selectedRowIds.includes(row.id)}
+                      rowExpanded={!!expandedRows[row.id]}
+                    >
+                      {cell.display
+                        ? cell.display(cell.value, row)
+                        : cell.value}
+                    </slot>
+                  </td>
+                {:else}
+                  <TableCell
+                    on:click={(e) => {
+                      dispatch("click", { row, cell });
+                      dispatch("click:cell", {
+                        cell,
+                        target: e.target,
+                        currentTarget: e.currentTarget,
+                      });
+                    }}
+                  >
+                    <slot
+                      name="cell"
+                      {row}
+                      {cell}
+                      rowIndex={actualIndex}
+                      cellIndex={j}
+                      rowSelected={selectedRowIds.includes(row.id)}
+                      rowExpanded={!!expandedRows[row.id]}
+                    >
+                      {cell.display
+                        ? cell.display(cell.value, row)
+                        : cell.value}
+                    </slot>
+                  </TableCell>
+                {/if}
+              {/each}
+            </TableRow>
+
+            {#if expandable}
+              <tr
+                id={`expandable-row-${row.id}`}
+                data-child-row
+                class:bx--expandable-row={true}
+                on:mouseenter={() => {
+                  if (nonExpandableRowIds.includes(row.id)) return;
+                  parentRowId = row.id;
+                }}
+                on:mouseleave={() => {
+                  if (nonExpandableRowIds.includes(row.id)) return;
+                  parentRowId = null;
+                }}
               >
-                <div class:bx--child-row-inner-container={true}>
-                  <slot
-                    name="expanded-row"
-                    {row}
-                    rowSelected={selectedRowIds.includes(row.id)}
-                  />
-                </div>
-              </TableCell>
+                {#if expandedRows[row.id] && !nonExpandableRowIds.includes(row.id)}
+                  <TableCell
+                    colspan={selectable
+                      ? headers.length + 2
+                      : headers.length + 1}
+                  >
+                    <div class:bx--child-row-inner-container={true}>
+                      <slot
+                        name="expanded-row"
+                        {row}
+                        rowSelected={selectedRowIds.includes(row.id)}
+                      />
+                    </div>
+                  </TableCell>
+                {/if}
+              </tr>
             {/if}
-          </tr>
+          {/each}
+
+          <!-- Spacer row for remaining height -->
+          {#if virtualData.endIndex < rowsToVirtualize.length}
+            {@const remainingHeight =
+              virtualData.totalHeight -
+              virtualData.endIndex * virtualConfig.itemHeight}
+            <tr style="height: {remainingHeight}px;">
+              <td colspan={totalColumns}></td>
+            </tr>
+          {/if}
+        {:else}
+          <!-- Non-virtualized: render all rows normally -->
+          {#each rowsToRender as row, i (row.id)}
+            <TableRow
+              data-row={row.id}
+              data-parent-row={expandable ? true : undefined}
+              class="{selectedRowIds.includes(row.id)
+                ? 'bx--data-table--selected'
+                : ''} {expandedRows[row.id]
+                ? 'bx--expandable-row'
+                : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
+              parentRowId === row.id
+                ? 'bx--expandable-row--hover'
+                : ''}"
+              on:click={(e) => {
+                // forgo "click", "click:row" events if target
+                // resembles an overflow menu, a checkbox, or radio button
+                if (
+                  [...e.target.classList].some((name) =>
+                    /^bx--(overflow-menu|checkbox|radio-button)/.test(name),
+                  )
+                ) {
+                  return;
+                }
+                dispatch("click", { row });
+                dispatch("click:row", {
+                  row,
+                  target: e.target,
+                  currentTarget: e.currentTarget,
+                });
+              }}
+              on:mouseenter={() => {
+                dispatch("mouseenter:row", row);
+              }}
+              on:mouseleave={() => {
+                dispatch("mouseleave:row", row);
+              }}
+            >
+              {#if expandable}
+                <TableCell
+                  class="bx--table-expand"
+                  headers="expand"
+                  data-previous-value={!nonExpandableRowIds.includes(row.id) &&
+                  expandedRows[row.id]
+                    ? "collapsed"
+                    : undefined}
+                >
+                  {#if !nonExpandableRowIds.includes(row.id)}
+                    <button
+                      type="button"
+                      class:bx--table-expand__button={true}
+                      aria-controls={`expandable-row-${row.id}`}
+                      aria-label={expandedRows[row.id]
+                        ? "Collapse current row"
+                        : "Expand current row"}
+                      on:click|stopPropagation={() => {
+                        const rowExpanded = !!expandedRows[row.id];
+
+                        expandedRowIds = rowExpanded
+                          ? expandedRowIds.filter((id) => id !== row.id)
+                          : [...expandedRowIds, row.id];
+
+                        dispatch("click:row--expand", {
+                          row,
+                          expanded: !rowExpanded,
+                        });
+                      }}
+                    >
+                      <ChevronRight
+                        aria-hidden="true"
+                        class="bx--table-expand__svg"
+                      />
+                    </button>
+                  {/if}
+                </TableCell>
+              {/if}
+              {#if selectable}
+                <td
+                  class:bx--table-column-checkbox={true}
+                  class:bx--table-column-radio={radio}
+                >
+                  {#if !nonSelectableRowIds.includes(row.id)}
+                    {@const inputId = `${id}-${row.id}`}
+                    {#if radio}
+                      <RadioButton
+                        id={inputId}
+                        name={inputName}
+                        checked={selectedRowIds.includes(row.id)}
+                        value={row.id}
+                        on:change={() => {
+                          selectedRowIds = [row.id];
+                          dispatch("click:row--select", {
+                            row,
+                            selected: true,
+                          });
+                        }}
+                      />
+                    {:else}
+                      <InlineCheckbox
+                        id={inputId}
+                        name={inputName}
+                        checked={selectedRowIds.includes(row.id)}
+                        value={row.id}
+                        on:change={() => {
+                          if (selectedRowIds.includes(row.id)) {
+                            selectedRowIds = selectedRowIds.filter(
+                              (id) => id !== row.id,
+                            );
+                            dispatch("click:row--select", {
+                              row,
+                              selected: false,
+                            });
+                          } else {
+                            selectedRowIds = [...selectedRowIds, row.id];
+                            dispatch("click:row--select", {
+                              row,
+                              selected: true,
+                            });
+                          }
+                        }}
+                      />
+                    {/if}
+                  {/if}
+                </td>
+              {/if}
+              {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
+                {#if cell.empty}
+                  <td class:bx--table-column-menu={cell.columnMenu}>
+                    <slot
+                      name="cell"
+                      {row}
+                      {cell}
+                      rowIndex={i}
+                      cellIndex={j}
+                      rowSelected={selectedRowIds.includes(row.id)}
+                      rowExpanded={!!expandedRows[row.id]}
+                    >
+                      {cell.display
+                        ? cell.display(cell.value, row)
+                        : cell.value}
+                    </slot>
+                  </td>
+                {:else}
+                  <TableCell
+                    on:click={(e) => {
+                      dispatch("click", { row, cell });
+                      dispatch("click:cell", {
+                        cell,
+                        target: e.target,
+                        currentTarget: e.currentTarget,
+                      });
+                    }}
+                  >
+                    <slot
+                      name="cell"
+                      {row}
+                      {cell}
+                      rowIndex={i}
+                      cellIndex={j}
+                      rowSelected={selectedRowIds.includes(row.id)}
+                      rowExpanded={!!expandedRows[row.id]}
+                    >
+                      {cell.display
+                        ? cell.display(cell.value, row)
+                        : cell.value}
+                    </slot>
+                  </TableCell>
+                {/if}
+              {/each}
+            </TableRow>
+
+            {#if expandable}
+              <tr
+                id={`expandable-row-${row.id}`}
+                data-child-row
+                class:bx--expandable-row={true}
+                on:mouseenter={() => {
+                  if (nonExpandableRowIds.includes(row.id)) return;
+                  parentRowId = row.id;
+                }}
+                on:mouseleave={() => {
+                  if (nonExpandableRowIds.includes(row.id)) return;
+                  parentRowId = null;
+                }}
+              >
+                {#if expandedRows[row.id] && !nonExpandableRowIds.includes(row.id)}
+                  <TableCell
+                    colspan={selectable
+                      ? headers.length + 2
+                      : headers.length + 1}
+                  >
+                    <div class:bx--child-row-inner-container={true}>
+                      <slot
+                        name="expanded-row"
+                        {row}
+                        rowSelected={selectedRowIds.includes(row.id)}
+                      />
+                    </div>
+                  </TableCell>
+                {/if}
+              </tr>
+            {/if}
+          {/each}
         {/if}
-      {/each}
-    </TableBody>
-  </Table>
+      </TableBody>
+    </Table>
+  </div>
 </TableContainer>

@@ -199,6 +199,48 @@ type $Props<Row extends DataTableRow = DataTableRow> = {
   page?: number;
 
   /**
+   * Enable virtualization for large row lists. Virtualization renders only the rows currently visible in the viewport, improving performance for large datasets.
+   *
+   * By default, virtualization is automatically enabled for tables with more than 100 rows.
+   *
+   * Set `virtualize={false}` to explicitly disable virtualization, even for large tables.
+   *
+   * Set `virtualize={true}` to explicitly enable virtualization with default settings.
+   *
+   * Provide an object to customize virtualization behavior:
+   * - `itemHeight` (default: 48 for medium size, adjusted for size variant): The height in pixels of each row. Specify a custom value when using custom slots with multi-line content or different heights.
+   * - `maxVisibleRows` (default: 10): The maximum number of rows to display in the viewport. The container height will be calculated as `itemHeight * maxVisibleRows`. Overridden by `containerHeight` if explicitly provided.
+   * - `containerHeight` (default: calculated from maxVisibleRows): The maximum height in pixels of the table body container. If not provided, calculated from `itemHeight * maxVisibleRows`.
+   * - `overscan` (default: 3): The number of extra rows to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
+   * - `threshold` (default: 100): The minimum number of rows required before virtualization activates. Tables with fewer rows will render all rows normally without virtualization.
+   * - `maxItems` (default: undefined): The maximum number of rows to render. When undefined, all visible rows are rendered.
+   * @default undefined
+   */
+  virtualize?:
+    | undefined
+    | boolean
+    | {
+        itemHeight?: number;
+        maxVisibleRows?: number;
+        containerHeight?: number;
+        overscan?: number;
+        threshold?: number;
+        maxItems?: number;
+      };
+
+  /**
+   * Obtain a reference to the table body HTML element.
+   * @default null
+   */
+  tableBodyRef?: null | HTMLTableSectionElement;
+
+  /**
+   * Obtain a reference to the scrollable container HTML element (used when stickyHeader is enabled).
+   * @default null
+   */
+  tableContainerRef?: null | HTMLElement;
+
+  /**
    * Override the default table header translation ids.
    * @default undefined
    */
