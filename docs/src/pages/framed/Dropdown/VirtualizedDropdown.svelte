@@ -12,7 +12,6 @@
 
 <Stack gap={5}>
   <Dropdown
-    virtualize
     labelText="Virtualized Dropdown (10,000 items)"
     {items}
     bind:selectedId
