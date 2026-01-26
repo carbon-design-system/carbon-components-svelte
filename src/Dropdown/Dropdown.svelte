@@ -146,6 +146,7 @@
   const DEFAULT_ITEM_HEIGHT = 40;
 
   let highlightedIndex = -1;
+  let prevHighlightedIndex = -1;
   let typeaheadBuffer = "";
   let typeaheadTimeout = null;
   let listScrollTop = 0;
@@ -165,6 +166,7 @@
   $: selectedItem = items.find((item) => item.id === selectedId);
   $: if (!open) {
     highlightedIndex = -1;
+    prevHighlightedIndex = -1;
     typeaheadBuffer = "";
     if (typeaheadTimeout) {
       clearTimeout(typeaheadTimeout);
@@ -201,9 +203,73 @@
     : items;
 
   afterUpdate(() => {
-    // Scroll to selected item when menu opens with virtualization
+    // Scroll to highlighted item when it changes via keyboard navigation
+    // Only scroll if the item is outside the visible viewport
+    if (
+      open &&
+      shouldVirtualize &&
+      virtualConfig &&
+      highlightedIndex !== prevHighlightedIndex &&
+      highlightedIndex >= 0 &&
+      listRef
+    ) {
+      tick().then(() => {
+        if (listRef && virtualConfig && highlightedIndex >= 0) {
+          const itemHeight = virtualConfig.itemHeight;
+          const containerHeight = virtualConfig.containerHeight;
+          const overscan = virtualConfig.overscan || 3;
+
+          // Calculate current visible range based on current scroll position
+          const currentScrollTop = listRef.scrollTop || listScrollTop;
+          const visibleStartIndex = Math.max(
+            0,
+            Math.floor(currentScrollTop / itemHeight) - overscan,
+          );
+          const visibleEndIndex = Math.min(
+            items.length,
+            Math.ceil((currentScrollTop + containerHeight) / itemHeight) +
+              overscan,
+          );
+
+          // Only scroll if highlighted item is outside visible range
+          if (
+            highlightedIndex < visibleStartIndex ||
+            highlightedIndex >= visibleEndIndex
+          ) {
+            const scrollPosition = highlightedIndex * itemHeight;
+            // Ensure scroll position is within bounds
+            const maxScroll = Math.max(
+              0,
+              items.length * itemHeight - containerHeight,
+            );
+            const finalScrollPosition = Math.max(
+              0,
+              Math.min(scrollPosition, maxScroll),
+            );
+
+            listScrollTop = finalScrollPosition;
+            listRef.scrollTop = finalScrollPosition;
+          }
+        }
+      });
+      prevHighlightedIndex = highlightedIndex;
+    }
+
+    // Set highlighted index to selected item when menu opens
     const wasJustOpened = open && !prevOpen;
-    if (wasJustOpened && virtualize && listRef) {
+    if (wasJustOpened) {
+      if (selectedId !== undefined && selectedItem) {
+        const selectedIndex = items.findIndex((item) => item.id === selectedId);
+        if (selectedIndex >= 0) {
+          // Set highlighted index to selected item so keyboard nav starts there
+          highlightedIndex = selectedIndex;
+          prevHighlightedIndex = selectedIndex;
+        }
+      }
+    }
+
+    // Scroll to selected item when menu opens with virtualization
+    if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
         if (listRef && virtualConfig) {
           if (selectedId !== undefined && selectedItem) {
@@ -242,7 +308,7 @@
     prevOpen = open;
 
     // Reset scroll position when menu closes
-    if (!open && virtualize) {
+    if (!open && shouldVirtualize) {
       listScrollTop = 0;
     }
   });

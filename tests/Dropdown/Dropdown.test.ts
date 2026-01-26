@@ -211,7 +211,9 @@ describe("Dropdown", () => {
       "Slack",
     );
 
-    await user.keyboard("{ArrowDown}{ArrowDown}");
+    // Keyboard nav starts at selected item (index 0, Slack)
+    // ArrowDown once: 0 -> 1 (Email)
+    await user.keyboard("{ArrowDown}");
     await user.keyboard("{Enter}");
 
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
@@ -298,7 +300,9 @@ describe("Dropdown", () => {
     const button = screen.getByRole("button");
     await user.click(button);
 
-    await user.keyboard("{ArrowDown}{ArrowDown}");
+    // Keyboard nav starts at selected item (index 0, Slack)
+    // ArrowDown once: skips disabled Email (index 1), goes to Fax (index 2)
+    await user.keyboard("{ArrowDown}");
     await user.keyboard("{Enter}");
 
     expect(button).toHaveTextContent("Fax");
@@ -1093,8 +1097,95 @@ describe("Dropdown", () => {
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{Enter}");
 
-      // ArrowDown twice selects index 1, which is "Item 2" (items are 0-indexed)
-      expect(button).toHaveTextContent("Item 2");
+      // Keyboard nav starts at selected item (index 0, Item 1)
+      // ArrowDown once: index 0 -> 1 (Item 2)
+      // ArrowDown twice: index 1 -> 2 (Item 3)
+      // Enter selects Item 3
+      expect(button).toHaveTextContent("Item 3");
+    });
+
+    it.each([
+      { virtualize: true, description: "with explicit virtualization" },
+      {
+        virtualize: undefined,
+        description: "with auto-enabled virtualization",
+      },
+    ])("should start keyboard navigation at selected item $description", async ({
+      virtualize,
+    }) => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "250", // Item 251, in the middle
+          virtualize,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expect(menu).toBeVisible();
+      });
+
+      // Press ArrowDown - should move to next item (251 -> 252)
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{Enter}");
+
+      // Should have selected Item 252 (index 251)
+      expect(button).toHaveTextContent("Item 252");
+    });
+
+    it("should only scroll when highlighted item is outside viewport", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "250", // Item 251, in the middle
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expect(menu).toBeVisible();
+        // Menu should have scrolled to show selected item at top
+        // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
+        expect(menu.scrollTop).toBe(10000);
+      });
+
+      const menu = screen.getByRole("listbox");
+      const initialScrollTop = menu.scrollTop;
+
+      // Navigate within visible viewport (ArrowDown a few times)
+      // These items should already be visible, so scroll shouldn't change much
+      await user.keyboard("{ArrowDown}"); // 250 -> 251
+      await user.keyboard("{ArrowDown}"); // 251 -> 252
+      await user.keyboard("{ArrowDown}"); // 252 -> 253
+
+      // Scroll position should remain similar (might change slightly due to overscan)
+      // but shouldn't jump significantly
+      await waitFor(() => {
+        const newScrollTop = menu.scrollTop;
+        // Allow some tolerance for overscan adjustments
+        expect(Math.abs(newScrollTop - initialScrollTop)).toBeLessThan(200);
+      });
+
+      // Now navigate far outside viewport - should scroll
+      // Navigate down many items to go outside visible range
+      await user.keyboard(
+        "{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}",
+      );
+
+      await waitFor(() => {
+        // Should have scrolled significantly to show the new highlighted item
+        expect(menu.scrollTop).toBeGreaterThan(initialScrollTop + 500);
+      });
     });
 
     it("should apply max-height style when virtualized", async () => {
