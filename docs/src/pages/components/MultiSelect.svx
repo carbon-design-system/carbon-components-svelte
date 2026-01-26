@@ -209,3 +209,43 @@ Disable specific items using the `disabled` property in the `items` prop. This e
     { id: "2", text: "Fax" },
   ]}
 />
+
+## Virtualized items (large lists)
+
+Virtualization is a technique that allows only the items currently visible in the viewport to be rendered in the DOM, improving performance for large lists.
+
+By default, the `MultiSelect` component will virtualize lists with more than 100 items.
+
+In the example below, 10,000 items are provided to the multi-select but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
+
+Set `virtualize={false}` to explicitly disable virtualization, even for large lists. Or, customize the threshold at which virtualization activates. See [Virtualized items (custom threshold)](#virtualized-items-custom-threshold).
+
+<FileSource src="/framed/MultiSelect/VirtualizedMultiSelect" />
+
+## Virtualized items (custom overscan)
+
+Overscanning is the process of rendering extra items above and below the viewport to ensure smooth scrolling. The default overscan value is 3.
+
+Specify a custom value for `overscan` to control how many extra items are rendered above/below the viewport for smoother scrolling.
+
+<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
+  <div class="body-short-01">
+    During very fast scrolling, higher overscan values may cause more flickering due to increased DOM updates. For fast scrolling scenarios, use a lower overscan value.
+  </div>
+</InlineNotification>
+
+<FileSource src="/framed/MultiSelect/VirtualizeOverscan" />
+
+## Virtualized items (custom threshold)
+
+The threshold is the minimum number of items required before virtualization activates. The default threshold value is 100, meaning lists with fewer than 100 items will not be virtualized and all items will be rendered normally.
+
+Specify a custom value for `threshold` to control when virtualization activates. Below the threshold, all items are rendered normally without virtualization.
+
+<FileSource src="/framed/MultiSelect/VirtualizeThreshold" />
+
+## Virtualized items (custom item height)
+
+The default item height for virtualization is 40 pixels. When using custom slots to render items with different heights (e.g., multi-line items with descriptions), specify a custom `itemHeight` value to match your item's actual height.
+
+<FileSource src="/framed/MultiSelect/VirtualizeItemHeight" />
