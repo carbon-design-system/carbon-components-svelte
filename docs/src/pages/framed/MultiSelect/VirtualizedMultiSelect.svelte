@@ -12,7 +12,6 @@
 
 <Stack gap={5}>
   <MultiSelect
-    virtualize
     filterable
     labelText="Virtualized MultiSelect (10,000 items)"
     {items}
