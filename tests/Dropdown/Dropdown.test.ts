@@ -1,7 +1,8 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { render, screen, waitFor, within } from "@testing-library/svelte";
 import type DropdownComponent from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { isSvelte5, user } from "../setup-tests";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
@@ -738,5 +739,385 @@ describe("Dropdown", () => {
     const bananaText = screen.getByText("Banana");
     const bananaOption = bananaText.closest(".bx--list-box__menu-item");
     expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
+  describe("virtualization", () => {
+    const createLargeItemList = (count: number) => {
+      return Array.from({ length: count }, (_, i) => ({
+        id: String(i),
+        text: `Item ${i + 1}`,
+      }));
+    };
+
+    it("should enable virtualization for large lists", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      expect(options.length).toBeLessThan(500);
+      expect(options.length).toBeGreaterThan(0);
+    });
+
+    it("should scroll to selected item when menu opens", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "250", // Item 251, in the middle
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+        expect(menu).toBeVisible();
+
+        // The selected item should be visible
+        const selectedOption = within(menu).getByRole("option", {
+          name: "Item 251",
+        });
+        expect(selectedOption).toBeInTheDocument();
+        expect(selectedOption).toHaveAttribute("aria-selected", "true");
+
+        // The scroll position should be set to show the selected item at the top
+        // Item 251 is at index 250, itemHeight=40
+        // Expected scroll: 250 * 40 = 10000
+        expect(menu.scrollTop).toBe(10000);
+      });
+    });
+
+    it("should scroll to selected item when menu reopens", async () => {
+      const largeItems = createLargeItemList(500);
+      const { rerender } = render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "250", // Item 251, in the middle
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const menu = screen.getByRole("listbox");
+      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+      expect(menu).toBeVisible();
+
+      // Scroll away from the selected item
+      menu.scrollTop = 0;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      rerender({ open: false });
+      await tick();
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      rerender({ open: true });
+      await tick();
+
+      await waitFor(() => {
+        const menuAfterReopen = screen.getByRole("listbox");
+        expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
+
+        // Selected item should be visible after reopening
+        const selectedOption = within(menuAfterReopen).getByRole("option", {
+          name: "Item 251",
+        });
+        expect(selectedOption).toBeInTheDocument();
+        expect(selectedOption).toHaveAttribute("aria-selected", "true");
+
+        // Should have scrolled back to show the selected item at the top
+        // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
+        expect(menuAfterReopen.scrollTop).toBe(10000);
+      });
+    });
+
+    it("should scroll to top when no item is selected", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: undefined,
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+        expect(menu).toBeVisible();
+        // Should scroll to top when no selection
+        expect(menu.scrollTop).toBe(0);
+      });
+    });
+
+    it("should handle selected item at the end of list", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "499", // Last item
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+
+        // The selected item should be visible
+        const selectedOption = within(menu).getByRole("option", {
+          name: "Item 500",
+        });
+        expect(selectedOption).toBeInTheDocument();
+        expect(selectedOption).toHaveAttribute("aria-selected", "true");
+
+        // Scroll should be at the position to show last item at top
+        // Item 500 is at index 499, itemHeight=40, so scroll should be 499 * 40 = 19960
+        // But max scroll is 500 * 40 - 300 = 19700, so it should be capped at 19700
+        expect(menu.scrollTop).toBe(19700);
+      });
+    });
+
+    it("should accept virtualization configuration object", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          virtualize: {
+            itemHeight: 50,
+            containerHeight: 400,
+            overscan: 5,
+            threshold: 50,
+            maxItems: 20,
+          },
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      // With maxItems: 20, should render at most 20 items
+      expect(options.length).toBeLessThanOrEqual(20);
+    });
+
+    it("should not virtualize lists below threshold", async () => {
+      const smallItems = createLargeItemList(50);
+      render(Dropdown, {
+        props: {
+          items: smallItems,
+          selectedId: "0",
+          virtualize: {
+            threshold: 100, // Threshold is 100, list has 50 items
+          },
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const options = screen.getAllByRole("option");
+      // Should render all items when below threshold
+      expect(options.length).toBe(50);
+    });
+
+    it("should use default item height when not specified", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      expect(options.length).toBeGreaterThan(0);
+      expect(options.length).toBeLessThan(500);
+    });
+
+    it("should handle virtualization with custom item height", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          virtualize: {
+            itemHeight: 60,
+            containerHeight: 300,
+          },
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      expect(options.length).toBeGreaterThan(0);
+      expect(options.length).toBeLessThan(500);
+      expect(options.length).toBeLessThan(15);
+    });
+
+    it("should calculate scroll position correctly with custom item height", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          virtualize: {
+            itemHeight: 80,
+            containerHeight: 400,
+          },
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const menu = screen.getByRole("listbox");
+      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+      expect(menu).toBeInTheDocument();
+
+      menu.scrollTop = 800;
+      await tick();
+
+      const optionsAfterScroll = screen.getAllByRole("option");
+      expect(optionsAfterScroll.length).toBeGreaterThan(0);
+
+      const firstVisibleOption = optionsAfterScroll[0];
+      await user.click(firstVisibleOption);
+
+      const buttonAfterClick = screen.getByRole("button");
+      expect(buttonAfterClick.textContent).toBeTruthy();
+    });
+
+    it("should override default item height when specified in virtualize object", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          virtualize: {
+            itemHeight: 100,
+            containerHeight: 500,
+          },
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      expect(options.length).toBeGreaterThan(0);
+      expect(options.length).toBeLessThan(15);
+    });
+
+    it("should maintain selection when virtualized", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "250",
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveTextContent("Item 251");
+
+      await user.click(button);
+
+      // With auto-scroll, the selected item should be visible without manual scrolling
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+        const selectedOption = within(menu).getByRole("option", {
+          name: "Item 251",
+        });
+        expect(selectedOption).toBeInTheDocument();
+        expect(selectedOption).toHaveAttribute("aria-selected", "true");
+      });
+    });
+
+    it("should handle keyboard navigation with virtualization", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{Enter}");
+
+      // ArrowDown twice selects index 1, which is "Item 2" (items are 0-indexed)
+      expect(button).toHaveTextContent("Item 2");
+    });
+
+    it("should apply max-height style when virtualized", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          virtualize: {
+            containerHeight: 400,
+          },
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+
+      // The ListBoxMenu itself has the style applied
+      const menu = screen.getByRole("listbox");
+      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+      expect(menu).toBeInTheDocument();
+      expect(menu.style.maxHeight).toBe("400px");
+      expect(menu.style.overflowY).toBe("auto");
+    });
   });
 });

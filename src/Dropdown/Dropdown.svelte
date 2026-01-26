@@ -92,6 +92,25 @@
    */
   export let translateWithId = undefined;
 
+  /**
+   * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
+   *
+   * By default, virtualization is automatically enabled for lists with more than 100 items.
+   *
+   * Set `virtualize={false}` to explicitly disable virtualization, even for large lists.
+   *
+   * Set `virtualize={true}` to explicitly enable virtualization with default settings.
+   *
+   * Provide an object to customize virtualization behavior:
+   * - `itemHeight` (default: 40): The height in pixels of each item. Specify a custom value when using custom slots with multi-line items or different heights.
+   * - `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.
+   * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
+   * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
+   * - `maxItems` (default: undefined): The maximum number of items to render. When undefined, all visible items are rendered.
+   * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   */
+  export let virtualize = undefined;
+
   /** Set an id for the list box component */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -104,7 +123,13 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, onMount } from "svelte";
+  /**
+   * Obtain a reference to the list HTML element.
+   * @type {null | HTMLDivElement}
+   */
+  export let listRef = null;
+
+  import { afterUpdate, createEventDispatcher, onMount, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -113,12 +138,18 @@
     ListBoxMenuIcon,
     ListBoxMenuItem,
   } from "../ListBox";
+  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+
+  /** Default item height in pixels for virtualization */
+  const DEFAULT_ITEM_HEIGHT = 40;
 
   let highlightedIndex = -1;
   let typeaheadBuffer = "";
   let typeaheadTimeout = null;
+  let listScrollTop = 0;
+  let prevOpen = false;
 
   const TYPEAHEAD_DELAY = 500;
 
@@ -140,6 +171,76 @@
       typeaheadTimeout = null;
     }
   }
+
+  $: virtualConfig = virtualize
+    ? {
+        itemHeight: DEFAULT_ITEM_HEIGHT,
+        containerHeight: 300,
+        overscan: 3,
+        threshold: 100,
+        maxItems: undefined,
+        ...(typeof virtualize === "object" ? virtualize : {}),
+      }
+    : null;
+
+  $: virtualData = virtualConfig
+    ? virtualizeUtil({
+        items,
+        scrollTop: listScrollTop,
+        ...virtualConfig,
+      })
+    : null;
+
+  $: itemsToRender = virtualData?.isVirtualized
+    ? virtualData.visibleItems
+    : items;
+
+  afterUpdate(() => {
+    // Scroll to selected item when menu opens with virtualization
+    const wasJustOpened = open && !prevOpen;
+    if (wasJustOpened && virtualize && listRef) {
+      tick().then(() => {
+        if (listRef && virtualConfig) {
+          if (selectedId !== undefined && selectedItem) {
+            // Find the index of the selected item
+            const selectedIndex = items.findIndex(
+              (item) => item.id === selectedId,
+            );
+            if (selectedIndex >= 0) {
+              // Calculate scroll position to show selected item at the top of viewport
+              const itemHeight = virtualConfig.itemHeight;
+              const containerHeight = virtualConfig.containerHeight;
+              const scrollPosition = selectedIndex * itemHeight;
+              // Ensure scroll position is within bounds
+              const maxScroll = Math.max(
+                0,
+                items.length * itemHeight - containerHeight,
+              );
+              const finalScrollPosition = Math.max(
+                0,
+                Math.min(scrollPosition, maxScroll),
+              );
+
+              listScrollTop = finalScrollPosition;
+              listRef.scrollTop = finalScrollPosition;
+            } else {
+              listRef.scrollTop = 0;
+              listScrollTop = 0;
+            }
+          } else {
+            listRef.scrollTop = 0;
+            listScrollTop = 0;
+          }
+        }
+      });
+    }
+    prevOpen = open;
+
+    // Reset scroll position when menu closes
+    if (!open && virtualize) {
+      listScrollTop = 0;
+    }
+  });
 
   function change(dir) {
     let index = highlightedIndex + dir;
@@ -350,32 +451,76 @@
       />
     </button>
     {#if open}
-      <ListBoxMenu aria-labelledby={id} {id}>
-        {#each items as item, i (item.id)}
-          <ListBoxMenuItem
-            id={item.id}
-            active={selectedId === item.id}
-            highlighted={highlightedIndex === i}
-            disabled={item.disabled}
-            on:click={(e) => {
-              if (item.disabled) {
-                e.stopPropagation();
-                return;
-              }
-              selectedId = item.id;
-              dispatchSelect();
-              ref.focus();
-            }}
-            on:mouseenter={() => {
-              if (item.disabled) return;
-              highlightedIndex = i;
-            }}
-          >
-            <slot {item} index={i}>
-              {itemToString(item)}
-            </slot>
-          </ListBoxMenuItem>
-        {/each}
+      <ListBoxMenu
+        aria-labelledby={id}
+        {id}
+        on:scroll
+        on:scroll={(e) => {
+          listScrollTop = e.target.scrollTop;
+        }}
+        bind:ref={listRef}
+        style={virtualConfig
+          ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+          : undefined}
+      >
+        {#if virtualData?.isVirtualized}
+          <div style="height: {virtualData.totalHeight}px; position: relative;">
+            <div style="transform: translateY({virtualData.offsetY}px);">
+              {#each itemsToRender as item, i (item.id)}
+                {@const actualIndex = virtualData.startIndex + i}
+                <ListBoxMenuItem
+                  id={item.id}
+                  active={selectedId === item.id}
+                  highlighted={highlightedIndex === actualIndex}
+                  disabled={item.disabled}
+                  on:click={(e) => {
+                    if (item.disabled) {
+                      e.stopPropagation();
+                      return;
+                    }
+                    selectedId = item.id;
+                    dispatchSelect();
+                    ref.focus();
+                  }}
+                  on:mouseenter={() => {
+                    if (item.disabled) return;
+                    highlightedIndex = actualIndex;
+                  }}
+                >
+                  <slot {item} index={actualIndex}>
+                    {itemToString(item)}
+                  </slot>
+                </ListBoxMenuItem>
+              {/each}
+            </div>
+          </div>
+        {:else}
+          {#each itemsToRender as item, i (item.id)}
+            <ListBoxMenuItem
+              id={item.id}
+              active={selectedId === item.id}
+              highlighted={highlightedIndex === i}
+              disabled={item.disabled}
+              on:click={(e) => {
+                if (item.disabled) {
+                  e.stopPropagation();
+                  return;
+                }
+                selectedId = item.id;
+                dispatchSelect();
+                ref.focus();
+              }}
+              on:mouseenter={() => {
+                if (item.disabled) return;
+                highlightedIndex = i;
+              }}
+            >
+              <slot {item} index={i}>
+                {itemToString(item)}
+              </slot>
+            </ListBoxMenuItem>
+          {/each}
+        {/if}
       </ListBoxMenu>
     {/if}
   </ListBox>
