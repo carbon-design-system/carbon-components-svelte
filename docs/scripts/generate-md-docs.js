@@ -55,10 +55,14 @@ const componentApi = JSON.parse(
 );
 
 /** @type {Record<string, true>} */
-const componentApiByName = componentApi.components.reduce((a, c) => {
-  a[c.moduleName] = true;
-  return a;
-}, {});
+const componentApiByName = componentApi.components.reduce(
+  /** @type {(acc: Record<string, true>, component: any) => Record<string, true>} */
+  (a, c) => {
+    a[c.moduleName] = true;
+    return a;
+  },
+  {},
+);
 
 /** @type {Map<string, any>} */
 const componentApiByModuleName = new Map(
