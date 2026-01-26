@@ -325,7 +325,12 @@
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
 
-  $: virtualConfig = virtualize
+  $: shouldVirtualize =
+    virtualize === false
+      ? false
+      : virtualize !== undefined || items.length > 100;
+
+  $: virtualConfig = shouldVirtualize
     ? {
         itemHeight: DEFAULT_ITEM_HEIGHT,
         containerHeight: 300,
