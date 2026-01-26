@@ -46,7 +46,9 @@ Add an `OverflowMenu` to handle long breadcrumb trails. Use `OverflowMenuItem` c
       <OverflowMenuItem href="/api/data/latest" text="Latest" />
     </OverflowMenu>
   </BreadcrumbItem>
-  <BreadcrumbItem href="/api/data/latest/usage" isCurrentPage>Usage</BreadcrumbItem>
+  <BreadcrumbItem href="/api/data/latest/usage" isCurrentPage>
+    Usage
+  </BreadcrumbItem>
 </Breadcrumb>
 
 ## Breadcrumb trail
