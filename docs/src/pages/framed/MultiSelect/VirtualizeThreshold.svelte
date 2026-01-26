@@ -11,6 +11,7 @@
 
 <MultiSelect
   virtualize={{ threshold: 200 }}
+  filterable
   labelText="Custom threshold (threshold: 200)"
   {items}
   bind:selectedIds

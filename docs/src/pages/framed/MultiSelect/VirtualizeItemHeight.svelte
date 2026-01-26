@@ -12,6 +12,7 @@
 
 <MultiSelect
   virtualize={{ itemHeight: 60 }}
+  filterable
   labelText="Custom item height (60px)"
   {items}
   bind:selectedIds
