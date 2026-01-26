@@ -1363,5 +1363,129 @@ describe("ComboBox", () => {
       expect(menu.style.maxHeight).toBe("400px");
       expect(menu.style.overflowY).toBe("auto");
     });
+
+    it("should automatically enable virtualization for lists with more than 100 items when virtualize is undefined", async () => {
+      const largeItems = createLargeItemList(150);
+      render(ComboBox, {
+        props: {
+          items: largeItems,
+        },
+      });
+
+      await user.click(getInput());
+
+      const menu = screen.getAllByRole("listbox")[1];
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      // Should virtualize, so fewer than 150 items rendered
+      expect(options.length).toBeLessThan(150);
+      expect(options.length).toBeGreaterThan(0);
+      // Should have max-height style applied
+      expect(menu.style.maxHeight).toBeTruthy();
+      expect(menu.style.overflowY).toBe("auto");
+    });
+
+    it("should not virtualize lists with 100 or fewer items when virtualize is undefined", async () => {
+      const smallItems = createLargeItemList(100);
+      render(ComboBox, {
+        props: {
+          items: smallItems,
+        },
+      });
+
+      await user.click(getInput());
+
+      const menu = screen.getAllByRole("listbox")[1];
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      // Should render all items when at or below threshold
+      expect(options.length).toBe(100);
+      // Should not have max-height style when not virtualized
+      expect(menu.style.maxHeight).toBeFalsy();
+    });
+
+    it("should not virtualize lists with exactly 100 items when virtualize is undefined", async () => {
+      const items = createLargeItemList(100);
+      render(ComboBox, {
+        props: {
+          items,
+        },
+      });
+
+      await user.click(getInput());
+
+      const options = screen.getAllByRole("option");
+      // Should render all 100 items (threshold is 100, so > 100 is needed)
+      expect(options.length).toBe(100);
+    });
+
+    it("should explicitly disable virtualization when virtualize is false, even with large lists", async () => {
+      const largeItems = createLargeItemList(500);
+      render(ComboBox, {
+        props: {
+          items: largeItems,
+          virtualize: false,
+        },
+      });
+
+      await user.click(getInput());
+
+      const menu = screen.getAllByRole("listbox")[1];
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      // Should render all items when explicitly disabled
+      expect(options.length).toBe(500);
+      // Should not have max-height style when not virtualized
+      expect(menu.style.maxHeight).toBeFalsy();
+    });
+
+    it("should respect threshold when virtualize is true with fewer than 100 items", async () => {
+      const smallItems = createLargeItemList(50);
+      render(ComboBox, {
+        props: {
+          items: smallItems,
+          virtualize: true, // Explicitly enabled, but below threshold
+        },
+      });
+
+      await user.click(getInput());
+
+      const menu = screen.getAllByRole("listbox")[1];
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      // Should render all items because threshold (100) is not met
+      // Even though virtualize=true, the threshold check prevents virtualization
+      expect(options.length).toBe(50);
+      // Should have max-height style applied (virtualConfig is created)
+      expect(menu.style.maxHeight).toBeTruthy();
+      expect(menu.style.overflowY).toBe("auto");
+    });
+
+    it("should virtualize when virtualize is true with more than 100 items", async () => {
+      const largeItems = createLargeItemList(150);
+      render(ComboBox, {
+        props: {
+          items: largeItems,
+          virtualize: true, // Explicitly enabled, above threshold
+        },
+      });
+
+      await user.click(getInput());
+
+      const menu = screen.getAllByRole("listbox")[1];
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      // Should virtualize when above threshold
+      expect(options.length).toBeLessThan(150);
+      expect(options.length).toBeGreaterThan(0);
+      // Should have max-height style applied
+      expect(menu.style.maxHeight).toBeTruthy();
+      expect(menu.style.overflowY).toBe("auto");
+    });
   });
 });
