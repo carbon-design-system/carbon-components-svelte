@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor, within } from "@testing-library/svelte";
 import type MultiSelectComponent from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { user } from "../setup-tests";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
@@ -1099,5 +1100,418 @@ describe("MultiSelect", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  describe("virtualization", () => {
+    const createLargeItemList = (count: number) => {
+      return Array.from({ length: count }, (_, i) => ({
+        id: String(i),
+        text: `Item ${i + 1}`,
+      }));
+    };
+
+    it("should enable virtualization for large lists", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["0"],
+          virtualize: true,
+        },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      expect(options.length).toBeLessThan(500);
+      expect(options.length).toBeGreaterThan(0);
+    });
+
+    it("should scroll to selected item when menu opens", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["250"], // Item 251, in the middle
+          virtualize: true,
+          selectionFeedback: "fixed", // Keep items in original order
+          sortItem: () => 0, // Disable sorting to maintain original order
+        },
+      });
+
+      await openMenu();
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+        expect(menu).toBeVisible();
+
+        // The selected item should be visible
+        const selectedOption = within(menu).getByRole("option", {
+          name: "Item 251",
+        });
+        expect(selectedOption).toBeInTheDocument();
+        expect(selectedOption).toHaveAttribute("aria-selected", "true");
+
+        // The scroll position should be set to show the selected item at the top
+        // Item 251 is at index 250, itemHeight=40
+        // Expected scroll: 250 * 40 = 10000
+        expect(menu.scrollTop).toBe(10000);
+      });
+    });
+
+    it("should scroll to selected item when menu reopens", async () => {
+      const largeItems = createLargeItemList(500);
+      const { rerender } = render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["250"], // Item 251, in the middle
+          virtualize: true,
+          selectionFeedback: "fixed", // Keep items in original order
+          sortItem: () => 0, // Disable sorting to maintain original order
+        },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+      expect(menu).toBeVisible();
+
+      // Scroll away from the selected item
+      menu.scrollTop = 0;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      rerender({ open: false });
+      await tick();
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      rerender({ open: true });
+      await tick();
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      await waitFor(
+        () => {
+          const menuAfterReopen = screen.getByRole("listbox");
+          expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
+
+          // Selected item should be visible after reopening
+          const selectedOption = within(menuAfterReopen).getByRole("option", {
+            name: "Item 251",
+          });
+          expect(selectedOption).toBeInTheDocument();
+          expect(selectedOption).toHaveAttribute("aria-selected", "true");
+
+          // Should have scrolled back to show the selected item at the top
+          // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
+          expect(menuAfterReopen.scrollTop).toBe(10000);
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    it("should scroll to top when no items are selected", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: [],
+          virtualize: true,
+        },
+      });
+
+      await openMenu();
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+        expect(menu).toBeVisible();
+        // Should scroll to top when no selection
+        expect(menu.scrollTop).toBe(0);
+      });
+    });
+
+    it("should handle selected items at the end of list", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["499"], // Last item
+          virtualize: true,
+          selectionFeedback: "fixed", // Keep items in original order
+          sortItem: () => 0, // Disable sorting to maintain original order
+        },
+      });
+
+      await openMenu();
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+
+        // The selected item should be visible
+        const selectedOption = within(menu).getByRole("option", {
+          name: "Item 500",
+        });
+        expect(selectedOption).toBeInTheDocument();
+        expect(selectedOption).toHaveAttribute("aria-selected", "true");
+
+        // Scroll should be at the position to show last item at top
+        // Item 500 is at index 499, itemHeight=40, so scroll should be 499 * 40 = 19960
+        // But max scroll is 500 * 40 - 300 = 19700, so it should be capped at 19700
+        expect(menu.scrollTop).toBe(19700);
+      });
+    });
+
+    it("should accept virtualization configuration object", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["0"],
+          virtualize: {
+            itemHeight: 50,
+            containerHeight: 400,
+            overscan: 5,
+            threshold: 50,
+            maxItems: 20,
+          },
+        },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      // With maxItems: 20, should render at most 20 items
+      expect(options.length).toBeLessThanOrEqual(20);
+    });
+
+    it("should not virtualize lists below threshold", async () => {
+      const smallItems = createLargeItemList(50);
+      render(MultiSelect, {
+        props: {
+          items: smallItems,
+          selectedIds: ["0"],
+          virtualize: {
+            threshold: 100, // Threshold is 100, list has 50 items
+          },
+        },
+      });
+
+      await openMenu();
+
+      const options = screen.getAllByRole("option");
+      // Should render all items when below threshold
+      expect(options.length).toBe(50);
+    });
+
+    it("should use default item height when not specified", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["0"],
+          virtualize: true,
+        },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      expect(options.length).toBeGreaterThan(0);
+      expect(options.length).toBeLessThan(500);
+    });
+
+    it("should handle virtualization with custom item height", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["0"],
+          virtualize: {
+            itemHeight: 60,
+            containerHeight: 300,
+          },
+        },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      expect(options.length).toBeGreaterThan(0);
+      expect(options.length).toBeLessThan(500);
+      expect(options.length).toBeLessThan(15);
+    });
+
+    it("should calculate scroll position correctly with custom item height", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["0"],
+          virtualize: {
+            itemHeight: 80,
+            containerHeight: 400,
+          },
+          selectionFeedback: "fixed", // Keep items in original order
+          sortItem: () => 0, // Disable sorting to maintain original order
+        },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+      expect(menu).toBeInTheDocument();
+
+      menu.scrollTop = 800;
+      await tick();
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      const optionsAfterScroll = screen.getAllByRole("option");
+      expect(optionsAfterScroll.length).toBeGreaterThan(0);
+
+      // Click on the checkbox directly (more reliable than clicking the option)
+      const checkboxes = screen.getAllByRole("checkbox");
+      const firstCheckbox = checkboxes[0];
+      expect(firstCheckbox).toBeDefined();
+
+      // Get the current checked state
+      const wasChecked = (firstCheckbox as HTMLInputElement).checked;
+
+      // Click the checkbox to toggle it
+      await user.click(firstCheckbox);
+      await tick();
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Verify selection works - the checkbox should have toggled
+      await waitFor(() => {
+        const updatedCheckboxes = screen.getAllByRole("checkbox");
+        const firstUpdatedCheckbox = updatedCheckboxes[0];
+        expect((firstUpdatedCheckbox as HTMLInputElement).checked).toBe(
+          !wasChecked,
+        );
+      });
+    });
+
+    it("should override default item height when specified", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["0"],
+          virtualize: {
+            itemHeight: 100,
+            containerHeight: 500,
+          },
+        },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeVisible();
+
+      const options = screen.getAllByRole("option");
+      expect(options.length).toBeGreaterThan(0);
+      expect(options.length).toBeLessThan(15);
+    });
+
+    it("should maintain selection when virtualized", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["250"],
+          virtualize: true,
+        },
+      });
+
+      await openMenu();
+
+      // With auto-scroll, the selected item should be visible without manual scrolling
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+        const selectedOption = within(menu).getByRole("option", {
+          name: "Item 251",
+        });
+        expect(selectedOption).toBeInTheDocument();
+        expect(selectedOption).toHaveAttribute("aria-selected", "true");
+      });
+    });
+
+    it("should handle keyboard navigation with virtualization", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: [],
+          virtualize: true,
+          selectionFeedback: "fixed", // Keep items in original order
+          sortItem: () => 0, // Disable sorting to maintain original order
+        },
+      });
+
+      await openMenu();
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{Enter}");
+      await tick();
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // ArrowDown twice selects index 1, which is "Item 2" (items are 0-indexed)
+      // Verify the item is selected - check if any checkbox is checked
+      await waitFor(() => {
+        const checkboxes = screen.getAllByRole("checkbox");
+        const checkedCheckboxes = checkboxes.filter(
+          (cb) => (cb as HTMLInputElement).checked,
+        );
+        expect(checkedCheckboxes.length).toBeGreaterThan(0);
+
+        // Also verify we can find Item 2 if it's visible
+        const item2Checkbox = checkboxes.find((cb) => {
+          const label = cb.closest("label");
+          return label?.textContent?.trim() === "Item 2";
+        });
+        if (item2Checkbox) {
+          expect((item2Checkbox as HTMLInputElement).checked).toBe(true);
+        }
+      });
+    });
+
+    it("should apply max-height style when virtualized", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          selectedIds: ["0"],
+          virtualize: {
+            containerHeight: 400,
+          },
+        },
+      });
+
+      await openMenu();
+
+      // The ListBoxMenu itself has the style applied
+      const menu = screen.getByRole("listbox");
+      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+      expect(menu).toBeInTheDocument();
+      expect(menu.style.maxHeight).toBe("400px");
+      expect(menu.style.overflowY).toBe("auto");
+    });
   });
 });

@@ -26,6 +26,9 @@
   export let itemToInput: ComponentProps<MultiSelect>["itemToInput"] =
     undefined;
   export let helperText: ComponentProps<MultiSelect>["helperText"] = "";
+  export let virtualize: ComponentProps<MultiSelect>["virtualize"] = undefined;
+  export let sortItem: ComponentProps<MultiSelect>["sortItem"] = undefined;
+  export let open: ComponentProps<MultiSelect>["open"] = undefined;
 </script>
 
 <MultiSelect
@@ -48,6 +51,9 @@
   {itemToString}
   {itemToInput}
   {helperText}
+  {virtualize}
+  {sortItem}
+  {open}
   on:select={(e) => {
     console.log("select", e.detail);
   }}

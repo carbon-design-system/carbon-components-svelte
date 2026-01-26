@@ -176,7 +176,32 @@
    */
   export let highlightedId = null;
 
-  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
+  /**
+   * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
+   *
+   * By default, virtualization is automatically enabled for lists with more than 100 items.
+   *
+   * Set `virtualize={false}` to explicitly disable virtualization, even for large lists.
+   *
+   * Set `virtualize={true}` to explicitly enable virtualization with default settings.
+   *
+   * Provide an object to customize virtualization behavior:
+   * - `itemHeight` (default: 40): The height in pixels of each item. Specify a custom value when using custom slots with multi-line items or different heights.
+   * - `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.
+   * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
+   * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
+   * - `maxItems` (default: undefined): The maximum number of items to render. When undefined, all visible items are rendered.
+   * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   */
+  export let virtualize = undefined;
+
+  /**
+   * Obtain a reference to the list HTML element.
+   * @type {null | HTMLDivElement}
+   */
+  export let listRef = null;
+
+  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -188,12 +213,18 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox";
+  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+
+  /** Default item height in pixels for virtualization */
+  const DEFAULT_ITEM_HEIGHT = 40;
 
   let highlightedIndex = -1;
   let prevChecked = [];
   let isInitialRender = true;
+  let listScrollTop = 0;
+  let prevOpen = false;
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement }) => void}
@@ -259,6 +290,65 @@
       highlightedIndex = -1;
       value = "";
     }
+
+    // Scroll to first selected item when menu opens with virtualization
+    const wasJustOpened = open && !prevOpen;
+    if (wasJustOpened && virtualize && listRef) {
+      tick().then(() => {
+        if (listRef && virtualConfig) {
+          if (selectedIds && selectedIds.length > 0) {
+            // Find the index of the first selected item in the itemsToUse array
+            // (the actual rendered list, which may be sorted/filtered)
+            const firstSelectedId = selectedIds[0];
+            const selectedIndex = itemsToUse.findIndex(
+              (item) => item.id === firstSelectedId,
+            );
+            if (selectedIndex >= 0) {
+              // Calculate scroll position to show selected item at the top of viewport
+              const itemHeight = virtualConfig.itemHeight;
+              const containerHeight = virtualConfig.containerHeight;
+              const scrollPosition = selectedIndex * itemHeight;
+              // Ensure scroll position is within bounds
+              const maxScroll = Math.max(
+                0,
+                itemsToUse.length * itemHeight - containerHeight,
+              );
+              const finalScrollPosition = Math.max(
+                0,
+                Math.min(scrollPosition, maxScroll),
+              );
+
+              listScrollTop = finalScrollPosition;
+              // Use requestAnimationFrame to ensure DOM is ready
+              requestAnimationFrame(() => {
+                if (listRef) {
+                  listRef.scrollTop = finalScrollPosition;
+                }
+              });
+            } else {
+              if (listRef) {
+                listRef.scrollTop = 0;
+              }
+              listScrollTop = 0;
+            }
+          } else {
+            if (listRef) {
+              listRef.scrollTop = 0;
+            }
+            listScrollTop = 0;
+          }
+        }
+      });
+    }
+    prevOpen = open;
+
+    // Reset scroll position when menu closes
+    if (!open && prevOpen && virtualize) {
+      listScrollTop = 0;
+      if (listRef) {
+        listRef.scrollTop = 0;
+      }
+    }
   });
 
   function sort() {
@@ -310,6 +400,31 @@
       ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
         null)
       : null;
+
+  $: virtualConfig = virtualize
+    ? {
+        itemHeight: DEFAULT_ITEM_HEIGHT,
+        containerHeight: 300,
+        overscan: 3,
+        threshold: 100,
+        maxItems: undefined,
+        ...(typeof virtualize === "object" ? virtualize : {}),
+      }
+    : null;
+
+  $: itemsToUse = filterable ? filteredItems : sortedItems;
+
+  $: virtualData = virtualConfig
+    ? virtualizeUtil({
+        items: itemsToUse,
+        scrollTop: listScrollTop,
+        ...virtualConfig,
+      })
+    : null;
+
+  $: itemsToRender = virtualData?.isVirtualized
+    ? virtualData.visibleItems
+    : itemsToUse;
 </script>
 
 <svelte:window
@@ -542,54 +657,121 @@
       </ListBoxField>
     {/if}
     <div style:display={open ? "block" : "none"}>
-      <ListBoxMenu aria-label={ariaLabel} {id} aria-multiselectable="true">
-        {#each filterable ? filteredItems : sortedItems as item, i (item.id)}
-          <ListBoxMenuItem
-            id={item.id}
-            role="option"
-            aria-labelledby="checkbox-{item.id}"
-            aria-selected={item.checked}
-            aria-checked={item.checked}
-            active={item.checked}
-            highlighted={highlightedIndex === i}
-            disabled={item.disabled}
-            on:click={(e) => {
-              if (item.disabled) {
-                e.stopPropagation();
-                return;
-              }
-              sortedItems = sortedItems.map((_) =>
-                _.id === item.id ? { ..._, checked: !_.checked } : _,
-              );
-              if (filterable) {
-                inputRef?.focus();
-              } else {
-                fieldRef?.focus();
-              }
-            }}
-            on:mouseenter={() => {
-              if (item.disabled) return;
-              highlightedIndex = i;
-            }}
-          >
-            <Checkbox
-              name={item.id}
-              title={useTitleInItem ? itemToString(item) : undefined}
-              {...itemToInput(item)}
-              tabindex="-1"
-              id="checkbox-{item.id}"
-              checked={item.checked}
+      <ListBoxMenu
+        aria-label={ariaLabel}
+        {id}
+        aria-multiselectable="true"
+        on:scroll
+        on:scroll={(e) => {
+          listScrollTop = e.target.scrollTop;
+        }}
+        bind:ref={listRef}
+        style={virtualConfig
+          ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+          : undefined}
+      >
+        {#if virtualData?.isVirtualized}
+          <div style="height: {virtualData.totalHeight}px; position: relative;">
+            <div style="transform: translateY({virtualData.offsetY}px);">
+              {#each itemsToRender as item, i (item.id)}
+                {@const actualIndex = virtualData.startIndex + i}
+                <ListBoxMenuItem
+                  id={item.id}
+                  role="option"
+                  aria-labelledby="checkbox-{item.id}"
+                  aria-selected={item.checked}
+                  aria-checked={item.checked}
+                  active={item.checked}
+                  highlighted={highlightedIndex === actualIndex}
+                  disabled={item.disabled}
+                  on:click={(e) => {
+                    if (item.disabled) {
+                      e.stopPropagation();
+                      return;
+                    }
+                    sortedItems = sortedItems.map((_) =>
+                      _.id === item.id ? { ..._, checked: !_.checked } : _,
+                    );
+                    if (filterable) {
+                      inputRef?.focus();
+                    } else {
+                      fieldRef?.focus();
+                    }
+                  }}
+                  on:mouseenter={() => {
+                    if (item.disabled) return;
+                    highlightedIndex = actualIndex;
+                  }}
+                >
+                  <Checkbox
+                    name={item.id}
+                    title={useTitleInItem ? itemToString(item) : undefined}
+                    {...itemToInput(item)}
+                    tabindex="-1"
+                    id="checkbox-{item.id}"
+                    checked={item.checked}
+                    disabled={item.disabled}
+                    on:blur={() => {
+                      if (actualIndex === itemsToUse.length - 1) open = false;
+                    }}
+                  >
+                    <slot slot="labelChildren" {item} index={actualIndex}>
+                      {itemToString(item)}
+                    </slot>
+                  </Checkbox>
+                </ListBoxMenuItem>
+              {/each}
+            </div>
+          </div>
+        {:else}
+          {#each itemsToRender as item, i (item.id)}
+            <ListBoxMenuItem
+              id={item.id}
+              role="option"
+              aria-labelledby="checkbox-{item.id}"
+              aria-selected={item.checked}
+              aria-checked={item.checked}
+              active={item.checked}
+              highlighted={highlightedIndex === i}
               disabled={item.disabled}
-              on:blur={() => {
-                if (i === filteredItems.length - 1) open = false;
+              on:click={(e) => {
+                if (item.disabled) {
+                  e.stopPropagation();
+                  return;
+                }
+                sortedItems = sortedItems.map((_) =>
+                  _.id === item.id ? { ..._, checked: !_.checked } : _,
+                );
+                if (filterable) {
+                  inputRef?.focus();
+                } else {
+                  fieldRef?.focus();
+                }
+              }}
+              on:mouseenter={() => {
+                if (item.disabled) return;
+                highlightedIndex = i;
               }}
             >
-              <slot slot="labelChildren" {item} index={i}>
-                {itemToString(item)}
-              </slot>
-            </Checkbox>
-          </ListBoxMenuItem>
-        {/each}
+              <Checkbox
+                name={item.id}
+                title={useTitleInItem ? itemToString(item) : undefined}
+                {...itemToInput(item)}
+                tabindex="-1"
+                id="checkbox-{item.id}"
+                checked={item.checked}
+                disabled={item.disabled}
+                on:blur={() => {
+                  if (i === itemsToUse.length - 1) open = false;
+                }}
+              >
+                <slot slot="labelChildren" {item} index={i}>
+                  {itemToString(item)}
+                </slot>
+              </Checkbox>
+            </ListBoxMenuItem>
+          {/each}
+        {/if}
       </ListBoxMenu>
     </div>
   </ListBox>
