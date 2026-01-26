@@ -13,7 +13,7 @@
 
 <Stack gap={5}>
   <ComboBox
-    virtualize={true}
+    virtualize
     labelText="Virtualized ComboBox (10,000 items)"
     placeholder="Filter..."
     {items}
