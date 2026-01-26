@@ -774,13 +774,21 @@ describe("Dropdown", () => {
       expect(options.length).toBeGreaterThan(0);
     });
 
-    it("should scroll to selected item when menu opens", async () => {
+    it.each([
+      { virtualize: true, description: "with explicit virtualization" },
+      {
+        virtualize: undefined,
+        description: "with auto-enabled virtualization",
+      },
+    ])("should scroll to selected item when menu opens $description", async ({
+      virtualize,
+    }) => {
       const largeItems = createLargeItemList(500);
       render(Dropdown, {
         props: {
           items: largeItems,
           selectedId: "250", // Item 251, in the middle
-          virtualize: true,
+          virtualize,
         },
       });
 
@@ -806,13 +814,21 @@ describe("Dropdown", () => {
       });
     });
 
-    it("should scroll to selected item when menu reopens", async () => {
+    it.each([
+      { virtualize: true, description: "with explicit virtualization" },
+      {
+        virtualize: undefined,
+        description: "with auto-enabled virtualization",
+      },
+    ])("should scroll to selected item when menu reopens $description", async ({
+      virtualize,
+    }) => {
       const largeItems = createLargeItemList(500);
       const { rerender } = render(Dropdown, {
         props: {
           items: largeItems,
           selectedId: "250", // Item 251, in the middle
-          virtualize: true,
+          virtualize,
         },
       });
 
