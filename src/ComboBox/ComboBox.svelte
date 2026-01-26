@@ -263,7 +263,7 @@
       ref.focus();
 
       // Store the current value before clearing.
-      if (clearFilterOnOpen && value && selectedItem) {
+      if (clearFilterOnOpen && value && selectedItem && !valueBeforeOpen) {
         valueBeforeOpen = value;
         value = "";
       }
@@ -274,16 +274,14 @@
       }
       highlightedIndex = -1;
       if (selectedItem) {
-        // Only set value if the input is not focused
-        if (!ref.contains(document.activeElement)) {
-          // Restore the value if clearFilterOnOpen was used and no new selection was made
-          if (clearFilterOnOpen && valueBeforeOpen && value === "") {
-            value = valueBeforeOpen;
-          } else {
-            // programmatically set value
-            value = itemToString(selectedItem);
-          }
+        // Restore the value if clearFilterOnOpen was used and no new selection was made.
+        // This must happen regardless of focus state to handle cases like closing via chevron.
+        if (clearFilterOnOpen && valueBeforeOpen) {
+          value = valueBeforeOpen;
           valueBeforeOpen = "";
+        } else if (!ref.contains(document.activeElement)) {
+          // Only set value programmatically if the input is not focused
+          value = itemToString(selectedItem);
         }
       } else {
         selectedId = undefined;

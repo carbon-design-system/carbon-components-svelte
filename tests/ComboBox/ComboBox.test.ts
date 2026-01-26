@@ -538,6 +538,49 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Email");
   });
 
+  it("should restore value when closing via chevron with clearFilterOnOpen", async () => {
+    render(ComboBox, { props: { clearFilterOnOpen: true, selectedId: "1" } });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
+    // Open via chevron
+    const openChevron = screen.getByTitle("Open menu");
+    await user.click(openChevron);
+    expect(input).toHaveValue("");
+
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(3);
+
+    // Close via chevron (input may still have focus)
+    const closeChevron = screen.getByTitle("Close menu");
+    await user.click(closeChevron);
+    expect(input).toHaveValue("Email");
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2579
+  it("should restore value when closing with clearFilterOnOpen after typing filter text", async () => {
+    render(ComboBox, { props: { clearFilterOnOpen: true, selectedId: "1" } });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
+    await user.click(input);
+    expect(input).toHaveValue("");
+
+    await user.type(input, "Sl");
+    expect(input).toHaveValue("Sl");
+
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]).toHaveTextContent("Slack");
+
+    const closeChevron = screen.getByTitle("Close menu");
+    await user.click(closeChevron);
+
+    expect(input).toHaveValue("Email");
+  });
+
   it("should reset value when menu closes with no selectedItem, input not focused, and allowCustomValue is false", async () => {
     render(ComboBox, { props: { allowCustomValue: false } });
 
