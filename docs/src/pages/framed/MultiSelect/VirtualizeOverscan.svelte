@@ -11,6 +11,7 @@
 
 <MultiSelect
   virtualize={{ overscan: 100 }}
+  filterable
   labelText="High overscan (10,000 items, overscan: 100)"
   {items}
   bind:selectedIds
