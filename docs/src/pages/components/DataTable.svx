@@ -8,7 +8,7 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`DataTable` displays structured data in a tabular format. Use it to present large datasets with features like sorting, filtering, pagination, and row selection.
+`DataTable` displays structured data in a tabular format. Use it to present large datasets with features like sorting, filtering, pagination, virtualization, and row selection.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -361,6 +361,32 @@ Set `stickyHeader` to `true` to fix the header in place. This adds a maximum hei
     rule: i % 3 ? "Round robin" : "DNS delegation",
   }))}
 />
+
+## Virtualized rows (large datasets)
+
+Virtualization renders only the rows currently visible in the viewport, improving performance for large datasets. Set `virtualize={true}` to enable. The header stays visible while scrolling (sticky positioning is applied automatically). Use `stickyHeader={true}` for the intended layout, if necessary. Container height defaults to 10 rows (`itemHeight * maxVisibleRows`).
+
+The example below shows 10,000 rows with a filterable toolbar; only visible rows are rendered in the DOM.
+
+<FileSource src="/framed/DataTable/VirtualizedDataTable" />
+
+## Virtualized rows (custom overscan)
+
+Overscanning renders extra rows above and below the viewport for smoother scrolling. The default overscan value is 3. Specify a custom `overscan` to control how many extra rows are rendered.
+
+<FileSource src="/framed/DataTable/VirtualizeOverscan" />
+
+## Virtualized rows (custom row height)
+
+By default, the virtual row height matches the table size variant (48px medium, 24px compact, 32px short, 64px tall). Use `rowClass` to apply a custom row height via CSS and set `itemHeight` to match for correct virtualization.
+
+<FileSource src="/framed/DataTable/VirtualizeRowHeight" />
+
+## Virtualized rows (custom max visible rows)
+
+By default, the table shows 10 rows in the viewport. Customize `maxVisibleRows` to control how many rows are visible at once. Container height is calculated as `itemHeight * maxVisibleRows`, or use `containerHeight` for pixel-based control.
+
+<FileSource src="/framed/DataTable/VirtualizeMaxVisibleRows" />
 
 ## With toolbar
 
