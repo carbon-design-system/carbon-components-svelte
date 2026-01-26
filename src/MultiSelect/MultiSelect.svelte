@@ -401,7 +401,12 @@
         null)
       : null;
 
-  $: virtualConfig = virtualize
+  $: shouldVirtualize =
+    virtualize === false
+      ? false
+      : virtualize !== undefined || items.length > 100;
+
+  $: virtualConfig = shouldVirtualize
     ? {
         itemHeight: DEFAULT_ITEM_HEIGHT,
         containerHeight: 300,
