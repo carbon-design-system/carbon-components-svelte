@@ -1098,12 +1098,20 @@ describe("ComboBox", () => {
       expect(options.length).toBeGreaterThan(0);
     });
 
-    it("should reset scroll position when menu reopens", async () => {
+    it.each([
+      { virtualize: true, description: "with explicit virtualization" },
+      {
+        virtualize: undefined,
+        description: "with auto-enabled virtualization",
+      },
+    ])("should reset scroll position when menu reopens $description", async ({
+      virtualize,
+    }) => {
       const largeItems = createLargeItemList(500);
       const { rerender } = render(ComboBox, {
         props: {
           items: largeItems,
-          virtualize: true,
+          virtualize,
         },
       });
 
