@@ -22,9 +22,6 @@ components: ["Header",
 
 The UI shell provides a collection of components for building application shells and navigation structures. It includes header, side navigation, and content components that work together to create a cohesive user interface.
 
-> [!NOTE]
-> Currently, the UI Shell is not themable and only supports dark mode.
-
 Open the following examples in a new tab to experience them in full.
 
 ## Header
