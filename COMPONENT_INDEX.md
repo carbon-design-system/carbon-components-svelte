@@ -5004,10 +5004,10 @@ export type ShowNodeOptions = {
 
 ### Slots
 
-| Slot name     | Default | Props                                                                                                                             | Fallback                 |
-| :------------ | :------ | :-------------------------------------------------------------------------------------------------------------------------------- | :----------------------- |
-| --            | Yes     | <code>{ node: { id: Node["id"]; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } } </code> | <code>{node.text}</code> |
-| labelChildren | No      | <code>Record<string, never> </code>                                                                                               | <code>{labelText}</code> |
+| Slot name     | Default | Props                                                                                   | Fallback                 |
+| :------------ | :------ | :-------------------------------------------------------------------------------------- | :----------------------- |
+| --            | Yes     | <code>{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } } </code> | <code>{node.text}</code> |
+| labelChildren | No      | <code>Record<string, never> </code>                                                     | <code>{labelText}</code> |
 
 ### Events
 

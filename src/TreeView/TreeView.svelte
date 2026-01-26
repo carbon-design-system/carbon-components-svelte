@@ -117,7 +117,7 @@
    * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
    * @property {boolean} [select] - Whether to select the node (default: true)
    * @property {boolean} [focus] - Whether to focus the node (default: true)
-   * @slot {{ node: { id: Node["id"]; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
+   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }}
    * @event select
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    * @event toggle

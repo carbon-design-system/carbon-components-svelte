@@ -84,16 +84,7 @@ type $Props<Node extends TreeNode<any> = TreeNode<any>> = {
   children?: (
     this: void,
     ...args: [
-      {
-        node: {
-          id: Node["id"];
-          text: string;
-          expanded: boolean;
-          leaf: boolean;
-          disabled: boolean;
-          selected: boolean;
-        };
-      },
+      { node: Node & { expanded: boolean; leaf: boolean; selected: boolean } },
     ]
   ) => void;
 
@@ -124,14 +115,7 @@ export default class TreeView<
   },
   {
     default: {
-      node: {
-        id: Node["id"];
-        text: string;
-        expanded: boolean;
-        leaf: boolean;
-        disabled: boolean;
-        selected: boolean;
-      };
+      node: Node & { expanded: boolean; leaf: boolean; selected: boolean };
     };
     labelChildren: Record<string, never>;
   }

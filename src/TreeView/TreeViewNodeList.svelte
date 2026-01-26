@@ -3,7 +3,7 @@
    * @generics {Id = (string|number)} Id
    * @template {string | number} Id
    * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
-   * @slot {{ node: { id: Id; text: string; expanded: boolean, leaf: boolean; disabled: boolean; selected: boolean; } }}
+   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; } }}
    */
 
   /** @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>} */
@@ -57,12 +57,22 @@
   });
 
   $: parent = Array.isArray(nodes);
-  $: node = { id, text, expanded, leaf: !parent };
+  $: expanded = $expandedNodeIds.includes(id);
+  $: selected = $selectedNodeIds.includes(id);
+  // Merge all props (including custom properties) with computed properties
+  // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
+  $: node = {
+    ...$$props,
+    text, // Ensure text is included and marked as used
+    disabled, // Ensure disabled is always included (has default value)
+    expanded,
+    leaf: !parent,
+    selected,
+  };
   $: if (refLabel) {
     refLabel.style.marginLeft = `-${offset()}rem`;
     refLabel.style.paddingLeft = `${offset()}rem`;
   }
-  $: expanded = $expandedNodeIds.includes(id);
 </script>
 
 {#if root}
@@ -78,7 +88,6 @@
     {/if}
   {/each}
 {:else}
-  {@const selected = $selectedNodeIds.includes(id)}
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <li
     bind:this={ref}
@@ -158,7 +167,7 @@
       </span>
       <span class:bx--tree-node__label__details={true}>
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <slot node={{ ...node, selected, disabled }} />
+        <slot {node} />
       </span>
     </div>
     {#if expanded}
