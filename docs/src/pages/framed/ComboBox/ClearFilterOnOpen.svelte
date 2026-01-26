@@ -17,5 +17,6 @@
   ]}
   {shouldFilterItem}
   clearFilterOnOpen
+  selectedId="1"
   helperText="Select an item, then reopen to see all items again"
 />
