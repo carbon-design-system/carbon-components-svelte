@@ -15,11 +15,13 @@ import { SvelteComponentTyped } from "svelte";
 export declare function computeTreeLeafDepth(
   node: HTMLLIElement | null,
 ): number;
+export type TreeNode<Id = string | number> =
+  import("./TreeView.svelte").TreeNode<Id>;
 
-export type TreeViewNodeProps<Id = string | number> = {
+export type TreeViewNodeProps<Node extends TreeNode<any> = TreeNode<any>> = {
   /**
-   * @generics Id
-   * @template Id
+   * @generics Node
+   * @template Node
    * @default false
    */
   leaf?: boolean;
@@ -27,7 +29,7 @@ export type TreeViewNodeProps<Id = string | number> = {
   /**
    * @default ""
    */
-  id?: Id;
+  id?: Node["id"];
 
   /**
    * @default ""
@@ -48,35 +50,19 @@ export type TreeViewNodeProps<Id = string | number> = {
   children?: (
     this: void,
     ...args: [
-      {
-        node: {
-          id: Id;
-          text: string;
-          expanded: false;
-          leaf: boolean;
-          disabled: boolean;
-          selected: boolean;
-        };
-      },
+      { node: Node & { expanded: false; leaf: boolean; selected: boolean } },
     ]
   ) => void;
 };
 
 export default class TreeViewNode<
-  Id = string | number,
+  Node extends TreeNode<any> = TreeNode<any>,
 > extends SvelteComponentTyped<
-  TreeViewNodeProps<Id>,
+  TreeViewNodeProps<Node>,
   Record<string, any>,
   {
     default: {
-      node: {
-        id: Id;
-        text: string;
-        expanded: false;
-        leaf: boolean;
-        disabled: boolean;
-        selected: boolean;
-      };
+      node: Node & { expanded: false; leaf: boolean; selected: boolean };
     };
   }
 > {}

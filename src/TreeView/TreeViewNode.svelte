@@ -54,14 +54,15 @@
 
 <script>
   /**
-   * @generics {Id = (string|number)} Id
-   * @template {string | number} Id
-   * @slot {{ node: { id: Id; text: string; expanded: false, leaf: boolean; disabled: boolean; selected: boolean; } }}
+   * @generics {Node extends TreeNode<any> = TreeNode<any>} Node
+   * @template {TreeNode<any>} Node
+   * @typedef {import('./TreeView.svelte').TreeNode<Id>} TreeNode<Id=(string|number)>
+   * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; } }}
    */
 
   export let leaf = false;
 
-  /** @type {Id} */
+  /** @type {Node["id"]} */
   export let id = "";
   export let text = "";
   export let disabled = false;
@@ -92,13 +93,13 @@
   });
 
   $: selected = $selectedNodeIds.includes(id);
+  // Merge all props (including custom properties) with computed properties
+  // Explicitly include disabled to ensure it's always present (has default value)
   $: node = {
-    id,
-    text,
-    // A node cannot be expanded.
-    expanded: false,
+    ...$$props,
+    disabled, // Ensure disabled is always included (has default value)
+    expanded: false, // A node cannot be expanded.
     leaf,
-    disabled,
     selected,
   };
   $: if (refLabel) {

@@ -1,9 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
-import type {
-  ShowNodeOptions,
-  TreeNode,
-} from "carbon-components-svelte/TreeView/TreeView.svelte";
+import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type {
   ComponentEvents,
   ComponentProps,
@@ -61,6 +58,7 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(consoleLog).toBeCalledWith("select", {
       disabled: false,
       expanded: false,
+      icon: expect.anything(),
       id: 0,
       leaf: true,
       selected: false,
@@ -730,20 +728,26 @@ describe("TreeView Generics", () => {
       type StringComponent = TreeViewComponent<StringNode>;
       type StringProps = ComponentProps<StringComponent>;
       // Test that showNode accepts string by checking the prop types
-      expectTypeOf<StringProps["activeId"]>().toEqualTypeOf<string | undefined>();
+      expectTypeOf<StringProps["activeId"]>().toEqualTypeOf<
+        string | undefined
+      >();
 
       // Number ID
       type NumberNode = { id: number; text: string };
       type NumberComponent = TreeViewComponent<NumberNode>;
       type NumberProps = ComponentProps<NumberComponent>;
-      expectTypeOf<NumberProps["activeId"]>().toEqualTypeOf<number | undefined>();
+      expectTypeOf<NumberProps["activeId"]>().toEqualTypeOf<
+        number | undefined
+      >();
 
       // Union ID
       type UnionId = "folder1" | "folder2" | "file1";
       type UnionNode = { id: UnionId; text: string };
       type UnionComponent = TreeViewComponent<UnionNode>;
       type UnionProps = ComponentProps<UnionComponent>;
-      expectTypeOf<UnionProps["activeId"]>().toEqualTypeOf<UnionId | undefined>();
+      expectTypeOf<UnionProps["activeId"]>().toEqualTypeOf<
+        UnionId | undefined
+      >();
     });
 
     it("should type context properties correctly with different ID types", () => {

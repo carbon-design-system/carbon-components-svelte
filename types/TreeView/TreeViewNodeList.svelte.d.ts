@@ -43,12 +43,9 @@ export type TreeViewNodeListProps<Id = string | number> = {
     this: void,
     ...args: [
       {
-        node: {
-          id: Id;
-          text: string;
+        node: TreeNode<Id> & {
           expanded: boolean;
           leaf: boolean;
-          disabled: boolean;
           selected: boolean;
         };
       },
@@ -63,12 +60,9 @@ export default class TreeViewNodeList<
   Record<string, any>,
   {
     default: {
-      node: {
-        id: Id;
-        text: string;
+      node: TreeNode<Id> & {
         expanded: boolean;
         leaf: boolean;
-        disabled: boolean;
         selected: boolean;
       };
     };
