@@ -969,6 +969,7 @@ await Promise.all(
     fs.writeFileSync(
       path.join(RAW_COMPONENTS_OUT_DIR, `${componentName}.md`),
       docFormatted,
+      "utf8",
     );
   }),
 );
@@ -978,4 +979,4 @@ const componentNames = generatedMdByComponent.map(
   ({ componentName }) => componentName,
 );
 const llmTxtContent = generateLlmTxt(componentNames);
-fs.writeFileSync(path.join("./public", "llms.txt"), llmTxtContent);
+fs.writeFileSync(path.join("./public", "llms.txt"), llmTxtContent, "utf8");
