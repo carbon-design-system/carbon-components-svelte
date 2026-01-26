@@ -293,7 +293,7 @@
 
     // Scroll to first selected item when menu opens with virtualization
     const wasJustOpened = open && !prevOpen;
-    if (wasJustOpened && virtualize && listRef) {
+    if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
         if (listRef && virtualConfig) {
           if (selectedIds && selectedIds.length > 0) {
@@ -343,7 +343,7 @@
     prevOpen = open;
 
     // Reset scroll position when menu closes
-    if (!open && prevOpen && virtualize) {
+    if (!open && prevOpen && shouldVirtualize) {
       listScrollTop = 0;
       if (listRef) {
         listRef.scrollTop = 0;

@@ -1130,13 +1130,21 @@ describe("MultiSelect", () => {
       expect(options.length).toBeGreaterThan(0);
     });
 
-    it("should scroll to selected item when menu opens", async () => {
+    it.each([
+      { virtualize: true, description: "with explicit virtualization" },
+      {
+        virtualize: undefined,
+        description: "with auto-enabled virtualization",
+      },
+    ])("should scroll to selected item when menu opens $description", async ({
+      virtualize,
+    }) => {
       const largeItems = createLargeItemList(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
           selectedIds: ["250"], // Item 251, in the middle
-          virtualize: true,
+          virtualize,
           selectionFeedback: "fixed", // Keep items in original order
           sortItem: () => 0, // Disable sorting to maintain original order
         },
@@ -1163,13 +1171,21 @@ describe("MultiSelect", () => {
       });
     });
 
-    it("should scroll to selected item when menu reopens", async () => {
+    it.each([
+      { virtualize: true, description: "with explicit virtualization" },
+      {
+        virtualize: undefined,
+        description: "with auto-enabled virtualization",
+      },
+    ])("should scroll to selected item when menu reopens $description", async ({
+      virtualize,
+    }) => {
       const largeItems = createLargeItemList(500);
       const { rerender } = render(MultiSelect, {
         props: {
           items: largeItems,
           selectedIds: ["250"], // Item 251, in the middle
-          virtualize: true,
+          virtualize,
           selectionFeedback: "fixed", // Keep items in original order
           sortItem: () => 0, // Disable sorting to maintain original order
         },
