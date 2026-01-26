@@ -9745,6 +9745,30 @@
           "isRequired": false,
           "constant": false,
           "reactive": true
+        },
+        {
+          "name": "virtualize",
+          "kind": "let",
+          "description": "Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.\n\nBy default, virtualization is automatically enabled for lists with more than 100 items.\n\nSet `virtualize={false}` to explicitly disable virtualization, even for large lists.\n\nSet `virtualize={true}` to explicitly enable virtualization with default settings.\n\nProvide an object to customize virtualization behavior:\n- `itemHeight` (default: 40): The height in pixels of each item. Specify a custom value when using custom slots with multi-line items or different heights.\n- `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.\n- `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.\n- `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.\n- `maxItems` (default: undefined): The maximum number of items to render. When undefined, all visible items are rendered.",
+          "type": "undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
+          "name": "listRef",
+          "kind": "let",
+          "description": "Obtain a reference to the list HTML element.",
+          "type": "null | HTMLDivElement",
+          "value": "null",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": true
         }
       ],
       "moduleExports": [],
@@ -9803,6 +9827,11 @@
           "type": "forwarded",
           "name": "paste",
           "element": "input"
+        },
+        {
+          "type": "forwarded",
+          "name": "scroll",
+          "element": "ListBoxMenu"
         }
       ],
       "typedefs": [
