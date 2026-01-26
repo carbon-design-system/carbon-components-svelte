@@ -174,6 +174,7 @@
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
+  let prevHighlightedIndex = -1;
   let valueBeforeOpen = "";
   let prevInputLength = 0;
   let listScrollTop = 0;
@@ -248,12 +249,107 @@
   }
 
   afterUpdate(() => {
-    // Reset DOM scroll position when menu opens with virtualization
+    // Scroll to highlighted item when it changes via keyboard navigation
+    // Only scroll if the item is outside the visible viewport
     const wasJustOpened = open && !prevOpen;
+    if (
+      open &&
+      shouldVirtualize &&
+      virtualConfig &&
+      highlightedIndex !== prevHighlightedIndex &&
+      highlightedIndex >= 0 &&
+      listRef
+    ) {
+      tick().then(() => {
+        if (listRef && virtualConfig && highlightedIndex >= 0) {
+          const itemHeight = virtualConfig.itemHeight;
+          const containerHeight = virtualConfig.containerHeight;
+          const overscan = virtualConfig.overscan || 3;
+
+          // Calculate current visible range based on current scroll position
+          const currentScrollTop = listRef.scrollTop || listScrollTop;
+          const visibleStartIndex = Math.max(
+            0,
+            Math.floor(currentScrollTop / itemHeight) - overscan,
+          );
+          const visibleEndIndex = Math.min(
+            filteredItems.length,
+            Math.ceil((currentScrollTop + containerHeight) / itemHeight) +
+              overscan,
+          );
+
+          // Only scroll if highlighted item is outside visible range
+          if (
+            highlightedIndex < visibleStartIndex ||
+            highlightedIndex >= visibleEndIndex
+          ) {
+            const scrollPosition = highlightedIndex * itemHeight;
+            // Ensure scroll position is within bounds
+            const maxScroll = Math.max(
+              0,
+              filteredItems.length * itemHeight - containerHeight,
+            );
+            const finalScrollPosition = Math.max(
+              0,
+              Math.min(scrollPosition, maxScroll),
+            );
+
+            listScrollTop = finalScrollPosition;
+            listRef.scrollTop = finalScrollPosition;
+          }
+        }
+      });
+      prevHighlightedIndex = highlightedIndex;
+    }
+
+    // Set highlighted index to selected item when menu opens
+    if (wasJustOpened) {
+      if (selectedId !== undefined && selectedItem) {
+        const selectedIndex = filteredItems.findIndex(
+          (item) => item.id === selectedId,
+        );
+        if (selectedIndex >= 0) {
+          // Set highlighted index to selected item so keyboard nav starts there
+          highlightedIndex = selectedIndex;
+          prevHighlightedIndex = selectedIndex;
+        }
+      }
+    }
+
+    // Scroll to selected item when menu opens with virtualization
     if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
-        if (listRef) {
-          listRef.scrollTop = 0;
+        if (listRef && virtualConfig) {
+          if (selectedId !== undefined && selectedItem) {
+            // Find the index of the selected item
+            const selectedIndex = filteredItems.findIndex(
+              (item) => item.id === selectedId,
+            );
+            if (selectedIndex >= 0) {
+              // Calculate scroll position to show selected item at the top of viewport
+              const itemHeight = virtualConfig.itemHeight;
+              const containerHeight = virtualConfig.containerHeight;
+              const scrollPosition = selectedIndex * itemHeight;
+              // Ensure scroll position is within bounds
+              const maxScroll = Math.max(
+                0,
+                filteredItems.length * itemHeight - containerHeight,
+              );
+              const finalScrollPosition = Math.max(
+                0,
+                Math.min(scrollPosition, maxScroll),
+              );
+
+              listScrollTop = finalScrollPosition;
+              listRef.scrollTop = finalScrollPosition;
+            } else {
+              listRef.scrollTop = 0;
+              listScrollTop = 0;
+            }
+          } else {
+            listRef.scrollTop = 0;
+            listScrollTop = 0;
+          }
         }
       });
     }
@@ -273,6 +369,7 @@
         listScrollTop = 0;
       }
       highlightedIndex = -1;
+      prevHighlightedIndex = -1;
       if (selectedItem) {
         // Restore the value if clearFilterOnOpen was used and no new selection was made.
         // This must happen regardless of focus state to handle cases like closing via chevron.
