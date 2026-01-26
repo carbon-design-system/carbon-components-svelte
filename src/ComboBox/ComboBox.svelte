@@ -250,7 +250,7 @@
   afterUpdate(() => {
     // Reset DOM scroll position when menu opens with virtualization
     const wasJustOpened = open && !prevOpen;
-    if (wasJustOpened && virtualize && listRef) {
+    if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
         if (listRef) {
           listRef.scrollTop = 0;
@@ -269,7 +269,7 @@
       }
     } else {
       // Reset scroll position when menu closes
-      if (virtualize) {
+      if (shouldVirtualize) {
         listScrollTop = 0;
       }
       highlightedIndex = -1;
