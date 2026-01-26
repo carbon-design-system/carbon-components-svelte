@@ -32,7 +32,7 @@ export function toHierarchy(flatArray, getParentId) {
       if (!childrenOf.has(parentId)) {
         childrenOf.set(parentId, []);
       }
-      childrenOf.get(parentId).push(item);
+      /** @type {NodeLike[]} */ (childrenOf.get(parentId)).push(item);
 
       const parent = itemsMap.get(parentId);
       if (parent) {

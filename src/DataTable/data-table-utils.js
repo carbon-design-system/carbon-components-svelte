@@ -138,6 +138,7 @@ export function rowsEqual(a, b) {
 
 const PATH_SPLIT_REGEX = /[.[\]'"]/;
 const MAX_PATH_CACHE_SIZE = 1000;
+/** @type {Map<string, string[]>} */
 const pathCache = new Map();
 
 /**
@@ -164,8 +165,9 @@ export function resolvePath(object, path) {
   }
 
   return segments.reduce(
+    /** @type {(acc: unknown, prop: string) => unknown} */
     (o, p) => (o && typeof o === "object" ? o[p] : o),
-    object,
+    /** @type {unknown} */ (object),
   );
 }
 
