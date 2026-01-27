@@ -99,9 +99,9 @@ export default class ContextMenuOption extends SvelteComponentTyped<
     click: CustomEvent<null>;
   },
   {
+    default: Record<string, never>;
     icon: Record<string, never>;
     labelChildren: Record<string, never>;
-    default: Record<string, never>;
     shortcutText: Record<string, never>;
   }
 > {}

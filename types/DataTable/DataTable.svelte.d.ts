@@ -288,6 +288,7 @@ export default class DataTable<
     }>;
   },
   {
+    default: Record<string, never>;
     cell: {
       row: Row;
       cell: DataTableCell<Row>;
@@ -302,6 +303,5 @@ export default class DataTable<
     };
     "expanded-row": { row: Row; rowSelected: boolean };
     titleChildren: { props: { class: "bx--data-table-header__title" } };
-    default: Record<string, never>;
   }
 > {}

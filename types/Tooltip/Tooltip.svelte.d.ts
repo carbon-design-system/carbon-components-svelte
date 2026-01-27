@@ -109,8 +109,8 @@ export default class Tooltip extends SvelteComponentTyped<
     mousedown: WindowEventMap["mousedown"];
   },
   {
+    default: Record<string, never>;
     icon: Record<string, never>;
     triggerText: Record<string, never>;
-    default: Record<string, never>;
   }
 > {}

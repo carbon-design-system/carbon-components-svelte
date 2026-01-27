@@ -43,8 +43,8 @@ export default class ContainedList extends SvelteComponentTyped<
   ContainedListProps,
   Record<string, any>,
   {
+    default: Record<string, never>;
     action: Record<string, never>;
     labelChildren: Record<string, never>;
-    default: Record<string, never>;
   }
 > {}

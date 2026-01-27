@@ -115,9 +115,9 @@ export default class Header extends SvelteComponentTyped<
   HeaderProps,
   { click: WindowEventMap["click"] },
   {
+    default: Record<string, never>;
     company: Record<string, never>;
     platform: Record<string, never>;
     skipToContent: Record<string, never>;
-    default: Record<string, never>;
   }
 > {}

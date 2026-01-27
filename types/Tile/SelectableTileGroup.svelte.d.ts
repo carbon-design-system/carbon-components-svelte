@@ -60,5 +60,5 @@ export default class SelectableTileGroup<
 > extends SvelteComponentTyped<
   SelectableTileGroupProps<T>,
   { select: CustomEvent<T>; deselect: CustomEvent<T> },
-  { legendChildren: Record<string, never>; default: Record<string, never> }
+  { default: Record<string, never>; legendChildren: Record<string, never> }
 > {}
