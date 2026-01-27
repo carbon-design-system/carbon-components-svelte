@@ -93,9 +93,9 @@ export default class InlineNotification extends SvelteComponentTyped<
     mouseleave: WindowEventMap["mouseleave"];
   },
   {
+    default: Record<string, never>;
     actions: Record<string, never>;
     subtitleChildren: Record<string, never>;
     titleChildren: Record<string, never>;
-    default: Record<string, never>;
   }
 > {}

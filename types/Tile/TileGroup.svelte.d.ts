@@ -67,5 +67,5 @@ export default class TileGroup<
 > extends SvelteComponentTyped<
   TileGroupProps<T>,
   { select: CustomEvent<T> },
-  { legendChildren: Record<string, never>; default: Record<string, never> }
+  { default: Record<string, never>; legendChildren: Record<string, never> }
 > {}

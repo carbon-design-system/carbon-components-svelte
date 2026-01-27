@@ -165,14 +165,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "title",
-          "default": false,
-          "fallback": "{title}",
+          "name": null,
+          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
-          "name": null,
-          "default": true,
+          "name": "title",
+          "default": false,
+          "fallback": "{title}",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -2518,6 +2518,11 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
           "name": "action",
           "default": false,
           "slot_props": "Record<string, never>"
@@ -2526,11 +2531,6 @@
           "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "Record<string, never>"
-        },
-        {
-          "name": null,
-          "default": true,
           "slot_props": "Record<string, never>"
         }
       ],
@@ -3086,6 +3086,11 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} />",
@@ -3095,11 +3100,6 @@
           "name": "labelChildren",
           "default": false,
           "fallback": "{labelText}",
-          "slot_props": "Record<string, never>"
-        },
-        {
-          "name": null,
-          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
@@ -3598,6 +3598,11 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
           "name": "cell",
           "default": false,
           "fallback": "{cell.display ? cell.display(cell.value, row) : cell.value}",
@@ -3625,11 +3630,6 @@
           "default": false,
           "fallback": "<h4 class:bx--data-table-header__title={true}>{title}</h4>",
           "slot_props": "{\n  props: {\n    class: \"bx--data-table-header__title\";\n  };\n}"
-        },
-        {
-          "name": null,
-          "default": true,
-          "slot_props": "Record<string, never>"
         }
       ],
       "events": [
@@ -6513,6 +6513,11 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
           "name": "company",
           "default": false,
           "fallback": "{companyName}&nbsp;",
@@ -6527,11 +6532,6 @@
         {
           "name": "skipToContent",
           "default": false,
-          "slot_props": "Record<string, never>"
-        },
-        {
-          "name": null,
-          "default": true,
           "slot_props": "Record<string, never>"
         }
       ],
@@ -6666,6 +6666,11 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
           "name": "closeIcon",
           "default": false,
           "fallback": "<svelte:component this={closeIcon} size={20} />",
@@ -6681,11 +6686,6 @@
           "name": "textChildren",
           "default": false,
           "fallback": "{#if text}<span class:bx--header__action-text={true}>{text}</span>{/if}",
-          "slot_props": "Record<string, never>"
-        },
-        {
-          "name": null,
-          "default": true,
           "slot_props": "Record<string, never>"
         }
       ],
@@ -7760,6 +7760,11 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
           "name": "actions",
           "default": false,
           "slot_props": "Record<string, never>"
@@ -7774,11 +7779,6 @@
           "name": "titleChildren",
           "default": false,
           "fallback": "{title}",
-          "slot_props": "Record<string, never>"
-        },
-        {
-          "name": null,
-          "default": true,
           "slot_props": "Record<string, never>"
         }
       ],
@@ -8962,6 +8962,11 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
           "name": "heading",
           "default": false,
           "fallback": "{modalHeading}",
@@ -8971,11 +8976,6 @@
           "name": "label",
           "default": false,
           "fallback": "{modalLabel}",
-          "slot_props": "Record<string, never>"
-        },
-        {
-          "name": null,
-          "default": true,
           "slot_props": "Record<string, never>"
         }
       ],
@@ -10855,14 +10855,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "menu",
-          "default": false,
-          "fallback": "<svelte:component\n      this={icon}\n      aria-label={iconDescription}\n      title={iconDescription}\n      class=\"bx--overflow-menu__icon {iconClass}\"\n    />",
+          "name": null,
+          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
-          "name": null,
-          "default": true,
+          "name": "menu",
+          "default": false,
+          "fallback": "<svelte:component\n      this={icon}\n      aria-label={iconDescription}\n      title={iconDescription}\n      class=\"bx--overflow-menu__icon {iconClass}\"\n    />",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -12737,14 +12737,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "legendChildren",
-          "default": false,
-          "fallback": "{legendText}",
+          "name": null,
+          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
-          "name": null,
-          "default": true,
+          "name": "legendChildren",
+          "default": false,
+          "fallback": "{legendText}",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -13777,14 +13777,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelChildren",
-          "default": false,
-          "fallback": "{labelText}",
+          "name": null,
+          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
-          "name": null,
-          "default": true,
+          "name": "labelChildren",
+          "default": false,
+          "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -14080,14 +14080,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "legendChildren",
-          "default": false,
-          "fallback": "{legendText}",
+          "name": null,
+          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
-          "name": null,
-          "default": true,
+          "name": "legendChildren",
+          "default": false,
+          "fallback": "{legendText}",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -14522,15 +14522,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "icon",
-          "default": false,
-          "fallback": "<svelte:component this={icon} />",
-          "slot_props": "Record<string, never>"
-        },
-        {
           "name": null,
           "default": true,
           "fallback": "{text}",
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": "icon",
+          "default": false,
+          "fallback": "<svelte:component this={icon} />",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -14605,14 +14605,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "icon",
-          "default": false,
-          "fallback": "<svelte:component this={icon} />",
+          "name": null,
+          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
-          "name": null,
-          "default": true,
+          "name": "icon",
+          "default": false,
+          "fallback": "<svelte:component this={icon} />",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -17922,14 +17922,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "legendChildren",
-          "default": false,
-          "fallback": "{legendText}",
+          "name": null,
+          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
-          "name": null,
-          "default": true,
+          "name": "legendChildren",
+          "default": false,
+          "fallback": "{legendText}",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -18164,14 +18164,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelChildren",
-          "default": false,
-          "fallback": "{labelText}",
+          "name": null,
+          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
-          "name": null,
-          "default": true,
+          "name": "labelChildren",
+          "default": false,
+          "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -18332,14 +18332,14 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "labelChildren",
-          "default": false,
-          "fallback": "{labelText}",
+          "name": null,
+          "default": true,
           "slot_props": "Record<string, never>"
         },
         {
-          "name": null,
-          "default": true,
+          "name": "labelChildren",
+          "default": false,
+          "fallback": "{labelText}",
           "slot_props": "Record<string, never>"
         }
       ],
@@ -18538,6 +18538,11 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
           "name": "captionChildren",
           "default": false,
           "fallback": "{caption}",
@@ -18553,11 +18558,6 @@
           "name": "titleChildren",
           "default": false,
           "fallback": "{title}",
-          "slot_props": "Record<string, never>"
-        },
-        {
-          "name": null,
-          "default": true,
           "slot_props": "Record<string, never>"
         }
       ],
@@ -19416,6 +19416,11 @@
       "moduleExports": [],
       "slots": [
         {
+          "name": null,
+          "default": true,
+          "slot_props": "Record<string, never>"
+        },
+        {
           "name": "icon",
           "default": false,
           "fallback": "<svelte:component this={icon} name={iconName} />",
@@ -19425,11 +19430,6 @@
           "name": "triggerText",
           "default": false,
           "fallback": "{triggerText}",
-          "slot_props": "Record<string, never>"
-        },
-        {
-          "name": null,
-          "default": true,
           "slot_props": "Record<string, never>"
         }
       ],
@@ -19734,15 +19734,15 @@
       "moduleExports": [],
       "slots": [
         {
-          "name": "tooltipText",
-          "default": false,
-          "fallback": "{tooltipText}",
-          "slot_props": "Record<string, never>"
-        },
-        {
           "name": null,
           "default": true,
           "fallback": "<svelte:component this={icon} />",
+          "slot_props": "Record<string, never>"
+        },
+        {
+          "name": "tooltipText",
+          "default": false,
+          "fallback": "{tooltipText}",
           "slot_props": "Record<string, never>"
         }
       ],

@@ -221,8 +221,8 @@
 
 | Slot name | Default | Props                               | Fallback             |
 | :-------- | :------ | :---------------------------------- | :------------------- |
-| title     | No      | <code>Record<string, never> </code> | <code>{title}</code> |
 | --        | Yes     | <code>Record<string, never> </code> | --                   |
+| title     | No      | <code>Record<string, never> </code> | <code>{title}</code> |
 
 ### Events
 
@@ -767,9 +767,9 @@ export type ComboBoxItem<Id = any> = {
 
 | Slot name     | Default | Props                               | Fallback                 |
 | :------------ | :------ | :---------------------------------- | :----------------------- |
+| --            | Yes     | <code>Record<string, never> </code> | --                       |
 | action        | No      | <code>Record<string, never> </code> | --                       |
 | labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
-| --            | Yes     | <code>Record<string, never> </code> | --                       |
 
 ### Events
 
@@ -922,9 +922,9 @@ None.
 
 | Slot name     | Default | Props                               | Fallback                                            |
 | :------------ | :------ | :---------------------------------- | :-------------------------------------------------- |
+| --            | Yes     | <code>Record<string, never> </code> | --                                                  |
 | icon          | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
 | labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code>                            |
-| --            | Yes     | <code>Record<string, never> </code> | --                                                  |
 | shortcutText  | No      | <code>Record<string, never> </code> | <code>{shortcutText}</code>                         |
 
 ### Events
@@ -1058,12 +1058,12 @@ export type DataTableCell<Row = DataTableRow> = {
 
 | Slot name           | Default | Props                                                                                                                                  | Fallback                                                                                        |
 | :------------------ | :------ | :------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------- |
+| --                  | Yes     | <code>Record<string, never> </code>                                                                                                    | --                                                                                              |
 | cell                | No      | <code>{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; } </code> | <code>{cell.display ? cell.display(cell.value, row) : cell.value}</code>                        |
 | cellHeader          | No      | <code>{ header: DataTableNonEmptyHeader; } </code>                                                                                     | <code>{header.value}</code>                                                                     |
 | descriptionChildren | No      | <code>{ props: { class: "bx--data-table-header\_\_description" } } </code>                                                             | <code>&lt;p class:bx--data-table-header\_\_description={true}&gt;{description}&lt;/p&gt;</code> |
 | expanded-row        | No      | <code>{ row: Row; rowSelected: boolean; } </code>                                                                                      | --                                                                                              |
 | titleChildren       | No      | <code>{ props: { class: "bx--data-table-header\_\_title" } } </code>                                                                   | <code>&lt;h4 class:bx--data-table-header\_\_title={true}&gt;{title}&lt;/h4&gt;</code>           |
-| --                  | Yes     | <code>Record<string, never> </code>                                                                                                    | --                                                                                              |
 
 ### Events
 
@@ -1662,10 +1662,10 @@ None.
 
 | Slot name     | Default | Props                               | Fallback                         |
 | :------------ | :------ | :---------------------------------- | :------------------------------- |
+| --            | Yes     | <code>Record<string, never> </code> | --                               |
 | company       | No      | <code>Record<string, never> </code> | <code>{companyName}&nbsp;</code> |
 | platform      | No      | <code>Record<string, never> </code> | <code>{platformName}</code>      |
 | skipToContent | No      | <code>Record<string, never> </code> | --                               |
-| --            | Yes     | <code>Record<string, never> </code> | --                               |
 
 ### Events
 
@@ -1693,10 +1693,10 @@ None.
 
 | Slot name    | Default | Props                               | Fallback                                                                                           |
 | :----------- | :------ | :---------------------------------- | :------------------------------------------------------------------------------------------------- |
+| --           | Yes     | <code>Record<string, never> </code> | --                                                                                                 |
 | closeIcon    | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={closeIcon} size={20} /&gt;</code>                                 |
 | icon         | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} size={20} /&gt;</code>                                      |
 | textChildren | No      | <code>Record<string, never> </code> | <code>{#if text}&lt;span class:bx--header\_\_action-text={true}&gt;{text}&lt;/span&gt;{/if}</code> |
-| --           | Yes     | <code>Record<string, never> </code> | --                                                                                                 |
 
 ### Events
 
@@ -2034,10 +2034,10 @@ None.
 
 | Slot name        | Default | Props                               | Fallback                |
 | :--------------- | :------ | :---------------------------------- | :---------------------- |
+| --               | Yes     | <code>Record<string, never> </code> | --                      |
 | actions          | No      | <code>Record<string, never> </code> | --                      |
 | subtitleChildren | No      | <code>Record<string, never> </code> | <code>{subtitle}</code> |
 | titleChildren    | No      | <code>Record<string, never> </code> | <code>{title}</code>    |
-| --               | Yes     | <code>Record<string, never> </code> | --                      |
 
 ### Events
 
@@ -2340,9 +2340,9 @@ None.
 
 | Slot name | Default | Props                               | Fallback                    |
 | :-------- | :------ | :---------------------------------- | :-------------------------- |
+| --        | Yes     | <code>Record<string, never> </code> | --                          |
 | heading   | No      | <code>Record<string, never> </code> | <code>{modalHeading}</code> |
 | label     | No      | <code>Record<string, never> </code> | <code>{modalLabel}</code>   |
-| --        | Yes     | <code>Record<string, never> </code> | --                          |
 
 ### Events
 
@@ -2767,8 +2767,8 @@ None.
 
 | Slot name | Default | Props                               | Fallback                                                                                                                                                                             |
 | :-------- | :------ | :---------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| menu      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component<br /> this={icon}<br /> aria-label={iconDescription}<br /> title={iconDescription}<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
 | --        | Yes     | <code>Record<string, never> </code> | --                                                                                                                                                                                   |
+| menu      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component<br /> this={icon}<br /> aria-label={iconDescription}<br /> title={iconDescription}<br /> class="bx--overflow-menu\_\_icon {iconClass}"<br /> /&gt;</code> |
 
 ### Events
 
@@ -3146,8 +3146,8 @@ None.
 
 | Slot name      | Default | Props                               | Fallback                  |
 | :------------- | :------ | :---------------------------------- | :------------------------ |
-| legendChildren | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
 | --             | Yes     | <code>Record<string, never> </code> | --                        |
+| legendChildren | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
 
 ### Events
 
@@ -3385,8 +3385,8 @@ None.
 
 | Slot name     | Default | Props                               | Fallback                 |
 | :------------ | :------ | :---------------------------------- | :----------------------- |
-| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 | --            | Yes     | <code>Record<string, never> </code> | --                       |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -3509,8 +3509,8 @@ None.
 
 | Slot name      | Default | Props                               | Fallback                  |
 | :------------- | :------ | :---------------------------------- | :------------------------ |
-| legendChildren | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
 | --             | Yes     | <code>Record<string, never> </code> | --                        |
+| legendChildren | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
 
 ### Events
 
@@ -3591,8 +3591,8 @@ None.
 
 | Slot name | Default | Props                               | Fallback                                            |
 | :-------- | :------ | :---------------------------------- | :-------------------------------------------------- |
-| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
 | --        | Yes     | <code>Record<string, never> </code> | <code>{text}</code>                                 |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
@@ -3615,8 +3615,8 @@ None.
 
 | Slot name | Default | Props                               | Fallback                                            |
 | :-------- | :------ | :---------------------------------- | :-------------------------------------------------- |
-| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
 | --        | Yes     | <code>Record<string, never> </code> | --                                                  |
+| icon      | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
 
 ### Events
 
@@ -4543,8 +4543,8 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 | Slot name      | Default | Props                               | Fallback                  |
 | :------------- | :------ | :---------------------------------- | :------------------------ |
-| legendChildren | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
 | --             | Yes     | <code>Record<string, never> </code> | --                        |
+| legendChildren | No      | <code>Record<string, never> </code> | <code>{legendText}</code> |
 
 ### Events
 
@@ -4577,8 +4577,8 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 | Slot name     | Default | Props                               | Fallback                 |
 | :------------ | :------ | :---------------------------------- | :----------------------- |
-| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 | --            | Yes     | <code>Record<string, never> </code> | --                       |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -4614,8 +4614,8 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 | Slot name     | Default | Props                               | Fallback                 |
 | :------------ | :------ | :---------------------------------- | :----------------------- |
-| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 | --            | Yes     | <code>Record<string, never> </code> | --                       |
+| labelChildren | No      | <code>Record<string, never> </code> | <code>{labelText}</code> |
 
 ### Events
 
@@ -4649,10 +4649,10 @@ export type CarbonTheme = "white" | "g10" | "g80" | "g90" | "g100";
 
 | Slot name        | Default | Props                               | Fallback                |
 | :--------------- | :------ | :---------------------------------- | :---------------------- |
+| --               | Yes     | <code>Record<string, never> </code> | --                      |
 | captionChildren  | No      | <code>Record<string, never> </code> | <code>{caption}</code>  |
 | subtitleChildren | No      | <code>Record<string, never> </code> | <code>{subtitle}</code> |
 | titleChildren    | No      | <code>Record<string, never> </code> | <code>{title}</code>    |
-| --               | Yes     | <code>Record<string, never> </code> | --                      |
 
 ### Events
 
@@ -4877,9 +4877,9 @@ None.
 
 | Slot name   | Default | Props                               | Fallback                                                            |
 | :---------- | :------ | :---------------------------------- | :------------------------------------------------------------------ |
+| --          | Yes     | <code>Record<string, never> </code> | --                                                                  |
 | icon        | No      | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} name={iconName} /&gt;</code> |
 | triggerText | No      | <code>Record<string, never> </code> | <code>{triggerText}</code>                                          |
-| --          | Yes     | <code>Record<string, never> </code> | --                                                                  |
 
 ### Events
 
@@ -4958,8 +4958,8 @@ None.
 
 | Slot name   | Default | Props                               | Fallback                                            |
 | :---------- | :------ | :---------------------------------- | :-------------------------------------------------- |
-| tooltipText | No      | <code>Record<string, never> </code> | <code>{tooltipText}</code>                          |
 | --          | Yes     | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
+| tooltipText | No      | <code>Record<string, never> </code> | <code>{tooltipText}</code>                          |
 
 ### Events
 

@@ -67,5 +67,5 @@ export default class TimePickerSelect extends SvelteComponentTyped<
     mouseenter: WindowEventMap["mouseenter"];
     mouseleave: WindowEventMap["mouseleave"];
   },
-  { labelChildren: Record<string, never>; default: Record<string, never> }
+  { default: Record<string, never>; labelChildren: Record<string, never> }
 > {}

@@ -85,9 +85,9 @@ export default class HeaderAction extends SvelteComponentTyped<
     click: WindowEventMap["click"];
   },
   {
+    default: Record<string, never>;
     closeIcon: Record<string, never>;
     icon: Record<string, never>;
     textChildren: Record<string, never>;
-    default: Record<string, never>;
   }
 > {}
