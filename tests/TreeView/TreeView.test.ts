@@ -891,4 +891,21 @@ describe("TreeView autoCollapse", () => {
     expect(folder2).toHaveAttribute("aria-expanded", "true");
     expect(folder1).toHaveAttribute("aria-expanded", "false");
   });
+
+  it("applies autoCollapse when activeId changes programmatically", async () => {
+    const { rerender } = render(TreeViewAutoCollapse, { autoCollapse: true });
+
+    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
+    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+
+    // Manually expand folder1 via click
+    await user.click(getToggleButton(folder1));
+    expect(folder1).toHaveAttribute("aria-expanded", "true");
+
+    // Programmatically set activeId to an item in folder2
+    // This should: 1) expand folder2, 2) collapse folder1 (autoCollapse)
+    await rerender({ activeId: "item3" });
+    expect(folder2).toHaveAttribute("aria-expanded", "true");
+    expect(folder1).toHaveAttribute("aria-expanded", "false");
+  });
 });

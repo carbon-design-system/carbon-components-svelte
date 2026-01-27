@@ -8,7 +8,7 @@
   type TreeViewNodeId = TreeNode<string>["id"];
 
   let treeview: TreeView;
-  let activeId: TreeViewNodeId = "";
+  export let activeId: TreeViewNodeId = "";
   let selectedIds: TreeViewNodeId[] = [];
   let expandedIds: TreeViewNodeId[] = [];
   let nodes: ComponentProps<TreeView>["nodes"] = [
