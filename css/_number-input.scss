@@ -65,6 +65,113 @@
       appearance: none;
     }
   }
+
+  .#{$prefix}--number--lg.#{$prefix}--number input[type='text'] {
+    padding-right: to-rem(144px);
+  }
+
+  .#{$prefix}--number--sm.#{$prefix}--number input[type='text'] {
+    padding-right: to-rem(112px);
+  }
+
+  .#{$prefix}--number input[type='text']:disabled {
+    border-bottom-color: transparent;
+    background-color: $field-01;
+    color: $disabled;
+    cursor: not-allowed;
+  }
+
+  // Add top and bottom outlines to number controls when text input is focused
+  .#{$prefix}--number
+    input[type='text']:focus
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn {
+    border-bottom-width: 0;
+
+    &:hover {
+      @include focus-outline('outline');
+
+      border: 0;
+    }
+  }
+
+  .#{$prefix}--number
+    input[type='text'][data-invalid]
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn {
+    border-bottom-width: 0;
+  }
+
+  // Add invalid outline to number controls only when invalid text input is not focused
+  .#{$prefix}--number
+    input[type='text'][data-invalid]:not(:focus)
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn:hover {
+    @include focus-outline('invalid');
+  }
+
+  .#{$prefix}--number
+    input[type='text']:focus
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn.up-icon::after {
+    background-color: transparent;
+  }
+
+  .#{$prefix}--number
+    input[type='text'][data-invalid]
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn.up-icon::after {
+    background-color: $support-01;
+  }
+
+  .#{$prefix}--number
+    input[type='text'][data-invalid]:focus
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn.up-icon::after,
+  .#{$prefix}--number
+    input[type='text'][data-invalid]
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn.up-icon:focus::after {
+    background-color: $focus;
+  }
+
+  .#{$prefix}--number
+    input[type='text']:disabled
+    + .#{$prefix}--number__controls
+    .#{$prefix}--number__rule-divider:first-of-type {
+    background-color: transparent;
+  }
+
+  .#{$prefix}--number
+    input[type='text']:disabled
+    + .#{$prefix}--number__controls
+    .#{$prefix}--number__rule-divider {
+    background-color: $disabled;
+  }
+
+  .#{$prefix}--number--light input[type='text'] {
+    background-color: $field-02;
+  }
+
+  .#{$prefix}--number--light input[type='text']:disabled {
+    background-color: $field-02;
+  }
+
+  .#{$prefix}--number--lg input[type='text'] {
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--number--sm input[type='text'] {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--number--nosteppers input[type='text'] {
+    padding-right: to-rem(48px);
+  }
+
+  .#{$prefix}--number--readonly input[type='text'] {
+    background: transparent;
+  }
 }
 
 @include exports('number-input-text-type') {
