@@ -414,11 +414,39 @@
   $: flattenedNodes = cachedFlattenedNodes ?? [];
   $: nodeIds = cachedNodeIds ?? [];
 
+  let prevActiveIdForAutoCollapse = activeId;
+
   $: {
     if (expandedIds !== lastExpandedIdsRef) {
       expandedIdsSet = new Set(expandedIds);
       lastExpandedIdsRef = expandedIds;
     }
+
+    // `autoCollapse` should also be triggered when activeId changes programmatically.
+    if (autoCollapse && activeId !== prevActiveIdForAutoCollapse) {
+      prevActiveIdForAutoCollapse = activeId;
+
+      for (const child of nodes) {
+        const path = findNodeById(child, activeId);
+        if (path) {
+          const ancestorIds = path.slice(0, -1).map((n) => n.id);
+
+          // For each ancestor, collapse its siblings.
+          for (const ancestorId of ancestorIds) {
+            const siblingIds = findSiblingIds(nodes, ancestorId);
+            for (const siblingId of siblingIds) {
+              expandedIdsSet.delete(siblingId);
+            }
+            expandedIdsSet.add(ancestorId);
+          }
+
+          expandedIds = Array.from(expandedIdsSet);
+          lastExpandedIdsRef = expandedIds;
+          break;
+        }
+      }
+    }
+
     activeNodeId.set(activeId);
     selectedNodeIds.set(selectedIds);
     expandedNodeIds.set(expandedIds);
