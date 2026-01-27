@@ -1,5 +1,5 @@
 <script>
-  import { Stack, TreeView } from "carbon-components-svelte";
+  import { Button, ButtonSet, Stack, TreeView } from "carbon-components-svelte";
 
   let activeId = "";
   let selectedIds = [];
@@ -46,6 +46,16 @@
 </script>
 
 <Stack gap={4}>
+  <ButtonSet>
+    <Button size="small" on:click={() => (activeId = 3)}>Select Spark</Button>
+    <Button size="small" on:click={() => (activeId = 8)}>
+      Select Blockchain
+    </Button>
+    <Button size="small" on:click={() => (activeId = 12)}>
+      Select MongoDB
+    </Button>
+  </ButtonSet>
+
   <TreeView
     labelText="Cloud Products"
     {nodes}
