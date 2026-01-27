@@ -2,58 +2,92 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.99.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.8...v0.99.0) (2026-01-27)
+
+### ⚠ BREAKING CHANGES
+
+- **header:** rename slot "skip-to-content" to "skipToContent" for Svelte 5 support
+- **data-table:** rename slot "cell-header" to "cellHeader" for Svelte 5 support
+
+### Features
+
+- **combo-box:** support virtualized items ([350a54e](https://github.com/carbon-design-system/carbon-components-svelte/commit/350a54eef3f59d0a7e7f6e109ad659c7f9849d61)), closes [#2395](https://github.com/carbon-design-system/carbon-components-svelte/issues/2395)
+- **dropdown:** support virtualized items ([f15f853](https://github.com/carbon-design-system/carbon-components-svelte/commit/f15f8533b24fbdcbd702a93a2fb6433122fe8fbb)), closes [#2396](https://github.com/carbon-design-system/carbon-components-svelte/issues/2396)
+- **local-storage:** auto-sync updates across tabs ([f966856](https://github.com/carbon-design-system/carbon-components-svelte/commit/f96685652a7d600d4437932527eb2d4555a95890))
+- **multi-select:** support virtualized items ([a9acb11](https://github.com/carbon-design-system/carbon-components-svelte/commit/a9acb113e1f8c3493a163e661989d8b72e8dd5c4)), closes [#1623](https://github.com/carbon-design-system/carbon-components-svelte/issues/1623)
+- **radio-button:** support implicit grouping via `name` attribute ([11b2684](https://github.com/carbon-design-system/carbon-components-svelte/commit/11b26845da742458a91391bb1e51137a848966a7))
+- **tree-view:** add `autoCollapse` ([226d301](https://github.com/carbon-design-system/carbon-components-svelte/commit/226d3010bad9e18bd698e47fc1d5539a4bb913e9)), closes [#2491](https://github.com/carbon-design-system/carbon-components-svelte/issues/2491)
+- **tree-view:** pass all tree view node props via slots ([1084461](https://github.com/carbon-design-system/carbon-components-svelte/commit/1084461369cf989690aa60b3eccdeeea72af427a))
+
+### Bug Fixes
+
+- **combo-box:** `clearFilterOnOpen` restores value after typing ([4e4b582](https://github.com/carbon-design-system/carbon-components-svelte/commit/4e4b5824539041462141a4f07623d8efb67c9ab5)), closes [#2579](https://github.com/carbon-design-system/carbon-components-svelte/issues/2579)
+- **combo-box:** `ComboBoxItemId` is generic, defaulting to `any` ([31336b1](https://github.com/carbon-design-system/carbon-components-svelte/commit/31336b1ffeb1957de655056ec30608fb890cca55))
+- **combo-box:** keyboard navigation starts at selected item index ([73a90aa](https://github.com/carbon-design-system/carbon-components-svelte/commit/73a90aac72afc2c23c20ec17ada63baec10d1220))
+- **data-table:** `DataTableRowId` is generic, defaulting to `any` ([aae89c0](https://github.com/carbon-design-system/carbon-components-svelte/commit/aae89c0569d827c6179a436944ae7c7ef1fadcee))
+- **dropdown:** `DropdownItem` id generic, defaulting to `any` ([72820f7](https://github.com/carbon-design-system/carbon-components-svelte/commit/72820f725ed2f3c63782c17bddc460f308b6856f)), closes [#2564](https://github.com/carbon-design-system/carbon-components-svelte/issues/2564)
+- **dropdown:** keyboard navigation starts at selected item index ([23549f6](https://github.com/carbon-design-system/carbon-components-svelte/commit/23549f6790679af0ecdd609c7099ef411988de23)), closes [#2575](https://github.com/carbon-design-system/carbon-components-svelte/issues/2575)
+- **multi-select:** `MultiSelectItemId` is generic, defaulting to `any` ([01549bb](https://github.com/carbon-design-system/carbon-components-svelte/commit/01549bb67d49c0d1de58b3cf8d5bc6316b024496))
+- **number-input:** add styles for `type="text"` ([83ac138](https://github.com/carbon-design-system/carbon-components-svelte/commit/83ac1382da6041b5d656a45537aba48928514ae4))
+- **number-input:** allow deleting all characters if `allowDecimal` is true ([5d36b14](https://github.com/carbon-design-system/carbon-components-svelte/commit/5d36b14db89a302e33ddad424dd1eca311f86bd1))
+- **number-input:** include correct styles for `allowDecimal` input ([e32fb3e](https://github.com/carbon-design-system/carbon-components-svelte/commit/e32fb3ee0207fb25ace5229b1d7747181712676e))
+- **overflow-menu:** item supports `target` and `rel` props ([61ef1ba](https://github.com/carbon-design-system/carbon-components-svelte/commit/61ef1ba3e88393ff93aa6310cbafc50e3c19ed67)), closes [#2559](https://github.com/carbon-design-system/carbon-components-svelte/issues/2559)
+- **toolbar-search:** `ToolbarSearch` preserves generic row ID types ([87b2cfe](https://github.com/carbon-design-system/carbon-components-svelte/commit/87b2cfef0d610f237de481414d5c4d738dee5123))
+- **tree-view:** `TreeNodeId` is generic, defaulting to `string | number` ([3b5f8c1](https://github.com/carbon-design-system/carbon-components-svelte/commit/3b5f8c13a374d3cabdac91b9e59aee60ca100d01))
+- **types:** generic component props should extend default values ([9d4b1f0](https://github.com/carbon-design-system/carbon-components-svelte/commit/9d4b1f08acbbee090e04210ea42d3e1a3d892c36))
+
 ### [0.98.8](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.7...v0.98.8) (2026-01-19)
 
 ### Bug Fixes
 
-* **code-snippet:** prevent dispatching initial "collapse" event in Svelte 5 ([81758aa](https://github.com/carbon-design-system/carbon-components-svelte/commit/81758aaedc575fade31dccaec942e1b858f51a47)), closes [#2527](https://github.com/carbon-design-system/carbon-components-svelte/issues/2527)
-* **header-search:** prevent dispatching initial "inactive" event in Svelte 5 ([0b63452](https://github.com/carbon-design-system/carbon-components-svelte/commit/0b63452a8e965d4a8d9e4d57ea9c925d0e030141)), closes [#2532](https://github.com/carbon-design-system/carbon-components-svelte/issues/2532)
-* **pagination:** prevent dispatching initial "update" event in Svelte 5 ([ab72262](https://github.com/carbon-design-system/carbon-components-svelte/commit/ab72262494aa78d6693ecb096b9f519aee9c2a25)), closes [#2528](https://github.com/carbon-design-system/carbon-components-svelte/issues/2528)
-* **search:** prevent dispatching initial "collapse" event in Svelte 5 ([7a2ebbe](https://github.com/carbon-design-system/carbon-components-svelte/commit/7a2ebbed6d5627bc58e4af2017a2743977c58445)), closes [#2529](https://github.com/carbon-design-system/carbon-components-svelte/issues/2529)
-* **side-nav:** prevent dispatching initial "close" event in Svelte 5 ([3f2a6fe](https://github.com/carbon-design-system/carbon-components-svelte/commit/3f2a6fee73186c66f2304c25f1f4d0671337c81a)), closes [#2533](https://github.com/carbon-design-system/carbon-components-svelte/issues/2533)
-* **theme:** prevent dispatching initial "update" event in Svelte 5 ([7f3924b](https://github.com/carbon-design-system/carbon-components-svelte/commit/7f3924bd193cda29a55dd1d3e6fd56628e8d843b)), closes [#2530](https://github.com/carbon-design-system/carbon-components-svelte/issues/2530)
-* **tooltip-definition:** prevent dispatching initial "close" event in Svelte 5 ([edf69cf](https://github.com/carbon-design-system/carbon-components-svelte/commit/edf69cfd0a4464b437998bc13318c4bbc37aed54)), closes [#2531](https://github.com/carbon-design-system/carbon-components-svelte/issues/2531)
+- **code-snippet:** prevent dispatching initial "collapse" event in Svelte 5 ([81758aa](https://github.com/carbon-design-system/carbon-components-svelte/commit/81758aaedc575fade31dccaec942e1b858f51a47)), closes [#2527](https://github.com/carbon-design-system/carbon-components-svelte/issues/2527)
+- **header-search:** prevent dispatching initial "inactive" event in Svelte 5 ([0b63452](https://github.com/carbon-design-system/carbon-components-svelte/commit/0b63452a8e965d4a8d9e4d57ea9c925d0e030141)), closes [#2532](https://github.com/carbon-design-system/carbon-components-svelte/issues/2532)
+- **pagination:** prevent dispatching initial "update" event in Svelte 5 ([ab72262](https://github.com/carbon-design-system/carbon-components-svelte/commit/ab72262494aa78d6693ecb096b9f519aee9c2a25)), closes [#2528](https://github.com/carbon-design-system/carbon-components-svelte/issues/2528)
+- **search:** prevent dispatching initial "collapse" event in Svelte 5 ([7a2ebbe](https://github.com/carbon-design-system/carbon-components-svelte/commit/7a2ebbed6d5627bc58e4af2017a2743977c58445)), closes [#2529](https://github.com/carbon-design-system/carbon-components-svelte/issues/2529)
+- **side-nav:** prevent dispatching initial "close" event in Svelte 5 ([3f2a6fe](https://github.com/carbon-design-system/carbon-components-svelte/commit/3f2a6fee73186c66f2304c25f1f4d0671337c81a)), closes [#2533](https://github.com/carbon-design-system/carbon-components-svelte/issues/2533)
+- **theme:** prevent dispatching initial "update" event in Svelte 5 ([7f3924b](https://github.com/carbon-design-system/carbon-components-svelte/commit/7f3924bd193cda29a55dd1d3e6fd56628e8d843b)), closes [#2530](https://github.com/carbon-design-system/carbon-components-svelte/issues/2530)
+- **tooltip-definition:** prevent dispatching initial "close" event in Svelte 5 ([edf69cf](https://github.com/carbon-design-system/carbon-components-svelte/commit/edf69cfd0a4464b437998bc13318c4bbc37aed54)), closes [#2531](https://github.com/carbon-design-system/carbon-components-svelte/issues/2531)
 
 ### [0.98.7](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.6...v0.98.7) (2026-01-19)
 
 ### Bug Fixes
 
-* **multi-select:** prevent dispatching initial "select" event in Svelte 5 ([e4c7797](https://github.com/carbon-design-system/carbon-components-svelte/commit/e4c7797d7ea860f600fb82d3718eeab234cf8c95)), closes [#2525](https://github.com/carbon-design-system/carbon-components-svelte/issues/2525)
+- **multi-select:** prevent dispatching initial "select" event in Svelte 5 ([e4c7797](https://github.com/carbon-design-system/carbon-components-svelte/commit/e4c7797d7ea860f600fb82d3718eeab234cf8c95)), closes [#2525](https://github.com/carbon-design-system/carbon-components-svelte/issues/2525)
 
 ## [0.98.6](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.5...v0.98.6) (2026-01-18)
 
 ### Bug Fixes
 
-* **select:** remove unused `SelectValue` type ([123bf08](https://github.com/carbon-design-system/carbon-components-svelte/commit/123bf081eb823d08308defe32452113517f6c308))
-* **theme:** pass `CarbonTheme` to generic `SelectProps` ([ca62ac9](https://github.com/carbon-design-system/carbon-components-svelte/commit/ca62ac949a05e4c8c302ae21361cb376d007ff64))
-* **ui-shell:** `SideNav` overlays `UIShell` content ([8ed59f1](https://github.com/carbon-design-system/carbon-components-svelte/commit/8ed59f11276eb96c493dab4056d94481ae4a32ef)), closes [#2520](https://github.com/carbon-design-system/carbon-components-svelte/issues/2520) [#1463](https://github.com/carbon-design-system/carbon-components-svelte/issues/1463) [#544](https://github.com/carbon-design-system/carbon-components-svelte/issues/544)
+- **select:** remove unused `SelectValue` type ([123bf08](https://github.com/carbon-design-system/carbon-components-svelte/commit/123bf081eb823d08308defe32452113517f6c308))
+- **theme:** pass `CarbonTheme` to generic `SelectProps` ([ca62ac9](https://github.com/carbon-design-system/carbon-components-svelte/commit/ca62ac949a05e4c8c302ae21361cb376d007ff64))
+- **ui-shell:** `SideNav` overlays `UIShell` content ([8ed59f1](https://github.com/carbon-design-system/carbon-components-svelte/commit/8ed59f11276eb96c493dab4056d94481ae4a32ef)), closes [#2520](https://github.com/carbon-design-system/carbon-components-svelte/issues/2520) [#1463](https://github.com/carbon-design-system/carbon-components-svelte/issues/1463) [#544](https://github.com/carbon-design-system/carbon-components-svelte/issues/544)
 
 ### [0.98.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.4...v0.98.5) (2026-01-17)
 
 ### Bug Fixes
 
-* **tree-view:** accessors use generic `Node` type ([0bfdfb0](https://github.com/carbon-design-system/carbon-components-svelte/commit/0bfdfb081cc725540abd763394c4f86122baf1cf))
-* **types:** context types support generics ([9066426](https://github.com/carbon-design-system/carbon-components-svelte/commit/90664262cfe505d2ed1d222fbb1c6de591eaaa39))
-* **types:** fix `truncate` function type ([fee3592](https://github.com/carbon-design-system/carbon-components-svelte/commit/fee3592297df95335890e79e85500a594d32e4f7))
+- **tree-view:** accessors use generic `Node` type ([0bfdfb0](https://github.com/carbon-design-system/carbon-components-svelte/commit/0bfdfb081cc725540abd763394c4f86122baf1cf))
+- **types:** context types support generics ([9066426](https://github.com/carbon-design-system/carbon-components-svelte/commit/90664262cfe505d2ed1d222fbb1c6de591eaaa39))
+- **types:** fix `truncate` function type ([fee3592](https://github.com/carbon-design-system/carbon-components-svelte/commit/fee3592297df95335890e79e85500a594d32e4f7))
 
 ### [0.98.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.3...v0.98.4) (2026-01-17)
 
 ### Bug Fixes
 
-* **types:** generate default slot props for Svelte 5 `#snippet` usage ([6f5eb78](https://github.com/carbon-design-system/carbon-components-svelte/commit/6f5eb78873d68c0dfbc76a419fdb40e64aded890)), closes [#2505](https://github.com/carbon-design-system/carbon-components-svelte/issues/2505)
+- **types:** generate default slot props for Svelte 5 `#snippet` usage ([6f5eb78](https://github.com/carbon-design-system/carbon-components-svelte/commit/6f5eb78873d68c0dfbc76a419fdb40e64aded890)), closes [#2505](https://github.com/carbon-design-system/carbon-components-svelte/issues/2505)
 
 ### [0.98.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.2...v0.98.3) (2026-01-17)
 
 ### Bug Fixes
 
-* **types:** named slot props for `#snippet` usage includes args ([7448035](https://github.com/carbon-design-system/carbon-components-svelte/commit/7448035711a98cf193a2b4f57aabab6bbd189f0e)), closes [#2505](https://github.com/carbon-design-system/carbon-components-svelte/issues/2505)
+- **types:** named slot props for `#snippet` usage includes args ([7448035](https://github.com/carbon-design-system/carbon-components-svelte/commit/7448035711a98cf193a2b4f57aabab6bbd189f0e)), closes [#2505](https://github.com/carbon-design-system/carbon-components-svelte/issues/2505)
 
 ### [0.98.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.1...v0.98.2) (2026-01-17)
 
 ### Bug Fixes
 
-* **multi-select:** selected options have `aria-checked` state ([aa87856](https://github.com/carbon-design-system/carbon-components-svelte/commit/aa8785698d0b1ed6034c11209a37d94b674f1db6))
-* **types:** generate named slot props for Svelte 5 `#snippet` usage ([6069a65](https://github.com/carbon-design-system/carbon-components-svelte/commit/6069a6550a46745da0dee6d422a67c945a142e38))
+- **multi-select:** selected options have `aria-checked` state ([aa87856](https://github.com/carbon-design-system/carbon-components-svelte/commit/aa8785698d0b1ed6034c11209a37d94b674f1db6))
+- **types:** generate named slot props for Svelte 5 `#snippet` usage ([6069a65](https://github.com/carbon-design-system/carbon-components-svelte/commit/6069a6550a46745da0dee6d422a67c945a142e38))
 
 ### [0.98.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.0...v0.98.1) (2025-12-26)
 
