@@ -40,6 +40,12 @@ type $Props = {
    */
   tableStyle?: string;
 
+  /**
+   * Obtain a reference to the section HTML element (when stickyHeader is enabled) or table HTML element.
+   * @default null
+   */
+  ref?: null | HTMLElement;
+
   children?: (this: void) => void;
 
   [key: `data-${string}`]: any;

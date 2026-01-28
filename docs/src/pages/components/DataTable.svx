@@ -928,6 +928,42 @@ Bind to `pageSize` and `page` props of `Pagination` and pass them to `DataTable`
 
 <FileSource src="/framed/DataTable/DataTablePagination" />
 
+## Virtualized rows (large datasets)
+
+Virtualization is a technique that allows only the rows currently visible in the viewport to be rendered in the DOM, improving performance for large datasets.
+
+By default, the `DataTable` component will virtualize tables with more than 100 rows. The table body container height is automatically calculated to show 10 rows by default (based on `itemHeight * maxVisibleRows`).
+
+In the example below, 10,000 rows are provided to the table but only the visible rows are rendered in the DOM.
+
+Set `virtualize={false}` to explicitly disable virtualization, even for large tables. Or, customize the threshold at which virtualization activates. See [Virtualized rows (custom threshold)](#virtualized-rows-custom-threshold).
+
+<FileSource src="/framed/DataTable/VirtualizedDataTable" />
+
+## Virtualized rows (custom overscan)
+
+Overscanning is the process of rendering extra rows above and below the viewport to ensure smooth scrolling. The default overscan value is 3.
+
+Specify a custom value for `overscan` to control how many extra rows are rendered above/below the viewport for smoother scrolling.
+
+<FileSource src="/framed/DataTable/VirtualizeOverscan" />
+
+## Virtualized rows (custom threshold)
+
+By default, virtualization activates when a table has more than 100 rows. Customize the `threshold` to change when virtualization activates.
+
+<FileSource src="/framed/DataTable/VirtualizeThreshold" />
+
+## Virtualized rows (custom row height)
+
+Specify a custom `itemHeight` when using custom cell content with different heights or when using different size variants.
+
+<FileSource src="/framed/DataTable/VirtualizeRowHeight" />
+
+## Virtualized rows (custom max visible rows)
+
+By default, the table shows 10 rows in the viewport. Customize `maxVisibleRows` to control how many rows are visible at once. The container height is automatically calculated as `itemHeight * maxVisibleRows`. Alternatively, you can use `containerHeight` for pixel-based control, which takes precedence over `maxVisibleRows`.
+
 ## Sortable with custom display and sort methods
 
 Use `display` and `sort` functions in header objects to customize cell rendering and sorting.
