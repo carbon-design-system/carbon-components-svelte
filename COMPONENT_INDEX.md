@@ -1030,6 +1030,17 @@ export type DataTableCell<Row = DataTableRow> = {
   value: DataTableValue;
   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
 };
+
+export interface DataTableRowClassArgs<Row = DataTableRow> {
+  row: Row;
+  rowIndex: number;
+  selected: boolean;
+  expanded: boolean;
+}
+
+export type DataTableRowClass<Row = DataTableRow> =
+  | string
+  | ((args: DataTableRowClassArgs<Row>) => string | undefined);
 ```
 
 ### Props
@@ -1047,6 +1058,7 @@ export type DataTableCell<Row = DataTableRow> = {
 | size                       | No       | <code>let</code> | No       | <code>"compact" &#124; "short" &#124; "medium" &#124; "tall"</code>                  | <code>undefined</code>                             | Set the size of the data table.                                                                                                                                                                        |
 | title                      | No       | <code>let</code> | No       | <code>string</code>                                                                  | <code>""</code>                                    | Specify the title of the data table                                                                                                                                                                    |
 | description                | No       | <code>let</code> | No       | <code>string</code>                                                                  | <code>""</code>                                    | Specify the description of the data table                                                                                                                                                              |
+| rowClass                   | No       | <code>let</code> | No       | <code>DataTableRowClass<Row></code>                                                  | <code>undefined</code>                             | --                                                                                                                                                                                                     |
 | inputName                  | No       | <code>let</code> | No       | <code>string</code>                                                                  | <code>\`ccs-${Math.random().toString(36)}\`</code> | Specify a name attribute for the input elements<br />in a selectable data table (radio or checkbox).<br />When the table is inside a form, this name will<br />be included in the form data on submit. |
 | zebra                      | No       | <code>let</code> | No       | <code>boolean</code>                                                                 | <code>false</code>                                 | Set to `true` to use zebra styles                                                                                                                                                                      |
 | sortable                   | No       | <code>let</code> | No       | <code>boolean</code>                                                                 | <code>false</code>                                 | Set to `true` for the sortable variant                                                                                                                                                                 |
@@ -1085,7 +1097,7 @@ export type DataTableCell<Row = DataTableRow> = {
 | mouseleave:row       | dispatched | <code>Row</code>                                                                                                                                               | --          |
 | click:row--expand    | dispatched | <code>{ expanded: boolean; row: Row; }</code>                                                                                                                  | --          |
 | click:row--select    | dispatched | <code>{ selected: boolean; row: Row; }</code>                                                                                                                  | --          |
-| click:cell           | dispatched | <code>{ cell: DataTableCell<Row>; target: EventTarget; currentTarget: EventTarget; }</code>                                                                    | --          |
+| click:cell           | dispatched | <code>{ cell: DataTableCell<Row>; target: EventTarget; currentTarget: EventTarget; rowClass?: DataTableRowClass<Row>; }</code>                                 | --          |
 
 ## `DataTableSkeleton`
 

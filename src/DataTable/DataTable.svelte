@@ -67,6 +67,10 @@
    * @property {DataTableCell<Row>} cell
    * @property {EventTarget} target
    * @property {EventTarget} currentTarget
+   * @typedef {{ row: Row, rowIndex: number, selected: boolean, expanded: boolean }} DataTableRowClassArgs<Row=DataTableRow>
+   * @typedef {string | ((args: DataTableRowClassArgs<Row>) => string | undefined)} DataTableRowClass<Row=DataTableRow>
+   * @type {object}
+   * @property {DataTableRowClass<Row>} [rowClass]
    * @restProps {div}
    */
 
@@ -94,6 +98,11 @@
 
   /** Specify the description of the data table */
   export let description = "";
+
+  /**
+   * @type {DataTableRowClass<Row>}
+   */
+  export let rowClass = undefined;
 
   /**
    * Specify a name attribute for the input elements
@@ -507,6 +516,10 @@
         {@const isExpanded = !!expandedRows[row.id]}
         {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
         {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
+        {@const rowClassValue =
+          typeof rowClass === "function"
+            ? rowClass({ row, rowIndex: i, selected: isSelected, expanded: isExpanded })
+            : rowClass}
         <TableRow
           data-row={row.id}
           data-parent-row={expandable ? true : undefined}
@@ -516,7 +529,7 @@
             ? 'bx--parent-row'
             : ''} {expandable && parentRowId === row.id
             ? 'bx--expandable-row--hover'
-            : ''}"
+            : ''} {rowClassValue || ''}"
           on:click={(e) => {
             // forgo "click", "click:row" events if target
             // resembles an overflow menu, a checkbox, or radio button

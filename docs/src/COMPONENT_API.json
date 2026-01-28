@@ -3367,6 +3367,17 @@
           "reactive": false
         },
         {
+          "name": "rowClass",
+          "kind": "let",
+          "type": "DataTableRowClass<Row>",
+          "value": "undefined",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "inputName",
           "kind": "let",
           "description": "Specify a name attribute for the input elements\nin a selectable data table (radio or checkbox).\nWhen the table is inside a form, this name will\nbe included in the form data on submit.",
@@ -3681,7 +3692,7 @@
         {
           "type": "dispatched",
           "name": "click:cell",
-          "detail": "{\n  cell: DataTableCell<Row>;\n  target: EventTarget;\n  currentTarget: EventTarget;\n}"
+          "detail": "{\n  cell: DataTableCell<Row>;\n  target: EventTarget;\n  currentTarget: EventTarget;\n  rowClass?: DataTableRowClass<Row>;\n}"
         }
       ],
       "typedefs": [
@@ -3719,6 +3730,16 @@
           "type": "{\n  key: DataTableKey<Row> | (string & {});\n  value: DataTableValue;\n  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;\n}",
           "name": "DataTableCell<Row=DataTableRow>",
           "ts": "type DataTableCell<Row = DataTableRow> =\n  {\n    key:\n      | DataTableKey<Row>\n      | (string & {});\n    value: DataTableValue;\n    display?: (\n      item: DataTableValue,\n      row: DataTableRow,\n    ) => DataTableValue;\n  };\n"
+        },
+        {
+          "type": "{ row: Row, rowIndex: number, selected: boolean, expanded: boolean }",
+          "name": "DataTableRowClassArgs<Row=DataTableRow>",
+          "ts": "interface DataTableRowClassArgs<\n  Row = DataTableRow,\n> {\n  row: Row;\n  rowIndex: number;\n  selected: boolean;\n  expanded: boolean;\n}\n"
+        },
+        {
+          "type": "string | ((args: DataTableRowClassArgs<Row>) => string | undefined)",
+          "name": "DataTableRowClass<Row=DataTableRow>",
+          "ts": "type DataTableRowClass<\n  Row = DataTableRow,\n> =\n  | string\n  | ((\n      args: DataTableRowClassArgs<Row>,\n    ) => string | undefined);\n"
         }
       ],
       "generics": [
