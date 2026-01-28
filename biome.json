@@ -1,5 +1,11 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.3.13/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "master"
+  },
   "formatter": {
     "enabled": true,
     "indentStyle": "space"
@@ -13,8 +19,6 @@
     "includes": [
       "**",
       "!!**/.*/**/*",
-      "!!**/build/**/*",
-      "!!**/dist/**/*",
       "!!**/css/*.css",
       "!!**/docs/src/pages/index.svelte",
       "!!**/docs/src/COMPONENT_API.json"
