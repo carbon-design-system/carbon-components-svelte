@@ -44,6 +44,17 @@ export type DataTableCell<Row = DataTableRow> = {
   display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;
 };
 
+export interface DataTableRowClassArgs<Row = DataTableRow> {
+  row: Row;
+  rowIndex: number;
+  selected: boolean;
+  expanded: boolean;
+}
+
+export type DataTableRowClass<Row = DataTableRow> =
+  | string
+  | ((row: DataTableRowClassArgs<Row>) => string | undefined);
+
 export type DataTableContext<Row extends DataTableRow = DataTableRow> = {
   batchSelectedIds: import("svelte/store").Writable<ReadonlyArray<Row["id"]>>;
   tableRows: import("svelte/store").Writable<ReadonlyArray<Row>>;
@@ -87,6 +98,21 @@ type $Props<Row extends DataTableRow = DataTableRow> = {
    * @default ""
    */
   description?: string;
+
+  /**
+   * Specify a custom class name for each row.
+   * Provide a function to return a class name based
+   * on row properties, allowing conditional classes
+   * based on selected/expanded state.
+   * @example
+   * ```svelte
+   * <DataTable rowClass={({ row, rowIndex, selected, expanded }) => {
+   *   return `row-${rowIndex} ${selected ? 'selected' : ''} ${expanded ? 'expanded' : ''}`;
+   * }} />
+   * ```
+   * @default undefined
+   */
+  rowClass?: DataTableRowClass<Row>;
 
   /**
    * Specify a name attribute for the input elements
@@ -296,6 +322,7 @@ export default class DataTable<
       cell: DataTableCell<Row>;
       target: EventTarget;
       currentTarget: EventTarget;
+      rowClass?: DataTableRowClass<Row>;
     }>;
   },
   {

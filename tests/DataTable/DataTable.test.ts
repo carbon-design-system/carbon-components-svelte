@@ -1727,5 +1727,82 @@ describe("DataTable", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<DefaultDataTableRow["id"]>().toEqualTypeOf<any>();
     });
+
+    describe("rowClass prop", () => {
+      it("applies string rowClass to all rows", () => {
+        const { container } = render(DataTable, {
+          props: {
+            headers,
+            rows,
+            rowClass: "custom-row-class",
+          },
+        });
+
+        const tableRows = container.querySelectorAll("tbody tr");
+
+        for (const row of tableRows) {
+          expect(row).toHaveClass("custom-row-class");
+        }
+      });
+
+      it("applies function rowClass based on row properties", () => {
+        const { container } = render(DataTable, {
+          props: {
+            headers,
+            rows,
+            rowClass: ({ row, rowIndex }) => {
+              if (rowIndex === 0) return "first-row";
+              if (row.port === 443) return "secure-row";
+              return "standard-row";
+            },
+          },
+        });
+
+        const firstRow = container.querySelector("tbody tr:first-child");
+        expect(firstRow).toHaveClass("first-row");
+
+        const secureRow = container.querySelector("tr[data-row='b']");
+        expect(secureRow).toHaveClass("secure-row");
+      });
+
+      it("applies rowClass based on selected and expanded state", async () => {
+        const { container, rerender } = render(DataTable, {
+          props: {
+            selectable: true,
+            expandable: true,
+            headers,
+            rows,
+            selectedRowIds: ["a"],
+            expandedRowIds: ["b"],
+            rowClass: ({ selected, expanded }) => {
+              const classes = [];
+              if (selected) classes.push("is-selected");
+              if (expanded) classes.push("is-expanded");
+              return classes.join(" ") || undefined;
+            },
+          },
+        });
+
+        expect(container.querySelector("tr[data-row='a']")).toHaveClass(
+          "is-selected",
+        );
+        expect(container.querySelector("tr[data-row='b']")).toHaveClass(
+          "is-expanded",
+        );
+
+        rerender({ selectedRowIds: ["b"] });
+        await tick();
+
+        expect(container.querySelector("tr[data-row='a']")).not.toHaveClass(
+          "is-selected",
+        );
+        expect(container.querySelector("tr[data-row='b']")).toHaveClass(
+          "is-selected",
+        );
+        expect(container.querySelector("tr[data-row='b']")).toHaveClass(
+          "is-expanded",
+        );
+      });
+    });
   });
 });
