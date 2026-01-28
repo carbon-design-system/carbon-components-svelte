@@ -301,12 +301,14 @@
 
   $: batchSelectedIds.set(selectedRowIds);
   $: rowIds = $tableRows.map((row) => row.id);
-  $: expandableRowIds = rowIds.filter(
-    (id) => !nonExpandableRowIds.includes(id),
-  );
-  $: selectableRowIds = rowIds.filter(
-    (id) => !nonSelectableRowIds.includes(id),
-  );
+
+  // Use Sets for faster row lookups.
+  $: selectedRowIdsSet = new Set(selectedRowIds);
+  $: nonSelectableRowIdsSet = new Set(nonSelectableRowIds);
+  $: nonExpandableRowIdsSet = new Set(nonExpandableRowIds);
+
+  $: expandableRowIds = rowIds.filter((id) => !nonExpandableRowIdsSet.has(id));
+  $: selectableRowIds = rowIds.filter((id) => !nonSelectableRowIdsSet.has(id));
   $: selectAll =
     selectableRowIds.length > 0 &&
     selectedRowIds.length === selectableRowIds.length;
@@ -492,7 +494,7 @@
         <TableRow
           data-row={row.id}
           data-parent-row={expandable ? true : undefined}
-          class="{selectedRowIds.includes(row.id)
+          class="{selectedRowIdsSet.has(row.id)
             ? 'bx--data-table--selected'
             : ''} {expandedRows[row.id] ? 'bx--expandable-row' : ''} {expandable
             ? 'bx--parent-row'
@@ -527,12 +529,12 @@
             <TableCell
               class="bx--table-expand"
               headers="expand"
-              data-previous-value={!nonExpandableRowIds.includes(row.id) &&
+              data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
               expandedRows[row.id]
                 ? "collapsed"
                 : undefined}
             >
-              {#if !nonExpandableRowIds.includes(row.id)}
+              {#if !nonExpandableRowIdsSet.has(row.id)}
                 <button
                   type="button"
                   class:bx--table-expand__button={true}
@@ -566,13 +568,13 @@
               class:bx--table-column-checkbox={true}
               class:bx--table-column-radio={radio}
             >
-              {#if !nonSelectableRowIds.includes(row.id)}
+              {#if !nonSelectableRowIdsSet.has(row.id)}
                 {@const inputId = `${id}-${row.id}`}
                 {#if radio}
                   <RadioButton
                     id={inputId}
                     name={inputName}
-                    checked={selectedRowIds.includes(row.id)}
+                    checked={selectedRowIdsSet.has(row.id)}
                     value={row.id}
                     on:change={() => {
                       selectedRowIds = [row.id];
@@ -583,10 +585,10 @@
                   <InlineCheckbox
                     id={inputId}
                     name={inputName}
-                    checked={selectedRowIds.includes(row.id)}
+                    checked={selectedRowIdsSet.has(row.id)}
                     value={row.id}
                     on:change={() => {
-                      if (selectedRowIds.includes(row.id)) {
+                      if (selectedRowIdsSet.has(row.id)) {
                         selectedRowIds = selectedRowIds.filter(
                           (id) => id !== row.id,
                         );
@@ -610,7 +612,7 @@
                   {cell}
                   rowIndex={i}
                   cellIndex={j}
-                  rowSelected={selectedRowIds.includes(row.id)}
+                  rowSelected={selectedRowIdsSet.has(row.id)}
                   rowExpanded={!!expandedRows[row.id]}
                 >
                   {cell.display ? cell.display(cell.value, row) : cell.value}
@@ -633,7 +635,7 @@
                   {cell}
                   rowIndex={i}
                   cellIndex={j}
-                  rowSelected={selectedRowIds.includes(row.id)}
+                  rowSelected={selectedRowIdsSet.has(row.id)}
                   rowExpanded={!!expandedRows[row.id]}
                 >
                   {cell.display ? cell.display(cell.value, row) : cell.value}
@@ -649,15 +651,15 @@
             data-child-row
             class:bx--expandable-row={true}
             on:mouseenter={() => {
-              if (nonExpandableRowIds.includes(row.id)) return;
+              if (nonExpandableRowIdsSet.has(row.id)) return;
               parentRowId = row.id;
             }}
             on:mouseleave={() => {
-              if (nonExpandableRowIds.includes(row.id)) return;
+              if (nonExpandableRowIdsSet.has(row.id)) return;
               parentRowId = null;
             }}
           >
-            {#if expandedRows[row.id] && !nonExpandableRowIds.includes(row.id)}
+            {#if expandedRows[row.id] && !nonExpandableRowIdsSet.has(row.id)}
               <TableCell
                 colspan={selectable ? headers.length + 2 : headers.length + 1}
               >
@@ -665,7 +667,7 @@
                   <slot
                     name="expanded-row"
                     {row}
-                    rowSelected={selectedRowIds.includes(row.id)}
+                    rowSelected={selectedRowIdsSet.has(row.id)}
                   />
                 </div>
               </TableCell>
