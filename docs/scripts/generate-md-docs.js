@@ -3,12 +3,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { format as prettierFormat } from "prettier";
 import { parse, walk } from "svelte/compiler";
-
-const COMPONENTS_PATH = "./src/pages/components";
-const RAW_COMPONENTS_OUT_DIR = "./public/components";
-const BASE_URL = "https://svelte.carbondesignsystem.com";
-
-const files = fs.readdirSync(COMPONENTS_PATH);
+import {
+  BASE_URL,
+  COMPONENTS_PATH,
+  RAW_COMPONENTS_OUT_DIR,
+} from "./constants.js";
+import { getComponentNames } from "./utils.js";
 
 const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---\s*\n/;
 const COMPONENTS_KEY_RE = /^components\s*:/m;
@@ -73,6 +73,7 @@ const PIPE_RE = /\|/g;
 const NEWLINE_RE = /\r?\n/g;
 const AT_EXAMPLE_RE = /@example/;
 const SVELTE_FENCE_RE = /```svelte\s*\n([\s\S]*?)```/;
+const ATX_HEADING_RE = /^(#{1,6})(\s+)(.*)$/;
 
 /**
  * @param {string} source
@@ -901,6 +902,29 @@ async function formatMarkdown(markdown) {
 }
 
 /**
+ * Increase every ATX heading by one level. Does not change lines inside fenced code blocks.
+ * @param {string} md
+ * @returns {string}
+ */
+function shiftMarkdownHeadings(md) {
+  const lines = md.split("\n");
+  let inFence = false;
+  const isFence = (line) => line.trimStart().startsWith("```");
+
+  return lines
+    .map((line) => {
+      if (isFence(line)) {
+        inFence = !inFence;
+        return line;
+      }
+      if (inFence) return line;
+      if (ATX_HEADING_RE.test(line)) return `#${line}`;
+      return line;
+    })
+    .join("\n");
+}
+
+/**
  * Generate llm.txt content from component list
  * @param {string[]} componentNames
  * @returns {string}
@@ -925,11 +949,8 @@ fs.mkdirSync(RAW_COMPONENTS_OUT_DIR, { recursive: true });
 /** @type {{ componentName: string; md: string }[]} */
 const generatedMdByComponent = [];
 
-for (const file of files) {
-  if (!file.endsWith(".svx")) continue;
-  const [componentName] = file.split(".");
-
-  const filePath = path.join(COMPONENTS_PATH, file);
+for (const componentName of getComponentNames()) {
+  const filePath = path.join(COMPONENTS_PATH, `${componentName}.svx`);
   const fileContent = fs.readFileSync(filePath, "utf8");
   const { frontmatter, body } = splitFrontmatter(fileContent);
   const components = extractComponents(frontmatter);
@@ -980,3 +1001,34 @@ const componentNames = generatedMdByComponent.map(
 );
 const llmTxtContent = generateLlmTxt(componentNames);
 fs.writeFileSync(path.join("./public", "llms.txt"), llmTxtContent, "utf8");
+
+// Generate llms-full.txt: overview + all component docs with headings shifted
+const overviewPath = path.join("./content", "overview.md");
+let overviewMd;
+try {
+  overviewMd = fs.readFileSync(overviewPath, "utf8").trim();
+} catch (err) {
+  throw new Error(
+    `Overview file required for llms-full.txt not found: ${overviewPath}`,
+    { cause: err },
+  );
+}
+const sortedByComponentName = [...generatedMdByComponent].sort((a, b) =>
+  a.componentName.localeCompare(b.componentName),
+);
+const introPart = `# Carbon Components Svelte\n\n${overviewMd}`;
+const formattedIntro = (await formatMarkdown(introPart)).trimEnd();
+const componentParts = sortedByComponentName.map(({ componentName }) => {
+  const formattedPath = path.join(
+    RAW_COMPONENTS_OUT_DIR,
+    `${componentName}.md`,
+  );
+  const formattedMd = fs.readFileSync(formattedPath, "utf8");
+  return shiftMarkdownHeadings(formattedMd);
+});
+const fullParts = [formattedIntro, ...componentParts];
+fs.writeFileSync(
+  path.join("./public", "llms-full.txt"),
+  fullParts.join("\n\n"),
+  "utf8",
+);

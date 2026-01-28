@@ -1,11 +1,7 @@
 // @ts-check
 import fs from "node:fs";
-
-const BASE_URL = "https://svelte.carbondesignsystem.com";
-const COMPONENTS_PATH = "./src/pages/components";
-const SITEMAP_PATH = "./public/sitemap.xml";
-
-const files = fs.readdirSync(COMPONENTS_PATH);
+import { BASE_URL, SITEMAP_PATH } from "./constants.js";
+import { getComponentNames } from "./utils.js";
 
 /** @type {string[]} */
 const urls = [];
@@ -19,8 +15,7 @@ urls.push(`
   </url>`);
 
 // Component pages
-for (const file of files) {
-  const [componentName] = file.split(".");
+for (const componentName of getComponentNames()) {
   urls.push(`
   <url>
     <loc>${BASE_URL}/components/${componentName}</loc>
@@ -33,6 +28,14 @@ for (const file of files) {
 urls.push(`
   <url>
     <loc>${BASE_URL}/llms.txt</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>`);
+
+// llms-full.txt
+urls.push(`
+  <url>
+    <loc>${BASE_URL}/llms-full.txt</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>`);
