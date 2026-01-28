@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.99.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.99.0...v0.99.1) (2026-01-28)
+
+### Bug Fixes
+
+- **tree-view:** `autoCollapse` respects `activeId` ([48673a1](https://github.com/carbon-design-system/carbon-components-svelte/commit/48673a1fcea615d9fe8518ad2c98986598ca7ea0)), closes [#2491](https://github.com/carbon-design-system/carbon-components-svelte/issues/2491)
+
 ## [0.99.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.98.8...v0.99.0) (2026-01-27)
 
 ### ⚠ BREAKING CHANGES
