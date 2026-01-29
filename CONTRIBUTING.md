@@ -50,7 +50,14 @@ Use `nvm` to switch:
 nvm use 20
 ```
 
-To run the docs site:
+When developing the docs site, you must first generate `docs/src/COMPONENT_API.json` (not committed to source control). From the project root, run:
+
+```sh
+bun i
+bun build:docs
+```
+
+Then run the docs site:
 
 ```sh
 cd docs

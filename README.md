@@ -20,11 +20,6 @@ The Carbon Svelte portfolio also includes:
 
 ## [Documentation](https://svelte.carbondesignsystem.com)
 
-Other forms of documentation are auto-generated:
-
-- **[TypeScript definitions](types)**: Component TypeScript definitions
-- **[Component API](docs/src/COMPONENT_API.json)**: Component API in JSON format
-
 ## Installation
 
 ```sh
