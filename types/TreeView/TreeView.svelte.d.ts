@@ -5,14 +5,18 @@ export type TreeNode<Id = string | number> = {
   id: Id;
   text: any;
   icon?: any;
-  /** Whether the node is disabled */ disabled?: boolean;
+  /** Whether the node is disabled */
+  disabled?: boolean;
   nodes?: TreeNode<Id>[];
 };
 
 export type ShowNodeOptions = {
-  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;
-  /** Whether to select the node (default: true) */ select?: boolean;
-  /** Whether to focus the node (default: true) */ focus?: boolean;
+  /** Whether to expand the node and its ancestors (default: true) */
+  expand?: boolean;
+  /** Whether to select the node (default: true) */
+  select?: boolean;
+  /** Whether to focus the node (default: true) */
+  focus?: boolean;
 };
 
 export type TreeViewContext<Node extends TreeNode<any> = TreeNode<any>> = {

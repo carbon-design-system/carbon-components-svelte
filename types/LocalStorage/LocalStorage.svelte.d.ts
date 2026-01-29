@@ -19,7 +19,10 @@ export default class LocalStorage extends SvelteComponentTyped<
   {
     save: CustomEvent<null>;
     /** Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab/window. */
-    update: CustomEvent<{ prevValue: any; value: any }>;
+    update: CustomEvent<{
+      prevValue: any;
+      value: any;
+    }>;
   },
   Record<string, never>
 > {

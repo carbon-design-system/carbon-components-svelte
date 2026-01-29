@@ -4,7 +4,8 @@ import type { SvelteHTMLElements } from "svelte/elements";
 export type ComboBoxItem<Id = any> = {
   id: Id;
   text: string;
-  /** Whether the item is disabled */ disabled?: boolean;
+  /** Whether the item is disabled */
+  disabled?: boolean;
 };
 
 type $RestProps = SvelteHTMLElements["input"];
@@ -222,7 +223,10 @@ export default class ComboBox<
 > extends SvelteComponentTyped<
   ComboBoxProps<Item>,
   {
-    select: CustomEvent<{ selectedId: Item["id"]; selectedItem: Item }>;
+    select: CustomEvent<{
+      selectedId: Item["id"];
+      selectedItem: Item;
+    }>;
     clear: CustomEvent<KeyboardEvent | MouseEvent>;
     input: WindowEventMap["input"];
     keydown: WindowEventMap["keydown"];

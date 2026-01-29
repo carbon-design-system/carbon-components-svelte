@@ -2,10 +2,14 @@ import { SvelteComponentTyped } from "svelte";
 import type { SvelteHTMLElements } from "svelte/elements";
 
 export type RecursiveListNode = {
-  /** Node text content */ text?: string;
-  /** Node link URL */ href?: string;
-  /** Node HTML content */ html?: string;
-  /** Child nodes */ nodes?: RecursiveListNode[];
+  /** Node text content */
+  text?: string;
+  /** Node link URL */
+  href?: string;
+  /** Node HTML content */
+  html?: string;
+  /** Child nodes */
+  nodes?: RecursiveListNode[];
 };
 
 type $RestProps = SvelteHTMLElements["ul"] & SvelteHTMLElements["ol"];

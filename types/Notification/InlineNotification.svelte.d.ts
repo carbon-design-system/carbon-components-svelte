@@ -86,7 +86,9 @@ export type InlineNotificationProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class InlineNotification extends SvelteComponentTyped<
   InlineNotificationProps,
   {
-    close: CustomEvent<{ timeout: boolean }>;
+    close: CustomEvent<{
+      timeout: boolean;
+    }>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];

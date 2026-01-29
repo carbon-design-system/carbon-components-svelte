@@ -66,7 +66,9 @@ export default class ComposedModal extends SvelteComponentTyped<
     close: CustomEvent<{
       trigger: "escape-key" | "outside-click" | "close-button";
     }>;
-    transitionend: CustomEvent<{ open: boolean }>;
+    transitionend: CustomEvent<{
+      open: boolean;
+    }>;
     keydown: WindowEventMap["keydown"];
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];

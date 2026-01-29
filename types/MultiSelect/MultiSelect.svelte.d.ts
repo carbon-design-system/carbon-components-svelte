@@ -6,7 +6,8 @@ export type MultiSelectItemText = string;
 export type MultiSelectItem<Id = any> = {
   id: Id;
   text: MultiSelectItemText;
-  /** Whether the item is disabled */ disabled?: boolean;
+  /** Whether the item is disabled */
+  disabled?: boolean;
 };
 
 export type MultiSelectContext = {
