@@ -1815,7 +1815,7 @@
           "ts": "type ColumnSize = boolean | number;\n"
         },
         {
-          "type": "{ span?: ColumnSize; offset: number; }",
+          "type": "{\n  span?: ColumnSize;\n  offset: number;\n}",
           "name": "ColumnSizeDescriptor",
           "ts": "type ColumnSizeDescriptor = {\n  span?: ColumnSize;\n  offset: number;\n};\n"
         },
@@ -2247,9 +2247,9 @@
       ],
       "typedefs": [
         {
-          "type": "{ id: Id; text: string; /** Whether the item is disabled */ disabled?: boolean; }",
+          "type": "{\n  id: Id;\n  text: string;\n  /** Whether the item is disabled */\n  disabled?: boolean;\n}",
           "name": "ComboBoxItem<Id=any>",
-          "ts": "type ComboBoxItem<Id = any> = {\n  id: Id;\n  text: string;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
+          "ts": "type ComboBoxItem<Id = any> = {\n  id: Id;\n  text: string;\n  /** Whether the item is disabled */\n  disabled?: boolean;\n};\n"
         }
       ],
       "generics": [
@@ -2368,7 +2368,7 @@
         {
           "type": "dispatched",
           "name": "transitionend",
-          "detail": "{ open: boolean }"
+          "detail": "{\n  open: boolean;\n}"
         },
         {
           "type": "forwarded",
@@ -3696,14 +3696,14 @@
           "ts": "type DataTableValue = any;\n"
         },
         {
-          "type": "{ key: DataTableKey<Row> | (string & {}); /** Whether the header is empty */ empty: boolean; display?: (item: DataTableValue, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); /** Whether the column menu is enabled */ columnMenu?: boolean; width?: string; minWidth?: string; }",
+          "type": "{\n  key: DataTableKey<Row> | (string & {});\n  /** Whether the header is empty */\n  empty: boolean;\n  display?: (item: DataTableValue, row: Row) => DataTableValue;\n  sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n  /** Whether the column menu is enabled */\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}",
           "name": "DataTableEmptyHeader<Row=DataTableRow>",
-          "ts": "type DataTableEmptyHeader<\n  Row = DataTableRow,\n> = {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  /** Whether the header is empty */ empty: boolean;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  /** Whether the column menu is enabled */ columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n};\n"
+          "ts": "type DataTableEmptyHeader<\n  Row = DataTableRow,\n> = {\n  key:\n    | DataTableKey<Row>\n    | (string & {});\n  /** Whether the header is empty */\n  empty: boolean;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  /** Whether the column menu is enabled */\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n};\n"
         },
         {
-          "type": "{ key: DataTableKey<Row>; value: DataTableValue; display?: (item: DataTableValue, row: Row) => DataTableValue; sort?: false | ((a: DataTableValue, b: DataTableValue) => number); /** Whether the column menu is enabled */ columnMenu?: boolean; width?: string; minWidth?: string; }",
+          "type": "{\n  key: DataTableKey<Row>;\n  value: DataTableValue;\n  display?: (item: DataTableValue, row: Row) => DataTableValue;\n  sort?: false | ((a: DataTableValue, b: DataTableValue) => number);\n  /** Whether the column menu is enabled */\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n}",
           "name": "DataTableNonEmptyHeader<Row=DataTableRow>",
-          "ts": "type DataTableNonEmptyHeader<\n  Row = DataTableRow,\n> = {\n  key: DataTableKey<Row>;\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  /** Whether the column menu is enabled */ columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n};\n"
+          "ts": "type DataTableNonEmptyHeader<\n  Row = DataTableRow,\n> = {\n  key: DataTableKey<Row>;\n  value: DataTableValue;\n  display?: (\n    item: DataTableValue,\n    row: Row,\n  ) => DataTableValue;\n  sort?:\n    | false\n    | ((\n        a: DataTableValue,\n        b: DataTableValue,\n      ) => number);\n  /** Whether the column menu is enabled */\n  columnMenu?: boolean;\n  width?: string;\n  minWidth?: string;\n};\n"
         },
         {
           "type": "DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>",
@@ -3716,7 +3716,7 @@
           "ts": "interface DataTableRow<Id = any> {\n  id: Id;\n  [key: string]: DataTableValue;\n}\n"
         },
         {
-          "type": "{ key: DataTableKey<Row> | (string & {}); value: DataTableValue; display?: (item: DataTableValue, row: DataTableRow) => DataTableValue; }",
+          "type": "{\n  key: DataTableKey<Row> | (string & {});\n  value: DataTableValue;\n  display?: (item: DataTableValue, row: DataTableRow) => DataTableValue;\n}",
           "name": "DataTableCell<Row=DataTableRow>",
           "ts": "type DataTableCell<Row = DataTableRow> =\n  {\n    key:\n      | DataTableKey<Row>\n      | (string & {});\n    value: DataTableValue;\n    display?: (\n      item: DataTableValue,\n      row: DataTableRow,\n    ) => DataTableValue;\n  };\n"
         }
@@ -4762,9 +4762,9 @@
       ],
       "typedefs": [
         {
-          "type": "{ id: Id; text: string; /** Whether the item is disabled */ disabled?: boolean; }",
+          "type": "{\n  id: Id;\n  text: string;\n  /** Whether the item is disabled */\n  disabled?: boolean;\n}",
           "name": "DropdownItem<Id=any>",
-          "ts": "type DropdownItem<Id = any> = {\n  id: Id;\n  text: string;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
+          "ts": "type DropdownItem<Id = any> = {\n  id: Id;\n  text: string;\n  /** Whether the item is disabled */\n  disabled?: boolean;\n};\n"
         }
       ],
       "generics": [
@@ -7354,7 +7354,7 @@
       ],
       "typedefs": [
         {
-          "type": "{ href: string; text: string; description?: string; }",
+          "type": "{\n  href: string;\n  text: string;\n  description?: string;\n}",
           "name": "HeaderSearchResult",
           "ts": "type HeaderSearchResult = {\n  href: string;\n  text: string;\n  description?: string;\n};\n"
         }
@@ -7786,7 +7786,7 @@
         {
           "type": "dispatched",
           "name": "close",
-          "detail": "{ timeout: boolean }"
+          "detail": "{\n  timeout: boolean;\n}"
         },
         {
           "type": "forwarded",
@@ -8988,12 +8988,12 @@
         {
           "type": "dispatched",
           "name": "transitionend",
-          "detail": "{ open: boolean }"
+          "detail": "{\n  open: boolean;\n}"
         },
         {
           "type": "dispatched",
           "name": "click:button--secondary",
-          "detail": "{ text: string }"
+          "detail": "{\n  text: string;\n}"
         },
         {
           "type": "forwarded",
@@ -9203,7 +9203,7 @@
         {
           "type": "dispatched",
           "name": "click:button--secondary",
-          "detail": "{ text: string }"
+          "detail": "{\n  text: string;\n}"
         }
       ],
       "typedefs": [],
@@ -9841,9 +9841,9 @@
           "ts": "type MultiSelectItemText = string;\n"
         },
         {
-          "type": "{ id: Id; text: MultiSelectItemText; /** Whether the item is disabled */ disabled?: boolean; }",
+          "type": "{\n  id: Id;\n  text: MultiSelectItemText;\n  /** Whether the item is disabled */\n  disabled?: boolean;\n}",
           "name": "MultiSelectItem<Id=any>",
-          "ts": "type MultiSelectItem<Id = any> = {\n  id: Id;\n  text: MultiSelectItemText;\n  /** Whether the item is disabled */ disabled?: boolean;\n};\n"
+          "ts": "type MultiSelectItem<Id = any> = {\n  id: Id;\n  text: MultiSelectItemText;\n  /** Whether the item is disabled */\n  disabled?: boolean;\n};\n"
         }
       ],
       "generics": [
@@ -10161,9 +10161,9 @@
       "events": [],
       "typedefs": [
         {
-          "type": "{ /** Optional id for deduplication */ id?: string; kind?: \"error\" | \"info\" | \"info-square\" | \"success\" | \"warning\" | \"warning-alt\"; title?: string; subtitle?: string; caption?: string; timeout?: number; lowContrast?: boolean; closeButtonDescription?: string; statusIconDescription?: string; hideCloseButton?: boolean; }",
+          "type": "{\n  /** Optional id for deduplication */\n  id?: string;\n  kind?: \"error\" | \"info\" | \"info-square\" | \"success\" | \"warning\" | \"warning-alt\";\n  title?: string;\n  subtitle?: string;\n  caption?: string;\n  timeout?: number;\n  lowContrast?: boolean;\n  closeButtonDescription?: string;\n  statusIconDescription?: string;\n  hideCloseButton?: boolean;\n}",
           "name": "NotificationData",
-          "ts": "type NotificationData = {\n  /** Optional id for deduplication */ id?: string;\n  kind?:\n    | \"error\"\n    | \"info\"\n    | \"info-square\"\n    | \"success\"\n    | \"warning\"\n    | \"warning-alt\";\n  title?: string;\n  subtitle?: string;\n  caption?: string;\n  timeout?: number;\n  lowContrast?: boolean;\n  closeButtonDescription?: string;\n  statusIconDescription?: string;\n  hideCloseButton?: boolean;\n};\n"
+          "ts": "type NotificationData = {\n  /** Optional id for deduplication */\n  id?: string;\n  kind?:\n    | \"error\"\n    | \"info\"\n    | \"info-square\"\n    | \"success\"\n    | \"warning\"\n    | \"warning-alt\";\n  title?: string;\n  subtitle?: string;\n  caption?: string;\n  timeout?: number;\n  lowContrast?: boolean;\n  closeButtonDescription?: string;\n  statusIconDescription?: string;\n  hideCloseButton?: boolean;\n};\n"
         }
       ],
       "generics": null,
@@ -11326,13 +11326,13 @@
         {
           "type": "dispatched",
           "name": "click:button--previous",
-          "detail": "{ page: number }",
+          "detail": "{\n  page: number;\n}",
           "description": "Dispatched when the user clicks the previous page button."
         },
         {
           "type": "dispatched",
           "name": "click:button--next",
-          "detail": "{ page: number }",
+          "detail": "{\n  page: number;\n}",
           "description": "Dispatched when the user clicks the next page button."
         },
         {
@@ -11445,18 +11445,18 @@
         {
           "type": "dispatched",
           "name": "change",
-          "detail": "{ page: number }",
+          "detail": "{\n  page: number;\n}",
           "description": "Fires after every user interaction"
         },
         {
           "type": "dispatched",
           "name": "click:button--previous",
-          "detail": "{ page: number }"
+          "detail": "{\n  page: number;\n}"
         },
         {
           "type": "dispatched",
           "name": "click:button--next",
-          "detail": "{ page: number }"
+          "detail": "{\n  page: number;\n}"
         }
       ],
       "typedefs": [],
@@ -13049,9 +13049,9 @@
       "events": [],
       "typedefs": [
         {
-          "type": "{ /** Node text content */ text?: string; /** Node link URL */ href?: string; /** Node HTML content */ html?: string; /** Child nodes */ nodes?: RecursiveListNode[]; }",
+          "type": "{\n  /** Node text content */\n  text?: string;\n  /** Node link URL */\n  href?: string;\n  /** Node HTML content */\n  html?: string;\n  /** Child nodes */\n  nodes?: RecursiveListNode[];\n}",
           "name": "RecursiveListNode",
-          "ts": "type RecursiveListNode = {\n  /** Node text content */ text?: string;\n  /** Node link URL */ href?: string;\n  /** Node HTML content */ html?: string;\n  /** Child nodes */ nodes?: RecursiveListNode[];\n};\n"
+          "ts": "type RecursiveListNode = {\n  /** Node text content */\n  text?: string;\n  /** Node link URL */\n  href?: string;\n  /** Node HTML content */\n  html?: string;\n  /** Child nodes */\n  nodes?: RecursiveListNode[];\n};\n"
         }
       ],
       "generics": [
@@ -18565,7 +18565,7 @@
         {
           "type": "dispatched",
           "name": "close",
-          "detail": "{ timeout: boolean }"
+          "detail": "{\n  timeout: boolean;\n}"
         },
         {
           "type": "forwarded",
@@ -19976,14 +19976,14 @@
       ],
       "typedefs": [
         {
-          "type": "{ id: Id; text: any; icon?: any; /** Whether the node is disabled */ disabled?: boolean; nodes?: TreeNode<Id>[]; }",
+          "type": "{\n  id: Id;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */\n  disabled?: boolean;\n  nodes?: TreeNode<Id>[];\n}",
           "name": "TreeNode<Id=(string|number)>",
-          "ts": "type TreeNode<Id = string | number> = {\n  id: Id;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */ disabled?: boolean;\n  nodes?: TreeNode<Id>[];\n};\n"
+          "ts": "type TreeNode<Id = string | number> = {\n  id: Id;\n  text: any;\n  icon?: any;\n  /** Whether the node is disabled */\n  disabled?: boolean;\n  nodes?: TreeNode<Id>[];\n};\n"
         },
         {
-          "type": "{ /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean; /** Whether to select the node (default: true) */ select?: boolean; /** Whether to focus the node (default: true) */ focus?: boolean; }",
+          "type": "{\n  /** Whether to expand the node and its ancestors (default: true) */\n  expand?: boolean;\n  /** Whether to select the node (default: true) */\n  select?: boolean;\n  /** Whether to focus the node (default: true) */\n  focus?: boolean;\n}",
           "name": "ShowNodeOptions",
-          "ts": "type ShowNodeOptions = {\n  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;\n  /** Whether to select the node (default: true) */ select?: boolean;\n  /** Whether to focus the node (default: true) */ focus?: boolean;\n};\n"
+          "ts": "type ShowNodeOptions = {\n  /** Whether to expand the node and its ancestors (default: true) */\n  expand?: boolean;\n  /** Whether to select the node (default: true) */\n  select?: boolean;\n  /** Whether to focus the node (default: true) */\n  focus?: boolean;\n};\n"
         }
       ],
       "generics": [

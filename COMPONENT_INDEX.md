@@ -618,7 +618,10 @@ None.
 ```ts
 export type ColumnSize = boolean | number;
 
-export type ColumnSizeDescriptor = { span?: ColumnSize; offset: number };
+export type ColumnSizeDescriptor = {
+  span?: ColumnSize;
+  offset: number;
+};
 
 export type ColumnBreakpoint = ColumnSize | ColumnSizeDescriptor;
 ```
@@ -657,7 +660,8 @@ None.
 export type ComboBoxItem<Id = any> = {
   id: Id;
   text: string;
-  /** Whether the item is disabled */ disabled?: boolean;
+  /** Whether the item is disabled */
+  disabled?: boolean;
 };
 ```
 
@@ -991,10 +995,12 @@ export type DataTableValue = any;
 
 export type DataTableEmptyHeader<Row = DataTableRow> = {
   key: DataTableKey<Row> | (string & {});
-  /** Whether the header is empty */ empty: boolean;
+  /** Whether the header is empty */
+  empty: boolean;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  /** Whether the column menu is enabled */ columnMenu?: boolean;
+  /** Whether the column menu is enabled */
+  columnMenu?: boolean;
   width?: string;
   minWidth?: string;
 };
@@ -1004,7 +1010,8 @@ export type DataTableNonEmptyHeader<Row = DataTableRow> = {
   value: DataTableValue;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  /** Whether the column menu is enabled */ columnMenu?: boolean;
+  /** Whether the column menu is enabled */
+  columnMenu?: boolean;
   width?: string;
   minWidth?: string;
 };
@@ -1211,7 +1218,8 @@ None.
 export type DropdownItem<Id = any> = {
   id: Id;
   text: string;
-  /** Whether the item is disabled */ disabled?: boolean;
+  /** Whether the item is disabled */
+  disabled?: boolean;
 };
 ```
 
@@ -2442,7 +2450,8 @@ export type MultiSelectItemText = string;
 export type MultiSelectItem<Id = any> = {
   id: Id;
   text: MultiSelectItemText;
-  /** Whether the item is disabled */ disabled?: boolean;
+  /** Whether the item is disabled */
+  disabled?: boolean;
 };
 ```
 
@@ -2578,7 +2587,8 @@ None.
 
 ```ts
 export type NotificationData = {
-  /** Optional id for deduplication */ id?: string;
+  /** Optional id for deduplication */
+  id?: string;
   kind?:
     | "error"
     | "info"
@@ -3217,10 +3227,14 @@ None.
 
 ```ts
 export type RecursiveListNode = {
-  /** Node text content */ text?: string;
-  /** Node link URL */ href?: string;
-  /** Node HTML content */ html?: string;
-  /** Child nodes */ nodes?: RecursiveListNode[];
+  /** Node text content */
+  text?: string;
+  /** Node link URL */
+  href?: string;
+  /** Node HTML content */
+  html?: string;
+  /** Child nodes */
+  nodes?: RecursiveListNode[];
 };
 ```
 
@@ -4980,14 +4994,18 @@ export type TreeNode<Id = string | number> = {
   id: Id;
   text: any;
   icon?: any;
-  /** Whether the node is disabled */ disabled?: boolean;
+  /** Whether the node is disabled */
+  disabled?: boolean;
   nodes?: TreeNode<Id>[];
 };
 
 export type ShowNodeOptions = {
-  /** Whether to expand the node and its ancestors (default: true) */ expand?: boolean;
-  /** Whether to select the node (default: true) */ select?: boolean;
-  /** Whether to focus the node (default: true) */ focus?: boolean;
+  /** Whether to expand the node and its ancestors (default: true) */
+  expand?: boolean;
+  /** Whether to select the node (default: true) */
+  select?: boolean;
+  /** Whether to focus the node (default: true) */
+  focus?: boolean;
 };
 ```
 

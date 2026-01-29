@@ -4,7 +4,8 @@ import type { SvelteHTMLElements } from "svelte/elements";
 export type DropdownItem<Id = any> = {
   id: Id;
   text: string;
-  /** Whether the item is disabled */ disabled?: boolean;
+  /** Whether the item is disabled */
+  disabled?: boolean;
 };
 
 type $RestProps = SvelteHTMLElements["div"];
@@ -185,7 +186,10 @@ export default class Dropdown<
 > extends SvelteComponentTyped<
   DropdownProps<Item>,
   {
-    select: CustomEvent<{ selectedId: Item["id"]; selectedItem: Item }>;
+    select: CustomEvent<{
+      selectedId: Item["id"];
+      selectedItem: Item;
+    }>;
     scroll: WindowEventMap["scroll"];
   },
   { default: { item: Item; index: number } }

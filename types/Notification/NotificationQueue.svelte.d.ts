@@ -1,7 +1,8 @@
 import { SvelteComponentTyped } from "svelte";
 
 export type NotificationData = {
-  /** Optional id for deduplication */ id?: string;
+  /** Optional id for deduplication */
+  id?: string;
   kind?:
     | "error"
     | "info"

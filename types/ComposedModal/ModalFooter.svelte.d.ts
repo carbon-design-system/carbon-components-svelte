@@ -62,6 +62,10 @@ export type ModalFooterProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class ModalFooter extends SvelteComponentTyped<
   ModalFooterProps,
-  { "click:button--secondary": CustomEvent<{ text: string }> },
+  {
+    "click:button--secondary": CustomEvent<{
+      text: string;
+    }>;
+  },
   { default: Record<string, never> }
 > {}

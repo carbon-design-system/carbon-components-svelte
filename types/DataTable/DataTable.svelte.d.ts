@@ -8,10 +8,12 @@ export type DataTableValue = any;
 
 export type DataTableEmptyHeader<Row = DataTableRow> = {
   key: DataTableKey<Row> | (string & {});
-  /** Whether the header is empty */ empty: boolean;
+  /** Whether the header is empty */
+  empty: boolean;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  /** Whether the column menu is enabled */ columnMenu?: boolean;
+  /** Whether the column menu is enabled */
+  columnMenu?: boolean;
   width?: string;
   minWidth?: string;
 };
@@ -21,7 +23,8 @@ export type DataTableNonEmptyHeader<Row = DataTableRow> = {
   value: DataTableValue;
   display?: (item: DataTableValue, row: Row) => DataTableValue;
   sort?: false | ((a: DataTableValue, b: DataTableValue) => number);
-  /** Whether the column menu is enabled */ columnMenu?: boolean;
+  /** Whether the column menu is enabled */
+  columnMenu?: boolean;
   width?: string;
   minWidth?: string;
 };
@@ -261,7 +264,9 @@ export default class DataTable<
       row?: Row;
       cell?: DataTableCell<Row>;
     }>;
-    "click:header--expand": CustomEvent<{ expanded: boolean }>;
+    "click:header--expand": CustomEvent<{
+      expanded: boolean;
+    }>;
     "click:header": CustomEvent<{
       header: DataTableHeader<Row>;
       sortDirection?: "ascending" | "descending" | "none";
@@ -279,8 +284,14 @@ export default class DataTable<
     }>;
     "mouseenter:row": CustomEvent<Row>;
     "mouseleave:row": CustomEvent<Row>;
-    "click:row--expand": CustomEvent<{ expanded: boolean; row: Row }>;
-    "click:row--select": CustomEvent<{ selected: boolean; row: Row }>;
+    "click:row--expand": CustomEvent<{
+      expanded: boolean;
+      row: Row;
+    }>;
+    "click:row--select": CustomEvent<{
+      selected: boolean;
+      row: Row;
+    }>;
     "click:cell": CustomEvent<{
       cell: DataTableCell<Row>;
       target: EventTarget;

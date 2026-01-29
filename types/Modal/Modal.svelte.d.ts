@@ -156,8 +156,12 @@ export default class Modal extends SvelteComponentTyped<
     close: CustomEvent<{
       trigger: "escape-key" | "outside-click" | "close-button";
     }>;
-    transitionend: CustomEvent<{ open: boolean }>;
-    "click:button--secondary": CustomEvent<{ text: string }>;
+    transitionend: CustomEvent<{
+      open: boolean;
+    }>;
+    "click:button--secondary": CustomEvent<{
+      text: string;
+    }>;
     keydown: WindowEventMap["keydown"];
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];

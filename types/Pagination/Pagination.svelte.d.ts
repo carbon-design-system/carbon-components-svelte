@@ -116,13 +116,23 @@ export default class Pagination extends SvelteComponentTyped<
   PaginationProps,
   {
     /** Dispatched when the user changes the page or page size through any interaction. */
-    change: CustomEvent<{ page?: number; pageSize?: number }>;
+    change: CustomEvent<{
+      page?: number;
+      pageSize?: number;
+    }>;
     /** Dispatched when the user clicks the previous page button. */
-    "click:button--previous": CustomEvent<{ page: number }>;
+    "click:button--previous": CustomEvent<{
+      page: number;
+    }>;
     /** Dispatched when the user clicks the next page button. */
-    "click:button--next": CustomEvent<{ page: number }>;
+    "click:button--next": CustomEvent<{
+      page: number;
+    }>;
     /** Dispatched reactively whenever the page or page size changes. */
-    update: CustomEvent<{ pageSize: number; page: number }>;
+    update: CustomEvent<{
+      pageSize: number;
+      page: number;
+    }>;
   },
   Record<string, never>
 > {}

@@ -67,6 +67,10 @@ export type PopoverProps = Omit<$RestProps, keyof $Props> & $Props;
 
 export default class Popover extends SvelteComponentTyped<
   PopoverProps,
-  { "click:outside": CustomEvent<{ target: HTMLElement }> },
+  {
+    "click:outside": CustomEvent<{
+      target: HTMLElement;
+    }>;
+  },
   { default: Record<string, never> }
 > {}

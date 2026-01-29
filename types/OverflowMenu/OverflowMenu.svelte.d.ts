@@ -118,7 +118,10 @@ export type OverflowMenuProps = Omit<$RestProps, keyof $Props> & $Props;
 export default class OverflowMenu extends SvelteComponentTyped<
   OverflowMenuProps,
   {
-    close: CustomEvent<{ index?: number; text?: string }>;
+    close: CustomEvent<{
+      index?: number;
+      text?: string;
+    }>;
     click: WindowEventMap["click"];
     mouseover: WindowEventMap["mouseover"];
     mouseenter: WindowEventMap["mouseenter"];
