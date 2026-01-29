@@ -312,6 +312,10 @@
   const selectedNodeIds = writable(selectedIds);
   /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
   const expandedNodeIds = writable(expandedIds);
+  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
+  const selectedIdsSetStore = writable(new Set(selectedIds));
+  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
+  const expandedIdsSetStore = writable(new Set(expandedIds));
 
   /** @type {HTMLElement | null} */
   let ref = null;
@@ -369,6 +373,8 @@
     activeNodeId,
     selectedNodeIds,
     expandedNodeIds,
+    selectedIdsSetStore,
+    expandedIdsSetStore,
     clickNode,
     selectNode,
     expandNode,
@@ -447,6 +453,8 @@
       }
     }
 
+    selectedIdsSetStore.set(new Set(selectedIds));
+    expandedIdsSetStore.set(expandedIdsSet);
     activeNodeId.set(activeId);
     selectedNodeIds.set(selectedIds);
     expandedNodeIds.set(expandedIds);

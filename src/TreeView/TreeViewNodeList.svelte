@@ -31,8 +31,8 @@
 
   const {
     activeNodeId,
-    selectedNodeIds,
-    expandedNodeIds,
+    selectedIdsSetStore,
+    expandedIdsSetStore,
     clickNode,
     selectNode,
     expandNode,
@@ -50,15 +50,15 @@
 
   afterUpdate(() => {
     if (id === $activeNodeId && prevActiveId !== $activeNodeId) {
-      if (!$selectedNodeIds.includes(id)) selectNode(node);
+      if (!$selectedIdsSetStore.has(id)) selectNode(node);
     }
 
     prevActiveId = $activeNodeId;
   });
 
   $: parent = Array.isArray(nodes);
-  $: expanded = $expandedNodeIds.includes(id);
-  $: selected = $selectedNodeIds.includes(id);
+  $: expanded = $expandedIdsSetStore.has(id);
+  $: selected = $selectedIdsSetStore.has(id);
   // Merge all props (including custom properties) with computed properties
   // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
   $: node = {
