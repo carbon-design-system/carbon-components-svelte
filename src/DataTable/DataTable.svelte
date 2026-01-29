@@ -320,16 +320,25 @@
     expanded = expandedRowIds.length === expandableRowIds.length;
   }
   $: if (radio || batchSelection) selectable = true;
-  $: tableCellsByRowId = rows.reduce((rows, row) => {
-    rows[row.id] = headers.map((header, index) => ({
-      key: header.key || `key-${index}`,
-      value: header.key ? resolvePath(row, header.key) : undefined,
-      display: header.display,
-      empty: header.empty,
-      columnMenu: header.columnMenu,
-    }));
-    return rows;
-  }, {});
+
+  let tableCellsByRowId = {};
+  let prevRows;
+  let prevHeaders;
+  $: if (rows !== prevRows || headers !== prevHeaders) {
+    tableCellsByRowId = rows.reduce((rowsAcc, row) => {
+      rowsAcc[row.id] = headers.map((header, index) => ({
+        key: header.key || `key-${index}`,
+        value: header.key ? resolvePath(row, header.key) : undefined,
+        display: header.display,
+        empty: header.empty,
+        columnMenu: header.columnMenu,
+      }));
+      return rowsAcc;
+    }, {});
+    prevRows = rows;
+    prevHeaders = headers;
+  }
+
   $: $tableRows = rows;
   $: sortedRows = [...$tableRows];
   $: ascending = sortDirection === "ascending";
