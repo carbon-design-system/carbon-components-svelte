@@ -1,19 +1,8 @@
 import { Glob } from "bun";
 import { sveld } from "sveld";
-import pkg from "../package.json" with { type: "json" };
 
 await sveld({
   glob: true,
-  markdown: true,
-  markdownOptions: {
-    onAppend: (type, document, components) => {
-      if (type === "h1")
-        document.append(
-          "quote",
-          `${components.size} components exported from ${pkg.name}@${pkg.version}.`,
-        );
-    },
-  },
   json: true,
   jsonOptions: {
     outFile: "docs/src/COMPONENT_API.json",

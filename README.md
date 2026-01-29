@@ -23,7 +23,6 @@ The Carbon Svelte portfolio also includes:
 Other forms of documentation are auto-generated:
 
 - **[TypeScript definitions](types)**: Component TypeScript definitions
-- **[Component Index](COMPONENT_INDEX.md)**: Component API in Markdown format
 - **[Component API](docs/src/COMPONENT_API.json)**: Component API in JSON format
 
 ## Installation
@@ -140,7 +139,7 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 </Accordion>
 ```
 
-**Refer to [COMPONENT_INDEX.md](COMPONENT_INDEX.md) for component API documentation.**
+**Refer to the [documentation site](https://svelte.carbondesignsystem.com) for component API documentation.**
 
 ## Preprocessors & Plugins
 
