@@ -197,7 +197,8 @@
 
   function parse(raw) {
     if (raw === "" || raw === "-") return null;
-    const num = Number(raw);
+    const normalized = raw.replace(',', '.');
+    const num = Number(normalized);
     return Number.isNaN(num) ? null : num;
   }
 
