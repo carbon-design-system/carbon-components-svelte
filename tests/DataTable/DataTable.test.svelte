@@ -72,6 +72,15 @@
   export let page = 0;
   export let tableHeaderTranslateWithId: ((id: string) => string) | undefined =
     undefined;
+  export let rowClass:
+    | string
+    | ((row: {
+        row: BaseRow;
+        rowIndex: number;
+        selected: boolean;
+        expanded: boolean;
+      }) => string | undefined)
+    | undefined = undefined;
 </script>
 
 <DataTable
@@ -95,6 +104,7 @@
   {expandedRowIds}
   {pageSize}
   {page}
+  {rowClass}
   {tableHeaderTranslateWithId}
   on:click={(e) => {
     console.log("click", e.detail);
