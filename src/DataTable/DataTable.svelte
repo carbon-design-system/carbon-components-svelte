@@ -299,7 +299,14 @@
 
   let refSelectAll = null;
 
-  $: batchSelectedIds.set(selectedRowIds);
+  let prevBatchSelected = [];
+  $: if (
+    prevBatchSelected.length !== selectedRowIds.length ||
+    selectedRowIds.some((id, i) => id !== prevBatchSelected[i])
+  ) {
+    prevBatchSelected = selectedRowIds;
+    batchSelectedIds.set(selectedRowIds);
+  }
   $: rowIds = $tableRows.map((row) => row.id);
 
   // Use Sets for faster row lookups.
