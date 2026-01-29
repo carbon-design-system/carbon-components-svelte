@@ -28,6 +28,15 @@ describe("UIShell", () => {
       expect(screen.getByText("Platform")).toBeInTheDocument();
     });
 
+    // Regression: ?? for aria-label chain so empty string is used (not fallback)
+    it("uses empty aria-label when passed (nullish coalescing)", () => {
+      render(UiShell, {
+        props: { platformName: "Platform", ariaLabel: "" },
+      });
+      const header = screen.getByRole("banner");
+      expect(header).toHaveAttribute("aria-label", "");
+    });
+
     it("should render with href", () => {
       render(UiShell, {
         props: { headerHref: "/home", platformName: "Platform" },

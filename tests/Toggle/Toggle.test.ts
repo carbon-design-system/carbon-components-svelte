@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import Toggle from "./Toggle.test.svelte";
+import ToggleNullishAriaLabel from "./ToggleNullishAriaLabel.test.svelte";
 import ToggleSkeletonSlot from "./ToggleSkeleton.slot.test.svelte";
+import ToggleSkeletonNullishAriaLabel from "./ToggleSkeletonNullishAriaLabel.test.svelte";
 
 describe("Toggle", () => {
   const getToggle = (label: string) =>
@@ -198,6 +200,16 @@ describe("Toggle", () => {
     expect(defaultToggle).toHaveAccessibleName("Default toggle");
   });
 
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  it("uses empty aria-label when passed (nullish coalescing)", () => {
+    const { container } = render(ToggleNullishAriaLabel, {
+      props: { ariaLabel: "" },
+    });
+    const label = container.querySelector("label[aria-label]");
+    expect(label).toBeInTheDocument();
+    expect(label).toHaveAttribute("aria-label", "");
+  });
+
   it("does not dispatch toggle event on mount", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Toggle);
@@ -284,5 +296,12 @@ describe("Toggle", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  it("ToggleSkeleton uses empty aria-label when passed (nullish coalescing)", () => {
+    render(ToggleSkeletonNullishAriaLabel, { props: { ariaLabel: "" } });
+    const label = document.querySelector("label[aria-label]");
+    expect(label).toHaveAttribute("aria-label", "");
   });
 });

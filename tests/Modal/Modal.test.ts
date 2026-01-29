@@ -4,6 +4,7 @@ import { user } from "../setup-tests";
 import ModalTest from "./Modal.test.svelte";
 import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
 import ModalFormIdTest from "./ModalFormId.test.svelte";
+import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
 
 describe("Modal", () => {
   beforeEach(() => {
@@ -39,6 +40,20 @@ describe("Modal", () => {
     expect(modalContainer).toHaveAttribute("role", "dialog");
     expect(modalContainer).toHaveAttribute("aria-modal", "true");
     expect(modalContainer).toHaveAttribute("aria-label", "Test Modal");
+  });
+
+  // Regression: ?? for aria-label chain so empty string is used (not fallback)
+  it("uses empty aria-label when passed (nullish coalescing)", () => {
+    render(ModalNullishAriaLabel, {
+      props: {
+        open: true,
+        ariaLabel: "",
+        primaryButtonText: "Save",
+        secondaryButtonText: "Cancel",
+      },
+    });
+    const modalContainer = screen.getByRole("dialog");
+    expect(modalContainer).toHaveAttribute("aria-label", "");
   });
 
   it("renders with basic structure", () => {

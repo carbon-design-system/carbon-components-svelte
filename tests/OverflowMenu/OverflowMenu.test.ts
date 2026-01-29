@@ -5,6 +5,13 @@ import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
 
 describe("OverflowMenu", () => {
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  it("uses empty aria-label when passed (nullish coalescing)", () => {
+    render(OverflowMenu, { props: { ariaLabel: "" } });
+    const menuButton = screen.getByRole("button");
+    expect(menuButton).toHaveAttribute("aria-label", "");
+  });
+
   it("renders and functions correctly", async () => {
     render(OverflowMenu);
 

@@ -24,6 +24,18 @@ describe("ComposedModal", () => {
     expect(screen.getByText("Test Modal")).toBeInTheDocument();
   });
 
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  it("uses empty aria-label when passed (nullish coalescing)", () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        "aria-label": "",
+      },
+    });
+    const modal = screen.getByRole("dialog");
+    expect(modal).toHaveAttribute("aria-label", "");
+  });
+
   it("should not have visible class when closed", () => {
     const { container } = render(ComposedModalTest, {
       props: {

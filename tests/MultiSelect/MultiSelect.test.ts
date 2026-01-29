@@ -61,6 +61,38 @@ describe("MultiSelect", () => {
     expect(screen.getByText("0 Slack 2")).toBeInTheDocument();
   });
 
+  // Regression: ?? for itemToString so item.text "" is used (not id)
+  it("displays empty string when item.text is empty (nullish coalescing)", async () => {
+    render(MultiSelect, {
+      props: {
+        items: [
+          { id: "1", text: "" },
+          { id: "2", text: "Email" },
+        ],
+        labelText: "Contact",
+        itemToString: (item: { id: string; text: string }) =>
+          item.text ?? item.id,
+      },
+    });
+    await openMenu();
+    const options = screen.getAllByRole("option");
+    expect(options[0]).toHaveTextContent("");
+  });
+
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  it("uses empty aria-label when passed (nullish coalescing)", async () => {
+    render(MultiSelect, {
+      props: {
+        items: [{ id: "1", text: "Email" }],
+        labelText: "Contact",
+        ariaLabel: "",
+      },
+    });
+    await openMenu();
+    const listbox = screen.getByRole("listbox");
+    expect(listbox).toHaveAttribute("aria-label", "");
+  });
+
   describe("selection behavior", () => {
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2525
     it("does not fire select event on initial render", async () => {

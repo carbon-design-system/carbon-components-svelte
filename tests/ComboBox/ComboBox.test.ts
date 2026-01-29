@@ -413,6 +413,36 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Item Banana");
   });
 
+  // Regression: ?? for itemToString so item.text "" is used (not id)
+  it("should display empty string when item.text is empty (nullish coalescing)", async () => {
+    render(ComboBox, {
+      props: {
+        items: [
+          { id: "1", text: "", price: 0 },
+          { id: "2", text: "Email", price: 200 },
+        ],
+      },
+    });
+    await user.click(getInput());
+    const options = screen.getAllByRole("option");
+    expect(options[0]).toHaveTextContent("");
+    await user.click(options[0]);
+    expect(getInput()).toHaveValue("");
+  });
+
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  it("should use empty aria-label when passed (nullish coalescing)", async () => {
+    render(ComboBox, {
+      props: {
+        items: [{ id: "1", text: "Email", price: 200 }],
+        ariaLabel: "",
+      },
+    });
+    await user.click(getInput());
+    const listbox = screen.getAllByRole("listbox")[1];
+    expect(listbox).toHaveAttribute("aria-label", "");
+  });
+
   it("should open menu if open prop is true on mount", () => {
     render(ComboBox, { props: { open: true } });
     const dropdown = screen.getAllByRole("listbox")[1];
