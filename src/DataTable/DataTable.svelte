@@ -551,9 +551,10 @@
                     ? "Collapse current row"
                     : "Expand current row"}
                   on:click|stopPropagation={() => {
-                    expandedRowIds = isExpanded
-                      ? expandedRowIds.filter((id) => id !== row.id)
-                      : [...expandedRowIds, row.id];
+                    const next = new Set(expandedRowIds);
+                    if (isExpanded) next.delete(row.id);
+                    else next.add(row.id);
+                    expandedRowIds = [...next];
 
                     dispatch("click:row--expand", {
                       row,
@@ -594,13 +595,14 @@
                     checked={isSelected}
                     value={row.id}
                     on:change={() => {
+                      const next = new Set(selectedRowIds);
                       if (isSelected) {
-                        selectedRowIds = selectedRowIds.filter(
-                          (id) => id !== row.id,
-                        );
+                        next.delete(row.id);
+                        selectedRowIds = [...next];
                         dispatch("click:row--select", { row, selected: false });
                       } else {
-                        selectedRowIds = [...selectedRowIds, row.id];
+                        next.add(row.id);
+                        selectedRowIds = [...next];
                         dispatch("click:row--select", { row, selected: true });
                       }
                     }}
