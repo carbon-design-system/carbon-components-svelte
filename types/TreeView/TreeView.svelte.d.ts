@@ -23,6 +23,8 @@ export type TreeViewContext<Node extends TreeNode<any> = TreeNode<any>> = {
   activeNodeId: import("svelte/store").Writable<Node["id"]>;
   selectedNodeIds: import("svelte/store").Writable<ReadonlyArray<Node["id"]>>;
   expandedNodeIds: import("svelte/store").Writable<ReadonlyArray<Node["id"]>>;
+  selectedIdsSetStore: import("svelte/store").Writable<Set<Node["id"]>>;
+  expandedIdsSetStore: import("svelte/store").Writable<Set<Node["id"]>>;
   clickNode: (node: Node) => void;
   selectNode: (node: Node) => void;
   expandNode: (node: Node, expanded: boolean) => void;
