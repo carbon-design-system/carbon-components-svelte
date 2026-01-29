@@ -26,6 +26,7 @@
   export let name: ComponentProps<NumberInput>["name"] = undefined;
   export let ref: ComponentProps<NumberInput>["ref"] = null;
   export let title: ComponentProps<NumberInput>["title"] = undefined;
+  export let lang: ComponentProps<NumberInput>["lang"] = undefined;
   export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
   export let oninput: ((event: CustomEvent) => void) | undefined = undefined;
   export let onkeydown: ((event: KeyboardEvent) => void) | undefined =
@@ -60,6 +61,7 @@
   {name}
   {ref}
   {title}
+  {lang}
   on:change={onchange}
   on:input={oninput}
   on:keydown={onkeydown}
