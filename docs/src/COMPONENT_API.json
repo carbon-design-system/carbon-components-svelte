@@ -19671,6 +19671,18 @@
           "reactive": false
         },
         {
+          "name": "size",
+          "kind": "let",
+          "description": "Specify the icon size.\nCarbon icons use a 16/20/24/32 scale, but any number (pixels) can be used.",
+          "type": "(16 | 20 | 24 | 32 | (number & {}))",
+          "value": "16",
+          "isFunction": false,
+          "isFunctionDeclaration": false,
+          "isRequired": false,
+          "constant": false,
+          "reactive": false
+        },
+        {
           "name": "disabled",
           "kind": "let",
           "description": "Set to `true` to disable the tooltip icon",
@@ -19736,7 +19748,7 @@
         {
           "name": null,
           "default": true,
-          "fallback": "<svelte:component this={icon} />",
+          "fallback": "<svelte:component this={icon} {size} />",
           "slot_props": "Record<string, never>"
         },
         {

@@ -18,6 +18,13 @@ type $Props = {
   icon?: any;
 
   /**
+   * Specify the icon size.
+   * Carbon icons use a 16/20/24/32 scale, but any number (pixels) can be used.
+   * @default 16
+   */
+  size?: 16 | 20 | 24 | 32 | (number & {});
+
+  /**
    * Set to `true` to disable the tooltip icon
    * @default false
    */

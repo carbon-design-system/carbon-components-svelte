@@ -4958,22 +4958,23 @@ None.
 
 ### Props
 
-| Prop name   | Required | Kind             | Reactive | Type                                                            | Default value                                      | Description                                                               |
-| :---------- | :------- | :--------------- | :------- | --------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------- |
-| ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                      | <code>null</code>                                  | Obtain a reference to the button HTML element                             |
-| tooltipText | No       | <code>let</code> | No       | <code>string</code>                                             | <code>""</code>                                    | Specify the tooltip text.<br />Alternatively, use the "tooltipText" slot. |
-| icon        | No       | <code>let</code> | No       | <code>any</code>                                                | <code>undefined</code>                             | Specify the icon to render.                                               |
-| disabled    | No       | <code>let</code> | No       | <code>boolean</code>                                            | <code>false</code>                                 | Set to `true` to disable the tooltip icon                                 |
-| align       | No       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>               | <code>"center"</code>                              | Set the alignment of the tooltip relative to the icon.                    |
-| direction   | No       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code> | <code>"bottom"</code>                              | Set the direction of the tooltip relative to the icon.                    |
-| id          | No       | <code>let</code> | No       | <code>string</code>                                             | <code>\`ccs-${Math.random().toString(36)}\`</code> | Set an id for the span element                                            |
+| Prop name   | Required | Kind             | Reactive | Type                                                                 | Default value                                      | Description                                                                                            |
+| :---------- | :------- | :--------------- | :------- | -------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| ref         | No       | <code>let</code> | Yes      | <code>null &#124; HTMLButtonElement</code>                           | <code>null</code>                                  | Obtain a reference to the button HTML element                                                          |
+| tooltipText | No       | <code>let</code> | No       | <code>string</code>                                                  | <code>""</code>                                    | Specify the tooltip text.<br />Alternatively, use the "tooltipText" slot.                              |
+| icon        | No       | <code>let</code> | No       | <code>any</code>                                                     | <code>undefined</code>                             | Specify the icon to render.                                                                            |
+| size        | No       | <code>let</code> | No       | <code>(16 &#124; 20 &#124; 24 &#124; 32 &#124; (number & {}))</code> | <code>16</code>                                    | Specify the icon size.<br />Carbon icons use a 16/20/24/32 scale, but any number (pixels) can be used. |
+| disabled    | No       | <code>let</code> | No       | <code>boolean</code>                                                 | <code>false</code>                                 | Set to `true` to disable the tooltip icon                                                              |
+| align       | No       | <code>let</code> | No       | <code>"start" &#124; "center" &#124; "end"</code>                    | <code>"center"</code>                              | Set the alignment of the tooltip relative to the icon.                                                 |
+| direction   | No       | <code>let</code> | No       | <code>"top" &#124; "right" &#124; "bottom" &#124; "left"</code>      | <code>"bottom"</code>                              | Set the direction of the tooltip relative to the icon.                                                 |
+| id          | No       | <code>let</code> | No       | <code>string</code>                                                  | <code>\`ccs-${Math.random().toString(36)}\`</code> | Set an id for the span element                                                                         |
 
 ### Slots
 
-| Slot name   | Default | Props                               | Fallback                                            |
-| :---------- | :------ | :---------------------------------- | :-------------------------------------------------- |
-| --          | Yes     | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} /&gt;</code> |
-| tooltipText | No      | <code>Record<string, never> </code> | <code>{tooltipText}</code>                          |
+| Slot name   | Default | Props                               | Fallback                                                   |
+| :---------- | :------ | :---------------------------------- | :--------------------------------------------------------- |
+| --          | Yes     | <code>Record<string, never> </code> | <code>&lt;svelte:component this={icon} {size} /&gt;</code> |
+| tooltipText | No      | <code>Record<string, never> </code> | <code>{tooltipText}</code>                                 |
 
 ### Events
 
