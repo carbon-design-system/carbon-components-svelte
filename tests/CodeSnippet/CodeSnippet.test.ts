@@ -7,6 +7,9 @@ import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte"
 import CodeSnippetInitialEvent from "./CodeSnippetInitialEvent.test.svelte";
 import CodeSnippetInline from "./CodeSnippetInline.test.svelte";
 import CodeSnippetMultiline from "./CodeSnippetMultiline.test.svelte";
+import CodeSnippetRestPropsButton from "./CodeSnippetRestPropsButton.test.svelte";
+import CodeSnippetRestPropsSingle from "./CodeSnippetRestPropsSingle.test.svelte";
+import CodeSnippetRestPropsSpan from "./CodeSnippetRestPropsSpan.test.svelte";
 import CodeSnippetWithCustomCopyText from "./CodeSnippetWithCustomCopyText.test.svelte";
 import CodeSnippetWithHideShowMore from "./CodeSnippetWithHideShowMore.test.svelte";
 import CodeSnippetWithWrapText from "./CodeSnippetWithWrapText.test.svelte";
@@ -138,5 +141,32 @@ describe("CodeSnippet", () => {
     const copyButton = screen.getByLabelText("Copy to clipboard");
     await user.click(copyButton);
     expect(screen.getByText("Custom copied text!")).toBeInTheDocument();
+  });
+
+  // Regression: rest props are spread to the span (inline, no copy button)
+  test("spreads rest props to span for inline variant with hideCopyButton", () => {
+    render(CodeSnippetRestPropsSpan);
+    const span = screen.getByTestId("snippet-rest-span");
+    expect(span).toBeInTheDocument();
+    expect(span.tagName.toLowerCase()).toBe("span");
+    expect(span).toHaveClass("bx--snippet--inline");
+  });
+
+  // Regression: rest props are spread to the copy button (inline with copy button)
+  test("spreads rest props to button for inline variant with copy button", () => {
+    render(CodeSnippetRestPropsButton);
+    const button = screen.getByTestId("snippet-rest-btn");
+    expect(button).toBeInTheDocument();
+    expect(button.tagName.toLowerCase()).toBe("button");
+    expect(button).toHaveClass("bx--snippet--inline");
+  });
+
+  // Regression: rest props are spread to the root div (single/multi)
+  test("spreads rest props to root div for single variant", () => {
+    render(CodeSnippetRestPropsSingle);
+    const root = screen.getByTestId("snippet-rest-div");
+    expect(root).toBeInTheDocument();
+    expect(root.tagName.toLowerCase()).toBe("div");
+    expect(root).toHaveClass("bx--snippet--single");
   });
 });
