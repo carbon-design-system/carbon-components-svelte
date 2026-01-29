@@ -79,20 +79,25 @@
   let refLabel = null;
   let prevActiveId = undefined;
 
-  const { activeNodeId, selectedNodeIds, clickNode, selectNode, focusNode } =
-    getContext("TreeView");
+  const {
+    activeNodeId,
+    selectedIdsSetStore,
+    clickNode,
+    selectNode,
+    focusNode,
+  } = getContext("TreeView");
   const offset = () =>
     computeTreeLeafDepth(refLabel) + (leaf && icon ? 2 : 2.5);
 
   afterUpdate(() => {
     if (id === $activeNodeId && prevActiveId !== $activeNodeId) {
-      if (!$selectedNodeIds.includes(id)) selectNode(node);
+      if (!$selectedIdsSetStore.has(id)) selectNode(node);
     }
 
     prevActiveId = $activeNodeId;
   });
 
-  $: selected = $selectedNodeIds.includes(id);
+  $: selected = $selectedIdsSetStore.has(id);
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
   $: node = {
