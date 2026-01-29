@@ -572,6 +572,19 @@ describe("Slider", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", 0);
   });
 
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  it("uses empty aria-label when passed (nullish coalescing)", () => {
+    render(Slider, {
+      props: {
+        labelText: "Range",
+        hideLabel: true,
+        ariaLabel: "",
+      },
+    });
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveAttribute("aria-label", "");
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1219
   it("should round shift+arrow values to valid steps", async () => {
     const consoleLog = vi.spyOn(console, "log");

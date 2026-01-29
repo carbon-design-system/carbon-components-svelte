@@ -29,9 +29,11 @@
   export let virtualize: ComponentProps<MultiSelect>["virtualize"] = undefined;
   export let sortItem: ComponentProps<MultiSelect>["sortItem"] = undefined;
   export let open: ComponentProps<MultiSelect>["open"] = undefined;
+  export let ariaLabel: string | undefined = undefined;
 </script>
 
 <MultiSelect
+  aria-label={ariaLabel}
   {items}
   {selectedIds}
   {filterable}

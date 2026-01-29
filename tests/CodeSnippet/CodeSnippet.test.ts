@@ -7,6 +7,7 @@ import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte"
 import CodeSnippetInitialEvent from "./CodeSnippetInitialEvent.test.svelte";
 import CodeSnippetInline from "./CodeSnippetInline.test.svelte";
 import CodeSnippetMultiline from "./CodeSnippetMultiline.test.svelte";
+import CodeSnippetNullishAriaLabel from "./CodeSnippetNullishAriaLabel.test.svelte";
 import CodeSnippetRestPropsButton from "./CodeSnippetRestPropsButton.test.svelte";
 import CodeSnippetRestPropsSingle from "./CodeSnippetRestPropsSingle.test.svelte";
 import CodeSnippetRestPropsSpan from "./CodeSnippetRestPropsSpan.test.svelte";
@@ -168,5 +169,14 @@ describe("CodeSnippet", () => {
     expect(root).toBeInTheDocument();
     expect(root.tagName.toLowerCase()).toBe("div");
     expect(root).toHaveClass("bx--snippet--single");
+  });
+
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  test("uses empty aria-label when passed (nullish coalescing)", () => {
+    const { container } = render(CodeSnippetNullishAriaLabel, {
+      props: { ariaLabel: "" },
+    });
+    const snippet = container.querySelector(".bx--snippet-container");
+    expect(snippet).toHaveAttribute("aria-label", "");
   });
 });

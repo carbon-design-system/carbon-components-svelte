@@ -17,7 +17,7 @@
   {iconDescription}
   {triggerHref}
   class={customClass}
-  aria-label={ariaLabel || undefined}
+  aria-label={ariaLabel === undefined ? undefined : ariaLabel}
   on:change={({ detail }) => {
     console.log("change event", detail);
   }}

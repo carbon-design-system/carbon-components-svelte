@@ -31,9 +31,11 @@
   export let clearFilterOnOpen = false;
   export let typeahead = false;
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
+  export let ariaLabel: string | undefined = undefined;
 </script>
 
 <ComboBox
+  aria-label={ariaLabel}
   {disabled}
   {helperText}
   {hideLabel}

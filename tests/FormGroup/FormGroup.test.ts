@@ -228,4 +228,18 @@ describe("FormGroup", () => {
     const fieldset = screen.getByRole("group");
     expect(fieldset).toHaveAttribute("aria-labelledby", "legend-1");
   });
+
+  // Regression: ?? for aria-labelledby so empty string is used (not legendId)
+  it("should use empty aria-labelledby when passed (nullish coalescing)", () => {
+    render(FormGroupTest, {
+      props: {
+        legendText: "Legend",
+        legendId: "my-legend-id",
+        "aria-labelledby": "",
+        slotContent: "Content",
+      },
+    });
+    const fieldset = screen.getByRole("group");
+    expect(fieldset).toHaveAttribute("aria-labelledby", "");
+  });
 });

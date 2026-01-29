@@ -603,6 +603,43 @@ describe("DataTable", () => {
     }
   });
 
+  // Regression: ?? for header.key so empty string is used (not key-${index})
+  it("uses empty header key when passed (nullish coalescing)", () => {
+    const headersWithEmptyKey = [
+      { key: "", value: "Empty Key Col" },
+      { key: "name", value: "Name" },
+    ];
+    const rowsWithEmptyKey = [
+      { id: "a", name: "Row A" },
+      { id: "b", name: "Row B" },
+    ];
+    render(DataTable, {
+      props: {
+        headers: headersWithEmptyKey,
+        rows: rowsWithEmptyKey,
+      },
+    });
+    expect(screen.getByText("Empty Key Col")).toBeInTheDocument();
+    expect(screen.getByText("Row A")).toBeInTheDocument();
+    expect(screen.getByText("Row B")).toBeInTheDocument();
+  });
+
+  // Regression: ?? for header.width so 0 is not replaced by minWidth
+  it("uses header width 0 when specified (nullish coalescing)", () => {
+    const customHeaders = [
+      { key: "name", value: "Name", width: "0px", minWidth: "100px" },
+      { key: "value", value: "Value" },
+    ];
+    render(DataTable, {
+      props: {
+        headers: customHeaders,
+        rows: [{ id: "1", name: "A", value: "B" }],
+      },
+    });
+    const nameHeader = screen.getByRole("columnheader", { name: "Name" });
+    expect(nameHeader).toHaveStyle({ width: "0px" });
+  });
+
   it("applies custom column widths", () => {
     const customHeaders = [
       { key: "name", value: "Name", width: "200px" },

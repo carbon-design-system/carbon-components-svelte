@@ -21,6 +21,7 @@
   export let headerRef: ComponentProps<Header>["ref"] = null;
   export let headerClass = "";
   export let useSlots = false;
+  export let ariaLabel: string | undefined = undefined;
 
   export let sideNavFixed: ComponentProps<SideNav>["fixed"] = false;
   export let sideNavRail: ComponentProps<SideNav>["rail"] = false;
@@ -33,6 +34,7 @@
 
 {#if useSlots}
   <Header
+    aria-label={ariaLabel}
     bind:isSideNavOpen
     {persistentHamburgerMenu}
     {ariaLabelMenu}
@@ -51,6 +53,7 @@
   </Header>
 {:else}
   <Header
+    aria-label={ariaLabel}
     href={headerHref}
     {companyName}
     {platformName}

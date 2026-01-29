@@ -4,8 +4,8 @@
 
   export let open = false;
   export let modalHeading = "";
-  export let modalLabel = "";
-  export let modalAriaLabel = "";
+  export let modalLabel: string | undefined = undefined;
+  export let modalAriaLabel: string | undefined = undefined;
   export let iconDescription = "Close the modal";
   export let hasForm = false;
   export let hasScrollingContent = false;

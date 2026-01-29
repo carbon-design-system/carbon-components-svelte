@@ -74,6 +74,13 @@ describe("Tabs", () => {
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  it("uses empty aria-label when passed (nullish coalescing)", () => {
+    render(Tabs, { props: { ariaLabel: "" } });
+    const listbox = screen.getByRole("listbox");
+    expect(listbox).toHaveAttribute("aria-label", "");
+  });
+
   it("should render container type tabs", () => {
     render(Tabs, {
       props: { type: "container" },

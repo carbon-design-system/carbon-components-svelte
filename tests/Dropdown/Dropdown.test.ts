@@ -40,6 +40,37 @@ describe("Dropdown", () => {
     expect(within(button).getByText("Slack (0)")).toBeInTheDocument();
   });
 
+  // Regression: ?? for itemToString so item.text "" is used (not id)
+  it("should display empty string when item.text is empty (nullish coalescing)", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "1", text: "" },
+          { id: "2", text: "Email" },
+        ],
+        labelText: "Contact",
+        selectedId: "1",
+      },
+    });
+    await user.click(screen.getByLabelText("Contact"));
+    const options = screen.getAllByRole("option");
+    expect(options[0]).toHaveTextContent("");
+  });
+
+  // Regression: ?? for aria-label so empty string is used (not fallback)
+  it("should use empty aria-label when passed (nullish coalescing)", () => {
+    const { container } = render(Dropdown, {
+      props: {
+        items: [{ id: "1", text: "Email" }],
+        labelText: "Contact",
+        "aria-label": "",
+      },
+    });
+    const dropdown = container.querySelector(".bx--dropdown");
+    expect(dropdown).toBeInTheDocument();
+    expect(dropdown).toHaveAttribute("aria-label", "");
+  });
+
   it("should handle hidden label", () => {
     render(Dropdown, {
       props: {

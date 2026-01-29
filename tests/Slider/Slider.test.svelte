@@ -17,6 +17,7 @@
   export let step = 1;
   export let light = false;
   export let hideLabel = false;
+  export let labelText = "Test Slider";
   export let name = "";
   export let inputType = "number";
   export let customClass = "";
@@ -24,10 +25,12 @@
   export let invalidText = "";
   export let warnText = "";
   export let id: string | undefined = undefined;
+  export let ariaLabel: string | undefined = undefined;
 </script>
 
 {#if useSlot}
   <Slider
+    aria-label={ariaLabel}
     bind:value
     id={id}
     {min}
@@ -60,8 +63,9 @@
   </Slider>
 {:else}
   <Slider
+    aria-label={ariaLabel}
     bind:value
-    labelText="Test Slider"
+    {labelText}
     id={id}
     {min}
     {max}
