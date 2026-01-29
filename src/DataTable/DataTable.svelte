@@ -340,21 +340,17 @@
   }
 
   $: $tableRows = rows;
-  $: sortedRows = [...$tableRows];
   $: ascending = sortDirection === "ascending";
   $: sorting = sortable && sortKey != null;
   $: sortingHeader = headers.find((header) => header.key === sortKey);
-  $: if (sorting) {
-    if (sortDirection === "none") {
-      sortedRows = $tableRows;
-    } else {
-      sortedRows = [...$tableRows].sort((a, b) => {
-        const itemA = resolvePath(a, sortKey);
-        const itemB = resolvePath(b, sortKey);
-        return compareValues(itemA, itemB, ascending, sortingHeader?.sort);
-      });
-    }
-  }
+  $: sortedRows =
+    sorting && sortDirection !== "none"
+      ? [...$tableRows].sort((a, b) => {
+          const itemA = resolvePath(a, sortKey);
+          const itemB = resolvePath(b, sortKey);
+          return compareValues(itemA, itemB, ascending, sortingHeader?.sort);
+        })
+      : $tableRows;
   $: displayedRows = getDisplayedRows($tableRows, page, pageSize);
   $: displayedSortedRows = getDisplayedRows(sortedRows, page, pageSize);
 
