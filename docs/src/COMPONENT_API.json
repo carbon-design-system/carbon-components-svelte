@@ -20018,6 +20018,18 @@
               "optional": false
             },
             {
+              "name": "selectedIdsSetStore",
+              "type": "import(\"svelte/store\").Writable<Set<Node[\"id\"]>>",
+              "description": "",
+              "optional": false
+            },
+            {
+              "name": "expandedIdsSetStore",
+              "type": "import(\"svelte/store\").Writable<Set<Node[\"id\"]>>",
+              "description": "",
+              "optional": false
+            },
+            {
               "name": "clickNode",
               "type": "(node: Node) => void",
               "description": "",
