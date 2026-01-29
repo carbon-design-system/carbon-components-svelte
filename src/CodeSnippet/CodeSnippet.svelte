@@ -3,6 +3,7 @@
    * @event {null} expand
    * @event {null} collapse
    * @event {null} copy
+   * @restProps {button | span} Rest props are spread to the span (inline variant) or the copy button (single/multi).
    */
 
   /**
