@@ -333,6 +333,25 @@
   let expandedIdsSet = new Set(expandedIds);
   /** @type {ReadonlyArray<Node["id"]>} */
   let lastExpandedIdsRef = expandedIds;
+  /** @type {Node["id"]} */
+  let lastActiveIdPushed = activeId;
+  /** @type {ReadonlyArray<Node["id"]>} */
+  let lastSelectedIdsPushed = selectedIds;
+  /** @type {ReadonlyArray<Node["id"]>} */
+  let lastExpandedIdsPushed = expandedIds;
+
+  /**
+   * @param {ReadonlyArray<Node["id"]>} a
+   * @param {ReadonlyArray<Node["id"]>} b
+   * @returns {boolean}
+   */
+  function arrayIdsEqual(a, b) {
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
 
   /** @type {(node: Node) => void} */
   const clickNode = (node) => {
@@ -453,11 +472,20 @@
       }
     }
 
-    selectedIdsSetStore.set(new Set(selectedIds));
-    expandedIdsSetStore.set(expandedIdsSet);
-    activeNodeId.set(activeId);
-    selectedNodeIds.set(selectedIds);
-    expandedNodeIds.set(expandedIds);
+    if (activeId !== lastActiveIdPushed) {
+      lastActiveIdPushed = activeId;
+      activeNodeId.set(activeId);
+    }
+    if (!arrayIdsEqual(selectedIds, lastSelectedIdsPushed)) {
+      lastSelectedIdsPushed = selectedIds;
+      selectedIdsSetStore.set(new Set(selectedIds));
+      selectedNodeIds.set(selectedIds);
+    }
+    if (!arrayIdsEqual(expandedIds, lastExpandedIdsPushed)) {
+      lastExpandedIdsPushed = expandedIds;
+      expandedIdsSetStore.set(expandedIdsSet);
+      expandedNodeIds.set(expandedIds);
+    }
   }
 
   $: if (ref && (nodes !== cachedNodes || !treeWalker)) {
