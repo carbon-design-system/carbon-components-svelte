@@ -7,7 +7,7 @@
    */
 
   /**
-   * Specify the kind of button.
+   * Specify the kind of button
    * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost"}
    */
   export let kind = "primary";
