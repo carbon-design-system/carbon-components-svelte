@@ -15,9 +15,16 @@ jobs:
         with:
           node-version: 22
           registry-url: "https://registry.npmjs.org"
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun ci
+
+      - name: Build docs
+        run: bun build:docs
 
       - name: Prune package.json
-        run: npx culls --preserve=svelte
+        run: bunx culls --preserve=svelte
 
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}

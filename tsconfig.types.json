@@ -3,6 +3,6 @@
   "compilerOptions": {
     "skipLibCheck": false
   },
-  "include": ["types"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

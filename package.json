@@ -6,23 +6,23 @@
   "type": "module",
   "svelte": "./src/index.js",
   "main": "./src/index.js",
-  "types": "./types/index.d.ts",
+  "types": "./src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
+      "types": "./src/index.d.ts",
       "svelte": "./src/index.js"
     },
     "./css/*": "./css/*",
     "./src/*.svelte": {
-      "types": "./types/*.svelte.d.ts",
+      "types": "./src/*.svelte.d.ts",
       "import": "./src/*.svelte"
     },
     "./src/*.js": {
-      "types": "./types/*.d.ts",
+      "types": "./src/*.d.ts",
       "import": "./src/*.js"
     },
     "./src/*": {
-      "types": "./types/*.d.ts",
+      "types": "./src/*.d.ts",
       "import": "./src/*.js"
     }
   },
@@ -91,7 +91,6 @@
   ],
   "files": [
     "src",
-    "types",
     "css",
     "telemetry.yml"
   ],

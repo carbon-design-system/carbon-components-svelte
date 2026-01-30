@@ -3,8 +3,8 @@
   "compilerOptions": {
     "moduleResolution": "bundler",
     "paths": {
-      "carbon-components-svelte": ["../../types"],
-      "carbon-components-svelte/*": ["../../types/*"]
+      "carbon-components-svelte": ["../../src"],
+      "carbon-components-svelte/*": ["../../src/*"]
     }
   },
   "include": ["./**/*.ts", "./**/*.svelte"]
