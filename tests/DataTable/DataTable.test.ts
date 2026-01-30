@@ -4,7 +4,7 @@ import type {
   DataTableKey,
   DataTableRow,
 } from "carbon-components-svelte/DataTable/DataTable.svelte";
-import type { PropertyPath } from "carbon-components-svelte/DataTable/DataTableTypes";
+import type { PropertyPath } from "carbon-components-svelte/DataTable/data-table-utils";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
