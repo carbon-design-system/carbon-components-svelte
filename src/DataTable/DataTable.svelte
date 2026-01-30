@@ -2,7 +2,7 @@
   /**
    * @generics {Row extends DataTableRow = DataTableRow} Row
    * @template {DataTableRow} Row
-   * @typedef {import('./DataTableTypes.d.ts').PropertyPath<Row>} DataTableKey<Row=DataTableRow>
+   * @typedef {import('./data-table-utils.d.ts').PropertyPath<Row>} DataTableKey<Row=DataTableRow>
    * @typedef {any} DataTableValue
    * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
