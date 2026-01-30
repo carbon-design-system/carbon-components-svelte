@@ -15,8 +15,8 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "paths": {
-      "carbon-components-svelte": ["./types"],
-      "carbon-components-svelte/*": ["./types/*"]
+      "carbon-components-svelte": ["./src"],
+      "carbon-components-svelte/*": ["./src/*"]
     }
   },
   "include": ["src", "tests"]

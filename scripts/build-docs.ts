@@ -1,5 +1,8 @@
-import { Glob } from "bun";
+import { $ } from "bun";
 import { sveld } from "sveld";
+
+// Clean auto-generated files.
+await $`rm -f src/index.d.ts && find src -name "*.svelte.d.ts" -delete`;
 
 await sveld({
   glob: true,
@@ -7,15 +10,7 @@ await sveld({
   jsonOptions: {
     outFile: "docs/src/COMPONENT_API.json",
   },
+  typesOptions: {
+    outDir: "src",
+  },
 });
-
-const glob = new Glob("**/*.d.ts");
-const files = Array.from(glob.scanSync({ cwd: "./src" }));
-
-await Promise.all(
-  files.map(async (file) => {
-    console.log("Copying", file, " to types/");
-    const sourceFile = Bun.file(`./src/${file}`);
-    await Bun.write(`./types/${file}`, sourceFile);
-  }),
-);

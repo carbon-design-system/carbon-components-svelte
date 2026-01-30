@@ -33,6 +33,9 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
 
+      - name: Generate types
+        run: bun build:docs
+
       - name: Test Svelte 4 Types
         run: bun run test:types
 
@@ -50,6 +53,9 @@ jobs:
         run: |
           cd tests-svelte3
           bun ci
+
+      - name: Generate types
+        run: bun build:docs
 
       - name: Test Svelte 3 Types
         run: |
@@ -73,6 +79,9 @@ jobs:
           cd tests-svelte5
           bun ci
 
+      - name: Generate types
+        run: bun build:docs
+
       - name: Test Svelte 5 Types
         run: |
           cd tests-svelte5
@@ -92,17 +101,6 @@ jobs:
 
       - name: Build docs
         run: bun build:docs
-
-      - name: Validate docs
-        run: |
-          if ! git diff --quiet --exit-code; then
-            echo "Error: Auto-generated documentation is out of date."
-            echo "Run 'bun build:docs' locally and commit the changes."
-            echo ""
-            echo "Changed files:"
-            git diff --name-only
-            exit 1
-          fi
 
       - run: bun test:src-types
       - run: bun test:types
