@@ -135,19 +135,13 @@
       }
     },
     {
-      "includes": ["**/*.d.ts"],
+      "includes": ["src/**/*.d.ts"],
       "linter": {
         "rules": {
           "suspicious": {
             "noExplicitAny": "off"
           }
         }
-      }
-    },
-    {
-      "includes": ["types/**/*.d.ts"],
-      "formatter": {
-        "enabled": false
       }
     },
     {
