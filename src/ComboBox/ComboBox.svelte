@@ -264,10 +264,10 @@
         if (listRef && virtualConfig && highlightedIndex >= 0) {
           const itemHeight = virtualConfig.itemHeight;
           const containerHeight = virtualConfig.containerHeight;
-          const overscan = virtualConfig.overscan || 3;
+          const overscan = virtualConfig.overscan ?? 3;
 
           // Calculate current visible range based on current scroll position
-          const currentScrollTop = listRef.scrollTop || listScrollTop;
+          const currentScrollTop = listRef.scrollTop ?? listScrollTop;
           const visibleStartIndex = Math.max(
             0,
             Math.floor(currentScrollTop / itemHeight) - overscan,
