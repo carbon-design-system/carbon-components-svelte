@@ -115,6 +115,12 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
 
+  /**
+   * Regex to normalize decimal separators to period.
+   * Supports comma (Europe/South America) and Arabic decimal separator (Middle East).
+   */
+  const DECIMAL_SEPARATOR_REGEX = /[,\u066B]/g;
+
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
     [translationIds.decrement]: "Decrement number",
@@ -204,7 +210,8 @@
 
   function parse(raw) {
     if (raw === "" || raw === "-") return null;
-    const num = Number(raw);
+    const normalized = raw.replace(DECIMAL_SEPARATOR_REGEX, ".");
+    const num = Number(normalized);
     return Number.isNaN(num) ? null : num;
   }
 

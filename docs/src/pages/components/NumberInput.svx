@@ -45,6 +45,14 @@ Preserve decimal input formatting like "1.0", "2.00", or "3." by setting `allowD
 
 <FileSource src="/framed/NumberInput/NumberInputDecimal" />
 
+## Decimal separator normalization (locale support)
+
+When `allowDecimal` is `true`, the input normalizes decimal separators before parsing so that users in locales that use comma (e.g. German, French, many European and South American locales) or the Arabic decimal separator (٫) can type numbers in their familiar format. For example, typing **3,14** or **3٫14** is parsed as **3.14**, matching the behavior expected when using `lang="de"` or similar.
+
+No wrapper is required for this parsing—it works regardless of `lang`. Optionally, wrap the input (or page) with the appropriate `lang` attribute so assistive technologies and browser behavior align with the user's locale.
+
+<FileSource src="/framed/NumberInput/NumberInputLocale" />
+
 ## Hidden label
 
 Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
