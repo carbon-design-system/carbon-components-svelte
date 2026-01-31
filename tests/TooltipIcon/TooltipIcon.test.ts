@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
+import type { TooltipIcon as TooltipIconSource } from "carbon-components-svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
+import TooltipIconSize from "./TooltipIcon.size.test.svelte";
 import TooltipIcon from "./TooltipIcon.test.svelte";
+
+type Props = ComponentProps<TooltipIconSource>;
 
 describe("TooltipIcon", () => {
   it("should render with default props", () => {
@@ -116,5 +121,38 @@ describe("TooltipIcon", () => {
 
     expect(trigger).toHaveAttribute("aria-describedby", "test-tooltip");
     expect(tooltip).toHaveClass("bx--assistive-text");
+  });
+
+  describe("size", () => {
+    it("should render with default size (16)", () => {
+      render(TooltipIconSize);
+
+      const icon = screen.getByTestId("mock-icon");
+      expect(icon).toHaveAttribute("width", "16");
+      expect(icon).toHaveAttribute("height", "16");
+    });
+
+    test.each([
+      [16, "16"],
+      [20, "20"],
+      [24, "24"],
+      [32, "32"],
+    ] as const)("should pass size %i to icon", (size, expected) => {
+      render(TooltipIconSize, {
+        props: { size },
+      });
+
+      const icon = screen.getByTestId("mock-icon");
+      expect(icon).toHaveAttribute("width", expected);
+      expect(icon).toHaveAttribute("height", expected);
+    });
+
+    it("should type size prop: 16/20/24/32 and any number are valid", () => {
+      expectTypeOf<16>().toExtend<Props["size"]>();
+      expectTypeOf<20>().toExtend<Props["size"]>();
+      expectTypeOf<24>().toExtend<Props["size"]>();
+      expectTypeOf<32>().toExtend<Props["size"]>();
+      expectTypeOf<number>().toExtend<NonNullable<Props["size"]>>();
+    });
   });
 });

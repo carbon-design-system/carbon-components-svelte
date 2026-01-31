@@ -13,6 +13,15 @@ Display a tooltip with the default bottom-center alignment.
 
 <TooltipIcon tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
 
+## Sizes
+
+Specify the icon size with the `size` prop. Carbon icons use a 16/20/24/32 scale, but any number (pixels) can be used.
+
+<TooltipIcon tooltipText="16px" icon={Carbon} size={16} />
+<TooltipIcon tooltipText="20px" icon={Carbon} size={20} />
+<TooltipIcon tooltipText="24px" icon={Carbon} size={24} />
+<TooltipIcon tooltipText="32px" icon={Carbon} size={32} />
+
 ## Directions
 
 Position the tooltip in different directions and alignments using the `direction` and `align` props.

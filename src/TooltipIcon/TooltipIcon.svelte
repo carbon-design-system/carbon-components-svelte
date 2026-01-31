@@ -11,6 +11,13 @@
    */
   export let icon = undefined;
 
+  /**
+   * Specify the icon size.
+   * Carbon icons use a 16/20/24/32 scale, but any number (pixels) can be used.
+   * @type {(16 | 20 | 24 | 32 | (number & {}))}
+   */
+  export let size = 16;
+
   /** Set to `true` to disable the tooltip icon */
   export let disabled = false;
 
@@ -78,6 +85,6 @@
     <slot name="tooltipText">{tooltipText}</slot>
   </span>
   <slot>
-    <svelte:component this={icon} />
+    <svelte:component this={icon} {size} />
   </slot>
 </button>
