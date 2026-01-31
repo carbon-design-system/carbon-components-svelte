@@ -32,7 +32,7 @@
   <label
     aria-label={labelText
       ? undefined
-      : $$props["aria-label"] || "Toggle is loading"}
+      : $$props["aria-label"] ?? "Toggle is loading"}
     for={id}
     class:bx--toggle__label={true}
     class:bx--skeleton={true}

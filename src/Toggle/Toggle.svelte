@@ -82,7 +82,7 @@
     {name}
   />
   <label
-    aria-label={labelText ? undefined : $$props["aria-label"] || "Toggle"}
+    aria-label={labelText ? undefined : $$props["aria-label"] ?? "Toggle"}
     for={id}
     class:bx--toggle-input__label={true}
   >
