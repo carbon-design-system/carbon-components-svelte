@@ -241,7 +241,7 @@
     role="listbox"
     tabindex="0"
     class:bx--tabs-trigger={true}
-    aria-label={$$props["aria-label"] || "listbox"}
+    aria-label={$$props["aria-label"] ?? "listbox"}
     on:click={() => {
       dropdownHidden = !dropdownHidden;
     }}
