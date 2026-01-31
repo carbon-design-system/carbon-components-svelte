@@ -196,7 +196,7 @@
     class:bx--slider-container--readonly={readonly}
     style:width={fullWidth && "100%"}
   >
-    <span class:bx--slider__range-label={true}>{minLabel || min}</span>
+    <span class:bx--slider__range-label={true}>{minLabel ?? min}</span>
     <div
       bind:this={ref}
       role="presentation"
@@ -247,7 +247,7 @@
         style:transform="translate(0, -50%) scaleX({left / 100})"
       ></div>
     </div>
-    <span class:bx--slider__range-label={true}>{maxLabel || max}</span>
+    <span class:bx--slider__range-label={true}>{maxLabel ?? max}</span>
     <div class:bx--slider-text-input-wrapper={true}>
       {#if invalid}
         <WarningFilled class="bx--slider__invalid-icon" />
@@ -267,7 +267,7 @@
         class:bx--slider-text-input--warn={warn}
         {value}
         aria-labelledby={$$props["aria-label"] ? undefined : labelId}
-        aria-label={$$props["aria-label"] || "Slider number input"}
+        aria-label={$$props["aria-label"] ?? "Slider number input"}
         {disabled}
         {readonly}
         {required}
