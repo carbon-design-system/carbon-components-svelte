@@ -191,7 +191,7 @@
   });
 
   $: menuId = `menu-${id}`;
-  $: ariaLabel = $$props["aria-label"] || "menu";
+  $: ariaLabel = $$props["aria-label"] ?? "menu";
   $: if ($items[$currentIndex]) {
     focusedId.set($items[$currentIndex].id);
   }
