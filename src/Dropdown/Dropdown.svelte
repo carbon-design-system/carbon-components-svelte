@@ -23,7 +23,7 @@
    * Override the display of a dropdown item.
    * @type {(item: Item) => string}
    */
-  export let itemToString = (item) => item.text || item.id;
+  export let itemToString = (item) => item.text ?? item.id;
 
   /**
    * Specify the selected item id.
