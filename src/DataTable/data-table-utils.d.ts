@@ -45,6 +45,7 @@ export function formatHeaderWidth<
 /**
  * Compares two values for sorting in a data table.
  * Handles numbers, strings, null/undefined values, and custom sort functions.
+ * @returns {number} Negative if a < b (ascending) or a > b (descending), positive if a > b (ascending) or a < b (descending), 0 if equal
  */
 export function compareValues<T = unknown>(
   itemA: T,
