@@ -775,8 +775,8 @@ describe("compareValues", () => {
       expect(compareValues("10", "2", true)).toBeGreaterThan(0);
     });
 
-    it("handles case-sensitive string comparison", () => {
-      expect(compareValues("Apple", "apple", true)).not.toBe(0);
+    it("handles case-insensitive string comparison", () => {
+      expect(compareValues("Apple", "apple", true)).toBe(0);
     });
   });
 
@@ -817,85 +817,85 @@ describe("compareValues", () => {
     });
   });
 
-  describe.skip("sorting", () => {
-    it("sorts ['apple', 'berry', 'Cherry'] ascending (case-insensitive)", () => {
+  describe("sorting", () => {
+    it("sorts ascending (case-insensitive)", () => {
       const sorted = ["apple", "berry", "Cherry"].sort((a, b) =>
         compareValues(a, b, true),
       );
       expect(sorted).toEqual(["apple", "berry", "Cherry"]);
     });
 
-    it("sorts ['Cherry', 'apple', 'berry'] ascending into alphabetical order", () => {
+    it("sorts ascending into alphabetical order", () => {
       const sorted = ["Cherry", "apple", "berry"].sort((a, b) =>
         compareValues(a, b, true),
       );
       expect(sorted).toEqual(["apple", "berry", "Cherry"]);
     });
 
-    it("sorts ['apple', 'berry', 'Cherry'] descending", () => {
+    it("sorts descending (case-insensitive)", () => {
       const sorted = ["apple", "berry", "Cherry"].sort((a, b) =>
         compareValues(a, b, false),
       );
       expect(sorted).toEqual(["Cherry", "berry", "apple"]);
     });
 
-    it("sorts ['Banana', 'apricot', 'Apple', 'cherry'] ascending (case-insensitive)", () => {
+    it("sorts mixed case ascending (case-insensitive)", () => {
       const sorted = ["Banana", "apricot", "Apple", "cherry"].sort((a, b) =>
         compareValues(a, b, true),
       );
       expect(sorted).toEqual(["Apple", "apricot", "Banana", "cherry"]);
     });
 
-    it("sorts numeric strings ['10', '2', '1', '20'] ascending (numeric: true)", () => {
+    it("sorts numeric strings ascending (numeric: true)", () => {
       const sorted = ["10", "2", "1", "20"].sort((a, b) =>
         compareValues(a, b, true),
       );
       expect(sorted).toEqual(["1", "2", "10", "20"]);
     });
 
-    it("sorts numeric strings ['1', '2', '10', '20'] descending", () => {
+    it("sorts numeric strings descending", () => {
       const sorted = ["1", "2", "10", "20"].sort((a, b) =>
         compareValues(a, b, false),
       );
       expect(sorted).toEqual(["20", "10", "2", "1"]);
     });
 
-    it("sorts with accents (sensitivity: base): ['café', 'cafe', 'berry'] → berry first, then cafe/café", () => {
+    it("sorts with accents (sensitivity: base)", () => {
       const sorted = ["café", "cafe", "berry"].sort((a, b) =>
         compareValues(a, b, true),
       );
       expect(sorted).toEqual(["berry", "café", "cafe"]);
     });
 
-    it("sorts mixed accents and plain: ['apple', 'café', 'apricot', 'berry'] alphabetical by base", () => {
+    it("sorts mixed accents and plain (alphabetical by base)", () => {
       const sorted = ["apple", "café", "apricot", "berry"].sort((a, b) =>
         compareValues(a, b, true),
       );
       expect(sorted).toEqual(["apple", "apricot", "berry", "café"]);
     });
 
-    it("sorts accent pairs (résumé=resume, naïve=naive): ['résumé', 'naïve', 'resume', 'naive']", () => {
+    it("sorts accent pairs (résumé=resume, naïve=naive)", () => {
       const sorted = ["résumé", "naïve", "resume", "naive"].sort((a, b) =>
         compareValues(a, b, true),
       );
       expect(sorted).toEqual(["naïve", "naive", "résumé", "resume"]);
     });
 
-    it("sorts mixed case and accents: ['Café', 'cafe', 'berry'] (case and accent insensitive)", () => {
+    it("sorts mixed case and accents (case and accent insensitive)", () => {
       const sorted = ["Café", "cafe", "berry"].sort((a, b) =>
         compareValues(a, b, true),
       );
       expect(sorted).toEqual(["berry", "Café", "cafe"]);
     });
 
-    it("sorts umlauts with base letters (ä=a, ö=o, ü=u): ['äpfel', 'zoo', 'apple']", () => {
+    it("sorts umlauts with base letters (ä=a, ö=o, ü=u)", () => {
       const sorted = ["äpfel", "zoo", "apple"].sort((a, b) =>
         compareValues(a, b, true),
       );
       expect(sorted).toEqual(["äpfel", "apple", "zoo"]);
     });
 
-    it("sorts umlauts descending: ['über', 'äpfel', 'zoo'] → zoo, über, äpfel (z > u > a)", () => {
+    it("sorts umlauts descending", () => {
       const sorted = ["über", "äpfel", "zoo"].sort((a, b) =>
         compareValues(a, b, false),
       );
@@ -967,7 +967,7 @@ describe("compareValues", () => {
     });
   });
 
-  describe.skip("localeCompare behavior", () => {
+  describe("localeCompare behavior", () => {
     it("is case-insensitive with sensitivity: base", () => {
       // With sensitivity: "base", case differences are ignored
       expect(compareValues("apple", "Apple", true)).toBe(0);

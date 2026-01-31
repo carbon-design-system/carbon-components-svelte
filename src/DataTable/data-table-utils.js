@@ -229,10 +229,19 @@ export function compareValues(itemA, itemB, ascending, customSort) {
     } else if (!itemB && itemB !== 0) {
       result = -1;
     } else {
-      // String comparison with locale-aware numeric sorting
-      result = String(itemA).localeCompare(String(itemB), "en", {
-        numeric: true,
-      });
+      result = String(itemA).localeCompare(
+        String(itemB),
+        // Use undefined to default to user's locale
+        undefined,
+        {
+          // Enable numeric sorting for strings that look like numbers
+          // E.g., "10" should come after "2"
+          numeric: true,
+          // Comparison is case- and accent-insensitive
+          // E.g., "apple" == "Apple", "café" == "cafe"
+          sensitivity: "base",
+        },
+      );
     }
   }
 
