@@ -113,7 +113,7 @@
 
   $: ariaLabel = companyName
     ? companyName
-    : `${uiShellAriaLabel || $$props["aria-label"] || platformName}`;
+    : `${uiShellAriaLabel ?? $$props["aria-label"] ?? platformName}`;
   $: hamburgerAriaLabel =
     ariaLabelMenu ?? (isSideNavOpen ? "Close menu" : "Open menu");
 </script>
