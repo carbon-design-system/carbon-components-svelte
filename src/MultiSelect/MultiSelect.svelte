@@ -27,7 +27,7 @@
    * Override the display of a multiselect item.
    * @type {(item: Item) => any}
    */
-  export let itemToString = (item) => item.text || item.id;
+  export let itemToString = (item) => item.text ?? item.id;
 
   /**
    * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
@@ -384,7 +384,7 @@
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: inline = type === "inline";
-  $: ariaLabel = $$props["aria-label"] || "Choose an item";
+  $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
   $: if (
     selectedIds &&
     (selectionFeedback === "top" ||
