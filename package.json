@@ -29,6 +29,10 @@
   "sideEffects": [
     "css/*.css"
   ],
+  "workspaces": [
+    "tests-svelte3",
+    "tests-svelte5"
+  ],
   "scripts": {
     "test": "vitest",
     "test:src-types": "tsc --project tsconfig.types.json",
