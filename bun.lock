@@ -19,7 +19,7 @@
         "autoprefixer": "^10.4.21",
         "carbon-components": "10.58.12",
         "carbon-icons-svelte": "^13.7.0",
-        "culls": "^0.1.2",
+        "culls": "^0.2.0",
         "jsdom": "^27.4.0",
         "postcss": "^8.5.5",
         "prettier": "^3.8.1",
@@ -384,7 +384,7 @@
 
     "cssstyle": ["cssstyle@5.3.7", "", { "dependencies": { "@asamuzakjp/css-color": "^4.1.1", "@csstools/css-syntax-patches-for-csstree": "^1.0.21", "css-tree": "^3.1.0", "lru-cache": "^11.2.4" } }, "sha512-7D2EPVltRrsTkhpQmksIu+LxeWAIEk6wRDMJ1qljlv+CKHJM+cJLlfhWIzNA44eAsHXSNe3+vO6DW1yCYx8SuQ=="],
 
-    "culls": ["culls@0.1.2", "", { "bin": { "culls": "dist/index.js" } }, "sha512-1HuHy0QoX3yZou7dZhoXuKAL5/xGI6esE9n2qGxnUmSrkAywDh1CWDuUXAS9q9sXpGKAoPmH5lR8mojkkgo9RA=="],
+    "culls": ["culls@0.2.0", "", { "bin": { "culls": "dist/index.js" } }, "sha512-SXout6aJuwBKzA9HuACs1Z9Yn51UwpgKPwEwMm9NU0bLoZUTIJer0M+qN+yY3Vki6Pt9QxKRpcjRetSisQOFAw=="],
 
     "dargs": ["dargs@7.0.0", "", {}, "sha512-2iy1EkLdlBzQGvbweYRFxmFath8+K7+AKB0TlhHWkNuH+TmovaMH/Wp7V7R4u7f4SnX3OgLsU9t1NI9ioDnUpg=="],
 
