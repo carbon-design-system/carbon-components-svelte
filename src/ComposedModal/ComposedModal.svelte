@@ -227,7 +227,7 @@
     bind:this={innerModal}
     role="dialog"
     aria-modal="true"
-    aria-label={$$props["aria-label"] || $label || undefined}
+    aria-label={$$props["aria-label"] ?? $label ?? undefined}
     class:bx--modal-container={true}
     class:bx--modal-container--xs={size === "xs"}
     class:bx--modal-container--sm={size === "sm"}
