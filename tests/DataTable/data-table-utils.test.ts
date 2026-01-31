@@ -817,6 +817,92 @@ describe("compareValues", () => {
     });
   });
 
+  describe.skip("sorting", () => {
+    it("sorts ['apple', 'berry', 'Cherry'] ascending (case-insensitive)", () => {
+      const sorted = ["apple", "berry", "Cherry"].sort((a, b) =>
+        compareValues(a, b, true),
+      );
+      expect(sorted).toEqual(["apple", "berry", "Cherry"]);
+    });
+
+    it("sorts ['Cherry', 'apple', 'berry'] ascending into alphabetical order", () => {
+      const sorted = ["Cherry", "apple", "berry"].sort((a, b) =>
+        compareValues(a, b, true),
+      );
+      expect(sorted).toEqual(["apple", "berry", "Cherry"]);
+    });
+
+    it("sorts ['apple', 'berry', 'Cherry'] descending", () => {
+      const sorted = ["apple", "berry", "Cherry"].sort((a, b) =>
+        compareValues(a, b, false),
+      );
+      expect(sorted).toEqual(["Cherry", "berry", "apple"]);
+    });
+
+    it("sorts ['Banana', 'apricot', 'Apple', 'cherry'] ascending (case-insensitive)", () => {
+      const sorted = ["Banana", "apricot", "Apple", "cherry"].sort((a, b) =>
+        compareValues(a, b, true),
+      );
+      expect(sorted).toEqual(["Apple", "apricot", "Banana", "cherry"]);
+    });
+
+    it("sorts numeric strings ['10', '2', '1', '20'] ascending (numeric: true)", () => {
+      const sorted = ["10", "2", "1", "20"].sort((a, b) =>
+        compareValues(a, b, true),
+      );
+      expect(sorted).toEqual(["1", "2", "10", "20"]);
+    });
+
+    it("sorts numeric strings ['1', '2', '10', '20'] descending", () => {
+      const sorted = ["1", "2", "10", "20"].sort((a, b) =>
+        compareValues(a, b, false),
+      );
+      expect(sorted).toEqual(["20", "10", "2", "1"]);
+    });
+
+    it("sorts with accents (sensitivity: base): ['café', 'cafe', 'berry'] → berry first, then cafe/café", () => {
+      const sorted = ["café", "cafe", "berry"].sort((a, b) =>
+        compareValues(a, b, true),
+      );
+      expect(sorted).toEqual(["berry", "café", "cafe"]);
+    });
+
+    it("sorts mixed accents and plain: ['apple', 'café', 'apricot', 'berry'] alphabetical by base", () => {
+      const sorted = ["apple", "café", "apricot", "berry"].sort((a, b) =>
+        compareValues(a, b, true),
+      );
+      expect(sorted).toEqual(["apple", "apricot", "berry", "café"]);
+    });
+
+    it("sorts accent pairs (résumé=resume, naïve=naive): ['résumé', 'naïve', 'resume', 'naive']", () => {
+      const sorted = ["résumé", "naïve", "resume", "naive"].sort((a, b) =>
+        compareValues(a, b, true),
+      );
+      expect(sorted).toEqual(["naïve", "naive", "résumé", "resume"]);
+    });
+
+    it("sorts mixed case and accents: ['Café', 'cafe', 'berry'] (case and accent insensitive)", () => {
+      const sorted = ["Café", "cafe", "berry"].sort((a, b) =>
+        compareValues(a, b, true),
+      );
+      expect(sorted).toEqual(["berry", "Café", "cafe"]);
+    });
+
+    it("sorts umlauts with base letters (ä=a, ö=o, ü=u): ['äpfel', 'zoo', 'apple']", () => {
+      const sorted = ["äpfel", "zoo", "apple"].sort((a, b) =>
+        compareValues(a, b, true),
+      );
+      expect(sorted).toEqual(["äpfel", "apple", "zoo"]);
+    });
+
+    it("sorts umlauts descending: ['über', 'äpfel', 'zoo'] → zoo, über, äpfel (z > u > a)", () => {
+      const sorted = ["über", "äpfel", "zoo"].sort((a, b) =>
+        compareValues(a, b, false),
+      );
+      expect(sorted).toEqual(["zoo", "über", "äpfel"]);
+    });
+  });
+
   describe("custom sort function", () => {
     it("uses custom sort function when provided", () => {
       const customSort = (a: number, b: number) => {
@@ -878,6 +964,42 @@ describe("compareValues", () => {
       expect(compareValues(Number.MAX_SAFE_INTEGER, 1, true)).toBeGreaterThan(
         0,
       );
+    });
+  });
+
+  describe.skip("localeCompare behavior", () => {
+    it("is case-insensitive with sensitivity: base", () => {
+      // With sensitivity: "base", case differences are ignored
+      expect(compareValues("apple", "Apple", true)).toBe(0);
+      expect(compareValues("Apple", "apple", true)).toBe(0);
+      expect(compareValues("BANANA", "banana", true)).toBe(0);
+    });
+
+    it("is accent-insensitive with sensitivity: base", () => {
+      // With sensitivity: "base", accent differences are ignored
+      expect(compareValues("cafe", "café", true)).toBe(0);
+      expect(compareValues("résumé", "resume", true)).toBe(0);
+      expect(compareValues("naïve", "naive", true)).toBe(0);
+    });
+
+    it("sorts alphabetically ignoring case", () => {
+      // Verifies case-insensitive alphabetical sorting
+      // With sensitivity: "base", "Apple" and "apple" are equal,
+      // so their relative order depends on sort stability
+      const sorted = ["banana", "Apple", "cherry", "Banana", "apple"].sort(
+        (a, b) => compareValues(a, b, true, undefined),
+      );
+      // All "apple" variants group together, all "banana" variants group together (stable sort)
+      expect(sorted).toEqual(["Apple", "apple", "banana", "Banana", "cherry"]);
+    });
+
+    it("handles unicode characters", () => {
+      // With sensitivity: "base", umlauts are treated as their base letters
+      expect(compareValues("ä", "a", true)).toBe(0); // ä equals a
+      expect(compareValues("ö", "o", true)).toBe(0); // ö equals o
+      expect(compareValues("ü", "u", true)).toBe(0); // ü equals u
+      // But different base letters are still distinct
+      expect(compareValues("ä", "z", true)).toBeLessThan(0); // a < z
     });
   });
 });
