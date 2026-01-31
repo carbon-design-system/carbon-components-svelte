@@ -915,4 +915,47 @@ describe("NumberInput", () => {
       container.querySelector(".bx--number--readonly"),
     ).toBeInTheDocument();
   });
+
+  it("should preserve last valid value when typing invalid input in allowDecimal mode", async () => {
+    // When allowDecimal is true and user types invalid input like "1.5." (two decimals),
+    // the value should preserve the last valid number (1.5) instead of becoming null.
+    // The input field can show "1.5." but value should stay at 1.5.
+    render(NumberInput, {
+      props: { allowDecimal: true, allowEmpty: true, value: null },
+    });
+
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+
+    // Type a valid decimal
+    await user.type(input, "1.5");
+    expect(input.value).toBe("1.5");
+    expect(screen.getByTestId("value").textContent).toBe("1.5");
+
+    // Type an additional decimal point (invalid)
+    await user.type(input, ".");
+    expect(input.value).toBe("1.5.");
+
+    // Value should preserve the last valid value (1.5), not become null
+    expect(screen.getByTestId("value").textContent).toBe("1.5");
+  });
+
+  it("should normalize invalid input to last valid value on blur in allowDecimal mode", async () => {
+    // When allowDecimal is true and user types invalid input like "1.5." and then blurs,
+    // the input should normalize back to the last valid value "1.5".
+    render(NumberInput, {
+      props: { allowDecimal: true, allowEmpty: true, value: null },
+    });
+
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+
+    // Type a valid decimal then an invalid character
+    await user.type(input, "1.5.");
+    expect(input.value).toBe("1.5.");
+    expect(screen.getByTestId("value").textContent).toBe("1.5");
+
+    // Blur the input - should normalize back to last valid value
+    await user.tab();
+    expect(input.value).toBe("1.5");
+    expect(screen.getByTestId("value").textContent).toBe("1.5");
+  });
 });

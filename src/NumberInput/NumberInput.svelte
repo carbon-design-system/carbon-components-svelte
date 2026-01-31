@@ -180,14 +180,21 @@
     "Numeric input field with increment and decrement buttons";
 
   let inputValue = value?.toString() ?? "";
+  let prevValue = value;
 
   // Only use inputValue tracking in allowDecimal mode
   $: if (allowDecimal) {
+    const valueChanged = value !== prevValue;
+    prevValue = value;
+
     if (value != null) {
       const valueStr = value.toString();
-      // Only update inputValue if it's not the same numeric value
-      // This allows "1.0" to stay as "1.0" while value is 1
-      if (parse(inputValue) !== value) {
+      const parsedInput = parse(inputValue);
+      // Sync inputValue to value when:
+      // - The numeric values differ AND input is valid (preserves "1.0" formatting)
+      // - OR value changed programmatically (force sync even if input is temporarily invalid)
+      // This allows "1.5." to stay visible while user corrects their typo.
+      if ((parsedInput !== value && parsedInput !== null) || valueChanged) {
         inputValue = valueStr;
       }
     } else if (value == null && inputValue !== "") {
@@ -209,7 +216,12 @@
   function onInput({ target }) {
     if (allowDecimal) {
       inputValue = target.value;
-      value = parse(target.value);
+      const parsed = parse(target.value);
+      // Preserve last valid value when input is invalid (e.g., "1.5." with two decimals).
+      // This provides better UX by letting users see and correct typos without losing data.
+      if (parsed !== null || target.value === "" || target.value === "-") {
+        value = parsed;
+      }
     } else {
       value = parse(target.value);
     }
@@ -232,6 +244,16 @@
         ref.value = parsedValue.toString();
         value = parsedValue;
       }
+    } else if (
+      allowDecimal &&
+      parsedValue === null &&
+      target.value !== "" &&
+      value !== null
+    ) {
+      // In allowDecimal mode, normalize invalid input (e.g., "1.5.") back to
+      // the last valid value on blur. This provides a clean UX where typos
+      // are corrected when the user leaves the field.
+      inputValue = value.toString();
     } else {
       value = parsedValue;
     }
