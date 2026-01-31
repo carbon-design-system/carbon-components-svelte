@@ -24,7 +24,7 @@
    * Override the display of a combobox item.
    * @type {(item: Item) => string}
    */
-  export let itemToString = (item) => item.text || item.id;
+  export let itemToString = (item) => item.text ?? item.id;
 
   /**
    * Set the selected item by value id.
@@ -414,7 +414,7 @@
     selectedItem = undefined;
   }
 
-  $: ariaLabel = $$props["aria-label"] || "Choose an item";
+  $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
