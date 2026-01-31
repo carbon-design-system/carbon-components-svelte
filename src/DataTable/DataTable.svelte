@@ -334,7 +334,7 @@
   $: if (rows !== prevRows || headers !== prevHeaders) {
     tableCellsByRowId = rows.reduce((rowsAcc, row) => {
       rowsAcc[row.id] = headers.map((header, index) => ({
-        key: header.key || `key-${index}`,
+        key: header.key ?? `key-${index}`,
         value: header.key ? resolvePath(row, header.key) : undefined,
         display: header.display,
         empty: header.empty,
@@ -362,7 +362,7 @@
   $: displayedSortedRows = getDisplayedRows(sortedRows, page, pageSize);
 
   $: hasCustomHeaderWidth = headers.some(
-    (header) => header.width || header.minWidth,
+    (header) => header.width ?? header.minWidth,
   );
 </script>
 
