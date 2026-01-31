@@ -247,7 +247,7 @@
     <div
       role={type === "single" ? "textbox" : undefined}
       tabindex={type === "single" && !disabled ? "0" : undefined}
-      aria-label={$$restProps["aria-label"] || copyLabel || "code-snippet"}
+      aria-label={$$restProps["aria-label"] ?? copyLabel ?? "code-snippet"}
       class:bx--snippet-container={true}
       style:width="100%"
       style:min-height="{minHeight}px"
