@@ -158,7 +158,7 @@
   $: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
   $: modalBodyId = `bx--modal-body--${id}`;
   $: ariaLabel =
-    modalLabel || $$props["aria-label"] || modalAriaLabel || modalHeading;
+    modalLabel ?? $$props["aria-label"] ?? modalAriaLabel ?? modalHeading;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
