@@ -1038,4 +1038,60 @@ describe("NumberInput", () => {
       expect(valueDisplay.textContent).toBe(isSvelte5 ? "" : "null");
     });
   });
+
+  describe("disableWheel", () => {
+    it("should prevent wheel events from changing value when disableWheel is true", async () => {
+      render(NumberInput, {
+        props: { disableWheel: true, value: 5 },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      await user.click(input);
+
+      const wheelEvent = new WheelEvent("wheel", {
+        bubbles: true,
+        cancelable: true,
+        deltaY: -100,
+      });
+
+      const prevented = !input.dispatchEvent(wheelEvent);
+      expect(prevented).toBe(true);
+    });
+
+    it("should allow wheel events when disableWheel is false (default)", async () => {
+      render(NumberInput, {
+        props: { value: 5 },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      await user.click(input);
+
+      const wheelEvent = new WheelEvent("wheel", {
+        bubbles: true,
+        cancelable: true,
+        deltaY: -100,
+      });
+
+      const prevented = !input.dispatchEvent(wheelEvent);
+      expect(prevented).toBe(false);
+    });
+
+    it("should prevent wheel events in allowDecimal mode when disableWheel is true", async () => {
+      render(NumberInput, {
+        props: { disableWheel: true, allowDecimal: true, value: 5 },
+      });
+
+      const input = screen.getByRole("textbox");
+      await user.click(input);
+
+      const wheelEvent = new WheelEvent("wheel", {
+        bubbles: true,
+        cancelable: true,
+        deltaY: -100,
+      });
+
+      const prevented = !input.dispatchEvent(wheelEvent);
+      expect(prevented).toBe(true);
+    });
+  });
 });

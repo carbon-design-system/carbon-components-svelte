@@ -60,6 +60,9 @@
   /** Set to `true` to hide the input stepper buttons */
   export let hideSteppers = false;
 
+  /** Set to `true` to prevent the scroll wheel from changing the input value */
+  export let disableWheel = false;
+
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
@@ -371,6 +374,9 @@
           on:focus
           on:blur
           on:paste
+          on:wheel|nonpassive={(e) => {
+            if (disableWheel) e.preventDefault();
+          }}
         />
       {:else}
         <input
@@ -404,6 +410,9 @@
           on:focus
           on:blur
           on:paste
+          on:wheel|nonpassive={(e) => {
+            if (disableWheel) e.preventDefault();
+          }}
         />
       {/if}
       {#if readonly}
