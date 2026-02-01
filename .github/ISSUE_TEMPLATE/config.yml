@@ -1,8 +1,0 @@
-blank_issues_enabled: true
-contact_links:
-  - name: Ask a question
-    url: https://github.com/carbon-design-system/carbon-components-svelte/discussions
-    about: Please ask and answer questions here.
-  - name: Carbon Design System Discord
-    url: https://discord.gg/J7JEUEkTRX
-    about: Chat with us on Discord.
