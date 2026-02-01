@@ -323,13 +323,40 @@ describe("NumberInput", () => {
     expect(true).toBe(true);
   });
 
-  it("should set aria-describedby attribute", () => {
+  it("should set aria-describedby to error id when invalid", () => {
+    render(NumberInput, {
+      props: { id: "test-input", invalid: true, invalidText: "Error" },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveAttribute("aria-describedby", "error-test-input");
+  });
+
+  it("should set aria-describedby to warn id when warn", () => {
+    render(NumberInput, {
+      props: { id: "test-input", warn: true, warnText: "Warning" },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveAttribute("aria-describedby", "warn-test-input");
+  });
+
+  it("should set aria-describedby to helper id when helperText is provided", () => {
+    render(NumberInput, {
+      props: { id: "test-input", helperText: "Helper" },
+    });
+
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveAttribute("aria-describedby", "helper-test-input");
+  });
+
+  it("should not set aria-describedby when no error, warn, or helperText", () => {
     render(NumberInput, {
       props: { id: "test-input" },
     });
 
     const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("aria-describedby", "error-test-input");
+    expect(input).not.toHaveAttribute("aria-describedby");
   });
 
   it("should set aria-label when no label is provided", () => {
