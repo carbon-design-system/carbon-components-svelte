@@ -180,6 +180,8 @@
   $: decrementLabel = translateWithId("decrement");
   $: hasError = invalid && invalidText && !readonly;
   $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
+  $: helperId = `helper-${id}`;
   $: ariaLabel =
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
@@ -346,7 +348,13 @@
           value={inputValue}
           type="text"
           inputmode="decimal"
-          aria-describedby={errorId}
+          aria-describedby={hasError
+            ? errorId
+            : warn
+              ? warnId
+              : helperText
+                ? helperId
+                : undefined}
           data-invalid={hasError || undefined}
           aria-invalid={hasError || undefined}
           aria-label={labelText ? undefined : ariaLabel}
@@ -369,7 +377,13 @@
           bind:this={ref}
           type="number"
           pattern="[0-9]*"
-          aria-describedby={errorId}
+          aria-describedby={hasError
+            ? errorId
+            : warn
+              ? warnId
+              : helperText
+                ? helperId
+                : undefined}
           data-invalid={hasError || undefined}
           aria-invalid={hasError || undefined}
           aria-label={labelText ? undefined : ariaLabel}
@@ -441,6 +455,7 @@
     </div>
     {#if !hasError && !warn && helperText}
       <div
+        id={helperId}
         class:bx--form__helper-text={true}
         class:bx--form__helper-text--disabled={disabled}
       >
@@ -453,7 +468,7 @@
       </div>
     {/if}
     {#if !hasError && warn}
-      <div id={errorId} class:bx--form-requirement={true}>{warnText}</div>
+      <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
     {/if}
   </div>
 </div>
