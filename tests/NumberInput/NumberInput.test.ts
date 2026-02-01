@@ -958,4 +958,57 @@ describe("NumberInput", () => {
     expect(input.value).toBe("1.5");
     expect(screen.getByTestId("value").textContent).toBe("1.5");
   });
+
+  describe("decimal separator normalization", () => {
+    test.each([
+      // Standard and locale decimal separators (comma, Arabic ٫)
+      ["3.14", 3.14, "period (standard)"],
+      ["3,14", 3.14, "comma (European)"],
+      ["3\u066B14", 3.14, "Arabic decimal separator"],
+      ["0,5", 0.5, "leading zero with comma"],
+      ["0\u066B5", 0.5, "leading zero with Arabic separator"],
+      // Integers and trailing zeros
+      ["12", 12, "integer (no separator)"],
+      ["1,0", 1, "trailing zero with comma"],
+      ["1\u066B0", 1, "trailing zero with Arabic separator"],
+      // Mixed separators: thousands + decimal
+      ["1.000,5", 1000.5, "European thousands with comma decimal"],
+      ["1,000.5", 1000.5, "English thousands with period decimal"],
+      ["1.000.000,5", 1000000.5, "European millions"],
+      ["1,000,000.5", 1000000.5, "English millions"],
+      // Comma-only as decimal (single comma, no dot)
+      ["1,5", 1.5, "comma as decimal"],
+      // Invalid input
+      ["abc", null, "invalid input"],
+    ] as const)("should parse '%s' as %s (%s)", async (input, expectedValue, _description) => {
+      render(NumberInput, {
+        props: { allowDecimal: true, allowEmpty: true },
+      });
+
+      const inputEl = screen.getByRole("textbox");
+      await user.clear(inputEl);
+      await user.type(inputEl, input);
+      await user.tab();
+
+      const valueDisplay = screen.getByTestId("value");
+      if (expectedValue === null) {
+        expect(valueDisplay.textContent).toBe(isSvelte5 ? "" : "null");
+      } else {
+        expect(valueDisplay.textContent).toBe(expectedValue.toString());
+      }
+    });
+
+    it("should parse empty input as null after blur", async () => {
+      render(NumberInput, {
+        props: { allowDecimal: true, allowEmpty: true },
+      });
+
+      const inputEl = screen.getByRole("textbox");
+      await user.clear(inputEl);
+      await user.tab();
+
+      const valueDisplay = screen.getByTestId("value");
+      expect(valueDisplay.textContent).toBe(isSvelte5 ? "" : "null");
+    });
+  });
 });
