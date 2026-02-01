@@ -122,6 +122,11 @@
 
   const dispatch = createEventDispatcher();
 
+  /** Regex to match period/dot characters globally */
+  const RE_DOT = /\./g;
+  /** Regex to match comma and Arabic decimal separator (٫) globally */
+  const RE_COMMA = /[,\u066B]/g;
+
   function updateValue(isIncrementing) {
     if (allowDecimal) {
       // When allowEmpty is false and value is null, use default value
@@ -202,9 +207,37 @@
     }
   }
 
-  function parse(raw) {
+  /**
+   * Simple normalization: treat comma/٫ as decimal separator.
+   * Used during typing to avoid mid-keystroke value jumps.
+   */
+  function normalize(raw) {
+    return raw.replace(RE_COMMA, ".");
+  }
+
+  /**
+   * Locale-aware normalization for completed input (on blur).
+   * When both period and comma/٫ are present, the last separator
+   * is the decimal mark; earlier ones are thousands separators.
+   * e.g., "1.000,5" → 1000.5, "1,000.5" → 1000.5
+   */
+  function normalizeLocale(raw) {
+    const lastComma = Math.max(raw.lastIndexOf(","), raw.lastIndexOf("\u066B"));
+    const lastDot = raw.lastIndexOf(".");
+
+    if (lastComma !== -1 && lastDot !== -1) {
+      if (lastComma > lastDot) {
+        return raw.replace(RE_DOT, "").replace(RE_COMMA, ".");
+      }
+      return raw.replace(RE_COMMA, "");
+    }
+
+    return normalize(raw);
+  }
+
+  function parse(raw, locale = false) {
     if (raw === "" || raw === "-") return null;
-    const num = Number(raw);
+    const num = Number(locale ? normalizeLocale(raw) : normalize(raw));
     return Number.isNaN(num) ? null : num;
   }
 
@@ -230,7 +263,7 @@
   }
 
   function onChange({ target }) {
-    let parsedValue = parse(target.value);
+    let parsedValue = parse(target.value, allowDecimal);
 
     // If allowEmpty is false and value would be null, use default value
     // This prevents the input from staying empty when allowEmpty is false
