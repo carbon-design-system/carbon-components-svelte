@@ -3,6 +3,7 @@
 
   export let selected: string | number | undefined = undefined;
   export let disabled = false;
+  export let id = "test-select";
   export let invalid = false;
   export let invalidText = "";
   export let warn = false;
@@ -18,6 +19,7 @@
 <Select
   bind:selected
   {disabled}
+  {id}
   {invalid}
   {invalidText}
   {warn}

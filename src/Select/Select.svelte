@@ -129,6 +129,8 @@
   });
 
   $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
+  $: helperId = `helper-${id}`;
   $: selectedValue.set(selected ?? $defaultValue);
 </script>
 
@@ -161,7 +163,13 @@
         >
           <select
             bind:this={ref}
-            aria-describedby={invalid ? errorId : undefined}
+            aria-describedby={invalid
+              ? errorId
+              : warn
+                ? warnId
+                : helperText
+                  ? helperId
+                  : undefined}
             aria-invalid={invalid || undefined}
             disabled={disabled || undefined}
             required={required || undefined}
@@ -192,6 +200,7 @@
       </div>
       {#if !invalid && !warn && helperText}
         <div
+          id={helperId}
           class:bx--form__helper-text={true}
           class:bx--form__helper-text--disabled={disabled}
         >
@@ -208,7 +217,13 @@
           bind:this={ref}
           {id}
           {name}
-          aria-describedby={invalid ? errorId : undefined}
+          aria-describedby={invalid
+            ? errorId
+            : warn
+              ? warnId
+              : helperText
+                ? helperId
+                : undefined}
           disabled={disabled || undefined}
           required={required || undefined}
           aria-invalid={invalid || undefined}
@@ -234,8 +249,9 @@
           />
         {/if}
       </div>
-      {#if !invalid && helperText}
+      {#if !invalid && !warn && helperText}
         <div
+          id={helperId}
           class:bx--form__helper-text={true}
           class:bx--form__helper-text--disabled={disabled}
         >
@@ -248,7 +264,7 @@
         </div>
       {/if}
       {#if !invalid && warn}
-        <div id={errorId} class:bx--form-requirement={true}>
+        <div id={warnId} class:bx--form-requirement={true}>
           {warnText}
         </div>
       {/if}

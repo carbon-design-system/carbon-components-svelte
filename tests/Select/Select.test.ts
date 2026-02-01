@@ -179,6 +179,131 @@ describe("Select", () => {
     expect(helperElement).toHaveTextContent("Helper text");
   });
 
+  describe("aria-describedby", () => {
+    it("references error message when invalid", () => {
+      render(Select, {
+        id: "test-select",
+        invalid: true,
+        invalidText: "Error message",
+      });
+
+      const selectElement = screen.getByLabelText("Select label");
+      expect(selectElement).toHaveAttribute(
+        "aria-describedby",
+        "error-test-select",
+      );
+
+      const errorElement = screen.getByText("Error message");
+      expect(errorElement).toHaveAttribute("id", "error-test-select");
+    });
+
+    it("references warning message when warn and not invalid", () => {
+      render(Select, {
+        id: "test-select",
+        warn: true,
+        warnText: "Warning message",
+      });
+
+      const selectElement = screen.getByLabelText("Select label");
+      expect(selectElement).toHaveAttribute(
+        "aria-describedby",
+        "warn-test-select",
+      );
+
+      const warnElement = screen.getByText("Warning message");
+      expect(warnElement).toHaveAttribute("id", "warn-test-select");
+    });
+
+    it("references helper text when provided and not invalid or warn", () => {
+      render(Select, {
+        id: "test-select",
+        helperText: "Helper text",
+      });
+
+      const selectElement = screen.getByLabelText("Select label");
+      expect(selectElement).toHaveAttribute(
+        "aria-describedby",
+        "helper-test-select",
+      );
+
+      const helperElement = screen.getByText("Helper text");
+      expect(helperElement).toHaveAttribute("id", "helper-test-select");
+    });
+
+    it("has no aria-describedby when no messages are present", () => {
+      render(Select, { id: "test-select" });
+
+      const selectElement = screen.getByLabelText("Select label");
+      expect(selectElement).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("prioritizes error over warning", () => {
+      render(Select, {
+        id: "test-select",
+        invalid: true,
+        invalidText: "Error message",
+        warn: true,
+        warnText: "Warning message",
+      });
+
+      const selectElement = screen.getByLabelText("Select label");
+      expect(selectElement).toHaveAttribute(
+        "aria-describedby",
+        "error-test-select",
+      );
+    });
+
+    it("prioritizes warning over helper text", () => {
+      render(Select, {
+        id: "test-select",
+        warn: true,
+        warnText: "Warning message",
+        helperText: "Helper text",
+      });
+
+      const selectElement = screen.getByLabelText("Select label");
+      expect(selectElement).toHaveAttribute(
+        "aria-describedby",
+        "warn-test-select",
+      );
+
+      // Helper text should not be rendered when warn is true
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+    });
+
+    it("works correctly for inline variant with invalid state", () => {
+      render(Select, {
+        id: "test-select",
+        inline: true,
+        invalid: true,
+        invalidText: "Error message",
+      });
+
+      const selectElement = screen.getByLabelText("Select label");
+      expect(selectElement).toHaveAttribute(
+        "aria-describedby",
+        "error-test-select",
+      );
+    });
+
+    it("works correctly for inline variant with helper text", () => {
+      render(Select, {
+        id: "test-select",
+        inline: true,
+        helperText: "Helper text",
+      });
+
+      const selectElement = screen.getByLabelText("Select label");
+      expect(selectElement).toHaveAttribute(
+        "aria-describedby",
+        "helper-test-select",
+      );
+
+      const helperElement = screen.getByText("Helper text");
+      expect(helperElement).toHaveAttribute("id", "helper-test-select");
+    });
+  });
+
   it("renders visible label by default", () => {
     render(Select);
     const label = screen.getByText("Select label");
