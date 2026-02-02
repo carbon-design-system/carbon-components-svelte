@@ -77,6 +77,15 @@
    */
   export let pageSizes = [10];
 
+  /**
+   * Set to `true` to dynamically filter page sizes based on total items.
+   * Page sizes larger than needed to display all items on a single page are hidden.
+   * @example
+   * <Pagination totalItems={9} pageSizes={[5, 10, 15]} dynamicPageSizes />
+   * <!-- renders [5, 10] -->
+   */
+  export let dynamicPageSizes = false;
+
   /** Set to `true` if the number of pages is unknown */
   export let pagesUnknown = false;
 
@@ -123,6 +132,23 @@
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
+  /**
+   * Filters page sizes to remove redundant options based on total items.
+   * Keeps all sizes up to and including the first one >= totalItems.
+   * @param {ReadonlyArray<number>} sizes - Available page sizes.
+   * @param {number} total - Total number of items.
+   * @returns {number[]} Filtered array of page sizes.
+   */
+  function getFilteredPageSizes(sizes, total) {
+    if (total <= 0) return sizes.slice(0, 1);
+    const filtered = [];
+    for (const size of sizes) {
+      filtered.push(size);
+      if (size >= total) break;
+    }
+    return filtered.length ? filtered : sizes.slice(0, 1);
+  }
+
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: if (page > totalPages) page = totalPages;
   $: if (prevPage !== page || prevPageSize !== pageSize) {
@@ -131,6 +157,9 @@
     prevPageSize = pageSize;
   }
   $: selectItems = getWindowedPages(page, totalPages, pageWindow);
+  $: effectivePageSizes = dynamicPageSizes
+    ? getFilteredPageSizes(pageSizes, totalItems)
+    : pageSizes;
   $: backButtonDisabled = disabled || page === 1;
   $: forwardButtonDisabled = disabled || page === totalPages;
 </script>
@@ -156,7 +185,7 @@
         }}
         bind:selected={pageSize}
       >
-        {#each pageSizes as size, i (size)}
+        {#each effectivePageSizes as size, i (size)}
           <SelectItem value={size} text={size.toString()} />
         {/each}
       </Select>
