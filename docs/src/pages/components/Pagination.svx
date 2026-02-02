@@ -27,6 +27,14 @@ Specify custom page sizes and set a default page size.
 
 <Pagination totalItems={102} pageSizes={[16, 36, 99]} pageSize={36} />
 
+## Dynamic page sizes
+
+Set `dynamicPageSizes` to `true` to automatically filter out redundant page sizes based on `totalItems`. Page sizes larger than needed to display all items on a single page are hidden.
+
+For example, with a total of 9 items and page sizes of `[5, 10, 15]`, the page sizes will be `[5, 10]`. This is because 10 is already larger than the total number of items.
+
+<Pagination totalItems={9} pageSizes={[5, 10, 15]} dynamicPageSizes />
+
 ## Unknown pages
 
 Set `pagesUnknown` to `true` when the total number of pages is unknown. This renders the item range text without factoring in the total number of pages.
