@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.99.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.99.1...v0.99.2) (2026-02-02)
+
+### Bug Fixes
+
+- **code-snippet:** allow empty value for `aria-label` ([1f2b40b](https://github.com/carbon-design-system/carbon-components-svelte/commit/1f2b40bbf1a110ef49406ea9687c93d8303ea00b))
+- **code-snippet:** type definitions include `$$restProps` ([cba89af](https://github.com/carbon-design-system/carbon-components-svelte/commit/cba89afc490fe5560bfb3aea44fc9b5479e781f5))
+- **combo-box:** `virtualConfig.overscan` allows 0 ([dbce40d](https://github.com/carbon-design-system/carbon-components-svelte/commit/dbce40d1580b739810986367f73495d70bbc42f1))
+- **combo-box:** allow empty `item.text` and `aria-label` ([3d2447a](https://github.com/carbon-design-system/carbon-components-svelte/commit/3d2447a8b410c1ecd51f784fa61dffe06d3fb2ca))
+- **composed-modal:** allow empty value for `aria-label` ([27508e7](https://github.com/carbon-design-system/carbon-components-svelte/commit/27508e76cae4bff55909d7289b2ce4ae9a5ae275))
+- **data-table:** allow empty `header.key` and 0 for `header.width` ([86e8cc0](https://github.com/carbon-design-system/carbon-components-svelte/commit/86e8cc09abaf71240cfedde636a3343b066cae28))
+- **data-table:** default string sorting is case- and accent-insensitive ([aada03e](https://github.com/carbon-design-system/carbon-components-svelte/commit/aada03e4efbd93aee6a6db3e0dd8a37d87a5fb3b))
+- **dropdown:** `virtualConfig.overscan` allows 0 ([e9fef81](https://github.com/carbon-design-system/carbon-components-svelte/commit/e9fef814489bc670dee5b216e2b2d18af4afeb8a))
+- **dropdown:** allow empty `item.text` ([46e661e](https://github.com/carbon-design-system/carbon-components-svelte/commit/46e661e07c888d19eef8ae474c7020646e7d328f))
+- **form-group:** allow empty value for `aria-labelledby` ([2f25c87](https://github.com/carbon-design-system/carbon-components-svelte/commit/2f25c87a2061c7e7b1824bb39d57d55bbd4a619c))
+- **modal:** allow empty value for `aria-label` ([7d79eaf](https://github.com/carbon-design-system/carbon-components-svelte/commit/7d79eaf11a25f28e045e9b798ad5be41d7bfc6c9))
+- **multi-select:** allow empty `item.text` and `aria-label` ([151118b](https://github.com/carbon-design-system/carbon-components-svelte/commit/151118b072c2e1653bddd7afa70edb98b9d37ebb))
+- **number-input:** dynamically set `aria-describedby` based on state ([6fa377d](https://github.com/carbon-design-system/carbon-components-svelte/commit/6fa377dc9b50bca2f7426741a9332556b2bbd054)), closes [#2613](https://github.com/carbon-design-system/carbon-components-svelte/issues/2613)
+- **number-input:** preserve value during invalid decimal input ([9ba0bc9](https://github.com/carbon-design-system/carbon-components-svelte/commit/9ba0bc9cdef31050bfd4010b9c6d4d6bae0e5c40))
+- **number-input:** support locale-specific decimal separators ([7665b23](https://github.com/carbon-design-system/carbon-components-svelte/commit/7665b2327da8b18e3e47b4456443874da8409b1e)), closes [#2547](https://github.com/carbon-design-system/carbon-components-svelte/issues/2547)
+- **overflow-menu:** allow empty value for `aria-label` ([9a26ae2](https://github.com/carbon-design-system/carbon-components-svelte/commit/9a26ae2b0137424e7d576a6317a0cce371f83f83))
+- **select:** dynamically set `aria-describedby` based on state ([9639107](https://github.com/carbon-design-system/carbon-components-svelte/commit/96391075365ce0db7270fd896b05945adfe23e6c))
+- **slider:** allow empty `minLabel`/`maxLabel` and `aria-label` ([ffd6d38](https://github.com/carbon-design-system/carbon-components-svelte/commit/ffd6d38f9caf2ef10a450f2fd041d189a4938991))
+- **tabs:** allow empty value for `aria-label` ([2a7a133](https://github.com/carbon-design-system/carbon-components-svelte/commit/2a7a133eca2b2c6c469ad2408f5343c5dd241159))
+- **toggle:** allow empty value for `aria-label` ([ebfa493](https://github.com/carbon-design-system/carbon-components-svelte/commit/ebfa49384e1e7950ba8b35d93978d87b8b5e9b43))
+- **ui-shell:** allow empty value for `aria-label` in `Header` ([32fe5b1](https://github.com/carbon-design-system/carbon-components-svelte/commit/32fe5b1906e450c6a647431d28c449229d21cfa2))
+
+### Performance
+
+- **data-table:** optimize row selection/expansion lookups using Sets ([54dfd41](https://github.com/carbon-design-system/carbon-components-svelte/commit/54dfd41090ee5a4168fc0cefbebd884825f8c06b))
+- **data-table:** compute selected/expanded states using `@const` ([efd5ae8](https://github.com/carbon-design-system/carbon-components-svelte/commit/efd5ae879999ef599fb67f22c72ffe66fa1522ca))
+- **data-table:** recompute `tableCellsByRowId` only when rows/headers change ([b372c91](https://github.com/carbon-design-system/carbon-components-svelte/commit/b372c91feb1ceee32bbb06f12cfed7f1438e85d4))
+- **data-table:** avoid redundant copy in `sortedRows` when sorting disabled ([6dd07f0](https://github.com/carbon-design-system/carbon-components-svelte/commit/6dd07f013c8ce3902b850322b71c6a21250030c2))
+- **data-table:** use Set in expand/select handlers ([a9c9101](https://github.com/carbon-design-system/carbon-components-svelte/commit/a9c910117d7d3fd378c16090dc62c02f9c935674))
+- **data-table:** update `batchSelectedIds` only when selected value changes ([da603ea](https://github.com/carbon-design-system/carbon-components-svelte/commit/da603ea59aadb0fa625ab534901872395be4299d))
+- **tree-view:** use Set lookups for selected/expanded instead of array includes ([f582b05](https://github.com/carbon-design-system/carbon-components-svelte/commit/f582b052c489689e844c8f1c5b255e0f42c9590d))
+- **tree-view:** guard store updates by `activeId` value equality ([f0928a1](https://github.com/carbon-design-system/carbon-components-svelte/commit/f0928a1fe33852f1d8b88d4343b3a15a22afbc94))
+
 ### [0.99.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.99.0...v0.99.1) (2026-01-28)
 
 ### Bug Fixes
