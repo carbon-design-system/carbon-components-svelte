@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.99.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.99.2...v0.99.3) (2026-02-03)
+
+### Bug Fixes
+
+- **text-input:** inline variant supports `labelChildren` slot ([78a065f](https://github.com/carbon-design-system/carbon-components-svelte/commit/78a065f492183603dfd5247c3ebb60628194d44e)), closes [#2625](https://github.com/carbon-design-system/carbon-components-svelte/issues/2625)
+
 ### [0.99.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.99.1...v0.99.2) (2026-02-02)
 
 ### Bug Fixes
