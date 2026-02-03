@@ -20,8 +20,7 @@
       "**",
       "!!**/.*/**/*",
       "!!**/css/*.css",
-      "!!**/docs/src/pages/index.svelte",
-      "!!**/docs/src/COMPONENT_API.json"
+      "!!**/docs/src/pages/index.svelte"
     ]
   },
   "linter": {
