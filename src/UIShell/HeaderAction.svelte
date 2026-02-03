@@ -70,9 +70,9 @@
 
   $: hasIconOnly = iconDescription && !(text || $$slots.textChildren);
   $: buttonClass = [
-    hasIconOnly && "bx--btn bx--btn--ghost",
+    hasIconOnly && "bx--btn",
     hasIconOnly && "bx--tooltip__trigger bx--tooltip--a11y",
-    hasIconOnly && "bx--btn--icon-only bx--btn--icon-only--bottom",
+    hasIconOnly && "bx--btn--icon-only--bottom",
     hasIconOnly && `bx--tooltip--align-${tooltipAlignment}`,
     $$restProps.class,
   ]

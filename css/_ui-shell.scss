@@ -27,6 +27,13 @@
     border-bottom-color: $border-subtle;
   }
 
+  .#{$prefix}--header__action.#{$prefix}--header__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: $spacing-01;
+  }
+
   .#{$prefix}--header__action.#{$prefix}--header__action:hover {
     background-color: $background-hover;
   }
@@ -48,12 +55,20 @@
   }
 
   .#{$prefix}--header__action.#{$prefix}--header__action:focus {
+    border-width: $button-border-width;
     border-color: $focus;
     outline: none;
   }
 
   .#{$prefix}--header__action.#{$prefix}--header__action:active {
     background-color: $background-active;
+  }
+
+  /** Header action uses btn + ghost; text color should inherit from header (including hover/active) */
+  .#{$prefix}--header__action.#{$prefix}--btn,
+  .#{$prefix}--header__action.#{$prefix}--btn--ghost:hover,
+  .#{$prefix}--header__action.#{$prefix}--btn--ghost:active {
+    color: inherit;
   }
 
   a.#{$prefix}--header__name.#{$prefix}--header__name,
@@ -150,25 +165,26 @@
   //--------------------------------------------------------------------------
   // Header Action - Text variant
   //--------------------------------------------------------------------------
-  .#{$prefix}--header__action--text {
+  .#{$prefix}--header__action--text.#{$prefix}--header__action--text {
     display: inline-flex;
-    align-items: center;
     width: auto;
-
-    /** 2px bottom padding aligns icon with `HeaderAction` */
-    padding: 0 1rem 2px 1rem;
-
-    /** `body-short-01` styles */
-    font-size: 0.875rem;
-    line-height: 1.28572;
-    letter-spacing: 0.16px;
-
-    /** Same color as `Header` platformName */
-    color: $text-primary;
+    padding: 0 $spacing-05 $spacing-01;
   }
+
+/*   .#{$prefix}--header__action--text {
+    align-items: center;
+    @include type-style('body-short-01');
+  } */
 
   .#{$prefix}--header__action-text {
     margin-left: 0.75rem;
+    @include type-style('body-short-01');
+  }
+
+  .#{$prefix}--header__action-text.#{$prefix}--btn--ghost,
+  .#{$prefix}--header__action-text.#{$prefix}--btn--ghost:hover,
+  .#{$prefix}--header__action-text.#{$prefix}--btn--ghost:active {
+    color: inherit;
   }
 
   //--------------------------------------------------------------------------
@@ -246,10 +262,11 @@
     height: 100%;
     padding: 0;
     flex-shrink: 0;
-    opacity: 1;
-    transition:
-      background-color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
-      opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+
+  /** Match other header actions: transparent default so no background flash on theme change */
+  .#{$prefix}--header-search-button.#{$prefix}--header__action {
+    background-color: transparent;
   }
 
   .#{$prefix}--header-search-button--disabled {
@@ -276,7 +293,7 @@
     background-color: $layer;
     border: 1px solid $border-subtle;
     border-top: none;
-    box-shadow: 0 4px 8px 0 $shadow;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
   }
 
   .#{$prefix}--header-search-menu-item {
