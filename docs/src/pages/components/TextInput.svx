@@ -27,6 +27,14 @@ Visually hide the label while maintaining accessibility by setting `hideLabel` t
 
 <TextInput hideLabel labelText="User name" placeholder="Enter user name..." />
 
+## Custom label
+
+Use the `labelChildren` slot to provide custom label content.
+
+<TextInput labelText="" placeholder="Enter user name...">
+  <strong slot="labelChildren">User name</strong>
+</TextInput>
+
 ## Light variant
 
 Use the light variant for light-themed backgrounds by setting `light` to `true`.
