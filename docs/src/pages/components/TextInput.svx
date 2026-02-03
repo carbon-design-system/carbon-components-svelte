@@ -39,6 +39,14 @@ Use the inline variant to display the label and input on the same line by settin
 
 <TextInput inline labelText="User name" placeholder="Enter user name..." />
 
+## Inline variant with custom label
+
+Use the `labelChildren` slot to provide custom inline label content.
+
+<TextInput inline labelText="" placeholder="Enter user name...">
+  <strong slot="labelChildren">User name</strong>
+</TextInput>
+
 ## Extra-large size
 
 Use the extra-large size for more prominent inputs by setting `size` to `"xl"`.
