@@ -160,20 +160,21 @@
       }}
       on:paste
     />
-    <button
-      type="button"
-      aria-label="Clear search"
-      tabindex={active ? "0" : "-1"}
-      class:bx--header__action={true}
-      class:bx--header-search-button={true}
-      class:bx--header-search-button--hidden={!active}
-      on:click={() => {
-        reset();
-        dispatch("clear");
-      }}
-    >
-      <Close size={20} title="Close" />
-    </button>
+    {#if active}
+      <button
+        type="button"
+        aria-label="Clear search"
+        tabindex={active ? "0" : "-1"}
+        class:bx--header__action={true}
+        class:bx--header-search-button={true}
+        on:click={() => {
+          reset();
+          dispatch("clear");
+        }}
+      >
+        <Close size={20} title="Close" />
+      </button>
+    {/if}
   </div>
 
   {#if active && results.length > 0}
