@@ -116,7 +116,7 @@
 >
   {#if inline}
     <div class:bx--text-input__label-helper-wrapper={true}>
-      {#if labelText}
+      {#if labelText || $$slots.labelChildren}
         <label
           for={id}
           class:bx--label={true}

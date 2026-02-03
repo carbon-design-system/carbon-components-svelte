@@ -3,6 +3,7 @@ import { isSvelte5, user } from "../setup-tests";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
 import TextInputFluid from "./TextInputFluid.test.svelte";
+import TextInputInlineLabelChildren from "./TextInputInlineLabelChildren.test.svelte";
 
 describe("TextInput", () => {
   it("should render with default props", () => {
@@ -111,6 +112,15 @@ describe("TextInput", () => {
     render(TextInput, { props: { inline: true } });
 
     expect(screen.getByText("User name")).toHaveClass("bx--label--inline");
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2625
+  it("should render labelChildren in inline mode when labelText is empty", () => {
+    render(TextInputInlineLabelChildren);
+
+    const slotLabel = screen.getByText("Inline Slot Label");
+    expect(slotLabel).toBeInTheDocument();
+    expect(slotLabel.closest("label")).toHaveClass("bx--label--inline");
   });
 
   it("should handle readonly state", () => {
