@@ -32,6 +32,7 @@
     align-items: center;
     justify-content: center;
     padding-bottom: $spacing-01;
+    transition: none;
   }
 
   .#{$prefix}--header__action.#{$prefix}--header__action:hover {
@@ -266,7 +267,7 @@
 
   /** Match other header actions: transparent default so no background flash on theme change */
   .#{$prefix}--header-search-button.#{$prefix}--header__action {
-    background-color: transparent;
+    background: transparent;
   }
 
   .#{$prefix}--header-search-button--disabled {
