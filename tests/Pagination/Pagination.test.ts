@@ -311,6 +311,104 @@ describe("Pagination", () => {
     expect(pagination).toHaveClass("custom-pagination");
   });
 
+  describe("dynamicPageSizes", () => {
+    it("should show all page sizes when dynamicPageSizes is false (default)", () => {
+      render(Pagination, {
+        props: {
+          totalItems: 9,
+          pageSizes: [5, 10, 15],
+          dynamicPageSizes: false,
+        },
+      });
+
+      const select = screen.getByRole("combobox", { name: "Items per page:" });
+      const options = within(select).getAllByRole("option");
+      expect(options).toHaveLength(3);
+      expect(options[0]).toHaveTextContent("5");
+      expect(options[1]).toHaveTextContent("10");
+      expect(options[2]).toHaveTextContent("15");
+    });
+
+    it("should filter out redundant page sizes when dynamicPageSizes is true", () => {
+      render(Pagination, {
+        props: {
+          totalItems: 9,
+          pageSizes: [5, 10, 15],
+          dynamicPageSizes: true,
+        },
+      });
+
+      const select = screen.getByRole("combobox", { name: "Items per page:" });
+      const options = within(select).getAllByRole("option");
+      expect(options).toHaveLength(2);
+      expect(options[0]).toHaveTextContent("5");
+      expect(options[1]).toHaveTextContent("10");
+    });
+
+    it("should keep only the first page size when totalItems is 0", () => {
+      render(Pagination, {
+        props: {
+          totalItems: 0,
+          pageSizes: [5, 10, 15],
+          dynamicPageSizes: true,
+        },
+      });
+
+      const select = screen.getByRole("combobox", { name: "Items per page:" });
+      const options = within(select).getAllByRole("option");
+      expect(options).toHaveLength(1);
+      expect(options[0]).toHaveTextContent("5");
+    });
+
+    it("should show all page sizes when all are smaller than totalItems", () => {
+      render(Pagination, {
+        props: {
+          totalItems: 100,
+          pageSizes: [5, 10, 15],
+          dynamicPageSizes: true,
+        },
+      });
+
+      const select = screen.getByRole("combobox", { name: "Items per page:" });
+      const options = within(select).getAllByRole("option");
+      expect(options).toHaveLength(3);
+      expect(options[0]).toHaveTextContent("5");
+      expect(options[1]).toHaveTextContent("10");
+      expect(options[2]).toHaveTextContent("15");
+    });
+
+    it("should show only first page size when all are larger than totalItems", () => {
+      render(Pagination, {
+        props: {
+          totalItems: 3,
+          pageSizes: [5, 10, 15],
+          dynamicPageSizes: true,
+        },
+      });
+
+      const select = screen.getByRole("combobox", { name: "Items per page:" });
+      const options = within(select).getAllByRole("option");
+      expect(options).toHaveLength(1);
+      expect(options[0]).toHaveTextContent("5");
+    });
+
+    it("should include the exact matching page size", () => {
+      render(Pagination, {
+        props: {
+          totalItems: 10,
+          pageSizes: [5, 10, 15, 20],
+          dynamicPageSizes: true,
+        },
+      });
+
+      const select = screen.getByRole("combobox", { name: "Items per page:" });
+      const options = within(select).getAllByRole("option");
+      expect(options).toHaveLength(2);
+      expect(options[0]).toHaveTextContent("5");
+      expect(options[1]).toHaveTextContent("10");
+    });
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1634
   it("should not trigger multiple updates when pageSize changes on last page", async () => {
     const consoleLog = vi.spyOn(console, "log");

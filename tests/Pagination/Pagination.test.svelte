@@ -12,6 +12,7 @@
   export let pageSizeInputDisabled = false;
   export let pageSize = 10;
   export let pageSizes: ComponentProps<Pagination>["pageSizes"] = [10];
+  export let dynamicPageSizes = false;
   export let pageWindow: ComponentProps<Pagination>["pageWindow"] = undefined;
   export let pagesUnknown = false;
   export let pageText: ComponentProps<Pagination>["pageText"] = undefined;
@@ -35,6 +36,7 @@
   {pageWindow}
   bind:pageSize
   {pageSizes}
+  {dynamicPageSizes}
   {pagesUnknown}
   {pageText}
   {pageRangeText}
