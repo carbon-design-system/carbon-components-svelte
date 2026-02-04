@@ -160,20 +160,21 @@
       }}
       on:paste
     />
-    <button
-      type="button"
-      aria-label="Clear search"
-      tabindex={active ? "0" : "-1"}
-      class:bx--header__action={true}
-      class:bx--header-search-button={true}
-      class:bx--header-search-button--hidden={!active}
-      on:click={() => {
-        reset();
-        dispatch("clear");
-      }}
-    >
-      <Close size={20} title="Close" />
-    </button>
+    {#if active}
+      <button
+        type="button"
+        aria-label="Clear search"
+        tabindex={active ? "0" : "-1"}
+        class:bx--header__action={true}
+        class:bx--header-search-button={true}
+        on:click={() => {
+          reset();
+          dispatch("clear");
+        }}
+      >
+        <Close size={20} title="Close" />
+      </button>
+    {/if}
   </div>
 
   {#if active && results.length > 0}
@@ -213,141 +214,3 @@
     </ul>
   {/if}
 </div>
-
-<style>
-  :global(.bx--header__search-label) {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    border: 0;
-    visibility: inherit;
-    clip: rect(0, 0, 0, 0);
-  }
-
-  :global(.bx--header__search) {
-    position: relative;
-    display: flex;
-    max-width: 28rem;
-    width: 100%;
-    margin-left: 0.5rem;
-    height: 3rem;
-    background-color: #393939;
-    color: #fff;
-    transition:
-      max-width 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
-      background 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
-  }
-
-  :global(.bx--header__search:not(.bx--header__search--active)) {
-    max-width: 3rem;
-    background-color: #161616;
-  }
-
-  :global(.bx--header__search.bx--header__search--active) {
-    outline: 2px solid #fff;
-    outline-offset: -2px;
-  }
-
-  :global(.bx--header__search-menu) {
-    display: flex;
-    flex-grow: 1;
-    border-bottom: 1px solid #393939;
-  }
-
-  :global(.bx--header__search-input) {
-    width: 100%;
-    height: 3rem;
-    padding: 0;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.375rem;
-    letter-spacing: 0;
-    color: #fff;
-    caret-color: #fff;
-    background-color: initial;
-    border: none;
-    outline: none;
-    transition: opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
-  }
-
-  :global(.bx--header__search-input:not(.bx--header__search--active)) {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  :global(.bx--header-search-button) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3rem;
-    height: 100%;
-    padding: 0;
-    flex-shrink: 0;
-    opacity: 1;
-    transition:
-      background-color 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
-      opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
-  }
-
-  :global(.bx--header-search-button--disabled) {
-    border: none;
-    pointer-events: none;
-  }
-
-  :global(.bx--header-search-button:hover) {
-    background-color: #4c4c4c;
-  }
-
-  :global(.bx--header-search-button--hidden) {
-    opacity: 0;
-    display: none;
-  }
-
-  :global(.bx--header-search-menu) {
-    position: absolute;
-    z-index: 10000;
-    padding: 1rem 0;
-    left: 0;
-    right: 0;
-    top: 3rem;
-    background-color: #161616;
-    border: 1px solid #393939;
-    border-top: none;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
-  }
-
-  :global(.bx--header-search-menu-item) {
-    padding: 6px 1rem;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.29;
-    letter-spacing: 0.16px;
-    transition: all 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
-    display: block;
-    text-decoration: none;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #c6c6c6;
-  }
-
-  :global(.bx--header-search-menu-item--selected),
-  :global(.bx--header-search-menu-item:hover) {
-    background-color: #353535;
-    color: #f4f4f4;
-  }
-
-  :global(.bx--header-search-menu-description) {
-    font-size: 0.75rem;
-    font-weight: 400;
-    line-height: 1.34;
-    letter-spacing: 0.32px;
-    text-transform: lowercase;
-    color: #c6c6c6;
-  }
-</style>
