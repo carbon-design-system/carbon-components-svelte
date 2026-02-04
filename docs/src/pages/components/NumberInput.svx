@@ -99,6 +99,12 @@ Hide the increment/decrement controls by setting `hideSteppers` to `true`. This 
 
 <NumberInput hideSteppers labelText="Clusters" value={0} />
 
+## Disable wheel
+
+Prevent the scroll wheel from changing the input value by setting `disableWheel` to `true`. This is useful in forms where accidental scroll changes are undesirable.
+
+<NumberInput disableWheel labelText="Clusters" value={0} />
+
 ## Skeleton
 
 Show a loading state using the `NumberInputSkeleton` component. This is useful while data is being fetched.

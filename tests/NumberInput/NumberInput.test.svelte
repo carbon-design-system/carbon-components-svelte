@@ -13,6 +13,7 @@
   export let allowDecimal = false;
   export let disabled = false;
   export let hideSteppers = false;
+  export let disableWheel = false;
   export let invalid = false;
   export let invalidText = "";
   export let warn = false;
@@ -48,6 +49,7 @@
   {allowDecimal}
   {disabled}
   {hideSteppers}
+  {disableWheel}
   {invalid}
   {invalidText}
   {warn}
