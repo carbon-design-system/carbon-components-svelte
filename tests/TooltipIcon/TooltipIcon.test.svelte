@@ -8,6 +8,7 @@
   export let direction: "top" | "right" | "bottom" | "left" = "bottom";
   export let id = "test-tooltip";
   export let icon = Carbon;
+  export let size = 16;
 </script>
 
 <TooltipIcon
@@ -17,6 +18,7 @@
   {direction}
   {id}
   {icon}
+  {size}
   on:click
   on:mouseover
   on:mouseenter
