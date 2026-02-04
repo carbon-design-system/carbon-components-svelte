@@ -6,11 +6,11 @@
     "build": "vite build"
   },
   "dependencies": {
-    "carbon-components-svelte": "^0.99.2"
+    "carbon-components-svelte": "^0.99.3"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
-    "carbon-preprocess-svelte": "^0.11.24",
+    "carbon-preprocess-svelte": "^0.11.25",
     "svelte": "^4.2.20",
     "vite": "^5.4.21"
   }

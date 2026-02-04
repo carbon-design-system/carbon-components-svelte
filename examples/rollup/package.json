@@ -6,13 +6,13 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "carbon-components-svelte": "^0.99.2"
+    "carbon-components-svelte": "^0.99.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^15.3.1",
     "@rollup/plugin-terser": "^0.4.4",
-    "carbon-preprocess-svelte": "^0.11.24",
+    "carbon-preprocess-svelte": "^0.11.25",
     "rollup": "^4.57.1",
     "rollup-plugin-css-only": "^4.5.5",
     "rollup-plugin-svelte": "^7.2.3",
