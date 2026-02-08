@@ -33,6 +33,12 @@
    */
   export let min = undefined;
 
+  /**
+   * Provide the value stepping should begin at when the input is empty.
+   * @type {number}
+   */
+  export let stepStartValue = undefined;
+
   /** Set to `true` to enable the light variant */
   export let light = false;
 
@@ -131,9 +137,22 @@
   const RE_COMMA = /[,\u066B]/g;
 
   function updateValue(isIncrementing) {
+    // When the input is empty (null) or zero and stepStartValue is set,
+    // jump directly to stepStartValue on the first step.
+    if ((value === null || value === 0) && stepStartValue !== undefined) {
+      value = stepStartValue;
+      if (allowDecimal) {
+        inputValue = value.toString();
+      } else if (ref) {
+        ref.value = value.toString();
+      }
+      dispatch("input", value);
+      dispatch("change", value);
+      return;
+    }
+
     if (allowDecimal) {
-      // When allowEmpty is false and value is null, use default value
-      const currentValue = value ?? (allowEmpty ? 0 : getDefaultValue());
+      const currentValue = value ?? getDefaultValue();
       let newValue;
 
       if (isIncrementing) {
@@ -247,7 +266,7 @@
   }
 
   function getDefaultValue() {
-    // When allowEmpty is false, use min if defined, otherwise 0
+    if (stepStartValue !== undefined) return stepStartValue;
     return min !== undefined ? min : 0;
   }
 
