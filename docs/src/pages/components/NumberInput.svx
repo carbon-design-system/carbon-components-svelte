@@ -39,6 +39,14 @@ Control the increment/decrement step size using the `step` prop. This example us
 
 <NumberInput value="{1}" helperText="Step of 0.1" step={0.1} labelText="Clusters" />
 
+## Step start value
+
+Configure a starting point for stepping when the input is empty or zero using `stepStartValue`. When the user clicks increment or decrement, the value jumps directly to `stepStartValue` instead of stepping from zero.
+
+This is useful when zero is not within the `min`/`max` range, or when there is a more sensible default (e.g., the current year when asking for a year). Combined with `allowEmpty`, it ensures the user must interact with the input before submitting a value.
+
+<NumberInput stepStartValue={2026} allowEmpty min={2026} max={2100} labelText="Year" />
+
 ## Preserve decimal input
 
 Preserve decimal input formatting like "1.0", "2.00", or "3." by setting `allowDecimal` to `true`. This uses `type="text"` with `inputmode="decimal"` instead of `type="number"`, allowing trailing zeros and decimal points to be preserved while typing. This is useful for financial data or precise decimal entry.
