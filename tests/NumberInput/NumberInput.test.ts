@@ -1039,6 +1039,122 @@ describe("NumberInput", () => {
     });
   });
 
+  describe("stepStartValue", () => {
+    it("should jump to stepStartValue when incrementing from null", async () => {
+      render(NumberInput, {
+        props: { allowEmpty: true, value: null, stepStartValue: 10 },
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+
+      await user.click(incrementButton);
+
+      // First step from empty jumps directly to stepStartValue
+      expect(screen.getByTestId("value").textContent).toBe("10");
+    });
+
+    it("should jump to stepStartValue when decrementing from null", async () => {
+      render(NumberInput, {
+        props: { allowEmpty: true, value: null, stepStartValue: 10 },
+      });
+
+      const decrementButton = screen.getByRole("button", {
+        name: "Decrement number",
+      });
+
+      await user.click(decrementButton);
+
+      // First step from empty jumps directly to stepStartValue
+      expect(screen.getByTestId("value").textContent).toBe("10");
+    });
+
+    it("should jump to stepStartValue when incrementing from zero", async () => {
+      render(NumberInput, {
+        props: { value: 0, stepStartValue: 10 },
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+
+      await user.click(incrementButton);
+
+      // First step from 0 jumps directly to stepStartValue
+      expect(screen.getByTestId("value").textContent).toBe("10");
+    });
+
+    it("should step normally after the first click", async () => {
+      render(NumberInput, {
+        props: { allowEmpty: true, value: null, stepStartValue: 10 },
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+
+      await user.click(incrementButton);
+      expect(screen.getByTestId("value").textContent).toBe("10");
+
+      await user.click(incrementButton);
+      expect(screen.getByTestId("value").textContent).toBe("11");
+    });
+
+    it("should jump to stepStartValue in allowDecimal mode when stepping from null", async () => {
+      render(NumberInput, {
+        props: {
+          allowDecimal: true,
+          allowEmpty: true,
+          value: null,
+          stepStartValue: 5,
+        },
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+
+      await user.click(incrementButton);
+      expect(screen.getByTestId("value").textContent).toBe("5");
+    });
+
+    it("should use stepStartValue over min as starting point", async () => {
+      render(NumberInput, {
+        props: {
+          allowEmpty: true,
+          value: null,
+          min: 0,
+          stepStartValue: 10,
+        },
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+
+      await user.click(incrementButton);
+
+      // Should jump to stepStartValue (10), not min (0)
+      expect(screen.getByTestId("value").textContent).toBe("10");
+    });
+
+    it("should default to min when stepStartValue is not set", async () => {
+      render(NumberInput, {
+        props: { allowEmpty: false, value: null, min: 5 },
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+
+      await user.click(incrementButton);
+
+      // Should start from min (5), then increment to 6
+      expect(screen.getByTestId("value").textContent).toBe("6");
+    });
+  });
+
   describe("disableWheel", () => {
     it("should prevent wheel events from changing value when disableWheel is true", async () => {
       render(NumberInput, {

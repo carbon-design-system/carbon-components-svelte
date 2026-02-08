@@ -14,6 +14,8 @@
   export let disabled = false;
   export let hideSteppers = false;
   export let disableWheel = false;
+  export let stepStartValue: ComponentProps<NumberInput>["stepStartValue"] =
+    undefined;
   export let invalid = false;
   export let invalidText = "";
   export let warn = false;
@@ -50,6 +52,7 @@
   {disabled}
   {hideSteppers}
   {disableWheel}
+  {stepStartValue}
   {invalid}
   {invalidText}
   {warn}
