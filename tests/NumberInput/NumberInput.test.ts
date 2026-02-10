@@ -257,15 +257,19 @@ describe("NumberInput", () => {
     expect(mockHandler).toHaveBeenCalled();
   });
 
-  it("should dispatch blur event", async () => {
+  it("should dispatch blur event with value", async () => {
     const mockHandler = vi.fn();
-    render(NumberInput, { props: { onblur: mockHandler } });
+    render(NumberInput, { props: { value: 5, onblur: mockHandler } });
 
     const input = screen.getByRole("spinbutton");
     await user.click(input);
     await user.tab();
 
     expect(mockHandler).toHaveBeenCalled();
+    expect(mockHandler.mock.calls[0][0].detail.value).toBe(5);
+    expect(mockHandler.mock.calls[0][0].detail.event).toBeInstanceOf(
+      FocusEvent,
+    );
   });
 
   it("should have paste event listener", () => {
@@ -1504,6 +1508,99 @@ describe("NumberInput", () => {
       rerender({ locale: "de-DE", value: null, allowEmpty: true });
       await tick();
       expect(input.value).toBe("");
+    });
+  });
+
+  describe("click:stepper event", () => {
+    it("should dispatch click:stepper with direction 'up' on increment click", async () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, {
+        props: { value: 0, onclickstepper: mockHandler },
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+      await user.click(incrementButton);
+
+      expect(mockHandler).toHaveBeenCalledTimes(1);
+      expect(mockHandler.mock.calls[0][0].detail).toEqual({
+        value: 1,
+        direction: "up",
+      });
+    });
+
+    it("should dispatch click:stepper with direction 'down' on decrement click", async () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, {
+        props: { value: 5, onclickstepper: mockHandler },
+      });
+
+      const decrementButton = screen.getByRole("button", {
+        name: "Decrement number",
+      });
+      await user.click(decrementButton);
+
+      expect(mockHandler).toHaveBeenCalledTimes(1);
+      expect(mockHandler.mock.calls[0][0].detail).toEqual({
+        value: 4,
+        direction: "down",
+      });
+    });
+
+    it("should not dispatch click:stepper on arrow key press", async () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, {
+        props: { allowDecimal: true, value: 5, onclickstepper: mockHandler },
+      });
+
+      const input = screen.getByRole("textbox");
+      await user.click(input);
+      await user.keyboard("{ArrowUp}");
+
+      expect(mockHandler).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("blur:stepper event", () => {
+    it("should dispatch blur:stepper with direction 'down' on decrement button blur", () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, {
+        props: { value: 5, onblurstepper: mockHandler },
+      });
+
+      const decrementButton = screen.getByRole("button", {
+        name: "Decrement number",
+      });
+      decrementButton.focus();
+      decrementButton.blur();
+
+      expect(mockHandler).toHaveBeenCalledTimes(1);
+      expect(mockHandler.mock.calls[0][0].detail.value).toBe(5);
+      expect(mockHandler.mock.calls[0][0].detail.direction).toBe("down");
+      expect(mockHandler.mock.calls[0][0].detail.event).toBeInstanceOf(
+        FocusEvent,
+      );
+    });
+
+    it("should dispatch blur:stepper with direction 'up' on increment button blur", () => {
+      const mockHandler = vi.fn();
+      render(NumberInput, {
+        props: { value: 5, onblurstepper: mockHandler },
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+      incrementButton.focus();
+      incrementButton.blur();
+
+      expect(mockHandler).toHaveBeenCalledTimes(1);
+      expect(mockHandler.mock.calls[0][0].detail.value).toBe(5);
+      expect(mockHandler.mock.calls[0][0].detail.direction).toBe("up");
+      expect(mockHandler.mock.calls[0][0].detail.event).toBeInstanceOf(
+        FocusEvent,
+      );
     });
   });
 

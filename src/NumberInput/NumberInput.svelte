@@ -3,6 +3,9 @@
    * @typedef {"increment" | "decrement"} NumberInputTranslationId
    * @event {null | number} change
    * @event {null | number} input
+   * @event {{ value: null | number, direction: "up" | "down" }} click:stepper
+   * @event {{ event: FocusEvent, value: null | number }} blur
+   * @event {{ event: FocusEvent, value: null | number, direction: "up" | "down" }} blur:stepper
    */
 
   /**
@@ -418,6 +421,14 @@
       updateValue(event.key === "ArrowUp");
     }
   }
+
+  function handleBlur(e) {
+    dispatch("blur", { event: e, value });
+  }
+
+  function handleStepperBlur(e, direction) {
+    dispatch("blur:stepper", { event: e, value, direction });
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -482,7 +493,7 @@
           on:keydown
           on:keyup
           on:focus
-          on:blur
+          on:blur={handleBlur}
           on:paste
           on:wheel|nonpassive={(e) => {
             if (disableWheel) e.preventDefault();
@@ -518,7 +529,7 @@
           on:keydown
           on:keyup
           on:focus
-          on:blur
+          on:blur={handleBlur}
           on:paste
           on:wheel|nonpassive={(e) => {
             if (disableWheel) e.preventDefault();
@@ -548,7 +559,9 @@
             class:down-icon={true}
             on:click={() => {
               updateValue(false);
+              dispatch("click:stepper", { value, direction: "down" });
             }}
+            on:blur={(e) => handleStepperBlur(e, "down")}
             {disabled}
           >
             <Subtract class="down-icon" />
@@ -563,7 +576,9 @@
             class:up-icon={true}
             on:click={() => {
               updateValue(true);
+              dispatch("click:stepper", { value, direction: "up" });
             }}
+            on:blur={(e) => handleStepperBlur(e, "up")}
             {disabled}
           >
             <Add class="up-icon" />

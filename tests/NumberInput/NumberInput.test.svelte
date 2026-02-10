@@ -39,8 +39,12 @@
     undefined;
   export let onkeyup: ((event: KeyboardEvent) => void) | undefined = undefined;
   export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
-  export let onblur: ((event: FocusEvent) => void) | undefined = undefined;
+  export let onblur: ((event: CustomEvent) => void) | undefined = undefined;
   export let onpaste: ((event: ClipboardEvent) => void) | undefined = undefined;
+  export let onclickstepper: ((event: CustomEvent) => void) | undefined =
+    undefined;
+  export let onblurstepper: ((event: CustomEvent) => void) | undefined =
+    undefined;
 </script>
 
 <NumberInput
@@ -79,6 +83,8 @@
   on:focus={onfocus}
   on:blur={onblur}
   on:paste={onpaste}
+  on:click:stepper={onclickstepper}
+  on:blur:stepper={onblurstepper}
 />
 
 <div data-testid="value">{value}</div>
