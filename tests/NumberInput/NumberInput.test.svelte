@@ -11,11 +11,15 @@
   export let readonly = false;
   export let allowEmpty = false;
   export let allowDecimal = false;
+  export let locale: ComponentProps<NumberInput>["locale"] = undefined;
+  export let formatOptions: ComponentProps<NumberInput>["formatOptions"] =
+    undefined;
   export let disabled = false;
   export let hideSteppers = false;
   export let disableWheel = false;
   export let stepStartValue: ComponentProps<NumberInput>["stepStartValue"] =
     undefined;
+  export let validate: ComponentProps<NumberInput>["validate"] = undefined;
   export let invalid = false;
   export let invalidText = "";
   export let warn = false;
@@ -49,10 +53,13 @@
   {readonly}
   {allowEmpty}
   {allowDecimal}
+  {locale}
+  {formatOptions}
   {disabled}
   {hideSteppers}
   {disableWheel}
   {stepStartValue}
+  {validate}
   {invalid}
   {invalidText}
   {warn}
