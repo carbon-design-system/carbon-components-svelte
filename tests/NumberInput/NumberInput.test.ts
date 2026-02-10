@@ -176,16 +176,16 @@ describe("NumberInput", () => {
     expect(input).toHaveValue(null);
   });
 
-  it("should accept values outside min/max range without showing invalid state", async () => {
-    // Per issue #1180, NumberInput should not automatically show invalid state
-    // based on min/max constraints - it should require explicit invalid={true}
+  it("should show invalid state when value exceeds max via typing", async () => {
     render(NumberInput, { props: { min: 4, max: 20 } });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "25");
     expect(screen.getByTestId("value").textContent).toBe("25");
-    // Should NOT show invalid state since invalid prop is false
-    expect(screen.getByRole("spinbutton")).not.toHaveAttribute("aria-invalid");
+    expect(screen.getByRole("spinbutton")).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
   });
 
   it("should not show helper text when invalid", () => {
@@ -473,25 +473,26 @@ describe("NumberInput", () => {
     ).not.toBeInTheDocument();
   });
 
-  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1180
-  it("should not show invalid state when value exceeds max but invalid prop is false", () => {
-    // NumberInput should be consistent with TextInput - only show invalid state when invalid={true}
+  it("should auto-invalidate when value exceeds max", () => {
     render(NumberInput, { props: { max: 10, value: 15 } });
 
     const input = screen.getByRole("spinbutton");
-    // Should NOT show invalid state since invalid prop is false
-    expect(input).not.toHaveAttribute("aria-invalid");
-    expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input.closest(".bx--number")).toHaveAttribute(
+      "data-invalid",
+      "true",
+    );
   });
 
-  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1180
-  it("should not show invalid state when value is below min but invalid prop is false", () => {
+  it("should auto-invalidate when value is below min", () => {
     render(NumberInput, { props: { min: 5, value: 2 } });
 
     const input = screen.getByRole("spinbutton");
-    // Should NOT show invalid state since invalid prop is false
-    expect(input).not.toHaveAttribute("aria-invalid");
-    expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input.closest(".bx--number")).toHaveAttribute(
+      "data-invalid",
+      "true",
+    );
   });
 
   it("should show invalid state when invalid prop is true and invalidText is provided", () => {
@@ -509,16 +510,22 @@ describe("NumberInput", () => {
     expect(screen.getByText("This field is invalid")).toBeInTheDocument();
   });
 
-  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1180
-  it("should not show invalid state when invalid prop is true but invalidText is empty", () => {
-    render(NumberInput, {
+  it("should show invalid visual state when invalid prop is true but invalidText is empty", () => {
+    const { container } = render(NumberInput, {
       props: { invalid: true, invalidText: "" },
     });
 
     const input = screen.getByRole("spinbutton");
-    // Should NOT show invalid state since invalidText is empty
-    expect(input).not.toHaveAttribute("aria-invalid");
-    expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
+    // Visual invalid state (border, icon) shows even without invalidText
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input.closest(".bx--number")).toHaveAttribute(
+      "data-invalid",
+      "true",
+    );
+    // But no error message div should be rendered
+    expect(
+      container.querySelector(".bx--form-requirement"),
+    ).not.toBeInTheDocument();
   });
 
   it("should bind ref to input element", () => {
@@ -835,24 +842,20 @@ describe("NumberInput", () => {
     }
   });
 
-  it("should not show invalid state when value exceeds max without invalid prop", async () => {
-    // Per issue #1180, NumberInput should only show invalid state when invalid={true}
+  it("should auto-invalidate when typed value exceeds max", async () => {
     render(NumberInput, { props: { max: 10 } });
 
     const input = screen.getByRole("spinbutton");
     await user.type(input, "15");
 
-    // Should NOT automatically show invalid state - requires explicit invalid={true}
-    expect(input).not.toHaveAttribute("aria-invalid");
+    expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
-  it("should not show invalid state when value is below min without invalid prop", () => {
-    // Per issue #1180, NumberInput should only show invalid state when invalid={true}
+  it("should auto-invalidate when initial value is below min", () => {
     render(NumberInput, { props: { min: 5, value: 3 } });
 
     const input = screen.getByRole("spinbutton");
-    // Should NOT automatically show invalid state - requires explicit invalid={true}
-    expect(input).not.toHaveAttribute("aria-invalid");
+    expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
   it("should not set error state when readonly and invalid", () => {
@@ -1152,6 +1155,355 @@ describe("NumberInput", () => {
 
       // Should start from min (5), then increment to 6
       expect(screen.getByTestId("value").textContent).toBe("6");
+    });
+  });
+
+  describe("auto min/max validation", () => {
+    it("should not auto-invalidate when value is within bounds", () => {
+      render(NumberInput, { props: { min: 0, max: 100, value: 50 } });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("should not auto-invalidate when value equals min (boundary)", () => {
+      render(NumberInput, { props: { min: 5, max: 20, value: 5 } });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("should not auto-invalidate when value equals max (boundary)", () => {
+      render(NumberInput, { props: { min: 5, max: 20, value: 20 } });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("should not auto-invalidate when value is null with bounds set", () => {
+      render(NumberInput, {
+        props: { min: 5, max: 20, value: null, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("should show invalid icon but no error text when auto-invalid without invalidText", () => {
+      render(NumberInput, { props: { max: 10, value: 15 } });
+
+      const input = screen.getByLabelText("Clusters");
+      const numberWrapper = input.closest(".bx--number");
+      // Icon should be present
+      expect(
+        numberWrapper?.querySelector(".bx--number__invalid"),
+      ).toBeInTheDocument();
+      // No error message text
+      expect(
+        numberWrapper?.querySelector(".bx--form-requirement"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should show invalid icon and error text when auto-invalid with invalidText", () => {
+      render(NumberInput, {
+        props: { max: 10, value: 15, invalidText: "Must be 10 or less" },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      const numberWrapper = input.closest(".bx--number");
+      expect(
+        numberWrapper?.querySelector(".bx--number__invalid"),
+      ).toBeInTheDocument();
+      expect(screen.getByText("Must be 10 or less")).toBeInTheDocument();
+    });
+
+    it("should auto-invalidate in allowDecimal mode", () => {
+      render(NumberInput, {
+        props: { allowDecimal: true, min: 0, max: 10, value: 15 },
+      });
+
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("should not auto-invalidate when readonly", () => {
+      render(NumberInput, {
+        props: { readonly: true, min: 5, max: 20, value: 25 },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("should keep invalid state when explicit invalid=true and value is within bounds", () => {
+      render(NumberInput, {
+        props: { invalid: true, min: 0, max: 100, value: 50 },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("should hide helper text when auto-invalid", () => {
+      render(NumberInput, {
+        props: { max: 10, value: 15, helperText: "Helper text" },
+      });
+
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+    });
+
+    it("should suppress warn state when auto-invalid", () => {
+      render(NumberInput, {
+        props: { max: 10, value: 15, warn: true, warnText: "Warning" },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      const numberWrapper = input.closest(".bx--number");
+      expect(
+        numberWrapper?.querySelector(".bx--number__invalid--warning"),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("validate", () => {
+    it("should show invalid when validate returns false", () => {
+      render(NumberInput, {
+        props: { value: 5, validate: () => false },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("should show valid when validate returns true even with autoInvalid", () => {
+      render(NumberInput, {
+        props: { value: 15, max: 10, validate: () => true },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).not.toHaveAttribute("aria-invalid");
+    });
+
+    it("should defer to autoInvalid when validate returns undefined", () => {
+      render(NumberInput, {
+        props: { value: 15, max: 10, validate: () => undefined },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("should defer to autoInvalid when validate is not provided", () => {
+      render(NumberInput, {
+        props: { value: 15, max: 10 },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("should not override explicit invalid=true when validate returns true", () => {
+      render(NumberInput, {
+        props: { value: 5, invalid: true, validate: () => true },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("should receive raw input string and locale as arguments", () => {
+      const validateFn = vi.fn(() => undefined);
+      render(NumberInput, {
+        props: { value: 5, locale: "de-DE", validate: validateFn },
+      });
+
+      expect(validateFn).toHaveBeenCalled();
+      // In text mode with locale, receives the formatted inputValue
+      expect(validateFn).toHaveBeenCalledWith(expect.any(String), "de-DE");
+    });
+
+    it("should receive undefined as locale when no locale prop", () => {
+      const validateFn = vi.fn(() => undefined);
+      render(NumberInput, {
+        props: { value: 5, validate: validateFn },
+      });
+
+      expect(validateFn).toHaveBeenCalled();
+      expect(validateFn).toHaveBeenCalledWith(expect.any(String), undefined);
+    });
+
+    it("should show invalid icon and error text when validate returns false with invalidText", () => {
+      render(NumberInput, {
+        props: {
+          value: 5,
+          validate: () => false,
+          invalidText: "Custom error",
+        },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      const numberWrapper = input.closest(".bx--number");
+      expect(
+        numberWrapper?.querySelector(".bx--number__invalid"),
+      ).toBeInTheDocument();
+      expect(screen.getByText("Custom error")).toBeInTheDocument();
+    });
+
+    it("should show icon but no error text when validate returns false without invalidText", () => {
+      const { container } = render(NumberInput, {
+        props: { value: 5, validate: () => false },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      const numberWrapper = input.closest(".bx--number");
+      expect(
+        numberWrapper?.querySelector(".bx--number__invalid"),
+      ).toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--form-requirement"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should not show invalid when readonly even if validate returns false", () => {
+      render(NumberInput, {
+        props: { value: 5, readonly: true, validate: () => false },
+      });
+
+      const input = screen.getByRole("spinbutton");
+      expect(input).not.toHaveAttribute("aria-invalid");
+    });
+  });
+
+  describe("locale", () => {
+    it("should force text mode when locale is set", () => {
+      render(NumberInput, { props: { locale: "de-DE", value: 5 } });
+
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveAttribute("type", "text");
+      expect(input).toHaveAttribute("inputmode", "decimal");
+    });
+
+    it("should format initial value with locale", () => {
+      render(NumberInput, { props: { locale: "de-DE", value: 1234.5 } });
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      // German locale uses period for thousands and comma for decimal
+      expect(input.value).toBe("1.234,5");
+    });
+
+    it("should format value on blur", async () => {
+      render(NumberInput, {
+        props: { locale: "en-US", value: null, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      await user.type(input, "1234.5");
+      await user.tab();
+
+      // After blur, value should be formatted according to locale
+      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+      expect(input.value).toBe("1,234.5");
+    });
+
+    it("should parse German decimal (comma) correctly on blur", async () => {
+      render(NumberInput, {
+        props: { locale: "de-DE", value: null, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      await user.type(input, "3,14");
+      await user.tab();
+
+      expect(screen.getByTestId("value").textContent).toBe("3.14");
+    });
+
+    it("should handle null value with locale", () => {
+      render(NumberInput, {
+        props: { locale: "en-US", value: null, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      expect(input.value).toBe("");
+    });
+
+    it("should handle stepper increment with locale formatting", async () => {
+      render(NumberInput, {
+        props: { locale: "de-DE", value: 1000, step: 1 },
+      });
+
+      const incrementButton = screen.getByRole("button", {
+        name: "Increment number",
+      });
+
+      await user.click(incrementButton);
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      expect(input.value).toBe("1.001");
+      expect(screen.getByTestId("value").textContent).toBe("1001");
+    });
+
+    it("should handle stepper decrement with locale formatting", async () => {
+      render(NumberInput, {
+        props: { locale: "de-DE", value: 1000, step: 1 },
+      });
+
+      const decrementButton = screen.getByRole("button", {
+        name: "Decrement number",
+      });
+
+      await user.click(decrementButton);
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      expect(input.value).toBe("999");
+      expect(screen.getByTestId("value").textContent).toBe("999");
+    });
+
+    it("should auto-invalidate with locale when value exceeds max", () => {
+      render(NumberInput, {
+        props: { locale: "en-US", value: 15, max: 10 },
+      });
+
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveAttribute("aria-invalid", "true");
+    });
+
+    it("should fall back to standard behavior when locale is undefined", () => {
+      render(NumberInput, { props: { value: 5 } });
+
+      // Should be a number input, not text
+      const input = screen.getByRole("spinbutton");
+      expect(input).toHaveAttribute("type", "number");
+    });
+
+    it("should handle formatOptions for decimal precision", () => {
+      render(NumberInput, {
+        props: {
+          locale: "en-US",
+          formatOptions: { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+          value: 1234.5,
+        },
+      });
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      expect(input.value).toBe("1,234.50");
+    });
+
+    it("should update formatting when value changes programmatically", async () => {
+      const { rerender } = render(NumberInput, {
+        props: { locale: "de-DE", value: 100, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      expect(input.value).toBe("100");
+
+      rerender({ locale: "de-DE", value: 1234.5, allowEmpty: true });
+      await tick();
+      expect(input.value).toBe("1.234,5");
+
+      rerender({ locale: "de-DE", value: null, allowEmpty: true });
+      await tick();
+      expect(input.value).toBe("");
     });
   });
 

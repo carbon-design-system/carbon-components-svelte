@@ -60,6 +60,29 @@
    */
   export let allowDecimal = false;
 
+  /**
+   * Specify a BCP 47 locale for number formatting.
+   * When set, forces type="text" with inputmode="decimal"
+   * and formats the display value using Intl.NumberFormat.
+   * @type {string}
+   * @example
+   * ```svelte
+   * <NumberInput locale="de-DE" value={1234.5} />
+   * <NumberInput locale="en-US" value={1234.5} />
+   * ```
+   */
+  export let locale = undefined;
+
+  /**
+   * Specify Intl.NumberFormat options when `locale` is set.
+   * @type {Intl.NumberFormatOptions}
+   * @example
+   * ```svelte
+   * <NumberInput locale="en-US" formatOptions={{ minimumFractionDigits: 2 }} value={1234.5} />
+   * ```
+   */
+  export let formatOptions = undefined;
+
   /** Set to `true` to disable the input */
   export let disabled = false;
 
@@ -68,6 +91,19 @@
 
   /** Set to `true` to prevent the scroll wheel from changing the input value */
   export let disableWheel = false;
+
+  /**
+   * Custom validation function.
+   * Receives the current raw input string and locale.
+   * Return `true` to force valid, `false` to force invalid,
+   * or `undefined` to defer to built-in validation.
+   * @type {(value: string, locale: string | undefined) => boolean | undefined}
+   * @example
+   * ```svelte
+   * <NumberInput validate={(raw) => Number(raw) % 2 === 0} invalidText="Must be even" />
+   * ```
+   */
+  export let validate = undefined;
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
@@ -141,8 +177,8 @@
     // jump directly to stepStartValue on the first step.
     if ((value === null || value === 0) && stepStartValue !== undefined) {
       value = stepStartValue;
-      if (allowDecimal) {
-        inputValue = value.toString();
+      if (useTextMode) {
+        inputValue = formatter ? formatter.format(value) : value.toString();
       } else if (ref) {
         ref.value = value.toString();
       }
@@ -151,7 +187,7 @@
       return;
     }
 
-    if (allowDecimal) {
+    if (useTextMode) {
       const currentValue = value ?? getDefaultValue();
       let newValue;
 
@@ -172,7 +208,7 @@
       newValue = Number(newValue.toFixed(decimalPlaces));
 
       value = newValue;
-      inputValue = newValue.toString();
+      inputValue = formatter ? formatter.format(newValue) : newValue.toString();
 
       dispatch("input", value);
       dispatch("change", value);
@@ -200,7 +236,28 @@
 
   $: incrementLabel = translateWithId("increment");
   $: decrementLabel = translateWithId("decrement");
-  $: hasError = invalid && invalidText && !readonly;
+  $: autoInvalid =
+    value !== null &&
+    ((min !== undefined && value < min) || (max !== undefined && value > max));
+  $: formatter = locale ? new Intl.NumberFormat(locale, formatOptions) : null;
+  $: useTextMode = allowDecimal || !!locale;
+
+  let inputValue = value?.toString() ?? "";
+  let prevValue;
+  let userInputActive = false;
+
+  $: customValid =
+    typeof validate === "function"
+      ? validate(useTextMode ? inputValue : String(value ?? ""), locale)
+      : undefined;
+  $: effectiveInvalid =
+    (() => {
+      if (invalid) return true;
+      if (customValid === false) return true;
+      if (customValid === true) return false;
+      return autoInvalid;
+    })() && !readonly;
+  $: hasErrorMessage = effectiveInvalid && !!invalidText;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
   $: helperId = `helper-${id}`;
@@ -208,17 +265,20 @@
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
 
-  let inputValue = value?.toString() ?? "";
-  let prevValue = value;
-
-  // Only use inputValue tracking in allowDecimal mode
-  $: if (allowDecimal) {
+  // Only use inputValue tracking in text mode (allowDecimal or locale).
+  // During user typing, don't interfere with inputValue — formatting
+  // happens on blur (onChange) and programmatic changes only.
+  $: if (useTextMode) {
     const valueChanged = value !== prevValue;
     prevValue = value;
 
-    if (value != null) {
-      const valueStr = value.toString();
-      const parsedInput = parse(inputValue);
+    if (userInputActive) {
+      // Don't interfere with user typing
+    } else if (value != null) {
+      const valueStr = formatter ? formatter.format(value) : value.toString();
+      const parsedInput = locale
+        ? parseLocaleValue(inputValue)
+        : parse(inputValue);
       // Sync inputValue to value when:
       // - The numeric values differ AND input is valid (preserves "1.0" formatting)
       // - OR value changed programmatically (force sync even if input is temporarily invalid)
@@ -259,9 +319,31 @@
     return normalize(raw);
   }
 
-  function parse(raw, locale = false) {
+  function parse(raw, useLocaleNormalize = false) {
     if (raw === "" || raw === "-") return null;
-    const num = Number(locale ? normalizeLocale(raw) : normalize(raw));
+    const num = Number(
+      useLocaleNormalize ? normalizeLocale(raw) : normalize(raw),
+    );
+    return Number.isNaN(num) ? null : num;
+  }
+
+  /**
+   * Parse a locale-formatted number string back to a number.
+   * Uses Intl.NumberFormat to detect the locale's grouping/decimal separators.
+   */
+  function parseLocaleValue(raw) {
+    if (raw === "" || raw === "-") return null;
+    const parts = new Intl.NumberFormat(locale).formatToParts(12345.6);
+    const group = parts.find((p) => p.type === "group")?.value ?? "";
+    const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
+    let normalized = raw;
+    if (group) {
+      normalized = normalized.split(group).join("");
+    }
+    if (decimal !== ".") {
+      normalized = normalized.replace(decimal, ".");
+    }
+    const num = Number(normalized);
     return Number.isNaN(num) ? null : num;
   }
 
@@ -271,9 +353,12 @@
   }
 
   function onInput({ target }) {
-    if (allowDecimal) {
+    if (useTextMode) {
+      userInputActive = true;
       inputValue = target.value;
-      const parsed = parse(target.value);
+      const parsed = locale
+        ? parseLocaleValue(target.value)
+        : parse(target.value);
       // Preserve last valid value when input is invalid (e.g., "1.5." with two decimals).
       // This provides better UX by letting users see and correct typos without losing data.
       if (parsed !== null || target.value === "" || target.value === "-") {
@@ -287,42 +372,48 @@
   }
 
   function onChange({ target }) {
-    let parsedValue = parse(target.value, allowDecimal);
+    userInputActive = false;
+    let parsedValue = locale
+      ? parseLocaleValue(target.value)
+      : parse(target.value, useTextMode);
 
     // If allowEmpty is false and value would be null, use default value
     // This prevents the input from staying empty when allowEmpty is false
     if (!allowEmpty && parsedValue === null && target.value === "") {
       parsedValue = getDefaultValue();
       // Update the input to show the default value
-      if (allowDecimal) {
-        inputValue = parsedValue.toString();
+      if (useTextMode) {
+        inputValue = formatter
+          ? formatter.format(parsedValue)
+          : parsedValue.toString();
         value = parsedValue;
       } else if (ref) {
         ref.value = parsedValue.toString();
         value = parsedValue;
       }
     } else if (
-      allowDecimal &&
+      useTextMode &&
       parsedValue === null &&
       target.value !== "" &&
       value !== null
     ) {
-      // In allowDecimal mode, normalize invalid input (e.g., "1.5.") back to
+      // In text mode, normalize invalid input (e.g., "1.5.") back to
       // the last valid value on blur. This provides a clean UX where typos
       // are corrected when the user leaves the field.
-      inputValue = value.toString();
+      inputValue = formatter ? formatter.format(value) : value.toString();
     } else {
       value = parsedValue;
+      // Format the display value on blur when locale is set
+      if (formatter && value !== null) {
+        inputValue = formatter.format(value);
+      }
     }
 
     dispatch("change", value);
   }
 
   function onKeyDown(event) {
-    if (
-      allowDecimal &&
-      (event.key === "ArrowUp" || event.key === "ArrowDown")
-    ) {
+    if (useTextMode && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
       event.preventDefault();
       updateValue(event.key === "ArrowUp");
     }
@@ -340,7 +431,7 @@
   on:mouseleave
 >
   <div
-    data-invalid={hasError || undefined}
+    data-invalid={effectiveInvalid || undefined}
     class:bx--number={true}
     class:bx--number--helpertext={true}
     class:bx--number--readonly={readonly}
@@ -362,23 +453,23 @@
     {/if}
     <div
       class:bx--number__input-wrapper={true}
-      class:bx--number__input-wrapper--warning={!invalid && warn}
+      class:bx--number__input-wrapper--warning={!effectiveInvalid && warn}
     >
-      {#if allowDecimal}
+      {#if useTextMode}
         <input
           bind:this={ref}
           value={inputValue}
           type="text"
           inputmode="decimal"
-          aria-describedby={hasError
+          aria-describedby={hasErrorMessage
             ? errorId
             : warn
               ? warnId
               : helperText
                 ? helperId
                 : undefined}
-          data-invalid={hasError || undefined}
-          aria-invalid={hasError || undefined}
+          data-invalid={effectiveInvalid || undefined}
+          aria-invalid={effectiveInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
           {disabled}
           {id}
@@ -402,15 +493,15 @@
           bind:this={ref}
           type="number"
           pattern="[0-9]*"
-          aria-describedby={hasError
+          aria-describedby={hasErrorMessage
             ? errorId
             : warn
               ? warnId
               : helperText
                 ? helperId
                 : undefined}
-          data-invalid={hasError || undefined}
-          aria-invalid={hasError || undefined}
+          data-invalid={effectiveInvalid || undefined}
+          aria-invalid={effectiveInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
           {disabled}
           {id}
@@ -437,10 +528,10 @@
       {#if readonly}
         <EditOff class="bx--text-input__readonly-icon" />
       {:else}
-        {#if invalid}
+        {#if effectiveInvalid}
           <WarningFilled class="bx--number__invalid" />
         {/if}
-        {#if !invalid && warn}
+        {#if !effectiveInvalid && warn}
           <WarningAltFilled
             class="bx--number__invalid bx--number__invalid--warning"
           />
@@ -481,7 +572,7 @@
         </div>
       {/if}
     </div>
-    {#if !hasError && !warn && helperText}
+    {#if !effectiveInvalid && !warn && helperText}
       <div
         id={helperId}
         class:bx--form__helper-text={true}
@@ -490,12 +581,12 @@
         {helperText}
       </div>
     {/if}
-    {#if hasError}
+    {#if hasErrorMessage}
       <div id={errorId} class:bx--form-requirement={true}>
         {invalidText}
       </div>
     {/if}
-    {#if !hasError && warn}
+    {#if !effectiveInvalid && warn}
       <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
     {/if}
   </div>
