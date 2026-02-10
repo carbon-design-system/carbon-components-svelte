@@ -71,6 +71,42 @@ Use the `validate` prop to provide custom validation logic. The function receive
 
 <NumberInput validate={(raw) => { const num = Number(raw); return Number.isNaN(num) ? undefined : num % 2 === 0; }} invalidText="Must be an even number" labelText="Even number" value={0} />
 
+## Blur event
+
+Use `on:blur` to listen for when the input loses focus. The event detail includes the current parsed `value` and the original `FocusEvent`.
+
+<NumberInput
+  on:blur={(e) => {
+    console.log(e.detail.value); // number | null
+    console.log(e.detail.event); // FocusEvent
+  }}
+/>
+
+## Stepper click event
+
+Use `on:click:stepper` to listen for stepper button clicks. The event detail includes the updated `value` and the `direction` (`"up"` or `"down"`). This event only fires on button clicks, not arrow key presses.
+
+<NumberInput
+  on:click:stepper={(e) => {
+    console.log(e.detail.value); // number
+    console.log(e.detail.direction); // "up" | "down"
+  }}
+/>
+
+## Stepper blur event
+
+Use `on:blur:stepper` to listen for when a stepper button loses focus. The event detail includes the current `value`, the `direction`, and the original `FocusEvent`.
+
+<NumberInput
+  on:blur:stepper={(e) => {
+    console.log(e.detail.value); // number | null
+    console.log(e.detail.direction); // "up" | "down"
+    console.log(e.detail.event); // FocusEvent
+  }}
+/>
+
+<FileSource src="/framed/NumberInput/NumberInputStepperEvents" />
+
 ## Hidden label
 
 Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
