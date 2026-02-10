@@ -29,7 +29,7 @@ Add descriptive text below the input using the `helperText` prop. This helps use
 
 ## Minimum and maximum values
 
-Constrain input values using `min` and `max` props. This example limits values between 4 and 20.
+Constrain input values using `min` and `max` props. When the value falls outside the specified range, the input automatically shows an invalid visual state. Provide `invalidText` to display an error message.
 
 <NumberInput min="{4}" max="{20}" value="{4}" invalidText="Number must be between 4 and 20." helperText="Clusters provisioned in your region" labelText="Clusters (4 min, 20 max)" />
 
@@ -52,6 +52,24 @@ This is useful when zero is not within the `min`/`max` range, or when there is a
 Preserve decimal input formatting like "1.0", "2.00", or "3." by setting `allowDecimal` to `true`. This uses `type="text"` with `inputmode="decimal"` instead of `type="number"`, allowing trailing zeros and decimal points to be preserved while typing. This is useful for financial data or precise decimal entry.
 
 <FileSource src="/framed/NumberInput/NumberInputDecimal" />
+
+## Locale formatting
+
+Format numbers according to a locale using the `locale` prop with a BCP 47 language tag. The display value is formatted on blur using `Intl.NumberFormat`. When `locale` is set, the input uses `type="text"` with `inputmode="decimal"`.
+
+<NumberInput locale="de-DE" value={1234.5} labelText="Amount (German)" />
+
+## Locale with format options
+
+Combine `locale` with `formatOptions` for additional formatting control like decimal precision.
+
+<NumberInput locale="en-US" formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} value={1234.5} labelText="Price" />
+
+## Custom validation
+
+Use the `validate` prop to provide custom validation logic. The function receives the raw input string and optional locale. Return `false` to mark invalid, `true` to force valid (overriding auto bounds checks), or `undefined` to use built-in validation.
+
+<NumberInput validate={(raw) => { const num = Number(raw); return Number.isNaN(num) ? undefined : num % 2 === 0; }} invalidText="Must be an even number" labelText="Even number" value={0} />
 
 ## Hidden label
 
