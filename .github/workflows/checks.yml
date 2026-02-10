@@ -34,13 +34,13 @@ jobs:
       - run: bun ci
 
       - name: Generate types
-        run: bun build:docs
+        run: bun run build:docs
 
       - name: Test Svelte 4 Types
         run: bun run test:types
 
       - name: Test Svelte 4
-        run: bun run test
+        run: bun --bun run test
 
   test-svelte3:
     runs-on: macos-15
@@ -55,7 +55,7 @@ jobs:
           bun ci
 
       - name: Generate types
-        run: bun build:docs
+        run: bun run build:docs
 
       - name: Test Svelte 3 Types
         run: |
@@ -65,7 +65,7 @@ jobs:
       - name: Test Svelte 3
         run: |
           cd tests-svelte3
-          bun run test
+          bun --bun run test
 
   test-svelte5:
     runs-on: macos-15
@@ -80,7 +80,7 @@ jobs:
           bun ci
 
       - name: Generate types
-        run: bun build:docs
+        run: bun run build:docs
 
       - name: Test Svelte 5 Types
         run: |
@@ -90,7 +90,7 @@ jobs:
       - name: Test Svelte 5
         run: |
           cd tests-svelte5
-          bun run test
+          bun --bun run test
 
   types:
     runs-on: macos-15
@@ -100,10 +100,10 @@ jobs:
       - run: bun ci
 
       - name: Build docs
-        run: bun build:docs
+        run: bun run build:docs
 
-      - run: bun test:src-types
-      - run: bun test:types
+      - run: bun run test:src-types
+      - run: bun run test:types
 
   deploy-docs:
     if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master'
