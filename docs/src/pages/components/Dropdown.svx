@@ -24,6 +24,16 @@ must have a unique `id` property.
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+## Custom label
+
+Use the `labelChildren` slot to provide custom label content instead of using the `labelText` prop.
+
+<Dropdown selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}">
+  <strong slot="labelChildren">Custom label</strong>
+</Dropdown>
+
 ## Custom slot
 
 Override the default slot to customize the display of each item. Access the item and
