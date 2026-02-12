@@ -4,6 +4,7 @@ import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.sv
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { isSvelte5, user } from "../setup-tests";
+import DropdownLabelChildren from "./Dropdown.slot.test.svelte";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
@@ -284,6 +285,13 @@ describe("Dropdown", () => {
     expect(customItems[0]).toHaveTextContent("Item 1: Option 1");
     expect(customItems[1]).toHaveTextContent("Item 2: Option 2");
     expect(customItems[2]).toHaveTextContent("Item 3: Option 3");
+  });
+
+  it("supports custom label slot", () => {
+    render(DropdownLabelChildren);
+
+    const customLabel = screen.getByText("Custom label content");
+    expect(customLabel).toBeInTheDocument();
   });
 
   it("should close on outside click", async () => {

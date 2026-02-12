@@ -24,6 +24,16 @@ describe("Svelte 5 Snippets", () => {
     });
   });
 
+  describe("Dropdown labelChildren", () => {
+    it("should render labelChildren slot", () => {
+      render(Snippets);
+
+      const customLabel = screen.getByTestId("dropdown-custom-label");
+      expect(customLabel).toBeInTheDocument();
+      expect(customLabel).toHaveTextContent("Custom label content");
+    });
+  });
+
   describe("ComboBox", () => {
     it("should render snippet with item and index arguments", async () => {
       render(Snippets);

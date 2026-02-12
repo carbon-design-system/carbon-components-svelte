@@ -399,14 +399,16 @@
   class:bx--dropdown__wrapper--inline--invalid={inline && invalid}
   {...$$restProps}
 >
-  {#if labelText}
+  {#if labelText || $$slots.labelChildren}
     <label
       for={id}
       class:bx--label={true}
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
     >
-      {labelText}
+      <slot name="labelChildren">
+        {labelText}
+      </slot>
     </label>
   {/if}
   <ListBox
