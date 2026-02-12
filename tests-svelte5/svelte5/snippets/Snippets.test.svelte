@@ -14,6 +14,10 @@
   {/snippet}
 </Dropdown>
 
+<Dropdown data-testid="dropdown-label-children" {items} selectedId="1">
+  <span slot="labelChildren" data-testid="dropdown-custom-label">Custom label content</span>
+</Dropdown>
+
 <ComboBox data-testid="combobox-snippet" {items}>
   {#snippet children({ item, index })}
     <span data-testid="combobox-item-{index}">{item.text} - index {index}</span>
