@@ -6,7 +6,7 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "carbon-components-svelte": "^0.99.3"
+    "carbon-components-svelte": "^0.100.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
