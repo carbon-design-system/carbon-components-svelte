@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.100.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.99.3...v0.100.0) (2026-02-13)
+
+### ⚠ BREAKING CHANGES
+
+- **number-input:** blur event is dispatched, not forwarded; access event through `e.detail.event`
+
+### Features
+
+- **data-table:** add `rowClass` prop ([740aad9](https://github.com/carbon-design-system/carbon-components-svelte/commit/740aad927e6511b9eb8cf77a394c91c6a0b0b575))
+- **dropdown:** add `labelChildren` slot ([7920fd5](https://github.com/carbon-design-system/carbon-components-svelte/commit/7920fd5d4dd38968b5a763bdf8859891c5c28ac5))
+- **number-input:** add `disableWheel` prop ([e651f9b](https://github.com/carbon-design-system/carbon-components-svelte/commit/e651f9bf15564c894463f2aa90f9d6791829628e)), closes [#2609](https://github.com/carbon-design-system/carbon-components-svelte/issues/2609)
+- **number-input:** add `stepStartValue` prop ([afdd567](https://github.com/carbon-design-system/carbon-components-svelte/commit/afdd567c6b483f83a54a67c85aa162def895d1cd)), closes [#2610](https://github.com/carbon-design-system/carbon-components-svelte/issues/2610)
+- **number-input:** add validation with auto min/max, locale formatting, `validate` prop ([31b29be](https://github.com/carbon-design-system/carbon-components-svelte/commit/31b29bebcd45bfd38ae157812601eb3fe46b51f1)), closes [#2614](https://github.com/carbon-design-system/carbon-components-svelte/issues/2614) [#2615](https://github.com/carbon-design-system/carbon-components-svelte/issues/2615) [#2616](https://github.com/carbon-design-system/carbon-components-svelte/issues/2616)
+- **number-input:** dispatch blur, `click:stepper` events with `value` ([ea3135a](https://github.com/carbon-design-system/carbon-components-svelte/commit/ea3135a31ffda929e1fec7ecc438e60791b513ab)), closes [#2611](https://github.com/carbon-design-system/carbon-components-svelte/issues/2611) [#2617](https://github.com/carbon-design-system/carbon-components-svelte/issues/2617) [#2618](https://github.com/carbon-design-system/carbon-components-svelte/issues/2618)
+- **pagination:** add `dynamicPageSizes` prop ([b748b0c](https://github.com/carbon-design-system/carbon-components-svelte/commit/b748b0cea9f6e0bbaf231ac558a665c28c637a0c))
+- **tooltip-icon:** add `size` prop ([7469b7d](https://github.com/carbon-design-system/carbon-components-svelte/commit/7469b7d86fca4a041e9fe2a892aa582b229bbd66)), closes [#2587](https://github.com/carbon-design-system/carbon-components-svelte/issues/2587)
+
 ### [0.99.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.99.2...v0.99.3) (2026-02-03)
 
 ### Bug Fixes
