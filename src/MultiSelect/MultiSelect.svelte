@@ -196,6 +196,13 @@
   export let virtualize = undefined;
 
   /**
+   * Set to `true` to render the dropdown menu in a portal,
+   * allowing it to escape containers with `overflow: hidden`.
+   * @type {boolean}
+   */
+  export let portalMenu = false;
+
+  /**
    * Obtain a reference to the list HTML element.
    * @type {null | HTMLDivElement}
    */
@@ -213,6 +220,7 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox";
+  import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
@@ -419,6 +427,8 @@
 
   $: itemsToUse = filterable ? filteredItems : sortedItems;
 
+  $: menuMaxHeight = getMenuMaxHeight(size);
+
   $: virtualData = virtualConfig
     ? virtualizeUtil({
         items: itemsToUse,
@@ -435,6 +445,7 @@
 <svelte:window
   on:click={({ target }) => {
     if (open && multiSelectRef && !multiSelectRef.contains(target)) {
+      if (portalMenu && listRef && listRef.contains(target)) return;
       open = false;
     }
   }}
@@ -661,19 +672,27 @@
         <ListBoxMenuIcon {open} {translateWithId} />
       </ListBoxField>
     {/if}
-    <div style:display={open ? "block" : "none"}>
+    <div style:display={open || portalMenu ? "block" : "none"}>
       <ListBoxMenu
         aria-label={ariaLabel}
         {id}
+        portal={portalMenu}
+        {open}
+        anchor={fieldRef}
+        {direction}
         aria-multiselectable="true"
         on:scroll
         on:scroll={(e) => {
           listScrollTop = e.target.scrollTop;
         }}
         bind:ref={listRef}
-        style={virtualConfig
-          ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
-          : undefined}
+        style={portalMenu
+          ? `max-height: ${virtualConfig
+              ? `${virtualConfig.containerHeight}px; overflow-y: auto`
+              : menuMaxHeight};`
+          : virtualConfig
+            ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+            : undefined}
       >
         {#if virtualData?.isVirtualized}
           <div style="height: {virtualData.totalHeight}px; position: relative;">
