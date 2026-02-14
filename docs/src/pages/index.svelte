@@ -213,6 +213,30 @@
 
     <Row style="margin-bottom: var(--cds-layout-02)">
       <Column>
+        <h2>LLM documentation</h2>
+        <p>
+          Component documentation is available in LLM-friendly plain text
+          formats.
+        </p>
+        <ul>
+          <li>
+            <Link inline size="lg" href="/llms.txt" target="_blank">
+              llms.txt
+            </Link>
+            – component index with links
+          </li>
+          <li>
+            <Link inline size="lg" href="/llms-full.txt" target="_blank">
+              llms-full.txt
+            </Link>
+            – full documentation in a single file
+          </li>
+        </ul>
+      </Column>
+    </Row>
+
+    <Row style="margin-bottom: var(--cds-layout-02)">
+      <Column>
         <h2>Portfolio</h2>
         <p>
           The Carbon Svelte portfolio includes packages for icons, pictograms,
