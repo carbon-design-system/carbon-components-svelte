@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import Button from "./Button.test.svelte";
 
@@ -105,6 +105,54 @@ describe("Button", () => {
     const buttonWithIcon = screen.getByRole("button", { name: "With icon" });
     const icon = buttonWithIcon.querySelector(".bx--btn__icon");
     expect(icon).toBeInTheDocument();
+  });
+
+  it("should set pointer-events to none on assistive text for icon-only buttons", () => {
+    render(Button);
+
+    const btnA = screen.getByTestId("btn-icon-a");
+    const assistiveText = btnA.querySelector(".bx--assistive-text");
+    assert(assistiveText instanceof HTMLElement);
+    expect(assistiveText.style.pointerEvents).toBe("none");
+  });
+
+  it("should hide other icon-only button tooltips on mouseenter", async () => {
+    render(Button);
+
+    const btnA = screen.getByTestId("btn-icon-a");
+    const btnB = screen.getByTestId("btn-icon-b");
+    const btnC = screen.getByTestId("btn-icon-c");
+
+    // Initially no button should have bx--tooltip--hidden.
+    expect(btnA).not.toHaveClass("bx--tooltip--hidden");
+    expect(btnB).not.toHaveClass("bx--tooltip--hidden");
+    expect(btnC).not.toHaveClass("bx--tooltip--hidden");
+
+    // Hover button A: others should get bx--tooltip--hidden.
+    await fireEvent.mouseEnter(btnA);
+    expect(btnA).not.toHaveClass("bx--tooltip--hidden");
+    expect(btnB).toHaveClass("bx--tooltip--hidden");
+    expect(btnC).toHaveClass("bx--tooltip--hidden");
+
+    // Hover button B: A and C should get bx--tooltip--hidden.
+    await fireEvent.mouseEnter(btnB);
+    expect(btnA).toHaveClass("bx--tooltip--hidden");
+    expect(btnB).not.toHaveClass("bx--tooltip--hidden");
+    expect(btnC).toHaveClass("bx--tooltip--hidden");
+  });
+
+  it("should clear tooltip hidden state on mouseleave", async () => {
+    render(Button);
+
+    const btnA = screen.getByTestId("btn-icon-a");
+    const btnB = screen.getByTestId("btn-icon-b");
+
+    await fireEvent.mouseEnter(btnA);
+    expect(btnB).toHaveClass("bx--tooltip--hidden");
+
+    await fireEvent.mouseLeave(btnA);
+    expect(btnA).not.toHaveClass("bx--tooltip--hidden");
+    expect(btnB).not.toHaveClass("bx--tooltip--hidden");
   });
 
   it("should hide tooltip but keep accessibility when hideTooltip is true", () => {
