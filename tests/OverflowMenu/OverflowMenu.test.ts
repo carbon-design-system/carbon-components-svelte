@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../setup-tests";
 import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
@@ -452,6 +453,93 @@ describe("OverflowMenu", () => {
       await user.type(menu, "{Escape}");
       expect(menuButton).toHaveAttribute("aria-expanded", "false");
       expect(menuButton).toHaveFocus();
+    });
+
+    it("should apply direction attribute on portal menu", async () => {
+      render(OverflowMenu, { props: { portalMenu: true, direction: "top" } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toHaveAttribute("data-floating-menu-direction", "top");
+    });
+
+    it("should set position: relative on portal menu ul", async () => {
+      render(OverflowMenu, { props: { portalMenu: true } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+
+      const menu = screen.getByRole("menu");
+      expect(menu.style.position).toBe("relative");
+    });
+
+    it("should reflect auto-flipped direction in data-floating-menu-direction", async () => {
+      // Mock getBoundingClientRect to simulate anchor near top of viewport
+      // so that direction="top" will auto-flip to "bottom".
+      const original = Element.prototype.getBoundingClientRect;
+      Element.prototype.getBoundingClientRect = function () {
+        if (this.hasAttribute?.("data-floating-portal")) {
+          return {
+            x: 0,
+            y: 0,
+            width: 160,
+            height: 200,
+            top: 0,
+            right: 160,
+            bottom: 200,
+            left: 0,
+            // biome-ignore lint/style/useNamingConvention: toJSON is standard DOMRect API
+            toJSON() {
+              return this;
+            },
+          } as DOMRect;
+        }
+        if (this.classList?.contains("bx--overflow-menu")) {
+          return {
+            x: 0,
+            y: 30,
+            width: 40,
+            height: 32,
+            top: 30,
+            right: 40,
+            bottom: 62,
+            left: 0,
+            // biome-ignore lint/style/useNamingConvention: toJSON is standard DOMRect API
+            toJSON() {
+              return this;
+            },
+          } as DOMRect;
+        }
+        return original.call(this);
+      };
+
+      try {
+        render(OverflowMenu, {
+          props: { portalMenu: true, direction: "top" },
+        });
+
+        const menuButton = screen.getByRole("button");
+        await user.click(menuButton);
+        await tick();
+
+        const menu = screen.getByRole("menu");
+
+        // FloatingPortal auto-flipped from "top" to "bottom" because
+        // there's not enough space above (30px) for the menu (200px height).
+        await waitFor(() => {
+          expect(menu).toHaveAttribute(
+            "data-floating-menu-direction",
+            "bottom",
+          );
+        });
+
+        const portal = menu.closest("[data-floating-portal]");
+        expect(portal).toHaveAttribute("data-floating-direction", "bottom");
+      } finally {
+        Element.prototype.getBoundingClientRect = original;
+      }
     });
   });
 });
