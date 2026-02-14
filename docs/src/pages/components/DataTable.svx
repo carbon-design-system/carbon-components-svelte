@@ -637,6 +637,12 @@ Set `zebra` to `true` to add alternating row colors.
   ]}"
 />
 
+## Custom row classes
+
+Use `rowClass` to apply custom CSS classes to rows. Pass a string for a static class, or a function that receives `{ row, rowIndex, selected, expanded }` and returns conditional classes. Try selecting and expanding rows to see the custom styles.
+
+<FileSource src="/framed/DataTable/DataTableRowClass" />
+
 ## Tall rows
 
 Set `size="tall"` for increased row height.
