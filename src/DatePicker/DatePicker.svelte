@@ -271,6 +271,9 @@
         if ($inputValueFrom !== "") {
           inputRef.value = $inputValueFrom;
         }
+        if ($inputValueTo !== "") {
+          inputRefTo.value = $inputValueTo;
+        }
       } else {
         calendar.setDate($inputValue);
       }
