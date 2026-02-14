@@ -200,4 +200,43 @@ describe("DatePicker", () => {
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
   });
+
+  describe("portalMenu", () => {
+    afterEach(() => {
+      // Clean up any flatpickr calendars appended to document.body.
+      for (const el of document.body.querySelectorAll(".flatpickr-calendar")) {
+        el.remove();
+      }
+    });
+
+    it("renders calendar inside the date picker wrapper by default", async () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "single",
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+
+      const calendar = await screen.findByLabelText("calendar-container");
+      const wrapper = container.querySelector(".bx--date-picker");
+      expect(wrapper?.contains(calendar)).toBe(true);
+      expect(calendar.classList.contains("static")).toBe(true);
+    });
+
+    it("renders calendar at document.body when portalMenu is true", async () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "single",
+        portalMenu: true,
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+
+      const calendar = await screen.findByLabelText("calendar-container");
+      const wrapper = container.querySelector(".bx--date-picker");
+      expect(wrapper?.contains(calendar)).toBe(false);
+      expect(document.body.contains(calendar)).toBe(true);
+      expect(calendar.classList.contains("static")).toBe(false);
+    });
+  });
 });

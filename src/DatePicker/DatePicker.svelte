@@ -56,6 +56,9 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
+  /** Set to `true` to render the calendar in a portal to prevent clipping. */
+  export let portalMenu = false;
+
   /** Set an id for the date picker element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -216,7 +219,7 @@
     calendar = await createCalendar({
       options: {
         ...options,
-        appendTo: datePickerRef,
+        ...(portalMenu ? { static: false } : { appendTo: datePickerRef }),
         defaultDate: $inputValue,
         mode: $mode,
       },
