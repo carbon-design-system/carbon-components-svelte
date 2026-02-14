@@ -56,6 +56,13 @@
   /** Obtain a reference to the overflow menu element */
   export let menuRef = null;
 
+  /**
+   * Set to `true` to render the menu in a portal,
+   * allowing it to escape containers with `overflow: hidden`.
+   * @type {boolean}
+   */
+  export let portalMenu = false;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -65,6 +72,7 @@
   import { writable } from "svelte/store";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
 
   const ctxBreadcrumbItem = getContext("BreadcrumbItem");
   const dispatch = createEventDispatcher();
@@ -160,24 +168,28 @@
       buttonWidth = width;
 
       if (!onMountAfterUpdate && $currentIndex < 0) {
-        menuRef.focus();
+        menuRef?.focus();
       }
 
-      if (flipped) {
-        menuRef.style.left = "auto";
-        menuRef.style.right = 0;
-      }
+      if (!portalMenu) {
+        if (flipped) {
+          menuRef.style.left = "auto";
+          menuRef.style.right = 0;
+        }
 
-      if (direction === "top") {
-        menuRef.style.top = "auto";
-        menuRef.style.bottom = `${height}px`;
-      } else if (direction === "bottom") {
-        menuRef.style.top = `${height}px`;
-      }
+        if (direction === "top") {
+          menuRef.style.top = "auto";
+          menuRef.style.bottom = `${height}px`;
+        } else if (direction === "bottom") {
+          menuRef.style.top = `${height}px`;
+        }
 
-      if (ctxBreadcrumbItem) {
-        menuRef.style.top = `${height + 10}px`;
-        menuRef.style.left = `${-11}px`;
+        if (ctxBreadcrumbItem) {
+          menuRef.style.top = `${height + 10}px`;
+          menuRef.style.left = `${-11}px`;
+        }
+      } else if (flipped && menuRef) {
+        menuRef.style.marginLeft = `${width - menuRef.offsetWidth}px`;
       }
     }
 
@@ -204,6 +216,7 @@
 <svelte:window
   on:click={({ target }) => {
     if (buttonRef && buttonRef.contains(target)) return;
+    if (portalMenu && menuRef && menuRef.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
       const shouldContinue = dispatch("close", null, { cancelable: true });
       if (shouldContinue) {
@@ -267,7 +280,7 @@
       class="bx--overflow-menu__icon {iconClass}"
     />
   </slot>
-  {#if open}
+  {#if open && !portalMenu}
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       bind:this={menuRef}
@@ -290,6 +303,43 @@
     </ul>
   {/if}
 </button>
+
+{#if portalMenu}
+  <FloatingPortal anchor={buttonRef} {direction} {open}>
+    <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+    <ul
+      bind:this={menuRef}
+      role="menu"
+      tabindex="-1"
+      id={menuId}
+      aria-label={ariaLabel}
+      data-floating-menu-direction={direction}
+      class:bx--overflow-menu-options={true}
+      class:bx--overflow-menu--flip={flipped}
+      class:bx--overflow-menu-options--open={open}
+      class:bx--overflow-menu-options--light={light}
+      class:bx--overflow-menu-options--sm={size === "sm"}
+      class:bx--overflow-menu-options--xl={size === "xl"}
+      class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
+      class={menuOptionsClass}
+      style="position: static; --overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
+      on:keydown={(e) => {
+        if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
+          e.preventDefault();
+        } else if (e.key === "Escape") {
+          e.stopPropagation();
+          const shouldContinue = dispatch("close", null, { cancelable: true });
+          if (shouldContinue) {
+            open = false;
+            buttonRef.focus();
+          }
+        }
+      }}
+    >
+      <slot />
+    </ul>
+  </FloatingPortal>
+{/if}
 
 <style>
   .bx--overflow-menu-options:after {

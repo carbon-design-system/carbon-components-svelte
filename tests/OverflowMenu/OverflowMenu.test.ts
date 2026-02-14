@@ -396,4 +396,62 @@ describe("OverflowMenu", () => {
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
+
+  describe("portalMenu", () => {
+    afterEach(() => {
+      const existingPortals = document.querySelectorAll(
+        "[data-floating-portal]",
+      );
+      for (const portal of existingPortals) {
+        portal.remove();
+      }
+    });
+
+    it("should render menu in FloatingPortal when portalMenu is true", async () => {
+      render(OverflowMenu, { props: { portalMenu: true } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).toBeInTheDocument();
+      expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+
+    it("should not render menu inside button when portalMenu is true", async () => {
+      render(OverflowMenu, { props: { portalMenu: true } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+
+      const menu = screen.getByRole("menu");
+      expect(menuButton.contains(menu)).toBe(false);
+    });
+
+    it("should close portal menu when clicking outside", async () => {
+      render(OverflowMenu, { props: { portalMenu: true } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+      expect(menuButton).toHaveAttribute("aria-expanded", "true");
+
+      await user.click(document.body);
+      expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("should close portal menu on Escape", async () => {
+      render(OverflowMenu, { props: { portalMenu: true } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+      expect(menuButton).toHaveAttribute("aria-expanded", "true");
+
+      const menu = screen.getByRole("menu");
+      await user.type(menu, "{Escape}");
+      expect(menuButton).toHaveAttribute("aria-expanded", "false");
+      expect(menuButton).toHaveFocus();
+    });
+  });
 });
