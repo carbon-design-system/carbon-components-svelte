@@ -136,6 +136,12 @@ Use the light variant for dark backgrounds by setting `light` to `true`. This pr
     {id: "2", text: "Fax"}]}"
   />
 
+## Portal menu
+
+Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
+
+<FileSource src="/framed/MultiSelect/MultiSelectPortalMenu" />
+
 ## Inline variant
 
 Display the dropdown inline with other content by setting `type` to `"inline"`. This removes the background and border.
