@@ -20,6 +20,12 @@ Create a basic overflow menu by wrapping `OverflowMenuItem` components within `O
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
+## Portal menu
+
+Set `portalMenu` to `true` to render the menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
+
+<FileSource src="/framed/OverflowMenu/OverflowMenuPortalMenu" />
+
 ## Flipped
 
 Set `flipped` to `true` to position the menu to the left of the button.
