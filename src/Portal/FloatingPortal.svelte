@@ -35,11 +35,53 @@
   import { onMount, tick } from "svelte";
   import Portal from "./Portal.svelte";
 
+  const SCROLLABLE_OVERFLOW_REGEX = /(auto|scroll)/;
+
   let mounted = true;
+
+  /** @type {Array<HTMLElement | Document>} */
+  let scrollableAncestors = [];
+
+  /**
+   * Walk up from the anchor element and collect every
+   * scrollable ancestor so we can listen for their scroll events.
+   * @param {HTMLElement} node
+   * @returns {Array<HTMLElement | Document>}
+   */
+  function getScrollableAncestors(node) {
+    /** @type {Array<HTMLElement | Document>} */
+    const result = [];
+    let current = node.parentElement;
+
+    while (current) {
+      const { overflow, overflowX, overflowY } = getComputedStyle(current);
+
+      if (SCROLLABLE_OVERFLOW_REGEX.test(overflow + overflowY + overflowX)) {
+        result.push(current);
+      }
+
+      current = current.parentElement;
+    }
+
+    return result;
+  }
+
+  function addScrollListeners() {
+    for (const el of scrollableAncestors) {
+      el.addEventListener("scroll", scheduleUpdate, { passive: true });
+    }
+  }
+
+  function removeScrollListeners() {
+    for (const el of scrollableAncestors) {
+      el.removeEventListener("scroll", scheduleUpdate);
+    }
+  }
 
   onMount(() => {
     return () => {
       mounted = false;
+      removeScrollListeners();
       if (rafId !== null) {
         cancelAnimationFrame(rafId);
         rafId = null;
@@ -111,12 +153,19 @@
   // The actual rendered direction after auto-flipping.
   $: actualDirection = pos.actualDirection;
 
-  $: if (!open && rafId !== null) {
-    cancelAnimationFrame(rafId);
-    rafId = null;
+  $: if (!open) {
+    removeScrollListeners();
+    scrollableAncestors = [];
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
   }
 
   $: if (open && anchor && ref) {
+    removeScrollListeners();
+    scrollableAncestors = getScrollableAncestors(anchor);
+    addScrollListeners();
     tick().then(updatePosition);
   }
 </script>
