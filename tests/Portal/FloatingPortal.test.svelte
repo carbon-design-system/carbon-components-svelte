@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import FloatingPortal from "../../src/Portal/FloatingPortal.svelte";
+  import { FloatingPortal } from "carbon-components-svelte";
 
   export let open = false;
   export let direction: "top" | "bottom" = "bottom";
@@ -19,14 +19,10 @@
     bind:this={containerRef}
     style="overflow: auto; height: 200px;"
   >
-    <div data-testid="anchor" bind:this={anchor}>
-      Anchor element
-    </div>
+    <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
   </div>
 {:else}
-  <div data-testid="anchor" bind:this={anchor}>
-    Anchor element
-  </div>
+  <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
 {/if}
 
 <FloatingPortal {anchor} {direction} {open} {zIndex} bind:ref>

@@ -1,5 +1,9 @@
 <script>
   /**
+   * @slot {{ direction: "bottom" | "top" }}
+   */
+
+  /**
    * Specify the anchor element to position the floating content relative to.
    * @type {null | HTMLElement}
    */
@@ -9,7 +13,7 @@
    * Set the preferred direction of the floating content.
    * The component will flip to the opposite direction
    * if there is not enough space.
-   * @type {"top" | "bottom"}
+   * @type {"bottom" | "top"}
    */
   export let direction = "bottom";
 
@@ -89,7 +93,7 @@
     };
   });
 
-  /** @type {{ top: number, left: number, width: number, actualDirection: "top" | "bottom" }} */
+  /** @type {{ top: number, left: number, width: number, actualDirection: "bottom" | "top" }} */
   let pos = {
     top: 0,
     left: 0,
