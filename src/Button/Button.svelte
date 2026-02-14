@@ -99,8 +99,10 @@
   /** Obtain a reference to the HTML element */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
+  import { get } from "svelte/store";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
+  import { activeButtonTooltip } from "./button-tooltip-store.js";
 
   const ctx = getContext("ComposedModal");
 
@@ -108,6 +110,35 @@
     ctx.declareRef(ref);
   }
   $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
+
+  const tooltipId = {};
+
+  $: tooltipHidden =
+    hasIconOnly &&
+    !hideTooltip &&
+    $activeButtonTooltip !== null &&
+    $activeButtonTooltip !== tooltipId;
+
+  function handleMouseEnter() {
+    if (hasIconOnly && !hideTooltip) {
+      activeButtonTooltip.set(tooltipId);
+    }
+  }
+
+  function handleMouseLeave() {
+    if ($activeButtonTooltip === tooltipId) {
+      activeButtonTooltip.set(null);
+    }
+  }
+
+  onMount(() => {
+    return () => {
+      if (get(activeButtonTooltip) === tooltipId) {
+        activeButtonTooltip.set(null);
+      }
+    };
+  });
+
   $: iconProps = {
     "aria-hidden": "true",
     class: "bx--btn__icon",
@@ -147,6 +178,7 @@
         !hideTooltip &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
+      hasIconOnly && !hideTooltip && tooltipHidden && "bx--tooltip--hidden",
       hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
       $$restProps.class,
     ]
@@ -182,10 +214,14 @@
     on:blur
     on:mouseover
     on:mouseenter
+    on:mouseenter={handleMouseEnter}
     on:mouseleave
+    on:mouseleave={handleMouseLeave}
   >
     {#if hasIconOnly}
-      <span class:bx--assistive-text={true}>{iconDescription}</span>
+      <span class:bx--assistive-text={true} style:pointer-events="none">
+        {iconDescription}
+      </span>
     {/if}
     <slot />
     {#if $$slots.icon}
@@ -211,10 +247,14 @@
     on:blur
     on:mouseover
     on:mouseenter
+    on:mouseenter={handleMouseEnter}
     on:mouseleave
+    on:mouseleave={handleMouseLeave}
   >
     {#if hasIconOnly}
-      <span class:bx--assistive-text={true}>{iconDescription}</span>
+      <span class:bx--assistive-text={true} style:pointer-events="none">
+        {iconDescription}
+      </span>
     {/if}
     <slot />
     {#if $$slots.icon}

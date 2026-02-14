@@ -50,3 +50,22 @@
 <Button skeleton />
 <Button skeleton size="field" />
 <Button skeleton size="small" />
+
+<Button
+  data-testid="btn-icon-a"
+  kind="ghost"
+  icon={Add}
+  iconDescription="Add"
+/>
+<Button
+  data-testid="btn-icon-b"
+  kind="ghost"
+  icon={Add}
+  iconDescription="Delete"
+/>
+<Button
+  data-testid="btn-icon-c"
+  kind="ghost"
+  icon={Add}
+  iconDescription="Save"
+/>
