@@ -27,6 +27,12 @@ Set `datePickerType` to `"range"` to enable date range selection.
 
 <FileSource src="/framed/DatePicker/DatePickerRange" />
 
+## Programmatic range update
+
+Use `bind:valueFrom` and `bind:valueTo` to programmatically update the date range from outside the component.
+
+<FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
+
 ## Portal menu
 
 Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
