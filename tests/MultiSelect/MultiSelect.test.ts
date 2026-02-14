@@ -1692,4 +1692,34 @@ describe("MultiSelect", () => {
       expect(menu.style.overflowY).toBe("auto");
     });
   });
+
+  describe("portalMenu", () => {
+    afterEach(() => {
+      const existingPortals = document.querySelectorAll(
+        "[data-floating-portal]",
+      );
+      for (const portal of existingPortals) {
+        portal.remove();
+      }
+    });
+
+    it("should render menu in FloatingPortal when portalMenu is true", () => {
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "0", text: "Slack" },
+            { id: "1", text: "Email" },
+          ],
+          portalMenu: true,
+          open: true,
+        },
+      });
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).toBeInTheDocument();
+      expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+  });
 });
