@@ -194,6 +194,40 @@ describe("DatePicker", () => {
     expect(inputEnd).toHaveValue("");
   });
 
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/893
+  it("syncs both inputs when range values are programmatically updated", async () => {
+    const { rerender } = render(DatePickerRange, {
+      props: {
+        valueFrom: "01/01/2024",
+        valueTo: "12/31/2024",
+      },
+    });
+
+    const inputStart = screen.getByLabelText("Start date");
+    const inputEnd = screen.getByLabelText("End date");
+
+    await user.click(inputStart);
+    expect(
+      await screen.findByLabelText("calendar-container"),
+    ).toBeInTheDocument();
+    expect(inputStart).toHaveValue("01/01/2024");
+    expect(inputEnd).toHaveValue("12/31/2024");
+
+    // Simulate programmatic update (e.g., from a month filter).
+    rerender({ valueFrom: "01/01/2024", valueTo: "01/31/2024" });
+    await tick();
+
+    expect(inputStart).toHaveValue("01/01/2024");
+    expect(inputEnd).toHaveValue("01/31/2024");
+
+    // Update again to verify continued sync.
+    rerender({ valueFrom: "03/01/2024", valueTo: "03/31/2024" });
+    await tick();
+
+    expect(inputStart).toHaveValue("03/01/2024");
+    expect(inputEnd).toHaveValue("03/31/2024");
+  });
+
   it("supports custom label slot for DatePickerInput", () => {
     render(DatePickerInputSlot);
 
