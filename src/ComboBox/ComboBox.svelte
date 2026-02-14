@@ -155,6 +155,13 @@
    */
   export let virtualize = undefined;
 
+  /**
+   * Set to `true` to render the dropdown menu in a portal,
+   * allowing it to escape containers with `overflow: hidden`.
+   * @type {boolean}
+   */
+  export let portalMenu = false;
+
   import { afterUpdate, createEventDispatcher, tick } from "svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -164,6 +171,7 @@
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
+  import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
@@ -179,6 +187,9 @@
   let prevInputLength = 0;
   let listScrollTop = 0;
   let prevOpen = false;
+
+  /** @type {null | HTMLDivElement} */
+  let fieldRef = null;
 
   /**
    * @param {Item} item
@@ -436,6 +447,8 @@
       }
     : null;
 
+  $: menuMaxHeight = getMenuMaxHeight(size);
+
   $: virtualData = virtualConfig
     ? virtualizeUtil({
         items: filteredItems,
@@ -470,6 +483,7 @@
 <svelte:window
   on:click={({ target }) => {
     if (open && ref && !ref.contains(target)) {
+      if (portalMenu && listRef && listRef.contains(target)) return;
       open = false;
     }
   }}
@@ -502,7 +516,7 @@
     {warn}
     {warnText}
   >
-    <div class:bx--list-box__field={true}>
+    <div bind:this={fieldRef} class:bx--list-box__field={true}>
       <input
         bind:this={ref}
         bind:value
@@ -634,14 +648,22 @@
       <ListBoxMenu
         aria-label={ariaLabel}
         {id}
+        portal={portalMenu}
+        {open}
+        anchor={fieldRef}
+        {direction}
         on:scroll
         on:scroll={(e) => {
           listScrollTop = e.target.scrollTop;
         }}
         bind:ref={listRef}
-        style={virtualConfig
-          ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
-          : undefined}
+        style={portalMenu
+          ? `max-height: ${virtualConfig
+              ? `${virtualConfig.containerHeight}px; overflow-y: auto`
+              : menuMaxHeight};`
+          : virtualConfig
+            ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+            : undefined}
       >
         {#if virtualData?.isVirtualized}
           <div style="height: {virtualData.totalHeight}px; position: relative;">

@@ -1677,4 +1677,27 @@ describe("ComboBox", () => {
       expect(menu.style.overflowY).toBe("auto");
     });
   });
+
+  describe("portalMenu", () => {
+    afterEach(() => {
+      const existingPortals = document.querySelectorAll(
+        "[data-floating-portal]",
+      );
+      for (const portal of existingPortals) {
+        portal.remove();
+      }
+    });
+
+    it("should render menu in FloatingPortal when portalMenu is true", () => {
+      render(ComboBox, {
+        props: { portalMenu: true, open: true },
+      });
+
+      const menu = screen.getAllByRole("listbox")[1];
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).toBeInTheDocument();
+      expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+  });
 });

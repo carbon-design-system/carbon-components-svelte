@@ -31,6 +31,7 @@
   export let clearFilterOnOpen = false;
   export let typeahead = false;
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
+  export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
   export let ariaLabel: string | undefined = undefined;
 </script>
 
@@ -57,6 +58,7 @@
   {clearFilterOnOpen}
   {typeahead}
   {virtualize}
+  {portalMenu}
   on:select={(e) => {
     console.log("select", e.detail);
   }}
