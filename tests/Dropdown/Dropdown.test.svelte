@@ -25,6 +25,7 @@
   export let name: ComponentProps<Dropdown>["name"] = undefined;
   export let ref: ComponentProps<Dropdown>["ref"] = null;
   export let virtualize: ComponentProps<Dropdown>["virtualize"] = undefined;
+  export let portalMenu: ComponentProps<Dropdown>["portalMenu"] = false;
   export let onselect: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
@@ -51,6 +52,7 @@
   {name}
   bind:ref
   {virtualize}
+  {portalMenu}
   on:select={onselect}
   {...$$restProps}
 />
