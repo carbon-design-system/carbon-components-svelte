@@ -27,6 +27,7 @@ jobs:
       - run: bunx biome ci --error-on-warnings
 
   test-svelte4:
+    needs: [lint]
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -43,6 +44,7 @@ jobs:
         run: bun --bun run test
 
   test-svelte3:
+    needs: [lint]
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -68,6 +70,7 @@ jobs:
           bun --bun run test
 
   test-svelte5:
+    needs: [lint]
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
