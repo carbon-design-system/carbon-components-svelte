@@ -48,7 +48,12 @@
     dispatch(isOpen ? "open" : "close");
     prevIsOpen = isOpen;
   }
-  $: $isSideNavCollapsed = !isOpen;
+  // Only update the collapsed store after hydration (winWidth is known).
+  // During SSR, defer to Carbon CSS media queries to handle visibility
+  // to avoid a flash when JS sets isOpen after hydration.
+  $: if (winWidth !== undefined) {
+    $isSideNavCollapsed = !isOpen;
+  }
   $: $isSideNavRail = rail;
   $: $isSideNavMobile =
     winWidth !== undefined && winWidth < expansionBreakpoint;
@@ -99,9 +104,11 @@
   class:bx--side-nav--expanded={rail && winWidth >= expansionBreakpoint
     ? false
     : isOpen}
-  class:bx--side-nav--collapsed={!isOpen && !rail}
+  class:bx--side-nav--collapsed={winWidth !== undefined && !isOpen && !rail}
   class:bx--side-nav--rail={rail}
-  style:visibility={!isOpen && !rail ? "hidden" : undefined}
+  style:visibility={winWidth !== undefined && !isOpen && !rail
+    ? "hidden"
+    : undefined}
   {...$$restProps}
 >
   <slot />

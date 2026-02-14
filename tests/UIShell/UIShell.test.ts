@@ -469,6 +469,53 @@ describe("UIShell", () => {
       expect(nav).not.toHaveStyle({ visibility: "hidden" });
     });
 
+    // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1383
+    describe("pre-hydration flicker prevention", () => {
+      const setInnerWidth = (value: number | undefined) => {
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value,
+        });
+      };
+
+      afterEach(() => {
+        setInnerWidth(1024);
+        window.dispatchEvent(new Event("resize"));
+      });
+
+      it("should not apply collapsed class or visibility:hidden when winWidth is undefined", () => {
+        setInnerWidth(undefined as unknown as number);
+
+        const { container } = render(UiShell, {
+          props: { sideNavIsOpen: false },
+        });
+
+        const nav = container.querySelector(".bx--side-nav");
+        expect(nav).not.toHaveClass("bx--side-nav--collapsed");
+        expect(nav).not.toHaveStyle({ visibility: "hidden" });
+      });
+
+      it("should apply collapsed state after viewport width becomes known", async () => {
+        setInnerWidth(undefined as unknown as number);
+
+        const { container } = render(UiShell, {
+          props: { sideNavIsOpen: false },
+        });
+
+        const nav = container.querySelector(".bx--side-nav");
+        expect(nav).not.toHaveClass("bx--side-nav--collapsed");
+
+        // Simulate hydration: viewport width becomes known.
+        setInnerWidth(500);
+        window.dispatchEvent(new Event("resize"));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(nav).toHaveClass("bx--side-nav--collapsed");
+        expect(nav).toHaveStyle({ visibility: "hidden" });
+      });
+    });
+
     it("should not apply visibility:hidden in rail mode when closed", () => {
       const { container } = render(UiShell, {
         props: { sideNavIsOpen: false, sideNavRail: true },
