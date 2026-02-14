@@ -137,6 +137,12 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+## Portal menu
+
+Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
+
+<FileSource src="/framed/ComboBox/ComboBoxPortalMenu" />
+
 ## Extra-large size
 
 Set `size` to `"xl"` for an extra-large combobox.
