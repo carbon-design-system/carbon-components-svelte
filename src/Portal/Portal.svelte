@@ -5,10 +5,14 @@
    */
   export let tag = "div";
 
+  /**
+   * Obtain a reference to the portal element.
+   * @type {null | HTMLElement}
+   */
+  export let ref = null;
+
   import { onMount } from "svelte";
 
-  /** @type {null | HTMLElement} */
-  let portal = null;
   let mounted = false;
 
   onMount(() => {
@@ -17,22 +21,19 @@
     return () => {
       mounted = false;
 
-      if (portal?.parentNode) {
-        portal.parentNode.removeChild(portal);
+      if (ref?.parentNode) {
+        ref.parentNode.removeChild(ref);
       }
     };
   });
 
-  $: if (mounted && portal) {
-    if (
-      typeof document !== "undefined" &&
-      portal.parentNode !== document.body
-    ) {
-      document.body.appendChild(portal);
+  $: if (mounted && ref) {
+    if (typeof document !== "undefined" && ref.parentNode !== document.body) {
+      document.body.appendChild(ref);
     }
   }
 </script>
 
-<svelte:element this={tag} bind:this={portal} data-portal {...$$restProps}>
+<svelte:element this={tag} bind:this={ref} data-portal {...$$restProps}>
   <slot />
 </svelte:element>

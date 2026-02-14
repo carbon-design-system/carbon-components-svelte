@@ -163,6 +163,48 @@ describe("Portal", () => {
     unmount2();
   });
 
+  it("binds ref to the portal element", async () => {
+    const { component } = render(PortalTest);
+
+    const portalContent = await screen.findByText("Portal content");
+    const portalElement = portalContent.closest("[data-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    expect(component.ref).toBeInstanceOf(HTMLElement);
+    expect(component.ref).toBe(portalElement);
+    expect(component.ref).toHaveAttribute("data-portal");
+  });
+
+  it("ref is null when portal is not rendered", () => {
+    const { component } = render(PortalTest, {
+      props: { showPortal: false },
+    });
+
+    expect(component.ref).toBeNull();
+  });
+
+  it("ref updates when portal is conditionally shown", async () => {
+    const { component, rerender } = render(PortalTest, {
+      props: { showPortal: false },
+    });
+
+    expect(component.ref).toBeNull();
+
+    rerender({ showPortal: true });
+
+    const portalContent = await screen.findByText("Portal content");
+    const portalElement = portalContent.closest("[data-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    expect(component.ref).toBeInstanceOf(HTMLElement);
+    expect(component.ref).toBe(portalElement);
+
+    rerender({ showPortal: false });
+    await tick();
+
+    expect(component.ref).toBeNull();
+  });
+
   it("forwards rest props to the portal element", async () => {
     render(PortalTest, {
       props: {
