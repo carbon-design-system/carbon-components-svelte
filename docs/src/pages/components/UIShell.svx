@@ -49,7 +49,7 @@ The hamburger menu will automatically be rendered if the `SideNav` component is 
 
 ## Header with side navigation (rail)
 
-Set `rail` to `true` on `SideNav` to use the rail variant.
+Set `rail` to `true` on `SideNav` to use the rail variant. Expanded `SideNavMenu` items automatically collapse when the rail is in its narrow state.
 
 <FileSource src="/framed/UIShell/HeaderNavRail" />
 
