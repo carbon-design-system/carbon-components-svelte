@@ -1,5 +1,12 @@
 <script>
+  import { metatags, page } from "@sveltech/routify";
   import { onMount } from "svelte";
+
+  $: exampleName = $page.title;
+  $: componentName = $page.parent?.title ?? "";
+
+  $: metatags.title = `${exampleName} – Carbon Components Svelte`;
+  $: metatags.description = `${exampleName} example for the ${componentName} component in Carbon Components Svelte.`;
 
   onMount(() => {
     document.body.classList.add("framed");
@@ -24,6 +31,13 @@
     }
   }
 </script>
+
+<svelte:head>
+  <link
+    rel="canonical"
+    href="https://svelte.carbondesignsystem.com{$page.path}"
+  />
+</svelte:head>
 
 <slot />
 
