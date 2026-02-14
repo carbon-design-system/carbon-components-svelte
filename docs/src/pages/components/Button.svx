@@ -110,6 +110,12 @@ Set `isSelected` to `true` to enable the selected state for an icon-only, ghost 
 
 <FileSource src="/framed/Button/SelectedIconOnlyButton" />
 
+## Adjacent icon-only buttons
+
+When multiple icon-only buttons are placed next to each other, only one tooltip will be visible at a time. Hovering a new button automatically hides the previous tooltip, ensuring the correct button is always clicked.
+
+<FileSource src="/framed/Button/AdjacentIconOnlyButtons" />
+
 ## Link button
 
 Set `href` to render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) instead of a `button` element.
