@@ -206,4 +206,89 @@ describe("FloatingPortal", () => {
       expect(cancelSpy).toHaveBeenCalled();
     });
   });
+
+  describe("scrollable ancestor tracking", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("listens for scroll events on scrollable ancestors", async () => {
+      const addEventSpy = vi.spyOn(HTMLElement.prototype, "addEventListener");
+
+      render(FloatingPortalTest, {
+        props: { open: true, scrollableContainer: true },
+      });
+
+      await screen.findByText("Floating content");
+
+      const scrollCalls = addEventSpy.mock.calls.filter(
+        ([event]) => event === "scroll",
+      );
+      expect(scrollCalls.length).toBeGreaterThan(0);
+
+      const hasContainerListener = scrollCalls.some(
+        (call) =>
+          call[2] && typeof call[2] === "object" && call[2].passive === true,
+      );
+      expect(hasContainerListener).toBe(true);
+    });
+
+    it("removes scroll listeners when open becomes false", async () => {
+      const removeEventSpy = vi.spyOn(
+        HTMLElement.prototype,
+        "removeEventListener",
+      );
+
+      const { rerender } = render(FloatingPortalTest, {
+        props: { open: true, scrollableContainer: true },
+      });
+
+      await screen.findByText("Floating content");
+
+      rerender({ open: false, scrollableContainer: true });
+      await tick();
+
+      const scrollRemoveCalls = removeEventSpy.mock.calls.filter(
+        ([event]) => event === "scroll",
+      );
+      expect(scrollRemoveCalls.length).toBeGreaterThan(0);
+    });
+
+    it("removes scroll listeners on unmount", async () => {
+      const removeEventSpy = vi.spyOn(
+        HTMLElement.prototype,
+        "removeEventListener",
+      );
+
+      const { unmount } = render(FloatingPortalTest, {
+        props: { open: true, scrollableContainer: true },
+      });
+
+      await screen.findByText("Floating content");
+
+      unmount();
+
+      const scrollRemoveCalls = removeEventSpy.mock.calls.filter(
+        ([event]) => event === "scroll",
+      );
+      expect(scrollRemoveCalls.length).toBeGreaterThan(0);
+    });
+
+    it("schedules position update when a scrollable ancestor scrolls", async () => {
+      const rafSpy = vi.spyOn(window, "requestAnimationFrame");
+
+      render(FloatingPortalTest, {
+        props: { open: true, scrollableContainer: true },
+      });
+
+      await screen.findByText("Floating content");
+
+      const rafCountBefore = rafSpy.mock.calls.length;
+
+      const container = screen.getByTestId("scroll-container");
+      container.dispatchEvent(new Event("scroll"));
+
+      expect(rafSpy.mock.calls.length).toBeGreaterThan(rafCountBefore);
+    });
+  });
 });
