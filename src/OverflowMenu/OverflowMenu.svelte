@@ -305,7 +305,7 @@
 </button>
 
 {#if portalMenu}
-  <FloatingPortal anchor={buttonRef} {direction} {open}>
+  <FloatingPortal anchor={buttonRef} {direction} {open} let:direction={portalDirection}>
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       bind:this={menuRef}
@@ -313,7 +313,7 @@
       tabindex="-1"
       id={menuId}
       aria-label={ariaLabel}
-      data-floating-menu-direction={direction}
+      data-floating-menu-direction={portalDirection}
       class:bx--overflow-menu-options={true}
       class:bx--overflow-menu--flip={flipped}
       class:bx--overflow-menu-options--open={open}
@@ -322,7 +322,7 @@
       class:bx--overflow-menu-options--xl={size === "xl"}
       class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
       class={menuOptionsClass}
-      style="position: static; --overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
+      style="position: relative; top: auto; left: auto; --overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
       on:keydown={(e) => {
         if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
           e.preventDefault();
