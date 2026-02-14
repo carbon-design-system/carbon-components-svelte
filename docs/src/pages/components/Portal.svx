@@ -3,7 +3,9 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `Portal` component renders its content directly into `document.body`, allowing you to escape parent overflow constraints and z-index stacking contexts.
+`Portal` renders its content directly into `document.body`, allowing you to escape parent overflow constraints and z-index stacking contexts.
+
+For anchored, positioned content (e.g., dropdowns, popovers, overflow menus), use [FloatingPortal](/components/FloatingPortal) instead.
 
 ## Default Portal
 
