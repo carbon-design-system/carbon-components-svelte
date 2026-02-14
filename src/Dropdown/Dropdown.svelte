@@ -111,6 +111,13 @@
    */
   export let virtualize = undefined;
 
+  /**
+   * Set to `true` to render the dropdown menu in a portal,
+   * allowing it to escape containers with `overflow: hidden`.
+   * @type {boolean}
+   */
+  export let portalMenu = false;
+
   /** Set an id for the list box component */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -138,6 +145,7 @@
     ListBoxMenuIcon,
     ListBoxMenuItem,
   } from "../ListBox";
+  import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
@@ -189,6 +197,8 @@
         ...(typeof virtualize === "object" ? virtualize : {}),
       }
     : null;
+
+  $: menuMaxHeight = getMenuMaxHeight(size);
 
   $: virtualData = virtualConfig
     ? virtualizeUtil({
@@ -386,6 +396,7 @@
 <svelte:window
   on:click={(e) => {
     if (open && ref && !ref.contains(e.target)) {
+      if (portalMenu && listRef && listRef.contains(e.target)) return;
       open = false;
     }
   }}
@@ -527,14 +538,22 @@
       <ListBoxMenu
         aria-labelledby={id}
         {id}
+        portal={portalMenu}
+        {open}
+        anchor={ref}
+        {direction}
         on:scroll
         on:scroll={(e) => {
           listScrollTop = e.target.scrollTop;
         }}
         bind:ref={listRef}
-        style={virtualConfig
-          ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
-          : undefined}
+        style={portalMenu
+          ? `max-height: ${virtualConfig
+              ? `${virtualConfig.containerHeight}px; overflow-y: auto`
+              : menuMaxHeight};`
+          : virtualConfig
+            ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+            : undefined}
       >
         {#if virtualData?.isVirtualized}
           <div style="height: {virtualData.totalHeight}px; position: relative;">
