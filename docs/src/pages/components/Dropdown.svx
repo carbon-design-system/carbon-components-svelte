@@ -86,6 +86,12 @@ to `true`.
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+## Portal menu
+
+Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
+
+<FileSource src="/framed/Dropdown/DropdownPortalMenu" />
+
 ## Inline variant
 
 Display the dropdown inline with other content by setting the `type` prop to
