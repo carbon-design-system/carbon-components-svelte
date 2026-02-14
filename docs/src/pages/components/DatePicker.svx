@@ -27,11 +27,9 @@ Set `datePickerType` to `"range"` to enable date range selection.
 
 <FileSource src="/framed/DatePicker/DatePickerRange" />
 
-## DatePicker in a modal
+## Portal menu
 
-The calendar is positioned inside the wrapper by default (`flatpickrProps.static: true`). This ensures proper positioning within a [Modal](/components/Modal).
-
-Set `flatpickrProps.static` to `false` to position the calendar outside the wrapper.
+Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
 
 <FileSource src="/framed/DatePicker/DatePickerModal" />
 
