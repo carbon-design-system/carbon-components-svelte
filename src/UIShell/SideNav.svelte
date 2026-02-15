@@ -37,7 +37,7 @@
     isSideNavMobile,
     isSideNavRail,
     shouldRenderHamburgerMenu,
-  } from "./navStore";
+  } from "./nav-store";
 
   const dispatch = createEventDispatcher();
 
