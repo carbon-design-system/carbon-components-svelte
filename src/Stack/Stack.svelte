@@ -47,6 +47,11 @@
   export let justify = "start";
 
   /**
+   * Set to `true` to use `display: inline-flex` instead of `display: flex`.
+   */
+  export let inline = false;
+
+  /**
    * Specify the tag name.
    * @type {keyof HTMLElementTagNameMap}
    */
@@ -56,6 +61,7 @@
 <svelte:element
   this={tag}
   class:bx--stack={true}
+  class:bx--stack-inline={inline}
   class:bx--stack-vertical={orientation === "vertical"}
   class:bx--stack-horizontal={orientation === "horizontal"}
   class:bx--stack-scale-1={gap === 1}
