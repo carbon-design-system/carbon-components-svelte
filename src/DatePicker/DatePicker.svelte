@@ -56,8 +56,12 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /** Set to `true` to render the calendar in a portal to prevent clipping. */
-  export let portalMenu = false;
+  /**
+   * Set to `true` to render the calendar in a portal to prevent clipping.
+   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * @type {boolean | undefined}
+   */
+  export let portalMenu = undefined;
 
   /** Set an id for the date picker element */
   export let id = `ccs-${Math.random().toString(36)}`;
@@ -72,6 +76,7 @@
   import {
     afterUpdate,
     createEventDispatcher,
+    getContext,
     onMount,
     setContext,
   } from "svelte";
@@ -79,6 +84,11 @@
   import { createCalendar } from "./createCalendar";
 
   const dispatch = createEventDispatcher();
+  const insideModal = getContext("Modal");
+
+  $: effectivePortalMenu =
+    portalMenu !== undefined ? portalMenu : !!insideModal;
+
   const inputs = writable([]);
   /**
    * @type {import("svelte/store").Readable<ReadonlyArray<string>>}
@@ -221,7 +231,7 @@
     calendar = await createCalendar({
       options: {
         ...options,
-        ...(portalMenu ? { static: false } : { appendTo: datePickerRef }),
+        ...(effectivePortalMenu ? { static: false } : { appendTo: datePickerRef }),
         defaultDate: $inputValue,
         mode: $mode,
       },
