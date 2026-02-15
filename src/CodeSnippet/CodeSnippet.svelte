@@ -113,6 +113,7 @@
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -121,6 +122,7 @@
   let animation = undefined;
   let timeout = undefined;
   let prevExpanded = expanded;
+  let inlineButtonRef = null;
 
   function setShowMoreLess() {
     const { height } = ref.getBoundingClientRect();
@@ -181,6 +183,7 @@
     </span>
   {:else}
     <button
+      bind:this={inlineButtonRef}
       type="button"
       aria-live="polite"
       class:bx--copy={true}
@@ -188,6 +191,7 @@
       class:bx--copy-btn--animating={animation}
       class:bx--copy-btn--fade-in={animation === "fade-in"}
       class:bx--copy-btn--fade-out={animation === "fade-out"}
+      class:bx--copy-btn--portal={true}
       class:bx--snippet={true}
       class:bx--snippet--inline={type === "inline"}
       class:bx--snippet--expand={expanded}
@@ -217,14 +221,29 @@
       <code {id}>
         <slot>{code}</slot>
       </code>
-      <span
-        aria-hidden="true"
-        class:bx--assistive-text={true}
-        class:bx--copy-btn__feedback={true}
-      >
-        {feedback}
-      </span>
     </button>
+    <FloatingPortal
+      anchor={inlineButtonRef}
+      direction="bottom"
+      open={!!animation}
+    >
+      <div
+        class:bx--copy-btn={true}
+        class:bx--copy-btn--animating={animation}
+        class:bx--copy-btn--fade-in={animation === "fade-in"}
+        class:bx--copy-btn--fade-out={animation === "fade-out"}
+        style="position: relative; display: block; width: 100%; height: 0; padding: 0; border: none; background: none;"
+      >
+        <span
+          aria-hidden="true"
+          class:bx--assistive-text={true}
+          class:bx--copy-btn__feedback={true}
+          style="top: 0.75rem; bottom: auto; transform: translateX(-50%);"
+        >
+          {feedback}
+        </span>
+      </div>
+    </FloatingPortal>
   {/if}
 {:else}
   <!-- svelte-ignore a11y-no-static-element-interactions -->
