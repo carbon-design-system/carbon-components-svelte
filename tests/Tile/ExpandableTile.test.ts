@@ -56,9 +56,7 @@ describe("ExpandableTile", () => {
       expect(tile).not.toHaveClass("bx--tile--is-expanded");
 
       // In interactive mode, the chevron is a <button> that controls expand/collapse
-      const chevronButton = tile.querySelector(
-        "button.bx--tile__chevron--interactive",
-      );
+      const chevronButton = tile.querySelector("button.bx--tile__chevron");
       expect.assert(chevronButton);
       expect(chevronButton).toHaveAttribute("aria-expanded", "false");
 

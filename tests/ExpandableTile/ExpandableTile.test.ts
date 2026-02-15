@@ -102,9 +102,7 @@ describe("ExpandableTile", () => {
     render(ExpandableTileCustom);
 
     const tile = document.querySelector(".bx--tile--expandable");
-    const chevronButton = tile?.querySelector(
-      "button.bx--tile__chevron--interactive",
-    );
+    const chevronButton = tile?.querySelector("button.bx--tile__chevron");
     const link = screen.getByTestId("test-link");
     const button = screen.getByTestId("test-button");
 
