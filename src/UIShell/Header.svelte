@@ -82,7 +82,7 @@
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/Menu.svelte";
   import HamburgerMenu from "./HamburgerMenu.svelte";
-  import { shouldRenderHamburgerMenu } from "./navStore";
+  import { shouldRenderHamburgerMenu } from "./nav-store";
 
   /** @type {undefined | number} */
   let winWidth = undefined;
