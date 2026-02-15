@@ -1,3 +1,7 @@
+html {
+  scrollbar-gutter: stable;
+}
+
 .prose > pre,
 .code-override .bx--snippet {
   color-scheme: dark;
