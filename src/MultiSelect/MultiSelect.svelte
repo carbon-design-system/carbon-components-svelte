@@ -198,9 +198,10 @@
   /**
    * Set to `true` to render the dropdown menu in a portal,
    * allowing it to escape containers with `overflow: hidden`.
-   * @type {boolean}
+   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * @type {boolean | undefined}
    */
-  export let portalMenu = false;
+  export let portalMenu = undefined;
 
   /**
    * Obtain a reference to the list HTML element.
@@ -208,7 +209,13 @@
    */
   export let listRef = null;
 
-  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    getContext,
+    setContext,
+    tick,
+  } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -224,6 +231,10 @@
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+  const insideModal = getContext("Modal");
+
+  $: effectivePortalMenu =
+    portalMenu !== undefined ? portalMenu : !!insideModal;
 
   /** Default item height in pixels for virtualization */
   const DEFAULT_ITEM_HEIGHT = 40;
@@ -445,7 +456,7 @@
 <svelte:window
   on:click={({ target }) => {
     if (open && multiSelectRef && !multiSelectRef.contains(target)) {
-      if (portalMenu && listRef && listRef.contains(target)) return;
+      if (effectivePortalMenu && listRef && listRef.contains(target)) return;
       open = false;
     }
   }}
@@ -672,11 +683,11 @@
         <ListBoxMenuIcon {open} {translateWithId} />
       </ListBoxField>
     {/if}
-    <div style:display={open || portalMenu ? "block" : "none"}>
+    <div style:display={open || effectivePortalMenu ? "block" : "none"}>
       <ListBoxMenu
         aria-label={ariaLabel}
         {id}
-        portal={portalMenu}
+        portal={effectivePortalMenu}
         {open}
         anchor={fieldRef}
         {direction}
@@ -686,7 +697,7 @@
           listScrollTop = e.target.scrollTop;
         }}
         bind:ref={listRef}
-        style={portalMenu
+        style={effectivePortalMenu
           ? `max-height: ${virtualConfig
               ? `${virtualConfig.containerHeight}px; overflow-y: auto`
               : menuMaxHeight};`
