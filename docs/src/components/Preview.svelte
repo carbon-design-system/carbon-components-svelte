@@ -28,7 +28,7 @@
         kind="ghost"
         target="_blank"
         size="field"
-        href={themedSrcUrl}
+        href={$url(src)}
         icon={Launch}
       >
         Open in new tab
