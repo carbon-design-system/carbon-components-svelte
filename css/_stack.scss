@@ -13,6 +13,10 @@
     display: flex;
   }
 
+  .#{$prefix}--stack-inline {
+    display: inline-flex;
+  }
+
   .#{$prefix}--stack-vertical {
     flex-direction: column;
   }

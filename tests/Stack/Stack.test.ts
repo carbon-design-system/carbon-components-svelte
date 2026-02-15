@@ -102,6 +102,35 @@ describe("Stack", () => {
     }
   });
 
+  it("should apply inline class when inline is true", () => {
+    render(Stack);
+
+    const element = screen.getByText("inline-default");
+    const stackElement = element.parentElement;
+    expect(stackElement).toHaveClass("bx--stack");
+    expect(stackElement).toHaveClass("bx--stack-inline");
+    expect(stackElement).toHaveClass("bx--stack-vertical");
+  });
+
+  it("should apply inline class with horizontal orientation", () => {
+    render(Stack);
+
+    const element = screen.getByText("inline-horizontal");
+    const stackElement = element.parentElement;
+    expect(stackElement).toHaveClass("bx--stack");
+    expect(stackElement).toHaveClass("bx--stack-inline");
+    expect(stackElement).toHaveClass("bx--stack-horizontal");
+    expect(stackElement).toHaveClass("bx--stack-scale-3");
+  });
+
+  it("should not apply inline class by default", () => {
+    render(Stack);
+
+    const element = screen.getByText("gap-1");
+    const stackElement = element.parentElement;
+    expect(stackElement).not.toHaveClass("bx--stack-inline");
+  });
+
   it("should omit gap class when gap is 0", () => {
     render(Stack);
 

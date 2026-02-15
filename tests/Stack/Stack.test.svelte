@@ -52,3 +52,11 @@
 <Stack orientation="horizontal" gap={0}>
   <span>horizontal-gap-0</span>
 </Stack>
+
+<Stack inline>
+  <p>inline-default</p>
+</Stack>
+
+<Stack inline gap={3} orientation="horizontal">
+  <span>inline-horizontal</span>
+</Stack>
