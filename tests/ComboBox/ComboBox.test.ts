@@ -8,6 +8,7 @@ import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
 import ComboBoxGenerics from "./ComboBoxGenerics.test.svelte";
+import ComboBoxInModal from "./ComboBoxInModal.test.svelte";
 
 describe("ComboBox", () => {
   const getInput = () => {
@@ -1698,6 +1699,33 @@ describe("ComboBox", () => {
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).toBeInTheDocument();
       expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+
+    it("should render menu in FloatingPortal when inside Modal (portalMenu not passed)", () => {
+      render(ComboBoxInModal, {
+        props: { modalOpen: true, comboBoxOpen: true },
+      });
+
+      const menu = screen.getAllByRole("listbox")[1];
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).toBeInTheDocument();
+      expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+
+    it("should not render menu in FloatingPortal when inside Modal with portalMenu=false", () => {
+      render(ComboBoxInModal, {
+        props: {
+          modalOpen: true,
+          comboBoxOpen: true,
+          portalMenu: false,
+        },
+      });
+
+      const menu = screen.getAllByRole("listbox")[1];
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).not.toBeInTheDocument();
     });
   });
 });
