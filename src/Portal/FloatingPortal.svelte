@@ -85,6 +85,7 @@
   onMount(() => {
     return () => {
       mounted = false;
+      unobserveAnchor();
       removeScrollListeners();
       if (rafId !== null) {
         cancelAnimationFrame(rafId);
@@ -103,6 +104,27 @@
 
   /** @type {number | null} */
   let rafId = null;
+
+  /** @type {MutationObserver | null} */
+  let anchorObserver = null;
+
+  function observeAnchor() {
+    if (!anchor || anchorObserver) return;
+    anchorObserver = new MutationObserver(scheduleUpdate);
+    anchorObserver.observe(anchor, {
+      attributes: true,
+      attributeFilter: ["style", "class"],
+      childList: false,
+      subtree: false,
+    });
+  }
+
+  function unobserveAnchor() {
+    if (anchorObserver && anchor) {
+      anchorObserver.disconnect();
+      anchorObserver = null;
+    }
+  }
 
   function updatePosition() {
     if (!mounted || !anchor || !ref) return;
@@ -158,6 +180,7 @@
   $: actualDirection = pos.actualDirection;
 
   $: if (!open) {
+    unobserveAnchor();
     removeScrollListeners();
     scrollableAncestors = [];
     if (rafId !== null) {
@@ -167,9 +190,11 @@
   }
 
   $: if (open && anchor && ref) {
+    unobserveAnchor();
     removeScrollListeners();
     scrollableAncestors = getScrollableAncestors(anchor);
     addScrollListeners();
+    observeAnchor();
     tick().then(updatePosition);
   }
 </script>

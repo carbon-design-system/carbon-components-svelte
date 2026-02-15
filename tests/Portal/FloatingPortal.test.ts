@@ -291,4 +291,60 @@ describe("FloatingPortal", () => {
       expect(rafSpy.mock.calls.length).toBeGreaterThan(rafCountBefore);
     });
   });
+
+  describe("anchor position tracking", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("schedules position update when anchor style changes", async () => {
+      const rafSpy = vi.spyOn(window, "requestAnimationFrame");
+
+      render(FloatingPortalTest, {
+        props: { open: true },
+      });
+
+      await screen.findByText("Floating content");
+
+      const anchor = screen.getByTestId("anchor");
+      const rafCountBefore = rafSpy.mock.calls.length;
+
+      anchor.setAttribute(
+        "style",
+        "position: absolute; left: 100px; top: 50px;",
+      );
+      await tick();
+
+      expect(rafSpy.mock.calls.length).toBeGreaterThan(rafCountBefore);
+    });
+
+    it("disconnects MutationObserver when open becomes false", async () => {
+      const disconnectSpy = vi.spyOn(MutationObserver.prototype, "disconnect");
+
+      const { rerender } = render(FloatingPortalTest, {
+        props: { open: true },
+      });
+
+      await screen.findByText("Floating content");
+
+      rerender({ open: false });
+      await tick();
+
+      expect(disconnectSpy).toHaveBeenCalled();
+    });
+
+    it("disconnects MutationObserver on unmount", async () => {
+      const disconnectSpy = vi.spyOn(MutationObserver.prototype, "disconnect");
+
+      const { unmount } = render(FloatingPortalTest, {
+        props: { open: true },
+      });
+
+      await screen.findByText("Floating content");
+
+      unmount();
+
+      expect(disconnectSpy).toHaveBeenCalled();
+    });
+  });
 });
