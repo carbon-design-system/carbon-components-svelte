@@ -43,7 +43,7 @@ Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The
 
 ## Portal menu
 
-Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
+Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. When inside a Modal, `portalMenu` defaults to `true` unless explicitly set to `false`.
 
 <FileSource src="/framed/DatePicker/DatePickerModal" />
 

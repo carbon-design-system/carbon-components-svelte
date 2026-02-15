@@ -19,7 +19,7 @@
   secondaryButtonText="Cancel"
   on:click:button--secondary={() => (open = false)}
 >
-  <DatePicker datePickerType="single" portalMenu>
+  <DatePicker datePickerType="single">
     <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" />
   </DatePicker>
 </Modal>

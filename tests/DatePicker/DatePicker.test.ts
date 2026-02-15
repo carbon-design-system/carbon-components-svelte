@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DatePicker from "./DatePicker.test.svelte";
+import DatePickerInModal from "./DatePickerInModal.test.svelte";
 import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
 
@@ -339,6 +340,36 @@ describe("DatePicker", () => {
       expect(wrapper?.contains(calendar)).toBe(false);
       expect(document.body.contains(calendar)).toBe(true);
       expect(calendar.classList.contains("static")).toBe(false);
+    });
+
+    it("renders calendar at document.body when inside Modal (portalMenu not passed)", async () => {
+      const { container } = render(DatePickerInModal, {
+        modalOpen: true,
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+
+      const calendar = await screen.findByLabelText("calendar-container");
+      const wrapper = container.querySelector(".bx--date-picker");
+      expect(wrapper?.contains(calendar)).toBe(false);
+      expect(document.body.contains(calendar)).toBe(true);
+      expect(calendar.classList.contains("static")).toBe(false);
+    });
+
+    it("renders calendar inside wrapper when inside Modal with portalMenu=false", async () => {
+      const { container } = render(DatePickerInModal, {
+        modalOpen: true,
+        portalMenu: false,
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+
+      const calendar = await screen.findByLabelText("calendar-container");
+      const wrapper = container.querySelector(".bx--date-picker");
+      expect(wrapper?.contains(calendar)).toBe(true);
+      expect(calendar.classList.contains("static")).toBe(true);
     });
   });
 });
