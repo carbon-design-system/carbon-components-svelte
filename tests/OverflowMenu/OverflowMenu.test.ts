@@ -4,6 +4,7 @@ import { user } from "../setup-tests";
 import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
+import OverflowMenuInModal from "./OverflowMenuInModal.test.svelte";
 
 describe("OverflowMenu", () => {
   // Regression: ?? for aria-label so empty string is used (not fallback)
@@ -488,6 +489,33 @@ describe("OverflowMenu", () => {
 
       const menu = screen.getByRole("menu");
       expect(menu.style.position).toBe("relative");
+    });
+
+    it("should render menu in FloatingPortal when inside Modal (portalMenu not passed)", async () => {
+      render(OverflowMenuInModal, { props: { modalOpen: true } });
+
+      const menuButton = screen.getByRole("button", { name: "menu" });
+      await user.click(menuButton);
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).toBeInTheDocument();
+      expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+
+    it("should not render menu in FloatingPortal when inside Modal with portalMenu=false", async () => {
+      render(OverflowMenuInModal, {
+        props: { modalOpen: true, portalMenu: false },
+      });
+
+      const menuButton = screen.getByRole("button", { name: "menu" });
+      await user.click(menuButton);
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).not.toBeInTheDocument();
     });
 
     it("should reflect auto-flipped direction in data-floating-menu-direction", async () => {

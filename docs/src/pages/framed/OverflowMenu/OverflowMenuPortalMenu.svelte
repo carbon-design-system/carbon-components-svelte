@@ -1,59 +1,22 @@
 <script>
   import {
-    Button,
-    Modal,
     OverflowMenu,
     OverflowMenuItem,
-    StructuredList,
-    StructuredListBody,
-    StructuredListCell,
-    StructuredListHead,
-    StructuredListRow,
+    Stack,
   } from "carbon-components-svelte";
-
-  let open = false;
 </script>
 
-<Button on:click={() => (open = true)}>Open modal</Button>
-
-<Modal
-  bind:open
-  size="sm"
-  modalHeading="API keys"
-  primaryButtonText="Done"
-  on:click:button--primary={() => (open = false)}
+<Stack
+  gap={4}
+  style="overflow: hidden; border: 1px dashed var(--cds-border-subtle); padding: 1rem; max-height: 120px;"
 >
-  <StructuredList condensed flush>
-    <StructuredListHead>
-      <StructuredListRow head>
-        <StructuredListCell head>Name</StructuredListCell>
-        <StructuredListCell head>Created</StructuredListCell>
-        <StructuredListCell head />
-      </StructuredListRow>
-    </StructuredListHead>
-    <StructuredListBody>
-      <StructuredListRow>
-        <StructuredListCell noWrap>my-api-key</StructuredListCell>
-        <StructuredListCell noWrap>2025-01-15</StructuredListCell>
-        <StructuredListCell>
-          <OverflowMenu portalMenu flipped>
-            <OverflowMenuItem text="Edit" />
-            <OverflowMenuItem text="Duplicate" />
-            <OverflowMenuItem danger text="Delete" />
-          </OverflowMenu>
-        </StructuredListCell>
-      </StructuredListRow>
-      <StructuredListRow>
-        <StructuredListCell noWrap>prod-key</StructuredListCell>
-        <StructuredListCell noWrap>2025-03-22</StructuredListCell>
-        <StructuredListCell>
-          <OverflowMenu portalMenu flipped>
-            <OverflowMenuItem text="Edit" />
-            <OverflowMenuItem text="Duplicate" />
-            <OverflowMenuItem danger text="Delete" />
-          </OverflowMenu>
-        </StructuredListCell>
-      </StructuredListRow>
-    </StructuredListBody>
-  </StructuredList>
-</Modal>
+  <div>
+    This container has hidden overflow. Without <code>portalMenu</code>, the
+    menu would be clipped.
+  </div>
+  <OverflowMenu portalMenu>
+    <OverflowMenuItem text="Edit" />
+    <OverflowMenuItem text="Duplicate" />
+    <OverflowMenuItem danger text="Delete" />
+  </OverflowMenu>
+</Stack>
