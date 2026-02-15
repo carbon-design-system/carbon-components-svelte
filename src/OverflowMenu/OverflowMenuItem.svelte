@@ -131,6 +131,7 @@
     </a>
   {:else}
     <button
+      type="button"
       bind:this={ref}
       {...buttonProps}
       on:click={handleClick}

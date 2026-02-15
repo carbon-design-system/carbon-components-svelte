@@ -30,10 +30,10 @@
   </svelte:fragment>
 </Tabs>
 
-<button data-testid="toggle-tab1" on:click={() => (showTab1 = !showTab1)}>
+<button type="button" data-testid="toggle-tab1" on:click={() => (showTab1 = !showTab1)}>
   Toggle Tab 1
 </button>
-<button data-testid="toggle-tab2" on:click={() => (showTab2 = !showTab2)}>
+<button type="button" data-testid="toggle-tab2" on:click={() => (showTab2 = !showTab2)}>
   Toggle Tab 2
 </button>
 <div data-testid="selected-index">{selected}</div>

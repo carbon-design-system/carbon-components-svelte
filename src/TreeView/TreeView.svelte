@@ -220,7 +220,9 @@
           node.nodes?.some((child) => filterNode(child) && child.nodes)
       )
       .map((node) => node.id);
-    nodesToExpand.forEach((id) => expandedIdsSet.add(id));
+    for (const id of nodesToExpand) {
+      expandedIdsSet.add(id);
+    }
     expandedIds = Array.from(expandedIdsSet);
     lastExpandedIdsRef = expandedIds;
   }
@@ -239,11 +241,11 @@
    * ```
    */
   export function collapseNodes(filterNode = (node) => true) {
-    flattenedNodes.forEach((node) => {
+    for (const node of flattenedNodes) {
       if (expandedIdsSet.has(node.id) && filterNode(node)) {
         expandedIdsSet.delete(node.id);
       }
-    });
+    }
     expandedIds = Array.from(expandedIdsSet);
     lastExpandedIdsRef = expandedIds;
   }
@@ -299,7 +301,7 @@
     }
   }
 
-  import { createEventDispatcher, setContext, onMount, tick } from "svelte";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
 
