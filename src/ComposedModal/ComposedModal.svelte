@@ -90,6 +90,7 @@
     label.set(value);
   };
 
+  setContext("Modal", {});
   setContext("ComposedModal", {
     closeModal,
     submit,
