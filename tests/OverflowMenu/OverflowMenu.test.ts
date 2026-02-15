@@ -252,6 +252,7 @@ describe("OverflowMenu", () => {
       "href",
       "https://cloud.ibm.com/docs/api-gateway/",
     );
+    expect(linkItem).not.toHaveAttribute("type");
   });
 
   it("forwards target attribute and adds rel for _blank", async () => {

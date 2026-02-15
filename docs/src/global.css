@@ -370,3 +370,10 @@
 .bx--col > p {
   margin-bottom: var(--cds-layout-02);
 }
+
+/* Moved from ComponentApi.svelte - code snippet white-space */
+.cell .bx--snippet--inline code,
+.cell .bx--snippet--single pre,
+.bx--snippet--inline code {
+  white-space: pre-wrap !important;
+}
