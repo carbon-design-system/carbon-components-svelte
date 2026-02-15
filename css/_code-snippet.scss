@@ -1,0 +1,18 @@
+@import 'carbon-components/scss/globals/scss/vars';
+@import 'carbon-components/scss/globals/scss/helper-mixins';
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
+
+/// Hide the copy button ::before pseudo-element when used in a portal context.
+/// @access private
+/// @group code-snippet
+@mixin code-snippet {
+  // CopyButton (single/multi) and CodeSnippet inline both use portal for feedback.
+  // Disable Carbon's show-feedback/hide-feedback animations so visibility isn't overridden.
+  .#{$prefix}--copy-btn--portal::before {
+    visibility: hidden !important;
+  }
+}
+
+@include exports('code-snippet') {
+  @include code-snippet;
+}

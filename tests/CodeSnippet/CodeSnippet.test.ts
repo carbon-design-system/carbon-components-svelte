@@ -114,6 +114,60 @@ describe("CodeSnippet", () => {
     });
   });
 
+  describe("tooltip portal", () => {
+    const originalClipboard = navigator.clipboard;
+
+    beforeEach(() => {
+      Object.defineProperty(navigator, "clipboard", {
+        value: {
+          writeText: vi.fn().mockImplementation(() => Promise.resolve()),
+        },
+        writable: true,
+      });
+    });
+
+    afterEach(() => {
+      Object.defineProperty(navigator, "clipboard", {
+        value: originalClipboard,
+        writable: true,
+      });
+    });
+
+    test("renders feedback in FloatingPortal for single variant", async () => {
+      render(CodeSnippetCopyButton);
+
+      const copyButton = screen.getByLabelText("Copy to clipboard");
+      await user.click(copyButton);
+
+      const feedback = screen.getByText("Copied!");
+      const portal = feedback.closest("[data-floating-portal]");
+      expect(portal).toBeInTheDocument();
+      expect(feedback).toHaveClass("bx--copy-btn__feedback");
+    });
+
+    test("renders feedback in FloatingPortal for inline variant", async () => {
+      render(CodeSnippetInline);
+
+      await user.click(screen.getByText("npm install -g @carbon/cli"));
+
+      const feedback = screen.getByText("Copied!");
+      const portal = feedback.closest("[data-floating-portal]");
+      expect(portal).toBeInTheDocument();
+      expect(feedback).toHaveClass("bx--copy-btn__feedback");
+    });
+
+    test("renders custom feedback in FloatingPortal", async () => {
+      render(CodeSnippetWithCustomCopyText);
+
+      const copyButton = screen.getByLabelText("Copy to clipboard");
+      await user.click(copyButton);
+
+      const feedback = screen.getByText("Custom copied text!");
+      const portal = feedback.closest("[data-floating-portal]");
+      expect(portal).toBeInTheDocument();
+    });
+  });
+
   test("should dispatch copy and copy error events", async () => {
     render(CodeSnippetCustomEvents);
 
