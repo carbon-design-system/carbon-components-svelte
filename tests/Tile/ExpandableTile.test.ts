@@ -80,4 +80,11 @@ describe("ExpandableTile", () => {
       expect(tile.tagName).not.toBe("BUTTON");
     });
   });
+
+  it("should set max-height to none when tileMaxHeight is 0 to prevent height animation on initial load", () => {
+    render(ExpandableTile);
+
+    const tile = screen.getByTestId("basic");
+    expect(tile.getAttribute("style")).toBe("max-height: none;");
+  });
 });
