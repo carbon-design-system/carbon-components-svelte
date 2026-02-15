@@ -24,9 +24,9 @@ Wrap `Modal` in a `Portal` to escape parent containers with `overflow: hidden` o
 
 ## Modal with dropdowns
 
-Use `ComboBox`, `Dropdown`, or `MultiSelect` inside a modal with the `portalMenu` prop. The modal itself is wrapped in a `Portal` to escape parent overflow.
+When components with menus are used inside a modal, such as `ComboBox`, `Dropdown`, `MultiSelect`, `DatePicker`, or `OverflowMenu`, these components automatically render their menus in a floating portal when inside a Modal, so menus are positioned relative to their trigger and are not clipped by the modal's overflow or z-index stacking.
 
-Each component's `portalMenu` prop renders its menu in a separate floating portal, so the menus are positioned relative to their trigger and are not clipped by the modal's overflow or z-index stacking.
+Set `portalMenu={false}` on these components to opt out. In this example, the modal itself is wrapped in a `Portal`.
 
 <FileSource src="/framed/Modal/ModalWithDropdowns" />
 

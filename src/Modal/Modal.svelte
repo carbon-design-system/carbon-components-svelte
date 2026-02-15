@@ -103,7 +103,7 @@
   /** Obtain a reference to the top-level HTML element */
   export let ref = null;
 
-  import { afterUpdate, createEventDispatcher } from "svelte";
+  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import Close from "../icons/Close.svelte";
@@ -137,6 +137,8 @@
   const openStore = writable(open);
   $: $openStore = open;
   trackModal(openStore);
+
+  setContext("Modal", {});
 
   afterUpdate(() => {
     if (opened) {

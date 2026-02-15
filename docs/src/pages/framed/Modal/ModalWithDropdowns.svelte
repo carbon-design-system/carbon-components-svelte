@@ -33,20 +33,17 @@
   >
     <Stack gap={4}>
       <ComboBox
-        portalMenu
         light
         labelText="Contact method"
         placeholder="Select contact method"
         items={contactItems}
       />
       <Dropdown
-        portalMenu
         labelText="Preferred channel"
         selectedId="0"
         items={contactItems}
       />
       <MultiSelect
-        portalMenu
         labelText="Notification methods"
         label="Select methods..."
         items={contactItems}
