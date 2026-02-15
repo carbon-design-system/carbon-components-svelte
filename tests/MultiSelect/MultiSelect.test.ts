@@ -7,6 +7,7 @@ import { user } from "../setup-tests";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
+import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
 import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
 
 const items = [
@@ -1720,6 +1721,33 @@ describe("MultiSelect", () => {
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).toBeInTheDocument();
       expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+
+    it("should render menu in FloatingPortal when inside Modal (portalMenu not passed)", () => {
+      render(MultiSelectInModal, {
+        props: { modalOpen: true, multiSelectOpen: true },
+      });
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).toBeInTheDocument();
+      expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+
+    it("should not render menu in FloatingPortal when inside Modal with portalMenu=false", () => {
+      render(MultiSelectInModal, {
+        props: {
+          modalOpen: true,
+          multiSelectOpen: true,
+          portalMenu: false,
+        },
+      });
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).not.toBeInTheDocument();
     });
   });
 });
