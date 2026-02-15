@@ -7,6 +7,7 @@ import { isSvelte5, user } from "../setup-tests";
 import DropdownLabelChildren from "./Dropdown.slot.test.svelte";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
+import DropdownInModal from "./DropdownInModal.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
 
 const items = [
@@ -1430,6 +1431,33 @@ describe("Dropdown", () => {
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).toBeInTheDocument();
       expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+
+    it("should render menu in FloatingPortal when inside Modal (portalMenu not passed)", () => {
+      render(DropdownInModal, {
+        props: { modalOpen: true, dropdownOpen: true },
+      });
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).toBeInTheDocument();
+      expect(floatingPortal?.parentElement).toBe(document.body);
+    });
+
+    it("should not render menu in FloatingPortal when inside Modal with portalMenu=false", () => {
+      render(DropdownInModal, {
+        props: {
+          modalOpen: true,
+          dropdownOpen: true,
+          portalMenu: false,
+        },
+      });
+
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeInTheDocument();
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).not.toBeInTheDocument();
     });
   });
 });
