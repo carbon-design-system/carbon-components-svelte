@@ -73,6 +73,7 @@
     role: "menuitem",
     tabindex: "-1",
     class: "bx--overflow-menu-options__btn",
+    type: href ? undefined : "button",
     disabled: href ? undefined : disabled,
     href: href ? href : undefined,
     target: href && target ? target : undefined,

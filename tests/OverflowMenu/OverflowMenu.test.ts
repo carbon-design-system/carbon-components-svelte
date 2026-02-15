@@ -224,6 +224,20 @@ describe("OverflowMenu", () => {
     );
   });
 
+  it("renders button menu items with type='button' to prevent form submission", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menuItems = screen.getAllByRole("menuitem");
+    const buttonItem = menuItems.find(
+      (item) => item.textContent === "Manage credentials",
+    );
+    expect(buttonItem?.tagName).toBe("BUTTON");
+    expect(buttonItem).toHaveAttribute("type", "button");
+  });
+
   it("handles link menu items correctly", async () => {
     render(OverflowMenu);
 
