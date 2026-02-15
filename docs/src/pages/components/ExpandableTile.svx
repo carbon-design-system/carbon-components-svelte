@@ -1,5 +1,5 @@
 <script>
-  import { ExpandableTile, Button, Stack } from "carbon-components-svelte";
+  import { ExpandableTile, Button, Stack, OutboundLink } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -80,12 +80,12 @@ If you need to use interactive content inside the tile, set the `hasInteractiveC
 Only the expand/collapse toggle with affect the tile's expand/collapse state.
 
 <ExpandableTile hasInteractiveContent tileExpandedLabel="View less" tileCollapsedLabel="View more">
-  <Stack slot="above" gap={4}>
-    <a href="https://svelte.carbondesignsystem.com/" target="_blank">
+  <Stack slot="above" gap={4} inline>
+    <OutboundLink href="https://svelte.carbondesignsystem.com/">
       Native link
-    </a>
+    </OutboundLink>
     <Button on:click={() => console.log("Hello world")}>
-      Svelte component
+      Button
     </Button>
   </Stack>
   <div slot="below">Below the fold content here</div>
