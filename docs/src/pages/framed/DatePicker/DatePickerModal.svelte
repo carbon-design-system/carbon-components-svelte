@@ -13,6 +13,7 @@
 
 <Modal
   bind:open
+  size="sm"
   modalHeading="Meeting date"
   primaryButtonText="Confirm"
   secondaryButtonText="Cancel"
