@@ -88,7 +88,9 @@ to `true`.
 
 ## Portal menu
 
-Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
+Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. The example below shows a container with hidden overflow. Without `portalMenu`, the dropdown would be clipped.
+
+When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
 
 <FileSource src="/framed/Dropdown/DropdownPortalMenu" />
 

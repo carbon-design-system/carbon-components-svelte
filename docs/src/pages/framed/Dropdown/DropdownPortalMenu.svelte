@@ -1,19 +1,12 @@
 <script>
-  import { Button, Dropdown, Modal } from "carbon-components-svelte";
-
-  let open = false;
+  import { Dropdown, Stack } from "carbon-components-svelte";
 </script>
 
-<Button on:click={() => (open = true)}>Open modal</Button>
-
-<Modal
-  bind:open
-  size="sm"
-  modalHeading="Add a contact"
-  primaryButtonText="Add"
-  secondaryButtonText="Cancel"
-  on:click:button--secondary={() => (open = false)}
+<Stack
+  gap={4}
+  style="overflow: hidden; border: 1px dashed var(--cds-border-subtle); padding: 1rem; max-height: 120px;"
 >
+  <div>This container has hidden overflow. Without <code>portalMenu</code>, the dropdown would be clipped.</div>
   <Dropdown
     portalMenu
     labelText="Preferred channel"
@@ -22,8 +15,6 @@
       { id: "0", text: "Slack" },
       { id: "1", text: "Email" },
       { id: "2", text: "Fax" },
-      { id: "3", text: "Teams" },
-      { id: "4", text: "Phone" },
     ]}
   />
-</Modal>
+</Stack>

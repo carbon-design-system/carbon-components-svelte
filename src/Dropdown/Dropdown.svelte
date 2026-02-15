@@ -114,9 +114,10 @@
   /**
    * Set to `true` to render the dropdown menu in a portal,
    * allowing it to escape containers with `overflow: hidden`.
-   * @type {boolean}
+   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * @type {boolean | undefined}
    */
-  export let portalMenu = false;
+  export let portalMenu = undefined;
 
   /** Set an id for the list box component */
   export let id = `ccs-${Math.random().toString(36)}`;
@@ -136,7 +137,13 @@
    */
   export let listRef = null;
 
-  import { afterUpdate, createEventDispatcher, onMount, tick } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    getContext,
+    onMount,
+    tick,
+  } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -149,6 +156,10 @@
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+  const insideModal = getContext("Modal");
+
+  $: effectivePortalMenu =
+    portalMenu !== undefined ? portalMenu : !!insideModal;
 
   /** Default item height in pixels for virtualization */
   const DEFAULT_ITEM_HEIGHT = 40;
@@ -396,7 +407,7 @@
 <svelte:window
   on:click={(e) => {
     if (open && ref && !ref.contains(e.target)) {
-      if (portalMenu && listRef && listRef.contains(e.target)) return;
+      if (effectivePortalMenu && listRef && listRef.contains(e.target)) return;
       open = false;
     }
   }}
@@ -538,7 +549,7 @@
       <ListBoxMenu
         aria-labelledby={id}
         {id}
-        portal={portalMenu}
+        portal={effectivePortalMenu}
         {open}
         anchor={ref}
         {direction}
@@ -547,7 +558,7 @@
           listScrollTop = e.target.scrollTop;
         }}
         bind:ref={listRef}
-        style={portalMenu
+        style={effectivePortalMenu
           ? `max-height: ${virtualConfig
               ? `${virtualConfig.containerHeight}px; overflow-y: auto`
               : menuMaxHeight};`
