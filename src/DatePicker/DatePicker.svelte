@@ -101,6 +101,7 @@
    */
   const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
+  const dateFormatStore = writable(dateFormat);
   /**
    * @type {import("svelte/store").Readable<boolean>}
    */
@@ -196,6 +197,7 @@
     inputValueTo,
     inputIds,
     hasCalendar,
+    dateFormat: dateFormatStore,
     add,
     declareRef,
     updateValue,
@@ -280,6 +282,7 @@
     }
   });
 
+  $: dateFormatStore.set(dateFormat);
   $: inputValue.set(value);
   $: value = $inputValue;
   $: inputValueFrom.set(valueFrom);

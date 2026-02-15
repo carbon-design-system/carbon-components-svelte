@@ -153,6 +153,16 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/DatePicker/DatePickerInput.svelte"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
     }
   ]
 }

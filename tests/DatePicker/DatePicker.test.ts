@@ -235,6 +235,74 @@ describe("DatePicker", () => {
     expect(customLabel).toBeInTheDocument();
   });
 
+  // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1362
+  describe("pattern derived from dateFormat", () => {
+    it("derives a default pattern matching the default dateFormat (m/d/Y)", () => {
+      render(DatePicker);
+
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveAttribute("pattern", "\\d{1,2}\\/\\d{1,2}\\/\\d{4}");
+    });
+
+    it("derives pattern for Y-m-d dateFormat", () => {
+      render(DatePicker, { dateFormat: "Y-m-d" });
+
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveAttribute("pattern", "\\d{4}\\-\\d{1,2}\\-\\d{1,2}");
+    });
+
+    it("derives pattern for d.m.Y dateFormat", () => {
+      render(DatePicker, { dateFormat: "d.m.Y" });
+
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveAttribute("pattern", "\\d{1,2}\\.\\d{1,2}\\.\\d{4}");
+    });
+
+    it("derives pattern for d/m/y dateFormat (2-digit year)", () => {
+      render(DatePicker, { dateFormat: "d/m/y" });
+
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveAttribute("pattern", "\\d{1,2}\\/\\d{1,2}\\/\\d{2}");
+    });
+
+    it("derives pattern for M j, Y dateFormat (text month)", () => {
+      render(DatePicker, { dateFormat: "M j, Y" });
+
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveAttribute("pattern", "\\w+ \\d{1,2}, \\d{4}");
+    });
+
+    it("allows explicit pattern override on DatePickerInput", () => {
+      render(DatePicker, {
+        dateFormat: "Y-m-d",
+        pattern: "\\d{4}-\\d{2}-\\d{2}",
+      });
+
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveAttribute("pattern", "\\d{4}-\\d{2}-\\d{2}");
+    });
+
+    it("derived pattern validates Y-m-d formatted values", () => {
+      render(DatePicker, { dateFormat: "Y-m-d" });
+
+      const input = screen.getByLabelText("Date");
+      const pattern = input.getAttribute("pattern");
+      const re = new RegExp(`^${pattern}$`);
+      expect(re.test("2026-02-10")).toBe(true);
+      expect(re.test("02/10/2026")).toBe(false);
+    });
+
+    it("derived pattern validates m/d/Y formatted values", () => {
+      render(DatePicker);
+
+      const input = screen.getByLabelText("Date");
+      const pattern = input.getAttribute("pattern");
+      const re = new RegExp(`^${pattern}$`);
+      expect(re.test("02/10/2026")).toBe(true);
+      expect(re.test("2026-02-10")).toBe(false);
+    });
+  });
+
   describe("portalMenu", () => {
     afterEach(() => {
       // Clean up any flatpickr calendars appended to document.body.

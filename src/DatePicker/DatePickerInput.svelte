@@ -11,8 +11,13 @@
   /** Specify the input placeholder text */
   export let placeholder = "";
 
-  /** Specify the Regular Expression for the input value */
-  export let pattern = "\\d{1,2}\\/\\d{1,2}\\/\\d{4}";
+  /**
+   * Specify the Regular Expression for the input value.
+   * By default, the pattern is derived from the parent
+   * `DatePicker`'s `dateFormat` prop.
+   * @type {string}
+   */
+  export let pattern = undefined;
 
   /** Set to `true` to disable the input */
   export let disabled = false;
@@ -62,6 +67,7 @@
     range,
     add,
     hasCalendar,
+    dateFormat,
     declareRef,
     inputIds,
     updateValue,
@@ -73,8 +79,37 @@
     inputValueTo,
   } = getContext("DatePicker");
 
+  const dateFormatTokens = {
+    d: "\\d{1,2}",
+    j: "\\d{1,2}",
+    m: "\\d{1,2}",
+    n: "\\d{1,2}",
+    Y: "\\d{4}",
+    y: "\\d{2}",
+    F: "\\w+",
+    M: "\\w+",
+    D: "\\w+",
+    l: "\\w+",
+  };
+
+  function dateFormatToPattern(fmt) {
+    let result = "";
+    for (let i = 0; i < fmt.length; i++) {
+      const ch = fmt[i];
+      if (ch === "\\" && i + 1 < fmt.length) {
+        result += fmt[++i].replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+      } else if (dateFormatTokens[ch]) {
+        result += dateFormatTokens[ch];
+      } else {
+        result += ch.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+      }
+    }
+    return result;
+  }
+
   add({ id, labelText });
 
+  $: actualPattern = pattern ?? dateFormatToPattern($dateFormat ?? "m/d/Y");
   $: if (ref) declareRef({ id, ref });
 </script>
 
@@ -106,7 +141,7 @@
       {name}
       {placeholder}
       {type}
-      {pattern}
+      pattern={actualPattern}
       {disabled}
       {...$$restProps}
       value={$range
