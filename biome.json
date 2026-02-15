@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.14/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.0/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -11,6 +11,7 @@
     "indentStyle": "space"
   },
   "html": {
+    "experimentalFullSupportEnabled": true,
     "formatter": {
       "indentScriptAndStyle": true
     }
@@ -19,8 +20,11 @@
     "includes": [
       "**",
       "!!**/.*/**/*",
-      "!!**/css/*.css",
-      "!!**/docs/src/pages/index.svelte"
+      "!!**/*.scss",
+      "!!**/docs/src/pages/index.svelte",
+      "!!**/docs/src/pages/framed/ComboBox/ComboBoxSlot.svelte",
+      "!!**/docs/src/pages/framed/Dropdown/DropdownSlot.svelte",
+      "!!**/docs/src/pages/framed/MultiSelect/MultiSelectSlot.svelte"
     ]
   },
   "linter": {
@@ -101,10 +105,16 @@
   },
   "overrides": [
     {
+      "includes": ["css/*.css"],
+      "formatter": { "enabled": false },
+      "linter": { "enabled": false }
+    },
+    {
       "includes": ["**/*.svelte"],
       "linter": {
         "rules": {
           "correctness": {
+            "noUnusedFunctionParameters": "off",
             "noUnusedImports": "off",
             "noUnusedVariables": "off",
             "noSelfAssign": "off"
@@ -116,9 +126,13 @@
             "noAssignInExpressions": "off",
             "noGlobalAssign": "off"
           },
-          "style": {
-            "useConst": "off",
-            "useImportType": "off"
+          "a11y": {
+            "noAutofocus": "off",
+            "noSvgWithoutTitle": "off",
+            "useAltText": "off",
+            "useAnchorContent": "off",
+            "useAriaPropsForRole": "off",
+            "useValidAriaRole": "off"
           }
         }
       }
