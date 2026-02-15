@@ -22,7 +22,9 @@ Create a basic overflow menu by wrapping `OverflowMenuItem` components within `O
 
 ## Portal menu
 
-Set `portalMenu` to `true` to render the menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
+Set `portalMenu` to `true` to render the menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. The example below shows a container with hidden overflow. Without `portalMenu`, the menu would be clipped.
+
+ When inside a [Modal](/components/Modal), `portalMenu` defaults to `true` unless explicitly set to `false`. 
 
 <FileSource src="/framed/OverflowMenu/OverflowMenuPortalMenu" />
 

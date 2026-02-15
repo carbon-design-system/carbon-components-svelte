@@ -59,9 +59,10 @@
   /**
    * Set to `true` to render the menu in a portal,
    * allowing it to escape containers with `overflow: hidden`.
-   * @type {boolean}
+   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * @type {boolean | undefined}
    */
-  export let portalMenu = false;
+  export let portalMenu = undefined;
 
   import {
     afterUpdate,
@@ -75,6 +76,11 @@
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
 
   const ctxBreadcrumbItem = getContext("BreadcrumbItem");
+  const insideModal = getContext("Modal");
+
+  $: effectivePortalMenu =
+    portalMenu !== undefined ? portalMenu : !!insideModal;
+
   const dispatch = createEventDispatcher();
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
@@ -171,7 +177,7 @@
         menuRef?.focus();
       }
 
-      if (!portalMenu) {
+      if (!effectivePortalMenu) {
         if (flipped) {
           menuRef.style.left = "auto";
           menuRef.style.right = 0;
@@ -216,7 +222,7 @@
 <svelte:window
   on:click={({ target }) => {
     if (buttonRef && buttonRef.contains(target)) return;
-    if (portalMenu && menuRef && menuRef.contains(target)) return;
+    if (effectivePortalMenu && menuRef && menuRef.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
       const shouldContinue = dispatch("close", null, { cancelable: true });
       if (shouldContinue) {
@@ -280,7 +286,7 @@
       class="bx--overflow-menu__icon {iconClass}"
     />
   </slot>
-  {#if open && !portalMenu}
+  {#if open && !effectivePortalMenu}
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       bind:this={menuRef}
@@ -304,7 +310,7 @@
   {/if}
 </button>
 
-{#if portalMenu}
+{#if effectivePortalMenu}
   <FloatingPortal anchor={buttonRef} {direction} {open} let:direction={portalDirection}>
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
