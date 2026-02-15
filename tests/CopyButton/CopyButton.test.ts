@@ -23,7 +23,7 @@ describe("CopyButton", () => {
     await user.click(button);
     expect(consoleLog).toHaveBeenCalledWith("copied");
 
-    const feedback = button.querySelector(".bx--copy-btn__feedback");
+    const feedback = document.querySelector(".bx--copy-btn__feedback");
     expect(feedback).toHaveTextContent("Copied!");
   });
 
@@ -33,7 +33,7 @@ describe("CopyButton", () => {
     const button = getCopyButton("Custom feedback");
     await user.click(button);
 
-    const feedback = button.querySelector(".bx--copy-btn__feedback");
+    const feedback = document.querySelector(".bx--copy-btn__feedback");
     expect(feedback).toHaveTextContent("Copied to clipboard");
 
     await new Promise((resolve) => setTimeout(resolve, 0));

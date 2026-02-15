@@ -28,6 +28,9 @@
 
   import { createEventDispatcher, onMount } from "svelte";
   import Copy from "../icons/Copy.svelte";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
+
+  let buttonRef = null;
 
   const dispatch = createEventDispatcher();
 
@@ -41,11 +44,13 @@
 </script>
 
 <button
+  bind:this={buttonRef}
   type="button"
   aria-live="polite"
   class:bx--copy-btn={true}
   class:bx--copy={true}
   class:bx--copy-btn--animating={animation}
+  class:bx--copy-btn--portal={true}
   class:bx--copy-btn--fade-in={animation === "fade-in"}
   class:bx--copy-btn--fade-out={animation === "fade-out"}
   aria-label={iconDescription}
@@ -72,11 +77,23 @@
   }}
 >
   <Copy class="bx--snippet__icon" />
-  <span
-    aria-hidden="true"
-    class:bx--assistive-text={true}
-    class:bx--copy-btn__feedback={true}
-  >
-    {feedback}
-  </span>
 </button>
+
+<FloatingPortal anchor={buttonRef} direction="bottom" open={!!animation}>
+  <div
+    class:bx--copy-btn={true}
+    class:bx--copy-btn--animating={animation}
+    class:bx--copy-btn--fade-in={animation === "fade-in"}
+    class:bx--copy-btn--fade-out={animation === "fade-out"}
+    style="position: relative; display: block; width: 100%; height: 0; padding: 0; border: none; background: none;"
+  >
+    <span
+      aria-hidden="true"
+      class:bx--assistive-text={true}
+      class:bx--copy-btn__feedback={true}
+      style="top: 0.75rem; bottom: auto; transform: translateX(-50%);"
+    >
+      {feedback}
+    </span>
+  </div>
+</FloatingPortal>
