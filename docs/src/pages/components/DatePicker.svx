@@ -33,6 +33,14 @@ Use `bind:valueFrom` and `bind:valueTo` to programmatically update the date rang
 
 <FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
 
+## Custom date format
+
+Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The input `pattern` attribute is automatically derived to match, ensuring native form validation works correctly.
+
+<DatePicker datePickerType="single" dateFormat="Y-m-d">
+  <DatePickerInput labelText="Date of birth" placeholder="yyyy-mm-dd" />
+</DatePicker>
+
 ## Portal menu
 
 Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts, such as modals.
