@@ -101,17 +101,20 @@ describe("ExpandableTile", () => {
   it("should handle interactive content without toggling", async () => {
     render(ExpandableTileCustom);
 
-    const tileButton = screen.getAllByRole("button")[0];
+    const tile = document.querySelector(".bx--tile--expandable");
+    const chevronButton = tile?.querySelector(
+      "button.bx--tile__chevron--interactive",
+    );
     const link = screen.getByTestId("test-link");
     const button = screen.getByTestId("test-button");
 
-    expect(tileButton).toHaveAttribute("aria-expanded", "false");
+    expect(chevronButton).toHaveAttribute("aria-expanded", "false");
 
     await user.click(link);
-    expect(tileButton).toHaveAttribute("aria-expanded", "false");
+    expect(chevronButton).toHaveAttribute("aria-expanded", "false");
 
     await user.click(button);
-    expect(tileButton).toHaveAttribute("aria-expanded", "false");
+    expect(chevronButton).toHaveAttribute("aria-expanded", "false");
   });
 
   it("should handle mouse events", async () => {
