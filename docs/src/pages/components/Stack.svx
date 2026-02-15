@@ -168,6 +168,16 @@ Gap scale of `13` (160px).
   <div>Item 3</div>
 </Stack>
 
+## Vertical inline
+
+Set `inline` to `true` to use `display: inline-flex` instead of `display: flex`. This causes the stack to shrink to fit its content width instead of spanning the full width of its container.
+
+<Stack inline gap={3}>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</Stack>
+
 ## Vertical (custom value)
 
 <Stack gap="22px">
