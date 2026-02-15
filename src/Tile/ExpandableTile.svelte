@@ -89,7 +89,7 @@
     class:bx--tile--expandable--interactive={true}
     class:bx--tile--is-expanded={expanded}
     class:bx--tile--light={light}
-    style:max-height={expanded ? "none" : `${tileMaxHeight + tilePadding}px`}
+    style:max-height={expanded || tileMaxHeight <= 0 ? "none" : `${tileMaxHeight + tilePadding}px`}
     {...$$restProps}
     on:click
     on:mouseover
@@ -135,7 +135,7 @@
     class:bx--tile--expandable={true}
     class:bx--tile--is-expanded={expanded}
     class:bx--tile--light={light}
-    style:max-height={expanded ? "none" : `${tileMaxHeight + tilePadding}px`}
+    style:max-height={expanded || tileMaxHeight <= 0 ? "none" : `${tileMaxHeight + tilePadding}px`}
     {...$$restProps}
     on:click
     on:click={() => {

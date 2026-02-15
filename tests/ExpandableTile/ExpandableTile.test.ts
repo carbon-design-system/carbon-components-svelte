@@ -149,4 +149,23 @@ describe("ExpandableTile", () => {
     await user.click(tile);
     expect(tile.getAttribute("style")).toBe("max-height: none;");
   });
+
+  it("should set max-height to none when tileMaxHeight is 0 to prevent height animation on initial load", () => {
+    render(ExpandableTile, {
+      props: {
+        tileMaxHeight: 0,
+        tilePadding: 20,
+      },
+    });
+
+    const tile = screen.getByRole("button");
+    expect(tile.getAttribute("style")).toBe("max-height: none;");
+  });
+
+  it("should set max-height to none when tileMaxHeight is 0 with default props", () => {
+    render(ExpandableTile);
+
+    const tile = screen.getByRole("button");
+    expect(tile.getAttribute("style")).toBe("max-height: none;");
+  });
 });
