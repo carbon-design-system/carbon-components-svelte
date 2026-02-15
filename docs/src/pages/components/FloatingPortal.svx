@@ -7,6 +7,8 @@
 
 Use `Portal` when you only need to escape overflow and z-index stacking contexts. Use `FloatingPortal` when you need anchored, positioned content such as dropdowns, popovers, or overflow menus.
 
+In the examples below, click the button to toggle the floating content and drag the tile to move the anchor. The floating content will track the anchor position.
+
 ## Default
 
 Position floating content below an anchor element.
