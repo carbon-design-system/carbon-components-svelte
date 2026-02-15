@@ -73,12 +73,13 @@ Customize the expand/collapse button labels using the `tileExpandedLabel` and
 
 ## With interactive content
 
-When the tile contains interactive elements like links or buttons, the component
-automatically detects them and reduces the click target to only the chevron icon.
-This ensures that clicks on interactive elements work as expected without toggling
-the tile's expand/collapse state.
+By default, the tile uses a `<button>` element to toggle the expand/collapse state.
 
-<ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
+If you need to use interactive content inside the tile, set the `hasInteractiveContent` prop to `true`. This will render the tile as a `<div>` element to avoid invalid HTML nesting. 
+
+Only the expand/collapse toggle with affect the tile's expand/collapse state.
+
+<ExpandableTile hasInteractiveContent tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <Stack slot="above" gap={4}>
     <a href="https://svelte.carbondesignsystem.com/" target="_blank">
       Native link

@@ -5,7 +5,7 @@
   export let linkClicked = false;
 </script>
 
-<ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
+<ExpandableTile hasInteractiveContent tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <div slot="above">
     <a
       href="/"
