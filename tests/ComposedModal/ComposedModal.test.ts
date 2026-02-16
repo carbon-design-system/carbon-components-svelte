@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import ComposedModalTest from "./ComposedModal.test.svelte";
+import ComposedModalFocusReturnTest from "./ComposedModalFocusReturn.test.svelte";
 import ComposedModalFocusTrapTest from "./ComposedModalFocusTrap.test.svelte";
 
 describe("ComposedModal", () => {
@@ -264,6 +265,94 @@ describe("ComposedModal", () => {
 
     const primaryButton = screen.getByRole("button", { name: "Save" });
     expect(primaryButton).toHaveFocus();
+  });
+
+  it("returns focus to trigger when closed via close button", async () => {
+    const { container } = render(ComposedModalFocusReturnTest, {
+      props: {},
+    });
+
+    const trigger = screen.getByRole("button", { name: "Open Modal" });
+    await user.click(trigger);
+    await tick();
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    const modalWrapper = container.querySelector(".bx--modal");
+    assert(modalWrapper);
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    const closeButton = screen.getByLabelText("Close");
+    await user.click(closeButton);
+    await tick();
+
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    expect(trigger).toHaveFocus();
+  });
+
+  it("returns focus to trigger when closed via Escape key", async () => {
+    const { container } = render(ComposedModalFocusReturnTest, {
+      props: {},
+    });
+
+    const trigger = screen.getByRole("button", { name: "Open Modal" });
+    await user.click(trigger);
+    await tick();
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    const modalWrapper = container.querySelector(".bx--modal");
+    assert(modalWrapper);
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    await user.keyboard("{Escape}");
+    await tick();
+
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    expect(trigger).toHaveFocus();
+  });
+
+  it("returns focus to trigger when closed via outside click", async () => {
+    const { container } = render(ComposedModalFocusReturnTest, {
+      props: {},
+    });
+
+    const trigger = screen.getByRole("button", { name: "Open Modal" });
+    await user.click(trigger);
+    await tick();
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    const modalWrapper = container.querySelector(".bx--modal");
+    assert(modalWrapper);
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    await user.click(modalWrapper);
+    await tick();
+
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    expect(trigger).toHaveFocus();
   });
 
   it("should respect selectorPrimaryFocus", async () => {
