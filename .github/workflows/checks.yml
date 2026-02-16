@@ -8,17 +8,48 @@ on:
     branches: [master]
     paths-ignore:
       - "**.md"
-      - "docs/**"
       - "examples/**"
   workflow_dispatch:
 
 permissions:
   contents: read
+  pull-requests: read
 
 env:
   IBM_TELEMETRY_DISABLED: true
 
 jobs:
+  detect:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: macos-15
+    outputs:
+      docs_only: ${{ steps.compute.outputs.docs_only }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          filters: |
+            docs:
+              - "docs/**"
+              - "**.md"
+              - "examples/**"
+            src:
+              - "src/**"
+              - "tests/**"
+              - "tests-svelte3/**"
+              - "tests-svelte5/**"
+      - id: compute
+        run: |
+          if [ "${{ steps.filter.outputs.docs }}" == "true" ] && [ "${{ steps.filter.outputs.src }}" != "true" ]; then
+            echo "docs_only=true" >> $GITHUB_OUTPUT
+          else
+            echo "docs_only=false" >> $GITHUB_OUTPUT
+          fi
+
   lint:
     runs-on: macos-15
     steps:
@@ -28,7 +59,8 @@ jobs:
       - run: bunx biome ci --error-on-warnings
 
   test-svelte4:
-    needs: [lint]
+    needs: [lint, detect]
+    if: needs.detect.outputs.docs_only != 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -45,7 +77,8 @@ jobs:
         run: bun --bun run test
 
   test-svelte3:
-    needs: [lint]
+    needs: [lint, detect]
+    if: needs.detect.outputs.docs_only != 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -71,7 +104,8 @@ jobs:
           bun --bun run test
 
   test-svelte5:
-    needs: [lint]
+    needs: [lint, detect]
+    if: needs.detect.outputs.docs_only != 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -110,8 +144,8 @@ jobs:
       - run: bun run test:types
 
   deploy-docs:
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master'
-    needs: [lint, test-svelte4, types]
+    if: always() && (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master') && needs.lint.result == 'success' && needs.types.result == 'success' && (needs.test-svelte4.result == 'success' || (needs.test-svelte4.result == 'skipped' && needs.detect.outputs.docs_only == 'true'))
+    needs: [lint, test-svelte4, types, detect]
     runs-on: macos-15
     steps:
       - name: Trigger deploy
