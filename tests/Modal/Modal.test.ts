@@ -204,10 +204,27 @@ describe("Modal", () => {
     expect(modalBody).toHaveClass("bx--modal-scroll-content");
   });
 
-  it("should focus close button when open", () => {
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2671
+  it("should focus primary button when open (not close button)", () => {
     render(ModalTest, {
       props: {
         open: true,
+        modalHeading: "Focus Test",
+        primaryButtonText: "Save",
+        secondaryButtonText: "Cancel",
+      },
+    });
+
+    const primaryButton = screen.getByRole("button", { name: "Save" });
+    expect(primaryButton).toHaveFocus();
+  });
+
+  it("should focus close button when open and passive", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        passiveModal: true,
+        modalHeading: "Passive Focus Test",
       },
     });
 
