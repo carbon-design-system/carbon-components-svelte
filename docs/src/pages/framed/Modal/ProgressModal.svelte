@@ -12,7 +12,7 @@
   } from "carbon-components-svelte";
   import { tick } from "svelte";
 
-  let open = true;
+  let open = false;
   let step = 0;
   let name = "";
   let region = "";
