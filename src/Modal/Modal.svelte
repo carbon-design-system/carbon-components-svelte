@@ -117,6 +117,7 @@
   let opened = false;
   let didClickInnerModal = false;
   let closeDispatched = false;
+  let previouslyFocusedElement = null;
 
   function focus(element) {
     const container = element || innerModal;
@@ -158,6 +159,10 @@
       }
     } else if (open) {
       opened = true;
+      previouslyFocusedElement =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
       focus();
       dispatch("open");
     }
@@ -264,6 +269,10 @@
   on:transitionend={(e) => {
     if (e.propertyName === "transform") {
       dispatch("transitionend", { open });
+      if (!open && previouslyFocusedElement?.isConnected) {
+        previouslyFocusedElement.focus();
+        previouslyFocusedElement = null;
+      }
     }
   }}
 >
