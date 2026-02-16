@@ -8,7 +8,8 @@ describe("RadioButton (Standalone)", () => {
       props: { checked: false },
     });
 
-    const input = screen.getByRole("radio") as HTMLInputElement;
+    const input = screen.getByRole("radio");
+    expect.assert(input instanceof HTMLInputElement);
     expect(input).not.toBeChecked();
 
     component.checked = true;

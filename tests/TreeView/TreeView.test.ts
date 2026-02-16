@@ -137,7 +137,8 @@ describe.each(testCases)("$name", ({ component }) => {
 
     expect(toggleButton).toBeInTheDocument();
 
-    await user.click(toggleButton as HTMLElement);
+    expect.assert(toggleButton instanceof HTMLElement);
+    await user.click(toggleButton);
 
     expect(consoleLog).toHaveBeenCalledWith(
       "toggle",
@@ -801,7 +802,9 @@ describe("TreeView Generics", () => {
 
 describe("TreeView autoCollapse", () => {
   const getToggleButton = (node: HTMLElement) => {
-    return node.querySelector(".bx--tree-parent-node__toggle") as HTMLElement;
+    const button = node.querySelector(".bx--tree-parent-node__toggle");
+    expect.assert(button instanceof HTMLElement);
+    return button;
   };
 
   const getAllExpandedItems = () => {

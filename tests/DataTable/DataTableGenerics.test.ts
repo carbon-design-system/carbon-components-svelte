@@ -29,7 +29,8 @@ describe("DataTable Generics", () => {
 
       // Get first table
       const firstTable = tables[0];
-      const firstTableContainer = within(firstTable as HTMLElement);
+      expect.assert(firstTable instanceof HTMLElement);
+      const firstTableContainer = within(firstTable);
 
       // Verify rows are rendered
       const rows = getTableRows(container, 0);
@@ -53,9 +54,7 @@ describe("DataTable Generics", () => {
       const { container } = render(DataTableGenerics);
 
       // Find checkboxes in the first table
-      const checkboxes = container.querySelectorAll(
-        'input[type="checkbox"]',
-      ) as NodeListOf<HTMLInputElement>;
+      const checkboxes = container.querySelectorAll('input[type="checkbox"]');
       const firstTableCheckboxes = Array.from(checkboxes).filter((cb) => {
         const row = cb.closest("tr");
         return row && getTableRows(container, 0).includes(row);
@@ -66,7 +65,8 @@ describe("DataTable Generics", () => {
       // Click the first checkbox (row-1 should be pre-selected)
       if (firstTableCheckboxes.length > 0) {
         const firstCheckbox = firstTableCheckboxes[0];
-        expect(firstCheckbox?.checked).toBe(true); // row-1 is pre-selected
+        expect.assert(firstCheckbox instanceof HTMLInputElement);
+        expect(firstCheckbox.checked).toBe(true); // row-1 is pre-selected
 
         // Click to deselect
         await user.click(firstCheckbox);
@@ -113,7 +113,8 @@ describe("DataTable Generics", () => {
 
       // Get second table
       const secondTable = tables[1];
-      const secondTableContainer = within(secondTable as HTMLElement);
+      expect.assert(secondTable instanceof HTMLElement);
+      const secondTableContainer = within(secondTable);
 
       // Verify rows are rendered in second table
       const rows = getTableRows(container, 1);
@@ -132,9 +133,7 @@ describe("DataTable Generics", () => {
       const { container } = render(DataTableGenerics);
 
       // Find checkboxes in the second table
-      const checkboxes = container.querySelectorAll(
-        'input[type="checkbox"]',
-      ) as NodeListOf<HTMLInputElement>;
+      const checkboxes = container.querySelectorAll('input[type="checkbox"]');
       const secondTableCheckboxes = Array.from(checkboxes).filter((cb) => {
         const row = cb.closest("tr");
         return row && getTableRows(container, 1).includes(row);
@@ -143,7 +142,10 @@ describe("DataTable Generics", () => {
       expect(secondTableCheckboxes.length).toBeGreaterThan(0);
 
       // Verify pre-selected rows (1 and 2 should be pre-selected)
-      const checkedBoxes = secondTableCheckboxes.filter((cb) => cb?.checked);
+      const checkedBoxes = secondTableCheckboxes.filter((cb) => {
+        expect.assert(cb instanceof HTMLInputElement);
+        return cb.checked;
+      });
       expect(checkedBoxes.length).toBeGreaterThanOrEqual(0);
     });
 
@@ -182,7 +184,8 @@ describe("DataTable Generics", () => {
 
       // Get third table
       const thirdTable = tables[2];
-      const thirdTableContainer = within(thirdTable as HTMLElement);
+      expect.assert(thirdTable instanceof HTMLElement);
+      const thirdTableContainer = within(thirdTable);
 
       // Verify rows are rendered in third table
       const rows = getTableRows(container, 2);
@@ -204,9 +207,7 @@ describe("DataTable Generics", () => {
       const { container } = render(DataTableGenerics);
 
       // Find checkboxes in the third table
-      const checkboxes = container.querySelectorAll(
-        'input[type="checkbox"]',
-      ) as NodeListOf<HTMLInputElement>;
+      const checkboxes = container.querySelectorAll('input[type="checkbox"]');
       const thirdTableCheckboxes = Array.from(checkboxes).filter((cb) => {
         const row = cb.closest("tr");
         return row && getTableRows(container, 2).includes(row);
@@ -215,7 +216,10 @@ describe("DataTable Generics", () => {
       expect(thirdTableCheckboxes.length).toBeGreaterThan(0);
 
       // Verify pre-selected row (prod-1 should be pre-selected)
-      const checkedBoxes = thirdTableCheckboxes.filter((cb) => cb?.checked);
+      const checkedBoxes = thirdTableCheckboxes.filter((cb) => {
+        expect.assert(cb instanceof HTMLInputElement);
+        return cb.checked;
+      });
       expect(checkedBoxes.length).toBeGreaterThanOrEqual(0);
     });
 
@@ -234,8 +238,8 @@ describe("DataTable Generics", () => {
       );
 
       if (thirdTableExpandButtons.length > 0) {
-        const firstExpandButton =
-          thirdTableExpandButtons[0] as HTMLButtonElement;
+        const firstExpandButton = thirdTableExpandButtons[0];
+        expect.assert(firstExpandButton instanceof HTMLButtonElement);
         await user.click(firstExpandButton);
         await tick();
 
@@ -284,7 +288,8 @@ describe("DataTable Generics", () => {
       );
 
       if (thirdTableExpandButtons.length > 0) {
-        const expandButton = thirdTableExpandButtons[0] as HTMLButtonElement;
+        const expandButton = thirdTableExpandButtons[0];
+        expect.assert(expandButton instanceof HTMLButtonElement);
         await user.click(expandButton);
         await tick();
 
@@ -316,7 +321,8 @@ describe("DataTable Generics", () => {
       );
 
       if (thirdTableExpandButtons.length > 0) {
-        const expandButton = thirdTableExpandButtons[0] as HTMLButtonElement;
+        const expandButton = thirdTableExpandButtons[0];
+        expect.assert(expandButton instanceof HTMLButtonElement);
         await user.click(expandButton);
         await tick();
 
