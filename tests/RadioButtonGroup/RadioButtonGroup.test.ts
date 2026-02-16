@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type RadioButtonGroupComponent from "carbon-components-svelte/RadioButtonGroup/RadioButtonGroup.svelte";
+import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import RadioButtonGroup from "./RadioButtonGroup.test.svelte";
 
@@ -148,5 +150,62 @@ describe("RadioButtonGroup", () => {
     render(RadioButtonGroup);
     const helperElement = screen.queryByText("Helper text message");
     expect(helperElement).not.toBeInTheDocument();
+  });
+
+  describe("Generics", () => {
+    it("should support custom string literal types with generics", () => {
+      type CustomValue = "option1" | "option2" | "option3";
+
+      type ComponentType = RadioButtonGroupComponent<CustomValue>;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<Props["selected"]>().toEqualTypeOf<
+        CustomValue | undefined
+      >();
+
+      type ChangeEvent = Events["change"];
+      type ChangeEventDetail =
+        ChangeEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<CustomValue>();
+    });
+
+    it("should default to string | number when generic is not specified", () => {
+      type ComponentType = RadioButtonGroupComponent;
+      type Props = ComponentProps<ComponentType>;
+      type Events = ComponentEvents<ComponentType>;
+
+      expectTypeOf<Props["selected"]>().toEqualTypeOf<
+        string | number | undefined
+      >();
+
+      type ChangeEvent = Events["change"];
+      type ChangeEventDetail =
+        ChangeEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<string | number>();
+    });
+
+    it("should provide type-safe access to custom string literal types in event handlers", () => {
+      type Status = "pending" | "approved" | "rejected";
+
+      const handleChange = (value: Status) => {
+        expectTypeOf(value).toEqualTypeOf<Status>();
+        if (value === "pending") {
+          expectTypeOf(value).toEqualTypeOf<"pending">();
+        }
+      };
+
+      expectTypeOf(handleChange).parameter(0).toEqualTypeOf<Status>();
+
+      type ComponentType = RadioButtonGroupComponent<Status>;
+      type Events = ComponentEvents<ComponentType>;
+      type ChangeEvent = Events["change"];
+      type ChangeEventDetail =
+        ChangeEvent extends CustomEvent<infer T> ? T : never;
+
+      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<
+        Parameters<typeof handleChange>[0]
+      >();
+    });
   });
 });
