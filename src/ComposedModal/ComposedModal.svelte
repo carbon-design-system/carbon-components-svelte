@@ -105,10 +105,14 @@
     const container = element || innerModal;
     /**
      * First, use the selectorPrimaryFocus to find the element.
-     * Otherwise, use the primary button and fallback to the close button.
+     * Otherwise, try the first input for transactional dialogs.
+     * Fall back to the primary button, then the close button.
      */
+    const selectorFirstInput =
+      'input:not([type="hidden"]):not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"])';
     const node =
       container?.querySelector(selectorPrimaryFocus) ||
+      container?.querySelector(selectorFirstInput) ||
       container?.querySelector(".bx--btn--primary") ||
       container?.querySelector(".bx--modal-close");
     if (node != null) node.focus();

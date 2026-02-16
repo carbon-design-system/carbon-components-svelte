@@ -26,6 +26,7 @@
   export let footerDanger = false;
   export let onopen: ((event: CustomEvent) => void) | undefined = undefined;
   export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
+  export let includeInput = true;
 </script>
 
 <ComposedModal
@@ -50,7 +51,9 @@
     hasScrollingContent={bodyHasScrollingContent}
   >
     <slot />
-    <input id="test-focus" data-testid="test-focus" />
+    {#if includeInput}
+      <input id="test-focus" data-testid="test-focus" />
+    {/if}
   </ModalBody>
   {#if footerPrimaryButtonText || footerSecondaryButtonText}
     <ModalFooter

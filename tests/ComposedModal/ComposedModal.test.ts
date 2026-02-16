@@ -258,6 +258,7 @@ describe("ComposedModal", () => {
         headerTitle: "Focus Test",
         footerPrimaryButtonText: "Save",
         footerSecondaryButtonText: "Cancel",
+        includeInput: false,
       },
     });
 
@@ -366,6 +367,35 @@ describe("ComposedModal", () => {
 
     await tick();
     expect(screen.getByTestId("test-focus")).toHaveFocus();
+  });
+
+  it("should focus the first input when selectorPrimaryFocus is default and modal has form fields", async () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Form Modal",
+        footerPrimaryButtonText: "Save",
+        footerSecondaryButtonText: "Cancel",
+      },
+    });
+
+    await tick();
+    expect(screen.getByTestId("test-focus")).toHaveFocus();
+  });
+
+  it("should allow selectorPrimaryFocus to override first-input focus", async () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Override Test",
+        footerPrimaryButtonText: "Save",
+        footerSecondaryButtonText: "Cancel",
+        selectorPrimaryFocus: "button.bx--btn--primary",
+      },
+    });
+
+    await tick();
+    expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
   });
 
   it("should have correct ARIA attributes", () => {

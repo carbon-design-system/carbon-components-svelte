@@ -46,7 +46,7 @@
   Create workspace
 </Button>
 
-<ComposedModal bind:open selectorPrimaryFocus="#name-input">
+<ComposedModal bind:open>
   <ModalHeader title="Create workspace" />
   <ModalBody hasForm>
     <form id="workspace-form" on:submit|preventDefault={handleSubmit}>
