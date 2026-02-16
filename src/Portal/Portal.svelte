@@ -29,7 +29,12 @@
 
   $: if (mounted && ref) {
     if (typeof document !== "undefined" && ref.parentNode !== document.body) {
+      const activeEl = document.activeElement;
+      const hadFocus = ref.contains(activeEl);
       document.body.appendChild(ref);
+      if (hadFocus && activeEl instanceof HTMLElement) {
+        activeEl.focus();
+      }
     }
   }
 </script>

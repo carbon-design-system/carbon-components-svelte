@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import PortalFocusTest from "./Portal.focus.test.svelte";
 import PortalMultipleTest from "./Portal.multiple.test.svelte";
 import PortalTest from "./Portal.test.svelte";
 
@@ -225,5 +226,15 @@ describe("Portal", () => {
     expect(portalElement).toHaveAttribute("data-testid", "portal-test");
     expect(portalElement).toHaveAttribute("aria-label", "Test portal");
     expect(portalElement.getAttribute("style")).toContain("background-color");
+  });
+
+  describe("focus preservation when moving to body", () => {
+    it("preserves focus on element inside portal when it is moved to document.body", async () => {
+      render(PortalFocusTest);
+
+      const input = await screen.findByTestId("portal-input");
+      expect(input).toBeInTheDocument();
+      expect(input).toHaveFocus();
+    });
   });
 });
