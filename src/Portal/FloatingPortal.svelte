@@ -4,10 +4,11 @@
    */
 
   /**
-   * Specify the anchor element to position the floating content relative to.
+   * Required. Specify the anchor element to position the floating content relative to.
+   * When using `bind:this`, this may be `null` initially until the element is mounted.
    * @type {null | HTMLElement}
    */
-  export let anchor = null;
+  export let anchor;
 
   /**
    * Set the preferred direction of the floating content.

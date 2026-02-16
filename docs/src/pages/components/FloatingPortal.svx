@@ -3,7 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`FloatingPortal` builds on [Portal](/components/Portal) by rendering content into `document.body` and positioning it relative to an anchor element. It automatically flips direction when there is not enough space and repositions on scroll and resize.
+`FloatingPortal` builds on [Portal](/components/Portal) by rendering content into `document.body` and positioning it relative to an anchor element. The `anchor` prop is required and specifies the element to position the floating content relative to. It automatically flips direction when there is not enough space and repositions on scroll and resize.
 
 Use `Portal` when you only need to escape overflow and z-index stacking contexts. Use `FloatingPortal` when you need anchored, positioned content such as dropdowns, popovers, or overflow menus.
 
