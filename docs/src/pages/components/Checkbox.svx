@@ -1,5 +1,5 @@
 <script>
-  import { Checkbox, CheckboxGroup, InlineNotification } from "carbon-components-svelte";
+  import { Checkbox, CheckboxGroup } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -58,13 +58,9 @@ Use two-way binding with `bind:checked` to track the checkbox state.
 
 ## Reactive example (bind:group)
 
-Bind an array of values using `group` to manage multiple checkboxes. This API is inspired by Svelte [group inputs](https://svelte.dev/tutorial/group-inputs).
+Bind an array to `group` so each checkbox adds or removes its `value` when toggled. This API is inspired by Svelte [group inputs](https://svelte.dev/tutorial/svelte/group-inputs).
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    When using <strong>bind:group</strong>, <strong>bind:checked</strong> only supports one-way binding.
-  </div>
-</InlineNotification>
+When using `bind:group`, the checked state is derived from the group array: use `bind:group` (not `bind:checked`) to control selection, since updating `checked` directly will be overwritten.
 
 <FileSource src="/framed/Checkbox/MultipleCheckboxes" />
 
@@ -79,9 +75,9 @@ Set `skeleton` to `true` to show a loading state.
 Use `CheckboxGroup` to wrap multiple `Checkbox` components with a shared legend, layout, and validation. This mirrors the [RadioButtonGroup](/components/RadioButton) API but supports multiple selections.
 
 <CheckboxGroup legendText="Notification preferences" name="prefs" selected={["email"]}>
-  <Checkbox value="email" labelText="Email" />
-  <Checkbox value="sms" labelText="SMS" />
-  <Checkbox value="push" labelText="Push notifications" />
+<Checkbox value="email" labelText="Email" />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
 ## CheckboxGroup (reactive example)
@@ -95,9 +91,9 @@ Use two-way binding with `bind:selected` to track and update the selected values
 Visually hide the legend while maintaining accessibility.
 
 <CheckboxGroup hideLegend legendText="Notification preferences" name="prefs-hidden" selected={["email"]}>
-  <Checkbox value="email" labelText="Email" />
-  <Checkbox value="sms" labelText="SMS" />
-  <Checkbox value="push" labelText="Push notifications" />
+<Checkbox value="email" labelText="Email" />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
 ## CheckboxGroup (vertical)
@@ -105,9 +101,9 @@ Visually hide the legend while maintaining accessibility.
 Display checkboxes in a vertical layout.
 
 <CheckboxGroup orientation="vertical" legendText="Notification preferences" name="prefs-vertical" selected={["email"]}>
-  <Checkbox value="email" labelText="Email" />
-  <Checkbox value="sms" labelText="SMS" />
-  <Checkbox value="push" labelText="Push notifications" />
+<Checkbox value="email" labelText="Email" />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
 ## CheckboxGroup (disabled)
@@ -115,9 +111,9 @@ Display checkboxes in a vertical layout.
 Disable all checkboxes in the group.
 
 <CheckboxGroup disabled legendText="Notification preferences" name="prefs-disabled" selected={["email"]}>
-  <Checkbox value="email" labelText="Email" />
-  <Checkbox value="sms" labelText="SMS" />
-  <Checkbox value="push" labelText="Push notifications" />
+<Checkbox value="email" labelText="Email" />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
 ## CheckboxGroup (helper text)
@@ -125,7 +121,7 @@ Disable all checkboxes in the group.
 Use `helperText` to provide additional context below the checkbox group.
 
 <CheckboxGroup legendText="Notification preferences" name="prefs-helper" selected={["email"]} helperText="You can change these settings at any time">
-  <Checkbox value="email" labelText="Email" />
-  <Checkbox value="sms" labelText="SMS" />
-  <Checkbox value="push" labelText="Push notifications" />
+<Checkbox value="email" labelText="Email" />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>

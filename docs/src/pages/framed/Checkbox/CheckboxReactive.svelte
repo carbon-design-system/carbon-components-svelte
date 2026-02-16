@@ -1,14 +1,14 @@
 <script>
-  import { Button, Checkbox } from "carbon-components-svelte";
+  import { Button, Checkbox, Stack } from "carbon-components-svelte";
 
   let checked = false;
 </script>
 
-<Checkbox labelText="Label text" bind:checked />
-
-<div style="margin: var(--cds-layout-01) 0">
+<Stack inline gap={4}>
+  <Checkbox labelText="Label text" bind:checked />
   <Button on:click={() => (checked = !checked)}>Toggle</Button>
-</div>
-
-<strong>checked:</strong>
-{checked}
+  <div>
+    <strong>checked:</strong>
+    {checked}
+  </div>
+</Stack>
