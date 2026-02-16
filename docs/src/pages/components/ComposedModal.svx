@@ -30,6 +30,12 @@ The modal dispatches a cancelable `close` event, allowing you to prevent the mod
 
 <FileSource src="/framed/Modal/ComposedModalPreventClose" />
 
+## Progress modal
+
+Combine `ComposedModal` with `ProgressIndicator` to create a multi-step flow within a modal. Use `ModalFooter`'s default slot to render Cancel (ghost), Previous (secondary), and Next (primary) buttons. Track the current step to control which content is displayed and update the button label on the final step.
+
+<FileSource src="/framed/Modal/ProgressModal" />
+
 ## Multiple secondary buttons
 
 Set `secondaryButtons` in `ModalFooter` to create a 3-button modal. This prop replaces `secondaryButtonText` and takes a tuple of two button configurations.
