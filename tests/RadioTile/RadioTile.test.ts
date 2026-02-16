@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type RadioTileComponent from "carbon-components-svelte/Tile/RadioTile.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import RadioTileGroup from "./RadioTile.group.test.svelte";
 import RadioTileSingle from "./RadioTile.single.test.svelte";
@@ -192,5 +194,23 @@ describe("RadioTile", () => {
       "bx--tile--is-selected",
     );
     expect(input).toHaveAttribute("name", "test-group");
+  });
+
+  describe("Generics", () => {
+    it("should support custom string literal types with generics", () => {
+      type CustomValue = "option1" | "option2" | "option3";
+
+      type ComponentType = RadioTileComponent<CustomValue>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<CustomValue | undefined>();
+    });
+
+    it("should default to string when generic is not specified", () => {
+      type ComponentType = RadioTileComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<string | undefined>();
+    });
   });
 });

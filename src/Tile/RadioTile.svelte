@@ -1,6 +1,8 @@
 <script>
   /**
    * @restProps {label}
+   * @generics {Value extends string = string} Value
+   * @template {string} Value
    */
 
   /** Set to `true` to check the tile */
@@ -15,7 +17,10 @@
   /** Set to `true` to mark the field as required */
   export let required = false;
 
-  /** Specify the value of the radio input */
+  /**
+   * Specify the value of the radio input.
+   * @type {Value}
+   */
   export let value = "";
 
   /** Specify the tabindex */
