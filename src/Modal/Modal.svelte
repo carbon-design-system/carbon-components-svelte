@@ -119,8 +119,15 @@
   let closeDispatched = false;
 
   function focus(element) {
+    const container = element || innerModal;
+    /**
+     * First, use the selectorPrimaryFocus to find the element.
+     * Otherwise, use the primary button and fallback to the close button.
+     */
     const node =
-      (element || innerModal).querySelector(selectorPrimaryFocus) || buttonRef;
+      container.querySelector(selectorPrimaryFocus) ||
+      primaryButtonRef ||
+      buttonRef;
     node.focus();
   }
 
