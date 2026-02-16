@@ -1,11 +1,13 @@
 <script>
   /**
-   * @event {string | number} change
+   * @generics {Value extends string | number = string | number} Value
+   * @template {string | number} Value
+   * @event {Value} change
    */
 
   /**
    * Set the selected radio button value.
-   * @type {string | number}
+   * @type {Value | undefined}
    */
   export let selected = undefined;
 
@@ -73,14 +75,14 @@
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<string | number | undefined>}
+   * @type {import("svelte/store").Writable<Value | undefined>}
    */
   const selectedValue = writable(selected);
   const groupName = writable(name);
   const groupRequired = writable(required);
 
   /**
-   * @type {(data: { checked: boolean; value: string | number }) => void}
+   * @type {(data: { checked: boolean; value: Value }) => void}
    */
   const add = ({ checked, value }) => {
     if (checked) {
@@ -89,7 +91,7 @@
   };
 
   /**
-   * @type {(value: string | number) => void}
+   * @type {(value: Value) => void}
    */
   const update = (value) => {
     selected = value;
