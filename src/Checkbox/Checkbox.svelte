@@ -58,13 +58,26 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
+  import { readable } from "svelte/store";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
 
-  $: useGroup = Array.isArray(group);
+  const ctx = getContext("CheckboxGroup");
+  const selectedValues = ctx?.selectedValues ?? readable([]);
+  const groupName = ctx?.groupName ?? readable(undefined);
+  const groupRequired = ctx?.groupRequired ?? readable(undefined);
+  const groupDisabled = ctx?.groupDisabled ?? readable(false);
+  const ctxUpdate = ctx?.update;
+
+  $: useGroup = !ctx && Array.isArray(group);
+  $: if (ctx) checked = $selectedValues.includes(value);
   $: if (useGroup) checked = group.includes(value);
+
+  $: effectiveDisabled = ctx ? $groupDisabled || disabled : disabled;
+  $: effectiveName = ctx ? ($groupName ?? name) : name;
+  $: effectiveRequired = ctx ? ($groupRequired ?? required) : required;
 
   // Track previous checked value to avoid duplicate dispatches in Svelte 5
   // The reactive statement will only dispatch when checked changes externally (e.g., via bind:checked)
@@ -109,11 +122,11 @@
       type="checkbox"
       {value}
       {checked}
-      {disabled}
+      disabled={effectiveDisabled}
       {id}
       bind:indeterminate
-      {name}
-      {required}
+      name={effectiveName}
+      required={effectiveRequired}
       aria-readonly={readonly || undefined}
       class:bx--checkbox={true}
       on:click={(e) => {
@@ -126,7 +139,9 @@
           e.preventDefault();
           return;
         }
-        if (useGroup) {
+        if (ctxUpdate) {
+          ctxUpdate(value, !checked);
+        } else if (useGroup) {
           group = group.includes(value)
             ? group.filter((_value) => _value !== value)
             : [...group, value];
