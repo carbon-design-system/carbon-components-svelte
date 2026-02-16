@@ -31,17 +31,17 @@ Set `hideLabel` to `true` to visually hide the label while keeping it accessible
 
 <Checkbox labelText="Label text" hideLabel />
 
-## Disabled state
-
-Set `disabled` to `true` to prevent user interaction.
-
-<Checkbox labelText="Label text" disabled />
-
 ## Helper text
 
 Use `helperText` to provide additional context or instructions below the checkbox.
 
 <Checkbox labelText="Subscribe to newsletter" helperText="You can unsubscribe at any time" />
+
+## Disabled state
+
+Set `disabled` to `true` to prevent user interaction.
+
+<Checkbox labelText="Label text" disabled />
 
 ## Read-only state
 
@@ -96,11 +96,11 @@ Visually hide the legend while maintaining accessibility.
 <Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
-## CheckboxGroup (vertical)
+## CheckboxGroup (helper text)
 
-Display checkboxes in a vertical layout.
+Use `helperText` to provide additional context below the checkbox group.
 
-<CheckboxGroup orientation="vertical" legendText="Notification preferences" name="prefs-vertical" selected={["email"]}>
+<CheckboxGroup legendText="Notification preferences" name="prefs-helper" selected={["email"]} helperText="You can change these settings at any time">
 <Checkbox value="email" labelText="Email" />
 <Checkbox value="sms" labelText="SMS" />
 <Checkbox value="push" labelText="Push notifications" />
@@ -116,12 +116,12 @@ Disable all checkboxes in the group.
 <Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
-## CheckboxGroup (helper text)
+## CheckboxGroup (read-only)
 
-Use `helperText` to provide additional context below the checkbox group.
+Set `readonly` on each `Checkbox` to display selected values without allowing user interaction. Unlike `disabled`, the readonly state keeps labels readable.
 
-<CheckboxGroup legendText="Notification preferences" name="prefs-helper" selected={["email"]} helperText="You can change these settings at any time">
-<Checkbox value="email" labelText="Email" />
-<Checkbox value="sms" labelText="SMS" />
-<Checkbox value="push" labelText="Push notifications" />
+<CheckboxGroup legendText="Notification preferences" name="prefs-readonly" selected={["email", "push"]}>
+<Checkbox value="email" labelText="Email" readonly />
+<Checkbox value="sms" labelText="SMS" readonly />
+<Checkbox value="push" labelText="Push notifications" readonly />
 </CheckboxGroup>
