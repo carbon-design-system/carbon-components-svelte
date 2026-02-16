@@ -518,6 +518,54 @@ describe("OverflowMenu", () => {
       expect(floatingPortal).not.toBeInTheDocument();
     });
 
+    it("should focus first menu item when opened", async () => {
+      render(OverflowMenu, { props: { portalMenu: true } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+
+      const menuItems = screen.getAllByRole("menuitem");
+      expect(menuItems[0]).toHaveFocus();
+    });
+
+    it("should handle keyboard navigation", async () => {
+      render(OverflowMenu, { props: { portalMenu: true } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+
+      const menuItems = screen.getAllByRole("menuitem");
+      expect(menuItems[0]).toHaveFocus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(menuItems[1]).toHaveFocus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(menuItems[2]).toHaveFocus();
+
+      await user.keyboard("{ArrowUp}");
+      expect(menuItems[1]).toHaveFocus();
+    });
+
+    it("should handle keyboard navigation with wrap-around", async () => {
+      render(OverflowMenu, { props: { portalMenu: true } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+
+      const menuItems = screen.getAllByRole("menuitem");
+      expect(menuItems[0]).toHaveFocus();
+
+      await user.keyboard("{ArrowUp}");
+      expect(menuItems[2]).toHaveFocus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(menuItems[0]).toHaveFocus();
+
+      await user.keyboard("{Escape}");
+      expect(menuButton).toHaveFocus();
+    });
+
     it("should reflect auto-flipped direction in data-floating-menu-direction", async () => {
       // Mock getBoundingClientRect to simulate anchor near top of viewport
       // so that direction="top" will auto-flip to "bottom".
