@@ -31,10 +31,11 @@ Set `portalMenu={false}` on these components to opt out. In this example, the mo
 When the modal opens, focus is set using the following priority:
 
 1. The element matching `selectorPrimaryFocus` (default: `[data-modal-primary-focus]`)
-1. The primary action button (for transactional modals)
-1. The close button (for passive modals or modals without a primary button)
+2. The first input, textarea, or select (for transactional modals with form fields)
+3. The primary action button (for confirmation modals)
+4. The close button (for passive modals or modals without a primary button)
 
-Use `selectorPrimaryFocus` to override the default and target a specific element, such as the first form input.
+Use `selectorPrimaryFocus` to override the default and target a specific element when the automatic first-input focus is not desired.
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
