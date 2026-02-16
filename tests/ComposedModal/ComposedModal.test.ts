@@ -249,6 +249,23 @@ describe("ComposedModal", () => {
     expect(modal).toHaveClass("custom-container");
   });
 
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2671
+  it("should focus primary button when open (not close button)", async () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Focus Test",
+        footerPrimaryButtonText: "Save",
+        footerSecondaryButtonText: "Cancel",
+      },
+    });
+
+    await tick();
+
+    const primaryButton = screen.getByRole("button", { name: "Save" });
+    expect(primaryButton).toHaveFocus();
+  });
+
   it("should respect selectorPrimaryFocus", async () => {
     render(ComposedModalTest, {
       props: {

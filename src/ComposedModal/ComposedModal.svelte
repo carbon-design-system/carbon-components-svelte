@@ -99,9 +99,17 @@
   });
 
   function focus(element) {
+    // If selectorPrimaryFocus is purposefully falsy, don't focus anything.
     if (selectorPrimaryFocus == null) return;
+    const container = element || innerModal;
+    /**
+     * First, use the selectorPrimaryFocus to find the element.
+     * Otherwise, use the primary button and fallback to the close button.
+     */
     const node =
-      (element || innerModal)?.querySelector(selectorPrimaryFocus) || buttonRef;
+      container?.querySelector(selectorPrimaryFocus) ||
+      container?.querySelector(".bx--btn--primary") ||
+      container?.querySelector(".bx--modal-close");
     if (node != null) node.focus();
   }
 
