@@ -1,4 +1,5 @@
 <script>
+  import { OrderedList, ListItem } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -30,9 +31,17 @@ Set `portalMenu={false}` on these components to opt out. In this example, the mo
 
 <FileSource src="/framed/Modal/ModalWithDropdowns" />
 
-## Custom focus
+## Focus behavior
 
-Control which element receives focus when the modal opens. Use `selectorPrimaryFocus` to specify the target element using CSS selectors.
+When the modal opens, focus is set using the following priority:
+
+<OrderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
+  <ListItem>The element matching <code>selectorPrimaryFocus</code> (default: <code>[data-modal-primary-focus]</code>)</ListItem>
+  <ListItem>The primary action button (for transactional modals)</ListItem>
+  <ListItem>The close button (for passive modals or modals without a primary button)</ListItem>
+</OrderedList>
+
+Use `selectorPrimaryFocus` to override the default and target a specific element, such as the first form input.
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
@@ -44,7 +53,7 @@ Display critical actions or destructive operations with the danger variant. This
 
 ## Passive modal
 
-Create a non-interactive modal for displaying information. This variant lacks action buttons and focuses on content presentation.
+Create a non-interactive modal for displaying information. This variant lacks action buttons and focuses on content presentation. Since there is no primary button, the close button will receive focus when the modal opens.
 
 <FileSource src="/framed/Modal/PassiveModal" />
 
