@@ -1,7 +1,12 @@
 <script>
   /**
+   * @generics {Value extends string | number = string | number} Value
+   * @template {string | number} Value
+   */
+
+  /**
    * Specify the option value.
-   * @type {string | number}
+   * @type {Value}
    */
   export let value = "";
 

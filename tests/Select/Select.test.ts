@@ -1,5 +1,6 @@
 import { render, screen, within } from "@testing-library/svelte";
 import type SelectComponent from "carbon-components-svelte/Select/Select.svelte";
+import type SelectItemComponent from "carbon-components-svelte/Select/SelectItem.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import SelectFalsy from "./Select.falsy.test.svelte";
@@ -466,5 +467,21 @@ describe("Select Generics", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  it("should type SelectItem value to match Select generic", () => {
+    type CustomValue = "option1" | "option2" | "option3";
+
+    type ComponentType = SelectItemComponent<CustomValue>;
+    type Props = ComponentProps<ComponentType>;
+
+    expectTypeOf<Props["value"]>().toEqualTypeOf<CustomValue | undefined>();
+  });
+
+  it("should default SelectItem to string | number when generic is not specified", () => {
+    type ComponentType = SelectItemComponent;
+    type Props = ComponentProps<ComponentType>;
+
+    expectTypeOf<Props["value"]>().toEqualTypeOf<string | number | undefined>();
   });
 });
