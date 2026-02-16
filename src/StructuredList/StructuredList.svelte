@@ -1,11 +1,13 @@
 <script>
   /**
-   * @event {string} change
+   * @generics {Value extends string = string} Value
+   * @template {string} Value
+   * @event {Value} change
    */
 
   /**
    * Specify the selected structured list row value.
-   * @type {string}
+   * @type {Value | undefined}
    */
   export let selected = undefined;
 
@@ -23,7 +25,7 @@
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<string | undefined>}
+   * @type {import("svelte/store").Writable<Value | undefined>}
    */
   const selectedValue = writable(selected);
 
@@ -31,7 +33,7 @@
   let isInitialRender = true;
 
   /**
-   * @type {(value: string) => void}
+   * @type {(value: Value) => void}
    */
   const update = (value) => {
     selectedValue.set(value);

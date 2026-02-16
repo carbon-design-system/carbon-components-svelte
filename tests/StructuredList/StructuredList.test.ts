@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type StructuredListComponent from "carbon-components-svelte/StructuredList/StructuredList.svelte";
+import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import StructuredList from "./StructuredList.test.svelte";
 import StructuredListCustom from "./StructuredListCustom.test.svelte";
@@ -127,5 +129,58 @@ describe("StructuredList", () => {
 
     await user.click(screen.getAllByRole("radio")[0]);
     expect(consoleLog).toHaveBeenCalledWith("change", "row-1-value");
+  });
+});
+
+describe("Generics", () => {
+  it("should support custom string literal types with generics", () => {
+    type CustomValue = "row1" | "row2" | "row3";
+
+    type ComponentType = StructuredListComponent<CustomValue>;
+    type Props = ComponentProps<ComponentType>;
+    type Events = ComponentEvents<ComponentType>;
+
+    expectTypeOf<Props["selected"]>().toEqualTypeOf<CustomValue | undefined>();
+
+    type ChangeEvent = Events["change"];
+    type ChangeEventDetail =
+      ChangeEvent extends CustomEvent<infer T> ? T : never;
+    expectTypeOf<ChangeEventDetail>().toEqualTypeOf<CustomValue>();
+  });
+
+  it("should default to string when generic is not specified", () => {
+    type ComponentType = StructuredListComponent;
+    type Props = ComponentProps<ComponentType>;
+    type Events = ComponentEvents<ComponentType>;
+
+    expectTypeOf<Props["selected"]>().toEqualTypeOf<string | undefined>();
+
+    type ChangeEvent = Events["change"];
+    type ChangeEventDetail =
+      ChangeEvent extends CustomEvent<infer T> ? T : never;
+    expectTypeOf<ChangeEventDetail>().toEqualTypeOf<string>();
+  });
+
+  it("should provide type-safe access to custom string literal types in event handlers", () => {
+    type Status = "pending" | "approved" | "rejected";
+
+    const handleChange = (value: Status) => {
+      expectTypeOf(value).toEqualTypeOf<Status>();
+      if (value === "pending") {
+        expectTypeOf(value).toEqualTypeOf<"pending">();
+      }
+    };
+
+    expectTypeOf(handleChange).parameter(0).toEqualTypeOf<Status>();
+
+    type ComponentType = StructuredListComponent<Status>;
+    type Events = ComponentEvents<ComponentType>;
+    type ChangeEvent = Events["change"];
+    type ChangeEventDetail =
+      ChangeEvent extends CustomEvent<infer T> ? T : never;
+
+    expectTypeOf<ChangeEventDetail>().toEqualTypeOf<
+      Parameters<typeof handleChange>[0]
+    >();
   });
 });
