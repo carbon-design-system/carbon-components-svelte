@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type RadioButtonComponent from "carbon-components-svelte/RadioButton/RadioButton.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import RadioButton from "./RadioButton.test.svelte";
 import RadioButtonCustom from "./RadioButtonCustom.test.svelte";
@@ -135,5 +137,25 @@ describe("RadioButton", () => {
     expect(component.ref).toBeInstanceOf(HTMLInputElement);
     assert(component.ref);
     expect(component.ref.type).toBe("radio");
+  });
+
+  describe("Generics", () => {
+    it("should support custom string literal types with generics", () => {
+      type CustomValue = "option1" | "option2" | "option3";
+
+      type ComponentType = RadioButtonComponent<CustomValue>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<CustomValue | undefined>();
+    });
+
+    it("should default to string | number when generic is not specified", () => {
+      type ComponentType = RadioButtonComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<
+        string | number | undefined
+      >();
+    });
   });
 });
