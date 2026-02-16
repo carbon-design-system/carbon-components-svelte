@@ -52,7 +52,7 @@
     updateGroupSelection,
   } from "./RadioButtonRegistry.js";
 
-  const ctx = getContext("RadioButtonGroup");
+  const ctx = getContext("carbon:RadioButtonGroup");
 
   const { add, update, selectedValue, groupName, groupRequired } = ctx ?? {
     groupName: readable(undefined),

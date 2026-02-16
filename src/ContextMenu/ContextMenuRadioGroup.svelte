@@ -33,7 +33,7 @@
     selectedId = id;
   };
 
-  setContext("ContextMenuRadioGroup", {
+  setContext("carbon:ContextMenuRadioGroup", {
     currentId,
     radioIds,
     addOption,

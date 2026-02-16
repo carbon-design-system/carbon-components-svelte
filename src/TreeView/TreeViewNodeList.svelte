@@ -38,7 +38,7 @@
     expandNode,
     focusNode,
     toggleNode,
-  } = getContext("TreeView");
+  } = getContext("carbon:TreeView");
 
   const offset = () => {
     const depth = computeTreeLeafDepth(refLabel);

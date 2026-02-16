@@ -80,7 +80,7 @@
 
   let prevOpen = undefined;
 
-  setContext("Tooltip", { tooltipOpen });
+  setContext("carbon:Tooltip", { tooltipOpen });
 
   function onKeydown(e) {
     if (e.key === "Escape" || e.key === "Tab") {

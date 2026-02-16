@@ -145,7 +145,7 @@
   $: $openStore = open;
   trackModal(openStore);
 
-  setContext("Modal", {});
+  setContext("carbon:Modal", {});
 
   afterUpdate(() => {
     if (opened) {

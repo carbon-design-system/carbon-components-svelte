@@ -1,7 +1,7 @@
 <script>
   import { getContext } from "svelte";
 
-  const ctx = getContext("Toolbar") ?? {};
+  const ctx = getContext("carbon:Toolbar") ?? {};
 
   let batchActionsActive = false;
 

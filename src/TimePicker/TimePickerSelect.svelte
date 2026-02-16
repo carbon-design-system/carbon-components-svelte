@@ -35,7 +35,7 @@
    */
   const selectedValue = writable(value);
 
-  setContext("TimePickerSelect", { selectedValue });
+  setContext("carbon:TimePickerSelect", { selectedValue });
 
   $: selectedValue.set(value);
   $: value = $selectedValue;

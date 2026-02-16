@@ -43,7 +43,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const ctx = getContext("SelectableTileGroup");
+  const ctx = getContext("carbon:SelectableTileGroup");
   const hasGroup = ctx !== undefined;
   const {
     add = () => {},

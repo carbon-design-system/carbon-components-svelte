@@ -5,7 +5,7 @@
   import { getContext, onMount } from "svelte";
 
   const { selectedContent, addContent, removeContent, tabs, contentById } =
-    getContext("Tabs");
+    getContext("carbon:Tabs");
 
   addContent({ id });
 

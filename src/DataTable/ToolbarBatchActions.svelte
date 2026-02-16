@@ -37,7 +37,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const ctx = getContext("DataTable");
+  const ctx = getContext("carbon:DataTable");
 
   function cancel() {
     const shouldContinue = dispatch("cancel", null, { cancelable: true });
@@ -73,7 +73,7 @@
 
   let overflowVisible = false;
 
-  const ctxToolbar = getContext("Toolbar");
+  const ctxToolbar = getContext("carbon:Toolbar");
   let unsubscribeOverflow;
 
   if (ctxToolbar?.overflowVisible) {

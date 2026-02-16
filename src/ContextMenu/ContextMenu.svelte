@@ -48,7 +48,7 @@
    * @type {import("svelte/store").Writable<number>}
    */
   const menuOffsetX = writable(0);
-  const ctx = getContext("ContextMenu");
+  const ctx = getContext("carbon:ContextMenu");
 
   let options = [];
   let direction = 1;
@@ -127,7 +127,7 @@
     hasPopup.set(popup);
   };
 
-  setContext("ContextMenu", {
+  setContext("carbon:ContextMenu", {
     menuOffsetX,
     currentIndex,
     position,

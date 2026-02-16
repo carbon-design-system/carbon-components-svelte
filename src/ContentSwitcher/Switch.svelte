@@ -25,7 +25,7 @@
 
   import { getContext, onMount } from "svelte";
 
-  const ctx = getContext("ContentSwitcher");
+  const ctx = getContext("carbon:ContentSwitcher");
 
   ctx.add({ id, text, selected });
 

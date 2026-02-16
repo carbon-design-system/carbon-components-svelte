@@ -80,7 +80,7 @@
     });
   };
 
-  setContext("CheckboxGroup", {
+  setContext("carbon:CheckboxGroup", {
     selectedValues,
     groupName: readonly(groupName),
     groupRequired: readonly(groupRequired),

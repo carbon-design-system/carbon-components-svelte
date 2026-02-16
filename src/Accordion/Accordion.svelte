@@ -30,7 +30,7 @@
 
   $: disableItems.set(disabled);
 
-  setContext("Accordion", { disableItems });
+  setContext("carbon:Accordion", { disableItems });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

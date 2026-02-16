@@ -62,7 +62,7 @@
     ref?.focus();
   };
 
-  setContext("HeaderNavMenu", {
+  setContext("carbon:HeaderNavMenu", {
     selectedItems,
     menuItems,
     updateSelectedItems,

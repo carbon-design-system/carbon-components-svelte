@@ -39,7 +39,7 @@
     [translationIds.clearSelection]: "Clear selected item",
   };
   const dispatch = createEventDispatcher();
-  const ctx = getContext("MultiSelect");
+  const ctx = getContext("carbon:MultiSelect");
 
   $: if (ctx && ref) {
     ctx.declareRef({ key: "selection", ref });

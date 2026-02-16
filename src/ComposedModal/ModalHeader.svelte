@@ -23,7 +23,7 @@
   import { getContext } from "svelte";
   import Close from "../icons/Close.svelte";
 
-  const { closeModal, updateLabel } = getContext("ComposedModal");
+  const { closeModal, updateLabel } = getContext("carbon:ComposedModal");
 
   $: updateLabel(label);
 </script>

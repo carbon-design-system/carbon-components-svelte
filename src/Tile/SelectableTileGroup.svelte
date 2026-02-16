@@ -76,7 +76,7 @@
     }
   };
 
-  setContext("SelectableTileGroup", {
+  setContext("carbon:SelectableTileGroup", {
     selectedValues,
     groupName: groupNameReadonly,
     add,

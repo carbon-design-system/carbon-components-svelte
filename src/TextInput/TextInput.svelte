@@ -74,7 +74,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
 
-  const ctx = getContext("Form");
+  const ctx = getContext("carbon:Form");
   const dispatch = createEventDispatcher();
 
   function parse(raw) {

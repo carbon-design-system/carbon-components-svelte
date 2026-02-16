@@ -176,7 +176,7 @@
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
-  const insideModal = getContext("Modal");
+  const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
     portalMenu !== undefined ? portalMenu : !!insideModal;

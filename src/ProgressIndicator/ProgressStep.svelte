@@ -32,7 +32,7 @@
   let step = {};
 
   const { stepsById, add, change, preventChangeOnClick } =
-    getContext("ProgressIndicator");
+    getContext("carbon:ProgressIndicator");
 
   $: add({ id, complete, disabled });
 

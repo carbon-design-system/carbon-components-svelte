@@ -77,7 +77,7 @@
     inputValue,
     inputValueFrom,
     inputValueTo,
-  } = getContext("DatePicker");
+  } = getContext("carbon:DatePicker");
 
   const dateFormatTokens = {
     d: "\\d{1,2}",

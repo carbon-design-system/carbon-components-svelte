@@ -11,7 +11,7 @@
    */
   const formContext = { isFluid: true };
 
-  setContext("Form", formContext);
+  setContext("carbon:Form", formContext);
 </script>
 
 <Form

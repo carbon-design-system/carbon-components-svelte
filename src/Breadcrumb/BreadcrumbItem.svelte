@@ -15,7 +15,7 @@
   import { setContext } from "svelte";
   import Link from "../Link/Link.svelte";
 
-  setContext("BreadcrumbItem", {});
+  setContext("carbon:BreadcrumbItem", {});
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
