@@ -546,7 +546,8 @@ describe("NumberInput", () => {
       props: { allowDecimal: true, step: 0.1, value: null },
     });
 
-    const input = screen.getByRole("textbox") as HTMLInputElement;
+    const input = screen.getByRole("textbox");
+    expect.assert(input instanceof HTMLInputElement);
 
     await user.type(input, "1.0");
     expect(input.value).toBe("1.0");
@@ -958,7 +959,8 @@ describe("NumberInput", () => {
       props: { allowDecimal: true, allowEmpty: true, value: null },
     });
 
-    const input = screen.getByRole("textbox") as HTMLInputElement;
+    const input = screen.getByRole("textbox");
+    expect.assert(input instanceof HTMLInputElement);
 
     // Type a valid decimal
     await user.type(input, "1.5");
@@ -980,7 +982,8 @@ describe("NumberInput", () => {
       props: { allowDecimal: true, allowEmpty: true, value: null },
     });
 
-    const input = screen.getByRole("textbox") as HTMLInputElement;
+    const input = screen.getByRole("textbox");
+    expect.assert(input instanceof HTMLInputElement);
 
     // Type a valid decimal then an invalid character
     await user.type(input, "1.5.");
@@ -1391,7 +1394,8 @@ describe("NumberInput", () => {
     it("should format initial value with locale", () => {
       render(NumberInput, { props: { locale: "de-DE", value: 1234.5 } });
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
       // German locale uses period for thousands and comma for decimal
       expect(input.value).toBe("1.234,5");
     });
@@ -1401,7 +1405,8 @@ describe("NumberInput", () => {
         props: { locale: "en-US", value: null, allowEmpty: true },
       });
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
       await user.type(input, "1234.5");
       await user.tab();
 
@@ -1415,7 +1420,8 @@ describe("NumberInput", () => {
         props: { locale: "de-DE", value: null, allowEmpty: true },
       });
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
       await user.type(input, "3,14");
       await user.tab();
 
@@ -1427,7 +1433,8 @@ describe("NumberInput", () => {
         props: { locale: "en-US", value: null, allowEmpty: true },
       });
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("");
     });
 
@@ -1442,7 +1449,8 @@ describe("NumberInput", () => {
 
       await user.click(incrementButton);
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("1.001");
       expect(screen.getByTestId("value").textContent).toBe("1001");
     });
@@ -1458,7 +1466,8 @@ describe("NumberInput", () => {
 
       await user.click(decrementButton);
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("999");
       expect(screen.getByTestId("value").textContent).toBe("999");
     });
@@ -1489,7 +1498,8 @@ describe("NumberInput", () => {
         },
       });
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("1,234.50");
     });
 
@@ -1498,7 +1508,8 @@ describe("NumberInput", () => {
         props: { locale: "de-DE", value: 100, allowEmpty: true },
       });
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("100");
 
       rerender({ locale: "de-DE", value: 1234.5, allowEmpty: true });

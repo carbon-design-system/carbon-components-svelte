@@ -1438,7 +1438,8 @@ describe("MultiSelect", () => {
       expect(firstCheckbox).toBeDefined();
 
       // Get the current checked state
-      const wasChecked = (firstCheckbox as HTMLInputElement).checked;
+      expect.assert(firstCheckbox instanceof HTMLInputElement);
+      const wasChecked = firstCheckbox.checked;
 
       // Click the checkbox to toggle it
       await user.click(firstCheckbox);
@@ -1449,9 +1450,8 @@ describe("MultiSelect", () => {
       await waitFor(() => {
         const updatedCheckboxes = screen.getAllByRole("checkbox");
         const firstUpdatedCheckbox = updatedCheckboxes[0];
-        expect((firstUpdatedCheckbox as HTMLInputElement).checked).toBe(
-          !wasChecked,
-        );
+        expect.assert(firstUpdatedCheckbox instanceof HTMLInputElement);
+        expect(firstUpdatedCheckbox.checked).toBe(!wasChecked);
       });
     });
 
@@ -1525,9 +1525,10 @@ describe("MultiSelect", () => {
       // Verify the item is selected - check if any checkbox is checked
       await waitFor(() => {
         const checkboxes = screen.getAllByRole("checkbox");
-        const checkedCheckboxes = checkboxes.filter(
-          (cb) => (cb as HTMLInputElement).checked,
-        );
+        const checkedCheckboxes = checkboxes.filter((cb) => {
+          expect.assert(cb instanceof HTMLInputElement);
+          return cb.checked;
+        });
         expect(checkedCheckboxes.length).toBeGreaterThan(0);
 
         // Also verify we can find Item 2 if it's visible
@@ -1536,7 +1537,8 @@ describe("MultiSelect", () => {
           return label?.textContent?.trim() === "Item 2";
         });
         if (item2Checkbox) {
-          expect((item2Checkbox as HTMLInputElement).checked).toBe(true);
+          expect.assert(item2Checkbox instanceof HTMLInputElement);
+          expect(item2Checkbox.checked).toBe(true);
         }
       });
     });
