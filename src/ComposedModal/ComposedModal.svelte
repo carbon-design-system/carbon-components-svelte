@@ -50,6 +50,7 @@
   let innerModal = null;
   let didClickInnerModal = false;
   let closeDispatched = false;
+  let previouslyFocusedElement = null;
 
   function close(trigger) {
     closeDispatched = true;
@@ -221,9 +222,17 @@
   on:transitionend={({ propertyName, currentTarget }) => {
     if (propertyName === "transform") {
       dispatch("transitionend", { open });
+      if (!open && previouslyFocusedElement?.isConnected) {
+        previouslyFocusedElement.focus();
+        previouslyFocusedElement = null;
+      }
     }
 
     if (didOpen) {
+      previouslyFocusedElement =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
       focus(currentTarget);
       didOpen = false;
     }
