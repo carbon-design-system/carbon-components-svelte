@@ -1,7 +1,12 @@
 <script>
   /**
+   * @generics {Value extends string | number = string | number} Value
+   * @template {string | number} Value
+   */
+
+  /**
    * Specify the value of the radio button.
-   * @type {string | number}
+   * @type {Value}
    */
   export let value = "";
 
