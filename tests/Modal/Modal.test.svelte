@@ -27,6 +27,7 @@
   export let onsubmit: ((event: CustomEvent) => void) | undefined = undefined;
   export let onclickbuttonprimary: ((event: CustomEvent) => void) | undefined =
     undefined;
+  export let includeInput = true;
 </script>
 
 <Modal
@@ -58,5 +59,7 @@
   on:transitionend={(e) => console.log("transitionend", e.detail)}
 >
   <slot />
-  <input id="test-focus" data-testid="test-focus" />
+  {#if includeInput}
+    <input id="test-focus" data-testid="test-focus" />
+  {/if}
 </Modal>

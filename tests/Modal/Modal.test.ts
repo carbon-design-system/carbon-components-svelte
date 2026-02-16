@@ -213,6 +213,7 @@ describe("Modal", () => {
         modalHeading: "Focus Test",
         primaryButtonText: "Save",
         secondaryButtonText: "Cancel",
+        includeInput: false,
       },
     });
 
@@ -226,6 +227,7 @@ describe("Modal", () => {
         open: true,
         passiveModal: true,
         modalHeading: "Passive Focus Test",
+        includeInput: false,
       },
     });
 
@@ -316,6 +318,33 @@ describe("Modal", () => {
     });
 
     expect(screen.getByTestId("test-focus")).toHaveFocus();
+  });
+
+  it("focuses the first input when selectorPrimaryFocus is default and modal has form fields", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Form Modal",
+        primaryButtonText: "Save",
+        secondaryButtonText: "Cancel",
+      },
+    });
+
+    expect(screen.getByTestId("test-focus")).toHaveFocus();
+  });
+
+  it("selectorPrimaryFocus overrides first-input focus", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Override Test",
+        primaryButtonText: "Save",
+        secondaryButtonText: "Cancel",
+        selectorPrimaryFocus: "button.bx--btn--primary",
+      },
+    });
+
+    expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
   });
 
   it("prevents closing when clicking outside if configured", async () => {
