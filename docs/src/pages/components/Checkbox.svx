@@ -1,5 +1,5 @@
 <script>
-  import { Checkbox, CheckboxGroup } from "carbon-components-svelte";
+  import { Checkbox, CheckboxGroup, Stack, Tooltip } from "carbon-components-svelte";
   import Preview from "../../components/Preview.svelte";
 </script>
 
@@ -94,6 +94,24 @@ Visually hide the legend while maintaining accessibility.
 <Checkbox value="email" labelText="Email" />
 <Checkbox value="sms" labelText="SMS" />
 <Checkbox value="push" labelText="Push notifications" />
+</CheckboxGroup>
+
+## CheckboxGroup (custom label content)
+
+Use the `legendChildren` slot to provide custom label content instead of using the `legendText` prop.
+
+<CheckboxGroup name="prefs-legend-slot" selected={["email"]}>
+  <Stack slot="legendChildren" orientation="horizontal">
+    Notification preferences
+    <Tooltip>
+      <p>
+        You can change these settings at any time.
+      </p>
+    </Tooltip>
+  </Stack>
+  <Checkbox value="email" labelText="Email" />
+  <Checkbox value="sms" labelText="SMS" />
+  <Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
 ## CheckboxGroup (helper text)
