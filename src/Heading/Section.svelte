@@ -66,7 +66,7 @@
   import { writable } from "svelte/store";
 
   /** @type {undefined | SectionLevel} */
-  const parentLevel = getContext("Section");
+  const parentLevel = getContext("carbon:Section");
 
   /** @type {import ("svelte/store").Writable<SectionLevel>} */
   const internalLevel = writable(level);
@@ -80,7 +80,7 @@
     internalLevel.set(level);
   }
 
-  setContext("Section", $internalLevel);
+  setContext("carbon:Section", $internalLevel);
 </script>
 
 <svelte:element this="{tag}"><slot /></svelte:element>

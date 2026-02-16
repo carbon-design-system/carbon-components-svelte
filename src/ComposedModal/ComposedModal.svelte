@@ -90,8 +90,8 @@
     label.set(value);
   };
 
-  setContext("Modal", {});
-  setContext("ComposedModal", {
+  setContext("carbon:Modal", {});
+  setContext("carbon:ComposedModal", {
     closeModal,
     submit,
     declareRef,

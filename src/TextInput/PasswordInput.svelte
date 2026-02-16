@@ -86,7 +86,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
 
-  const ctx = getContext("Form");
+  const ctx = getContext("carbon:Form");
 
   const isFluid = !!ctx && ctx.isFluid;
   $: helperId = `helper-${id}`;

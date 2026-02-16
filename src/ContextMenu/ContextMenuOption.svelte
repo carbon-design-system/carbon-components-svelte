@@ -66,9 +66,9 @@
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();
-  const ctx = getContext("ContextMenu");
-  const ctxGroup = getContext("ContextMenuGroup");
-  const ctxRadioGroup = getContext("ContextMenuRadioGroup");
+  const ctx = getContext("carbon:ContextMenu");
+  const ctxGroup = getContext("carbon:ContextMenuGroup");
+  const ctxRadioGroup = getContext("carbon:ContextMenuRadioGroup");
 
   // "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
   const moderate01 = 150;

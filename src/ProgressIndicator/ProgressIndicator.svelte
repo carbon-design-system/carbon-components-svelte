@@ -72,7 +72,7 @@
     dispatch("change", index);
   };
 
-  setContext("ProgressIndicator", {
+  setContext("carbon:ProgressIndicator", {
     steps,
     stepsById,
     preventChangeOnClick: preventChangeOnClickReadable,

@@ -100,7 +100,7 @@
     }));
   };
 
-  setContext("Select", {
+  setContext("carbon:Select", {
     selectedValue,
     setDefaultValue,
   });

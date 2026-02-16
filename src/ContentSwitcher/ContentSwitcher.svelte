@@ -72,7 +72,7 @@
     }
   };
 
-  setContext("ContentSwitcher", {
+  setContext("carbon:ContentSwitcher", {
     currentId,
     add,
     update,

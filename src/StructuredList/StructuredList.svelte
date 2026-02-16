@@ -39,7 +39,7 @@
     selectedValue.set(value);
   };
 
-  setContext("StructuredListWrapper", {
+  setContext("carbon:StructuredListWrapper", {
     selectedValue,
     update,
   });

@@ -84,7 +84,7 @@
   import { createCalendar } from "./createCalendar";
 
   const dispatch = createEventDispatcher();
-  const insideModal = getContext("Modal");
+  const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
     portalMenu !== undefined ? portalMenu : !!insideModal;
@@ -200,7 +200,7 @@
     ).focus();
   };
 
-  setContext("DatePicker", {
+  setContext("carbon:DatePicker", {
     range,
     inputValue,
     inputValueFrom,

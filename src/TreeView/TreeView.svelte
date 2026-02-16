@@ -390,7 +390,7 @@
   /** @type {(node: Node) => void} */
   const toggleNode = (node) => dispatch("toggle", node);
 
-  setContext("TreeView", {
+  setContext("carbon:TreeView", {
     activeNodeId,
     selectedNodeIds,
     expandedNodeIds,

@@ -5,7 +5,7 @@
   import Settings from "../icons/Settings.svelte";
   import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
 
-  const ctx = getContext("Toolbar") ?? {};
+  const ctx = getContext("carbon:Toolbar") ?? {};
 
   let menuRef = null;
 

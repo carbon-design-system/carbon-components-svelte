@@ -146,7 +146,7 @@
     activeTab?.focus();
   };
 
-  setContext("Tabs", {
+  setContext("carbon:Tabs", {
     tabs,
     contentById,
     selectedTab,

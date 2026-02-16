@@ -56,7 +56,7 @@
   import { afterUpdate, createEventDispatcher, getContext } from "svelte";
 
   const dispatch = createEventDispatcher();
-  const { focusedId, add, update, change, items } = getContext("OverflowMenu");
+  const { focusedId, add, update, change, items } = getContext("carbon:OverflowMenu");
 
   $: item = $items.find((_) => _.id === id);
 

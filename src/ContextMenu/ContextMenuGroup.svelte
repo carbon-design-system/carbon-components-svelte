@@ -33,7 +33,7 @@
     }
   };
 
-  setContext("ContextMenuGroup", {
+  setContext("carbon:ContextMenuGroup", {
     currentIds,
     addOption,
     toggleOption,

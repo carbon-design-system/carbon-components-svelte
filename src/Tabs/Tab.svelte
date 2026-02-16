@@ -29,7 +29,7 @@
   import { getContext, onMount } from "svelte";
 
   const { selectedTab, useAutoWidth, add, remove, update, change } =
-    getContext("Tabs");
+    getContext("carbon:Tabs");
 
   add({ id, label, disabled });
 

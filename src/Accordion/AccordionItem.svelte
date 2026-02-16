@@ -25,7 +25,7 @@
 
   let initialDisabled = disabled;
 
-  const ctx = getContext("Accordion");
+  const ctx = getContext("carbon:Accordion");
   const unsubscribe = ctx.disableItems.subscribe((value) => {
     if (!value && initialDisabled) return;
     disabled = value;

@@ -33,7 +33,7 @@
     [translationIds.close]: "Close menu",
     [translationIds.open]: "Open menu",
   };
-  const ctx = getContext("MultiSelect");
+  const ctx = getContext("carbon:MultiSelect");
 
   $: if (ctx && ref) {
     ctx.declareRef({ key: "field", ref });

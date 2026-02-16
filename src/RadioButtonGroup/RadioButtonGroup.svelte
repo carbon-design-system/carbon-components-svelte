@@ -97,7 +97,7 @@
     selected = value;
   };
 
-  setContext("RadioButtonGroup", {
+  setContext("carbon:RadioButtonGroup", {
     selectedValue,
     groupName: readonly(groupName),
     groupRequired: readonly(groupRequired),

@@ -75,8 +75,8 @@
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
 
-  const ctxBreadcrumbItem = getContext("BreadcrumbItem");
-  const insideModal = getContext("Modal");
+  const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
+  const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
     portalMenu !== undefined ? portalMenu : !!insideModal;
@@ -158,7 +158,7 @@
     currentIndex.set(index);
   };
 
-  setContext("OverflowMenu", {
+  setContext("carbon:OverflowMenu", {
     focusedId,
     items,
     add,

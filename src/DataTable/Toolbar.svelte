@@ -28,7 +28,7 @@
     if (ref) ref.style.overflow = visible ? "visible" : "inherit";
   };
 
-  setContext("Toolbar", {
+  setContext("carbon:Toolbar", {
     overflowVisible,
     setOverflowVisible,
     batchActionsActive,

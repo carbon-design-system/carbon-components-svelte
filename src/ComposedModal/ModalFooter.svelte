@@ -45,7 +45,7 @@
   import Button from "../Button/Button.svelte";
 
   const dispatch = createEventDispatcher();
-  const { closeModal, submit } = getContext("ComposedModal");
+  const { closeModal, submit } = getContext("carbon:ComposedModal");
 </script>
 
 <div

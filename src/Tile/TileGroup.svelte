@@ -80,7 +80,7 @@
     dispatch("select", value);
   };
 
-  setContext("TileGroup", {
+  setContext("carbon:TileGroup", {
     selectedValue,
     groupName: groupNameReadonly,
     groupRequired: groupRequiredReadonly,

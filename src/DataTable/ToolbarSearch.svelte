@@ -52,7 +52,7 @@
   import Search from "../Search/Search.svelte";
   import { rowsEqual } from "./data-table-utils.js";
 
-  const ctx = getContext("DataTable") ?? {};
+  const ctx = getContext("carbon:DataTable") ?? {};
 
   let rows = null;
   let unsubscribe = null;

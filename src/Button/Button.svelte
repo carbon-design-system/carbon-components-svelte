@@ -104,7 +104,7 @@
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
 
-  const ctx = getContext("ComposedModal");
+  const ctx = getContext("carbon:ComposedModal");
 
   $: if (ctx && ref) {
     ctx.declareRef(ref);

@@ -387,7 +387,7 @@
     return filteredRows.map((row) => row.id);
   };
 
-  setContext("DataTable", {
+  setContext("carbon:DataTable", {
     batchSelectedIds,
     tableRows,
     resetSelectedRowIds,

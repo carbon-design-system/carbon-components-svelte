@@ -27,7 +27,7 @@
 
   import { getContext } from "svelte";
 
-  const { selectedValue, update } = getContext("StructuredListWrapper");
+  const { selectedValue, update } = getContext("carbon:StructuredListWrapper");
 
   if (checked) {
     update(value);

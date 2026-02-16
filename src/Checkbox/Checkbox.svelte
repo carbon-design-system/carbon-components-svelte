@@ -64,7 +64,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const ctx = getContext("CheckboxGroup");
+  const ctx = getContext("carbon:CheckboxGroup");
   const selectedValues = ctx?.selectedValues ?? readable([]);
   const groupName = ctx?.groupName ?? readable(undefined);
   const groupRequired = ctx?.groupRequired ?? readable(undefined);

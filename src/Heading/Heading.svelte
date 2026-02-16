@@ -31,7 +31,7 @@
   import { getContext } from "svelte";
 
   /** @type {undefined | SectionLevel} */
-  const sectionLevel = getContext("Section");
+  const sectionLevel = getContext("carbon:Section");
 
   $: tag = `h${sectionLevel ?? 1}`;
 </script>

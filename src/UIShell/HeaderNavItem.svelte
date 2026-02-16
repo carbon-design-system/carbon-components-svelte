@@ -20,7 +20,7 @@
   import { getContext, onMount } from "svelte";
 
   const id = `ccs-${Math.random().toString(36)}`;
-  const ctx = getContext("HeaderNavMenu");
+  const ctx = getContext("carbon:HeaderNavMenu");
 
   let selectedItemIds = [];
   let menuItems = [];

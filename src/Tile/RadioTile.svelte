@@ -52,7 +52,7 @@
   );
 
   const { add, update, selectedValue, groupName, groupRequired } = getContext(
-    "TileGroup",
+    "carbon:TileGroup",
   ) ?? {
     add: () => {},
     groupName: readable(undefined),
