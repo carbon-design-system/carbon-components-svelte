@@ -10,7 +10,7 @@ components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter"]
 
 **ComposedModal vs Modal**
 
-`ComposedModal` provides a composition-based approach with `ModalHeader`, `ModalBody`, and `ModalFooter` sub-components for maximum flexibility. For simpler use cases, use [Modal](/components/Modal) instead. Both components share the same events and accessibility features.
+`ComposedModal` provides a composition-based approach with `ModalHeader`, `ModalBody`, and `ModalFooter` sub-components for maximum flexibility. For simpler use cases, use [Modal](/components/Modal) instead. Both components share the same events, accessibility features, and [focus behavior](/components/Modal#focus-behavior).
 
 ## Composed modal
 
