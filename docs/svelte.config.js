@@ -82,8 +82,7 @@ function plugin() {
     if (
       node.lang !== "svelte" &&
       !node.value.startsWith("<FileSource") &&
-      !node.value.startsWith("<script>") &&
-      !node.value.match(/svx-ignore/g)
+      !node.value.startsWith("<script>")
     ) {
       const scriptBlock = createImports(node.value);
       const formattedCode = format(scriptBlock + node.value, {

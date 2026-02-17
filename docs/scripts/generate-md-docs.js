@@ -34,11 +34,6 @@ const HTML_VOID_TAGS = new Set([
   "wbr",
 ]);
 
-const ANY_HTML_TAG_RE = /<\/?[^>]+>/g;
-
-// Generic regex to match any component with svx-ignore attribute
-const SVX_IGNORE_COMPONENT_RE = /<([A-Z][\w]*)\b[^>]*\bsvx-ignore[^>]*>/i;
-
 const LEADING_SVELTE_SCRIPT_BLOCK_RE = /^\s*<script\b[\s\S]*?<\/script>\s*\n*/i;
 const FILE_SOURCE_SRC_ATTR_RE = /src="([^"]+)"/i;
 const FILE_SOURCE_START_RE = /^\s*<FileSource\b/;
@@ -327,188 +322,6 @@ function renderComponentApiMarkdown(moduleName) {
   ].filter(Boolean);
 
   return sections.join("\n\n");
-}
-
-/**
- * @param {string} openTag
- * @param {string} name
- */
-function getAttr(openTag, name) {
-  const m = openTag.match(new RegExp(`${name}="([^"]*)"`, "i"));
-  return m?.[1] ?? null;
-}
-
-/**
- * Convert CodeSnippet component to markdown code block
- * @param {string} openTag
- * @param {string} innerContent
- * @returns {string[]}
- */
-function convertCodeSnippet(openTag, innerContent) {
-  // Try to get code from prop first
-  let code = getAttr(openTag, "code");
-
-  // If no code prop, extract from slot content
-  if (!code) {
-    // Strip HTML tags and get text content
-    code = innerContent.replace(ANY_HTML_TAG_RE, "").trim();
-  }
-
-  if (!code) return [];
-
-  // Use empty language for code fence
-  const lang = "";
-
-  const out = [`\`\`\`${lang}`];
-  out.push(...code.split("\n"));
-  out.push("```");
-  out.push("");
-  return out;
-}
-
-/**
- * Find matching closing tag for a component (handles self-closing tags)
- * @param {string} componentName
- * @param {string[]} lines
- * @param {number} startIdx
- * @returns {{ endIdx: number; block: string; isSelfClosing: boolean } | null}
- */
-function findComponentBlock(componentName, lines, startIdx) {
-  const openTagRe = new RegExp(`<${componentName}\\b([^>]*?)(/?)>`, "i");
-  const closeTagRe = new RegExp(`</${componentName}>`, "i");
-
-  const openMatch = lines[startIdx].match(openTagRe);
-  if (!openMatch) return null;
-
-  // Check if it's a self-closing tag
-  const isSelfClosing =
-    openMatch[2] === "/" || lines[startIdx].trimEnd().endsWith("/>");
-
-  if (isSelfClosing) {
-    return {
-      endIdx: startIdx,
-      block: lines[startIdx],
-      isSelfClosing: true,
-    };
-  }
-
-  /** @type {string[]} */
-  const blockLines = [lines[startIdx]];
-  let foundClose = !!lines[startIdx].match(closeTagRe);
-  let depth = 1;
-  let i = startIdx;
-
-  while (depth > 0 && i + 1 < lines.length) {
-    i++;
-    const line = lines[i];
-    blockLines.push(line);
-
-    if (openTagRe.test(line)) depth++;
-    if (closeTagRe.test(line)) {
-      depth--;
-      if (depth === 0) foundClose = true;
-    }
-  }
-
-  if (!foundClose) return null;
-
-  return {
-    endIdx: i,
-    block: blockLines.join("\n"),
-    isSelfClosing: false,
-  };
-}
-
-/**
- * Extract inner content from component block
- * @param {string} componentName
- * @param {string} block
- * @returns {string}
- */
-function extractInnerContent(componentName, block) {
-  const openTagRe = new RegExp(`<${componentName}\\b[^>]*>`, "i");
-  const closeTagRe = new RegExp(`</${componentName}>`, "i");
-
-  const openMatch = block.match(openTagRe);
-  if (!openMatch || openMatch.index === undefined) return "";
-
-  const startIdx = openMatch.index + openMatch[0].length;
-  const closeMatch = block.slice(startIdx).match(closeTagRe);
-  if (!closeMatch || closeMatch.index === undefined) return "";
-
-  return block.slice(startIdx, startIdx + closeMatch.index);
-}
-
-/**
- * Convert svx-ignore components to markdown
- * @param {string} body
- */
-function transformSvxIgnoreComponents(body) {
-  const lines = body.split("\n");
-  /** @type {string[]} */
-  const out = [];
-
-  let inFence = false;
-  const isFence = (line) => line.trimStart().startsWith("```");
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-
-    if (isFence(line)) {
-      inFence = !inFence;
-      out.push(line);
-      continue;
-    }
-
-    if (inFence) {
-      out.push(line);
-      continue;
-    }
-
-    // Check if line contains a component with svx-ignore
-    const svxIgnoreMatch = line.match(SVX_IGNORE_COMPONENT_RE);
-    if (!svxIgnoreMatch) {
-      out.push(line);
-      continue;
-    }
-
-    const componentName = svxIgnoreMatch[1];
-    const componentBlock = findComponentBlock(componentName, lines, i);
-
-    if (!componentBlock) {
-      out.push(line);
-      continue;
-    }
-
-    // Extract open tag
-    const openTagMatch = componentBlock.block.match(
-      new RegExp(`<${componentName}\\b([^>]*?)(/?)>`, "i"),
-    );
-    const openTag = openTagMatch
-      ? `<${componentName}${openTagMatch[1]}${openTagMatch[2]}>`
-      : "";
-
-    // Extract inner content (empty for self-closing tags)
-    const innerContent = componentBlock.isSelfClosing
-      ? ""
-      : extractInnerContent(componentName, componentBlock.block);
-
-    // Route to appropriate converter
-    let convertedLines = [];
-    if (componentName === "CodeSnippet") {
-      convertedLines = convertCodeSnippet(openTag, innerContent);
-    } else {
-      // Unknown component - just skip it (or could output as-is)
-      out.push(line);
-      i = componentBlock.endIdx;
-      continue;
-    }
-
-    out.push(...convertedLines);
-    i = componentBlock.endIdx;
-  }
-
-  return out.join("\n");
 }
 
 /**
@@ -882,10 +695,7 @@ for (const componentName of getComponentNames()) {
   const bodyWithInlinedFileSources = inlineFileSources(
     bodyWithoutLeadingScript,
   );
-  const bodyWithSvxIgnoreConverted = transformSvxIgnoreComponents(
-    bodyWithInlinedFileSources,
-  );
-  const fencedBody = fenceInlineSvelte(bodyWithSvxIgnoreConverted);
+  const fencedBody = fenceInlineSvelte(bodyWithInlinedFileSources);
 
   const apiSections = componentsForUsage
     .map(renderComponentApiMarkdown)
