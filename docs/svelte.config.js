@@ -13,10 +13,9 @@ import "prism-svelte";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const componentApiByName = componentApi.components.reduce((a, c) => {
-  a[c.moduleName] = true;
-  return a;
-}, {});
+const componentApiByName = new Set(
+  componentApi.components.map((c) => c.moduleName),
+);
 
 const ICON_NAME_REGEX = /[A-Z][a-z]*/;
 const NODE_MODULES_REGEX = /node_modules/;
@@ -24,6 +23,7 @@ const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
 const GIT_PREFIX_REGEX = /^git\+/;
 const GIT_SUFFIX_REGEX = /\.git$/;
 const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
+const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
 
 function createImports(source) {
   const inlineComponents = new Set();
@@ -32,7 +32,7 @@ function createImports(source) {
 
   // heuristic to guess if the inline component or expression name is a Carbon icon
   const isIcon = (text) =>
-    ICON_NAME_REGEX.test(text) && !(text in componentApiByName);
+    ICON_NAME_REGEX.test(text) && !componentApiByName.has(text);
 
   walk(parse(source), {
     enter(node) {
@@ -55,9 +55,9 @@ function createImports(source) {
     },
   });
 
-  const actionImports = Array.from(actions.keys());
-  const ccsImports = [...Array.from(inlineComponents.keys()), ...actionImports];
-  const iconImports = Array.from(icons.keys());
+  const actionImports = [...actions];
+  const ccsImports = [...inlineComponents, ...actionImports];
+  const iconImports = [...icons];
 
   if (ccsImports.length === 0) return "";
 
@@ -99,19 +99,8 @@ function plugin() {
     }
 
     if (node.value.startsWith("<FileSource")) {
-      let src = "";
-
-      walk(parse(node.value), {
-        enter(node) {
-          if (node.name === "FileSource") {
-            for (const attribute of node.attributes) {
-              if (attribute.name === "src") {
-                src += attribute.value[0].raw;
-              }
-            }
-          }
-        },
-      });
+      const srcMatch = node.value.match(FILE_SOURCE_SRC_REGEX);
+      const src = srcMatch ? srcMatch[1] : "";
 
       const sourceCode = fs.readFileSync(
         path.join("src/pages", `${src}.svelte`),
@@ -135,6 +124,7 @@ function plugin() {
   };
 }
 
+const H2_REGEX = /<h2[^>]+id="([^"]+)"[^>]*>([^<]+)<\/h2>/g;
 const ADMONITION_RE = /^\[!(NOTE|WARNING|TIP|CAUTION)\]\s*/i;
 const ADMONITION_LINK_REF_RE = /^!(NOTE|WARNING|TIP|CAUTION)$/;
 const LEADING_WHITESPACE_RE = /^\n\s*/;
@@ -188,93 +178,99 @@ function serializeInlineNodes(nodes) {
 
 function carbonify() {
   return (tree) => {
-    visit(tree, "link", (node) => {
-      node.data = { hProperties: { class: "bx--link" } };
-    });
+    visit(tree, (node, index, parent) => {
+      switch (node.type) {
+        case "link":
+          node.data = { hProperties: { class: "bx--link" } };
+          return;
+        case "list":
+          node.data = {
+            hProperties: {
+              class: node.ordered ? "bx--list--ordered" : "bx--list--unordered",
+            },
+          };
+          return;
+        case "listItem":
+          node.data = { hProperties: { class: "bx--list__item" } };
+          return;
+        case "blockquote":
+          break;
+        default:
+          return;
+      }
 
-    visit(tree, "list", (node) => {
-      node.data = {
-        hProperties: {
-          class: node.ordered ? "bx--list--ordered" : "bx--list--unordered",
-        },
-      };
-    });
+      {
+        if (!parent || index == null) return;
 
-    visit(tree, "listItem", (node) => {
-      node.data = { hProperties: { class: "bx--list__item" } };
-    });
+        const firstChild = node.children[0];
+        if (!firstChild || firstChild.type !== "paragraph") return;
 
-    visit(tree, "blockquote", (node, index, parent) => {
-      if (!parent || index == null) return;
+        const first = firstChild.children[0];
+        if (!first) return;
 
-      const firstChild = node.children[0];
-      if (!firstChild || firstChild.type !== "paragraph") return;
+        let type = null;
 
-      const first = firstChild.children[0];
-      if (!first) return;
-
-      let type = null;
-
-      if (first.type === "text") {
-        // [!NOTE] parsed as plain text
-        const match = first.value.match(ADMONITION_RE);
-        if (!match) return;
-        type = match[1].toUpperCase();
-        first.value = first.value.slice(match[0].length);
-        if (!first.value) {
+        if (first.type === "text") {
+          // [!NOTE] parsed as plain text
+          const match = first.value.match(ADMONITION_RE);
+          if (!match) return;
+          type = match[1].toUpperCase();
+          first.value = first.value.slice(match[0].length);
+          if (!first.value) {
+            firstChild.children.shift();
+            if (firstChild.children[0]?.type === "break") {
+              firstChild.children.shift();
+            }
+          }
+        } else if (first.type === "linkReference") {
+          // remark may parse [!NOTE] as a shortcut link reference
+          const id = (first.identifier || "").toUpperCase();
+          const admonitionMatch = id.match(ADMONITION_LINK_REF_RE);
+          if (!admonitionMatch) return;
+          type = admonitionMatch[1];
           firstChild.children.shift();
-          if (firstChild.children[0]?.type === "break") {
-            firstChild.children.shift();
+          // Clean up leading whitespace/break after the marker
+          while (firstChild.children.length > 0) {
+            const next = firstChild.children[0];
+            if (next.type === "break") {
+              firstChild.children.shift();
+            } else if (next.type === "text") {
+              next.value = next.value.replace(LEADING_WHITESPACE_RE, "");
+              if (!next.value) firstChild.children.shift();
+              break;
+            } else {
+              break;
+            }
           }
+        } else {
+          return;
         }
-      } else if (first.type === "linkReference") {
-        // remark may parse [!NOTE] as a shortcut link reference
-        const id = (first.identifier || "").toUpperCase();
-        const admonitionMatch = id.match(ADMONITION_LINK_REF_RE);
-        if (!admonitionMatch) return;
-        type = admonitionMatch[1];
-        firstChild.children.shift();
-        // Clean up leading whitespace/break after the marker
-        while (firstChild.children.length > 0) {
-          const next = firstChild.children[0];
-          if (next.type === "break") {
-            firstChild.children.shift();
-          } else if (next.type === "text") {
-            next.value = next.value.replace(LEADING_WHITESPACE_RE, "");
-            if (!next.value) firstChild.children.shift();
-            break;
-          } else {
-            break;
-          }
+
+        const kind = NOTIFICATION_KINDS[type];
+        const title = NOTIFICATION_TITLES[type];
+        const icon = NOTIFICATION_ICONS[kind];
+
+        // If the first paragraph is now empty, remove it
+        if (firstChild.children.length === 0) {
+          node.children.shift();
         }
-      } else {
-        return;
+
+        // Serialize paragraph children directly to avoid <p> wrappers
+        const body = node.children
+          .map((child) =>
+            child.type === "paragraph"
+              ? serializeInlineNodes(child.children)
+              : "",
+          )
+          .join("<br/>");
+
+        const html = {
+          type: "html",
+          value: `<div role="alert" class="bx--inline-notification bx--inline-notification--low-contrast bx--inline-notification--hide-close-button bx--inline-notification--${kind}"><div class="bx--inline-notification__details">${icon}<div class="bx--inline-notification__text-wrapper"><p class="bx--inline-notification__title">${title}</p><div class="body-short-01">${body}</div></div></div></div>`,
+        };
+
+        parent.children.splice(index, 1, html);
       }
-
-      const kind = NOTIFICATION_KINDS[type];
-      const title = NOTIFICATION_TITLES[type];
-      const icon = NOTIFICATION_ICONS[kind];
-
-      // If the first paragraph is now empty, remove it
-      if (firstChild.children.length === 0) {
-        node.children.shift();
-      }
-
-      // Serialize paragraph children directly to avoid <p> wrappers
-      const body = node.children
-        .map((child) =>
-          child.type === "paragraph"
-            ? serializeInlineNodes(child.children)
-            : "",
-        )
-        .join("<br/>");
-
-      const html = {
-        type: "html",
-        value: `<div role="alert" class="bx--inline-notification bx--inline-notification--low-contrast bx--inline-notification--hide-close-button bx--inline-notification--${kind}"><div class="bx--inline-notification__details">${icon}<div class="bx--inline-notification__text-wrapper"><p class="bx--inline-notification__title">${title}</p><div class="body-short-01">${body}</div></div></div></div>`,
-      };
-
-      parent.children.splice(index, 1, html);
     });
   };
 }
@@ -311,21 +307,9 @@ export default {
 
         const toc = [];
 
-        walk(parse(content), {
-          enter(node) {
-            if (node.type === "Element") {
-              if (node.name === "h2") {
-                const id = node.attributes.find(
-                  (attribute) => attribute.name === "id",
-                );
-                toc.push({
-                  id: id.value[0].raw,
-                  text: node.children[0].raw,
-                });
-              }
-            }
-          },
-        });
+        for (const match of content.matchAll(H2_REGEX)) {
+          toc.push({ id: match[1], text: match[2] });
+        }
 
         let code = content.replace(
           "</Layout_MDSVEX_DEFAULT>",
