@@ -113,7 +113,9 @@
     const node =
       container?.querySelector(selectorPrimaryFocus) ||
       container?.querySelector(selectorFirstInput) ||
-      container?.querySelector(".bx--btn--primary") ||
+      (danger
+        ? container?.querySelector(".bx--btn--secondary")
+        : container?.querySelector(".bx--btn--primary")) ||
       container?.querySelector(".bx--modal-close");
     if (node != null) node.focus();
   }

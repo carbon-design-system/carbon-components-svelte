@@ -398,6 +398,41 @@ describe("ComposedModal", () => {
     expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
   });
 
+  it("should focus the cancel button when danger and modal has secondary button", async () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        danger: true,
+        headerTitle: "Delete Modal",
+        footerPrimaryButtonText: "Delete",
+        footerSecondaryButtonText: "Cancel",
+        footerDanger: true,
+        includeInput: false,
+      },
+    });
+
+    await tick();
+    expect(screen.getByRole("button", { name: "Cancel" })).toHaveFocus();
+  });
+
+  it("should allow selectorPrimaryFocus to override danger focus", async () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        danger: true,
+        headerTitle: "Delete Modal",
+        footerPrimaryButtonText: "Delete",
+        footerSecondaryButtonText: "Cancel",
+        footerDanger: true,
+        selectorPrimaryFocus: "button.bx--btn--danger",
+        includeInput: false,
+      },
+    });
+
+    await tick();
+    expect(screen.getByRole("button", { name: "Delete" })).toHaveFocus();
+  });
+
   it("should have correct ARIA attributes", () => {
     render(ComposedModalTest, {
       props: {
