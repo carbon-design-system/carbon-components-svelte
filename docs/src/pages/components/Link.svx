@@ -17,9 +17,9 @@ Create a basic link with the default styling.
   Carbon Design System
 </Link>
 
-## Target _blank
+## Opens in new tab
 
-For external links, the component automatically adds security attributes. You can override the `rel` attribute if needed.
+For external links that open in a new tab, the component automatically adds security attributes (`rel="noopener noreferrer"`). You can override the `rel` attribute if needed.
 
 <Link href="https://www.carbondesignsystem.com/" target="_blank">
   Carbon Design System

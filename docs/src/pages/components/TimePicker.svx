@@ -10,6 +10,8 @@ Time pickers provide a time input field with optional period (AM/PM) and timezon
 
 ## Default
 
+Create a time picker with period (AM/PM) and timezone selectors.
+
 <TimePicker labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />

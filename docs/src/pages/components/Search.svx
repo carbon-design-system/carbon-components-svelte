@@ -73,8 +73,12 @@ Display a loading state using the skeleton variant.
 
 ## Skeleton (large)
 
+Display a loading state for the large search variant.
+
 <Search size="lg" skeleton />
 
 ## Skeleton (small)
+
+Display a loading state for the small search variant.
 
 <Search size="sm" skeleton />

@@ -45,6 +45,8 @@ Add an icon to the file uploader button using the `icon` prop.
 
 ## Icon-only button
 
+Create an icon-only file uploader button by omitting the label text and providing an icon description for accessibility.
+
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
     Provide an <strong>iconDescription</strong> for accessibility. This text will be used as the button's tooltip and screen reader label. Set <strong>labelText=""</strong> to render an icon-only button.

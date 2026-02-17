@@ -16,11 +16,15 @@ Display a 2:1 aspect ratio container by default.
 
 ## Ratio 2x3
 
+Display content with a 2:3 aspect ratio.
+
 <AspectRatio ratio="2x3">
   2x3
 </AspectRatio>
 
 ## Ratio 16x9
+
+Display content with a 16:9 aspect ratio.
 
 <AspectRatio ratio="16x9">
   16x9
@@ -28,11 +32,15 @@ Display a 2:1 aspect ratio container by default.
 
 ## Ratio 4x3
 
+Display content with a 4:3 aspect ratio.
+
 <AspectRatio ratio="4x3">
   4x3
 </AspectRatio>
 
 ## Ratio 1x1
+
+Display content with a 1:1 (square) aspect ratio.
 
 <AspectRatio ratio="1x1">
   1x1
@@ -40,11 +48,15 @@ Display a 2:1 aspect ratio container by default.
 
 ## Ratio 3x4
 
+Display content with a 3:4 aspect ratio.
+
 <AspectRatio ratio="3x4">
   3x4
 </AspectRatio>
 
 ## Ratio 3x2
+
+Display content with a 3:2 aspect ratio.
 
 <AspectRatio ratio="3x2">
   3x2
@@ -52,17 +64,23 @@ Display a 2:1 aspect ratio container by default.
 
 ## Ratio 9x16
 
+Display content with a 9:16 aspect ratio.
+
 <AspectRatio ratio="9x16">
   9x16
 </AspectRatio>
 
 ## Ratio 1x2
 
+Display content with a 1:2 aspect ratio.
+
 <AspectRatio ratio="1x2">
   1x2
 </AspectRatio>
 
 ## Tile (16x9)
+
+Wrap a tile or other content in an aspect ratio container to maintain proportions.
 
 <AspectRatio ratio="16x9">
   <Tile style="height: 100%">Content</Tile>
