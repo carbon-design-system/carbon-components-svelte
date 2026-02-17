@@ -1,5 +1,5 @@
 <script>
-  import { Button, Modal, TextInput } from "carbon-components-svelte";
+  import { Button, Modal, Stack, TextInput } from "carbon-components-svelte";
 
   let open = false;
 </script>
@@ -11,17 +11,21 @@
   modalHeading="Create database"
   primaryButtonText="Confirm"
   secondaryButtonText="Cancel"
-  selectorPrimaryFocus="#db-name"
+  selectorPrimaryFocus="#advanced-options"
   on:click:button--secondary={() => (open = false)}
   on:open
   on:close
   on:submit
 >
-  <p>Create a new Cloudant database in the US South region.</p>
-  <br />
-  <TextInput
-    id="db-name"
-    labelText="Database name"
-    placeholder="Enter database name..."
-  />
+  <Stack gap={3}>
+    <p>Create a new Cloudant database in the US South region.</p>
+    <TextInput
+      id="db-name"
+      labelText="Database name"
+      placeholder="Enter database name..."
+    />
+    <Button id="advanced-options" kind="ghost" size="small">
+      Advanced options
+    </Button>
+  </Stack>
 </Modal>
