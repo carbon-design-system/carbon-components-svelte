@@ -102,7 +102,6 @@ const modified = {
 
           return {
             ...slot,
-            // biome-ignore lint/style/useNamingConvention: slot_props matches the JSON API structure
             slot_props: formatted,
           };
         }),

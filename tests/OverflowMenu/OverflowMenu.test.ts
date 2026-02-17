@@ -581,7 +581,6 @@ describe("OverflowMenu", () => {
             right: 160,
             bottom: 200,
             left: 0,
-            // biome-ignore lint/style/useNamingConvention: toJSON is standard DOMRect API
             toJSON() {
               return this;
             },
@@ -597,7 +596,6 @@ describe("OverflowMenu", () => {
             right: 40,
             bottom: 62,
             left: 0,
-            // biome-ignore lint/style/useNamingConvention: toJSON is standard DOMRect API
             toJSON() {
               return this;
             },

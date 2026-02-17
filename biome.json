@@ -83,7 +83,7 @@
         "noUnusedTemplateLiteral": "error",
         "useDefaultParameterLast": "error",
         "useExponentiationOperator": "error",
-        "useNamingConvention": "error",
+        "useNamingConvention": "off",
         "useNodejsImportProtocol": "error",
         "useNumberNamespace": "error",
         "useSingleVarDeclarator": "error",
@@ -157,41 +157,11 @@
       }
     },
     {
-      "includes": ["docs/src/**/*.{svelte,svx}"],
-      "linter": {
-        "rules": {
-          "style": {
-            "useNamingConvention": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["src/DatePicker/DatePickerInput.svelte"],
-      "linter": {
-        "rules": {
-          "style": {
-            "useNamingConvention": "off"
-          }
-        }
-      }
-    },
-    {
       "includes": ["src/ImageLoader/ImageLoader.svelte"],
       "linter": {
         "rules": {
           "style": {
             "noRestrictedGlobals": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["docs/svelte.config.js"],
-      "linter": {
-        "rules": {
-          "style": {
-            "useNamingConvention": "off"
           }
         }
       }
