@@ -11,7 +11,6 @@ components: ["Form", "FormGroup"]
     Select,
     SelectItem,
     Button,} from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `Form` component provides a structured way to collect user input. It works with

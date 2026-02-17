@@ -4,7 +4,6 @@ components: ["Toggle", "ToggleSkeleton"]
 
 <script>
   import { Toggle, ToggleSkeleton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Toggle` provides a switch-like control that allows users to turn options on or off. It supports custom labels, different sizes, and various states to match your application's needs.

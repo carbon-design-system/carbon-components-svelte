@@ -4,7 +4,6 @@ components: ["Heading", "Section"]
 
 <script>
   import { Heading, Section } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Heading` and `Section` components work together to automatically manage semantic heading hierarchy in your application. The `Heading` component automatically adjusts its heading level (h1–h6) based on the nesting depth of `Section` components, ensuring proper document structure and accessibility without manual level management.

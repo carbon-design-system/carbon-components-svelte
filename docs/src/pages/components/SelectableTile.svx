@@ -4,7 +4,6 @@ components: ["SelectableTileGroup", "SelectableTile"]
 
 <script>
   import { SelectableTileGroup, SelectableTile } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `SelectableTile` provides a tile-based selection interface that allows users to select multiple options. It supports various states and includes built-in keyboard navigation and accessibility features.

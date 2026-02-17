@@ -1,6 +1,5 @@
 <script>
   import { Popover, Stack } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Popover` provides a floating container that displays content relative to a trigger element. It supports various alignments, caret indicators, and visual variants.

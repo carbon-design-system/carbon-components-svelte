@@ -1,6 +1,5 @@
 <script>
   import { AspectRatio, Tile } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `AspectRatio` component maintains consistent proportions for content across different screen sizes. It's particularly useful for images, videos, and other media that need to preserve their aspect ratio when resizing.

@@ -1,6 +1,5 @@
 <script>
   import { InlineNotification, RecursiveList, Link } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `RecursiveList` provides a flexible way to render hierarchical data structures using either unordered or ordered lists. It supports nested nodes, links, and HTML content, making it ideal for displaying complex data hierarchies.

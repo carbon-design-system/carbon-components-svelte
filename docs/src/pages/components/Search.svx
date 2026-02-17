@@ -1,7 +1,6 @@
 <script>
   import Query from "carbon-icons-svelte/lib/Query.svelte";
   import { Search } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Search` provides a flexible search input component with support for expandable variants, different sizes, and custom icons. It includes built-in functionality for clearing input and handling keyboard events.

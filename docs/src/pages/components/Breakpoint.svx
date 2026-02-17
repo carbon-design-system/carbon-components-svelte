@@ -3,7 +3,6 @@
   import {
     UnorderedList, ListItem
   } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The Carbon Design System [grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints:

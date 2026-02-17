@@ -4,7 +4,6 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 
 <script>
   import { TimePicker, TimePickerSelect, SelectItem } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `TimePicker` provides a time input field with optional period (AM/PM) and timezone selectors. It supports various sizes, states, and themes to match your application's design system.

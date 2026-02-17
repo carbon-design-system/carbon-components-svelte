@@ -1,6 +1,5 @@
 <script>
   import { ComboBox, InlineNotification } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `ComboBox` combines a text input with a dropdown menu to let users select from predefined options or enter custom values. It supports filtering, custom item rendering, and various states.

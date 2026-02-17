@@ -9,7 +9,6 @@ components: ["Breadcrumb", "BreadcrumbItem"]
     OverflowMenu,
     OverflowMenuItem
   } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Breadcrumb` displays a hierarchical navigation trail that shows users their current location within an application. It supports current page indication, trailing slash customization, and overflow handling for long navigation paths.

@@ -1,6 +1,5 @@
 <script>
   import { CopyButton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `CopyButton` lets users copy text to their clipboard with a single click. Use it to provide quick access to code snippets, links, or other text content.

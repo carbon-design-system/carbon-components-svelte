@@ -4,7 +4,6 @@ components: ["Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "Toolb
 
 <script>
   import { InlineNotification, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, ToolbarBatchActions, Button } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Toolbar` provides a flexible container for organizing actions, search, and menu items. It can be used standalone or as part of a DataTable for batch operations and filtering.

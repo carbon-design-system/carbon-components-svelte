@@ -4,7 +4,6 @@ components: ["Slider", "SliderSkeleton"]
 
 <script>
   import { Slider, SliderSkeleton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Slider` provides a visual way to select a value from a range. It supports keyboard navigation, custom ranges, step values, and various states.

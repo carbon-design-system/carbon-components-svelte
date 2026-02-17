@@ -4,7 +4,6 @@ components: ["TextArea", "TextAreaSkeleton"]
 
 <script>
   import { TextArea, TextAreaSkeleton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `TextArea` provides a multi-line text input field with support for various states, character counting, and accessibility features. It's ideal for longer text input like descriptions, comments, or messages.

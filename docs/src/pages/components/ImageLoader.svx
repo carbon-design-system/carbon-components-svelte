@@ -1,6 +1,5 @@
 <script>
     import { ImageLoader, Button, InlineLoading } from "carbon-components-svelte";
-    import Preview from "../../components/Preview.svelte";
 
     let key = 0;
 </script>

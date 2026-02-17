@@ -4,7 +4,6 @@ components: ["OrderedList", "ListItem"]
 
 <script>
   import { InlineNotification, OrderedList, ListItem, Link } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `OrderedList` provides a structured way to display numbered lists of items. It supports nested lists, native browser styles, and expressive typography for enhanced visual hierarchy.

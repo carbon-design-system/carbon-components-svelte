@@ -3,7 +3,6 @@
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 Buttons trigger actions in the interface. Use them to submit forms, navigate between pages, or perform specific tasks. Choose from different styles and sizes to match the importance and context of each action.

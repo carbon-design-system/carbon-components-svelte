@@ -1,6 +1,5 @@
 <script>
   import { ExpandableTile, Button, Stack, OutboundLink } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `ExpandableTile` component creates a collapsible content container that can

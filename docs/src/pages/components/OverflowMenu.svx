@@ -5,7 +5,6 @@ components: ["OverflowMenu", "OverflowMenuItem"]
 <script>
   import { OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `OverflowMenu` provides a compact way to display a list of actions or options. It renders as a button that opens a dropdown menu when clicked, making it ideal for secondary actions or overflow content.

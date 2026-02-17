@@ -1,6 +1,5 @@
 <script>
   import { ClickableTile } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 Clickable tiles create interactive content areas that link to other pages or trigger actions. Use them to group related content and provide clear navigation targets.

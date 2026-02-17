@@ -4,7 +4,6 @@ components: ["Dropdown", "DropdownSkeleton"]
 
 <script>
   import { Dropdown, DropdownSkeleton, InlineNotification } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `Dropdown` component provides a select input with a dropdown menu. It supports

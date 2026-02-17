@@ -4,7 +4,6 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
 
 <script>
   import { ProgressIndicator, ProgressStep, ProgressIndicatorSkeleton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `ProgressIndicator` provides a visual representation of progress through a sequence of steps. It supports horizontal and vertical layouts, step completion states, and interactive navigation.

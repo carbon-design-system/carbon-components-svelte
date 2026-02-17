@@ -1,6 +1,5 @@
 <script>
   import { TooltipDefinition } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `TooltipDefinition` provides inline definitions for terms or concepts. It displays a tooltip when users hover over or focus on the defined term, making it ideal for providing additional context without cluttering the interface.
