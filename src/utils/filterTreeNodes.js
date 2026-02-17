@@ -7,7 +7,7 @@
  * @property {string | number} id - Unique identifier for the node
  * @property {string} [text] - Optional text/name for the node
  * @property {TreeNode[]} [nodes] - Optional array of child nodes
- * @property {Record<string, any>} [additionalProperties] - Any additional properties
+ * @property {Record<string, unknown>} [additionalProperties] - Any additional properties
  *
  * @typedef {Object} FilterOptions
  * @property {boolean} [includeChildren=false] - Include all descendants of matching nodes

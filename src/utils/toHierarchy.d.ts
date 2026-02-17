@@ -1,7 +1,7 @@
 type NodeLike = {
   id: string | number;
   nodes?: NodeLike[];
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 /** Create a hierarchical tree from a flat array. */
