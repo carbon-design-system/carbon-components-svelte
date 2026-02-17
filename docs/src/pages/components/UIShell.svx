@@ -20,17 +20,10 @@ components: ["Header",
 "HeaderGlobalAction"]
 ---
 
-<script>
-   import { InlineNotification } from "carbon-components-svelte";
-</script>
-
 The UI shell provides a collection of components for building application shells and navigation structures. It includes header, side navigation, and content components that work together to create a cohesive user interface.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    Currently, the UI Shell is not themable and only supports dark mode.
-  </div>
-</InlineNotification>
+> [!NOTE]
+> Currently, the UI Shell is not themable and only supports dark mode.
 
 Open the following examples in a new tab to experience them in full.
 

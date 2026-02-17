@@ -1,14 +1,11 @@
 <script>
-  import { InlineNotification, RecursiveList, Link } from "carbon-components-svelte";
+  import { RecursiveList, Link } from "carbon-components-svelte";
 </script>
 
 Recursive lists provide a flexible way to render hierarchical data structures using either unordered or ordered lists. They support nested nodes, links, and HTML content, making them ideal for displaying complex data hierarchies.
 
-<InlineNotification svx-ignore lowContrast title="Warning:" kind="warning" hideCloseButton>
-  <div class="body-short-01">
-    HTML content provided via the <code>html</code> prop is not sanitized.
-  </div>
-</InlineNotification>
+> [!WARNING]
+> HTML content provided via the `html` prop is not sanitized.
 
 ## Default
 

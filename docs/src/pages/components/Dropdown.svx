@@ -3,16 +3,15 @@ components: ["Dropdown", "DropdownSkeleton"]
 ---
 
 <script>
-  import { Dropdown, DropdownSkeleton, InlineNotification } from "carbon-components-svelte";
+  import { Dropdown, DropdownSkeleton } from "carbon-components-svelte";
 </script>
 
 Dropdowns provide a select input with a dropdown menu. They support
 various states, sizes, and customization options. Each item in the dropdown must
 have a unique `id` property for proper functionality.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">Every <code>items</code> object must have a unique "id" property.</div>
-</InlineNotification>
+> [!NOTE]
+> Every `items` object must have a unique "id" property.
 
 ## Default
 
@@ -181,11 +180,8 @@ Overscanning is the process of rendering extra items above and below the viewpor
 
 Specify a custom value for `overscan` to control how many extra items are rendered above/below the viewport for smoother scrolling.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    During very fast scrolling, higher overscan values may cause more flickering due to increased DOM updates. For fast scrolling scenarios, use a lower overscan value.
-  </div>
-</InlineNotification>
+> [!NOTE]
+> During very fast scrolling, higher overscan values may cause more flickering due to increased DOM updates. For fast scrolling scenarios, use a lower overscan value.
 
 <FileSource src="/framed/Dropdown/VirtualizeOverscan" />
 

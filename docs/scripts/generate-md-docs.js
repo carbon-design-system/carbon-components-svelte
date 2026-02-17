@@ -34,12 +34,7 @@ const HTML_VOID_TAGS = new Set([
   "wbr",
 ]);
 
-const DIV_WRAPPER_RE = /<\/?div\b[^>]*>/gi;
-const STRONG_TAG_CONTENT_RE = /<strong\b[^>]*>([\s\S]*?)<\/strong>/gi;
-const TAG_STRIP_RE = /<[^>]+>/g;
 const ANY_HTML_TAG_RE = /<\/?[^>]+>/g;
-const TRAILING_WS_BEFORE_NL_RE = /[ \t]+\n/g;
-const MULTI_NL_RE = /\n{3,}/g;
 
 // Generic regex to match any component with svx-ignore attribute
 const SVX_IGNORE_COMPONENT_RE = /<([A-Z][\w]*)\b[^>]*\bsvx-ignore[^>]*>/i;
@@ -344,47 +339,6 @@ function getAttr(openTag, name) {
 }
 
 /**
- * @param {string} html
- */
-function inlineNotificationBodyToMarkdown(html) {
-  let s = html;
-  s = s.replace(DIV_WRAPPER_RE, "");
-  s = s.replace(STRONG_TAG_CONTENT_RE, (_, t) => {
-    const text = String(t).replace(TAG_STRIP_RE, "").trim();
-    return text ? `\`${text}\`` : "";
-  });
-  s = s.replace(ANY_HTML_TAG_RE, "");
-  s = s.replace(TRAILING_WS_BEFORE_NL_RE, "\n");
-  s = s.replace(MULTI_NL_RE, "\n\n");
-  return s.trim();
-}
-
-/**
- * Convert InlineNotification component to markdown admonition
- * @param {string} openTag
- * @param {string} innerContent
- * @returns {string[]}
- */
-function convertInlineNotification(openTag, innerContent) {
-  const kind = getAttr(openTag, "kind")?.toLowerCase();
-  const title = getAttr(openTag, "title")?.toLowerCase() ?? "";
-
-  let label = "NOTE";
-  if (kind === "warning") label = "WARNING";
-  else if (kind === "error" || kind === "danger") label = "CAUTION";
-  else if (kind === "success") label = "TIP";
-  else if (title.includes("note")) label = "NOTE";
-
-  const mdBody = inlineNotificationBodyToMarkdown(innerContent);
-  const bodyLines = mdBody.length ? mdBody.split("\n") : [];
-
-  const out = [`> [!${label}]`];
-  for (const l of bodyLines) out.push(l.trim() ? `> ${l}` : ">");
-  out.push("");
-  return out;
-}
-
-/**
  * Convert CodeSnippet component to markdown code block
  * @param {string} openTag
  * @param {string} innerContent
@@ -541,9 +495,7 @@ function transformSvxIgnoreComponents(body) {
 
     // Route to appropriate converter
     let convertedLines = [];
-    if (componentName === "InlineNotification") {
-      convertedLines = convertInlineNotification(openTag, innerContent);
-    } else if (componentName === "CodeSnippet") {
+    if (componentName === "CodeSnippet") {
       convertedLines = convertCodeSnippet(openTag, innerContent);
     } else {
       // Unknown component - just skip it (or could output as-is)

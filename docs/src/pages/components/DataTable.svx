@@ -3,20 +3,14 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
 ---
 
 <script>
-  import { InlineNotification, DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
+  import { DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 </script>
 
 Data tables display structured data in a tabular format. Use them to present large datasets with features like sorting, filtering, pagination, virtualization, and row selection.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    This component is keyed for performance.
-    
-    Every <strong>headers</strong> object must have a unique "key" property.
-    <div class="body-short-01">Every <strong>rows</strong> object must have a unique "id" property.</div>
-  </div>
-</InlineNotification>
+> [!NOTE]
+> This component is keyed for performance. Every **headers** object must have a unique "key" property. Every **rows** object must have a unique "id" property.
 
 ## Default
 
@@ -334,9 +328,8 @@ title="Load balancers" description="Your organization's active load balancers."
 
 Specify `width` or `minWidth` in the `headers` object to set column dimensions. This applies a fixed table layout.
 
-<InlineNotification svx-ignore lowContrast kind="warning" title="Note:" hideCloseButton>
-  <div class="body-short-01">Custom column widths do not work with a <a class="bx--link" href="#sticky-header">sticky header</a>.</div>
-</InlineNotification>
+> [!WARNING]
+> Custom column widths do not work with a [sticky header](#sticky-header).
 
 <FileSource src="/framed/DataTable/DataTableHeaderWidth" />
 

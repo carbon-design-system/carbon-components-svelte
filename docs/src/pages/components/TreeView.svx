@@ -1,16 +1,11 @@
-<script>
-  import { InlineNotification, Link } from "carbon-components-svelte";
-</script>
-
 A tree view displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, and programmatic control of the tree state.
 
 ## Default
 
 Create a basic tree view using the `nodes` prop. Each node requires an `id` and `text`, with optional properties for `disabled`, `icon`, and child `nodes`.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">Every node must have a unique id.</div>
-</InlineNotification>
+> [!NOTE]
+> Every node must have a unique id.
 
 <FileSource src="/framed/TreeView/TreeView" />
 

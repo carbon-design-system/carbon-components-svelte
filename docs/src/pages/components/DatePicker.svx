@@ -3,16 +3,13 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 ---
 
 <script>
-  import { DatePicker, DatePickerSkeleton, DatePickerInput, InlineNotification } from "carbon-components-svelte";
+  import { DatePicker, DatePickerSkeleton, DatePickerInput } from "carbon-components-svelte";
 </script>
 
 Date pickers let users select a date or date range using a calendar interface. They use the [flatpickr](https://github.com/flatpickr/flatpickr) library for their calendar implementation.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    If using Rollup, specify <strong>inlineDynamicImports: true</strong> in your <strong>rollup.config.js</strong>.
-  </div>
-</InlineNotification>
+> [!NOTE]
+> If using Rollup, specify **inlineDynamicImports: true** in your **rollup.config.js**.
 
 ## Single
 

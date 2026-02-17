@@ -3,7 +3,7 @@ components: ["Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "Toolb
 ---
 
 <script>
-  import { InlineNotification, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, ToolbarBatchActions, Button } from "carbon-components-svelte";
+  import { Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, ToolbarBatchActions, Button } from "carbon-components-svelte";
 </script>
 
 Toolbars provide a flexible container for organizing actions, search, and menu items. They can be used standalone or as part of a data table for batch operations and filtering.
@@ -131,11 +131,8 @@ Stack multiple action buttons in the toolbar.
 
 ## Standalone usage
 
-<InlineNotification svx-ignore lowContrast kind="info" hideCloseButton>
-  <div class="body-short-01">
-    The toolbar can be used independently of the data table. It provides its own context for child components like toolbar menu and toolbar search.
-  </div>
-</InlineNotification>
+> [!NOTE]
+> **Toolbar** can be used independently of DataTable. It provides its own context for child components like **ToolbarMenu** and **ToolbarSearch**.
 
 The toolbar components work standalone for general-purpose layouts:
 
