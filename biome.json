@@ -122,7 +122,6 @@
             "noUselessUndefinedInitialization": "off"
           },
           "suspicious": {
-            "noAssignInExpressions": "off",
             "noGlobalAssign": "off"
           },
           "a11y": {
