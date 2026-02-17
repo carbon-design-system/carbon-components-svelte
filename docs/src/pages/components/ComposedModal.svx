@@ -3,7 +3,6 @@ components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter"]
 ---
 
 <script>
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `ComposedModal` lets you build custom modals by combining `ModalHeader`, `ModalBody`, and `ModalFooter` components. Use it to create focused interactions that require user attention or input.

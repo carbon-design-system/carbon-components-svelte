@@ -4,7 +4,6 @@ components: ["NumberInput", "NumberInputSkeleton"]
 
 <script>
   import { NumberInput, NumberInputSkeleton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `NumberInput` component provides a controlled input for numerical values. It supports validation, step values, and various states to ensure accurate data entry.

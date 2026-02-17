@@ -1,6 +1,5 @@
 <script>
   import { MultiSelect, InlineNotification } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `MultiSelect` component provides a dropdown interface for selecting multiple options using checkboxes. It supports filtering, custom formatting, and various states. Each item must have a unique `id` property for proper functionality.

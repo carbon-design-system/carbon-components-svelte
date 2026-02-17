@@ -1,6 +1,5 @@
 <script>
   import { CodeSnippet } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 Code snippets display and copy code examples. They support single-line, multi-line, and inline formats with customizable copy and expand functionality.

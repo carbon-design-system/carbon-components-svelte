@@ -1,6 +1,5 @@
 <script>
   import { SkeletonPlaceholder } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `SkeletonPlaceholder` provides a loading state placeholder that can be used to indicate content is being loaded. It supports custom sizing and forwards mouse events for interactive loading states.

@@ -6,7 +6,6 @@ components: ["ContainedList", "ContainedListItem"]
   import { Button, Search, ContainedList, ContainedListItem } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Close from "carbon-icons-svelte/lib/Close.svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `ContainedList` provides a structured way to display a list of items within a container. It supports various sizes, interactive items, icons, actions, and search functionality. The component is useful for displaying hierarchical or grouped content with consistent spacing and styling.

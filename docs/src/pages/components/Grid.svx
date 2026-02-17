@@ -4,7 +4,6 @@ components: ["Grid", "Row", "Column"]
 
 <script>
   import { UnorderedList, ListItem } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `Grid` system provides a responsive layout structure that adapts to different

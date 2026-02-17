@@ -3,7 +3,6 @@ components: ["ContextMenu", "ContextMenuGroup", "ContextMenuRadioGroup", "Contex
 ---
 
 <script>
-    import Preview from "../../components/Preview.svelte";
 </script>
 
 `ContextMenu` displays a menu when users right-click. Use it to provide quick access to contextual actions or options.

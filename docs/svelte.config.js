@@ -23,6 +23,7 @@ const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
 const GIT_PREFIX_REGEX = /^git\+/;
 const GIT_SUFFIX_REGEX = /\.git$/;
+const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
 
 function createImports(source) {
   const inlineComponents = new Set();
@@ -191,10 +192,9 @@ export default {
           },
         });
 
-        return {
-          code: content.replace(
-            "</Layout_MDSVEX_DEFAULT>",
-            `<div slot="aside">
+        let code = content.replace(
+          "</Layout_MDSVEX_DEFAULT>",
+          `<div slot="aside">
                 <ul class="bx--list--unordered">
                     ${toc
                       .map(
@@ -224,8 +224,17 @@ export default {
                 </ul>
               </div>
             </Layout_MDSVEX_DEFAULT>`,
-          ),
-        };
+        );
+
+        // Auto-import Preview component used by the mdsvex remark plugin.
+        if (!code.includes("import Preview")) {
+          code = code.replace(
+            SCRIPT_TAG_REGEX,
+            '$1\n  import Preview from "../../components/Preview.svelte";',
+          );
+        }
+
+        return { code };
       },
     },
   ],

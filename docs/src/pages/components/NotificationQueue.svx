@@ -4,7 +4,6 @@ components: ["NotificationQueue"]
 
 <script>
   import { NotificationQueue } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 A notification queue provides an imperative API for managing toast notifications. It handles positioning, deduplication, and overflow management, making it easy to display notifications from anywhere in your application.

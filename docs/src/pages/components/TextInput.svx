@@ -4,7 +4,6 @@ components: ["TextInput", "TextInputSkeleton"]
 
 <script>
   import { TextInput, TextInputSkeleton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `TextInput` provides a single-line text input field with support for various states, sizes, and accessibility features. It's ideal for short text input like usernames, search terms, or form fields.

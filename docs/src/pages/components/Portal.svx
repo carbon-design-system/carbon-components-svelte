@@ -1,6 +1,5 @@
 <script>
   import { Portal } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Portal` renders its content directly into `document.body`, allowing you to escape parent overflow constraints and z-index stacking contexts.

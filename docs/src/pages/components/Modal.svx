@@ -1,6 +1,5 @@
 <script>
   import { OrderedList, ListItem } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `Modal` component provides a focused dialog for user interactions, confirmations, or data entry. It supports various sizes, states, and customization options to create accessible and user-friendly modal experiences.

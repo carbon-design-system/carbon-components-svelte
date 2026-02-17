@@ -1,6 +1,5 @@
 <script>
   import { Checkbox, CheckboxGroup, Stack, Tooltip } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 Checkboxes let users select one or more options from a list. Use them for multiple-choice questions, settings, or to confirm actions.

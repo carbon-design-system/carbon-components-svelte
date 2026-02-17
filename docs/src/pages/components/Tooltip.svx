@@ -5,7 +5,6 @@ components: ["Tooltip", "TooltipFooter"]
 <script>
   import { Tooltip, TooltipFooter, Link, Button } from "carbon-components-svelte";
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Tooltip` displays contextual information when users hover over or focus on an element. It supports various directions, alignments, and interactive content to provide additional context or guidance.

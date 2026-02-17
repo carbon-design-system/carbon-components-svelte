@@ -1,6 +1,5 @@
 <script>
   import { ProgressBar } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `ProgressBar` provides a visual indicator of progress for operations such as file uploads or data processing. It supports determinate and indeterminate states, various sizes, and status indicators.

@@ -4,7 +4,6 @@ components: ["UnorderedList", "ListItem"]
 
 <script>
   import { InlineNotification, UnorderedList, ListItem, Link } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `UnorderedList` provides a styled unordered list component that supports nested lists, links, and expressive typography. It's ideal for displaying bulleted content in your interface.

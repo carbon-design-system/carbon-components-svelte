@@ -5,7 +5,6 @@ components: ["Link", "OutboundLink"]
 <script>
   import { Link, OutboundLink } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte"
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `Link` component provides styled hyperlinks with various customization options. It supports different sizes, states, and can include icons. The `OutboundLink` variant automatically handles external links with proper security attributes.

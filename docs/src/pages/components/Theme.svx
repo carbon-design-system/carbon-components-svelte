@@ -3,7 +3,6 @@ components: ["Theme"]
 ---
 
 <script>
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `Theme` component provides dynamic client-side theming using CSS variables. It supports five themes: `white`, `g10`, `g80`, `g90`, and `g100`, and allows for custom theme token overrides.

@@ -6,7 +6,6 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
   import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, UnorderedList, ListItem, InlineNotification, Stack } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `FileUploader` components provide a complete solution for file uploads, including

@@ -4,7 +4,6 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
 
 <script>
   import { Tabs, Tab, TabContent, TabsSkeleton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Tabs` provides a way to organize content into separate views that can be switched between. It supports keyboard navigation, disabled states, and various layout options.

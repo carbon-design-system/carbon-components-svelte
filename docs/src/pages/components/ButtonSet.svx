@@ -1,7 +1,6 @@
 <script>
   import { Button, ButtonSet } from "carbon-components-svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 Group related buttons together in a set. Use this component to create consistent spacing and alignment between multiple buttons.

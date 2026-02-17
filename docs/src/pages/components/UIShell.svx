@@ -22,7 +22,6 @@ components: ["Header",
 
 <script>
    import { InlineNotification } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `UIShell` provides a collection of components for building application shells and navigation structures. It includes header, side navigation, and content components that work together to create a cohesive user interface.

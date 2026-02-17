@@ -4,7 +4,6 @@
     TextInput,
     PasswordInput,
   } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `FluidForm` component provides a fluid-width form layout that adapts to its

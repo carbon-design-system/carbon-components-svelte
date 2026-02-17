@@ -5,7 +5,6 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
 <script>
   import { InlineNotification, DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `DataTable` displays structured data in a tabular format. Use it to present large datasets with features like sorting, filtering, pagination, virtualization, and row selection.

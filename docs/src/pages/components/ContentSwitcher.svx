@@ -6,7 +6,6 @@ components: ["ContentSwitcher", "Switch"]
   import { ContentSwitcher, Switch, Stack } from "carbon-components-svelte";
   import Bullhorn from "carbon-icons-svelte/lib/Bullhorn.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `ContentSwitcher` lets users switch between different views or sections of content. Use it to organize related content into distinct categories or states.

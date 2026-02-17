@@ -7,7 +7,6 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
     Accordion,
     AccordionItem,
   } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Accordion` creates a vertically stacked list of expandable sections that show or hide content. It supports custom titles, different sizes, and various states including disabled and skeleton loading.

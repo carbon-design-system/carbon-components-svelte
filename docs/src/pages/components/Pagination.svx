@@ -4,7 +4,6 @@ components: ["Pagination", "PaginationSkeleton"]
 
 <script>
   import { Pagination, PaginationSkeleton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Pagination` provides navigation controls for large data sets. It displays the current page, total items, and allows users to change page size and navigate between pages.

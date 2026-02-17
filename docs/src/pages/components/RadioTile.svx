@@ -4,7 +4,6 @@ components: ["TileGroup", "RadioTile"]
 
 <script>
   import { TileGroup, RadioTile } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `RadioTile` provides a selectable tile interface for choosing a single option from a set. It supports both individual and grouped usage, with options for light and disabled states.

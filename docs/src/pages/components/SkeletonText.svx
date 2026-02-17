@@ -1,6 +1,5 @@
 <script>
   import { SkeletonText } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `SkeletonText` provides a loading state for text content with support for different sizes and line counts. It's commonly used to indicate that text content is being loaded.

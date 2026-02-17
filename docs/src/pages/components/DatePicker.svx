@@ -4,7 +4,6 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 
 <script>
   import { DatePicker, DatePickerSkeleton, DatePickerInput, InlineNotification } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `DatePicker` lets users select a date or date range using a calendar interface. It uses the [flatpickr](https://github.com/flatpickr/flatpickr) library for its calendar implementation.

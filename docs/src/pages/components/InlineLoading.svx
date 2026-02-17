@@ -4,7 +4,6 @@ components: ["InlineLoading"]
 
 <script>
   import { InlineLoading, UnorderedList, ListItem } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 The `InlineLoading` component provides a compact loading indicator that can be embedded within content. It's ideal for showing progress during inline operations like form submissions or data updates.

@@ -5,7 +5,6 @@ components: ["Tag", "TagSkeleton"]
 <script>
   import { Tag, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Tag` provides a way to categorize content with a keyword or label. It supports various styles, sizes, and interactive states, including filterable and interactive variants.

@@ -4,7 +4,6 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
 
 <script>
   import { Select, SelectItem, SelectItemGroup, SelectSkeleton } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Select` provides a dropdown menu for selecting a single option from a list. It supports various states, sizes, and includes built-in validation and helper text.

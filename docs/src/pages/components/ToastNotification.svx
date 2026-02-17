@@ -4,7 +4,6 @@ components: ["ToastNotification"]
 
 <script>
   import { ToastNotification } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 A toast notification displays non-modal, time-based messages that appear at the top of the screen and automatically disappear. It supports various notification types, custom content, and accessibility features.

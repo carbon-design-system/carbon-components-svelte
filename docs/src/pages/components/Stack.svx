@@ -1,6 +1,5 @@
 <script>
   import { Stack, UnorderedList, ListItem } from "carbon-components-svelte";
-  import Preview from "../../components/Preview.svelte";
 </script>
 
 `Stack` is a utility component that can be used to create a stack of elements with a consistent gap between them. It supports both vertical and horizontal orientations.
