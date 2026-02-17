@@ -18,7 +18,7 @@
     var day = Math.min(d.getDate(), lastDay);
     var mm = String(month + 1).padStart(2, "0");
     var dd = String(day).padStart(2, "0");
-    return mm + "/" + dd + "/" + year;
+    return `${mm}/${dd}/${year}`;
   }
 
   function nextMonth() {

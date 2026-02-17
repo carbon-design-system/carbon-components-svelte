@@ -3,7 +3,7 @@
 
   const items = Array.from({ length: 10_000 }, (_, i) => ({
     id: i,
-    text: "Item " + (i + 1),
+    text: `Item ${i + 1}`,
   }));
 
   let selectedIds = [1000];

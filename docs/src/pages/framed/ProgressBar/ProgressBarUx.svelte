@@ -6,7 +6,7 @@
   let status = "active";
 
   $: helperText =
-    value > 0 ? value.toFixed(0) + "MB of " + max + "MB" : "Press start";
+    value > 0 ? `${value.toFixed(0)}MB of ${max}MB` : "Press start";
   $: if (value === max) {
     helperText = "Done";
     status = "finished";
