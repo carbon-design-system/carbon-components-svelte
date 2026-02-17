@@ -3,7 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`TreeView` displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, and programmatic control of the tree state.
+A tree view displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, and programmatic control of the tree state.
 
 ## Default
 
@@ -32,7 +32,7 @@ Customize node rendering using the default slot with the `let:node` directive. T
 
 ## Slottable node with checkbox
 
-Slot a `Checkbox` component in each tree view node to create a tree with checkable items. The checkbox is wrapped in a container with `stopPropagation` to prevent tree node selection when checking items.
+Slot a checkbox component in each tree view node to create a tree with checkable items. The checkbox is wrapped in a container with `stopPropagation` to prevent tree node selection when checking items.
 
 <FileSource src="/framed/TreeView/TreeViewCheckbox" />
 
@@ -116,7 +116,7 @@ Configure `TreeView.showNode` behavior using optional parameters. By default, al
 
 ## Performance with large and deep trees
 
-`TreeView` is optimized to handle large datasets efficiently. This example demonstrates performance with both a large tree (1000+ nodes) and a deeply nested tree (100 levels deep).
+The tree view is optimized to handle large datasets efficiently. This example demonstrates performance with both a large tree (1000+ nodes) and a deeply nested tree (100 levels deep).
 
 <FileSource src="/framed/TreeView/TreeViewPerformance" />
 
@@ -128,7 +128,7 @@ Convert flat data to a hierarchical structure using the `toHierarchy` utility.
 
 ## Filter by text with search input
 
-Combine a `Search` input with `filterTreeByText` to create an interactive searchable tree. Type to filter nodes by name (case-insensitive substring matching). By default, matching nodes and their ancestors are included to maintain valid tree structure.
+Combine a search input with `filterTreeByText` to create an interactive searchable tree. Type to filter nodes by name (case-insensitive substring matching). By default, matching nodes and their ancestors are included to maintain valid tree structure.
 
 <FileSource src="/framed/TreeView/TreeViewFilter" />
 

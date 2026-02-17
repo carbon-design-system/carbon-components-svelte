@@ -7,7 +7,7 @@ components: ["TileGroup", "RadioTile"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`RadioTile` provides a selectable tile interface for choosing a single option from a set. It supports both individual and grouped usage, with options for light and disabled states.
+Radio tiles provide a selectable tile interface for choosing a single option from a set. They support both individual and grouped usage, with options for light and disabled states.
 
 ## Default
 

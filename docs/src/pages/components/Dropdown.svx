@@ -7,7 +7,7 @@ components: ["Dropdown", "DropdownSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `Dropdown` component provides a select input with a dropdown menu. It supports
+Dropdowns provide a select input with a dropdown menu. They support
 various states, sizes, and customization options. Each item in the dropdown must
 have a unique `id` property for proper functionality.
 
@@ -17,7 +17,7 @@ have a unique `id` property for proper functionality.
 
 ## Default
 
-Use the `Dropdown` component to create a select input with a dropdown menu. Each item
+Use the dropdown to create a select input with a dropdown menu. Each item
 must have a unique `id` property.
 
 <Dropdown labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
@@ -168,7 +168,7 @@ selections.
 
 Virtualization is a technique that allows only the items currently visible in the viewport to be rendered in the DOM, improving performance for large lists.
 
-By default, the `Dropdown` component will virtualize lists with more than 100 items.
+By default, the dropdown will virtualize lists with more than 100 items.
 
 In the example below, 10,000 items are provided to the dropdown but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
 
@@ -206,7 +206,7 @@ The default item height for virtualization is 40 pixels. When using custom slots
 
 ## Skeleton
 
-Display a loading state using the `DropdownSkeleton` component. This provides
+Display a loading state using the dropdown skeleton. This provides
 visual feedback while the dropdown content is being loaded.
 
 <DropdownSkeleton />

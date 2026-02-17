@@ -3,7 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`CopyButton` lets users copy text to their clipboard with a single click. Use it to provide quick access to code snippets, links, or other text content.
+Copy buttons let users copy text to their clipboard with a single click. Use them to provide quick access to code snippets, links, or other text content.
 
 This component uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text. Override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
 

@@ -7,7 +7,7 @@ components: ["NumberInput", "NumberInputSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `NumberInput` component provides a controlled input for numerical values. It supports validation, step values, and various states to ensure accurate data entry.
+Number inputs provide a controlled input for numerical values. They support validation, step values, and various states to ensure accurate data entry.
 
 ## Default
 
@@ -169,7 +169,7 @@ Prevent the scroll wheel from changing the input value by setting `disableWheel`
 
 ## Skeleton
 
-Show a loading state using the `NumberInputSkeleton` component. This is useful while data is being fetched.
+Show a loading state using the number input skeleton. This is useful while data is being fetched.
 
 <NumberInputSkeleton />
 

@@ -3,7 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`RecursiveList` provides a flexible way to render hierarchical data structures using either unordered or ordered lists. It supports nested nodes, links, and HTML content, making it ideal for displaying complex data hierarchies.
+Recursive lists provide a flexible way to render hierarchical data structures using either unordered or ordered lists. They support nested nodes, links, and HTML content, making them ideal for displaying complex data hierarchies.
 
 <InlineNotification svx-ignore lowContrast title="Warning:" kind="warning" hideCloseButton>
   <div class="body-short-01">

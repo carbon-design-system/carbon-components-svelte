@@ -3,10 +3,10 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `ExpandableTile` component creates a collapsible content container that can
-show and hide content with a smooth animation. It's ideal for managing content
-overflow and progressive disclosure of information. The component automatically
-measures content height using a resize observer.
+Expandable tiles create a collapsible content container that can
+show and hide content with a smooth animation. They are ideal for managing content
+overflow and progressive disclosure of information. They automatically
+measure content height using a resize observer.
 
 ## Default
 

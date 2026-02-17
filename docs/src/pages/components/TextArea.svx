@@ -7,7 +7,7 @@ components: ["TextArea", "TextAreaSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`TextArea` provides a multi-line text input field with support for various states, character counting, and accessibility features. It's ideal for longer text input like descriptions, comments, or messages.
+Text areas provide a multi-line text input field with support for various states, character counting, and accessibility features. They are ideal for longer text input like descriptions, comments, or messages.
 
 ## Default
 

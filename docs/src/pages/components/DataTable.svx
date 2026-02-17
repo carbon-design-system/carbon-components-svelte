@@ -8,7 +8,7 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`DataTable` displays structured data in a tabular format. Use it to present large datasets with features like sorting, filtering, pagination, virtualization, and row selection.
+Data tables display structured data in a tabular format. Use them to present large datasets with features like sorting, filtering, pagination, virtualization, and row selection.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -596,7 +596,7 @@ Set `selectable` to `true` to enable selectable rows. Here, the toolbar is used 
 
 Set `shouldFilterRows` to `true` to enable client-side filtering. The default filter performs string comparisons on cell values.
 
-For pagination with filtering, bind to `filteredRowIds` and pass its length to `Pagination`'s `totalItems`.
+For pagination with filtering, bind to `filteredRowIds` and pass its length to the pagination component's `totalItems`.
 
 <FileSource src="/framed/DataTable/DataTableFilterable" />
 
@@ -956,7 +956,7 @@ Set `sortable` to `true` to enable column sorting. Disable sorting on specific c
 
 ## Sortable with pagination
 
-Bind to `pageSize` and `page` props of `Pagination` and pass them to `DataTable`.
+Bind to `pageSize` and `page` props of the pagination component and pass them to the data table.
 
 <FileSource src="/framed/DataTable/DataTablePagination" />
 
@@ -1489,7 +1489,7 @@ Combine `batchExpansion` and `batchSelection` for tables with both expandable an
 
 ## Skeleton
 
-Use `DataTableSkeleton` to show a loading state.
+Use the data table skeleton to show a loading state.
 
 <DataTableSkeleton />
 

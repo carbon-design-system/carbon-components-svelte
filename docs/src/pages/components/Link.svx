@@ -8,7 +8,7 @@ components: ["Link", "OutboundLink"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `Link` component provides styled hyperlinks with various customization options. It supports different sizes, states, and can include icons. The `OutboundLink` variant automatically handles external links with proper security attributes.
+Links provide styled hyperlinks with various customization options. They support different sizes, states, and can include icons. The outbound link variant automatically handles external links with proper security attributes.
 
 ## Default
 
@@ -28,7 +28,7 @@ For external links, the component automatically adds security attributes. You ca
 
 ## Outbound link
 
-Use `OutboundLink` as a convenient alternative for external links.
+Use the outbound link as a convenient alternative for external links.
 
 <OutboundLink href="https://www.carbondesignsystem.com/">
   Carbon Design System

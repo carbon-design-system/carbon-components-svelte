@@ -3,7 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `AspectRatio` component maintains consistent proportions for content across different screen sizes. It's particularly useful for images, videos, and other media that need to preserve their aspect ratio when resizing.
+Aspect ratios maintain consistent proportions for content across different screen sizes. They are particularly useful for images, videos, and other media that need to preserve their aspect ratio when resizing.
 
 Supported aspect ratios include `"2x1"`, `"2x3"`, `"16x9"`, `"4x3"`, `"1x1"`, `"3x4"`, `"3x2"`, `"9x16"` and `"1x2"`.
 

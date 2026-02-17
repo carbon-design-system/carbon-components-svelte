@@ -7,7 +7,7 @@ components: ["SelectableTileGroup", "SelectableTile"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`SelectableTile` provides a tile-based selection interface that allows users to select multiple options. It supports various states and includes built-in keyboard navigation and accessibility features.
+Selectable tiles provide a tile-based selection interface that allows users to select multiple options. They support various states and include built-in keyboard navigation and accessibility features.
 
 ## Multi-selectable tiles
 

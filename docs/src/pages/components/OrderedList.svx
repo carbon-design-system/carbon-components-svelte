@@ -7,7 +7,7 @@ components: ["OrderedList", "ListItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`OrderedList` provides a structured way to display numbered lists of items. It supports nested lists, native browser styles, and expressive typography for enhanced visual hierarchy.
+Ordered lists provide a structured way to display numbered lists of items. They support nested lists, native browser styles, and expressive typography for enhanced visual hierarchy.
 
 <InlineNotification svx-ignore lowContrast title="Tip:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -17,7 +17,7 @@ components: ["OrderedList", "ListItem"]
 
 ## Default
 
-Create a basic ordered list by wrapping `ListItem` components within `OrderedList`.
+Create a basic ordered list by wrapping list item components within the ordered list.
 
 <OrderedList>
   <ListItem>Ordered list item</ListItem>
@@ -27,7 +27,7 @@ Create a basic ordered list by wrapping `ListItem` components within `OrderedLis
 
 ## With links
 
-Add interactive elements like `Link` components within list items.
+Add interactive elements like link components within list items.
 
 <OrderedList>
   <ListItem>

@@ -4,11 +4,11 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`Search` provides a flexible search input component with support for expandable variants, different sizes, and custom icons. It includes built-in functionality for clearing input and handling keyboard events.
+Search provides a flexible search input with support for expandable variants, different sizes, and custom icons. It includes built-in functionality for clearing input and handling keyboard events.
 
 ## Default
 
-The search component is extra-large by default. Use the `size` prop to choose between [large](#large-size) and [small](#small-size) variants.
+The search input is extra-large by default. Use the `size` prop to choose between [large](#large-size) and [small](#small-size) variants.
 
 <Search />
 

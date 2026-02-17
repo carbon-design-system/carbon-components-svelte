@@ -6,13 +6,13 @@ components: ["ContextMenu", "ContextMenuGroup", "ContextMenuRadioGroup", "Contex
     import Preview from "../../components/Preview.svelte";
 </script>
 
-`ContextMenu` displays a menu when users right-click. Use it to provide quick access to contextual actions or options.
+Context menus display a menu when users right-click. Use them to provide quick access to contextual actions or options.
 
 In the examples, right click anywhere within the iframe.
   
 ## Default
 
-The context menu appears when right-clicking anywhere in the window. Use `ContextMenuOption` for menu items and `ContextMenuDivider` for visual separation.
+The context menu appears when right-clicking anywhere in the window. Use context menu option for menu items and context menu divider for visual separation.
   
 <FileSource src="/framed/ContextMenu/ContextMenu" />
 
@@ -32,6 +32,6 @@ Set `target` to an array of elements to trigger the context menu from multiple s
 
 ## Radio groups
 
-Use `ContextMenuGroup` and `ContextMenuRadioGroup` to organize related options and create radio button selections.
+Use context menu group and context menu radio group to organize related options and create radio button selections.
 
 <FileSource src="/framed/ContextMenu/ContextMenuGroups" />

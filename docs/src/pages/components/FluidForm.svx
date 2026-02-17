@@ -7,14 +7,14 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `FluidForm` component provides a fluid-width form layout that adapts to its
-container. It's designed for full-width form layouts and works with most Carbon
+Fluid forms provide a fluid-width form layout that adapts to their
+container. They are designed for full-width form layouts and work with most Carbon
 input components. Note that inline input variants cannot be used within a
-`FluidForm`.
+fluid form.
 
 ## Fluid form
 
-Create a fluid-width form layout using the `FluidForm` component. This example
+Create a fluid-width form layout using the fluid form component. This example
 shows a basic login form with required fields.
 
 <FluidForm>

@@ -7,7 +7,7 @@ components: ["Slider", "SliderSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`Slider` provides a visual way to select a value from a range. It supports keyboard navigation, custom ranges, step values, and various states.
+Sliders provide a visual way to select a value from a range. They support keyboard navigation, custom ranges, step values, and various states.
 
 ## Default
 

@@ -130,7 +130,7 @@ Similarly, link buttons can have icons.
 
 ## Custom element
 
-By default, the `Button` will render either a `button` or `a` element.
+By default, the button will render either a `button` or `a` element.
 
 To render a different element, set `as` to `true` and spread `let:props` to the element.
 

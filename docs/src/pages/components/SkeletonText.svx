@@ -3,7 +3,7 @@
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`SkeletonText` provides a loading state for text content with support for different sizes and line counts. It's commonly used to indicate that text content is being loaded.
+Skeleton text provides a loading state for text content with support for different sizes and line counts. It's commonly used to indicate that text content is being loaded.
 
 ## Default
 

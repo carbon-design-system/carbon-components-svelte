@@ -7,7 +7,7 @@ components: ["Loading"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-The `Loading` component provides a full-screen or inline loading indicator. It's ideal for showing progress during page loads or data fetching operations.
+Loading indicators provide a full-screen or inline loading indicator. They are ideal for showing progress during page loads or data fetching operations.
 
 ## Default
 

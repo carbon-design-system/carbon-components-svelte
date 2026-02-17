@@ -7,7 +7,7 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`DatePicker` lets users select a date or date range using a calendar interface. It uses the [flatpickr](https://github.com/flatpickr/flatpickr) library for its calendar implementation.
+Date pickers let users select a date or date range using a calendar interface. They use the [flatpickr](https://github.com/flatpickr/flatpickr) library for their calendar implementation.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">

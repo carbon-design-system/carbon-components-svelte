@@ -9,11 +9,11 @@ components: ["ContentSwitcher", "Switch"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`ContentSwitcher` lets users switch between different views or sections of content. Use it to organize related content into distinct categories or states.
+Content switchers let users switch between different views or sections of content. Use them to organize related content into distinct categories or states.
 
 ## Default
 
-Create a content switcher with `Switch` components. Each switch needs a `text` prop.
+Create a content switcher with switch components. Each switch needs a `text` prop.
 
 <ContentSwitcher>
   <Switch text="Latest news" />
@@ -40,7 +40,7 @@ interactions or application state.
 
 ## Custom switch slot
 
-Override the default slot in `Switch` to customize how each option displays.
+Override the default slot in the switch to customize how each option displays.
 
 <ContentSwitcher>
   <Switch>

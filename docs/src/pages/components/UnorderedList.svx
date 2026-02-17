@@ -7,7 +7,7 @@ components: ["UnorderedList", "ListItem"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`UnorderedList` provides a styled unordered list component that supports nested lists, links, and expressive typography. It's ideal for displaying bulleted content in your interface.
+Unordered lists provide a styled unordered list that supports nested lists, links, and expressive typography. They are ideal for displaying bulleted content in your interface.
 
 <InlineNotification svx-ignore lowContrast title="Tip:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -17,7 +17,7 @@ components: ["UnorderedList", "ListItem"]
 
 ## Default
 
-Create a basic unordered list with `ListItem` components.
+Create a basic unordered list with list item components.
 
 <UnorderedList>
   <ListItem>Unordered list item</ListItem>
@@ -27,7 +27,7 @@ Create a basic unordered list with `ListItem` components.
 
 ## With links
 
-Add links to list items by wrapping them in `Link` components.
+Add links to list items by wrapping them in link components.
 
 <UnorderedList>
   <ListItem>
@@ -43,7 +43,7 @@ Add links to list items by wrapping them in `Link` components.
 
 ## Nested
 
-Create nested lists by setting `nested` to `true` on child `UnorderedList` components.
+Create nested lists by setting `nested` to `true` on child unordered list components.
 
 <UnorderedList>
   <ListItem>

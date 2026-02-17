@@ -25,7 +25,7 @@ components: ["Header",
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`UIShell` provides a collection of components for building application shells and navigation structures. It includes header, side navigation, and content components that work together to create a cohesive user interface.
+The UI shell provides a collection of components for building application shells and navigation structures. It includes header, side navigation, and content components that work together to create a cohesive user interface.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -37,25 +37,25 @@ Open the following examples in a new tab to experience them in full.
 
 ## Header
 
-Create a basic header with the `Header` component.
+Create a basic header with the header component.
 
 <FileSource src="/framed/UIShell/Header" />
 
 ## Header with side navigation
 
-The hamburger menu will automatically be rendered if the `SideNav` component is used.
+The hamburger menu will automatically be rendered if the side nav component is used.
 
 <FileSource src="/framed/UIShell/HeaderNav" />
 
 ## Header with side navigation (rail)
 
-Set `rail` to `true` on `SideNav` to use the rail variant. Expanded `SideNavMenu` items automatically collapse when the rail is in its narrow state.
+Set `rail` to `true` on the side nav to use the rail variant. Expanded side nav menu items automatically collapse when the rail is in its narrow state.
 
 <FileSource src="/framed/UIShell/HeaderNavRail" />
 
 ## Header with app switcher
 
-The `HeaderAction` component uses the [transition:slide API](https://svelte.dev/docs#slide); you can customize the transition duration, delay, and easing with the `transition` prop.
+The header action component uses the [transition:slide API](https://svelte.dev/docs#slide); you can customize the transition duration, delay, and easing with the `transition` prop.
 
 You can disable the `transition` by setting it to `false`.
 
@@ -79,7 +79,7 @@ Add a global search component to the header.
 
 ## Header with utilities
 
-Include utility components in the header using `HeaderUtilities`.
+Include utility components in the header using header utilities.
 
 <FileSource src="/framed/UIShell/HeaderUtilities" />
 

@@ -7,13 +7,13 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`RadioButton` provides a selection control that allows users to choose a single option from a set. It supports both individual and grouped usage, with options for horizontal and vertical layouts.
+Radio buttons provide a selection control that allows users to choose a single option from a set. They support both individual and grouped usage, with options for horizontal and vertical layouts.
 
 ## Default
 
 Create a group of radio buttons with a shared name and legend.
 
-See [Standalone usage](#standalone-usage) for individual usage or [Implicit grouping](#implicit-grouping) to group multiple standalone radio buttons by name without using a `RadioButtonGroup`.
+See [Standalone usage](#standalone-usage) for individual usage or [Implicit grouping](#implicit-grouping) to group multiple standalone radio buttons by name without using a radio button group.
 
 <RadioButtonGroup legendText="Storage tier (disk)" name="plan" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -23,13 +23,13 @@ See [Standalone usage](#standalone-usage) for individual usage or [Implicit grou
 
 ## Standalone usage
 
-Use `RadioButton` individually with a bindable `checked` prop for simple use cases.
+Use a radio button individually with a bindable `checked` prop for simple use cases.
 
 <FileSource src="/framed/RadioButton/RadioButtonStandalone" />
 
 ## Implicit grouping
 
-Multiple standalone `RadioButton` components sharing the same `name` attribute automatically form a group and synchronize their checked state. This allows you to create radio button groups without using `RadioButtonGroup`.
+Multiple standalone radio button components sharing the same `name` attribute automatically form a group and synchronize their checked state. This allows you to create radio button groups without using a radio button group.
 
 <FileSource src="/framed/RadioButton/RadioButtonImplicitGroup" />
 

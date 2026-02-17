@@ -8,7 +8,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`StructuredList` provides a semantic way to display tabular data with support for selection, keyboard navigation, and various layout options.
+Structured lists provide a semantic way to display tabular data with support for selection, keyboard navigation, and various layout options.
 
 ## Default
 
@@ -120,7 +120,7 @@ Use the flush variant to remove padding from the list.
 
 ## Selectable rows
 
-Enable row selection with the `selection` prop and `StructuredListInput` components.
+Enable row selection with the `selection` prop and structured list input components.
 
 <StructuredList selection selected="row-1-value">
   <StructuredListHead>

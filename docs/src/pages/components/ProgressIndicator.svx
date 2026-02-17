@@ -7,7 +7,7 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
   import Preview from "../../components/Preview.svelte";
 </script>
 
-`ProgressIndicator` provides a visual representation of progress through a sequence of steps. It supports horizontal and vertical layouts, step completion states, and interactive navigation.
+Progress indicators provide a visual representation of progress through a sequence of steps. They support horizontal and vertical layouts, step completion states, and interactive navigation.
 
 ## Default
 
