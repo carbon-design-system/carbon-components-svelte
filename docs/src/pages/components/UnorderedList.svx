@@ -3,16 +3,13 @@ components: ["UnorderedList", "ListItem"]
 ---
 
 <script>
-  import { InlineNotification, UnorderedList, ListItem, Link } from "carbon-components-svelte";
+  import { UnorderedList, ListItem, Link } from "carbon-components-svelte";
 </script>
 
 Unordered lists provide a styled unordered list that supports nested lists, links, and expressive typography. They are ideal for displaying bulleted content in your interface.
 
-<InlineNotification svx-ignore lowContrast title="Tip:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-   Consider using the <Link href="/components/RecursiveList#unordered">RecursiveList</Link> component for rendering tree structured data.
-  </div>
-</InlineNotification>
+> [!TIP]
+> Consider using the [RecursiveList](/components/RecursiveList#unordered) component for rendering tree structured data.
 
 ## Default
 

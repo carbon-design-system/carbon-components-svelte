@@ -3,16 +3,13 @@ components: ["OrderedList", "ListItem"]
 ---
 
 <script>
-  import { InlineNotification, OrderedList, ListItem, Link } from "carbon-components-svelte";
+  import { OrderedList, ListItem, Link } from "carbon-components-svelte";
 </script>
 
 Ordered lists provide a structured way to display numbered lists of items. They support nested lists, native browser styles, and expressive typography for enhanced visual hierarchy.
 
-<InlineNotification svx-ignore lowContrast title="Tip:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    Consider using the <Link href="/components/RecursiveList#ordered">RecursiveList</Link> component for rendering tree structured data.
-  </div>
-</InlineNotification>
+> [!TIP]
+> Consider using the [RecursiveList](/components/RecursiveList#ordered) component for rendering tree structured data.
 
 ## Default
 

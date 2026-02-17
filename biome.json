@@ -185,6 +185,16 @@
           }
         }
       }
+    },
+    {
+      "includes": ["docs/svelte.config.js"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
     }
   ]
 }

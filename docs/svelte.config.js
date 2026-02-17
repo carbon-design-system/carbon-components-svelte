@@ -136,6 +136,57 @@ function plugin() {
   };
 }
 
+const ADMONITION_RE = /^\[!(NOTE|WARNING|TIP|CAUTION)\]\s*/i;
+const ADMONITION_LINK_REF_RE = /^!(NOTE|WARNING|TIP|CAUTION)$/;
+const LEADING_WHITESPACE_RE = /^\n\s*/;
+
+const NOTIFICATION_ICONS = {
+  info: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="20" height="20" class="bx--inline-notification__icon"><path fill="none" d="M16,8a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,13.875H17.125v-8H13v2.25h1.875v5.75H12v2.25h8Z" data-icon-path="inner-path"></path><path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,6a1.5,1.5,0,1,1-1.5,1.5A1.5,1.5,0,0,1,16,8Zm4,16.125H12v-2.25h2.875v-5.75H13v-2.25h4.125v8H20Z"></path></svg>',
+  warning:
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="20" height="20" class="bx--inline-notification__icon"><path d="M16,2C8.3,2,2,8.3,2,16s6.3,14,14,14s14-6.3,14-14C30,8.3,23.7,2,16,2z M14.9,8h2.2v11h-2.2V8z M16,25c-0.8,0-1.5-0.7-1.5-1.5S15.2,22,16,22c0.8,0,1.5,0.7,1.5,1.5S16.8,25,16,25z"></path><path fill="none" d="M17.5,23.5c0,0.8-0.7,1.5-1.5,1.5c-0.8,0-1.5-0.7-1.5-1.5S15.2,22,16,22C16.8,22,17.5,22.7,17.5,23.5z M17.1,8h-2.2v11h2.2V8z" data-icon-path="inner-path" opacity="0"></path></svg>',
+  success:
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="20" height="20" class="bx--inline-notification__icon"><path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2ZM14,21.5908l-5-5L10.5906,15,14,18.4092,21.41,11l1.5957,1.5859Z"></path><path fill="none" d="M14 21.591L9 16.591 10.591 15 14 18.409 21.41 11 23.005 12.585 14 21.591z" data-icon-path="inner-path"></path></svg>',
+  error:
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" width="20" height="20" class="bx--inline-notification__icon"><path fill="none" d="M14.9 7.2H17.1V24.799H14.9z" data-icon-path="inner-path" transform="rotate(-45 16 16)"></path><path d="M16,2A13.914,13.914,0,0,0,2,16,13.914,13.914,0,0,0,16,30,13.914,13.914,0,0,0,30,16,13.914,13.914,0,0,0,16,2Zm5.4449,21L9,10.5557,10.5557,9,23,21.4448Z"></path></svg>',
+};
+
+const NOTIFICATION_KINDS = {
+  NOTE: "info",
+  WARNING: "warning",
+  TIP: "success",
+  CAUTION: "error",
+};
+
+const NOTIFICATION_TITLES = {
+  NOTE: "Note:",
+  WARNING: "Warning:",
+  TIP: "Tip:",
+  CAUTION: "Caution:",
+};
+
+function serializeInlineNodes(nodes) {
+  return nodes
+    .map((node) => {
+      switch (node.type) {
+        case "text":
+          return node.value;
+        case "inlineCode":
+          return `<code>${node.value}</code>`;
+        case "strong":
+          return `<strong>${serializeInlineNodes(node.children)}</strong>`;
+        case "emphasis":
+          return `<em>${serializeInlineNodes(node.children)}</em>`;
+        case "link":
+          return `<a class="bx--link" href="${node.url}">${serializeInlineNodes(node.children)}</a>`;
+        case "break":
+          return "<br/>";
+        default:
+          return "";
+      }
+    })
+    .join("");
+}
+
 function carbonify() {
   return (tree) => {
     visit(tree, "link", (node) => {
@@ -152,6 +203,79 @@ function carbonify() {
 
     visit(tree, "listItem", (node) => {
       node.data = { hProperties: { class: "bx--list__item" } };
+    });
+
+    visit(tree, "blockquote", (node, index, parent) => {
+      if (!parent || index == null) return;
+
+      const firstChild = node.children[0];
+      if (!firstChild || firstChild.type !== "paragraph") return;
+
+      const first = firstChild.children[0];
+      if (!first) return;
+
+      let type = null;
+
+      if (first.type === "text") {
+        // [!NOTE] parsed as plain text
+        const match = first.value.match(ADMONITION_RE);
+        if (!match) return;
+        type = match[1].toUpperCase();
+        first.value = first.value.slice(match[0].length);
+        if (!first.value) {
+          firstChild.children.shift();
+          if (firstChild.children[0]?.type === "break") {
+            firstChild.children.shift();
+          }
+        }
+      } else if (first.type === "linkReference") {
+        // remark may parse [!NOTE] as a shortcut link reference
+        const id = (first.identifier || "").toUpperCase();
+        const admonitionMatch = id.match(ADMONITION_LINK_REF_RE);
+        if (!admonitionMatch) return;
+        type = admonitionMatch[1];
+        firstChild.children.shift();
+        // Clean up leading whitespace/break after the marker
+        while (firstChild.children.length > 0) {
+          const next = firstChild.children[0];
+          if (next.type === "break") {
+            firstChild.children.shift();
+          } else if (next.type === "text") {
+            next.value = next.value.replace(LEADING_WHITESPACE_RE, "");
+            if (!next.value) firstChild.children.shift();
+            break;
+          } else {
+            break;
+          }
+        }
+      } else {
+        return;
+      }
+
+      const kind = NOTIFICATION_KINDS[type];
+      const title = NOTIFICATION_TITLES[type];
+      const icon = NOTIFICATION_ICONS[kind];
+
+      // If the first paragraph is now empty, remove it
+      if (firstChild.children.length === 0) {
+        node.children.shift();
+      }
+
+      // Serialize paragraph children directly to avoid <p> wrappers
+      const body = node.children
+        .map((child) =>
+          child.type === "paragraph"
+            ? serializeInlineNodes(child.children)
+            : "",
+        )
+        .join("<br/>");
+
+      const html = {
+        type: "html",
+        value: `<div role="alert" class="bx--inline-notification bx--inline-notification--low-contrast bx--inline-notification--hide-close-button bx--inline-notification--${kind}"><div class="bx--inline-notification__details">${icon}<div class="bx--inline-notification__text-wrapper"><p class="bx--inline-notification__title">${title}</p><div class="body-short-01">${body}</div></div></div></div>`,
+      };
+
+      parent.children.splice(index, 1, html);
     });
   };
 }

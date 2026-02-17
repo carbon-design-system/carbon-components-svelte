@@ -1,5 +1,5 @@
 <script>
-  import { InlineNotification, Button, Stack } from "carbon-components-svelte";
+  import { Button, Stack } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
@@ -47,12 +47,6 @@ Set `kind="danger-tertiary"` for less prominent destructive actions.
 
 Create an icon-only danger tertiary button by omitting the label text and providing an icon description for accessibility.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    Provide an <strong>iconDescription</strong> for accessibility. This text will be used as the button's tooltip and screen reader label.
-  </div>
-</InlineNotification>
-
 <Button kind="danger-tertiary" iconDescription="Delete" icon={TrashCan} />
 
 ## Danger ghost button
@@ -69,13 +63,8 @@ Add an icon to the button using the `icon` prop.
 
 ## Icon-only button
 
-Create an icon-only button by omitting the label text and providing an icon description for accessibility.
-
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    Provide an <strong>iconDescription</strong> for accessibility. This text will be used as the button's tooltip and screen reader label.
-  </div>
-</InlineNotification>
+> [!NOTE]
+> Provide an **iconDescription** for accessibility. This text will be used as the button's tooltip and screen reader label.
 
 <Button iconDescription="Tooltip text" icon={Add} />
 
@@ -95,11 +84,8 @@ Control the tooltip position and alignment with `tooltipPosition` and `tooltipAl
 
 Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers.
 
-<InlineNotification svx-ignore lowContrast title="Use case:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed (e.g., toolbars). The <strong>iconDescription</strong> remains accessible to screen readers.
-  </div>
-</InlineNotification>
+> [!NOTE]
+> Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed (e.g., toolbars). The **iconDescription** remains accessible to screen readers.
 
 <Stack orientation="horizontal" gap={2}>
   <Button hideTooltip iconDescription="Add item" icon={Add} />
@@ -192,11 +178,8 @@ Set `disabled` to disable the button.
 
 Set `expressive` to `true` to use Carbon's expressive typesetting.
 
-<InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
-  <div class="body-short-01">
-    Use expressive styles with default, "lg", or "xl" button sizes.
-  </div>
-</InlineNotification>
+> [!NOTE]
+> Use expressive styles with default, "lg", or "xl" button sizes.
 
 <Button expressive size="xl">Primary</Button>
 <Button expressive size="xl" kind="secondary">Secondary</Button>
