@@ -1,5 +1,5 @@
 <script>
-  import { MultiSelect } from "carbon-components-svelte";
+  import { MultiSelect, Stack } from "carbon-components-svelte";
 
   const items = [
     { id: "0", text: "Slack" },
@@ -19,26 +19,19 @@
   $: secondary = formatSelected(multiselect2_selectedIds);
 </script>
 
-<MultiSelect
-  labelText="Primary contact"
-  bind:selectedIds={multiselect1_selectedIds}
-  label="Select contact methods..."
-  {items}
-/>
-
-<div>Primary: {primary}</div>
-
-<MultiSelect
-  labelText="Secondary contact"
-  bind:selectedIds={multiselect2_selectedIds}
-  label="Select contact methods..."
-  {items}
-/>
-
-<div>Secondary: {secondary}</div>
-
-<style>
-  div {
-    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
-  }
-</style>
+<Stack gap={4}>
+  <MultiSelect
+    labelText="Primary contact"
+    bind:selectedIds={multiselect1_selectedIds}
+    label="Select contact methods..."
+    {items}
+  />
+  <div>Primary: {primary}</div>
+  <MultiSelect
+    labelText="Secondary contact"
+    bind:selectedIds={multiselect2_selectedIds}
+    label="Select contact methods..."
+    {items}
+  />
+  <div>Secondary: {secondary}</div>
+</Stack>

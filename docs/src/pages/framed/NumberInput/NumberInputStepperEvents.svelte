@@ -1,5 +1,5 @@
 <script>
-  import { NumberInput } from "carbon-components-svelte";
+  import { NumberInput, Stack } from "carbon-components-svelte";
 
   let value = 0;
   let clickStepperEvents = [];
@@ -21,17 +21,17 @@
   }}
 />
 
-<div style="margin-top: var(--cds-layout-01)">
-  <strong>click:stepper events:</strong>
-  <pre>{clickStepperEvents.join("\n") || "(none)"}</pre>
-</div>
-
-<div style="margin-top: var(--cds-layout-01)">
-  <strong>blur events:</strong>
-  <pre>{blurEvents.join("\n") || "(none)"}</pre>
-</div>
-
-<div style="margin-top: var(--cds-layout-01)">
-  <strong>blur:stepper events:</strong>
-  <pre>{blurStepperEvents.join("\n") || "(none)"}</pre>
-</div>
+<Stack gap={2}>
+  <div>
+    <strong>click:stepper events:</strong>
+    <pre>{clickStepperEvents.join("\n") || "(none)"}</pre>
+  </div>
+  <div>
+    <strong>blur events:</strong>
+    <pre>{blurEvents.join("\n") || "(none)"}</pre>
+  </div>
+  <div>
+    <strong>blur:stepper events:</strong>
+    <pre>{blurStepperEvents.join("\n") || "(none)"}</pre>
+  </div>
+</Stack>

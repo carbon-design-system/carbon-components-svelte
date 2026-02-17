@@ -3,6 +3,7 @@
     Button,
     ProgressIndicator,
     ProgressStep,
+    Stack,
   } from "carbon-components-svelte";
 
   let currentIndex = 1;
@@ -32,18 +33,18 @@
   />
 </ProgressIndicator>
 
-<div style="margin: var(--cds-layout-02) 0">
-  <Button
-    kind={currentIndex === 2 ? "secondary" : "primary"}
-    on:click={() => {
-      currentIndex = currentIndex === 2 ? 0 : 2;
-    }}
-  >
-    Set currentIndex to
-    {currentIndex === 2 ? 0 : 2}
-  </Button>
-</div>
-
-<h3>Current index: {currentIndex}</h3>
-
-<div>Is the third step currently selected? {thirdStepCurrent}</div>
+<Stack gap={3}>
+  <div>
+    <Button
+      kind={currentIndex === 2 ? "secondary" : "primary"}
+      on:click={() => {
+        currentIndex = currentIndex === 2 ? 0 : 2;
+      }}
+    >
+      Set currentIndex to
+      {currentIndex === 2 ? 0 : 2}
+    </Button>
+  </div>
+  <h3>Current index: {currentIndex}</h3>
+  <div>Is the third step currently selected? {thirdStepCurrent}</div>
+</Stack>

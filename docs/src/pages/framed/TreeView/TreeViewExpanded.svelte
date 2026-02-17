@@ -1,5 +1,5 @@
 <script>
-  import { TreeView } from "carbon-components-svelte";
+  import { Stack, TreeView } from "carbon-components-svelte";
 
   let activeId = 1;
   let selectedIds = [];
@@ -46,23 +46,18 @@
   ];
 </script>
 
-<TreeView
-  labelText="Cloud Products"
-  {nodes}
-  bind:activeId
-  bind:selectedIds
-  bind:expandedIds
-  on:select={({ detail }) => console.log("select", detail)}
-  on:toggle={({ detail }) => console.log("toggle", detail)}
-  on:focus={({ detail }) => console.log("focus", detail)}
-/>
-
-<div>Active node id: {activeId}</div>
-<div>Selected ids: {JSON.stringify(selectedIds)}</div>
-<div>Expanded ids: {JSON.stringify(expandedIds)}</div>
-
-<style>
-  div {
-    margin-top: var(--cds-spacing-05);
-  }
-</style>
+<Stack gap={5}>
+  <TreeView
+    labelText="Cloud Products"
+    {nodes}
+    bind:activeId
+    bind:selectedIds
+    bind:expandedIds
+    on:select={({ detail }) => console.log("select", detail)}
+    on:toggle={({ detail }) => console.log("toggle", detail)}
+    on:focus={({ detail }) => console.log("focus", detail)}
+  />
+  <div>Active node id: {activeId}</div>
+  <div>Selected ids: {JSON.stringify(selectedIds)}</div>
+  <div>Expanded ids: {JSON.stringify(expandedIds)}</div>
+</Stack>

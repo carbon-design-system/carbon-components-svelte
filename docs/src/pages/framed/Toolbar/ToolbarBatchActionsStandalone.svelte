@@ -2,6 +2,7 @@
   import {
     Button,
     Checkbox,
+    Stack,
     Toolbar,
     ToolbarBatchActions,
     ToolbarContent,
@@ -53,8 +54,8 @@
   </ToolbarContent>
 </Toolbar>
 
-<div style:margin-top="var(--cds-layout-02)">
+<Stack gap={3}>
   {#each items as item (item.id)}
     <Checkbox labelText={item.name} bind:checked={item.checked} />
   {/each}
-</div>
+</Stack>

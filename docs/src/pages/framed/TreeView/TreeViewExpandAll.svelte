@@ -1,5 +1,5 @@
 <script>
-  import { Button, TreeView } from "carbon-components-svelte";
+  import { Button, Stack, TreeView } from "carbon-components-svelte";
 
   let treeview = null;
   let nodes = [
@@ -44,14 +44,9 @@
   ];
 </script>
 
-<div>
-  <Button on:click={treeview?.expandAll}>Expand all</Button>
-</div>
-
-<TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />
-
-<style>
-  div {
-    margin-bottom: var(--cds-spacing-05);
-  }
-</style>
+<Stack gap={5}>
+  <div>
+    <Button on:click={treeview?.expandAll}>Expand all</Button>
+  </div>
+  <TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />
+</Stack>

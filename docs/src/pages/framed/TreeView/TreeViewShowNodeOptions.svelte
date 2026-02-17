@@ -1,5 +1,5 @@
 <script>
-  import { Button, ButtonSet, TreeView } from "carbon-components-svelte";
+  import { Button, ButtonSet, Stack, TreeView } from "carbon-components-svelte";
 
   const targetNode = { id: 3, text: "Apache Spark" };
   const targetNodeSelect = { id: 0, text: "AI / Machine learning" };
@@ -29,37 +29,38 @@
   ];
 </script>
 
-<ButtonSet style="margin-bottom: var(--cds-spacing-05)">
-  <Button
-    on:click={() => {
-      treeview?.showNode(targetNode.id);
-    }}
-  >
-    Default (expand + select + focus)
-  </Button>
-  <Button
-    on:click={() => {
-      treeview?.showNode(targetNode.id, {
-        select: false,
-        focus: false,
-      });
-    }}
-  >
-    Expand only
-  </Button>
-  <Button
-    on:click={() => {
-      treeview?.showNode(targetNodeSelect.id, {
-        expand: false,
-        focus: false,
-      });
-    }}
-  >
-    Select only
-  </Button>
-  <Button kind="tertiary" on:click={() => key++}>Reset</Button>
-</ButtonSet>
-
-{#key key}
-  <TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />
-{/key}
+<Stack gap={5}>
+  <ButtonSet>
+    <Button
+      on:click={() => {
+        treeview?.showNode(targetNode.id);
+      }}
+    >
+      Default (expand + select + focus)
+    </Button>
+    <Button
+      on:click={() => {
+        treeview?.showNode(targetNode.id, {
+          select: false,
+          focus: false,
+        });
+      }}
+    >
+      Expand only
+    </Button>
+    <Button
+      on:click={() => {
+        treeview?.showNode(targetNodeSelect.id, {
+          expand: false,
+          focus: false,
+        });
+      }}
+    >
+      Select only
+    </Button>
+    <Button kind="tertiary" on:click={() => key++}>Reset</Button>
+  </ButtonSet>
+  {#key key}
+    <TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />
+  {/key}
+</Stack>

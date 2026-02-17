@@ -1,5 +1,5 @@
 <script>
-  import { RecursiveList, TreeView } from "carbon-components-svelte";
+  import { RecursiveList, Stack, TreeView } from "carbon-components-svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
 
   let nodes = [
@@ -55,17 +55,15 @@
 
 <TreeView labelText="Cloud Products" {nodes} let:node>
   <div on:click|stopPropagation on:keydown|stopPropagation role="none">
-    <span
-      contenteditable={!node.disabled}
-      on:input={(e) => updateNodeText(node.id, e.target.textContent)}
-      style:display="flex"
-      style:align-items="center"
-      style:outline="none"
-      style:gap="var(--cds-spacing-02)"
+    <Stack
+      orientation="horizontal"
+      gap={2}
+      tag="span"
+      style="align-items: center; outline: none"
     >
-      {node.text}
+      <span contenteditable={!node.disabled} on:input={(e) => updateNodeText(node.id, e.target.textContent)}>{node.text}</span>
       <Edit aria-hidden="true" />
-    </span>
+    </Stack>
   </div>
 </TreeView>
 

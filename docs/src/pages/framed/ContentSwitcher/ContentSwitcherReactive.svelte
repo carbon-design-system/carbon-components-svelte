@@ -1,5 +1,5 @@
 <script>
-  import { Button, ContentSwitcher, Switch } from "carbon-components-svelte";
+  import { Button, ContentSwitcher, Stack, Switch } from "carbon-components-svelte";
 
   let selectedIndex = 1;
 </script>
@@ -10,20 +10,15 @@
   <Switch text="Recommended" />
 </ContentSwitcher>
 
-<div>
-  <Button
+<Stack gap={5}>
+  <div>
+    <Button
     size="small"
     disabled={selectedIndex === 2}
     on:click={() => (selectedIndex = 2)}
   >
     Set selected to 2
   </Button>
-</div>
-
-<div>Selected index: {selectedIndex}</div>
-
-<style>
-  div {
-    margin-top: var(--cds-spacing-05);
-  }
-</style>
+  </div>
+  <div>Selected index: {selectedIndex}</div>
+</Stack>

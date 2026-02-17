@@ -1,5 +1,5 @@
 <script>
-  import { Dropdown } from "carbon-components-svelte";
+  import { Dropdown, Stack } from "carbon-components-svelte";
 
   const items = [
     { id: "0", text: "Slack" },
@@ -17,26 +17,19 @@
   $: secondary = formatSelected(dropdown2_selectedId);
 </script>
 
-<Dropdown
-  labelText="Primary contact"
-  bind:selectedId={dropdown1_selectedId}
-  {items}
-/>
-
-<div>Primary: {primary}</div>
-
-<Dropdown
-  invalid={dropdown1_selectedId === dropdown2_selectedId}
-  invalidText="Secondary contact method must be different from the primary contact"
-  labelText="Secondary contact"
-  bind:selectedId={dropdown2_selectedId}
-  {items}
-/>
-
-<div>Secondary: {secondary}</div>
-
-<style>
-  div {
-    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
-  }
-</style>
+<Stack gap={4}>
+  <Dropdown
+    labelText="Primary contact"
+    bind:selectedId={dropdown1_selectedId}
+    {items}
+  />
+  <div>Primary: {primary}</div>
+  <Dropdown
+    invalid={dropdown1_selectedId === dropdown2_selectedId}
+    invalidText="Secondary contact method must be different from the primary contact"
+    labelText="Secondary contact"
+    bind:selectedId={dropdown2_selectedId}
+    {items}
+  />
+  <div>Secondary: {secondary}</div>
+</Stack>
