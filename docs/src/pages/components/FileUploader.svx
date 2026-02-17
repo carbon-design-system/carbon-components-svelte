@@ -3,7 +3,7 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
 ---
 
 <script>
-  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, UnorderedList, ListItem, InlineNotification, Stack } from "carbon-components-svelte";
+  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, InlineNotification, Stack } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
 </script>
@@ -91,10 +91,8 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 Remove uploaded files from the file uploader in two ways:
 
-<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
-  <ListItem>programmatically using the <strong>clearFiles</strong> accessor</ListItem>
-  <ListItem>two-way binding by setting <strong>files</strong> to <strong>[]</strong></ListItem>
-</UnorderedList>
+- programmatically using the **clearFiles** accessor
+- two-way binding by setting **files** to **[]**
 
 <FileSource src="/framed/FileUploader/FileUploaderClearFiles" />
 

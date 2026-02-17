@@ -1,7 +1,3 @@
-<script>
-  import { OrderedList, ListItem } from "carbon-components-svelte";
-</script>
-
 Modals provide a focused dialog for user interactions, confirmations, or data entry. They support various sizes, states, and customization options to create accessible and user-friendly modal experiences.
 
 **Modal vs ComposedModal**
@@ -34,11 +30,9 @@ Set `portalMenu={false}` on these components to opt out. In this example, the mo
 
 When the modal opens, focus is set using the following priority:
 
-<OrderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
-  <ListItem>The element matching <code>selectorPrimaryFocus</code> (default: <code>[data-modal-primary-focus]</code>)</ListItem>
-  <ListItem>The primary action button (for transactional modals)</ListItem>
-  <ListItem>The close button (for passive modals or modals without a primary button)</ListItem>
-</OrderedList>
+1. The element matching `selectorPrimaryFocus` (default: `[data-modal-primary-focus]`)
+1. The primary action button (for transactional modals)
+1. The close button (for passive modals or modals without a primary button)
 
 Use `selectorPrimaryFocus` to override the default and target a specific element, such as the first form input.
 

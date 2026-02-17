@@ -1,5 +1,5 @@
 <script>
-  import { Stack, UnorderedList, ListItem } from "carbon-components-svelte";
+  import { Stack } from "carbon-components-svelte";
 </script>
 
 Stacks are utility components that can be used to create a stack of elements with a consistent gap between them. They support both vertical and horizontal orientations.
@@ -8,22 +8,20 @@ It uses layout tokens from the Carbon Design System to define the gap between el
 
 The `gap` scale can be set from `0` to `13`:
 
-<UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
-  <ListItem><strong>0</strong>: 0 (no gap)</ListItem>
-  <ListItem><strong>1</strong>: 0.125rem (2px)</ListItem>
-  <ListItem><strong>2</strong>: 0.25rem (4px)</ListItem>
-  <ListItem><strong>3</strong>: 0.5rem (8px)</ListItem>
-  <ListItem><strong>4</strong>: 0.75rem (12px)</ListItem>
-  <ListItem><strong>5</strong>: 1rem (16px)</ListItem>
-  <ListItem><strong>6</strong>: 1.5rem (24px)</ListItem>
-  <ListItem><strong>7</strong>: 2rem (32px)</ListItem>
-  <ListItem><strong>8</strong>: 2.5rem (40px)</ListItem>
-  <ListItem><strong>9</strong>: 3rem (48px)</ListItem>
-  <ListItem><strong>10</strong>: 4rem (64px)</ListItem>
-  <ListItem><strong>11</strong>: 5rem (80px)</ListItem>
-  <ListItem><strong>12</strong>: 6rem (96px)</ListItem>
-  <ListItem><strong>13</strong>: 10rem (160px)</ListItem>
-</UnorderedList>
+- **0**: 0 (no gap)
+- **1**: 0.125rem (2px)
+- **2**: 0.25rem (4px)
+- **3**: 0.5rem (8px)
+- **4**: 0.75rem (12px)
+- **5**: 1rem (16px)
+- **6**: 1.5rem (24px)
+- **7**: 2rem (32px)
+- **8**: 2.5rem (40px)
+- **9**: 3rem (48px)
+- **10**: 4rem (64px)
+- **11**: 5rem (80px)
+- **12**: 6rem (96px)
+- **13**: 10rem (160px)
 
 Alternatively, you can specify an arbitrary `gap` value (e.g., `200px`). You can also set `gap` to `0` to omit any gap class.
 

@@ -335,14 +335,19 @@ html {
   max-width: 44rem;
 }
 
-.bx--col > p > code {
-  font-size: var(--cds-code-02-font-size);
-  font-weight: var(--cds-code-02-font-weight);
-  line-height: var(--cds-code-02-line-height);
-  letter-spacing: var(--cds-code-02-letter-spacing);
-  background-color: var(--cds-ui-03);
-  border-radius: 0.25rem;
+.bx--col > p > code,
+.bx--col > ul > li > code,
+.bx--col > ol > li > code {
+  font-family: var(--cds-code-01-font-family);
+  font-size: var(--cds-code-01-font-size, 0.75rem);
+  font-weight: var(--cds-code-01-font-weight, 400);
+  line-height: var(--cds-code-01-line-height, 1.33333);
+  letter-spacing: var(--cds-code-01-letter-spacing, 0.32px);
   padding: 0 var(--cds-spacing-02);
+  color: var(--cds-text-01, #161616);
+  border: 2px solid rgba(0, 0, 0, 0);
+  background-color: var(--cds-field-01, #f4f4f4);
+  border-radius: 4px;
 }
 
 [class*="bx--col"] > h2,
@@ -371,7 +376,9 @@ html {
   scroll-margin-top: 3rem;
 }
 
-.bx--col > p {
+.bx--col > p,
+.bx--col > ul,
+.bx--col > ol {
   margin-bottom: var(--cds-layout-02);
 }
 
