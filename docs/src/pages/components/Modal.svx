@@ -4,6 +4,17 @@ Modals provide a focused dialog for user interactions, confirmations, or data en
 
 The modal is an all-in-one component configured through props, making it ideal for standard modal dialogs. For more complex layouts or fine-grained control, use [ComposedModal](/components/ComposedModal) instead.
 
+**Focus behavior**
+
+When the modal opens, focus is set using the following priority:
+
+1. The element matching `selectorPrimaryFocus` (default: `[data-modal-primary-focus]`)
+2. The first input, textarea, or select (for transactional modals with form fields)
+3. The primary action button (for confirmation modals), or the cancel button (for destructive modals with `danger={true}`)
+4. The close button (for passive modals or modals without a primary button)
+
+After closing the modal, focus is returned to the element that triggered the modal.
+
 ## Default
 
 Display a modal dialog with a header, content area, and footer by default.
@@ -26,14 +37,7 @@ Set `portalMenu={false}` on these components to opt out. In this example, the mo
 
 <FileSource src="/framed/Modal/ModalWithDropdowns" />
 
-## Focus behavior
-
-When the modal opens, focus is set using the following priority:
-
-1. The element matching `selectorPrimaryFocus` (default: `[data-modal-primary-focus]`)
-2. The first input, textarea, or select (for transactional modals with form fields)
-3. The primary action button (for confirmation modals)
-4. The close button (for passive modals or modals without a primary button)
+## Custom focus
 
 Use `selectorPrimaryFocus` to override the default and target a specific element when the automatic first-input focus is not desired.
 
@@ -42,6 +46,8 @@ Use `selectorPrimaryFocus` to override the default and target a specific element
 ## Danger modal
 
 Display critical actions or destructive operations with the danger variant. This style emphasizes the severity of the action.
+
+By default, the cancel button receives focus instead of the critical button to prevent accidental destructive actions.
 
 <FileSource src="/framed/Modal/DangerModal" />
 
