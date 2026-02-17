@@ -3,7 +3,7 @@
 
   let rows = Array.from({ length: 10 }).map((_, i) => ({
     id: i,
-    name: "Load Balancer " + (i + 1),
+    name: `Load Balancer ${i + 1}`,
     protocol: "HTTP",
     port: 3000 + i * 10,
     rule: i % 2 ? "Round robin" : "DNS delegation",

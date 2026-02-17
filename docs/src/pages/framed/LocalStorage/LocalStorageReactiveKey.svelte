@@ -8,7 +8,7 @@
   let selectedUser = "user-1";
   let theme = "white";
 
-  $: storageKey = "local-storage-reactive-example-" + selectedUser;
+  $: storageKey = `local-storage-reactive-example-${selectedUser}`;
 </script>
 
 <div style:margin-bottom="var(--cds-layout-01)">

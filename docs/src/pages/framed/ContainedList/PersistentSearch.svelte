@@ -8,7 +8,7 @@
   let searchTerm = "";
   let searchResults = Array.from(
     { length: 50 },
-    (_, i) => "List item " + (i + 1),
+    (_, i) => `List item ${i + 1}`,
   );
 
   $: filteredResults = searchResults.filter((item) => {

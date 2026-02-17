@@ -161,8 +161,7 @@
       "linter": {
         "rules": {
           "style": {
-            "useNamingConvention": "off",
-            "useTemplate": "off"
+            "useNamingConvention": "off"
           }
         }
       }
