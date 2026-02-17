@@ -131,6 +131,7 @@
     const node =
       container.querySelector(selectorPrimaryFocus) ||
       container.querySelector(selectorFirstInput) ||
+      (danger ? container.querySelector(".bx--btn--secondary") : null) ||
       primaryButtonRef ||
       buttonRef;
     node.focus();

@@ -347,6 +347,37 @@ describe("Modal", () => {
     expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
   });
 
+  it("focuses the cancel button when danger and modal has secondary button", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        danger: true,
+        modalHeading: "Delete Modal",
+        primaryButtonText: "Delete",
+        secondaryButtonText: "Cancel",
+        includeInput: false,
+      },
+    });
+
+    expect(screen.getByRole("button", { name: "Cancel" })).toHaveFocus();
+  });
+
+  it("selectorPrimaryFocus overrides danger focus", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        danger: true,
+        modalHeading: "Delete Modal",
+        primaryButtonText: "Delete",
+        secondaryButtonText: "Cancel",
+        selectorPrimaryFocus: "button.bx--btn--danger",
+        includeInput: false,
+      },
+    });
+
+    expect(screen.getByRole("button", { name: "Delete" })).toHaveFocus();
+  });
+
   it("prevents closing when clicking outside if configured", async () => {
     render(ModalTest, {
       props: {
