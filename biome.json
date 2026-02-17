@@ -147,16 +147,6 @@
       }
     },
     {
-      "includes": ["src/**/*.d.ts"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "noExplicitAny": "off"
-          }
-        }
-      }
-    },
-    {
       "includes": ["src/ImageLoader/ImageLoader.svelte"],
       "linter": {
         "rules": {

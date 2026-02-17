@@ -2,7 +2,7 @@ type NodeLike = {
   id: string | number;
   text?: string;
   nodes?: NodeLike[];
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 type FilterOptions = {

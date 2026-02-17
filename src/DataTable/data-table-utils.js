@@ -102,9 +102,9 @@ function deepEqual(a, b, stack = new WeakMap()) {
  * Lightweight deep equality check optimized for DataTable rows.
  * Compares arrays of row objects by first checking IDs (fast path),
  * then falling back to deep object comparison to handle nested structures.
- * @template {Record<string, any>} Row - Row type with at least an optional `id` property
- * @param {ReadonlyArray<Row> | null} a - First array of rows to compare
- * @param {ReadonlyArray<Row> | null} b - Second array of rows to compare
+ * @template T
+ * @param {ReadonlyArray<T> | null} a - First array of rows to compare
+ * @param {ReadonlyArray<T> | null} b - Second array of rows to compare
  * @returns {boolean} True if row arrays are deeply equal, false otherwise
  */
 export function rowsEqual(a, b) {
