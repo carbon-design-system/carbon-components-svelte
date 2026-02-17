@@ -96,7 +96,7 @@ function plugin() {
         "svelte",
       );
 
-      node.value = `<Preview codeRaw="{\`${formattedCode}\`}" code="{\`${highlightedCode}\`}">${node.value}</Preview>`;
+      node.value = `<Preview codeRaw={${JSON.stringify(formattedCode)}} code={${JSON.stringify(highlightedCode)}}>${node.value}</Preview>`;
     }
 
     if (node.value.startsWith("<FileSource")) {
@@ -127,7 +127,7 @@ function plugin() {
         "svelte",
       );
 
-      node.value = `<Preview framed src="${src}" codeRaw="{\`${formattedCode}\`}" code="{\`${highlightedCode}\`}" />`;
+      node.value = `<Preview framed src="${src}" codeRaw={${JSON.stringify(formattedCode)}} code={${JSON.stringify(highlightedCode)}} />`;
     }
   }
 
