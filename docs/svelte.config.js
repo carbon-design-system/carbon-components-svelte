@@ -141,6 +141,18 @@ function carbonify() {
     visit(tree, "link", (node) => {
       node.data = { hProperties: { class: "bx--link" } };
     });
+
+    visit(tree, "list", (node) => {
+      node.data = {
+        hProperties: {
+          class: node.ordered ? "bx--list--ordered" : "bx--list--unordered",
+        },
+      };
+    });
+
+    visit(tree, "listItem", (node) => {
+      node.data = { hProperties: { class: "bx--list__item" } };
+    });
   };
 }
 

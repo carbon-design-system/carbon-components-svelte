@@ -385,39 +385,6 @@ function convertInlineNotification(openTag, innerContent) {
 }
 
 /**
- * Convert UnorderedList component to markdown list
- * @param {string} _openTag
- * @param {string} innerContent
- * @returns {string[]}
- */
-function convertUnorderedList(_openTag, innerContent) {
-  const listItemRe = /<ListItem\b[^>]*>([\s\S]*?)<\/ListItem>/gi;
-  const items = [];
-  let match = listItemRe.exec(innerContent);
-
-  while (match !== null) {
-    let itemText = match[1];
-    // Convert <strong> tags to markdown bold
-    itemText = itemText.replace(STRONG_TAG_CONTENT_RE, (_, t) => {
-      const text = String(t).replace(TAG_STRIP_RE, "").trim();
-      return text ? `**${text}**` : "";
-    });
-    // Strip remaining HTML tags
-    itemText = itemText.replace(ANY_HTML_TAG_RE, "");
-    // Clean up whitespace
-    itemText = itemText.replace(TRAILING_WS_BEFORE_NL_RE, "\n");
-    itemText = itemText.replace(MULTI_NL_RE, "\n\n");
-    itemText = itemText.trim();
-    if (itemText) items.push(`- ${itemText}`);
-    match = listItemRe.exec(innerContent);
-  }
-
-  const out = items.length > 0 ? items : [];
-  if (out.length > 0) out.push("");
-  return out;
-}
-
-/**
  * Convert CodeSnippet component to markdown code block
  * @param {string} openTag
  * @param {string} innerContent
@@ -576,8 +543,6 @@ function transformSvxIgnoreComponents(body) {
     let convertedLines = [];
     if (componentName === "InlineNotification") {
       convertedLines = convertInlineNotification(openTag, innerContent);
-    } else if (componentName === "UnorderedList") {
-      convertedLines = convertUnorderedList(openTag, innerContent);
     } else if (componentName === "CodeSnippet") {
       convertedLines = convertCodeSnippet(openTag, innerContent);
     } else {
