@@ -29,6 +29,14 @@ The modal dispatches a cancelable `close` event, allowing you to prevent the mod
 
 <FileSource src="/framed/Modal/ComposedModalPreventClose" />
 
+## Danger modal
+
+Display critical actions or destructive operations with the danger variant. Set `danger` on both `ComposedModal` and `ModalFooter` for the red danger styling.
+
+By default, the cancel button receives focus instead of the critical button to prevent accidental destructive actions.
+
+<FileSource src="/framed/Modal/DangerComposedModal" />
+
 ## Progress modal
 
 Combine the composed modal with a progress indicator to create a multi-step flow within a modal. Use the modal footer's default slot to render Cancel (ghost), Previous (secondary), and Next (primary) buttons. Track the current step to control which content is displayed and update the button label on the final step.
