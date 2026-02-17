@@ -340,8 +340,7 @@ html {
 .bx--col > ol > li > code {
   font-family: var(--cds-code-01-font-family);
   font-size: var(--cds-code-01-font-size, 0.75rem);
-  font-weight: var(--cds-code-01-font-weight, 400);
-  line-height: var(--cds-code-01-line-height, 1.33333);
+  font-weight: 500;
   letter-spacing: var(--cds-code-01-letter-spacing, 0.32px);
   padding: 0 var(--cds-spacing-02);
   color: var(--cds-text-01, #161616);
