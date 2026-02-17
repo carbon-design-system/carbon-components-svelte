@@ -184,4 +184,6 @@ Display a loading state using the skeleton variant.
 
 ## Skeleton without label
 
+Display a loading state for the select without a visible label.
+
 <SelectSkeleton hideLabel />

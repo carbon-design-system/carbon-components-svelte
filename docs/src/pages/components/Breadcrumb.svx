@@ -53,6 +53,8 @@ Add an overflow menu to handle long breadcrumb trails. Use overflow menu item co
 
 ## Breadcrumb trail
 
+Build a full breadcrumb trail with multiple items and a current page indicator.
+
 <FileSource src="/framed/Breadcrumbs/Breadcrumbs" />
 
 ## Skeleton

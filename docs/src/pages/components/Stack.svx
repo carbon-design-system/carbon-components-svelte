@@ -180,6 +180,8 @@ Set `inline` to `true` to use `display: inline-flex` instead of `display: flex`.
 
 ## Vertical (custom value)
 
+Use an arbitrary gap value (e.g., 22px) instead of the scale.
+
 <Stack gap="22px">
   <div>Item 1</div>
   <div>Item 2</div>
@@ -337,6 +339,8 @@ Gap scale of `13` (160px).
 </Stack>
 
 ## Horizontal (custom value)
+
+Use an arbitrary gap value (e.g., 22px) instead of the scale.
 
 <Stack orientation="horizontal" gap="22px">
   <div>Item 1</div>

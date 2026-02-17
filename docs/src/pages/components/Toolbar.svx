@@ -134,7 +134,7 @@ Stack multiple action buttons in the toolbar.
 
 <InlineNotification svx-ignore lowContrast kind="info" hideCloseButton>
   <div class="body-short-01">
-    <strong>Toolbar</strong> can be used independently of DataTable. It provides its own context for child components like <strong>ToolbarMenu</strong> and <strong>ToolbarSearch</strong>.
+    The toolbar can be used independently of the data table. It provides its own context for child components like toolbar menu and toolbar search.
   </div>
 </InlineNotification>
 

@@ -46,6 +46,8 @@ Set `kind="danger-tertiary"` for less prominent destructive actions.
 
 ## Danger tertiary, icon-only button
 
+Create an icon-only danger tertiary button by omitting the label text and providing an icon description for accessibility.
+
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
     Provide an <strong>iconDescription</strong> for accessibility. This text will be used as the button's tooltip and screen reader label.
@@ -67,6 +69,8 @@ Add an icon to the button using the `icon` prop.
 <Button icon={Add}>With icon</Button>
 
 ## Icon-only button
+
+Create an icon-only button by omitting the label text and providing an icon description for accessibility.
 
 <InlineNotification svx-ignore lowContrast title="Note:" kind="info" hideCloseButton>
   <div class="body-short-01">
@@ -140,9 +144,7 @@ To render a different element, set `as` to `true` and spread `let:props` to the 
 
 ## Field size
 
-The default size is "default".
-
-Set `size="field"` for field-sized buttons.
+Set `size="field"` for field-sized buttons that align with form input heights.
 
 <Button size="field">Primary</Button>
 <Button size="field" kind="secondary">Secondary</Button>
