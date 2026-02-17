@@ -6,8 +6,8 @@ components: ["Grid", "Row", "Column"]
   import { UnorderedList, ListItem } from "carbon-components-svelte";
 </script>
 
-The `Grid` system provides a responsive layout structure that adapts to different
-screen sizes. Use `Row` and `Column` components to create flexible layouts. The
+The grid system provides a responsive layout structure that adapts to different
+screen sizes. Use row and column components to create flexible layouts. The
 grid supports various spacing options and column configurations.
 
 ## Grid System Overview
@@ -105,7 +105,7 @@ content alignment across different column widths.
 ## Padding
 
 Add vertical padding (top/bottom) to grid elements using the `padding` prop. You can
-apply padding at the `Grid`, `Row`, or `Column` level to control spacing between rows
+apply padding at the grid, row, or column level to control spacing between rows
 of content. This is useful for creating vertical rhythm without manually adding margins.
 
 <FileSource src="/framed/Grid/PaddedGrid" />

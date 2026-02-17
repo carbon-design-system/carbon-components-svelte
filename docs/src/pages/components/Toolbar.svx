@@ -6,11 +6,11 @@ components: ["Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "Toolb
   import { InlineNotification, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, ToolbarBatchActions, Button } from "carbon-components-svelte";
 </script>
 
-`Toolbar` provides a flexible container for organizing actions, search, and menu items. It can be used standalone or as part of a DataTable for batch operations and filtering.
+Toolbars provide a flexible container for organizing actions, search, and menu items. They can be used standalone or as part of a data table for batch operations and filtering.
 
 ## Default
 
-Create a basic toolbar with content inside `ToolbarContent`.
+Create a basic toolbar with content inside toolbar content.
 
 <Toolbar>
   <ToolbarContent>
@@ -30,7 +30,7 @@ Set `size="sm"` for a compact toolbar.
 
 ## With search
 
-Add search functionality using `ToolbarSearch`.
+Add search functionality using toolbar search.
 
 <Toolbar>
   <ToolbarContent>
@@ -41,7 +41,7 @@ Add search functionality using `ToolbarSearch`.
 
 ## With persistent search
 
-Set `persistent` on `ToolbarSearch` to keep it always expanded.
+Set `persistent` on toolbar search to keep it always expanded.
 
 <Toolbar>
   <ToolbarContent>
@@ -58,7 +58,7 @@ Bind to the `value` prop for reactive updates.
 
 ## With menu
 
-Add an overflow menu using `ToolbarMenu` and `ToolbarMenuItem`.
+Add an overflow menu using toolbar menu and toolbar menu item.
 
 <Toolbar>
   <ToolbarContent>
@@ -152,8 +152,8 @@ The toolbar components work standalone for general-purpose layouts:
 
 ## Batch actions
 
-`ToolbarBatchActions` displays batch actions when items are selected. 
+Toolbar batch actions display batch actions when items are selected. 
 
-Although intended for use with [DataTable](/components/datatable), this component can be used standalone if `selectedIds` is provided. This prop does not need to be provided if using with `DataTable`.
+Although intended for use with [DataTable](/components/datatable), this component can be used standalone if `selectedIds` is provided. This prop does not need to be provided if using with a data table.
 
 <FileSource src="/framed/Toolbar/ToolbarBatchActionsStandalone" />

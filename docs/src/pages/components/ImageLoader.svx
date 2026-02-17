@@ -4,9 +4,9 @@
     let key = 0;
 </script>
 
-The `ImageLoader` component provides a robust way to load images with built-in
-loading and error states. It uses the [Image API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image)
-to handle image loading programmatically. The component supports aspect ratios,
+Image loaders provide a robust way to load images with built-in
+loading and error states. They use the [Image API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image)
+to handle image loading programmatically. They support aspect ratios,
 fade-in animations, and custom loading/error states.
 
 ## Default
@@ -57,7 +57,7 @@ demonstrates how to trigger image loading manually.
 
 ## Dynamic image source
 
-Update the image source dynamically using the same `ImageLoader` instance. This
+Update the image source dynamically using the same image loader instance. This
 allows for smooth transitions between different images.
 
 <FileSource src="/framed/ImageLoader/DynamicImageLoader" />

@@ -6,7 +6,7 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   import { Tabs, Tab, TabContent, TabsSkeleton } from "carbon-components-svelte";
 </script>
 
-`Tabs` provides a way to organize content into separate views that can be switched between. It supports keyboard navigation, disabled states, and various layout options.
+Tabs provide a way to organize content into separate views that can be switched between. They support keyboard navigation, disabled states, and various layout options.
 
 ## Default
 
@@ -54,7 +54,7 @@ If the current selected tab is removed, the next tab will be selected.
 
 ## Disabled tabs
 
-Set `disabled` to `true` on a `Tab` component to prevent interaction. Keyboard navigation will skip disabled tabs.
+Set `disabled` to `true` on a tab component to prevent interaction. Keyboard navigation will skip disabled tabs.
 
 <Tabs>
   <Tab label="Tab label 1" />

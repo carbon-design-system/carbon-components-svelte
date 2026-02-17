@@ -2,7 +2,7 @@
   import { Tile } from "carbon-components-svelte";
 </script>
 
-`Tile` provides a container for displaying content in a structured, card-like format. It supports light and dark variants and can be used to create consistent, visually distinct content sections.
+Tiles provide a container for displaying content in a structured, card-like format. They support light and dark variants and can be used to create consistent, visually distinct content sections.
 
 ## Default
 

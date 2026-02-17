@@ -6,11 +6,11 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
   import { Select, SelectItem, SelectItemGroup, SelectSkeleton } from "carbon-components-svelte";
 </script>
 
-`Select` provides a dropdown menu for selecting a single option from a list. It supports various states, sizes, and includes built-in validation and helper text.
+Selects provide a dropdown menu for selecting a single option from a list. They support various states, sizes, and include built-in validation and helper text.
 
 ## Default
 
-Create a basic select menu with `SelectItem` components. The first item's value is used as the default if `selected` is not set.
+Create a basic select menu with select item components. The first item's value is used as the default if `selected` is not set.
 
 <Select labelText="Carbon theme" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" />
@@ -76,7 +76,7 @@ Visually hide the label while maintaining accessibility.
 
 ## Item groups
 
-Group related options using `SelectItemGroup` components.
+Group related options using select item group components.
 
 <Select labelText="Carbon theme" selected="0">
   <SelectItem value="0" text="Select a theme" disabled hidden />

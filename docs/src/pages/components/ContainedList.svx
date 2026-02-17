@@ -8,7 +8,7 @@ components: ["ContainedList", "ContainedListItem"]
   import Close from "carbon-icons-svelte/lib/Close.svelte";
 </script>
 
-`ContainedList` provides a structured way to display a list of items within a container. It supports various sizes, interactive items, icons, actions, and search functionality. The component is useful for displaying hierarchical or grouped content with consistent spacing and styling.
+Contained lists provide a structured way to display a list of items within a container. They support various sizes, interactive items, icons, actions, and search functionality. They are useful for displaying hierarchical or grouped content with consistent spacing and styling.
 
 ## Default
 
@@ -100,7 +100,7 @@ Add icons to list items by passing an icon component to the `icon` prop. Icons a
 
 ## With expandable search
 
-Use the `action` slot on `ContainedList` to add interactive elements like an expandable search component. The search will be positioned in the header and can be used to filter list items.
+Use the `action` slot on the contained list to add interactive elements like an expandable search component. The search will be positioned in the header and can be used to filter list items.
 
 <ContainedList labelText="List title">
   <Search slot="action" expandable />
@@ -111,13 +111,13 @@ Use the `action` slot on `ContainedList` to add interactive elements like an exp
 
 ## With persistent search
 
-Pass the `Search` component as a direct child (not in the `action` slot) to create a persistent search that appears below the title. The search input is styled specifically for use within the list and is adapted to work with the sticky list headers.
+Pass the search component as a direct child (not in the `action` slot) to create a persistent search that appears below the title. The search input is styled specifically for use within the list and is adapted to work with the sticky list headers.
 
 <FileSource src="/framed/ContainedList/PersistentSearch" />
 
 ## Interactive items
 
-Set the `interactive` prop to `true` on `ContainedListItem` to render the item as a clickable button element. This enables keyboard navigation and click event handling. You can also set `disabled` to prevent interaction.
+Set the `interactive` prop to `true` on a contained list item to render the item as a clickable button element. This enables keyboard navigation and click event handling. You can also set `disabled` to prevent interaction.
 
 <ContainedList labelText="List title">
   <ContainedListItem interactive on:click={() => console.log('click')}>
@@ -129,7 +129,7 @@ Set the `interactive` prop to `true` on `ContainedListItem` to render the item a
 
 ## Interactive items with actions
 
-Add interactive elements to individual list items using the `action` slot on `ContainedListItem`. This is useful for adding buttons, icons, or other controls that appear on the right side of each item. Actions are positioned absolutely and don't interfere with the item's clickable area.
+Add interactive elements to individual list items using the `action` slot on a contained list item. This is useful for adding buttons, icons, or other controls that appear on the right side of each item. Actions are positioned absolutely and don't interfere with the item's clickable area.
 
 <ContainedList labelText="List title">
   <ContainedListItem interactive on:click={() => console.log('click')}>

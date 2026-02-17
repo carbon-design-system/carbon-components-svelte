@@ -11,7 +11,7 @@ components: ["Breadcrumb", "BreadcrumbItem"]
   } from "carbon-components-svelte";
 </script>
 
-`Breadcrumb` displays a hierarchical navigation trail that shows users their current location within an application. It supports current page indication, trailing slash customization, and overflow handling for long navigation paths.
+Breadcrumbs display a hierarchical navigation trail that shows users their current location within an application. They support current page indication, trailing slash customization, and overflow handling for long navigation paths.
 
 ## Default
 
@@ -34,7 +34,7 @@ Remove the trailing slash from the last breadcrumb item using `noTrailingSlash`.
 
 ## Overflow menu
 
-Add an `OverflowMenu` to handle long breadcrumb trails. Use `OverflowMenuItem` components for menu options.
+Add an overflow menu to handle long breadcrumb trails. Use overflow menu item components for menu options.
 
 <Breadcrumb>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>

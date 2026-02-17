@@ -4,7 +4,7 @@
   import Filter from "carbon-icons-svelte/lib/Filter.svelte";
 </script>
 
-`TooltipIcon` displays contextual information when users hover over or focus on an icon. It's ideal for providing additional context about icons or actions in your interface.
+Tooltip icons display contextual information when users hover over or focus on an icon. They are ideal for providing additional context about icons or actions in your interface.
 
 ## Default
 

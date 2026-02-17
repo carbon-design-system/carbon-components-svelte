@@ -5,11 +5,11 @@ components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter"]
 <script>
 </script>
 
-`ComposedModal` lets you build custom modals by combining `ModalHeader`, `ModalBody`, and `ModalFooter` components. Use it to create focused interactions that require user attention or input.
+Composed modals let you build custom modals by combining modal header, modal body, and modal footer components. Use them to create focused interactions that require user attention or input.
 
 **ComposedModal vs Modal**
 
-`ComposedModal` provides a composition-based approach with `ModalHeader`, `ModalBody`, and `ModalFooter` sub-components for maximum flexibility. For simpler use cases, use [Modal](/components/Modal) instead. Both components share the same events, accessibility features, and [focus behavior](/components/Modal#focus-behavior).
+The composed modal provides a composition-based approach with modal header, modal body, and modal footer sub-components for maximum flexibility. For simpler use cases, use [Modal](/components/Modal) instead. Both components share the same events, accessibility features, and [focus behavior](/components/Modal#focus-behavior).
 
 ## Composed modal
 
@@ -19,7 +19,7 @@ Create a modal with a header, body, and footer. Each section can be customized i
 
 ## With Portal
 
-Wrap `ComposedModal` in a `Portal` to ensure it renders above all z-index stacking contexts and parent overflow constraints, preventing visual clipping and layering issues.
+Wrap the composed modal in a portal to ensure it renders above all z-index stacking contexts and parent overflow constraints, preventing visual clipping and layering issues.
 
 <FileSource src="/framed/Portal/ComposedModalPortal" />
 
@@ -31,12 +31,12 @@ The modal dispatches a cancelable `close` event, allowing you to prevent the mod
 
 ## Progress modal
 
-Combine `ComposedModal` with `ProgressIndicator` to create a multi-step flow within a modal. Use `ModalFooter`'s default slot to render Cancel (ghost), Previous (secondary), and Next (primary) buttons. Track the current step to control which content is displayed and update the button label on the final step.
+Combine the composed modal with a progress indicator to create a multi-step flow within a modal. Use the modal footer's default slot to render Cancel (ghost), Previous (secondary), and Next (primary) buttons. Track the current step to control which content is displayed and update the button label on the final step.
 
 <FileSource src="/framed/Modal/ProgressModal" />
 
 ## Multiple secondary buttons
 
-Set `secondaryButtons` in `ModalFooter` to create a 3-button modal. This prop replaces `secondaryButtonText` and takes a tuple of two button configurations.
+Set `secondaryButtons` in the modal footer to create a 3-button modal. This prop replaces `secondaryButtonText` and takes a tuple of two button configurations.
 
 <FileSource src="/framed/Modal/3ButtonComposedModal" />

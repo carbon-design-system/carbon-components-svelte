@@ -13,13 +13,13 @@ components: ["Form", "FormGroup"]
     Button,} from "carbon-components-svelte";
 </script>
 
-The `Form` component provides a structured way to collect user input. It works with
-various form controls like checkboxes, radio buttons, and select menus. The
-`FormGroup` component helps organize related form controls with a legend.
+Forms provide a structured way to collect user input. They work with
+various form controls like checkboxes, radio buttons, and select menus. Form
+groups help organize related form controls with a legend.
 
 ## Form
 
-Create a form with grouped controls using `Form` and `FormGroup`. This example
+Create a form with grouped controls using the form and form group. This example
 shows a form with checkboxes, radio buttons, and a select menu.
 
 <Form on:submit>

@@ -71,7 +71,7 @@ Set `skeleton` to `true` to show a loading state.
 
 ## CheckboxGroup
 
-Use `CheckboxGroup` to wrap multiple `Checkbox` components with a shared legend, layout, and validation. This mirrors the [RadioButtonGroup](/components/RadioButton) API but supports multiple selections.
+Use a checkbox group to wrap multiple checkbox components with a shared legend, layout, and validation. This mirrors the [RadioButtonGroup](/components/RadioButton) API but supports multiple selections.
 
 <CheckboxGroup legendText="Notification preferences" name="prefs" selected={["email"]}>
 <Checkbox value="email" labelText="Email" />
@@ -135,7 +135,7 @@ Disable all checkboxes in the group.
 
 ## CheckboxGroup (read-only)
 
-Set `readonly` on each `Checkbox` to display selected values without allowing user interaction. Unlike `disabled`, the readonly state keeps labels readable.
+Set `readonly` on each checkbox to display selected values without allowing user interaction. Unlike `disabled`, the readonly state keeps labels readable.
 
 <CheckboxGroup legendText="Notification preferences" name="prefs-readonly" selected={["email", "push"]}>
 <Checkbox value="email" labelText="Email" readonly />

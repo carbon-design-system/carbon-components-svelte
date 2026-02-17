@@ -7,7 +7,7 @@ components: ["Tooltip", "TooltipFooter"]
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
 </script>
 
-`Tooltip` displays contextual information when users hover over or focus on an element. It supports various directions, alignments, and interactive content to provide additional context or guidance.
+Tooltips display contextual information when users hover over or focus on an element. They support various directions, alignments, and interactive content to provide additional context or guidance.
 
 ## Default
 
@@ -54,7 +54,7 @@ Align the tooltip content using the `align` prop.
 
 ## Interactive
 
-Add interactive elements like links and buttons using `TooltipFooter`.
+Add interactive elements like links and buttons using the tooltip footer.
 
 <Tooltip triggerText="Resource list">
   <p>

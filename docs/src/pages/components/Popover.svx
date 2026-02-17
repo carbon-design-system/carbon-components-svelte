@@ -2,7 +2,7 @@
   import { Popover, Stack } from "carbon-components-svelte";
 </script>
 
-`Popover` provides a floating container that displays content relative to a trigger element. It supports various alignments, caret indicators, and visual variants.
+Popovers provide a floating container that displays content relative to a trigger element. They support various alignments, caret indicators, and visual variants.
 
 ## Default
 

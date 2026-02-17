@@ -2,7 +2,7 @@
   import { PaginationNav } from "carbon-components-svelte";
 </script>
 
-`PaginationNav` provides a compact navigation interface for paginated content. It displays page numbers and navigation buttons, with support for overflow menus when there are many pages.
+Pagination nav provides a compact navigation interface for paginated content. It displays page numbers and navigation buttons, with support for overflow menus when there are many pages.
 
 ## Default
 

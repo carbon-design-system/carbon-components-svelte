@@ -6,7 +6,7 @@ components: ["InlineNotification", "NotificationActionButton"]
   import { InlineNotification, NotificationActionButton } from "carbon-components-svelte";
 </script>
 
-An inline notification displays contextual messages inline with content. It supports various types of notifications (error, warning, success, info) and can include actions. Use it to provide feedback or important information to users.
+Inline notifications display contextual messages inline with content. They support various types of notifications (error, warning, success, info) and can include actions. Use them to provide feedback or important information to users.
 
 See [detailed usage](https://carbondesignsystem.com/components/notification/usage).  
 See also: [ToastNotification](ToastNotification)
@@ -77,7 +77,7 @@ Add interactive elements to notifications using the actions slot.
 
 ## Action button as link
 
-`NotificationActionButton` accepts an `href` prop to render as a link instead of a button.
+The notification action button accepts an `href` prop to render as a link instead of a button.
 
 <InlineNotification kind="info" title="New features available:" subtitle="Check out what's new in this release.">
   <svelte:fragment slot="actions">

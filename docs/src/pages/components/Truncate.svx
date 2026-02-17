@@ -2,7 +2,7 @@
   import { Truncate, truncate } from "carbon-components-svelte";
 </script>
 
-`Truncate` provides text truncation functionality for single-line content. It implements Carbon's text truncation CSS classes and can be used as either a component or an action.
+Truncate provides text truncation functionality for single-line content. It implements Carbon's text truncation CSS classes and can be used as either a component or an action.
 
 ## Default
 

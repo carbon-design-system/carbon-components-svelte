@@ -9,11 +9,11 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   } from "carbon-components-svelte";
 </script>
 
-`Accordion` creates a vertically stacked list of expandable sections that show or hide content. It supports custom titles, different sizes, and various states including disabled and skeleton loading.
+Accordions create a vertically stacked list of expandable sections that show or hide content. They support custom titles, different sizes, and various states including disabled and skeleton loading.
 
 ## Default
 
-Use the `Accordion` and `AccordionItem` components to compose a collapsible list of
+Use the accordion and accordion item components to compose a collapsible list of
 items.
 
 By default, the chevron icon is on the right side of the accordion item.
@@ -82,7 +82,7 @@ This allows for more complex title layouts with multiple elements.
 
 ## First item open
 
-Set the `open` prop on an `AccordionItem` to have it expanded by default when the
+Set the `open` prop on an accordion item to have it expanded by default when the
 accordion is first rendered.
 
 <Accordion>
@@ -146,7 +146,7 @@ a secondary UI element.
 
 ## Disabled state
 
-Set the `disabled` prop on the `Accordion` component to disable all items at once.
+Set the `disabled` prop on the accordion to disable all items at once.
 This prevents users from expanding or collapsing any items in the accordion.
 
 <Accordion disabled>
@@ -171,7 +171,7 @@ Programmatically toggle the disabled state of all accordion items using the `dis
 ## Disabled (item)
 
 Individual accordion items can be disabled by setting the `disabled` prop on
-specific `AccordionItem` components. This allows for more granular control over
+specific accordion item components. This allows for more granular control over
 which items are interactive.
 
 <Accordion>

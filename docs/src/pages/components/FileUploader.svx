@@ -8,13 +8,13 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
   import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
 </script>
 
-The `FileUploader` components provide a complete solution for file uploads, including
-a button trigger, drag-and-drop container, and file list display. The components
+File uploaders provide a complete solution for file uploads, including
+a button trigger, drag-and-drop container, and file list display. They
 support various states, file validation, and customization options.
 
 ## File uploader (button-only)
 
-Create a simple file upload button using `FileUploaderButton`. By default, it
+Create a simple file upload button using the file uploader button. By default, it
 accepts a single file. Set `multiple` to `true` to allow multiple file selection.
 
 <FileUploaderButton labelText="Add file" />
@@ -77,7 +77,7 @@ Set `hideTooltip` to `true` to visually hide the tooltip while maintaining acces
 
 ## File uploader
 
-The `FileUploader` component combines a button trigger with a list of uploaded
+The file uploader combines a button trigger with a list of uploaded
 files. It supports file type restrictions, multiple file selection, and various
 upload states.
 
@@ -87,7 +87,7 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 ## Clear files
 
-Remove uploaded files from the `FileUploader` component in two ways:
+Remove uploaded files from the file uploader in two ways:
 
 <UnorderedList svx-ignore style="margin-bottom: var(--cds-spacing-08)">
   <ListItem>programmatically using the <strong>clearFiles</strong> accessor</ListItem>
@@ -179,7 +179,7 @@ is "default".
 
 ## Drop container
 
-Use `FileUploaderDropContainer` for drag-and-drop file uploads. It supports file
+Use the file uploader drop container for drag-and-drop file uploads. It supports file
 validation and multiple file selection.
 
 This example accepts files smaller than 1 kB and logs the selected files to the
@@ -198,7 +198,7 @@ console.
 
 ## Skeleton
 
-Display a loading state using the `FileUploaderSkeleton` component. This provides
+Display a loading state using the file uploader skeleton. This provides
 visual feedback while the file uploader content is being loaded.
 
 <FileUploaderSkeleton />

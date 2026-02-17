@@ -7,7 +7,7 @@ components: ["Tag", "TagSkeleton"]
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
-`Tag` provides a way to categorize content with a keyword or label. It supports various styles, sizes, and interactive states, including filterable and interactive variants.
+Tags provide a way to categorize content with a keyword or label. They support various styles, sizes, and interactive states, including filterable and interactive variants.
 
 ## Default
 

@@ -2,7 +2,7 @@
   import { Portal } from "carbon-components-svelte";
 </script>
 
-`Portal` renders its content directly into `document.body`, allowing you to escape parent overflow constraints and z-index stacking contexts.
+Portals render their content directly into `document.body`, allowing you to escape parent overflow constraints and z-index stacking contexts.
 
 For anchored, positioned content (e.g., dropdowns, popovers, overflow menus), use [FloatingPortal](/components/FloatingPortal) instead.
 
@@ -20,12 +20,12 @@ Each portal instance is independent and creates its own element in `document.bod
 
 ## Custom Tag
 
-Use the `tag` prop to specify a custom HTML element. By default, Portal uses a `div` element.
+Use the `tag` prop to specify a custom HTML element. By default, the portal uses a `div` element.
 
 <FileSource src="/framed/Portal/CustomTagPortal" />
 
 ## Modal with Portal
 
-Wrap `Modal` in a `Portal` to escape parent containers with `overflow: hidden` or z-index stacking contexts. This ensures the modal appears above all content and isn't clipped by parent boundaries.
+Wrap the modal in a portal to escape parent containers with `overflow: hidden` or z-index stacking contexts. This ensures the modal appears above all content and isn't clipped by parent boundaries.
 
 <FileSource src="/framed/Portal/ModalPortal" />
