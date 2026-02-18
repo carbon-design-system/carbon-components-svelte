@@ -212,7 +212,7 @@
    * </button>
    * ```
    */
-  export function expandNodes(filterNode = (node) => false) {
+  export function expandNodes(filterNode = () => false) {
     const nodesToExpand = flattenedNodes
       .filter(
         (node) =>
@@ -240,7 +240,7 @@
    * </button>
    * ```
    */
-  export function collapseNodes(filterNode = (node) => true) {
+  export function collapseNodes(filterNode = () => true) {
     for (const node of flattenedNodes) {
       if (expandedIdsSet.has(node.id) && filterNode(node)) {
         expandedIdsSet.delete(node.id);
