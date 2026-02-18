@@ -1,23 +1,17 @@
 <script>
-  import { Button, Tooltip } from "carbon-components-svelte";
+  import { Button, Stack, Tooltip } from "carbon-components-svelte";
 
   let open = true;
 </script>
 
-<Tooltip bind:open triggerText="Resource list" align="start">
-  <p>Resources are provisioned based on your account's organization.</p>
-</Tooltip>
-
-<div style="margin-top: var(--cds-spacing-12);">
-  <Button size="small" on:click={() => (open = !open)}>
-    {open ? "Close tooltip" : "Open tooltip"}
-  </Button>
-</div>
-
-<div>Open: {open}</div>
-
-<style>
-  div {
-    margin-top: var(--cds-spacing-05);
-  }
-</style>
+<Stack gap={12}>
+  <Tooltip bind:open triggerText="Resource list" align="start">
+    <p>Resources are provisioned based on your account's organization.</p>
+  </Tooltip>
+  <div>
+    <Button size="small" on:click={() => (open = !open)}>
+      {open ? "Close tooltip" : "Open tooltip"}
+    </Button>
+  </div>
+  <div>Open: {open}</div>
+</Stack>

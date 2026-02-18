@@ -1,5 +1,5 @@
 <script>
-  import { ComboBox } from "carbon-components-svelte";
+  import { ComboBox, Stack } from "carbon-components-svelte";
 
   const items = [
     { id: "0", text: "Slack" },
@@ -17,26 +17,19 @@
   $: secondary = formatSelected(comboBox2_selectedId);
 </script>
 
-<ComboBox
-  bind:selectedId={comboBox1_selectedId}
-  labelText="Primary contact"
-  placeholder="Select primary contact method"
-  {items}
-/>
-
-<div>Primary: {primary}</div>
-
-<ComboBox
-  bind:selectedId={comboBox2_selectedId}
-  labelText="Secondary contact"
-  placeholder="Select secondary contact method"
-  {items}
-/>
-
-<div>Secondary: {secondary}</div>
-
-<style>
-  div {
-    margin: var(--cds-layout-01) 0 var(--cds-layout-03);
-  }
-</style>
+<Stack gap={4}>
+  <ComboBox
+    bind:selectedId={comboBox1_selectedId}
+    labelText="Primary contact"
+    placeholder="Select primary contact method"
+    {items}
+  />
+  <div>Primary: {primary}</div>
+  <ComboBox
+    bind:selectedId={comboBox2_selectedId}
+    labelText="Secondary contact"
+    placeholder="Select secondary contact method"
+    {items}
+  />
+  <div>Secondary: {secondary}</div>
+</Stack>

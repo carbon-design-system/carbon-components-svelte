@@ -1,5 +1,5 @@
 <script>
-  import { filterTreeByText, Search, TreeView } from "carbon-components-svelte";
+  import { filterTreeByText, Search, Stack, TreeView } from "carbon-components-svelte";
 
   const allNodes = [
     {
@@ -113,12 +113,13 @@
   }
 </script>
 
-<Search size="sm" placeholder="Search tree nodes..." bind:value={searchValue} />
-
-<div style:margin-top="var(--cds-layout-01)">
-  {#if filteredNodes.length > 0}
-    <TreeView labelText="File System" nodes={filteredNodes} {expandedIds} />
-  {:else}
-    No matching nodes found for "{searchValue}"
-  {/if}
-</div>
+<Stack gap={2}>
+  <Search size="sm" placeholder="Search tree nodes..." bind:value={searchValue} />
+  <div>
+    {#if filteredNodes.length > 0}
+      <TreeView labelText="File System" nodes={filteredNodes} {expandedIds} />
+    {:else}
+      No matching nodes found for "{searchValue}"
+    {/if}
+  </div>
+</Stack>

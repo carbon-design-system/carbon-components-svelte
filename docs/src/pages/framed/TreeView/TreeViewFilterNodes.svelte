@@ -3,6 +3,7 @@
     Button,
     ButtonSet,
     filterTreeNodes,
+    Stack,
     TreeView,
   } from "carbon-components-svelte";
 
@@ -102,13 +103,14 @@
   }
 </script>
 
-<ButtonSet style="margin-bottom: var(--cds-layout-01)">
-  <Button size="sm" on:click={filterByExtension}>
-    Filter by extension (.pdf, .docx)
-  </Button>
-  <Button size="sm" on:click={filterLeafNodes}>Filter leaf nodes</Button>
-  <Button size="sm" on:click={filterWithChildren}>Filter with children</Button>
-  <Button size="sm" kind="tertiary" on:click={resetFilter}>Reset</Button>
-</ButtonSet>
-
-<TreeView labelText="File System" nodes={filteredNodes} {expandedIds} />
+<Stack gap={2}>
+  <ButtonSet>
+    <Button size="sm" on:click={filterByExtension}>
+      Filter by extension (.pdf, .docx)
+    </Button>
+    <Button size="sm" on:click={filterLeafNodes}>Filter leaf nodes</Button>
+    <Button size="sm" on:click={filterWithChildren}>Filter with children</Button>
+    <Button size="sm" kind="tertiary" on:click={resetFilter}>Reset</Button>
+  </ButtonSet>
+  <TreeView labelText="File System" nodes={filteredNodes} {expandedIds} />
+</Stack>

@@ -2,6 +2,7 @@
   import {
     Button,
     ButtonSet,
+    Stack,
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
@@ -17,8 +18,9 @@
   </ToolbarContent>
 </Toolbar>
 
-<div>
-  <ButtonSet>
+<Stack gap={5}>
+  <div>
+    <ButtonSet>
     <Button
       size="small"
       disabled={value === "products"}
@@ -35,12 +37,6 @@
       Clear value
     </Button>
   </ButtonSet>
-</div>
-
-<div>Search value: {value}</div>
-
-<style>
-  div {
-    margin-top: var(--cds-spacing-05);
-  }
-</style>
+  </div>
+  <div>Search value: {value}</div>
+</Stack>

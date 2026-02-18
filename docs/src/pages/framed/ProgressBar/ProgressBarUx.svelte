@@ -1,5 +1,5 @@
 <script>
-  import { Button, ButtonSet, ProgressBar } from "carbon-components-svelte";
+  import { Button, ButtonSet, ProgressBar, Stack } from "carbon-components-svelte";
 
   let max = 328;
   let value = 0;
@@ -13,9 +13,9 @@
   }
 </script>
 
-<ProgressBar labelText="Upload status" {value} {max} {helperText} {status} />
-
-<ButtonSet style="margin-top: var(--cds-spacing-08)">
+<Stack gap={8}>
+  <ProgressBar labelText="Upload status" {value} {max} {helperText} {status} />
+  <ButtonSet>
   <Button
     disabled={value > 0}
     on:click={() => {
@@ -43,4 +43,5 @@
   >
     Reset
   </Button>
-</ButtonSet>
+  </ButtonSet>
+</Stack>

@@ -1,5 +1,5 @@
 <script>
-  import { Button, ButtonSet, TreeView } from "carbon-components-svelte";
+  import { Button, ButtonSet, Stack, TreeView } from "carbon-components-svelte";
 
   const nodeSpark = { id: 3, text: "Apache Spark" };
   const nodeBlockchain = { id: 8, text: "IBM Blockchain Platform" };
@@ -28,17 +28,18 @@
   ];
 </script>
 
-<ButtonSet style="margin-bottom: var(--cds-spacing-05)">
-  {#each [nodeSpark, nodeBlockchain] as { id, text }}
-    <Button
-      on:click={() => {
-        treeview?.showNode(id);
-      }}
-    >
-      Show "{text}"
-    </Button>
-  {/each}
-  <Button kind="tertiary" on:click={treeview.collapseAll}>Collapse all</Button>
-</ButtonSet>
-
-<TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />
+<Stack gap={5}>
+  <ButtonSet>
+    {#each [nodeSpark, nodeBlockchain] as { id, text }}
+      <Button
+        on:click={() => {
+          treeview?.showNode(id);
+        }}
+      >
+        Show "{text}"
+      </Button>
+    {/each}
+    <Button kind="tertiary" on:click={treeview.collapseAll}>Collapse all</Button>
+  </ButtonSet>
+  <TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />
+</Stack>

@@ -1,5 +1,5 @@
 <script>
-  import { Checkbox, TreeView } from "carbon-components-svelte";
+  import { Checkbox, Stack, TreeView } from "carbon-components-svelte";
 
   let checkedNodes = new Set([0, 7]);
   let nodes = [
@@ -45,18 +45,19 @@
   }
 </script>
 
-<TreeView labelText="Cloud Products" {nodes} let:node>
-  <div on:click|stopPropagation on:keydown|stopPropagation role="none">
-    <Checkbox
-      labelText={node.text}
-      checked={checkedNodes.has(node.id)}
-      disabled={node.disabled}
-      on:check={() => handleCheck(node.id)}
-    />
+<Stack gap={3}>
+  <TreeView labelText="Cloud Products" {nodes} let:node>
+    <div on:click|stopPropagation on:keydown|stopPropagation role="none">
+      <Checkbox
+        labelText={node.text}
+        checked={checkedNodes.has(node.id)}
+        disabled={node.disabled}
+        on:check={() => handleCheck(node.id)}
+      />
+    </div>
+  </TreeView>
+  <div>
+    <strong>Checked node IDs:</strong>
+    {Array.from(checkedNodes)}
   </div>
-</TreeView>
-
-<div style:margin-top="var(--cds-layout-02)">
-  <strong>Checked node IDs:</strong>
-  {Array.from(checkedNodes)}
-</div>
+</Stack>

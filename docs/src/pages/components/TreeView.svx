@@ -1,3 +1,7 @@
+<script>
+  import { InlineNotification, Stack, UnorderedList, ListItem, Link } from "carbon-components-svelte";
+</script>
+
 A tree view displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, and programmatic control of the tree state.
 
 ## Default
