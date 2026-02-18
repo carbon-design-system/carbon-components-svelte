@@ -219,7 +219,7 @@ html {
  * UI Shell Header shares the same z-index.
  */
 [aria-label="Navigation"] {
-  z-index: calc(8000 + 2);
+  z-index: 10000;
 }
 
 [aria-label="Navigation"] ~ [data-components] {
