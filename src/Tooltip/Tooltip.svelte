@@ -59,6 +59,18 @@
   /** Set the tooltip button text */
   export let triggerText = "";
 
+  /**
+   * Specify the duration in milliseconds to delay before displaying the tooltip.
+   * @type {number}
+   */
+  export let enterDelayMs = 100;
+
+  /**
+   * Specify the duration in milliseconds to delay before hiding the tooltip.
+   * @type {number}
+   */
+  export let leaveDelayMs = 300;
+
   /** Obtain a reference to the trigger text HTML element */
   export let ref = null;
 
@@ -68,7 +80,12 @@
   /** Obtain a reference to the icon HTML element */
   export let refIcon = null;
 
-  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+  } from "svelte";
   import { writable } from "svelte/store";
   import Information from "../icons/Information.svelte";
 
@@ -79,18 +96,35 @@
   const tooltipOpen = writable(open);
 
   let prevOpen = undefined;
+  let openTimeout;
+  let focusByMouse = false;
 
   setContext("carbon:Tooltip", { tooltipOpen });
 
+  function setOpenDelayed(value, delay = 0) {
+    clearTimeout(openTimeout);
+    if (delay > 0) {
+      openTimeout = setTimeout(() => {
+        open = value;
+      }, delay);
+    } else {
+      open = value;
+    }
+  }
+
+  function onMouseEnter() {
+    setOpenDelayed(true, enterDelayMs);
+  }
+
+  function onMouseLeave() {
+    setOpenDelayed(false, leaveDelayMs);
+  }
+
   function onKeydown(e) {
-    if (e.key === "Escape" || e.key === "Tab") {
+    if (e.key === "Escape") {
       e.stopPropagation();
-      if (e.key === "Escape") refIcon?.focus();
+      refIcon?.focus();
       open = false;
-    } else if (e.key === " " || e.key === "Enter") {
-      e.stopPropagation();
-      e.preventDefault();
-      open = true;
     }
   }
 
@@ -98,29 +132,24 @@
     if (refTooltip && !refTooltip.contains(relatedTarget)) {
       open = false;
     }
+    focusByMouse = false;
   }
 
   function onFocus() {
-    open = true;
-  }
-
-  function onPointerdown(e) {
-    if (e.currentTarget.setPointerCapture) {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    }
-    // determine the desired state before the focus event triggers.
-    const shouldClose = open;
-    // ensure changes are scheduled at the end, i.e. after the possible focus event.
-    setTimeout(() => {
-      open = !shouldClose;
-    });
-  }
-
-  function onPointerup(e) {
-    if (e.currentTarget.releasePointerCapture) {
-      e.currentTarget.releasePointerCapture(e.pointerId);
+    if (!focusByMouse) {
+      open = true;
     }
   }
+
+  function onMouseDown() {
+    focusByMouse = true;
+  }
+
+  onMount(() => {
+    return () => {
+      clearTimeout(openTimeout);
+    };
+  });
 
   afterUpdate(() => {
     if (open) {
@@ -197,31 +226,12 @@
   };
 </script>
 
-<svelte:window
-  on:mousedown={({ target }) => {
-    if (open) {
-      if (target.contains(refTooltip)) {
-        if (refIcon) {
-          refIcon.focus();
-        } else if (ref) {
-          ref.focus();
-        }
-      }
-    }
-  }}
-  on:click|capture={({ target }) => {
-    if (open && !ref.contains(target) && !refTooltip.contains(target)) {
-      setTimeout(() => {
-        open = false;
-      });
-    }
-  }}
-/>
-
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   style:position="relative"
   style:z-index={open ? 1 : undefined}
   {...$$restProps}
+  on:mouseleave={onMouseLeave}
 >
   {#if !hideIcon}
     <div bind:this={ref} id={triggerId} class:bx--tooltip__label={true}>
@@ -231,9 +241,10 @@
         bind:this={refIcon}
         {...buttonProps}
         aria-describedby={tooltipId}
-        on:pointerdown={onPointerdown}
-        on:pointerup={onPointerup}
+        on:mouseenter={onMouseEnter}
+        on:mousedown={onMouseDown}
         on:focus={onFocus}
+        on:blur={onBlur}
         on:keydown={onKeydown}
       >
         <slot name="icon">
@@ -247,8 +258,8 @@
       bind:this={ref}
       {...buttonProps}
       aria-describedby={tooltipId}
-      on:pointerdown={onPointerdown}
-      on:pointerup={onPointerup}
+      on:mouseenter={onMouseEnter}
+      on:mousedown={onMouseDown}
       on:focus={onFocus}
       on:blur={onBlur}
       on:keydown={onKeydown}
@@ -271,6 +282,7 @@
       class:bx--tooltip--align-center={align === "center"}
       class:bx--tooltip--align-start={align === "start"}
       class:bx--tooltip--align-end={align === "end"}
+      on:mouseenter={onMouseEnter}
       on:keydown={onKeydown}
     >
       <span class:bx--tooltip__caret={true}></span>
