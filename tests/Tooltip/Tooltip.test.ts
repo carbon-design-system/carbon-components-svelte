@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
 import TooltipAlignments from "./TooltipAlignments.test.svelte";
 import TooltipCustomContent from "./TooltipCustomContent.test.svelte";
 import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
@@ -8,9 +7,16 @@ import TooltipDirections from "./TooltipDirections.test.svelte";
 import TooltipEvents from "./TooltipEvents.test.svelte";
 import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
 import TooltipOpen from "./TooltipOpen.test.svelte";
-import TooltipPointerCapture from "./TooltipPointerCapture.test.svelte";
 
 describe("Tooltip", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   test("should render with default props", () => {
     render(TooltipDefault);
     const trigger = screen.getByRole("button", { name: "Information" });
@@ -25,7 +31,10 @@ describe("Tooltip", () => {
     const trigger = screen.getByRole("button");
     expect(trigger).not.toHaveClass("bx--tooltip__trigger");
     expect(screen.getByText("Tooltip trigger")).toBeInTheDocument();
-    await user.click(screen.getByText("Tooltip trigger"));
+
+    await fireEvent.mouseEnter(trigger);
+    await vi.advanceTimersByTimeAsync(100);
+
     expect(
       screen.getByText("This tooltip has its icon hidden"),
     ).toBeInTheDocument();
@@ -63,16 +72,56 @@ describe("Tooltip", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  test("should toggle tooltip on mousedown", async () => {
+  test("should open tooltip on mouseenter", async () => {
     render(TooltipDefault);
 
     const trigger = screen.getByRole("button", { name: "Information" });
 
-    await user.click(trigger);
+    await fireEvent.mouseEnter(trigger);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+    await vi.advanceTimersByTimeAsync(100);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  test("should close tooltip on mouseleave", async () => {
+    const { container } = render(TooltipOpen);
+
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    await user.click(trigger);
+    const wrapper = container.firstElementChild;
+    if (!(wrapper instanceof Element)) expect.fail("Expected element");
+    await fireEvent.mouseLeave(wrapper);
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(300);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  test("should cancel close when re-entering tooltip", async () => {
+    render(TooltipDefault);
+
+    const trigger = screen.getByRole("button", { name: "Information" });
+
+    // Open via hover.
+    await fireEvent.mouseEnter(trigger);
+    await vi.advanceTimersByTimeAsync(100);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    // Start leaving.
+    const tooltipEl = screen.getByRole("dialog").closest(".bx--tooltip");
+    if (!(tooltipEl instanceof Element)) expect.fail("Expected element");
+    const wrapper = tooltipEl.parentElement;
+    if (!(wrapper instanceof Element)) expect.fail("Expected element");
+    await fireEvent.mouseLeave(wrapper);
+    await vi.advanceTimersByTimeAsync(100);
+
+    // Re-enter the tooltip content before leaveDelayMs expires.
+    await fireEvent.mouseEnter(tooltipEl);
+
+    // Wait past the original leave delay.
+    await vi.advanceTimersByTimeAsync(300);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
   test("should render custom slot content", () => {
@@ -88,7 +137,10 @@ describe("Tooltip", () => {
     expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
     expect(screen.getByText("🔍")).toBeInTheDocument();
 
-    await user.click(screen.getByTestId("custom-icon"));
+    // mouseenter doesn't bubble, so fire on the trigger (parent of custom-icon).
+    const trigger = screen.getByRole("button");
+    await fireEvent.mouseEnter(trigger);
+    await vi.advanceTimersByTimeAsync(100);
     expect(screen.getByText("Custom icon tooltip")).toBeInTheDocument();
   });
 
@@ -145,45 +197,24 @@ describe("Tooltip", () => {
     expect(screen.getByText("Close events: 0")).toBeInTheDocument();
 
     const trigger = screen.getByRole("button");
-    await user.click(trigger);
+    await fireEvent.mouseEnter(trigger);
+    await vi.advanceTimersByTimeAsync(100);
     expect(screen.getByText("Open events: 1")).toBeInTheDocument();
 
-    await user.keyboard("{Escape}");
+    const tooltip = screen.getByRole("dialog");
+    await fireEvent.keyDown(tooltip, { key: "Escape" });
     expect(screen.getByText("Close events: 1")).toBeInTheDocument();
   });
 
-  test("should close tooltip when clicking outside", async () => {
-    render(TooltipOpen);
+  test("should not open tooltip on focus caused by mouse", async () => {
+    render(TooltipDefault);
 
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    const trigger = screen.getByRole("button", { name: "Information" });
 
-    await user.click(document.body);
+    // Mouse down sets focusByMouse flag.
+    await fireEvent.mouseDown(trigger);
+    await fireEvent.focus(trigger);
+
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-  });
-
-  test("should maintain pointer capture during interaction to prevent premature closing", async () => {
-    render(TooltipPointerCapture);
-
-    const trigger = screen.getByRole("button");
-
-    if (!trigger.setPointerCapture) {
-      trigger.setPointerCapture = vi.fn();
-    }
-    if (!trigger.releasePointerCapture) {
-      trigger.releasePointerCapture = vi.fn();
-    }
-
-    const setPointerCaptureSpy = vi.spyOn(trigger, "setPointerCapture");
-    const releasePointerCaptureSpy = vi.spyOn(trigger, "releasePointerCapture");
-    await fireEvent.pointerDown(trigger, { pointerId: 1 });
-
-    // Simulate the delay of the focus event.
-    await new Promise((resolve) => setTimeout(resolve, 10));
-
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(setPointerCaptureSpy).toHaveBeenCalled();
-
-    await fireEvent.pointerUp(trigger, { pointerId: 1 });
-    expect(releasePointerCaptureSpy).toHaveBeenCalled();
   });
 });
