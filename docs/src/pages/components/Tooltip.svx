@@ -87,6 +87,18 @@ Customize the icon using the `icon` slot for more flexibility.
   </p>
 </Tooltip>
 
+## Custom delay
+
+The tooltip has a hover delay to avoid accidental opening. The default enter delay is 100ms and default leave delay is 300ms.
+
+Customize the enter and leave delay using `enterDelayMs` and `leaveDelayMs`.
+
+<Tooltip triggerText="Slow open" enterDelayMs={500} leaveDelayMs={200}>
+  <p>
+    This tooltip has a 500ms enter delay and a 200ms leave delay.
+  </p>
+</Tooltip>
+
 ## Hidden icon
 
 Hide the icon while keeping the tooltip functionality using `hideIcon`.
