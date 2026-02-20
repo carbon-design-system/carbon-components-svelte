@@ -249,7 +249,7 @@ describe("DatePicker", () => {
       render(DatePicker, { dateFormat: "Y-m-d" });
 
       const input = screen.getByLabelText("Date");
-      expect(input).toHaveAttribute("pattern", "\\d{4}\\-\\d{1,2}\\-\\d{1,2}");
+      expect(input).toHaveAttribute("pattern", "\\d{4}-\\d{1,2}-\\d{1,2}");
     });
 
     it("derives pattern for d.m.Y dateFormat", () => {
@@ -301,6 +301,28 @@ describe("DatePicker", () => {
       const re = new RegExp(`^${pattern}$`);
       expect(re.test("02/10/2026")).toBe(true);
       expect(re.test("2026-02-10")).toBe(false);
+    });
+
+    // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2689
+    // The HTML pattern attribute is evaluated with the `u` (Unicode) flag.
+    // Escaped hyphens (`\-`) are invalid in Unicode mode and cause a SyntaxError,
+    // which makes native form validation always fail.
+    it.each([
+      ["m/d/Y", "02/10/2026"],
+      ["Y-m-d", "2026-02-10"],
+      ["d.m.Y", "10.02.2026"],
+      ["d/m/y", "10/02/26"],
+      ["M j, Y", "Feb 10, 2026"],
+    ])("derived pattern for %s is valid with the Unicode (u) flag", (dateFormat, sampleValue) => {
+      render(DatePicker, { dateFormat });
+
+      const input = screen.getByLabelText("Date");
+      const pattern = input.getAttribute("pattern");
+      expect(pattern).toBeTruthy();
+
+      // This is how browsers evaluate the HTML pattern attribute.
+      const re = new RegExp(`^(?:${pattern})$`, "u");
+      expect(re.test(sampleValue)).toBe(true);
     });
   });
 
