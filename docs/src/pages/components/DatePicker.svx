@@ -33,9 +33,7 @@ Use `bind:valueFrom` and `bind:valueTo` to programmatically update the date rang
 
 Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The input `pattern` attribute is automatically derived to match, ensuring native form validation works correctly.
 
-<DatePicker datePickerType="single" dateFormat="Y-m-d">
-  <DatePickerInput labelText="Date of birth" placeholder="yyyy-mm-dd" />
-</DatePicker>
+<FileSource src="/framed/DatePicker/DatePickerCustomFormat" />
 
 ## Portal menu
 
