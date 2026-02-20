@@ -97,11 +97,11 @@
     for (let i = 0; i < fmt.length; i++) {
       const ch = fmt[i];
       if (ch === "\\" && i + 1 < fmt.length) {
-        result += fmt[++i].replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+        result += fmt[++i].replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
       } else if (dateFormatTokens[ch]) {
         result += dateFormatTokens[ch];
       } else {
-        result += ch.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+        result += ch.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
       }
     }
     return result;
