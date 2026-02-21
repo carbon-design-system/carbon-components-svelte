@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.101.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.0...v0.101.1) (2026-02-21)
+
+### Bug Fixes
+
+- **composed-modal:** auto-focus first input for transactional dialogs ([1e4abac](https://github.com/carbon-design-system/carbon-components-svelte/commit/1e4abac06187cddc8befe753437ae2b727002fe7)), closes [#2671](https://github.com/carbon-design-system/carbon-components-svelte/issues/2671)
+- **composed-modal:** auto-focus secondary button for danger modals ([445c343](https://github.com/carbon-design-system/carbon-components-svelte/commit/445c3437d2a2ee1f8b8a852cab6fd4cab13fd0bf))
+- **date-picker:** don't escape hyphens in derived input pattern ([7476b77](https://github.com/carbon-design-system/carbon-components-svelte/commit/7476b7707d74496cf6d37c9b4d0558f299101845)), closes [#2689](https://github.com/carbon-design-system/carbon-components-svelte/issues/2689)
+- **modal:** auto-focus first input for transactional dialogs ([bdc7728](https://github.com/carbon-design-system/carbon-components-svelte/commit/bdc7728a77e344e10bd11c43462fd84e930a7061)), closes [#2671](https://github.com/carbon-design-system/carbon-components-svelte/issues/2671)
+- **modal:** auto-focus secondary button for danger modals ([0bd8148](https://github.com/carbon-design-system/carbon-components-svelte/commit/0bd8148188c6721120e45b3a269184de759816ab))
+- **tooltip:** show tooltip on hover ([0f148fc](https://github.com/carbon-design-system/carbon-components-svelte/commit/0f148fc3623cdd62741a69de4e6346044351e964)), closes [#2687](https://github.com/carbon-design-system/carbon-components-svelte/issues/2687)
+- **types:** replace `any` with inferred generics and `unknown` ([d30aec2](https://github.com/carbon-design-system/carbon-components-svelte/commit/d30aec2001aa451f2ea043ebfcfab96e851e23bc))
+
 ## [0.101.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.100.0...v0.101.0) (2026-02-16)
 
 ### ⚠ BREAKING CHANGES
