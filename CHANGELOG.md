@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.101.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.1...v0.101.2) (2026-02-23)
+
+### Bug Fixes
+
+- **dropdown:** menu should close if `portalMenu` is true ([09a4a91](https://github.com/carbon-design-system/carbon-components-svelte/commit/09a4a91aeb9ee01b88e94a1cd5454ebb3b96ed02)), closes [#2699](https://github.com/carbon-design-system/carbon-components-svelte/issues/2699)
+
 ### [0.101.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.0...v0.101.1) (2026-02-21)
 
 ### Bug Fixes
