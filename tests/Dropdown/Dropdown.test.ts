@@ -1445,6 +1445,35 @@ describe("Dropdown", () => {
       expect(floatingPortal?.parentElement).toBe(document.body);
     });
 
+    // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2699
+    it("should close after item click selection with portalMenu", async () => {
+      const selectHandler = vi.fn();
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          portalMenu: true,
+          onselect: selectHandler,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      await user.click(button);
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+      const menuItemText = screen.getByText("Email");
+      const menuItem = menuItemText.closest(".bx--list-box__menu-item");
+      assert(menuItem);
+      await user.click(menuItem);
+
+      expect(selectHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          detail: { selectedId: "1", selectedItem: items[1] },
+        }),
+      );
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
     it("should not render menu in FloatingPortal when inside Modal with portalMenu=false", () => {
       render(DropdownInModal, {
         props: {
