@@ -583,6 +583,7 @@
                     }
                     selectedId = item.id;
                     dispatchSelect();
+                    open = false;
                     ref.focus();
                   }}
                   on:mouseenter={() => {
@@ -611,6 +612,7 @@
                 }
                 selectedId = item.id;
                 dispatchSelect();
+                open = false;
                 ref.focus();
               }}
               on:mouseenter={() => {
