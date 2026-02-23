@@ -5,17 +5,15 @@
     "dev": "rollup -cw",
     "build": "rollup -c"
   },
-  "dependencies": {
-    "carbon-components-svelte": "^0.100.0"
-  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^15.3.1",
     "@rollup/plugin-terser": "^0.4.4",
-    "carbon-preprocess-svelte": "^0.11.25",
-    "rollup": "^4.57.1",
+    "carbon-components-svelte": "^0.101.1",
+    "carbon-preprocess-svelte": "^0.11.26",
+    "rollup": "^4.59.0",
     "rollup-plugin-css-only": "^4.5.5",
     "rollup-plugin-svelte": "^7.2.3",
-    "svelte": "^5.53.0"
+    "svelte": "^5.53.3"
   }
 }

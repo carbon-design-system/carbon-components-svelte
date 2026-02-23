@@ -13,9 +13,6 @@ const PROD = NODE_ENV === "production";
 export default {
   entry: { "build/bundle": ["./src/index.js"] },
   resolve: {
-    alias: {
-      svelte: path.resolve("node_modules", "svelte/src/runtime"),
-    },
     extensions: [".mjs", ".js", ".svelte"],
     mainFields: ["svelte", "browser", "module", "main"],
     conditionNames: ["svelte", "browser", "import"],
