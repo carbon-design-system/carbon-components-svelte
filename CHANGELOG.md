@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.101.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.2...v0.101.3) (2026-02-25)
+
+### Bug Fixes
+
+- **ui-shell:** fixed `SideNav` should not render hamburger menu or unset left margin ([4f2db4b](https://github.com/carbon-design-system/carbon-components-svelte/commit/4f2db4bfd7bf6b5199c59562dcde9cc0c61dd697)), closes [#2701](https://github.com/carbon-design-system/carbon-components-svelte/issues/2701)
+
 ### [0.101.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.1...v0.101.2) (2026-02-23)
 
 ### Bug Fixes
