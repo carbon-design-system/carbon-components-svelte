@@ -56,7 +56,7 @@
   }
   $: $isSideNavRail = rail;
   $: $isSideNavMobile =
-    winWidth !== undefined && winWidth < expansionBreakpoint;
+    winWidth !== undefined && winWidth < expansionBreakpoint && !fixed;
 
   // Lock body scroll when SideNav is open on mobile (below breakpoint).
   // Only applies to non-fixed, non-rail variants.
@@ -69,7 +69,7 @@
   }
 
   onMount(() => {
-    shouldRenderHamburgerMenu.set(true);
+    shouldRenderHamburgerMenu.set(!fixed);
     return () => {
       shouldRenderHamburgerMenu.set(false);
       isSideNavMobile.set(false);

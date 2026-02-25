@@ -356,6 +356,18 @@ describe("UIShell", () => {
       });
     });
 
+    // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2701
+    it("should not render hamburger menu when SideNav is fixed", () => {
+      const { container } = render(UiShell, {
+        props: { sideNavFixed: true },
+      });
+
+      const hamburgerButton = container.querySelector(
+        ".bx--header__menu-trigger",
+      );
+      expect(hamburgerButton).not.toBeInTheDocument();
+    });
+
     it("should render fixed variant", () => {
       const { container } = render(UiShell, {
         props: { sideNavFixed: true },
@@ -573,6 +585,21 @@ describe("UIShell", () => {
         const content = container.querySelector(".bx--content");
         // On desktop with SideNav open, margin should not be explicitly set to 0
         // (CSS will handle the margin via .bx--side-nav ~ .bx--content)
+        expect(content).not.toHaveStyle({ marginLeft: "0px" });
+      });
+
+      // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2701
+      it("should not unset left margin on mobile when SideNav is fixed", async () => {
+        setViewportWidth(500); // Mobile viewport
+
+        const { container } = render(UiShell, {
+          props: { sideNavIsOpen: true, sideNavFixed: true },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const content = container.querySelector(".bx--content");
+        // Fixed SideNav is always visible, so Content should keep its CSS margin
         expect(content).not.toHaveStyle({ marginLeft: "0px" });
       });
 
