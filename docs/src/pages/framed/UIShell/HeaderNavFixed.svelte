@@ -1,0 +1,61 @@
+<script>
+  import {
+    Column,
+    Content,
+    Grid,
+    Header,
+    HeaderNav,
+    HeaderNavItem,
+    HeaderNavMenu,
+    Row,
+    SideNav,
+    SideNavDivider,
+    SideNavItems,
+    SideNavLink,
+    SideNavMenu,
+    SideNavMenuItem,
+    SkipToContent,
+  } from "carbon-components-svelte";
+</script>
+
+<Header companyName="IBM" platformName="Carbon Svelte">
+  <svelte:fragment slot="skipToContent">
+    <SkipToContent />
+  </svelte:fragment>
+  <HeaderNav>
+    <HeaderNavItem href="/" text="Link 1" />
+    <HeaderNavItem href="/" text="Link 2" />
+    <HeaderNavItem href="/" text="Link 3" />
+    <HeaderNavMenu text="Menu">
+      <HeaderNavItem href="/" text="Link 1" />
+      <HeaderNavItem href="/" text="Link 2" />
+      <HeaderNavItem href="/" text="Link 3" />
+    </HeaderNavMenu>
+    <HeaderNavItem href="/" text="Link 4" />
+  </HeaderNav>
+</Header>
+
+<SideNav fixed isOpen>
+  <SideNavItems>
+    <SideNavLink text="Link 1" />
+    <SideNavLink text="Link 2" />
+    <SideNavLink text="Link 3" />
+    <SideNavMenu text="Menu">
+      <SideNavMenuItem href="/" text="Link 1" />
+      <SideNavMenuItem href="/" text="Link 2" />
+      <SideNavMenuItem href="/" text="Link 3" />
+    </SideNavMenu>
+    <SideNavDivider />
+    <SideNavLink text="Link 4" />
+  </SideNavItems>
+</SideNav>
+
+<Content>
+  <Grid>
+    <Row>
+      <Column>
+        <h1>Welcome</h1>
+      </Column>
+    </Row>
+  </Grid>
+</Content>
