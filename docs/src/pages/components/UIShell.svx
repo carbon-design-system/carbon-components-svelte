@@ -39,6 +39,12 @@ The hamburger menu will automatically be rendered if the side nav component is u
 
 <FileSource src="/framed/UIShell/HeaderNav" />
 
+## Header with fixed side navigation
+
+Set `fixed` to `true` on the side nav to keep it always visible, regardless of viewport width. The hamburger menu is not rendered because the side nav is not collapsible.
+
+<FileSource src="/framed/UIShell/HeaderNavFixed" />
+
 ## Header with side navigation (rail)
 
 Set `rail` to `true` on the side nav to use the rail variant. Expanded side nav menu items automatically collapse when the rail is in its narrow state.
