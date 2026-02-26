@@ -63,6 +63,8 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
 
+  const REGEX_SPECIAL_CHARS = /[/\\^$*+?.()|[\]{}]/g;
+
   const {
     range,
     add,
@@ -97,11 +99,11 @@
     for (let i = 0; i < fmt.length; i++) {
       const ch = fmt[i];
       if (ch === "\\" && i + 1 < fmt.length) {
-        result += fmt[++i].replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
+        result += fmt[++i].replace(REGEX_SPECIAL_CHARS, "\\$&");
       } else if (dateFormatTokens[ch]) {
         result += dateFormatTokens[ch];
       } else {
-        result += ch.replace(/[/\\^$*+?.()|[\]{}]/g, "\\$&");
+        result += ch.replace(REGEX_SPECIAL_CHARS, "\\$&");
       }
     }
     return result;
