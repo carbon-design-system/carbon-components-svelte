@@ -1266,6 +1266,47 @@ describe("DataTable", () => {
     expect(detail).toHaveProperty("row");
   });
 
+  it("does not dispatch click:row when clicking checkbox", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(DataTable, {
+      props: {
+        selectable: true,
+        headers,
+        rows,
+      },
+    });
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    consoleLog.mockClear();
+    await user.click(checkboxes[0]);
+
+    const clickRowCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "click:row",
+    );
+    expect(clickRowCalls).toHaveLength(0);
+  });
+
+  it("does not dispatch click:row when clicking radio button", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(DataTable, {
+      props: {
+        selectable: true,
+        radio: true,
+        headers,
+        rows,
+      },
+    });
+
+    const radioButtons = screen.getAllByRole("radio");
+    consoleLog.mockClear();
+    await user.click(radioButtons[0]);
+
+    const clickRowCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "click:row",
+    );
+    expect(clickRowCalls).toHaveLength(0);
+  });
+
   it("uses default table header translations", () => {
     render(DataTable, {
       props: {
