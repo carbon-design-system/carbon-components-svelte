@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.101.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.3...v0.101.4) (2026-02-26)
+
+### Bug Fixes
+
+- **ui-shell:** remove incorrect role="menu" from `SideNavMenu` ([#2704](https://github.com/carbon-design-system/carbon-components-svelte/issues/2704)) ([6d6cd02](https://github.com/carbon-design-system/carbon-components-svelte/commit/6d6cd0210c985675f06f85e2cf4936d010bb787b))
+
+### Performance
+
+- **date-picker:** hoist regex to module scope in `DatePickerInput` ([#2705](https://github.com/carbon-design-system/carbon-components-svelte/issues/2705)) ([e30d3afe](https://github.com/carbon-design-system/carbon-components-svelte/commit/e30d3afef86142e43913e94caf8344e9b42e7c65))
+- **data-table:** extract and hoist row click ignore regex to `shouldIgnoreRowClick` utility ([#2705](https://github.com/carbon-design-system/carbon-components-svelte/issues/2705)) ([5b832f5a](https://github.com/carbon-design-system/carbon-components-svelte/commit/5b832f5ad6fe003c7cb31de0dad99e3c594adf63))
+
 ### [0.101.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.2...v0.101.3) (2026-02-25)
 
 ### Bug Fixes
