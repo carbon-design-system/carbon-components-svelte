@@ -136,6 +136,19 @@ export function rowsEqual(a, b) {
   return true;
 }
 
+const RE_IGNORE_ROW_CLICK = /^bx--(overflow-menu|checkbox|radio-button)/;
+
+/**
+ * Returns true if the element's class list indicates the click target
+ * is an overflow menu, checkbox, or radio button (row click should be ignored).
+ * @param {EventTarget} target - The event target (e.g., from a click event)
+ * @returns {boolean}
+ */
+export function shouldIgnoreRowClick(target) {
+  if (!target || !("classList" in target)) return false;
+  return [...target.classList].some((name) => RE_IGNORE_ROW_CLICK.test(name));
+}
+
 const PATH_SPLIT_REGEX = /[.[\]'"]/;
 const MAX_PATH_CACHE_SIZE = 1000;
 /** @type {Map<string, string[]>} */

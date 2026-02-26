@@ -9,6 +9,12 @@ export function rowsEqual<T>(
 ): boolean;
 
 /**
+ * Returns true if the element's class list indicates the click target
+ * is an overflow menu, checkbox, or radio button (row click should be ignored).
+ */
+export function shouldIgnoreRowClick(target: EventTarget | null): boolean;
+
+/**
  * Resolves a nested property path in an object.
  * Supports both direct property access and nested paths like "contact.company".
  */
