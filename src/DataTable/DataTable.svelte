@@ -245,6 +245,7 @@
     formatHeaderWidth,
     getDisplayedRows,
     resolvePath,
+    shouldIgnoreRowClick,
   } from "./data-table-utils.js";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
@@ -724,11 +725,7 @@
               on:click={(e) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
-                if (
-                  [...e.target.classList].some((name) =>
-                    /^bx--(overflow-menu|checkbox|radio-button)/.test(name),
-                  )
-                ) {
+                if (shouldIgnoreRowClick(e.target)) {
                   return;
                 }
                 dispatch("click", { row });
@@ -944,11 +941,7 @@
               on:click={(e) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
-                if (
-                  [...e.target.classList].some((name) =>
-                    /^bx--(overflow-menu|checkbox|radio-button)/.test(name),
-                  )
-                ) {
+                if (shouldIgnoreRowClick(e.target)) {
                   return;
                 }
                 dispatch("click", { row });
