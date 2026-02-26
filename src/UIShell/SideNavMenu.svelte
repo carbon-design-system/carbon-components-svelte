@@ -53,9 +53,7 @@
       <ChevronDown />
     </div>
   </button>
-  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
-    role="menu"
     inert={expanded ? undefined : "true"}
     class:bx--side-nav__menu={true}
     style:max-height={expanded ? "none" : undefined}
