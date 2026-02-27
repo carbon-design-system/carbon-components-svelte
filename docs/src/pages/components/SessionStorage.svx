@@ -1,0 +1,32 @@
+---
+components: ["SessionStorage"]
+---
+
+Session storage provides a reactive wrapper around the [Window.sessionStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage). Unlike [LocalStorage](/components/LocalStorage), data is cleared when the browser tab is closed and is isolated per tab—each tab has its own storage. Use session storage for temporary state that should not persist across sessions (e.g., form drafts, wizard progress).
+
+The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) for consistency with the storage API.
+
+## Basic example
+
+See how the component maintains state within a session. Toggle the switch and refresh the page to see the persisted state. Note that state is cleared when the tab is closed.
+
+<FileSource src="/framed/SessionStorage/SessionStorage" />
+
+## Reactive key
+
+The `key` prop is also reactive, allowing you to dynamically switch between different storage keys. This is useful for managing per-user settings or multiple contexts.
+
+In this example, each user has their own theme preference stored under a separate key. When you switch users, the component automatically loads that user's saved preference.
+
+<FileSource src="/framed/SessionStorage/SessionStorageReactiveKey" />
+
+## Clear item, clear all
+
+The component provides methods to manage stored data:
+
+- `clearItem`: Remove a specific key-value pair
+- `clearAll`: Remove all stored data
+
+Use `bind:this` to access these methods. In this example, try toggling the switch, refreshing the page, then clearing the storage.
+
+<FileSource src="/framed/SessionStorage/SessionStorageClear" />
