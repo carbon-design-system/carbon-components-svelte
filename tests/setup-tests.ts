@@ -7,6 +7,8 @@ export {
   isSvelte5,
   SVELTE_VERSION,
   setupLocalStorageMock,
+  setupSessionStorageEventMock,
+  setupSessionStorageMock,
   setupStorageEventMock,
   user,
 } from "./utils/setup-shared";
