@@ -133,6 +133,116 @@ export const setupLocalStorageMock = () => {
   };
 };
 
+export const setupSessionStorageMock = () => {
+  let sessionStorageMock: { [key: string]: string } = {};
+  let originalSessionStorage: Storage;
+
+  beforeEach(() => {
+    originalSessionStorage = global.sessionStorage;
+    sessionStorageMock = {};
+    global.sessionStorage = {
+      getItem: vi.fn((key) => sessionStorageMock[key] || null),
+      setItem: vi.fn((key, value) => {
+        sessionStorageMock[key] = value;
+      }),
+      removeItem: vi.fn((key) => {
+        delete sessionStorageMock[key];
+      }),
+      clear: vi.fn(() => {
+        sessionStorageMock = {};
+      }),
+      length: 0,
+      key: vi.fn(),
+    };
+  });
+
+  afterEach(() => {
+    global.sessionStorage = originalSessionStorage;
+    sessionStorage.clear();
+    vi.restoreAllMocks();
+    sessionStorageMock = {};
+  });
+
+  return {
+    setMockItem: (key: string, value: string) => {
+      sessionStorageMock[key] = value;
+    },
+    getMockItem: (key: string) => sessionStorageMock[key],
+  };
+};
+
+/**
+ * Sets up sessionStorage mock and storage event listener
+ * capture for cross-tab sync testing.
+ */
+export const setupSessionStorageEventMock = () => {
+  let sessionStorageMock: Record<string, string> = {};
+  let originalSessionStorage: Storage;
+  let storageEventListeners: ((event: StorageEvent) => void)[] = [];
+
+  beforeEach(() => {
+    originalSessionStorage = global.sessionStorage;
+    sessionStorageMock = {};
+    storageEventListeners = [];
+
+    global.sessionStorage = {
+      getItem: vi.fn((key) => sessionStorageMock[key] || null),
+      setItem: vi.fn((key, value) => {
+        sessionStorageMock[key] = value;
+      }),
+      removeItem: vi.fn((key) => {
+        delete sessionStorageMock[key];
+      }),
+      clear: vi.fn(() => {
+        sessionStorageMock = {};
+      }),
+      length: 0,
+      key: vi.fn(),
+    };
+
+    const originalAddEventListener = window.addEventListener;
+    vi.spyOn(window, "addEventListener").mockImplementation(
+      (type, listener, options) => {
+        if (type === "storage") {
+          storageEventListeners.push(listener as (event: StorageEvent) => void);
+        } else {
+          originalAddEventListener.call(window, type, listener, options);
+        }
+      },
+    );
+  });
+
+  afterEach(() => {
+    global.sessionStorage = originalSessionStorage;
+    sessionStorage.clear();
+    vi.restoreAllMocks();
+    sessionStorageMock = {};
+    storageEventListeners = [];
+  });
+
+  function dispatchStorageEvent(key: string, newValue: string | null) {
+    const event = {
+      key,
+      newValue,
+      oldValue: null,
+      storageArea: null,
+      url: "",
+    } as StorageEvent;
+
+    for (const listener of storageEventListeners) {
+      listener(event);
+    }
+  }
+
+  return {
+    dispatchStorageEvent,
+    setMockItem: (key: string, value: string) => {
+      sessionStorageMock[key] = value;
+    },
+    getMockItem: (key: string) => sessionStorageMock[key],
+  };
+};
+
 /**
  * Sets up localStorage mock and storage event listener
  * capture for cross-tab sync testing.
