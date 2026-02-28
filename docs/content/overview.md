@@ -141,7 +141,7 @@ You can use the `Theme` component to update the theme at runtime.
 The Carbon Svelte collection includes packages for icons, pictograms, and data visualization:
 
 - **Carbon Components Svelte** — 50+ components — [GitHub](https://github.com/carbon-design-system/carbon-components-svelte)
-- **Carbon Icons Svelte** — 2,500+ icons — [GitHub](https://github.com/carbon-design-system/carbon-icons-svelte)
+- **Carbon Icons Svelte** — 2,600+ icons — [GitHub](https://github.com/carbon-design-system/carbon-icons-svelte)
 - **Carbon Pictograms Svelte** — 1,500+ pictograms — [GitHub](https://github.com/carbon-design-system/carbon-pictograms-svelte)
 - **Carbon Charts Svelte** — 25+ charts, powered by d3 — [GitHub](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)
 - **Carbon Preprocess Svelte** — Collection of Carbon Svelte preprocessors — [GitHub](https://github.com/carbon-design-system/carbon-preprocess-svelte)
