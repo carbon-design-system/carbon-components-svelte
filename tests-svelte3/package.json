@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^14.6.1",
     "jsdom": "^28.1.0",
     "svelte": "^3.59.1",
-    "svelte-check": "^4.4.0",
+    "svelte-check": "^4.4.4",
     "vitest": "^4.0.18"
   }
 }
