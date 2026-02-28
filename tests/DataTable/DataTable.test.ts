@@ -12,6 +12,7 @@ import DataTable from "./DataTable.test.svelte";
 import DataTableCustomBoth from "./DataTableCustomBoth.test.svelte";
 import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte";
 import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
+import DataTableExpandIcon from "./DataTableExpandIcon.test.svelte";
 
 describe("DataTable", () => {
   beforeEach(() => {
@@ -561,6 +562,31 @@ describe("DataTable", () => {
     expect(
       container.querySelectorAll(".bx--child-row-inner-container"),
     ).toHaveLength(0);
+  });
+
+  it("renders custom expand icon via expandIcon slot", async () => {
+    const { container } = render(DataTableExpandIcon);
+
+    const customIcons = screen.getAllByTestId("custom-expand-icon");
+    expect(customIcons.length).toBeGreaterThanOrEqual(2);
+
+    const firstExpandButton = screen.getAllByRole("button", {
+      name: /expand/i,
+    })[0];
+    expect(
+      within(firstExpandButton).getByTestId("custom-expand-icon"),
+    ).toHaveAttribute("data-expanded", "false");
+
+    await user.click(firstExpandButton);
+
+    expect(
+      within(firstExpandButton).getByTestId("custom-expand-icon"),
+    ).toHaveAttribute("data-expanded", "true");
+
+    const expandedContent = container.querySelector(
+      ".bx--child-row-inner-container",
+    );
+    expect(expandedContent).toBeInTheDocument();
   });
 
   // Styling and layout tests

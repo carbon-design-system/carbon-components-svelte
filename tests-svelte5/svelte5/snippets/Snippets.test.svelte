@@ -1,12 +1,46 @@
 <script lang="ts">
-  import { Button, ComboBox, Dropdown, Theme } from "carbon-components-svelte";
+  import {
+    Button,
+    ComboBox,
+    DataTable,
+    Dropdown,
+    Theme,
+  } from "carbon-components-svelte";
 
   const items = [
     { id: "1", text: "Option 1" },
     { id: "2", text: "Option 2" },
     { id: "3", text: "Option 3" },
   ] as const;
+
+  const dataTableHeaders = [
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+  ] as const;
+
+  const dataTableRows = [
+    { id: "a", name: "Load Balancer 1", protocol: "HTTP" },
+    { id: "b", name: "Load Balancer 2", protocol: "HTTPS" },
+  ];
 </script>
+
+<DataTable
+  data-testid="datatable-expand-icon-snippet-container"
+  expandable
+  headers={dataTableHeaders}
+  rows={dataTableRows}
+>
+  {#snippet expandIcon({ expanded, row, props })}
+    <span
+      data-testid="datatable-expand-icon-snippet"
+      {...props}
+      data-expanded={expanded}
+    ></span>
+  {/snippet}
+  <svelte:fragment slot="expanded-row" let:row>
+    <pre>{JSON.stringify(row, null, 2)}</pre>
+  </svelte:fragment>
+</DataTable>
 
 <Dropdown data-testid="dropdown-snippet" {items} selectedId="1">
   {#snippet children({ item, index })}
