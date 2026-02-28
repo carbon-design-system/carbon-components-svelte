@@ -1217,6 +1217,12 @@ Set `expandable` to `true` to make rows expandable. Use the `expanded-row` slot 
   </svelte:fragment>
 </DataTable>
 
+## Custom expand icon
+
+Use the `expandIcon` slot to customize the expand/collapse icon. The slot receives `expanded` (whether the row is expanded), `row` (the row data, or `undefined` for the header expand-all button), and `props` (object with `aria-hidden` and `class` to spread onto your icon).
+
+<FileSource src="/framed/DataTable/DataTableExpandIcon" />
+
 ## Non-expandable rows
 
 Use `nonExpandableRowIds` to prevent expansion of specific rows.
