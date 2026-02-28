@@ -1,8 +1,41 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../../setup-tests";
 import Snippets from "./Snippets.test.svelte";
 
 describe("Svelte 5 Snippets", () => {
+  describe("DataTable expandIcon", () => {
+    it("should render custom expand icon via expandIcon snippet with expanded, row, and props", async () => {
+      const { container } = render(Snippets);
+
+      const datatable = screen.getByTestId(
+        "datatable-expand-icon-snippet-container",
+      );
+      expect(datatable).toBeInTheDocument();
+
+      const customIcons = screen.getAllByTestId(
+        "datatable-expand-icon-snippet",
+      );
+      expect(customIcons.length).toBeGreaterThanOrEqual(2);
+
+      const firstExpandButton = screen.getAllByRole("button", {
+        name: /expand/i,
+      })[0];
+      const iconInButton = within(firstExpandButton).getByTestId(
+        "datatable-expand-icon-snippet",
+      );
+      expect(iconInButton).toHaveAttribute("data-expanded", "false");
+
+      await user.click(firstExpandButton);
+
+      expect(iconInButton).toHaveAttribute("data-expanded", "true");
+
+      const expandedContent = container.querySelector(
+        ".bx--child-row-inner-container",
+      );
+      expect(expandedContent).toBeInTheDocument();
+    });
+  });
+
   describe("Dropdown", () => {
     it("should render snippet with item and index arguments", async () => {
       render(Snippets);

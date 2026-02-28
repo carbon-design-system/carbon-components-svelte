@@ -26,6 +26,7 @@
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: DataTableRow) => DataTableValue} [display]
+   * @slot {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon
    * @slot {{ row: Row; rowSelected: boolean; }} expanded-row
    * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
@@ -276,6 +277,11 @@
     short: 32,
     medium: 48,
     tall: 64,
+  };
+
+  const expandIconProps = {
+    "aria-hidden": "true",
+    class: "bx--table-expand__svg",
   };
 
   let tableBodyScrollTop = 0;
@@ -610,10 +616,9 @@
                     dispatch("click:header--expand", { expanded });
                   }}
                 >
-                  <ChevronRight
-                    aria-hidden="true"
-                    class="bx--table-expand__svg"
-                  />
+                  <slot name="expandIcon" {expanded} row={undefined} props={expandIconProps}>
+                    <ChevronRight {...expandIconProps} />
+                  </slot>
                 </button>
               {/if}
             </th>
@@ -772,10 +777,9 @@
                         });
                       }}
                     >
-                      <ChevronRight
-                        aria-hidden="true"
-                        class="bx--table-expand__svg"
-                      />
+                      <slot name="expandIcon" expanded={!!expandedRows[row.id]} {row} props={expandIconProps}>
+                        <ChevronRight {...expandIconProps} />
+                      </slot>
                     </button>
                   {/if}
                 </TableCell>
@@ -986,10 +990,9 @@
                         });
                       }}
                     >
-                      <ChevronRight
-                        aria-hidden="true"
-                        class="bx--table-expand__svg"
-                      />
+                      <slot name="expandIcon" expanded={isExpanded} {row} props={expandIconProps}>
+                        <ChevronRight {...expandIconProps} />
+                      </slot>
                     </button>
                   {/if}
                 </TableCell>
