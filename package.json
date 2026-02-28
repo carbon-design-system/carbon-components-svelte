@@ -66,7 +66,7 @@
     "standard-version": "^9.5.0",
     "sveld": "^0.26.2",
     "svelte": "^4.2.20",
-    "svelte-check": "^4.4.0",
+    "svelte-check": "^4.4.4",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
