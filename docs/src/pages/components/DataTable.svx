@@ -1158,7 +1158,7 @@ Use `nonSelectableRowIds` to prevent selection of specific rows.
 
 ## Expandable rows
 
-Set `expandable` to `true` to make rows expandable. Use the `expanded-row` slot to customize expanded content.
+Set `expandable` to `true` to make rows expandable. Use the `expandedRow` slot to customize expanded content.
 
 <DataTable expandable
   headers="{[
@@ -1212,7 +1212,7 @@ Set `expandable` to `true` to make rows expandable. Use the `expanded-row` slot 
     },
   ]}"
 >
-  <svelte:fragment slot="expanded-row" let:row>
+  <svelte:fragment slot="expandedRow" let:row>
     <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>
@@ -1291,7 +1291,7 @@ Set `size="compact"` for expandable rows with minimal height.
     },
   ]}"
 >
-  <svelte:fragment slot="expanded-row" let:row>
+  <svelte:fragment slot="expandedRow" let:row>
     <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>
@@ -1352,7 +1352,7 @@ Set `size="short"` for expandable rows with compact height.
     },
   ]}"
 >
-  <svelte:fragment slot="expanded-row" let:row>
+  <svelte:fragment slot="expandedRow" let:row>
     <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>
@@ -1413,7 +1413,7 @@ Set `size="tall"` for expandable rows with increased height.
     },
   ]}"
 >
-  <svelte:fragment slot="expanded-row" let:row>
+  <svelte:fragment slot="expandedRow" let:row>
     <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>
@@ -1474,7 +1474,7 @@ Set `batchExpansion` to `true` to expand and collapse all rows at once.
     },
   ]}"
 >
-  <svelte:fragment slot="expanded-row" let:row>
+  <svelte:fragment slot="expandedRow" let:row>
     <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>

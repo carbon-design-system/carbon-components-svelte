@@ -62,7 +62,7 @@
       style="display: inline-block; transition: transform 0.2s ease; transform: {expanded ? 'rotate(45deg)' : 'rotate(0deg)'}"
     />
   </svelte:fragment>
-  <svelte:fragment slot="expanded-row" let:row>
+  <svelte:fragment slot="expandedRow" let:row>
     <pre>{JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>

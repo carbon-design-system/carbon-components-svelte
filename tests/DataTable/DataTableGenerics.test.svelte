@@ -104,7 +104,7 @@
     console.log("Expanded:", row.id);
   }}
 >
-  <svelte:fragment slot="expanded-row" let:row>
+  <svelte:fragment slot="expandedRow" let:row>
     <p>Expanded content for {row.name}</p>
   </svelte:fragment>
 </DataTable>

@@ -37,9 +37,9 @@
       data-expanded={expanded}
     ></span>
   {/snippet}
-  <svelte:fragment slot="expanded-row" let:row>
+  {#snippet expandedRow({ row, rowSelected })}
     <pre>{JSON.stringify(row, null, 2)}</pre>
-  </svelte:fragment>
+  {/snippet}
 </DataTable>
 
 <Dropdown data-testid="dropdown-snippet" {items} selectedId="1">
@@ -49,7 +49,9 @@
 </Dropdown>
 
 <Dropdown data-testid="dropdown-label-children" {items} selectedId="1">
-  <span slot="labelChildren" data-testid="dropdown-custom-label">Custom label content</span>
+  {#snippet labelChildren()}
+    <span data-testid="dropdown-custom-label">Custom label content</span>
+  {/snippet}
 </Dropdown>
 
 <ComboBox data-testid="combobox-snippet" {items}>

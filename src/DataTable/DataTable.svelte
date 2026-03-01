@@ -27,7 +27,7 @@
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: DataTableRow) => DataTableValue} [display]
    * @slot {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon
-   * @slot {{ row: Row; rowSelected: boolean; }} expanded-row
+   * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
    * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
    * @event click
@@ -901,7 +901,7 @@
                   >
                     <div class:bx--child-row-inner-container={true}>
                       <slot
-                        name="expanded-row"
+                        name="expandedRow"
                         {row}
                         rowSelected={selectedRowIdsSet.has(row.id)}
                       />
@@ -1100,7 +1100,7 @@
                   >
                     <div class:bx--child-row-inner-container={true}>
                       <slot
-                        name="expanded-row"
+                        name="expandedRow"
                         {row}
                         rowSelected={isSelected}
                       />
