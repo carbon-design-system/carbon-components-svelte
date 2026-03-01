@@ -9,6 +9,7 @@
    * @property {boolean} empty - Whether the header is empty
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
    * @property {false | ((a: DataTableValue, b: DataTableValue) => number)} [sort]
+   * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {string} [width]
    * @property {string} [minWidth]
@@ -17,6 +18,7 @@
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
    * @property {false | ((a: DataTableValue, b: DataTableValue) => number)} [sort]
+   * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {string} [width]
    * @property {string} [minWidth]
@@ -142,6 +144,12 @@
   export let sortDirection = "none";
 
   /**
+   * Set to `true` to only toggle between "ascending" and
+   * "descending" sort directions, skipping "none".
+   */
+  export let sortAlways = false;
+
+  /**
    * Set to `true` for the expandable variant.
    * Automatically set to `true` if `batchExpansion` is `true`.
    */
@@ -256,11 +264,6 @@
   import TableHeader from "./TableHeader.svelte";
   import TableRow from "./TableRow.svelte";
 
-  const sortDirectionMap = {
-    none: "ascending",
-    ascending: "descending",
-    descending: "none",
-  };
   const dispatch = createEventDispatcher();
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<Row["id"]>>}
@@ -682,6 +685,19 @@
                   } else {
                     let currentSortDirection =
                       sortKey === header.key ? sortDirection : "none";
+                    const effectiveSortAlways =
+                      header.sortAlways ?? sortAlways;
+                    const sortDirectionMap = effectiveSortAlways
+                      ? {
+                          none: "ascending",
+                          ascending: "descending",
+                          descending: "ascending",
+                        }
+                      : {
+                          none: "ascending",
+                          ascending: "descending",
+                          descending: "none",
+                        };
                     sortDirection = sortDirectionMap[currentSortDirection];
                     sortKey =
                       sortDirection === "none" ? null : thKeys[header.key];

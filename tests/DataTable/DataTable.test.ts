@@ -414,6 +414,193 @@ describe("DataTable", () => {
     expect(sortedCells[2]).toHaveTextContent("20");
   });
 
+  it("sortAlways: first click goes to ascending", async () => {
+    render(DataTable, {
+      props: {
+        sortable: true,
+        sortAlways: true,
+        headers,
+        rows,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+    await user.click(nameHeader);
+
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 1",
+    );
+  });
+
+  it("sortAlways: toggles between ascending and descending only", async () => {
+    render(DataTable, {
+      props: {
+        sortable: true,
+        sortAlways: true,
+        headers,
+        rows,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+
+    // Click 1: none -> ascending
+    await user.click(nameHeader);
+    let tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 1",
+    );
+
+    // Click 2: ascending -> descending
+    await user.click(nameHeader);
+    tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 3",
+    );
+
+    // Click 3: descending -> ascending (NOT back to none)
+    await user.click(nameHeader);
+    tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 1",
+    );
+  });
+
+  it("sortAlways: switches columns without resetting to none", async () => {
+    render(DataTable, {
+      props: {
+        sortable: true,
+        sortAlways: true,
+        headers,
+        rows,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+    const portHeader = screen.getByText("Port");
+
+    // Sort by name ascending
+    await user.click(nameHeader);
+    let tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 1",
+    );
+
+    // Switch to port – should sort ascending
+    await user.click(portHeader);
+    tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(tableRows[0]).getAllByRole("cell")[2]).toHaveTextContent(
+      "80",
+    );
+  });
+
+  it("without sortAlways: third click resets to original order", async () => {
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers,
+        rows,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+
+    // Click 1: ascending
+    await user.click(nameHeader);
+    // Click 2: descending
+    await user.click(nameHeader);
+    // Click 3: none (original order)
+    await user.click(nameHeader);
+
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    // Original order: Load Balancer 3, Load Balancer 1, Load Balancer 2
+    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 3",
+    );
+  });
+
+  it("header.sortAlways overrides table: column with sortAlways: true stays sorted", async () => {
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers: [
+          { key: "name", value: "Name", sortAlways: true },
+          { key: "protocol", value: "Protocol" },
+          { key: "port", value: "Port", sortAlways: false },
+        ],
+        rows,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+    const portHeader = screen.getByText("Port");
+
+    // Name has sortAlways: true (override) – third click stays sorted
+    await user.click(nameHeader);
+    await user.click(nameHeader);
+    await user.click(nameHeader);
+    let tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 1",
+    );
+
+    // Port has sortAlways: false (override) – third click unsorts
+    await user.click(portHeader);
+    await user.click(portHeader);
+    await user.click(portHeader);
+    tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 3",
+    );
+  });
+
+  it("header.sortAlways overrides table: column with sortAlways: false allows unsort when table has sortAlways: true", async () => {
+    render(DataTable, {
+      props: {
+        sortable: true,
+        sortAlways: true,
+        headers: [
+          { key: "name", value: "Name" },
+          { key: "port", value: "Port", sortAlways: false },
+        ],
+        rows,
+      },
+    });
+
+    const portHeader = screen.getByText("Port");
+
+    // Port has sortAlways: false – overrides table, third click unsorts
+    await user.click(portHeader);
+    await user.click(portHeader);
+    await user.click(portHeader);
+
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 3",
+    );
+  });
+
   // Selection tests
   it("handles selectable rows", async () => {
     const { container } = render(DataTable, {
