@@ -29,7 +29,7 @@
     rule: i % 3 ? "Round robin" : "DNS delegation",
   }))}
 >
-  <svelte:fragment slot="expanded-row" let:row>
+  <svelte:fragment slot="expandedRow" let:row>
     <pre> {JSON.stringify(row, null, 2)}</pre>
   </svelte:fragment>
 </DataTable>

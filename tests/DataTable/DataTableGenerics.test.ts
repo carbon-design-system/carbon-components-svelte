@@ -306,7 +306,7 @@ describe("DataTable Generics", () => {
       consoleLog.mockRestore();
     });
 
-    it("should provide correctly typed row to expanded-row slot", async () => {
+    it("should provide correctly typed row to expandedRow slot", async () => {
       const { container } = render(DataTableGenerics);
 
       // Find expand button in the third table

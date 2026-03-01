@@ -52,7 +52,7 @@
       {cell.value}
     {/if}
   </svelte:fragment>
-  <svelte:fragment slot="expanded-row" let:row let:rowSelected>
+  <svelte:fragment slot="expandedRow" let:row let:rowSelected>
     <div>
       Additional details for <strong>{row.name}</strong>
       {rowSelected ? "(Currently selected)" : ""}

@@ -1050,7 +1050,7 @@ describe("DataTable", () => {
     expect(expandedRow).toHaveClass("bx--expandable-row");
   });
 
-  it("passes rowSelected prop to expanded-row slot", () => {
+  it("passes rowSelected prop to expandedRow slot", () => {
     const { container } = render(DataTable, {
       props: {
         selectable: true,
