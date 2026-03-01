@@ -112,9 +112,5 @@ jobs:
   deploy-docs:
     if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master'
     needs: [lint, test-svelte4, types]
-    runs-on: macos-15
-    steps:
-      - name: Trigger deploy
-        env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: curl -f "$deploy_url"
+    uses: ./.github/workflows/deploy-docs.yml
+    secrets: inherit
