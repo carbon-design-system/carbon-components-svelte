@@ -18,6 +18,7 @@
           a: string | number | boolean,
           b: string | number | boolean,
         ) => number);
+    sortAlways?: boolean;
   };
 
   export let headers: readonly DataTableHeader[] = [
@@ -57,6 +58,7 @@
     undefined;
   export let zebra = false;
   export let sortable = false;
+  export let sortAlways = false;
   export let stickyHeader = false;
   export let useStaticWidth = false;
   export let expandable = false;
@@ -105,6 +107,7 @@
   {size}
   {zebra}
   {sortable}
+  {sortAlways}
   {stickyHeader}
   {useStaticWidth}
   {expandable}
