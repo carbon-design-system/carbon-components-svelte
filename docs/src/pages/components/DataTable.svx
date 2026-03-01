@@ -946,6 +946,87 @@ Set `sortable` to `true` to enable column sorting. Disable sorting on specific c
   ]}"
 />
 
+## Sortable (sort always)
+
+Sortable columns support three directions: `none` (unsorted, original row order), `ascending`, and `descending`. Clicking a column header cycles through them in order.
+
+By default, a third click on a sorted column unsorts it (`none` restores the original row order).
+
+Set `sortAlways` to `true` to skip the unsorted state so the column always remains sorted. The first click goes to `ascending`; subsequent clicks alternate between `ascending` and `descending` (no `none`).
+
+<DataTable sortable sortAlways
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+/>
+
+## Sortable (per-column sortAlways)
+
+Use `sortAlways` on individual headers to control which columns allow unsorting. In this transaction log, the Date column always stays sorted (chronological order is required for audit trails), while Amount and Status can be unsorted.
+
+<DataTable sortable title="Recent transactions"
+  headers="{[
+    { key: 'date', value: 'Date', sortAlways: true },
+    { key: 'description', value: 'Description' },
+    { key: 'amount', value: 'Amount' },
+    { key: 'status', value: 'Status', sortAlways: false }
+  ]}"
+  rows="{[
+    { id: '1', date: '2025-03-05', description: 'Cloud hosting', amount: 149.00, status: 'Paid' },
+    { id: '2', date: '2025-03-04', description: 'Domain renewal', amount: 12.99, status: 'Paid' },
+    { id: '3', date: '2025-03-03', description: 'API subscription', amount: 49.00, status: 'Pending' },
+    { id: '4', date: '2025-03-02', description: 'SSL certificate', amount: 0, status: 'Paid' },
+    { id: '5', date: '2025-03-01', description: 'Backup storage', amount: 24.50, status: 'Failed' }
+  ]}"
+/>
+
 ## Sortable with pagination
 
 Bind to `pageSize` and `page` props of the pagination component and pass them to the data table.
