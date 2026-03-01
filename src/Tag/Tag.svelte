@@ -52,6 +52,7 @@
     on:mouseleave
   />
 {:else if filter}
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     aria-label={title}
     {id}
@@ -72,6 +73,10 @@
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
     {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
   >
     <slot props={{ class: "bx--tag__label" }}>
       <span class:bx--tag__label={true}>{type}</span>
@@ -82,13 +87,9 @@
       class:bx--tag__close-icon={true}
       {disabled}
       {title}
-      on:click
       on:click|stopPropagation={() => {
         dispatch("close");
       }}
-      on:mouseover
-      on:mouseenter
-      on:mouseleave
     >
       <Close />
     </button>

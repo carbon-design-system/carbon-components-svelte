@@ -42,13 +42,40 @@ describe("Tag", () => {
     const filterableTag = screen.getByText("Filterable");
     expect(filterableTag).toHaveClass("bx--tag--filter");
 
-    const closeButton = screen.getByRole("button", { name: /clear filter/i });
-    expect(closeButton).toHaveClass("bx--tag__close-icon");
+    const tagElement = filterableTag.closest(".bx--tag--filter");
+    assert(tagElement);
+    const closeButton = tagElement.querySelector(".bx--tag__close-icon");
+    assert(closeButton instanceof HTMLElement);
     expect(closeButton).toHaveAttribute("title", "Clear filter");
 
     await user.click(closeButton);
     expect(consoleLog).toHaveBeenCalledWith("close");
-    expect(consoleLog).toHaveBeenCalledWith("click");
+  });
+
+  it("fires click event when clicking filterable tag body", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Tag);
+
+    const tagBody = screen.getByText("Filter click and close");
+    await user.click(tagBody);
+    expect(consoleLog).toHaveBeenCalledWith("filter-body-click");
+    expect(consoleLog).not.toHaveBeenCalledWith("filter-close");
+  });
+
+  it("fires only close event when clicking filterable tag close button", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Tag);
+
+    const tagElement = screen
+      .getByText("Filter click and close")
+      .closest(".bx--tag--filter");
+    assert(tagElement);
+    const closeButton = tagElement.querySelector(".bx--tag__close-icon");
+    assert(closeButton instanceof HTMLElement);
+
+    await user.click(closeButton);
+    expect(consoleLog).toHaveBeenCalledWith("filter-close");
+    expect(consoleLog).not.toHaveBeenCalledWith("filter-body-click");
   });
 
   it("renders custom icon tag correctly", () => {
