@@ -56,6 +56,18 @@ Combine the filterable variant with the small size.
 
 <Tag size="sm" filter on:close>carbon-components</Tag>
 
+## Filterable with click and close
+
+Filterable tags forward `on:click` from the tag body and `on:close` from the close button. Click the tag body to select; click the close icon to remove.
+
+<Tag
+filter
+on:click={() => console.log("click")}
+on:close={() => console.log("close")}
+>
+carbon-components
+</Tag>
+
 ## Custom icon
 
 Add a custom icon to the tag. Note: custom icons cannot be used with the filterable variant.
