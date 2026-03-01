@@ -1,0 +1,16 @@
+on:
+  push:
+    branches: [master]
+    paths:
+      - "docs/**"
+      - "**.md"
+  workflow_dispatch:
+
+jobs:
+  deploy-docs:
+    runs-on: macos-15
+    steps:
+      - name: Trigger deploy
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: curl -f "$deploy_url"
