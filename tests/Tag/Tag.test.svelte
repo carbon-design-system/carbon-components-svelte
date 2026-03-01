@@ -74,3 +74,13 @@
   <Add slot="icon" />
   Icon slot
 </Tag>
+
+<Tag
+  filter
+  on:click={() => {
+    console.log("filter-body-click");
+  }}
+  on:close={() => {
+    console.log("filter-close");
+  }}>Filter click and close</Tag
+>
