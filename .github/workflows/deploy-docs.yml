@@ -7,6 +7,8 @@ on:
       - "docs/**"
       - "**.md"
 
+permissions: {}
+
 jobs:
   deploy-docs:
     runs-on: macos-15
