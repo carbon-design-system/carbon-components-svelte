@@ -63,6 +63,7 @@
       },
       "suspicious": {
         "noExplicitAny": "error",
+        "noImportCycles": "error",
         "useAwait": "error"
       },
       "style": {
