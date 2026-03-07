@@ -8,11 +8,11 @@
   const smallerThan = observer.smallerThan("md");
   const largerThan = observer.largerThan("md");
 
-  smallerThan.subscribe((value) => {
+  smallerThan.subscribe((value: boolean) => {
     smallerThanMd = value;
   });
 
-  largerThan.subscribe((value) => {
+  largerThan.subscribe((value: boolean) => {
     largerThanMd = value;
   });
 </script>

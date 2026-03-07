@@ -2041,7 +2041,15 @@ describe("DataTable", () => {
           props: {
             headers,
             rows,
-            rowClass: ({ row, rowIndex }) => {
+            rowClass: ({
+              row,
+              rowIndex,
+            }: {
+              row: DataTableRow;
+              rowIndex: number;
+              selected: boolean;
+              expanded: boolean;
+            }) => {
               if (rowIndex === 0) return "first-row";
               if (row.port === 443) return "secure-row";
               return "standard-row";
@@ -2065,7 +2073,15 @@ describe("DataTable", () => {
             rows,
             selectedRowIds: ["a"],
             expandedRowIds: ["b"],
-            rowClass: ({ selected, expanded }) => {
+            rowClass: ({
+              selected,
+              expanded,
+            }: {
+              row: DataTableRow;
+              rowIndex: number;
+              selected: boolean;
+              expanded: boolean;
+            }) => {
               const classes = [];
               if (selected) classes.push("is-selected");
               if (expanded) classes.push("is-expanded");

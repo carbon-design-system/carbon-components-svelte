@@ -3,13 +3,14 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:types": "svelte-check --workspace ../tests --fail-on-warnings && svelte-check --workspace ./svelte5 --fail-on-warnings"
+    "test:types": "svelte-check --workspace ../tests --fail-on-warnings --tsgo && svelte-check --workspace ./svelte5 --fail-on-warnings --tsgo"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260307.1",
     "jsdom": "^28.1.0",
     "svelte": "^5.53.6",
     "svelte-check": "^4.4.4",

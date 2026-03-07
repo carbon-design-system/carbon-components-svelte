@@ -27,7 +27,7 @@
       { id: 14, text: "Integration", disabled: true },
       { id: 15, text: "IBM API Connect", disabled: true, pid: 14 },
     ],
-    (node) => node.pid,
+    (node: HierarchyNode) => node.pid,
   );
 
   $: console.log("selectedIds", selectedIds);

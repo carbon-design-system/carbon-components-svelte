@@ -4,8 +4,10 @@ import {
   filterTreeNodes,
 } from "carbon-components-svelte";
 
+type TreeNode = { id: number; text?: string; nodes?: TreeNode[] };
+
 describe("filterTreeNodes", () => {
-  const sampleTree = [
+  const sampleTree: TreeNode[] = [
     {
       id: 1,
       text: "Documents",
@@ -34,7 +36,10 @@ describe("filterTreeNodes", () => {
 
   describe("filterTreeNodes with predicate", () => {
     test("should filter by custom predicate and include ancestors", () => {
-      const result = filterTreeNodes(sampleTree, (node) => node.id === 3);
+      const result = filterTreeNodes(
+        sampleTree,
+        (node: TreeNode) => node.id === 3,
+      );
 
       expect(result).toEqual([
         {
@@ -54,7 +59,7 @@ describe("filterTreeNodes", () => {
     test("should filter multiple nodes at different levels", () => {
       const result = filterTreeNodes(
         sampleTree,
-        (node) => node.id === 3 || node.id === 8,
+        (node: TreeNode) => node.id === 3 || node.id === 8,
       );
 
       expect(result).toEqual([
@@ -78,14 +83,21 @@ describe("filterTreeNodes", () => {
     });
 
     test("should return empty array when no matches", () => {
-      const result = filterTreeNodes(sampleTree, (node) => node.id === 999);
+      const result = filterTreeNodes(
+        sampleTree,
+        (node: TreeNode) => node.id === 999,
+      );
       expect(result).toEqual([]);
     });
 
     test("should include all children when includeChildren is true", () => {
-      const result = filterTreeNodes(sampleTree, (node) => node.id === 2, {
-        includeChildren: true,
-      });
+      const result = filterTreeNodes(
+        sampleTree,
+        (node: TreeNode) => node.id === 2,
+        {
+          includeChildren: true,
+        },
+      );
 
       expect(result).toEqual([
         {
@@ -106,15 +118,22 @@ describe("filterTreeNodes", () => {
     });
 
     test("should exclude ancestors when includeAncestors is false", () => {
-      const result = filterTreeNodes(sampleTree, (node) => node.id === 3, {
-        includeAncestors: false,
-      });
+      const result = filterTreeNodes(
+        sampleTree,
+        (node: TreeNode) => node.id === 3,
+        {
+          includeAncestors: false,
+        },
+      );
 
       expect(result).toEqual([]);
     });
 
     test("should match root nodes", () => {
-      const result = filterTreeNodes(sampleTree, (node) => node.id === 1);
+      const result = filterTreeNodes(
+        sampleTree,
+        (node: TreeNode) => node.id === 1,
+      );
 
       // When a root node matches, without includeChildren,
       // it only includes the node itself (no children unless they also match)
@@ -136,7 +155,10 @@ describe("filterTreeNodes", () => {
         },
       ];
 
-      const result = filterTreeNodes(tree, (node) => node.id === 2);
+      const result = filterTreeNodes(
+        tree,
+        (node: (typeof tree)[number]) => node.id === 2,
+      );
 
       expect(result).toEqual([
         {
@@ -307,7 +329,10 @@ describe("filterTreeNodes", () => {
 
   describe("edge cases", () => {
     test("should handle empty tree", () => {
-      const result = filterTreeNodes([], (_node) => true);
+      const result = filterTreeNodes<{ id: number }>(
+        [],
+        (_node: { id: number }) => true,
+      );
       expect(result).toEqual([]);
     });
 

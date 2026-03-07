@@ -6,7 +6,10 @@ describe("toHierarchy", () => {
       { id: 1, name: "Item 1" },
       { id: 2, name: "Item 2", parentId: "invalid" },
     ];
-    const result = toHierarchy(input, (item) => item.parentId);
+    const result = toHierarchy(
+      input,
+      (item: (typeof input)[number]) => item.parentId,
+    );
 
     expect(result).toEqual([
       { id: 1, name: "Item 1" },
@@ -20,7 +23,10 @@ describe("toHierarchy", () => {
       { id: 2, name: "Child", pid: 1, randomKey: "randomValue" },
       { id: 3, name: "Grandchild", pid: 2 },
     ];
-    const result = toHierarchy(input, (item) => item.pid);
+    const result = toHierarchy(
+      input,
+      (item: (typeof input)[number]) => item.pid,
+    );
 
     expect(result).toEqual([
       {
@@ -52,7 +58,10 @@ describe("toHierarchy", () => {
       { id: 3, name: "Child 1", pid: 1 },
       { id: 4, name: "Child 2", pid: 2 },
     ];
-    const result = toHierarchy(input, (item) => item.pid);
+    const result = toHierarchy(
+      input,
+      (item: (typeof input)[number]) => item.pid,
+    );
 
     expect(result).toEqual([
       {
@@ -85,7 +94,10 @@ describe("toHierarchy", () => {
       { id: 1, name: "Root" },
       { id: 2, name: "Leaf", pid: 1 },
     ];
-    const result = toHierarchy(input, (item) => item.pid);
+    const result = toHierarchy(
+      input,
+      (item: (typeof input)[number]) => item.pid,
+    );
     expect(result).toEqual([
       {
         id: 1,
@@ -107,7 +119,11 @@ describe("toHierarchy", () => {
     const result = toHierarchy<
       { id: string | number; parentId?: string | number },
       "parentId"
-    >([], (item) => item.parentId || null);
+    >(
+      [],
+      (item: { id: string | number; parentId?: string | number }) =>
+        item.parentId || null,
+    );
     expect(result).toEqual([]);
   });
 
@@ -116,7 +132,10 @@ describe("toHierarchy", () => {
       { id: 1, name: "Root" },
       { id: 2, name: "Child", pid: 999 },
     ];
-    const result = toHierarchy(input, (item) => item.pid);
+    const result = toHierarchy(
+      input,
+      (item: (typeof input)[number]) => item.pid,
+    );
     expect(result).toEqual([
       { id: 1, name: "Root" },
       { id: 2, name: "Child", pid: 999 },
@@ -131,7 +150,10 @@ describe("toHierarchy", () => {
       { id: 4, name: "Level 4", pid: 3 },
       { id: 5, name: "Level 5", pid: 4 },
     ];
-    const result = toHierarchy(input, (item) => item.pid);
+    const result = toHierarchy(
+      input,
+      (item: (typeof input)[number]) => item.pid,
+    );
     expect(result).toEqual([
       {
         id: 1,
@@ -174,7 +196,10 @@ describe("toHierarchy", () => {
       { id: 1, name: "Child 1", pid: "root" },
       { id: "2", name: "Child 2", pid: "root" },
     ];
-    const result = toHierarchy(input, (item) => item.pid);
+    const result = toHierarchy(
+      input,
+      (item: (typeof input)[number]) => item.pid,
+    );
     expect(result).toEqual([
       {
         id: "root",
@@ -200,7 +225,10 @@ describe("toHierarchy", () => {
       { id: 1, name: "Root", extra: "data", meta: { key: "value" } },
       { id: 2, name: "Child", pid: 1, flag: true, count: 42 },
     ];
-    const result = toHierarchy(input, (item) => item.pid);
+    const result = toHierarchy(
+      input,
+      (item: (typeof input)[number]) => item.pid,
+    );
     expect(result).toEqual([
       {
         id: 1,
@@ -227,7 +255,10 @@ describe("toHierarchy", () => {
       { id: 3, name: "Root 3", pid: undefined },
       { id: 4, name: "Child", pid: 1 },
     ];
-    const result = toHierarchy(input, (item) => item.pid);
+    const result = toHierarchy(
+      input,
+      (item: (typeof input)[number]) => item.pid,
+    );
     expect(result).toEqual([
       {
         id: 1,
