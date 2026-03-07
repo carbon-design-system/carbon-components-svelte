@@ -50,7 +50,7 @@
   import {
     registerRadioButton,
     updateGroupSelection,
-  } from "./RadioButtonRegistry.js";
+  } from "./radio-button-registry.js";
 
   const ctx = getContext("carbon:RadioButtonGroup");
 

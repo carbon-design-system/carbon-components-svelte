@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { clearAllGroups } from "../../src/RadioButton/RadioButtonRegistry";
+import { clearAllGroups } from "../../src/RadioButton/radio-button-registry";
 import { user } from "../setup-tests";
 import RadioButtonImplicitGroup from "./RadioButtonImplicitGroup.test.svelte";
 
