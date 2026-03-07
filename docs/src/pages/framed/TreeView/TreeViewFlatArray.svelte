@@ -1,5 +1,5 @@
 <script>
-  import { TreeView, toHierarchy } from "carbon-components-svelte";
+  import { Stack, TreeView, toHierarchy } from "carbon-components-svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 
   let nodesFlat = [
@@ -22,7 +22,11 @@
   ];
 </script>
 
-<TreeView
-  labelText="Cloud Products"
-  nodes={toHierarchy(nodesFlat, (node) => node.pid)}
-/>
+<Stack gap={6}>
+  <div>
+    <TreeView
+      labelText="Cloud Products"
+      nodes={toHierarchy(nodesFlat, (node) => node.pid)}
+    />
+  </div>
+</Stack>

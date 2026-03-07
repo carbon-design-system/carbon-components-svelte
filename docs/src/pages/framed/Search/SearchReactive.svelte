@@ -1,13 +1,13 @@
 <script>
-  import { Button, ButtonSet, Search } from "carbon-components-svelte";
+  import { Button, ButtonSet, Search, Stack } from "carbon-components-svelte";
 
   let value = "";
 </script>
 
-<Search bind:value />
-
-<div>
-  <ButtonSet>
+<Stack gap={5}>
+  <Search bind:value />
+  <div>
+    <ButtonSet>
     <Button
       size="small"
       disabled={value === "Cloud functions"}
@@ -24,12 +24,6 @@
       Clear value
     </Button>
   </ButtonSet>
-</div>
-
-<div>Value: {value}</div>
-
-<style>
-  div {
-    margin-top: var(--cds-spacing-05);
-  }
-</style>
+  </div>
+  <div>Value: {value}</div>
+</Stack>

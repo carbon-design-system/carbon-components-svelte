@@ -2,6 +2,7 @@
   import {
     Button,
     Checkbox,
+    Stack,
     Toolbar,
     ToolbarBatchActions,
     ToolbarContent,
@@ -19,42 +20,43 @@
   $: selectedIds = items.filter((item) => item.checked).map((item) => item.id);
 </script>
 
-<Toolbar>
-  <ToolbarBatchActions
-    {selectedIds}
-    on:cancel={() => {
-      items = items.map((item) => ({ ...item, checked: false }));
-    }}
-  >
-    <Button
-      kind="danger"
-      icon={TrashCan}
-      on:click={() => {
-        items = items.filter((item) => !item.checked);
+<Stack gap={6}>
+  <Toolbar>
+    <ToolbarBatchActions
+      {selectedIds}
+      on:cancel={() => {
+        items = items.map((item) => ({ ...item, checked: false }));
       }}
     >
-      Delete
-    </Button>
-  </ToolbarBatchActions>
-  <ToolbarContent>
-    <Button
-      icon={Add}
-      size="small"
-      on:click={() => {
-        items = [
-          ...items,
-          { id: nextId, name: "Item " + nextId, checked: false },
-        ];
-        nextId++;
-      }}
-    >
-      Add item
-    </Button>
-  </ToolbarContent>
-</Toolbar>
-
-<div style:margin-top="var(--cds-layout-02)">
-  {#each items as item (item.id)}
-    <Checkbox labelText={item.name} bind:checked={item.checked} />
-  {/each}
-</div>
+      <Button
+        kind="danger"
+        icon={TrashCan}
+        on:click={() => {
+          items = items.filter((item) => !item.checked);
+        }}
+      >
+        Delete
+      </Button>
+    </ToolbarBatchActions>
+    <ToolbarContent>
+      <Button
+        icon={Add}
+        size="small"
+        on:click={() => {
+          items = [
+            ...items,
+            { id: nextId, name: "Item " + nextId, checked: false },
+          ];
+          nextId++;
+        }}
+      >
+        Add item
+      </Button>
+    </ToolbarContent>
+  </Toolbar>
+  <Stack>
+    {#each items as item (item.id)}
+      <Checkbox labelText={item.name} bind:checked={item.checked} />
+    {/each}
+  </Stack>
+</Stack>

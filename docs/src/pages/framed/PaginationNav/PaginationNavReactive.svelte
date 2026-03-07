@@ -1,16 +1,23 @@
 <script>
-  import { Button, PaginationNav } from "carbon-components-svelte";
+  import { Button, PaginationNav, Stack } from "carbon-components-svelte";
 
   let page = 2;
 </script>
 
-<PaginationNav bind:page />
-
-<div style="margin: var(--cds-layout-01) 0">
-  <Button on:click={() => (page = 1)} disabled={page === 0}>
-    Set page to 1
-  </Button>
-</div>
-
-<strong>page:</strong>
-{page}
+<Stack gap={6}>
+  <PaginationNav bind:page />
+  <Stack gap={4} orientation="horizontal" align="center">
+    <Button
+      kind="tertiary"
+      size="small"
+      on:click={() => (page = 1)}
+      disabled={page === 0}
+    >
+      Set page to 1
+    </Button>
+    <div>
+      <strong>Current page:</strong>
+      {page}
+    </div>
+  </Stack>
+</Stack>

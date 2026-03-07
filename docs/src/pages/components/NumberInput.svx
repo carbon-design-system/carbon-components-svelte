@@ -104,6 +104,8 @@ Use `on:blur:stepper` to listen for when a stepper button loses focus. The event
   }}
 />
 
+## Stepper events
+
 <FileSource src="/framed/NumberInput/NumberInputStepperEvents" />
 
 ## Hidden label
