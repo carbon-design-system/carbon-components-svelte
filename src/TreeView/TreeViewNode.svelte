@@ -87,7 +87,7 @@
     focusNode,
   } = getContext("carbon:TreeView");
   const offset = () =>
-    computeTreeLeafDepth(refLabel) + (leaf && icon ? 2 : 2.5);
+    computeTreeLeafDepth(refLabel) - 1 + (leaf && icon ? 2 : 2.5);
 
   afterUpdate(() => {
     if (id === $activeNodeId && prevActiveId !== $activeNodeId) {
