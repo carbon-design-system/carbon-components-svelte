@@ -1,0 +1,41 @@
+import { expect, test } from "@playwright/test";
+
+test.describe("TreeView", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/tree-view.html");
+  });
+
+  test("renders tree view", async ({ page }) => {
+    await expect(page.getByTestId("tree-view")).toBeVisible();
+    await expect(page.getByRole("tree", { name: "Tree" })).toBeVisible();
+    await expect(
+      page.getByRole("treeitem", { name: "Parent 1" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("treeitem", { name: "Parent 2" }),
+    ).toBeVisible();
+  });
+
+  test("expands node when toggle is clicked", async ({ page }) => {
+    await expect(
+      page.getByRole("treeitem", { name: "Child 1-1" }),
+    ).not.toBeVisible();
+
+    await page
+      .getByRole("treeitem", { name: "Parent 1" })
+      .locator(".bx--tree-parent-node__toggle")
+      .click();
+
+    await expect(
+      page.getByRole("treeitem", { name: "Child 1-1" }),
+    ).toBeVisible();
+  });
+
+  test("selects node when clicked", async ({ page }) => {
+    await page.getByRole("treeitem", { name: "Parent 2" }).click();
+
+    await expect(
+      page.getByRole("treeitem", { name: "Parent 2" }),
+    ).toHaveAttribute("aria-selected", "true");
+  });
+});
