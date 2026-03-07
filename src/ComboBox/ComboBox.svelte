@@ -430,7 +430,7 @@
     selectedItem = undefined;
   }
 
-  $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
+  $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;

@@ -444,6 +444,45 @@ describe("ComboBox", () => {
     expect(listbox).toHaveAttribute("aria-label", "");
   });
 
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2715
+  it("should use labelText as aria-label fallback when aria-label is not passed", () => {
+    render(ComboBox, {
+      props: {
+        items: [{ id: "1", text: "Email", price: 200 }],
+        labelText: "Contact",
+      },
+    });
+    const listbox = screen.getByRole("listbox", { name: "Contact" });
+    expect(listbox).toHaveAttribute("aria-label", "Contact");
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2715
+  it("should use explicit aria-label over labelText when both are provided", () => {
+    render(ComboBox, {
+      props: {
+        items: [{ id: "1", text: "Email", price: 200 }],
+        labelText: "Contact",
+        ariaLabel: "Custom accessible name",
+      },
+    });
+    const listbox = screen.getByRole("listbox", {
+      name: "Custom accessible name",
+    });
+    expect(listbox).toHaveAttribute("aria-label", "Custom accessible name");
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2715
+  it("should default to 'Choose an item' when neither labelText nor aria-label is provided", () => {
+    render(ComboBox, {
+      props: {
+        items: [{ id: "1", text: "Email", price: 200 }],
+        labelText: "",
+      },
+    });
+    const listbox = screen.getByRole("listbox", { name: "Choose an item" });
+    expect(listbox).toHaveAttribute("aria-label", "Choose an item");
+  });
+
   it("should open menu if open prop is true on mount", () => {
     render(ComboBox, { props: { open: true } });
     const dropdown = screen.getAllByRole("listbox")[1];
