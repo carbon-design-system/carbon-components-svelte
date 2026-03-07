@@ -67,6 +67,7 @@
         "useAwait": "error"
       },
       "style": {
+        "useFilenamingConvention": "error",
         "noImplicitBoolean": "error",
         "noNegationElse": "error",
         "noParameterAssign": "error",
@@ -113,6 +114,9 @@
       "includes": ["**/*.svelte"],
       "linter": {
         "rules": {
+          "style": {
+            "useFilenamingConvention": "off"
+          },
           "correctness": {
             "noUnusedImports": "off",
             "noUnusedVariables": "off",
@@ -141,6 +145,9 @@
         "rules": {
           "performance": {
             "useTopLevelRegex": "off"
+          },
+          "style": {
+            "useFilenamingConvention": "off"
           }
         }
       }
