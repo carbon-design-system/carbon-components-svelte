@@ -26,7 +26,7 @@ In this example, we use the open source module [clipboard-copy](https://github.c
 
 Pass a no-op function to the `copy` prop to disable copying.
 
-<FileSource src="/framed/CodeSnippet/CodeSnippetPreventCopy" />
+<CodeSnippet code="npm i carbon-components-svelte" copy={() => {}} />
 
 ## Inline
 
