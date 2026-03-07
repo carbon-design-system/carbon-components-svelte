@@ -346,6 +346,64 @@ describe("TreeView Props", () => {
     expect(node2).toHaveClass("bx--tree-node--active");
   });
 
+  describe("active node label indentation regression", () => {
+    it("applies correct offset to root-level leaf node label (prevents active indicator clipping)", () => {
+      render(TreeViewProps, { activeId: 1 });
+
+      const activeNode = screen.getByRole("treeitem", { name: /Node 2/ });
+      const label = activeNode.querySelector(".bx--tree-node__label");
+      expect.assert(label instanceof HTMLElement);
+      expect(label.style.paddingLeft).toBe("2.5rem");
+      expect(label.style.marginLeft).toBe("-2.5rem");
+    });
+
+    it("applies correct offset to nested leaf node label when expanded", () => {
+      render(TreeViewProps, {
+        activeId: 5,
+        expandedIds: [1],
+        nodes: [
+          { id: 0, text: "Node 1" },
+          {
+            id: 1,
+            text: "Node 2",
+            nodes: [
+              { id: 2, text: "Node 2a" },
+              { id: 5, text: "Node 2b" },
+            ],
+          },
+        ],
+      });
+
+      const activeNode = screen.getByRole("treeitem", { current: true });
+      const label = activeNode.querySelector(".bx--tree-node__label");
+      expect.assert(label instanceof HTMLElement);
+      // Nested at depth 2: offset = (2 - 1) + 2.5 = 3.5rem
+      expect(label.style.paddingLeft).toBe("3.5rem");
+      expect(label.style.marginLeft).toBe("-3.5rem");
+    });
+
+    it("applies correct offset to root-level parent node label", () => {
+      render(TreeViewProps, {
+        activeId: 1,
+        nodes: [
+          { id: 0, text: "Node 1" },
+          {
+            id: 1,
+            text: "Node 2",
+            nodes: [{ id: 2, text: "Node 2a" }],
+          },
+        ],
+      });
+
+      const activeNode = screen.getByRole("treeitem", { name: /Node 2/ });
+      const label = activeNode.querySelector(".bx--tree-node__label");
+      expect.assert(label instanceof HTMLElement);
+      // Root parent: offset = (1 - 1) + 1 = 1rem
+      expect(label.style.paddingLeft).toBe("1rem");
+      expect(label.style.marginLeft).toBe("-1rem");
+    });
+  });
+
   it("handles multiple selectedIds", () => {
     render(TreeViewMultiselect, { selectedIds: [0, 7, 9] });
 

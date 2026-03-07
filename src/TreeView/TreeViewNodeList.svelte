@@ -41,7 +41,7 @@
   } = getContext("carbon:TreeView");
 
   const offset = () => {
-    const depth = computeTreeLeafDepth(refLabel);
+    const depth = computeTreeLeafDepth(refLabel) - 1;
 
     if (parent) return depth + 1;
     if (icon) return depth + 2;
