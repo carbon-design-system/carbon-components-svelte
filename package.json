@@ -37,6 +37,7 @@
     "test:types:svelte3": "cd tests-svelte3 && bun run test:types",
     "test:svelte5": "cd tests-svelte5 && bunx vitest",
     "test:types:svelte5": "cd tests-svelte5 && bun run test:types",
+    "test:e2e": "playwright test",
     "lint": "biome check --write .",
     "build:css": "bun scripts/build-css",
     "build:docs": "bun scripts/build-docs && bun scripts/format-component-api",
@@ -49,6 +50,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.6",
+    "@playwright/test": "^1.58.2",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
