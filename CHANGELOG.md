@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.102.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.4...v0.102.0) (2026-03-07)
+
+### ⚠ BREAKING CHANGES
+
+- **data-table:** rename `expanded-row` slot to `expandedRow` for Svelte 5 snippet support
+
+### Features
+
+- **data-table:** add `sortAlways` prop ([44a85ea](https://github.com/carbon-design-system/carbon-components-svelte/commit/44a85eaf98ddb5338a4b077813b72e6c69e738ec)), closes [#2697](https://github.com/carbon-design-system/carbon-components-svelte/issues/2697)
+- **data-table:** allow custom expand icon ([65349c4](https://github.com/carbon-design-system/carbon-components-svelte/commit/65349c4968abf3285a878acc0a34ed33bf6acb51)), closes [#2696](https://github.com/carbon-design-system/carbon-components-svelte/issues/2696)
+- **session-storage:** add `SessionStorage` component ([d63670a](https://github.com/carbon-design-system/carbon-components-svelte/commit/d63670a495707288eea17767c34365772f64577c)), closes [#2695](https://github.com/carbon-design-system/carbon-components-svelte/issues/2695)
+
+### Bug Fixes
+
+- **tag:** filterable tag supports `click` event on tag body ([aaf15a1](https://github.com/carbon-design-system/carbon-components-svelte/commit/aaf15a125f5c103b9e1e0058179b062eb987699c)), closes [#2694](https://github.com/carbon-design-system/carbon-components-svelte/issues/2694)
+- **tree-view:** use correct leaf depth to restore active node style ([7fda0f7](https://github.com/carbon-design-system/carbon-components-svelte/commit/7fda0f71ddc6ef2464b62f99dedc71961651dc8d))
+
 ### [0.101.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.3...v0.101.4) (2026-02-26)
 
 ### Bug Fixes
