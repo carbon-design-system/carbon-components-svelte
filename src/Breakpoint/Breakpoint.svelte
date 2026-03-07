@@ -28,7 +28,7 @@
   };
 
   import { createEventDispatcher } from "svelte";
-  import { breakpointObserver } from "./breakpointObserver";
+  import { breakpointObserver } from "./breakpoint-observer";
   import { breakpoints } from "./breakpoints";
 
   const dispatch = createEventDispatcher();
