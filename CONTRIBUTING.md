@@ -130,9 +130,61 @@ bun run build:docs
 
 ### Checks
 
+- `bun run lint` — run Biome linter
 - `bun run test` — run unit tests
+- `bun run test:e2e` — run Playwright E2E tests
 - `bun test:src-types` — type-check `src/` (uses `tsconfig.types.json`)
 - `bun test:types` — run `svelte-check` on `*.svelte` and `.ts` files in `tests/`
+
+## Testing
+
+### Unit tests
+
+Unit tests live in `tests/` and use Vitest with `@testing-library/svelte`. Run them with `bun run test`.
+
+### E2E testing with Playwright
+
+E2E tests run in a real browser against HTML fixtures served by Vite. The Playwright config is in `playwright.config.ts`; the Vite config for fixtures is in `e2e/vite.config.ts`.
+
+**Run the full suite:**
+
+```sh
+bun run test:e2e
+```
+
+**Run a focused component or pattern:**
+
+```sh
+# Single test file
+bunx playwright test e2e/breakpoint.test.ts
+
+# Tests matching a grep pattern (e.g. "Breakpoint" or "sm breakpoint")
+bunx playwright test --grep "Breakpoint"
+```
+
+**Adding a new E2E test** — use the Breakpoint example as a template. Create these files:
+
+| File                                     | Purpose                                                                                                          |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `e2e/fixtures/MyComponentFixture.svelte` | Svelte component that renders the component under test. Use `data-testid` on elements you want to query.         |
+| `e2e/fixtures/my-component.ts`           | Entry script that mounts the fixture into `#app`. Use the shared `mount()` utility from `./mount`.               |
+| `e2e/fixtures/my-component.html`         | HTML page with `<div id="app"></div>` and a script tag loading the entry module.                                 |
+| `e2e/my-component.test.ts`               | Playwright tests. Use `page.goto("/my-component.html")` in `beforeEach`, then `page.getByTestId(...)` to assert. |
+
+**Example fixture mount** (`my-component.ts`):
+
+```ts
+import MyComponentFixture from "./MyComponentFixture.svelte";
+import { mount } from "./mount";
+
+mount(MyComponentFixture);
+```
+
+**Notes:**
+
+- **Visibility assertions:** For components that hide content with CSS (e.g. ComposedModal), `toBeVisible()` can be unreliable because the element stays in the DOM. Prefer `toHaveClass(/is-visible/)` on the container, or assert on `aria-hidden` / `inert` instead.
+- **Strict mode:** `getByText("Row 1")` matches "Row 10", "Row 11", etc. Use `getByRole("cell", { name: "Row 1", exact: true })` or more specific selectors when content can match multiple elements.
+- Add a link to `e2e/fixtures/index.html` so the fixture is reachable from the index page.
 
 ## Submit a Pull Request
 
