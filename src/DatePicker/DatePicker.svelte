@@ -81,7 +81,7 @@
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
-  import { createCalendar } from "./createCalendar";
+  import { createCalendar } from "./create-calendar";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
