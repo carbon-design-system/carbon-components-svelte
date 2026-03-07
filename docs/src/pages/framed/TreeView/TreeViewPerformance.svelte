@@ -136,7 +136,7 @@
   }
 </script>
 
-<Stack gap={4}>
+<Stack gap={6}>
     <ContentSwitcher {selectedIndex} on:change={handleTreeSwitch}>
       <Switch text="Large Tree (1000+ nodes)" />
       <Switch text="Deep Tree (100 levels)" />
@@ -155,12 +155,13 @@
         <div>Show Node: {performanceInfo.showNode.toFixed(2)}ms</div>
       </Stack>
     {/if}
-
-  <TreeView
-    bind:this={treeview}
-    labelText={treeType === "large"
-      ? "Large Tree (1000+ nodes)"
-      : "Deep Tree (100 levels)"}
-    {nodes}
-  />
+  <div>
+    <TreeView
+      bind:this={treeview}
+      labelText={treeType === "large"
+        ? "Large Tree (1000+ nodes)"
+        : "Deep Tree (100 levels)"}
+      {nodes}
+    />
+  </div>
 </Stack>

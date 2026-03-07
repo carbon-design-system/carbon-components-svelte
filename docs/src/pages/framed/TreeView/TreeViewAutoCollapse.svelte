@@ -45,7 +45,7 @@
   ];
 </script>
 
-<Stack gap={4}>
+<Stack gap={6}>
   <ButtonSet>
     <Button size="small" on:click={() => (activeId = 3)}>Select Spark</Button>
     <Button size="small" on:click={() => (activeId = 8)}>
@@ -55,20 +55,22 @@
       Select MongoDB
     </Button>
   </ButtonSet>
-
-  <TreeView
-    labelText="Cloud Products"
-    {nodes}
-    bind:activeId
-    bind:selectedIds
-    bind:expandedIds
-    autoCollapse={true}
-    on:select={({ detail }) => console.log("select", detail)}
-    on:toggle={({ detail }) => console.log("toggle", detail)}
-    on:focus={({ detail }) => console.log("focus", detail)}
-  />
-
-  <div>Active node id: {activeId}</div>
-  <div>Selected ids: {JSON.stringify(selectedIds)}</div>
-  <div>Expanded ids: {JSON.stringify(expandedIds)}</div>
+  <div>
+    <TreeView
+      labelText="Cloud Products"
+      {nodes}
+      bind:activeId
+      bind:selectedIds
+      bind:expandedIds
+      autoCollapse={true}
+      on:select={({ detail }) => console.log("select", detail)}
+      on:toggle={({ detail }) => console.log("toggle", detail)}
+      on:focus={({ detail }) => console.log("focus", detail)}
+    />
+  </div>
+  <Stack gap={4}>
+    <div>Active node id: {activeId}</div>
+    <div>Selected ids: {JSON.stringify(selectedIds)}</div>
+    <div>Expanded ids: {JSON.stringify(expandedIds)}</div>
+  </Stack>
 </Stack>

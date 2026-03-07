@@ -9,6 +9,7 @@
     HeaderUtilities,
     Row,
     SkipToContent,
+    Stack,
   } from "carbon-components-svelte";
 
   const data = [
@@ -111,14 +112,16 @@
           logged below:
         </p>
         <div style:overflow-x="auto">
-          {#each events as { type, ...rest }}
-            <div style:margin-bottom="var(--cds-layout-01)">
-              <div><strong>on:{type}</strong></div>
-              {#if Object.keys(rest).length > 0}
-                <pre>{JSON.stringify(rest, null, 2)}</pre>
-              {/if}
-            </div>
-          {/each}
+          <Stack gap={2}>
+            {#each events as { type, ...rest }}
+              <div>
+                <div><strong>on:{type}</strong></div>
+                {#if Object.keys(rest).length > 0}
+                  <pre>{JSON.stringify(rest, null, 2)}</pre>
+                {/if}
+              </div>
+            {/each}
+          </Stack>
         </div>
       </Column>
     </Row>

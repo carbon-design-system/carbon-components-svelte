@@ -5,7 +5,7 @@
   export let borderRight = false;
   export let borderBottom = false;
 
-  import { AspectRatio, ClickableTile, Tile } from "carbon-components-svelte";
+  import { AspectRatio, ClickableTile, Stack, Tile } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
 
@@ -21,12 +21,12 @@
       style="height: 100%;"
     >
       <div class="card">
-        <div>
+        <Stack gap={1}>
           <h5 class="title">{title}</h5>
           {#if subtitle}
             <div class="subtitle">{subtitle}</div>
           {/if}
-        </div>
+        </Stack>
         <div class="card-footer">
           <svelte:component
             this={LogoGithub}
@@ -69,7 +69,6 @@
 
   .title {
     margin-top: calc(-1 * var(--cds-spacing-02));
-    margin-bottom: var(--cds-spacing-01);
   }
 
   .subtitle {

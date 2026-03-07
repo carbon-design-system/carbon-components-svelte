@@ -19,8 +19,6 @@ The system uses a responsive column structure where the total number of columns 
 For example, to create a full-width column, use `sm={4} md={8} lg={16}` instead of the
 same value across all breakpoints.
 
-
-
 ## Default
 
 Create a basic grid layout with equal-width columns. This example demonstrates the
