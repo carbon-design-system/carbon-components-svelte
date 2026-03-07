@@ -107,7 +107,7 @@
   import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import Close from "../icons/Close.svelte";
-  import { trackModal } from "./modalStore";
+  import { trackModal } from "./modal-store";
 
   const dispatch = createEventDispatcher();
 

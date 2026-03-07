@@ -41,7 +41,7 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
-  import { trackModal } from "../Modal/modalStore";
+  import { trackModal } from "../Modal/modal-store";
 
   const dispatch = createEventDispatcher();
   const label = writable(undefined);
