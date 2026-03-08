@@ -4,6 +4,9 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
 
 <script>
   import { Tabs, Tab, TabContent, TabsSkeleton } from "carbon-components-svelte";
+  import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
+  import Settings from "carbon-icons-svelte/lib/Settings.svelte";
 </script>
 
 Tabs provide a way to organize content into separate views that can be switched between. They support keyboard navigation, disabled states, and various layout options.
@@ -66,6 +69,21 @@ Set `disabled` to `true` on a tab component to prevent interaction. Keyboard nav
     <TabContent>Content 2</TabContent>
     <TabContent>Content 3</TabContent>
     <TabContent>Content 4</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## With icons
+
+Use the `icon` prop to render an icon next to the tab label. The icon is rendered to the right of the label.
+
+<Tabs>
+  <Tab label="Calendar" icon={Calendar} />
+  <Tab label="Information" icon={Information} />
+  <Tab label="Settings" icon={Settings} disabled />
+  <svelte:fragment slot="content">
+    <TabContent>Calendar content</TabContent>
+    <TabContent>Information content</TabContent>
+    <TabContent>Settings content</TabContent>
   </svelte:fragment>
 </Tabs>
 
