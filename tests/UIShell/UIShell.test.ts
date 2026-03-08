@@ -451,6 +451,63 @@ describe("UIShell", () => {
       expect(consoleLog).toHaveBeenCalledWith("sidenav-overlay-click");
     });
 
+    describe("custom expansion breakpoint (HeaderNavCustomBreakpoint-style)", () => {
+      const setViewportWidth = (width: number) => {
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value: width,
+        });
+        window.dispatchEvent(new Event("resize"));
+      };
+
+      afterEach(() => {
+        setViewportWidth(1024);
+        document.body.classList.remove("bx--body--with-modal-open");
+      });
+
+      it("with expansionBreakpoint Infinity, overlay has --mobile and -active when open at desktop width", async () => {
+        setViewportWidth(1200);
+
+        const { container } = render(UiShell, {
+          props: {
+            expansionBreakpoint: Number.POSITIVE_INFINITY,
+            isSideNavOpen: true,
+            sideNavIsOpen: true,
+          },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const overlay = container.querySelector(".bx--side-nav__overlay");
+        expect(overlay).toBeInTheDocument();
+        expect(overlay).toHaveClass("bx--side-nav__overlay--mobile");
+        expect(overlay).toHaveClass("bx--side-nav__overlay-active");
+      });
+
+      it("with expansionBreakpoint Infinity, clicking overlay at desktop width closes side nav", async () => {
+        setViewportWidth(1200);
+        const consoleLog = vi.spyOn(console, "log");
+
+        const { container, component } = render(UiShell, {
+          props: {
+            expansionBreakpoint: Number.POSITIVE_INFINITY,
+            isSideNavOpen: true,
+            sideNavIsOpen: true,
+          },
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const overlay = container.querySelector(".bx--side-nav__overlay");
+        assert(overlay);
+        await user.click(overlay);
+
+        expect(component.sideNavIsOpen).toBe(false);
+        expect(consoleLog).toHaveBeenCalledWith("sidenav-overlay-click");
+      });
+    });
+
     it("should render side nav links", () => {
       const { container } = render(UiShell);
 

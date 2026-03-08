@@ -1,0 +1,38 @@
+// Side nav overlay styles are defined here (and imported at bundle root) so they
+// are compiled outside carbon-components’ ui-shell media query. In Carbon, the
+// overlay is only styled inside a breakpoint-down block, so it does not appear
+// above the large viewport (e.g. 1056px). This override ensures the overlay is
+// visible and correctly stacked when the rail is expanded at all viewport sizes.
+
+//
+// Copyright IBM Corp. 2016, 2018
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Side nav overlay — applied at all viewport sizes (breaks out of Carbon media query).
+/// @access private
+/// @group ui-shell
+@mixin ui-shell {
+  .#{$prefix}--side-nav__overlay.#{$prefix}--side-nav__overlay--mobile.#{$prefix}--side-nav__overlay-active {
+    position: fixed;
+    inset: 0;
+    z-index: 6000;
+    display: block;
+    block-size: 100vh;
+    inline-size: 100vw;
+    background-color: var(--cds-overlay, rgba(0, 0, 0, 0.6));
+    opacity: 1;
+    transition:
+      opacity 0.3s cubic-bezier(0.5, 0, 0.1, 1),
+      background-color 0.3s cubic-bezier(0.5, 0, 0.1, 1);
+  }
+}
+
+@include exports("ui-shell") {
+  @include ui-shell;
+}
