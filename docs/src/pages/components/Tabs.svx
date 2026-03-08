@@ -198,6 +198,27 @@ When only some tabs use `secondaryLabel`, the container still applies the taller
   </svelte:fragment>
 </Tabs>
 
+## Container type (`secondaryChildren` slot)
+
+Use the `secondaryChildren` slot to customize the secondary label with custom markup (e.g. `<strong>` for emphasis).
+
+<Tabs type="container">
+  <Tab label="Engage">
+    <strong slot="secondaryChildren">(21/25)</strong>
+  </Tab>
+  <Tab label="Analyze">
+    <strong slot="secondaryChildren">(12/16)</strong>
+  </Tab>
+  <Tab label="Remediate">
+    <strong slot="secondaryChildren">(0/7)</strong>
+  </Tab>
+  <svelte:fragment slot="content">
+    <TabContent>Engage content</TabContent>
+    <TabContent>Analyze content</TabContent>
+    <TabContent>Remediate content</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ## Skeleton (default)
 
 Show a loading state with the default skeleton variant.
