@@ -39,6 +39,16 @@ The hamburger menu will automatically be rendered if the side nav component is u
 
 <FileSource src="/framed/UIShell/HeaderNav" />
 
+## Header with custom expansion breakpoint
+
+By default, `expansionBreakpoint` is `1056` (Carbon's [large breakpoint](/components/Breakpoint)).
+
+Below that width the side nav is collapsed and the hamburger is shown; opening it shows the overlay. At 1056px and above the side nav is expanded and the hamburger is hidden.
+
+Set `expansionBreakpoint` on both `Header` and `SideNav` to change that threshold. For example, use `Infinity` to keep the side nav collapsed with overlay at all viewport sizes.
+
+<FileSource src="/framed/UIShell/HeaderNavCustomBreakpoint" />
+
 ## Header with fixed side navigation
 
 Set `fixed` to `true` on the side nav to keep it always visible, regardless of viewport width. The hamburger menu is not rendered because the side nav is not collapsible.
