@@ -13,7 +13,12 @@
   ];
 </script>
 
-<Modal bind:open={modalOpen} modalHeading="Test" primaryButtonText="OK" secondaryButtonText="Cancel">
+<Modal
+  bind:open={modalOpen}
+  modalHeading="Test"
+  primaryButtonText="OK"
+  secondaryButtonText="Cancel"
+>
   <Dropdown
     {items}
     selectedId="0"

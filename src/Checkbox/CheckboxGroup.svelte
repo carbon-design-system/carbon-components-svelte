@@ -117,10 +117,7 @@
   on:mouseenter
   on:mouseleave
 >
-  <fieldset
-    class:bx--checkbox-group={true}
-    {disabled}
-  >
+  <fieldset class:bx--checkbox-group={true} {disabled}>
     {#if legendText || $$slots.legendChildren}
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>
         <slot name="legendChildren">{legendText}</slot>

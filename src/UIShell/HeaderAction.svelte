@@ -116,12 +116,12 @@
       <svelte:component this={closeIcon} size={20} />
     </slot>
   {:else}
-    <slot name="icon">
-      <svelte:component this={icon} size={20} />
-    </slot>
+    <slot name="icon"> <svelte:component this={icon} size={20} /> </slot>
   {/if}
   <slot name="textChildren">
-    {#if text}<span class:bx--header__action-text={true}>{text}</span>{/if}
+    {#if text}
+      <span class:bx--header__action-text={true}>{text}</span>
+    {/if}
   </slot>
 </button>
 {#if isOpen}

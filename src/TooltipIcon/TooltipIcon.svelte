@@ -84,7 +84,5 @@
   <span {id} class:bx--assistive-text={true}>
     <slot name="tooltipText">{tooltipText}</slot>
   </span>
-  <slot>
-    <svelte:component this={icon} {size} />
-  </slot>
+  <slot> <svelte:component this={icon} {size} /> </slot>
 </button>

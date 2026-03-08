@@ -39,9 +39,7 @@
   >
     {#if $$slots.icon || icon}
       <div class:bx--side-nav__icon={true}>
-        <slot name="icon">
-          <svelte:component this={icon} />
-        </slot>
+        <slot name="icon"> <svelte:component this={icon} /> </slot>
       </div>
     {/if}
     <span class:bx--side-nav__submenu-title={true}>{text}</span>

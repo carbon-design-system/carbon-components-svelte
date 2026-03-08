@@ -1,6 +1,5 @@
 <script>
   import { TooltipDefinition } from "carbon-components-svelte";
-
 </script>
 
 <TooltipDefinition

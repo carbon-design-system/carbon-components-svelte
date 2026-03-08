@@ -12,8 +12,14 @@
 </script>
 
 <ListItem>
-  {#if text && !href}{text}{/if}
-  {#if href}<a class:bx--link={true} {href}>{text || href}</a>{/if}
-  {#if !text && html}{@html html}{/if}
+  {#if text && !href}
+    {text}
+  {/if}
+  {#if href}
+    <a class:bx--link={true} {href}>{text || href}</a>
+  {/if}
+  {#if !text && html}
+    {@html html}
+  {/if}
   <slot />
 </ListItem>

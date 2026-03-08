@@ -19,18 +19,29 @@
 
 {#if testComponent === "Toolbar"}
   <Toolbar {size} {...$$restProps}>
-    {#if slotContent}{slotContent}{/if}
+    {#if slotContent}
+      {slotContent}
+    {/if}
     <slot />
   </Toolbar>
 {:else if testComponent === "ToolbarContent"}
   <ToolbarContent>
-    {#if slotContent}{slotContent}{/if}
+    {#if slotContent}
+      {slotContent}
+    {/if}
     <slot />
   </ToolbarContent>
 {:else if testComponent === "ToolbarBatchActions"}
   <Toolbar>
-    <ToolbarBatchActions {selectedIds} {active} on:cancel={oncancel} {...$$restProps}>
-      {#if slotContent}{slotContent}{/if}
+    <ToolbarBatchActions
+      {selectedIds}
+      {active}
+      on:cancel={oncancel}
+      {...$$restProps}
+    >
+      {#if slotContent}
+        {slotContent}
+      {/if}
       <slot />
     </ToolbarBatchActions>
   </Toolbar>

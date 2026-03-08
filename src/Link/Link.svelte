@@ -54,9 +54,7 @@
     <slot />
     {#if !inline && ($$slots.icon || icon)}
       <div class:bx--link__icon={true}>
-        <slot name="icon">
-          <svelte:component this={icon} />
-        </slot>
+        <slot name="icon"> <svelte:component this={icon} /> </slot>
       </div>
     {/if}
   </a>
@@ -80,9 +78,7 @@
     <slot />
     {#if !inline && ($$slots.icon || icon)}
       <div class:bx--link__icon={true}>
-        <slot name="icon">
-          <svelte:component this={icon} />
-        </slot>
+        <slot name="icon"> <svelte:component this={icon} /> </slot>
       </div>
     {/if}
   </a>

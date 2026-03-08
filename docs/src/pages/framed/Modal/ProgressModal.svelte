@@ -79,7 +79,8 @@
           {#if name || region}
             <p>
               <strong>Name:</strong>
-              {name || "(not set)"} · <strong>Region:</strong>
+              {name || "(not set)"}
+              · <strong>Region:</strong>
               {region || "(not set)"}
             </p>
           {/if}

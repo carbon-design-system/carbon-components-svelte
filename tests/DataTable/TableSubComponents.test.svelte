@@ -42,12 +42,16 @@
     {tableStyle}
     {...$$restProps}
   >
-    {#if slotContent}{slotContent}{/if}
+    {#if slotContent}
+      {slotContent}
+    {/if}
     <slot />
   </Table>
 {:else if testComponent === "TableBody"}
   <TableBody {...$$restProps}>
-    {#if slotContent}{slotContent}{/if}
+    {#if slotContent}
+      {slotContent}
+    {/if}
     <slot />
   </TableBody>
 {:else if testComponent === "TableCell"}
@@ -58,7 +62,9 @@
     on:mouseleave={() => console.log("mouseleave")}
     {...$$restProps}
   >
-    {#if slotContent}{slotContent}{/if}
+    {#if slotContent}
+      {slotContent}
+    {/if}
     <slot />
   </TableCell>
 {:else if testComponent === "TableRow"}
@@ -69,7 +75,9 @@
     on:mouseleave={() => console.log("mouseleave")}
     {...$$restProps}
   >
-    {#if slotContent}{slotContent}{/if}
+    {#if slotContent}
+      {slotContent}
+    {/if}
     <slot />
   </TableRow>
 {:else if testComponent === "TableHead"}
@@ -80,7 +88,9 @@
     on:mouseleave={() => console.log("mouseleave")}
     {...$$restProps}
   >
-    {#if slotContent}{slotContent}{/if}
+    {#if slotContent}
+      {slotContent}
+    {/if}
     <slot />
   </TableHead>
 {:else if testComponent === "TableContainer"}
@@ -91,7 +101,9 @@
     {useStaticWidth}
     {...$$restProps}
   >
-    {#if slotContent}{slotContent}{/if}
+    {#if slotContent}
+      {slotContent}
+    {/if}
     <slot />
   </TableContainer>
 {/if}

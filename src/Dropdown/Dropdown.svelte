@@ -428,9 +428,7 @@
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
     >
-      <slot name="labelChildren">
-        {labelText}
-      </slot>
+      <slot name="labelChildren"> {labelText} </slot>
     </label>
   {/if}
   <ListBox
@@ -533,7 +531,11 @@
       {id}
     >
       <span class:bx--list-box__label={true}>
-        {#if selectedItem}{itemToString(selectedItem)}{:else}{label}{/if}
+        {#if selectedItem}
+          {itemToString(selectedItem)}
+        {:else}
+          {label}
+        {/if}
       </span>
       <ListBoxMenuIcon
         on:click={(e) => {
@@ -591,9 +593,7 @@
                     highlightedIndex = actualIndex;
                   }}
                 >
-                  <slot {item} index={actualIndex}>
-                    {itemToString(item)}
-                  </slot>
+                  <slot {item} index={actualIndex}> {itemToString(item)} </slot>
                 </ListBoxMenuItem>
               {/each}
             </div>
@@ -620,9 +620,7 @@
                 highlightedIndex = i;
               }}
             >
-              <slot {item} index={i}>
-                {itemToString(item)}
-              </slot>
+              <slot {item} index={i}> {itemToString(item)} </slot>
             </ListBoxMenuItem>
           {/each}
         {/if}

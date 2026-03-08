@@ -105,12 +105,14 @@
 
 <Stack gap={6}>
   <ButtonSet>
-    <Button size="sm" on:click={filterByExtension}>
+    <Button size="small" on:click={filterByExtension}>
       Filter by extension (.pdf, .docx)
     </Button>
-    <Button size="sm" on:click={filterLeafNodes}>Filter leaf nodes</Button>
-    <Button size="sm" on:click={filterWithChildren}>Filter with children</Button>
-    <Button size="sm" kind="tertiary" on:click={resetFilter}>Reset</Button>
+    <Button size="small" on:click={filterLeafNodes}>Filter leaf nodes</Button>
+    <Button size="small" on:click={filterWithChildren}>
+      Filter with children
+    </Button>
+    <Button size="small" kind="tertiary" on:click={resetFilter}>Reset</Button>
   </ButtonSet>
   <div>
     <TreeView labelText="File System" nodes={filteredNodes} {expandedIds} />

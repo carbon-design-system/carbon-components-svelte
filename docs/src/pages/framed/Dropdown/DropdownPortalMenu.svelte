@@ -6,7 +6,10 @@
   gap={4}
   style="overflow: hidden; border: 1px dashed var(--cds-border-subtle); padding: 1rem; max-height: 120px;"
 >
-  <div>This container has hidden overflow. Without <code>portalMenu</code>, the dropdown would be clipped.</div>
+  <div>
+    This container has hidden overflow. Without <code>portalMenu</code>, the
+    dropdown would be clipped.
+  </div>
   <Dropdown
     portalMenu
     labelText="Preferred channel"

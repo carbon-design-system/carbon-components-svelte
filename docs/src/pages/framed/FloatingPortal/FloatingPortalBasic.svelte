@@ -42,15 +42,17 @@
   }
 
   function handleDragEnd() {
-    const moved =
-      Math.abs(x - startX) > 5 || Math.abs(y - startY) > 5;
+    const moved = Math.abs(x - startX) > 5 || Math.abs(y - startY) > 5;
     if (!moved) {
       open = !open;
     }
   }
 </script>
 
-<div bind:this={container} style="position: relative; min-height: 200px; min-width: 300px;">
+<div
+  bind:this={container}
+  style="position: relative; min-height: 200px; min-width: 300px;"
+>
   <div
     bind:this={anchor}
     role="button"
@@ -69,6 +71,4 @@
   </div>
 </div>
 
-<FloatingPortal {anchor} {open}>
-  <Tile>Content</Tile>
-</FloatingPortal>
+<FloatingPortal {anchor} {open}> <Tile>Content</Tile> </FloatingPortal>

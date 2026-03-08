@@ -25,9 +25,7 @@
   platformName="Carbon Svelte"
   bind:isSideNavOpen
 >
-  <div slot="skipToContent">
-    <SkipToContent />
-  </div>
+  <div slot="skipToContent"><SkipToContent /></div>
 
   <HeaderNav>
     <HeaderNavItem href="/" text="Link 1" />
@@ -57,9 +55,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column>
-        <h1>Welcome</h1>
-      </Column>
+      <Column> <h1>Welcome</h1> </Column>
     </Row>
   </Grid>
 </Content>

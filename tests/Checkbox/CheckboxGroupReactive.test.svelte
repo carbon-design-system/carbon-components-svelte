@@ -30,4 +30,3 @@
 />
 
 <div data-testid="group-value">{JSON.stringify(group)}</div>
-

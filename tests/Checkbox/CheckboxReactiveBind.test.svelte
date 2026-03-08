@@ -14,4 +14,3 @@
   data-testid="checkbox-reactive"
   on:check={() => console.log("check")}
 />
-

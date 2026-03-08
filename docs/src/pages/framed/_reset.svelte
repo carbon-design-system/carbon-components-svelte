@@ -60,7 +60,7 @@
   <link
     rel="canonical"
     href="https://svelte.carbondesignsystem.com{$page.path}"
-  />
+  >
 </svelte:head>
 
 <slot />

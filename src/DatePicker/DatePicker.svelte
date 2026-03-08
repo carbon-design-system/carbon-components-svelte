@@ -231,7 +231,9 @@
     calendar = await createCalendar({
       options: {
         ...options,
-        ...(effectivePortalMenu ? { static: false } : { appendTo: datePickerRef }),
+        ...(effectivePortalMenu
+          ? { static: false }
+          : { appendTo: datePickerRef }),
         defaultDate: $inputValue,
         mode: $mode,
       },

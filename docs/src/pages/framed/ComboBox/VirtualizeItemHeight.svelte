@@ -27,4 +27,3 @@
     <span>{item.description}</span>
   </Stack>
 </ComboBox>
-

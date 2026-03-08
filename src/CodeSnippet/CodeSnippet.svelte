@@ -175,9 +175,7 @@
       class:bx--snippet--multi={type === "multi"}
       {...$$restProps}
     >
-      <code {id}>
-        <slot>{code}</slot>
-      </code>
+      <code {id}> <slot>{code}</slot> </code>
     </span>
   {:else}
     <button
@@ -214,9 +212,7 @@
       on:mouseenter
       on:mouseleave
     >
-      <code {id}>
-        <slot>{code}</slot>
-      </code>
+      <code {id}> <slot>{code}</slot> </code>
       <span
         aria-hidden="true"
         class:bx--assistive-text={true}

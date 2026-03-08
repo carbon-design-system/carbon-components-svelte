@@ -14,7 +14,7 @@
   bind:files
 />
 
-<br />
+<br>
 
 <Button
   kind="tertiary"

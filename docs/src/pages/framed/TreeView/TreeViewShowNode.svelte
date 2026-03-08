@@ -39,7 +39,9 @@
         Show "{text}"
       </Button>
     {/each}
-    <Button kind="tertiary" on:click={() => treeview?.collapseAll()}>Collapse all</Button>
+    <Button kind="tertiary" on:click={() => treeview?.collapseAll()}>
+      Collapse all
+    </Button>
   </ButtonSet>
   <div>
     <TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />

@@ -11,7 +11,7 @@
 
 <Toggle size="sm" labelText="Dark mode" bind:toggled />
 
-<br />
-<br />
+<br>
+<br>
 
 <Button size="small" on:click={storage.clearAll}>Clear storage</Button>

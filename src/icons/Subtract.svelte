@@ -21,6 +21,8 @@
   {...attributes}
   {...$$restProps}
 >
-  {#if title}<title>{title}</title>{/if}
+  {#if title}
+    <title>{title}</title>
+  {/if}
   <path d="M8 15H24V17H8z"></path>
 </svg>

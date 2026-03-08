@@ -7,7 +7,6 @@
     copyCount += 1;
   }
 </script>
-
 Copy events: {copyCount}
 
 <CodeSnippet

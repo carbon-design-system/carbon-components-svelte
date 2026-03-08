@@ -84,7 +84,8 @@
   <label
     class:bx--header__search-label={true}
     for="search-input"
-    id="search-label">Search</label
+    id="search-label"
+    >Search</label
   >
   <div
     class:bx--header__search-menu={true}
@@ -159,7 +160,7 @@
         }
       }}
       on:paste
-    />
+    >
     <button
       type="button"
       aria-label="Clear search"
@@ -202,10 +203,11 @@
           >
             <slot {result} index={i}>
               {result.text}
-              {#if result.description}<span
-                  class:bx--header-search-menu-description={true}
+              {#if result.description}
+                <span class:bx--header-search-menu-description={true}
                   >– {result.description}</span
-                >{/if}
+                >
+              {/if}
             </slot>
           </a>
         </li>

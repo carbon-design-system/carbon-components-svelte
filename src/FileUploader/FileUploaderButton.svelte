@@ -161,9 +161,7 @@
   {#if hasIconOnly}
     <span class:bx--assistive-text={true}>{iconDescription}</span>
   {:else}
-    <slot name="labelChildren">
-      {labelText}
-    </slot>
+    <slot name="labelChildren"> {labelText} </slot>
   {/if}
   {#if icon}
     <svelte:component
@@ -198,4 +196,4 @@
   on:click={({ target }) => {
     target.value = "";
   }}
-/>
+>

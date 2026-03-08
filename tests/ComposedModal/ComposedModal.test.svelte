@@ -52,7 +52,7 @@
   >
     <slot />
     {#if includeInput}
-      <input id="test-focus" data-testid="test-focus" />
+      <input id="test-focus" data-testid="test-focus">
     {/if}
   </ModalBody>
   {#if footerPrimaryButtonText || footerSecondaryButtonText}

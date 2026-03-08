@@ -4,4 +4,8 @@
   export let ariaLabel: string | undefined = undefined;
 </script>
 
-<CodeSnippet type="single" code="test" {...(ariaLabel !== undefined ? { "aria-label": ariaLabel } : {})} />
+<CodeSnippet
+  type="single"
+  code="test"
+  {...(ariaLabel !== undefined ? { "aria-label": ariaLabel } : {})}
+/>

@@ -33,6 +33,8 @@
         />
         <OverflowMenuItem danger text="Stop" />
       </OverflowMenu>
-    {:else}{cell.value}{/if}
+    {:else}
+      {cell.value}
+    {/if}
   </svelte:fragment>
 </DataTable>

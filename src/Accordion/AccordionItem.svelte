@@ -79,7 +79,5 @@
       <slot name="title">{title}</slot>
     </div>
   </button>
-  <div class:bx--accordion__content={true}>
-    <slot />
-  </div>
+  <div class:bx--accordion__content={true}><slot /></div>
 </li>

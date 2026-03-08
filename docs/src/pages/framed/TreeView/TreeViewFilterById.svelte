@@ -76,9 +76,11 @@
 
 <Stack gap={6}>
   <ButtonSet>
-    <Button size="sm" on:click={filterBySingleId}>Filter single ID</Button>
-    <Button size="sm" on:click={filterByMultipleIds}>Filter multiple IDs</Button>
-    <Button size="sm" kind="tertiary" on:click={resetFilter}>Reset</Button>
+    <Button size="small" on:click={filterBySingleId}>Filter single ID</Button>
+    <Button size="small" on:click={filterByMultipleIds}>
+      Filter multiple IDs
+    </Button>
+    <Button size="small" kind="tertiary" on:click={resetFilter}>Reset</Button>
   </ButtonSet>
   <div>
     <TreeView labelText="File System" nodes={filteredNodes} {expandedIds} />

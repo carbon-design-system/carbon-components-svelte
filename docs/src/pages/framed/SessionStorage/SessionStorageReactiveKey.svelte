@@ -24,7 +24,7 @@
   <RadioButton labelText="User 3" value="user-3" />
 </RadioButtonGroup>
 
-<br />
+<br>
 
 <RadioButtonGroup legendText="Theme preference" bind:selected={theme}>
   <RadioButton labelText="White" value="white" />

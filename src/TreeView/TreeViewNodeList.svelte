@@ -78,13 +78,9 @@
 {#if root}
   {#each nodes as child (child.id)}
     {#if Array.isArray(child.nodes)}
-      <svelte:self {...child} let:node>
-        <slot {node} />
-      </svelte:self>
+      <svelte:self {...child} let:node> <slot {node} /> </svelte:self>
     {:else}
-      <TreeViewNode leaf {...child} let:node>
-        <slot {node} />
-      </TreeViewNode>
+      <TreeViewNode leaf {...child} let:node> <slot {node} /> </TreeViewNode>
     {/if}
   {/each}
 {:else}
@@ -174,9 +170,7 @@
       <ul role="group" class:bx--tree-node__children={true}>
         {#each nodes as child (child.id)}
           {#if Array.isArray(child.nodes)}
-            <svelte:self {...child} let:node>
-              <slot {node} />
-            </svelte:self>
+            <svelte:self {...child} let:node> <slot {node} /> </svelte:self>
           {:else}
             <TreeViewNode leaf {...child} let:node>
               <slot {node}>{node.text}</slot>

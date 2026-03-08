@@ -100,7 +100,5 @@
       <slot name="legendChildren">{legendText}</slot>
     </legend>
   {/if}
-  <div>
-    <slot />
-  </div>
+  <div><slot /></div>
 </fieldset>

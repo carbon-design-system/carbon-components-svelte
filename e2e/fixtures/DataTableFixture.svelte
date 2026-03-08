@@ -13,6 +13,4 @@
   }));
 </script>
 
-<div data-testid="data-table-virtual">
-  <DataTable {headers} {rows} />
-</div>
+<div data-testid="data-table-virtual"><DataTable {headers} {rows} /></div>

@@ -21,7 +21,10 @@
   {...attributes}
   {...$$restProps}
 >
-  {#if title}<title>{title}</title>{/if}
-  <circle cx="8" cy="16" r="2"></circle><circle cx="16" cy="16" r="2"
-  ></circle><circle cx="24" cy="16" r="2"></circle>
+  {#if title}
+    <title>{title}</title>
+  {/if}
+  <circle cx="8" cy="16" r="2"></circle>
+  <circle cx="16" cy="16" r="2"></circle>
+  <circle cx="24" cy="16" r="2"></circle>
 </svg>

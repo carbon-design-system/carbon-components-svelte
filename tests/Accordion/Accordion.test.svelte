@@ -47,7 +47,8 @@
       }}
       on:animationend={() => {
         console.log("item-animationend");
-      }}>3</AccordionItem
+      }}
+      >3</AccordionItem
     >
   {/if}
 </Accordion>

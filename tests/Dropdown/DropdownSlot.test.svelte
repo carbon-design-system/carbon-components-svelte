@@ -19,7 +19,5 @@
   let:item
   let:index
 >
-  <span data-testid="custom-item">
-    Item {index + 1}: {item.text}
-  </span>
+  <span data-testid="custom-item"> Item {index + 1}: {item.text} </span>
 </Dropdown>

@@ -311,7 +311,12 @@
 </button>
 
 {#if effectivePortalMenu}
-  <FloatingPortal anchor={buttonRef} {direction} {open} let:direction={portalDirection}>
+  <FloatingPortal
+    anchor={buttonRef}
+    {direction}
+    {open}
+    let:direction={portalDirection}
+  >
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       bind:this={menuRef}

@@ -5,7 +5,11 @@
   export let linkClicked = false;
 </script>
 
-<ExpandableTile hasInteractiveContent tileExpandedLabel="View less" tileCollapsedLabel="View more">
+<ExpandableTile
+  hasInteractiveContent
+  tileExpandedLabel="View less"
+  tileCollapsedLabel="View more"
+>
   <div slot="above">
     <a
       href="/"
@@ -16,7 +20,7 @@
     >
       Test link
     </a>
-    <br /><br />
+    <br><br>
     <Button
       data-testid="test-button"
       on:click={(e) => {

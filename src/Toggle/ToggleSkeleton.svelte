@@ -28,7 +28,7 @@
     class:bx--toggle={true}
     class:bx--toggle--small={size === "sm"}
     class:bx--skeleton={true}
-  />
+  >
   <label
     aria-label={labelText
       ? undefined
@@ -39,9 +39,7 @@
   >
     {#if labelText || $$slots.labelChildren}
       <span class:bx--toggle__label-text={true}>
-        <slot name="labelChildren">
-          {labelText}
-        </slot>
+        <slot name="labelChildren"> {labelText} </slot>
       </span>
     {/if}
     <span class:bx--toggle__text--left={true}></span>

@@ -52,9 +52,7 @@
 <div data-testid="link-with-icon-slot">
   <Link href="https://www.carbondesignsystem.com/">
     Carbon Design System
-    <svelte:fragment slot="icon">
-      <Carbon />
-    </svelte:fragment>
+    <svelte:fragment slot="icon"> <Carbon /> </svelte:fragment>
   </Link>
 </div>
 

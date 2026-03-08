@@ -22,16 +22,8 @@
         { id: "1", text: "Second item" },
       ]}
     />
-    <TextInput
-      placeholder="text"
-      name="text"
-      labelText="Login"
-    />
-    <TextInput
-      placeholder="password"
-      type="password"
-      labelText="Password"
-    />
+    <TextInput placeholder="text" name="text" labelText="Login" />
+    <TextInput placeholder="password" type="password" labelText="Password" />
   </ModalBody>
   <ModalFooter primaryButtonText="OK" secondaryButtonText="Cancel" />
 </ComposedModal>

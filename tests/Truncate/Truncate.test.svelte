@@ -6,6 +6,4 @@
     "This is a long text that should be truncated when it exceeds the available space";
 </script>
 
-<Truncate {clamp}>
-  {text}
-</Truncate>
+<Truncate {clamp}> {text} </Truncate>

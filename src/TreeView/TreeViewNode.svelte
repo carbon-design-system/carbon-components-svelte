@@ -154,8 +154,6 @@
 >
   <div bind:this={refLabel} class:bx--tree-node__label={true}>
     <svelte:component this={icon} class="bx--tree-node__icon" />
-    <slot {node}>
-      {text}
-    </slot>
+    <slot {node}> {text} </slot>
   </div>
 </li>
