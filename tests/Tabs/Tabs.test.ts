@@ -7,6 +7,7 @@ import { user } from "../setup-tests";
 import Tab from "./Tab.test.svelte";
 import TabIcon from "./TabIcon.test.svelte";
 import TabIconContainer from "./TabIconContainer.test.svelte";
+import TabIconSecondaryLabel from "./TabIconSecondaryLabel.test.svelte";
 import TabSecondaryLabel from "./TabSecondaryLabel.test.svelte";
 import Tabs from "./Tabs.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
@@ -518,6 +519,70 @@ describe("Container tabs with icon", () => {
     await user.click(tab);
 
     expect(tab).toHaveAttribute("aria-selected", "true");
+  });
+});
+
+describe("Container tabs with icons and secondary label", () => {
+  it("should render container type with icon and secondary label on each tab", () => {
+    const { container } = render(TabIconSecondaryLabel);
+
+    const tabsContainer = screen.getByRole("navigation");
+    expect(tabsContainer).toHaveClass("bx--tabs--container");
+
+    expect(screen.getByRole("tab", { name: /Calendar/ })).toBeInTheDocument();
+    expect(screen.getByText("(12 events)")).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("tab", { name: /Information/ }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("(3 new)")).toBeInTheDocument();
+
+    expect(screen.getByRole("tab", { name: /Settings/ })).toBeInTheDocument();
+    expect(screen.getByText("(2 pending)")).toBeInTheDocument();
+
+    const iconWrappers = container.querySelectorAll(
+      ".bx--tabs__nav-item--icon",
+    );
+    expect(iconWrappers).toHaveLength(3);
+  });
+
+  it("should have label wrapper and secondary label when tab has icon and secondaryLabel", () => {
+    const { container } = render(TabIconSecondaryLabel);
+
+    const navItems = container.querySelectorAll(".bx--tabs__nav-item");
+    const calendarTab = navItems[0];
+    const labelWrapper = calendarTab?.querySelector(
+      ".bx--tabs__nav-item-label-wrapper",
+    );
+    const secondaryLabel = calendarTab?.querySelector(
+      ".bx--tabs__nav-item-secondary-label",
+    );
+    const iconWrapper = calendarTab?.querySelector(".bx--tabs__nav-item--icon");
+
+    expect(labelWrapper).toBeInTheDocument();
+    expect(secondaryLabel).toBeInTheDocument();
+    expect(secondaryLabel).toHaveTextContent("(12 events)");
+    expect(iconWrapper).toBeInTheDocument();
+  });
+
+  it("should be clickable and show content when tab has icon and secondary label", async () => {
+    render(TabIconSecondaryLabel);
+
+    const informationTab = screen.getByRole("tab", { name: /Information/ });
+    await user.click(informationTab);
+
+    expect(informationTab).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("Information content")).toBeVisible();
+  });
+
+  it("should not select disabled tab with icon and secondary label", async () => {
+    render(TabIconSecondaryLabel);
+
+    const settingsTab = screen.getByRole("tab", { name: /Settings/ });
+    expect(settingsTab).toHaveAttribute("aria-disabled", "true");
+    await user.click(settingsTab);
+
+    expect(settingsTab).toHaveAttribute("aria-selected", "false");
   });
 });
 
