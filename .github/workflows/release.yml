@@ -3,6 +3,9 @@ on:
     tags:
       - "v*"
 
+env:
+  IBM_TELEMETRY_DISABLED: true
+
 jobs:
   release:
     runs-on: macos-15
