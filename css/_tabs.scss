@@ -72,6 +72,44 @@
   @include tabs-full-width;
 }
 
+/// Tab tall (secondary label) styles
+/// @access private
+/// @group components
+@mixin tabs-tall {
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tabs--tall.#{$prefix}--tabs--container {
+      min-height: 4rem;
+    }
+
+    .#{$prefix}--tabs--tall .#{$prefix}--tabs__nav-item {
+      min-height: 4rem;
+    }
+
+    .#{$prefix}--tabs--tall.#{$prefix}--tabs--container a.#{$prefix}--tabs__nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      height: 100%;
+    }
+  }
+
+  .#{$prefix}--tabs__nav-item-label-wrapper {
+    display: flex;
+    line-height: normal;
+  }
+
+  .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item-secondary-label {
+    @include carbon--type-style("caption-01");
+
+    min-height: 1rem;
+  }
+}
+
+@include exports('tabs-tall') {
+  @include tabs-tall;
+}
+
 /// Tab container panel background
 /// @access private
 /// @group components

@@ -5,6 +5,7 @@ import { user } from "../setup-tests";
 import Tab from "./Tab.test.svelte";
 import TabIcon from "./TabIcon.test.svelte";
 import TabIconContainer from "./TabIconContainer.test.svelte";
+import TabSecondaryLabel from "./TabSecondaryLabel.test.svelte";
 import Tabs from "./Tabs.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
@@ -515,6 +516,103 @@ describe("Container tabs with icon", () => {
     await user.click(tab);
 
     expect(tab).toHaveAttribute("aria-selected", "true");
+  });
+});
+
+describe("Container tabs with secondary label", () => {
+  it("should render container with tall class when any tab has secondary label", () => {
+    render(TabSecondaryLabel);
+
+    const tabsContainer = screen.getByRole("navigation");
+    expect(tabsContainer).toHaveClass("bx--tabs--container");
+    expect(tabsContainer).toHaveClass("bx--tabs--tall");
+  });
+
+  it("should render secondary label via prop", () => {
+    render(TabSecondaryLabel);
+
+    expect(screen.getByRole("tab", { name: /Engage/ })).toBeInTheDocument();
+    expect(screen.getByText("(21/25)")).toBeInTheDocument();
+  });
+
+  it("should render secondary label via slot", () => {
+    render(TabSecondaryLabel);
+
+    expect(screen.getByRole("tab", { name: /Analyze/ })).toBeInTheDocument();
+    expect(screen.getByText("(12/16)")).toBeInTheDocument();
+  });
+
+  it("should have label wrapper and secondary label element for tab with prop", () => {
+    const { container } = render(TabSecondaryLabel);
+
+    const navItems = container.querySelectorAll(".bx--tabs__nav-item");
+    const engageTab = navItems[0];
+    const labelWrapper = engageTab?.querySelector(
+      ".bx--tabs__nav-item-label-wrapper",
+    );
+    const secondaryLabel = engageTab?.querySelector(
+      ".bx--tabs__nav-item-secondary-label",
+    );
+
+    expect(labelWrapper).toBeInTheDocument();
+    expect(secondaryLabel).toBeInTheDocument();
+    expect(secondaryLabel).toHaveTextContent("(21/25)");
+  });
+
+  it("should have label wrapper and secondary label element for tab with slot", () => {
+    const { container } = render(TabSecondaryLabel);
+
+    const navItems = container.querySelectorAll(".bx--tabs__nav-item");
+    const analyzeTab = navItems[1];
+    const labelWrapper = analyzeTab?.querySelector(
+      ".bx--tabs__nav-item-label-wrapper",
+    );
+    const secondaryLabel = analyzeTab?.querySelector(
+      ".bx--tabs__nav-item-secondary-label",
+    );
+
+    expect(labelWrapper).toBeInTheDocument();
+    expect(secondaryLabel).toBeInTheDocument();
+    expect(secondaryLabel).toHaveTextContent("(12/16)");
+  });
+
+  it("should render label wrapper and empty spacer for tab without secondary label (for alignment)", () => {
+    const { container } = render(TabSecondaryLabel);
+
+    const navItems = container.querySelectorAll(".bx--tabs__nav-item");
+    const plainTab = navItems[2];
+    const labelWrapper = plainTab?.querySelector(
+      ".bx--tabs__nav-item-label-wrapper",
+    );
+    const secondaryLabelEl = plainTab?.querySelector(
+      ".bx--tabs__nav-item-secondary-label",
+    );
+
+    expect(labelWrapper).toBeInTheDocument();
+    expect(secondaryLabelEl).toBeInTheDocument();
+    expect(secondaryLabelEl).toHaveAttribute("aria-hidden", "true");
+    expect(secondaryLabelEl).toHaveTextContent("");
+    expect(plainTab).toHaveTextContent("Plain");
+  });
+
+  it("should be clickable and show content when tab has secondary label", async () => {
+    render(TabSecondaryLabel);
+
+    const engageTab = screen.getByRole("tab", { name: /Engage/ });
+    await user.click(engageTab);
+
+    expect(engageTab).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("Engage content")).toBeVisible();
+  });
+
+  it("should switch content when clicking tab with slot secondary label", async () => {
+    render(TabSecondaryLabel);
+
+    const analyzeTab = screen.getByRole("tab", { name: /Analyze/ });
+    await user.click(analyzeTab);
+
+    expect(analyzeTab).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("Analyze content")).toBeVisible();
   });
 });
 

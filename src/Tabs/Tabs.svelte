@@ -34,7 +34,7 @@
   const dispatch = createEventDispatcher();
 
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; index: number }>>}
+   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
    */
   const tabs = writable([]);
   const tabsById = derived(tabs, (_) =>
@@ -80,8 +80,13 @@
   // This is necessary to avoid infinite loops in Svelte 5.
   let needsDomSync = false;
 
+  const hasSecondaryLabel = derived(
+    tabs,
+    (_) => type === "container" && _.some((tab) => tab.hasSecondaryLabel),
+  );
+
   /**
-   * @type {(data: { id: string; label: string; disabled: boolean }) => void}
+   * @type {(data: { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean }) => void}
    */
   const add = (data) => {
     needsDomSync = true;
@@ -160,6 +165,7 @@
     selectedContent,
     useAutoWidth,
     useFullWidth,
+    hasSecondaryLabel,
     add,
     remove,
     addContent,
@@ -244,6 +250,7 @@
   role="navigation"
   class:bx--tabs={true}
   class:bx--tabs--container={type === "container"}
+  class:bx--tabs--tall={$hasSecondaryLabel}
   class:bx--tabs--full-width={fullWidth}
   {...$$restProps}
 >
