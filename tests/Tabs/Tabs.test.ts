@@ -28,6 +28,9 @@ describe("Tabs", () => {
     expect(screen.getByText("Content 1")).toBeVisible();
     expect(screen.getByText("Content 2")).not.toBeVisible();
     expect(screen.getByText("Content 3")).not.toBeVisible();
+
+    const tabsContainer = screen.getByRole("navigation");
+    expect(tabsContainer).not.toHaveClass("bx--tabs--full-width");
   });
 
   it("should select initial tab based on selected prop", () => {
@@ -103,6 +106,15 @@ describe("Tabs", () => {
       const navItem = tab.closest(".bx--tabs__nav-item");
       expect(navItem).not.toHaveStyle({ width: "10rem" });
     }
+  });
+
+  it("should render full-width tabs when fullWidth is true", () => {
+    render(Tabs, {
+      props: { fullWidth: true },
+    });
+
+    const tabsContainer = screen.getByRole("navigation");
+    expect(tabsContainer).toHaveClass("bx--tabs--full-width");
   });
 
   it("should show dropdown on trigger click", async () => {
