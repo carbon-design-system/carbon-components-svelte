@@ -91,8 +91,8 @@
       isOpen = false;
     }}
     class:bx--side-nav__overlay={true}
+    class:bx--side-nav__overlay--mobile={$isSideNavMobile}
     class:bx--side-nav__overlay-active={isOpen}
-    style:z-index={isOpen ? 6000 : undefined}
   ></div>
 {/if}
 <nav
