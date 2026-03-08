@@ -1,6 +1,9 @@
 import { render, screen, within } from "@testing-library/svelte";
+import Calendar from "../../src/icons/Calendar.svelte";
+import Settings from "../../src/icons/Settings.svelte";
 import { user } from "../setup-tests";
 import Tab from "./Tab.test.svelte";
+import TabIcon from "./TabIcon.test.svelte";
 import Tabs from "./Tabs.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
@@ -359,6 +362,71 @@ describe("Tab", () => {
 
     const tab = screen.getByRole("tab");
     expect(tab).toHaveTextContent("Slot content");
+  });
+});
+
+describe("Tab icon", () => {
+  it("should render icon next to label", () => {
+    const { container } = render(TabIcon, { props: { icon: Calendar } });
+
+    const iconWrapper = container.querySelector(".bx--tabs__nav-item--icon");
+    expect(iconWrapper).toBeInTheDocument();
+
+    const svg = iconWrapper?.querySelector("svg");
+    expect(svg).toBeInTheDocument();
+    expect(svg).toHaveAttribute("width", "16");
+    expect(svg).toHaveAttribute("height", "16");
+  });
+
+  it("should not render icon wrapper when no icon is provided", () => {
+    const { container } = render(TabIcon, { props: { icon: Calendar } });
+
+    // The second tab ("No Icon") should not have an icon wrapper
+    const navItems = container.querySelectorAll(".bx--tabs__nav-item");
+    const secondTab = navItems[1];
+    const iconWrapper = secondTab?.querySelector(".bx--tabs__nav-item--icon");
+    expect(iconWrapper).not.toBeInTheDocument();
+  });
+
+  it("should render icon inside the nav link element", () => {
+    const { container } = render(TabIcon, { props: { icon: Calendar } });
+
+    const navLink = container.querySelector(".bx--tabs__nav-link");
+    const iconWrapper = navLink?.querySelector(".bx--tabs__nav-item--icon");
+    expect(iconWrapper).toBeInTheDocument();
+  });
+
+  it("should render label and icon together", () => {
+    render(TabIcon, { props: { label: "Dashboard", icon: Calendar } });
+
+    const tab = screen.getByRole("tab", { name: /Dashboard/ });
+    expect(tab).toBeInTheDocument();
+    expect(tab.querySelector(".bx--tabs__nav-item--icon")).toBeInTheDocument();
+  });
+
+  it("should apply disabled styling context when tab is disabled", () => {
+    const { container } = render(TabIcon, {
+      props: { icon: Settings, disabled: true },
+    });
+
+    const disabledItem = container.querySelector(
+      ".bx--tabs__nav-item--disabled",
+    );
+    expect(disabledItem).toBeInTheDocument();
+
+    const iconWrapper = disabledItem?.querySelector(
+      ".bx--tabs__nav-item--icon",
+    );
+    expect(iconWrapper).toBeInTheDocument();
+  });
+
+  it("should still be clickable with icon when enabled", async () => {
+    render(TabIcon, { props: { icon: Calendar } });
+
+    const tab = screen.getByRole("tab", { name: /Test Tab/ });
+    await user.click(tab);
+
+    expect(tab).toHaveAttribute("aria-selected", "true");
   });
 });
 

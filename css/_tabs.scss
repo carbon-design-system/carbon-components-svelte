@@ -1,0 +1,34 @@
+//
+// Copyright IBM Corp. 2016, 2018
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Tab icon styles
+/// @access private
+/// @group components
+@mixin tabs-icon {
+  .#{$prefix}--tabs__nav-link:has(.#{$prefix}--tabs__nav-item--icon) {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--tabs__nav-item--icon {
+    display: flex;
+    align-items: center;
+    padding-inline-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-item--icon svg {
+    fill: $disabled-02;
+  }
+}
+
+@include exports('tabs-icon') {
+  @include tabs-icon;
+}
