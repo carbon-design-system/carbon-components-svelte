@@ -21,9 +21,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
-  <svelte:fragment slot="skipToContent">
-    <SkipToContent />
-  </svelte:fragment>
+  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderNav>
     <HeaderNavItem href="/" text="Link 1" />
     <HeaderNavItem href="/" text="Link 2" />
@@ -55,9 +53,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column>
-        <h1>Welcome</h1>
-      </Column>
+      <Column> <h1>Welcome</h1> </Column>
     </Row>
   </Grid>
 </Content>

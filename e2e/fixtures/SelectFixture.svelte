@@ -4,11 +4,7 @@
   let selected = "";
 </script>
 
-<Select
-  data-testid="select-country"
-  labelText="Country"
-  bind:selected
->
+<Select data-testid="select-country" labelText="Country" bind:selected>
   <SelectItem value="us" text="United States" />
   <SelectItem value="uk" text="United Kingdom" />
   <SelectItem value="ca" text="Canada" />

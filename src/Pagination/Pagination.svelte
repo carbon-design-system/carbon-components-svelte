@@ -222,7 +222,9 @@
       <span class:bx--pagination__text={true}>
         {#if pagesUnknown}
           {pageText(page)}
-        {:else}{pageRangeText(page, totalPages)}{/if}
+        {:else}
+          {pageRangeText(page, totalPages)}
+        {/if}
       </span>
     {/if}
     <Button

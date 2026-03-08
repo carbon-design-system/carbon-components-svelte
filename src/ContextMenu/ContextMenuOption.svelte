@@ -374,9 +374,7 @@
     >
       {#if indented}
         <div class:bx--menu-option__icon={true}>
-          <slot name="icon">
-            <svelte:component this={icon} />
-          </slot>
+          <slot name="icon"> <svelte:component this={icon} /> </slot>
         </div>
       {/if}
       <span class:bx--menu-option__label={true} title={labelText}>
@@ -400,9 +398,7 @@
     >
       {#if indented}
         <div class:bx--menu-option__icon={true}>
-          <slot name="icon">
-            <svelte:component this={icon} />
-          </slot>
+          <slot name="icon"> <svelte:component this={icon} /> </slot>
         </div>
       {/if}
       <span class:bx--menu-option__label={true} title={labelText}>

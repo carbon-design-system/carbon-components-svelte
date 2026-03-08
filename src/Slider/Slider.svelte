@@ -187,9 +187,7 @@
     class:bx--label--disabled={disabled}
     class:bx--visually-hidden={hideLabel}
   >
-    <slot name="labelChildren">
-      {labelText}
-    </slot>
+    <slot name="labelChildren"> {labelText} </slot>
   </label>
   <div
     class:bx--slider-container={true}
@@ -287,7 +285,7 @@
           : warn
             ? warnId
             : undefined}
-      />
+      >
     </div>
   </div>
   {#if invalid}

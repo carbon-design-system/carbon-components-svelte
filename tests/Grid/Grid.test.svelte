@@ -24,9 +24,7 @@
     {...$$restProps}
     let:props
   >
-    <header {...props}>
-      <slot />
-    </header>
+    <header {...props}><slot /></header>
   </Grid>
 {:else}
   <Grid

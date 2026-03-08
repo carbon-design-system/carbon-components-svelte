@@ -12,14 +12,16 @@
 </script>
 
 <Stack gap={5}>
-  <SelectableTileGroup legendText="Service pricing tiers" name="plan" bind:selected>
+  <SelectableTileGroup
+    legendText="Service pricing tiers"
+    name="plan"
+    bind:selected
+  >
     {#each values as value}
       <SelectableTile {value}>{value}</SelectableTile>
     {/each}
   </SelectableTileGroup>
-  <div>
-    Selected: <strong>{selected.join(", ") || "None"}</strong>
-  </div>
+  <div>Selected: <strong>{selected.join(", ") || "None"}</strong></div>
   <Button
     size="small"
     disabled={selected.length === 1 && selected[0] === values[1]}

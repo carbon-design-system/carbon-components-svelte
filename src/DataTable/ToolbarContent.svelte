@@ -14,6 +14,4 @@
   $: inertProps = batchActionsActive ? { inert: true } : {};
 </script>
 
-<div class:bx--toolbar-content={true} {...inertProps}>
-  <slot />
-</div>
+<div class:bx--toolbar-content={true} {...inertProps}><slot /></div>

@@ -109,7 +109,9 @@
       Filter by extension (.pdf, .docx)
     </Button>
     <Button size="sm" on:click={filterLeafNodes}>Filter leaf nodes</Button>
-    <Button size="sm" on:click={filterWithChildren}>Filter with children</Button>
+    <Button size="sm" on:click={filterWithChildren}
+      >Filter with children</Button
+    >
     <Button size="sm" kind="tertiary" on:click={resetFilter}>Reset</Button>
   </ButtonSet>
   <div>

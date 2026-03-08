@@ -57,8 +57,6 @@
         Restart
       </Button>
     </ToolbarBatchActions>
-    <ToolbarContent>
-      <Button>Create balancer</Button>
-    </ToolbarContent>
+    <ToolbarContent> <Button>Create balancer</Button> </ToolbarContent>
   </Toolbar>
 </DataTable>

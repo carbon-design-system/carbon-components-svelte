@@ -108,7 +108,9 @@
       }
     }}
   >
-    {#if selectionCount !== undefined}{selectionCount}{/if}
+    {#if selectionCount !== undefined}
+      {selectionCount}
+    {/if}
     <Close />
   </div>
 {/if}

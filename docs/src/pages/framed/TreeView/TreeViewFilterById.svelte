@@ -77,7 +77,9 @@
 <Stack gap={6}>
   <ButtonSet>
     <Button size="sm" on:click={filterBySingleId}>Filter single ID</Button>
-    <Button size="sm" on:click={filterByMultipleIds}>Filter multiple IDs</Button>
+    <Button size="sm" on:click={filterByMultipleIds}
+      >Filter multiple IDs</Button
+    >
     <Button size="sm" kind="tertiary" on:click={resetFilter}>Reset</Button>
   </ButtonSet>
   <div>

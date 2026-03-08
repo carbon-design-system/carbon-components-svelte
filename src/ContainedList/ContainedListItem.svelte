@@ -37,9 +37,7 @@
         <svelte:component this="{icon}" />
       </div>
     {/if}
-    <div>
-      <slot />
-    </div>
+    <div><slot /></div>
   </svelte:element>
   {#if $$slots.action}
     <div class:bx--contained-list-item__action="{true}">
@@ -47,4 +45,3 @@
     </div>
   {/if}
 </li>
-

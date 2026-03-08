@@ -22,7 +22,8 @@
   export let headerClass = "";
   export let useSlots = false;
   export let ariaLabel: string | undefined = undefined;
-  export let expansionBreakpoint: ComponentProps<Header>["expansionBreakpoint"] = undefined;
+  export let expansionBreakpoint: ComponentProps<Header>["expansionBreakpoint"] =
+    undefined;
 
   export let sideNavFixed: ComponentProps<SideNav>["fixed"] = false;
   export let sideNavRail: ComponentProps<SideNav>["rail"] = false;
@@ -81,7 +82,7 @@
   rail={sideNavRail}
   ariaLabel={sideNavAriaLabel}
   bind:isOpen={sideNavIsOpen}
-  expansionBreakpoint={expansionBreakpoint}
+  {expansionBreakpoint}
   class={sideNavClass}
   on:open={() => {
     console.log("sidenav-open");

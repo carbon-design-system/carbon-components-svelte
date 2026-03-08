@@ -4,10 +4,7 @@
   let clicked = false;
 </script>
 
-<ClickableTile
-  data-testid="clickable-tile"
-  bind:clicked
->
+<ClickableTile data-testid="clickable-tile" bind:clicked>
   Clickable tile content
 </ClickableTile>
 <div data-testid="clicked-state">{clicked}</div>

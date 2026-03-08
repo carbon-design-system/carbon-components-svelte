@@ -3,8 +3,6 @@
 </script>
 
 <ContentSwitcher>
-  <Switch>
-    <div data-testid="custom-content">Custom Content</div>
-  </Switch>
+  <Switch> <div data-testid="custom-content">Custom Content</div> </Switch>
   <Switch text="Regular Text" />
 </ContentSwitcher>

@@ -26,9 +26,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
-  <div slot="skipToContent">
-    <SkipToContent />
-  </div>
+  <div slot="skipToContent"><SkipToContent /></div>
   <HeaderUtilities>
     <HeaderGlobalAction iconDescription="Settings" icon={SettingsAdjust} />
     <HeaderAction
@@ -69,9 +67,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column>
-        <h1>Welcome</h1>
-      </Column>
+      <Column> <h1>Welcome</h1> </Column>
     </Row>
   </Grid>
 </Content>

@@ -16,7 +16,12 @@
     <SelectItem value="g90" text="Gray 90" />
     <SelectItem value="g100" text="Gray 100" />
   </Select>
-  <Button kind="tertiary" size="small" disabled={selected === "g90"} on:click={() => (selected = "g90")}>
+  <Button
+    kind="tertiary"
+    size="small"
+    disabled={selected === "g90"}
+    on:click={() => (selected = "g90")}
+  >
     Set to "g90"
   </Button>
 </Stack>

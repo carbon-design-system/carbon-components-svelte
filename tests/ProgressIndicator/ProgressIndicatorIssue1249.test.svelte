@@ -22,6 +22,4 @@
   <ProgressStep complete={stepsCompleted[2]} label="Step 3" />
 </ProgressIndicator>
 
-<button type="button" on:click={completeStep3}>
-  Click me twice
-</button>
+<button type="button" on:click={completeStep3}>Click me twice</button>

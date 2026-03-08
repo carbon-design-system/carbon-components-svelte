@@ -15,13 +15,9 @@
 </ButtonSet>
 
 {#if showPortal1}
-  <Portal>
-    Portal content 1
-  </Portal>
+  <Portal> Portal content 1 </Portal>
 {/if}
 
 {#if showPortal2}
-  <Portal>
-    Portal content 2
-  </Portal>
+  <Portal> Portal content 2 </Portal>
 {/if}

@@ -20,4 +20,3 @@
   </ContainedListItem>
   <ContainedListItem>Item 2</ContainedListItem>
 </ContainedList>
-

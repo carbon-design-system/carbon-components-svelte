@@ -16,9 +16,7 @@
 
 <ComposedModal bind:open>
   <ModalHeader title="Modal title" />
-  <ModalBody>
-    <p data-testid="modal-body">Modal content</p>
-  </ModalBody>
+  <ModalBody> <p data-testid="modal-body">Modal content</p> </ModalBody>
   <ModalFooter>
     <Button data-testid="close-modal" on:click={() => (open = false)}>
       Close

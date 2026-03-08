@@ -50,9 +50,7 @@
     >
       {#if labelText || $$slots.labelChildren}
         <div id="{labelId}" class:bx--contained-list__label="{true}">
-          <slot name="labelChildren">
-            {labelText}
-          </slot>
+          <slot name="labelChildren"> {labelText} </slot>
         </div>
       {/if}
       {#if $$slots.action}
@@ -62,8 +60,10 @@
       {/if}
     </div>
   {/if}
-  <ul role="list" aria-labelledby={labelText || $$slots.labelChildren ? labelId : undefined}>
+  <ul
+    role="list"
+    aria-labelledby={labelText || $$slots.labelChildren ? labelId : undefined}
+  >
     <slot />
   </ul>
 </div>
-

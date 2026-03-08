@@ -1,5 +1,10 @@
 <script>
-  import { filterTreeByText, Search, Stack, TreeView } from "carbon-components-svelte";
+  import {
+    filterTreeByText,
+    Search,
+    Stack,
+    TreeView,
+  } from "carbon-components-svelte";
 
   const allNodes = [
     {
@@ -114,7 +119,11 @@
 </script>
 
 <Stack gap={6}>
-  <Search size="sm" placeholder="Search tree nodes..." bind:value={searchValue} />
+  <Search
+    size="sm"
+    placeholder="Search tree nodes..."
+    bind:value={searchValue}
+  />
   <div>
     {#if filteredNodes.length > 0}
       <TreeView labelText="File System" nodes={filteredNodes} {expandedIds} />

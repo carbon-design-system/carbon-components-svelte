@@ -7,15 +7,14 @@
 
 <NotificationQueue bind:this={queue} maxNotifications={3} />
 
-  <Button
-    on:click={() => {
+<Button
+  on:click={() => {
       count++;
       queue.add({
         kind: "success",
         title: "Notification " + count,
       });
     }}
-  >
-    Add notification
-  </Button>
-
+>
+  Add notification
+</Button>

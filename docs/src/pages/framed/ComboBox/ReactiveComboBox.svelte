@@ -14,7 +14,7 @@
     { id: "2", text: "Fax" },
   ]}
 />
-<br />
+<br>
 <Button on:click={() => (selectedId = undefined)}
   >Set to undefined (unselected)</Button
 >

@@ -4,8 +4,4 @@
   let page = 1;
 </script>
 
-<PaginationNav
-  data-testid="pagination-nav"
-  total={10}
-  bind:page
-/>
+<PaginationNav data-testid="pagination-nav" total={10} bind:page />

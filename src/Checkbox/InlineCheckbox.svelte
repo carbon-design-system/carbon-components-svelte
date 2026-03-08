@@ -31,7 +31,7 @@
     on:change
     on:focus
     on:blur
-  />
+  >
   <label
     for={id}
     {title}

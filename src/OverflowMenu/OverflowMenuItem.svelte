@@ -56,7 +56,9 @@
   import { afterUpdate, createEventDispatcher, getContext } from "svelte";
 
   const dispatch = createEventDispatcher();
-  const { focusedId, add, update, change, items } = getContext("carbon:OverflowMenu");
+  const { focusedId, add, update, change, items } = getContext(
+    "carbon:OverflowMenu",
+  );
 
   $: item = $items.find((_) => _.id === id);
 
@@ -124,9 +126,7 @@
       }}
     >
       <slot>
-        <div class:bx--overflow-menu-options__option-content={true}>
-          {text}
-        </div>
+        <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
       </slot>
     </a>
   {:else}
@@ -145,9 +145,7 @@
       }}
     >
       <slot>
-        <div class:bx--overflow-menu-options__option-content={true}>
-          {text}
-        </div>
+        <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
       </slot>
     </button>
   {/if}

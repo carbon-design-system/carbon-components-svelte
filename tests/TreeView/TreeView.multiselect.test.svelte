@@ -54,4 +54,3 @@
   on:toggle={({ detail }) => console.log("toggle", detail)}
   on:focus={({ detail }) => console.log("focus", detail)}
 />
-

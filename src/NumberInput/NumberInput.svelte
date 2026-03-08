@@ -498,7 +498,7 @@
           on:wheel|nonpassive={(e) => {
             if (disableWheel) e.preventDefault();
           }}
-        />
+        >
       {:else}
         <input
           bind:this={ref}
@@ -534,7 +534,7 @@
           on:wheel|nonpassive={(e) => {
             if (disableWheel) e.preventDefault();
           }}
-        />
+        >
       {/if}
       {#if readonly}
         <EditOff class="bx--text-input__readonly-icon" />
@@ -597,9 +597,7 @@
       </div>
     {/if}
     {#if hasErrorMessage}
-      <div id={errorId} class:bx--form-requirement={true}>
-        {invalidText}
-      </div>
+      <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
     {/if}
     {#if !effectiveInvalid && warn}
       <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>

@@ -11,7 +11,8 @@
     open = true;
     hasUnsavedChanges = true;
     showWarning = false;
-  }}>Open modal with unsaved changes</Button
+  }}
+  >Open modal with unsaved changes</Button
 >
 
 <Modal

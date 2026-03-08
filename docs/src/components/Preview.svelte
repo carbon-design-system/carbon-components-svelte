@@ -37,7 +37,10 @@
   {/if}
   <div class="preview-viewer" class:framed>
     {#if framed}
-      <iframe loading="lazy" title={src.split("/").pop()} src={themedSrcUrl}
+      <iframe
+        loading="lazy"
+        title={src.split("/").pop()}
+        src={themedSrcUrl}
       ></iframe>
     {:else}
       <slot />

@@ -4,6 +4,6 @@
 
 <div>
   <div>This is rendered inside the div</div>
-  <br />
+  <br>
   <Portal>This is rendered outside of the div</Portal>
 </div>

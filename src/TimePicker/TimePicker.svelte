@@ -79,9 +79,7 @@
           class:bx--visually-hidden={hideLabel}
           class:bx--label--disabled={disabled}
         >
-          <slot name="labelChildren">
-            {labelText}
-          </slot>
+          <slot name="labelChildren"> {labelText} </slot>
         </label>
       {/if}
       <Stack orientation="horizontal" gap={0}>
@@ -108,7 +106,7 @@
           on:focus
           on:blur
           on:paste
-        />
+        >
         <slot />
       </Stack>
     </div>

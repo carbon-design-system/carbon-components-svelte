@@ -95,7 +95,10 @@
 </script>
 
 <Stack gap={5}>
-  <div bind:this={containerBottom} style="position: relative; min-height: 200px; min-width: 300px;">
+  <div
+    bind:this={containerBottom}
+    style="position: relative; min-height: 200px; min-width: 300px;"
+  >
     <div
       bind:this={anchorBottom}
       role="button"
@@ -109,7 +112,9 @@
       title="Drag to move, click to toggle"
     >
       <Tile>
-        <Button on:click={() => (openBottom = !openBottom)}>Direction: bottom (default)</Button>
+        <Button on:click={() => (openBottom = !openBottom)}
+          >Direction: bottom (default)</Button
+        >
       </Tile>
     </div>
     <FloatingPortal anchor={anchorBottom} open={openBottom} direction="bottom">
@@ -117,7 +122,10 @@
     </FloatingPortal>
   </div>
 
-  <div bind:this={containerTop} style="position: relative; min-height: 200px; min-width: 300px;">
+  <div
+    bind:this={containerTop}
+    style="position: relative; min-height: 200px; min-width: 300px;"
+  >
     <div
       bind:this={anchorTop}
       role="button"

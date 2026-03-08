@@ -32,7 +32,7 @@
   <Slider
     aria-label={ariaLabel}
     bind:value
-    id={id}
+    {id}
     {min}
     {max}
     {step}
@@ -66,7 +66,7 @@
     aria-label={ariaLabel}
     bind:value
     {labelText}
-    id={id}
+    {id}
     {min}
     {max}
     {step}

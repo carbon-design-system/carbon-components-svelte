@@ -6,7 +6,7 @@
 
 <Search expandable bind:expanded on:expand on:collapse />
 
-<br />
+<br>
 
 <strong>Expanded:</strong>
 {expanded}

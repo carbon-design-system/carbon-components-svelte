@@ -6,7 +6,5 @@
 </script>
 
 <MultiSelect {items} let:item let:index>
-  <div>
-    <strong>{item.id} {item.text} {index}</strong>
-  </div>
+  <div><strong>{item.id} {item.text} {index}</strong></div>
 </MultiSelect>

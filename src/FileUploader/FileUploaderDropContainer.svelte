@@ -102,9 +102,7 @@
       class:bx--file__drop-container={true}
       class:bx--file__drop-container--drag-over={over}
     >
-      <slot name="labelChildren">
-        {labelText}
-      </slot>
+      <slot name="labelChildren"> {labelText} </slot>
     </div>
   </label>
   <input
@@ -127,5 +125,5 @@
     on:click={({ target }) => {
       target.value = null;
     }}
-  />
+  >
 </div>

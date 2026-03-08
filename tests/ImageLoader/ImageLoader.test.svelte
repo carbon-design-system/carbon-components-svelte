@@ -22,16 +22,19 @@
 
 <!-- Default image loader -->
 <div data-testid="default-loader">
-  <ImageLoader src={validImageSrc} alt="IBM Logo" on:load={onload} on:error={onerror} />
+  <ImageLoader
+    src={validImageSrc}
+    alt="IBM Logo"
+    on:load={onload}
+    on:error={onerror}
+  />
 </div>
 
 <!-- Image loader with loading and error slots -->
 <div data-testid="loader-with-slots">
   <ImageLoader src={validImageSrc} alt="IBM Logo with slots">
     <svelte:fragment slot="loading">
-      <div data-testid="loading-state">
-        <InlineLoading />
-      </div>
+      <div data-testid="loading-state"><InlineLoading /></div>
     </svelte:fragment>
     <svelte:fragment slot="error">
       <div data-testid="error-state">An error occurred.</div>

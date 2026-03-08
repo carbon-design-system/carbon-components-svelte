@@ -66,7 +66,5 @@
     }
   }}
 >
-  <span class:bx--content-switcher__label={true}>
-    <slot>{text}</slot>
-  </span>
+  <span class:bx--content-switcher__label={true}> <slot>{text}</slot> </span>
 </button>

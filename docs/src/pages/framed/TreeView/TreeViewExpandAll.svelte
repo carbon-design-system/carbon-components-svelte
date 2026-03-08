@@ -45,9 +45,7 @@
 </script>
 
 <Stack gap={6}>
-  <div>
-    <Button on:click={treeview?.expandAll}>Expand all</Button>
-  </div>
+  <div><Button on:click={treeview?.expandAll}>Expand all</Button></div>
   <div>
     <TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />
   </div>

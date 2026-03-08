@@ -68,7 +68,5 @@
   style:position={relative ? "relative" : undefined}
   {...$$restProps}
 >
-  <div class:bx--popover-contents={true}>
-    <slot />
-  </div>
+  <div class:bx--popover-contents={true}><slot /></div>
 </div>

@@ -92,9 +92,7 @@
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
       >
-        <slot name="labelChildren">
-          {labelText}
-        </slot>
+        <slot name="labelChildren"> {labelText} </slot>
       </label>
       {#if maxCount}
         <div class:bx--label={true} class:bx--label--disabled={disabled}>

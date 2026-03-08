@@ -327,8 +327,13 @@
     {#if component.rest_props.type === "Element"}
       <code>{component.rest_props.name}</code>
       element.
-    {:else}<code>{component.rest_props.name}</code> component.{/if}
-  {:else}This component does not spread <code>restProps</code>{/if}
+    {:else}
+      <code>{component.rest_props.name}</code>
+      component.
+    {/if}
+  {:else}
+    This component does not spread <code>restProps</code>
+  {/if}
 </div>
 
 <style>

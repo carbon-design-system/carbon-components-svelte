@@ -502,9 +502,7 @@
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
     >
-      <slot name="labelChildren">
-        {labelText}
-      </slot>
+      <slot name="labelChildren"> {labelText} </slot>
     </label>
   {/if}
   <ListBox
@@ -621,7 +619,7 @@
           }
         }}
         on:paste
-      />
+      >
       {#if invalid}
         <WarningFilled class="bx--list-box__invalid-icon" />
       {/if}
@@ -698,9 +696,7 @@
                     highlightedIndex = actualIndex;
                   }}
                 >
-                  <slot {item} index={actualIndex}>
-                    {itemToString(item)}
-                  </slot>
+                  <slot {item} index={actualIndex}> {itemToString(item)} </slot>
                   {#if selectedItem && selectedItem.id === item.id}
                     <Checkmark class="bx--list-box__menu-item__selected-icon" />
                   {/if}
@@ -733,9 +729,7 @@
                 highlightedIndex = i;
               }}
             >
-              <slot {item} index={i}>
-                {itemToString(item)}
-              </slot>
+              <slot {item} index={i}> {itemToString(item)} </slot>
               {#if selectedItem && selectedItem.id === item.id}
                 <Checkmark class="bx--list-box__menu-item__selected-icon" />
               {/if}

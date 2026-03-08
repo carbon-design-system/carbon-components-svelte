@@ -30,9 +30,7 @@
 
 <Button href="#">Link button</Button>
 
-<Button as let:props>
-  <p {...props}>Custom element</p>
-</Button>
+<Button as let:props> <p {...props}>Custom element</p> </Button>
 
 <Button disabled>Disabled button</Button>
 

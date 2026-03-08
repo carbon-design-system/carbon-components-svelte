@@ -1,16 +1,14 @@
 {#if $$slots.default}
-  <li class:bx--header-panel-divider={true}>
-    <slot />
-  </li>
+  <li class:bx--header-panel-divider={true}><slot /></li>
 {/if}
-<hr class:bx--switcher__item--divider={true} />
+<hr class:bx--switcher__item--divider={true}>
 
 <style>
   /**
-    * Carbon does not support a divider with a subject.
-    * We apply custom styles using the switcher subject divider
-    * from https://carbondesignsystem.com/ as a reference.
-    */
+   * Carbon does not support a divider with a subject.
+   * We apply custom styles using the switcher subject divider
+   * from https://carbondesignsystem.com/ as a reference.
+   */
 
   :global(.bx--header-panel-divider) {
     margin: 2rem 1rem 0;

@@ -126,9 +126,7 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
     >
-      <slot name="labelChildren">
-        {labelText}
-      </slot>
+      <slot name="labelChildren"> {labelText} </slot>
     </label>
   {/if}
   <div
@@ -174,7 +172,7 @@
         blurInput(relatedTarget);
       }}
       on:paste
-    />
+    >
     {#if invalid}
       <WarningFilled
         class="bx--date-picker__icon bx--date-picker__icon--invalid"

@@ -44,7 +44,4 @@
   on:check={(e) => handleCheck("option-3", e)}
 />
 
-<div data-testid="check-counts">
-  {JSON.stringify(checkCounts)}
-</div>
-
+<div data-testid="check-counts">{JSON.stringify(checkCounts)}</div>
