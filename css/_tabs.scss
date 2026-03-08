@@ -67,3 +67,21 @@
 @include exports('tabs-container-panel') {
   @include tabs-container-panel;
 }
+
+/// Container type: remove link border on disabled tab hover
+/// Default tabs add a bottom border to the nav link on disabled hover; container
+/// tabs use a different visual treatment and should not show this border.
+/// @access private
+/// @group components
+@mixin tabs-container-disabled-hover {
+  .#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--disabled:hover
+    .#{$prefix}--tabs__nav-link {
+    border-bottom: none;
+    border-block-end: none;
+  }
+}
+
+@include exports('tabs-container-disabled-hover') {
+  @include tabs-container-disabled-hover;
+}
