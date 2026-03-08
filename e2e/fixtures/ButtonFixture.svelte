@@ -4,35 +4,24 @@
   let clickCount = 0;
 </script>
 
-<div class="fixture-container">
-  <Button
-    data-testid="button-primary"
-    on:click={() => (clickCount += 1)}
-  >
-    Primary
-  </Button>
+<Button
+  data-testid="button-primary"
+  on:click={() => (clickCount += 1)}
+>
+  Primary
+</Button>
 
-  <Button
-    data-testid="button-disabled"
-    disabled={true}
-  >
-    Disabled
-  </Button>
+<Button
+  data-testid="button-disabled"
+  disabled={true}
+>
+  Disabled
+</Button>
 
-  <Button kind="secondary" data-testid="button-secondary">
-    Secondary
-  </Button>
+<Button kind="secondary" data-testid="button-secondary">
+  Secondary
+</Button>
 
-  {#if clickCount > 0}
-    <p data-testid="click-count">Clicked: {clickCount}</p>
-  {/if}
-</div>
-
-<style>
-  .fixture-container {
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-</style>
+{#if clickCount > 0}
+  <p data-testid="click-count">Clicked: {clickCount}</p>
+{/if}

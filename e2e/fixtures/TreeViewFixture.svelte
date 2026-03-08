@@ -11,19 +11,11 @@
   ];
 </script>
 
-<div class="fixture-container">
-  <TreeView
-    data-testid="tree-view"
-    labelText="Tree"
-    {nodes}
-    bind:activeId
-    bind:selectedIds
-    bind:expandedIds
-  />
-</div>
-
-<style>
-  .fixture-container {
-    padding: 2rem;
-  }
-</style>
+<TreeView
+  data-testid="tree-view"
+  labelText="Tree"
+  {nodes}
+  bind:activeId
+  bind:selectedIds
+  bind:expandedIds
+/>
