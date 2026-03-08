@@ -117,6 +117,23 @@ Use the container type for a more prominent tab interface.
   </svelte:fragment>
 </Tabs>
 
+## Container type (disabled)
+
+Container type tabs with disabled states. Set `disabled` to `true` on individual tabs to prevent interaction.
+
+<Tabs type="container">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" disabled />
+  <Tab label="Tab label 3" disabled />
+  <Tab label="Tab label 4" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+    <TabContent>Content 4</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ## Skeleton (default)
 
 Show a loading state with the default skeleton variant.
