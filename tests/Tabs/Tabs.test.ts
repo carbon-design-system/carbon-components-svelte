@@ -5,6 +5,7 @@ import { user } from "../setup-tests";
 import Tab from "./Tab.test.svelte";
 import TabIcon from "./TabIcon.test.svelte";
 import Tabs from "./Tabs.test.svelte";
+import TabsDismissible from "./TabsDismissible.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 
@@ -427,6 +428,69 @@ describe("Tab icon", () => {
     await user.click(tab);
 
     expect(tab).toHaveAttribute("aria-selected", "true");
+  });
+});
+
+describe("Tabs dismissible", () => {
+  it("should render dismiss buttons when dismissible is enabled", () => {
+    const { container } = render(TabsDismissible);
+
+    const tabsContainer = screen.getByRole("navigation");
+    expect(tabsContainer).toHaveClass("bx--tabs--dismissable");
+
+    const dismissButtons = screen.getAllByRole("button", { name: /Dismiss/ });
+    expect(dismissButtons).toHaveLength(3);
+
+    const closeButton = container.querySelector(".bx--tabs__nav-item--close");
+    expect(closeButton).toBeInTheDocument();
+  });
+
+  it("should render the icon to the left of the label when dismissible", () => {
+    const { container } = render(TabsDismissible);
+
+    const dashboardTab = screen.getByRole("tab", { name: "Dashboard" });
+    const navLink = dashboardTab.closest(".bx--tabs__nav-link");
+    const iconWrapper = navLink?.querySelector(
+      ".bx--tabs__nav-item--icon-left",
+    );
+
+    expect(iconWrapper).toBeInTheDocument();
+    expect(navLink?.firstElementChild).toHaveClass(
+      "bx--tabs__nav-item--icon-left",
+    );
+    expect(iconWrapper?.querySelector("svg")).toBeInTheDocument();
+
+    const secondTab = container.querySelectorAll(".bx--tabs__nav-item")[1];
+    expect(
+      secondTab?.querySelector(".bx--tabs__nav-item--icon-left"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("should dispatch dismiss with tab metadata", async () => {
+    const log = vi.spyOn(console, "log");
+
+    render(TabsDismissible);
+
+    const dismissButton = screen.getByRole("button", {
+      name: "Dismiss Dashboard",
+    });
+    await user.click(dismissButton);
+
+    expect(log).toHaveBeenCalledWith("dismiss event", {
+      id: expect.any(String),
+      label: "Dashboard",
+      disabled: false,
+      index: 0,
+    });
+    expect(log).not.toHaveBeenCalledWith("change event", expect.anything());
+  });
+
+  it("should disable the dismiss button for disabled tabs", () => {
+    render(TabsDismissible, { props: { disabled: true } });
+
+    expect(
+      screen.getByRole("button", { name: "Dismiss Settings" }),
+    ).toBeDisabled();
   });
 });
 

@@ -1,0 +1,92 @@
+//
+// Copyright IBM Corp. 2016, 2018
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Dismissible tab styles
+/// @access private
+/// @group components
+@mixin tabs-dismissible {
+  .#{$prefix}--tabs--dismissable .#{$prefix}--tabs__nav-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--tabs--dismissable .#{$prefix}--tabs__nav-link {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    min-inline-size: 0;
+    padding-inline-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--tabs--dismissable.#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link {
+    padding-inline-end: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--tabs--dismissable .#{$prefix}--tabs__nav-item--icon-left {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding-inline-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--tabs--dismissable .#{$prefix}--tabs__nav-item--close {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    margin-inline-start: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    padding: $carbon--spacing-02;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon:hover {
+    background-color: $hover-ui;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon svg {
+    fill: $text-02;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon:hover svg,
+  .#{$prefix}--tabs__nav-item--close-icon:focus svg {
+    fill: $text-01;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon--disabled,
+  .#{$prefix}--tabs__nav-item--close-icon--disabled:hover {
+    background-color: transparent;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon--disabled svg,
+  .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-item--icon-left svg {
+    fill: $disabled-02;
+  }
+}
+
+@include exports('tabs-dismissible') {
+  @include tabs-dismissible;
+}

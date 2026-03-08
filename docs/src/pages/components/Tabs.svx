@@ -7,6 +7,50 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
+
+  let dismissibleSelected = 0;
+  let dismissibleTabs = [
+    { id: "dashboard", label: "Dashboard" },
+    { id: "monitoring", label: "Monitoring" },
+    { id: "settings", label: "Settings", disabled: true },
+  ];
+
+  let dismissibleIconsSelected = 0;
+  let dismissibleIconsTabs = [
+    { id: "dashboard", label: "Dashboard", icon: Calendar },
+    { id: "monitoring", label: "Monitoring", icon: Information },
+    { id: "settings", label: "Settings", icon: Settings, disabled: true },
+  ];
+
+  function handleDismiss({ detail }) {
+    dismissibleTabs = dismissibleTabs.filter((tab) => tab.id !== detail.id);
+
+    if (dismissibleTabs.length === 0) {
+      dismissibleSelected = 0;
+      return;
+    }
+
+    if (dismissibleSelected > detail.index) {
+      dismissibleSelected -= 1;
+    } else if (dismissibleSelected >= dismissibleTabs.length) {
+      dismissibleSelected = dismissibleTabs.length - 1;
+    }
+  }
+
+  function handleDismissIcons({ detail }) {
+    dismissibleIconsTabs = dismissibleIconsTabs.filter((tab) => tab.id !== detail.id);
+
+    if (dismissibleIconsTabs.length === 0) {
+      dismissibleIconsSelected = 0;
+      return;
+    }
+
+    if (dismissibleIconsSelected > detail.index) {
+      dismissibleIconsSelected -= 1;
+    } else if (dismissibleIconsSelected >= dismissibleIconsTabs.length) {
+      dismissibleIconsSelected = dismissibleIconsTabs.length - 1;
+    }
+  }
 </script>
 
 Tabs provide a way to organize content into separate views that can be switched between. They support keyboard navigation, disabled states, and various layout options.
@@ -74,7 +118,7 @@ Set `disabled` to `true` on a tab component to prevent interaction. Keyboard nav
 
 ## With icons
 
-Use the `icon` prop to render an icon next to the tab label. The icon is rendered to the right of the label.
+Use the `icon` prop to render an icon next to the tab label. The icon is rendered to the right of the label by default and shifts to the left when `dismissible` is enabled.
 
 <Tabs>
   <Tab label="Calendar" icon={Calendar} />
@@ -84,6 +128,36 @@ Use the `icon` prop to render an icon next to the tab label. The icon is rendere
     <TabContent>Calendar content</TabContent>
     <TabContent>Information content</TabContent>
     <TabContent>Settings content</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Dismissible
+
+Set `dismissible` on `Tabs` to render a close button for each tab. The `dismiss` event includes the dismissed tab metadata so you can remove the item from your data source.
+
+<Tabs bind:selected={dismissibleSelected} dismissible on:dismiss={handleDismiss}>
+  {#each dismissibleTabs as tab (tab.id)}
+    <Tab label={tab.label} disabled={tab.disabled} />
+  {/each}
+  <svelte:fragment slot="content">
+    {#each dismissibleTabs as tab (tab.id)}
+      <TabContent>{tab.label} content</TabContent>
+    {/each}
+  </svelte:fragment>
+</Tabs>
+
+## Dismissible with icons
+
+Combine `dismissible` with the `icon` prop on each tab. Icons are shown to the left of the label when dismissible is enabled.
+
+<Tabs bind:selected={dismissibleIconsSelected} dismissible on:dismiss={handleDismissIcons}>
+  {#each dismissibleIconsTabs as tab (tab.id)}
+    <Tab label={tab.label} icon={tab.icon} disabled={tab.disabled} />
+  {/each}
+  <svelte:fragment slot="content">
+    {#each dismissibleIconsTabs as tab (tab.id)}
+      <TabContent>{tab.label} content</TabContent>
+    {/each}
   </svelte:fragment>
 </Tabs>
 
