@@ -164,6 +164,25 @@ Container type tabs also support the `icon` prop.
   </svelte:fragment>
 </Tabs>
 
+## Container type (secondary label)
+
+Use `secondaryLabel` with container type tabs to display additional context below the primary label.
+
+<Tabs type="container">
+  <Tab label="Engage" secondaryLabel="(21/25)" />
+  <Tab label="Analyze" secondaryLabel="(12/16)" />
+  <Tab label="Remediate" secondaryLabel="(0/7)" />
+  <Tab label="Assets" secondaryLabel="(4/12)" />
+  <Tab label="Monitoring" secondaryLabel="(0/10)" disabled />
+  <svelte:fragment slot="content">
+    <TabContent>Engage content</TabContent>
+    <TabContent>Analyze content</TabContent>
+    <TabContent>Remediate content</TabContent>
+    <TabContent>Assets content</TabContent>
+    <TabContent>Monitoring content</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ## Skeleton (default)
 
 Show a loading state with the default skeleton variant.
