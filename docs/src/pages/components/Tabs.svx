@@ -183,6 +183,21 @@ Use `secondaryLabel` with container type tabs to display additional context belo
   </svelte:fragment>
 </Tabs>
 
+## Container type (one secondary label)
+
+When only some tabs use `secondaryLabel`, the container still applies the taller min-height so all tab items align. Only tabs with a secondary label show the two-line layout.
+
+<Tabs type="container">
+  <Tab label="Overview" />
+  <Tab label="Details" secondaryLabel="(3)" />
+  <Tab label="Settings" />
+  <svelte:fragment slot="content">
+    <TabContent>Overview content</TabContent>
+    <TabContent>Details content</TabContent>
+    <TabContent>Settings content</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ## Skeleton (default)
 
 Show a loading state with the default skeleton variant.
