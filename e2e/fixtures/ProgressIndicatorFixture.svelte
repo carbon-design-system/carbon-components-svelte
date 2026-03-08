@@ -4,15 +4,8 @@
   let currentIndex = 0;
 </script>
 
-<div
-  class="fixture-container"
-  data-testid="current-index"
-  data-current={currentIndex}
->
-  <ProgressIndicator
-    data-testid="progress-indicator"
-    bind:currentIndex
-  >
+<div data-testid="current-index" data-current={currentIndex}>
+  <ProgressIndicator data-testid="progress-indicator" bind:currentIndex>
     <ProgressStep
       label="First step"
       description="Step 1"
@@ -35,9 +28,3 @@
     />
   </ProgressIndicator>
 </div>
-
-<style>
-  .fixture-container {
-    padding: 2rem;
-  }
-</style>

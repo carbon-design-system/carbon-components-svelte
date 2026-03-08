@@ -4,37 +4,28 @@
   let selectedAction = "";
 </script>
 
-<div class="fixture-container">
-  <div data-testid="outside-area" class="outside-click-area">
-    Click here to close menu
-  </div>
-
-  <OverflowMenu
-    data-testid="overflow-menu"
-    aria-label="Actions"
-    iconDescription="Open menu"
-    on:close={({ detail }) => {
-      if (detail?.text) selectedAction = detail.text;
-    }}
-  >
-    <OverflowMenuItem text="Action 1" />
-    <OverflowMenuItem text="Action 2" />
-    <OverflowMenuItem text="Action 3" />
-  </OverflowMenu>
-
-  {#if selectedAction}
-    <p data-testid="selected-action">Selected: {selectedAction}</p>
-  {/if}
+<div data-testid="outside-area" class="outside-click-area">
+  Click here to close menu
 </div>
 
-<style>
-  .fixture-container {
-    padding: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
+<OverflowMenu
+  data-testid="overflow-menu"
+  aria-label="Actions"
+  iconDescription="Open menu"
+  on:close={({ detail }) => {
+    if (detail?.text) selectedAction = detail.text;
+  }}
+>
+  <OverflowMenuItem text="Action 1" />
+  <OverflowMenuItem text="Action 2" />
+  <OverflowMenuItem text="Action 3" />
+</OverflowMenu>
 
+{#if selectedAction}
+  <p data-testid="selected-action">Selected: {selectedAction}</p>
+{/if}
+
+<style>
   .outside-click-area {
     padding: 1rem;
     background: #e0e0e0;

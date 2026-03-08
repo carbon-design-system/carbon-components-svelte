@@ -12,24 +12,16 @@
   let selectedIds = [];
 </script>
 
-<div class="fixture-container">
-  <MultiSelect
-    data-testid="multiselect-fruits"
-    labelText="Fruits"
-    label="Choose fruits"
-    {items}
-    bind:selectedIds
-    filterable={true}
-    placeholder="Filter fruits"
-  />
+<MultiSelect
+  data-testid="multiselect-fruits"
+  labelText="Fruits"
+  label="Choose fruits"
+  {items}
+  bind:selectedIds
+  filterable={true}
+  placeholder="Filter fruits"
+/>
 
-  {#if selectedIds.length > 0}
-    <p data-testid="selected-count">Selected: {selectedIds.length}</p>
-  {/if}
-</div>
-
-<style>
-  .fixture-container {
-    padding: 2rem;
-  }
-</style>
+{#if selectedIds.length > 0}
+  <p data-testid="selected-count">Selected: {selectedIds.length}</p>
+{/if}
