@@ -102,3 +102,22 @@
 @include exports('tabs-container-disabled-hover') {
   @include tabs-container-disabled-hover;
 }
+
+/// Container type: do not apply fixed 10rem width to nav links.
+/// Default tabs get width: 10rem at 42rem viewport from base Carbon styles
+/// (including :focus and :active); container tabs should size naturally.
+/// @access private
+/// @group components
+@mixin tabs-container-nav-link-width {
+  @media (min-width: 42rem) {
+    .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link:focus,
+    .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link:active {
+      width: auto;
+    }
+  }
+}
+
+@include exports('tabs-container-nav-link-width') {
+  @include tabs-container-nav-link-width;
+}
