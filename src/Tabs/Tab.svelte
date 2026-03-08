@@ -23,6 +23,13 @@
   /** Set an id for the top-level element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
+  /**
+   * Specify the icon to render.
+   * Icon is rendered to the right of the label.
+   * @type {any}
+   */
+  export let icon = undefined;
+
   /** Obtain a reference to the anchor HTML element */
   export let ref = null;
 
@@ -83,5 +90,10 @@
     style:width={$useAutoWidth ? "auto" : undefined}
   >
     <slot>{label}</slot>
+    {#if icon}
+      <div class:bx--tabs__nav-item--icon={true}>
+        <svelte:component this={icon} />
+      </div>
+    {/if}
   </a>
 </li>
