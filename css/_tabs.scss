@@ -32,3 +32,16 @@
 @include exports('tabs-icon') {
   @include tabs-icon;
 }
+
+/// Tab container panel background
+/// @access private
+/// @group components
+@mixin tabs-container-panel {
+  .#{$prefix}--tabs--container ~ .#{$prefix}--tab-content {
+    background-color: $ui-01;
+  }
+}
+
+@include exports('tabs-container-panel') {
+  @include tabs-container-panel;
+}
