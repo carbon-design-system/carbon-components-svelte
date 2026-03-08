@@ -1,9 +1,10 @@
 <script>
   /**
+   * @generics {T = any} T
    * @event {null} save
    * @event update - Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab/window.
-   * @property {any} prevValue
-   * @property {any} value
+   * @property {T} prevValue
+   * @property {T} value
    */
 
   /**
@@ -13,9 +14,9 @@
 
   /**
    * Provide a value to persist.
-   * @type {any}
+   * @type {T}
    */
-  export let value = "";
+  export let value = /** @type {T} */ ("");
 
   /**
    * Remove the persisted key value from the browser's local storage
