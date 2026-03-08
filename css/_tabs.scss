@@ -27,6 +27,23 @@
   .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-item--icon svg {
     fill: $disabled-02;
   }
+
+  .#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--disabled
+    .#{$prefix}--tabs__nav-item--icon
+    svg {
+    fill: $text-on-color-disabled;
+  }
+
+  .#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-link:has(.#{$prefix}--tabs__nav-item--icon) {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--icon {
+    margin-inline-start: auto;
+    padding-inline-start: $carbon--spacing-05;
+  }
 }
 
 @include exports('tabs-icon') {
