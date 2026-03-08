@@ -1,6 +1,7 @@
 <script>
   /**
    * @event {number} change
+   * @event {{ id: string; label: string; disabled: boolean; index: number }} dismiss
    */
 
   /** Specify the selected tab index */
@@ -15,6 +16,9 @@
   /** Set to `true` for tabs to have an auto-width */
   export let autoWidth = false;
 
+  /** Set to `true` to render a dismiss button for each tab */
+  export let dismissible = false;
+
   /**
    * Specify the ARIA label for the chevron icon.
    * @type {string}
@@ -25,7 +29,7 @@
   export let triggerHref = "#";
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
-  import { derived, writable } from "svelte/store";
+  import { derived, get, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
 
   const dispatch = createEventDispatcher();
@@ -44,6 +48,10 @@
    * @type {import("svelte/store").Writable<boolean>}
    */
   const useAutoWidth = writable(autoWidth);
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const useDismissible = writable(dismissible);
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
    */
@@ -113,6 +121,17 @@
   };
 
   /**
+   * @type {(id: string) => void}
+   */
+  const dismiss = (id) => {
+    const tab = get(tabsById)[id];
+
+    if (tab) {
+      dispatch("dismiss", tab);
+    }
+  };
+
+  /**
    * @type {(direction: number) => Promise<void>}
    */
   const change = async (direction) => {
@@ -152,11 +171,13 @@
     selectedTab,
     selectedContent,
     useAutoWidth,
+    useDismissible,
     add,
     remove,
     addContent,
     removeContent,
     update,
+    dismiss,
     change,
   });
 
@@ -228,6 +249,7 @@
     dropdownHidden = true;
   }
   $: useAutoWidth.set(autoWidth);
+  $: useDismissible.set(dismissible);
 </script>
 
 <div
@@ -235,6 +257,7 @@
   role="navigation"
   class:bx--tabs={true}
   class:bx--tabs--container={type === "container"}
+  class:bx--tabs--dismissable={dismissible}
   {...$$restProps}
 >
   <div

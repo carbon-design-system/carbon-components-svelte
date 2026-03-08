@@ -25,7 +25,8 @@
 
   /**
    * Specify the icon to render.
-   * Icon is rendered to the right of the label.
+   * Icon is rendered to the right of the label by default.
+   * When `Tabs.dismissible` is enabled, the icon is rendered to the left.
    * @type {any}
    */
   export let icon = undefined;
@@ -34,9 +35,18 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
+  import Close from "../icons/Close.svelte";
 
-  const { selectedTab, useAutoWidth, add, remove, update, change } =
-    getContext("carbon:Tabs");
+  const {
+    selectedTab,
+    useAutoWidth,
+    useDismissible,
+    add,
+    remove,
+    update,
+    dismiss,
+    change,
+  } = getContext("carbon:Tabs");
 
   add({ id, label, disabled });
 
@@ -68,7 +78,9 @@
   on:mouseleave
   on:keydown={({ key }) => {
     if (!disabled) {
-      if (key === "ArrowRight") {
+      if ($useDismissible && key === "Delete") {
+        dismiss(id);
+      } else if (key === "ArrowRight") {
         change(1);
       } else if (key === "ArrowLeft") {
         change(-1);
@@ -87,13 +99,44 @@
     {id}
     {href}
     class:bx--tabs__nav-link={true}
-    style:width={$useAutoWidth ? "auto" : undefined}
+    style:width={
+      $useAutoWidth
+        ? "auto"
+        : $useDismissible
+          ? "calc(10rem - 1.5rem)"
+          : undefined
+    }
   >
+    {#if $useDismissible && icon}
+      <div class:bx--tabs__nav-item--icon-left={true}>
+        <svelte:component this={icon} />
+      </div>
+    {/if}
     <slot>{label}</slot>
-    {#if icon}
+    {#if icon && !$useDismissible}
       <div class:bx--tabs__nav-item--icon={true}>
         <svelte:component this={icon} />
       </div>
     {/if}
   </a>
+  {#if $useDismissible}
+    <div class:bx--tabs__nav-item--close={true}>
+      <button
+        type="button"
+        tabindex="-1"
+        aria-label={label ? `Dismiss ${label}` : "Dismiss tab"}
+        class:bx--tabs__nav-item--close-icon={true}
+        class:bx--tabs__nav-item--close-icon--selected={selected}
+        class:bx--tabs__nav-item--close-icon--disabled={disabled}
+        {disabled}
+        on:click|preventDefault|stopPropagation={() => {
+          if (!disabled) {
+            dismiss(id);
+          }
+        }}
+      >
+        <Close aria-hidden="true" />
+      </button>
+    </div>
+  {/if}
 </li>
