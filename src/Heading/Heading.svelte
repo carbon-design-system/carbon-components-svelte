@@ -36,6 +36,4 @@
   $: tag = `h${sectionLevel ?? 1}`;
 </script>
 
-<svelte:element this={tag}>
-  <slot />
-</svelte:element>
+<svelte:element this={tag}> <slot /> </svelte:element>

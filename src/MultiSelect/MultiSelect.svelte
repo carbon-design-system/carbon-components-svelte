@@ -477,9 +477,7 @@
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
     >
-      <slot name="labelChildren">
-        {labelText}
-      </slot>
+      <slot name="labelChildren"> {labelText} </slot>
     </label>
   {/if}
   <ListBox
@@ -589,7 +587,7 @@
           {placeholder}
           {id}
           {name}
-        />
+        >
         {#if invalid}
           <WarningFilled class="bx--list-box__invalid-icon" />
         {/if}

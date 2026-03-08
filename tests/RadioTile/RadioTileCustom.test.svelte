@@ -3,7 +3,5 @@
 </script>
 
 <TileGroup legendText="Test group" name="test-group" selected="test">
-  <RadioTile value="test">
-    <div>Custom content</div>
-  </RadioTile>
+  <RadioTile value="test"> <div>Custom content</div> </RadioTile>
 </TileGroup>

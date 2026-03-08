@@ -22,6 +22,5 @@
   {/each}
 </SelectableTileGroup>
 
-<br />
-
+<br>
 Selected: <strong>{selected.join(", ") || "None"}</strong>

@@ -45,15 +45,27 @@
 <Button data-testid="show-default" on:click={() => treeview.showNode(3)}>
   Show node (default)
 </Button>
-<Button data-testid="expand-only" on:click={() => treeview.showNode(3, { select: false, focus: false })}>
+<Button
+  data-testid="expand-only"
+  on:click={() => treeview.showNode(3, { select: false, focus: false })}
+>
   Expand only
 </Button>
-<Button data-testid="select-only" on:click={() => treeview.showNode(3, { expand: false, focus: false })}>
+<Button
+  data-testid="select-only"
+  on:click={() => treeview.showNode(3, { expand: false, focus: false })}
+>
   Select only
 </Button>
-<Button data-testid="focus-only" on:click={() => treeview.showNode(3, { expand: false, select: false })}>
+<Button
+  data-testid="focus-only"
+  on:click={() => treeview.showNode(3, { expand: false, select: false })}
+>
   Focus only
 </Button>
-<Button data-testid="reset" on:click={() => { expandedIds = []; selectedIds = []; activeId = undefined; }}>
+<Button
+  data-testid="reset"
+  on:click={() => { expandedIds = []; selectedIds = []; activeId = undefined; }}
+>
   Reset
 </Button>

@@ -7,4 +7,3 @@
   <ContainedListItem>Item 1</ContainedListItem>
   <ContainedListItem>Item 2</ContainedListItem>
 </ContainedList>
-

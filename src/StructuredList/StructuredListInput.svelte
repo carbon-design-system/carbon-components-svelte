@@ -50,4 +50,4 @@
   on:change={() => {
     update(value);
   }}
-/>
+>

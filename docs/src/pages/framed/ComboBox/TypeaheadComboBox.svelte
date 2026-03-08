@@ -21,7 +21,7 @@
   typeahead
   {items}
 />
-<br />
+<br>
 <Button on:click={() => (selectedId = undefined)}>
   Set to undefined (unselected)
 </Button>

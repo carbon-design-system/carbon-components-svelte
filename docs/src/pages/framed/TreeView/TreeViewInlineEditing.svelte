@@ -63,7 +63,12 @@
           tag="span"
           style="align-items: center; outline: none"
         >
-          <span contenteditable={!node.disabled} on:input={(e) => updateNodeText(node.id, e.target.textContent)}>{node.text}</span>
+          <span
+            contenteditable={!node.disabled}
+            on:input={(e) => updateNodeText(node.id, e.target.textContent)}
+          >
+            {node.text}
+          </span>
           <Edit aria-hidden="true" />
         </Stack>
       </div>

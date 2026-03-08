@@ -126,9 +126,7 @@
           class:bx--label--inline--sm={size === "sm"}
           class:bx--label--inline--xl={size === "xl"}
         >
-          <slot name="labelChildren">
-            {labelText}
-          </slot>
+          <slot name="labelChildren"> {labelText} </slot>
         </label>
       {/if}
       {#if !isFluid && helperText}
@@ -152,9 +150,7 @@
       class:bx--label--inline-sm={inline && size === "sm"}
       class:bx--label--inline-xl={inline && size === "xl"}
     >
-      <slot name="labelChildren">
-        {labelText}
-      </slot>
+      <slot name="labelChildren"> {labelText} </slot>
     </label>
   {/if}
   <div
@@ -213,14 +209,12 @@
         on:focus
         on:blur
         on:paste
-      />
+      >
       {#if isFluid}
-        <hr class:bx--text-input__divider={true} />
+        <hr class:bx--text-input__divider={true}>
       {/if}
       {#if isFluid && !inline && invalid}
-        <div class:bx--form-requirement={true} id={errorId}>
-          {invalidText}
-        </div>
+        <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
       {/if}
       {#if isFluid && !inline && warn}
         <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
@@ -237,9 +231,7 @@
       </div>
     {/if}
     {#if !isFluid && invalid}
-      <div class:bx--form-requirement={true} id={errorId}>
-        {invalidText}
-      </div>
+      <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
     {/if}
     {#if !isFluid && !invalid && warn}
       <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>

@@ -31,7 +31,11 @@
 </script>
 
 {#if stickyHeader}
-  <section class:bx--data-table_inner-container={true} bind:this={ref} {...$$restProps}>
+  <section
+    class:bx--data-table_inner-container={true}
+    bind:this={ref}
+    {...$$restProps}
+  >
     <table
       class:bx--data-table={true}
       class:bx--data-table--compact={size === "compact"}

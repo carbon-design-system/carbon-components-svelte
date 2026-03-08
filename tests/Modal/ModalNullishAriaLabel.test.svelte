@@ -12,5 +12,4 @@
   aria-label={ariaLabel}
   {primaryButtonText}
   {secondaryButtonText}
->
-</Modal>
+> </Modal>

@@ -96,7 +96,7 @@
         {src}
         {alt}
         transition:fade|local={{ duration: fadeIn ? fast02 : 0 }}
-      />
+      >
     {/if}
   {/key}
   {#if error}
@@ -115,7 +115,7 @@
           {src}
           {alt}
           transition:fade|local={{ duration: fadeIn ? fast02 : 0 }}
-        />
+        >
       {/if}
     {/key}
     {#if error}

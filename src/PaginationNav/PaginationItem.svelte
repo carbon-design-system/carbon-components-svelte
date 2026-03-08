@@ -15,9 +15,7 @@
     class:bx--pagination-nav__page--active={active}
     on:click
   >
-    <span class:bx--pagination-nav__accessibility-label={true}>
-      <slot />
-    </span>
+    <span class:bx--pagination-nav__accessibility-label={true}> <slot /> </span>
     {page}
   </button>
 </li>

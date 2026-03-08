@@ -11,11 +11,7 @@
   let selected = undefined;
 </script>
 
-<StructuredList
-  data-testid="structured-list"
-  bind:selected
-  selection
->
+<StructuredList data-testid="structured-list" bind:selected selection>
   <StructuredListHead>
     <StructuredListRow head>
       <StructuredListCell head>Name</StructuredListCell>

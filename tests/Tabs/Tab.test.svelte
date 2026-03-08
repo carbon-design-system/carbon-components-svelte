@@ -11,13 +11,9 @@
 
 <Tabs>
   {#if useSlot}
-    <Tab {href} {disabled} {tabindex} {id}>
-      <span>Slot content</span>
-    </Tab>
+    <Tab {href} {disabled} {tabindex} {id}> <span>Slot content</span> </Tab>
   {:else}
     <Tab {label} {href} {disabled} {tabindex} {id} />
   {/if}
-  <svelte:fragment slot="content">
-    <div>Test Content</div>
-  </svelte:fragment>
+  <svelte:fragment slot="content"> <div>Test Content</div> </svelte:fragment>
 </Tabs>

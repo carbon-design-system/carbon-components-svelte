@@ -10,15 +10,14 @@
 <script lang="ts">
   import { Theme } from "carbon-components-svelte";
 </script>
-  
-  <Theme
-    render="select"
-    select={{
+
+<Theme
+  render="select"
+  select={{
       themes: lightThemes,
       labelText: "Light themes",
     }}
-    on:update={({ detail }) => {
+  on:update={({ detail }) => {
       console.log("update", detail);
     }}
-  />
-  
+/>

@@ -47,12 +47,19 @@
 
 <Stack gap={6}>
   <div>
-    <TreeView labelText="Cloud Products" {activeId} {selectedIds} {nodes} let:node>
+    <TreeView
+      labelText="Cloud Products"
+      {activeId}
+      {selectedIds}
+      {nodes}
+      let:node
+    >
       <span
         style:color={node.selected ? "var(--cds-interactive-04)" : "inherit"}
         style:text-decoration={node.disabled ? "inherit" : "underline"}
       >
-        {node.text} (id: {node.id})
+        {node.text}
+        (id: {node.id})
       </span>
     </TreeView>
   </div>

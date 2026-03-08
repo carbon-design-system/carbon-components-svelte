@@ -20,7 +20,9 @@
 >
   {@const { id, text, price, category } = item}
   <div>
-    <strong>{text}</strong> - ${price} - {id}
+    <strong>{text}</strong>
+    - ${price}
+    - {id}
     <span>({category})</span>
   </div>
 </Dropdown>

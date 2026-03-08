@@ -125,14 +125,10 @@
   >
     {#if $$slots.icon || icon}
       <div class:bx--tag__custom-icon={true}>
-        <slot name="icon">
-          <svelte:component this={icon} />
-        </slot>
+        <slot name="icon"> <svelte:component this={icon} /> </slot>
       </div>
     {/if}
-    <span>
-      <slot />
-    </span>
+    <span> <slot /> </span>
   </button>
 {:else}
   <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -161,13 +157,9 @@
   >
     {#if $$slots.icon || icon}
       <div class:bx--tag__custom-icon={true}>
-        <slot name="icon">
-          <svelte:component this={icon} />
-        </slot>
+        <slot name="icon"> <svelte:component this={icon} /> </slot>
       </div>
     {/if}
-    <span>
-      <slot />
-    </span>
+    <span> <slot /> </span>
   </div>
 {/if}

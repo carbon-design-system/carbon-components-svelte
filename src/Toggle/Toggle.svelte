@@ -80,30 +80,24 @@
     {disabled}
     {id}
     {name}
-  />
+  >
   <label
     aria-label={labelText ? undefined : $$props["aria-label"] ?? "Toggle"}
     for={id}
     class:bx--toggle-input__label={true}
   >
     <span class:bx--visually-hidden={hideLabel}>
-      <slot name="labelChildren">
-        {labelText}
-      </slot>
+      <slot name="labelChildren"> {labelText} </slot>
     </span>
     <span
       class:bx--toggle__switch={true}
       style:margin-top={hideLabel ? 0 : undefined}
     >
       <span aria-hidden="true" class:bx--toggle__text--off={true}>
-        <slot name="labelA">
-          {labelA}
-        </slot>
+        <slot name="labelA"> {labelA} </slot>
       </span>
       <span aria-hidden="true" class:bx--toggle__text--on={true}>
-        <slot name="labelB">
-          {labelB}
-        </slot>
+        <slot name="labelB"> {labelB} </slot>
       </span>
     </span>
   </label>

@@ -4,10 +4,7 @@
   let selectedIndex = 0;
 </script>
 
-<ContentSwitcher
-  data-testid="content-switcher"
-  bind:selectedIndex
->
+<ContentSwitcher data-testid="content-switcher" bind:selectedIndex>
   <Switch text="First" selected={true} />
   <Switch text="Second" />
   <Switch text="Third" />

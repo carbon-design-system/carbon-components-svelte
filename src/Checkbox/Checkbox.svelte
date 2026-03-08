@@ -156,16 +156,14 @@
       on:change
       on:focus
       on:blur
-    />
+    >
     <label for={id} {title} class:bx--checkbox-label={true}>
       <span
         bind:this={refLabel}
         class:bx--checkbox-label-text={true}
         class:bx--visually-hidden={hideLabel}
       >
-        <slot name="labelChildren">
-          {labelText}
-        </slot>
+        <slot name="labelChildren"> {labelText} </slot>
       </span>
     </label>
     {#if helperText}

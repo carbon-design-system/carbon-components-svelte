@@ -21,7 +21,7 @@
   on:click:button--primary
 >
   <form id="test-form" on:submit|preventDefault={onFormSubmit}>
-    <input name="username" type="text" data-testid="username-input" />
-    <input name="email" type="email" data-testid="email-input" />
+    <input name="username" type="text" data-testid="username-input">
+    <input name="email" type="email" data-testid="email-input">
   </form>
 </Modal>

@@ -14,7 +14,9 @@
 {#if testComponent === "ToolbarMenu"}
   <Toolbar>
     <ToolbarMenu {...menuProps} {...$$restProps}>
-      {#if slotContent}{slotContent}{/if}
+      {#if slotContent}
+        {slotContent}
+      {/if}
       <slot />
     </ToolbarMenu>
   </Toolbar>
@@ -26,7 +28,9 @@
         on:keydown={() => console.log("keydown")}
         {...$$restProps}
       >
-        {#if slotContent}{slotContent}{/if}
+        {#if slotContent}
+          {slotContent}
+        {/if}
         <slot />
       </ToolbarMenuItem>
     </ToolbarMenu>

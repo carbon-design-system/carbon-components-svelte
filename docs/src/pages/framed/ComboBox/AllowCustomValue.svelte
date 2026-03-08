@@ -8,7 +8,7 @@
 <Stack gap={2}>
   <ComboBox
     allowCustomValue
-      labelText="Favorite fruit"
+    labelText="Favorite fruit"
     placeholder="Select or enter a fruit"
     helperText="You can select from the list or type your own"
     bind:selectedId

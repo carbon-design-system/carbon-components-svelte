@@ -31,7 +31,8 @@
 
 <ButtonSet>
   <Button size="field" {disabled} on:click={() => (open = !open)}>
-    {open ? "Collapse" : "Expand"} all
+    {open ? "Collapse" : "Expand"}
+    all
   </Button>
   <Button
     kind="ghost"
@@ -43,7 +44,8 @@
       }
     }}
   >
-    {disabled ? "Enable" : "Disable"} all
+    {disabled ? "Enable" : "Disable"}
+    all
   </Button>
 </ButtonSet>
 
@@ -54,4 +56,3 @@
     </AccordionItem>
   {/each}
 </Accordion>
-

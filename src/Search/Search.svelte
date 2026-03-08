@@ -118,9 +118,7 @@
       <svelte:component this={icon} class="bx--search-magnifier-icon" />
     </div>
     <label id="{id}-search" for={id} class:bx--label={true}>
-      <slot name="labelChildren">
-        {labelText}
-      </slot>
+      <slot name="labelChildren"> {labelText} </slot>
     </label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
@@ -156,7 +154,7 @@
       }}
       on:keyup
       on:paste
-    />
+    >
     <button
       type="button"
       aria-label={closeButtonLabelText}

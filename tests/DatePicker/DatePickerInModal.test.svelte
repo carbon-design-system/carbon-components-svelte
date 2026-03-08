@@ -6,7 +6,12 @@
   export let portalMenu: ComponentProps<DatePicker>["portalMenu"] = undefined;
 </script>
 
-<Modal bind:open={modalOpen} modalHeading="Test" primaryButtonText="OK" secondaryButtonText="Cancel">
+<Modal
+  bind:open={modalOpen}
+  modalHeading="Test"
+  primaryButtonText="OK"
+  secondaryButtonText="Cancel"
+>
   <DatePicker datePickerType="single" {portalMenu}>
     <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
   </DatePicker>

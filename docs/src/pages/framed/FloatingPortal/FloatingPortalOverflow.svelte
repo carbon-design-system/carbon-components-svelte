@@ -47,15 +47,20 @@
   }
 
   function handleDragEnd() {
-    const moved =
-      Math.abs(x - startX) > 5 || Math.abs(y - startY) > 5;
+    const moved = Math.abs(x - startX) > 5 || Math.abs(y - startY) > 5;
     if (!moved) open = !open;
   }
 </script>
 
-<Stack gap={4} style="overflow: hidden; border: 1px dashed var(--cds-border-subtle); padding: 1rem">
+<Stack
+  gap={4}
+  style="overflow: hidden; border: 1px dashed var(--cds-border-subtle); padding: 1rem"
+>
   <div>This container has hidden overflow.</div>
-  <div bind:this={container} style="position: relative; min-height: 200px; min-width: 300px;">
+  <div
+    bind:this={container}
+    style="position: relative; min-height: 200px; min-width: 300px;"
+  >
     <div
       bind:this={anchor}
       role="button"
@@ -75,6 +80,4 @@
   </div>
 </Stack>
 
-<FloatingPortal {anchor} {open}>
-  <Tile>Content</Tile>
-</FloatingPortal>
+<FloatingPortal {anchor} {open}> <Tile>Content</Tile> </FloatingPortal>

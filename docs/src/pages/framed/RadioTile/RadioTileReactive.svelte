@@ -1,5 +1,10 @@
 <script>
-  import { Button, RadioTile, Stack, TileGroup } from "carbon-components-svelte";
+  import {
+    Button,
+    RadioTile,
+    Stack,
+    TileGroup,
+  } from "carbon-components-svelte";
 
   const values = ["Lite plan", "Standard plan", "Plus plan"];
 
@@ -12,9 +17,7 @@
       <RadioTile {value}>{value}</RadioTile>
     {/each}
   </TileGroup>
-  <div>
-    Selected: <strong>{selected}</strong>
-  </div>
+  <div>Selected: <strong>{selected}</strong></div>
   <Button
     size="small"
     disabled={selected === values[1]}

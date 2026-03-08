@@ -27,9 +27,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Carbon Svelte">
-  <svelte:fragment slot="skipToContent">
-    <SkipToContent />
-  </svelte:fragment>
+  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
 </Header>
 
 <NotificationQueue bind:this={queue} position={queuePosition} />
@@ -40,7 +38,10 @@
       <Column>
         <Stack gap={6}>
           <h1>Welcome</h1>
-          <p>Click the buttons below to trigger toast notifications in different positions.</p>
+          <p>
+            Click the buttons below to trigger toast notifications in different
+            positions.
+          </p>
           <ButtonSet>
             <Button on:click={() => triggerToast("top-right")}>
               Top right

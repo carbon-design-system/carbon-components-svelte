@@ -259,7 +259,9 @@
         dropdownHidden = !dropdownHidden;
       }}
     >
-      {#if currentTab}{currentTab.label}{/if}
+      {#if currentTab}
+        {currentTab.label}
+      {/if}
     </a>
     <ChevronDown aria-hidden="true" title={iconDescription} />
   </div>

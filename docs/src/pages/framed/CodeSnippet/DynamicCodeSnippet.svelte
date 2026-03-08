@@ -8,10 +8,6 @@
 </script>
 
 <Stack gap={5}>
-  <Toggle
-    bind:toggled
-    size="sm"
-    labelText="Trigger snippet overflow"
-  />
+  <Toggle bind:toggled size="sm" labelText="Trigger snippet overflow" />
   <CodeSnippet type="multi" {code} />
 </Stack>

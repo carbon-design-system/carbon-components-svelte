@@ -92,9 +92,7 @@
   </Toolbar>
 </DataTable>
 
-<div data-testid="filtered-ids-1">
-  {JSON.stringify(filteredRowIds)}
-</div>
+<div data-testid="filtered-ids-1">{JSON.stringify(filteredRowIds)}</div>
 
 <DataTable headers={numericHeaders} rows={numericRows}>
   <Toolbar>
@@ -113,9 +111,7 @@
   </Toolbar>
 </DataTable>
 
-<div data-testid="filtered-ids-2">
-  {JSON.stringify(numericFilteredRowIds)}
-</div>
+<div data-testid="filtered-ids-2">{JSON.stringify(numericFilteredRowIds)}</div>
 
 <DataTable headers={productHeaders} rows={productRows}>
   <Toolbar>
@@ -135,6 +131,4 @@
   </Toolbar>
 </DataTable>
 
-<div data-testid="filtered-ids-3">
-  {JSON.stringify(productFilteredRowIds)}
-</div>
+<div data-testid="filtered-ids-3">{JSON.stringify(productFilteredRowIds)}</div>

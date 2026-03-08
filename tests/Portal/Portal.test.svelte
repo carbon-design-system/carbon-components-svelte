@@ -10,8 +10,5 @@
 </script>
 
 {#if showPortal}
-  <Portal {tag} bind:ref {...$$restProps}>
-    {portalContent}
-  </Portal>
+  <Portal {tag} bind:ref {...$$restProps}> {portalContent} </Portal>
 {/if}
-

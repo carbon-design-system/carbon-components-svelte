@@ -29,4 +29,3 @@
   {maxNotifications}
   bind:this={queue}
 />
-

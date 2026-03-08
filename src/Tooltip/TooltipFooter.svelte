@@ -24,6 +24,4 @@
   }
 </script>
 
-<div bind:this={ref} class:bx--tooltip__footer={true}>
-  <slot />
-</div>
+<div bind:this={ref} class:bx--tooltip__footer={true}><slot /></div>

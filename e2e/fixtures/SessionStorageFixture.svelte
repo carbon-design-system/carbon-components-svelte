@@ -9,16 +9,19 @@
 
 <div data-testid="display-value">{value}</div>
 
-<TextInput
-  data-testid="value-input"
-  labelText="Value"
-  bind:value
-  hideLabel
-/>
+<TextInput data-testid="value-input" labelText="Value" bind:value hideLabel />
 
-<button type="button" data-testid="clear-item" on:click={() => storage?.clearItem()}>
+<button
+  type="button"
+  data-testid="clear-item"
+  on:click={() => storage?.clearItem()}
+>
   Clear item
 </button>
-<button type="button" data-testid="clear-all" on:click={() => storage?.clearAll()}>
+<button
+  type="button"
+  data-testid="clear-all"
+  on:click={() => storage?.clearAll()}
+>
   Clear all
 </button>

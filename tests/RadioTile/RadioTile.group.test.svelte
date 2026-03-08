@@ -12,9 +12,7 @@
   {/each}
 </TileGroup>
 
-<div>
-  Selected: {selected}
-</div>
+<div>Selected: {selected}</div>
 
 <Button
   size="small"

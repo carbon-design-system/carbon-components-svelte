@@ -3,9 +3,7 @@
 </script>
 
 <!-- Default inline loading -->
-<div data-testid="default-loader">
-  <InlineLoading />
-</div>
+<div data-testid="default-loader"><InlineLoading /></div>
 
 <!-- Inline loading with description -->
 <div data-testid="loader-with-description">

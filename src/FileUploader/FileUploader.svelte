@@ -152,9 +152,7 @@
       class:bx--file--label={true}
       class:bx--label-description--disabled={disabled}
     >
-      <slot name="labelTitle">
-        {labelTitle}
-      </slot>
+      <slot name="labelTitle"> {labelTitle} </slot>
     </p>
   {/if}
   {#if labelDescription || $$slots.labelDescription}
@@ -162,9 +160,7 @@
       class:bx--label-description={true}
       class:bx--label-description--disabled={disabled}
     >
-      <slot name="labelDescription">
-        {labelDescription}
-      </slot>
+      <slot name="labelDescription"> {labelDescription} </slot>
     </p>
   {/if}
   <FileUploaderButton

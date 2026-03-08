@@ -217,7 +217,7 @@
       .filter(
         (node) =>
           filterNode(node) ||
-          node.nodes?.some((child) => filterNode(child) && child.nodes)
+          node.nodes?.some((child) => filterNode(child) && child.nodes),
       )
       .map((node) => node.id);
     for (const id of nodesToExpand) {
@@ -420,7 +420,7 @@
 
   onMount(() => {
     const firstFocusableNode = ref.querySelector(
-      "li.bx--tree-node:not(.bx--tree-node--disabled)"
+      "li.bx--tree-node:not(.bx--tree-node--disabled)",
     );
 
     if (firstFocusableNode != null) {
@@ -517,8 +517,6 @@
   on:keydown|stopPropagation={handleKeyDown}
 >
   <TreeViewNodeList root {nodes} let:node>
-    <slot {node}>
-      {node.text}
-    </slot>
+    <slot {node}> {node.text} </slot>
   </TreeViewNodeList>
 </ul>

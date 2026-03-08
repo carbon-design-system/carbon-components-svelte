@@ -556,7 +556,10 @@
   {#if title || $$slots.titleChildren || description || $$slots.descriptionChildren}
     <div class:bx--data-table-header={true}>
       {#if title || $$slots.titleChildren}
-        <slot name="titleChildren" props={{ class: "bx--data-table-header__title" }}>
+        <slot
+          name="titleChildren"
+          props={{ class: "bx--data-table-header__title" }}
+        >
           <h4 class:bx--data-table-header__title={true}>{title}</h4>
         </slot>
       {/if}
@@ -619,7 +622,12 @@
                     dispatch("click:header--expand", { expanded });
                   }}
                 >
-                  <slot name="expandIcon" {expanded} row={undefined} props={expandIconProps}>
+                  <slot
+                    name="expandIcon"
+                    {expanded}
+                    row={undefined}
+                    props={expandIconProps}
+                  >
                     <ChevronRight {...expandIconProps} />
                   </slot>
                 </button>
@@ -793,7 +801,12 @@
                         });
                       }}
                     >
-                      <slot name="expandIcon" expanded={!!expandedRows[row.id]} {row} props={expandIconProps}>
+                      <slot
+                        name="expandIcon"
+                        expanded={!!expandedRows[row.id]}
+                        {row}
+                        props={expandIconProps}
+                      >
                         <ChevronRight {...expandIconProps} />
                       </slot>
                     </button>
@@ -1006,7 +1019,12 @@
                         });
                       }}
                     >
-                      <slot name="expandIcon" expanded={isExpanded} {row} props={expandIconProps}>
+                      <slot
+                        name="expandIcon"
+                        expanded={isExpanded}
+                        {row}
+                        props={expandIconProps}
+                      >
                         <ChevronRight {...expandIconProps} />
                       </slot>
                     </button>
@@ -1115,11 +1133,7 @@
                     colspan={selectable ? headers.length + 2 : headers.length + 1}
                   >
                     <div class:bx--child-row-inner-container={true}>
-                      <slot
-                        name="expandedRow"
-                        {row}
-                        rowSelected={isSelected}
-                      />
+                      <slot name="expandedRow" {row} rowSelected={isSelected} />
                     </div>
                   </TableCell>
                 {/if}

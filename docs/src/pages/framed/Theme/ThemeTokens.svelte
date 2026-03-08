@@ -54,9 +54,7 @@
     <Link href="#example">Themed link</Link>
   </div>
 
-  <div>
-    <Tag type="blue">Themed tag</Tag>
-  </div>
+  <div><Tag type="blue">Themed tag</Tag></div>
 
   <TextInput labelText="Text input" placeholder="Enter text..." />
 
@@ -64,9 +62,7 @@
 
   <Toggle labelText="Toggle with themed colors" />
 
-  <Tile>
-    <p>Tile with themed background</p>
-  </Tile>
+  <Tile> <p>Tile with themed background</p> </Tile>
 
   <InlineNotification
     kind="info"
