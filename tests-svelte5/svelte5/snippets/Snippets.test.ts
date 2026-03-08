@@ -113,4 +113,35 @@ describe("Svelte 5 Snippets", () => {
       );
     });
   });
+
+  describe("Tabs secondary label", () => {
+    it("should render container tabs with secondary label via prop", () => {
+      render(Snippets);
+
+      const tabsContainer = screen.getByTestId("tabs-secondary-label-snippet");
+      expect(tabsContainer).toBeInTheDocument();
+      expect(tabsContainer).toHaveClass("bx--tabs--container");
+      expect(tabsContainer).toHaveClass("bx--tabs--tall");
+
+      expect(screen.getByText("(21/25)")).toBeInTheDocument();
+    });
+
+    it("should render secondary label via secondaryChildren snippet", () => {
+      render(Snippets);
+
+      const snippetContent = screen.getByTestId("tab-secondary-label-snippet");
+      expect(snippetContent).toBeInTheDocument();
+      expect(snippetContent).toHaveTextContent("(12/16)");
+    });
+
+    it("should switch content when clicking tab with secondary label snippet", async () => {
+      render(Snippets);
+
+      const analyzeTab = screen.getByRole("tab", { name: /Analyze/ });
+      await user.click(analyzeTab);
+
+      expect(analyzeTab).toHaveAttribute("aria-selected", "true");
+      expect(screen.getByText("Analyze content")).toBeVisible();
+    });
+  });
 });

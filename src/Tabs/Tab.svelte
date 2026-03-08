@@ -24,6 +24,13 @@
   export let id = `ccs-${Math.random().toString(36)}`;
 
   /**
+   * Specify an optional secondary label.
+   * Only rendered for container type tabs.
+   * Alternatively, use the "secondaryChildren" slot.
+   */
+  export let secondaryLabel = "";
+
+  /**
    * Specify the icon to render.
    * Icon is rendered to the right of the label.
    * @type {any}
@@ -39,13 +46,19 @@
     selectedTab,
     useAutoWidth,
     useFullWidth,
+    hasSecondaryLabel,
     add,
     remove,
     update,
     change,
   } = getContext("carbon:Tabs");
 
-  add({ id, label, disabled });
+  add({
+    id,
+    label,
+    disabled,
+    hasSecondaryLabel: Boolean(secondaryLabel || $$slots.secondaryChildren),
+  });
 
   onMount(() => {
     return () => {
@@ -96,11 +109,37 @@
     class:bx--tabs__nav-link={true}
     style:width={$useFullWidth ? "100%" : $useAutoWidth ? "auto" : undefined}
   >
-    <slot>{label}</slot>
-    {#if icon}
-      <div class:bx--tabs__nav-item--icon={true}>
-        <svelte:component this={icon} />
+    {#if $hasSecondaryLabel}
+      <div class:bx--tabs__nav-item-label-wrapper={true}>
+        <span class:bx--tabs__nav-item-label={true}>
+          <slot>{label}</slot>
+        </span>
+        {#if icon}
+          <div class:bx--tabs__nav-item--icon={true}>
+            <svelte:component this={icon} />
+          </div>
+        {/if}
       </div>
+      {#if secondaryLabel || $$slots.secondaryChildren}
+        <div
+          class:bx--tabs__nav-item-secondary-label={true}
+          title={secondaryLabel || undefined}
+        >
+          <slot name="secondaryChildren">{secondaryLabel}</slot>
+        </div>
+      {:else}
+        <div
+          class:bx--tabs__nav-item-secondary-label={true}
+          aria-hidden="true"
+        ></div>
+      {/if}
+    {:else}
+      <span class:bx--tabs__nav-item-label={true}> <slot>{label}</slot> </span>
+      {#if icon}
+        <div class:bx--tabs__nav-item--icon={true}>
+          <svelte:component this={icon} />
+        </div>
+      {/if}
     {/if}
   </a>
 </li>

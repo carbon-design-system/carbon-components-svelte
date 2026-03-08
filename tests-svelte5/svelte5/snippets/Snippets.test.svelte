@@ -4,6 +4,9 @@
     ComboBox,
     DataTable,
     Dropdown,
+    Tab,
+    TabContent,
+    Tabs,
     Theme,
   } from "carbon-components-svelte";
 
@@ -73,3 +76,20 @@
     {/snippet}
   </Theme>
 </div>
+
+<Tabs
+  type="container"
+  data-testid="tabs-secondary-label-snippet"
+  aria-label="Secondary label tabs"
+>
+  <Tab label="Engage" secondaryLabel="(21/25)" />
+  <Tab label="Analyze">
+    {#snippet secondaryChildren()}
+      <span data-testid="tab-secondary-label-snippet">(12/16)</span>
+    {/snippet}
+  </Tab>
+  <svelte:fragment slot="content">
+    <TabContent>Engage content</TabContent>
+    <TabContent>Analyze content</TabContent>
+  </svelte:fragment>
+</Tabs>
