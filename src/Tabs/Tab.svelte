@@ -35,8 +35,15 @@
 
   import { getContext, onMount } from "svelte";
 
-  const { selectedTab, useAutoWidth, add, remove, update, change } =
-    getContext("carbon:Tabs");
+  const {
+    selectedTab,
+    useAutoWidth,
+    useFullWidth,
+    add,
+    remove,
+    update,
+    change,
+  } = getContext("carbon:Tabs");
 
   add({ id, label, disabled });
 
@@ -87,7 +94,7 @@
     {id}
     {href}
     class:bx--tabs__nav-link={true}
-    style:width={$useAutoWidth ? "auto" : undefined}
+    style:width={$useFullWidth ? "100%" : $useAutoWidth ? "auto" : undefined}
   >
     <slot>{label}</slot>
     {#if icon}

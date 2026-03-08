@@ -4,6 +4,7 @@
   export let selected = 0;
   export let type: "default" | "container" = "default";
   export let autoWidth = false;
+  export let fullWidth = false;
   export let iconDescription = "Show menu options";
   export let triggerHref = "#";
   export let customClass = "";
@@ -14,6 +15,7 @@
   {selected}
   {type}
   {autoWidth}
+  {fullWidth}
   {iconDescription}
   {triggerHref}
   class={customClass}

@@ -15,6 +15,9 @@
   /** Set to `true` for tabs to have an auto-width */
   export let autoWidth = false;
 
+  /** Set to `true` for tabs to span the full width of the container */
+  export let fullWidth = false;
+
   /**
    * Specify the ARIA label for the chevron icon.
    * @type {string}
@@ -44,6 +47,10 @@
    * @type {import("svelte/store").Writable<boolean>}
    */
   const useAutoWidth = writable(autoWidth);
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const useFullWidth = writable(fullWidth);
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
    */
@@ -152,6 +159,7 @@
     selectedTab,
     selectedContent,
     useAutoWidth,
+    useFullWidth,
     add,
     remove,
     addContent,
@@ -228,6 +236,7 @@
     dropdownHidden = true;
   }
   $: useAutoWidth.set(autoWidth);
+  $: useFullWidth.set(fullWidth);
 </script>
 
 <div
@@ -235,6 +244,7 @@
   role="navigation"
   class:bx--tabs={true}
   class:bx--tabs--container={type === "container"}
+  class:bx--tabs--full-width={fullWidth}
   {...$$restProps}
 >
   <div
