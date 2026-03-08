@@ -104,9 +104,24 @@ Use the `icon` prop to render an icon next to the tab label. The icon is rendere
 
 ## Container type
 
-Use the container type for a more prominent tab interface.
+Use the container type for a more prominent tab interface. By default, container types have an auto-width.
 
 <Tabs type="container">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Container type (full width)
+
+Combine `type="container"` with `fullWidth` for container tabs that evenly span the full width of the container.
+
+<Tabs type="container" fullWidth>
   <Tab label="Tab label 1" />
   <Tab label="Tab label 2" />
   <Tab label="Tab label 3" />
