@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
+import type ThemeComponent from "carbon-components-svelte/Theme/Theme.svelte";
 import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";
 import { themes } from "carbon-components-svelte/Theme/Theme.svelte";
+import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import Theme from "./Theme.test.svelte";
@@ -241,5 +243,38 @@ describe("Theme", () => {
 
     await user.selectOptions(select, "g10");
     expect(select).toHaveTextContent(themes.g10);
+  });
+
+  describe("Generics", () => {
+    it("should support custom token types with generics", () => {
+      type CustomTokens = {
+        "interactive-01": string;
+        "ui-background": string;
+      };
+
+      type ComponentType = ThemeComponent<CustomTokens>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["tokens"]>().toEqualTypeOf<CustomTokens | undefined>();
+    });
+
+    it("should default to Record<string, any> when generic is not specified", () => {
+      type ComponentType = ThemeComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["tokens"]>().toEqualTypeOf<
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        Record<string, any> | undefined
+      >();
+    });
+
+    it("should work with index signature token types", () => {
+      type TokenMap = Record<string, string | number>;
+
+      type ComponentType = ThemeComponent<TokenMap>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["tokens"]>().toEqualTypeOf<TokenMap | undefined>();
+    });
   });
 });
