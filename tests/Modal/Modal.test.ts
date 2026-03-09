@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type ModalComponent from "carbon-components-svelte/Modal/Modal.svelte";
+import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import ModalTest from "./Modal.test.svelte";
@@ -742,6 +744,27 @@ describe("Modal", () => {
       // Both Modal events should occur
       expect(submitHandler).toHaveBeenCalledTimes(1);
       expect(clickPrimaryHandler).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = ModalComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["primaryButtonIcon"]>().toEqualTypeOf<
+        CustomIcon | undefined
+      >();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = ModalComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["primaryButtonIcon"]>().toEqualTypeOf<any>();
     });
   });
 });
