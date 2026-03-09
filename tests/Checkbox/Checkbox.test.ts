@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type CheckboxComponent from "carbon-components-svelte/Checkbox/Checkbox.svelte";
+import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import CheckboxGroup from "./Checkbox.group.test.svelte";
@@ -502,5 +504,78 @@ describe("Checkbox", () => {
     render(Checkbox);
     const helperElement = screen.queryByText("Helper text message");
     expect(helperElement).not.toBeInTheDocument();
+  });
+
+  describe("Generics", () => {
+    it("should support custom types with generics", () => {
+      type CustomValue = "option1" | "option2" | "option3";
+
+      type ComponentType = CheckboxComponent<CustomValue>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<CustomValue | undefined>();
+      expectTypeOf<Props["group"]>().toEqualTypeOf<
+        ReadonlyArray<CustomValue> | undefined
+      >();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = CheckboxComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["value"]>().toEqualTypeOf<any>();
+      expectTypeOf<Props["group"]>().toEqualTypeOf<
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        ReadonlyArray<any> | undefined
+      >();
+    });
+
+    it("should provide type-safe access when using group binding", () => {
+      type Status = "pending" | "approved" | "rejected";
+
+      const handleCheck = (checked: boolean) => {
+        expectTypeOf(checked).toEqualTypeOf<boolean>();
+      };
+
+      type ComponentType = CheckboxComponent<Status>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<Status | undefined>();
+      expectTypeOf<Props["group"]>().toEqualTypeOf<
+        ReadonlyArray<Status> | undefined
+      >();
+      expectTypeOf(handleCheck).parameter(0).toEqualTypeOf<boolean>();
+    });
+
+    it("should work with object types", () => {
+      type Option = { id: string; label: string };
+
+      type ComponentType = CheckboxComponent<Option>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<Option | undefined>();
+      expectTypeOf<Props["group"]>().toEqualTypeOf<
+        ReadonlyArray<Option> | undefined
+      >();
+    });
+
+    it("should work with 'as const' for type inference", () => {
+      const options = ["light", "dark", "auto"] as const;
+      type InferredType = (typeof options)[number];
+
+      expectTypeOf<typeof options>().toEqualTypeOf<
+        readonly ["light", "dark", "auto"]
+      >();
+      expectTypeOf<InferredType>().toEqualTypeOf<"light" | "dark" | "auto">();
+
+      type ComponentType = CheckboxComponent<InferredType>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<InferredType | undefined>();
+      expectTypeOf<Props["group"]>().toEqualTypeOf<
+        ReadonlyArray<InferredType> | undefined
+      >();
+    });
   });
 });
