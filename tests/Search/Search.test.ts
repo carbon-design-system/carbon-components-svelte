@@ -152,5 +152,22 @@ describe("Search", () => {
 
       expectTypeOf<Props["value"]>().toEqualTypeOf<InferredType | undefined>();
     });
+
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = SearchComponent<unknown, CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default Icon to any when not specified", () => {
+      type ComponentType = SearchComponent<string>;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });

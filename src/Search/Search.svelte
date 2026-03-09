@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {T = any} T
+   * @generics {T = any, Icon = any} T,Icon
    * @event {null} expand
    * @event {null} collapse
    * @restProps {input}
@@ -56,9 +56,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = IconSearch;
+  export let icon = /** @type {Icon} */ (IconSearch);
 
   /** Set an id for the input element */
   export let id = `ccs-${Math.random().toString(36)}`;
