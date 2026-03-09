@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
    * @event close
    * @property {number} [index]
    * @property {string} [text]
@@ -34,9 +35,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = OverflowMenuVertical;
+  export let icon = /** @type {Icon} */ (OverflowMenuVertical);
 
   /**
    * Specify the icon class.
