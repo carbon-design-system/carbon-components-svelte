@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
+import type TreeViewNodeComponent from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
+import type TreeViewNodeListComponent from "carbon-components-svelte/TreeView/TreeViewNodeList.svelte";
 import type {
   ComponentEvents,
   ComponentProps,
@@ -968,5 +970,43 @@ describe("TreeView autoCollapse", () => {
     await rerender({ activeId: "item3" });
     expect(folder2).toHaveAttribute("aria-expanded", "true");
     expect(folder1).toHaveAttribute("aria-expanded", "false");
+  });
+
+  describe("TreeViewNode Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = TreeViewNodeComponent<TreeNode, CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default Icon to any when not specified", () => {
+      type ComponentType = TreeViewNodeComponent<TreeNode>;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
+  });
+
+  describe("TreeViewNodeList Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = TreeViewNodeListComponent<string, CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default Icon to any when not specified", () => {
+      type ComponentType = TreeViewNodeListComponent<string>;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });

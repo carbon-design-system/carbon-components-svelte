@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Id = (string|number)} Id
+   * @generics {Id = (string|number), Icon = any} Id,Icon
    * @template {string | number} Id
    * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
    * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; } }}
@@ -17,9 +17,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   import { afterUpdate, getContext } from "svelte";
   import CaretDown from "../icons/CaretDown.svelte";
