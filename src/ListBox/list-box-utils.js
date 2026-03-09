@@ -11,9 +11,9 @@ export const MENU_MAX_HEIGHT = Object.freeze({
 
 /**
  * Get the max height for a listbox/dropdown menu based on size.
- * @param {"sm" | "md" | "lg" | "xl"} [size]
- * @returns {string}
+ * @param {"sm" | "md" | "lg" | "xl"} [size] - The size variant
+ * @returns {string} The max height in rem units
  */
-export function getMenuMaxHeight(size) {
-  return MENU_MAX_HEIGHT[size] ?? MENU_MAX_HEIGHT.md;
+export function getMenuMaxHeight(size = "md") {
+  return MENU_MAX_HEIGHT[size];
 }
