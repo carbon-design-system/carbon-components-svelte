@@ -106,6 +106,19 @@ describe("Breakpoint", () => {
     expect(screen.getByTestId("larger-than-md").textContent).toBe("true");
   });
 
+  it("does not throw when no media query matches (find returns undefined); derived stores emit boolean", () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: false,
+      media: query,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }));
+
+    expect(() => render(BreakpointObserver)).not.toThrow();
+    expect(screen.getByTestId("smaller-than-md").textContent).toBe("false");
+    expect(screen.getByTestId("larger-than-md").textContent).toBe("false");
+  });
+
   it("exposes breakpoint values", () => {
     render(Breakpoints);
 

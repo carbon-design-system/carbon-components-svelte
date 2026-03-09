@@ -13,14 +13,14 @@ export function breakpointObserver(): {
   ) => Unsubscriber;
   /**
    * Returns a store readable store that returns whether the current
-   * breakpoint is smaller than {@link size}.
-   * @param {BreakpointSize} size Size to compare against.
+   * breakpoint is smaller than size.
+   * @param size - Size to compare against.
    */
   smallerThan: (size: BreakpointSize) => Readable<boolean>;
   /**
    * Returns a store readable store that returns whether the current
-   * breakpoint is larger than {@link size}.
-   * @param {BreakpointSize} size Size to compare against.
+   * breakpoint is larger than size.
+   * @param size - Size to compare against.
    */
   largerThan: (size: BreakpointSize) => Readable<boolean>;
 };
