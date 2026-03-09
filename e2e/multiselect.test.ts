@@ -48,4 +48,21 @@ test.describe("MultiSelect", () => {
     await page.getByRole("button", { name: /Clear/i }).click();
     await expect(page.getByTestId("selected-count")).not.toBeVisible();
   });
+
+  test("opens with Enter and closes with Escape", async ({ page }) => {
+    const trigger = page.getByTestId("multiselect-fruits");
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("option", { name: "Apple" })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("option", { name: "Apple" })).not.toBeVisible();
+  });
+
+  test("ArrowDown and Enter toggle option selection", async ({ page }) => {
+    const trigger = page.getByTestId("multiselect-fruits");
+    await trigger.click();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(page.getByTestId("selected-count")).toContainText("1");
+  });
 });
