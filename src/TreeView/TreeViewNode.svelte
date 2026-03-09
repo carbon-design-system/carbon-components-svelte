@@ -54,7 +54,7 @@
 
 <script>
   /**
-   * @generics {Node extends TreeNode<any> = TreeNode<any>} Node
+   * @generics {Node extends TreeNode<any> = TreeNode<any>, Icon = any} Node,Icon
    * @template {TreeNode<any>} Node
    * @typedef {import('./TreeView.svelte').TreeNode<Id>} TreeNode<Id=(string|number)>
    * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; } }}
@@ -69,9 +69,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   import { afterUpdate, getContext } from "svelte";
 
