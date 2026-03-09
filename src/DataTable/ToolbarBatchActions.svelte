@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {Id = any} Id
    * @event {null} cancel
    */
 
@@ -19,7 +20,7 @@
   /**
    * Specify the selected IDs for standalone usage.
    * This is unnecessary if using this component with `DataTable`.
-   * @type {ReadonlyArray<any>}
+   * @type {ReadonlyArray<Id>}
    */
   export let selectedIds = [];
 

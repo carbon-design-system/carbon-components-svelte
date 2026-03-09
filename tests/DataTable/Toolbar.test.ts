@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type ToolbarBatchActionsComponent from "carbon-components-svelte/DataTable/ToolbarBatchActions.svelte";
+import type { ComponentProps } from "svelte";
 import Toolbar from "./Toolbar.test.svelte";
 
 describe("DataTable Toolbar", () => {
@@ -190,6 +192,73 @@ describe("DataTable Toolbar", () => {
 
       cancelButton.click();
       expect(cancelFired).toBe(true);
+    });
+
+    describe("Generics", () => {
+      it("should support custom Id types with generics", () => {
+        type CustomId = "row-1" | "row-2" | "row-3";
+
+        type ComponentType = ToolbarBatchActionsComponent<CustomId>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+          ReadonlyArray<CustomId> | undefined
+        >();
+      });
+
+      it("should work with number Id types", () => {
+        type ComponentType = ToolbarBatchActionsComponent<number>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+          ReadonlyArray<number> | undefined
+        >();
+      });
+
+      it("should provide type-safe selectedIds for handlers", () => {
+        type RowId = "a" | "b" | "c";
+
+        const handleSelected = (ids: ReadonlyArray<RowId>) => {
+          expectTypeOf(ids).toEqualTypeOf<ReadonlyArray<RowId>>();
+        };
+
+        type ComponentType = ToolbarBatchActionsComponent<RowId>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+          ReadonlyArray<RowId> | undefined
+        >();
+        expectTypeOf<Parameters<typeof handleSelected>[0]>().toEqualTypeOf<
+          ReadonlyArray<RowId>
+        >();
+      });
+
+      it("should default to any type when generic is not specified", () => {
+        type ComponentType = ToolbarBatchActionsComponent;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+          // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+          ReadonlyArray<any> | undefined
+        >();
+      });
+
+      it("should work with 'as const' for type inference", () => {
+        const ids = ["id-a", "id-b", "id-c"] as const;
+        type InferredId = (typeof ids)[number];
+
+        expectTypeOf<typeof ids>().toEqualTypeOf<
+          readonly ["id-a", "id-b", "id-c"]
+        >();
+        expectTypeOf<InferredId>().toEqualTypeOf<"id-a" | "id-b" | "id-c">();
+
+        type ComponentType = ToolbarBatchActionsComponent<InferredId>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
+          ReadonlyArray<InferredId> | undefined
+        >();
+      });
     });
   });
 });
