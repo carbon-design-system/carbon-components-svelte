@@ -1,8 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-// Prefer getByTestId for reliable selectors (per CONTRIBUTING.md).
-// The ComboBox passes data-testid to the input via $$restProps.
-
 test.describe("ComboBox", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/combobox.html");
@@ -55,5 +52,25 @@ test.describe("ComboBox", () => {
     await combobox.fill("Sl");
     await expect(page.getByRole("option", { name: "Slack" })).toBeVisible();
     await expect(page.getByRole("option", { name: "Email" })).not.toBeVisible();
+  });
+
+  test("opens menu with Enter and selects with Arrow Down + Enter", async ({
+    page,
+  }) => {
+    const combobox = page.getByTestId("combobox-contact");
+    await combobox.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(combobox).toHaveValue("Slack");
+  });
+
+  test("closes menu with Escape", async ({ page }) => {
+    const combobox = page.getByTestId("combobox-contact");
+    await combobox.click();
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.locator(".bx--list-box__menu")).not.toBeVisible();
   });
 });
