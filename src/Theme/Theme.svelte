@@ -16,6 +16,7 @@
    */
 
   /**
+   * @generics {Tokens = Record<string, any>} Tokens
    * @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme
    * @event update
    * @type {object}
@@ -32,9 +33,9 @@
   /**
    * Customize a theme with your own tokens.
    * @see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme
-   * @type {{ [token: string]: any; }}
+   * @type {Tokens}
    */
-  export let tokens = {};
+  export let tokens = /** @type {Tokens} */ ({});
 
   /** Set to `true` to persist the theme using window.localStorage */
   export let persist = false;
