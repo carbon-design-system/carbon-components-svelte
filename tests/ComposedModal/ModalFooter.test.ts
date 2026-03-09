@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type ModalFooterComponent from "carbon-components-svelte/ComposedModal/ModalFooter.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ModalFooterTest from "./ModalFooter.test.svelte";
 
@@ -246,5 +248,26 @@ describe("ModalFooter", () => {
       text: "Reset",
     });
     expect(consoleLog).not.toHaveBeenCalledWith("close");
+  });
+
+  describe("Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = ModalFooterComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["primaryButtonIcon"]>().toEqualTypeOf<
+        CustomIcon | undefined
+      >();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = ModalFooterComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["primaryButtonIcon"]>().toEqualTypeOf<any>();
+    });
   });
 });

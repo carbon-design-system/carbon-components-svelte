@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
    * @event click:button--secondary
    * @property {string} text
    */
@@ -9,9 +10,9 @@
 
   /**
    * Specify the primary button icon.
-   * @type {any}
+   * @type {Icon}
    */
-  export let primaryButtonIcon = undefined;
+  export let primaryButtonIcon = /** @type {Icon} */ (undefined);
 
   /** Set to `true` to disable the primary button */
   export let primaryButtonDisabled = false;
