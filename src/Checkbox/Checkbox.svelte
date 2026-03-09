@@ -1,21 +1,22 @@
 <script>
   /**
+   * @generics {T = any} T
    * @restProps {div}
    * @event {boolean} check
    */
 
   /**
    * Specify the value of the checkbox.
-   * @type {any}
+   * @type {T}
    */
-  export let value = "";
+  export let value = /** @type {T} */ ("");
 
   /** Specify whether the checkbox is checked */
   export let checked = false;
 
   /**
    * Specify the bound group.
-   * @type {ReadonlyArray<any>}
+   * @type {ReadonlyArray<T> | undefined}
    */
   export let group = undefined;
 
