@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @generics {Icon = any} Icon
+   */
+
   /** Set to `true` to render a `button` element instead of a `div` */
   export let interactive = false;
 
@@ -8,9 +12,9 @@
   /**
    * Specify the icon to render.
    * Icon is rendered to the left of the item content.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   $: tag = interactive ? "button" : "div";
   $: props = {
