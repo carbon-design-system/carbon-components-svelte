@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "close-button"} trigger
@@ -71,9 +72,9 @@
 
   /**
    * Specify the primary button icon.
-   * @type {any}
+   * @type {Icon}
    */
-  export let primaryButtonIcon = undefined;
+  export let primaryButtonIcon = /** @type {Icon} */ (undefined);
 
   /**
    * Set to `true` for the "submit" and "click:button--primary" events
