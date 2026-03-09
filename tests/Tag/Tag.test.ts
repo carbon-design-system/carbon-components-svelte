@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type TagComponent from "carbon-components-svelte/Tag/Tag.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import Tag from "./Tag.test.svelte";
 
@@ -171,5 +173,24 @@ describe("Tag", () => {
     assert(tagElement);
     const iconContainer = tagElement.querySelector(".bx--tag__custom-icon");
     expect(iconContainer).toBeInTheDocument();
+  });
+
+  describe("Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = TagComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = TagComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });
