@@ -141,12 +141,13 @@ const RE_IGNORE_ROW_CLICK = /^bx--(overflow-menu|checkbox|radio-button)/;
 /**
  * Returns true if the element's class list indicates the click target
  * is an overflow menu, checkbox, or radio button (row click should be ignored).
- * @param {EventTarget} target - The event target (e.g., from a click event)
+ * @param {EventTarget | null} target - The event target (e.g., from a click event)
  * @returns {boolean}
  */
 export function shouldIgnoreRowClick(target) {
   if (!target || !("classList" in target)) return false;
-  return [...target.classList].some((name) => RE_IGNORE_ROW_CLICK.test(name));
+  const el = /** @type {HTMLElement} */ (target);
+  return [...el.classList].some((name) => RE_IGNORE_ROW_CLICK.test(name));
 }
 
 const PATH_SPLIT_REGEX = /[.[\]'"]/;
@@ -171,16 +172,25 @@ export function resolvePath(object, path) {
     if (segments.length > 1) {
       if (pathCache.size >= MAX_PATH_CACHE_SIZE) {
         const firstKey = pathCache.keys().next().value;
-        pathCache.delete(firstKey);
+        if (firstKey !== undefined) {
+          pathCache.delete(firstKey);
+        }
       }
       pathCache.set(path, segments);
     }
   }
 
-  return segments.reduce(
-    /** @type {(acc: unknown, prop: string) => unknown} */
-    (o, p) => (o && typeof o === "object" ? o[p] : o),
-    /** @type {unknown} */ (object),
+  return (segments ?? []).reduce(
+    /**
+     * @param {unknown} acc
+     * @param {string} p
+     * @returns {unknown}
+     */
+    (acc, p) =>
+      acc && typeof acc === "object"
+        ? /** @type {Record<string, unknown>} */ (acc)[p]
+        : acc,
+    object,
   );
 }
 
