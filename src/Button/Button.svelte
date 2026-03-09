@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
    * @extends {"./ButtonSkeleton.svelte"} ButtonSkeletonProps
    * @restProps {button | a | div}
    * @slot {{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }}
@@ -30,7 +31,7 @@
    * Specify the icon to render.
    * Alternatively, use the named slot "icon".
    *
-   * @type {any}
+   * @type {Icon}
    * @example
    * ```svelte
    * <Button>
@@ -38,7 +39,7 @@
    * </Button>
    * ```
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify the ARIA label for the button icon.

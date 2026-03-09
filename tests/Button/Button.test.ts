@@ -1,4 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import type ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import Button from "./Button.test.svelte";
 
@@ -171,5 +173,24 @@ describe("Button", () => {
     const assistiveText = iconButton.querySelector(".bx--assistive-text");
     assert(assistiveText);
     expect(assistiveText).toHaveTextContent("Add item");
+  });
+
+  describe("Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = ButtonComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = ButtonComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });
