@@ -1,5 +1,9 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
+   */
+
+  /**
    * Set the type of notification.
    * @type {"toast" | "inline"}
    */
@@ -7,9 +11,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = Close;
+  export let icon = /** @type {Icon} */ (Close);
 
   /**
    * Specify the title of the icon.

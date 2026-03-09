@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
+import type NotificationButtonComponent from "carbon-components-svelte/Notification/NotificationButton.svelte";
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
+import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import NotificationQueueTest from "./NotificationQueue.test.svelte";
@@ -486,5 +488,24 @@ describe("NotificationQueue", () => {
       '[style*="position: fixed"]',
     );
     expect(queueContainer).not.toBeInTheDocument();
+  });
+
+  describe("NotificationButton Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = NotificationButtonComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = NotificationButtonComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });
