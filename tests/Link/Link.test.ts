@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type LinkComponent from "carbon-components-svelte/Link/Link.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import Link from "./Link.test.svelte";
 
@@ -141,5 +143,24 @@ describe("Link", () => {
 
     expect(link).toHaveClass("bx--link--inline");
     expect(link.querySelector(".bx--link__icon")).not.toBeInTheDocument();
+  });
+
+  describe("Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = LinkComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = LinkComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });

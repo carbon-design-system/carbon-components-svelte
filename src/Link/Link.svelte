@@ -1,5 +1,9 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
+   */
+
+  /**
    * Specify the size of the link.
    * @type {"sm" | "lg"}
    */
@@ -17,9 +21,9 @@
   /**
    * Specify the icon to render.
    * `inline` must be `false`.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /** Set to `true` to disable the checkbox */
   export let disabled = false;
