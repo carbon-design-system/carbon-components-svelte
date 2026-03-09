@@ -16,7 +16,15 @@
 
 <ComposedModal bind:open>
   <ModalHeader title="Modal title" />
-  <ModalBody> <p data-testid="modal-body">Modal content</p> </ModalBody>
+  <ModalBody>
+    <p data-testid="modal-body">Modal content</p>
+    <input
+      type="text"
+      data-modal-primary-focus
+      data-testid="modal-primary-focus"
+      aria-label="Primary focus input"
+    >
+  </ModalBody>
   <ModalFooter>
     <Button data-testid="close-modal" on:click={() => (open = false)}>
       Close
