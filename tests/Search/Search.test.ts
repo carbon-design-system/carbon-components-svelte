@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type SearchComponent from "carbon-components-svelte/Search/Search.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
@@ -105,5 +107,50 @@ describe("Search", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  describe("Generics", () => {
+    it("should support custom types with generics", () => {
+      type CustomValue = "option1" | "option2" | "option3";
+
+      type ComponentType = SearchComponent<CustomValue>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<CustomValue | undefined>();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = SearchComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["value"]>().toEqualTypeOf<any>();
+    });
+
+    it("should work with object types", () => {
+      type SearchFilters = { query: string; category: string };
+
+      type ComponentType = SearchComponent<SearchFilters>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<SearchFilters | undefined>();
+    });
+
+    it("should work with 'as const' for type inference", () => {
+      const suggestions = ["apple", "banana", "cherry"] as const;
+      type InferredType = (typeof suggestions)[number];
+
+      expectTypeOf<typeof suggestions>().toEqualTypeOf<
+        readonly ["apple", "banana", "cherry"]
+      >();
+      expectTypeOf<InferredType>().toEqualTypeOf<
+        "apple" | "banana" | "cherry"
+      >();
+
+      type ComponentType = SearchComponent<InferredType>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<InferredType | undefined>();
+    });
   });
 });

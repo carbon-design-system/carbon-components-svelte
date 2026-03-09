@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {T = any} T
    * @event {null} expand
    * @event {null} collapse
    * @restProps {input}
@@ -7,9 +8,9 @@
 
   /**
    * Specify the value of the search input.
-   * @type {any}
+   * @type {T}
    */
-  export let value = "";
+  export let value = /** @type {T} */ ("");
 
   /**
    * Specify the size of the search input.
