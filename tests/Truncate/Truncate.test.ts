@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { truncate } from "../../src/Truncate/truncate.js";
 import Truncate from "./Truncate.test.svelte";
 import TruncateAction from "./TruncateAction.test.svelte";
 
@@ -85,6 +86,13 @@ describe("Truncate", () => {
 
       const element = screen.getByText(/This is a long text/);
       expect(element).toHaveClass("bx--text-truncate--end");
+    });
+
+    it("update() with no arguments does not throw (options optional guard)", () => {
+      const node = document.createElement("p");
+      const { update } = truncate(node);
+      expect(() => update()).not.toThrow();
+      expect(() => update(undefined)).not.toThrow();
     });
   });
 });
