@@ -1,5 +1,9 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
+   */
+
+  /**
    * Specify the tab label.
    * Alternatively, use the default slot.
    * @example
@@ -33,9 +37,9 @@
   /**
    * Specify the icon to render.
    * Icon is rendered to the right of the label.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /** Obtain a reference to the anchor HTML element */
   export let ref = null;
