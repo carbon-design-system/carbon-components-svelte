@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @generics {Icon = any} Icon
+   */
+
   /** Set to `true` to use the active state */
   export let linkIsActive = false;
 
@@ -10,9 +14,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /** Obtain a reference to the HTML anchor element */
   export let ref = null;

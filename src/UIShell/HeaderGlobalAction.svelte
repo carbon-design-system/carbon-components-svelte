@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
    * @extends {"../Button/Button.svelte"} ButtonProps
    */
 
@@ -8,9 +9,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /** Obtain a reference to the HTML button element.
    * @type {HTMLButtonElement}

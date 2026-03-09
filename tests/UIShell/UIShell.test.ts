@@ -1,4 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
+import type HamburgerMenuComponent from "carbon-components-svelte/UIShell/HamburgerMenu.svelte";
+import type HeaderComponent from "carbon-components-svelte/UIShell/Header.svelte";
+import type HeaderActionLinkComponent from "carbon-components-svelte/UIShell/HeaderActionLink.svelte";
+import type HeaderGlobalActionComponent from "carbon-components-svelte/UIShell/HeaderGlobalAction.svelte";
+import type SideNavLinkComponent from "carbon-components-svelte/UIShell/SideNavLink.svelte";
+import type SideNavMenuComponent from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import HeaderSlot from "./Header.slot.test.svelte";
 import UiShell from "./UIShell.test.svelte";
@@ -671,6 +678,136 @@ describe("UIShell", () => {
 
         const content = container.querySelector(".bx--content");
         expect(content).toHaveStyle({ marginLeft: "0px" });
+      });
+    });
+  });
+
+  describe("Generics", () => {
+    describe("HamburgerMenu", () => {
+      it("should support custom Icon types with generics", () => {
+        type CustomIcon = new (...args: unknown[]) => unknown;
+
+        type ComponentType = HamburgerMenuComponent<CustomIcon>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["iconMenu"]>().toEqualTypeOf<
+          CustomIcon | undefined
+        >();
+        expectTypeOf<Props["iconClose"]>().toEqualTypeOf<
+          CustomIcon | undefined
+        >();
+      });
+
+      it("should default to any type when generic is not specified", () => {
+        type ComponentType = HamburgerMenuComponent;
+        type Props = ComponentProps<ComponentType>;
+
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<Props["iconMenu"]>().toEqualTypeOf<any>();
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<Props["iconClose"]>().toEqualTypeOf<any>();
+      });
+    });
+
+    describe("Header", () => {
+      it("should support custom Icon types with generics", () => {
+        type CustomIcon = new (...args: unknown[]) => unknown;
+
+        type ComponentType = HeaderComponent<CustomIcon>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["iconMenu"]>().toEqualTypeOf<
+          CustomIcon | undefined
+        >();
+        expectTypeOf<Props["iconClose"]>().toEqualTypeOf<
+          CustomIcon | undefined
+        >();
+      });
+
+      it("should default to any type when generic is not specified", () => {
+        type ComponentType = HeaderComponent;
+        type Props = ComponentProps<ComponentType>;
+
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<Props["iconMenu"]>().toEqualTypeOf<any>();
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<Props["iconClose"]>().toEqualTypeOf<any>();
+      });
+    });
+
+    describe("HeaderActionLink", () => {
+      it("should support custom Icon types with generics", () => {
+        type CustomIcon = new (...args: unknown[]) => unknown;
+
+        type ComponentType = HeaderActionLinkComponent<CustomIcon>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+      });
+
+      it("should default to any type when generic is not specified", () => {
+        type ComponentType = HeaderActionLinkComponent;
+        type Props = ComponentProps<ComponentType>;
+
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+      });
+    });
+
+    describe("HeaderGlobalAction", () => {
+      it("should support custom Icon types with generics", () => {
+        type CustomIcon = new (...args: unknown[]) => unknown;
+
+        type ComponentType = HeaderGlobalActionComponent<CustomIcon>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["icon"]>().toExtend<CustomIcon | undefined>();
+      });
+
+      it("should default to any type when generic is not specified", () => {
+        type ComponentType = HeaderGlobalActionComponent;
+        type Props = ComponentProps<ComponentType>;
+
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+      });
+    });
+
+    describe("SideNavLink", () => {
+      it("should support custom Icon types with generics", () => {
+        type CustomIcon = new (...args: unknown[]) => unknown;
+
+        type ComponentType = SideNavLinkComponent<CustomIcon>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+      });
+
+      it("should default to any type when generic is not specified", () => {
+        type ComponentType = SideNavLinkComponent;
+        type Props = ComponentProps<ComponentType>;
+
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+      });
+    });
+
+    describe("SideNavMenu", () => {
+      it("should support custom Icon types with generics", () => {
+        type CustomIcon = new (...args: unknown[]) => unknown;
+
+        type ComponentType = SideNavMenuComponent<CustomIcon>;
+        type Props = ComponentProps<ComponentType>;
+
+        expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+      });
+
+      it("should default to any type when generic is not specified", () => {
+        type ComponentType = SideNavMenuComponent;
+        type Props = ComponentProps<ComponentType>;
+
+        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
       });
     });
   });
