@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.103.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.102.0...v0.103.0) (2026-03-09)
+
+### Features
+
+- **button:** `icon` is generic ([a7e7df7](https://github.com/carbon-design-system/carbon-components-svelte/commit/a7e7df73caf3503b2e3f1580d681507494164646))
+- **checkbox:** `value` is generic ([478bbc3](https://github.com/carbon-design-system/carbon-components-svelte/commit/478bbc33f72fc65b85de97d55c0d8edbfa9f1307))
+- **contained-list:** `icon` is generic ([d8c4e6d](https://github.com/carbon-design-system/carbon-components-svelte/commit/d8c4e6d29a88c5a3a32f7c8de6a96ece07eac6d4))
+- **context-menu-option:** `icon` is generic ([fb55602](https://github.com/carbon-design-system/carbon-components-svelte/commit/fb55602cf50a6d4e48c2ee9d3c706640ac9ebd7a))
+- **file-uploader-button:** `icon` is generic ([6d23ae9](https://github.com/carbon-design-system/carbon-components-svelte/commit/6d23ae94f4f6a30880642077d40834f5da6dd3ac))
+- **link:** `icon` is generic ([519fe6f](https://github.com/carbon-design-system/carbon-components-svelte/commit/519fe6f33972dce7c44b7d3c8e09cfb2986bd800))
+- **local-storage:** `value` is generic ([f6c5402](https://github.com/carbon-design-system/carbon-components-svelte/commit/f6c5402fa8f7144f5b769bb46b5ee1562db75e27))
+- **modal-footer:** `primaryButtonIcon` is generic ([ea83bd6](https://github.com/carbon-design-system/carbon-components-svelte/commit/ea83bd6d60dd099c7e5d7198c577caf676609017))
+- **modal:** `primaryButtonIcon` is generic ([98029d6](https://github.com/carbon-design-system/carbon-components-svelte/commit/98029d694713d70999ef8703f23e477b8d13c341))
+- **notification-button:** `icon` is generic ([a8bb771](https://github.com/carbon-design-system/carbon-components-svelte/commit/a8bb771f0299a9ae618fafbb1afd2a8ba4ca6731))
+- **overflow-menu:** `icon` is generic ([3be481f](https://github.com/carbon-design-system/carbon-components-svelte/commit/3be481f8446ecdaa83e1de1a21b8dd447c6a5711))
+- **search:** `icon` is generic ([09bace4](https://github.com/carbon-design-system/carbon-components-svelte/commit/09bace4f48b9a292052a5087f288139900bea257))
+- **search:** `value` is generic ([72564ad](https://github.com/carbon-design-system/carbon-components-svelte/commit/72564ad3a6309c2cd4f1df25447a58b8317fe5e4))
+- **session-storage:** `value` is generic ([cab5277](https://github.com/carbon-design-system/carbon-components-svelte/commit/cab52775b91ad55615e67e0ce2da987e37ddb13c))
+- **tab:** `icon` is generic ([cf3bf3c](https://github.com/carbon-design-system/carbon-components-svelte/commit/cf3bf3c45a67e4bca357995b362da365033ce275))
+- **tabs:** `Tab` supports `icon` prop ([c520ce6](https://github.com/carbon-design-system/carbon-components-svelte/commit/c520ce6dd204a49edddb3c567d782466f59e602b)), closes [#2729](https://github.com/carbon-design-system/carbon-components-svelte/issues/2729)
+- **tabs:** container type supports `secondaryLabel` ([1c52431](https://github.com/carbon-design-system/carbon-components-svelte/commit/1c52431060e5e8b1ba4e1bb944a7ab636029c3e1)), closes [#2725](https://github.com/carbon-design-system/carbon-components-svelte/issues/2725)
+- **tabs:** container type supports icons ([b4e53fc](https://github.com/carbon-design-system/carbon-components-svelte/commit/b4e53fcd84bf5b24c13e40593a04c95807878122)), closes [#2724](https://github.com/carbon-design-system/carbon-components-svelte/issues/2724)
+- **tabs:** support `fullWidth` ([7bf42f7](https://github.com/carbon-design-system/carbon-components-svelte/commit/7bf42f7f9a76a98e303e9579568e154cf2dc4ae2)), closes [#2722](https://github.com/carbon-design-system/carbon-components-svelte/issues/2722)
+- **tag:** `icon` is generic ([a76bc23](https://github.com/carbon-design-system/carbon-components-svelte/commit/a76bc2379534f5317e7db79aa4c1d210796ec0ff))
+- **theme:** `tokens` is generic ([dbfe108](https://github.com/carbon-design-system/carbon-components-svelte/commit/dbfe1088f3a0da84116febd929802cb165f1a0f7))
+- **toolbar-batch-actions:** `id` is generic ([ef743b4](https://github.com/carbon-design-system/carbon-components-svelte/commit/ef743b4b114bf82acd3e300c65b93b755ce697d1))
+- **tooltip-icon:** `icon` is generic ([a1f8f74](https://github.com/carbon-design-system/carbon-components-svelte/commit/a1f8f74ec6a9ca72d0a79e4eea5ce6a8a55b5192))
+- **tooltip:** `icon` is generic ([1e01218](https://github.com/carbon-design-system/carbon-components-svelte/commit/1e01218c5528506e9a74218cc6e2da2927c2d6b5))
+- **tree-view-node:** `icon` is generic ([cfd460a](https://github.com/carbon-design-system/carbon-components-svelte/commit/cfd460a79b5700a56e3bcf48d071e83a30f6b52a))
+- **ui-shell:** `icon` is generic ([22f1d24](https://github.com/carbon-design-system/carbon-components-svelte/commit/22f1d248e6f2320eaf44b9e03ed9b6b8749d02b3))
+
+### Bug Fixes
+
+- **breakpoint:** guard `breakpointObserver` find result and derived callbacks ([0478240](https://github.com/carbon-design-system/carbon-components-svelte/commit/0478240dda88bbe8a75783df10e748d65e7b979d))
+- **combo-box:** use `labelText` as aria-label fallback ([b997f69](https://github.com/carbon-design-system/carbon-components-svelte/commit/b997f6936f42a8bfb3d9df1bddd26b5fd524176b)), closes [#2715](https://github.com/carbon-design-system/carbon-components-svelte/issues/2715)
+- **data-table:** guard `resolvePath` pathCache.delete and segments ([aad08b6](https://github.com/carbon-design-system/carbon-components-svelte/commit/aad08b6f42c5e96c8e99bfce6ceeb9a60d6e6190))
+- **date-picker:** add null safety check for `createCalendar`, guard `RangePlugin` use ([d4dacdc](https://github.com/carbon-design-system/carbon-components-svelte/commit/d4dacdceff0a781ac53b65c2cedfe37e6e165a62))
+- **tabs:** container type disabled tab should not apply border on hover ([bdfae5a](https://github.com/carbon-design-system/carbon-components-svelte/commit/bdfae5a3d34fc464e5ea6637995284256bcc3654))
+- **tabs:** container type has background color for panel ([7c2be21](https://github.com/carbon-design-system/carbon-components-svelte/commit/7c2be21083216710dbb0c2f4910866a66f873961)), closes [#2723](https://github.com/carbon-design-system/carbon-components-svelte/issues/2723)
+- **tabs:** container type should be auto-width by default ([0713704](https://github.com/carbon-design-system/carbon-components-svelte/commit/07137049110646b385f435915feffd798fd584e9)), closes [#2739](https://github.com/carbon-design-system/carbon-components-svelte/issues/2739)
+- **truncate:** guard update() options in truncate action ([98ea6d5](https://github.com/carbon-design-system/carbon-components-svelte/commit/98ea6d58963c889c4404f9a88526bb96bc88ced2))
+- **ui-shell:** allow `SideNav` overlay to show for custom expansion breakpoint ([84eb3bd](https://github.com/carbon-design-system/carbon-components-svelte/commit/84eb3bd54f8d35c5dd16789bcdee775381967b44)), closes [#770](https://github.com/carbon-design-system/carbon-components-svelte/issues/770)
+
 ## [0.102.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.101.4...v0.102.0) (2026-03-07)
 
 ### ⚠ BREAKING CHANGES
