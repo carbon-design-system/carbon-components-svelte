@@ -38,4 +38,39 @@ test.describe("TreeView", () => {
       page.getByRole("treeitem", { name: "Parent 2" }),
     ).toHaveAttribute("aria-selected", "true");
   });
+
+  test("Enter expands focused parent node", async ({ page }) => {
+    await expect(
+      page.getByRole("treeitem", { name: "Child 1-1" }),
+    ).not.toBeVisible();
+
+    await page.getByRole("treeitem", { name: "Parent 1" }).focus();
+    await page.keyboard.press("Enter");
+
+    await expect(
+      page.getByRole("treeitem", { name: "Child 1-1" }),
+    ).toBeVisible();
+  });
+
+  test("ArrowDown moves focus to next node", async ({ page }) => {
+    await page.getByRole("treeitem", { name: "Parent 1" }).focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(
+      page.getByRole("treeitem", { name: "Parent 2" }),
+    ).toBeFocused();
+  });
+
+  test("ArrowRight expands and ArrowLeft collapses parent", async ({
+    page,
+  }) => {
+    await page.getByRole("treeitem", { name: "Parent 1" }).focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(
+      page.getByRole("treeitem", { name: "Child 1-1" }),
+    ).toBeVisible();
+    await page.keyboard.press("ArrowLeft");
+    await expect(
+      page.getByRole("treeitem", { name: "Child 1-1" }),
+    ).not.toBeVisible();
+  });
 });
