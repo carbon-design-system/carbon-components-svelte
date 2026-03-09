@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type ContainedListItemComponent from "carbon-components-svelte/ContainedList/ContainedListItem.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ContainedListLabelChildren from "./ContainedList.labelChildren.test.svelte";
 import ContainedList from "./ContainedList.test.svelte";
@@ -212,5 +214,24 @@ describe("ContainedList", () => {
 
     await user.click(dismissButton);
     expect(consoleLog).toHaveBeenCalledWith("action click");
+  });
+
+  describe("ContainedListItem Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = ContainedListItemComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = ContainedListItemComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });
