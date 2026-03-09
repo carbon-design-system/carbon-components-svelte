@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
    * @event {null} open
    * @event {null} close
    */
@@ -9,15 +10,15 @@
 
   /**
    * Specify the icon to render when the action panel is closed.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = Switcher;
+  export let icon = /** @type {Icon} */ (Switcher);
 
   /**
    * Specify the icon to render when the action panel is open.
-   * @type {any}
+   * @type {Icon}
    */
-  export let closeIcon = Close;
+  export let closeIcon = /** @type {Icon} */ (Close);
 
   /**
    * Specify the text displayed next to the icon.
