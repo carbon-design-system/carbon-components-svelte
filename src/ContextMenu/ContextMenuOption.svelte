@@ -1,5 +1,9 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
+   */
+
+  /**
    * Specify the kind of option.
    * @type {"default" | "danger"}
    */
@@ -14,9 +18,9 @@
   /**
    * Specify the icon to render.
    * Icon is rendered to the left of the label text.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify the label text.

@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
+import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ContextMenu from "./ContextMenu.test.svelte";
 import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
@@ -281,5 +283,24 @@ describe("ContextMenu", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  describe("ContextMenuOption Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = ContextMenuOptionComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = ContextMenuOptionComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });
