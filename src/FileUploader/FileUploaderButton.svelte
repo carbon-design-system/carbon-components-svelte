@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
    * @event {ReadonlyArray<File>} change
    */
 
@@ -50,9 +51,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify the ARIA label for the button icon.
