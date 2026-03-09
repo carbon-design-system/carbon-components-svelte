@@ -21,7 +21,7 @@ export function truncate(node, options = {}) {
 
   return {
     update(options) {
-      toggleClass(options.clamp === "front");
+      toggleClass(options?.clamp === "front");
     },
   };
 }
