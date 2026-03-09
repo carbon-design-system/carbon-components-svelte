@@ -1,5 +1,9 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
+   */
+
+  /**
    * Specify the tooltip text.
    * Alternatively, use the "tooltipText" slot.
    */
@@ -7,9 +11,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify the icon size.
