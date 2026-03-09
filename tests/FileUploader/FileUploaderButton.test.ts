@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
+import type FileUploaderButtonComponent from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
 import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import FileUploaderButton from "./FileUploaderButton.test.svelte";
 
@@ -456,5 +458,24 @@ describe("FileUploaderButton", () => {
 
     await user.click(button);
     expect(clickSpy).toHaveBeenCalled();
+  });
+
+  describe("Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = FileUploaderButtonComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = FileUploaderButtonComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });
