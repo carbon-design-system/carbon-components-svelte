@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type { TooltipIcon as TooltipIconSource } from "carbon-components-svelte";
+import type TooltipIconComponent from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import TooltipIconSize from "./TooltipIcon.size.test.svelte";
@@ -153,6 +154,27 @@ describe("TooltipIcon", () => {
       expectTypeOf<24>().toExtend<Props["size"]>();
       expectTypeOf<32>().toExtend<Props["size"]>();
       expectTypeOf<number>().toExtend<NonNullable<Props["size"]>>();
+    });
+  });
+
+  describe("Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = TooltipIconComponent<CustomIcon>;
+      type GenericProps = ComponentProps<ComponentType>;
+
+      expectTypeOf<GenericProps["icon"]>().toEqualTypeOf<
+        CustomIcon | undefined
+      >();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = TooltipIconComponent;
+      type GenericProps = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<GenericProps["icon"]>().toEqualTypeOf<any>();
     });
   });
 });
