@@ -30,4 +30,10 @@ test.describe("Tooltip", () => {
     await page.getByTestId("tooltip-wrapper").hover();
     await expect(page.getByTestId("tooltip-content")).toBeVisible();
   });
+
+  test("shows on focus", async ({ page }) => {
+    const trigger = page.getByTestId("tooltip-wrapper").getByRole("button");
+    await trigger.focus();
+    await expect(page.getByTestId("tooltip-content")).toBeVisible();
+  });
 });
