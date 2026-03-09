@@ -1,4 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import type TooltipComponent from "carbon-components-svelte/Tooltip/Tooltip.svelte";
+import type { ComponentProps } from "svelte";
 import TooltipAlignments from "./TooltipAlignments.test.svelte";
 import TooltipCustomContent from "./TooltipCustomContent.test.svelte";
 import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
@@ -216,5 +218,24 @@ describe("Tooltip", () => {
     await fireEvent.focus(trigger);
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  describe("Generics", () => {
+    it("should support custom Icon types with generics", () => {
+      type CustomIcon = new (...args: unknown[]) => unknown;
+
+      type ComponentType = TooltipComponent<CustomIcon>;
+      type Props = ComponentProps<ComponentType>;
+
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
+    });
+
+    it("should default to any type when generic is not specified", () => {
+      type ComponentType = TooltipComponent;
+      type Props = ComponentProps<ComponentType>;
+
+      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
   });
 });

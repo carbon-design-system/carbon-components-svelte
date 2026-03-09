@@ -1,5 +1,6 @@
 <script>
   /**
+   * @generics {Icon = any} Icon
    * @event {null} open
    * @event {null} close
    */
@@ -31,9 +32,9 @@
   /**
    * Specify the icon to render for the tooltip button.
    * Defaults to `<Information />`.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = Information;
+  export let icon = /** @type {Icon} */ (Information);
 
   /** Specify the ARIA label for the tooltip button */
   export let iconDescription = "";
