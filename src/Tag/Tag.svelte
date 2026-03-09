@@ -1,5 +1,8 @@
 <script>
-  /** @restProps {div | span} */
+  /**
+   * @generics {Icon = any} Icon
+   * @restProps {div | span}
+   */
 
   /**
    * Specify the type of tag.
@@ -27,9 +30,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {any}
+   * @type {Icon}
    */
-  export let icon = undefined;
+  export let icon = /** @type {Icon} */ (undefined);
 
   /** Set an id for the filterable tag */
   export let id = `ccs-${Math.random().toString(36)}`;
