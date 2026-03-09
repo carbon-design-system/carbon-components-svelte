@@ -38,4 +38,19 @@ test.describe("Popover", () => {
       /bx--popover--open/,
     );
   });
+
+  test("popover content is visible in viewport when open", async ({ page }) => {
+    await page.getByTestId("open-popover").click();
+    const content = page.getByTestId("popover-content");
+    await expect(content).toBeVisible();
+    const box = await content.boundingBox();
+    expect(box).not.toBeNull();
+    const viewport = page.viewportSize();
+    if (box && viewport) {
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.y).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 1);
+      expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 1);
+    }
+  });
 });
