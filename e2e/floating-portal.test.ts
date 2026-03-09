@@ -63,4 +63,19 @@ test.describe("FloatingPortal", () => {
     expect(style).toMatch(/left:\s*\d+px/);
     expect(style).toContain("z-index: 9200");
   });
+
+  test("floating content is visible and within viewport when open", async ({
+    page,
+  }) => {
+    await page.getByTestId("toggle").click();
+    const content = page.getByTestId("floating-inner");
+    await expect(content).toBeVisible();
+    const box = await content.boundingBox();
+    expect(box).not.toBeNull();
+    const viewport = page.viewportSize();
+    if (box && viewport) {
+      expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 2);
+      expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 2);
+    }
+  });
 });
