@@ -624,6 +624,11 @@ describe("resolvePath", () => {
     expect(resolvePath(obj, "contact.company")).toBeUndefined();
   });
 
+  it("returns undefined for single-segment path not in object (segments reduce guard)", () => {
+    const obj = { a: 1 };
+    expect(resolvePath(obj, "b")).toBeUndefined();
+  });
+
   it("handles null and undefined in path resolution", () => {
     const obj = {
       contact: null,
@@ -681,7 +686,7 @@ describe("resolvePath", () => {
     expect(result3).toBe("Other Corp");
   });
 
-  it("handles cache size limit to prevent memory leaks", () => {
+  it("handles cache size limit to prevent memory leaks (also guards pathCache.delete key)", () => {
     const paths = Array.from(
       { length: 1000 + 1 },
       (_, i) => `level${i}.nested.value`,
