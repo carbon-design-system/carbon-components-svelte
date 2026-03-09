@@ -34,4 +34,24 @@ test.describe("Tabs", () => {
       "true",
     );
   });
+
+  test("ArrowRight switches to next tab", async ({ page }) => {
+    await page.getByRole("tab", { name: "Tab 1" }).focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(page.getByRole("tab", { name: "Tab 2" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await expect(page.getByTestId("tab-content-2")).toBeVisible();
+  });
+
+  test("ArrowLeft switches to previous tab", async ({ page }) => {
+    await page.getByRole("tab", { name: "Tab 2" }).click();
+    await page.keyboard.press("ArrowLeft");
+    await expect(page.getByRole("tab", { name: "Tab 1" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await expect(page.getByTestId("tab-content-1")).toBeVisible();
+  });
 });
