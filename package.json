@@ -70,7 +70,7 @@
     "svelte": "^4.2.20",
     "svelte-check": "^4.4.4",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.0"
   },
   "standard-version": {
     "skip": {
