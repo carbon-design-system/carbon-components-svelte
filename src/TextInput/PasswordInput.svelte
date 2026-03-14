@@ -93,7 +93,7 @@
   import ViewOff from "../icons/ViewOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
 
   const ctx = getContext("carbon:Form");
   const insideModal = getContext("carbon:Modal");
@@ -286,18 +286,10 @@
 </div>
 
 {#if effectivePortalTooltip && !disabled}
-  <FloatingPortal
+  <PortalTooltip
     anchor={toggleButtonRef}
     direction={tooltipPosition === "top" ? "top" : "bottom"}
     open={tooltipOpen}
-    intrinsicWidth={true}
-  >
-    <div
-      class="bx--tooltip-portal"
-      data-direction={tooltipPosition === "top" ? "top" : "bottom"}
-    >
-      <span class="bx--tooltip-portal__caret"></span>
-      <span class="bx--tooltip-portal__content"> {tooltipLabel} </span>
-    </div>
-  </FloatingPortal>
+    text={tooltipLabel}
+  />
 {/if}
