@@ -22,6 +22,12 @@ The default direction is `"bottom"`.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalDirection" />
 
+## Intrinsic width
+
+By default, the floating content matches the anchor's width. Set `intrinsicWidth` to `true` to use the content's intrinsic width instead and center it horizontally on the anchor. This is useful for tooltips, small popovers, or any floating content that should size to its content rather than the trigger.
+
+<FileSource src="/framed/FloatingPortal/FloatingPortalIntrinsicWidth" />
+
 ## Escaping overflow
 
 Because the floating content is rendered into `document.body`, it escapes parent containers with `overflow: hidden`.
