@@ -16,7 +16,7 @@ Position floating content below an anchor element.
 
 ## Direction
 
-Set the `direction` prop to `"top"` or `"bottom"` to control the preferred direction. The component will flip to the opposite direction if there is not enough space.
+Set the `direction` prop to `"top"`, `"bottom"`, `"left"`, or `"right"` to control the preferred direction. The component will flip to the opposite direction if there is not enough space (e.g. `"top"` flips to `"bottom"`, `"right"` flips to `"left"`).
 
 The default direction is `"bottom"`.
 
@@ -27,6 +27,19 @@ The default direction is `"bottom"`.
 By default, the floating content matches the anchor's width. Set `intrinsicWidth` to `true` to use the content's intrinsic width instead and center it horizontally on the anchor. This is useful for tooltips, small popovers, or any floating content that should size to its content rather than the trigger.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalIntrinsicWidth" />
+
+## Gaps and alignment
+
+Use these props to fine-tune spacing and vertical alignment:
+
+- **`gapTop`** (number, default `0`): Vertical gap in pixels between the anchor and the floating content when direction is `"top"`. Useful for caret clearance (e.g. tooltips).
+- **`gapBottom`** (number, default `0`): Vertical gap when direction is `"bottom"`.
+- **`horizontalGapLeft`** (number, default `0`): Horizontal gap in pixels when the content is to the left of the anchor (space between anchor left edge and content right edge).
+- **`horizontalGapRight`** (number, default `0`): Horizontal gap when the content is to the right of the anchor.
+- **`verticalAlignOffsetLeft`** (number, default `0`): Vertical offset in pixels when direction is `"left"` (e.g. negative to nudge content up).
+- **`verticalAlignOffsetRight`** (number, default `0`): Vertical offset when direction is `"right"`.
+
+These are optional; omit them to use defaults. The [Tooltip](/components/Tooltip) component uses them when `portalTooltip` is true to match non-portal tooltip spacing and alignment.
 
 ## Escaping overflow
 
