@@ -32,6 +32,13 @@
   export let zIndex = 9200;
 
   /**
+   * Set to `true` to use the content's intrinsic width and center it on the anchor.
+   * When `false` (default), the portal width matches the anchor.
+   * @type {boolean}
+   */
+  export let intrinsicWidth = false;
+
+  /**
    * Obtain a reference to the floating portal element.
    * @type {null | HTMLElement}
    */
@@ -163,7 +170,9 @@
 
     pos = {
       top,
-      left: rect.left + window.scrollX,
+      left: intrinsicWidth
+        ? rect.left + window.scrollX + rect.width / 2
+        : rect.left + window.scrollX,
       width: rect.width,
       actualDirection,
     };
@@ -211,7 +220,9 @@
     {...$$restProps}
     data-floating-portal
     data-floating-direction={pos.actualDirection}
-    style="position: absolute; top: {pos.top}px; left: {pos.left}px; width: {pos.width}px; z-index: {zIndex};"
+    style="position: absolute; top: {pos.top}px; left: {pos.left}px;{intrinsicWidth
+      ? ' transform: translateX(-50%);'
+      : ` width: ${pos.width}px;`} z-index: {zIndex};"
   >
     <slot direction={actualDirection} />
   </Portal>
