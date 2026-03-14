@@ -32,6 +32,14 @@ Pass a no-op function to the `copy` prop to disable copying.
 
 <CopyButton text="This text should not be copied" copy={() => {}} />
 
+## Portal tooltip
+
+Set `portalTooltip` to `true` to render the feedback tooltip in a floating portal. This prevents the tooltip from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. The example below uses a container with hidden overflow; with `portalTooltip`, the tooltip breaks out of the container.
+
+When inside a [Modal](/components/Modal), `portalTooltip` defaults to `true` unless explicitly set to `false`.
+
+<FileSource src="/framed/CopyButton/CopyButtonPortalTooltip" />
+
 ## Inside a modal
 
 When used inside a `Modal`, the feedback tooltip is automatically portalled to prevent it from being clipped by `overflow: hidden`. Set `portalTooltip` to explicitly control this behavior.
