@@ -22,6 +22,7 @@
   export let id = "test-password-input";
   export let name = "";
   export let ref: HTMLInputElement | null = null;
+  export let portalTooltip: boolean | undefined = undefined;
 </script>
 
 <PasswordInput
@@ -47,6 +48,7 @@
   {inline}
   {id}
   {name}
+  {portalTooltip}
   on:click
   on:mouseover
   on:mouseenter

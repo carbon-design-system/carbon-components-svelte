@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import PasswordInputSlot from "./PasswordInput.slot.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
+import PasswordInputInModal from "./PasswordInputInModal.test.svelte";
 
 describe("PasswordInput", () => {
   describe("Default", () => {
@@ -223,5 +224,104 @@ describe("PasswordInput", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  describe("Portal tooltip", () => {
+    afterEach(() => {
+      const existingPortals = document.querySelectorAll(
+        "[data-floating-portal]",
+      );
+      for (const portal of existingPortals) {
+        portal.remove();
+      }
+    });
+
+    it("should add portal-active class and aria-label when portalTooltip is true", () => {
+      render(PasswordInput, {
+        props: {
+          labelText: "Password",
+          portalTooltip: true,
+        },
+      });
+
+      const button = screen.getByRole("button", { name: "Show password" });
+      expect(button).toHaveClass("bx--tooltip--portal-active");
+      expect(button).toHaveAttribute("aria-label", "Show password");
+    });
+
+    it("should render tooltip in FloatingPortal when portalTooltip is true", async () => {
+      render(PasswordInput, {
+        props: {
+          labelText: "Password",
+          portalTooltip: true,
+        },
+      });
+
+      const button = screen.getByRole("button", { name: "Show password" });
+      await user.hover(button);
+
+      const portal = document.querySelector("[data-floating-portal]");
+      expect(portal).toBeInTheDocument();
+      expect(portal?.parentElement).toBe(document.body);
+      expect(
+        portal?.querySelector(".bx--tooltip-portal__content"),
+      ).toHaveTextContent("Show password");
+    });
+
+    it("should not use portal when portalTooltip is false", () => {
+      render(PasswordInput, {
+        props: {
+          labelText: "Password",
+          portalTooltip: false,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      expect(button).not.toHaveClass("bx--tooltip--portal-active");
+      expect(button).not.toHaveAttribute("aria-label");
+      expect(screen.getByText("Show password")).toBeInTheDocument();
+    });
+
+    it("should use portal when inside Modal (portalTooltip not passed)", async () => {
+      render(PasswordInputInModal, {
+        props: { modalOpen: true },
+      });
+
+      const button = screen.getByRole("button", { name: "Show password" });
+      expect(button).toHaveClass("bx--tooltip--portal-active");
+
+      await user.hover(button);
+      const portal = document.querySelector("[data-floating-portal]");
+      expect(portal).toBeInTheDocument();
+      expect(portal?.parentElement).toBe(document.body);
+    });
+
+    it("should not use portal when inside Modal with portalTooltip=false", () => {
+      render(PasswordInputInModal, {
+        props: { modalOpen: true, portalTooltip: false },
+      });
+
+      const button = screen.getByRole("button", { name: "Show password" });
+      expect(button).not.toHaveClass("bx--tooltip--portal-active");
+      expect(button).not.toHaveAttribute("aria-label");
+      expect(screen.getByText("Show password")).toBeInTheDocument();
+    });
+
+    it("should not render portal tooltip when disabled", () => {
+      render(PasswordInput, {
+        props: {
+          labelText: "Password",
+          portalTooltip: true,
+          disabled: true,
+        },
+      });
+
+      const button = screen.getByRole("button");
+      expect(button).toBeDisabled();
+      expect(button).toHaveClass("bx--tooltip--portal-active");
+      expect(
+        document.querySelector("[data-floating-portal]"),
+      ).not.toBeInTheDocument();
+    });
   });
 });

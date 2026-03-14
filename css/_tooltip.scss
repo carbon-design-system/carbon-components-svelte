@@ -1,0 +1,57 @@
+// Portal tooltip styles for rendering tooltips outside
+// overflow containers (e.g., inside modals).
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+@mixin tooltip-portal {
+  // Suppress the default CSS pseudo-element tooltip when a portal tooltip is active.
+  .#{$prefix}--tooltip--portal-active::before,
+  .#{$prefix}--tooltip--portal-active::after {
+    display: none !important;
+  }
+
+  .#{$prefix}--tooltip-portal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--tooltip-portal[data-direction='top'] {
+    flex-direction: column-reverse;
+  }
+
+  .#{$prefix}--tooltip-portal__caret {
+    width: 0;
+    height: 0.75rem;
+    border-right: 0.3125rem solid transparent;
+    border-bottom: 0.3125rem solid $inverse-02;
+    border-left: 0.3125rem solid transparent;
+  }
+
+  .#{$prefix}--tooltip-portal[data-direction='top']
+    .#{$prefix}--tooltip-portal__caret {
+    border-top: 0.3125rem solid $inverse-02;
+    border-bottom: none;
+  }
+
+  .#{$prefix}--tooltip-portal__content {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    min-height: 1.5rem;
+    max-width: 13rem;
+    padding: 0.1875rem 1rem;
+    border-radius: 0.125rem;
+    background-color: $inverse-02;
+    color: $inverse-01;
+    font-size: 0.875rem;
+    font-weight: 400;
+    text-align: center;
+  }
+}
+
+@include exports('tooltip-portal') {
+  @include tooltip-portal;
+}

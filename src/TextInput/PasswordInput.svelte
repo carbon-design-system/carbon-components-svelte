@@ -80,18 +80,36 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
+  /**
+   * Set to `true` to render the tooltip in a portal,
+   * preventing it from being clipped by `overflow: hidden` containers.
+   * By default, the tooltip is portalled when inside a `Modal`.
+   * @type {boolean | undefined}
+   */
+  export let portalTooltip = undefined;
+
   import { getContext } from "svelte";
   import View from "../icons/View.svelte";
   import ViewOff from "../icons/ViewOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
 
   const ctx = getContext("carbon:Form");
+  const insideModal = getContext("carbon:Modal");
 
   const isFluid = !!ctx && ctx.isFluid;
+  $: effectivePortalTooltip =
+    portalTooltip !== undefined ? portalTooltip : !!insideModal;
+
+  /** @type {null | HTMLButtonElement} */
+  let toggleButtonRef = null;
+  let tooltipOpen = false;
+
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
+  $: tooltipLabel = type === "text" ? hidePasswordLabel : showPasswordLabel;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -204,6 +222,7 @@
       {/if}
       {#if !(isFluid && invalid)}
         <button
+          bind:this={toggleButtonRef}
           type="button"
           {disabled}
           class:bx--text-input--password__visibility__toggle={true}
@@ -212,6 +231,7 @@
           class:bx--btn--disabled={disabled}
           class:bx--tooltip__trigger={true}
           class:bx--tooltip--a11y={true}
+          class:bx--tooltip--portal-active={effectivePortalTooltip}
           class:bx--tooltip--top={tooltipPosition === "top"}
           class:bx--tooltip--right={tooltipPosition === "right"}
           class:bx--tooltip--bottom={tooltipPosition === "bottom"}
@@ -219,18 +239,25 @@
           class:bx--tooltip--align-start={tooltipAlignment === "start"}
           class:bx--tooltip--align-center={tooltipAlignment === "center"}
           class:bx--tooltip--align-end={tooltipAlignment === "end"}
+          aria-label={effectivePortalTooltip ? tooltipLabel : undefined}
           on:click={() => {
             type = type === "password" ? "text" : "password";
           }}
+          on:mouseenter={() => {
+            tooltipOpen = true;
+          }}
+          on:mouseleave={() => {
+            tooltipOpen = false;
+          }}
+          on:focus={() => {
+            tooltipOpen = true;
+          }}
+          on:blur={() => {
+            tooltipOpen = false;
+          }}
         >
-          {#if !disabled}
-            <span class:bx--assistive-text={true}>
-              {#if type === "text"}
-                {hidePasswordLabel}
-              {:else}
-                {showPasswordLabel}
-              {/if}
-            </span>
+          {#if !disabled && !effectivePortalTooltip}
+            <span class:bx--assistive-text={true}> {tooltipLabel} </span>
           {/if}
           {#if type === "text"}
             <ViewOff class="bx--icon-visibility-off" />
@@ -257,3 +284,20 @@
     {/if}
   </div>
 </div>
+
+{#if effectivePortalTooltip && !disabled}
+  <FloatingPortal
+    anchor={toggleButtonRef}
+    direction={tooltipPosition === "top" ? "top" : "bottom"}
+    open={tooltipOpen}
+    intrinsicWidth={true}
+  >
+    <div
+      class="bx--tooltip-portal"
+      data-direction={tooltipPosition === "top" ? "top" : "bottom"}
+    >
+      <span class="bx--tooltip-portal__caret" />
+      <span class="bx--tooltip-portal__content"> {tooltipLabel} </span>
+    </div>
+  </FloatingPortal>
+{/if}
