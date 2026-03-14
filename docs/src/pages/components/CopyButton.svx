@@ -31,3 +31,9 @@ This example uses the NPM package [clipboard-copy](https://github.com/feross/cli
 Pass a no-op function to the `copy` prop to disable copying.
 
 <CopyButton text="This text should not be copied" copy={() => {}} />
+
+## Inside a modal
+
+When used inside a `Modal`, the feedback tooltip is automatically portalled to prevent it from being clipped by `overflow: hidden`. Set `portalTooltip` to explicitly control this behavior.
+
+<FileSource src="/framed/CopyButton/CopyButtonInModal" />
