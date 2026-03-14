@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import CopyButton from "./CopyButton.test.svelte";
+import CopyButtonInModal from "./CopyButtonInModal.test.svelte";
 
 describe("CopyButton", () => {
   const getCopyButton = (label: string) =>
@@ -65,5 +66,79 @@ describe("CopyButton", () => {
     const button = getCopyButton("Basic");
     await user.click(button);
     expect(consoleLog).toHaveBeenCalledWith("Clipboard error");
+  });
+
+  describe("Portal tooltip", () => {
+    afterEach(() => {
+      const existingPortals = document.querySelectorAll(
+        "[data-floating-portal]",
+      );
+      for (const portal of existingPortals) {
+        portal.remove();
+      }
+    });
+
+    it("should add portal-active class when portalTooltip is true", () => {
+      render(CopyButton, {
+        props: { portalTooltip: true },
+      });
+
+      const button = getCopyButton("Basic");
+      expect(button).toHaveClass("bx--copy-btn--portal-active");
+    });
+
+    it("should render feedback in FloatingPortal on click when portalTooltip is true", async () => {
+      render(CopyButton, {
+        props: { portalTooltip: true },
+      });
+
+      const button = getCopyButton("Basic");
+      await user.click(button);
+
+      const portal = document.querySelector("[data-floating-portal]");
+      expect(portal).toBeInTheDocument();
+      expect(portal?.parentElement).toBe(document.body);
+      expect(
+        portal?.querySelector(".bx--tooltip-portal__content"),
+      ).toHaveTextContent("Copied!");
+    });
+
+    it("should not use portal when portalTooltip is false", () => {
+      render(CopyButton, {
+        props: { portalTooltip: false },
+      });
+
+      const button = getCopyButton("Basic");
+      expect(button).not.toHaveClass("bx--copy-btn--portal-active");
+      expect(
+        button.querySelector(".bx--copy-btn__feedback"),
+      ).toBeInTheDocument();
+    });
+
+    it("should use portal when inside Modal (portalTooltip not passed)", async () => {
+      render(CopyButtonInModal, {
+        props: { modalOpen: true },
+      });
+
+      const button = getCopyButton("Copy");
+      expect(button).toHaveClass("bx--copy-btn--portal-active");
+
+      await user.click(button);
+      const portal = document.querySelector("[data-floating-portal]");
+      expect(portal).toBeInTheDocument();
+      expect(portal?.parentElement).toBe(document.body);
+    });
+
+    it("should not use portal when inside Modal with portalTooltip=false", () => {
+      render(CopyButtonInModal, {
+        props: { modalOpen: true, portalTooltip: false },
+      });
+
+      const button = getCopyButton("Copy");
+      expect(button).not.toHaveClass("bx--copy-btn--portal-active");
+      expect(
+        button.querySelector(".bx--copy-btn__feedback"),
+      ).toBeInTheDocument();
+    });
   });
 });

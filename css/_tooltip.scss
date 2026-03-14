@@ -36,6 +36,12 @@
     border-bottom: none;
   }
 
+  // Suppress the default CSS feedback tooltip on copy buttons when a portal is active.
+  .#{$prefix}--copy-btn--portal-active::before,
+  .#{$prefix}--copy-btn--portal-active .#{$prefix}--copy-btn__feedback {
+    display: none !important;
+  }
+
   .#{$prefix}--tooltip-portal__content {
     display: flex;
     align-items: center;
