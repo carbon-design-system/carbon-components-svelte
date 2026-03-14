@@ -74,6 +74,32 @@ describe("FloatingPortal", () => {
     expect(portalElement).toHaveAttribute("data-floating-direction", "top");
   });
 
+  it("uses left or right direction when direction prop is left", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, direction: "left" },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    const actualDirection = portalElement?.getAttribute(
+      "data-floating-direction",
+    );
+    expect(["left", "right"]).toContain(actualDirection);
+  });
+
+  it("uses left or right direction when direction prop is right", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, direction: "right" },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    const actualDirection = portalElement?.getAttribute(
+      "data-floating-direction",
+    );
+    expect(["left", "right"]).toContain(actualDirection);
+  });
+
   it("applies z-index from zIndex prop", async () => {
     render(FloatingPortalTest, {
       props: { open: true, zIndex: 10000 },
@@ -94,6 +120,38 @@ describe("FloatingPortal", () => {
     const portalElement = content.closest("[data-floating-portal]");
     const style = portalElement?.getAttribute("style") ?? "";
     expect(style).toContain("z-index: 9200");
+  });
+
+  it("accepts gapTop and gapBottom props", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, gapTop: 8, gapBottom: 10 },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    expect(portalElement).toBeInTheDocument();
+    const style = portalElement?.getAttribute("style") ?? "";
+    expect(style).toContain("position: absolute");
+  });
+
+  it("accepts horizontal gap and vertical align offset props", async () => {
+    render(FloatingPortalTest, {
+      props: {
+        open: true,
+        direction: "right",
+        horizontalGapLeft: 10,
+        horizontalGapRight: 4,
+        verticalAlignOffsetLeft: -10,
+        verticalAlignOffsetRight: 10,
+      },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    expect(portalElement).toBeInTheDocument();
+    expect(["left", "right"]).toContain(
+      portalElement?.getAttribute("data-floating-direction"),
+    );
   });
 
   it("applies position styles", async () => {

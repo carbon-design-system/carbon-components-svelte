@@ -1,6 +1,6 @@
 <script>
   /**
-   * @slot {{ direction: "bottom" | "top" }}
+   * @slot {{ direction: "bottom" | "top" | "left" | "right" }}
    */
 
   /**
@@ -14,7 +14,7 @@
    * Set the preferred direction of the floating content.
    * The component will flip to the opposite direction
    * if there is not enough space.
-   * @type {"bottom" | "top"}
+   * @type {"bottom" | "top" | "left" | "right"}
    */
   export let direction = "bottom";
 
@@ -23,6 +23,42 @@
    * @type {boolean}
    */
   export let open = false;
+
+  /**
+   * Vertical gap in pixels when direction is top.
+   * @type {number}
+   */
+  export let gapTop = 0;
+
+  /**
+   * Vertical gap in pixels when direction is bottom.
+   * @type {number}
+   */
+  export let gapBottom = 0;
+
+  /**
+   * Horizontal gap in pixels when direction is left (space between anchor left and tooltip right).
+   * @type {number}
+   */
+  export let horizontalGapLeft = 0;
+
+  /**
+   * Horizontal gap in pixels when direction is right (space between anchor right and tooltip left).
+   * @type {number}
+   */
+  export let horizontalGapRight = 0;
+
+  /**
+   * Vertical offset in pixels when direction is left.
+   * @type {number}
+   */
+  export let verticalAlignOffsetLeft = 0;
+
+  /**
+   * Vertical offset in pixels when direction is right.
+   * @type {number}
+   */
+  export let verticalAlignOffsetRight = 0;
 
   /**
    * Specify the z-index of the floating portal.
@@ -102,7 +138,7 @@
     };
   });
 
-  /** @type {{ top: number, left: number, width: number, actualDirection: "bottom" | "top" }} */
+  /** @type {{ top: number, left: number, width?: number, actualDirection: "bottom" | "top" | "left" | "right" }} */
   let pos = {
     top: 0,
     left: 0,
@@ -140,40 +176,89 @@
     const rect = anchor.getBoundingClientRect();
     const floatingRect = ref.getBoundingClientRect();
 
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-
+    const isVertical = direction === "top" || direction === "bottom";
     let actualDirection = direction;
 
-    if (
-      direction === "bottom" &&
-      spaceBelow < floatingRect.height &&
-      spaceAbove > spaceBelow
-    ) {
-      actualDirection = "top";
-    } else if (
-      direction === "top" &&
-      spaceAbove < floatingRect.height &&
-      spaceBelow > spaceAbove
-    ) {
-      actualDirection = "bottom";
+    if (isVertical) {
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+
+      if (
+        direction === "bottom" &&
+        spaceBelow < floatingRect.height &&
+        spaceAbove > spaceBelow
+      ) {
+        actualDirection = "top";
+      } else if (
+        direction === "top" &&
+        spaceAbove < floatingRect.height &&
+        spaceBelow > spaceAbove
+      ) {
+        actualDirection = "bottom";
+      }
+    } else {
+      const spaceRight = window.innerWidth - rect.right;
+      const spaceLeft = rect.left;
+
+      if (
+        direction === "right" &&
+        spaceRight < floatingRect.width + horizontalGapRight &&
+        spaceLeft > spaceRight
+      ) {
+        actualDirection = "left";
+      } else if (
+        direction === "left" &&
+        spaceLeft < floatingRect.width + horizontalGapLeft &&
+        spaceRight > spaceLeft
+      ) {
+        actualDirection = "right";
+      }
     }
 
     /** @type {number} */
     let top;
+    /** @type {number} */
+    let left;
+    /** @type {number | undefined} */
+    let width;
 
     if (actualDirection === "bottom") {
-      top = rect.bottom + window.scrollY;
+      top = rect.bottom + window.scrollY + gapBottom;
+      left = rect.left + window.scrollX;
+      width = rect.width;
+    } else if (actualDirection === "top") {
+      top = rect.top + window.scrollY - floatingRect.height - gapTop;
+      left = rect.left + window.scrollX;
+      width = rect.width;
+    } else if (actualDirection === "right") {
+      top =
+        rect.top +
+        window.scrollY +
+        rect.height / 2 -
+        floatingRect.height / 2 +
+        verticalAlignOffsetRight;
+      left = rect.right + window.scrollX + horizontalGapRight;
     } else {
-      top = rect.top + window.scrollY - floatingRect.height;
+      // left
+      top =
+        rect.top +
+        window.scrollY +
+        rect.height / 2 -
+        floatingRect.height / 2 +
+        verticalAlignOffsetLeft;
+      left =
+        rect.left + window.scrollX - floatingRect.width - horizontalGapLeft;
     }
 
+    const useIntrinsicCenter =
+      intrinsicWidth &&
+      (actualDirection === "top" || actualDirection === "bottom");
     pos = {
       top,
-      left: intrinsicWidth
+      left: useIntrinsicCenter
         ? rect.left + window.scrollX + rect.width / 2
-        : rect.left + window.scrollX,
-      width: rect.width,
+        : left,
+      ...(width !== undefined && { width }),
       actualDirection,
     };
   }
@@ -188,6 +273,20 @@
 
   // The actual rendered direction after auto-flipping.
   $: actualDirection = pos.actualDirection;
+
+  $: useIntrinsicCenter =
+    intrinsicWidth &&
+    (actualDirection === "top" || actualDirection === "bottom");
+  $: portalStyle = [
+    "position: absolute",
+    `top: ${pos.top}px`,
+    `left: ${pos.left}px`,
+    useIntrinsicCenter ? "transform: translateX(-50%)" : null,
+    !useIntrinsicCenter && pos.width != null ? `width: ${pos.width}px` : null,
+    `z-index: ${zIndex}`,
+  ]
+    .filter(Boolean)
+    .join("; ");
 
   $: if (!open) {
     unobserveAnchor();
@@ -205,7 +304,14 @@
     scrollableAncestors = getScrollableAncestors(anchor);
     addScrollListeners();
     observeAnchor();
-    tick().then(updatePosition);
+    tick().then(() => {
+      updatePosition();
+      // For left/right, portal size is not set until content lays out; run again after layout
+      const isHorizontal = direction === "left" || direction === "right";
+      if (isHorizontal) {
+        requestAnimationFrame(updatePosition);
+      }
+    });
   }
 </script>
 
@@ -220,9 +326,7 @@
     {...$$restProps}
     data-floating-portal
     data-floating-direction={pos.actualDirection}
-    style="position: absolute; top: {pos.top}px; left: {pos.left}px;{intrinsicWidth
-      ? ' transform: translateX(-50%);'
-      : ` width: ${pos.width}px;`} z-index: {zIndex};"
+    style={portalStyle}
   >
     <slot direction={actualDirection} />
   </Portal>
