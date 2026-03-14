@@ -108,3 +108,38 @@ Hide the icon while keeping the tooltip functionality using `hideIcon`.
     Resources are provisioned based on your account's organization.
   </p>
 </Tooltip>
+
+## Portal tooltip
+
+Use `portalTooltip` to render the tooltip in a portal, preventing it from being clipped by `overflow: hidden` containers. This is automatically enabled when the tooltip is inside a `Modal`.
+
+<Tooltip portalTooltip triggerText="Portalled">
+  <p>
+    This tooltip is rendered in a portal.
+  </p>
+</Tooltip>
+
+## Portal tooltip (hidden icon)
+
+Portal tooltips also work with `hideIcon`.
+
+<Tooltip portalTooltip hideIcon triggerText="Portalled (hidden icon)">
+  <p>
+    This tooltip is rendered in a portal without the icon.
+  </p>
+</Tooltip>
+
+## Portal tooltip directions
+
+Position portalled tooltips in different directions.
+
+<Tooltip portalTooltip triggerText="Top" direction="top"><p>Top</p></Tooltip>
+<Tooltip portalTooltip triggerText="Right" direction="right"><p>Right</p></Tooltip>
+<Tooltip portalTooltip triggerText="Bottom" direction="bottom"><p>Bottom</p></Tooltip>
+<Tooltip portalTooltip triggerText="Left" direction="left"><p>Left</p></Tooltip>
+
+## Inside a modal
+
+When a tooltip is used inside a [Modal](/components/Modal), it is automatically rendered in a portal so it is not clipped by the modal's overflow or z-index stacking. No need to set `portalTooltip` in this case.
+
+<FileSource src="/framed/Tooltip/TooltipModal" />
