@@ -121,7 +121,7 @@
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
-  import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
@@ -263,17 +263,11 @@
     </button>
 
     {#if effectivePortalTooltip}
-      <FloatingPortal
+      <PortalTooltip
         anchor={inlineButtonRef}
-        direction="top"
         open={feedbackOpen}
-        intrinsicWidth={true}
-      >
-        <div class="bx--tooltip-portal" data-direction="top">
-          <span class="bx--tooltip-portal__caret"></span>
-          <span class="bx--tooltip-portal__content">{feedback}</span>
-        </div>
-      </FloatingPortal>
+        text={feedback}
+      />
     {/if}
   {/if}
 {:else}

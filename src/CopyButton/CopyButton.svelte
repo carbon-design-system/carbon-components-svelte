@@ -36,7 +36,7 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import Copy from "../icons/Copy.svelte";
-  import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
 
   const dispatch = createEventDispatcher();
@@ -121,15 +121,5 @@
 </button>
 
 {#if effectivePortalTooltip}
-  <FloatingPortal
-    anchor={buttonRef}
-    direction="top"
-    open={feedbackOpen}
-    intrinsicWidth={true}
-  >
-    <div class="bx--tooltip-portal" data-direction="top">
-      <span class="bx--tooltip-portal__caret"></span>
-      <span class="bx--tooltip-portal__content">{feedback}</span>
-    </div>
-  </FloatingPortal>
+  <PortalTooltip anchor={buttonRef} open={feedbackOpen} text={feedback} />
 {/if}
