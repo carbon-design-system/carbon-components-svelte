@@ -81,14 +81,26 @@
   /** Obtain a reference to the icon HTML element */
   export let refIcon = null;
 
+  /**
+   * Set to `true` to render the tooltip in a portal,
+   * preventing it from being clipped by `overflow: hidden` containers.
+   * By default, the tooltip is portalled when inside a `Modal`.
+   * @type {boolean | undefined}
+   */
+  export let portalTooltip = undefined;
+
   import {
     afterUpdate,
     createEventDispatcher,
+    getContext,
     onMount,
     setContext,
   } from "svelte";
   import { writable } from "svelte/store";
   import Information from "../icons/Information.svelte";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
+
+  const insideModal = getContext("carbon:Modal");
 
   const dispatch = createEventDispatcher();
   /**
@@ -99,6 +111,9 @@
   let prevOpen = undefined;
   let openTimeout;
   let focusByMouse = false;
+
+  $: effectivePortalTooltip =
+    portalTooltip !== undefined ? portalTooltip : !!insideModal;
 
   setContext("carbon:Tooltip", { tooltipOpen });
 
@@ -153,7 +168,7 @@
   });
 
   afterUpdate(() => {
-    if (open) {
+    if (open && !effectivePortalTooltip) {
       const button = ref.getBoundingClientRect();
       const tooltip = refTooltip.getBoundingClientRect();
 
@@ -268,7 +283,7 @@
       <slot name="triggerText">{triggerText}</slot>
     </div>
   {/if}
-  {#if open}
+  {#if open && !effectivePortalTooltip}
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       bind:this={refTooltip}
@@ -301,3 +316,52 @@
     </div>
   {/if}
 </div>
+
+{#if effectivePortalTooltip}
+  <FloatingPortal
+    anchor={hideIcon ? ref : refIcon}
+    {direction}
+    {open}
+    gapTop={8}
+    gapBottom={10}
+    horizontalGapLeft={16}
+    horizontalGapRight={6}
+    verticalAlignOffsetLeft={-10}
+    verticalAlignOffsetRight={4}
+    bind:ref={refTooltip}
+    let:direction={actualDirection}
+  >
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div
+        id={tooltipId}
+        data-floating-menu-direction={actualDirection}
+        class:bx--tooltip={true}
+        class:bx--tooltip--shown={open}
+        class:bx--tooltip--top={actualDirection === "top"}
+        class:bx--tooltip--right={actualDirection === "right"}
+        class:bx--tooltip--bottom={actualDirection === "bottom"}
+        class:bx--tooltip--left={actualDirection === "left"}
+        class:bx--tooltip--align-center={align === "center"}
+        class:bx--tooltip--align-start={align === "start"}
+        class:bx--tooltip--align-end={align === "end"}
+        style="position: relative; transform: none; display: block; left: auto; margin-top: 0;"
+        on:mouseenter={onMouseEnter}
+        on:keydown={onKeydown}
+      >
+        <span class:bx--tooltip__caret={true}></span>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <div
+          on:click|stopPropagation
+          on:mousedown|stopPropagation
+          class:bx--tooltip__content={true}
+          tabindex="-1"
+          role="dialog"
+        >
+          <slot />
+        </div>
+      </div>
+    </div>
+  </FloatingPortal>
+{/if}
