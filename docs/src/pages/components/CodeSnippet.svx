@@ -110,6 +110,12 @@ Re-render the component to fix this issue.
 
 <FileSource src="/framed/CodeSnippet/HiddenCodeSnippet" />
 
+## Inside a modal
+
+When used inside a `Modal`, the feedback tooltip is automatically portalled to prevent it from being clipped by `overflow: hidden`. Set `portalTooltip` to explicitly control this behavior.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetInModal" />
+
 ## Skeleton
 
 Set `skeleton` to `true` to show a loading state. Defaults to `"single"` type.
