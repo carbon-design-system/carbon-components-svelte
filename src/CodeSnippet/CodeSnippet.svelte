@@ -109,18 +109,42 @@
   /** Obtain a reference to the pre HTML element */
   export let ref = null;
 
-  import { createEventDispatcher, onMount, tick } from "svelte";
+  /**
+   * Set to `true` to render the feedback tooltip in a portal,
+   * preventing it from being clipped by `overflow: hidden` containers.
+   * By default, the tooltip is portalled when inside a `Modal`.
+   * @type {boolean | undefined}
+   */
+  export let portalTooltip = undefined;
+
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { observeModalClose } from "../Portal/portal-utils.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
+  const insideModal = getContext("carbon:Modal");
+
+  $: effectivePortalTooltip =
+    portalTooltip !== undefined ? portalTooltip : !!insideModal;
+
+  /** @type {null | HTMLButtonElement} */
+  let inlineButtonRef = null;
 
   /** @type {"fade-in" | "fade-out"} */
   let animation = undefined;
   let timeout = undefined;
+  let feedbackOpen = false;
   let prevExpanded = expanded;
+
+  function dismissFeedback() {
+    feedbackOpen = false;
+    animation = undefined;
+    clearTimeout(timeout);
+  }
 
   function setShowMoreLess() {
     const { height } = ref.getBoundingClientRect();
@@ -148,7 +172,17 @@
   }
 
   onMount(() => {
-    return () => clearTimeout(timeout);
+    const el = inlineButtonRef || ref;
+    const disconnectModalObserver =
+      effectivePortalTooltip && el
+        ? observeModalClose(el, dismissFeedback)
+        : () => {};
+
+    return () => {
+      clearTimeout(timeout);
+      feedbackOpen = false;
+      disconnectModalObserver();
+    };
   });
 </script>
 
@@ -179,6 +213,7 @@
     </span>
   {:else}
     <button
+      bind:this={inlineButtonRef}
       type="button"
       aria-live="polite"
       class:bx--copy={true}
@@ -186,6 +221,7 @@
       class:bx--copy-btn--animating={animation}
       class:bx--copy-btn--fade-in={animation === "fade-in"}
       class:bx--copy-btn--fade-out={animation === "fade-out"}
+      class:bx--copy-btn--portal-active={effectivePortalTooltip}
       class:bx--snippet={true}
       class:bx--snippet--inline={type === "inline"}
       class:bx--snippet--expand={expanded}
@@ -199,6 +235,7 @@
         dispatch("copy");
         if (animation === "fade-in") return;
         animation = "fade-in";
+        feedbackOpen = true;
         timeout = setTimeout(() => {
           animation = "fade-out";
         }, feedbackTimeout);
@@ -206,6 +243,7 @@
       on:animationend={({ animationName }) => {
         if (animationName === "hide-feedback") {
           animation = undefined;
+          feedbackOpen = false;
         }
       }}
       on:mouseover
@@ -213,14 +251,30 @@
       on:mouseleave
     >
       <code {id}> <slot>{code}</slot> </code>
-      <span
-        aria-hidden="true"
-        class:bx--assistive-text={true}
-        class:bx--copy-btn__feedback={true}
-      >
-        {feedback}
-      </span>
+      {#if !effectivePortalTooltip}
+        <span
+          aria-hidden="true"
+          class:bx--assistive-text={true}
+          class:bx--copy-btn__feedback={true}
+        >
+          {feedback}
+        </span>
+      {/if}
     </button>
+
+    {#if effectivePortalTooltip}
+      <FloatingPortal
+        anchor={inlineButtonRef}
+        direction="top"
+        open={feedbackOpen}
+        intrinsicWidth={true}
+      >
+        <div class="bx--tooltip-portal" data-direction="top">
+          <span class="bx--tooltip-portal__caret" />
+          <span class="bx--tooltip-portal__content">{feedback}</span>
+        </div>
+      </FloatingPortal>
+    {/if}
   {/if}
 {:else}
   <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -259,6 +313,7 @@
         {feedback}
         {feedbackTimeout}
         iconDescription={copyButtonDescription}
+        portalTooltip={effectivePortalTooltip}
         on:click
         on:copy
         on:animationend
