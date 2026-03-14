@@ -296,7 +296,7 @@
       class="bx--tooltip-portal"
       data-direction={tooltipPosition === "top" ? "top" : "bottom"}
     >
-      <span class="bx--tooltip-portal__caret" />
+      <span class="bx--tooltip-portal__caret"></span>
       <span class="bx--tooltip-portal__content"> {tooltipLabel} </span>
     </div>
   </FloatingPortal>

@@ -270,7 +270,7 @@
         intrinsicWidth={true}
       >
         <div class="bx--tooltip-portal" data-direction="top">
-          <span class="bx--tooltip-portal__caret" />
+          <span class="bx--tooltip-portal__caret"></span>
           <span class="bx--tooltip-portal__content">{feedback}</span>
         </div>
       </FloatingPortal>
