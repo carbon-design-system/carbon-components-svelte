@@ -6,6 +6,7 @@
   export let open = false;
   export let direction: "top" | "bottom" = "bottom";
   export let zIndex = 9200;
+  export let intrinsicWidth = false;
   export let anchor: HTMLElement | null = null;
   export let ref: HTMLElement | null = null;
   export let content = "Floating content";
@@ -25,6 +26,6 @@
   <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
 {/if}
 
-<FloatingPortal {anchor} {direction} {open} {zIndex} bind:ref>
+<FloatingPortal {anchor} {direction} {open} {zIndex} {intrinsicWidth} bind:ref>
   {content}
 </FloatingPortal>

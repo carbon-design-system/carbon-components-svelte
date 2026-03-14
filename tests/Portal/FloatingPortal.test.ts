@@ -110,6 +110,32 @@ describe("FloatingPortal", () => {
     expect(style).toMatch(/width:\s*\d+px/);
   });
 
+  describe("intrinsicWidth", () => {
+    it("applies width and no translateX when intrinsicWidth is false (default)", async () => {
+      render(FloatingPortalTest, {
+        props: { open: true, intrinsicWidth: false },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest("[data-floating-portal]");
+      const style = portalElement?.getAttribute("style") ?? "";
+      expect(style).toMatch(/width:\s*\d+px/);
+      expect(style).not.toContain("translateX(-50%)");
+    });
+
+    it("applies translateX(-50%) and no width when intrinsicWidth is true", async () => {
+      render(FloatingPortalTest, {
+        props: { open: true, intrinsicWidth: true },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest("[data-floating-portal]");
+      const style = portalElement?.getAttribute("style") ?? "";
+      expect(style).toContain("transform: translateX(-50%)");
+      expect(style).not.toMatch(/\bwidth:\s*\d+px/);
+    });
+  });
+
   it("binds ref to the floating portal element", async () => {
     const { component } = render(FloatingPortalTest, {
       props: { open: true },
