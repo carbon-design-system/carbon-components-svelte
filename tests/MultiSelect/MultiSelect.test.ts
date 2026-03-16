@@ -208,6 +208,286 @@ describe("MultiSelect", () => {
     });
   });
 
+  describe("isSelectAll behavior", () => {
+    const itemsWithSelectAll = [
+      { id: "select-all", text: "All roles", isSelectAll: true },
+      { id: "editor", text: "Editor" },
+      { id: "owner", text: "Owner" },
+      { id: "uploader", text: "Uploader" },
+      { id: "reader", text: "Reader", disabled: true },
+    ];
+
+    it("renders select-all item first in the list", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveTextContent("All roles");
+    });
+
+    it("applies bx--multi-select--selectall class when an item has isSelectAll", () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      const wrapper = screen.getByRole("combobox").closest(".bx--multi-select");
+      expect(wrapper).toHaveClass("bx--multi-select--selectall");
+    });
+
+    it("does not apply bx--multi-select--selectall when no item has isSelectAll", () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact",
+        },
+      });
+
+      const wrapper = screen.getByRole("combobox").closest(".bx--multi-select");
+      expect(wrapper).not.toHaveClass("bx--multi-select--selectall");
+    });
+
+    it("clicking select-all selects all non-disabled items", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("All roles");
+
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: ["editor", "owner", "uploader"],
+        selected: expect.arrayContaining([
+          expect.objectContaining({
+            id: "editor",
+            text: "Editor",
+            checked: true,
+          }),
+          expect.objectContaining({
+            id: "owner",
+            text: "Owner",
+            checked: true,
+          }),
+          expect.objectContaining({
+            id: "uploader",
+            text: "Uploader",
+            checked: true,
+          }),
+        ]),
+        unselected: expect.arrayContaining([
+          expect.objectContaining({
+            id: "reader",
+            text: "Reader",
+            disabled: true,
+            checked: false,
+          }),
+        ]),
+      });
+      expect(consoleLog.mock.calls[0][1].selected).toHaveLength(3);
+
+      const readerOption = screen.getByRole("option", { name: "Reader" });
+      expect(readerOption).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("disabled items are not selected when clicking select-all", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("All roles");
+
+      const options = screen.getAllByRole("option");
+      const readerOption = options.find(
+        (o) => o.textContent?.trim() === "Reader",
+      );
+      expect(readerOption).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("clicking select-all when all selected deselects all non-disabled items", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          selectedIds: ["editor", "owner", "uploader"],
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("All roles");
+
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: [],
+        selected: [],
+        unselected: expect.arrayContaining([
+          expect.objectContaining({
+            id: "editor",
+            text: "Editor",
+            checked: false,
+          }),
+          expect.objectContaining({
+            id: "owner",
+            text: "Owner",
+            checked: false,
+          }),
+          expect.objectContaining({
+            id: "uploader",
+            text: "Uploader",
+            checked: false,
+          }),
+          expect.objectContaining({
+            id: "reader",
+            text: "Reader",
+            disabled: true,
+            checked: false,
+          }),
+        ]),
+      });
+      expect(consoleLog.mock.calls[0][1].unselected).toHaveLength(4);
+    });
+
+    it("select event excludes isSelectAll item from selectedIds and selected/unselected", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("All roles");
+
+      const detail = consoleLog.mock.calls[0][1];
+      expect(detail.selectedIds).not.toContain("select-all");
+      expect(
+        detail.selected.every((s: { id: string }) => s.id !== "select-all"),
+      ).toBe(true);
+      expect(
+        detail.unselected.every((u: { id: string }) => u.id !== "select-all"),
+      ).toBe(true);
+    });
+
+    it("select-all option shows indeterminate state when some items selected", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          selectedIds: ["editor"],
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "mixed");
+    });
+
+    it("select-all option shows checked when all selectable items selected", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          selectedIds: ["editor", "owner", "uploader"],
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "true");
+    });
+
+    it("select-all option shows unchecked when no items selected", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "false");
+    });
+
+    it("clear button deselects all including select-all state", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          selectedIds: ["editor", "owner", "uploader"],
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const clearButton = screen.getByRole("button", { name: /clear/i });
+      await user.click(clearButton);
+      await closeMenu();
+      await openMenu();
+
+      const allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "false");
+      const editorOption = screen.getByRole("option", { name: "Editor" });
+      expect(editorOption).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("select-all item remains visible when filterable and filter is applied", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          filterable: true,
+          placeholder: "Filter roles...",
+          labelText: "Roles",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter roles...");
+      await user.click(input);
+      await user.type(input, "Ed");
+
+      expect(screen.getByText("All roles")).toBeInTheDocument();
+      expect(screen.getByText("Editor")).toBeInTheDocument();
+      expect(screen.queryByText("Owner")).not.toBeInTheDocument();
+      expect(screen.queryByText("Uploader")).not.toBeInTheDocument();
+    });
+
+    it("selecting individual items updates select-all checked/indeterminate state", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      let allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "false");
+
+      await toggleOption("Editor");
+      allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "mixed");
+
+      await toggleOption("Owner");
+      await toggleOption("Uploader");
+      allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "true");
+    });
+  });
+
   describe("filtering behavior", () => {
     it("filters items based on input", async () => {
       const consoleLog = vi.spyOn(console, "log");

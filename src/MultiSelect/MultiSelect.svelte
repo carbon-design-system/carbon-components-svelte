@@ -7,6 +7,7 @@
    * @property {Id} id
    * @property {MultiSelectItemText} text
    * @property {boolean} [disabled] - Whether the item is disabled
+   * @property {boolean} [isSelectAll] - Whether this item acts as a "select all" toggle
    * @event select
    * @type {object}
    * @property {Item["id"][]} selectedIds
@@ -291,15 +292,53 @@
     highlightedIndex = index;
   }
 
+  /**
+   * Handle selection of an item, including isSelectAll logic.
+   * @param {Item} item
+   */
+  function selectItem(item) {
+    if (item.disabled) return;
+
+    if (item.isSelectAll) {
+      if (allSelected) {
+        sortedItems = sortedItems.map((si) =>
+          si.disabled ? si : { ...si, checked: false },
+        );
+      } else {
+        sortedItems = sortedItems.map((si) =>
+          si.disabled ? si : { ...si, checked: true },
+        );
+      }
+    } else {
+      sortedItems = sortedItems.map((si) =>
+        si.id === item.id ? { ...si, checked: !si.checked } : si,
+      );
+
+      if (hasSelectAll) {
+        const newSelectableChecked = sortedItems.filter(
+          (si) => !si.disabled && !si.isSelectAll && si.checked,
+        ).length;
+        const newAllSelected =
+          selectableItems.length > 0 &&
+          newSelectableChecked === selectableItems.length;
+        sortedItems = sortedItems.map((si) =>
+          si.isSelectAll ? { ...si, checked: newAllSelected } : si,
+        );
+      }
+    }
+  }
+
   afterUpdate(() => {
     if (checked.length !== prevChecked.length) {
       prevChecked = checked;
-      selectedIds = checked.map(({ id }) => id);
+      selectedIds = checked
+        .filter((item) => !item.isSelectAll)
+        .map(({ id }) => id);
       if (!isInitialRender) {
         dispatch("select", {
           selectedIds,
-          selected: checked,
-          unselected: unchecked,
+          selected: checked.filter((item) => !item.isSelectAll),
+          unselected: unchecked.filter((item) => !item.isSelectAll),
         });
       }
     }
@@ -371,18 +410,31 @@
   });
 
   function sort() {
+    const selectAllEntries = items
+      .filter((item) => item.isSelectAll)
+      .map((item) => {
+        const regularItems = items.filter((i) => !i.isSelectAll && !i.disabled);
+        const allChecked =
+          regularItems.length > 0 &&
+          regularItems.every((i) => selectedIds.includes(i.id));
+        return { ...item, checked: allChecked };
+      });
+
+    const regularItems = items.filter((item) => !item.isSelectAll);
+
     if (
       selectionFeedback === "top" ||
       selectionFeedback === "top-after-reopen"
     ) {
-      const checkedItems = items
+      const checkedItems = regularItems
         .filter((item) => selectedIds.includes(item.id))
         .map((item) => ({ ...item, checked: true }));
-      const uncheckedItems = items
+      const uncheckedItems = regularItems
         .filter((item) => !selectedIds.includes(item.id))
         .map((item) => ({ ...item, checked: false }));
 
       return [
+        ...selectAllEntries,
         ...(checkedItems.length > 1
           ? checkedItems.sort(sortItem)
           : checkedItems),
@@ -390,12 +442,15 @@
       ];
     }
 
-    return items
-      .map((item) => ({
-        ...item,
-        checked: selectedIds.includes(item.id),
-      }))
-      .sort(sortItem);
+    return [
+      ...selectAllEntries,
+      ...regularItems
+        .map((item) => ({
+          ...item,
+          checked: selectedIds.includes(item.id),
+        }))
+        .sort(sortItem),
+    ];
   }
 
   let sortedItems = sort();
@@ -411,9 +466,26 @@
   ) {
     sortedItems = sort();
   }
+  $: hasSelectAll = items.some((item) => item.isSelectAll);
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
-  $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
+  $: selectableItems = sortedItems.filter(
+    (item) => !item.disabled && !item.isSelectAll,
+  );
+  $: selectableCheckedCount = selectableItems.filter(
+    (item) => item.checked,
+  ).length;
+  $: allSelected =
+    selectableItems.length > 0 &&
+    selectableCheckedCount === selectableItems.length;
+  $: selectAllIndeterminate =
+    hasSelectAll && selectableCheckedCount > 0 && !allSelected;
+  $: selectionCount = hasSelectAll
+    ? checked.filter((item) => !item.isSelectAll).length
+    : checked.length;
+  $: filteredItems = sortedItems.filter(
+    (item) => item.isSelectAll || filterItem(item, value),
+  );
   $: highlightedId =
     highlightedIndex > -1
       ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
@@ -497,7 +569,8 @@
       {filterable && 'bx--multi-select--filterable'}
       {invalid && 'bx--multi-select--invalid'}
       {inline && 'bx--multi-select--inline'}
-      {checked.length > 0 && 'bx--multi-select--selected'}"
+      {selectionCount > 0 && 'bx--multi-select--selected'}
+      {hasSelectAll && 'bx--multi-select--selectall'}"
   >
     {#if invalid}
       <WarningFilled class="bx--list-box__invalid-icon" />
@@ -509,9 +582,9 @@
     {/if}
     {#if filterable}
       <div class:bx--list-box__field={true}>
-        {#if checked.length > 0}
+        {#if selectionCount > 0}
           <ListBoxSelection
-            selectionCount={checked.length}
+            {selectionCount}
             on:clear
             on:clear={() => {
               selectedIds = [];
@@ -549,13 +622,10 @@
           on:keydown|stopPropagation={({ key }) => {
             if (key === "Enter") {
               if (highlightedId) {
-                const filteredItemIndex = sortedItems.findIndex(
+                const highlightedItem = sortedItems.find(
                   (item) => item.id === highlightedId,
                 );
-                sortedItems = sortedItems.map((item, i) => {
-                  if (i !== filteredItemIndex) return item;
-                  return { ...item, checked: !item.checked };
-                });
+                if (highlightedItem) selectItem(highlightedItem);
               }
             } else if (key === "Tab") {
               open = false;
@@ -646,10 +716,10 @@
             change(-1);
           } else if (key === "Enter") {
             if (highlightedIndex > -1) {
-              sortedItems = sortedItems.map((item, i) => {
-                if (i !== highlightedIndex) return item;
-                return { ...item, checked: !item.checked };
-              });
+              const item = (filterable ? filteredItems : sortedItems)[
+                highlightedIndex
+              ];
+              if (item) selectItem(item);
             }
           } else if (key === "Escape") {
             open = false;
@@ -662,9 +732,9 @@
         {disabled}
         {translateWithId}
       >
-        {#if checked.length > 0}
+        {#if selectionCount > 0}
           <ListBoxSelection
-            selectionCount={checked.length}
+            {selectionCount}
             on:clear
             on:clear={() => {
               selectedIds = [];
@@ -712,9 +782,13 @@
                   id={item.id}
                   role="option"
                   aria-labelledby="checkbox-{item.id}"
-                  aria-selected={item.checked}
-                  aria-checked={item.checked}
-                  active={item.checked}
+                  aria-selected={item.isSelectAll ? allSelected : item.checked}
+                  aria-checked={item.isSelectAll
+                    ? selectAllIndeterminate
+                      ? "mixed"
+                      : allSelected
+                    : item.checked}
+                  active={item.isSelectAll ? false : item.checked}
                   highlighted={highlightedIndex === actualIndex}
                   disabled={item.disabled}
                   on:click={(e) => {
@@ -722,9 +796,7 @@
                       e.stopPropagation();
                       return;
                     }
-                    sortedItems = sortedItems.map((_) =>
-                      _.id === item.id ? { ..._, checked: !_.checked } : _,
-                    );
+                    selectItem(item);
                     if (filterable) {
                       inputRef?.focus();
                     } else {
@@ -742,7 +814,10 @@
                     {...itemToInput(item)}
                     tabindex="-1"
                     id="checkbox-{item.id}"
-                    checked={item.checked}
+                    checked={item.isSelectAll ? allSelected : item.checked}
+                    indeterminate={item.isSelectAll
+                      ? selectAllIndeterminate
+                      : false}
                     disabled={item.disabled}
                     on:blur={() => {
                       if (actualIndex === itemsToUse.length - 1) open = false;
@@ -762,9 +837,13 @@
               id={item.id}
               role="option"
               aria-labelledby="checkbox-{item.id}"
-              aria-selected={item.checked}
-              aria-checked={item.checked}
-              active={item.checked}
+              aria-selected={item.isSelectAll ? allSelected : item.checked}
+              aria-checked={item.isSelectAll
+                ? selectAllIndeterminate
+                  ? "mixed"
+                  : allSelected
+                : item.checked}
+              active={item.isSelectAll ? false : item.checked}
               highlighted={highlightedIndex === i}
               disabled={item.disabled}
               on:click={(e) => {
@@ -772,9 +851,7 @@
                   e.stopPropagation();
                   return;
                 }
-                sortedItems = sortedItems.map((_) =>
-                  _.id === item.id ? { ..._, checked: !_.checked } : _,
-                );
+                selectItem(item);
                 if (filterable) {
                   inputRef?.focus();
                 } else {
@@ -792,7 +869,10 @@
                 {...itemToInput(item)}
                 tabindex="-1"
                 id="checkbox-{item.id}"
-                checked={item.checked}
+                checked={item.isSelectAll ? allSelected : item.checked}
+                indeterminate={item.isSelectAll
+                  ? selectAllIndeterminate
+                  : false}
                 disabled={item.disabled}
                 on:blur={() => {
                   if (i === itemsToUse.length - 1) open = false;
