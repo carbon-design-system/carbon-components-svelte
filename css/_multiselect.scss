@@ -1,0 +1,33 @@
+// Multi-select "select all" styles for the first item
+// separator border treatment.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+@mixin multiselect-selectall {
+  // When select all is turned on, the first item in the listbox
+  // is always the "Select all" option and gets special border
+  // treatment
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--selectall
+    .#{$prefix}--list-box__menu-item:first-child
+    .#{$prefix}--list-box__menu-item__option {
+    border-block-end: 1px solid $ui-03;
+    margin-left: 0;
+    padding-left: $carbon--spacing-05;
+    margin-right: 0;
+    padding-right: $carbon--spacing-05;
+  }
+
+  // When select all is turned on, the second item in the list
+  // has special treatment to look correct against the "Select all"
+  // border treatment
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--selectall
+    .#{$prefix}--list-box__menu-item:nth-child(2)
+    .#{$prefix}--list-box__menu-item__option {
+    border-block-start: none;
+  }
+}
+
+@include exports('multiselect-selectall') {
+  @include multiselect-selectall;
+}

@@ -40,3 +40,6 @@ $css--plex: true;
 
 // Import all component styles
 @import "carbon-components/scss/globals/scss/styles";
+
+// Custom component overrides (must come after Carbon styles)
+@import "./multiselect";
