@@ -94,6 +94,11 @@
    */
   export let clearFilterOnOpen = false;
 
+  /**
+   * Set to `true` to select all text in the input when it receives focus (e.g. on tab or click).
+   */
+  export let selectTextOnFocus = false;
+
   /** Set to `true` to enable autocomplete with typeahead */
   export let typeahead = false;
 
@@ -606,6 +611,11 @@
         }}
         on:keyup
         on:focus
+        on:focus={() => {
+          if (selectTextOnFocus && ref) {
+            tick().then(() => ref.select());
+          }
+        }}
         on:blur
         on:blur={({ relatedTarget }) => {
           if (!open || !relatedTarget) return;

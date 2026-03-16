@@ -73,4 +73,27 @@ test.describe("ComboBox", () => {
     await page.keyboard.press("Escape");
     await expect(page.locator(".bx--list-box__menu")).not.toBeVisible();
   });
+
+  test("selects all text on focus when selectTextOnFocus is true", async ({
+    page,
+  }) => {
+    const combobox = page.getByTestId("combobox-select-on-focus");
+    await expect(combobox).toHaveValue("Email");
+    await combobox.click();
+    const selection = await page.evaluate(() => {
+      const input = document.activeElement;
+      if (input instanceof HTMLInputElement) {
+        return {
+          selectionStart: input.selectionStart,
+          selectionEnd: input.selectionEnd,
+          valueLength: input.value.length,
+        };
+      }
+      return null;
+    });
+    expect(selection).not.toBeNull();
+    expect(selection?.selectionStart).toBe(0);
+    expect(selection?.selectionEnd).toBe(5);
+    expect(selection?.valueLength).toBe(5);
+  });
 });

@@ -29,6 +29,7 @@
     undefined;
   export let allowCustomValue = false;
   export let clearFilterOnOpen = false;
+  export let selectTextOnFocus = false;
   export let typeahead = false;
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
@@ -56,6 +57,7 @@
   {translateWithIdSelection}
   {allowCustomValue}
   {clearFilterOnOpen}
+  {selectTextOnFocus}
   {typeahead}
   {virtualize}
   {portalMenu}
