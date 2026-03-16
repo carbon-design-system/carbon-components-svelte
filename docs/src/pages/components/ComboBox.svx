@@ -113,6 +113,21 @@ Set `allowCustomValue` to `true` to let users enter custom text that isn't in th
 
 <FileSource src="/framed/ComboBox/AllowCustomValue" />
 
+## Select text on focus
+
+Set `selectTextOnFocus` to `true` to select all text in the input when it receives focus (e.g. on tab or click). This lets users replace the value by typing without manually selecting first.
+
+An alternative is [clear filter on open](#clear-filter-on-open), which clears the filter when opening so all options are visible.
+
+<ComboBox selectTextOnFocus labelText="Contact" placeholder="Select contact method"
+selectedId="1"
+value="Email"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
 ## Top direction
 
 Set `direction` to `"top"` to make the dropdown menu appear above the input.
