@@ -688,6 +688,43 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("");
   });
 
+  it("should select all text on focus when selectTextOnFocus is true", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        selectTextOnFocus: true,
+      },
+    });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe(5);
+  });
+
+  it("should not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        selectTextOnFocus: false,
+      },
+    });
+
+    const input = getInput();
+    await user.click(input);
+    await tick();
+
+    // With selectTextOnFocus false, cursor is at end; no full selection
+    expect(input.selectionStart).toBe(input.selectionEnd);
+    expect(input.selectionEnd).toBe(5);
+  });
+
   describe("Typeahead", () => {
     it("should autocomplete with typeahead when typing", async () => {
       render(ComboBox, {
