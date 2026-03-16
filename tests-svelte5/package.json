@@ -6,13 +6,13 @@
     "test:types": "svelte-check --workspace ../tests --fail-on-warnings && svelte-check --workspace ./svelte5 --fail-on-warnings"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^6.2.4",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
-    "jsdom": "^28.1.0",
-    "svelte": "^5.53.6",
-    "svelte-check": "^4.4.4",
+    "jsdom": "^29.0.0",
+    "svelte": "^5.53.12",
+    "svelte-check": "^4.4.5",
     "vitest": "^4.1.0"
   }
 }
