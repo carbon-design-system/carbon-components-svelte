@@ -96,8 +96,15 @@
   /** Specify the button label */
   export let buttonLabel = "";
 
-  /** Specify the ARIA label used for the status icons */
-  export let iconDescription = "Provide icon description";
+  /**
+   * Accessible label for file row status icons (spinner, remove control, checkmark).
+   * Forwarded to `Filename`. When omitted or blank after trim, `Filename` uses:
+   * - `uploading`: `Loading` description `"uploading"`
+   * - `edit`: close button `aria-label` `"Remove file"`
+   * - `complete`: checkmark `aria-label` / `title` `"Upload complete"`
+   * @type {string | undefined}
+   */
+  export let iconDescription = undefined;
 
   /** Specify a name attribute for the file button uploader input */
   export let name = "";

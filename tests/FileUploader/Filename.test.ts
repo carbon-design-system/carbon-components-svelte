@@ -25,6 +25,7 @@ describe("Filename", () => {
     assert(closeButton);
     expect(closeButton).toBeInTheDocument();
     expect(closeButton.tagName).toBe("BUTTON");
+    expect(closeButton).toHaveAttribute("aria-label", "Remove file");
   });
 
   it("should render complete status with checkmark", () => {
@@ -34,6 +35,11 @@ describe("Filename", () => {
 
     const checkmark = container.querySelector(".bx--file-complete");
     expect(checkmark).toBeInTheDocument();
+    assert(checkmark);
+    expect(checkmark.getAttribute("aria-label")).toBe("Upload complete");
+    const titleEl = checkmark.querySelector("title");
+    assert(titleEl);
+    expect(titleEl).toHaveTextContent("Upload complete");
   });
 
   it("should render invalid state with warning icon when status is edit", () => {
@@ -52,6 +58,18 @@ describe("Filename", () => {
 
     const warningIcon = container.querySelector(".bx--file-invalid");
     expect(warningIcon).not.toBeInTheDocument();
+  });
+
+  it("should use default uploading description when iconDescription is omitted", () => {
+    const { container } = render(Filename, {
+      props: { status: "uploading" },
+    });
+
+    const loading = container.querySelector(".bx--loading");
+    assert(loading);
+    const title = loading.querySelector("title");
+    assert(title);
+    expect(title).toHaveTextContent("uploading");
   });
 
   it("should handle iconDescription prop for uploading status", () => {

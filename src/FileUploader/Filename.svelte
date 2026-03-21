@@ -9,8 +9,20 @@
    */
   export let status = "uploading";
 
-  /** Specify the ARIA label used for the status icons */
-  export let iconDescription = "";
+  /**
+   * Accessible label for the status icons (spinner, remove control, checkmark).
+   * When omitted or blank after trim, defaults are used:
+   * - `uploading`: passed to `Loading` as `"uploading"`
+   * - `edit`: close button `aria-label` is `"Remove file"`
+   * - `complete`: checkmark `aria-label` / `title` are `"Upload complete"`
+   * @type {string | undefined}
+   */
+  export let iconDescription = undefined;
+
+  $: resolvedIconLabel =
+    iconDescription != null && `${iconDescription}`.trim() !== ""
+      ? `${iconDescription}`.trim()
+      : null;
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
@@ -23,7 +35,7 @@
 
 {#if status === "uploading"}
   <Loading
-    description={iconDescription}
+    description={resolvedIconLabel ?? "uploading"}
     {...$$restProps}
     small
     withOverlay={false}
@@ -35,7 +47,7 @@
     <WarningFilled class="bx--file-invalid" />
   {/if}
   <button
-    aria-label={iconDescription}
+    aria-label={resolvedIconLabel ?? "Remove file"}
     class:bx--file-close={true}
     type="button"
     tabindex="0"
@@ -49,8 +61,8 @@
 
 {#if status === "complete"}
   <CheckmarkFilled
-    aria-label={iconDescription}
-    title={iconDescription}
+    aria-label={resolvedIconLabel ?? "Upload complete"}
+    title={resolvedIconLabel ?? "Upload complete"}
     class="bx--file-complete"
     {...$$restProps}
   />
