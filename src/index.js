@@ -129,6 +129,7 @@ export { default as Tab } from "./Tabs/Tab.svelte";
 export { default as TabContent } from "./Tabs/TabContent.svelte";
 export { default as Tabs } from "./Tabs/Tabs.svelte";
 export { default as TabsSkeleton } from "./Tabs/TabsSkeleton.svelte";
+export { default as SelectableTag } from "./Tag/SelectableTag.svelte";
 export { default as Tag } from "./Tag/Tag.svelte";
 export { default as TagSkeleton } from "./Tag/TagSkeleton.svelte";
 export { default as TextArea } from "./TextArea/TextArea.svelte";

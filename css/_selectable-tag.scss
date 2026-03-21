@@ -1,0 +1,46 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+@mixin selectable-tag {
+  .#{$prefix}--tag--selectable {
+    border: 1px solid $border-inverse;
+    background-color: $ui-01;
+    color: $text-01;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $hover-ui;
+      outline: none;
+    }
+
+    &:focus {
+      outline: 2px solid $focus;
+      outline-offset: 1px;
+    }
+  }
+
+  .#{$prefix}--tag--selectable-selected {
+    background-color: $layer-selected-inverse;
+    color: $text-inverse;
+
+    &:hover {
+      background-color: $layer-selected-inverse;
+    }
+  }
+
+  .#{$prefix}--tag--selectable.#{$prefix}--tag--disabled {
+    border: 1px solid $disabled-02;
+    background-color: $ui-01;
+    color: $disabled-02;
+
+    &:hover {
+      background-color: $ui-01;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@include exports('selectable-tag') {
+  @include selectable-tag;
+}
