@@ -6,6 +6,7 @@
   export let align: "start" | "center" | "end" = "center";
   export let direction: "top" | "bottom" = "bottom";
   export let id = "test-tooltip";
+  export let clickToOpen = false;
   export let triggerContent = "Tooltip trigger";
 </script>
 
@@ -15,6 +16,7 @@
   {align}
   {direction}
   {id}
+  {clickToOpen}
   on:open={() => {
     console.log("open");
   }}

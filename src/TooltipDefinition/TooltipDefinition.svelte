@@ -27,6 +27,13 @@
   /** Set an id for the tooltip div element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
+  /**
+   * By default, the tooltip is opened on hover or focus.
+   * Set to `true` to open the tooltip on click/focus instead of on hover.
+   * Unhovering or blurring the tooltip will close it.
+   */
+  export let clickToOpen = false;
+
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
@@ -37,6 +44,8 @@
   const hide = () => (open = false);
 
   const show = () => (open = true);
+
+  const toggle = () => (open = !open);
 
   let isInitialRender = true;
 
@@ -59,7 +68,7 @@
   class:bx--tooltip--definition={true}
   class:bx--tooltip--a11y={true}
   {...$$restProps}
-  on:mouseenter={show}
+  on:mouseenter={clickToOpen ? undefined : show}
   on:mouseleave={hide}
 >
   <button
@@ -76,12 +85,13 @@
     class:bx--tooltip--align-start={align === "start"}
     class:bx--tooltip--align-center={align === "center"}
     class:bx--tooltip--align-end={align === "end"}
+    on:click={clickToOpen ? toggle : undefined}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
     on:focus
-    on:focus={show}
+    on:focus={clickToOpen ? undefined : show}
     on:blur={hide}
   >
     <slot />
