@@ -83,8 +83,10 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 Remove uploaded files from the file uploader in two ways:
 
-- programmatically using the **clearFiles** accessor
-- two-way binding by setting **files** to **[]**
+- programmatically using the `clearFiles` accessor
+- two-way binding by setting `files` to `[]`
+
+Calling `clearFiles` or setting `files` to `[]` dispatches `change` (with an empty array) and `clear` so event listeners stay in sync.
 
 <FileSource src="/framed/FileUploader/FileUploaderClearFiles" />
 

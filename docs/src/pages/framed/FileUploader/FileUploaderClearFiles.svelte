@@ -12,6 +12,12 @@
   buttonLabel="Add files"
   status="complete"
   bind:files
+  on:change={(e) => {
+    console.log("change", e.detail);
+  }}
+  on:clear={() => {
+    console.log("clear");
+  }}
 />
 
 <br>
