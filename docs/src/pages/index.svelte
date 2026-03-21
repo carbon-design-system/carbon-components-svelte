@@ -146,18 +146,15 @@
           light, 3 dark).
         </p>
       </Column>
+      <Column padding max={10} xlg={10}>
+        <RadioButtonGroup legendText="Carbon themes" bind:selected={$theme}>
+          {#each ["white", "g10", "g80", "g90", "g100"] as value}
+            <RadioButton labelText={themes[value]} {value} />
+          {/each}
+        </RadioButtonGroup>
+      </Column>
     </Row>
     <Stack gap={6}>
-      <Row>
-        <Column max={10} xlg={10}>
-          <RadioButtonGroup legendText="Carbon themes" bind:selected={$theme}>
-            {#each ["white", "g10", "g80", "g90", "g100"] as value}
-              <RadioButton labelText={themes[value]} {value} />
-            {/each}
-          </RadioButtonGroup>
-        </Column>
-      </Row>
-
       <Row>
         <Column max={8} xlg={8} noGutter>
           <Tabs autoWidth>
@@ -191,18 +188,14 @@
                   <code>carbon-components</code>. Although it requires more set
                   up, you can reduce the size of the bundle CSS by importing
                   individual component styles instead of a pre-compiled CSS
-                  StyleSheet.
-                </p>
-                <p>
-                  Refer to the
+                  StyleSheet. Refer to the
                   <OutboundLink
                     inline
                     size="lg"
                     href="https://github.com/carbon-design-system/carbon/blob/v10/docs/guides/sass.md"
                   >
-                    official Carbon guide on SASS
+                    official Carbon guide on SASS.
                   </OutboundLink>
-                  for documentation.
                 </p>
               </TabContent>
             </svelte:fragment>
