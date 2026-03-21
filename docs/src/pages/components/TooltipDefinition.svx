@@ -12,12 +12,33 @@ Display a basic definition tooltip with the default bottom-center alignment.
   Armonk
 </TooltipDefinition>
 
-## Custom tooltip direction and alignment
+## Direction
 
-Customize the tooltip position using the `direction` and `align` props. The default direction is `"bottom"` and alignment is `"center"`.
+By default, the tooltip is positioned to the bottom.
 
-<TooltipDefinition direction="top" align="start" tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
-  Armonk
+Position the tooltip in different directions using the `direction` prop.
+
+<TooltipDefinition direction="top" tooltipText="Top">
+Top
+</TooltipDefinition>
+<TooltipDefinition direction="bottom" tooltipText="Bottom">
+Bottom
+</TooltipDefinition>
+
+## Alignment
+
+By default, the tooltip is aligned to the center.
+
+Align the tooltip content using the `align` prop.
+
+<TooltipDefinition align="start" tooltipText="Start">
+Start
+</TooltipDefinition>
+<TooltipDefinition align="center" tooltipText="Center">
+Center
+</TooltipDefinition>
+<TooltipDefinition align="end" tooltipText="End">
+End
 </TooltipDefinition>
 
 ## Open by default
