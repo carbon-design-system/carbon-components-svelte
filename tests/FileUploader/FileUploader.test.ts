@@ -761,4 +761,82 @@ describe("FileUploader", () => {
     expect(changeEvent.detail[0].name).toBe("small1.txt");
     expect(changeEvent.detail[1].name).toBe("small2.txt");
   });
+
+  it("should reject duplicate files when preventDuplicate is true", async () => {
+    const rejectedHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: {
+        preventDuplicate: true,
+        multiple: true,
+        onRejected: rejectedHandler,
+      },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", {
+      type: "text/plain",
+      lastModified: 1000,
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    });
+
+    // Select the same file again.
+    const duplicate = new File(["content1"], "file1.txt", {
+      type: "text/plain",
+      lastModified: 1000,
+    });
+    simulateFileSelection(input, [duplicate]);
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+    });
+
+    const event = rejectedHandler.mock.calls[0][0];
+    expect(event.detail).toHaveLength(1);
+    expect(event.detail[0].file.name).toBe("file1.txt");
+    expect(event.detail[0].reason).toBe("duplicate");
+
+    // Only the original file should remain.
+    const fileNames = screen.queryAllByText("file1.txt");
+    expect(fileNames).toHaveLength(1);
+  });
+
+  it("should allow duplicate files when preventDuplicate is false (default)", async () => {
+    const rejectedHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: {
+        multiple: true,
+        onRejected: rejectedHandler,
+      },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", {
+      type: "text/plain",
+      lastModified: 1000,
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    });
+
+    const duplicate = new File(["content1"], "file1.txt", {
+      type: "text/plain",
+      lastModified: 1000,
+    });
+    simulateFileSelection(input, [duplicate]);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText("file1.txt");
+      expect(fileNames).toHaveLength(2);
+    });
+
+    expect(rejectedHandler).not.toHaveBeenCalled();
+  });
 });
