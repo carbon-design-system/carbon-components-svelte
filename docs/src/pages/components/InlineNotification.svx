@@ -37,7 +37,7 @@ Control the notification visibility by binding to the `open` prop. This allows y
 Customize the notification content using slots for more flexibility.
 
 <InlineNotification>
-  <strong slot="titleChildren">Error: </strong>
+  <span slot="titleChildren">Error: </span>
   <strong slot="subtitleChildren">An internal server error occurred.</strong>
 </InlineNotification>
 
