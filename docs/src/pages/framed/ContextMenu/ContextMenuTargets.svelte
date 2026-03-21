@@ -40,23 +40,7 @@
   <ContextMenuOption indented kind="danger" labelText="Delete" />
 </ContextMenu>
 
-<div>
-  <p bind:this={target}>Right click this element</p>
-  <p bind:this={target2}>... or this one</p>
+<div data-centered>
+  <p data-outline bind:this={target}>Right click this element</p>
+  <p data-outline bind:this={target2}>... or this one</p>
 </div>
-
-<style>
-  div {
-    position: absolute;
-    width: calc(100% - var(--cds-spacing-05));
-    height: calc(100% - var(--cds-spacing-06));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--cds-text-02);
-  }
-
-  p {
-    outline: 1px solid var(--cds-interactive-01);
-  }
-</style>
