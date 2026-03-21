@@ -4,6 +4,7 @@
    * @event {ReadonlyArray<File>} remove
    * @event {ReadonlyArray<File>} change
    * @event {void} clear
+   * @event {Array<{ file: File; reason: "size" }>} rejected
    */
 
   /**
@@ -192,7 +193,15 @@
       let newFiles = e.detail;
 
       if (maxFileSize !== undefined) {
+        const rejected = newFiles.filter((file) => file.size > maxFileSize);
         newFiles = newFiles.filter((file) => file.size <= maxFileSize);
+
+        if (rejected.length > 0) {
+          dispatch(
+            "rejected",
+            rejected.map((file) => ({ file, reason: "size" })),
+          );
+        }
       }
 
       files = newFiles;

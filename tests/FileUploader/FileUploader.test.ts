@@ -695,4 +695,70 @@ describe("FileUploader", () => {
 
     expect(changeHandler.mock.calls[0][0].detail).toHaveLength(0);
   });
+
+  it("should dispatch rejected event when files exceed maxFileSize", async () => {
+    const rejectedHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { maxFileSize: 1000, onRejected: rejectedHandler },
+    });
+
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [largeFile]);
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+    });
+
+    const event = rejectedHandler.mock.calls[0][0];
+    expect(event.detail).toHaveLength(1);
+    expect(event.detail[0].file.name).toBe("large.txt");
+    expect(event.detail[0].reason).toBe("size");
+  });
+
+  it("should dispatch rejected with only oversized files when some exceed maxFileSize", async () => {
+    const rejectedHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: {
+        maxFileSize: 1000,
+        multiple: true,
+        onRejected: rejectedHandler,
+        onChange: changeHandler,
+      },
+    });
+
+    const smallFile1 = new File(["x".repeat(500)], "small1.txt", {
+      type: "text/plain",
+    });
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+    const smallFile2 = new File(["x".repeat(300)], "small2.txt", {
+      type: "text/plain",
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [smallFile1, largeFile, smallFile2]);
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    // Only the large file should be rejected
+    const rejectedEvent = rejectedHandler.mock.calls[0][0];
+    expect(rejectedEvent.detail).toHaveLength(1);
+    expect(rejectedEvent.detail[0].file.name).toBe("large.txt");
+    expect(rejectedEvent.detail[0].reason).toBe("size");
+
+    // The two small files should be accepted
+    const changeEvent = changeHandler.mock.calls[0][0];
+    expect(changeEvent.detail).toHaveLength(2);
+    expect(changeEvent.detail[0].name).toBe("small1.txt");
+    expect(changeEvent.detail[1].name).toBe("small2.txt");
+  });
 });

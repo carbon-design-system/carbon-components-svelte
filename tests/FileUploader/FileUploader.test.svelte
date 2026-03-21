@@ -15,6 +15,9 @@
     | ((e: CustomEvent<ReadonlyArray<File>>) => void)
     | undefined = undefined;
   export let onClear: ((e: CustomEvent<void>) => void) | undefined = undefined;
+  export let onRejected:
+    | ((e: CustomEvent<Array<{ file: File; reason: string }>>) => void)
+    | undefined = undefined;
 
   export let disabled: ComponentProps<FileUploader>["disabled"] = false;
   export let accept: ComponentProps<FileUploader>["accept"] = [];
@@ -68,5 +71,6 @@
     on:remove={onRemove}
     on:change={onChange}
     on:clear={onClear}
+    on:rejected={onRejected}
   />
 </form>
