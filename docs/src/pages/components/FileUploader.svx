@@ -103,6 +103,12 @@ This example accepts files up to 1 MB (1,048,576 bytes). Files over the limit ar
 
 <FileSource src="/framed/FileUploader/FileUploaderMaxFileSize" />
 
+## Duplicate detection
+
+Set `preventDuplicate` to `true` to reject files that match an already-selected file (detected using the file's name, size, and lastModified). Rejected duplicates are reported via the `rejected` event with `reason: "duplicate"`.
+
+<FileSource src="/framed/FileUploader/FileUploaderPreventDuplicate" />
+
 ## File uploader (disabled state)
 
 Disable the file uploader by setting the `disabled` prop to `true`. This prevents

@@ -4,7 +4,7 @@
    * @event {ReadonlyArray<File>} remove
    * @event {ReadonlyArray<File>} change
    * @event {void} clear
-   * @event {Array<{ file: File; reason: "size" }>} rejected
+   * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
    */
 
   /**
@@ -43,6 +43,13 @@
 
   /** Set to `true` to allow multiple files */
   export let multiple = false;
+
+  /**
+   * Set to `true` to reject files that match an already-selected file
+   * (by name, size, and lastModified). Rejected duplicates are reported
+   * via the `rejected` event with `reason: 'duplicate'`.
+   */
+  export let preventDuplicate = false;
 
   /**
    * Programmatically clear the uploaded files.
@@ -198,17 +205,42 @@
     bind:files
     on:change={(e) => {
       let newFiles = e.detail;
+      const allRejected = [];
 
       if (maxFileSize !== undefined) {
         const rejected = newFiles.filter((file) => file.size > maxFileSize);
         newFiles = newFiles.filter((file) => file.size <= maxFileSize);
 
         if (rejected.length > 0) {
-          dispatch(
-            "rejected",
-            rejected.map((file) => ({ file, reason: "size" })),
+          allRejected.push(
+            ...rejected.map((file) => ({ file, reason: "size" })),
           );
         }
+      }
+
+      if (preventDuplicate) {
+        // In multiple mode, newFiles includes re-sent existing files
+        // (same reference) plus newly selected ones. Only reject new
+        // objects that match an existing file by content.
+        const existingRefs = new Set(prevFiles);
+        const existingKeys = new Set(
+          prevFiles.map((f) => `${f.name}\0${f.size}\0${f.lastModified}`),
+        );
+        const isDuplicate = (f) =>
+          !existingRefs.has(f) &&
+          existingKeys.has(`${f.name}\0${f.size}\0${f.lastModified}`);
+        const duplicates = newFiles.filter(isDuplicate);
+        newFiles = newFiles.filter((f) => !isDuplicate(f));
+
+        if (duplicates.length > 0) {
+          allRejected.push(
+            ...duplicates.map((file) => ({ file, reason: "duplicate" })),
+          );
+        }
+      }
+
+      if (allRejected.length > 0) {
+        dispatch("rejected", allRejected);
       }
 
       files = newFiles;
