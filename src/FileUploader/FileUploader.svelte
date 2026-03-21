@@ -108,19 +108,28 @@
 
   let prevFiles = [];
 
-  /** @type {(file: File) => string} */
-  const getFileId = (file) => file.lastModified + file.name;
+  /** @type {(file: File, index: number) => string} */
+  const getFileId = (file, index) =>
+    `${file.lastModified + file.name}-${index}`;
+
+  /** Stable keys for `{#each}` (and Biome-safe: no commas in the each header). */
+  $: filesWithKeys = files.map((file, index) => ({
+    file,
+    key: getFileId(file, index),
+  }));
 
   afterUpdate(() => {
-    const fileIds = files.map(getFileId);
-    const prevFileIds = prevFiles.map(getFileId);
+    const fileIds = files.map((f, i) => getFileId(f, i));
+    const prevFileIds = prevFiles.map((f, i) => getFileId(f, i));
     const addedIds = fileIds.filter((_) => !prevFileIds.includes(_));
     const removedIds = prevFileIds.filter((_) => !fileIds.includes(_));
 
     if (addedIds.length > 0) {
       dispatch(
         "add",
-        addedIds.map((id) => files.find((file) => id === getFileId(file))),
+        addedIds.map((id) =>
+          files.find((file, i) => id === getFileId(file, i)),
+        ),
       );
     }
 
@@ -128,7 +137,7 @@
       dispatch(
         "remove",
         removedIds.map((id) =>
-          prevFiles.find((file) => id === getFileId(file)),
+          prevFiles.find((file, i) => id === getFileId(file, i)),
         ),
       );
     }
@@ -175,32 +184,32 @@
     bind:files
     on:change={(e) => {
       let newFiles = e.detail;
-      
+
       if (maxFileSize !== undefined) {
         newFiles = newFiles.filter((file) => file.size <= maxFileSize);
       }
-      
+
       files = newFiles;
       dispatch("change", newFiles);
     }}
   />
   <div class:bx--file-container={true}>
-    {#each files as { name }, i}
+    {#each filesWithKeys as { file, key } (key)}
       <span class:bx--file__selected-file={true}>
-        <p class:bx--file-filename={true}>{name}</p>
+        <p class:bx--file-filename={true}>{file.name}</p>
         <span class:bx--file__state-container={true}>
           <Filename
             {iconDescription}
             {status}
             on:keydown
-            on:keydown={({ key }) => {
-              if (key === " " || key === "Enter") {
-                files = files.filter((_, index) => index !== i);
+            on:keydown={(e) => {
+              if (e.key === " " || e.key === "Enter") {
+                files = files.filter((f) => f !== file);
               }
             }}
             on:click
             on:click={() => {
-              files = files.filter((_, index) => index !== i);
+              files = files.filter((f) => f !== file);
             }}
           />
         </span>
