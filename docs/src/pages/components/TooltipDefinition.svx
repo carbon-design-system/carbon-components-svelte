@@ -41,6 +41,14 @@ Center
 End
 </TooltipDefinition>
 
+## Click to open
+
+Set `clickToOpen` to open the tooltip on click instead of on hover.
+
+<TooltipDefinition clickToOpen tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
+  Armonk
+</TooltipDefinition>
+
 ## Open by default
 
 Use the `open` prop to open the tooltip by default.
