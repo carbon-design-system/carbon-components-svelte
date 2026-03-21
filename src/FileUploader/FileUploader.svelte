@@ -3,6 +3,7 @@
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} remove
    * @event {ReadonlyArray<File>} change
+   * @event {void} clear
    */
 
   /**
@@ -140,6 +141,11 @@
           prevFiles.find((file, i) => id === getFileId(file, i)),
         ),
       );
+    }
+
+    if (prevFiles.length > 0 && files.length === 0) {
+      dispatch("change", []);
+      dispatch("clear");
     }
 
     prevFiles = [...files];

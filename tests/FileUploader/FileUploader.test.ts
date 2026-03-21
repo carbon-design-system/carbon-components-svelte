@@ -191,35 +191,6 @@ describe("FileUploader", () => {
     expect(input.value).toBe("");
   });
 
-  it("should dispatch remove event when clearing files programmatically", async () => {
-    const removeHandler = vi.fn();
-    const { component } = render(FileUploader, {
-      props: { onRemove: removeHandler },
-    });
-
-    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-
-    const input = component.getInputElement();
-    simulateFileSelection(input, [file1, file2]);
-
-    await vi.waitFor(() => {
-      const fileNames = screen.queryAllByText(/file\d\.txt/);
-      expect(fileNames).toHaveLength(2);
-    });
-
-    component.setFiles([]);
-
-    await vi.waitFor(() => {
-      expect(removeHandler).toHaveBeenCalled();
-    });
-
-    const event = removeHandler.mock.calls[0][0];
-    expect(event.detail).toHaveLength(2);
-    expect(event.detail[0].name).toBe("file1.txt");
-    expect(event.detail[1].name).toBe("file2.txt");
-  });
-
   it("supports custom label slot for FileUploaderButton", () => {
     render(FileUploaderButtonSlot);
 
@@ -587,5 +558,141 @@ describe("FileUploader", () => {
 
     const event2 = changeHandler.mock.calls[0][0];
     expect(event2.detail).toHaveLength(0);
+  });
+
+  it("should dispatch remove, change, and clear when files are cleared via two-way binding", async () => {
+    const changeHandler = vi.fn();
+    const clearHandler = vi.fn();
+    const removeHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: {
+        onChange: changeHandler,
+        onClear: clearHandler,
+        onRemove: removeHandler,
+        multiple: true,
+      },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    });
+
+    changeHandler.mockClear();
+    clearHandler.mockClear();
+    removeHandler.mockClear();
+    component.setFiles([]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+      expect(clearHandler).toHaveBeenCalled();
+      expect(removeHandler).toHaveBeenCalled();
+    });
+
+    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(0);
+    expect(removeHandler.mock.calls[0][0].detail).toHaveLength(2);
+    expect(removeHandler.mock.calls[0][0].detail[0].name).toBe("file1.txt");
+    expect(removeHandler.mock.calls[0][0].detail[1].name).toBe("file2.txt");
+  });
+
+  it("should dispatch remove, change, and clear when clearFiles() empties multiple files", async () => {
+    const changeHandler = vi.fn();
+    const clearHandler = vi.fn();
+    const removeHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: {
+        onChange: changeHandler,
+        onClear: clearHandler,
+        onRemove: removeHandler,
+        multiple: true,
+      },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    });
+
+    changeHandler.mockClear();
+    clearHandler.mockClear();
+    removeHandler.mockClear();
+    component.clearFiles();
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+      expect(clearHandler).toHaveBeenCalled();
+      expect(removeHandler).toHaveBeenCalled();
+    });
+
+    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(0);
+    expect(removeHandler.mock.calls[0][0].detail).toHaveLength(2);
+    expect(removeHandler.mock.calls[0][0].detail[0].name).toBe("file1.txt");
+    expect(removeHandler.mock.calls[0][0].detail[1].name).toBe("file2.txt");
+  });
+
+  it("should not dispatch clear when only some files are removed via row close", async () => {
+    const clearHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { onClear: clearHandler, multiple: true },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    });
+
+    const closeButtons = document.querySelectorAll(
+      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
+    );
+    assert(closeButtons[0] instanceof HTMLElement);
+    await user.click(closeButtons[0]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).not.toBeInTheDocument();
+    });
+
+    expect(clearHandler).not.toHaveBeenCalled();
+  });
+
+  it("should dispatch change and clear when the last file is removed via row close", async () => {
+    const changeHandler = vi.fn();
+    const clearHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { onChange: changeHandler, onClear: clearHandler },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    });
+
+    changeHandler.mockClear();
+    const closeButton = document.querySelector(
+      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
+    );
+    assert(closeButton instanceof HTMLElement);
+    await user.click(closeButton);
+
+    await vi.waitFor(() => {
+      expect(clearHandler).toHaveBeenCalled();
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(0);
   });
 });
