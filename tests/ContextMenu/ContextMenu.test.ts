@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
+import ContextMenuPreventDefault from "./ContextMenu.preventDefault.test.svelte";
 import ContextMenu from "./ContextMenu.test.svelte";
 import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
 
@@ -283,6 +284,35 @@ describe("ContextMenu", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  it("supports preventDefault on click to prevent menu from closing", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContextMenuPreventDefault, {
+      props: { open: true, x: 100, y: 100 },
+    });
+
+    const options = screen.getAllByRole("menuitem");
+    await user.click(options[0]);
+
+    expect(consoleLog).toHaveBeenCalledWith("click", "Stay open");
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+
+    const menu = screen.queryByRole("menu");
+    expect(menu).toBeInTheDocument();
+  });
+
+  it("closes menu normally when preventDefault is not called on click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContextMenuPreventDefault, {
+      props: { open: true, x: 100, y: 100 },
+    });
+
+    const options = screen.getAllByRole("menuitem");
+    await user.click(options[1]);
+
+    expect(consoleLog).toHaveBeenCalledWith("click", "Close menu");
+    expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
   describe("ContextMenuOption Generics", () => {

@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {Event} click
+   */
+
+  /**
    * @generics {Icon = any} Icon
    */
 
@@ -168,24 +172,27 @@
     return inTopTriangle || inBottomTriangle;
   }
 
-  function handleClick(opts = {}) {
+  function handleClick(e, opts = {}) {
     if (disabled) return ctx.close();
     if (subOptions) return;
 
-    if (ctxGroup) {
-      ctxGroup.toggleOption({ id });
-    } else if (ctxRadioGroup) {
-      if (opts.fromKeyboard) {
-        ctxRadioGroup.setOption({ id: opts.id });
-      } else {
-        ctxRadioGroup.setOption({ id });
-      }
-    } else {
-      selected = !selected;
-    }
+    const shouldContinue = dispatch("click", e, { cancelable: true });
 
-    ctx.close();
-    dispatch("click");
+    if (shouldContinue) {
+      if (ctxGroup) {
+        ctxGroup.toggleOption({ id });
+      } else if (ctxRadioGroup) {
+        if (opts.fromKeyboard) {
+          ctxRadioGroup.setOption({ id: opts.id });
+        } else {
+          ctxRadioGroup.setOption({ id });
+        }
+      } else {
+        selected = !selected;
+      }
+
+      ctx.close();
+    }
   }
 
   function handleGlobalMouseMove(e) {
@@ -296,7 +303,8 @@
   data-id={id}
   {...$$restProps}
   on:keydown
-  on:keydown={async ({ key, target }) => {
+  on:keydown={async (e) => {
+    const { key, target } = e;
     if (
       subOptions &&
       (key === "ArrowRight" || key === " " || key === "Enter")
@@ -329,7 +337,7 @@
     }
 
     if (key === " " || key === "Enter") {
-      handleClick({ fromKeyboard: true, id: target.getAttribute("data-id") });
+      handleClick(e, { fromKeyboard: true, id: target.getAttribute("data-id") });
     }
   }}
   on:mouseenter
@@ -368,7 +376,7 @@
       submenuOpen = true;
       return;
     }
-    handleClick();
+    handleClick(e);
   }}
 >
   {#if subOptions}
