@@ -26,7 +26,7 @@ The context menu appears when right-clicking anywhere in the window. Use context
 - `disabled`: non-interactive, dimmed row.
 - `kind`: `"default"` or `"danger"` for destructive actions.
 
-For options inside `ContextMenuGroup`, see [Selectable](#selectable) and [Radio groups](#radio-groups).
+For options inside `ContextMenuGroup`, see [Selectable](#selectable) and [Radio group](#radio-group).
 
 <FileSource src="/framed/ContextMenu/ContextMenuOptionProps" />
 
@@ -56,11 +56,17 @@ Use `selectable` for a single toggle item, or wrap options in `ContextMenuGroup`
 
 <FileSource src="/framed/ContextMenu/ContextMenuSelectable" />
 
-## Radio groups
+## Radio group
 
 Use `ContextMenuRadioGroup` to organize related options as a radio set: only one option can be selected at a time, and `bind:selectedId` reflects the active choice.
 
 <FileSource src="/framed/ContextMenu/ContextMenuGroups" />
+
+## Radio group (nested)
+
+Put `ContextMenuRadioGroup` inside a parent `ContextMenuOption` to show the radio set in a flyout submenu, similar to the nested checkbox group in [Nested menu](#nested-menu). Use `bind:selectedId` for the active choice.
+
+<FileSource src="/framed/ContextMenu/ContextMenuRadioGroupNested" />
 
 ## Prevent menu from closing
 
