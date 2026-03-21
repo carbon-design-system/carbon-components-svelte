@@ -26,13 +26,13 @@ The context menu appears when right-clicking anywhere in the window. Use context
 - `disabled`: non-interactive, dimmed row.
 - `kind`: `"default"` or `"danger"` for destructive actions.
 
-For options inside `ContextMenuGroup`, see [Selectable](#selectable) and [Radio group](#radio-group).
+For options inside `ContextMenuGroup`, see [Selectable](#selectable), [Selectable (nested)](#selectable-nested), and [Radio group](#radio-group).
 
 <FileSource src="/framed/ContextMenu/ContextMenuOptionProps" />
 
 ## Nested menu
 
-Put child `ContextMenuOption` nodes or a `ContextMenuGroup` inside a parent `ContextMenuOption` to open a flyout submenu. Use `indented` on the parent when it has no icon so the label aligns with other rows. A nested `ContextMenuGroup` sets an accessible label on the submenu list; its children behave like the checkbox group in [Selectable](#selectable), so use `bind:selectedIds` when you need the chosen values. Toggling a checkbox or radio item in a nested submenu leaves that flyout open so you can adjust multiple choices; the root menu still closes when you activate a plain action row or click outside.
+Put child `ContextMenuOption` nodes or a `ContextMenuGroup` inside a parent `ContextMenuOption` to open a flyout submenu. Use `indented` on the parent when it has no icon so the label aligns with other rows. A nested `ContextMenuGroup` sets an accessible label on the submenu list; its children behave like the checkbox group in [Selectable (nested)](#selectable-nested), so use `bind:selectedIds` when you need the chosen values. Toggling a checkbox or radio item in a nested submenu leaves that flyout open so you can adjust multiple choices; the root menu still closes when you activate a plain action row or click outside.
 
 <FileSource src="/framed/ContextMenu/ContextMenuNested" />
 
@@ -55,6 +55,12 @@ Set `target` to an array of elements to trigger the context menu from multiple s
 Use `selectable` for a single toggle item, or wrap options in `ContextMenuGroup` with `bind:selectedIds` for a checkbox-style group. Provide an `id` on each option in the group. Multiple items can be selected at once: the standalone toggle and each item in the group are independent, and the group keeps every chosen option in `selectedIds`.
 
 <FileSource src="/framed/ContextMenu/ContextMenuSelectable" />
+
+## Selectable (nested)
+
+Put `ContextMenuGroup` inside a parent `ContextMenuOption` to show the checkbox-style group in a flyout submenu. Use `bind:selectedIds` for the chosen values. See also [Nested menu](#nested-menu) for a full submenu example that includes both plain options and grouped selection.
+
+<FileSource src="/framed/ContextMenu/ContextMenuSelectableNested" />
 
 ## Radio group
 
