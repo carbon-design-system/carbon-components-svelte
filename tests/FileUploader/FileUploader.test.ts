@@ -67,6 +67,41 @@ describe("FileUploader", () => {
     expect(input.files[1].name).toBe("file3.txt");
   });
 
+  it("should remove the middle file and keep first and third", async () => {
+    const { component } = render(FileUploader);
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    const file3 = new File(["content3"], "file3.txt", { type: "text/plain" });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2, file3]);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      expect(fileNames).toHaveLength(3);
+    });
+
+    // Click the close button for the middle file (file2.txt)
+    const closeButtons = document.querySelectorAll(
+      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
+    );
+    expect(closeButtons.length).toBe(3);
+    const middleCloseButton = closeButtons[1];
+    assert(middleCloseButton instanceof HTMLElement);
+    await user.click(middleCloseButton);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      expect(fileNames).toHaveLength(2);
+    });
+
+    // Verify the remaining files are the first and third
+    expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    expect(screen.queryByText("file2.txt")).not.toBeInTheDocument();
+    expect(screen.queryByText("file3.txt")).toBeInTheDocument();
+  });
+
   it("should clear input.files when all files are removed", async () => {
     const { component } = render(FileUploader);
 
