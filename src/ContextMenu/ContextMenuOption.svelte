@@ -255,6 +255,10 @@
     submenuPosition = [x, y];
   }
   $: {
+    if (icon) {
+      indented = true;
+    }
+
     if (isSelectable) {
       indented = true;
       role = "menuitemcheckbox";
