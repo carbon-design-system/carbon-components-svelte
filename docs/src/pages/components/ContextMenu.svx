@@ -22,13 +22,19 @@ The context menu appears when right-clicking anywhere in the window. Use context
 - `labelText`: primary label (or use the `labelChildren` slot; see the API reference).
 - `shortcutText`: keyboard hint shown on the right; can be used with or without an icon.
 - `icon`: Carbon icon component to the left of the label. When an icon is set, the option is indented automatically so rows align; you do not need to pass `indented` for icon rows.
-- `indented`: indent the label without an icon, for example to align with submenu parents or nested items (see [Custom target](#custom-target) and [Multiple targets](#multiple-targets)).
+- `indented`: indent the label without an icon, for example to align with submenu parents or nested items (see [Nested menu](#nested-menu), [Custom target](#custom-target), and [Multiple targets](#multiple-targets)).
 - `disabled`: non-interactive, dimmed row.
 - `kind`: `"default"` or `"danger"` for destructive actions.
 
 For options inside `ContextMenuGroup`, see [Selectable](#selectable) and [Radio groups](#radio-groups).
 
 <FileSource src="/framed/ContextMenu/ContextMenuOptionProps" />
+
+## Nested menu
+
+Put child `ContextMenuOption` nodes or a `ContextMenuGroup` inside a parent `ContextMenuOption` to open a flyout submenu. Use `indented` on the parent when it has no icon so the label aligns with other rows. A nested `ContextMenuGroup` sets an accessible label on the submenu list; its children behave like the checkbox group in [Selectable](#selectable), so use `bind:selectedIds` when you need the chosen values. Toggling a checkbox or radio item in a nested submenu leaves that flyout open so you can adjust multiple choices; the root menu still closes when you activate a plain action row or click outside.
+
+<FileSource src="/framed/ContextMenu/ContextMenuNested" />
 
 ## Custom target
 
