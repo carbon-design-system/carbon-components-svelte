@@ -79,6 +79,12 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
+## Per-file status icon labels
+
+Set `iconDescription` to a function for accessible labels that depend on each row. The callback receives `{ file, fileName, status, invalid }`. On `FileUploader`, `file` is that row’s `File` object; on `FileUploaderItem`, `file` is always `undefined` and `fileName` matches the `name` prop.
+
+<FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" status="edit" iconDescription={({ fileName }) => `Remove ${fileName}`} />
+
 ## Clear files
 
 Remove uploaded files from the file uploader in two ways:
