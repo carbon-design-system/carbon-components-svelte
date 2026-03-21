@@ -12,6 +12,13 @@
    */
   export let size = undefined;
 
+  /**
+   * Choose whether or not to automatically change selection
+   * on focus when using arrow keys. Defaults to "automatic".
+   * @type {"automatic" | "manual"}
+   */
+  export let selectionMode = "automatic";
+
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
 
@@ -25,6 +32,7 @@
   let refContainer = null;
 
   $: currentIndex = -1;
+  $: focusedIndex = -1;
   $: switches = [];
   $: if (switches[currentIndex]) {
     dispatch("change", currentIndex);
@@ -72,16 +80,46 @@
     }
   };
 
+  /**
+   * Move focus to the next/previous switch without changing selection.
+   * @type {(direction: number) => Promise<void>}
+   */
+  const focus = async (direction) => {
+    const base = focusedIndex >= 0 ? focusedIndex : currentIndex;
+    let index = base + direction;
+
+    if (index < 0) {
+      index = switches.length - 1;
+    } else if (index >= switches.length) {
+      index = 0;
+    }
+
+    focusedIndex = index;
+
+    await tick();
+    const tabs = refContainer?.querySelectorAll("[role='tab']");
+    const tab = tabs?.[index];
+
+    if (tab instanceof HTMLElement) {
+      tab.focus();
+    }
+  };
+
   setContext("carbon:ContentSwitcher", {
     currentId,
     add,
     update,
     change,
+    focus,
+    get selectionMode() {
+      return selectionMode;
+    },
   });
 
   afterUpdate(() => {
     if (selectedIndex !== currentIndex) {
       currentIndex = selectedIndex;
+      focusedIndex = -1;
     }
   });
 </script>

@@ -60,9 +60,9 @@
   on:keydown
   on:keydown={({ key }) => {
     if (key === "ArrowRight") {
-      ctx.change(1);
+      ctx.selectionMode === "manual" ? ctx.focus(1) : ctx.change(1);
     } else if (key === "ArrowLeft") {
-      ctx.change(-1);
+      ctx.selectionMode === "manual" ? ctx.focus(-1) : ctx.change(-1);
     }
   }}
 >
