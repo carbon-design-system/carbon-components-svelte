@@ -34,3 +34,9 @@ Set `target` to an array of elements to trigger the context menu from multiple s
 Use context menu group and context menu radio group to organize related options and create radio button selections.
 
 <FileSource src="/framed/ContextMenu/ContextMenuGroups" />
+
+## Prevent menu from closing
+
+Use `preventDefault()` on individual context menu option click events to prevent the menu from closing when that option is clicked. This is useful for scenarios where you want to keep the menu open after performing an action.
+
+<FileSource src="/framed/ContextMenu/ContextMenuPreventDefault" />
