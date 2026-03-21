@@ -16,8 +16,10 @@
   export let size = "default";
 
   /**
-   * Accessible label for the status icons. When omitted or blank, `Filename` applies defaults.
-   * @type {string | undefined}
+   * Accessible label for the status icons. Forwarded to `Filename`.
+   * Use a string, or a function with `{ file, fileName, status, invalid }` (`file` is always `undefined` here).
+   * When omitted or the resolved value is blank after trim, `Filename` applies defaults.
+   * @type {string | undefined | ((ctx: { file?: File; fileName: string; status: "uploading" | "edit" | "complete"; invalid: boolean }) => string | undefined)}
    */
   export let iconDescription = undefined;
 
@@ -58,6 +60,7 @@
   <p class:bx--file-filename={true}>{name}</p>
   <span class:bx--file__state-container={true}>
     <Filename
+      fileName={name}
       on:keydown={({ key }) => {
         if (key === " " || key === "Enter") {
           dispatch("delete", id);

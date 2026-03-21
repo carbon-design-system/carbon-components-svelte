@@ -839,4 +839,51 @@ describe("FileUploader", () => {
 
     expect(rejectedHandler).not.toHaveBeenCalled();
   });
+
+  it("should use per-file labels when iconDescription is a function", async () => {
+    const file1 = new File(["a"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["b"], "file2.txt", { type: "text/plain" });
+    const iconDescription = vi.fn(
+      (ctx: {
+        file?: File;
+        fileName: string;
+        status: string;
+        invalid: boolean;
+      }) => `Remove ${ctx.fileName}`,
+    );
+
+    const { component } = render(FileUploader, {
+      props: {
+        multiple: true,
+        status: "edit",
+        iconDescription,
+      },
+    });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2]);
+
+    await vi.waitFor(() => {
+      expect(screen.getByText("file1.txt")).toBeInTheDocument();
+      expect(screen.getByText("file2.txt")).toBeInTheDocument();
+    });
+
+    const closeButtons = document.querySelectorAll(
+      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
+    );
+    expect(closeButtons).toHaveLength(2);
+    assert(closeButtons[0] instanceof HTMLElement);
+    assert(closeButtons[1] instanceof HTMLElement);
+    expect(closeButtons[0]).toHaveAttribute("aria-label", "Remove file1.txt");
+    expect(closeButtons[1]).toHaveAttribute("aria-label", "Remove file2.txt");
+
+    expect(iconDescription).toHaveBeenCalled();
+    const contexts = iconDescription.mock.calls.map((c) => c[0]);
+    const names = contexts.map((ctx) => ctx.fileName).sort();
+    expect(names).toEqual(["file1.txt", "file2.txt"]);
+    for (const ctx of contexts) {
+      assert(ctx.file instanceof File);
+      expect(ctx.file.name).toBe(ctx.fileName);
+    }
+  });
 });

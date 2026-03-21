@@ -105,11 +105,10 @@
 
   /**
    * Accessible label for file row status icons (spinner, remove control, checkmark).
-   * Forwarded to `Filename`. When omitted or blank after trim, `Filename` uses:
-   * - `uploading`: `Loading` description `"uploading"`
-   * - `edit`: close button `aria-label` `"Remove file"`
-   * - `complete`: checkmark `aria-label` / `title` `"Upload complete"`
-   * @type {string | undefined}
+   * Forwarded to `Filename`. Use a string, or a function with context `{ file, fileName, status, invalid }`
+   * where `file` is the row's `File` (only set from `FileUploader`, not from `FileUploaderItem`).
+   * When omitted or the resolved value is blank after trim, `Filename` uses built-in defaults.
+   * @type {string | undefined | ((ctx: { file?: File; fileName: string; status: "uploading" | "edit" | "complete"; invalid: boolean }) => string | undefined)}
    */
   export let iconDescription = undefined;
 
@@ -253,6 +252,8 @@
         <p class:bx--file-filename={true}>{file.name}</p>
         <span class:bx--file__state-container={true}>
           <Filename
+            {file}
+            fileName={file.name}
             {iconDescription}
             {status}
             on:keydown
