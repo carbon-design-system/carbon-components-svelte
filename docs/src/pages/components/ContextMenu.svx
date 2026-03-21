@@ -32,7 +32,15 @@ For options inside `ContextMenuGroup`, see [Selectable](#selectable), [Selectabl
 
 ## Nested menu
 
-Put child `ContextMenuOption` nodes or a `ContextMenuGroup` inside a parent `ContextMenuOption` to open a flyout submenu. Use `indented` on the parent when it has no icon so the label aligns with other rows. A nested `ContextMenuGroup` sets an accessible label on the submenu list; its children behave like the checkbox group in [Selectable (nested)](#selectable-nested), so use `bind:selectedIds` when you need the chosen values. Toggling a checkbox or radio item in a nested submenu leaves that flyout open so you can adjust multiple choices; the root menu still closes when you activate a plain action row or click outside.
+Put children inside a parent `ContextMenuOption` to open a flyout submenu. Use `indented` on the parent when it has no icon so the label aligns with other rows.
+
+Submenus can contain:
+
+- **Plain options**: nested `ContextMenuOption` rows for ordinary actions (no selection state). This page’s example below mixes plain rows with a selectable group; see **Open with** → Preview / Editor.
+- **Selectable group**: a nested `ContextMenuGroup` with an accessible label; options act as checkboxes and share `bind:selectedIds`. See [Selectable (nested)](#selectable-nested); the **Export as** branch in this example shows the same pattern alongside plain items.
+- **Radio group**: a nested `ContextMenuRadioGroup` with `bind:selectedId` so only one choice is active. See [Radio group (nested)](#radio-group-nested).
+
+Toggling a checkbox or radio item in a nested submenu leaves that flyout open so you can change several choices; the root menu still closes when you pick a plain action row or click outside.
 
 <FileSource src="/framed/ContextMenu/ContextMenuNested" />
 
