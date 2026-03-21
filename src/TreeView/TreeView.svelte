@@ -511,7 +511,7 @@
   class:bx--tree--default={size === "default"}
   class:bx--tree--compact={size === "compact"}
   aria-label={hideLabel ? labelText : undefined}
-  aria-labelledby={!hideLabel ? labelId : undefined}
+  aria-labelledby={hideLabel ? undefined : labelId}
   aria-multiselectable={selectedIds.length > 1 || undefined}
   on:keydown
   on:keydown|stopPropagation={handleKeyDown}

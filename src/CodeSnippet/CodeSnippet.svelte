@@ -129,7 +129,7 @@
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalTooltip =
-    portalTooltip !== undefined ? portalTooltip : !!insideModal;
+    portalTooltip === undefined ? !!insideModal : portalTooltip;
 
   /** @type {null | HTMLButtonElement} */
   let inlineButtonRef = null;

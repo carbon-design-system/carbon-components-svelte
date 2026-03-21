@@ -69,7 +69,7 @@ export function breakpointObserver() {
     smallerThan: (size) => {
       checkSizeValid(size);
       return derived(store, ($size) =>
-        $size !== undefined ? breakpoints[$size] < breakpoints[size] : false,
+        $size === undefined ? false : breakpoints[$size] < breakpoints[size],
       );
     },
 
@@ -81,7 +81,7 @@ export function breakpointObserver() {
     largerThan: (size) => {
       checkSizeValid(size);
       return derived(store, ($size) =>
-        $size !== undefined ? breakpoints[$size] > breakpoints[size] : false,
+        $size === undefined ? false : breakpoints[$size] > breakpoints[size],
       );
     },
   };

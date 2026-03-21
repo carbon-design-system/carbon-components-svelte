@@ -352,7 +352,7 @@
 
   function getDefaultValue() {
     if (stepStartValue !== undefined) return stepStartValue;
-    return min !== undefined ? min : 0;
+    return min === undefined ? 0 : min;
   }
 
   function onInput({ target }) {

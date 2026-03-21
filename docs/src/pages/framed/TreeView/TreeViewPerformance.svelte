@@ -124,9 +124,9 @@
     const targetId =
       treeType === "large"
         ? 999
-        : lastDeepNodeId !== null
-          ? lastDeepNodeId
-          : 100;
+        : lastDeepNodeId === null
+          ? 100
+          : lastDeepNodeId;
     if (treeview) {
       treeview.showNode(targetId);
     }

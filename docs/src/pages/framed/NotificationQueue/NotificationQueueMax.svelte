@@ -12,7 +12,7 @@
       count++;
       queue.add({
         kind: "success",
-        title: "Notification " + count,
+        title: `Notification ${count}`,
       });
     }}
 >

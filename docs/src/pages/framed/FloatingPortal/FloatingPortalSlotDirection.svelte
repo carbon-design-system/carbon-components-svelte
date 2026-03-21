@@ -66,7 +66,9 @@
     on:dragstart={handleDragStart}
     on:drag={handleDrag}
     on:dragend={handleDragEnd}
-    on:keydown={(e) => e.key === "Enter" && (open = !open)}
+    on:keydown={(e) => {
+      if (e.key === "Enter") open = !open;
+    }}
     title="Drag to move, click to toggle"
   >
     <Tile>

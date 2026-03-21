@@ -159,7 +159,7 @@
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
-    portalMenu !== undefined ? portalMenu : !!insideModal;
+    portalMenu === undefined ? !!insideModal : portalMenu;
 
   /** Default item height in pixels for virtualization */
   const DEFAULT_ITEM_HEIGHT = 40;
@@ -407,7 +407,7 @@
 <svelte:window
   on:click={(e) => {
     if (open && ref && !ref.contains(e.target)) {
-      if (effectivePortalMenu && listRef && listRef.contains(e.target)) return;
+      if (effectivePortalMenu && listRef?.contains(e.target)) return;
       open = false;
     }
   }}

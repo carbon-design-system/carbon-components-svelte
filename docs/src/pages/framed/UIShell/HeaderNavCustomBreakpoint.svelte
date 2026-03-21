@@ -23,7 +23,7 @@
   companyName="IBM"
   platformName="Carbon Svelte"
   bind:isSideNavOpen
-  expansionBreakpoint={Infinity}
+  expansionBreakpoint={Number.POSITIVE_INFINITY}
 >
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderNav>
@@ -33,7 +33,10 @@
   </HeaderNav>
 </Header>
 
-<SideNav bind:isOpen={isSideNavOpen} expansionBreakpoint={Infinity}>
+<SideNav
+  bind:isOpen={isSideNavOpen}
+  expansionBreakpoint={Number.POSITIVE_INFINITY}
+>
   <SideNavItems>
     <SideNavLink text="Link 1" />
     <SideNavLink text="Link 2" />

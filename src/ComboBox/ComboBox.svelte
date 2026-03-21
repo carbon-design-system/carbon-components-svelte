@@ -179,7 +179,7 @@
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
-    portalMenu !== undefined ? portalMenu : !!insideModal;
+    portalMenu === undefined ? !!insideModal : portalMenu;
 
   /** Default item height in pixels for virtualization */
   const DEFAULT_ITEM_HEIGHT = 40;
@@ -408,7 +408,10 @@
     }
   });
 
-  $: if (selectedId !== undefined) {
+  $: if (selectedId === undefined) {
+    prevSelectedId = selectedId;
+    selectedItem = undefined;
+  } else {
     if (prevSelectedId !== selectedId) {
       // Only dispatch select event if not initial render (prevSelectedId was not null)
       const isInitialRender = prevSelectedId === null;
@@ -425,9 +428,6 @@
         dispatch("select", { selectedId, selectedItem });
       }
     }
-  } else {
-    prevSelectedId = selectedId;
-    selectedItem = undefined;
   }
 
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
@@ -488,7 +488,7 @@
 <svelte:window
   on:click={({ target }) => {
     if (open && ref && !ref.contains(target)) {
-      if (effectivePortalMenu && listRef && listRef.contains(target)) return;
+      if (effectivePortalMenu && listRef?.contains(target)) return;
       open = false;
     }
   }}

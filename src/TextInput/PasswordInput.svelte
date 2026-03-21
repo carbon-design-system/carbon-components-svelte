@@ -100,7 +100,7 @@
 
   const isFluid = !!ctx && ctx.isFluid;
   $: effectivePortalTooltip =
-    portalTooltip !== undefined ? portalTooltip : !!insideModal;
+    portalTooltip === undefined ? !!insideModal : portalTooltip;
 
   /** @type {null | HTMLButtonElement} */
   let toggleButtonRef = null;

@@ -14,16 +14,16 @@
     on:click:stepper={(e) => {
       clickStepperEvents = [
         ...clickStepperEvents,
-        "value: " + e.detail.value + ", direction: " + e.detail.direction,
+        `value: ${e.detail.value}, direction: ${e.detail.direction}`,
       ];
     }}
     on:blur={(e) => {
-      blurEvents = [...blurEvents, "value: " + e.detail.value];
+      blurEvents = [...blurEvents, `value: ${e.detail.value}`];
     }}
     on:blur:stepper={(e) => {
       blurStepperEvents = [
         ...blurStepperEvents,
-        "value: " + e.detail.value + ", direction: " + e.detail.direction,
+        `value: ${e.detail.value}, direction: ${e.detail.direction}`,
       ];
     }}
   />
