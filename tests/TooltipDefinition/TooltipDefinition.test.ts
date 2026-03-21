@@ -164,6 +164,48 @@ describe("TooltipDefinition", () => {
     expect(tooltip).toHaveAttribute("id", "custom-id");
   });
 
+  it("should not open on hover when clickToOpen is true", async () => {
+    render(TooltipDefinition, { props: { clickToOpen: true } });
+
+    const trigger = screen.getByText("Tooltip trigger");
+    await user.hover(trigger);
+
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+    expect(consoleLog).not.toHaveBeenCalledWith("open");
+  });
+
+  it("should open on click when clickToOpen is true", async () => {
+    render(TooltipDefinition, { props: { clickToOpen: true } });
+
+    const trigger = screen.getByText("Tooltip trigger");
+    await user.click(trigger);
+
+    expect(trigger).toHaveClass("bx--tooltip--visible");
+    expect(consoleLog).toHaveBeenCalledWith("open");
+  });
+
+  it("should close on second click when clickToOpen is true", async () => {
+    render(TooltipDefinition, { props: { clickToOpen: true } });
+
+    const trigger = screen.getByText("Tooltip trigger");
+    await user.click(trigger);
+    await user.click(trigger);
+
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+    expect(consoleLog).toHaveBeenCalledWith("close");
+  });
+
+  it("should close on Escape when clickToOpen is true", async () => {
+    render(TooltipDefinition, { props: { clickToOpen: true } });
+
+    const trigger = screen.getByText("Tooltip trigger");
+    await user.click(trigger);
+    await user.keyboard("{Escape}");
+
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+    expect(consoleLog).toHaveBeenCalledWith("close");
+  });
+
   it("should have correct ARIA attributes", () => {
     render(TooltipDefinition);
 
