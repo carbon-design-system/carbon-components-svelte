@@ -3,6 +3,7 @@ import { user } from "../setup-tests";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
+import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.svelte";
 import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
 import ContentSwitcher from "./ContentSwitcher.test.svelte";
 
@@ -223,5 +224,108 @@ describe("ContentSwitcher", () => {
     assert(component.switchRef);
     expect(component.switchRef).toBeInstanceOf(HTMLButtonElement);
     expect(component.switchRef.type).toBe("button");
+  });
+
+  describe('selectionMode="manual"', () => {
+    it("arrow keys move focus without changing selection", async () => {
+      render(ContentSwitcherSelectionMode);
+
+      const tabs = screen.getAllByRole("tab");
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+
+      await user.tab();
+      expect(document.activeElement).toBe(tabs[0]);
+
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[1]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[1]).not.toHaveClass("bx--content-switcher--selected");
+
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[2]).not.toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("arrow left moves focus without changing selection", async () => {
+      render(ContentSwitcherSelectionMode);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+
+      await user.keyboard("{ArrowLeft}");
+      expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[2]).not.toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("Enter selects the focused tab", async () => {
+      render(ContentSwitcherSelectionMode);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[1]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+
+      await user.keyboard("{Enter}");
+      expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("Space selects the focused tab", async () => {
+      render(ContentSwitcherSelectionMode);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[1]);
+
+      await user.keyboard(" ");
+      expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("click selects a tab", async () => {
+      render(ContentSwitcherSelectionMode);
+
+      const tabs = screen.getAllByRole("tab");
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+
+      await user.click(tabs[2]);
+      expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("wraps focus around from last to first", async () => {
+      render(ContentSwitcherSelectionMode);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+
+      await user.keyboard("{ArrowRight}");
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[2]);
+
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[0]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("dispatches change event only on selection, not on focus", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ContentSwitcherSelectionMode);
+
+      await user.tab();
+      consoleLog.mockClear();
+
+      await user.keyboard("{ArrowRight}");
+      expect(consoleLog).not.toHaveBeenCalledWith("change", 1);
+
+      await user.keyboard("{Enter}");
+      expect(consoleLog).toHaveBeenCalledWith("change", 1);
+    });
   });
 });
