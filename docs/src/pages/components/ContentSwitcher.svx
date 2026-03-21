@@ -29,6 +29,18 @@ Set `selectedIndex` to pre-select a switch when the content switcher loads.
   <Switch text="Recommended" />
 </ContentSwitcher>
 
+## Manual selection mode
+
+By default, the content switcher will change the selection when the user uses the arrow keys to move focus.
+
+Set `selectionMode` to `"manual"` so that arrow keys only move focus without changing the selection. The user must press Enter or Space to select a switch.
+
+<ContentSwitcher selectionMode="manual">
+  <Switch text="Latest news" />
+  <Switch text="Trending" />
+  <Switch text="Recommended" />
+</ContentSwitcher>
+
 ## Reactive example
 
 This example demonstrates how to programmatically control the content switcher using
