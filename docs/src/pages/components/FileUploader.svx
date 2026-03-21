@@ -99,16 +99,9 @@ The `maxFileSize` prop accepts values in bytes. File sizes use binary (base 2)
 units, where 1024 bytes = 1 KiB (kibibyte), not 1000 bytes. This matches how
 operating systems and file systems measure file sizes.
 
-This example accepts files up to 1 MB (1,048,576 bytes):
+This example accepts files up to 1 MB (1,048,576 bytes). Files over the limit are not added and a `rejected` event is fired with `{ file, reason: "size" }` for each rejected file. Use `on:rejected` to show a message or log.
 
-<FileUploader
-  multiple
-  maxFileSize={1024 * 1024}
-  labelTitle="Upload files"
-  buttonLabel="Add files"
-  labelDescription="Maximum file size: 1 MB"
-  status="edit"
-/>
+<FileSource src="/framed/FileUploader/FileUploaderMaxFileSize" />
 
 ## File uploader (disabled state)
 
