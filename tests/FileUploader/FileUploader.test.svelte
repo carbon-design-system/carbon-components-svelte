@@ -32,6 +32,8 @@
   export let maxFileSize: ComponentProps<FileUploader>["maxFileSize"] =
     undefined;
   export let preventDuplicate: ComponentProps<FileUploader>["preventDuplicate"] = false;
+  export let iconDescription: ComponentProps<FileUploader>["iconDescription"] =
+    undefined;
 
   // Allow initial files to be set
   $: if (typeof $$props.files !== "undefined" && $$props.files !== files) {
@@ -68,6 +70,7 @@
     {name}
     {maxFileSize}
     {preventDuplicate}
+    {iconDescription}
     bind:files
     on:add={onAdd}
     on:remove={onRemove}

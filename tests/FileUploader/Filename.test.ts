@@ -94,6 +94,58 @@ describe("Filename", () => {
     expect(closeButton).toHaveAttribute("aria-label", "Remove file");
   });
 
+  it("should resolve iconDescription function with context for edit status", () => {
+    const fn = vi.fn((ctx: { fileName: string }) => `Remove ${ctx.fileName}`);
+    const file = new File(["x"], "doc.txt", { type: "text/plain" });
+    const { container } = render(Filename, {
+      props: {
+        status: "edit",
+        file,
+        fileName: "doc.txt",
+        iconDescription: fn,
+      },
+    });
+
+    expect(fn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        file,
+        fileName: "doc.txt",
+        status: "edit",
+        invalid: false,
+      }),
+    );
+    const closeButton = container.querySelector(".bx--file-close");
+    assert(closeButton);
+    expect(closeButton).toHaveAttribute("aria-label", "Remove doc.txt");
+  });
+
+  it("should fall back to defaults when iconDescription function returns undefined", () => {
+    const { container } = render(Filename, {
+      props: {
+        status: "edit",
+        fileName: "x.txt",
+        iconDescription: () => undefined,
+      },
+    });
+
+    const closeButton = container.querySelector(".bx--file-close");
+    assert(closeButton);
+    expect(closeButton).toHaveAttribute("aria-label", "Remove file");
+  });
+
+  it("should fall back to defaults when iconDescription function returns only whitespace", () => {
+    const { container } = render(Filename, {
+      props: {
+        status: "edit",
+        iconDescription: () => "   ",
+      },
+    });
+
+    const closeButton = container.querySelector(".bx--file-close");
+    assert(closeButton);
+    expect(closeButton).toHaveAttribute("aria-label", "Remove file");
+  });
+
   it("should handle iconDescription prop for complete status", () => {
     const { container } = render(Filename, {
       props: { status: "complete", iconDescription: "Upload complete" },
