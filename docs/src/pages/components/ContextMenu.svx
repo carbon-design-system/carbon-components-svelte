@@ -9,11 +9,26 @@ Context menus display a menu when users right-click. Use them to provide quick a
 
 In the examples, right click anywhere within the iframe.
   
-## Default
+## Basic
 
 The context menu appears when right-clicking anywhere in the window. Use context menu option for menu items and context menu divider for visual separation.
   
 <FileSource src="/framed/ContextMenu/ContextMenu" />
+
+## Context menu options
+
+`ContextMenuOption` supports the following props:
+
+- `labelText`: primary label (or use the `labelChildren` slot; see the API reference).
+- `shortcutText`: keyboard hint shown on the right; can be used with or without an icon.
+- `icon`: Carbon icon component to the left of the label. When an icon is set, the option is indented automatically so rows align; you do not need to pass `indented` for icon rows.
+- `indented`: indent the label without an icon, for example to align with submenu parents or nested items (see [Custom target](#custom-target) and [Multiple targets](#multiple-targets)).
+- `disabled`: non-interactive, dimmed row.
+- `kind`: `"default"` or `"danger"` for destructive actions.
+
+For options inside `ContextMenuGroup`, see [Selectable](#selectable) and [Radio groups](#radio-groups).
+
+<FileSource src="/framed/ContextMenu/ContextMenuOptionProps" />
 
 ## Custom target
 
@@ -29,9 +44,15 @@ Set `target` to an array of elements to trigger the context menu from multiple s
 
 <FileSource src="/framed/ContextMenu/ContextMenuTargets" />
 
+## Selectable
+
+Use `selectable` for a single toggle item, or wrap options in `ContextMenuGroup` with `bind:selectedIds` for a checkbox-style group. Provide an `id` on each option in the group. Multiple items can be selected at once: the standalone toggle and each item in the group are independent, and the group keeps every chosen option in `selectedIds`.
+
+<FileSource src="/framed/ContextMenu/ContextMenuSelectable" />
+
 ## Radio groups
 
-Use context menu group and context menu radio group to organize related options and create radio button selections.
+Use `ContextMenuRadioGroup` to organize related options as a radio set: only one option can be selected at a time, and `bind:selectedId` reflects the active choice.
 
 <FileSource src="/framed/ContextMenu/ContextMenuGroups" />
 

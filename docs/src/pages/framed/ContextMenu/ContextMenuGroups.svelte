@@ -18,8 +18,6 @@
     <ContextMenuOption id="0" labelText="Set as foreground" />
     <ContextMenuOption id="1" labelText="Set as background" />
   </ContextMenuRadioGroup>
-  <ContextMenuDivider />
-  <ContextMenuOption selectable labelText="Lock layer" />
 </ContextMenu>
 
 <div data-centered>

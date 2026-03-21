@@ -36,12 +36,7 @@
     }}
   />
   <ContextMenuDivider />
-  <ContextMenuOption
-    indented
-    kind="danger"
-    labelText="Delete item"
-    icon={TrashCan}
-  />
+  <ContextMenuOption kind="danger" labelText="Delete item" icon={TrashCan} />
 </ContextMenu>
 
 <div data-centered>
