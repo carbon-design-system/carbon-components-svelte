@@ -33,7 +33,7 @@
   export let showToolbar = true;
 
   $: values = headers.map((header) =>
-    header.value !== undefined ? header.value : header,
+    header.value === undefined ? header : header.value,
   );
   $: cols = Array.from(
     { length: headers.length > 0 ? headers.length : columns },

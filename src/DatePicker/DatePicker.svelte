@@ -87,7 +87,7 @@
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
-    portalMenu !== undefined ? portalMenu : !!insideModal;
+    portalMenu === undefined ? !!insideModal : portalMenu;
 
   const inputs = writable([]);
   /**
@@ -320,7 +320,7 @@
 <svelte:window
   on:click={({ target }) => {
     if (!calendar || !calendar.isOpen) return;
-    if (datePickerRef && datePickerRef.contains(target)) return;
+    if (datePickerRef?.contains(target)) return;
     if (!calendar.calendarContainer.contains(target)) calendar.close();
   }}
 />

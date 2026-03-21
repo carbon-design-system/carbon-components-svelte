@@ -351,7 +351,7 @@
     }
   }}
   on:mouseleave
-  on:mouseleave={(e) => {
+  on:mouseleave={() => {
     if (subOptions) {
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
 

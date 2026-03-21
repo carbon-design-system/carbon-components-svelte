@@ -113,7 +113,7 @@
   let focusByMouse = false;
 
   $: effectivePortalTooltip =
-    portalTooltip !== undefined ? portalTooltip : !!insideModal;
+    portalTooltip === undefined ? !!insideModal : portalTooltip;
 
   setContext("carbon:Tooltip", { tooltipOpen });
 

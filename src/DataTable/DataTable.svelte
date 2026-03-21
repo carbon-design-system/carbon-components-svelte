@@ -691,7 +691,7 @@
                       currentTarget: e.currentTarget,
                     });
                   } else {
-                    let currentSortDirection =
+                    const currentSortDirection =
                       sortKey === header.key ? sortDirection : "none";
                     const effectiveSortAlways =
                       header.sortAlways ?? sortAlways;

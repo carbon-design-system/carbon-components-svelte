@@ -63,15 +63,15 @@
   onMount(() => {
     const item = sessionStorage.getItem(key);
 
-    if (item != null) {
+    if (item == null) {
+      setItem(value);
+      dispatch("save");
+    } else {
       try {
         value = JSON.parse(item);
       } catch (e) {
         value = item;
       }
-    } else {
-      setItem(value);
-      dispatch("save");
     }
 
     mounted = true;
@@ -98,14 +98,14 @@
   $: if (mounted && key !== prevKey) {
     const item = sessionStorage.getItem(key);
 
-    if (item != null) {
+    if (item == null) {
+      setItem(value);
+    } else {
       try {
         value = JSON.parse(item);
       } catch (e) {
         value = item;
       }
-    } else {
-      setItem(value);
     }
 
     prevKey = key;
