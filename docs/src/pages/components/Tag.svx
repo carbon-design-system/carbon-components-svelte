@@ -1,9 +1,9 @@
 ---
-components: ["Tag", "TagSkeleton"]
+components: ["Tag", "SelectableTag", "TagSkeleton"]
 ---
 
 <script>
-  import { Tag, TooltipDefinition } from "carbon-components-svelte";
+  import { Tag, SelectableTag, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
@@ -96,6 +96,30 @@ Embed a tooltip within a tag to provide additional context.
     Armonk
   </TooltipDefinition>
 </Tag>
+
+## Selectable
+
+Use `SelectableTag` to create a tag that toggles between selected and unselected states.
+
+<FileSource src="/framed/Tag/SelectableTagReactive" />
+
+## Selectable with icon
+
+Combine `SelectableTag` with a custom icon.
+
+<FileSource src="/framed/Tag/SelectableTagIconReactive" />
+
+## Selectable (disabled)
+
+Disable a selectable tag to prevent interaction.
+
+<SelectableTag disabled>Machine learning</SelectableTag>
+
+## Selectable (small)
+
+Use the small size variant for selectable tags.
+
+<SelectableTag size="sm">Small tag</SelectableTag>
 
 ## Skeleton
 
