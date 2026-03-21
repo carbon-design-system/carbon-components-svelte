@@ -5,7 +5,7 @@
     ContextMenuOption,
   } from "carbon-components-svelte";
   import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
-  import type { ComponentProps } from "svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 
   export let open = false;
   export let x = 0;
@@ -23,5 +23,5 @@
   <ContextMenuOption labelText="Copy" icon={CopyFile} />
   <ContextMenuOption labelText="Plain" />
   <ContextMenuDivider />
-  <ContextMenuOption kind="danger" labelText="Delete" icon={CopyFile} />
+  <ContextMenuOption kind="danger" labelText="Delete" icon={TrashCan} />
 </ContextMenu>
