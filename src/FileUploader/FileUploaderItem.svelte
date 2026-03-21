@@ -15,8 +15,11 @@
    */
   export let size = "default";
 
-  /** Specify the ARIA label used for the status icons */
-  export let iconDescription = "";
+  /**
+   * Accessible label for the status icons. When omitted or blank, `Filename` applies defaults.
+   * @type {string | undefined}
+   */
+  export let iconDescription = undefined;
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
