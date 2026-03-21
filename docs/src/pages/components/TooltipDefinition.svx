@@ -20,6 +20,26 @@ Customize the tooltip position using the `direction` and `align` props. The defa
   Armonk
 </TooltipDefinition>
 
+## Open by default
+
+Use the `open` prop to open the tooltip by default.
+
+<TooltipDefinition open tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
+  Armonk
+</TooltipDefinition>
+
+## Programmatic usage
+
+Control the tooltip state programmatically using `bind:open`.
+
+<FileSource src="/framed/TooltipDefinition/TooltipDefinitionReactive" />
+
+## Dispatched events
+
+The component dispatches `open` and `close` events.
+
+<FileSource src="/framed/TooltipDefinition/TooltipDefinitionEvents" />
+
 ## Custom tooltip slot
 
 Use the `tooltip` slot to customize the tooltip content with additional styling or structure.
