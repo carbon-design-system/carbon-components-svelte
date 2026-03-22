@@ -68,11 +68,21 @@
   export let zIndex = 9200;
 
   /**
-   * Set to `true` to use the content's intrinsic width and center it on the anchor.
+   * Set to `true` to use the content's intrinsic width instead of the anchor width.
+   * Position along the anchor edge is controlled by `intrinsicAlign`.
    * When `false` (default), the portal width matches the anchor.
    * @type {boolean}
    */
   export let intrinsicWidth = false;
+
+  /**
+   * When `intrinsicWidth` is true, align the floating box to the anchor (Carbon-style):
+   * - `top` / `bottom`: horizontal alignment (`start` = anchor left, `center`, `end` = anchor right).
+   * - `left` / `right`: vertical alignment (`start` = anchor top, `center`, `end` = anchor bottom).
+   * Ignored when `intrinsicWidth` is false.
+   * @type {"start" | "center" | "end"}
+   */
+  export let intrinsicAlign = "center";
 
   /**
    * Obtain a reference to the floating portal element.
@@ -138,12 +148,13 @@
     };
   });
 
-  /** @type {{ top: number, left: number, width?: number, actualDirection: "bottom" | "top" | "left" | "right" }} */
+  /** @type {{ top: number, left: number, width?: number, actualDirection: "bottom" | "top" | "left" | "right", caretNudgePx?: number }} */
   let pos = {
     top: 0,
     left: 0,
     width: 0,
     actualDirection: direction,
+    caretNudgePx: undefined,
   };
 
   /** @type {number | null} */
@@ -231,35 +242,107 @@
       left = rect.left + window.scrollX;
       width = rect.width;
     } else if (actualDirection === "right") {
-      top =
-        rect.top +
-        window.scrollY +
-        rect.height / 2 -
-        floatingRect.height / 2 +
-        verticalAlignOffsetRight;
+      if (intrinsicWidth) {
+        if (intrinsicAlign === "start") {
+          top = rect.top + window.scrollY + verticalAlignOffsetRight;
+        } else if (intrinsicAlign === "end") {
+          top =
+            rect.bottom +
+            window.scrollY -
+            floatingRect.height +
+            verticalAlignOffsetRight;
+        } else {
+          top =
+            rect.top +
+            window.scrollY +
+            rect.height / 2 -
+            floatingRect.height / 2 +
+            verticalAlignOffsetRight;
+        }
+      } else {
+        top =
+          rect.top +
+          window.scrollY +
+          rect.height / 2 -
+          floatingRect.height / 2 +
+          verticalAlignOffsetRight;
+      }
       left = rect.right + window.scrollX + horizontalGapRight;
     } else {
       // left
-      top =
-        rect.top +
-        window.scrollY +
-        rect.height / 2 -
-        floatingRect.height / 2 +
-        verticalAlignOffsetLeft;
+      if (intrinsicWidth) {
+        if (intrinsicAlign === "start") {
+          top = rect.top + window.scrollY + verticalAlignOffsetLeft;
+        } else if (intrinsicAlign === "end") {
+          top =
+            rect.bottom +
+            window.scrollY -
+            floatingRect.height +
+            verticalAlignOffsetLeft;
+        } else {
+          top =
+            rect.top +
+            window.scrollY +
+            rect.height / 2 -
+            floatingRect.height / 2 +
+            verticalAlignOffsetLeft;
+        }
+      } else {
+        top =
+          rect.top +
+          window.scrollY +
+          rect.height / 2 -
+          floatingRect.height / 2 +
+          verticalAlignOffsetLeft;
+      }
       left =
         rect.left + window.scrollX - floatingRect.width - horizontalGapLeft;
     }
 
-    const useIntrinsicCenter =
+    let posLeft = left;
+    /** @type {number | undefined} */
+    let posWidth = width;
+
+    if (
       intrinsicWidth &&
-      (actualDirection === "top" || actualDirection === "bottom");
+      (actualDirection === "top" || actualDirection === "bottom")
+    ) {
+      if (intrinsicAlign === "center") {
+        posLeft = rect.left + window.scrollX + rect.width / 2;
+      } else if (intrinsicAlign === "start") {
+        posLeft = rect.left + window.scrollX;
+      } else {
+        posLeft = rect.right + window.scrollX;
+      }
+      posWidth = undefined;
+    }
+
+    /** @type {number | undefined} */
+    let caretNudgePx = undefined;
+    if (
+      ref &&
+      intrinsicWidth &&
+      (actualDirection === "top" || actualDirection === "bottom") &&
+      (intrinsicAlign === "start" || intrinsicAlign === "end")
+    ) {
+      const fr = ref.getBoundingClientRect();
+      const anchorCx = rect.left + rect.width / 2;
+      // End + translateX(-100%): right edges meet anchor.right. Derive portal left from
+      // width so caret nudge is not thrown off by fr.left read in the same turn as a
+      // pending left/transform style update (measured left can be one frame stale).
+      const portalLeftViewport =
+        intrinsicAlign === "end" && fr.width > 0
+          ? rect.right - fr.width
+          : fr.left;
+      caretNudgePx = anchorCx - portalLeftViewport;
+    }
+
     pos = {
       top,
-      left: useIntrinsicCenter
-        ? rect.left + window.scrollX + rect.width / 2
-        : left,
-      ...(width !== undefined && { width }),
+      left: posLeft,
+      ...(posWidth !== undefined && { width: posWidth }),
       actualDirection,
+      caretNudgePx,
     };
   }
 
@@ -274,16 +357,30 @@
   // The actual rendered direction after auto-flipping.
   $: actualDirection = pos.actualDirection;
 
-  $: useIntrinsicCenter =
+  $: useIntrinsicWidthVertical =
     intrinsicWidth &&
     (actualDirection === "top" || actualDirection === "bottom");
+
+  $: intrinsicTranslateX = useIntrinsicWidthVertical
+    ? intrinsicAlign === "center"
+      ? "transform: translateX(-50%)"
+      : intrinsicAlign === "end"
+        ? "transform: translateX(-100%)"
+        : null
+    : null;
+
   $: portalStyle = [
     "position: absolute",
     `top: ${pos.top}px`,
     `left: ${pos.left}px`,
-    useIntrinsicCenter ? "transform: translateX(-50%)" : null,
-    !useIntrinsicCenter && pos.width != null ? `width: ${pos.width}px` : null,
+    intrinsicTranslateX,
+    !useIntrinsicWidthVertical && pos.width != null
+      ? `width: ${pos.width}px`
+      : null,
     `z-index: ${zIndex}`,
+    pos.caretNudgePx == null
+      ? null
+      : `--ccs-tooltip-caret-nudge: ${pos.caretNudgePx}px`,
   ]
     .filter(Boolean)
     .join("; ");
@@ -306,9 +403,12 @@
     observeAnchor();
     tick().then(() => {
       updatePosition();
-      // For left/right, portal size is not set until content lays out; run again after layout
-      const isHorizontal = direction === "left" || direction === "right";
-      if (isHorizontal) {
+      // Second pass: left/right need final width; top/bottom intrinsic needs stable rect for caret nudge.
+      const needsSecondLayoutPass =
+        direction === "left" ||
+        direction === "right" ||
+        (intrinsicWidth && (direction === "top" || direction === "bottom"));
+      if (needsSecondLayoutPass) {
         requestAnimationFrame(updatePosition);
       }
     });
@@ -326,6 +426,7 @@
     {...$$restProps}
     data-floating-portal
     data-floating-direction={pos.actualDirection}
+    data-floating-intrinsic-align={intrinsicWidth ? intrinsicAlign : undefined}
     style={portalStyle}
   >
     <slot direction={actualDirection} />

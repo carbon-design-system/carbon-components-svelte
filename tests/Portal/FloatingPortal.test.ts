@@ -192,6 +192,38 @@ describe("FloatingPortal", () => {
       expect(style).toContain("transform: translateX(-50%)");
       expect(style).not.toMatch(/\bwidth:\s*\d+px/);
     });
+
+    it("applies no horizontal transform for intrinsicAlign start", async () => {
+      render(FloatingPortalTest, {
+        props: {
+          open: true,
+          intrinsicWidth: true,
+          intrinsicAlign: "start",
+        },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest("[data-floating-portal]");
+      const style = portalElement?.getAttribute("style") ?? "";
+      expect(style).not.toContain("translateX");
+      expect(style).not.toMatch(/\bwidth:\s*\d+px/);
+    });
+
+    it("applies translateX(-100%) for intrinsicAlign end", async () => {
+      render(FloatingPortalTest, {
+        props: {
+          open: true,
+          intrinsicWidth: true,
+          intrinsicAlign: "end",
+        },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest("[data-floating-portal]");
+      const style = portalElement?.getAttribute("style") ?? "";
+      expect(style).toContain("transform: translateX(-100%)");
+      expect(style).not.toMatch(/\bwidth:\s*\d+px/);
+    });
   });
 
   it("binds ref to the floating portal element", async () => {
