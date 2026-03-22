@@ -79,3 +79,42 @@ Use the `tooltip` slot to customize the tooltip content with additional styling 
     IBM Corporate Headquarters is based in Armonk, New York.
   </span>
 </TooltipDefinition>
+
+## Portal tooltip
+
+Use `portalTooltip` to render the tooltip in a portal, preventing it from being clipped by `overflow: hidden` containers. This is automatically enabled when the tooltip is inside a `Modal`. The `align` prop is respected when portalled, matching non-portal positioning.
+
+<TooltipDefinition portalTooltip tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
+  Armonk
+</TooltipDefinition>
+
+## Portal (direction)
+
+Definition tooltips support `top` and `bottom` only. With `portalTooltip`, `direction` behaves the same as the default CSS path.
+
+<TooltipDefinition portalTooltip direction="top" tooltipText="Top">
+  Top
+</TooltipDefinition>
+<TooltipDefinition portalTooltip direction="bottom" tooltipText="Bottom">
+  Bottom
+</TooltipDefinition>
+
+## Portal (alignment)
+
+Portalled tooltips use the same `align` prop as the non-portal path: horizontal placement along the anchor for `top` and `bottom`.
+
+<TooltipDefinition portalTooltip align="start" tooltipText="Start">
+  Start
+</TooltipDefinition>
+<TooltipDefinition portalTooltip align="center" tooltipText="Center">
+  Center
+</TooltipDefinition>
+<TooltipDefinition portalTooltip align="end" tooltipText="End">
+  End
+</TooltipDefinition>
+
+## Inside a modal
+
+When a tooltip definition is used inside a [Modal](/components/Modal), it is automatically rendered in a portal so it is not clipped by the modal's overflow or z-index stacking. Set `portalTooltip` to explicitly control this behavior.
+
+<FileSource src="/framed/TooltipDefinition/TooltipDefinitionModal" />
