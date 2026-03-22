@@ -10,13 +10,40 @@ describe("SkeletonPlaceholder", () => {
     expect(element).toHaveClass("bx--skeleton__placeholder");
   });
 
-  it("should render with custom size", () => {
+  it("should render with size prop (string)", () => {
     render(SkeletonPlaceholder, {
-      props: { style: "height: 12rem; width: 12rem;" },
+      props: { size: "12rem" },
     });
 
     const element = screen.getByTestId("skeleton-placeholder");
     expect(element).toHaveStyle({ height: "12rem", width: "12rem" });
+  });
+
+  it("should render with size prop (number)", () => {
+    render(SkeletonPlaceholder, {
+      props: { size: 200 },
+    });
+
+    const element = screen.getByTestId("skeleton-placeholder");
+    expect(element).toHaveStyle({ height: "200px", width: "200px" });
+  });
+
+  it("should render with width and height props", () => {
+    render(SkeletonPlaceholder, {
+      props: { width: "20rem", height: "10rem" },
+    });
+
+    const element = screen.getByTestId("skeleton-placeholder");
+    expect(element).toHaveStyle({ width: "20rem", height: "10rem" });
+  });
+
+  it("should allow width/height to override size", () => {
+    render(SkeletonPlaceholder, {
+      props: { size: "5rem", width: "10rem", height: "8rem" },
+    });
+
+    const element = screen.getByTestId("skeleton-placeholder");
+    expect(element).toHaveStyle({ width: "10rem", height: "8rem" });
   });
 
   it("should handle mouse events", async () => {
