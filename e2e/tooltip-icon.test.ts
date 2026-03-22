@@ -21,3 +21,54 @@ test.describe("TooltipIcon", () => {
     await expect(page.getByText("Icon tooltip text")).toBeAttached();
   });
 });
+
+test.describe("TooltipIcon portaled inside Modal", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/tooltip-icon-modal.html");
+  });
+
+  test("uses floating portal attached to document.body", async ({ page }) => {
+    await page.getByTestId("open-modal").click();
+    await expect(
+      page.getByRole("dialog", { name: "Modal for tooltip test" }),
+    ).toBeVisible();
+
+    await page.getByTestId("tooltip-icon-modal").hover();
+
+    await expect(page.getByText("Portaled icon tooltip")).toBeVisible();
+
+    const portalOnBody = await page.evaluate(() => {
+      const portal = document.querySelector("[data-floating-portal]");
+      return portal?.parentElement === document.body;
+    });
+    expect(portalOnBody).toBe(true);
+  });
+
+  test("does not render assistive text span inside the trigger when portaled", async ({
+    page,
+  }) => {
+    await page.getByTestId("open-modal").click();
+
+    const trigger = page.getByTestId("tooltip-icon-modal");
+    await expect(trigger.locator(".bx--assistive-text")).toHaveCount(0);
+  });
+
+  test("marks trigger as portal-active", async ({ page }) => {
+    await page.getByTestId("open-modal").click();
+
+    await expect(page.getByTestId("tooltip-icon-modal")).toHaveClass(
+      /bx--tooltip--portal-active/,
+    );
+  });
+
+  test("sets icon tooltip type on portalled shell", async ({ page }) => {
+    await page.getByTestId("open-modal").click();
+    await page.getByTestId("tooltip-icon-modal").hover();
+
+    await expect(
+      page.locator(
+        '[data-floating-portal] .bx--tooltip-portal[data-tooltip-type="icon"]',
+      ),
+    ).toBeVisible();
+  });
+});
