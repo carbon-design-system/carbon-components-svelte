@@ -1,9 +1,11 @@
 <script>
   /**
    * @generics {Icon = any} Icon
+   * @event {null} open
+   * @event {null} close
    */
 
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { get } from "svelte/store";
   import { activeTooltipIcon } from "./tooltip-icon-store.js";
 
@@ -12,6 +14,11 @@
    * Alternatively, use the "tooltipText" slot.
    */
   export let tooltipText = "";
+
+  /**
+   * Set to `true` to open the tooltip.
+   */
+  export let open = false;
 
   /**
    * Specify the icon to render.
@@ -47,12 +54,43 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
+  const dispatch = createEventDispatcher();
   const tooltipId = {};
 
-  let hidden = false;
+  let isInitialRender = true;
+  let clicked = false;
+
+  const show = () => {
+    open = true;
+    activeTooltipIcon.set(tooltipId);
+  };
+
+  const hide = () => {
+    clicked = false;
+    open = false;
+    if (get(activeTooltipIcon) === tooltipId) {
+      activeTooltipIcon.set(null);
+    }
+  };
 
   $: tooltipHidden =
     $activeTooltipIcon !== null && $activeTooltipIcon !== tooltipId;
+
+  // Sync the store when open is set externally (e.g., bind:open).
+  $: {
+    if (open) {
+      activeTooltipIcon.set(tooltipId);
+    } else if (get(activeTooltipIcon) === tooltipId) {
+      activeTooltipIcon.set(null);
+    }
+  }
+
+  $: {
+    if (!isInitialRender) {
+      dispatch(open ? "open" : "close");
+    }
+    isInitialRender = false;
+  }
 
   onMount(() => {
     return () => {
@@ -66,10 +104,7 @@
 <svelte:window
   on:keydown={({ key }) => {
     if (key === "Escape") {
-      hidden = true;
-      if ($activeTooltipIcon === tooltipId) {
-        activeTooltipIcon.set(null);
-      }
+      hide();
     }
   }}
 />
@@ -81,7 +116,8 @@
   aria-describedby={id}
   class:bx--tooltip__trigger={true}
   class:bx--tooltip--a11y={true}
-  class:bx--tooltip--hidden={hidden || disabled || tooltipHidden}
+  class:bx--tooltip--visible={open && !disabled && !tooltipHidden}
+  class:bx--tooltip--hidden={!open || disabled || tooltipHidden}
   class:bx--tooltip--top={direction === "top"}
   class:bx--tooltip--right={direction === "right"}
   class:bx--tooltip--bottom={direction === "bottom"}
@@ -92,24 +128,34 @@
   style:cursor={disabled ? "not-allowed" : "default"}
   {...$$restProps}
   on:click
+  on:click={() => {
+    if (disabled) return;
+    if (clicked) {
+      hide();
+    } else {
+      clicked = true;
+      show();
+    }
+  }}
   on:mouseover
   on:mouseenter
   on:mouseenter={() => {
     if (disabled) return;
-    hidden = false;
-    activeTooltipIcon.set(tooltipId);
+    show();
   }}
   on:mouseleave
   on:mouseleave={() => {
-    if ($activeTooltipIcon === tooltipId) {
-      activeTooltipIcon.set(null);
-    }
+    if (clicked) return;
+    hide();
   }}
   on:focus
   on:focus={() => {
     if (disabled) return;
-    hidden = false;
-    activeTooltipIcon.set(tooltipId);
+    show();
+  }}
+  on:blur
+  on:blur={() => {
+    hide();
   }}
 >
   <span {id} class:bx--assistive-text={true} style:pointer-events="none">

@@ -6,10 +6,35 @@ import { user } from "../setup-tests";
 import TooltipIconSize from "./TooltipIcon.size.test.svelte";
 import TooltipIcon from "./TooltipIcon.test.svelte";
 import TooltipIconMultiple from "./TooltipIconMultiple.test.svelte";
+import TooltipIconReactive from "./TooltipIconReactive.test.svelte";
 
 type Props = ComponentProps<TooltipIconSource>;
 
 describe("TooltipIcon", () => {
+  let consoleLog: Console["log"];
+
+  beforeEach(() => {
+    consoleLog = vi.spyOn(console, "log");
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("does not fire open/close event on initial render", () => {
+    render(TooltipIcon);
+
+    expect(consoleLog).not.toHaveBeenCalledWith("open");
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+  });
+
+  it("does not fire open/close event on initial render when open is true", () => {
+    render(TooltipIcon, { props: { open: true } });
+
+    expect(consoleLog).not.toHaveBeenCalledWith("open");
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+  });
+
   it("should render with default props", () => {
     render(TooltipIcon);
 
@@ -37,6 +62,49 @@ describe("TooltipIcon", () => {
     expect(trigger).not.toHaveClass("bx--tooltip--hidden");
   });
 
+  it("should hide tooltip on blur", async () => {
+    render(TooltipIcon);
+
+    await user.tab();
+    const trigger = screen.getByRole("button");
+    expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+
+    await user.tab();
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+  });
+
+  it("should stay open on mouseleave after click", async () => {
+    render(TooltipIcon);
+
+    const trigger = screen.getByRole("button");
+    await user.click(trigger);
+
+    expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+
+    await user.unhover(trigger);
+    expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+  });
+
+  it("should close on second click", async () => {
+    render(TooltipIcon);
+
+    const trigger = screen.getByRole("button");
+    await user.click(trigger);
+    await user.click(trigger);
+
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+  });
+
+  it("should close on Escape after click", async () => {
+    render(TooltipIcon);
+
+    const trigger = screen.getByRole("button");
+    await user.click(trigger);
+    await user.keyboard("{Escape}");
+
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+  });
+
   it("should hide tooltip on Escape key", async () => {
     render(TooltipIcon);
 
@@ -45,6 +113,88 @@ describe("TooltipIcon", () => {
     await user.keyboard("{Escape}");
 
     expect(trigger).toHaveClass("bx--tooltip--hidden");
+  });
+
+  it("should support controlled open state", () => {
+    render(TooltipIcon, {
+      props: { open: true },
+    });
+
+    const trigger = screen.getByRole("button");
+    expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+  });
+
+  it("should dispatch open event on hover", async () => {
+    render(TooltipIcon);
+
+    const trigger = screen.getByRole("button");
+    await user.hover(trigger);
+
+    expect(consoleLog).toHaveBeenCalledWith("open");
+  });
+
+  it("should dispatch close event on Escape", async () => {
+    render(TooltipIcon);
+
+    const trigger = screen.getByRole("button");
+    await user.hover(trigger);
+    await user.keyboard("{Escape}");
+
+    expect(consoleLog).toHaveBeenCalledWith("close");
+  });
+
+  it("should dispatch close event on mouse leave", async () => {
+    render(TooltipIcon);
+
+    const trigger = screen.getByRole("button");
+    await user.hover(trigger);
+    await user.unhover(trigger);
+
+    expect(consoleLog).toHaveBeenCalledWith("close");
+  });
+
+  it("should dispatch open event on focus", async () => {
+    render(TooltipIcon);
+
+    await user.tab();
+
+    expect(consoleLog).toHaveBeenCalledWith("open");
+  });
+
+  describe("reactive (bind:open)", () => {
+    it("should be visible when initially open", () => {
+      render(TooltipIconReactive);
+
+      const trigger = screen.getByRole("button", { name: /test tooltip/i });
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+      expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+    });
+
+    it("should hide when toggled off via external button", async () => {
+      render(TooltipIconReactive);
+
+      const trigger = screen.getByRole("button", { name: /test tooltip/i });
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+
+      const toggle = screen.getByTestId("toggle");
+      await user.click(toggle);
+
+      expect(trigger).not.toHaveClass("bx--tooltip--visible");
+      expect(trigger).toHaveClass("bx--tooltip--hidden");
+    });
+
+    it("should show again when toggled back on", async () => {
+      render(TooltipIconReactive);
+
+      const trigger = screen.getByRole("button", { name: /test tooltip/i });
+      const toggle = screen.getByTestId("toggle");
+
+      await user.click(toggle); // close
+      await user.click(toggle); // re-open
+
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+      expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+    });
   });
 
   describe("tooltip positioning", () => {
@@ -166,18 +316,18 @@ describe("TooltipIcon", () => {
       const btnB = screen.getByTestId("tooltip-b");
       const btnC = screen.getByTestId("tooltip-c");
 
-      // Initially no button should have bx--tooltip--hidden.
-      expect(btnA).not.toHaveClass("bx--tooltip--hidden");
-      expect(btnB).not.toHaveClass("bx--tooltip--hidden");
-      expect(btnC).not.toHaveClass("bx--tooltip--hidden");
+      // Initially all tooltips are hidden (open defaults to false).
+      expect(btnA).toHaveClass("bx--tooltip--hidden");
+      expect(btnB).toHaveClass("bx--tooltip--hidden");
+      expect(btnC).toHaveClass("bx--tooltip--hidden");
 
-      // Hover tooltip A: others should get bx--tooltip--hidden.
+      // Hover tooltip A: only A should be visible.
       await fireEvent.mouseEnter(btnA);
       expect(btnA).not.toHaveClass("bx--tooltip--hidden");
       expect(btnB).toHaveClass("bx--tooltip--hidden");
       expect(btnC).toHaveClass("bx--tooltip--hidden");
 
-      // Hover tooltip B: A and C should get bx--tooltip--hidden.
+      // Hover tooltip B: only B should be visible.
       await fireEvent.mouseEnter(btnB);
       expect(btnA).toHaveClass("bx--tooltip--hidden");
       expect(btnB).not.toHaveClass("bx--tooltip--hidden");
@@ -191,11 +341,13 @@ describe("TooltipIcon", () => {
       const btnB = screen.getByTestId("tooltip-b");
 
       await fireEvent.mouseEnter(btnA);
+      expect(btnA).not.toHaveClass("bx--tooltip--hidden");
       expect(btnB).toHaveClass("bx--tooltip--hidden");
 
       await fireEvent.mouseLeave(btnA);
-      expect(btnA).not.toHaveClass("bx--tooltip--hidden");
-      expect(btnB).not.toHaveClass("bx--tooltip--hidden");
+      // After mouseleave, both are hidden (no tooltip is open).
+      expect(btnA).toHaveClass("bx--tooltip--hidden");
+      expect(btnB).toHaveClass("bx--tooltip--hidden");
     });
   });
 

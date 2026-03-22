@@ -3,6 +3,7 @@
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
 
   export let tooltipText = "Test tooltip text";
+  export let open = false;
   export let disabled = false;
   export let align: "start" | "center" | "end" = "center";
   export let direction: "top" | "right" | "bottom" | "left" = "bottom";
@@ -13,6 +14,7 @@
 
 <TooltipIcon
   {tooltipText}
+  {open}
   {disabled}
   {align}
   {direction}
@@ -24,6 +26,12 @@
   on:mouseenter
   on:mouseleave
   on:focus
+  on:open={() => {
+    console.log("open");
+  }}
+  on:close={() => {
+    console.log("close");
+  }}
 >
   <slot name="tooltipText" />
   <slot />
