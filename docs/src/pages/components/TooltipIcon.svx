@@ -12,6 +12,12 @@ Display a tooltip with the default bottom-center alignment.
 
 <TooltipIcon tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
 
+## Reactive example
+
+Control the tooltip state programmatically using `bind:open`.
+
+<FileSource src="/framed/TooltipIcon/TooltipIconReactive" />
+
 ## Sizes
 
 Specify the icon size with the `size` prop. Carbon icons use a 16/20/24/32 scale, but any number (pixels) can be used.
