@@ -5,8 +5,9 @@
    * @event {null} close
    */
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { activeTooltipIcon } from "./tooltip-icon-store.js";
 
   /**
@@ -54,11 +55,28 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
+  /**
+   * Set to `true` to render the tooltip in a portal,
+   * preventing it from being clipped by `overflow: hidden` containers.
+   * By default, the tooltip is portalled when inside a `Modal`.
+   * @type {boolean | undefined}
+   */
+  export let portalTooltip = undefined;
+
   const dispatch = createEventDispatcher();
   const tooltipId = {};
 
   let isInitialRender = true;
   let clicked = false;
+
+  const insideModal = getContext("carbon:Modal");
+
+  $: effectivePortalTooltip =
+    portalTooltip === undefined ? !!insideModal : portalTooltip;
+
+  let hidden = false;
+  let hovered = false;
+  let focused = false;
 
   const show = () => {
     open = true;
@@ -68,6 +86,8 @@
   const hide = () => {
     clicked = false;
     open = false;
+    hovered = false;
+    focused = false;
     if (get(activeTooltipIcon) === tooltipId) {
       activeTooltipIcon.set(null);
     }
@@ -92,6 +112,46 @@
     isInitialRender = false;
   }
 
+  $: portalOpen =
+    effectivePortalTooltip &&
+    !hidden &&
+    !disabled &&
+    (hovered || focused || open);
+
+  const PORTAL_HORIZONTAL_GAP_LEFT_PX = 2;
+  const PORTAL_HORIZONTAL_GAP_RIGHT_PX = 2;
+  const PORTAL_VERTICAL_GAP_TOP_PX = 1;
+  const PORTAL_VERTICAL_GAP_BOTTOM_PX = 1;
+  const PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX = -3;
+  const PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX = 1;
+
+  $: portalHorizontalGapLeft =
+    direction === "left" || direction === "right"
+      ? PORTAL_HORIZONTAL_GAP_LEFT_PX
+      : 0;
+  $: portalHorizontalGapRight =
+    direction === "left" || direction === "right"
+      ? PORTAL_HORIZONTAL_GAP_RIGHT_PX
+      : 0;
+
+  $: portalGapTop =
+    direction === "top" || direction === "bottom"
+      ? PORTAL_VERTICAL_GAP_TOP_PX
+      : 0;
+  $: portalGapBottom =
+    direction === "top" || direction === "bottom"
+      ? PORTAL_VERTICAL_GAP_BOTTOM_PX
+      : 0;
+
+  $: portalVerticalAlignOffsetLeft =
+    direction === "left" && align === "start"
+      ? PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX
+      : 0;
+  $: portalVerticalAlignOffsetRight =
+    direction === "right" && align === "end"
+      ? PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX
+      : 0;
+
   onMount(() => {
     return () => {
       if (get(activeTooltipIcon) === tooltipId) {
@@ -115,16 +175,22 @@
   type="button"
   aria-describedby={id}
   class:bx--tooltip__trigger={true}
-  class:bx--tooltip--a11y={true}
-  class:bx--tooltip--visible={open && !disabled && !tooltipHidden}
-  class:bx--tooltip--hidden={!open || disabled || tooltipHidden}
-  class:bx--tooltip--top={direction === "top"}
-  class:bx--tooltip--right={direction === "right"}
-  class:bx--tooltip--bottom={direction === "bottom"}
-  class:bx--tooltip--left={direction === "left"}
-  class:bx--tooltip--align-start={align === "start"}
-  class:bx--tooltip--align-center={align === "center"}
-  class:bx--tooltip--align-end={align === "end"}
+  class:bx--tooltip--portal-active={effectivePortalTooltip}
+  class:bx--tooltip--a11y={!effectivePortalTooltip}
+  class:bx--tooltip--visible={!effectivePortalTooltip &&
+    open &&
+    !disabled &&
+    !tooltipHidden}
+  class:bx--tooltip--hidden={!effectivePortalTooltip &&
+    (!open || disabled || tooltipHidden)}
+  class:bx--tooltip--top={!effectivePortalTooltip && direction === "top"}
+  class:bx--tooltip--right={!effectivePortalTooltip && direction === "right"}
+  class:bx--tooltip--bottom={!effectivePortalTooltip && direction === "bottom"}
+  class:bx--tooltip--left={!effectivePortalTooltip && direction === "left"}
+  class:bx--tooltip--align-start={!effectivePortalTooltip && align === "start"}
+  class:bx--tooltip--align-center={!effectivePortalTooltip &&
+    align === "center"}
+  class:bx--tooltip--align-end={!effectivePortalTooltip && align === "end"}
   style:cursor={disabled ? "not-allowed" : "default"}
   {...$$restProps}
   on:click
@@ -141,25 +207,65 @@
   on:mouseenter
   on:mouseenter={() => {
     if (disabled) return;
-    show();
+    hidden = false;
+    if (effectivePortalTooltip) {
+      hovered = true;
+    } else {
+      show();
+    }
   }}
   on:mouseleave
   on:mouseleave={() => {
     if (clicked) return;
-    hide();
+    if (effectivePortalTooltip) {
+      hovered = false;
+    } else {
+      hide();
+    }
   }}
   on:focus
   on:focus={() => {
     if (disabled) return;
-    show();
+    hidden = false;
+    if (effectivePortalTooltip) {
+      focused = true;
+    } else {
+      show();
+    }
   }}
   on:blur
   on:blur={() => {
-    hide();
+    if (effectivePortalTooltip) {
+      focused = false;
+    } else {
+      hide();
+    }
   }}
 >
-  <span {id} class:bx--assistive-text={true} style:pointer-events="none">
-    <slot name="tooltipText">{tooltipText}</slot>
-  </span>
-  <slot> <svelte:component this={icon} {size} /> </slot>
+  {#if !effectivePortalTooltip}
+    <span {id} class:bx--assistive-text={true} style:pointer-events="none">
+      <slot name="tooltipText">{tooltipText}</slot>
+    </span>
+  {/if}
+  <slot><svelte:component this={icon} {size} /></slot>
 </button>
+
+{#if effectivePortalTooltip}
+  <PortalTooltip
+    anchor={ref}
+    {direction}
+    open={portalOpen}
+    text={tooltipText}
+    tooltipType="icon"
+    horizontalGapLeft={portalHorizontalGapLeft}
+    horizontalGapRight={portalHorizontalGapRight}
+    gapTop={portalGapTop}
+    gapBottom={portalGapBottom}
+    verticalAlignOffsetLeft={portalVerticalAlignOffsetLeft}
+    verticalAlignOffsetRight={portalVerticalAlignOffsetRight}
+    intrinsicAlign={align}
+    {id}
+  >
+    <slot name="tooltipText">{tooltipText}</slot>
+  </PortalTooltip>
+{/if}

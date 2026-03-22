@@ -6,6 +6,7 @@ import { user } from "../setup-tests";
 import TooltipIconSize from "./TooltipIcon.size.test.svelte";
 import TooltipIcon from "./TooltipIcon.test.svelte";
 import TooltipIconMultiple from "./TooltipIconMultiple.test.svelte";
+import TooltipIconPortal from "./TooltipIconPortal.test.svelte";
 import TooltipIconReactive from "./TooltipIconReactive.test.svelte";
 
 type Props = ComponentProps<TooltipIconSource>;
@@ -348,6 +349,48 @@ describe("TooltipIcon", () => {
       // After mouseleave, both are hidden (no tooltip is open).
       expect(btnA).toHaveClass("bx--tooltip--hidden");
       expect(btnB).toHaveClass("bx--tooltip--hidden");
+    });
+  });
+
+  describe("portal tooltip", () => {
+    it("should render tooltip content in a portal when hovered", async () => {
+      render(TooltipIconPortal);
+
+      const buttons = screen.getAllByRole("button");
+      // TooltipIconPortal order: top, right, bottom, left
+      await user.hover(buttons[2]);
+
+      expect(screen.getByText("Portal tooltip bottom")).toBeInTheDocument();
+    });
+
+    it("should not render assistive text span when using portal", () => {
+      render(TooltipIcon, {
+        props: { portalTooltip: true },
+      });
+
+      const button = screen.getByRole("button");
+      const assistiveText = button.querySelector(".bx--assistive-text");
+      expect(assistiveText).not.toBeInTheDocument();
+    });
+
+    it("should not apply CSS tooltip classes when using portal", () => {
+      render(TooltipIcon, {
+        props: { portalTooltip: true, direction: "top" },
+      });
+
+      const button = screen.getByRole("button");
+      expect(button).not.toHaveClass("bx--tooltip--a11y");
+      expect(button).not.toHaveClass("bx--tooltip--top");
+    });
+
+    it("should add portal-active class on trigger when using portal", () => {
+      render(TooltipIcon, {
+        props: { portalTooltip: true },
+      });
+
+      expect(screen.getByRole("button")).toHaveClass(
+        "bx--tooltip--portal-active",
+      );
     });
   });
 

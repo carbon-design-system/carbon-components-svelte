@@ -9,7 +9,7 @@
   // Suppress the default CSS pseudo-element tooltip when a portal tooltip is active.
   .#{$prefix}--tooltip--portal-active::before,
   .#{$prefix}--tooltip--portal-active::after {
-    display: none !important;
+    display: none;
   }
 
   .#{$prefix}--tooltip-portal {
@@ -19,28 +19,92 @@
     pointer-events: none;
   }
 
-  .#{$prefix}--tooltip-portal[data-direction='top'] {
+  [data-floating-portal][data-floating-direction='top'] .#{$prefix}--tooltip-portal {
     flex-direction: column-reverse;
   }
 
+  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='start']
+    .#{$prefix}--tooltip-portal,
+  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='start']
+    .#{$prefix}--tooltip-portal,
+  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='end']
+    .#{$prefix}--tooltip-portal,
+  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='end']
+    .#{$prefix}--tooltip-portal {
+    align-items: flex-start;
+  }
+
+  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='end']
+    .#{$prefix}--tooltip-portal__content,
+  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='end']
+    .#{$prefix}--tooltip-portal__content {
+    align-self: flex-end;
+  }
+
+  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='start']
+    .#{$prefix}--tooltip-portal__caret,
+  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='start']
+    .#{$prefix}--tooltip-portal__caret,
+  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='end']
+    .#{$prefix}--tooltip-portal__caret,
+  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='end']
+    .#{$prefix}--tooltip-portal__caret {
+    margin-left: calc(var(--ccs-tooltip-caret-nudge) - 0.3125rem);
+  }
+
+  [data-floating-portal][data-floating-direction='right'] .#{$prefix}--tooltip-portal {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  [data-floating-portal][data-floating-direction='left'] .#{$prefix}--tooltip-portal {
+    flex-direction: row-reverse;
+    align-items: center;
+  }
+
+  .#{$prefix}--tooltip-portal[data-tooltip-type='definition'] {
+    filter: drop-shadow(0 2px 6px var(--cds-shadow, rgba(0, 0, 0, 0.3)));
+  }
+
   .#{$prefix}--tooltip-portal__caret {
+    flex-shrink: 0;
     width: 0;
     height: 0.75rem;
     border-right: 0.3125rem solid transparent;
     border-bottom: 0.3125rem solid $inverse-02;
     border-left: 0.3125rem solid transparent;
+    border-top: 0 solid transparent;
   }
 
-  .#{$prefix}--tooltip-portal[data-direction='top']
+  [data-floating-portal][data-floating-direction='top']
     .#{$prefix}--tooltip-portal__caret {
     border-top: 0.3125rem solid $inverse-02;
     border-bottom: none;
   }
 
-  // Suppress the default CSS feedback tooltip on copy buttons when a portal is active.
+  [data-floating-portal][data-floating-direction='right']
+    .#{$prefix}--tooltip-portal__caret {
+    width: 0.75rem;
+    height: 0;
+    border-top: 0.3125rem solid transparent;
+    border-right: 0.3125rem solid $inverse-02;
+    border-bottom: 0.3125rem solid transparent;
+    border-left: 0;
+  }
+
+  [data-floating-portal][data-floating-direction='left']
+    .#{$prefix}--tooltip-portal__caret {
+    width: 0.75rem;
+    height: 0;
+    border-top: 0.3125rem solid transparent;
+    border-right: 0;
+    border-bottom: 0.3125rem solid transparent;
+    border-left: 0.3125rem solid $inverse-02;
+  }
+
   .#{$prefix}--copy-btn--portal-active::before,
   .#{$prefix}--copy-btn--portal-active .#{$prefix}--copy-btn__feedback {
-    display: none !important;
+    display: none;
   }
 
   .#{$prefix}--tooltip-portal__content {
@@ -58,14 +122,31 @@
     text-align: center;
   }
 
-  // Match Carbon definition-tooltip content (tooltip--content('definition')) for portalled
-  // tooltips, which are not descendants of .bx--tooltip__trigger... .bx--assistive-text.
   .#{$prefix}--tooltip-portal[data-tooltip-type='definition']
     .#{$prefix}--tooltip-portal__content {
     @include tooltip--content('definition');
 
+    box-shadow: none;
     position: static;
     z-index: auto;
+    transform: none;
+    opacity: 1;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    min-height: unset;
+    box-sizing: content-box;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .#{$prefix}--tooltip-portal[data-tooltip-type='icon']
+    .#{$prefix}--tooltip-portal__content {
+    @include tooltip--content('icon');
+
+    box-shadow: 0 2px 6px var(--cds-shadow, rgba(0, 0, 0, 0.3));
+    position: static;
+    z-index: 1;
     transform: none;
     opacity: 1;
     pointer-events: none;
