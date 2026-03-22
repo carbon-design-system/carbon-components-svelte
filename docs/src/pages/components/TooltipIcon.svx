@@ -49,3 +49,32 @@ Use the `tooltipText` slot to customize the tooltip content with additional styl
 Set `disabled` to `true` to prevent user interaction with the tooltip.
 
 <TooltipIcon disabled tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
+
+## Portal tooltip
+
+Use `portalTooltip` to render the tooltip in a portal, preventing it from being clipped by `overflow: hidden` containers. This is automatically enabled when the tooltip is inside a `Modal`. The `direction` and `align` props are respected when portalled, matching non-portal positioning.
+
+<TooltipIcon portalTooltip tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
+
+## Portal (direction)
+
+Icon tooltips support `top`, `right`, `bottom`, and `left`. With `portalTooltip`, `direction` behaves the same as the default CSS path.
+
+<TooltipIcon portalTooltip direction="top" tooltipText="Top" icon={Carbon} />
+<TooltipIcon portalTooltip direction="right" tooltipText="Right" icon={Carbon} />
+<TooltipIcon portalTooltip direction="bottom" tooltipText="Bottom" icon={Carbon} />
+<TooltipIcon portalTooltip direction="left" tooltipText="Left" icon={Carbon} />
+
+## Portal (alignment)
+
+Portalled tooltips use the same `align` prop as the non-portal path: horizontal placement along the anchor for `top` and `bottom`, and vertical placement for `left` and `right`.
+
+<TooltipIcon portalTooltip direction="bottom" align="start" tooltipText="Start" icon={Carbon} />
+<TooltipIcon portalTooltip direction="bottom" align="center" tooltipText="Center" icon={Carbon} />
+<TooltipIcon portalTooltip direction="bottom" align="end" tooltipText="End" icon={Carbon} />
+
+## Inside a modal
+
+When a tooltip icon is used inside a [Modal](/components/Modal), it is automatically rendered in a portal so it is not clipped by the modal's overflow or z-index stacking. Set `portalTooltip` to explicitly control this behavior.
+
+<FileSource src="/framed/TooltipIcon/TooltipIconModal" />
