@@ -3,6 +3,10 @@
    * @generics {Icon = any} Icon
    */
 
+  import { onMount } from "svelte";
+  import { get } from "svelte/store";
+  import { activeTooltipIcon } from "./tooltip-icon-store.js";
+
   /**
    * Specify the tooltip text.
    * Alternatively, use the "tooltipText" slot.
@@ -43,13 +47,29 @@
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
+  const tooltipId = {};
+
   let hidden = false;
+
+  $: tooltipHidden =
+    $activeTooltipIcon !== null && $activeTooltipIcon !== tooltipId;
+
+  onMount(() => {
+    return () => {
+      if (get(activeTooltipIcon) === tooltipId) {
+        activeTooltipIcon.set(null);
+      }
+    };
+  });
 </script>
 
 <svelte:window
   on:keydown={({ key }) => {
     if (key === "Escape") {
       hidden = true;
+      if ($activeTooltipIcon === tooltipId) {
+        activeTooltipIcon.set(null);
+      }
     }
   }}
 />
@@ -61,7 +81,7 @@
   aria-describedby={id}
   class:bx--tooltip__trigger={true}
   class:bx--tooltip--a11y={true}
-  class:bx--tooltip--hidden={hidden || disabled}
+  class:bx--tooltip--hidden={hidden || disabled || tooltipHidden}
   class:bx--tooltip--top={direction === "top"}
   class:bx--tooltip--right={direction === "right"}
   class:bx--tooltip--bottom={direction === "bottom"}
@@ -77,15 +97,22 @@
   on:mouseenter={() => {
     if (disabled) return;
     hidden = false;
+    activeTooltipIcon.set(tooltipId);
   }}
   on:mouseleave
+  on:mouseleave={() => {
+    if ($activeTooltipIcon === tooltipId) {
+      activeTooltipIcon.set(null);
+    }
+  }}
   on:focus
   on:focus={() => {
     if (disabled) return;
     hidden = false;
+    activeTooltipIcon.set(tooltipId);
   }}
 >
-  <span {id} class:bx--assistive-text={true}>
+  <span {id} class:bx--assistive-text={true} style:pointer-events="none">
     <slot name="tooltipText">{tooltipText}</slot>
   </span>
   <slot> <svelte:component this={icon} {size} /> </slot>
