@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import TooltipDefinition from "./TooltipDefinition.test.svelte";
+import TooltipDefinitionPortal from "./TooltipDefinitionPortal.test.svelte";
 
 describe("TooltipDefinition", () => {
   let consoleLog: Console["log"];
@@ -214,5 +215,41 @@ describe("TooltipDefinition", () => {
 
     expect(trigger).toHaveAttribute("aria-describedby", tooltip.id);
     expect(tooltip).toHaveClass("bx--assistive-text");
+  });
+
+  describe("portal tooltip", () => {
+    it("should render tooltip content in a portal when open", () => {
+      render(TooltipDefinitionPortal);
+
+      expect(screen.getByText("Portal tooltip bottom")).toBeInTheDocument();
+    });
+
+    it("should not render assistive text div when using portal", () => {
+      render(TooltipDefinition, {
+        props: { portalTooltip: true },
+      });
+
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    });
+
+    it("should not apply CSS tooltip classes when using portal", () => {
+      render(TooltipDefinition, {
+        props: { portalTooltip: true, direction: "top" },
+      });
+
+      const trigger = screen.getByText("Tooltip trigger");
+      expect(trigger).not.toHaveClass("bx--tooltip--a11y");
+      expect(trigger).not.toHaveClass("bx--tooltip--top");
+    });
+
+    it("should add portal-active class on trigger when using portal", () => {
+      render(TooltipDefinition, {
+        props: { portalTooltip: true },
+      });
+
+      expect(screen.getByText("Tooltip trigger")).toHaveClass(
+        "bx--tooltip--portal-active",
+      );
+    });
   });
 });

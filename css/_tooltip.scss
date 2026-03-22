@@ -2,6 +2,7 @@
 // overflow containers (e.g., inside modals).
 
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/tooltip";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 @mixin tooltip-portal {
@@ -55,6 +56,25 @@
     font-size: 0.875rem;
     font-weight: 400;
     text-align: center;
+  }
+
+  // Match Carbon definition-tooltip content (tooltip--content('definition')) for portalled
+  // tooltips, which are not descendants of .bx--tooltip__trigger... .bx--assistive-text.
+  .#{$prefix}--tooltip-portal[data-tooltip-type='definition']
+    .#{$prefix}--tooltip-portal__content {
+    @include tooltip--content('definition');
+
+    position: static;
+    z-index: auto;
+    transform: none;
+    opacity: 1;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    min-height: unset;
+    box-sizing: content-box;
+    white-space: normal;
+    word-break: break-word;
   }
 }
 

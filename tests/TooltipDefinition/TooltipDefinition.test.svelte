@@ -8,6 +8,7 @@
   export let id = "test-tooltip";
   export let clickToOpen = false;
   export let triggerContent = "Tooltip trigger";
+  export let portalTooltip: boolean | undefined = undefined;
 </script>
 
 <TooltipDefinition
@@ -17,6 +18,7 @@
   {direction}
   {id}
   {clickToOpen}
+  {portalTooltip}
   on:open={() => {
     console.log("open");
   }}
