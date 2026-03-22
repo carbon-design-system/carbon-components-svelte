@@ -119,6 +119,22 @@ This example accepts files up to 1 MB (1,048,576 bytes). Files over the limit ar
 
 <FileSource src="/framed/FileUploader/FileUploaderMaxFileSize" />
 
+## File ordering (prepend)
+
+By default, new files are appended to the end of the list.
+
+Set `orderFiles` to `"prepend"` to show the newest uploads first instead of appending them to the end.
+
+<FileSource src="/framed/FileUploader/FileUploaderOrderFilesPrepend" />
+
+## File ordering (custom)
+
+Pass a custom function to `orderFiles` for full control over the file list order. The function receives `(existingFiles, addedFiles)` and returns the merged array.
+
+This example sorts all files by `lastModified`, newest first.
+
+<FileSource src="/framed/FileUploader/FileUploaderOrderFilesCustom" />
+
 ## Duplicate detection
 
 Set `preventDuplicate` to `true` to reject files that match an already-selected file (detected using the file's name, size, and lastModified). Rejected duplicates are reported via the `rejected` event with `reason: "duplicate"`.
