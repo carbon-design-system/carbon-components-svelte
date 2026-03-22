@@ -840,6 +840,89 @@ describe("FileUploader", () => {
     expect(rejectedHandler).not.toHaveBeenCalled();
   });
 
+  it("should prepend new files when orderFiles is 'prepend'", async () => {
+    const { component } = render(FileUploader, {
+      props: { multiple: true, orderFiles: "prepend" },
+    });
+
+    const fileA = new File(["a"], "a.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [fileA]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("a.txt")).toBeInTheDocument();
+    });
+
+    const fileB = new File(["b"], "b.txt", { type: "text/plain" });
+    simulateFileSelection(input, [fileB]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("b.txt")).toBeInTheDocument();
+    });
+
+    const fileNames = screen
+      .queryAllByText(/\.txt$/)
+      .map((el) => el.textContent);
+    expect(fileNames).toEqual(["b.txt", "a.txt"]);
+  });
+
+  it("should append new files by default (orderFiles='append')", async () => {
+    const { component } = render(FileUploader, {
+      props: { multiple: true },
+    });
+
+    const fileA = new File(["a"], "a.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [fileA]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("a.txt")).toBeInTheDocument();
+    });
+
+    const fileB = new File(["b"], "b.txt", { type: "text/plain" });
+    simulateFileSelection(input, [fileB]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("b.txt")).toBeInTheDocument();
+    });
+
+    const fileNames = screen
+      .queryAllByText(/\.txt$/)
+      .map((el) => el.textContent);
+    expect(fileNames).toEqual(["a.txt", "b.txt"]);
+  });
+
+  it("should support a custom orderFiles function", async () => {
+    const orderFiles = (
+      existing: ReadonlyArray<File>,
+      added: ReadonlyArray<File>,
+    ) => [...existing, ...added].sort((a, b) => a.name.localeCompare(b.name));
+
+    const { component } = render(FileUploader, {
+      props: { multiple: true, orderFiles },
+    });
+
+    const fileB = new File(["b"], "banana.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [fileB]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("banana.txt")).toBeInTheDocument();
+    });
+
+    const fileA = new File(["a"], "apple.txt", { type: "text/plain" });
+    simulateFileSelection(input, [fileA]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("apple.txt")).toBeInTheDocument();
+    });
+
+    const fileNames = screen
+      .queryAllByText(/\.txt$/)
+      .map((el) => el.textContent);
+    expect(fileNames).toEqual(["apple.txt", "banana.txt"]);
+  });
+
   it("should use per-file labels when iconDescription is a function", async () => {
     const file1 = new File(["a"], "file1.txt", { type: "text/plain" });
     const file2 = new File(["b"], "file2.txt", { type: "text/plain" });

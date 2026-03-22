@@ -52,6 +52,15 @@
   export let preventDuplicate = false;
 
   /**
+   * Control how newly added files are ordered in the list.
+   * - `"append"` (default): new files appear at the end
+   * - `"prepend"`: new files appear at the beginning
+   * - A custom function receiving (existingFiles, newFiles) that returns the merged array
+   * @type {"append" | "prepend" | ((existing: ReadonlyArray<File>, added: ReadonlyArray<File>) => ReadonlyArray<File>)}
+   */
+  export let orderFiles = "append";
+
+  /**
    * Programmatically clear the uploaded files.
    * @type {() => void}
    * @example
@@ -205,6 +214,7 @@
     on:change={(e) => {
       let newFiles = e.detail;
       const allRejected = [];
+      const existingRefs = new Set(prevFiles);
 
       if (maxFileSize !== undefined) {
         const rejected = newFiles.filter((file) => file.size > maxFileSize);
@@ -221,7 +231,6 @@
         // In multiple mode, newFiles includes re-sent existing files
         // (same reference) plus newly selected ones. Only reject new
         // objects that match an existing file by content.
-        const existingRefs = new Set(prevFiles);
         const existingKeys = new Set(
           prevFiles.map((f) => `${f.name}\0${f.size}\0${f.lastModified}`),
         );
@@ -242,8 +251,18 @@
         dispatch("rejected", allRejected);
       }
 
-      files = newFiles;
-      dispatch("change", newFiles);
+      const carried = newFiles.filter((f) => existingRefs.has(f));
+      const added = newFiles.filter((f) => !existingRefs.has(f));
+
+      if (typeof orderFiles === "function") {
+        files = orderFiles(carried, added);
+      } else if (orderFiles === "prepend") {
+        files = [...added, ...carried];
+      } else {
+        files = [...carried, ...added];
+      }
+
+      dispatch("change", files);
     }}
   />
   <div class:bx--file-container={true}>
