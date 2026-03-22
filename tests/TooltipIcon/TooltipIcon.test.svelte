@@ -10,6 +10,7 @@
   export let id = "test-tooltip";
   export let icon = Carbon;
   export let size = 16;
+  export let portalTooltip: boolean | undefined = undefined;
 </script>
 
 <TooltipIcon
@@ -21,6 +22,7 @@
   {id}
   {icon}
   {size}
+  {portalTooltip}
   on:click
   on:mouseover
   on:mouseenter
