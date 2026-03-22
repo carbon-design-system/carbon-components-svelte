@@ -12,6 +12,24 @@ Create a basic skeleton placeholder with default styling.
 
 ## Custom size
 
-Specify custom dimensions using the `style` prop.
+Use the `size` prop to set both width and height.
 
-<SkeletonPlaceholder style="height: 12rem; width: 12rem;" />
+<SkeletonPlaceholder size="8rem" />
+
+## Custom size (number)
+
+Number values default to pixels.
+
+<SkeletonPlaceholder size={128} />
+
+## Custom width and height
+
+Use the `width` and `height` props for different dimensions.
+
+<SkeletonPlaceholder width="20rem" height="10rem" />
+
+## Custom width and height (number)
+
+Number values default to pixels.
+
+<SkeletonPlaceholder width={320} height={160} />
