@@ -18,6 +18,7 @@
   export let horizontalGapRight = 0;
   export let verticalAlignOffsetLeft = 0;
   export let verticalAlignOffsetRight = 0;
+  export let intrinsicAlign: "start" | "center" | "end" = "center";
 </script>
 
 {#if scrollableContainer}
@@ -44,6 +45,7 @@
   {horizontalGapRight}
   {verticalAlignOffsetLeft}
   {verticalAlignOffsetRight}
+  {intrinsicAlign}
   bind:ref
 >
   {content}
