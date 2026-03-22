@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { TooltipIcon as TooltipIconSource } from "carbon-components-svelte";
 import type TooltipIconComponent from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import TooltipIconSize from "./TooltipIcon.size.test.svelte";
 import TooltipIcon from "./TooltipIcon.test.svelte";
+import TooltipIconMultiple from "./TooltipIconMultiple.test.svelte";
 
 type Props = ComponentProps<TooltipIconSource>;
 
@@ -154,6 +155,47 @@ describe("TooltipIcon", () => {
       expectTypeOf<24>().toExtend<Props["size"]>();
       expectTypeOf<32>().toExtend<Props["size"]>();
       expectTypeOf<number>().toExtend<NonNullable<Props["size"]>>();
+    });
+  });
+
+  describe("adjacent tooltip icons", () => {
+    it("should only show one tooltip at a time when hovering between icons", async () => {
+      render(TooltipIconMultiple);
+
+      const btnA = screen.getByTestId("tooltip-a");
+      const btnB = screen.getByTestId("tooltip-b");
+      const btnC = screen.getByTestId("tooltip-c");
+
+      // Initially no button should have bx--tooltip--hidden.
+      expect(btnA).not.toHaveClass("bx--tooltip--hidden");
+      expect(btnB).not.toHaveClass("bx--tooltip--hidden");
+      expect(btnC).not.toHaveClass("bx--tooltip--hidden");
+
+      // Hover tooltip A: others should get bx--tooltip--hidden.
+      await fireEvent.mouseEnter(btnA);
+      expect(btnA).not.toHaveClass("bx--tooltip--hidden");
+      expect(btnB).toHaveClass("bx--tooltip--hidden");
+      expect(btnC).toHaveClass("bx--tooltip--hidden");
+
+      // Hover tooltip B: A and C should get bx--tooltip--hidden.
+      await fireEvent.mouseEnter(btnB);
+      expect(btnA).toHaveClass("bx--tooltip--hidden");
+      expect(btnB).not.toHaveClass("bx--tooltip--hidden");
+      expect(btnC).toHaveClass("bx--tooltip--hidden");
+    });
+
+    it("should clear tooltip hidden state on mouseleave", async () => {
+      render(TooltipIconMultiple);
+
+      const btnA = screen.getByTestId("tooltip-a");
+      const btnB = screen.getByTestId("tooltip-b");
+
+      await fireEvent.mouseEnter(btnA);
+      expect(btnB).toHaveClass("bx--tooltip--hidden");
+
+      await fireEvent.mouseLeave(btnA);
+      expect(btnA).not.toHaveClass("bx--tooltip--hidden");
+      expect(btnB).not.toHaveClass("bx--tooltip--hidden");
     });
   });
 
