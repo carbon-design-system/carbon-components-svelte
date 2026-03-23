@@ -10,7 +10,6 @@ import Prism from "prismjs";
 import rehypeSlug from "rehype-slug";
 import { parse } from "svelte/compiler";
 import visit from "unist-util-visit";
-import pkg from "../package.json" with { type: "json" };
 import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
 import "prismjs/components/prism-markup.js";
 import "prismjs/components/prism-css.js";
@@ -28,8 +27,6 @@ const componentApiByName = new Set(
 const ICON_NAME_REGEX = /[A-Z][a-z]*/;
 const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
-const GIT_PREFIX_REGEX = /^git\+/;
-const GIT_SUFFIX_REGEX = /\.git$/;
 const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
 const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
 
@@ -351,21 +348,6 @@ function carbonify() {
 export default {
   extensions: [".svelte", ".svx"],
   preprocess: [
-    {
-      markup: ({ filename, content }) => {
-        if (NODE_MODULES_REGEX.test(filename) || !filename.endsWith(".svelte"))
-          return;
-        const repoUrl = pkg.repository?.url ?? "";
-        const normalizedRepoUrl = repoUrl
-          .replace(GIT_PREFIX_REGEX, "")
-          .replace(GIT_SUFFIX_REGEX, "");
-        return {
-          code: content
-            .replace(/process.env.VERSION/g, JSON.stringify(pkg.version))
-            .replace(/"REPO_URL"/g, JSON.stringify(normalizedRepoUrl)),
-        };
-      },
-    },
     mdsvex({
       smartypants: false,
       highlight: { highlighter: mdsvexPrismHighlighter },

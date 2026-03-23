@@ -98,7 +98,7 @@
 
     <span slot="platform" class="platform-name" class:hidden={active}>
       Carbon<span class="platform-name-full">&nbsp;Components</span>&nbsp;Svelte
-      &nbsp;<code class="code-01">v{process.env.VERSION || ""}</code>
+      &nbsp;<code class="code-01">v{__PKG_VERSION__}</code>
     </span>
     <HeaderUtilities>
       <HeaderSearch
