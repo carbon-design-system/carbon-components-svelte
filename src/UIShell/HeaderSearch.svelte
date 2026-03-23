@@ -300,7 +300,7 @@
     pointer-events: none;
   }
 
-  :global(.bx--header-search-button:hover) {
+  :global(.bx--header__action.bx--header-search-button:hover) {
     background-color: #4c4c4c;
   }
 
