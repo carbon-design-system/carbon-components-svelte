@@ -350,6 +350,30 @@ describe("TooltipIcon", () => {
       expect(btnA).toHaveClass("bx--tooltip--hidden");
       expect(btnB).toHaveClass("bx--tooltip--hidden");
     });
+
+    it("should skip enterDelayMs when moving from one tooltip to another (warm handoff)", async () => {
+      vi.useFakeTimers();
+
+      render(TooltipIconMultiple, {
+        props: { enterDelayMs: 200, leaveDelayMs: 0 },
+      });
+
+      const btnA = screen.getByTestId("tooltip-a");
+      const btnB = screen.getByTestId("tooltip-b");
+
+      // First tooltip requires the full delay.
+      await fireEvent.mouseEnter(btnA);
+      expect(btnA).toHaveClass("bx--tooltip--hidden");
+
+      await vi.advanceTimersByTimeAsync(200);
+      expect(btnA).not.toHaveClass("bx--tooltip--hidden");
+
+      // Moving to B should show instantly (warm handoff, no delay).
+      await fireEvent.mouseEnter(btnB);
+      expect(btnB).not.toHaveClass("bx--tooltip--hidden");
+
+      vi.useRealTimers();
+    });
   });
 
   describe("portal tooltip", () => {
@@ -391,6 +415,50 @@ describe("TooltipIcon", () => {
       expect(screen.getByRole("button")).toHaveClass(
         "bx--tooltip--portal-active",
       );
+    });
+  });
+
+  describe("enterDelayMs / leaveDelayMs", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("should delay showing tooltip on mouseenter by enterDelayMs", async () => {
+      render(TooltipIcon, {
+        props: { enterDelayMs: 200, leaveDelayMs: 0 },
+      });
+
+      const trigger = screen.getByRole("button");
+      await fireEvent.mouseEnter(trigger);
+
+      expect(trigger).toHaveClass("bx--tooltip--hidden");
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+    });
+
+    it("should delay hiding tooltip on mouseleave by leaveDelayMs", async () => {
+      render(TooltipIcon, {
+        props: { enterDelayMs: 0, leaveDelayMs: 200 },
+      });
+
+      const trigger = screen.getByRole("button");
+      await fireEvent.mouseEnter(trigger);
+
+      expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+
+      await fireEvent.mouseLeave(trigger);
+
+      expect(trigger).not.toHaveClass("bx--tooltip--hidden");
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(trigger).toHaveClass("bx--tooltip--hidden");
     });
   });
 
