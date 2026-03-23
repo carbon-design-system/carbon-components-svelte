@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { format as prettierFormat } from "prettier";
+import prettierPluginSvelte from "prettier-plugin-svelte";
 import { parse } from "svelte/compiler";
 import { BASE_URL, COMPONENTS_PATH, RAW_COMPONENTS_OUT_DIR } from "./constants";
 import { getComponentNames } from "./utils";
@@ -624,8 +625,9 @@ async function formatSvelteFences(markdown) {
         const injected = injectImportsIntoSvelteSnippet(c.code);
         const formatted = await prettierFormat(injected, {
           parser: "svelte",
+          plugins: [prettierPluginSvelte],
           svelteSortOrder: "scripts-markup-styles-options",
-        } as Parameters<typeof prettierFormat>[1]);
+        });
         return String(formatted).trimEnd();
       } catch {
         return null;
