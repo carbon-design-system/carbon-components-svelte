@@ -36,10 +36,10 @@ describe("Theme", () => {
       },
     };
     consoleLog = vi.spyOn(console, "log");
-    originalLocalStorage = global.localStorage;
+    originalLocalStorage = globalThis.localStorage;
     localStorageMock = {};
 
-    global.localStorage = {
+    globalThis.localStorage = {
       getItem: vi.fn((key) => localStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         localStorageMock[key] = value;
@@ -57,7 +57,7 @@ describe("Theme", () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    global.localStorage = originalLocalStorage;
+    globalThis.localStorage = originalLocalStorage;
     localStorage.clear();
     localStorageMock = {};
   });
