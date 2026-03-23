@@ -7,7 +7,7 @@ import { escapeSvelte, mdsvex } from "mdsvex";
 import { format } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
 import Prism from "prismjs";
-import slug from "remark-slug";
+import rehypeSlug from "rehype-slug";
 import { parse } from "svelte/compiler";
 import visit from "unist-util-visit";
 import pkg from "../package.json" with { type: "json" };
@@ -369,7 +369,8 @@ export default {
     mdsvex({
       smartypants: false,
       highlight: { highlighter: mdsvexPrismHighlighter },
-      remarkPlugins: [plugin, slug, carbonify],
+      remarkPlugins: [plugin, carbonify],
+      rehypePlugins: [rehypeSlug],
       layout: {
         _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
       },
