@@ -55,13 +55,13 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
-    "@types/bun": "^1.3.9",
-    "@types/node": "^25.2.3",
+    "@types/bun": "^1.3.11",
+    "@types/node": "^25.5.0",
     "autoprefixer": "^10.4.21",
     "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^13.7.0",
     "culls": "^0.2.0",
-    "jsdom": "^29.0.0",
+    "jsdom": "^29.0.1",
     "postcss": "^8.5.5",
     "prettier": "^3.8.1",
     "sass": "^1.49.11",
@@ -70,7 +70,7 @@
     "svelte": "^4.2.20",
     "svelte-check": "^4.4.5",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.1"
   },
   "standard-version": {
     "skip": {
