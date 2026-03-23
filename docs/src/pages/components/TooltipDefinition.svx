@@ -69,6 +69,14 @@ The component dispatches `open` and `close` events.
 
 <FileSource src="/framed/TooltipDefinition/TooltipDefinitionEvents" />
 
+## Custom delay
+
+Use `enterDelayMs` and `leaveDelayMs` to customize the delay before showing and hiding the tooltip on hover. The defaults are 100ms and 300ms, respectively.
+
+<TooltipDefinition tooltipText="Slow to appear" enterDelayMs={500} leaveDelayMs={500}>
+  Armonk
+</TooltipDefinition>
+
 ## Custom tooltip slot
 
 Use the `tooltip` slot to customize the tooltip content with additional styling or structure.
