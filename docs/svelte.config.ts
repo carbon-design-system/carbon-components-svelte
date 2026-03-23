@@ -5,6 +5,7 @@ import { walk } from "estree-walker";
 import type { Blockquote, List, Paragraph } from "mdast";
 import { escapeSvelte, mdsvex } from "mdsvex";
 import { format } from "prettier";
+import prettierPluginSvelte from "prettier-plugin-svelte";
 import Prism from "prismjs";
 import slug from "remark-slug";
 import { parse } from "svelte/compiler";
@@ -72,13 +73,11 @@ function mdsvexPrismHighlighter(
     : `<pre class="language-${classLang}"><code class="language-${classLang}">${highlighted}</code></pre>`;
 }
 
-/** Prettier 2 is sync; some `@types/prettier` versions type `format` as async. */
-function formatCode(
-  code: string,
-  options: Parameters<typeof format>[1],
-): string {
-  return format(code, options) as unknown as string;
-}
+const prettierSvelte = {
+  parser: "svelte" as const,
+  plugins: [prettierPluginSvelte],
+  svelteSortOrder: "scripts-markup-styles-options" as const,
+};
 
 function createImports(source: string) {
   const inlineComponents = new Set<string>();
@@ -140,7 +139,7 @@ function createImports(source: string) {
 
 function plugin() {
   /** mdsvex / remark can surface `html` nodes that carry fenced-block metadata on `lang`. */
-  function visitor(
+  async function visitHtml(
     node: { lang?: string; value: string } & import("unist").Node,
   ) {
     if (
@@ -149,10 +148,10 @@ function plugin() {
       !node.value.startsWith("<script>")
     ) {
       const scriptBlock = createImports(node.value);
-      const formattedCode = formatCode(scriptBlock + node.value, {
-        parser: "svelte",
-        svelteSortOrder: "scripts-markup-styles-options",
-      });
+      const formattedCode = await format(
+        scriptBlock + node.value,
+        prettierSvelte,
+      );
       const highlightedCode = Prism.highlight(
         formattedCode,
         Prism.languages.svelte,
@@ -170,9 +169,7 @@ function plugin() {
         path.join("src/pages", `${src}.svelte`),
         "utf-8",
       );
-      const formattedCode = formatCode(sourceCode, {
-        parser: "svelte",
-      });
+      const formattedCode = await format(sourceCode, prettierSvelte);
       const highlightedCode = Prism.highlight(
         formattedCode,
         Prism.languages.svelte,
@@ -183,8 +180,12 @@ function plugin() {
     }
   }
 
-  return (tree) => {
-    visit(tree, "html", visitor);
+  return async (tree) => {
+    const jobs: Promise<void>[] = [];
+    visit(tree, "html", (node) => {
+      jobs.push(visitHtml(node as Parameters<typeof visitHtml>[0]));
+    });
+    await Promise.all(jobs);
   };
 }
 
