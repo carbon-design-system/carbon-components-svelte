@@ -10,6 +10,8 @@
     <div style="margin: 50px;">
       <TooltipIcon
         portalTooltip
+        enterDelayMs={0}
+        leaveDelayMs={0}
         tooltipText="Portal tooltip {direction}"
         {direction}
         icon={Carbon}

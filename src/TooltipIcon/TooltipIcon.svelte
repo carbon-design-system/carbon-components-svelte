@@ -52,6 +52,18 @@
   /** Set an id for the span element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
+  /**
+   * Specify the duration in milliseconds to delay before displaying the tooltip.
+   * @type {number}
+   */
+  export let enterDelayMs = 100;
+
+  /**
+   * Specify the duration in milliseconds to delay before hiding the tooltip.
+   * @type {number}
+   */
+  export let leaveDelayMs = 300;
+
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
@@ -68,6 +80,20 @@
 
   let isInitialRender = true;
   let clicked = false;
+  let openTimeout;
+
+  function setOpenDelayed(value, delay = 0) {
+    clearTimeout(openTimeout);
+    if (delay > 0) {
+      openTimeout = setTimeout(() => {
+        if (value) show();
+        else hide();
+      }, delay);
+    } else {
+      if (value) show();
+      else hide();
+    }
+  }
 
   const insideModal = getContext("carbon:Modal");
 
@@ -154,6 +180,7 @@
 
   onMount(() => {
     return () => {
+      clearTimeout(openTimeout);
       if (get(activeTooltipIcon) === tooltipId) {
         activeTooltipIcon.set(null);
       }
@@ -208,19 +235,35 @@
   on:mouseenter={() => {
     if (disabled) return;
     hidden = false;
+    // If immediately hovering over another tooltip icon, skip the delay.
+    const warmHandoff = $activeTooltipIcon !== null;
     if (effectivePortalTooltip) {
-      hovered = true;
+      clearTimeout(openTimeout);
+      if (!warmHandoff && enterDelayMs > 0) {
+        openTimeout = setTimeout(() => {
+          hovered = true;
+        }, enterDelayMs);
+      } else {
+        hovered = true;
+      }
     } else {
-      show();
+      setOpenDelayed(true, warmHandoff ? 0 : enterDelayMs);
     }
   }}
   on:mouseleave
   on:mouseleave={() => {
     if (clicked) return;
     if (effectivePortalTooltip) {
-      hovered = false;
+      clearTimeout(openTimeout);
+      if (leaveDelayMs > 0) {
+        openTimeout = setTimeout(() => {
+          hovered = false;
+        }, leaveDelayMs);
+      } else {
+        hovered = false;
+      }
     } else {
-      hide();
+      setOpenDelayed(false, leaveDelayMs);
     }
   }}
   on:focus

@@ -11,6 +11,8 @@
   export let icon = Carbon;
   export let size = 16;
   export let portalTooltip: boolean | undefined = undefined;
+  export let enterDelayMs = 0;
+  export let leaveDelayMs = 0;
 </script>
 
 <TooltipIcon
@@ -23,6 +25,8 @@
   {icon}
   {size}
   {portalTooltip}
+  {enterDelayMs}
+  {leaveDelayMs}
   on:click
   on:mouseover
   on:mouseenter
