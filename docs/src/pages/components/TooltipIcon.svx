@@ -44,6 +44,12 @@ Use the `tooltipText` slot to customize the tooltip content with additional styl
   <span slot="tooltipText" style="color: red">Carbon is an open source design system by IBM.</span>
 </TooltipIcon>
 
+## Custom delay
+
+Use `enterDelayMs` and `leaveDelayMs` to customize the delay before showing and hiding the tooltip on hover. The defaults are 100ms and 300ms, respectively.
+
+<TooltipIcon tooltipText="Slow to appear" icon={Carbon} enterDelayMs={500} leaveDelayMs={500} />
+
 ## Disabled state
 
 Set `disabled` to `true` to prevent user interaction with the tooltip.
