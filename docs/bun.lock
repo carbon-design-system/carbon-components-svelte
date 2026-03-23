@@ -11,7 +11,7 @@
         "estree-walker": "^3.0.3",
         "github-slugger": "^2.0.0",
         "mdast": "^3.0.0",
-        "mdsvex": "^0.12.3",
+        "mdsvex": "^0.12.7",
         "minisearch": "^7.1.0",
         "prettier": "^2.8.8",
         "prettier-plugin-svelte": "^2.10.1",
