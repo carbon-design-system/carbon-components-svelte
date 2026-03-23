@@ -31,8 +31,26 @@ jobs:
       - run: bun ci
       - run: bunx biome ci --error-on-warnings
 
+  changes:
+    runs-on: macos-15
+    outputs:
+      src-or-tests: ${{ steps.filter.outputs.src-or-tests }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            src-or-tests:
+              - 'src/**'
+              - 'tests/**'
+              - '.github/**'
+
   test-svelte4:
-    needs: [lint]
+    needs: [lint, changes]
+    if: needs.changes.outputs.src-or-tests == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -75,7 +93,8 @@ jobs:
         run: bun run test:e2e
 
   test-svelte3:
-    needs: [lint]
+    needs: [lint, changes]
+    if: needs.changes.outputs.src-or-tests == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -101,7 +120,8 @@ jobs:
           bun --bun run test
 
   test-svelte5:
-    needs: [lint]
+    needs: [lint, changes]
+    if: needs.changes.outputs.src-or-tests == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -139,7 +159,10 @@ jobs:
       - run: bun run test:src-types
 
   deploy-docs:
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master'
     needs: [lint, test-svelte4, types]
+    if: |
+      always() &&
+      (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master') &&
+      !failure() && !cancelled()
     uses: ./.github/workflows/deploy-docs.yml
     secrets: inherit
