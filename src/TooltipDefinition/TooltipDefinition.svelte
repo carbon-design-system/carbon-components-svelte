@@ -34,6 +34,18 @@
    */
   export let clickToOpen = false;
 
+  /**
+   * Specify the duration in milliseconds to delay before displaying the tooltip.
+   * @type {number}
+   */
+  export let enterDelayMs = 100;
+
+  /**
+   * Specify the duration in milliseconds to delay before hiding the tooltip.
+   * @type {number}
+   */
+  export let leaveDelayMs = 300;
+
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
@@ -45,7 +57,7 @@
    */
   export let portalTooltip = undefined;
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
 
   const insideModal = getContext("carbon:Modal");
@@ -57,6 +69,19 @@
   const PORTAL_VERTICAL_GAP_BOTTOM_PX = -3;
 
   const dispatch = createEventDispatcher();
+
+  let openTimeout;
+
+  function setOpenDelayed(value, delay = 0) {
+    clearTimeout(openTimeout);
+    if (delay > 0) {
+      openTimeout = setTimeout(() => {
+        open = value;
+      }, delay);
+    } else {
+      open = value;
+    }
+  }
 
   const hide = () => (open = false);
 
@@ -72,6 +97,12 @@
     }
     isInitialRender = false;
   }
+
+  onMount(() => {
+    return () => {
+      clearTimeout(openTimeout);
+    };
+  });
 </script>
 
 <svelte:window
@@ -85,8 +116,8 @@
   class:bx--tooltip--definition={true}
   class:bx--tooltip--a11y={true}
   {...$$restProps}
-  on:mouseenter={clickToOpen ? undefined : show}
-  on:mouseleave={hide}
+  on:mouseenter={clickToOpen ? undefined : () => setOpenDelayed(true, enterDelayMs)}
+  on:mouseleave={() => setOpenDelayed(false, leaveDelayMs)}
 >
   <button
     bind:this={ref}
