@@ -1,11 +1,5 @@
 <script>
-  import {
-    beforeUrlChange,
-    goto,
-    isActive,
-    layout,
-    url,
-  } from "@sveltech/routify";
+  import { beforeUrlChange, goto, isActive, node, url } from "@roxi/routify";
   import {
     Header,
     HeaderAction,
@@ -25,6 +19,7 @@
   } from "carbon-components-svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import MiniSearch from "minisearch";
+  import { onDestroy } from "svelte";
   import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import { theme } from "../store";
 
@@ -40,6 +35,13 @@
 
   miniSearch.addAll(SEARCH_INDEX);
 
+  /** Routify + Svelte 5: `$goto` in event handlers runs outside fragment context; keep a root-level subscription. */
+  let navigateTo;
+  const unsubGoto = goto.subscribe((fn) => {
+    navigateTo = fn;
+  });
+  onDestroy(unsubGoto);
+
   const deprecated = [];
   const new_components = [];
 
@@ -52,9 +54,7 @@
   let innerWidth = 2048;
 
   $: isMobile = innerWidth < 1056;
-  $: components = $layout.children.find(
-    (child) => child.title === "components",
-  );
+  $: components = $node.children.find((child) => child.name === "components");
 
   $beforeUrlChange(() => {
     if (isMobile) isSideNavOpen = false;
@@ -62,7 +62,7 @@
   });
 </script>
 
-<!-- routify:options bundle=true -->
+<!-- routify:meta bundle -->
 <svelte:window bind:innerWidth />
 
 <svelte:body
@@ -87,17 +87,7 @@
   }}
 />
 
-<Theme
-  persist
-  bind:theme={$theme}
-  on:update={(e) => {
-    const theme = e.detail.theme;
-    document.documentElement.style.setProperty(
-      "color-scheme",
-      ["white", "g10"].includes(theme) ? "light" : "dark",
-    );
-  }}
->
+<Theme persist bind:theme={$theme}>
   <Header
     aria-label="Navigation"
     href={$url("/")}
@@ -119,7 +109,13 @@
         {results}
         let:result
         on:select={(e) => {
-          $goto(e.detail.selectedResult.href);
+          const href = e.detail.selectedResult.href;
+          // Hash must not be part of the path: getChainTo treats "/" segments literally,
+          // so "Toolbar#slug" would not match the Toolbar route node.
+          const u = new URL(href, window.location.origin);
+          const path = u.pathname;
+          const hash = u.hash.slice(1);
+          navigateTo?.(path, hash ? { "#": hash } : undefined);
         }}
       >
         <Stack
@@ -142,6 +138,7 @@
         icon={LogoGithub}
         href="https://github.com/carbon-design-system/carbon-components-svelte"
         target="_blank"
+        aria-label="Carbon Components Svelte on GitHub"
       />
       <HeaderAction transition={false} bind:isOpen>
         <HeaderPanelLinks>
@@ -180,14 +177,14 @@
 
   <SideNav bind:isOpen={isSideNavOpen}>
     <SideNavItems>
-      {#each components.children.filter((child) => !deprecated.includes(child.title)) as child (child.path)}
+      {#each components.children.filter((child) => !deprecated.includes(child.name)) as child (child.path)}
         <SideNavMenuItem
-          text={child.title}
+          text={child.name}
           href={$url(child.path)}
           isSelected={$isActive($url(child.path))}
         >
-          {child.title}
-          {#if deprecated.includes(child.title)}
+          {child.name}
+          {#if deprecated.includes(child.name)}
             <Tag
               size="sm"
               type="red"
@@ -196,7 +193,7 @@
               Deprecated
             </Tag>
           {/if}
-          {#if new_components.includes(child.title)}
+          {#if new_components.includes(child.name)}
             <Tag
               size="sm"
               type="green"

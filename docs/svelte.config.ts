@@ -1,14 +1,21 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { mdsvex } from "mdsvex";
+import { walk } from "estree-walker";
+import type { Blockquote, List, Paragraph } from "mdast";
+import { escapeSvelte, mdsvex } from "mdsvex";
 import { format } from "prettier";
 import Prism from "prismjs";
 import slug from "remark-slug";
-import { parse, walk } from "svelte/compiler";
+import { parse } from "svelte/compiler";
 import visit from "unist-util-visit";
 import pkg from "../package.json" with { type: "json" };
 import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
+import "prismjs/components/prism-markup.js";
+import "prismjs/components/prism-css.js";
+import "prismjs/components/prism-clike.js";
+import "prismjs/components/prism-javascript.js";
+import "prismjs/components/prism-typescript.js";
 import "prism-svelte";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -25,32 +32,86 @@ const GIT_SUFFIX_REGEX = /\.git$/;
 const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
 const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
 
-function createImports(source) {
-  const inlineComponents = new Set();
-  const icons = new Set();
-  const actions = new Set();
+const MDSVEX_LANG_ALIASES = {
+  js: "javascript",
+  ts: "typescript",
+  html: "markup",
+  svg: "markup",
+} as const;
+
+function escapeHtmlText(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function mdsvexPrismHighlighter(
+  code: string,
+  lang: string | null | undefined,
+  _meta: string | null | undefined,
+  _filename?: string,
+  optimize = true,
+): string {
+  const raw = lang?.toLowerCase().trim() ?? "";
+  const classLang = raw || "text";
+  const grammarKey = raw ? (MDSVEX_LANG_ALIASES[raw] ?? raw) : "";
+  const grammar =
+    grammarKey && Prism.languages[grammarKey as keyof typeof Prism.languages]
+      ? Prism.languages[grammarKey as keyof typeof Prism.languages]
+      : null;
+
+  const inner = grammar
+    ? Prism.highlight(code, grammar, grammarKey)
+    : escapeHtmlText(code);
+  const highlighted = escapeSvelte(inner);
+
+  return optimize
+    ? `<pre class="language-${classLang}">{@html \`<code class="language-${classLang}">${highlighted}</code>\`}</pre>`
+    : `<pre class="language-${classLang}"><code class="language-${classLang}">${highlighted}</code></pre>`;
+}
+
+/** Prettier 2 is sync; some `@types/prettier` versions type `format` as async. */
+function formatCode(
+  code: string,
+  options: Parameters<typeof format>[1],
+): string {
+  return format(code, options) as unknown as string;
+}
+
+function createImports(source: string) {
+  const inlineComponents = new Set<string>();
+  const icons = new Set<string>();
+  const actions = new Set<string>();
 
   // heuristic to guess if the inline component or expression name is a Carbon icon
-  const isIcon = (text) =>
+  const isIcon = (text: string) =>
     ICON_NAME_REGEX.test(text) && !componentApiByName.has(text);
 
-  walk(parse(source), {
+  walk(parse(source) as unknown as Parameters<typeof walk>[0], {
     enter(node) {
-      if (node.type === "InlineComponent") {
-        if (isIcon(node.name)) {
-          icons.add(node.name);
+      const n = node as {
+        type?: string;
+        name?: string;
+        expression?: { type?: string; name?: string };
+      };
+      if (n.type === "InlineComponent" && n.name) {
+        if (isIcon(n.name)) {
+          icons.add(n.name);
         } else {
-          inlineComponents.add(node.name);
+          inlineComponents.add(n.name);
         }
-      } else if (node.type === "MustacheTag") {
+      } else if (n.type === "MustacheTag" && n.expression) {
         if (
-          node.expression.type === "Identifier" &&
-          isIcon(node.expression.name)
+          n.expression.type === "Identifier" &&
+          n.expression.name &&
+          isIcon(n.expression.name)
         ) {
-          icons.add(node.expression.name);
+          icons.add(n.expression.name);
         }
-      } else if (node.type === "Action") {
-        actions.add(node.name);
+      } else if (n.type === "Action" && n.name) {
+        actions.add(n.name);
       }
     },
   });
@@ -78,14 +139,17 @@ function createImports(source) {
 }
 
 function plugin() {
-  function visitor(node) {
+  /** mdsvex / remark can surface `html` nodes that carry fenced-block metadata on `lang`. */
+  function visitor(
+    node: { lang?: string; value: string } & import("unist").Node,
+  ) {
     if (
       node.lang !== "svelte" &&
       !node.value.startsWith("<FileSource") &&
       !node.value.startsWith("<script>")
     ) {
       const scriptBlock = createImports(node.value);
-      const formattedCode = format(scriptBlock + node.value, {
+      const formattedCode = formatCode(scriptBlock + node.value, {
         parser: "svelte",
         svelteSortOrder: "scripts-markup-styles-options",
       });
@@ -106,7 +170,7 @@ function plugin() {
         path.join("src/pages", `${src}.svelte`),
         "utf-8",
       );
-      const formattedCode = format(sourceCode, {
+      const formattedCode = formatCode(sourceCode, {
         parser: "svelte",
       });
       const highlightedCode = Prism.highlight(
@@ -177,19 +241,21 @@ function serializeInlineNodes(nodes) {
 }
 
 function carbonify() {
-  return (tree) => {
+  return (tree: Parameters<typeof visit>[0]) => {
     visit(tree, (node, index, parent) => {
       switch (node.type) {
         case "link":
           node.data = { hProperties: { class: "bx--link" } };
           return;
-        case "list":
-          node.data = {
+        case "list": {
+          const list = node as List;
+          list.data = {
             hProperties: {
-              class: node.ordered ? "bx--list--ordered" : "bx--list--unordered",
+              class: list.ordered ? "bx--list--ordered" : "bx--list--unordered",
             },
           };
           return;
+        }
         case "listItem":
           node.data = { hProperties: { class: "bx--list__item" } };
           return;
@@ -202,13 +268,15 @@ function carbonify() {
       {
         if (!parent || index == null) return;
 
-        const firstChild = node.children[0];
+        const bq = node as Blockquote;
+        const firstChild = bq.children[0];
         if (!firstChild || firstChild.type !== "paragraph") return;
 
-        const first = firstChild.children[0];
+        const para = firstChild as Paragraph;
+        const first = para.children[0];
         if (!first) return;
 
-        let type = null;
+        let type: string | null = null;
 
         if (first.type === "text") {
           // [!NOTE] parsed as plain text
@@ -246,20 +314,24 @@ function carbonify() {
           return;
         }
 
-        const kind = NOTIFICATION_KINDS[type];
-        const title = NOTIFICATION_TITLES[type];
+        if (!type) return;
+
+        const kind =
+          NOTIFICATION_KINDS[type as keyof typeof NOTIFICATION_KINDS];
+        const title =
+          NOTIFICATION_TITLES[type as keyof typeof NOTIFICATION_TITLES];
         const icon = NOTIFICATION_ICONS[kind];
 
         // If the first paragraph is now empty, remove it
-        if (firstChild.children.length === 0) {
-          node.children.shift();
+        if (para.children.length === 0) {
+          bq.children.shift();
         }
 
         // Serialize paragraph children directly to avoid <p> wrappers
-        const body = node.children
+        const body = bq.children
           .map((child) =>
             child.type === "paragraph"
-              ? serializeInlineNodes(child.children)
+              ? serializeInlineNodes((child as Paragraph).children)
               : "",
           )
           .join("<br/>");
@@ -269,7 +341,7 @@ function carbonify() {
           value: `<div role="alert" class="bx--inline-notification bx--inline-notification--low-contrast bx--inline-notification--hide-close-button bx--inline-notification--${kind}"><div class="bx--inline-notification__details">${icon}<div class="bx--inline-notification__text-wrapper"><p class="bx--inline-notification__title">${title}</p><div class="body-short-01">${body}</div></div></div></div>`,
         };
 
-        parent.children.splice(index, 1, html);
+        (parent as { children: unknown[] }).children.splice(index, 1, html);
       }
     });
   };
@@ -295,6 +367,7 @@ export default {
     },
     mdsvex({
       smartypants: false,
+      highlight: { highlighter: mdsvexPrismHighlighter },
       remarkPlugins: [plugin, slug, carbonify],
       layout: {
         _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
@@ -305,7 +378,7 @@ export default {
         if (NODE_MODULES_REGEX.test(filename)) return null;
         if (!filename.match(PAGES_COMPONENTS_REGEX)) return null;
 
-        const toc = [];
+        const toc: { id: string; text: string }[] = [];
 
         for (const match of content.matchAll(H2_REGEX)) {
           toc.push({ id: match[1], text: match[2] });

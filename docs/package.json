@@ -1,42 +1,32 @@
 {
   "private": true,
   "scripts": {
-    "dev": "npm run index-docs && run-p dev:*",
-    "dev:routify": "cross-env NODE_ENV=development routify run",
-    "dev:svite": "vite dev",
-    "build": "run-s build:index-docs build:md-docs build:routify build:sitemap build:svite",
-    "index-docs": "node scripts/index-docs.js",
-    "build:index-docs": "node scripts/index-docs.js",
-    "build:md-docs": "node scripts/generate-md-docs.js",
-    "build:routify": "routify run -b",
-    "build:sitemap": "node scripts/generate-sitemap.js",
-    "build:svite": "vite build"
+    "dev": "bun scripts/index-docs.ts && vite dev",
+    "build": "bun run --sequential build:index-docs build:md-docs build:sitemap build:vite",
+    "index-docs": "bun scripts/index-docs.ts",
+    "build:index-docs": "bun scripts/index-docs.ts",
+    "build:md-docs": "bun scripts/generate-md-docs.ts",
+    "build:sitemap": "bun scripts/generate-sitemap.ts",
+    "build:vite": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "@sveltech/routify": "^1.9.10",
-    "@sveltejs/vite-plugin-svelte": "^3.1.2",
-    "carbon-components-svelte": "file:..",
+    "@roxi/routify": "^3.6.4",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "carbon-icons-svelte": "^13.3.0",
     "clipboard-copy": "^4.0.1",
-    "cross-env": "^7.0.3",
+    "estree-walker": "^3.0.3",
+    "github-slugger": "^2.0.0",
+    "mdast": "^3.0.0",
     "mdsvex": "^0.12.3",
     "minisearch": "^7.1.0",
-    "npm-run-all": "^4.1.5",
     "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.10.1",
     "prism-svelte": "^0.5.0",
     "prismjs": "^1.30.0",
     "remark-slug": "^6.1.0",
-    "svelte": "^4.2.19",
-    "vite": "^5.4.21"
-  },
-  "routify": {
-    "routifyDir": ".routify",
-    "dynamicImports": true,
-    "extensions": [
-      "svelte",
-      "svx"
-    ]
+    "svelte": "^5.54.1",
+    "vite": "^8.0.1"
   },
   "type": "module"
 }

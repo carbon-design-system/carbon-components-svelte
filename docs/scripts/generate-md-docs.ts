@@ -1,14 +1,48 @@
-// @ts-check
 import fs from "node:fs";
 import path from "node:path";
 import { format as prettierFormat } from "prettier";
-import { parse, walk } from "svelte/compiler";
-import {
-  BASE_URL,
-  COMPONENTS_PATH,
-  RAW_COMPONENTS_OUT_DIR,
-} from "./constants.js";
-import { getComponentNames } from "./utils.js";
+import { parse } from "svelte/compiler";
+import { BASE_URL, COMPONENTS_PATH, RAW_COMPONENTS_OUT_DIR } from "./constants";
+import { getComponentNames } from "./utils";
+
+type ComponentApiProp = {
+  name: string;
+  description?: string;
+  type?: string;
+  value?: unknown;
+  isRequired?: boolean;
+  reactive?: boolean;
+};
+
+type ComponentApiTypedef = {
+  ts?: string;
+};
+
+type ComponentApiSlot = {
+  default?: boolean;
+  name?: string | null;
+  slot_props?: string;
+};
+
+type ComponentApiEvent = {
+  type?: string;
+  name?: string;
+  detail?: string;
+  description?: string;
+};
+
+type ComponentApiEntry = {
+  moduleName: string;
+  props?: ComponentApiProp[];
+  typedefs?: ComponentApiTypedef[];
+  slots?: ComponentApiSlot[];
+  events?: ComponentApiEvent[];
+  rest_props?: { type: string; name: string };
+};
+
+type ComponentApiFile = {
+  components: ComponentApiEntry[];
+};
 
 const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---\s*\n/;
 const COMPONENTS_KEY_RE = /^components\s*:/m;
@@ -42,11 +76,9 @@ const ICON_NAME_RE = /[A-Z][a-z]*/;
 
 const componentApi = JSON.parse(
   fs.readFileSync(path.join("src", "COMPONENT_API.json"), "utf8"),
-);
+) as ComponentApiFile;
 
-/** @type {Record<string, true>} */
-const componentApiByName = componentApi.components.reduce(
-  /** @type {(acc: Record<string, true>, component: any) => Record<string, true>} */
+const componentApiByName = componentApi.components.reduce<Record<string, true>>(
   (a, c) => {
     a[c.moduleName] = true;
     return a;
@@ -54,7 +86,6 @@ const componentApiByName = componentApi.components.reduce(
   {},
 );
 
-/** @type {Map<string, any>} */
 const componentApiByModuleName = new Map(
   componentApi.components.map((c) => [c.moduleName, c]),
 );
@@ -105,7 +136,7 @@ function extractComponents(frontmatter) {
   }
 
   const listText = afterKey.slice(bracketStart, i);
-  const out = [];
+  const out: string[] = [];
   let match = QUOTED_COMPONENT_RE.exec(listText);
   while (match) {
     out.push(match[1] ?? match[2]);
@@ -329,8 +360,7 @@ function renderComponentApiMarkdown(moduleName) {
  */
 function inlineFileSources(body) {
   const lines = body.split("\n");
-  /** @type {string[]} */
-  const out = [];
+  const out: string[] = [];
 
   let inFence = false;
   const isFence = (line) => line.trimStart().startsWith("```");
@@ -377,56 +407,63 @@ function inlineFileSources(body) {
   return out.join("\n");
 }
 
-/**
- * @param {string} text
- */
-function isIconName(text) {
+function isIconName(text: string): boolean {
   return ICON_NAME_RE.test(text) && !(text in componentApiByName);
 }
 
-/**
- * @param {string} code
- */
-function injectImportsIntoSvelteSnippet(code) {
+/** Depth-first walk of legacy (`modern: false`) Svelte template AST nodes (no `svelte/compiler` walk in v5). */
+function walkLegacySvelteNode(
+  node: unknown,
+  enter: (n: Record<string, unknown>) => void,
+): void {
+  if (node === null || node === undefined || typeof node !== "object") return;
+  const n = node as Record<string, unknown>;
+  if (typeof n.type === "string") enter(n);
+  for (const v of Object.values(n)) {
+    if (Array.isArray(v)) {
+      for (const item of v) walkLegacySvelteNode(item, enter);
+    } else if (v !== null && typeof v === "object") {
+      walkLegacySvelteNode(v, enter);
+    }
+  }
+}
+
+function injectImportsIntoSvelteSnippet(code: string): string {
   const trimmed = code.trimStart();
   if (HAS_SCRIPT_TAG_RE.test(code)) return code;
   if (FILE_SOURCE_START_RE.test(trimmed)) return code;
 
-  const inlineComponents = new Set();
-  const icons = new Set();
-  const actions = new Set();
+  const inlineComponents = new Set<string>();
+  const icons = new Set<string>();
+  const actions = new Set<string>();
 
   try {
-    /** @type {any} */
-    const ast = parse(code);
-    walk(ast.html, {
-      /** @param {any} node */
-      enter(node) {
-        if (node.type === "InlineComponent") {
-          if (isIconName(node.name)) icons.add(node.name);
-          else inlineComponents.add(node.name);
-        } else if (node.type === "MustacheTag") {
-          if (
-            node.expression?.type === "Identifier" &&
-            isIconName(node.expression.name)
-          ) {
-            icons.add(node.expression.name);
-          }
-        } else if (node.type === "Action") {
-          actions.add(node.name);
+    const ast = parse(code, { modern: false }) as { html?: unknown };
+    const root = ast.html;
+    if (!root) return code;
+
+    walkLegacySvelteNode(root, (node) => {
+      if (node.type === "InlineComponent" && typeof node.name === "string") {
+        if (isIconName(node.name)) icons.add(node.name);
+        else inlineComponents.add(node.name);
+      } else if (node.type === "MustacheTag") {
+        const expr = node.expression as
+          | { type?: string; name?: string }
+          | undefined;
+        if (expr?.type === "Identifier" && expr.name && isIconName(expr.name)) {
+          icons.add(expr.name);
         }
-      },
+      } else if (node.type === "Action" && typeof node.name === "string") {
+        actions.add(node.name);
+      }
     });
   } catch {
     return code;
   }
 
-  const actionImports = Array.from(actions.keys());
-  const ccsImports = [
-    ...Array.from(inlineComponents.keys()),
-    ...actionImports,
-  ].filter(Boolean);
-  const iconImports = Array.from(icons.keys()).filter(Boolean);
+  const actionImports = [...actions];
+  const ccsImports = [...inlineComponents, ...actionImports].filter(Boolean);
+  const iconImports = [...icons].filter(Boolean);
 
   if (ccsImports.length === 0 && iconImports.length === 0) return code;
 
@@ -456,8 +493,7 @@ function injectImportsIntoSvelteSnippet(code) {
  */
 function fenceInlineSvelte(body) {
   const lines = body.split("\n");
-  /** @type {string[]} */
-  const out = [];
+  const out: string[] = [];
 
   let inCodeFence = false;
   let inSvelteFence = false;
@@ -527,14 +563,20 @@ function fenceInlineSvelte(body) {
 /**
  * @param {string} markdown
  */
+type MdChunk =
+  | { type: "line"; line: string }
+  | {
+      type: "fence";
+      open: string;
+      close: string | null;
+      lang: string;
+      code: string;
+    };
+
 async function formatSvelteFences(markdown) {
   const lines = markdown.split("\n");
-  /**
-   * @typedef {{ type: "line"; line: string } | { type: "fence"; open: string; close: string | null; lang: string; code: string }} Chunk
-   */
 
-  /** @type {Chunk[]} */
-  const chunks = [];
+  const chunks: MdChunk[] = [];
   const isFenceLine = (line) => line.trimStart().startsWith("```");
 
   for (let i = 0; i < lines.length; i++) {
@@ -548,9 +590,8 @@ async function formatSvelteFences(markdown) {
     const info = line.trim().slice(3).trim();
     const lang = info.split(WHITESPACE_RE)[0]?.toLowerCase() ?? "";
 
-    /** @type {string[]} */
-    const codeLines = [];
-    let close = null;
+    const codeLines: string[] = [];
+    let close: string | null = null;
 
     for (let j = i + 1; j < lines.length; j++) {
       if (isFenceLine(lines[j])) {
@@ -572,8 +613,9 @@ async function formatSvelteFences(markdown) {
     });
   }
 
-  /** @type {Extract<Chunk, { type: "fence" }>[]} */
-  const fenceChunks = chunks.filter((c) => c.type === "fence");
+  const fenceChunks = chunks.filter(
+    (c): c is Extract<MdChunk, { type: "fence" }> => c.type === "fence",
+  );
   const svelteFences = fenceChunks.filter((c) => c.lang === "svelte");
 
   const formattedCodes = await Promise.all(
@@ -583,7 +625,7 @@ async function formatSvelteFences(markdown) {
         const formatted = await prettierFormat(injected, {
           parser: "svelte",
           svelteSortOrder: "scripts-markup-styles-options",
-        });
+        } as Parameters<typeof prettierFormat>[1]);
         return String(formatted).trimEnd();
       } catch {
         return null;
@@ -591,8 +633,7 @@ async function formatSvelteFences(markdown) {
     }),
   );
 
-  /** @type {string[]} */
-  const out = [];
+  const out: string[] = [];
   let formattedIdx = 0;
 
   for (const chunk of chunks) {
@@ -604,10 +645,11 @@ async function formatSvelteFences(markdown) {
     out.push(chunk.open);
     if (chunk.lang === "svelte") {
       const formatted = formattedCodes[formattedIdx++];
-      const codeToUse = formatted ?? chunk.code;
+      const codeToUse = formatted ?? chunk.code ?? "";
       if (codeToUse.length > 0) out.push(...codeToUse.split("\n"));
     } else {
-      if (chunk.code.length > 0) out.push(...chunk.code.split("\n"));
+      const md = chunk.code ?? "";
+      if (md.length > 0) out.push(...md.split("\n"));
     }
     if (chunk.close !== null) out.push(chunk.close);
   }
@@ -676,8 +718,7 @@ ${links.join("\n")}
 fs.rmSync(RAW_COMPONENTS_OUT_DIR, { recursive: true, force: true });
 fs.mkdirSync(RAW_COMPONENTS_OUT_DIR, { recursive: true });
 
-/** @type {{ componentName: string; md: string }[]} */
-const generatedMdByComponent = [];
+const generatedMdByComponent: { componentName: string; md: string }[] = [];
 
 for (const componentName of getComponentNames()) {
   const filePath = path.join(COMPONENTS_PATH, `${componentName}.svx`);
@@ -731,7 +772,7 @@ fs.writeFileSync(path.join("./public", "llms.txt"), llmTxtContent, "utf8");
 
 // Generate llms-full.txt: overview + all component docs with headings shifted
 const overviewPath = path.join("./content", "overview.md");
-let overviewMd;
+let overviewMd: string;
 try {
   overviewMd = fs.readFileSync(overviewPath, "utf8").trim();
 } catch (err) {
