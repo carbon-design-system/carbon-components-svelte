@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import routify from "@roxi/routify/vite-plugin";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
+import pkg from "../package.json" with { type: "json" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const carbonRoot = path.resolve(__dirname, "..");
@@ -31,6 +32,12 @@ export default defineConfig({
       },
     },
   ],
+  define: {
+    __PKG_VERSION__: JSON.stringify(pkg.version),
+    __REPO_URL__: JSON.stringify(
+      (pkg.repository?.url ?? "").replace(/^git\+/, "").replace(/\.git$/, ""),
+    ),
+  },
   optimizeDeps: {
     include: ["clipboard-copy", "flatpickr/dist/plugins/rangePlugin"],
     exclude: [

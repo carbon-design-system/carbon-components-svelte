@@ -27,7 +27,7 @@
   import ComponentApi from "../components/ComponentApi.svelte";
   import { theme } from "../store";
 
-  const REPO_URL = "REPO_URL";
+  const REPO_URL = __REPO_URL__;
 
   export let component = $activeRoute?.leaf?.node?.name ?? "";
   export let components = [component];
