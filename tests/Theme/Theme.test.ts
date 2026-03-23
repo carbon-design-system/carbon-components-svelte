@@ -83,6 +83,37 @@ describe("Theme", () => {
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "white");
   });
 
+  it.each<[CarbonTheme, "light" | "dark"]>([
+    ["white", "light"],
+    ["g10", "light"],
+    ["g80", "dark"],
+    ["g90", "dark"],
+    ["g100", "dark"],
+  ])("when theme is %s, should set color-scheme to %s", (theme, expected) => {
+    render(Theme, { props: { theme } });
+    expect(documentMock.style.setProperty).toHaveBeenCalledWith(
+      "color-scheme",
+      expected,
+    );
+  });
+
+  it("should update color-scheme when theme changes", async () => {
+    const { rerender } = render(Theme);
+
+    expect(documentMock.style.setProperty).toHaveBeenCalledWith(
+      "color-scheme",
+      "light",
+    );
+
+    rerender({ theme: "g100" });
+    await tick();
+
+    expect(documentMock.style.setProperty).toHaveBeenCalledWith(
+      "color-scheme",
+      "dark",
+    );
+  });
+
   it("should update theme attribute when theme changes", async () => {
     const { rerender } = render(Theme);
 

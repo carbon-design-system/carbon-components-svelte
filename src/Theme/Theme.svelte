@@ -102,6 +102,10 @@
 
     if (theme in themes) {
       document.documentElement.setAttribute("theme", theme);
+      document.documentElement.style.setProperty(
+        "color-scheme",
+        theme === "white" || theme === "g10" ? "light" : "dark",
+      );
     } else {
       console.warn(
         `[Theme.svelte] invalid theme "${theme}". Value must be one of: ${JSON.stringify(
