@@ -1,12 +1,9 @@
 <script>
-  import { metatags, page } from "@sveltech/routify";
+  import { activeRoute } from "@roxi/routify";
   import { onMount } from "svelte";
 
-  $: exampleName = $page.title;
-  $: componentName = $page.parent?.title ?? "";
-
-  $: metatags.title = `${exampleName} – Carbon Components Svelte`;
-  $: metatags.description = `${exampleName} example for the ${componentName} component in Carbon Components Svelte.`;
+  $: exampleName = $activeRoute?.leaf?.node?.name ?? "";
+  $: componentName = $activeRoute?.leaf?.node?.parent?.name ?? "";
 
   const validThemes = ["white", "g10", "g80", "g90", "g100"];
 
@@ -56,10 +53,16 @@
   }
 </script>
 
+<!-- routify:meta reset -->
 <svelte:head>
+  <title>{exampleName} – Carbon Components Svelte</title>
+  <meta
+    name="description"
+    content="{exampleName} example for the {componentName} component in Carbon Components Svelte."
+  >
   <link
     rel="canonical"
-    href="https://svelte.carbondesignsystem.com{$page.path}"
+    href="https://svelte.carbondesignsystem.com{$activeRoute?.leaf?.node?.path ?? ''}"
   >
 </svelte:head>
 

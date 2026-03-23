@@ -1,5 +1,4 @@
 <script>
-  import { metatags } from "@sveltech/routify";
   import {
     CodeSnippet,
     Column,
@@ -17,10 +16,6 @@
   } from "carbon-components-svelte";
   import TileCard from "../components/TileCard.svelte";
   import { theme } from "../store";
-
-  metatags.title = "Carbon Components Svelte";
-  metatags.description =
-    "The Svelte implementation of the Carbon Design System featuring UI components, icons, pictograms, and charts.";
 
   const installNpm = "npm i carbon-components-svelte";
   const installPnpm = "pnpm i carbon-components-svelte";
@@ -47,6 +42,11 @@
 </script>
 
 <svelte:head>
+  <title>Carbon Components Svelte</title>
+  <meta
+    name="description"
+    content="The Svelte implementation of the Carbon Design System featuring UI components, icons, pictograms, and charts."
+  />
   <link rel="canonical" href="https://svelte.carbondesignsystem.com/" />
   <!-- Tealium/GA Set up -->
   <script type="text/javascript">
@@ -327,7 +327,7 @@
 </Content>
 
 <footer>
-  <dds-footer-container disable-locale-button="true" size="micro" />
+  <dds-footer-container disable-locale-button="true" size="micro"></dds-footer-container>
 </footer>
 
 <style>

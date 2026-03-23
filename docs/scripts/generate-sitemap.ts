@@ -1,12 +1,9 @@
-// @ts-check
 import fs from "node:fs";
-import { BASE_URL, SITEMAP_PATH } from "./constants.js";
-import { getComponentNames } from "./utils.js";
+import { BASE_URL, SITEMAP_PATH } from "./constants";
+import { getComponentNames } from "./utils";
 
-/** @type {string[]} */
-const urls = [];
+const urls: string[] = [];
 
-// Root page
 urls.push(`
   <url>
     <loc>${BASE_URL}/</loc>
@@ -14,7 +11,6 @@ urls.push(`
     <priority>1.0</priority>
   </url>`);
 
-// Component pages
 for (const componentName of getComponentNames()) {
   urls.push(`
   <url>
@@ -24,7 +20,6 @@ for (const componentName of getComponentNames()) {
   </url>`);
 }
 
-// llms.txt
 urls.push(`
   <url>
     <loc>${BASE_URL}/llms.txt</loc>
@@ -32,7 +27,6 @@ urls.push(`
     <priority>0.5</priority>
   </url>`);
 
-// llms-full.txt
 urls.push(`
   <url>
     <loc>${BASE_URL}/llms-full.txt</loc>

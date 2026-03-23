@@ -3,7 +3,7 @@
 </script>
 
 <script>
-  import { metatags, page } from "@sveltech/routify";
+  import { activeRoute } from "@roxi/routify";
   import {
     Button,
     Column,
@@ -29,10 +29,8 @@
 
   const REPO_URL = "REPO_URL";
 
-  export let component = $page.title;
+  export let component = $activeRoute?.leaf?.node?.name ?? "";
   export let components = [component];
-
-  metatags.title = $page.title;
 
   const componentMap = new Map(
     COMPONENT_API.components.map((c) => [c.moduleName, c]),
@@ -114,6 +112,7 @@
 </script>
 
 <svelte:head>
+  <title>{component}</title>
   <link
     rel="canonical"
     href="https://svelte.carbondesignsystem.com/components/{component}"

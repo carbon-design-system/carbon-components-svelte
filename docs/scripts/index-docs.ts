@@ -1,36 +1,32 @@
-// @ts-check
 import fs from "node:fs";
 import path from "node:path";
-import githubSlugger from "github-slugger";
+import GithubSlugger from "github-slugger";
+import { COMPONENTS_PATH } from "./constants";
 
-const { slug } = githubSlugger;
+const slugger = new GithubSlugger();
 
-const COMPONENTS_PATH = "./src/pages/components";
 const SEARCH_INDEX_PATH = "./src/SEARCH_INDEX.json";
 const H2_DELMIMITER = "## ";
 
+type SearchDocument = {
+  id: string;
+  text: string;
+  description: string;
+  href: string;
+  isComponent: boolean;
+};
+
 const files = fs.readdirSync(COMPONENTS_PATH);
-
-/**
- * @typedef {Object} Document
- * @property {string} id
- * @property {string} text
- * @property {string} description
- * @property {string} href
- * @property {boolean} isComponent
- */
-
-/** @type {Document[]} */
-const documents = [];
+const documents: SearchDocument[] = [];
 
 for (const file of files) {
+  slugger.reset();
   const [componentName] = file.split(".");
+  if (!componentName) continue;
   const filePath = path.join(COMPONENTS_PATH, file);
   const fileContent = fs.readFileSync(filePath, "utf8");
   const lines = fileContent.split("\n");
 
-  // Add base component page entry first (for higher ranking)
-  // Use component name in description to boost ranking for MiniSearch.
   documents.push({
     id: `${componentName}-page`,
     text: componentName,
@@ -39,11 +35,11 @@ for (const file of files) {
     isComponent: true,
   });
 
-  // Add H2 sections
   for (const line of lines) {
     if (line.startsWith(H2_DELMIMITER)) {
       const [, h2] = line.split(H2_DELMIMITER);
-      const hash = slug(h2);
+      if (!h2) continue;
+      const hash = slugger.slug(h2);
 
       documents.push({
         id: componentName + hash,
