@@ -10,9 +10,9 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
-    "jsdom": "^29.0.0",
-    "svelte": "^5.53.12",
+    "jsdom": "^29.0.1",
+    "svelte": "^5.55.0",
     "svelte-check": "^4.4.5",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.1"
   }
 }
