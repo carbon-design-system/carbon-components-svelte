@@ -9,6 +9,8 @@
   export let clickToOpen = false;
   export let triggerContent = "Tooltip trigger";
   export let portalTooltip: boolean | undefined = undefined;
+  export let enterDelayMs = 0;
+  export let leaveDelayMs = 0;
 </script>
 
 <TooltipDefinition
@@ -19,6 +21,8 @@
   {id}
   {clickToOpen}
   {portalTooltip}
+  {enterDelayMs}
+  {leaveDelayMs}
   on:open={() => {
     console.log("open");
   }}

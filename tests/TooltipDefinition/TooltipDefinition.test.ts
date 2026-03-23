@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import TooltipDefinition from "./TooltipDefinition.test.svelte";
 import TooltipDefinitionPortal from "./TooltipDefinitionPortal.test.svelte";
@@ -205,6 +205,55 @@ describe("TooltipDefinition", () => {
 
     expect(trigger).toHaveClass("bx--tooltip--hidden");
     expect(consoleLog).toHaveBeenCalledWith("close");
+  });
+
+  describe("enterDelayMs / leaveDelayMs", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("should delay showing tooltip on mouseenter by enterDelayMs", async () => {
+      render(TooltipDefinition, {
+        props: { enterDelayMs: 200, leaveDelayMs: 0 },
+      });
+
+      const trigger = screen.getByText("Tooltip trigger");
+      const definition = trigger.closest(".bx--tooltip--definition");
+      expect.assert(definition instanceof HTMLElement);
+      await fireEvent.mouseEnter(definition);
+
+      expect(trigger).toHaveClass("bx--tooltip--hidden");
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+    });
+
+    it("should delay hiding tooltip on mouseleave by leaveDelayMs", async () => {
+      render(TooltipDefinition, {
+        props: { enterDelayMs: 0, leaveDelayMs: 200 },
+      });
+
+      const trigger = screen.getByText("Tooltip trigger");
+      const span = trigger.closest(".bx--tooltip--definition");
+      expect.assert(span instanceof HTMLElement);
+
+      await fireEvent.mouseEnter(span);
+
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+
+      await fireEvent.mouseLeave(span);
+
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(trigger).toHaveClass("bx--tooltip--hidden");
+    });
   });
 
   it("should have correct ARIA attributes", () => {
