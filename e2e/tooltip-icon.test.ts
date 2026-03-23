@@ -72,3 +72,47 @@ test.describe("TooltipIcon portaled inside Modal", () => {
     ).toBeVisible();
   });
 });
+
+test.describe("TooltipIcon (controlled open & exclusivity)", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/tooltip-icon-reactive.html");
+  });
+
+  test("opens and closes from bind:open", async ({ page }) => {
+    const trigger = page.getByTestId("tooltip-controlled");
+
+    await page.getByTestId("toggle-controlled").click();
+    await expect(trigger).toHaveClass(/bx--tooltip--visible/);
+    await expect(trigger).not.toHaveClass(/bx--tooltip--hidden/);
+
+    await page.getByTestId("toggle-controlled").click();
+    await expect(trigger).toHaveClass(/bx--tooltip--hidden/);
+    await expect(trigger).not.toHaveClass(/bx--tooltip--visible/);
+  });
+
+  test("dispatches open and close when toggled", async ({ page }) => {
+    await expect(page.getByTestId("open-event-count")).toHaveText("0");
+    await expect(page.getByTestId("close-event-count")).toHaveText("0");
+
+    await page.getByTestId("toggle-controlled").click();
+    await expect(page.getByTestId("open-event-count")).toHaveText("1");
+
+    await page.getByTestId("toggle-controlled").click();
+    await expect(page.getByTestId("close-event-count")).toHaveText("1");
+  });
+
+  test("only one non-portal tooltip is visible when moving hover between icons", async ({
+    page,
+  }) => {
+    const a = page.getByTestId("tooltip-a");
+    const b = page.getByTestId("tooltip-b");
+
+    await a.hover();
+    await expect(a).toHaveClass(/bx--tooltip--visible/);
+    await expect(b).toHaveClass(/bx--tooltip--hidden/);
+
+    await b.hover();
+    await expect(b).toHaveClass(/bx--tooltip--visible/);
+    await expect(a).toHaveClass(/bx--tooltip--hidden/);
+  });
+});
