@@ -1,8 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "dev": "bun scripts/index-docs.ts && vite dev",
-    "build": "bun run --sequential build:index-docs build:md-docs build:sitemap build:vite",
+    "dev": "bun run --parallel index-docs dev:vite",
+    "dev:vite": "vite dev",
+    "build": "bun run --parallel build:index-docs build:sitemap && bun run build:md-docs && bun run build:vite",
     "index-docs": "bun scripts/index-docs.ts",
     "build:index-docs": "bun scripts/index-docs.ts",
     "build:md-docs": "bun scripts/generate-md-docs.ts",
