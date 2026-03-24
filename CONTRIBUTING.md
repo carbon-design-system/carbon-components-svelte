@@ -8,11 +8,6 @@ Before submitting a pull request (PR), consider [filing an issue](https://github
 
 - [Bun](https://bun.com/docs/installation)
 
-**Docs**
-
-- [Node.js](https://nodejs.org/en/download/package-manager/) (version 20)
-  - Installing Node should automatically install [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm#using-a-node-installer-to-install-nodejs-and-npm)
-
 ## Project set-up
 
 Fork the repo and clone your fork:
@@ -40,15 +35,7 @@ bun install
 
 ## Documentation set-up
 
-Component documentation is located in the `docs` folder. The website is built using svite, routify, and MDsveX. You will need to create a symbolic project link in order to see live changes reflected when developing locally.
-
-Running the docs site requires Node.js version 20.
-
-Use `nvm` to switch:
-
-```sh
-nvm use 20
-```
+Component documentation is located in the `docs` folder. The site uses [Vite](https://vitejs.dev/), [Routify 3](https://routify.dev/docs), Svelte 5, and MDsveX. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` are picked up without a separate package link.
 
 When developing the docs site, you must first generate `docs/src/COMPONENT_API.json` and the TypeScript definitions in `src/` (these are not committed; see `.gitignore`). From the project root, run:
 
@@ -57,11 +44,12 @@ bun i
 bun build:docs
 ```
 
-Then run the docs site:
+Then install docs dependencies and start the dev server:
 
 ```sh
 cd docs
-nvm use 20 && npm i && npm run dev
+bun i
+bun dev
 ```
 
 The site should be served at http://localhost:5173/ (or the next available port).
