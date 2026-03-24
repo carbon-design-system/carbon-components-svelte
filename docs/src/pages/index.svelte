@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     CodeSnippet,
     Column,
@@ -28,7 +28,7 @@
     g90: "Gray 90",
     g100: "Gray 100",
     all: "All",
-  };
+  }
 
   const cssImportAll = `import "carbon-components-svelte/css/all.css";`;
   const cssThemeToggle = `<script>
@@ -148,7 +148,7 @@
       </Column>
       <Column padding max={10} xlg={10}>
         <RadioButtonGroup legendText="Carbon themes" bind:selected={$theme}>
-          {#each ["white", "g10", "g80", "g90", "g100"] as value}
+          {#each (["white", "g10", "g80", "g90", "g100"] as const) as value}
             <RadioButton labelText={themes[value]} {value} />
           {/each}
         </RadioButtonGroup>

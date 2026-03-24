@@ -1,10 +1,53 @@
-<script>
-  export let component = {
+<script lang="ts">
+  type ComponentApiProp = {
+    name: string;
+    description?: string;
+    type?: string;
+    value?: string;
+    isRequired?: boolean;
+    reactive?: boolean;
+  };
+
+  type ComponentApiTypedef = {
+    ts?: string;
+  };
+
+  type ComponentApiSlot = {
+    default?: boolean;
+    name?: string | null;
+    slot_props?: string;
+  };
+
+  type ComponentApiEvent = {
+    type?: string;
+    name?: string;
+    detail?: string;
+    description?: string;
+  };
+
+  type ComponentApiRestProps = {
+    type: string;
+    name: string;
+  };
+
+  type ComponentApiData = {
+    moduleName: string;
+    filePath: string;
+    props: ComponentApiProp[];
+    slots: ComponentApiSlot[];
+    events: ComponentApiEvent[];
+    typedefs: ComponentApiTypedef[];
+    rest_props?: ComponentApiRestProps;
+  };
+
+  export let component: ComponentApiData = {
+    moduleName: "",
+    filePath: "",
     props: [],
     slots: [],
     events: [],
-    rest_props: undefined,
     typedefs: [],
+    rest_props: undefined,
   };
 
   import {
@@ -21,7 +64,9 @@
   import { onMount } from "svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
 
-  let AsyncPreviewTypeScript;
+  let AsyncPreviewTypeScript:
+    | typeof import("./PreviewTypeScript.svelte").default
+    | undefined;
 
   onMount(async () => {
     AsyncPreviewTypeScript = (await import("./PreviewTypeScript.svelte"))
@@ -29,7 +74,7 @@
   });
 
   const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
-  const typeMap = {
+  const typeMap: Record<string, string> = {
     string: "string",
     boolean: "boolean",
     number: "number",
@@ -42,12 +87,7 @@
   // The regex uses [\s\S]*? to match any character including newlines (non-greedy)
   const EXAMPLE_CODE_BLOCK_REGEX = /```svelte\s*\n([\s\S]*?)```/;
 
-  /**
-   * Parse description to extract main text and example code
-   * @param {string} description - The full description string
-   * @returns {{ mainDescription: string, exampleCode: string | null }}
-   */
-  function parseDescription(description) {
+  function parseDescription(description: string) {
     if (!description) {
       return { mainDescription: "", exampleCode: null };
     }
@@ -147,7 +187,7 @@
                       <svelte:component
                         this={AsyncPreviewTypeScript}
                         type="inline"
-                        code={typeMap[type]}
+                        code={typeMap[type] ?? type}
                       />
                     </div>
                   {:else}
@@ -209,8 +249,8 @@
                 {:else}
                   <svelte:component
                     this={AsyncPreviewTypeScript}
-                    type={/\n/.test(prop.value) ? "multi" : "inline"}
-                    code={prop.value}
+                    type={/\n/.test(prop.value ?? "") ? "multi" : "inline"}
+                    code={prop.value ?? ""}
                   />
                 {/if}
               </div>
@@ -230,7 +270,7 @@
   <div class="my-layout-01-03">
     <svelte:component
       this={AsyncPreviewTypeScript}
-      code={component.typedefs.map((t) => t.ts).join("\n")}
+      code={component.typedefs.map((t) => t.ts ?? "").join("\n")}
     />
   </div>
 {:else}
@@ -247,7 +287,7 @@
       </StructuredListRow>
     </StructuredListHead>
     <StructuredListBody>
-      {#each component.slots as slot (slot.name)}
+      {#each component.slots as slot (slot.name ?? "default")}
         <StructuredListRow>
           <StructuredListCell>
             <strong>{slot.default ? "default" : slot.name}</strong>
@@ -255,8 +295,8 @@
           <StructuredListCell>
             <svelte:component
               this={AsyncPreviewTypeScript}
-              type={/\n/.test(slot.slot_props) ? "multi" : "inline"}
-              code={slot.slot_props}
+              type={/\n/.test(slot.slot_props ?? "") ? "multi" : "inline"}
+              code={slot.slot_props ?? ""}
             />
           </StructuredListCell>
         </StructuredListRow>
@@ -301,8 +341,8 @@
           <StructuredListCell>
             <svelte:component
               this={AsyncPreviewTypeScript}
-              type={/\n/.test(dispatched_event.detail) ? "multi" : "inline"}
-              code={dispatched_event.detail}
+              type={/\n/.test(dispatched_event.detail ?? "") ? "multi" : "inline"}
+              code={dispatched_event.detail ?? ""}
             />
           </StructuredListCell>
           <StructuredListCell>

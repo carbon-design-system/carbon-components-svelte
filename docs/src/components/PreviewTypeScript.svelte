@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   export let code = "";
   export let type = "multi";
 
   import { CodeSnippet } from "carbon-components-svelte";
-  import { highlight } from "prismjs";
+  import Prism, { highlight } from "prismjs";
   import "prismjs/components/prism-typescript";
   import copy from "clipboard-copy";
 

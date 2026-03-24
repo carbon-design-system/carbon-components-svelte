@@ -1,8 +1,8 @@
-<script context="module">
+<script lang="ts" context="module">
   const markdownCache = new Map();
 </script>
 
-<script>
+<script lang="ts">
   import { activeRoute } from "@roxi/routify";
   import {
     Button,
@@ -27,7 +27,7 @@
   import ComponentApi from "../components/ComponentApi.svelte";
   import { theme } from "../store";
 
-  const REPO_URL = __REPO_URL__;
+  const REPO_URL = __PKG_REPO;
 
   export let component = $activeRoute?.leaf?.node?.name ?? "";
   export let components = [component];
