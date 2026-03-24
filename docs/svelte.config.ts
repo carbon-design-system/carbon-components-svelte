@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -29,6 +30,12 @@ const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
 const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
 const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
+/** Heuristics for skipping svelte/compiler parse in createImports (see snippetMayNeedCarbonImportScan). */
+const SNIPPET_PASCAL_COMPONENT_RE = /<[A-Z][A-Za-z0-9]*/;
+const SNIPPET_USE_ACTION_RE = /use:\s*\w/;
+const SNIPPET_ICON_MUSTACHE_RE = /\{\s*[A-Z][A-Za-z0-9]*\s*[},]/;
+const SNIPPET_TAG_RE = /<[a-zA-Z]/;
+const SNIPPET_MUSTACHE_ANY_RE = /\{/;
 
 const MDSVEX_LANG_ALIASES = {
   js: "javascript",
@@ -36,6 +43,18 @@ const MDSVEX_LANG_ALIASES = {
   html: "markup",
   svg: "markup",
 } as const;
+
+const SKIP_MDSVEX_PRETTIER = process.env.NODE_ENV === "development";
+
+const previewCodeCache = new Map<
+  string,
+  { formattedCode: string; highlightedCode: string }
+>();
+const createImportsCache = new Map<string, string>();
+
+function hashKey(s: string): string {
+  return createHash("sha256").update(s, "utf8").digest("hex").slice(0, 32);
+}
 
 function escapeHtmlText(str: string): string {
   return str
@@ -54,6 +73,7 @@ function mdsvexPrismHighlighter(
 ): string {
   const raw = lang?.toLowerCase().trim() ?? "";
   const classLang = raw || "text";
+
   const grammarKey = raw ? (MDSVEX_LANG_ALIASES[raw] ?? raw) : "";
   const grammar =
     grammarKey && Prism.languages[grammarKey as keyof typeof Prism.languages]
@@ -76,7 +96,18 @@ const prettierSvelte = {
   svelteSortOrder: "scripts-markup-styles-options" as const,
 };
 
-function createImports(source: string) {
+/** Avoid svelte/compiler parse when the snippet cannot reference Carbon components, actions, or icons. */
+function snippetMayNeedCarbonImportScan(source: string): boolean {
+  if (SNIPPET_PASCAL_COMPONENT_RE.test(source)) return true;
+  if (SNIPPET_USE_ACTION_RE.test(source)) return true;
+  if (SNIPPET_ICON_MUSTACHE_RE.test(source)) return true;
+  if (SNIPPET_TAG_RE.test(source) && SNIPPET_MUSTACHE_ANY_RE.test(source)) {
+    return true;
+  }
+  return false;
+}
+
+function createImportsUncached(source: string) {
   const inlineComponents = new Set<string>();
   const icons = new Set<string>();
   const actions = new Set<string>();
@@ -118,20 +149,73 @@ function createImports(source: string) {
 
   if (ccsImports.length === 0) return "";
 
-  return `
-  <script>
-    import {${ccsImports.join(",")}} from "carbon-components-svelte";
-    ${
-      icons.size > 0
-        ? iconImports
-            .map(
-              (icon) =>
-                `import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
-            )
-            .join("\n")
-        : ""
-    }
-  </script>\n`;
+  const iconBlock =
+    icons.size > 0
+      ? `\n${iconImports
+          .map(
+            (icon) =>
+              `  import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
+          )
+          .join("\n")}`
+      : "";
+
+  return `<script>
+  import { ${ccsImports.join(", ")} } from "carbon-components-svelte";${iconBlock}
+</script>
+
+`;
+}
+
+function createImports(source: string) {
+  const cached = createImportsCache.get(source);
+  if (cached !== undefined) return cached;
+  const result = snippetMayNeedCarbonImportScan(source)
+    ? createImportsUncached(source)
+    : "";
+  createImportsCache.set(source, result);
+  return result;
+}
+
+async function formatAndHighlightPreviewSvelte(combinedSource: string) {
+  const mode = SKIP_MDSVEX_PRETTIER ? "raw" : "fmt";
+  const cacheKey = `${mode}:${hashKey(combinedSource)}`;
+  const cached = previewCodeCache.get(cacheKey);
+  if (cached) return cached;
+
+  const formattedCode = SKIP_MDSVEX_PRETTIER
+    ? combinedSource
+    : await format(combinedSource, prettierSvelte);
+  const highlightedCode = Prism.highlight(
+    formattedCode,
+    Prism.languages.svelte,
+    "svelte",
+  );
+  const out = { formattedCode, highlightedCode };
+  previewCodeCache.set(cacheKey, out);
+  return out;
+}
+
+async function formatAndHighlightFileSourceSvelte(
+  src: string,
+  sourceCode: string,
+  mtimeMs: number,
+) {
+  const mode = SKIP_MDSVEX_PRETTIER ? "raw" : "fmt";
+  const cacheKey = `file:${src}:${mtimeMs}:${mode}`;
+  const cached = previewCodeCache.get(cacheKey);
+  if (cached) return cached;
+
+  const formattedCode = SKIP_MDSVEX_PRETTIER
+    ? sourceCode
+    : await format(sourceCode, prettierSvelte);
+  const highlightedCode = Prism.highlight(
+    formattedCode,
+    Prism.languages.svelte,
+    "svelte",
+  );
+  const out = { formattedCode, highlightedCode };
+  previewCodeCache.set(cacheKey, out);
+  return out;
 }
 
 function plugin() {
@@ -145,15 +229,8 @@ function plugin() {
       !node.value.startsWith("<script>")
     ) {
       const scriptBlock = createImports(node.value);
-      const formattedCode = await format(
-        scriptBlock + node.value,
-        prettierSvelte,
-      );
-      const highlightedCode = Prism.highlight(
-        formattedCode,
-        Prism.languages.svelte,
-        "svelte",
-      );
+      const { formattedCode, highlightedCode } =
+        await formatAndHighlightPreviewSvelte(scriptBlock + node.value);
 
       node.value = `<Preview codeRaw={${JSON.stringify(formattedCode)}} code={${JSON.stringify(highlightedCode)}}>${node.value}</Preview>`;
     }
@@ -162,16 +239,11 @@ function plugin() {
       const srcMatch = node.value.match(FILE_SOURCE_SRC_REGEX);
       const src = srcMatch ? srcMatch[1] : "";
 
-      const sourceCode = fs.readFileSync(
-        path.join("src/pages", `${src}.svelte`),
-        "utf-8",
-      );
-      const formattedCode = await format(sourceCode, prettierSvelte);
-      const highlightedCode = Prism.highlight(
-        formattedCode,
-        Prism.languages.svelte,
-        "svelte",
-      );
+      const filePath = path.join(__dirname, "src/pages", `${src}.svelte`);
+      const sourceCode = fs.readFileSync(filePath, "utf-8");
+      const mtimeMs = fs.statSync(filePath).mtimeMs;
+      const { formattedCode, highlightedCode } =
+        await formatAndHighlightFileSourceSvelte(src, sourceCode, mtimeMs);
 
       node.value = `<Preview framed src="${src}" codeRaw={${JSON.stringify(formattedCode)}} code={${JSON.stringify(highlightedCode)}} />`;
     }
