@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { beforeUrlChange, goto, isActive, node, url } from "@roxi/routify";
   import {
     Header,
@@ -17,13 +17,18 @@
     Tag,
     Theme,
   } from "carbon-components-svelte";
+  import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import MiniSearch from "minisearch";
   import { onDestroy } from "svelte";
   import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import { theme } from "../store";
 
-  const miniSearch = new MiniSearch({
+  type ModuleSearchResult = HeaderSearchResult & { isComponent: boolean };
+
+  type SearchIndexDocument = ModuleSearchResult & { id: string };
+
+  const miniSearch = new MiniSearch<SearchIndexDocument>({
     fields: ["text", "description"],
     storeFields: ["text", "description", "href", "isComponent"],
     searchOptions: {
@@ -33,21 +38,34 @@
     },
   });
 
-  miniSearch.addAll(SEARCH_INDEX);
+  miniSearch.addAll(SEARCH_INDEX as SearchIndexDocument[]);
 
   /** Routify + Svelte 5: `$goto` in event handlers runs outside fragment context; keep a root-level subscription. */
-  let navigateTo;
+  let navigateTo:
+    | ((path: string, options?: { "#": string }) => void)
+    | undefined;
   const unsubGoto = goto.subscribe((fn) => {
     navigateTo = fn;
   });
   onDestroy(unsubGoto);
 
-  const deprecated = [];
-  const new_components = [];
+  const deprecated: string[] = [];
+  const new_components: string[] = [];
 
   let value = "";
   let active = false;
-  $: results = miniSearch.search(value).slice(0, 10);
+  let results: ModuleSearchResult[] = [];
+  $: results = miniSearch
+    .search(value)
+    .slice(0, 10)
+    .map(
+      (r): ModuleSearchResult => ({
+        href: String(r.href),
+        text: String(r.text),
+        description: r.description == null ? undefined : String(r.description),
+        isComponent: Boolean(r.isComponent),
+      }),
+    );
 
   let isOpen = false;
   let isSideNavOpen = true;
@@ -98,7 +116,7 @@
 
     <span slot="platform" class="platform-name" class:hidden={active}>
       Carbon<span class="platform-name-full">&nbsp;Components</span>&nbsp;Svelte
-      &nbsp;<code class="code-01">v{__PKG_VERSION__}</code>
+      &nbsp;<code class="code-01">v{__PKG_VERSION}</code>
     </span>
     <HeaderUtilities>
       <HeaderSearch
@@ -118,18 +136,19 @@
           navigateTo?.(path, hash ? { "#": hash } : undefined);
         }}
       >
+        {@const hit = result as ModuleSearchResult}
         <Stack
           gap={3}
           orientation="horizontal"
           style="display: flex; align-items: center;"
         >
-          {result.text}
-          {#if result.description && !result.isComponent}
+          {hit.text}
+          {#if hit.description && !hit.isComponent}
             <span class="bx--header-search-menu-description">
-              {result.description}
+              {hit.description}
             </span>
           {/if}
-          {#if result.isComponent}
+          {#if hit.isComponent}
             <Tag size="sm" type="blue" style="margin: 0">Component</Tag>
           {/if}
         </Stack>
@@ -177,7 +196,7 @@
 
   <SideNav bind:isOpen={isSideNavOpen}>
     <SideNavItems>
-      {#each components.children.filter((child) => !deprecated.includes(child.name)) as child (child.path)}
+      {#each (components?.children ?? []).filter((child) => !deprecated.includes(child.name)) as child (child.path)}
         <SideNavMenuItem
           text={child.name}
           href={$url(child.path)}

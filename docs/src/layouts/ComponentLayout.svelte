@@ -1,8 +1,8 @@
-<script context="module">
-  const markdownCache = new Map();
+<script lang="ts" context="module">
+  const markdownCache = new Map<string, string>();
 </script>
 
-<script>
+<script lang="ts">
   import { activeRoute } from "@roxi/routify";
   import {
     Button,
@@ -20,6 +20,7 @@
     TabContent,
     Tabs,
   } from "carbon-components-svelte";
+  import type { CarbonTheme } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";
   import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
   import { onMount } from "svelte";
@@ -27,7 +28,21 @@
   import ComponentApi from "../components/ComponentApi.svelte";
   import { theme } from "../store";
 
-  const REPO_URL = __REPO_URL__;
+  type DocComponent = (typeof COMPONENT_API.components)[number];
+
+  const URL_THEMES: readonly CarbonTheme[] = [
+    "white",
+    "g10",
+    "g80",
+    "g90",
+    "g100",
+  ];
+
+  function isCarbonTheme(value: string | null): value is CarbonTheme {
+    return value !== null && URL_THEMES.includes(value as CarbonTheme);
+  }
+
+  const REPO_URL = __PKG_REPO;
 
   export let component = $activeRoute?.leaf?.node?.name ?? "";
   export let components = [component];
@@ -36,14 +51,16 @@
     COMPONENT_API.components.map((c) => [c.moduleName, c]),
   );
 
-  $: api_components = components.map((i) => componentMap.get(i));
+  $: api_components = components
+    .map((i) => componentMap.get(i))
+    .filter((c): c is DocComponent => c != null);
   $: multiple = api_components.length > 1;
 
   onMount(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const current_theme = searchParams.get("theme");
 
-    if (["white", "g10", "g80", "g90", "g100"].includes(current_theme)) {
+    if (isCarbonTheme(current_theme)) {
       theme.set(current_theme);
     }
 
@@ -54,7 +71,7 @@
     };
   });
 
-  function formatSourceURL(multiple) {
+  function formatSourceURL(multiple: boolean) {
     const filePath = api_components[0]?.filePath ?? "";
 
     if (multiple) {
@@ -78,8 +95,7 @@
   let copying = false;
   let copied = false;
 
-  /** @type {NodeJS.Timeout | null} */
-  let copyTimeout = null;
+  let copyTimeout: ReturnType<typeof setTimeout> | null = null;
 
   async function copyMarkdown() {
     if (copying) return;
@@ -146,7 +162,7 @@
             >
               {copied ? "Copied!" : "Copy page"}
             </Button>
-            <OverflowMenu flipped icon={OverflowMenuVertical} size="field">
+            <OverflowMenu flipped icon={OverflowMenuVertical}>
               <OverflowMenuItem
                 text="Source code"
                 href={sourceCode}

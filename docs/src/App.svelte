@@ -1,4 +1,4 @@
-<script context="module">
+<script lang="ts" context="module">
   import { createRouter, Router } from "@roxi/routify";
   import routes from "../.routify/routes.default.js";
 

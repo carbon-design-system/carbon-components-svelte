@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { walk } from "estree-walker";
-import type { Blockquote, List, Paragraph } from "mdast";
+import type { Blockquote, List, Paragraph, PhrasingContent } from "mdast";
 import { escapeSvelte, mdsvex } from "mdsvex";
 import { format } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
@@ -74,7 +74,9 @@ function mdsvexPrismHighlighter(
   const raw = lang?.toLowerCase().trim() ?? "";
   const classLang = raw || "text";
 
-  const grammarKey = raw ? (MDSVEX_LANG_ALIASES[raw] ?? raw) : "";
+  const grammarKey = raw
+    ? (MDSVEX_LANG_ALIASES[raw as keyof typeof MDSVEX_LANG_ALIASES] ?? raw)
+    : "";
   const grammar =
     grammarKey && Prism.languages[grammarKey as keyof typeof Prism.languages]
       ? Prism.languages[grammarKey as keyof typeof Prism.languages]
@@ -249,7 +251,7 @@ function plugin() {
     }
   }
 
-  return async (tree) => {
+  return async (tree: Parameters<typeof visit>[0]) => {
     const jobs: Promise<void>[] = [];
     visit(tree, "html", (node) => {
       jobs.push(visitHtml(node as Parameters<typeof visitHtml>[0]));
@@ -287,9 +289,9 @@ const NOTIFICATION_TITLES = {
   CAUTION: "Caution:",
 };
 
-function serializeInlineNodes(nodes) {
+function serializeInlineNodes(nodes: PhrasingContent[]): string {
   return nodes
-    .map((node) => {
+    .map((node: PhrasingContent): string => {
       switch (node.type) {
         case "text":
           return node.value;
@@ -386,11 +388,11 @@ function carbonify() {
 
         if (!type) return;
 
-        const kind =
-          NOTIFICATION_KINDS[type as keyof typeof NOTIFICATION_KINDS];
-        const title =
-          NOTIFICATION_TITLES[type as keyof typeof NOTIFICATION_TITLES];
-        const icon = NOTIFICATION_ICONS[kind];
+        const admonitionKey = type as keyof typeof NOTIFICATION_KINDS;
+        const kind = NOTIFICATION_KINDS[admonitionKey];
+        const title = NOTIFICATION_TITLES[admonitionKey];
+        const icon =
+          NOTIFICATION_ICONS[kind as keyof typeof NOTIFICATION_ICONS];
 
         // If the first paragraph is now empty, remove it
         if (para.children.length === 0) {
@@ -430,7 +432,7 @@ export default {
       },
     }),
     {
-      markup({ content, filename }) {
+      markup({ content, filename }: { content: string; filename: string }) {
         if (NODE_MODULES_REGEX.test(filename)) return null;
         if (!filename.match(PAGES_COMPONENTS_REGEX)) return null;
 

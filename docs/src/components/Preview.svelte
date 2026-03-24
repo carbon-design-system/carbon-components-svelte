@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let code = "";
   export let codeRaw = "";
   export let src = "";

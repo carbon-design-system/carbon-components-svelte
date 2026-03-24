@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/prismjs": "^1.26.5",
     "@roxi/routify": "^3.6.4",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "carbon-icons-svelte": "^13.3.0",

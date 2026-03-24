@@ -33,8 +33,8 @@ export default defineConfig({
     },
   ],
   define: {
-    __PKG_VERSION__: JSON.stringify(pkg.version),
-    __REPO_URL__: JSON.stringify(
+    __PKG_VERSION: JSON.stringify(pkg.version),
+    __PKG_REPO: JSON.stringify(
       (pkg.repository?.url ?? "").replace(/^git\+/, "").replace(/\.git$/, ""),
     ),
   },

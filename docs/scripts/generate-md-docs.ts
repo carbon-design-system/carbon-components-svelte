@@ -97,22 +97,13 @@ const AT_EXAMPLE_RE = /@example/;
 const SVELTE_FENCE_RE = /```svelte\s*\n([\s\S]*?)```/;
 const ATX_HEADING_RE = /^(#{1,6})(\s+)(.*)$/;
 
-/**
- * @param {string} source
- */
-function splitFrontmatter(source) {
+function splitFrontmatter(source: string) {
   const match = source.match(FRONTMATTER_RE);
   if (!match) return { frontmatter: null, body: source };
   return { frontmatter: match[1], body: source.slice(match[0].length) };
 }
 
-/**
- * Extract component names from a `components: [...]` YAML flow sequence.
- *
- * @param {string | null} frontmatter
- * @returns {string[]}
- */
-function extractComponents(frontmatter) {
+function extractComponents(frontmatter: string | null) {
   if (!frontmatter) return [];
 
   const keyIdx = frontmatter.search(COMPONENTS_KEY_RE);
@@ -147,34 +138,23 @@ function extractComponents(frontmatter) {
   return out;
 }
 
-/**
- * @param {string} text
- */
-function escapeTableCell(text) {
+function escapeTableCell(text: unknown) {
   return String(text ?? "")
     .replace(PIPE_RE, "\\|")
     .replace(NEWLINE_RE, "<br />")
     .trim();
 }
 
-/**
- * @param {string[]} headers
- * @param {string[][]} rows
- */
-function renderMarkdownTable(headers, rows) {
+function renderMarkdownTable(headers: string[], rows: string[][]) {
   const headerLine = `| ${headers.map(escapeTableCell).join(" | ")} |`;
   const sepLine = `| ${headers.map(() => "---").join(" | ")} |`;
   const rowLines = rows.map(
-    (cells) => `| ${cells.map(escapeTableCell).join(" | ")} |`,
+    (cells: string[]) => `| ${cells.map(escapeTableCell).join(" | ")} |`,
   );
   return [headerLine, sepLine, ...rowLines].join("\n");
 }
 
-/**
- * @param {string} description
- * @returns {{ mainDescription: string; exampleCode: string | null }}
- */
-function parseDescription(description) {
+function parseDescription(description: string) {
   if (!description) return { mainDescription: "", exampleCode: null };
 
   const exampleIndex = description.search(AT_EXAMPLE_RE);
@@ -190,11 +170,10 @@ function parseDescription(description) {
   return { mainDescription, exampleCode };
 }
 
-/**
- * @param {any} component
- * @param {string} componentName
- */
-function renderPropsSection(component, componentName) {
+function renderPropsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
   const props = Array.isArray(component.props) ? component.props : [];
   if (props.length === 0) return "";
 
@@ -236,16 +215,15 @@ function renderPropsSection(component, componentName) {
   )}`;
 }
 
-/**
- * @param {any} component
- * @param {string} componentName
- */
-function renderTypedefsSection(component, componentName) {
+function renderTypedefsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
   const typedefs = Array.isArray(component.typedefs) ? component.typedefs : [];
   if (typedefs.length === 0) return "";
 
   const ts = typedefs
-    .map((t) => t?.ts)
+    .map((t: ComponentApiTypedef) => t?.ts)
     .filter(Boolean)
     .join("\n")
     .trim();
@@ -255,15 +233,14 @@ function renderTypedefsSection(component, componentName) {
   return `### \`${componentName}\` typedefs\n\n\`\`\`ts\n${ts}\n\`\`\``;
 }
 
-/**
- * @param {any} component
- * @param {string} componentName
- */
-function renderSlotsSection(component, componentName) {
+function renderSlotsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
   const slots = Array.isArray(component.slots) ? component.slots : [];
   if (slots.length === 0) return "";
 
-  const rows = slots.map((slot) => {
+  const rows = slots.map((slot: ComponentApiSlot) => {
     const name =
       slot?.default || slot?.name == null ? "default" : String(slot.name);
     const detail = slot?.slot_props ? String(slot.slot_props) : "";
@@ -273,14 +250,17 @@ function renderSlotsSection(component, componentName) {
   return `### \`${componentName}\` slots\n\n${renderMarkdownTable(["Slot", "Detail"], rows)}`;
 }
 
-/**
- * @param {any} component
- * @param {string} componentName
- */
-function renderEventsSection(component, componentName) {
+function renderEventsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
   const events = Array.isArray(component.events) ? component.events : [];
-  const forwarded = events.filter((e) => e?.type === "forwarded");
-  const dispatched = events.filter((e) => e?.type === "dispatched");
+  const forwarded = events.filter(
+    (e: ComponentApiEvent) => e?.type === "forwarded",
+  );
+  const dispatched = events.filter(
+    (e: ComponentApiEvent) => e?.type === "dispatched",
+  );
 
   if (forwarded.length === 0 && dispatched.length === 0) return "";
 
@@ -289,10 +269,12 @@ function renderEventsSection(component, componentName) {
       ? ""
       : `### \`${componentName}\` forwarded events\n\n${renderMarkdownTable(
           ["Event"],
-          forwarded.map((e) => [`\`on:${e.name}\``]),
+          forwarded.map((e: ComponentApiEvent) => [`\`on:${e.name}\``]),
         )}`;
 
-  const hasDispatchedDescription = dispatched.some((e) => e?.description);
+  const hasDispatchedDescription = dispatched.some(
+    (e: ComponentApiEvent) => e?.description,
+  );
   const dispatchedHeaders = hasDispatchedDescription
     ? ["Event", "Detail", "Description"]
     : ["Event", "Detail"];
@@ -300,7 +282,7 @@ function renderEventsSection(component, componentName) {
   const dispatchedRows =
     dispatched.length === 0
       ? null
-      : dispatched.map((e) => {
+      : dispatched.map((e: ComponentApiEvent) => {
           const base = [
             `\`on:${e.name}\``,
             e.detail ? `\`${String(e.detail)}\`` : "",
@@ -321,11 +303,10 @@ function renderEventsSection(component, componentName) {
   return sections.join("\n\n");
 }
 
-/**
- * @param {any} component
- * @param {string} componentName
- */
-function renderRestPropsSection(component, componentName) {
+function renderRestPropsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
   const rest = component?.rest_props;
   if (!rest) return "";
 
@@ -336,10 +317,7 @@ function renderRestPropsSection(component, componentName) {
   return `### \`${componentName}\` $$restProps\n\n\`${component.moduleName}\` spreads \`$$restProps\` to the \`${rest.name}\` component.`;
 }
 
-/**
- * @param {string} moduleName
- */
-function renderComponentApiMarkdown(moduleName) {
+function renderComponentApiMarkdown(moduleName: string) {
   const entry = componentApiByModuleName.get(moduleName);
   if (!entry) {
     throw new Error(`API data not found for component: ${moduleName}`);
@@ -356,15 +334,12 @@ function renderComponentApiMarkdown(moduleName) {
   return sections.join("\n\n");
 }
 
-/**
- * @param {string} body
- */
-function inlineFileSources(body) {
+function inlineFileSources(body: string) {
   const lines = body.split("\n");
   const out: string[] = [];
 
   let inFence = false;
-  const isFence = (line) => line.trimStart().startsWith("```");
+  const isFence = (line: string) => line.trimStart().startsWith("```");
 
   for (const line of lines) {
     if (isFence(line)) {
@@ -489,10 +464,7 @@ function injectImportsIntoSvelteSnippet(code: string): string {
   return scriptLines.join("\n") + code.trimStart();
 }
 
-/**
- * @param {string} body
- */
-function fenceInlineSvelte(body) {
+function fenceInlineSvelte(body: string) {
   const lines = body.split("\n");
   const out: string[] = [];
 
@@ -500,13 +472,10 @@ function fenceInlineSvelte(body) {
   let inSvelteFence = false;
   let tagDepth = 0;
 
-  const isFence = (line) => line.trimStart().startsWith("```");
-  const isTagLine = (line) => TAG_LINE_RE.test(line);
+  const isFence = (line: string) => line.trimStart().startsWith("```");
+  const isTagLine = (line: string) => TAG_LINE_RE.test(line);
 
-  /**
-   * @param {string} line
-   */
-  const applyTagDepth = (line) => {
+  const applyTagDepth = (line: string) => {
     HTML_TAG_RE.lastIndex = 0;
     let m = HTML_TAG_RE.exec(line);
     while (m) {
@@ -561,9 +530,6 @@ function fenceInlineSvelte(body) {
   return out.join("\n");
 }
 
-/**
- * @param {string} markdown
- */
 type MdChunk =
   | { type: "line"; line: string }
   | {
@@ -574,11 +540,11 @@ type MdChunk =
       code: string;
     };
 
-async function formatSvelteFences(markdown) {
+async function formatSvelteFences(markdown: string) {
   const lines = markdown.split("\n");
 
   const chunks: MdChunk[] = [];
-  const isFenceLine = (line) => line.trimStart().startsWith("```");
+  const isFenceLine = (line: string) => line.trimStart().startsWith("```");
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -659,10 +625,7 @@ async function formatSvelteFences(markdown) {
   return out.join("\n");
 }
 
-/**
- * @param {string} markdown
- */
-async function formatMarkdown(markdown) {
+async function formatMarkdown(markdown: string) {
   try {
     const formatted = await prettierFormat(markdown, {
       parser: "markdown",
@@ -675,18 +638,13 @@ async function formatMarkdown(markdown) {
   }
 }
 
-/**
- * Increase every ATX heading by one level. Does not change lines inside fenced code blocks.
- * @param {string} md
- * @returns {string}
- */
-function shiftMarkdownHeadings(md) {
+function shiftMarkdownHeadings(md: string) {
   const lines = md.split("\n");
   let inFence = false;
-  const isFence = (line) => line.trimStart().startsWith("```");
+  const isFence = (line: string) => line.trimStart().startsWith("```");
 
   return lines
-    .map((line) => {
+    .map((line: string) => {
       if (isFence(line)) {
         inFence = !inFence;
         return line;
@@ -698,12 +656,7 @@ function shiftMarkdownHeadings(md) {
     .join("\n");
 }
 
-/**
- * Generate llm.txt content from component list
- * @param {string[]} componentNames
- * @returns {string}
- */
-function generateLlmTxt(componentNames) {
+function generateLlmTxt(componentNames: string[]) {
   const sorted = [...componentNames].sort();
   const links = sorted.map(
     (name) => `- [${name}](${BASE_URL}/components/${name}.md)`,
