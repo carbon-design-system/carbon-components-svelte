@@ -222,6 +222,10 @@ html {
   z-index: 10000;
 }
 
+[aria-label="Navigation"] .bx--skip-to-content:focus {
+  z-index: calc(10000 + 1);
+}
+
 [aria-label="Navigation"] ~ [data-components] {
   z-index: calc(8000 + 1);
 }
