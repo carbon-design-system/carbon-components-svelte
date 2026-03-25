@@ -80,7 +80,6 @@
   });
 </script>
 
-<!-- routify:meta bundle -->
 <svelte:window bind:innerWidth />
 
 <svelte:body
