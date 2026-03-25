@@ -46,4 +46,7 @@ export default defineConfig({
       "@roxi/routify",
     ],
   },
+  build: {
+    chunkSizeWarningLimit: 700,
+  },
 });
