@@ -303,6 +303,21 @@ describe("DataTable", () => {
         name: "Load Balancer 3",
       }),
     ).toHaveTextContent("Load Balancer 3");
+
+    await user.click(dateHeader);
+    const rowsAfterDateDescSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(
+      within(rowsAfterDateDescSort[0]).getByRole("cell", {
+        name: "Load Balancer 3",
+      }),
+    ).toHaveTextContent("Load Balancer 3");
+    expect(
+      within(rowsAfterDateDescSort[2]).getByRole("cell", {
+        name: "Load Balancer 2",
+      }),
+    ).toHaveTextContent("Load Balancer 2");
   });
 
   it("handles sorting with nested object values", async () => {

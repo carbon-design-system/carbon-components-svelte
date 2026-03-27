@@ -973,6 +973,8 @@ describe("compareValues", () => {
     it("handles custom sort returning zero", () => {
       const customSort = () => 0;
       expect(compareValues("a", "b", true, customSort)).toBe(0);
+      // -0 from negation; still a zero comparator result (see numeric descending tests)
+      expect(compareValues("a", "b", false, customSort) === 0).toBe(true);
     });
   });
 
