@@ -964,10 +964,10 @@ describe("compareValues", () => {
       expect(compareValues(2, 1, true, customSort)).toBe(-1);
     });
 
-    it("ignores ascending parameter when custom sort is provided", () => {
-      const customSort = (a: string, b: string) => a.length - b.length; // Sort by string length
+    it("applies ascending/descending to custom sort like the default comparator", () => {
+      const customSort = (a: string, b: string) => a.length - b.length; // Ascending by length
       expect(compareValues("a", "abc", true, customSort)).toBeLessThan(0);
-      expect(compareValues("a", "abc", false, customSort)).toBeLessThan(0);
+      expect(compareValues("a", "abc", false, customSort)).toBeGreaterThan(0);
     });
 
     it("handles custom sort returning zero", () => {
