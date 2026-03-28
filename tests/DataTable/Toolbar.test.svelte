@@ -36,7 +36,7 @@
     <ToolbarBatchActions
       {selectedIds}
       {active}
-      on:cancel={oncancel}
+      on:cancel={(e) => oncancel?.(e)}
       {...$$restProps}
     >
       {#if slotContent}

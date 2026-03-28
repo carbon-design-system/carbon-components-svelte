@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
+import { svelte, vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vitest/config";
 import { testConfig } from "../tests/utils";
 
@@ -13,7 +13,8 @@ export default defineConfig({
     },
     conditions: ["browser"],
   },
-  plugins: [svelte()],
+  // @ts-expect-error
+  plugins: [svelte({ preprocess: [vitePreprocess()] })],
   server: {
     fs: {
       allow: [".."],
@@ -21,7 +22,8 @@ export default defineConfig({
   },
   test: {
     ...testConfig,
-    include: ["../tests/**/*.test.ts", "./svelte5/**/*.test.ts"],
+    include: ["../tests/**/*.test.ts"],
+    exclude: ["../tests/Snippets/**"],
     setupFiles: ["./setup-tests.ts"],
   },
 });

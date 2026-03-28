@@ -25,8 +25,8 @@
   <ImageLoader
     src={validImageSrc}
     alt="IBM Logo"
-    on:load={onload}
-    on:error={onerror}
+    on:load={(e) => onload?.(e)}
+    on:error={(e) => onerror?.(e)}
   />
 </div>
 

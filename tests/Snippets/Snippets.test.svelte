@@ -63,10 +63,8 @@
   {/snippet}
 </ComboBox>
 
-<Button data-testid="button-snippet" as>
-  {#snippet children({ props })}
-    <div {...props} data-testid="custom-button">Custom Button Element</div>
-  {/snippet}
+<Button data-testid="button-snippet" as let:props>
+  <div {...props} data-testid="custom-button">Custom Button Element</div>
 </Button>
 
 <div data-testid="theme-snippet">

@@ -1,5 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
-import { user } from "../../setup-tests";
+import { user } from "../setup-tests";
 import Snippets from "./Snippets.test.svelte";
 
 describe("Svelte 5 Snippets", () => {
@@ -44,7 +44,7 @@ describe("Svelte 5 Snippets", () => {
       expect(dropdown).toBeInTheDocument();
 
       const button = dropdown.querySelector("button");
-      expect.assert(button);
+      if (!button) throw new Error("expected dropdown trigger button");
       await user.click(button);
 
       const item0 = screen.getByTestId("dropdown-item-0");
@@ -88,7 +88,7 @@ describe("Svelte 5 Snippets", () => {
   });
 
   describe("Button", () => {
-    it("should render snippet with props argument when using 'as' prop", () => {
+    it("should render default slot props when using 'as' prop", () => {
       render(Snippets);
 
       const customButton = screen.getByTestId("custom-button");

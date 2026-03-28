@@ -41,7 +41,7 @@
   {light}
   {flatpickrProps}
   {portalMenu}
-  on:change={onchange}
+  on:change={(e) => onchange?.(e)}
 >
   <DatePickerInput
     labelText="Date"

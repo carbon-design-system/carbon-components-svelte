@@ -3,15 +3,15 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:types": "svelte-check --workspace ../tests --fail-on-warnings && svelte-check --workspace ./svelte5 --fail-on-warnings"
+    "test:types": "svelte-check --workspace ../tests --tsconfig ../tests/tsconfig.compat-check.json --fail-on-warnings"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^7.0.0",
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
     "jsdom": "^29.0.1",
-    "svelte": "^5.55.0",
+    "svelte": "^4.2.20",
     "svelte-check": "^4.4.5",
     "vitest": "^4.1.1"
   }

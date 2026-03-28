@@ -74,10 +74,10 @@
     {orderFiles}
     {iconDescription}
     bind:files
-    on:add={onAdd}
-    on:remove={onRemove}
-    on:change={onChange}
-    on:clear={onClear}
-    on:rejected={onRejected}
+    on:add={(e) => onAdd?.(e)}
+    on:remove={(e) => onRemove?.(e)}
+    on:change={(e) => onChange?.(e)}
+    on:clear={(e) => onClear?.(e)}
+    on:rejected={(e) => onRejected?.(e)}
   />
 </form>

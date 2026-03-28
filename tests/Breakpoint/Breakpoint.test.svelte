@@ -26,7 +26,7 @@
 <Breakpoint
   bind:size
   bind:sizes
-  on:change={onchange}
+  on:change={(e) => onchange?.(e)}
   let:size={currentSize}
   let:sizes={currentSizes}
 >

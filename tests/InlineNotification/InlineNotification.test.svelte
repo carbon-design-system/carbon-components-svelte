@@ -27,7 +27,7 @@
   {statusIconDescription}
   {closeButtonDescription}
   {hideCloseButton}
-  on:close={onclose}
-  on:click={onclick}
+  on:close={(e) => onclose?.(e)}
+  on:click={(e) => onclick?.(e)}
   {...$$restProps}
 />
