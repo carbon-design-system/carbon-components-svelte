@@ -30,6 +30,7 @@
     "css/*.css"
   ],
   "scripts": {
+    "setup": "bun install && cd docs && bun install && cd .. && bun build:docs",
     "test": "vitest",
     "test:src-types": "tsc --project tsconfig.types.json",
     "test:types": "svelte-check --workspace tests --fail-on-warnings",

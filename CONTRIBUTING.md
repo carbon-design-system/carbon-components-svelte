@@ -27,28 +27,22 @@ git remote -v
 
 ### Install
 
-Install the project dependencies.
+Install all dependencies (root and docs) and generate TypeScript definitions and `docs/src/COMPONENT_API.json`:
 
 ```sh
-bun install
+bun setup
 ```
+
+This single command runs `bun install` in both the project root and `docs/`, then runs `bun build:docs`.
 
 ## Documentation set-up
 
 Component documentation is located in the `docs` folder. The site uses [Vite](https://vitejs.dev/), [Routify 3](https://routify.dev/docs), Svelte 5, and MDsveX. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` are picked up without a separate package link.
 
-When developing the docs site, you must first generate `docs/src/COMPONENT_API.json` and the TypeScript definitions in `src/` (these are not committed; see `.gitignore`). From the project root, run:
-
-```sh
-bun i
-bun build:docs
-```
-
-Then install docs dependencies and start the dev server:
+After running `bun setup`, start the docs dev server:
 
 ```sh
 cd docs
-bun i
 bun dev
 ```
 
