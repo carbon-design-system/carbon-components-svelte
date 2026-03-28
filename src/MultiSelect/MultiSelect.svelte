@@ -1,7 +1,6 @@
 <script>
   /**
    * @generics {Item extends MultiSelectItem<any> = MultiSelectItem<any>} Item
-   * @template {MultiSelectItem<any>} Item
    * @typedef {string} MultiSelectItemText
    * @typedef {object} MultiSelectItem<Id=any>
    * @property {Id} id

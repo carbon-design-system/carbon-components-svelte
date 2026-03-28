@@ -1,7 +1,6 @@
 <script>
   /**
    * @generics {Value extends string | number = string | number} Value
-   * @template {string | number} Value
    */
 
   /**
