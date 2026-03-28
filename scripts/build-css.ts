@@ -2,7 +2,7 @@ import path from "node:path";
 import autoprefixer from "autoprefixer";
 import { Glob } from "bun";
 import postcss from "postcss";
-import sass from "sass";
+import { compileAsync } from "sass";
 
 const PARTIAL_FILE_REGEX = /^_/;
 
@@ -18,12 +18,10 @@ await Promise.all(
 
     console.log("[build-css]", file, "-->", outFile);
 
-    const { css } = sass.renderSync({
-      file,
-      outFile,
-      outputStyle: "compressed",
-      omitSourceMapUrl: true,
-      includePaths: ["node_modules"],
+    const { css } = await compileAsync(file, {
+      style: "compressed",
+      sourceMap: false,
+      loadPaths: ["node_modules"],
     });
 
     const prefixed = await postcss([
