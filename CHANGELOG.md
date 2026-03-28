@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.105.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.104.0...v0.105.0) (2026-03-28)
+
+### Features
+
+- **ui-shell:** support theming ([83af86b](https://github.com/carbon-design-system/carbon-components-svelte/commit/83af86b918402e8cd2f31a38faee233eca05afa3)), closes [#2457](https://github.com/carbon-design-system/carbon-components-svelte/issues/2457)
+
+### Bug Fixes
+
+- **ui-shell:** `HeaderSearch` does not render clear button if inactive ([089fb86](https://github.com/carbon-design-system/carbon-components-svelte/commit/089fb86570b9f17ecbe3bcefebec099f4c857649))
+
 ### [0.104.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.103.0...v0.104.0) (2026-03-28)
 
 ### Features
