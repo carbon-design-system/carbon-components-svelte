@@ -118,8 +118,8 @@
         <Tabs autoWidth>
           <Tab label="NPM" />
           <Tab label="pnpm" />
-          <Tab label="Yarn" />
           <Tab label="Bun" />
+          <Tab label="Yarn" />
           <div slot="content" style="margin: 1rem -1rem">
             <TabContent>
               <CodeSnippet code={installNpm} />
@@ -128,10 +128,10 @@
               <CodeSnippet code={installPnpm} />
             </TabContent>
             <TabContent>
-              <CodeSnippet code={installYarn} />
+              <CodeSnippet code={installBun} />
             </TabContent>
             <TabContent>
-              <CodeSnippet code={installBun} />
+              <CodeSnippet code={installYarn} />
             </TabContent>
           </div>
         </Tabs>

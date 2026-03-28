@@ -22,17 +22,13 @@ The Carbon Svelte portfolio also includes:
 ## Installation
 
 ```sh
-# npm
 npm i carbon-components-svelte
 
-# pnpm
 pnpm i carbon-components-svelte
 
-# Yarn
-yarn add carbon-components-svelte
-
-# Bun
 bun add carbon-components-svelte
+
+yarn add carbon-components-svelte
 ```
 
 ## Usage
@@ -143,17 +139,10 @@ Import components from `carbon-components-svelte` in the `script` tag of your Sv
 > Using `carbon-preprocess-svelte` is optional and not a prerequisite for this library. It should be installed as a development dependency.
 
 ```sh
-# npm
 npm i -D carbon-preprocess-svelte
-
-# pnpm
 pnpm i -D carbon-preprocess-svelte
-
-# Yarn
-yarn add -D carbon-preprocess-svelte
-
-# Bun
 bun add -D carbon-preprocess-svelte
+yarn add -D carbon-preprocess-svelte
 ```
 
 ### `optimizeImports`

@@ -3,17 +3,13 @@ Carbon Components Svelte is a [Svelte](https://github.com/sveltejs/svelte) compo
 ## Installation
 
 ```sh
-# npm
 npm i carbon-components-svelte
 
-# pnpm
 pnpm i carbon-components-svelte
 
-# Yarn
-yarn add carbon-components-svelte
-
-# Bun
 bun add carbon-components-svelte
+
+yarn add carbon-components-svelte
 ```
 
 ## Styling
@@ -53,14 +49,11 @@ Install [carbon-preprocess-svelte](https://github.com/carbon-design-system/carbo
 ```bash
 npm i -D carbon-preprocess-svelte
 
-# pnpm
 pnpm i -D carbon-preprocess-svelte
 
-# Yarn
-yarn add -D carbon-preprocess-svelte
-
-# Bun
 bun add -D carbon-preprocess-svelte
+
+yarn add -D carbon-preprocess-svelte
 ```
 
 ### optimizeImports
