@@ -53,6 +53,6 @@
   bind:ref
   {virtualize}
   {portalMenu}
-  on:select={onselect}
+  on:select={(e) => onselect?.(e)}
   {...$$restProps}
 />

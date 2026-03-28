@@ -31,13 +31,13 @@
   {translateWithId}
   {id}
   bind:ref
-  on:click={onclick}
-  on:mouseover={onmouseover}
-  on:mouseenter={onmouseenter}
-  on:mouseleave={onmouseleave}
-  on:keydown={onkeydown}
-  on:focus={onfocus}
-  on:blur={onblur}
+  on:click={(e) => onclick?.(e)}
+  on:mouseover={(e) => onmouseover?.(e)}
+  on:mouseenter={(e) => onmouseenter?.(e)}
+  on:mouseleave={(e) => onmouseleave?.(e)}
+  on:keydown={(e) => onkeydown?.(e)}
+  on:focus={(e) => onfocus?.(e)}
+  on:blur={(e) => onblur?.(e)}
   {...$$restProps}
 >
   {#if slotContent}

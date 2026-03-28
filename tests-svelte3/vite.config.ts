@@ -23,6 +23,7 @@ export default defineConfig({
   test: {
     ...testConfig,
     include: ["../tests/**/*.test.ts"],
+    exclude: ["../tests/Snippets/**"],
     setupFiles: ["./setup-tests.ts"],
   },
 });

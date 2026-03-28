@@ -9,9 +9,9 @@
 </script>
 
 <FileUploaderItem
-  on:delete={ondelete}
-  on:mouseover={onmouseover}
-  on:mouseenter={onmouseenter}
-  on:mouseleave={onmouseleave}
+  on:delete={(e) => ondelete?.(e)}
+  on:mouseover={(e) => onmouseover?.(e)}
+  on:mouseenter={(e) => onmouseenter?.(e)}
+  on:mouseleave={(e) => onmouseleave?.(e)}
   {...$$restProps}
 />

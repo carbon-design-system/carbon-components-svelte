@@ -23,7 +23,7 @@
   {anchor}
   {direction}
   {open}
-  on:scroll={onscroll}
+  on:scroll={(e) => onscroll?.(e)}
   {...$$restProps}
 >
   {#if slotContent}
