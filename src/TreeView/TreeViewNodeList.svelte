@@ -1,7 +1,6 @@
 <script>
   /**
-   * @generics {Id = (string|number), Icon = any} Id,Icon
-   * @template {string | number} Id
+   * @generics {Id extends string | number = string | number, Icon = any} Id,Icon
    * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
    * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; } }}
    */

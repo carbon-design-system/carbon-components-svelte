@@ -1,7 +1,6 @@
 <script>
   /**
    * @generics {Result extends HeaderSearchResult = HeaderSearchResult} Result
-   * @template {HeaderSearchResult} Result
    * @typedef {object} HeaderSearchResult
    * @property {string} href
    * @property {string} text

@@ -2,7 +2,6 @@
   /**
    * @restProps {label}
    * @generics {Value extends string = string} Value
-   * @template {string} Value
    */
 
   /** Set to `true` to check the tile */

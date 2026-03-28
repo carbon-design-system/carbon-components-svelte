@@ -106,7 +106,6 @@
 <script>
   /**
    * @generics {Node extends TreeNode<any> = TreeNode<any>} Node
-   * @template {TreeNode<any>} Node
    * @typedef {object} TreeNode<Id=(string|number)>
    * @property {Id} id
    * @property {any} text

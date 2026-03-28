@@ -1,7 +1,6 @@
 <script>
   /**
    * @generics {Row extends DataTableRow = DataTableRow} Row
-   * @template {DataTableRow} Row
    * @typedef {import('./data-table-utils.d.ts').PropertyPath<Row>} DataTableKey<Row=DataTableRow>
    * @typedef {any} DataTableValue
    * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>

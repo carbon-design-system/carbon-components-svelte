@@ -1,7 +1,6 @@
 <script>
   /**
    * @generics {Row extends import("./DataTable.svelte").DataTableRow = import("./DataTable.svelte").DataTableRow} Row
-   * @template {import("./DataTable.svelte").DataTableRow} Row
    * @restProps {input}
    * @event {null} clear
    */

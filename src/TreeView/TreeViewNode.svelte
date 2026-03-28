@@ -55,7 +55,6 @@
 <script>
   /**
    * @generics {Node extends TreeNode<any> = TreeNode<any>, Icon = any} Node,Icon
-   * @template {TreeNode<any>} Node
    * @typedef {import('./TreeView.svelte').TreeNode<Id>} TreeNode<Id=(string|number)>
    * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; } }}
    */
