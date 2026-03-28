@@ -58,13 +58,12 @@ describe("HeaderSearch", () => {
       expect(clearButton).toBeInTheDocument();
     });
 
-    it("should hide clear button when not active", () => {
+    it("should not render clear button when not active", () => {
       render(HeaderSearchTest, { props: { active: false } });
 
-      const clearButton = screen.queryByRole("button", {
-        name: "Clear search",
-      });
-      expect(clearButton).toHaveClass("bx--header-search-button--hidden");
+      expect(
+        screen.queryByRole("button", { name: "Clear search" }),
+      ).not.toBeInTheDocument();
     });
   });
 
