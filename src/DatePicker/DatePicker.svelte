@@ -319,7 +319,7 @@
 
 <svelte:window
   on:click={({ target }) => {
-    if (!calendar || !calendar.isOpen) return;
+    if (!calendar?.isOpen) return;
     if (datePickerRef?.contains(target)) return;
     if (!calendar.calendarContainer.contains(target)) calendar.close();
   }}
