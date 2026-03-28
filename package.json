@@ -59,7 +59,7 @@
     "@types/node": "^25.5.0",
     "autoprefixer": "^10.4.21",
     "carbon-components": "10.58.12",
-    "carbon-icons-svelte": "^13.7.0",
+    "carbon-icons-svelte": "^13.10.0",
     "culls": "^0.2.0",
     "jsdom": "^29.0.1",
     "postcss": "^8.5.5",
@@ -70,7 +70,7 @@
     "svelte": "^5.55.0",
     "svelte-check": "^4.4.5",
     "typescript": "^6.0.2",
-    "vitest": "^4.1.1"
+    "vitest": "^4.1.2"
   },
   "standard-version": {
     "skip": {
