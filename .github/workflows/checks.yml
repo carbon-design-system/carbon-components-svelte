@@ -69,6 +69,7 @@ jobs:
   test-e2e:
     needs: [lint]
     runs-on: macos-15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
