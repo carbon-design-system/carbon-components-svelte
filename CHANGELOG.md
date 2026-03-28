@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.104.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.103.0...v0.104.0) (2026-03-28)
+
+### Features
+
+- **code-snippet:** portal tooltip inside modal context ([7821456](https://github.com/carbon-design-system/carbon-components-svelte/commit/7821456430d28dc71dd5f2b352589f8e0f72be25)), closes [#386](https://github.com/carbon-design-system/carbon-components-svelte/issues/386)
+- **combo-box:** add `selectTextOnFocus` prop ([e0554a0](https://github.com/carbon-design-system/carbon-components-svelte/commit/e0554a04fbe275cf56917387bf113bdccccfaf7d))
+- **content-switcher:** add `selectionMode` prop ([ef0fb0a](https://github.com/carbon-design-system/carbon-components-svelte/commit/ef0fb0a27d147e152c08b272f6f35d2d585bd07d))
+- **context-menu:** `e.preventDefault()` prevents menu from closing ([66d08bc](https://github.com/carbon-design-system/carbon-components-svelte/commit/66d08bcd1eb7f613157f0da3997e4ec5e25e4cc9))
+- **copy-button:** portal tooltip inside modal context ([10f109f](https://github.com/carbon-design-system/carbon-components-svelte/commit/10f109f83000fbad016a67539705b26b6742acbc))
+- **file-uploader:** `iconDescription` passes back file metadata ([80730e6](https://github.com/carbon-design-system/carbon-components-svelte/commit/80730e67effa36f5ca00216c22088dc8e0091da8))
+- **file-uploader:** `iconDescription` uses better defaults ([252d536](https://github.com/carbon-design-system/carbon-components-svelte/commit/252d5363bb3409bef4a7032afadb6caecd0d50e0))
+- **file-uploader:** add `orderFiles` prop ([70a939a](https://github.com/carbon-design-system/carbon-components-svelte/commit/70a939a050a339594a0b75101899790bd3369e33)), closes [#2775](https://github.com/carbon-design-system/carbon-components-svelte/issues/2775)
+- **file-uploader:** add `preventDuplicates` prop ([b867814](https://github.com/carbon-design-system/carbon-components-svelte/commit/b8678148956cc842aa7d7a35956f6d4d8f9af83b))
+- **file-uploader:** dispatch clear and change events when clearing files ([6ca7acc](https://github.com/carbon-design-system/carbon-components-svelte/commit/6ca7acc278e591808c77d1d43f5bb5ca1ff5f88a))
+- **file-uploader:** dispatch rejected event if file exceeds `maxFileSize` ([f4a9cc6](https://github.com/carbon-design-system/carbon-components-svelte/commit/f4a9cc618dedee92d3ba24593c26197113e2148d))
+- **floating-portal:** add `intrinsicAlign` prop ([6731628](https://github.com/carbon-design-system/carbon-components-svelte/commit/673162838927531a3c2a9805d4e314d6e781e3ad))
+- **floating-portal:** support `intrinsicWidth` prop ([d98fddc](https://github.com/carbon-design-system/carbon-components-svelte/commit/d98fddc0bf5cbbebecfc715d94a1ebc8031c8ec0))
+- **floating-portal:** support left/right directions, gap props ([01d07ac](https://github.com/carbon-design-system/carbon-components-svelte/commit/01d07acb3c092c5c3e0e7a845157ead67eb0079a))
+- **multi-select:** support `isSelectAll` item option ([a97b2b7](https://github.com/carbon-design-system/carbon-components-svelte/commit/a97b2b7ddfc4f0e128faa43e655a6fb3b58f9c71))
+- **skeleton-icon:** add `SkeletonIcon` component ([d91ed6a](https://github.com/carbon-design-system/carbon-components-svelte/commit/d91ed6aeac4c715d82c0924c7af8e5aa328ba6b2))
+- **skeleton-placeholder:** add size/width/height props ([4f364ce](https://github.com/carbon-design-system/carbon-components-svelte/commit/4f364cee9096c4e77bee0c0be8371d0692f94deb))
+- **tag:** add `SelectableTag` ([9314882](https://github.com/carbon-design-system/carbon-components-svelte/commit/931488293e086662827834c04f46547b1c9bc21a)), closes [#2763](https://github.com/carbon-design-system/carbon-components-svelte/issues/2763)
+- **theme:** set `color-scheme` on root element ([0c69e41](https://github.com/carbon-design-system/carbon-components-svelte/commit/0c69e41555133c754bc39945e126ca6823cf1f7b))
+- **tooltip-definition:** add `clickToOpen` prop ([4960a6c](https://github.com/carbon-design-system/carbon-components-svelte/commit/4960a6c1287cb34d40f377c42efc5ba8e2094fe3)), closes [#2761](https://github.com/carbon-design-system/carbon-components-svelte/issues/2761)
+- **tooltip-definition:** add `enterDelayMs` and `leaveDelayMs` props ([454e392](https://github.com/carbon-design-system/carbon-components-svelte/commit/454e39260ef7aa6783e50c2ed7020e3fed6ea412))
+- **tooltip-definition:** portal tooltip inside modal context ([05b7293](https://github.com/carbon-design-system/carbon-components-svelte/commit/05b72939ed9364a2cb9ba11b74658c0c1399f37b))
+- **tooltip-icon:** add `enterDelayMs` and `leaveDelayMs` props ([5678ce3](https://github.com/carbon-design-system/carbon-components-svelte/commit/5678ce3d27f554a8369b182f59f3fca84d370c0f))
+- **tooltip-icon:** add `open` prop and open/close events ([33585f9](https://github.com/carbon-design-system/carbon-components-svelte/commit/33585f979cd07ac7358b1ba2afbf8952f500cf16))
+- **tooltip-icon:** portal tooltip inside modal context ([db287f5](https://github.com/carbon-design-system/carbon-components-svelte/commit/db287f598875f863f9e885e74c9b6de1c63e7f80))
+- **tooltip:** portal tooltip inside modal context ([71c153d](https://github.com/carbon-design-system/carbon-components-svelte/commit/71c153dd94e9664e41586fc76c7cc8fb18c1ea5c))
+
+### Bug Fixes
+
+- **context-menu:** auto-indent option with icon ([4a1f32c](https://github.com/carbon-design-system/carbon-components-svelte/commit/4a1f32c87583cb00b378600248bbb33ae3b74c5a))
+- **data-table:** custom sort accounts for sort direction ([#2797](https://github.com/carbon-design-system/carbon-components-svelte/issues/2797)) ([388709a](https://github.com/carbon-design-system/carbon-components-svelte/commit/388709a3604ce223942773c75b5f42b1ba6c2ea5))
+- **file-uploader:** use stable file IDs ([ea2608f](https://github.com/carbon-design-system/carbon-components-svelte/commit/ea2608f604b7a9eb42a94dc16ab9aa6d4351e110))
+- **inline-notification:** title uses `strong` element for emphasis ([#2750](https://github.com/carbon-design-system/carbon-components-svelte/issues/2750)) ([5385c00](https://github.com/carbon-design-system/carbon-components-svelte/commit/5385c006101cd0203521fdcb9ed9ffcbb932b03e))
+- **password-input:** portal tooltip inside modal context ([3930789](https://github.com/carbon-design-system/carbon-components-svelte/commit/39307898d4c40a220bac6da73a78c29bc8b529ac)), closes [#545](https://github.com/carbon-design-system/carbon-components-svelte/issues/545) [#1603](https://github.com/carbon-design-system/carbon-components-svelte/issues/1603)
+- **toolbar-search:** remove redundant `<any>` from Row generics ([6657a61](https://github.com/carbon-design-system/carbon-components-svelte/commit/6657a6103b4086949d1a54b1f1591bcc54f7c4a7))
+- **tooltip-icon:** only one tooltip is visible at a time ([d93c795](https://github.com/carbon-design-system/carbon-components-svelte/commit/d93c7951e1daec70141c5bbe4cd916fc48eaa3d6))
+- **types:** remove unnecessary `[@template](https://github.com/template)` JSDoc type ([bed6a59](https://github.com/carbon-design-system/carbon-components-svelte/commit/bed6a597355649d688784f7f4bbd24e83801ae5b))
+- **ui-shell:** ensure `HeaderAction` button styles match spec ([309d62e](https://github.com/carbon-design-system/carbon-components-svelte/commit/309d62ee2f1e48849d58e37fb56a4277ec8a85ed))
+- **ui-shell:** ensure search close button hover style is preserved ([f8d1df1](https://github.com/carbon-design-system/carbon-components-svelte/commit/f8d1df1bad5b313c465b6a76be592109a172974f))
+
 ### [0.103.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.102.0...v0.103.0) (2026-03-09)
 
 ### Features
