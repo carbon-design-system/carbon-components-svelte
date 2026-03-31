@@ -1,5 +1,6 @@
 import type { Component } from "svelte";
 import { mount as mountSvelte } from "svelte";
+import "carbon-components-svelte/css/all.css";
 
 /**
  * Mount a Svelte component into the DOM.

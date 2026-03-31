@@ -49,7 +49,12 @@ test.describe("Modal with Dropdowns", () => {
     await menu.getByRole("option", { name: "Slack" }).click();
     await menu.getByRole("option", { name: "Email" }).click();
 
-    await expect(page.locator(".bx--tag__label")).toHaveText("2");
+    await expect(
+      menu.getByRole("option", { name: "Slack" }).getByRole("checkbox"),
+    ).toBeChecked();
+    await expect(
+      menu.getByRole("option", { name: "Email" }).getByRole("checkbox"),
+    ).toBeChecked();
   });
 
   test("Dropdown menu renders outside the dialog (portal)", async ({

@@ -43,7 +43,7 @@ test.describe("DatePicker", () => {
     const calendarIcon = page
       .getByTestId("date-picker-single")
       .locator(".bx--date-picker__icon");
-    await calendarIcon.click();
+    await calendarIcon.click({ force: true });
     const calendar = page
       .getByTestId("date-picker-single")
       .getByLabel("calendar-container");
