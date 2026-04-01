@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.105.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.105.0...v0.105.1) (2026-04-01)
+
+### Bug Fixes
+
+- **composed-modal:** use mouse events for outside click ([7104ac4](https://github.com/carbon-design-system/carbon-components-svelte/commit/7104ac4957539ede9ed4d02784bf4c8513ea249e)), closes [#2805](https://github.com/carbon-design-system/carbon-components-svelte/issues/2805)
+- **modal:** use mouse events for outside click ([3a8fa07](https://github.com/carbon-design-system/carbon-components-svelte/commit/3a8fa07ff7ddca1100d2a6c8e52cbe3deb72a974)), closes [#2805](https://github.com/carbon-design-system/carbon-components-svelte/issues/2805)
+
 ### [0.105.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.104.0...v0.105.0) (2026-03-28)
 
 ### Features
