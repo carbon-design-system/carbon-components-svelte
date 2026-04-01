@@ -1,13 +1,34 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { format } from "prettier";
 import plugin from "prettier/plugins/typescript";
-import componentApi from "../docs/src/COMPONENT_API.json" with { type: "json" };
+import componentApi from "../src/COMPONENT_API.json" with { type: "json" };
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const outFile = path.join(__dirname, "../src/COMPONENT_API.json");
 
 const WHITESPACE_REGEX = /\s{2,}/;
 const TRAILING_SEMICOLON_REGEX = /;\s*$/;
 const EVENT_DETAIL_PREFIX_REGEX = /type EventDetail = /;
 const SLOT_PROPS_PREFIX_REGEX = /type SlotProps = /;
 
-const formatTypeScript = async (value) => {
+/** Avoid `type EventDetail = type EventDetail = …` when re-running the formatter. */
+const stripLeadingTypeAlias = (
+  source: string,
+  name: "EventDetail" | "SlotProps",
+) => {
+  const re = new RegExp(`^\\s*type\\s+${name}\\s*=\\s*`, "i");
+  let s = source;
+  let next = s.replace(re, "").trimStart();
+  while (next !== s) {
+    s = next;
+    next = s.replace(re, "").trimStart();
+  }
+  return s;
+};
+
+const formatTypeScript = async (value: string) => {
   return await format(value, {
     parser: "typescript",
     plugins: [plugin],
@@ -67,7 +88,16 @@ const modified = {
             return event;
           }
 
-          const normalizedValue = `type EventDetail = ${event.detail}`;
+          if (!("detail" in event) || typeof event.detail !== "string") {
+            return event;
+          }
+
+          const detailBody = stripLeadingTypeAlias(event.detail, "EventDetail");
+          if (!detailBody) {
+            return event;
+          }
+
+          const normalizedValue = `type EventDetail = ${detailBody}`;
 
           const formatted = (await formatTypeScript(normalizedValue))
             // Remove prefix needed for formatting.
@@ -88,7 +118,10 @@ const modified = {
             return slot;
           }
 
-          let normalizedValue = slot.slot_props;
+          let normalizedValue = stripLeadingTypeAlias(
+            slot.slot_props,
+            "SlotProps",
+          );
 
           if (normalizedValue.startsWith("{")) {
             normalizedValue = `type SlotProps = ${normalizedValue}`;
@@ -118,9 +151,6 @@ const modified = {
   ),
 };
 
-await Bun.write(
-  "./docs/src/COMPONENT_API.json",
-  JSON.stringify(modified, null, 2),
-);
+fs.writeFileSync(outFile, JSON.stringify(modified, null, 2));
 
 console.timeEnd("formatComponentApi");

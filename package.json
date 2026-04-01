@@ -41,7 +41,7 @@
     "test:e2e": "playwright test",
     "lint": "biome check --write .",
     "build:css": "bun scripts/build-css",
-    "build:docs": "bun scripts/build-docs && bun scripts/format-component-api",
+    "build:docs": "bun scripts/build-docs",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
     "release": "standard-version && bun build:docs"
   },
@@ -64,7 +64,6 @@
     "culls": "^0.2.0",
     "jsdom": "^29.0.1",
     "postcss": "^8.5.5",
-    "prettier": "^3.8.1",
     "sass": "^1.98.0",
     "standard-version": "^9.5.0",
     "sveld": "^0.29.1",

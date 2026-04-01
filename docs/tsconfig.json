@@ -1,10 +1,10 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "carbon-components-svelte": ["../src"],
-      "carbon-components-svelte/*": ["../*"]
+      "carbon-components-svelte/*": ["../*"],
+      "*": ["./*"]
     }
   },
   "include": ["src/**/*", "scripts/**/*", "*.ts"]

@@ -1,13 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "dev": "bun run --parallel index-docs dev:vite",
+    "dev": "bun run format-component-api && bun run --parallel index-docs dev:vite",
     "dev:vite": "vite dev",
-    "build": "bun run --parallel build:index-docs build:sitemap && bun run build:md-docs && bun run build:vite",
+    "build": "bun run format-component-api && bun run --parallel build:index-docs build:sitemap && bun run build:md-docs && bun run build:vite",
     "index-docs": "bun scripts/index-docs.ts",
     "build:index-docs": "bun scripts/index-docs.ts",
     "build:md-docs": "bun scripts/generate-md-docs.ts",
     "build:sitemap": "bun scripts/generate-sitemap.ts",
+    "format-component-api": "bun scripts/format-component-api.ts",
     "build:vite": "vite build",
     "preview": "vite preview"
   },
