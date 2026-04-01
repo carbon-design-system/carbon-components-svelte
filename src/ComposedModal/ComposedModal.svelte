@@ -216,7 +216,7 @@
     }
   }}
   on:click
-  on:click={() => {
+  on:mouseup={() => {
     if (!didClickInnerModal && !preventCloseOnClickOutside) {
       close("outside-click");
     }
@@ -257,7 +257,7 @@
     class:bx--modal-container--sm={size === "sm"}
     class:bx--modal-container--lg={size === "lg"}
     class={containerClass}
-    on:click={() => {
+    on:mousedown={() => {
       didClickInnerModal = true;
     }}
   >
