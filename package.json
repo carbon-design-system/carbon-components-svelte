@@ -65,7 +65,7 @@
     "jsdom": "^29.0.1",
     "postcss": "^8.5.5",
     "prettier": "^3.8.1",
-    "sass": "^1.49.11",
+    "sass": "^1.98.0",
     "standard-version": "^9.5.0",
     "sveld": "^0.29.1",
     "svelte": "^5.55.0",
