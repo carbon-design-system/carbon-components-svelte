@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
 ### [0.105.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.105.0...v0.105.1) (2026-04-01)
 
