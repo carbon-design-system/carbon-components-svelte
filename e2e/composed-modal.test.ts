@@ -90,15 +90,26 @@ test.describe("ComposedModal", () => {
     await expect(page.locator(".bx--modal")).toHaveClass(/is-visible/);
 
     const primaryFocus = page.getByTestId("modal-primary-focus");
-    await primaryFocus.focus();
+    const footerClose = page.getByTestId("close-modal");
+    const headerClose = page.locator(".bx--modal-close");
+
+    // ComposedModal moves focus in a transitionend handler; wait for that
+    // before sending Tab so we do not race parallel updates.
+    await expect
+      .poll(
+        async () =>
+          primaryFocus.evaluate((el) => el === document.activeElement),
+        { timeout: 10_000 },
+      )
+      .toBeTruthy();
 
     await page.keyboard.press("Tab");
-    await expect(page.getByTestId("close-modal")).toBeFocused();
+    await expect(footerClose).toBeFocused({ timeout: 10_000 });
 
     await page.keyboard.press("Tab");
-    await expect(page.locator(".bx--modal-close")).toBeFocused();
+    await expect(headerClose).toBeFocused({ timeout: 10_000 });
 
     await page.keyboard.press("Tab");
-    await expect(primaryFocus).toBeFocused();
+    await expect(primaryFocus).toBeFocused({ timeout: 10_000 });
   });
 });

@@ -12,7 +12,7 @@ test.describe("RadioButtonGroup", () => {
   test("selects radio button", async ({ page }) => {
     await page
       .getByRole("radio", { name: "Option Two" })
-      .click({ force: true });
+      .evaluate((el: HTMLInputElement) => el.click());
     await expect(page.getByTestId("selected-value")).toContainText("two");
   });
 
@@ -21,7 +21,7 @@ test.describe("RadioButtonGroup", () => {
     await expect(group).toBeVisible();
     await group
       .getByRole("radio", { name: "Option Three" })
-      .click({ force: true });
+      .evaluate((el: HTMLInputElement) => el.click());
     await expect(page.getByTestId("selected-value")).toContainText("three");
   });
 

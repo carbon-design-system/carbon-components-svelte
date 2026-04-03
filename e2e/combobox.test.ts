@@ -79,21 +79,28 @@ test.describe("ComboBox", () => {
   }) => {
     const combobox = page.getByTestId("combobox-select-on-focus");
     await expect(combobox).toHaveValue("Email");
-    await combobox.click();
-    const selection = await page.evaluate(() => {
-      const input = document.activeElement;
-      if (input instanceof HTMLInputElement) {
-        return {
-          selectionStart: input.selectionStart,
-          selectionEnd: input.selectionEnd,
-          valueLength: input.value.length,
-        };
-      }
-      return null;
-    });
-    expect(selection).not.toBeNull();
-    expect(selection?.selectionStart).toBe(0);
-    expect(selection?.selectionEnd).toBe(5);
-    expect(selection?.valueLength).toBe(5);
+    await combobox.focus();
+    // ComboBox selects on focus after Svelte tick(); WebKit can lag one frame.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(() => {
+            const input = document.activeElement;
+            if (input instanceof HTMLInputElement) {
+              return {
+                selectionStart: input.selectionStart,
+                selectionEnd: input.selectionEnd,
+                valueLength: input.value.length,
+              };
+            }
+            return null;
+          }),
+        { timeout: 10_000 },
+      )
+      .toMatchObject({
+        selectionStart: 0,
+        selectionEnd: 5,
+        valueLength: 5,
+      });
   });
 });
