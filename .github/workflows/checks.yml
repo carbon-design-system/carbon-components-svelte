@@ -69,26 +69,21 @@ jobs:
   test-e2e:
     needs: [lint]
     runs-on: macos-15
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
 
       - name: Cache Playwright browsers
-        id: playwright-cache
         uses: actions/cache@v5
         with:
           path: ~/Library/Caches/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('node_modules/@playwright/test/package.json') }}
+          # Suffix bumps cache when the set of installed browsers changes.
+          key: ${{ runner.os }}-playwright-${{ hashFiles('node_modules/@playwright/test/package.json') }}-chromium-firefox-webkit
 
       - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: bunx playwright install --with-deps chromium
-
-      - name: Install Playwright OS dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: bunx playwright install-deps chromium
+        run: bunx playwright install --with-deps chromium firefox webkit
 
       - name: E2E tests
         run: bun run test:e2e
