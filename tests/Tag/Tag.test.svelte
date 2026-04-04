@@ -56,6 +56,12 @@
 
 <Tag size="sm">Small tag</Tag>
 
+<Tag size="lg">Large tag</Tag>
+
+<Tag size="lg" filter on:close>Large filterable</Tag>
+
+<Tag size="lg" skeleton />
+
 <Tag filter disabled title="Custom title">Disabled filterable</Tag>
 
 <Tag interactive disabled>Disabled interactive</Tag>
