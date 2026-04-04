@@ -490,10 +490,6 @@
       expandedNodeIds.set(expandedIds);
     }
   }
-
-  $: if (ref && (nodes !== cachedNodes || !treeWalker)) {
-    treeWalker = createTreeWalkerInstance(ref);
-  }
 </script>
 
 {#if !hideLabel}
