@@ -63,6 +63,18 @@ Customize the select dropdown using the `select` prop. You can specify which the
 
 <FileSource src="/framed/Theme/ThemeSelectCustom" />
 
+## Theme dropdown
+
+Set `render` to `"dropdown"` to display a Dropdown component for selecting from all available themes.
+
+<FileSource src="/framed/Theme/ThemeDropdown" />
+
+## Theme dropdown (custom)
+
+Customize the dropdown using the `dropdown` prop. You can specify which themes to include, customize labels, and adjust other dropdown properties.
+
+<FileSource src="/framed/Theme/ThemeDropdownCustom" />
+
 ## Exported themes constant
 
 The `themes` constant is exported from the Theme component, providing programmatic access to all available theme keys and their human-readable labels.
