@@ -325,9 +325,7 @@
     // Set highlighted index to selected item when menu opens
     if (wasJustOpened) {
       if (selectedId !== undefined && selectedItem) {
-        const selectedIndex = filteredItems.findIndex(
-          (item) => item.id === selectedId,
-        );
+        const selectedIndex = filteredItemIndexById.get(selectedId) ?? -1;
         if (selectedIndex >= 0) {
           // Set highlighted index to selected item so keyboard nav starts there
           highlightedIndex = selectedIndex;
@@ -426,7 +424,7 @@
         highlightedIndex = -1;
         highlightedId = undefined;
       } else {
-        selectedItem = items.find((item) => item.id === selectedId);
+        selectedItem = itemsById.get(selectedId);
       }
       if (!isInitialRender) {
         dispatch("select", { selectedId, selectedItem });
@@ -434,11 +432,15 @@
     }
   }
 
+  $: itemsById = new Map(items.map((item) => [item.id, item]));
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
+  $: filteredItemIndexById = new Map(
+    filteredItems.map((item, i) => [item.id, i]),
+  );
 
   $: shouldVirtualize =
     virtualize === false
@@ -564,7 +566,7 @@
         on:keydown
         on:keydown|stopPropagation={(e) => {
           const { key } = e;
-          if (["Enter", "ArrowDown", "ArrowUp"].includes(key)) {
+          if (key === "Enter" || key === "ArrowDown" || key === "ArrowUp") {
             e.preventDefault();
           }
           if (key === "Enter") {
@@ -620,7 +622,7 @@
           if (!open || !relatedTarget) return;
           if (
             relatedTarget &&
-            !["INPUT", "SELECT", "TEXTAREA"].includes(relatedTarget.tagName) &&
+            relatedTarget.tagName !== "INPUT" && relatedTarget.tagName !== "SELECT" && relatedTarget.tagName !== "TEXTAREA" &&
             relatedTarget.getAttribute("role") !== "button" &&
             relatedTarget.getAttribute("role") !== "searchbox"
           ) {
