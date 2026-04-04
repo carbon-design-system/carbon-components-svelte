@@ -46,6 +46,12 @@ Use the compact variant by setting `size` to `"compact"`.
 
 <FileSource src="/framed/TreeView/TreeViewCompact" />
 
+## With links
+
+Add links to leaf nodes by defining an `href` property. Link nodes render as `<a>` elements with `role="treeitem"`. When a link node is active, `aria-current="page"` is used. Disabled link nodes omit the `href` attribute.
+
+<FileSource src="/framed/TreeView/TreeViewLinks" />
+
 ## With icons
 
 Add icons to nodes by defining an `icon` property with a Carbon Svelte icon component.
