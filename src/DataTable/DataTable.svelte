@@ -434,17 +434,30 @@
   let tableCellsByRowId = {};
   let prevRows;
   let prevHeaders;
+  let rowRefById = {};
+
   $: if (rows !== prevRows || headers !== prevHeaders) {
-    tableCellsByRowId = rows.reduce((rowsAcc, row) => {
-      rowsAcc[row.id] = headers.map((header, index) => ({
-        key: header.key ?? `key-${index}`,
-        value: header.key ? resolvePath(row, header.key) : undefined,
-        display: header.display,
-        empty: header.empty,
-        columnMenu: header.columnMenu,
-      }));
-      return rowsAcc;
-    }, {});
+    const headersChanged = headers !== prevHeaders;
+    const next = {};
+    const nextRefs = {};
+
+    for (const row of rows) {
+      if (!headersChanged && rowRefById[row.id] === row) {
+        next[row.id] = tableCellsByRowId[row.id];
+      } else {
+        next[row.id] = headers.map((header, index) => ({
+          key: header.key ?? `key-${index}`,
+          value: header.key ? resolvePath(row, header.key) : undefined,
+          display: header.display,
+          empty: header.empty,
+          columnMenu: header.columnMenu,
+        }));
+      }
+      nextRefs[row.id] = row;
+    }
+
+    tableCellsByRowId = next;
+    rowRefById = nextRefs;
     prevRows = rows;
     prevHeaders = headers;
   }
