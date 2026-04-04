@@ -6,6 +6,8 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import Theme from "./Theme.test.svelte";
+import ThemeDropdown from "./ThemeDropdown.test.svelte";
+import ThemeDropdownCustom from "./ThemeDropdownCustom.test.svelte";
 import ThemeSelect from "./ThemeSelect.test.svelte";
 import ThemeSelectCustom from "./ThemeSelectCustom.test.svelte";
 import ThemeSelectDynamic from "./ThemeSelectDynamic.test.svelte";
@@ -274,6 +276,42 @@ describe("Theme", () => {
 
     await user.selectOptions(select, "g10");
     expect(select).toHaveTextContent(themes.g10);
+  });
+
+  it("should render dropdown when render prop is set to dropdown", async () => {
+    render(ThemeDropdown);
+
+    const button = screen.getByLabelText("Themes");
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveTextContent("White");
+
+    await user.click(button);
+    await user.click(screen.getByText("Gray 100"));
+    expect(button).toHaveTextContent("Gray 100");
+    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
+
+    await user.click(button);
+    await user.click(screen.getByText("White"));
+    expect(button).toHaveTextContent("White");
+    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
+  });
+
+  it("should render custom dropdown when render prop is set to dropdown and custom dropdown options are provided", async () => {
+    render(ThemeDropdownCustom);
+
+    const button = screen.getByLabelText("Select a theme");
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveTextContent("White");
+
+    await user.click(button);
+    await user.click(screen.getByText("Gray 100"));
+    expect(button).toHaveTextContent("Gray 100");
+    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
+
+    await user.click(button);
+    await user.click(screen.getByText("White"));
+    expect(button).toHaveTextContent("White");
+    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
   });
 
   describe("Generics", () => {
