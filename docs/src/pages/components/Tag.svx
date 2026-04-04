@@ -21,6 +21,12 @@ Use the small size variant for more compact layouts.
 
 <Tag size="sm">IBM Cloud</Tag>
 
+## Large size
+
+Use the large size variant for more prominent layouts.
+
+<Tag size="lg">IBM Cloud</Tag>
+
 ## Tag types
 
 Choose from a variety of color types to match your design system.
@@ -55,6 +61,12 @@ Disable a filterable tag to prevent interaction.
 Combine the filterable variant with the small size.
 
 <Tag size="sm" filter on:close>carbon-components</Tag>
+
+## Filterable (large)
+
+Combine the filterable variant with the large size.
+
+<Tag size="lg" filter on:close>carbon-components</Tag>
 
 ## Filterable with click and close
 
@@ -132,3 +144,9 @@ Show a loading state with the default skeleton variant.
 Show a loading state with the small skeleton variant.
 
 <Tag size="sm" skeleton />
+
+## Skeleton (large)
+
+Show a loading state with the large skeleton variant.
+
+<Tag size="lg" skeleton />
