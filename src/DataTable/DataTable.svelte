@@ -339,7 +339,13 @@
   const id = `ccs-${Math.random().toString(36)}`;
 
   // Store a copy of the original rows for filter restoration.
-  $: originalRows = [...rows];
+  let prevRows_ref = rows;
+  let originalRows = [...rows];
+  $: if (rows !== prevRows_ref) {
+    originalRows = [...rows];
+    $tableRows = rows;
+    prevRows_ref = rows;
+  }
 
   $: thKeys = headers.reduce((a, c) => {
     a[c.key] = c.key;
@@ -460,7 +466,6 @@
     prevHeaders = headers;
   }
 
-  $: $tableRows = rows;
   $: ascending = sortDirection === "ascending";
   $: sorting = sortable && sortKey != null;
   $: sortingHeader = headers.find((header) => header.key === sortKey);
