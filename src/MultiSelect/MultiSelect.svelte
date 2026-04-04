@@ -275,8 +275,9 @@
     }
 
     let disabled = itemsToUse[index].disabled;
+    let attempts = 0;
 
-    while (disabled) {
+    while (disabled && attempts < length) {
       index = index + direction;
 
       if (index < 0) {
@@ -286,9 +287,10 @@
       }
 
       disabled = itemsToUse[index].disabled;
+      attempts++;
     }
 
-    highlightedIndex = index;
+    if (!disabled) highlightedIndex = index;
   }
 
   /**

@@ -946,6 +946,32 @@ describe("MultiSelect", () => {
     expect(options[2]).toHaveAttribute("aria-selected", "false");
   });
 
+  it("should not infinite loop when all items are disabled", async () => {
+    render(MultiSelect, {
+      props: {
+        items: [
+          { id: "1", text: "Aa", disabled: true },
+          { id: "2", text: "Ba", disabled: true },
+          { id: "3", text: "Ca", disabled: true },
+        ],
+        filterable: true,
+        placeholder: "Filter...",
+      },
+    });
+    const input = screen.getByPlaceholderText("Filter...");
+    await user.click(input);
+
+    // If the while loop has no guard, this would hang forever.
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowUp}");
+
+    // No item should be selected since all are disabled.
+    const options = screen.getAllByRole("option");
+    for (const option of options) {
+      expect(option).toHaveAttribute("aria-selected", "false");
+    }
+  });
+
   it("skips disabled items during keyboard navigation", async () => {
     render(MultiSelect, {
       props: {
