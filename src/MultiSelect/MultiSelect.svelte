@@ -409,13 +409,15 @@
   });
 
   function sort() {
+    const selectedIdsSet = new Set(selectedIds);
+
     const selectAllEntries = items
       .filter((item) => item.isSelectAll)
       .map((item) => {
         const regularItems = items.filter((i) => !i.isSelectAll && !i.disabled);
         const allChecked =
           regularItems.length > 0 &&
-          regularItems.every((i) => selectedIds.includes(i.id));
+          regularItems.every((i) => selectedIdsSet.has(i.id));
         return { ...item, checked: allChecked };
       });
 
@@ -426,10 +428,10 @@
       selectionFeedback === "top-after-reopen"
     ) {
       const checkedItems = regularItems
-        .filter((item) => selectedIds.includes(item.id))
+        .filter((item) => selectedIdsSet.has(item.id))
         .map((item) => ({ ...item, checked: true }));
       const uncheckedItems = regularItems
-        .filter((item) => !selectedIds.includes(item.id))
+        .filter((item) => !selectedIdsSet.has(item.id))
         .map((item) => ({ ...item, checked: false }));
 
       return [
@@ -446,7 +448,7 @@
       ...regularItems
         .map((item) => ({
           ...item,
-          checked: selectedIds.includes(item.id),
+          checked: selectedIdsSet.has(item.id),
         }))
         .sort(sortItem),
     ];
@@ -465,6 +467,7 @@
   ) {
     sortedItems = sort();
   }
+  $: sortedItemsById = new Map(sortedItems.map((item) => [item.id, item]));
   $: hasSelectAll = items.some((item) => item.isSelectAll);
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
@@ -621,9 +624,7 @@
           on:keydown|stopPropagation={({ key }) => {
             if (key === "Enter") {
               if (highlightedId) {
-                const highlightedItem = sortedItems.find(
-                  (item) => item.id === highlightedId,
-                );
+                const highlightedItem = sortedItemsById.get(highlightedId);
                 if (highlightedItem) selectItem(highlightedItem);
               }
             } else if (key === "Tab") {
@@ -700,7 +701,7 @@
         }}
         on:keydown={(e) => {
           const key = e.key;
-          if ([" ", "ArrowUp", "ArrowDown"].includes(key)) {
+          if (key === " " || key === "ArrowUp" || key === "ArrowDown") {
             e.preventDefault();
           }
           if (key === " ") {
