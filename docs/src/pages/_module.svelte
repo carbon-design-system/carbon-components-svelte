@@ -20,7 +20,7 @@
   import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import MiniSearch from "minisearch";
-  import { onDestroy } from "svelte";
+  import { onMount, tick } from "svelte";
   import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import { theme } from "../store";
 
@@ -47,7 +47,19 @@
   const unsubGoto = goto.subscribe((fn) => {
     navigateTo = fn;
   });
-  onDestroy(unsubGoto);
+
+  onMount(() => {
+    tick().then(() => {
+      const selected = document.querySelector(
+        '.bx--side-nav [aria-current="page"]',
+      );
+      selected?.scrollIntoView({ block: "center" });
+    });
+
+    return () => {
+      unsubGoto();
+    };
+  });
 
   const deprecated: string[] = [];
   const new_components: string[] = [];
