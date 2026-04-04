@@ -8,19 +8,19 @@
     Button,
     Column,
     Content,
+    Dropdown,
     Grid,
     Link,
     OverflowMenu,
     OverflowMenuItem,
     Row,
-    Select,
-    SelectItem,
     Stack,
     Tab,
     TabContent,
     Tabs,
   } from "carbon-components-svelte";
   import type { CarbonTheme } from "carbon-components-svelte/src/Theme/Theme.svelte";
+  import { themes as themeLabels } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";
   import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
   import { onMount } from "svelte";
@@ -37,6 +37,8 @@
     "g90",
     "g100",
   ];
+
+  const themeItems = URL_THEMES.map((t) => ({ id: t, text: themeLabels[t] }));
 
   function isCarbonTheme(value: string | null): value is CarbonTheme {
     return value !== null && URL_THEMES.includes(value as CarbonTheme);
@@ -141,18 +143,15 @@
       <Column>
         <h1>{component}</h1>
         <div class="bar">
-          <Select
-            id="select-theme"
-            inline
+          <Dropdown
+            type="inline"
             labelText="Theme"
-            bind:selected={$theme}
-          >
-            <SelectItem value="white" text="White" />
-            <SelectItem value="g10" text="Gray 10" />
-            <SelectItem value="g80" text="Gray 80" />
-            <SelectItem value="g90" text="Gray 90" />
-            <SelectItem value="g100" text="Gray 100" />
-          </Select>
+            items={themeItems}
+            selectedId={$theme}
+            on:select={({ detail }) => {
+              theme.set(detail.selectedId);
+            }}
+          />
           <Stack orientation="horizontal">
             <Button
               kind="ghost"
@@ -209,7 +208,7 @@
             {/each}
             <div slot="content" class="tab-content-spacing">
               {#each api_components as component (component.moduleName)}
-                <TabContent> <ComponentApi {component} /> </TabContent>
+                <TabContent><ComponentApi {component} /></TabContent>
               {/each}
             </div>
           </Tabs>
