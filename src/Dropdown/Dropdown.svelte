@@ -170,6 +170,8 @@
   let typeaheadTimeout = null;
   let listScrollTop = 0;
   let prevOpen = false;
+  let itemsById = new Map();
+  let itemIndexById = new Map();
 
   const TYPEAHEAD_DELAY = 500;
 
@@ -182,7 +184,15 @@
   });
 
   $: inline = type === "inline";
-  $: selectedItem = items.find((item) => item.id === selectedId);
+  $: {
+    itemsById = new Map();
+    itemIndexById = new Map();
+    for (let i = 0; i < items.length; i++) {
+      itemsById.set(items[i].id, items[i]);
+      itemIndexById.set(items[i].id, i);
+    }
+  }
+  $: selectedItem = itemsById.get(selectedId);
   $: if (!open) {
     highlightedIndex = -1;
     prevHighlightedIndex = -1;
@@ -280,7 +290,7 @@
     const wasJustOpened = open && !prevOpen;
     if (wasJustOpened) {
       if (selectedId !== undefined && selectedItem) {
-        const selectedIndex = items.findIndex((item) => item.id === selectedId);
+        const selectedIndex = itemIndexById.get(selectedId) ?? -1;
         if (selectedIndex >= 0) {
           // Set highlighted index to selected item so keyboard nav starts there
           highlightedIndex = selectedIndex;
@@ -399,7 +409,7 @@
   const dispatchSelect = () => {
     dispatch("select", {
       selectedId,
-      selectedItem: items.find((item) => item.id === selectedId),
+      selectedItem: itemsById.get(selectedId),
     });
   };
 </script>
@@ -474,7 +484,7 @@
       tabindex="0"
       aria-expanded={open}
       on:keydown={(e) => {
-        if (["Enter", "ArrowDown", "ArrowUp"].includes(e.key)) {
+        if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
         }
 
@@ -510,7 +520,7 @@
         }
       }}
       on:keyup={(e) => {
-        if ([" "].includes(e.key)) {
+        if (e.key === " ") {
           e.preventDefault();
         } else {
           return;
