@@ -22,6 +22,14 @@ must have a unique `id` property.
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+## No initial selection
+
+Omit `selectedId` to render the dropdown with no item selected. The `label` prop is displayed as placeholder text until the user makes a selection.
+
+<Dropdown labelText="Contact" label="Choose a contact method" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ## Custom label
 
 Use the `labelChildren` slot to provide custom label content instead of using the `labelText` prop.
