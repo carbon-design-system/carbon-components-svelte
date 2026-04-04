@@ -347,11 +347,6 @@
     prevRows_ref = rows;
   }
 
-  $: thKeys = headers.reduce((a, c) => {
-    a[c.key] = c.key;
-    return a;
-  }, {});
-
   /**
    * @type {() => void}
    */
@@ -712,7 +707,7 @@
                         };
                     sortDirection = sortDirectionMap[currentSortDirection];
                     sortKey =
-                      sortDirection === "none" ? null : thKeys[header.key];
+                      sortDirection === "none" ? null : header.key;
                     dispatch("click:header", {
                       header,
                       sortDirection,
