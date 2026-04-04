@@ -1115,6 +1115,12 @@ Use `display` and `sort` functions in header objects to customize cell rendering
   ]}"
 />
 
+## Sortable with top-level sort
+
+Use the `sort` prop to define a default comparator for all sortable columns. Per-header `sort` functions take precedence. The comparator receives `(a, b, { key, ascending, row_a, row_b })`, enabling key-aware and row-level sorting logic.
+
+<FileSource src="/framed/DataTable/DataTableSortProp" />
+
 ## Sortable with nested object values
 
 Access nested object properties using dot notation in the header key.
