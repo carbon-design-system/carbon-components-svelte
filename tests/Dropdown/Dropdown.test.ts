@@ -1489,4 +1489,75 @@ describe("Dropdown", () => {
       expect(floatingPortal).not.toBeInTheDocument();
     });
   });
+
+  describe("checkmark icon", () => {
+    it("should render a checkmark icon for the selected item", async () => {
+      render(Dropdown, {
+        props: { items, selectedId: "1", labelText: "Contact" },
+      });
+
+      await user.click(screen.getByRole("button"));
+
+      const options = screen.getAllByRole("option");
+      // "Email" (index 1) is selected – should have the checkmark icon
+      const selectedOption = options[1];
+      const checkmark = selectedOption.querySelector(
+        ".bx--list-box__menu-item__selected-icon",
+      );
+      expect(checkmark).toBeInTheDocument();
+
+      // Non-selected options should not have the checkmark icon
+      expect(
+        options[0].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).not.toBeInTheDocument();
+      expect(
+        options[2].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should move the checkmark icon when selection changes", async () => {
+      render(Dropdown, {
+        props: { items, selectedId: "0", labelText: "Contact" },
+      });
+
+      await user.click(screen.getByRole("button"));
+
+      let options = screen.getAllByRole("option");
+      expect(
+        options[0].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeInTheDocument();
+      expect(
+        options[1].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).not.toBeInTheDocument();
+
+      // Select "Email"
+      await user.click(options[1]);
+
+      // Re-open the menu
+      await user.click(screen.getByRole("button"));
+
+      options = screen.getAllByRole("option");
+      expect(
+        options[0].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).not.toBeInTheDocument();
+      expect(
+        options[1].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeInTheDocument();
+    });
+
+    it("should not render a checkmark when no item is selected", async () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact" },
+      });
+
+      await user.click(screen.getByRole("button"));
+
+      const options = screen.getAllByRole("option");
+      for (const option of options) {
+        expect(
+          option.querySelector(".bx--list-box__menu-item__selected-icon"),
+        ).not.toBeInTheDocument();
+      }
+    });
+  });
 });
