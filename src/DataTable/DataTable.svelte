@@ -236,13 +236,7 @@
    */
   export let tableHeaderTranslateWithId = undefined;
 
-  import {
-    afterUpdate,
-    createEventDispatcher,
-    onMount,
-    setContext,
-    tick,
-  } from "svelte";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
@@ -300,33 +294,27 @@
   }
 
   // Set up scroll listener for sticky header container
-  afterUpdate(() => {
-    if (
-      virtualConfig &&
-      stickyHeader &&
-      tableRef &&
-      calculatedContainerHeight
-    ) {
-      tick().then(() => {
-        const container = tableRef;
-        if (container) {
-          if (scrollListenerCleanup) {
-            scrollListenerCleanup();
-            scrollListenerCleanup = null;
-          }
-          container.style.maxHeight = `${calculatedContainerHeight}px`;
-          container.style.overflowY = "auto";
-          const handleScroll = () => {
-            tableBodyScrollTop = container.scrollTop || 0;
-          };
-          container.addEventListener("scroll", handleScroll, { passive: true });
-          scrollListenerCleanup = () => {
-            container.removeEventListener("scroll", handleScroll);
-          };
-        }
-      });
+  $: if (
+    virtualConfig &&
+    stickyHeader &&
+    tableRef &&
+    calculatedContainerHeight
+  ) {
+    if (scrollListenerCleanup) {
+      scrollListenerCleanup();
+      scrollListenerCleanup = null;
     }
-  });
+    const container = tableRef;
+    container.style.maxHeight = `${calculatedContainerHeight}px`;
+    container.style.overflowY = "auto";
+    const handleScroll = () => {
+      tableBodyScrollTop = container.scrollTop || 0;
+    };
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    scrollListenerCleanup = () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }
 
   onMount(() => {
     return () => {
