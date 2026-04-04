@@ -2379,6 +2379,46 @@ describe("DataTable", () => {
       expect(dataRows.length).toBeLessThan(500);
     });
 
+    it("should not re-attach scroll listener on unrelated state changes", async () => {
+      const largeRows = createLargeRowList(500);
+      const { rerender } = render(DataTable, {
+        props: {
+          headers,
+          rows: largeRows,
+          stickyHeader: true,
+          selectable: true,
+          virtualize: true,
+        },
+      });
+
+      await tick();
+
+      // Find the sticky header scroll container (section.bx--data-table_inner-container)
+      const innerContainer = document.querySelector(
+        ".bx--data-table_inner-container",
+      );
+      expect(innerContainer).toBeInstanceOf(HTMLElement);
+      assert(innerContainer instanceof HTMLElement);
+
+      // Scroll listener should already be attached after initial render
+      const addSpy = vi.spyOn(innerContainer, "addEventListener");
+
+      // Trigger an unrelated state change (selecting a row)
+      await rerender({ selectedRowIds: ["0"] });
+      await tick();
+
+      // With the old afterUpdate approach, addEventListener("scroll") would be
+      // called again here because afterUpdate fires on every reactive update.
+      // With the reactive $: block, it should NOT re-attach because none of
+      // virtualConfig, stickyHeader, tableRef, or calculatedContainerHeight changed.
+      const scrollCalls = addSpy.mock.calls.filter(
+        ([event]) => event === "scroll",
+      );
+      expect(scrollCalls).toHaveLength(0);
+
+      addSpy.mockRestore();
+    });
+
     it("should work with zebra striping", () => {
       const largeRows = createLargeRowList(500);
       render(DataTable, {
