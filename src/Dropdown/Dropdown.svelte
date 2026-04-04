@@ -143,6 +143,7 @@
     onMount,
     tick,
   } from "svelte";
+  import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -593,6 +594,9 @@
                   }}
                 >
                   <slot {item} index={actualIndex}> {itemToString(item)} </slot>
+                  {#if selectedId === item.id}
+                    <Checkmark class="bx--list-box__menu-item__selected-icon" />
+                  {/if}
                 </ListBoxMenuItem>
               {/each}
             </div>
@@ -620,6 +624,9 @@
               }}
             >
               <slot {item} index={i}> {itemToString(item)} </slot>
+              {#if selectedId === item.id}
+                <Checkmark class="bx--list-box__menu-item__selected-icon" />
+              {/if}
             </ListBoxMenuItem>
           {/each}
         {/if}
