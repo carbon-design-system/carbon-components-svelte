@@ -12,11 +12,12 @@
    *         ? import('./data-table-utils.d.ts').PropertyPathIgnoringIndexSignatures<Row>
    *         : import('./data-table-utils.d.ts').PropertyPath<Row>
    * )} DataTableKey<Row=DataTableRow> Path keys for sort, headers, and cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures in ./data-table-utils.d.ts.
+   * @typedef {import('./data-table-utils.d.ts').DataTableSortValue<Row>} DataTableSortValue<Row=DataTableRow>
    * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {boolean} empty - Whether the header is empty
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {false | ((a: DataTableValue, b: DataTableValue) => number)} [sort]
+   * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {string} [width]
@@ -25,7 +26,7 @@
    * @property {DataTableKey<Row>} key
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {false | ((a: DataTableValue, b: DataTableValue) => number)} [sort]
+   * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {string} [width]
@@ -161,6 +162,31 @@
    * "descending" sort directions, skipping "none".
    */
   export let sortAlways = false;
+
+  /**
+   * Specify a default sort comparator for all sortable columns.
+   * Per-header `sort` functions take precedence over this prop.
+   *
+   * With a typed row generic, `a` and `b` are {@link DataTableSortValue} (the union of cell value types over every {@link DataTableKey} on `Row`). Narrow using `context.key` (typed as {@link DataTableKey}) or runtime checks.
+   *
+   * @example
+   * ```svelte
+   * <DataTable
+   *   sort={(a, b, { key }) => {
+   *     switch (key) {
+   *       case "expireDate":
+   *         return new Date(a) - new Date(b);
+   *       case "port":
+   *         return a - b;
+   *       default:
+   *         return String(a).localeCompare(String(b));
+   *     }
+   *   }}
+   * />
+   * ```
+   * @type {(a: DataTableSortValue<Row>, b: DataTableSortValue<Row>, context: { key: DataTableKey<Row>; ascending: boolean; row_a: Row; row_b: Row }) => number}
+   */
+  export let sort = undefined;
 
   /**
    * Set to `true` for the expandable variant.
@@ -484,7 +510,22 @@
       ? [...$tableRows].sort((a, b) => {
           const itemA = resolvePath(a, sortKey);
           const itemB = resolvePath(b, sortKey);
-          return compareValues(itemA, itemB, ascending, sortingHeader?.sort);
+          const headerSort = sortingHeader?.sort;
+
+          if (headerSort) {
+            return compareValues(itemA, itemB, ascending, headerSort);
+          }
+
+          if (sort) {
+            const result = sort(itemA, itemB, {
+              key: sortKey,
+              ascending,
+              row_a: a,
+              row_b: b,
+            });
+            return ascending ? result : -result;
+          }
+          return compareValues(itemA, itemB, ascending);
         })
       : $tableRows;
   $: defaultRowHeight = DEFAULT_ROW_HEIGHTS[size] || DEFAULT_ROW_HEIGHTS.medium;
