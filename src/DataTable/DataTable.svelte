@@ -341,6 +341,9 @@
   // Store a copy of the original rows for filter restoration.
   $: originalRows = [...rows];
 
+  // Track whether a filter is currently active.
+  let filterActive = false;
+
   $: thKeys = headers.reduce((a, c) => {
     a[c.key] = c.key;
     return a;
@@ -363,9 +366,12 @@
 
     if (value.length === 0) {
       // Reset to original rows.
+      filterActive = false;
       tableRows.set(originalRows);
       return originalRows.map((row) => row.id);
     }
+
+    filterActive = true;
 
     let filteredRows = [];
 
@@ -446,6 +452,10 @@
   let prevRows;
   let prevHeaders;
   $: if (rows !== prevRows || headers !== prevHeaders) {
+    // Props changed while a search filter is active: drop the guard so
+    // $tableRows syncs to the new `rows` before render. `ToolbarSearch`
+    // re-applies the query in afterUpdate (avoids stale row ids vs cells).
+    if (filterActive) filterActive = false;
     tableCellsByRowId = rows.reduce((rowsAcc, row) => {
       rowsAcc[row.id] = headers.map((header, index) => ({
         key: header.key ?? `key-${index}`,
@@ -460,7 +470,7 @@
     prevHeaders = headers;
   }
 
-  $: $tableRows = rows;
+  $: if (!filterActive) $tableRows = rows;
   $: ascending = sortDirection === "ascending";
   $: sorting = sortable && sortKey != null;
   $: sortingHeader = headers.find((header) => header.key === sortKey);
