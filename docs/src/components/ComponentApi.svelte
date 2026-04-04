@@ -182,7 +182,7 @@
                     </OutboundLink>
                   {:else if type in typeMap}
                     <div
-                      style="display: inline-flex; max-width: 220px; word-break: break-word;"
+                      style="display: inline-flex; max-width: 220px; white-space: nowrap;"
                     >
                       <svelte:component
                         this={AsyncPreviewTypeScript}
