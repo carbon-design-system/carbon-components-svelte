@@ -1,6 +1,7 @@
 <script lang="ts">
   import { DataTable } from "carbon-components-svelte";
   import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import type { DataTableSortValue } from "carbon-components-svelte/DataTable/data-table-utils";
   import type { ComponentEvents } from "svelte";
 
   type BaseRow = {
@@ -17,8 +18,8 @@
     sort?:
       | false
       | ((
-          a: string | number | boolean,
-          b: string | number | boolean,
+          a: DataTableSortValue<BaseRow>,
+          b: DataTableSortValue<BaseRow>,
         ) => number);
     sortAlways?: boolean;
   };
@@ -61,6 +62,18 @@
   export let zebra = false;
   export let sortable = false;
   export let sortAlways = false;
+  export let sort:
+    | ((
+        a: DataTableSortValue<BaseRow>,
+        b: DataTableSortValue<BaseRow>,
+        context: {
+          key: string;
+          ascending: boolean;
+          row_a: BaseRow;
+          row_b: BaseRow;
+        },
+      ) => number)
+    | undefined = undefined;
   export let stickyHeader = false;
   export let useStaticWidth = false;
   export let expandable = false;
@@ -113,6 +126,7 @@
   {zebra}
   {sortable}
   {sortAlways}
+  {sort}
   {stickyHeader}
   {useStaticWidth}
   {expandable}

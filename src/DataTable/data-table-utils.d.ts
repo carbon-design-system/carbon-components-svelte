@@ -115,3 +115,31 @@ export type PropertyPathIgnoringIndexSignatures<T, D extends number = 3> = [
           : never;
       }[keyof KeysWithoutIndexSignature<T>]
     : "";
+
+/**
+ * Cell value type at a column path (e.g. `"port"` or `"contact.company"`).
+ */
+export type DataTableValueAtPath<Row, Path extends string> = Row extends object
+  ? Path extends keyof Row & string
+    ? Row[Path]
+    : Path extends `${infer Head}.${infer Rest}`
+      ? Head extends keyof Row
+        ? DataTableValueAtPath<NonNullable<Row[Head]>, Rest>
+        : unknown
+      : unknown
+  : unknown;
+
+/**
+ * Union of cell value types for all column paths on `Row`.
+ * Used for default and per-column `sort` comparators.
+ *
+ * `Row` is unconstrained so generated `DataTableSortValue<Row = DataTableRow>` aliases stay valid;
+ * non-object `Row` resolves to `never`.
+ */
+export type DataTableSortValue<Row> = Row extends object
+  ? PropertyPath<Row> extends infer K
+    ? K extends string
+      ? DataTableValueAtPath<Row, K>
+      : never
+    : never
+  : never;

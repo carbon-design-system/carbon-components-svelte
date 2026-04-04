@@ -3,8 +3,13 @@ import type DataTableComponent from "carbon-components-svelte/DataTable/DataTabl
 import type {
   DataTableKey,
   DataTableRow,
+  DataTableValue,
 } from "carbon-components-svelte/DataTable/DataTable.svelte";
-import type { PropertyPath } from "carbon-components-svelte/DataTable/data-table-utils";
+import type {
+  DataTableSortValue,
+  DataTableValueAtPath,
+  PropertyPath,
+} from "carbon-components-svelte/DataTable/data-table-utils";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
@@ -278,7 +283,7 @@ describe("DataTable", () => {
         value: "Expire date",
         display: (date: string | number | boolean) =>
           new Date(date as string).toLocaleString(),
-        sort: (a: string | number | boolean, b: string | number | boolean) =>
+        sort: (a: DataTableValue, b: DataTableValue) =>
           new Date(a as string).getTime() - new Date(b as string).getTime(),
       },
     ];
@@ -686,6 +691,190 @@ describe("DataTable", () => {
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 3",
     );
+  });
+
+  it("sorts using the top-level sort prop", async () => {
+    const customRows = [
+      {
+        id: "a",
+        name: "Load Balancer 3",
+        protocol: "HTTP",
+        port: 3000,
+        rule: "Round robin",
+      },
+      {
+        id: "b",
+        name: "Load Balancer 1",
+        protocol: "HTTP",
+        port: 443,
+        rule: "Round robin",
+      },
+      {
+        id: "c",
+        name: "Load Balancer 2",
+        protocol: "HTTP",
+        port: 80,
+        rule: "DNS delegation",
+      },
+    ];
+
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers,
+        rows: customRows,
+        sort: (a: DataTableValue, b: DataTableValue) => {
+          // Reverse alphabetical for strings, normal for numbers
+          if (typeof a === "number" && typeof b === "number") return a - b;
+          return String(b).localeCompare(String(a));
+        },
+      },
+    });
+
+    // Sort by name — should use the top-level sort (reverse alphabetical)
+    const nameHeader = screen.getByText("Name");
+    await user.click(nameHeader);
+
+    const rowsAfterSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(rowsAfterSort[0]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 3",
+    );
+    expect(within(rowsAfterSort[2]).getAllByRole("cell")[0]).toHaveTextContent(
+      "Load Balancer 1",
+    );
+
+    // Sort by port — should use the top-level sort (numeric)
+    const portHeader = screen.getByText("Port");
+    await user.click(portHeader);
+
+    const rowsAfterPortSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(
+      within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
+    ).toHaveTextContent("80");
+    expect(
+      within(rowsAfterPortSort[2]).getAllByRole("cell")[2],
+    ).toHaveTextContent("3000");
+  });
+
+  it("per-header sort overrides the top-level sort prop", async () => {
+    const customHeaders = [
+      { key: "name", value: "Name" },
+      { key: "protocol", value: "Protocol" },
+      {
+        key: "port",
+        value: "Port",
+        sort: (a: DataTableValue, b: DataTableValue) =>
+          (b as number) - (a as number), // descending when ascending
+      },
+      { key: "rule", value: "Rule" },
+    ];
+
+    const customRows = [
+      {
+        id: "a",
+        name: "Load Balancer 3",
+        protocol: "HTTP",
+        port: 3000,
+        rule: "Round robin",
+      },
+      {
+        id: "b",
+        name: "Load Balancer 1",
+        protocol: "HTTP",
+        port: 443,
+        rule: "Round robin",
+      },
+      {
+        id: "c",
+        name: "Load Balancer 2",
+        protocol: "HTTP",
+        port: 80,
+        rule: "DNS delegation",
+      },
+    ];
+
+    // Top-level sort would sort numbers ascending, but header sort reverses port
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers: customHeaders,
+        rows: customRows,
+        sort: (a: DataTableValue, b: DataTableValue) => {
+          if (typeof a === "number" && typeof b === "number") return a - b;
+          return String(a).localeCompare(String(b));
+        },
+      },
+    });
+
+    // Sort by name — should use the top-level sort (normal alphabetical)
+    const nameHeader = screen.getByText("Name");
+    await user.click(nameHeader);
+
+    const rowsAfterNameSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(
+      within(rowsAfterNameSort[0]).getAllByRole("cell")[0],
+    ).toHaveTextContent("Load Balancer 1");
+    expect(
+      within(rowsAfterNameSort[2]).getAllByRole("cell")[0],
+    ).toHaveTextContent("Load Balancer 3");
+
+    // Sort by port — should use per-header sort (descending when ascending)
+    const portHeader = screen.getByText("Port");
+    await user.click(portHeader);
+
+    const rowsAfterPortSort = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    // Per-header sort reverses: ascending click → 3000 first
+    expect(
+      within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
+    ).toHaveTextContent("3000");
+    expect(
+      within(rowsAfterPortSort[2]).getAllByRole("cell")[2],
+    ).toHaveTextContent("80");
+  });
+
+  it("calls top-level sort except where header.sort overrides", async () => {
+    const tableSort = vi.fn((a: DataTableValue, b: DataTableValue) => {
+      if (typeof a === "number" && typeof b === "number") return a - b;
+      return String(a).localeCompare(String(b));
+    });
+    const nameHeaderSort = vi.fn((a: DataTableValue, b: DataTableValue) =>
+      String(a).localeCompare(String(b)),
+    );
+
+    const customHeaders = [
+      { key: "name", value: "Name", sort: nameHeaderSort },
+      { key: "protocol", value: "Protocol" },
+      { key: "port", value: "Port" },
+      { key: "rule", value: "Rule" },
+    ];
+
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers: customHeaders,
+        rows,
+        sort: tableSort,
+      },
+    });
+
+    await user.click(screen.getByText("Port"));
+    expect(tableSort).toHaveBeenCalled();
+    expect(nameHeaderSort).not.toHaveBeenCalled();
+
+    tableSort.mockClear();
+    nameHeaderSort.mockClear();
+
+    await user.click(screen.getByText("Name"));
+    expect(nameHeaderSort).toHaveBeenCalled();
+    expect(tableSort).not.toHaveBeenCalled();
   });
 
   // Selection tests
@@ -1779,6 +1968,61 @@ describe("DataTable", () => {
         ClickEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<ClickEventDetail["row"]>().toEqualTypeOf<
         CustomRow | undefined
+      >();
+    });
+
+    it("sort prop types comparator args from the row generic", () => {
+      type Row = {
+        id: string;
+        name: string;
+        port: number;
+        active: boolean;
+      };
+
+      type Props = ComponentProps<DataTableComponent<Row>>;
+      type SortFn = NonNullable<Props["sort"]>;
+
+      expectTypeOf<Parameters<SortFn>[0]>().toEqualTypeOf<
+        DataTableSortValue<Row>
+      >();
+      expectTypeOf<Parameters<SortFn>[1]>().toEqualTypeOf<
+        DataTableSortValue<Row>
+      >();
+      expectTypeOf<DataTableSortValue<Row>>().toEqualTypeOf<
+        string | number | boolean
+      >();
+      expectTypeOf<Parameters<SortFn>[2]>().toEqualTypeOf<{
+        key: DataTableKey<Row>;
+        ascending: boolean;
+        row_a: Row;
+        row_b: Row;
+      }>();
+    });
+
+    it("DataTableValueAtPath narrows nested keys for sort-related typing", () => {
+      type NestedRow = {
+        id: string;
+        user: { name: string };
+        port: number;
+      };
+
+      expectTypeOf<
+        DataTableValueAtPath<NestedRow, "id">
+      >().toEqualTypeOf<string>();
+      expectTypeOf<
+        DataTableValueAtPath<NestedRow, "user.name">
+      >().toEqualTypeOf<string>();
+      expectTypeOf<
+        DataTableValueAtPath<NestedRow, "port">
+      >().toEqualTypeOf<number>();
+
+      type Props = ComponentProps<DataTableComponent<NestedRow>>;
+      type SortFn = NonNullable<Props["sort"]>;
+      expectTypeOf<Parameters<SortFn>[0]>().toEqualTypeOf<
+        DataTableSortValue<NestedRow>
+      >();
+      expectTypeOf<DataTableSortValue<NestedRow>>().toEqualTypeOf<
+        string | number | { name: string }
       >();
     });
 
