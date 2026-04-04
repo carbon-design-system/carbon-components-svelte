@@ -11,6 +11,7 @@ import type {
 import { user } from "../setup-tests";
 import TreeViewAutoCollapse from "./TreeView.autoCollapse.test.svelte";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
+import TreeViewHref from "./TreeView.href.test.svelte";
 import TreeViewMultiselect from "./TreeView.multiselect.test.svelte";
 import TreeViewProps from "./TreeView.props.test.svelte";
 import TreeViewSlot from "./TreeView.slot.test.svelte";
@@ -857,6 +858,179 @@ describe("TreeView Generics", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+});
+
+describe("TreeViewNode href", () => {
+  it("renders an anchor element with role='treeitem' when href is set", () => {
+    render(TreeViewHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    expect(linkNode.tagName).toBe("A");
+    expect(linkNode).toHaveAttribute("href", "/page-1");
+  });
+
+  it("wraps the anchor in a li with role='none'", () => {
+    render(TreeViewHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    const parentLi = linkNode.closest("li");
+    expect(parentLi).toHaveAttribute("role", "none");
+  });
+
+  it("renders a regular li when href is not set", () => {
+    render(TreeViewHref);
+
+    const plainNode = screen.getByRole("treeitem", { name: /Plain Node/ });
+    expect(plainNode.tagName).toBe("LI");
+    expect(plainNode).not.toHaveAttribute("href");
+  });
+
+  it("does not set href on disabled link nodes", () => {
+    render(TreeViewHref);
+
+    const disabledLink = screen.getByRole("treeitem", {
+      name: /Disabled Link/,
+    });
+    expect(disabledLink.tagName).toBe("A");
+    expect(disabledLink).not.toHaveAttribute("href");
+    expect(disabledLink).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("uses aria-current='page' instead of 'true' for active link nodes", () => {
+    render(TreeViewHref, { activeId: "link-1" });
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    expect(linkNode).toHaveAttribute("aria-current", "page");
+  });
+
+  it("does not set aria-selected on link nodes", () => {
+    render(TreeViewHref, { selectedIds: ["link-1"] });
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    expect(linkNode).not.toHaveAttribute("aria-selected");
+  });
+
+  it("can select a link node via click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    await user.click(linkNode);
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "select",
+      expect.objectContaining({
+        id: "link-1",
+        text: "Link Node",
+        href: "/page-1",
+      }),
+    );
+  });
+
+  it("does not select a disabled link node via click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewHref);
+
+    const disabledLink = screen.getByRole("treeitem", {
+      name: /Disabled Link/,
+    });
+    await user.click(disabledLink);
+
+    expect(consoleLog).not.toHaveBeenCalledWith(
+      "select",
+      expect.objectContaining({ id: "link-disabled" }),
+    );
+  });
+
+  it("dispatches focus event for link nodes", () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    linkNode.focus();
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "focus",
+      expect.objectContaining({
+        id: "link-1",
+        text: "Link Node",
+        href: "/page-1",
+      }),
+    );
+  });
+
+  it("selects link node with Enter key", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    linkNode.focus();
+
+    await user.keyboard("{Enter}");
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "select",
+      expect.objectContaining({
+        id: "link-1",
+        text: "Link Node",
+      }),
+    );
+  });
+
+  it("selects link node with Space key", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    linkNode.focus();
+
+    await user.keyboard(" ");
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "select",
+      expect.objectContaining({
+        id: "link-1",
+        text: "Link Node",
+      }),
+    );
+  });
+
+  it("sets target attribute on the anchor element", () => {
+    render(TreeViewHref);
+
+    const blankLink = screen.getByRole("treeitem", { name: /Blank Target/ });
+    expect(blankLink.tagName).toBe("A");
+    expect(blankLink).toHaveAttribute("target", "_blank");
+  });
+
+  it("adds rel='noopener noreferrer' when target is '_blank'", () => {
+    render(TreeViewHref);
+
+    const blankLink = screen.getByRole("treeitem", { name: /Blank Target/ });
+    expect(blankLink).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("does not add rel when target is not '_blank'", () => {
+    render(TreeViewHref);
+
+    const selfLink = screen.getByRole("treeitem", { name: /Self Target/ });
+    expect(selfLink).toHaveAttribute("target", "_self");
+    expect(selfLink).not.toHaveAttribute("rel");
+  });
+
+  it("does not set target on disabled link nodes", () => {
+    render(TreeViewHref);
+
+    const disabledLink = screen.getByRole("treeitem", {
+      name: /Disabled Link/,
+    });
+    expect(disabledLink).not.toHaveAttribute("target");
   });
 });
 

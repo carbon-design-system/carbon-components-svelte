@@ -44,6 +44,9 @@
   function findParentTreeNode(node) {
     if (node == null || !(node instanceof HTMLElement)) return null;
     if (node.classList.contains("bx--tree-parent-node")) return node;
+    if (node.classList.contains("bx--tree-node-link-parent")) {
+      return node.firstElementChild;
+    }
     if (node.classList.contains("bx--tree")) return null;
     if (node.parentNode instanceof HTMLElement) {
       return findParentTreeNode(node.parentNode);
@@ -65,6 +68,18 @@
   export let id = "";
   export let text = "";
   export let disabled = false;
+
+  /**
+   * Specify the URL the TreeNode links to.
+   * @type {string | undefined}
+   */
+  export let href = undefined;
+
+  /**
+   * Specify the link target.
+   * @type {string | undefined}
+   */
+  export let target = undefined;
 
   /**
    * Specify the icon to render.
@@ -112,47 +127,106 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-<li
-  bind:this={ref}
-  role="treeitem"
-  {id}
-  tabindex={disabled ? undefined : -1}
-  aria-current={id === $activeNodeId || undefined}
-  aria-selected={disabled ? undefined : selected}
-  aria-disabled={disabled}
-  class:bx--tree-node={true}
-  class:bx--tree-leaf-node={true}
-  class:bx--tree-node--active={id === $activeNodeId}
-  class:bx--tree-node--selected={selected}
-  class:bx--tree-node--disabled={disabled}
-  class:bx--tree-node--with-icon={icon}
-  on:click|stopPropagation={() => {
-    if (disabled) return;
-    clickNode(node);
-  }}
-  on:keydown={(e) => {
-    if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "Enter") {
-      e.stopPropagation();
-    }
+{#if href}
+  <li role="none">
+    <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role a11y-role-has-required-aria-props -->
+    <a
+      bind:this={ref}
+      role="treeitem"
+      {id}
+      href={disabled ? undefined : href}
+      target={disabled ? undefined : target}
+      rel={target === "_blank" ? "noopener noreferrer" : undefined}
+      tabindex={disabled ? undefined : -1}
+      aria-current={id === $activeNodeId ? "page" : undefined}
+      aria-disabled={disabled}
+      class:bx--tree-node={true}
+      class:bx--tree-leaf-node={true}
+      class:bx--tree-node--active={id === $activeNodeId}
+      class:bx--tree-node--selected={selected}
+      class:bx--tree-node--disabled={disabled}
+      class:bx--tree-node--with-icon={icon}
+      on:click|stopPropagation={() => {
+        if (disabled) return;
+        clickNode(node);
+      }}
+      on:keydown={(e) => {
+        if (
+          e.key === "ArrowLeft" ||
+          e.key === "ArrowRight" ||
+          e.key === "Enter"
+        ) {
+          e.stopPropagation();
+        }
 
-    if (e.key === "ArrowLeft") {
-      const parentNode = findParentTreeNode(ref.parentNode);
-      if (parentNode) parentNode.focus();
-    }
+        if (e.key === "ArrowLeft") {
+          const parentNode = findParentTreeNode(ref.parentNode?.parentNode);
+          if (parentNode) parentNode.focus();
+        }
 
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (disabled) return;
+          clickNode(node);
+        }
+      }}
+      on:focus={() => {
+        focusNode(node);
+      }}
+    >
+      <div bind:this={refLabel} class:bx--tree-node__label={true}>
+        <svelte:component this={icon} class="bx--tree-node__icon" />
+        <slot {node}> {text} </slot>
+      </div>
+    </a>
+  </li>
+{:else}
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+  <li
+    bind:this={ref}
+    role="treeitem"
+    {id}
+    tabindex={disabled ? undefined : -1}
+    aria-current={id === $activeNodeId || undefined}
+    aria-selected={disabled ? undefined : selected}
+    aria-disabled={disabled}
+    class:bx--tree-node={true}
+    class:bx--tree-leaf-node={true}
+    class:bx--tree-node--active={id === $activeNodeId}
+    class:bx--tree-node--selected={selected}
+    class:bx--tree-node--disabled={disabled}
+    class:bx--tree-node--with-icon={icon}
+    on:click|stopPropagation={() => {
       if (disabled) return;
       clickNode(node);
-    }
-  }}
-  on:focus={() => {
-    focusNode(node);
-  }}
->
-  <div bind:this={refLabel} class:bx--tree-node__label={true}>
-    <svelte:component this={icon} class="bx--tree-node__icon" />
-    <slot {node}> {text} </slot>
-  </div>
-</li>
+    }}
+    on:keydown={(e) => {
+      if (
+        e.key === "ArrowLeft" ||
+        e.key === "ArrowRight" ||
+        e.key === "Enter"
+      ) {
+        e.stopPropagation();
+      }
+
+      if (e.key === "ArrowLeft") {
+        const parentNode = findParentTreeNode(ref.parentNode);
+        if (parentNode) parentNode.focus();
+      }
+
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (disabled) return;
+        clickNode(node);
+      }
+    }}
+    on:focus={() => {
+      focusNode(node);
+    }}
+  >
+    <div bind:this={refLabel} class:bx--tree-node__label={true}>
+      <svelte:component this={icon} class="bx--tree-node__icon" />
+      <slot {node}> {text} </slot>
+    </div>
+  </li>
+{/if}

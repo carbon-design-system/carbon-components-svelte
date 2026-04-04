@@ -111,6 +111,8 @@
    * @property {any} text
    * @property {any} [icon]
    * @property {boolean} [disabled] - Whether the node is disabled
+   * @property {string} [href] - Optional URL the node links to
+   * @property {string} [target] - Optional link target (e.g., "_blank")
    * @property {TreeNode<Id>[]} [nodes]
    * @typedef {object} ShowNodeOptions
    * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
