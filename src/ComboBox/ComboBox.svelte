@@ -227,21 +227,23 @@
     } else if (index >= _items.length) {
       index = 0;
     }
-    let disabled = items[index].disabled;
+    let disabled = _items[index].disabled;
+    let attempts = 0;
 
-    while (disabled) {
+    while (disabled && attempts < _items.length) {
       index = index + dir;
 
       if (index < 0) {
-        index = items.length - 1;
-      } else if (index >= items.length) {
+        index = _items.length - 1;
+      } else if (index >= _items.length) {
         index = 0;
       }
 
-      disabled = items[index].disabled;
+      disabled = _items[index].disabled;
+      attempts++;
     }
 
-    highlightedIndex = index;
+    if (!disabled) highlightedIndex = index;
   }
 
   /**

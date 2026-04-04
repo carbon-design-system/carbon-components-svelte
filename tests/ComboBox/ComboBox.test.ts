@@ -489,6 +489,63 @@ describe("ComboBox", () => {
     expect(dropdown).toBeVisible();
   });
 
+  it("should not infinite loop when all items are disabled", async () => {
+    render(ComboBoxCustom, {
+      props: {
+        items: [
+          { id: "1", text: "A", disabled: true },
+          { id: "2", text: "B", disabled: true },
+          { id: "3", text: "C", disabled: true },
+        ],
+      },
+    });
+    const input = getInput();
+    await user.click(input);
+
+    // If the while loop has no guard, this would hang forever.
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowUp}");
+
+    // No item should be selectable since all are disabled.
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("");
+  });
+
+  it("should skip disabled items in filtered list, not unfiltered list", async () => {
+    // Regression: `change()` previously checked `items[index].disabled`
+    // instead of `_items[index].disabled`, indexing into the wrong array
+    // when filtering was active.
+    //
+    // Unfiltered: [Ax, Bx, Ay(disabled), Az]
+    // Filtered by "a": [Ax, Ay(disabled), Az]
+    //
+    // Old bug: at filtered index 1 (Ay), it checked items[1] (Bx, not
+    // disabled) and stopped — highlighting a disabled item. Fixed code
+    // checks _items[1] (Ay, disabled) and correctly skips to Az.
+    render(ComboBoxCustom, {
+      props: {
+        items: [
+          { id: "1", text: "Ax" },
+          { id: "2", text: "Bx" },
+          { id: "3", text: "Ay", disabled: true },
+          { id: "4", text: "Az" },
+        ],
+      },
+    });
+    const input = getInput();
+    await user.click(input);
+
+    // Typing "a" filters to: Ax, Ay (disabled), Az
+    await user.type(input, "a");
+
+    // ArrowDown highlights Ax (index 0)
+    await user.keyboard("{ArrowDown}");
+    // ArrowDown should skip disabled Ay, highlight Az
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("Az");
+  });
+
   it("should skip disabled items during keyboard navigation", async () => {
     render(ComboBoxCustom, {
       props: {
