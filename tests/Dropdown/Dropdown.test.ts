@@ -616,10 +616,10 @@ describe("Dropdown", () => {
         type Props = ComponentProps<ComponentType>;
 
         // selectedId should accept undefined
-        expectTypeOf<undefined>().toMatchTypeOf<Props["selectedId"]>();
+        expectTypeOf<undefined>().toExtend<Props["selectedId"]>();
 
         // Should be an optional property (not required)
-        expectTypeOf<Record<string, never>>().toMatchTypeOf<
+        expectTypeOf<Record<string, never>>().toExtend<
           Pick<Props, "selectedId">
         >();
 
@@ -627,7 +627,7 @@ describe("Dropdown", () => {
         type StringItem = { id: string; text: string };
         type StringComponent = DropdownComponent<StringItem>;
         type StringProps = ComponentProps<StringComponent>;
-        expectTypeOf<undefined>().toMatchTypeOf<StringProps["selectedId"]>();
+        expectTypeOf<undefined>().toExtend<StringProps["selectedId"]>();
       });
 
       it("should default Id to any when not specified", () => {
