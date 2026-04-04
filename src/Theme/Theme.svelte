@@ -44,8 +44,8 @@
   export let persistKey = "theme";
 
   /**
-   * Render a toggle or select dropdown to control the theme.
-   * @type {"toggle" | "select"}
+   * Render a toggle, select, or dropdown to control the theme.
+   * @type {"toggle" | "select" | "dropdown"}
    */
   export let render = undefined;
 
@@ -74,7 +74,18 @@
     hideLabel: false,
   };
 
+  /**
+   * Override the default dropdown props.
+   * @type {Omit<import("../Dropdown/Dropdown.svelte").DropdownProps, "items" | "selectedId"> & { themes?: CarbonTheme[]; }}
+   */
+  export let dropdown = {
+    themes: themeKeys,
+    labelText: "Themes",
+    hideLabel: false,
+  };
+
   import { afterUpdate, createEventDispatcher } from "svelte";
+  import Dropdown from "../Dropdown/Dropdown.svelte";
   import LocalStorage from "../LocalStorage/LocalStorage.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
@@ -136,6 +147,16 @@
       <SelectItem value={theme} text={themes[theme]} />
     {/each}
   </Select>
+{:else if render === "dropdown"}
+  {@const { themes: dropdownThemes, ...dropdownProps } = dropdown}
+  <Dropdown
+    {...dropdownProps}
+    items={dropdownThemes.map((t) => ({ id: t, text: themes[t] }))}
+    selectedId={theme}
+    on:select={({ detail }) => {
+      theme = detail.selectedId;
+    }}
+  />
 {/if}
 
 <slot {theme} />
