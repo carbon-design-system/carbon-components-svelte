@@ -355,8 +355,9 @@
     }
 
     let disabled = items[index].disabled;
+    let attempts = 0;
 
-    while (disabled) {
+    while (disabled && attempts < items.length) {
       index = index + dir;
 
       if (index < 0) {
@@ -366,9 +367,10 @@
       }
 
       disabled = items[index].disabled;
+      attempts++;
     }
 
-    highlightedIndex = index;
+    if (!disabled) highlightedIndex = index;
   }
 
   function typeaheadSearch(char) {
