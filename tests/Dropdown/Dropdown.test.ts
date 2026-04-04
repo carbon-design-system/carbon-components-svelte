@@ -323,6 +323,34 @@ describe("Dropdown", () => {
     expect(dropdown).toHaveClass("bx--list-box--up");
   });
 
+  it("should not infinite loop when all items are disabled", async () => {
+    const allDisabledItems = [
+      { id: "0", text: "Slack", disabled: true },
+      { id: "1", text: "Email", disabled: true },
+      { id: "2", text: "Fax", disabled: true },
+    ];
+
+    render(Dropdown, {
+      props: {
+        items: allDisabledItems,
+        labelText: "Contact",
+      },
+    });
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    // If the while loop has no guard, this would hang forever.
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowUp}");
+
+    // No item should be selected since all are disabled.
+    const options = screen.getAllByRole("option");
+    for (const option of options) {
+      expect(option).not.toHaveAttribute("aria-selected", "true");
+    }
+  });
+
   it("should handle keyboard navigation with disabled items", async () => {
     const itemsWithDisabled = [
       { id: "0", text: "Slack" },
