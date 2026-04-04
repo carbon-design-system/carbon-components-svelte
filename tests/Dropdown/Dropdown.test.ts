@@ -371,6 +371,30 @@ describe("Dropdown", () => {
     expect(button).toHaveTextContent("Slack");
   });
 
+  it("should render with no selected item when selectedId is not provided", async () => {
+    render(Dropdown, {
+      props: {
+        items,
+        label: "Choose an option",
+        labelText: "Contact",
+      },
+    });
+
+    const button = screen.getByLabelText("Contact");
+    // Should display the label placeholder, not any item text
+    expect(within(button).getByText("Choose an option")).toBeInTheDocument();
+
+    // Open the dropdown and select an item
+    await user.click(button);
+    const menuItemText = screen.getByText("Email");
+    const menuItem = menuItemText.closest(".bx--list-box__menu-item");
+    assert(menuItem);
+    await user.click(menuItem);
+
+    // After selection, should display the selected item
+    expect(within(button).getByText("Email")).toBeInTheDocument();
+  });
+
   it("should handle empty items array", () => {
     render(Dropdown, {
       props: {
@@ -587,6 +611,25 @@ describe("Dropdown", () => {
     });
 
     describe("Id generic parameter", () => {
+      it("should allow selectedId to be undefined (optional)", () => {
+        type ComponentType = DropdownComponent;
+        type Props = ComponentProps<ComponentType>;
+
+        // selectedId should accept undefined
+        expectTypeOf<undefined>().toMatchTypeOf<Props["selectedId"]>();
+
+        // Should be an optional property (not required)
+        expectTypeOf<Record<string, never>>().toMatchTypeOf<
+          Pick<Props, "selectedId">
+        >();
+
+        // With a specific item type, selectedId should still accept undefined
+        type StringItem = { id: string; text: string };
+        type StringComponent = DropdownComponent<StringItem>;
+        type StringProps = ComponentProps<StringComponent>;
+        expectTypeOf<undefined>().toMatchTypeOf<StringProps["selectedId"]>();
+      });
+
       it("should default Id to any when not specified", () => {
         type ComponentType = DropdownComponent;
         type Props = ComponentProps<ComponentType>;
@@ -608,14 +651,14 @@ describe("Dropdown", () => {
         type StringComponent = DropdownComponent<StringItem>;
         expectTypeOf<
           ComponentProps<StringComponent>["selectedId"]
-        >().toEqualTypeOf<string>();
+        >().toEqualTypeOf<string | undefined>();
 
         // Number ID
         type NumberItem = { id: number; text: string };
         type NumberComponent = DropdownComponent<NumberItem>;
         expectTypeOf<
           ComponentProps<NumberComponent>["selectedId"]
-        >().toEqualTypeOf<number>();
+        >().toEqualTypeOf<number | undefined>();
 
         // Union ID
         type UnionId = "a" | "b" | "c";
@@ -646,7 +689,9 @@ describe("Dropdown", () => {
         type ComponentType = DropdownComponent<InferredItem>;
         type Props = ComponentProps<ComponentType>;
 
-        expectTypeOf<Props["selectedId"]>().toEqualTypeOf<InferredId>();
+        expectTypeOf<Props["selectedId"]>().toEqualTypeOf<
+          InferredId | undefined
+        >();
 
         type SelectEvent = ComponentEvents<ComponentType>["select"];
         type SelectEventDetail =
