@@ -377,6 +377,46 @@ html {
   box-shadow: inset 0 -1px 0 var(--cds-ui-03);
 }
 
+.prose > table {
+  width: 100%;
+  max-width: 48rem;
+  border-collapse: collapse;
+  margin-bottom: var(--cds-layout-02);
+  font-size: var(--cds-body-short-01-font-size, 0.875rem);
+  line-height: var(--cds-body-short-01-line-height, 1.125rem);
+}
+
+.prose > table th,
+.prose > table td {
+  padding: var(--cds-spacing-03) var(--cds-spacing-04);
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--cds-ui-03);
+}
+
+.prose > table th {
+  font-weight: 600;
+  background-color: var(--cds-field-01, #f4f4f4);
+  color: var(--cds-text-01, #161616);
+}
+
+.prose > table tbody tr:nth-child(even) td {
+  background-color: var(--cds-ui-background);
+}
+
+.prose > table td code,
+.prose > table th code {
+  font-family: var(--cds-code-01-font-family);
+  font-size: var(--cds-code-01-font-size, 0.75rem);
+  font-weight: 500;
+  letter-spacing: var(--cds-code-01-letter-spacing, 0.32px);
+  padding: 0 var(--cds-spacing-02);
+  color: var(--cds-text-01, #161616);
+  border: 2px solid rgba(0, 0, 0, 0);
+  background-color: var(--cds-field-01, #f4f4f4);
+  border-radius: 4px;
+}
+
 [class*="bx--col"] > h2,
 .bx--tab-content > h2 {
   font-size: var(--cds-expressive-heading-04-font-size);
