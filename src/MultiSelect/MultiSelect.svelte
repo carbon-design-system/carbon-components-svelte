@@ -657,6 +657,23 @@
               open = false;
             } else if (key === " ") {
               if (!open) open = true;
+            } else if (key === "Backspace" && value === "") {
+              selectedIds = [];
+              sortedItems = sortedItems.map((item) => ({
+                ...item,
+                checked: false,
+              }));
+            } else if (key === "Delete") {
+              if (open) {
+                value = "";
+              } else {
+                value = "";
+                selectedIds = [];
+                sortedItems = sortedItems.map((item) => ({
+                  ...item,
+                  checked: false,
+                }));
+              }
             }
           }}
           on:input
