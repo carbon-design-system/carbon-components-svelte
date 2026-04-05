@@ -270,6 +270,22 @@
     if (options?.focus !== false) ref?.focus();
   }
 
+  function scrollToIndex(index) {
+    if (!listRef || !virtualConfig) return;
+    const { itemHeight, containerHeight } = virtualConfig;
+    const scrollPosition = index * itemHeight;
+    const maxScroll = Math.max(
+      0,
+      filteredItems.length * itemHeight - containerHeight,
+    );
+    const finalScrollPosition = Math.max(
+      0,
+      Math.min(scrollPosition, maxScroll),
+    );
+    listScrollTop = finalScrollPosition;
+    listRef.scrollTop = finalScrollPosition;
+  }
+
   afterUpdate(() => {
     // Scroll to highlighted item when it changes via keyboard navigation
     // Only scroll if the item is outside the visible viewport
@@ -284,8 +300,7 @@
     ) {
       tick().then(() => {
         if (listRef && virtualConfig && highlightedIndex >= 0) {
-          const itemHeight = virtualConfig.itemHeight;
-          const containerHeight = virtualConfig.containerHeight;
+          const { itemHeight, containerHeight } = virtualConfig;
           const overscan = virtualConfig.overscan ?? 3;
 
           // Calculate current visible range based on current scroll position
@@ -305,19 +320,7 @@
             highlightedIndex < visibleStartIndex ||
             highlightedIndex >= visibleEndIndex
           ) {
-            const scrollPosition = highlightedIndex * itemHeight;
-            // Ensure scroll position is within bounds
-            const maxScroll = Math.max(
-              0,
-              filteredItems.length * itemHeight - containerHeight,
-            );
-            const finalScrollPosition = Math.max(
-              0,
-              Math.min(scrollPosition, maxScroll),
-            );
-
-            listScrollTop = finalScrollPosition;
-            listRef.scrollTop = finalScrollPosition;
+            scrollToIndex(highlightedIndex);
           }
         }
       });
@@ -341,27 +344,11 @@
       tick().then(() => {
         if (listRef && virtualConfig) {
           if (selectedId !== undefined && selectedItem) {
-            // Find the index of the selected item
             const selectedIndex = filteredItems.findIndex(
               (item) => item.id === selectedId,
             );
             if (selectedIndex >= 0) {
-              // Calculate scroll position to show selected item at the top of viewport
-              const itemHeight = virtualConfig.itemHeight;
-              const containerHeight = virtualConfig.containerHeight;
-              const scrollPosition = selectedIndex * itemHeight;
-              // Ensure scroll position is within bounds
-              const maxScroll = Math.max(
-                0,
-                filteredItems.length * itemHeight - containerHeight,
-              );
-              const finalScrollPosition = Math.max(
-                0,
-                Math.min(scrollPosition, maxScroll),
-              );
-
-              listScrollTop = finalScrollPosition;
-              listRef.scrollTop = finalScrollPosition;
+              scrollToIndex(selectedIndex);
             } else {
               listRef.scrollTop = 0;
               listScrollTop = 0;
