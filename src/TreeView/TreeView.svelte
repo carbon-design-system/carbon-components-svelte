@@ -293,7 +293,7 @@
 
         if (focus) {
           tick().then(() => {
-            ref?.querySelector(`[id="${lastId}"]`)?.focus();
+            ref?.querySelector(`[id="${CSS.escape(lastId)}"]`)?.focus();
           });
         }
 
