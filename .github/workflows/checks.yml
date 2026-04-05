@@ -69,8 +69,12 @@ jobs:
   test-e2e:
     needs: [lint, test]
     if: ${{ !failure() && !cancelled() }}
-    runs-on: macos-15
+    runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: true
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
@@ -79,15 +83,14 @@ jobs:
       - name: Cache Playwright browsers
         uses: actions/cache@v5
         with:
-          path: ~/Library/Caches/ms-playwright
-          # Suffix bumps cache when the set of installed browsers changes.
-          key: ${{ runner.os }}-playwright-${{ hashFiles('node_modules/@playwright/test/package.json') }}-chromium-firefox-webkit
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ matrix.browser }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
 
-      - name: Install Playwright browsers
-        run: bunx playwright install --with-deps chromium firefox webkit
+      - name: Install Playwright browser
+        run: bunx playwright install --with-deps ${{ matrix.browser }}
 
       - name: E2E tests
-        run: bun run test:e2e
+        run: bunx playwright test --project=${{ matrix.browser }}
 
   test-svelte3:
     needs: [lint, changes]
