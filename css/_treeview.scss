@@ -1,0 +1,40 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+@mixin treeview-multiselect-overrides {
+  .#{$prefix}--tree--multiselect
+    .#{$prefix}--tree-node--selected
+    > .#{$prefix}--tree-node__label::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0.25rem;
+    height: 100%;
+    background-color: $interactive-04;
+    content: "";
+  }
+
+  .#{$prefix}--tree--multiselect
+    .#{$prefix}--tree-node--selected
+    > .#{$prefix}--tree-node__label {
+    position: relative;
+  }
+
+  // Hide the active-node accent bar when the row is focused but not part of the selection.
+  .#{$prefix}--tree--multiselect
+    .#{$prefix}--tree-node--active:not(.#{$prefix}--tree-node--selected)
+    > .#{$prefix}--tree-node__label::before {
+    content: none;
+  }
+
+  // Disable text selection while Ctrl/Cmd/Shift are held (multi-select gestures).
+  .#{$prefix}--tree--multiselect.#{$prefix}--tree--multiselect-modifier
+    .#{$prefix}--tree-node__label {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+@include exports('treeview-multiselect') {
+  @include treeview-multiselect-overrides;
+}

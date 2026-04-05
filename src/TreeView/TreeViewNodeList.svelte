@@ -99,9 +99,9 @@
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
     aria-expanded={expanded}
-    on:click|stopPropagation={() => {
+    on:click|stopPropagation={(e) => {
       if (disabled) return;
-      clickNode(node);
+      clickNode(node, e);
     }}
     on:keydown={(e) => {
       if (
@@ -133,7 +133,7 @@
         if (disabled) return;
         expanded = !expanded;
         toggleNode(node);
-        clickNode(node);
+        clickNode(node, e);
         expandNode(node, expanded);
         ref.focus();
       }

@@ -59,6 +59,28 @@
   }
 
   /**
+   * Like `traverse` but only descends into expanded nodes.
+   * Used for Shift+Click range selection (only visible nodes).
+   * @template {object} Node
+   * @param {ReadonlyArray<Node & { id: string | number; nodes?: Node[] }>} nodes
+   * @param {Set<string | number>} expandedIdsSet
+   * @returns {Array<Node>}
+   */
+  function traverseVisible(nodes, expandedIdsSet) {
+    return nodes.reduce((acc, node) => {
+      acc.push(node);
+      if (
+        Array.isArray(node.nodes) &&
+        node.nodes.length > 0 &&
+        expandedIdsSet.has(node.id)
+      ) {
+        acc.push(...traverseVisible(node.nodes, expandedIdsSet));
+      }
+      return acc;
+    }, []);
+  }
+
+  /**
    * Finds sibling node IDs for a given node ID within a tree structure.
    * @template {{ id: string | number; nodes?: TNode[] }} TNode
    * @param {ReadonlyArray<TNode>} nodes - The tree nodes to search
@@ -100,6 +122,54 @@
     }
 
     return [];
+  }
+
+  /**
+   * Finds a node by id across top-level tree roots.
+   * @template {{ id: string | number; disabled?: boolean; nodes?: TNode[] }} TNode
+   * @param {ReadonlyArray<TNode>} roots
+   * @param {string | number} id
+   * @returns {TNode | null}
+   */
+  function findForestNodeById(roots, id) {
+    for (const child of roots) {
+      const path = findNodeById(child, id);
+      if (path) return path[path.length - 1];
+    }
+    return null;
+  }
+
+  /**
+   * IDs to select for multiselect expansion from `node` (non-disabled only).
+   * Disabled nodes are omitted; subtrees under a disabled node are not traversed.
+   * @template {{ id: string | number; disabled?: boolean; nodes?: TNode[] }} TNode
+   * @param {TNode} node
+   * @param {'node' | 'shallow' | 'deep'} mode
+   * @returns {Array<string | number>}
+   */
+  function multiselectExpansionIds(node, mode) {
+    if (node.disabled) return [];
+    if (mode === "node") {
+      return [node.id];
+    }
+    if (mode === "shallow") {
+      const out = [node.id];
+      if (!Array.isArray(node.nodes)) return out;
+      for (const c of node.nodes) {
+        if (!c.disabled) out.push(c.id);
+      }
+      return out;
+    }
+    const out = [];
+    /** @param {TNode} n */
+    function walkDeep(n) {
+      if (n.disabled) return;
+      out.push(n.id);
+      if (!Array.isArray(n.nodes)) return;
+      for (const c of n.nodes) walkDeep(c);
+    }
+    walkDeep(node);
+    return out;
   }
 </script>
 
@@ -169,6 +239,21 @@
    * When enabled, only one node at each level can be expanded at a time.
    */
   export let autoCollapse = false;
+
+  /**
+   * Set to `true` to enable multi-select mode.
+   * Supports Ctrl/Cmd+Click (toggle) and Shift+Click (range select).
+   */
+  export let multiselect = false;
+
+  /**
+   * When `multiselect` is true, `multiselectMode` controls how many nodes a selection gesture includes:
+   * - `'node'`: only the clicked/active node (default)
+   * - `'shallow'`: the node plus its direct non-disabled children
+   * - `'deep'`: the node plus all non-disabled descendants
+   * @type {'node' | 'shallow' | 'deep'}
+   */
+  export let multiselectMode = "node";
 
   /**
    * Programmatically expand all nodes
@@ -288,7 +373,12 @@
 
         if (select) {
           activeId = lastId;
-          selectedIds = [lastId];
+          const targetNode = path[path.length - 1];
+          if (multiselect && multiselectMode !== "node") {
+            selectedIds = multiselectExpansionIds(targetNode, multiselectMode);
+          } else {
+            selectedIds = [lastId];
+          }
         }
 
         if (focus) {
@@ -309,6 +399,9 @@
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
 
+  /** @type {import("svelte/store").Writable<boolean>} */
+  const multiselectStore = writable(multiselect);
+
   /** @type {import("svelte/store").Writable<Node["id"]>} */
   const activeNodeId = writable(activeId);
   /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
@@ -322,6 +415,64 @@
 
   /** @type {HTMLElement | null} */
   let ref = null;
+
+  /** While true (Ctrl/Cmd/Shift held), node labels use user-select: none for multiselect clicks. */
+  let multiselectModifierActive = false;
+
+  /** @param {KeyboardEvent} e */
+  function syncModifierFromKeyboard(e) {
+    if (!multiselect) return;
+    multiselectModifierActive = e.ctrlKey || e.metaKey || e.shiftKey;
+  }
+
+  function clearMultiselectModifierKeys() {
+    multiselectModifierActive = false;
+  }
+
+  /** @param {MouseEvent} e */
+  function syncModifierFromTreeMouseDown(e) {
+    if (!multiselect) return;
+    multiselectModifierActive = e.ctrlKey || e.metaKey || e.shiftKey;
+  }
+
+  /** @param {Event} e */
+  function handleMultiselectSelectStart(e) {
+    if (multiselect && multiselectModifierActive) {
+      e.preventDefault();
+    }
+  }
+
+  function onDocumentVisibilityChange() {
+    if (document.visibilityState === "hidden") {
+      clearMultiselectModifierKeys();
+    }
+  }
+
+  let multiselectKeyListenersAttached = false;
+
+  /** @param {boolean} want */
+  function setMultiselectKeyListeners(want) {
+    if (want && !multiselectKeyListenersAttached) {
+      window.addEventListener("keydown", syncModifierFromKeyboard, true);
+      window.addEventListener("keyup", syncModifierFromKeyboard, true);
+      window.addEventListener("blur", clearMultiselectModifierKeys);
+      document.addEventListener("visibilitychange", onDocumentVisibilityChange);
+      multiselectKeyListenersAttached = true;
+    } else if (!want && multiselectKeyListenersAttached) {
+      window.removeEventListener("keydown", syncModifierFromKeyboard, true);
+      window.removeEventListener("keyup", syncModifierFromKeyboard, true);
+      window.removeEventListener("blur", clearMultiselectModifierKeys);
+      document.removeEventListener(
+        "visibilitychange",
+        onDocumentVisibilityChange,
+      );
+      multiselectKeyListenersAttached = false;
+      multiselectModifierActive = false;
+    }
+  }
+
+  $: setMultiselectKeyListeners(multiselect);
+
   /** @type {TreeWalker | null} */
   let treeWalker = null;
 
@@ -331,6 +482,9 @@
   let cachedFlattenedNodes = null;
   /** @type {Array<Node["id"]> | null} */
   let cachedNodeIds = null;
+
+  /** @type {Node["id"] | null} */
+  let anchorId = null;
 
   /** @type {Set<Node["id"]>} */
   let expandedIdsSet = new Set(expandedIds);
@@ -356,16 +510,84 @@
     return true;
   }
 
-  /** @type {(node: Node) => void} */
-  const clickNode = (node) => {
+  /** @type {(node: Node, event?: Event) => void} */
+  const clickNode = (node, event) => {
     activeId = node.id;
-    selectedIds = [node.id];
+
+    const mode =
+      multiselect && multiselectMode !== "node" ? multiselectMode : "node";
+
+    if (multiselect && event) {
+      const isMeta =
+        /** @type {MouseEvent | KeyboardEvent} */ (event).metaKey ||
+        /** @type {MouseEvent | KeyboardEvent} */ (event).ctrlKey;
+      const isShift = /** @type {MouseEvent | KeyboardEvent} */ (event)
+        .shiftKey;
+
+      if (isMeta && !isShift) {
+        const expansion = multiselectExpansionIds(node, mode);
+        const expansionSet = new Set(expansion);
+        const currentSet = new Set(selectedIds);
+        if (currentSet.has(node.id)) {
+          for (const id of expansionSet) currentSet.delete(id);
+        } else {
+          for (const id of expansionSet) currentSet.add(id);
+        }
+        selectedIds = Array.from(currentSet);
+        anchorId = node.id;
+      } else if (isShift && anchorId != null) {
+        const visibleIds = traverseVisible(nodes, expandedIdsSet)
+          .filter((n) => !n.disabled)
+          .map((n) => n.id);
+        const anchorIndex = visibleIds.indexOf(anchorId);
+        const currentIndex = visibleIds.indexOf(node.id);
+        if (anchorIndex !== -1 && currentIndex !== -1) {
+          const start = Math.min(anchorIndex, currentIndex);
+          const end = Math.max(anchorIndex, currentIndex);
+          const sliceIds = visibleIds.slice(start, end + 1);
+          if (mode === "node") {
+            selectedIds = sliceIds;
+          } else {
+            const ordered = [];
+            const seen = new Set();
+            for (const id of sliceIds) {
+              const n = findForestNodeById(nodes, id);
+              if (!n) continue;
+              for (const eid of multiselectExpansionIds(n, mode)) {
+                if (!seen.has(eid)) {
+                  seen.add(eid);
+                  ordered.push(eid);
+                }
+              }
+            }
+            selectedIds = ordered;
+          }
+        } else {
+          selectedIds = multiselectExpansionIds(node, mode);
+          anchorId = node.id;
+        }
+      } else {
+        selectedIds = multiselectExpansionIds(node, mode);
+        anchorId = node.id;
+      }
+    } else {
+      selectedIds = [node.id];
+    }
+
     dispatch("select", node);
   };
 
   /** @type {(node: Node) => void} */
   const selectNode = (node) => {
-    selectedIds = [node.id];
+    if (multiselect) {
+      const mode = multiselectMode === "node" ? "node" : multiselectMode;
+      const expansion = multiselectExpansionIds(node, mode);
+      const set = new Set(selectedIds);
+      for (const id of expansion) set.add(id);
+      selectedIds = Array.from(set);
+    } else {
+      selectedIds = [node.id];
+    }
   };
 
   /** @type {(node: Node, expanded: boolean) => void} */
@@ -397,6 +619,7 @@
     expandedNodeIds,
     selectedIdsSetStore,
     expandedIdsSetStore,
+    multiselectStore,
     clickNode,
     selectNode,
     expandNode,
@@ -431,6 +654,10 @@
     if (ref && !treeWalker) {
       treeWalker = createTreeWalkerInstance(ref);
     }
+
+    return () => {
+      setMultiselectKeyListeners(false);
+    };
   });
 
   $: if (nodes !== cachedNodes) {
@@ -439,6 +666,7 @@
     cachedNodeIds = cachedFlattenedNodes.map((node) => node.id);
   }
 
+  $: multiselectStore.set(multiselect);
   $: flattenedNodes = cachedFlattenedNodes ?? [];
   $: nodeIds = cachedNodeIds ?? [];
 
@@ -507,9 +735,13 @@
   class:bx--tree={true}
   class:bx--tree--default={size === "default"}
   class:bx--tree--compact={size === "compact"}
+  class:bx--tree--multiselect={multiselect}
+  class:bx--tree--multiselect-modifier={multiselect && multiselectModifierActive}
   aria-label={hideLabel ? labelText : undefined}
   aria-labelledby={hideLabel ? undefined : labelId}
-  aria-multiselectable={selectedIds.length > 1 || undefined}
+  aria-multiselectable={multiselect || undefined}
+  on:mousedown|capture={syncModifierFromTreeMouseDown}
+  on:selectstart|capture={handleMultiselectSelectStart}
   on:keydown
   on:keydown|stopPropagation={handleKeyDown}
 >

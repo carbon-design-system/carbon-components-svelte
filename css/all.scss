@@ -33,9 +33,6 @@ $css--plex: true;
 @import "./ui-shell-classic";
 @import "./tabs";
 @import "./tooltip";
-@import "./multiselect";
-@import "./selectable-tag";
-@import "./tag";
 
 // The default theme is "white" (White)
 :root {
@@ -92,3 +89,9 @@ $css--plex: true;
 
 // Import all component styles
 @import "carbon-components/scss/globals/scss/styles";
+
+// Custom component overrides (must come after Carbon styles; same order as white/g10/etc.)
+@import "./multiselect";
+@import "./treeview";
+@import "./selectable-tag";
+@import "./tag";
