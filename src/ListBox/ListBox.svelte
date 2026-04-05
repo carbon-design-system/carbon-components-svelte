@@ -1,7 +1,7 @@
 <script>
   /**
    * Set the size of the list box.
-   * @type {"sm" | "xl"}
+   * @type {"sm" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -39,6 +39,7 @@
   data-invalid={invalid || undefined}
   class:bx--list-box={true}
   class:bx--list-box--sm={size === "sm"}
+  class:bx--list-box--lg={size === "lg"}
   class:bx--list-box--xl={size === "xl"}
   class:bx--list-box--inline={type === "inline"}
   class:bx--list-box--disabled={disabled}
