@@ -146,9 +146,9 @@
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
-      on:click|stopPropagation={() => {
+      on:click|stopPropagation={(e) => {
         if (disabled) return;
-        clickNode(node);
+        clickNode(node, e);
       }}
       on:keydown={(e) => {
         if (
@@ -167,7 +167,7 @@
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           if (disabled) return;
-          clickNode(node);
+          clickNode(node, e);
         }
       }}
       on:focus={() => {
@@ -196,9 +196,9 @@
     class:bx--tree-node--selected={selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
-    on:click|stopPropagation={() => {
+    on:click|stopPropagation={(e) => {
       if (disabled) return;
-      clickNode(node);
+      clickNode(node, e);
     }}
     on:keydown={(e) => {
       if (
@@ -217,7 +217,7 @@
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         if (disabled) return;
-        clickNode(node);
+        clickNode(node, e);
       }
     }}
     on:focus={() => {

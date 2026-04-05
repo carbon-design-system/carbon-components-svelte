@@ -418,8 +418,11 @@ describe("TreeView Props", () => {
     });
   });
 
-  it("handles multiple selectedIds", () => {
-    render(TreeViewMultiselect, { selectedIds: [0, 7, 9] });
+  it("handles multiple selectedIds with multiselect", () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [0, 7, 9],
+    });
 
     const tree = screen.getByRole("tree");
     expect(tree).toHaveAttribute("aria-multiselectable", "true");
@@ -433,6 +436,163 @@ describe("TreeView Props", () => {
     expect(aiItem).toHaveAttribute("aria-selected", "true");
     expect(blockchainItem).toHaveAttribute("aria-selected", "true");
     expect(databasesItem).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("does not set aria-multiselectable when multiselect is false", () => {
+    render(TreeViewMultiselect, {
+      multiselect: false,
+      selectedIds: [0, 7, 9],
+    });
+
+    const tree = screen.getByRole("tree");
+    expect(tree).not.toHaveAttribute("aria-multiselectable");
+  });
+
+  it("ctrl+click toggles selection in multiselect mode", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+
+    await user.click(aiItem);
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+
+    await user.keyboard("{Control>}");
+    await user.click(blockchainItem);
+    await user.keyboard("{/Control}");
+
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+    expect(blockchainItem).toHaveAttribute("aria-selected", "true");
+
+    // Ctrl+click again to deselect
+    await user.keyboard("{Control>}");
+    await user.click(blockchainItem);
+    await user.keyboard("{/Control}");
+
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+    expect(blockchainItem).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("plain click replaces selection in multiselect mode", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [0, 7, 9],
+    });
+
+    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+
+    await user.click(blockchainItem);
+
+    expect(blockchainItem).toHaveAttribute("aria-selected", "true");
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+
+    expect(aiItem).toHaveAttribute("aria-selected", "false");
+    expect(databasesItem).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("ctrl+click has no effect when multiselect is false", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: false,
+      selectedIds: [],
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+
+    await user.click(aiItem);
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+
+    await user.keyboard("{Control>}");
+    await user.click(blockchainItem);
+    await user.keyboard("{/Control}");
+
+    // Should replace, not toggle
+    expect(aiItem).toHaveAttribute("aria-selected", "false");
+    expect(blockchainItem).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("multiselectMode shallow selects parent and direct children only", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "shallow",
+      selectedIds: [],
+      expandedIds: [1],
+    });
+
+    const analyticsItem = document.getElementById("1");
+    const engineItem = document.getElementById("2");
+    const sqlItem = document.getElementById("5");
+    const db2Item = document.getElementById("6");
+    expect.assert(analyticsItem instanceof HTMLElement);
+    expect.assert(engineItem instanceof HTMLElement);
+    expect.assert(sqlItem instanceof HTMLElement);
+    expect.assert(db2Item instanceof HTMLElement);
+
+    await user.click(analyticsItem);
+
+    expect(analyticsItem).toHaveAttribute("aria-selected", "true");
+    expect(engineItem).toHaveAttribute("aria-selected", "true");
+    expect(sqlItem).toHaveAttribute("aria-selected", "true");
+    expect(db2Item).toHaveAttribute("aria-selected", "true");
+
+    expect(document.getElementById("3")).toBeNull();
+  });
+
+  it("multiselectMode deep selects all descendants", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "deep",
+      selectedIds: [],
+      expandedIds: [1, 2],
+    });
+
+    const analyticsItem = document.getElementById("1");
+    const sparkItem = document.getElementById("3");
+    const hadoopItem = document.getElementById("4");
+    expect.assert(analyticsItem instanceof HTMLElement);
+    expect.assert(sparkItem instanceof HTMLElement);
+    expect.assert(hadoopItem instanceof HTMLElement);
+
+    await user.click(analyticsItem);
+
+    expect(analyticsItem).toHaveAttribute("aria-selected", "true");
+    expect(sparkItem).toHaveAttribute("aria-selected", "true");
+    expect(hadoopItem).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("ctrl+click removes deep subtree when multiselectMode is deep", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "deep",
+      selectedIds: [],
+      expandedIds: [1, 2],
+    });
+
+    const analyticsItem = document.getElementById("1");
+    const sparkItem = document.getElementById("3");
+    expect.assert(analyticsItem instanceof HTMLElement);
+    expect.assert(sparkItem instanceof HTMLElement);
+
+    await user.click(analyticsItem);
+    expect(sparkItem).toHaveAttribute("aria-selected", "true");
+
+    await user.keyboard("{Control>}");
+    await user.click(analyticsItem);
+    await user.keyboard("{/Control}");
+
+    expect(analyticsItem).toHaveAttribute("aria-selected", "false");
+    expect(sparkItem).toHaveAttribute("aria-selected", "false");
   });
 
   it("handles empty nodes array", () => {
