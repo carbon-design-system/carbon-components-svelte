@@ -244,6 +244,15 @@
     ((min !== undefined && value < min) || (max !== undefined && value > max));
   $: formatter = locale ? new Intl.NumberFormat(locale, formatOptions) : null;
   $: useTextMode = allowDecimal || !!locale;
+  $: separatorParts = locale
+    ? new Intl.NumberFormat(locale).formatToParts(12345.6)
+    : null;
+  $: groupSeparator = separatorParts
+    ? (separatorParts.find((p) => p.type === "group")?.value ?? "")
+    : "";
+  $: decimalSeparator = separatorParts
+    ? (separatorParts.find((p) => p.type === "decimal")?.value ?? ".")
+    : ".";
 
   let inputValue = value?.toString() ?? "";
   let prevValue;
@@ -336,15 +345,12 @@
    */
   function parseLocaleValue(raw) {
     if (raw === "" || raw === "-") return null;
-    const parts = new Intl.NumberFormat(locale).formatToParts(12345.6);
-    const group = parts.find((p) => p.type === "group")?.value ?? "";
-    const decimal = parts.find((p) => p.type === "decimal")?.value ?? ".";
     let normalized = raw;
-    if (group) {
-      normalized = normalized.split(group).join("");
+    if (groupSeparator) {
+      normalized = normalized.split(groupSeparator).join("");
     }
-    if (decimal !== ".") {
-      normalized = normalized.replace(decimal, ".");
+    if (decimalSeparator !== ".") {
+      normalized = normalized.replace(decimalSeparator, ".");
     }
     const num = Number(normalized);
     return Number.isNaN(num) ? null : num;
