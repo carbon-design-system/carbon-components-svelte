@@ -32,6 +32,9 @@
   export let sideNavClass = "";
 
   export let headerNavClass = "";
+
+  export let headerTheme: ComponentProps<Header>["theme"] = undefined;
+  export let sideNavTheme: ComponentProps<SideNav>["theme"] = undefined;
 </script>
 
 {#if useSlots}
@@ -41,6 +44,7 @@
     {expansionBreakpoint}
     {persistentHamburgerMenu}
     {ariaLabelMenu}
+    theme={headerTheme}
     bind:ref={headerRef}
     class={headerClass}
     on:click={() => {
@@ -64,6 +68,7 @@
     {expansionBreakpoint}
     {persistentHamburgerMenu}
     {ariaLabelMenu}
+    theme={headerTheme}
     bind:ref={headerRef}
     class={headerClass}
     on:click={() => {
@@ -83,6 +88,7 @@
   ariaLabel={sideNavAriaLabel}
   bind:isOpen={sideNavIsOpen}
   {expansionBreakpoint}
+  theme={sideNavTheme}
   class={sideNavClass}
   on:open={() => {
     console.log("sidenav-open");
