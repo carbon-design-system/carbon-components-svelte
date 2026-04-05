@@ -478,6 +478,7 @@
           value={inputValue}
           type="text"
           inputmode="decimal"
+          pattern="[0-9]*"
           aria-describedby={hasErrorMessage
             ? errorId
             : warn
@@ -491,6 +492,9 @@
           {disabled}
           {id}
           {name}
+          {max}
+          {min}
+          {step}
           {readonly}
           {...$$restProps}
           on:change={onChange}
