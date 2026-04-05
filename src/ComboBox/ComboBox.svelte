@@ -586,14 +586,14 @@
               }
             } else {
               // searching typed value in text list with lowercase
-              const matchedItem =
-                filteredItems.find(
-                  (e) =>
-                    e.text.toLowerCase() === value?.toLowerCase() &&
-                    !e.disabled,
-                ) ?? filteredItems.find((e) => !e.disabled);
+              const inputValue = ref?.value ?? value;
+              const matchedItem = filteredItems.find(
+                (e) =>
+                  e.text.toLowerCase() === inputValue?.toLowerCase() &&
+                  !e.disabled,
+              );
               if (matchedItem) {
-                // typed value has matched or fallback to first enabled item
+                // typed value has matched
                 open = false;
                 valueBeforeOpen = "";
                 selectedItem = matchedItem;
