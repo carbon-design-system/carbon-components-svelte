@@ -192,6 +192,11 @@
       itemIndexById.set(items[i].id, i);
     }
   }
+  $: menuId = `menu-${id}`;
+  $: highlightedId =
+    highlightedIndex > -1 && items[highlightedIndex]
+      ? items[highlightedIndex].id
+      : undefined;
   $: selectedItem = itemsById.get(selectedId);
   $: if (!open) {
     highlightedIndex = -1;
@@ -482,9 +487,13 @@
     <button
       bind:this={ref}
       type="button"
+      role="combobox"
       class:bx--list-box__field={true}
       tabindex="0"
       aria-expanded={open}
+      aria-haspopup="listbox"
+      aria-activedescendant={highlightedId ?? ""}
+      aria-controls={menuId}
       on:keydown={(e) => {
         if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
