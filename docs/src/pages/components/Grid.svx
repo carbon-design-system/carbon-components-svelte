@@ -8,11 +8,13 @@ grid supports various spacing options and column configurations.
 
 The system uses a responsive column structure where the total number of columns changes based on screen size:
 
-- **Small (sm)**: 0-671px — 4 columns
-- **Medium (md)**: 672-1055px — 8 columns
-- **Large (lg)**: 1056-1311px — 16 columns
-- **X-Large (xlg)**: 1312-1583px — 16 columns
-- **Max (max)**: 1584px and above — 16 columns
+| Breakpoint        | Viewport width   | Columns |
+| ----------------- | ---------------- | ------- |
+| **Small (`sm`)**  | 0–671px          | 4       |
+| **Medium (`md`)** | 672–1055px       | 8       |
+| **Large (`lg`)**  | 1056–1311px      | 16      |
+| **X-Large (`xlg`)** | 1312–1583px    | 16      |
+| **Max (`max`)**   | 1584px and above | 16      |
 
 > [!NOTE]
 > Column spans are relative to the total columns at each breakpoint.
@@ -104,11 +106,13 @@ of content. This is useful for creating vertical rhythm without manually adding 
 Understanding [breakpoints](/components/Breakpoint) is critical for creating responsive layouts. Each breakpoint
 has specific pixel ranges and column counts:
 
-- **Small (sm)**: 0-671px — 4 columns — Mobile phones
-- **Medium (md)**: 672-1055px — 8 columns — Tablets, small laptops
-- **Large (lg)**: 1056-1311px — 16 columns — Desktop monitors, laptops
-- **X-Large (xlg)**: 1312-1583px — 16 columns — Large desktop monitors
-- **Max (max)**: 1584px and above — 16 columns — Extra-large displays
+| Breakpoint          | Viewport width   | Columns | Typical use              |
+| ------------------- | ---------------- | ------- | ------------------------ |
+| **Small (`sm`)**    | 0–671px          | 4       | Mobile phones            |
+| **Medium (`md`)**   | 672–1055px       | 8       | Tablets, small laptops   |
+| **Large (`lg`)**    | 1056–1311px      | 16      | Desktop monitors, laptops |
+| **X-Large (`xlg`)** | 1312–1583px      | 16      | Large desktop monitors   |
+| **Max (`max`)**     | 1584px and above | 16      | Extra-large displays     |
 
 When designing responsive layouts, start with mobile (sm) and work your
 way up to ensure your content works well at all sizes.

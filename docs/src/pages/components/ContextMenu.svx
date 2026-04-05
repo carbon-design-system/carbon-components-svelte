@@ -19,12 +19,14 @@ The context menu appears when right-clicking anywhere in the window. Use context
 
 `ContextMenuOption` supports the following props:
 
-- `labelText`: primary label (or use the `labelChildren` slot; see the API reference).
-- `shortcutText`: keyboard hint shown on the right; can be used with or without an icon. For example, pass **⌘C** as the hint text, or show individual keys in prose as <DocKbd label="⌘" />+<DocKbd label="C" />.
-- `icon`: Carbon icon component to the left of the label. When an icon is set, the option is indented automatically so rows align; you do not need to pass `indented` for icon rows.
-- `indented`: indent the label without an icon, for example to align with submenu parents or nested items (see [Nested menu](#nested-menu), [Custom target](#custom-target), and [Multiple targets](#multiple-targets)).
-- `disabled`: non-interactive, dimmed row.
-- `kind`: `"default"` or `"danger"` for destructive actions.
+| Prop            | Description                                                                                                                                                                                                                                                                                    |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `labelText`     | Primary label (or use the `labelChildren` slot; see the API reference).                                                                                                                                                                                                                        |
+| `shortcutText`  | Keyboard hint shown on the right; can be used with or without an icon. For example, pass **⌘C** as the hint text, or show individual keys in prose as <DocKbd label="⌘" />+<DocKbd label="C" />.                                                                                              |
+| `icon`          | Carbon icon component to the left of the label. When an icon is set, the option is indented automatically so rows align; you do not need to pass `indented` for icon rows.                                                                                                                     |
+| `indented`      | Indent the label without an icon, for example to align with submenu parents or nested items (see [Nested menu](#nested-menu), [Custom target](#custom-target), and [Multiple targets](#multiple-targets)).                                                                                     |
+| `disabled`      | Non-interactive, dimmed row.                                                                                                                                                                                                                                                                   |
+| `kind`          | `"default"` or `"danger"` for destructive actions.                                                                                                                                                                                                                                               |
 
 For options inside `ContextMenuGroup`, see [Selectable](#selectable), [Selectable (nested)](#selectable-nested), and [Radio group](#radio-group).
 
@@ -36,9 +38,11 @@ Put children inside a parent `ContextMenuOption` to open a flyout submenu. Use `
 
 Submenus can contain:
 
-- **Plain options**: nested `ContextMenuOption` rows for ordinary actions (no selection state). This page’s example below mixes plain rows with a selectable group; see **Open with** → Preview / Editor.
-- **Selectable group**: a nested `ContextMenuGroup` with an accessible label; options act as checkboxes and share `bind:selectedIds`. See [Selectable (nested)](#selectable-nested); the **Export as** branch in this example shows the same pattern alongside plain items.
-- **Radio group**: a nested `ContextMenuRadioGroup` with `bind:selectedId` so only one choice is active. See [Radio group (nested)](#radio-group-nested).
+| Kind                 | Description                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Plain options    | Nested `ContextMenuOption` rows for ordinary actions (no selection state). This page’s example below mixes plain rows with a selectable group; see **Open with** → Preview / Editor.                                                                                                                                                                             |
+| Selectable group | A nested `ContextMenuGroup` with an accessible label; options act as checkboxes and share `bind:selectedIds`. See [Selectable (nested)](#selectable-nested); the **Export as** branch in this example shows the same pattern alongside plain items.                                                                                                            |
+| Radio group      | A nested `ContextMenuRadioGroup` with `bind:selectedId` so only one choice is active. See [Radio group (nested)](#radio-group-nested).                                                                                                                                                                                                                           |
 
 Toggling a checkbox or radio item in a nested submenu leaves that flyout open so you can change several choices; the root menu still closes when you pick a plain action row or click outside.
 

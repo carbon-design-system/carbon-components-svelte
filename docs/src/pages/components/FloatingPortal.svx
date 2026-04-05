@@ -32,8 +32,10 @@ By default, the floating content matches the anchor's width. Set `intrinsicWidth
 
 When `intrinsicWidth` is `true`, set `intrinsicAlign` to `"start"`, `"center"`, or `"end"` (default `"center"`) to position the floating box along the anchor:
 
-- **`top` / `bottom`**: horizontal alignment to the anchor's left edge, horizontal center, or right edge (LTR).
-- **`left` / `right`**: vertical alignment to the anchor's top, vertical center, or bottom.
+| `direction`        | Effect of `intrinsicAlign` (`start` / `center` / `end`)      |
+| ------------------ | ------------------------------------------------------------ |
+| **`top` / `bottom`** | Horizontal alignment to the anchor's left edge, horizontal center, or right edge (LTR). |
+| **`left` / `right`** | Vertical alignment to the anchor's top, vertical center, or bottom. |
 
 Portalled [TooltipIcon](/components/TooltipIcon) and [TooltipDefinition](/components/TooltipDefinition) tooltips pass their `align` prop through as `intrinsicAlign`, so portal positioning matches non-portal Carbon alignment.
 
@@ -43,12 +45,14 @@ Portalled [TooltipIcon](/components/TooltipIcon) and [TooltipDefinition](/compon
 
 Use these props to fine-tune spacing and nudge side-positioned content:
 
-- **`gapTop`** (number, default `0`): Vertical gap in pixels between the anchor and the floating content when direction is `"top"`. Useful for caret clearance (e.g. tooltips).
-- **`gapBottom`** (number, default `0`): Vertical gap when direction is `"bottom"`.
-- **`horizontalGapLeft`** (number, default `0`): Horizontal gap in pixels when the content is to the left of the anchor (space between anchor left edge and content right edge).
-- **`horizontalGapRight`** (number, default `0`): Horizontal gap when the content is to the right of the anchor.
-- **`verticalAlignOffsetLeft`** (number, default `0`): Vertical offset in pixels when direction is `"left"` (e.g. negative to nudge content up).
-- **`verticalAlignOffsetRight`** (number, default `0`): Vertical offset when direction is `"right"`.
+| Prop                      | Type (default)   | Description                                                                                                                                                    |
+| ------------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gapTop`                  | number (`0`)     | Vertical gap in pixels between the anchor and the floating content when direction is `"top"`. Useful for caret clearance (e.g. tooltips).                        |
+| `gapBottom`               | number (`0`)     | Vertical gap when direction is `"bottom"`.                                                                                                                     |
+| `horizontalGapLeft`       | number (`0`)     | Horizontal gap in pixels when the content is to the left of the anchor (space between anchor left edge and content right edge).                                |
+| `horizontalGapRight`      | number (`0`)     | Horizontal gap when the content is to the right of the anchor.                                                                                               |
+| `verticalAlignOffsetLeft` | number (`0`)     | Vertical offset in pixels when direction is `"left"` (e.g. negative to nudge content up).                                                                        |
+| `verticalAlignOffsetRight` | number (`0`)     | Vertical offset when direction is `"right"`.                                                                                                                  |
 
 These are optional; omit them to use defaults. [Tooltip](/components/Tooltip) uses them when `portalTooltip` is true; [TooltipIcon](/components/TooltipIcon) and [TooltipDefinition](/components/TooltipDefinition) apply small built-in gaps when portalled so spacing matches the non-portal Carbon tooltips.
 
