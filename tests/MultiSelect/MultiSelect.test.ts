@@ -590,6 +590,67 @@ describe("MultiSelect", () => {
       expect(nthRenderedOptionText(0)).toBe("A");
     });
 
+    it("does not double re-sort when toggling with selectionFeedback: top", async () => {
+      let sortCallCount = 0;
+
+      // Wrap sortItem to count how many comparisons occur per toggle.
+      const sortItem = (a: { text: string }, b: { text: string }) => {
+        sortCallCount++;
+        return a.text.localeCompare(b.text);
+      };
+
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+            { id: "3", text: "C" },
+            { id: "4", text: "D" },
+            { id: "5", text: "E" },
+          ],
+          selectionFeedback: "top",
+          sortItem,
+        },
+      });
+
+      await openMenu();
+      sortCallCount = 0;
+
+      // Toggle two items so both checked and unchecked partitions get sorted.
+      await toggleOption("C");
+      await toggleOption("E");
+      const callsForTwoToggles = sortCallCount;
+
+      // With 5 items and 2 checked, a single sort() call produces
+      // at most ~10 comparisons (two small partitions).
+      // A double re-sort per toggle would roughly double this count.
+      // Use a generous upper bound for a single-pass sort per toggle.
+      expect(callsForTwoToggles).toBeLessThanOrEqual(20);
+      expect(callsForTwoToggles).toBeGreaterThan(0);
+    });
+
+    it("re-sorts when selectedIds changes externally with selectionFeedback: top", async () => {
+      const { rerender } = render(MultiSelect, {
+        props: {
+          items: [
+            { id: "3", text: "C" },
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+          ],
+          selectionFeedback: "top",
+        },
+      });
+
+      await openMenu();
+      expect(nthRenderedOptionText(0)).toBe("A");
+
+      // External selectedIds change should still trigger re-sort.
+      await rerender({ selectedIds: ["3"] });
+      await tick();
+
+      expect(nthRenderedOptionText(0)).toBe("C");
+    });
+
     it("sorts after reopen with selectionFeedback: top-after-reopen", async () => {
       render(MultiSelect, {
         props: {
