@@ -893,6 +893,8 @@ Set `size="compact"` for minimal row height.
 
 Set `sortable` to `true` to enable column sorting. Disable sorting on specific columns by setting `sort: false` in the header object.
 
+When a sortable header is clicked, the table dispatches a cancelable `sort` event with `event.detail` as `{ key, direction }` (the sort that would apply). `key` is the header `key` (or `null` when unsorted), and `direction` is `"none"`, `"ascending"`, or `"descending"`. Listen with `on:sort`.
+
 <DataTable sortable
   headers="{[
     { key: "name", value: "Name" },
@@ -944,7 +946,18 @@ Set `sortable` to `true` to enable column sorting. Disable sorting on specific c
       rule: "DNS delegation"
     },
   ]}"
+  on:sort={(e) => console.log(e.detail.key, e.detail.direction)}
 />
+
+## Sortable (server-side, preventDefault)
+
+When rows and sort order come from an API, the canonical order is usually defined on the server (collation, nullable fields, joined columns, security filters).
+
+Client-side sorting on the same payload can disagree with that behavior or waste work on large datasets. In those cases, call `preventDefault()` on the `sort` event so the table does not reorder `rows` or apply its own sort for that click. Use `event.detail.key` and `event.detail.direction` as your sort parameters (query string, GraphQL variables, RPC args), wait for the response, then assign the new `rows`. The sort indicators should match what the server applied: bind `sortKey` and `sortDirection` from the parent and set them after the response (as in the example), or pass them as one-way props if you do not need child-to-parent sync.
+
+The framed example uses `setTimeout` to simulate a network request; `preventDefault()` runs first, then simulated “sorted” rows replace `rows` and the bound sort props update the header.
+
+<FileSource src="/framed/DataTable/DataTableSortPreventDefault" />
 
 ## Sortable (sort always)
 
