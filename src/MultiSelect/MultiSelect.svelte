@@ -301,19 +301,15 @@
     if (item.disabled) return;
 
     if (item.isSelectAll) {
-      if (allSelected) {
-        sortedItems = sortedItems.map((si) =>
-          si.disabled ? si : { ...si, checked: false },
-        );
-      } else {
-        sortedItems = sortedItems.map((si) =>
-          si.disabled ? si : { ...si, checked: true },
-        );
-      }
-    } else {
+      const target = !allSelected;
       sortedItems = sortedItems.map((si) =>
-        si.id === item.id ? { ...si, checked: !si.checked } : si,
+        si.disabled || si.checked === target ? si : { ...si, checked: target },
       );
+    } else {
+      const idx = sortedItems.indexOf(item);
+      if (idx !== -1) {
+        sortedItems[idx] = { ...item, checked: !item.checked };
+      }
 
       if (hasSelectAll) {
         const newSelectableChecked = sortedItems.filter(
@@ -322,10 +318,19 @@
         const newAllSelected =
           selectableItems.length > 0 &&
           newSelectableChecked === selectableItems.length;
-        sortedItems = sortedItems.map((si) =>
-          si.isSelectAll ? { ...si, checked: newAllSelected } : si,
-        );
+        const selectAllIdx = sortedItems.findIndex((si) => si.isSelectAll);
+        if (
+          selectAllIdx !== -1 &&
+          sortedItems[selectAllIdx].checked !== newAllSelected
+        ) {
+          sortedItems[selectAllIdx] = {
+            ...sortedItems[selectAllIdx],
+            checked: newAllSelected,
+          };
+        }
       }
+
+      sortedItems = [...sortedItems];
     }
   }
 
