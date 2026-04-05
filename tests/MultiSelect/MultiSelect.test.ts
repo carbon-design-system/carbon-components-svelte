@@ -1229,6 +1229,18 @@ describe("MultiSelect", () => {
       expectTypeOf(filterItem).parameter(0).toEqualTypeOf<Tag>();
     });
 
+    it("sortItem should return number, not Item", () => {
+      type Item = { id: string; text: string };
+
+      const sortItem: ComponentProps<MultiSelectComponent<Item>>["sortItem"] = (
+        a: Item,
+        b: Item,
+      ) => a.text.localeCompare(b.text, "en", { numeric: true });
+
+      expectTypeOf(sortItem).returns.toEqualTypeOf<number>();
+      expectTypeOf(sortItem).parameters.toEqualTypeOf<[Item, Item]>();
+    });
+
     it("should support slot props with generic item type", () => {
       type MenuItem = {
         id: string;
