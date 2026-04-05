@@ -321,6 +321,35 @@ describe("ComboBox", () => {
     expect(input).toHaveFocus();
   });
 
+  it("should dispatch clear event on programmatic clear()", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBoxCustom, { props: { selectedId: "1" } });
+
+    expect(getInput()).toHaveValue("Email");
+
+    await user.click(screen.getByText("Clear"));
+
+    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
+  });
+
+  it("should dispatch clear event on Escape key", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+      },
+    });
+
+    expect(getInput()).toHaveValue("Email");
+
+    const input = getInput();
+    await user.click(input);
+    await user.keyboard("{Escape}");
+
+    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
+  });
+
   it("should not re-focus textbox if clearOptions.focus is false", async () => {
     render(ComboBoxCustom, {
       props: {

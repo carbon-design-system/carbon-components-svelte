@@ -265,6 +265,7 @@
     selectedItem = undefined;
     open = false;
     value = "";
+    dispatch("clear");
     // Ensure binding updates are complete before focusing.
     await tick();
     if (options?.focus !== false) ref?.focus();
@@ -643,7 +644,6 @@
       {/if}
       {#if value}
         <ListBoxSelection
-          on:clear
           on:clear={clear}
           translateWithId={translateWithIdSelection}
           {disabled}

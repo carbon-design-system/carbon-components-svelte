@@ -29,6 +29,9 @@
   on:select={(e) => {
     console.log("select", e.detail);
   }}
+  on:clear={(e) => {
+    console.log("clear", e.type);
+  }}
   let:item
 >
   <span>Item {item.text}</span>
