@@ -31,6 +31,14 @@
    */
   export let expansionBreakpoint = 1056;
 
+  /**
+   * Set to `"classic"` for the mixed UI Shell theme (White side nav).
+   * Use with `Header` `theme="classic"` (Gray 100 header).
+   * Requires `carbon-components-svelte/css/all.css`.
+   * @type {"classic" | undefined}
+   */
+  export let theme = undefined;
+
   import { createEventDispatcher, onMount } from "svelte";
   import {
     isSideNavCollapsed,
@@ -106,6 +114,7 @@
     : isOpen}
   class:bx--side-nav--collapsed={winWidth !== undefined && !isOpen && !rail}
   class:bx--side-nav--rail={rail}
+  class:bx--side-nav--ui-shell-classic={theme === "classic"}
   style:visibility={winWidth !== undefined && !isOpen && !rail
     ? "hidden"
     : undefined}

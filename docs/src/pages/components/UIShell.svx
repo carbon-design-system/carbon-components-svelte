@@ -99,3 +99,18 @@ Create a header with a persistent hamburger menu state.
 Integrate toasts with the UI Shell. This example triggers a toast, which appears in the top right corner, below the header.
 
 <FileSource src="/framed/UIShell/HeaderWithToast" />
+
+## Classic theme
+
+Before version 0.105.0, the UI Shell defaulted to a mixed theme: **Gray 100** header and **White** side navigation. Now, the UI Shell respects the current theme (e.g., `white`, `g10`, `g80`, `g90`, `g100`).
+
+Set `theme="classic"` on both `Header` and `SideNav` for the classic look: **Gray 100** header and **White** side navigation, independent of the global theme.
+
+> [!NOTE]
+> The classic theme requires **carbon-components-svelte/css/all.css** because it uses CSS custom properties.
+
+```css
+import "carbon-components-svelte/css/all.css";
+```
+
+<FileSource src="/framed/UIShell/HeaderNavClassic" />
