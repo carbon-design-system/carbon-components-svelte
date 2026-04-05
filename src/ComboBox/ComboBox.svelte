@@ -623,10 +623,8 @@
         on:blur={({ relatedTarget }) => {
           if (!open || !relatedTarget) return;
           if (
-            relatedTarget &&
-            relatedTarget.tagName !== "INPUT" && relatedTarget.tagName !== "SELECT" && relatedTarget.tagName !== "TEXTAREA" &&
-            relatedTarget.getAttribute("role") !== "button" &&
-            relatedTarget.getAttribute("role") !== "searchbox"
+            fieldRef?.contains(relatedTarget) ||
+            listRef?.contains(relatedTarget)
           ) {
             ref.focus();
           }

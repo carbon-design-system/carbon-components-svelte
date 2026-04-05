@@ -1861,4 +1861,30 @@ describe("ComboBox", () => {
       expect(floatingPortal).not.toBeInTheDocument();
     });
   });
+
+  it("should not trap focus when tabbing away from an open menu", async () => {
+    const { container } = render(ComboBox);
+
+    // Add an external focusable element after the combobox.
+    const externalButton = document.createElement("button");
+    externalButton.textContent = "Outside";
+    container.appendChild(externalButton);
+
+    const input = getInput();
+    await user.click(input);
+
+    // Menu should be open.
+    expect(screen.getAllByRole("listbox")[1]).toBeVisible();
+
+    // Simulate a blur where focus moves to an element outside the combobox.
+    // In a real browser, Tab triggers blur with relatedTarget = next element.
+    // A buggy handler will call ref.focus() synchronously, trapping focus.
+    const focusSpy = vi.spyOn(input, "focus");
+    input.dispatchEvent(
+      new FocusEvent("blur", { relatedTarget: externalButton, bubbles: true }),
+    );
+
+    // The blur handler should NOT refocus the input when focus leaves the component.
+    expect(focusSpy).not.toHaveBeenCalled();
+  });
 });
