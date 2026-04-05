@@ -59,7 +59,7 @@ Create a non-interactive modal for displaying information. This variant lacks ac
 
 ## With form submission
 
-Connect the modal's primary button to a form using the `formId` prop. This enables native form submission even though the button is outside the form element. Clicking the primary button or pressing Enter will trigger the form's submit event.
+Connect the modal's primary button to a form using the `formId` prop. This enables native form submission even though the button is outside the form element. Clicking the primary button or pressing <DocKbd label="Enter" /> will trigger the form's submit event.
 
 <FileSource src="/framed/Modal/ModalWithForm" />
 
@@ -101,7 +101,7 @@ Use the large size for complex content by setting `size` to `"lg"`. This provide
 
 ## Prevent default close behavior
 
-The modal dispatches a cancelable `close` event, allowing you to prevent the modal from closing using `e.preventDefault()`. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"`, `"outside-click"`, or `"close-button"`.
+The modal dispatches a cancelable `close` event, allowing you to prevent the modal from closing using `e.preventDefault()`. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, or `"close-button"`.
 
 <FileSource src="/framed/Modal/ModalPreventClose" />
 
