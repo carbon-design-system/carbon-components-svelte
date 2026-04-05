@@ -74,6 +74,21 @@ test.describe("ComboBox", () => {
     await expect(page.locator(".bx--list-box__menu")).not.toBeVisible();
   });
 
+  test("does not trap focus when clicking an outside element while menu is open", async ({
+    page,
+  }) => {
+    const combobox = page.getByTestId("combobox-contact");
+    await combobox.click();
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+
+    // Click an outside focusable element while the menu is open.
+    // The blur handler should not yank focus back to the input.
+    const outsideLink = page.getByTestId("outside-link");
+    await outsideLink.focus();
+
+    await expect(outsideLink).toBeFocused();
+  });
+
   test("selects all text on focus when selectTextOnFocus is true", async ({
     page,
   }) => {
