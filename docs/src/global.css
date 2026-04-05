@@ -339,6 +339,16 @@ html {
   max-width: 44rem;
 }
 
+.prose > ul,
+.prose > ol {
+  max-width: 48rem;
+}
+
+.bx--col > p:has(+ ul),
+.bx--col > p:has(+ ol) {
+  margin-bottom: var(--cds-layout-01);
+}
+
 .bx--col > p > code,
 .bx--col > ul > li > code,
 .bx--col > ol > li > code {
