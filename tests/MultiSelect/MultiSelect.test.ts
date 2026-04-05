@@ -678,6 +678,36 @@ describe("MultiSelect", () => {
       expect(wrapper).toHaveClass("bx--multi-select--invalid");
     });
 
+    // Regression: filterable + invalid rendered two WarningFilled icons
+    it("renders only one invalid icon when filterable", () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+        },
+      });
+
+      const icons = container.querySelectorAll(".bx--list-box__invalid-icon");
+      expect(icons).toHaveLength(1);
+    });
+
+    // Regression: filterable + warn rendered two WarningAltFilled icons
+    it("renders only one warning icon when filterable", () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          warn: true,
+          warnText: "Warning message",
+        },
+      });
+
+      const icons = container.querySelectorAll(".bx--list-box__invalid-icon");
+      expect(icons).toHaveLength(1);
+    });
+
     it("handles warning state", () => {
       render(MultiSelect, {
         props: {

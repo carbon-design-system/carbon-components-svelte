@@ -665,14 +665,6 @@
           {id}
           {name}
         >
-        {#if invalid}
-          <WarningFilled class="bx--list-box__invalid-icon" />
-        {/if}
-        {#if !invalid && warn}
-          <WarningAltFilled
-            class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
-          />
-        {/if}
         {#if value}
           <ListBoxSelection
             on:clear={() => {
