@@ -25,7 +25,7 @@ Bind to the `value` prop for reactive updates.
 
 ## Clear event
 
-The `clear` event is dispatched when clicking the clear button or pressing the Escape key.
+The `clear` event is dispatched when clicking the clear button or pressing <DocKbd label="Escape" />.
 
 <Search value="Cloud functions" on:clear={() => console.log('clear')}/>
 

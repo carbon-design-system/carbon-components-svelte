@@ -20,7 +20,7 @@ The context menu appears when right-clicking anywhere in the window. Use context
 `ContextMenuOption` supports the following props:
 
 - `labelText`: primary label (or use the `labelChildren` slot; see the API reference).
-- `shortcutText`: keyboard hint shown on the right; can be used with or without an icon.
+- `shortcutText`: keyboard hint shown on the right; can be used with or without an icon. For example, pass **⌘C** as the hint text, or show individual keys in prose as <DocKbd label="⌘" />+<DocKbd label="C" />.
 - `icon`: Carbon icon component to the left of the label. When an icon is set, the option is indented automatically so rows align; you do not need to pass `indented` for icon rows.
 - `indented`: indent the label without an icon, for example to align with submenu parents or nested items (see [Nested menu](#nested-menu), [Custom target](#custom-target), and [Multiple targets](#multiple-targets)).
 - `disabled`: non-interactive, dimmed row.

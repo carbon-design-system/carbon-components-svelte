@@ -25,7 +25,7 @@ Wrap the composed modal in a portal to ensure it renders above all z-index stack
 
 ## Prevent default close behavior
 
-The modal dispatches a cancelable `close` event, allowing you to prevent the modal from closing using `e.preventDefault()`. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"`, `"outside-click"`, or `"close-button"`.
+The modal dispatches a cancelable `close` event, allowing you to prevent the modal from closing using `e.preventDefault()`. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, or `"close-button"`.
 
 <FileSource src="/framed/Modal/ComposedModalPreventClose" />
 
