@@ -182,11 +182,31 @@ Indicate an invalid selection by setting `invalid` to `true`. This example shows
     {id: "2", text: "Fax"}]}"
   />
 
+## Invalid state (filterable)
+
+Combine `filterable` and `invalid` to show validation errors on a filterable multi-select.
+
+<MultiSelect filterable invalid invalidText="A contact method is required" labelText="Contact" placeholder="Filter contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ## Warning state
 
 Indicate a warning state by setting `warn` to `true`. This example shows a warning about unassociated accounts.
 
 <MultiSelect warn warnText="One or more contact methods are not associated with your account" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Warning state (filterable)
+
+Combine `filterable` and `warn` to show warnings on a filterable multi-select.
+
+<MultiSelect filterable warn warnText="One or more contact methods are not associated with your account" labelText="Contact" placeholder="Filter contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
