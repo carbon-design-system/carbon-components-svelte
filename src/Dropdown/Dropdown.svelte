@@ -414,6 +414,15 @@
       selectedItem: itemsById.get(selectedId),
     });
   };
+
+  function selectHighlighted() {
+    open = !open;
+    if (highlightedIndex > -1 && items[highlightedIndex].id !== selectedId) {
+      selectedId = items[highlightedIndex].id;
+      dispatchSelect();
+      open = false;
+    }
+  }
 </script>
 
 <svelte:window
@@ -491,15 +500,7 @@
         }
 
         if (e.key === "Enter") {
-          open = !open;
-          if (
-            highlightedIndex > -1 &&
-            items[highlightedIndex].id !== selectedId
-          ) {
-            selectedId = items[highlightedIndex].id;
-            dispatchSelect();
-            open = false;
-          }
+          selectHighlighted();
         } else if (e.key === "Tab") {
           open = false;
         } else if (e.key === "ArrowDown") {
@@ -527,16 +528,7 @@
         } else {
           return;
         }
-        open = !open;
-
-        if (
-          highlightedIndex > -1 &&
-          items[highlightedIndex].id !== selectedId
-        ) {
-          selectedId = items[highlightedIndex].id;
-          dispatchSelect();
-          open = false;
-        }
+        selectHighlighted();
       }}
       {disabled}
       {id}
