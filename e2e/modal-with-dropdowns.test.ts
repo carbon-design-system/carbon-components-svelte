@@ -28,14 +28,14 @@ test.describe("Modal with Dropdowns", () => {
   });
 
   test("Dropdown opens and selects an item", async ({ page }) => {
-    await page.getByRole("button", { name: "Preferred channel" }).click();
+    await page.getByRole("combobox", { name: "Preferred channel" }).click();
 
     const menu = page.getByRole("listbox", { name: "Preferred channel" });
     await expect(menu).toBeVisible();
 
     await menu.getByRole("option", { name: "Fax" }).click();
     await expect(
-      page.getByRole("button", { name: "Preferred channel" }),
+      page.getByRole("combobox", { name: "Preferred channel" }),
     ).toContainText("Fax");
   });
 
@@ -60,7 +60,7 @@ test.describe("Modal with Dropdowns", () => {
   test("Dropdown menu renders outside the dialog (portal)", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: "Preferred channel" }).click();
+    await page.getByRole("combobox", { name: "Preferred channel" }).click();
 
     // The Dropdown listbox is portaled outside the dialog element.
     const dialog = page.getByRole("dialog", { name: "Add a contact" });

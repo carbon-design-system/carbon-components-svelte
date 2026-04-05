@@ -99,7 +99,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--light");
   });
 
@@ -112,7 +112,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
     expect(button).toHaveTextContent("Slack");
     expect(button.closest(".bx--dropdown__wrapper")).toHaveClass(
@@ -129,7 +129,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--sm");
 
     await rerender({ items, selectedId: "0", size: "xl" });
@@ -146,7 +146,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
     expect(button).toHaveTextContent("Slack");
     expect(button.closest(".bx--dropdown")).toHaveAttribute(
@@ -166,7 +166,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
     expect(button).toHaveTextContent("Slack");
     expect(button.closest(".bx--dropdown")).toHaveClass(
@@ -185,8 +185,8 @@ describe("Dropdown", () => {
     });
 
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(screen.getByRole("button")).toHaveAttribute("disabled");
-    expect(screen.getByRole("button")).toHaveTextContent("Slack");
+    expect(screen.getByRole("combobox")).toHaveAttribute("disabled");
+    expect(screen.getByRole("combobox")).toHaveTextContent("Slack");
   });
 
   it("should handle helper text", () => {
@@ -211,7 +211,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     const menuItemText = screen.getByText("Email");
@@ -234,7 +234,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.tab();
     expect(button).toHaveFocus();
 
@@ -267,7 +267,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     const menuItemText = screen.getByText("Email");
@@ -303,7 +303,7 @@ describe("Dropdown", () => {
       },
     });
 
-    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("combobox"));
     expect(screen.getByRole("listbox")).toBeVisible();
 
     await user.click(document.body);
@@ -319,7 +319,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const dropdown = screen.getByRole("button").closest(".bx--dropdown");
+    const dropdown = screen.getByRole("combobox").closest(".bx--dropdown");
     expect(dropdown).toHaveClass("bx--list-box--up");
   });
 
@@ -337,7 +337,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // If the while loop has no guard, this would hang forever.
@@ -365,7 +365,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Keyboard nav starts at selected item (index 0, Slack)
@@ -384,7 +384,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     await user.keyboard("{ArrowUp}");
@@ -431,7 +431,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
     // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
     // See: https://svelte.dev/docs/svelte/v5-migration-guide
@@ -461,7 +461,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(
       within(button).getByRole("img", { name: "Open dropdown" }),
     ).toBeInTheDocument();
@@ -747,7 +747,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Type 'b' to find Banana
@@ -777,7 +777,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Type 'apr' to find Apricot
@@ -799,7 +799,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Type 'b' - should skip Banana and find Blueberry
@@ -821,7 +821,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Type 'B' (uppercase) to find Banana
@@ -844,7 +844,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Navigate down to beyond the last item, which should wrap
@@ -876,7 +876,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -905,7 +905,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -945,7 +945,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -990,7 +990,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -1012,7 +1012,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -1049,7 +1049,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1072,7 +1072,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const options = screen.getAllByRole("option");
@@ -1090,7 +1090,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1114,7 +1114,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1139,7 +1139,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1155,7 +1155,7 @@ describe("Dropdown", () => {
       const firstVisibleOption = optionsAfterScroll[0];
       await user.click(firstVisibleOption);
 
-      const buttonAfterClick = screen.getByRole("button");
+      const buttonAfterClick = screen.getByRole("combobox");
       expect(buttonAfterClick.textContent).toBeTruthy();
     });
 
@@ -1172,7 +1172,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1193,7 +1193,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       expect(button).toHaveTextContent("Item 251");
 
       await user.click(button);
@@ -1220,7 +1220,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{ArrowDown}");
@@ -1251,7 +1251,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -1277,7 +1277,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -1329,7 +1329,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       // The ListBoxMenu itself has the style applied
@@ -1349,7 +1349,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1373,7 +1373,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1395,7 +1395,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const options = screen.getAllByRole("option");
@@ -1413,7 +1413,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1436,7 +1436,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1461,7 +1461,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1530,7 +1530,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
       expect(screen.getByRole("listbox")).toBeInTheDocument();
 
@@ -1569,7 +1569,7 @@ describe("Dropdown", () => {
         props: { items, selectedId: "1", labelText: "Contact" },
       });
 
-      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("combobox"));
 
       const options = screen.getAllByRole("option");
       // "Email" (index 1) is selected – should have the checkmark icon
@@ -1593,7 +1593,7 @@ describe("Dropdown", () => {
         props: { items, selectedId: "0", labelText: "Contact" },
       });
 
-      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("combobox"));
 
       let options = screen.getAllByRole("option");
       expect(
@@ -1607,7 +1607,7 @@ describe("Dropdown", () => {
       await user.click(options[1]);
 
       // Re-open the menu
-      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("combobox"));
 
       options = screen.getAllByRole("option");
       expect(
@@ -1623,7 +1623,7 @@ describe("Dropdown", () => {
         props: { items, labelText: "Contact" },
       });
 
-      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("combobox"));
 
       const options = screen.getAllByRole("option");
       for (const option of options) {

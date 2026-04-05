@@ -71,8 +71,7 @@ describe("Svelte 5 Snippets", () => {
     it("should render snippet with item and index arguments", async () => {
       render(Snippets);
 
-      const inputs = screen.getAllByRole("combobox");
-      const comboboxInput = inputs[0];
+      const comboboxInput = screen.getByTestId("combobox-snippet");
       expect(comboboxInput).toBeInTheDocument();
 
       await user.click(comboboxInput);
