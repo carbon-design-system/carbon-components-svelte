@@ -25,7 +25,7 @@
 
   /**
    * Override the display of a multiselect item.
-   * @type {(item: Item) => any}
+   * @type {(item: Item) => string | Item["id"]}
    */
   export let itemToString = (item) => item.text ?? item.id;
 
