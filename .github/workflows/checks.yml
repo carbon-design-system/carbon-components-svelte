@@ -67,7 +67,8 @@ jobs:
         run: bun --bun run test
 
   test-e2e:
-    needs: [lint]
+    needs: [lint, test]
+    if: ${{ !failure() && !cancelled() }}
     runs-on: macos-15
     timeout-minutes: 20
     steps:
