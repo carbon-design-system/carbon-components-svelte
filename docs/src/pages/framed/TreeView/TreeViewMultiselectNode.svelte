@@ -2,7 +2,8 @@
   import { Stack, TreeView } from "carbon-components-svelte";
 
   let activeId = 0;
-  let selectedIds = [0, 7, 9];
+  let selectedIds = [0];
+  let expandedIds = [1];
   let nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
@@ -26,35 +27,19 @@
       text: "Blockchain",
       nodes: [{ id: 8, text: "IBM Blockchain Platform" }],
     },
-    {
-      id: 9,
-      text: "Databases",
-      nodes: [
-        { id: 10, text: "IBM Cloud Databases for Elasticsearch" },
-        { id: 11, text: "IBM Cloud Databases for Enterprise DB" },
-        { id: 12, text: "IBM Cloud Databases for MongoDB" },
-        { id: 13, text: "IBM Cloud Databases for PostgreSQL" },
-      ],
-    },
-    {
-      id: 14,
-      text: "Integration",
-      disabled: true,
-      nodes: [{ id: 15, text: "IBM API Connect", disabled: true }],
-    },
   ];
 </script>
 
 <Stack gap={6}>
   <div>
     <TreeView
-      labelText="Cloud Products"
+      multiselect
+      multiselectMode="node"
+      labelText="Cloud Products (node scope)"
       {nodes}
       bind:activeId
       bind:selectedIds
-      on:select={({ detail }) => console.log("select", detail)}
-      on:toggle={({ detail }) => console.log("toggle", detail)}
-      on:focus={({ detail }) => console.log("focus", detail)}
+      bind:expandedIds
     />
   </div>
   <Stack gap={4}>

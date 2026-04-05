@@ -4,6 +4,10 @@ A tree view displays hierarchical data in a collapsible tree structure. It suppo
 
 Create a basic tree view using the `nodes` prop. Each node requires an `id` and `text`, with optional properties for `disabled`, `icon`, and child `nodes`.
 
+By default only **one** node is selected: `selectedIds` tracks a single id, and clicking another row replaces the previous selection.
+
+For a multiselectable tree, set `multiselect` to `true` (and optionally `multiselectMode`); see [Multi-select (node)](#multi-select-node), [Multi-select (shallow)](#multi-select-shallow), and [Multi-select (deep)](#multi-select-deep).
+
 > [!NOTE]
 > Every node must have a unique id.
 
@@ -66,11 +70,35 @@ Set initially expanded nodes using the `expandedIds` prop.
 
 <FileSource src="/framed/TreeView/TreeViewExpanded" />
 
-## Initial multiple selected nodes
+## Multi-select (node)
 
-Set multiple initially selected nodes using the `selectedIds` prop.
+Set `multiselect` to allow more than one selected row. With the default `multiselectMode="node"`, each gesture applies to the clicked row only, not its children.
 
-<FileSource src="/framed/TreeView/TreeViewMultiselect" />
+- **Plain click** replaces the selection with that row and sets the anchor used for the next range selection.
+- **<DocKbd label="CMD" />** or **<DocKbd label="Ctrl" />** + **click** toggles that row's unit: **deselect** (remove the whole unit from the selection) if it is already selected, **add** it otherwise. Other selected rows stay selected. The anchor updates to the row you clicked.
+- **<DocKbd label="Shift" />** + **click** replaces the selection with all **visible** rows from the anchor through the clicked row, in tree order (only rows under **expanded** parents count; collapsed branches are not included). If no anchor exists yet, behavior matches a plain click. Holding **<DocKbd label="Shift" />** together with **<DocKbd label="Ctrl" />** or **<DocKbd label="CMD" />** still applies range selection, not per-row toggle.
+
+For selection that includes direct children or the full subtree on each gesture, see [Multi-select (shallow)](#multi-select-shallow) and [Multi-select (deep)](#multi-select-deep).
+
+<FileSource src="/framed/TreeView/TreeViewMultiselectNode" />
+
+## Multi-select (shallow)
+
+With `multiselectMode="shallow"`, the same modifier keys apply, but each row acts as a **unit** of one parent plus its immediate non-disabled children (deeper descendants are not included).
+
+- **Plain click** and **<DocKbd label="Ctrl" />** or **<DocKbd label="CMD" />** + **click** add or remove that whole shallow set. Toggle removes every id in that set when the clicked row was already part of the selection.
+- **<DocKbd label="Shift" />** + **click** walks the visible rows between anchor and target as in [node mode](#multi-select-node), then **expands** each of those rows to its shallow set and merges the results in order (duplicates omitted).
+
+<FileSource src="/framed/TreeView/TreeViewMultiselectShallow" />
+
+## Multi-select (deep)
+
+With `multiselectMode="deep"`, each row's unit is that node plus **all** non-disabled descendants recursively (full subtree). Disabled nodes are skipped, and subtrees under a disabled node are not traversed.
+
+- **Plain click** and **<DocKbd label="Ctrl" />** or **<DocKbd label="CMD" />** + **click** use that deep expansion for replace and toggle, respectively.
+- **<DocKbd label="Shift" />** + **click** takes the visible range between anchor and target and unions each row's deep expansion the same way as in shallow mode.
+
+<FileSource src="/framed/TreeView/TreeViewMultiselectDeep" />
 
 ## Auto-collapse siblings
 
