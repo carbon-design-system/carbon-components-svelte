@@ -69,6 +69,17 @@ const HTML_VOID_TAGS = new Set([
   "wbr",
 ]);
 
+const DOC_KBD_SELF_CLOSING_DQUOT_RE =
+  /<DocKbd\b\s+label\s*=\s*"([^"]*)"\s*\/>/g;
+const DOC_KBD_SELF_CLOSING_SQUOT_RE =
+  /<DocKbd\b\s+label\s*=\s*'([^']*)'\s*\/>/g;
+
+const KBD_HTML_ESCAPE_AMP = /&/g;
+const KBD_HTML_ESCAPE_LT = /</g;
+const KBD_HTML_ESCAPE_GT = />/g;
+const MD_LINE_OPENS_KBD_RE = /^<kbd\b/i;
+const MD_LINE_OPENS_KBD_CLOSE_RE = /^<\/kbd>/i;
+
 const LEADING_SVELTE_SCRIPT_BLOCK_RE = /^\s*<script\b[\s\S]*?<\/script>\s*\n*/i;
 const FILE_SOURCE_SRC_ATTR_RE = /src="([^"]+)"/i;
 const FILE_SOURCE_START_RE = /^\s*<FileSource\b/;
@@ -334,6 +345,28 @@ function renderComponentApiMarkdown(moduleName: string) {
   return sections.join("\n\n");
 }
 
+function escapeKbdInnerText(label: string) {
+  return label
+    .replace(KBD_HTML_ESCAPE_AMP, "&amp;")
+    .replace(KBD_HTML_ESCAPE_LT, "&lt;")
+    .replace(KBD_HTML_ESCAPE_GT, "&gt;");
+}
+
+function convertDocKbdToKbdForMarkdown(body: string) {
+  return body
+    .replace(DOC_KBD_SELF_CLOSING_DQUOT_RE, (_m, label: string) => {
+      return `<kbd>${escapeKbdInnerText(label)}</kbd>`;
+    })
+    .replace(DOC_KBD_SELF_CLOSING_SQUOT_RE, (_m, label: string) => {
+      return `<kbd>${escapeKbdInnerText(label)}</kbd>`;
+    });
+}
+
+function lineOpensKbdMarkdownHtml(line: string) {
+  const t = line.trimStart();
+  return MD_LINE_OPENS_KBD_RE.test(t) || MD_LINE_OPENS_KBD_CLOSE_RE.test(t);
+}
+
 function inlineFileSources(body: string) {
   const lines = body.split("\n");
   const out: string[] = [];
@@ -503,7 +536,12 @@ function fenceInlineSvelte(body: string) {
       continue;
     }
 
-    if (!inCodeFence && !inSvelteFence && isTagLine(line)) {
+    if (
+      !inCodeFence &&
+      !inSvelteFence &&
+      isTagLine(line) &&
+      !lineOpensKbdMarkdownHtml(line)
+    ) {
       out.push("```svelte");
       inSvelteFence = true;
       tagDepth = 0;
@@ -638,6 +676,35 @@ async function formatMarkdown(markdown: string) {
   }
 }
 
+/**
+ * Output is always valid UTF-8, but some clients (browsers, editors, download
+ * tools) assume Windows-1252/Latin-1 and show mojibake for typographic Unicode
+ * (e.g. `â€"` for an em dash). Normalizing to ASCII keeps generated `.md` /
+ * `llms-full.txt` readable everywhere without changing meaning much.
+ */
+function asciiNormalizeGeneratedMarkdown(text: string): string {
+  return (
+    text
+      // Dashes / quotes / spaces (common in prose)
+      .replaceAll("\u2014", "--") // em dash —
+      .replaceAll("\u2013", "-") // en dash –
+      .replaceAll("\u2212", "-") // minus sign −
+      .replaceAll("\u2018", "'")
+      .replaceAll("\u2019", "'")
+      .replaceAll("\u201c", '"')
+      .replaceAll("\u201d", '"')
+      .replaceAll("\u2026", "...")
+      .replaceAll("\u00a0", " ")
+      // Keys / symbols sometimes pasted from macOS docs
+      .replaceAll("\u2318", "Cmd") // ⌘
+      .replaceAll("\u2325", "Option") // ⌥
+      .replaceAll("\u21e7", "Shift") // ⇧
+      .replaceAll("\u238b", "Esc") // ⎋ (less common)
+      // Strip BOM if present upstream
+      .replaceAll("\ufeff", "")
+  );
+}
+
 function shiftMarkdownHeadings(md: string) {
   const lines = md.split("\n");
   let inFence = false;
@@ -688,9 +755,8 @@ for (const componentName of getComponentNames()) {
     LEADING_SVELTE_SCRIPT_BLOCK_RE,
     "",
   );
-  const bodyWithInlinedFileSources = inlineFileSources(
-    bodyWithoutLeadingScript,
-  );
+  const bodyWithKbd = convertDocKbdToKbdForMarkdown(bodyWithoutLeadingScript);
+  const bodyWithInlinedFileSources = inlineFileSources(bodyWithKbd);
   const fencedBody = fenceInlineSvelte(bodyWithInlinedFileSources);
 
   const apiSections = componentsForUsage
@@ -710,9 +776,10 @@ await Promise.all(
   generatedMdByComponent.map(async ({ componentName, md }) => {
     const svelteFormatted = await formatSvelteFences(md);
     const docFormatted = await formatMarkdown(svelteFormatted);
+    const docOut = asciiNormalizeGeneratedMarkdown(docFormatted);
     fs.writeFileSync(
       path.join(RAW_COMPONENTS_OUT_DIR, `${componentName}.md`),
-      docFormatted,
+      docOut,
       "utf8",
     );
   }),
@@ -740,7 +807,9 @@ const sortedByComponentName = [...generatedMdByComponent].sort((a, b) =>
   a.componentName.localeCompare(b.componentName),
 );
 const introPart = `# Carbon Components Svelte\n\n${overviewMd}`;
-const formattedIntro = (await formatMarkdown(introPart)).trimEnd();
+const formattedIntro = asciiNormalizeGeneratedMarkdown(
+  (await formatMarkdown(introPart)).trimEnd(),
+);
 const componentParts = sortedByComponentName.map(({ componentName }) => {
   const formattedPath = path.join(
     RAW_COMPONENTS_OUT_DIR,
@@ -752,6 +821,6 @@ const componentParts = sortedByComponentName.map(({ componentName }) => {
 const fullParts = [formattedIntro, ...componentParts];
 fs.writeFileSync(
   path.join("./public", "llms-full.txt"),
-  fullParts.join("\n\n"),
+  asciiNormalizeGeneratedMarkdown(fullParts.join("\n\n")),
   "utf8",
 );

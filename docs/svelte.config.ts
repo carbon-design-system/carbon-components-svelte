@@ -30,6 +30,12 @@ const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
 const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
 const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
+/** Prose-only inline HTML: do not wrap in Preview (see visitHtml). */
+const NO_PREVIEW_HTML_RE = /^\s*<DocKbd\b/;
+const DOC_KBD_IMPORT_STMT =
+  '  import DocKbd from "../../components/DocKbd.svelte";';
+const DOC_KBD_IMPORT_RE = /import\s+DocKbd\s+from/;
+const DOC_KBD_USAGE_RE = /<DocKbd\b/;
 /** Heuristics for skipping svelte/compiler parse in createImports (see snippetMayNeedCarbonImportScan). */
 const SNIPPET_PASCAL_COMPONENT_RE = /<[A-Z][A-Za-z0-9]*/;
 const SNIPPET_USE_ACTION_RE = /use:\s*\w/;
@@ -113,6 +119,7 @@ function createImportsUncached(source: string) {
   const inlineComponents = new Set<string>();
   const icons = new Set<string>();
   const actions = new Set<string>();
+  let usesDocKbd = false;
 
   // heuristic to guess if the inline component or expression name is a Carbon icon
   const isIcon = (text: string) =>
@@ -126,6 +133,10 @@ function createImportsUncached(source: string) {
         expression?: { type?: string; name?: string };
       };
       if (n.type === "InlineComponent" && n.name) {
+        if (n.name === "DocKbd") {
+          usesDocKbd = true;
+          return;
+        }
         if (isIcon(n.name)) {
           icons.add(n.name);
         } else {
@@ -149,20 +160,29 @@ function createImportsUncached(source: string) {
   const ccsImports = [...inlineComponents, ...actionImports];
   const iconImports = [...icons];
 
-  if (ccsImports.length === 0) return "";
+  if (ccsImports.length === 0 && !usesDocKbd) return "";
 
-  const iconBlock =
-    icons.size > 0
-      ? `\n${iconImports
-          .map(
-            (icon) =>
-              `  import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
-          )
-          .join("\n")}`
-      : "";
+  const lines: string[] = [];
+  if (usesDocKbd) {
+    lines.push(DOC_KBD_IMPORT_STMT);
+  }
+  if (ccsImports.length > 0) {
+    lines.push(
+      `  import { ${ccsImports.join(", ")} } from "carbon-components-svelte";`,
+    );
+    if (icons.size > 0) {
+      for (const icon of iconImports) {
+        lines.push(
+          `  import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
+        );
+      }
+    }
+  }
+
+  if (lines.length === 0) return "";
 
   return `<script>
-  import { ${ccsImports.join(", ")} } from "carbon-components-svelte";${iconBlock}
+${lines.join("\n")}
 </script>
 
 `;
@@ -228,7 +248,8 @@ function plugin() {
     if (
       node.lang !== "svelte" &&
       !node.value.startsWith("<FileSource") &&
-      !node.value.startsWith("<script>")
+      !node.value.startsWith("<script>") &&
+      !NO_PREVIEW_HTML_RE.test(node.value)
     ) {
       const scriptBlock = createImports(node.value);
       const { formattedCode, highlightedCode } =
@@ -482,6 +503,14 @@ export default {
             SCRIPT_TAG_REGEX,
             '$1\n  import Preview from "../../components/Preview.svelte";',
           );
+        }
+
+        if (DOC_KBD_USAGE_RE.test(code) && !DOC_KBD_IMPORT_RE.test(code)) {
+          if (SCRIPT_TAG_REGEX.test(code)) {
+            code = code.replace(SCRIPT_TAG_REGEX, `$1\n${DOC_KBD_IMPORT_STMT}`);
+          } else {
+            code = `<script>\n${DOC_KBD_IMPORT_STMT}\n</script>\n\n${code}`;
+          }
         }
 
         return { code };
