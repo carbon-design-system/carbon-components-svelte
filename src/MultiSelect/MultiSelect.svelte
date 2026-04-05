@@ -244,6 +244,7 @@
   let isInitialRender = true;
   let listScrollTop = 0;
   let prevOpen = false;
+  let internalSelectedIdsRef = selectedIds;
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement }) => void}
@@ -332,6 +333,14 @@
 
       sortedItems = [...sortedItems];
     }
+
+    if (selectionFeedback === "top") {
+      selectedIds = sortedItems
+        .filter((si) => si.checked && !si.isSelectAll)
+        .map((si) => si.id);
+      internalSelectedIdsRef = selectedIds;
+      sortedItems = sort();
+    }
   }
 
   afterUpdate(() => {
@@ -340,6 +349,7 @@
       selectedIds = checked
         .filter((item) => !item.isSelectAll)
         .map(({ id }) => id);
+      internalSelectedIdsRef = selectedIds;
       if (!isInitialRender) {
         dispatch("select", {
           selectedIds,
@@ -469,9 +479,10 @@
   $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
   $: if (
     selectedIds &&
-    (selectionFeedback === "top" ||
+    ((selectionFeedback === "top" && selectedIds !== internalSelectedIdsRef) ||
       (selectionFeedback === "top-after-reopen" && open === false))
   ) {
+    internalSelectedIdsRef = selectedIds;
     sortedItems = sort();
   }
   $: sortedItemsById = new Map(sortedItems.map((item) => [item.id, item]));
