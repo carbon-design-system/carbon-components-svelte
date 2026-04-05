@@ -80,6 +80,17 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(getAllExpandedItems()).toHaveLength(5);
   });
 
+  it("expandNodes() with no arguments expands all nodes", async () => {
+    render(component);
+
+    noExpandedItems();
+
+    const expandNodesButton = screen.getByText("Expand nodes (no filter)");
+    await user.click(expandNodesButton);
+
+    expect(getAllExpandedItems()).toHaveLength(5);
+  });
+
   it("can expand some nodes", async () => {
     render(component);
 

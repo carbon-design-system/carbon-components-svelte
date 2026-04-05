@@ -213,7 +213,7 @@
    * </button>
    * ```
    */
-  export function expandNodes(filterNode = () => false) {
+  export function expandNodes(filterNode = () => true) {
     const nodesToExpand = flattenedNodes
       .filter(
         (node) =>
