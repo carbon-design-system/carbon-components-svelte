@@ -2161,4 +2161,103 @@ describe("MultiSelect", () => {
       expect(floatingPortal).not.toBeInTheDocument();
     });
   });
+
+  describe("filterable: Backspace/Delete clears selection", () => {
+    it("Backspace clears selection when input is empty", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+      expect(options[1]).toHaveAttribute("aria-selected", "true");
+      expect(options[2]).toHaveAttribute("aria-selected", "false");
+
+      await user.keyboard("{Backspace}");
+
+      expect(options[0]).toHaveAttribute("aria-selected", "false");
+      expect(options[1]).toHaveAttribute("aria-selected", "false");
+      expect(options[2]).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("Backspace does not clear selection when input has text", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+      await user.type(input, "Sl");
+
+      // Backspace should remove a character, not clear selection
+      await user.keyboard("{Backspace}");
+
+      // Re-open to check all options since filter may hide some
+      // The selection should still be intact
+      await user.clear(input);
+
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("Delete clears input text when menu is open", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+      await user.type(input, "Sl");
+      expect(input).toHaveValue("Sl");
+
+      await user.keyboard("{Delete}");
+
+      // Delete clears the entire input value when menu is open
+      expect(input).toHaveValue("");
+    });
+
+    it("Delete clears selection when menu is closed", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      // Focus input then close menu
+      await user.click(input);
+      await user.keyboard("{Escape}");
+      expect(input).toHaveAttribute("aria-expanded", "false");
+
+      await user.keyboard("{Delete}");
+
+      // Open menu to verify selections were cleared
+      await user.click(input);
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "false");
+      expect(options[1]).toHaveAttribute("aria-selected", "false");
+      expect(options[2]).toHaveAttribute("aria-selected", "false");
+    });
+  });
 });
