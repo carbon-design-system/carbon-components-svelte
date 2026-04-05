@@ -382,11 +382,11 @@ describe("NumberInput", () => {
     expect(input).not.toHaveAttribute("aria-label");
   });
 
-  it("should set pattern attribute for numeric input", () => {
+  it("should not set pattern attribute on type=number input (ignored per HTML spec)", () => {
     render(NumberInput);
 
     const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("pattern", "[0-9]*");
+    expect(input).not.toHaveAttribute("pattern");
   });
 
   it("should support aria-label override via restProps", () => {
