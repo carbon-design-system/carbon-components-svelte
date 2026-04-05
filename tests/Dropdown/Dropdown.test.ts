@@ -1518,6 +1518,65 @@ describe("Dropdown", () => {
       expect(floatingPortal?.parentElement).toBe(document.body);
     });
 
+    describe("portaled menu accessible name", () => {
+      it("should set aria-label from labelText and omit aria-labelledby on the menu", () => {
+        render(Dropdown, {
+          props: {
+            items: [{ id: "0", text: "A" }],
+            labelText: "Preferred channel",
+            portalMenu: true,
+            open: true,
+          },
+        });
+
+        const menu = screen.getByRole("listbox", { name: "Preferred channel" });
+        expect(menu).toHaveAttribute("aria-label", "Preferred channel");
+        expect(menu).not.toHaveAttribute("aria-labelledby");
+      });
+
+      it("should use Dropdown aria-label prop for the portaled menu when set", () => {
+        render(Dropdown, {
+          props: {
+            items: [{ id: "0", text: "A" }],
+            labelText: "Field label",
+            "aria-label": "Explicit popup label",
+            portalMenu: true,
+            open: true,
+          },
+        });
+
+        const menu = screen.getByRole("listbox", {
+          name: "Explicit popup label",
+        });
+        expect(menu).toHaveAttribute("aria-label", "Explicit popup label");
+      });
+
+      it("should default portaled menu aria-label to Choose an item without labelText or aria-label", () => {
+        render(Dropdown, {
+          props: {
+            items: [{ id: "0", text: "A" }],
+            portalMenu: true,
+            open: true,
+          },
+        });
+
+        const menu = screen.getByRole("listbox", { name: "Choose an item" });
+        expect(menu).toHaveAttribute("aria-label", "Choose an item");
+      });
+
+      it("should resolve listbox accessible name when portaled outside an open Modal", () => {
+        render(DropdownInModal, {
+          props: { modalOpen: true, dropdownOpen: true },
+        });
+
+        const menu = screen.getByRole("listbox", { name: "Contact" });
+        expect(menu).toHaveAttribute("aria-label", "Contact");
+        expect(menu.closest("[data-floating-portal]")?.parentElement).toBe(
+          document.body,
+        );
+      });
+    });
+
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2699
     it("should close after item click selection with portalMenu", async () => {
       const selectHandler = vi.fn();
