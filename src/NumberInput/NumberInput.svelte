@@ -513,7 +513,6 @@
         <input
           bind:this={ref}
           type="number"
-          pattern="[0-9]*"
           aria-describedby={hasErrorMessage
             ? errorId
             : warn
