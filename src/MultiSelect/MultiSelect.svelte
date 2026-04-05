@@ -344,6 +344,11 @@
   }
 
   afterUpdate(() => {
+    // Compare by length, not by IDs. This is intentional: `on:select`
+    // should only fire in response to UI interaction (toggle/clear),
+    // not programmatic `selectedIds` changes. A length check is sufficient
+    // because `selectItem` only ever toggles one item at a time, so user-
+    // driven changes always alter the count.
     if (checked.length !== prevChecked.length) {
       prevChecked = checked;
       selectedIds = checked
