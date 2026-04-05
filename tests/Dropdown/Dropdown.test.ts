@@ -1633,4 +1633,19 @@ describe("Dropdown", () => {
       }
     });
   });
+
+  // Regression: translateWithId function prop should not be rendered as a DOM attribute.
+  it("should not render translateWithId as a DOM attribute on the button", () => {
+    const { container } = render(Dropdown, {
+      props: {
+        items,
+        labelText: "Contact",
+        translateWithId: (id: string) => id,
+      },
+    });
+    const button = container.querySelector("button.bx--list-box__field");
+    expect(button).toBeInTheDocument();
+    expect(button).not.toHaveAttribute("translateWithId");
+    expect(button).not.toHaveAttribute("translatewithid");
+  });
 });

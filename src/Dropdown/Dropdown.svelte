@@ -539,7 +539,6 @@
         }
       }}
       {disabled}
-      {translateWithId}
       {id}
     >
       <span class:bx--list-box__label={true}>
