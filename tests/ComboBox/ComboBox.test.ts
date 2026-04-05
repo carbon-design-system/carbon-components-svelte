@@ -575,6 +575,20 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("");
   });
 
+  it("should not auto-select an unrelated item when Enter is pressed with a partial match", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+    // "a" matches "Slack" and "Fax" via the filter, but is not an exact
+    // text match for either. Pressing Enter should not silently select
+    // the first filtered item.
+    await user.type(input, "a");
+    await user.keyboard("{Enter}");
+
+    expect(input).toHaveValue("a");
+  });
+
   it("should skip disabled items in filtered list, not unfiltered list", async () => {
     // Regression: `change()` previously checked `items[index].disabled`
     // instead of `_items[index].disabled`, indexing into the wrong array
