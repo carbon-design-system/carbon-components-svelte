@@ -1,8 +1,17 @@
 <script>
   /**
    * @generics {Row extends DataTableRow = DataTableRow} Row
-   * @typedef {import('./data-table-utils.d.ts').PropertyPath<Row>} DataTableKey<Row=DataTableRow>
    * @typedef {any} DataTableValue
+   * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
+   * @typedef {(
+   *   [keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row>] extends [never]
+   *     ? import('./data-table-utils.d.ts').PropertyPath<Row>
+   *     : keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row> extends "id"
+   *       ? import('./data-table-utils.d.ts').PropertyPath<Row>
+   *       : Row extends DataTableRow
+   *         ? import('./data-table-utils.d.ts').PropertyPathIgnoringIndexSignatures<Row>
+   *         : import('./data-table-utils.d.ts').PropertyPath<Row>
+   * )} DataTableKey<Row=DataTableRow> Path keys for sort, headers, and cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures in ./data-table-utils.d.ts.
    * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {boolean} empty - Whether the header is empty
@@ -22,7 +31,6 @@
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
-   * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
    * @typedef {object} DataTableCell<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {DataTableValue} value
@@ -64,6 +72,12 @@
    * @type {object}
    * @property {boolean} selected
    * @property {Row} row
+   * @event sort
+   * @type {object}
+   * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
+   * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
+   *
+   * Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client-side sorting for that click (for example full server-side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client-side. Typical uses: server-side sorting, URL or query-string sync, analytics, and persisting sort preferences.
    * @event click:cell
    * @type {object}
    * @property {DataTableCell<Row>} cell
@@ -706,9 +720,21 @@
                           ascending: "descending",
                           descending: "none",
                         };
-                    sortDirection = sortDirectionMap[currentSortDirection];
-                    sortKey =
-                      sortDirection === "none" ? null : header.key;
+                    const nextSortDirection =
+                      sortDirectionMap[currentSortDirection];
+                    const nextSortKey =
+                      nextSortDirection === "none"
+                        ? null
+                        : header.key;
+                    const applySort = dispatch(
+                      "sort",
+                      { key: nextSortKey, direction: nextSortDirection },
+                      { cancelable: true },
+                    );
+                    if (applySort) {
+                      sortDirection = nextSortDirection;
+                      sortKey = nextSortKey;
+                    }
                     dispatch("click:header", {
                       header,
                       sortDirection,

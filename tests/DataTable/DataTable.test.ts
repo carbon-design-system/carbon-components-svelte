@@ -8,6 +8,7 @@ import type { PropertyPath } from "carbon-components-svelte/DataTable/data-table
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
+import DataTableSortPreventDefault from "./DataTable.sort.preventDefault.test.svelte";
 import DataTable from "./DataTable.test.svelte";
 import DataTableCustomBoth from "./DataTableCustomBoth.test.svelte";
 import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte";
@@ -225,6 +226,43 @@ describe("DataTable", () => {
       "cell",
     )[2];
     expect(firstRowPortDesc).toHaveTextContent("3000");
+  });
+
+  it("sort: preventDefault skips client-side sort but still fires sort with detail", async () => {
+    const onsort = vi.fn();
+    render(DataTableSortPreventDefault, {
+      props: { preventSortDefault: true, onsort },
+    });
+
+    await user.click(screen.getByText("Name"));
+    await tick();
+
+    expect(onsort).toHaveBeenCalledTimes(1);
+    expect(onsort.mock.calls[0][0].detail).toEqual({
+      key: "name",
+      direction: "ascending",
+    });
+
+    const bodyRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(bodyRows[0]).getByText("Zebra")).toBeInTheDocument();
+  });
+
+  it("sort: without preventDefault applies client-side sort", async () => {
+    const onsort = vi.fn();
+    render(DataTableSortPreventDefault, {
+      props: { preventSortDefault: false, onsort },
+    });
+
+    await user.click(screen.getByText("Name"));
+    await tick();
+
+    expect(onsort).toHaveBeenCalledTimes(1);
+    const bodyRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(within(bodyRows[0]).getByText("Alpha")).toBeInTheDocument();
   });
 
   it("handles sorting with custom display and sort methods", async () => {
@@ -547,6 +585,40 @@ describe("DataTable", () => {
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 3",
     );
+  });
+
+  it("sort: third click dispatches sort with key null and direction none", async () => {
+    const sortHandler = vi.fn();
+    render(DataTable, {
+      props: {
+        sortable: true,
+        headers,
+        rows,
+        onsort: sortHandler,
+      },
+    });
+
+    const nameHeader = screen.getByText("Name");
+    await user.click(nameHeader);
+    await tick();
+    await user.click(nameHeader);
+    await tick();
+    await user.click(nameHeader);
+    await tick();
+
+    expect(sortHandler).toHaveBeenCalledTimes(3);
+    expect(sortHandler.mock.calls[0][0].detail).toEqual({
+      key: "name",
+      direction: "ascending",
+    });
+    expect(sortHandler.mock.calls[1][0].detail).toEqual({
+      key: "name",
+      direction: "descending",
+    });
+    expect(sortHandler.mock.calls[2][0].detail).toEqual({
+      key: null,
+      direction: "none",
+    });
   });
 
   it("header.sortAlways overrides table: column with sortAlways: true stays sorted", async () => {

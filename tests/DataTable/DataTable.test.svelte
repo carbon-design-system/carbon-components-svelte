@@ -1,5 +1,7 @@
 <script lang="ts">
   import { DataTable } from "carbon-components-svelte";
+  import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import type { ComponentEvents } from "svelte";
 
   type BaseRow = {
     id: string;
@@ -88,6 +90,9 @@
   export let scrollContainerRef: HTMLDivElement | null = null;
   export let tableHeaderTranslateWithId: ((id: string) => string) | undefined =
     undefined;
+  export let onsort:
+    | ((e: ComponentEvents<DataTableComponent>["sort"]) => void)
+    | undefined = undefined;
   export let rowClass:
     | string
     | ((row: {
@@ -145,6 +150,7 @@
   on:mouseleave:row={(e) => {
     console.log("mouseleave:row", e.detail);
   }}
+  on:sort={(e) => onsort?.(e)}
 >
   <slot />
 </DataTable>
