@@ -13,12 +13,14 @@ Create a basic tree view using the `nodes` prop. Each node requires an `id` and 
 
 Customize node rendering using the default slot with the `let:node` directive. The node object provides:
 
-- **id**: the node id
-- **text**: the node text
-- **expanded**: true if the node is expanded
-- **leaf**: true if the node does not have child nodes
-- **disabled**: true if the node is disabled
-- **selected**: true if the node is selected
+| Property    | Description                                      |
+| ----------- | ------------------------------------------------ |
+| **id**      | The node id.                                     |
+| **text**    | The node text.                                   |
+| **expanded**| `true` if the node is expanded.                  |
+| **leaf**    | `true` if the node does not have child nodes.    |
+| **disabled**| `true` if the node is disabled.                   |
+| **selected**| `true` if the node is selected.                  |
 
 <FileSource src="/framed/TreeView/TreeViewSlot" />
 

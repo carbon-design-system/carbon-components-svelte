@@ -24,10 +24,12 @@ Add a descriptive text to provide context about the loading operation.
 
 The component supports different status states to indicate progress:
 
-- **active**: Shows an animated loading indicator
-- **inactive**: Displays a static state
-- **finished**: Shows a success state
-- **error**: Displays an error state
+| Status       | Description                         |
+| ------------ | ----------------------------------- |
+| **active**   | Shows an animated loading indicator |
+| **inactive** | Displays a static state           |
+| **finished** | Shows a success state             |
+| **error**    | Displays an error state           |
 
 <InlineLoading status="active" description="Submitting..." />
 <InlineLoading status="inactive" description="Cancelling..." />

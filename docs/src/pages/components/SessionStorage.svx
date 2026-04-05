@@ -24,8 +24,10 @@ In this example, each user has their own theme preference stored under a separat
 
 The component provides methods to manage stored data:
 
-- `clearItem`: Remove a specific key-value pair
-- `clearAll`: Remove all stored data
+| Method       | Description                         |
+| ------------ | ----------------------------------- |
+| `clearItem`  | Remove a specific key-value pair.   |
+| `clearAll`   | Remove all stored data.             |
 
 Use `bind:this` to access these methods. In this example, try toggling the switch, refreshing the page, then clearing the storage.
 
