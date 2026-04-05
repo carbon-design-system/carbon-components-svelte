@@ -97,7 +97,7 @@
   /**
    * Override the sorting logic.
    * The default sorting compare the item text value.
-   * @type {((a: Item, b: Item) => Item) | (() => void)}
+   * @type {((a: Item, b: Item) => number) | (() => void)}
    */
   export let sortItem = (a, b) =>
     a.text.localeCompare(b.text, locale, { numeric: true });
