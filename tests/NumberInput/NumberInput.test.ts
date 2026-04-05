@@ -1737,4 +1737,47 @@ describe("NumberInput", () => {
       expect(prevented).toBe(true);
     });
   });
+
+  describe("text mode parity with type=number attributes", () => {
+    it("should have min, max, and step attributes when allowDecimal is true", () => {
+      render(NumberInput, {
+        props: { allowDecimal: true, min: 0, max: 100, step: 0.5, value: 50 },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input).toHaveAttribute("min", "0");
+      expect(input).toHaveAttribute("max", "100");
+      expect(input).toHaveAttribute("step", "0.5");
+    });
+
+    it("should have min, max, and step attributes when locale is set", () => {
+      render(NumberInput, {
+        props: { locale: "en-US", min: -10, max: 10, step: 1, value: 5 },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input).toHaveAttribute("min", "-10");
+      expect(input).toHaveAttribute("max", "10");
+      expect(input).toHaveAttribute("step", "1");
+    });
+
+    it("should not have min/max attributes when not provided", () => {
+      render(NumberInput, {
+        props: { allowDecimal: true, value: 5 },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input).not.toHaveAttribute("min");
+      expect(input).not.toHaveAttribute("max");
+    });
+
+    it("should have pattern attribute in text mode", () => {
+      render(NumberInput, {
+        props: { allowDecimal: true, value: 5 },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input).toHaveAttribute("pattern", "[0-9]*");
+    });
+  });
 });
