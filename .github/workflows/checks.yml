@@ -70,24 +70,28 @@ jobs:
     needs: [lint, test]
     if: ${{ !failure() && !cancelled() }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # Official image includes Chromium/Firefox/WebKit + system deps
+    # Bump tag with @playwright/test in bun.lock.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.0-noble
+      options: --ipc=host --init
+    timeout-minutes: 15
     strategy:
       fail-fast: true
       matrix:
         browser: [chromium, firefox, webkit]
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      # Firefox refuses to start if $HOME is not owned by the current user.
+      HOME: /root
     steps:
       - uses: actions/checkout@v6
+
+      # Playwright image is minimal; setup-bun extracts a zip and needs unzip.
+      - run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y unzip
+
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ matrix.browser }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
-
-      - name: Install Playwright browser
-        run: bunx playwright install --with-deps ${{ matrix.browser }}
 
       - name: E2E tests
         run: bunx playwright test --project=${{ matrix.browser }}
