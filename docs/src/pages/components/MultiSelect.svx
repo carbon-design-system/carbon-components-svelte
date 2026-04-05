@@ -67,6 +67,16 @@ Pre-select items by passing an array of item IDs to `selectedIds`. This example 
     {id: "2", text: "Fax"}]}" 
   />
 
+## Selection feedback "top"
+
+Move selected items to the top of the list immediately after selection by setting `selectionFeedback` to `"top"`. The default behavior (`"top-after-reopen"`) only reorders items when the dropdown is reopened.
+
+<MultiSelect selectionFeedback="top" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ## Multiple multi-select dropdowns
 
 This example demonstrates how to manage multiple dropdowns in a form with coordinated state.
