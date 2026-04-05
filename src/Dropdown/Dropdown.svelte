@@ -161,6 +161,8 @@
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
 
+  $: menuAriaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
+
   /** Default item height in pixels for virtualization */
   const DEFAULT_ITEM_HEIGHT = 40;
 
@@ -570,7 +572,7 @@
     </button>
     {#if open}
       <ListBoxMenu
-        aria-labelledby={id}
+        aria-label={menuAriaLabel}
         {id}
         portal={effectivePortalMenu}
         {open}
