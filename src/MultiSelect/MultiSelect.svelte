@@ -45,7 +45,7 @@
   export let value = "";
 
   /**
-   * Set the size of the combobox.
+   * Set the size of the multiselect.
    * @type {"sm" | "lg" | "xl"}
    */
   export let size = undefined;
