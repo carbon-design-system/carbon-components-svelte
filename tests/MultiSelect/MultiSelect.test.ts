@@ -8,6 +8,7 @@ import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
+import MultiSelectItemToStringId from "./MultiSelectItemToStringId.test.svelte";
 import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
 
 const items = [
@@ -1330,6 +1331,37 @@ describe("MultiSelect", () => {
 
       expectTypeOf(sortItem).returns.toEqualTypeOf<number>();
       expectTypeOf(sortItem).parameters.toEqualTypeOf<[Item, Item]>();
+    });
+
+    it('itemToString may return string or Item["id"] (matches default text ?? id)', () => {
+      type Row = { id: number; text: string };
+
+      type ItemToString = NonNullable<
+        ComponentProps<MultiSelectComponent<Row>>["itemToString"]
+      >;
+
+      expectTypeOf<ItemToString>().returns.toEqualTypeOf<string | number>();
+
+      const showText = (item: Row) => item.text;
+      const showId = (item: Row) => item.id;
+      // `text` must be optional so `?? id` is typed as `string | number` (required `text` would infer only `string`).
+      const showFallback = (item: { id: number; text?: string }) =>
+        item.text ?? item.id;
+
+      expectTypeOf(showText).returns.toEqualTypeOf<string>();
+      expectTypeOf(showId).returns.toEqualTypeOf<number>();
+      expectTypeOf(showFallback).returns.toEqualTypeOf<string | number>();
+
+      expectTypeOf(showText).toMatchTypeOf<ItemToString>();
+      expectTypeOf(showId).toMatchTypeOf<ItemToString>();
+      expectTypeOf(showFallback).toMatchTypeOf<ItemToString>();
+    });
+
+    it('itemToString may return numeric Item["id"] for option labels', async () => {
+      render(MultiSelectItemToStringId);
+      await openMenu();
+      const options = screen.getAllByRole("option");
+      expect(options.map((o) => o.textContent?.trim())).toEqual(["101", "102"]);
     });
 
     it("should support slot props with generic item type", () => {
