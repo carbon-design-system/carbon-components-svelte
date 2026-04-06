@@ -1,8 +1,9 @@
 <script lang="ts">
   import { Modal } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   export let open = false;
-  export let formId: string | undefined = undefined;
+  export let formId: ComponentProps<Modal>["formId"] = undefined;
   export let shouldSubmitOnEnter = true;
   export let onFormSubmit: (e: SubmitEvent) => void = () => {};
 </script>

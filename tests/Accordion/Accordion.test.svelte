@@ -1,8 +1,9 @@
 <script lang="ts">
   import { Accordion, AccordionItem } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let align: "start" | "end" = "end";
-  export let size: "sm" | "xl" | undefined = undefined;
+  export let align: ComponentProps<Accordion>["align"] = "end";
+  export let size: ComponentProps<Accordion>["size"] = undefined;
   export let customClass = "";
   export let itemClass = "";
   export let useSlot = false;

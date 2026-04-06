@@ -2,11 +2,12 @@
 
 <script lang="ts">
   import { Portal } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   export let showPortal = true;
   export let portalContent = "Portal content";
-  export let tag: keyof HTMLElementTagNameMap = "div";
-  export let ref: HTMLElement | null = null;
+  export let tag: ComponentProps<Portal>["tag"] = "div";
+  export let ref: ComponentProps<Portal>["ref"] = null;
 </script>
 
 {#if showPortal}

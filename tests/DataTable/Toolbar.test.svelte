@@ -12,8 +12,9 @@
     | "ToolbarBatchActions" = "Toolbar";
   export let size: ComponentProps<Toolbar>["size"] = "default";
   export let slotContent = "";
-  export let selectedIds: ReadonlyArray<string> = [];
-  export let active: boolean | undefined = undefined;
+  export let selectedIds: ComponentProps<ToolbarBatchActions>["selectedIds"] =
+    [];
+  export let active: ComponentProps<ToolbarBatchActions>["active"] = undefined;
   export let oncancel: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 

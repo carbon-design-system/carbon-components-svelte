@@ -21,7 +21,7 @@
   export let headerRef: ComponentProps<Header>["ref"] = null;
   export let headerClass = "";
   export let useSlots = false;
-  export let ariaLabel: string | undefined = undefined;
+  export let ariaLabel: ComponentProps<Header>["aria-label"] = undefined;
   export let expansionBreakpoint: ComponentProps<Header>["expansionBreakpoint"] =
     undefined;
 

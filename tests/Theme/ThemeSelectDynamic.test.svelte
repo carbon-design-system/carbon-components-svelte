@@ -1,8 +1,9 @@
 <script lang="ts">
   import { Theme } from "carbon-components-svelte";
-  import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let themes: CarbonTheme[] = [];
+  export let themes: NonNullable<ComponentProps<Theme>["select"]>["themes"] =
+    [];
   export let labelText = "Themes";
 </script>
 
