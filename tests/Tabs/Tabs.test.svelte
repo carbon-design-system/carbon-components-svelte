@@ -1,8 +1,9 @@
 <script lang="ts">
   import { Tab, TabContent, Tabs } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   export let selected = 0;
-  export let type: "default" | "container" = "default";
+  export let type: ComponentProps<Tabs>["type"] = "default";
   export let autoWidth = false;
   export let fullWidth = false;
   export let iconDescription = "Show menu options";

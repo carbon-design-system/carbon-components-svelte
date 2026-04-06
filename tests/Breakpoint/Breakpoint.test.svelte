@@ -4,9 +4,10 @@
     BreakpointSize,
     BreakpointValue,
   } from "carbon-components-svelte/Breakpoint/Breakpoint.svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let size: BreakpointSize | undefined = undefined;
-  export let sizes: Record<BreakpointSize, boolean> = {
+  export let size: ComponentProps<Breakpoint>["size"] = undefined;
+  export let sizes: NonNullable<ComponentProps<Breakpoint>["sizes"]> = {
     sm: false,
     md: false,
     lg: false,

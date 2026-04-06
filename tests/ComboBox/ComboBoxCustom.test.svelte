@@ -1,20 +1,25 @@
 <script lang="ts">
   import { ComboBox } from "carbon-components-svelte";
   import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+  import type { ComponentProps } from "svelte";
 
   let comboBoxRef: ComboBox;
 
-  export let items: ComboBoxItem[] = [
+  export let items: ComponentProps<ComboBox>["items"] = [
     { id: "0", text: "Slack" },
     { id: "1", text: "Email" },
     { id: "2", text: "Fax", disabled: true },
   ];
-  export let selectedId: string | undefined = undefined;
-  export let direction: "top" | "bottom" = "bottom";
+  export let selectedId: ComponentProps<ComboBox>["selectedId"] = undefined;
+  export let direction: ComponentProps<ComboBox>["direction"] = "bottom";
   export let clearOptions: { focus?: boolean } = {};
-  export let shouldFilterItem = (item: ComboBoxItem, value: string) =>
+  export let shouldFilterItem: NonNullable<
+    ComponentProps<ComboBox>["shouldFilterItem"]
+  > = (item: ComboBoxItem, value: string) =>
     item.text.toLowerCase().includes(value.toLowerCase());
-  export let itemToString = (item: ComboBoxItem) => item.text;
+  export let itemToString: NonNullable<
+    ComponentProps<ComboBox>["itemToString"]
+  > = (item: ComboBoxItem) => item.text;
 </script>
 
 <ComboBox

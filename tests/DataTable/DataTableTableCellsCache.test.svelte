@@ -1,18 +1,12 @@
 <script lang="ts">
   import { DataTable } from "carbon-components-svelte";
-  import type { DataTableHeader } from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import type { ComponentProps } from "svelte";
 
-  type Row = {
-    id: string;
-    name: string;
-    protocol?: string;
-  };
-
-  export let headers: ReadonlyArray<DataTableHeader<Row>> = [
+  export let headers: ComponentProps<DataTable>["headers"] = [
     { key: "name", value: "Name" },
   ];
 
-  export let rows: ReadonlyArray<Row>;
+  export let rows: ComponentProps<DataTable>["rows"];
 
   export let onCellClick: (cell: { key: string; value: unknown }) => void =
     () => {};

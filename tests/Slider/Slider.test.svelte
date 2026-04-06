@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Slider } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   export let value = 0;
 
@@ -24,8 +25,8 @@
   export let useSlot = false;
   export let invalidText = "";
   export let warnText = "";
-  export let id: string | undefined = undefined;
-  export let ariaLabel: string | undefined = undefined;
+  export let id: ComponentProps<Slider>["id"] = undefined;
+  export let ariaLabel: ComponentProps<Slider>["aria-label"] = undefined;
 </script>
 
 {#if useSlot}

@@ -2,13 +2,14 @@
 
 <script lang="ts">
   import { FloatingPortal } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   export let open = false;
-  export let direction: "top" | "bottom" | "left" | "right" = "bottom";
+  export let direction: ComponentProps<FloatingPortal>["direction"] = "bottom";
   export let zIndex = 9200;
   export let intrinsicWidth = false;
-  export let anchor: HTMLElement | null = null;
-  export let ref: HTMLElement | null = null;
+  export let anchor: ComponentProps<FloatingPortal>["anchor"] = null;
+  export let ref: ComponentProps<FloatingPortal>["ref"] = null;
   export let content = "Floating content";
   export let scrollableContainer = false;
   export let containerRef: HTMLElement | null = null;
@@ -18,7 +19,8 @@
   export let horizontalGapRight = 0;
   export let verticalAlignOffsetLeft = 0;
   export let verticalAlignOffsetRight = 0;
-  export let intrinsicAlign: "start" | "center" | "end" = "center";
+  export let intrinsicAlign: ComponentProps<FloatingPortal>["intrinsicAlign"] =
+    "center";
 </script>
 
 {#if scrollableContainer}

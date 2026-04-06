@@ -20,7 +20,7 @@
   export let warnText = "";
   export let helperText = "";
   export let hideLabel = false;
-  export let size: "sm" | "xl" | undefined = undefined;
+  export let size: ComponentProps<ComboBox>["size"] = undefined;
   export let shouldFilterItem: ComponentProps<ComboBox>["shouldFilterItem"] = (
     item,
     value,
@@ -33,7 +33,7 @@
   export let typeahead = false;
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
-  export let ariaLabel: string | undefined = undefined;
+  export let ariaLabel: ComponentProps<ComboBox>["aria-label"] = undefined;
 </script>
 
 <ComboBox
