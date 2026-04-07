@@ -98,6 +98,12 @@
    */
   export let selectTextOnFocus = false;
 
+  /**
+   * Set to `true` to reopen the dropdown menu after clearing the selection.
+   * This allows users to immediately see all available items after clearing.
+   */
+  export let openOnClear = false;
+
   /** Set to `true` to enable autocomplete with typeahead */
   export let typeahead = false;
 
@@ -196,6 +202,7 @@
   /** Default item height in pixels for virtualization */
   const DEFAULT_ITEM_HEIGHT = 40;
 
+  let skipWindowClick = false;
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
@@ -257,7 +264,8 @@
   /**
    * Clear the combo box programmatically.
    * By default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.
-   * @type {(options?: { focus?: boolean; }) => Promise<void>}
+   * Set `options.open` to `true` to keep the dropdown open after clearing.
+   * @type {(options?: { focus?: boolean; open?: boolean; }) => Promise<void>}
    * @example
    * ```svelte
    * <ComboBox bind:this={comboBox} items={items} />
@@ -273,8 +281,10 @@
     selectedItem = undefined;
     open = false;
     value = "";
+    if (options?.open === true) skipWindowClick = true;
     // Ensure binding updates are complete before focusing.
     await tick();
+    if (options?.open === true) open = true;
     if (options?.focus !== false) ref?.focus();
   }
 
@@ -519,6 +529,10 @@
 
 <svelte:window
   on:click={({ target }) => {
+    if (skipWindowClick) {
+      skipWindowClick = false;
+      return;
+    }
     if (open && ref && !ref.contains(target)) {
       if (effectivePortalMenu && listRef?.contains(target)) return;
       open = false;
@@ -666,7 +680,7 @@
       {#if value}
         <ListBoxSelection
           on:clear
-          on:clear={clear}
+          on:clear={() => clear({ open: openOnClear })}
           translateWithId={translateWithIdSelection}
           {disabled}
           {open}

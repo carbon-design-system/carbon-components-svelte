@@ -269,6 +269,56 @@ describe("ComboBox", () => {
     expect(consoleLog).toHaveBeenCalledWith("clear", "clear");
   });
 
+  it("should not reopen menu after clear button click by default", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+      },
+    });
+
+    await user.click(getClearButton());
+
+    expect(getInput()).toHaveValue("");
+    expect(screen.queryByRole("option")).not.toBeInTheDocument();
+  });
+
+  it("should reopen menu after clear button click when openOnClear is true", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        openOnClear: true,
+      },
+    });
+
+    await user.click(getClearButton());
+
+    expect(getInput()).toHaveValue("");
+    const options = screen.getAllByRole("option");
+    expect(options.length).toBe(3);
+  });
+
+  it("should not reopen menu on Escape even when openOnClear is true", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        openOnClear: true,
+      },
+    });
+
+    const input = getInput();
+    await user.click(input);
+
+    const dropdown = screen.getAllByRole("listbox")[1];
+    expect(dropdown).toBeVisible();
+
+    await user.keyboard("{Escape}");
+    expect(dropdown).not.toBeVisible();
+    expect(getInput()).toHaveValue("");
+  });
+
   it("should handle disabled items", async () => {
     render(ComboBoxCustom);
 
@@ -319,6 +369,20 @@ describe("ComboBox", () => {
     await user.click(screen.getByText("Clear"));
     expect(input).toHaveValue("");
     expect(input).toHaveFocus();
+  });
+
+  it("should programmatically clear and reopen menu", async () => {
+    render(ComboBoxCustom, { props: { selectedId: "1" } });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
+    await user.click(screen.getByText("Clear (reopen)"));
+    expect(input).toHaveValue("");
+    expect(input).toHaveFocus();
+
+    const options = screen.getAllByRole("option");
+    expect(options.length).toBe(3);
   });
 
   it("should not re-focus textbox if clearOptions.focus is false", async () => {
