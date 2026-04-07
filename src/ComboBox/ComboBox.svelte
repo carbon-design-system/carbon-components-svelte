@@ -115,12 +115,17 @@
    */
   export let autoHighlight = "none";
 
+  const defaultShouldFilter = () => true;
+
   /**
    * Determine if an item should be filtered given the current combobox value.
-   * Will be ignored if `typeahead` is enabled.
+   * When `typeahead` is enabled and no custom function is provided,
+   * the default case-insensitive prefix matching is used.
+   * When a custom function is provided, it is used even with `typeahead`.
+   * @default () => true
    * @type {(item: Item, value: string) => boolean}
    */
-  export let shouldFilterItem = () => true;
+  export let shouldFilterItem = defaultShouldFilter;
 
   /**
    * Override the chevron icon label based on the open state.
@@ -231,7 +236,11 @@
     return lowercaseItem.startsWith(lowercaseInput);
   }
 
-  $: filterFn = typeahead ? autocompleteCustomFilter : shouldFilterItem;
+  $: filterFn = typeahead
+    ? shouldFilterItem === defaultShouldFilter
+      ? autocompleteCustomFilter
+      : shouldFilterItem
+    : shouldFilterItem;
 
   function change(dir) {
     let index = highlightedIndex + dir;
