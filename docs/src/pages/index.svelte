@@ -48,35 +48,6 @@
     content="The Svelte implementation of the Carbon Design System featuring UI components, icons, pictograms, and charts."
   />
   <link rel="canonical" href="https://svelte.carbondesignsystem.com/" />
-  <!-- Tealium/GA Set up -->
-  <script type="text/javascript">
-    window._ibmAnalytics = {
-      settings: {
-        name: "CarbonSvelte",
-        isSpa: true,
-        tealiumProfileName: "ibm-web-app",
-      },
-      onLoad: [["ibmStats.pageview", []]],
-    };
-    digitalData = {
-      page: {
-        pageInfo: {
-          ibm: { siteId: "IBM_" + _ibmAnalytics.settings.name },
-        },
-        category: { primaryCategory: "PC100" },
-      },
-    };
-  </script>
-  <script
-    type="module"
-    src="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/footer.min.js"
-    defer
-  ></script>
-  <script
-    src="//1.www.s81c.com/common/stats/ibm-common.js"
-    type="text/javascript"
-    defer
-  ></script>
 </svelte:head>
 
 <Content>
@@ -326,14 +297,3 @@
   </Grid>
 </Content>
 
-<footer>
-  <dds-footer-container disable-locale-button="true" size="micro"></dds-footer-container>
-</footer>
-
-<style>
-  @media (min-width: 1056px) {
-    footer {
-      margin-left: 256px;
-    }
-  }
-</style>
