@@ -106,13 +106,19 @@ items={[
 
 Set `typeahead` to `true` to enable autocomplete with typeahead functionality. As users type, the input automatically suggests and completes matching items.
 
-The typeahead feature uses prefix matching (case-insensitive) to filter items that start with the entered text. When a match is found, the suggestion is displayed with the untyped portion highlighted, allowing users to accept it or continue typing.
+By default, the typeahead feature uses prefix matching (case-insensitive) to filter items that start with the entered text. When a match is found, the suggestion is displayed with the untyped portion highlighted, allowing users to accept it or continue typing.
 
 Pressing <DocKbd label="Enter" /> selects the matching item and closes the dropdown.
 
-Note that when `typeahead` is enabled, the `shouldFilterItem` prop is ignored as the typeahead functionality provides its own filtering logic.
+You can provide a custom `shouldFilterItem` to change the filtering logic. See [Typeahead with custom filter](#typeahead-with-custom-filter).
 
 <FileSource src="/framed/ComboBox/TypeaheadComboBox" />
+
+## Typeahead with custom filter
+
+Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. In this example, a simple fuzzy filter is used where each typed character must appear in order within the item text (e.g., "ba" matches "Banana" and "Blackberry").
+
+<FileSource src="/framed/ComboBox/TypeaheadCustomFilter" />
 
 ## Typeahead with auto-highlight
 
