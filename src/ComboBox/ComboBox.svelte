@@ -102,6 +102,14 @@
   export let typeahead = false;
 
   /**
+   * Control whether the first matching item is automatically highlighted as the user types.
+   * - `"none"`: No auto-highlighting (default). The user must use arrow keys or hover to highlight items.
+   * - `"first-match"`: Automatically highlight the first non-disabled filtered item on each input change.
+   * @type {"none" | "first-match"}
+   */
+  export let autoHighlight = "none";
+
+  /**
    * Determine if an item should be filtered given the current combobox value.
    * Will be ignored if `typeahead` is enabled.
    * @type {(item: Item, value: string) => boolean}
@@ -490,6 +498,22 @@
         ref.setSelectionRange(selectionStart, selectionEnd);
       });
     }
+  }
+
+  $: if (
+    autoHighlight === "first-match" &&
+    open &&
+    value.length > 0 &&
+    filteredItems.length > 0
+  ) {
+    const firstEnabledIndex = filteredItems.findIndex((item) => !item.disabled);
+    highlightedIndex = firstEnabledIndex >= 0 ? firstEnabledIndex : -1;
+  } else if (
+    autoHighlight === "first-match" &&
+    open &&
+    (value.length === 0 || filteredItems.length === 0)
+  ) {
+    highlightedIndex = -1;
   }
 </script>
 
