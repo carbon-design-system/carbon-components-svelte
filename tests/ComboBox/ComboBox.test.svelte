@@ -2,7 +2,14 @@
   import { ComboBox } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 
-  export let items = [
+  type TestItem = {
+    id: string;
+    text: string;
+    price: number;
+    disabled?: boolean;
+  };
+
+  export let items: TestItem[] = [
     { id: "0", text: "Slack", price: 100 },
     { id: "1", text: "Email", price: 200 },
     { id: "2", text: "Fax", price: 300 },
@@ -31,6 +38,7 @@
   export let clearFilterOnOpen = false;
   export let selectTextOnFocus = false;
   export let typeahead = false;
+  export let autoHighlight: ComponentProps<ComboBox>["autoHighlight"] = "none";
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
   export let ariaLabel: string | undefined = undefined;
@@ -59,6 +67,7 @@
   {clearFilterOnOpen}
   {selectTextOnFocus}
   {typeahead}
+  {autoHighlight}
   {virtualize}
   {portalMenu}
   on:select={(e) => {

@@ -1887,4 +1887,206 @@ describe("ComboBox", () => {
     // The blur handler should NOT refocus the input when focus leaves the component.
     expect(focusSpy).not.toHaveBeenCalled();
   });
+
+  describe("autoHighlight", () => {
+    const getHighlightedItems = () =>
+      document.querySelectorAll(
+        ".bx--list-box__menu-item--highlighted:not(.bx--list-box__menu-item--active)",
+      );
+
+    const getHighlightedOption = () => {
+      const items = document.querySelectorAll(
+        ".bx--list-box__menu-item--highlighted",
+      );
+      // Return the highlighted item that isn't highlighted solely due to being active
+      for (const item of items) {
+        return item;
+      }
+      return null;
+    };
+
+    it("should not auto-highlight by default", async () => {
+      render(ComboBox);
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "f");
+
+      await tick();
+
+      // No item should be highlighted (only filtered items visible, none highlighted)
+      const highlighted = getHighlightedItems();
+      expect(highlighted.length).toBe(0);
+    });
+
+    it('should highlight first matching item with autoHighlight="first-match"', async () => {
+      render(ComboBox, {
+        props: { autoHighlight: "first-match" },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "f");
+
+      await tick();
+
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Fax");
+    });
+
+    it("should skip disabled items", async () => {
+      render(ComboBox, {
+        props: {
+          autoHighlight: "first-match",
+          items: [
+            { id: "0", text: "Slack", price: 100 },
+            { id: "1", text: "Safari", price: 200, disabled: true },
+            { id: "2", text: "Signal", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "s");
+
+      await tick();
+
+      // Safari is disabled, so Signal should not be highlighted — Slack matches first
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Slack");
+    });
+
+    it("should reset highlight when no items match", async () => {
+      render(ComboBox, {
+        props: { autoHighlight: "first-match" },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "zzz");
+
+      await tick();
+
+      const highlighted = getHighlightedItems();
+      expect(highlighted.length).toBe(0);
+    });
+
+    it("should not highlight when input is empty", async () => {
+      render(ComboBox, {
+        props: { autoHighlight: "first-match" },
+      });
+
+      const input = getInput();
+      await user.click(input);
+
+      await tick();
+
+      const highlighted = getHighlightedItems();
+      expect(highlighted.length).toBe(0);
+    });
+
+    it("should highlight selected item on re-open, then update on typing", async () => {
+      render(ComboBox, {
+        props: { autoHighlight: "first-match" },
+      });
+
+      const input = getInput();
+
+      // Select "Email"
+      await user.click(input);
+      await user.click(screen.getByText("Email"));
+      expect(input).toHaveValue("Email");
+
+      // Re-open the menu
+      await user.click(input);
+      await tick();
+
+      // The selected item (Email) should be highlighted (via active+highlighted class)
+      const emailOption = screen
+        .getAllByRole("option")
+        .find((el) => el.textContent?.includes("Email"));
+      expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+      // Clear and type a new value
+      await user.clear(input);
+      await user.type(input, "f");
+      await tick();
+
+      // Now "Fax" should be highlighted
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Fax");
+    });
+
+    it("should allow arrow keys to override auto-highlight", async () => {
+      render(ComboBox, {
+        props: {
+          autoHighlight: "first-match",
+          items: [
+            { id: "0", text: "Slack", price: 100 },
+            { id: "1", text: "Signal", price: 200 },
+            { id: "2", text: "Skype", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "s");
+
+      await tick();
+
+      // First filtered item "Slack" should be auto-highlighted
+      let highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Slack");
+
+      // ArrowDown should move to Signal
+      await user.keyboard("{ArrowDown}");
+      await tick();
+
+      highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Signal");
+    });
+
+    it("should work with typeahead: input autocompletes and first match highlights", async () => {
+      render(ComboBox, {
+        props: {
+          autoHighlight: "first-match",
+          typeahead: true,
+          items: [
+            { id: "0", text: "Slack", price: 100 },
+            { id: "1", text: "Signal", price: 200 },
+            { id: "2", text: "Email", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "sl");
+
+      await tick();
+
+      // Typeahead should autocomplete the input with the suggestion appended
+      // User typed "sl" (lowercase), typeahead appends "ack" from "Slack"
+      expect(input.value).toBe("slack");
+      // The typed portion ends at index 2, suggestion fills the rest
+      expect(input.selectionStart).toBe(2);
+      expect(input.selectionEnd).toBe(5);
+
+      // Auto-highlight should highlight "Slack" (first filtered match)
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Slack");
+
+      // Pressing Enter should select the highlighted item
+      await user.keyboard("{Enter}");
+      expect(input).toHaveValue("Slack");
+    });
+  });
 });
