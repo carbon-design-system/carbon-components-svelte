@@ -140,6 +140,21 @@ Set `focus: false` in the method options to prevent re-focusing the input.
 
 <FileSource src="/framed/ComboBox/ComboBoxClear" />
 
+## Open on clear
+
+By default, the dropdown menu is closed after clearing the selection.
+
+Set `openOnClear` to `true` to reopen the dropdown menu after clearing the selection. This lets users immediately browse all available items without needing to click the input again.
+
+<ComboBox openOnClear labelText="Contact" placeholder="Select contact method"
+selectedId="1"
+value="Email"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
 ## Multiple combo boxes
 
 See how to manage multiple comboboxes in a form.
