@@ -11,6 +11,7 @@ const scss = Array.from(glob.scanSync({ cwd: "css" }))
   .filter((file) => !PARTIAL_FILE_REGEX.test(file))
   .map((file) => path.parse(file));
 
+console.time("[build-css]");
 await Promise.all(
   scss.map(async ({ name, base }) => {
     const file = `css/${base}`;
@@ -22,6 +23,13 @@ await Promise.all(
       style: "compressed",
       sourceMap: false,
       loadPaths: ["node_modules"],
+      quietDeps: true,
+      silenceDeprecations: [
+        "import",
+        "global-builtin",
+        "color-functions",
+        "if-function",
+      ],
     });
 
     const prefixed = await postcss([
@@ -33,3 +41,4 @@ await Promise.all(
     await Bun.write(outFile, prefixed.css);
   }),
 );
+console.timeEnd("[build-css]");
