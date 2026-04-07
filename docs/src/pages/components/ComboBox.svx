@@ -55,15 +55,82 @@ See how the combobox responds to user input and selection changes.
 
 <FileSource src="/framed/ComboBox/ReactiveComboBox" />
 
-## Autocomplete with typeahead
+## Auto-highlight first match
+
+By default, no item is automatically highlighted when typing.
+
+Set `autoHighlight` to `"first-match"` to automatically highlight the first matching item as you type. This makes it easy to select by pressing <DocKbd label="Enter" /> without using arrow keys.
+
+The default filter is case-insensitive substring matching (e.g., "app" matches "Apple").
+
+<ComboBox autoHighlight="first-match"
+labelText="Item"
+placeholder="Select an item"
+items={[
+  {id: "0", text: "Apple"},
+  {id: "1", text: "Apricot"},
+  {id: "2", text: "Banana"},
+  {id: "3", text: "Blueberry"},
+  {id: "4", text: "Blackberry"},
+  {id: "5", text: "Cherry"},
+  {id: "6", text: "Cranberry"},
+  {id: "7", text: "Grape"},
+  {id: "8", text: "Mango"},
+  {id: "9", text: "Pineapple"},
+  ]}  />
+
+## Auto-highlight with custom filter
+
+Use `autoHighlight="first-match"` with a custom `shouldFilterItem` to control which items appear. The auto-highlight respects the custom filter; only items that pass the filter are considered for highlighting.
+
+In this example, the filter is case-sensitive.
+
+<ComboBox autoHighlight="first-match"
+shouldFilterItem={(item, value) => item.text.startsWith(value)}
+labelText="Item"
+placeholder="Select an item"
+items={[
+  {id: "0", text: "Apple"},
+  {id: "1", text: "Apricot"},
+  {id: "2", text: "Banana"},
+  {id: "3", text: "Blueberry"},
+  {id: "4", text: "Blackberry"},
+  {id: "5", text: "Cherry"},
+  {id: "6", text: "Cranberry"},
+  {id: "7", text: "Grape"},
+  {id: "8", text: "Mango"},
+  {id: "9", text: "Pineapple"},
+  ]}  />
+
+## Typeahead
 
 Set `typeahead` to `true` to enable autocomplete with typeahead functionality. As users type, the input automatically suggests and completes matching items.
 
 The typeahead feature uses prefix matching (case-insensitive) to filter items that start with the entered text. When a match is found, the suggestion is displayed with the untyped portion highlighted, allowing users to accept it or continue typing.
 
+Pressing <DocKbd label="Enter" /> selects the matching item and closes the dropdown.
+
 Note that when `typeahead` is enabled, the `shouldFilterItem` prop is ignored as the typeahead functionality provides its own filtering logic.
 
 <FileSource src="/framed/ComboBox/TypeaheadComboBox" />
+
+## Typeahead with auto-highlight
+
+Combine `typeahead` and `autoHighlight="first-match"` for the full autocomplete experience: the input text is completed and the matching item is visually highlighted.
+
+<ComboBox typeahead autoHighlight="first-match" labelText="Fruit" placeholder="Search for a fruit"
+items={[
+  {id: "0", text: "Apple"},
+  {id: "1", text: "Apricot"},
+  {id: "2", text: "Banana"},
+  {id: "3", text: "Blueberry"},
+  {id: "4", text: "Blackberry"},
+  {id: "5", text: "Cherry"},
+  {id: "6", text: "Cranberry"},
+  {id: "7", text: "Grape"},
+  {id: "8", text: "Mango"},
+  {id: "9", text: "Pineapple"},
+  ]}  />
 
 ## Clear selection
 
