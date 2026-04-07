@@ -42,3 +42,6 @@
 <button type="button" on:click={() => comboBoxRef.clear(clearOptions)}>
   Clear
 </button>
+<button type="button" on:click={() => comboBoxRef.clear({ open: true })}>
+  Clear (reopen)
+</button>

@@ -37,6 +37,7 @@
   export let allowCustomValue = false;
   export let clearFilterOnOpen = false;
   export let selectTextOnFocus = false;
+  export let openOnClear = false;
   export let typeahead = false;
   export let autoHighlight: ComponentProps<ComboBox>["autoHighlight"] = "none";
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
@@ -66,6 +67,7 @@
   {allowCustomValue}
   {clearFilterOnOpen}
   {selectTextOnFocus}
+  {openOnClear}
   {typeahead}
   {autoHighlight}
   {virtualize}
