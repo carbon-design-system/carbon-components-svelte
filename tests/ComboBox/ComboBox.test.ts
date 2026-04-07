@@ -890,8 +890,7 @@ describe("ComboBox", () => {
       expect(options[0]).toHaveTextContent("Banana");
     });
 
-    it("should ignore shouldFilterItem when typeahead is enabled", async () => {
-      const customFilter = vi.fn(() => true);
+    it("should use default prefix matching when typeahead is enabled without custom filter", async () => {
       render(ComboBox, {
         props: {
           typeahead: true,
@@ -899,16 +898,42 @@ describe("ComboBox", () => {
             { id: "1", text: "Apple", price: 100 },
             { id: "2", text: "Banana", price: 200 },
           ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "B");
+
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(1);
+      expect(options[0]).toHaveTextContent("Banana");
+    });
+
+    it("should use custom shouldFilterItem when typeahead is enabled", async () => {
+      const customFilter = vi.fn((item: { text: string }, value: string) =>
+        item.text.toLowerCase().includes(value.toLowerCase()),
+      );
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Pineapple", price: 200 },
+            { id: "3", text: "Banana", price: 300 },
+          ],
           shouldFilterItem: customFilter,
         },
       });
 
       const input = getInput();
       await user.click(input);
-      await user.type(input, "A");
+      await user.type(input, "apple");
 
-      // shouldFilterItem should not be called when typeahead is enabled
-      expect(customFilter).not.toHaveBeenCalled();
+      // Custom "includes" filter should match both Apple and Pineapple
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(2);
+      expect(customFilter).toHaveBeenCalled();
     });
 
     it("should use case-insensitive prefix matching with typeahead", async () => {
