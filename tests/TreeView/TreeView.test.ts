@@ -602,6 +602,244 @@ describe("TreeView Props", () => {
     expect(tree).toBeInTheDocument();
     expect(screen.queryAllByRole("treeitem")).toHaveLength(0);
   });
+
+  it("shift+click selects range between anchor and target (node mode)", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "node",
+      selectedIds: [],
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+    const analyticsItem = screen.getAllByRole("treeitem", {
+      name: /Analytics/,
+    })[0];
+
+    // Plain click sets anchor on AI
+    await user.click(aiItem);
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+
+    // Shift+click on Blockchain selects range: AI, Analytics, Blockchain
+    await user.keyboard("{Shift>}");
+    await user.click(blockchainItem);
+    await user.keyboard("{/Shift}");
+
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+    expect(analyticsItem).toHaveAttribute("aria-selected", "true");
+    expect(blockchainItem).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("shift+click range only includes visible (expanded) nodes", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "node",
+      selectedIds: [],
+      expandedIds: [], // All collapsed - children are not visible
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+
+    await user.click(aiItem);
+
+    await user.keyboard("{Shift>}");
+    await user.click(databasesItem);
+    await user.keyboard("{/Shift}");
+
+    // With all nodes collapsed, only top-level nodes are visible in the range
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+    expect(databasesItem).toHaveAttribute("aria-selected", "true");
+
+    // Children of collapsed parents should NOT be selected
+    // (e.g., id=2 "IBM Analytics Engine" is a child of collapsed Analytics)
+    expect(document.getElementById("2")).toBeNull(); // not rendered since collapsed
+  });
+
+  it("shift+click range includes children when parent is expanded", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "node",
+      selectedIds: [],
+      expandedIds: [1], // Analytics is expanded
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+
+    await user.click(aiItem);
+
+    await user.keyboard("{Shift>}");
+    await user.click(blockchainItem);
+    await user.keyboard("{/Shift}");
+
+    // Analytics' children are visible, so they should be in the range
+    const engineItem = document.getElementById("2");
+    const sqlItem = document.getElementById("5");
+    const db2Item = document.getElementById("6");
+    expect.assert(engineItem instanceof HTMLElement);
+    expect.assert(sqlItem instanceof HTMLElement);
+    expect.assert(db2Item instanceof HTMLElement);
+
+    expect(engineItem).toHaveAttribute("aria-selected", "true");
+    expect(sqlItem).toHaveAttribute("aria-selected", "true");
+    expect(db2Item).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("plain click resets anchor and replaces selection in multiselect mode", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "node",
+      selectedIds: [],
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+
+    // Click AI, then plain click Databases (resets anchor to Databases)
+    await user.click(aiItem);
+    await user.click(databasesItem);
+
+    expect(aiItem).toHaveAttribute("aria-selected", "false");
+    expect(databasesItem).toHaveAttribute("aria-selected", "true");
+
+    // Shift+click Blockchain should range from Databases anchor
+    // Since Databases (id=9) comes after Blockchain (id=7) in the tree,
+    // the range should include Blockchain and Databases
+    await user.keyboard("{Shift>}");
+    await user.click(blockchainItem);
+    await user.keyboard("{/Shift}");
+
+    expect(blockchainItem).toHaveAttribute("aria-selected", "true");
+    expect(databasesItem).toHaveAttribute("aria-selected", "true");
+    // AI should NOT be selected (anchor was reset to Databases)
+    expect(aiItem).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("ctrl+click in shallow mode toggles parent and direct children", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "shallow",
+      selectedIds: [],
+      expandedIds: [1],
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    const analyticsItem = document.getElementById("1");
+    const engineItem = document.getElementById("2");
+    const sqlItem = document.getElementById("5");
+    const db2Item = document.getElementById("6");
+    expect.assert(analyticsItem instanceof HTMLElement);
+    expect.assert(engineItem instanceof HTMLElement);
+    expect.assert(sqlItem instanceof HTMLElement);
+    expect.assert(db2Item instanceof HTMLElement);
+
+    // Click AI first
+    await user.click(aiItem);
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+
+    // Ctrl+click Analytics adds it and its direct children
+    await user.keyboard("{Control>}");
+    await user.click(analyticsItem);
+    await user.keyboard("{/Control}");
+
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+    expect(analyticsItem).toHaveAttribute("aria-selected", "true");
+    expect(engineItem).toHaveAttribute("aria-selected", "true");
+    expect(sqlItem).toHaveAttribute("aria-selected", "true");
+    expect(db2Item).toHaveAttribute("aria-selected", "true");
+
+    // Ctrl+click Analytics again removes it and its direct children
+    await user.keyboard("{Control>}");
+    await user.click(analyticsItem);
+    await user.keyboard("{/Control}");
+
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+    expect(analyticsItem).toHaveAttribute("aria-selected", "false");
+    expect(engineItem).toHaveAttribute("aria-selected", "false");
+    expect(sqlItem).toHaveAttribute("aria-selected", "false");
+    expect(db2Item).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("disabled nodes are skipped in multiselect expansion", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "node",
+      selectedIds: [],
+    });
+
+    const disabledNode = screen.getByRole("treeitem", {
+      name: /Integration/,
+    });
+
+    await user.click(disabledNode);
+
+    // Disabled node should not become selected
+    expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
+  });
+
+  it("shift+click skips disabled nodes in range selection", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "node",
+      selectedIds: [],
+      expandedIds: [],
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+
+    // Click AI first
+    await user.click(aiItem);
+
+    // Shift+click to select range to Databases (Integration is disabled in between)
+    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+
+    await user.keyboard("{Shift>}");
+    await user.click(databasesItem);
+    await user.keyboard("{/Shift}");
+
+    expect(aiItem).toHaveAttribute("aria-selected", "true");
+    expect(databasesItem).toHaveAttribute("aria-selected", "true");
+
+    // Integration is disabled and should not be selected
+    const disabledNode = screen.getByRole("treeitem", {
+      name: /Integration/,
+    });
+    expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
+  });
+
+  it("multiselect tree has bx--tree--multiselect class", () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    const tree = screen.getByRole("tree");
+    expect(tree).toHaveClass("bx--tree--multiselect");
+  });
+
+  it("non-multiselect tree does not have bx--tree--multiselect class", () => {
+    render(TreeViewMultiselect, {
+      multiselect: false,
+      selectedIds: [],
+    });
+
+    const tree = screen.getByRole("tree");
+    expect(tree).not.toHaveClass("bx--tree--multiselect");
+  });
 });
 
 describe("TreeView Generics", () => {
