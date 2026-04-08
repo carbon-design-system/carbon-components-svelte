@@ -138,14 +138,6 @@ items={[
   {id: "9", text: "Pineapple"},
   ]}  />
 
-## Clear selection
-
-Use `bind:this` to access the component instance and call `ComboBox.clear()` to programmatically clear the selection.
-
-Set `focus: false` in the method options to prevent re-focusing the input.
-
-<FileSource src="/framed/ComboBox/ComboBoxClear" />
-
 ## Open on clear
 
 By default, the dropdown menu is closed after clearing the selection.
@@ -160,6 +152,14 @@ items={[
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}
   ]}  />
+
+## Clear selection
+
+Use `bind:this` to access the component instance and call `ComboBox.clear()` to programmatically clear the selection.
+
+Set `focus: false` in the method options to prevent re-focusing the input.
+
+<FileSource src="/framed/ComboBox/ComboBoxClear" />
 
 ## Multiple combo boxes
 
