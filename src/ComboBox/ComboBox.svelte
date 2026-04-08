@@ -525,7 +525,13 @@
     value.length > 0 &&
     filteredItems.length > 0
   ) {
-    const firstEnabledIndex = filteredItems.findIndex((item) => !item.disabled);
+    const lowerValue = value.toLowerCase();
+    const firstEnabledIndex = filteredItems.findIndex(
+      (item) =>
+        !item.disabled &&
+        (filterFn !== defaultShouldFilter ||
+          itemToString(item).toLowerCase().includes(lowerValue)),
+    );
     highlightedIndex = firstEnabledIndex >= 0 ? firstEnabledIndex : -1;
   } else if (
     autoHighlight === "first-match" &&

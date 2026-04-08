@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
+import { ComboBox as ComboBoxReal } from "carbon-components-svelte";
 import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
@@ -2036,6 +2037,29 @@ describe("ComboBox", () => {
       const highlighted = getHighlightedOption();
       expect(highlighted).not.toBeNull();
       expect(highlighted?.textContent).toContain("Fax");
+    });
+
+    it("should highlight the correct item without a custom shouldFilterItem", async () => {
+      render(ComboBoxReal, {
+        props: {
+          autoHighlight: "first-match",
+          items: [
+            { id: "0", text: "Apple" },
+            { id: "1", text: "Apricot" },
+            { id: "2", text: "Banana" },
+            { id: "3", text: "Blueberry" },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "b");
+
+      // "Banana" should be highlighted, not "Apple"
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Banana");
     });
 
     it("should skip disabled items", async () => {
