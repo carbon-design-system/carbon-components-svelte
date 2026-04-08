@@ -214,6 +214,15 @@ for (const c of releasable) {
   }
 }
 
+function compareBulletLines(a: string, b: string): number {
+  return a.localeCompare(b, "en", { sensitivity: "base" });
+}
+
+breakingLines.sort(compareBulletLines);
+featureLines.sort(compareBulletLines);
+fixLines.sort(compareBulletLines);
+perfLines.sort(compareBulletLines);
+
 const sections: string[] = [];
 if (breakingLines.length) {
   sections.push("### ⚠ BREAKING CHANGES", "", ...breakingLines, "");
