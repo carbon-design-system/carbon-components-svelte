@@ -24,7 +24,7 @@
         "jsdom": "^29.0.1",
         "postcss": "^8.5.5",
         "sass": "^1.98.0",
-        "sveld": "^0.30.0",
+        "sveld": "^0.30.1",
         "svelte": "^5.55.0",
         "svelte-check": "^4.4.6",
         "typescript": "^6.0.2",
@@ -445,7 +445,7 @@
 
     "strip-indent": ["strip-indent@3.0.0", "", { "dependencies": { "min-indent": "^1.0.0" } }, "sha512-laJTa3Jb+VQpaC6DseHhF7dXVqHTfJPCRDaEbid/drOhgitgYku/letMUqOXFoWV0zIIUbjpdH2t+tYj4bQMRQ=="],
 
-    "sveld": ["sveld@0.30.0", "", { "dependencies": { "prettier": "^3.8.0" }, "bin": { "sveld": "cli.js" } }, "sha512-GUvWgq1wAJSal3WuNBTtFvQefMC0y/CfL06yPO4/7kJwAfPn49loA+0cAlowLR5f2jluqhmc+2emlZ4WrIrgnQ=="],
+    "sveld": ["sveld@0.30.1", "", { "dependencies": { "prettier": "^3.8.0" }, "bin": { "sveld": "cli.js" } }, "sha512-+xyFgdPUpdnhJmOMWumo5r/AnWeJhLjDKAq1d9hi6xl8V5xp2HydVBbr8p6APWJPNaM9Gnd0830Po6+CGWUofQ=="],
 
     "svelte": ["svelte@5.55.0", "", { "dependencies": { "@jridgewell/remapping": "^2.3.4", "@jridgewell/sourcemap-codec": "^1.5.0", "@sveltejs/acorn-typescript": "^1.0.5", "@types/estree": "^1.0.5", "@types/trusted-types": "^2.0.7", "acorn": "^8.12.1", "aria-query": "5.3.1", "axobject-query": "^4.1.0", "clsx": "^2.1.1", "devalue": "^5.6.4", "esm-env": "^1.2.1", "esrap": "^2.2.2", "is-reference": "^3.0.3", "locate-character": "^3.0.0", "magic-string": "^0.30.11", "zimmerframe": "^1.1.2" } }, "sha512-SThllKq6TRMBwPtat7ASnm/9CDXnIhBR0NPGw0ujn2DVYx9rVwsPZxDaDQcYGdUz/3BYVsCzdq7pZarRQoGvtw=="],
 
