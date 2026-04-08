@@ -253,7 +253,7 @@
     digitalData = {
       page: {
         pageInfo: {
-          ibm: { siteId: "IBM_" + _ibmAnalytics.settings.name },
+          ibm: { siteId: `IBM_${_ibmAnalytics.settings.name}` },
         },
         category: { primaryCategory: "PC100" },
       },
