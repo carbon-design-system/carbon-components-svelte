@@ -1,5 +1,5 @@
 <script>
-  import { Button, Stack, TreeView } from "carbon-components-svelte";
+  import { Button, ButtonSet, Stack, TreeView } from "carbon-components-svelte";
 
   let treeview = null;
   let expandedIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 14];
@@ -48,15 +48,23 @@
 </script>
 
 <Stack gap={6}>
-  <div>
+  <ButtonSet>
     <Button
       on:click={() => {
+        treeview?.collapseNodes();
+      }}
+    >
+      Collapse all nodes
+    </Button>
+    <Button
+      on:click={() => {
+        treeview?.expandNodes();
         treeview?.collapseNodes((node) => node.disabled);
       }}
     >
       Collapse disabled nodes
     </Button>
-  </div>
+  </ButtonSet>
   <div>
     <TreeView
       bind:this={treeview}
