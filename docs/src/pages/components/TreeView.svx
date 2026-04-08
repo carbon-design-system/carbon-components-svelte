@@ -92,13 +92,13 @@ Programmatically collapse all nodes using the `TreeView.collapseAll()` method.
 
 ## Expand a subset of nodes
 
-Use `TreeView.expandNodes` to expand specific nodes based on a condition.
+Use `TreeView.expandNodes` to expand specific nodes based on a condition. Calling `expandNodes()` with no arguments expands all nodes.
 
 <FileSource src="/framed/TreeView/TreeViewExpandNodes" />
 
 ## Collapse a subset of nodes
 
-Use `TreeView.collapseNodes` to collapse specific nodes based on a condition.
+Use `TreeView.collapseNodes` to collapse specific nodes based on a condition. Calling `collapseNodes()` with no arguments collapses all nodes.
 
 <FileSource src="/framed/TreeView/TreeViewCollapseNodes" />
 
