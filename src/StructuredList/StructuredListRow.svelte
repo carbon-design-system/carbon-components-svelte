@@ -5,7 +5,10 @@
   /** Set to `true` to render a label slot */
   export let label = false;
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 </script>
 

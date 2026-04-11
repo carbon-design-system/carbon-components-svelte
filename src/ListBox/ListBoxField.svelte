@@ -9,7 +9,10 @@
   /** Specify the role attribute */
   export let role = "combobox";
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "-1";
 
   /** Default translation ids */

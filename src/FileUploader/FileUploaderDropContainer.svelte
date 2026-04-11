@@ -35,7 +35,10 @@
   /** Set to `true` to disable the input */
   export let disabled = false;
 
-  /** Specify `tabindex` attribute */
+  /**
+   * Specify `tabindex` attribute
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /** Set an id for the input element */

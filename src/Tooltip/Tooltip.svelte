@@ -42,7 +42,10 @@
   /** Specify the icon name attribute */
   export let iconName = "";
 
-  /** Set the button tabindex */
+  /**
+   * Set the button tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /**
