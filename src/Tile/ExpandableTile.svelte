@@ -23,7 +23,10 @@
   /** Specify the icon label of the collapsed tile */
   export let tileCollapsedLabel = "";
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /** Set an id for the top-level div element */

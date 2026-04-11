@@ -38,7 +38,10 @@
    */
   export let filteredRowIds = [];
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /**

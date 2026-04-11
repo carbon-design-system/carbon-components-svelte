@@ -91,7 +91,10 @@
    */
   export let href = undefined;
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /** Specify the `type` attribute for the button element */

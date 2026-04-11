@@ -22,7 +22,10 @@
    */
   export let value = "";
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /** Specify the ARIA label for the radio tile checkmark icon */

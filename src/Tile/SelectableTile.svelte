@@ -19,7 +19,10 @@
   /** Specify the value of the selectable tile */
   export let value = "value";
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /** Specify the ARIA label for the selectable tile checkmark icon */

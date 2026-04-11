@@ -21,7 +21,10 @@
   /** Set to `true` to disable the tab */
   export let disabled = false;
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /** Set an id for the top-level element */
