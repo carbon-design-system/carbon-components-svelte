@@ -42,6 +42,7 @@
         loading="lazy"
         title={src.split("/").pop()}
         src={themedSrcUrl}
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
       ></iframe>
     {:else}
       <slot />
