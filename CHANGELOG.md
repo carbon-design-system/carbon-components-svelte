@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.106.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.106.0...v0.106.1) (2026-04-16)
+
+### Bug Fixes
+
+- **data-table-skeleton:** do not require `DataTableHeader` key/empty/value properties (#2870) ([482feac](https://github.com/carbon-design-system/carbon-components-svelte/commit/482feac23bf2db92ace6f802d28bc4c72a4f6c76)), closes [#2869](https://github.com/carbon-design-system/carbon-components-svelte/issues/2869)
+- **types:** `tabindex` type allows number or string ([8f2180d](https://github.com/carbon-design-system/carbon-components-svelte/commit/8f2180d560996f99d577de9f8904781d1cf092b2))
+
 ### [0.106.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.105.1...v0.106.0) (2026-04-08)
 
 ### Features
