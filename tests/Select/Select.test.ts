@@ -8,6 +8,7 @@ import SelectGroup from "./Select.group.test.svelte";
 import SelectSkeleton from "./Select.skeleton.test.svelte";
 import SelectSlot from "./Select.slot.test.svelte";
 import Select from "./Select.test.svelte";
+import SelectToggle from "./Select.toggle.test.svelte";
 
 describe("Select", () => {
   beforeEach(() => {
@@ -49,6 +50,25 @@ describe("Select", () => {
     expect(consoleLog).toHaveBeenCalledWith("input");
     expect(consoleLog).toHaveBeenCalledWith("update", "option-2");
     expect(consoleLog).toHaveBeenCalledTimes(3);
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2871
+  it("does not dispatch update event on initial render", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Select);
+
+    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2871
+  it("does not dispatch update event when toggled into view", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(SelectToggle, { open: false });
+
+    await user.click(screen.getByRole("button", { name: "toggle" }));
+
+    expect(screen.getByLabelText("Toggled select")).toBeInTheDocument();
+    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
   });
 
   it("renders default size", () => {
