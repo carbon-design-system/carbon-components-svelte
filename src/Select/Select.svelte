@@ -115,12 +115,13 @@
     selectedValue.set(value);
   };
 
-  let prevSelected = undefined;
+  let prevSelected = null;
 
   afterUpdate(() => {
     if (selected !== $selectedValue) {
+      const isInitialRender = prevSelected === null;
       selected = $selectedValue;
-      if (prevSelected !== undefined) {
+      if (!isInitialRender) {
         dispatch("update", $selectedValue);
       }
     }
