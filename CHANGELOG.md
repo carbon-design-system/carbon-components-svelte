@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.106.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.106.1...v0.106.2) (2026-04-20)
+
+### Bug Fixes
+
+- **select:** prevent dispatching initial "update" event in Svelte 5 (#2872) ([5e8afc1](https://github.com/carbon-design-system/carbon-components-svelte/commit/5e8afc1a5c23473e701f8c2bccf7556c85bb1066)), closes [#2871](https://github.com/carbon-design-system/carbon-components-svelte/issues/2871)
+
 ### [0.106.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.106.0...v0.106.1) (2026-04-16)
 
 ### Bug Fixes
