@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -138,9 +138,22 @@
       }
     },
     {
-      "includes": ["**/*.test.ts", "**/*.test.svelte", "docs/**/*.svelte"],
+      "includes": ["**/*.test.ts"],
       "linter": {
         "rules": {
+          "performance": {
+            "useTopLevelRegex": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.test.svelte", "docs/**/*.svelte"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedFunctionParameters": "off"
+          },
           "performance": {
             "useTopLevelRegex": "off"
           }
