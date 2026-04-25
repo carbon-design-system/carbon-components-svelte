@@ -22,6 +22,8 @@
   export let intrinsicAlign: ComponentProps<FloatingPortal>["intrinsicAlign"] =
     "center";
   export let target: ComponentProps<FloatingPortal>["target"] = null;
+  export let dialogAncestor = false;
+  export let dialogRef: HTMLDialogElement | null = null;
 </script>
 
 {#if scrollableContainer}
@@ -32,6 +34,10 @@
   >
     <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
   </div>
+{:else if dialogAncestor}
+  <dialog data-testid="dialog-ancestor" bind:this={dialogRef} open>
+    <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
+  </dialog>
 {:else}
   <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
 {/if}

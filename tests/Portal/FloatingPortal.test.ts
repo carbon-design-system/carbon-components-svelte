@@ -188,6 +188,39 @@ describe("FloatingPortal", () => {
     customTarget.remove();
   });
 
+  it("auto-mounts into the anchor's nearest <dialog> ancestor", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, dialogAncestor: true },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    const dialog = screen.getByTestId("dialog-ancestor");
+    expect(portalElement.parentElement).toBe(dialog);
+    expect(portalElement.getAttribute("style") ?? "").toContain(
+      "position: fixed",
+    );
+  });
+
+  it("explicit target overrides the auto-detected <dialog> ancestor", async () => {
+    const customTarget = document.createElement("div");
+    document.body.appendChild(customTarget);
+
+    render(FloatingPortalTest, {
+      props: { open: true, dialogAncestor: true, target: customTarget },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    expect(portalElement.parentElement).toBe(customTarget);
+
+    customTarget.remove();
+  });
+
   describe("intrinsicWidth", () => {
     it("applies width and no translateX when intrinsicWidth is false (default)", async () => {
       render(FloatingPortalTest, {

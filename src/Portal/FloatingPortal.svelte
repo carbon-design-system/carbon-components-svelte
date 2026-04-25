@@ -92,7 +92,9 @@
 
   /**
    * Specify the DOM element to mount the portal into.
-   * Defaults to `document.body`.
+   * When not set, mounts into the anchor's nearest `<dialog>` ancestor if one
+   * exists (so the portal participates in the dialog's top layer), otherwise
+   * falls back to `document.body`.
    * @type {HTMLElement | null}
    */
   export let target = null;
@@ -188,6 +190,11 @@
     }
   }
 
+  // Auto-detect the nearest <dialog> ancestor of the anchor so that portalled
+  // content participates in the dialog's top layer by default. An explicit
+  // `target` prop overrides this.
+  $: effectiveTarget = target ?? anchor?.closest("dialog") ?? null;
+
   // When the portal is mounted into a custom target (e.g. a native <dialog>
   // opened with showModal()), `position: absolute` resolves against the target's
   // containing block rather than the viewport. Use `position: fixed` in that
@@ -195,9 +202,9 @@
   // skip the document scroll offsets, which only apply to absolute positioning
   // relative to `document.body`.
   $: useFixedPosition =
-    target != null &&
+    effectiveTarget != null &&
     typeof document !== "undefined" &&
-    target !== document.body;
+    effectiveTarget !== document.body;
 
   function updatePosition() {
     if (!mounted || !anchor || !ref) return;
@@ -442,7 +449,7 @@
 {#if open}
   <Portal
     bind:ref
-    {target}
+    target={effectiveTarget}
     {...$$restProps}
     data-floating-portal
     data-floating-direction={pos.actualDirection}
