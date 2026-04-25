@@ -31,11 +31,16 @@
   /** @type {HTMLDivElement | null} */
   let refContainer = null;
 
+  let prevIndex = -1;
+
   $: currentIndex = -1;
   $: focusedIndex = -1;
   $: switches = [];
   $: if (switches[currentIndex]) {
-    dispatch("change", currentIndex);
+    if (prevIndex > -1 && prevIndex !== currentIndex) {
+      dispatch("change", currentIndex);
+    }
+    prevIndex = currentIndex;
     currentId.set(switches[currentIndex].id);
   }
 
