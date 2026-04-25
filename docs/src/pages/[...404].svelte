@@ -4,7 +4,7 @@
 
 <svelte:head> <title>404</title> </svelte:head>
 
-<Content>
+<Content style="min-height: calc(100vh - 6rem - 1px);">
   <Grid>
     <Row>
       <Column>
