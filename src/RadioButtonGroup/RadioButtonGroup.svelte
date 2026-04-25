@@ -65,6 +65,7 @@
   export let id = undefined;
 
   import {
+    afterUpdate,
     beforeUpdate,
     createEventDispatcher,
     onMount,
@@ -79,6 +80,7 @@
   const selectedValue = writable(selected);
   const groupName = writable(name);
   const groupRequired = writable(required);
+  let isInitialRender = true;
 
   /**
    * @type {(data: { checked: boolean; value: Value }) => void}
@@ -114,7 +116,13 @@
 
   selectedValue.subscribe((value) => {
     selected = value;
-    dispatch("change", value);
+    if (!isInitialRender) {
+      dispatch("change", value);
+    }
+  });
+
+  afterUpdate(() => {
+    isInitialRender = false;
   });
 
   $: $groupName = name;
