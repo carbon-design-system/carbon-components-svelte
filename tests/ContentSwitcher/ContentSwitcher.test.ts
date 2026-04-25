@@ -78,6 +78,24 @@ describe("ContentSwitcher", () => {
     expect(tabs[2]).toHaveAttribute("tabindex", "-1");
   });
 
+  it("does not dispatch change event on initial render", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContentSwitcher);
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
+  it("does not dispatch change event on initial render with selectedIndex", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContentSwitcher, { props: { selectedIndex: 1 } });
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
   it("updates when selectedIndex changes", async () => {
     const { rerender } = render(ContentSwitcherSelectedIndex);
 

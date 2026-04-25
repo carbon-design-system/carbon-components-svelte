@@ -4,12 +4,14 @@
   import { ContentSwitcher, Switch } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 
+  export let selectedIndex: ComponentProps<ContentSwitcher>["selectedIndex"] = 0;
   export let customClass = "";
   export let switchId: ComponentProps<Switch>["id"] = undefined;
   export let switchRef: ComponentProps<Switch>["ref"] = null;
 </script>
 
 <ContentSwitcher
+  {selectedIndex}
   class={customClass}
   on:change={(e) => {
     console.log("change", e.detail);
