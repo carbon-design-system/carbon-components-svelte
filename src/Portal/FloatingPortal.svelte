@@ -90,6 +90,13 @@
    */
   export let ref = null;
 
+  /**
+   * Specify the DOM element to mount the portal into.
+   * Defaults to `document.body`.
+   * @type {HTMLElement | null}
+   */
+  export let target = null;
+
   import { onMount, tick } from "svelte";
   import Portal from "./Portal.svelte";
 
@@ -181,11 +188,24 @@
     }
   }
 
+  // When the portal is mounted into a custom target (e.g. a native <dialog>
+  // opened with showModal()), `position: absolute` resolves against the target's
+  // containing block rather than the viewport. Use `position: fixed` in that
+  // case — fixed stays viewport-relative even inside a top-layer dialog — and
+  // skip the document scroll offsets, which only apply to absolute positioning
+  // relative to `document.body`.
+  $: useFixedPosition =
+    target != null &&
+    typeof document !== "undefined" &&
+    target !== document.body;
+
   function updatePosition() {
     if (!mounted || !anchor || !ref) return;
 
     const rect = anchor.getBoundingClientRect();
     const floatingRect = ref.getBoundingClientRect();
+    const scrollYOffset = useFixedPosition ? 0 : window.scrollY;
+    const scrollXOffset = useFixedPosition ? 0 : window.scrollX;
 
     const isVertical = direction === "top" || direction === "bottom";
     let actualDirection = direction;
@@ -234,27 +254,27 @@
     let width;
 
     if (actualDirection === "bottom") {
-      top = rect.bottom + window.scrollY + gapBottom;
-      left = rect.left + window.scrollX;
+      top = rect.bottom + scrollYOffset + gapBottom;
+      left = rect.left + scrollXOffset;
       width = rect.width;
     } else if (actualDirection === "top") {
-      top = rect.top + window.scrollY - floatingRect.height - gapTop;
-      left = rect.left + window.scrollX;
+      top = rect.top + scrollYOffset - floatingRect.height - gapTop;
+      left = rect.left + scrollXOffset;
       width = rect.width;
     } else if (actualDirection === "right") {
       if (intrinsicWidth) {
         if (intrinsicAlign === "start") {
-          top = rect.top + window.scrollY + verticalAlignOffsetRight;
+          top = rect.top + scrollYOffset + verticalAlignOffsetRight;
         } else if (intrinsicAlign === "end") {
           top =
             rect.bottom +
-            window.scrollY -
+            scrollYOffset -
             floatingRect.height +
             verticalAlignOffsetRight;
         } else {
           top =
             rect.top +
-            window.scrollY +
+            scrollYOffset +
             rect.height / 2 -
             floatingRect.height / 2 +
             verticalAlignOffsetRight;
@@ -262,27 +282,27 @@
       } else {
         top =
           rect.top +
-          window.scrollY +
+          scrollYOffset +
           rect.height / 2 -
           floatingRect.height / 2 +
           verticalAlignOffsetRight;
       }
-      left = rect.right + window.scrollX + horizontalGapRight;
+      left = rect.right + scrollXOffset + horizontalGapRight;
     } else {
       // left
       if (intrinsicWidth) {
         if (intrinsicAlign === "start") {
-          top = rect.top + window.scrollY + verticalAlignOffsetLeft;
+          top = rect.top + scrollYOffset + verticalAlignOffsetLeft;
         } else if (intrinsicAlign === "end") {
           top =
             rect.bottom +
-            window.scrollY -
+            scrollYOffset -
             floatingRect.height +
             verticalAlignOffsetLeft;
         } else {
           top =
             rect.top +
-            window.scrollY +
+            scrollYOffset +
             rect.height / 2 -
             floatingRect.height / 2 +
             verticalAlignOffsetLeft;
@@ -290,13 +310,12 @@
       } else {
         top =
           rect.top +
-          window.scrollY +
+          scrollYOffset +
           rect.height / 2 -
           floatingRect.height / 2 +
           verticalAlignOffsetLeft;
       }
-      left =
-        rect.left + window.scrollX - floatingRect.width - horizontalGapLeft;
+      left = rect.left + scrollXOffset - floatingRect.width - horizontalGapLeft;
     }
 
     let posLeft = left;
@@ -308,11 +327,11 @@
       (actualDirection === "top" || actualDirection === "bottom")
     ) {
       if (intrinsicAlign === "center") {
-        posLeft = rect.left + window.scrollX + rect.width / 2;
+        posLeft = rect.left + scrollXOffset + rect.width / 2;
       } else if (intrinsicAlign === "start") {
-        posLeft = rect.left + window.scrollX;
+        posLeft = rect.left + scrollXOffset;
       } else {
-        posLeft = rect.right + window.scrollX;
+        posLeft = rect.right + scrollXOffset;
       }
       posWidth = undefined;
     }
@@ -370,7 +389,7 @@
     : null;
 
   $: portalStyle = [
-    "position: absolute",
+    useFixedPosition ? "position: fixed" : "position: absolute",
     `top: ${pos.top}px`,
     `left: ${pos.left}px`,
     intrinsicTranslateX,
@@ -423,6 +442,7 @@
 {#if open}
   <Portal
     bind:ref
+    {target}
     {...$$restProps}
     data-floating-portal
     data-floating-direction={pos.actualDirection}

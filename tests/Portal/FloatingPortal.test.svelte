@@ -21,6 +21,7 @@
   export let verticalAlignOffsetRight = 0;
   export let intrinsicAlign: ComponentProps<FloatingPortal>["intrinsicAlign"] =
     "center";
+  export let target: ComponentProps<FloatingPortal>["target"] = null;
 </script>
 
 {#if scrollableContainer}
@@ -48,6 +49,7 @@
   {verticalAlignOffsetLeft}
   {verticalAlignOffsetRight}
   {intrinsicAlign}
+  {target}
   bind:ref
 >
   {content}

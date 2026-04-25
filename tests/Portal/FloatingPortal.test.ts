@@ -168,6 +168,26 @@ describe("FloatingPortal", () => {
     expect(style).toMatch(/width:\s*\d+px/);
   });
 
+  it("uses position: fixed when mounted into a non-body target", async () => {
+    const customTarget = document.createElement("div");
+    document.body.appendChild(customTarget);
+
+    render(FloatingPortalTest, {
+      props: { open: true, target: customTarget },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    expect(portalElement.parentElement).toBe(customTarget);
+    const style = portalElement.getAttribute("style") ?? "";
+    expect(style).toContain("position: fixed");
+    expect(style).not.toContain("position: absolute");
+
+    customTarget.remove();
+  });
+
   describe("intrinsicWidth", () => {
     it("applies width and no translateX when intrinsicWidth is false (default)", async () => {
       render(FloatingPortalTest, {
