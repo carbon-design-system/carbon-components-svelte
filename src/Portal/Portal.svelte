@@ -6,6 +6,13 @@
   export let tag = "div";
 
   /**
+   * Specify the DOM element to mount the portal into.
+   * Defaults to `document.body`.
+   * @type {HTMLElement | null}
+   */
+  export let target = null;
+
+  /**
    * Obtain a reference to the portal element.
    * @type {null | HTMLElement}
    */
@@ -27,11 +34,14 @@
     };
   });
 
-  $: if (mounted && ref) {
-    if (typeof document !== "undefined" && ref.parentNode !== document.body) {
+  $: effectiveTarget =
+    target ?? (typeof document === "undefined" ? null : document.body);
+
+  $: if (mounted && ref && effectiveTarget) {
+    if (ref.parentNode !== effectiveTarget) {
       const activeEl = document.activeElement;
       const hadFocus = ref.contains(activeEl);
-      document.body.appendChild(ref);
+      effectiveTarget.appendChild(ref);
       if (hadFocus && activeEl instanceof HTMLElement) {
         activeEl.focus();
       }
