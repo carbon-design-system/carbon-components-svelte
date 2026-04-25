@@ -228,6 +228,60 @@ describe("Portal", () => {
     expect(portalElement.getAttribute("style")).toContain("background-color");
   });
 
+  describe("custom target", () => {
+    it("mounts into the provided target element", async () => {
+      const customTarget = document.createElement("div");
+      customTarget.setAttribute("data-testid", "custom-target");
+      document.body.appendChild(customTarget);
+
+      render(PortalTest, { props: { target: customTarget } });
+
+      const portalContent = await screen.findByText("Portal content");
+      const portalElement = portalContent.closest("[data-portal]");
+      assert(portalElement instanceof HTMLElement);
+
+      expect(portalElement.parentElement).toBe(customTarget);
+      expect(portalElement.parentElement).not.toBe(document.body);
+
+      customTarget.remove();
+    });
+
+    it("falls back to document.body when target is null", async () => {
+      render(PortalTest, { props: { target: null } });
+
+      const portalContent = await screen.findByText("Portal content");
+      const portalElement = portalContent.closest("[data-portal]");
+      assert(portalElement instanceof HTMLElement);
+
+      expect(portalElement.parentElement).toBe(document.body);
+    });
+
+    it("moves the portal when target changes", async () => {
+      const firstTarget = document.createElement("div");
+      const secondTarget = document.createElement("div");
+      document.body.appendChild(firstTarget);
+      document.body.appendChild(secondTarget);
+
+      const { rerender } = render(PortalTest, {
+        props: { target: firstTarget },
+      });
+
+      const portalContent = await screen.findByText("Portal content");
+      const portalElement = portalContent.closest("[data-portal]");
+      assert(portalElement instanceof HTMLElement);
+
+      expect(portalElement.parentElement).toBe(firstTarget);
+
+      rerender({ target: secondTarget });
+      await tick();
+
+      expect(portalElement.parentElement).toBe(secondTarget);
+
+      firstTarget.remove();
+      secondTarget.remove();
+    });
+  });
+
   describe("focus preservation when moving to body", () => {
     it("preserves focus on element inside portal when it is moved to document.body", async () => {
       render(PortalFocusTest);
