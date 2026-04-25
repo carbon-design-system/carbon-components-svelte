@@ -28,6 +28,24 @@ describe("CheckboxGroup", () => {
     expect(screen.getByRole("checkbox", { name: "Option 3" })).toBeChecked();
   });
 
+  it("does not dispatch change event on initial render", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxGroupComponent);
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
+  it("does not dispatch change event on initial render with selected values", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxGroupComponent, { props: { selected: ["2"] } });
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
   it("should handle disabled state", () => {
     render(CheckboxGroupComponent, { props: { disabled: true } });
 

@@ -55,6 +55,7 @@
     createEventDispatcher,
     onMount,
     setContext,
+    tick,
   } from "svelte";
   import { readonly, writable } from "svelte/store";
 
@@ -67,6 +68,7 @@
   const groupName = writable(name);
   const groupRequired = writable(required);
   const groupDisabled = writable(disabled);
+  let isInitialRender = true;
 
   /**
    * @type {(value: string | number, checked: boolean) => void}
@@ -90,6 +92,9 @@
 
   onMount(() => {
     $selectedValues = selected;
+    tick().then(() => {
+      isInitialRender = false;
+    });
   });
 
   beforeUpdate(() => {
@@ -98,7 +103,9 @@
 
   selectedValues.subscribe((value) => {
     selected = value;
-    dispatch("change", value);
+    if (!isInitialRender) {
+      dispatch("change", value);
+    }
   });
 
   $: $groupName = name;
