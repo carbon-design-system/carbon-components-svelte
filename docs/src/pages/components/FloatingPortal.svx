@@ -69,3 +69,7 @@ By default, the floating content is rendered below the anchor element. However, 
 Use the `direction` slot prop to read the actual rendered direction after auto-flipping for conditional logic, like styles.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalSlotDirection" />
+
+## Custom target
+
+Use the `target` prop to mount the floating content into a specific DOM element instead of `document.body`. Positioning is always driven by the `anchor`, so `target` only changes which DOM subtree the floating content lives in. See the [Portal custom target example](/components/Portal#custom-target) for typical use cases.
