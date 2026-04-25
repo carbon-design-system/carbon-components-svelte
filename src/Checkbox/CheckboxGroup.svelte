@@ -69,6 +69,13 @@
   const groupRequired = writable(required);
   const groupDisabled = writable(disabled);
   let isInitialRender = true;
+  let isSyncingSelected = false;
+
+  function syncSelectedValues() {
+    isSyncingSelected = true;
+    $selectedValues = selected;
+    isSyncingSelected = false;
+  }
 
   /**
    * @type {(value: string | number, checked: boolean) => void}
@@ -91,19 +98,19 @@
   });
 
   onMount(() => {
-    $selectedValues = selected;
+    syncSelectedValues();
     tick().then(() => {
       isInitialRender = false;
     });
   });
 
   beforeUpdate(() => {
-    $selectedValues = selected;
+    syncSelectedValues();
   });
 
   selectedValues.subscribe((value) => {
     selected = value;
-    if (!isInitialRender) {
+    if (!isInitialRender && !isSyncingSelected) {
       dispatch("change", value);
     }
   });
