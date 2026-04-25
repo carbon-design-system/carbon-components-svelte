@@ -29,3 +29,9 @@ Use the `tag` prop to specify a custom HTML element. By default, the portal uses
 Wrap the modal in a portal to escape parent containers with `overflow: hidden` or z-index stacking contexts. This ensures the modal appears above all content and isn't clipped by parent boundaries.
 
 <FileSource src="/framed/Portal/ModalPortal" />
+
+## Custom target
+
+Use the `target` prop to mount the portal into a specific DOM element instead of `document.body`.
+
+<FileSource src="/framed/Portal/CustomTargetPortal" />
