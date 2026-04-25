@@ -73,3 +73,11 @@ Use the `direction` slot prop to read the actual rendered direction after auto-f
 ## Custom target
 
 Use the `target` prop to mount the floating content into a specific DOM element instead of `document.body`. Positioning is always driven by the `anchor`, so `target` only changes which DOM subtree the floating content lives in. See the [Portal custom target example](/components/Portal#custom-target) for typical use cases.
+
+## Inside a native dialog
+
+When the anchor is inside a [native dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog), floating content is automatically mounted into that dialog (via `anchor.closest("dialog")`). This ensures the content exists in the dialog's top layer to remain visible and interactive.
+
+Components inside the `dialog` must still enable `portalMenu` for its menu or content to be portalled. Pass an explicit `target` to override this behavior.
+
+<FileSource src="/framed/FloatingPortal/FloatingPortalDialog" />
