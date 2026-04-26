@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.107.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.106.2...v0.107.0) (2026-04-25)
+
+### Features
+
+- **floating-portal:** add `target` prop ([b4b0b50](https://github.com/carbon-design-system/carbon-components-svelte/commit/b4b0b5054ef2d0f74d153ae6b3b205d2521e2372))
+- **floating-portal:** auto-detect native `dialog` as target ([4e438df](https://github.com/carbon-design-system/carbon-components-svelte/commit/4e438df7ac0c7d3dfff8f122b6911d747bec5965)), closes [#2873](https://github.com/carbon-design-system/carbon-components-svelte/issues/2873)
+- **portal:** add `target` prop ([029f65e](https://github.com/carbon-design-system/carbon-components-svelte/commit/029f65e08ef0dd970becf9dc174a9ae3773b524f))
+
+### Bug Fixes
+
+- **checkbox-group:** avoid dispatching "change" event twice ([bab81b4](https://github.com/carbon-design-system/carbon-components-svelte/commit/bab81b4f180a66a19aaa28f95937ebaae08a400a))
+- **checkbox-group:** prevent dispatching initial "change" event in Svelte 5 ([4fe17ef](https://github.com/carbon-design-system/carbon-components-svelte/commit/4fe17ef594c52d291af7e2c42616cd16307ef88f)), closes [#2878](https://github.com/carbon-design-system/carbon-components-svelte/issues/2878)
+- **content-switcher:** prevent dispatching initial "change" event in Svelte 5 ([4f8066c](https://github.com/carbon-design-system/carbon-components-svelte/commit/4f8066cf2a40869ac52733c909da51499a807147)), closes [#2878](https://github.com/carbon-design-system/carbon-components-svelte/issues/2878)
+- **radio-button-group:** prevent dispatching initial "change" event in Svelte 5 ([fb3b758](https://github.com/carbon-design-system/carbon-components-svelte/commit/fb3b758919c6ffe5c876021d45df893a08c72db7)), closes [#2879](https://github.com/carbon-design-system/carbon-components-svelte/issues/2879)
+
 ### [0.106.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.106.1...v0.106.2) (2026-04-20)
 
 ### Bug Fixes
