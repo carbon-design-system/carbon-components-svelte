@@ -24,6 +24,8 @@
   export let target: ComponentProps<FloatingPortal>["target"] = null;
   export let dialogAncestor = false;
   export let dialogRef: HTMLDialogElement | null = null;
+  export let popoverAncestor = false;
+  export let popoverRef: HTMLElement | null = null;
 </script>
 
 {#if scrollableContainer}
@@ -38,6 +40,10 @@
   <dialog data-testid="dialog-ancestor" bind:this={dialogRef} open>
     <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
   </dialog>
+{:else if popoverAncestor}
+  <div data-testid="popover-ancestor" popover="manual" bind:this={popoverRef}>
+    <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
+  </div>
 {:else}
   <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
 {/if}
