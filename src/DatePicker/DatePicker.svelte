@@ -59,6 +59,11 @@
   /**
    * Set to `true` to render the calendar in a portal to prevent clipping.
    * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   *
+   * When the date picker is inside a native `<dialog>` (opened with
+   * `showModal()`) or an open `[popover]` element, the calendar auto-mounts
+   * into that top-layer ancestor and uses `position: fixed` so it renders
+   * above the backdrop instead of behind it.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -82,6 +87,11 @@
   } from "svelte";
   import { derived, writable } from "svelte/store";
   import { createCalendar } from "./createCalendar";
+  import {
+    getTopLayerAncestor,
+    isEventTargetInsidePortaledCalendar,
+    positionFlatpickrCalendarFixed,
+  } from "./datePickerTopLayer";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
@@ -228,11 +238,22 @@
       return;
     }
 
+    // Auto-detect a top-layer ancestor (native dialog or open popover) so the
+    // calendar can participate in its top layer instead of being clipped behind
+    // the backdrop. Computed at creation time — appendTo cannot change after.
+    const topLayerAncestor = getTopLayerAncestor(datePickerRef);
+
     calendar = await createCalendar({
       options: {
         ...options,
         ...(effectivePortalMenu
-          ? { static: false }
+          ? {
+              static: false,
+              ...(topLayerAncestor && {
+                appendTo: topLayerAncestor,
+                position: positionFlatpickrCalendarFixed,
+              }),
+            }
           : { appendTo: datePickerRef }),
         defaultDate: $inputValue,
         mode: $mode,
@@ -320,8 +341,16 @@
 <svelte:window
   on:click={({ target }) => {
     if (!calendar?.isOpen) return;
-    if (datePickerRef?.contains(target)) return;
-    if (!calendar.calendarContainer.contains(target)) calendar.close();
+    if (
+      isEventTargetInsidePortaledCalendar(
+        datePickerRef,
+        calendar.calendarContainer,
+        target,
+      )
+    ) {
+      return;
+    }
+    calendar.close();
   }}
 />
 
