@@ -76,8 +76,14 @@ Use the `target` prop to mount the floating content into a specific DOM element 
 
 ## Inside a native dialog
 
-When the anchor is inside a [native dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog), floating content is automatically mounted into that dialog (via `anchor.closest("dialog")`). This ensures the content exists in the dialog's top layer to remain visible and interactive.
+When the anchor is inside a [native dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog), floating content is automatically mounted into that dialog (default `target` is `anchor.closest("dialog,[popover]")`, which resolves to the dialog when the anchor is nested under it). This keeps the content in the dialog top layer so it stays visible and interactive.
 
 Components inside the `dialog` must still enable `portalMenu` for its menu or content to be portalled. Pass an explicit `target` to override this behavior.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalDialog" />
+
+## Inside a native popover
+
+When the anchor is inside an element with a [`popover`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover) attribute (see the [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), the same default `target` applies: floating content mounts into that popover element so it participates in the popover top layer.
+
+<FileSource src="/framed/FloatingPortal/FloatingPortalPopover" />
