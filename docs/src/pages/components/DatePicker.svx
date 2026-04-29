@@ -43,9 +43,15 @@ Set `portalMenu` to `true` to render the calendar in a floating portal. This pre
 
 ## Inside a native dialog
 
-When the date picker is rendered inside a native `<dialog>` (opened with `showModal()`) or an open `[popover]` element, the calendar auto-mounts into that top-layer ancestor and uses `position: fixed` so it appears above the backdrop.
+When the date picker is inside a native `<dialog>` opened with `showModal()`, `portalMenu` mounts the calendar into that dialog so it appears above the modal backdrop. The calendar uses `position: fixed` with viewport coordinates.
 
 <FileSource src="/framed/DatePicker/DatePickerDialog" />
+
+## Inside a native popover
+
+When the date picker is inside an open element with a [`popover`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover) attribute (see the [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), `portalMenu` mounts the calendar into that ancestor so it stays in the popover top layer.
+
+<FileSource src="/framed/DatePicker/DatePickerPopover" />
 
 ## Simple
 
