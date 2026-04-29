@@ -92,9 +92,10 @@
 
   /**
    * Specify the DOM element to mount the portal into.
-   * When not set, mounts into the anchor's nearest `<dialog>` ancestor if one
-   * exists (so the portal participates in the dialog's top layer), otherwise
-   * falls back to `document.body`.
+   * When not set, mounts into the anchor's nearest top-layer ancestor —
+   * a `<dialog>` or `[popover]` element — if one exists, so the portal
+   * participates in the dialog/popover top layer. Otherwise falls back
+   * to `document.body`.
    * @type {HTMLElement | null}
    */
   export let target = null;
@@ -190,17 +191,17 @@
     }
   }
 
-  // Auto-detect the nearest <dialog> ancestor of the anchor so that portalled
-  // content participates in the dialog's top layer by default. An explicit
-  // `target` prop overrides this.
-  $: effectiveTarget = target ?? anchor?.closest("dialog") ?? null;
+  // Auto-detect the nearest top-layer ancestor of the anchor — a <dialog> or
+  // [popover] element — so portalled content participates in their top layer
+  // by default. An explicit `target` prop overrides this.
+  $: effectiveTarget = target ?? anchor?.closest("dialog,[popover]") ?? null;
 
   // When the portal is mounted into a custom target (e.g. a native <dialog>
-  // opened with showModal()), `position: absolute` resolves against the target's
-  // containing block rather than the viewport. Use `position: fixed` in that
-  // case — fixed stays viewport-relative even inside a top-layer dialog — and
-  // skip the document scroll offsets, which only apply to absolute positioning
-  // relative to `document.body`.
+  // opened with showModal() or an open [popover]), `position: absolute`
+  // resolves against the target's containing block rather than the viewport.
+  // Use `position: fixed` in that case — fixed stays viewport-relative even
+  // inside a top-layer element — and skip the document scroll offsets, which
+  // only apply to absolute positioning relative to `document.body`.
   $: useFixedPosition =
     effectiveTarget != null &&
     typeof document !== "undefined" &&

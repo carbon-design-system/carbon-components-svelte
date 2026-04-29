@@ -221,6 +221,22 @@ describe("FloatingPortal", () => {
     customTarget.remove();
   });
 
+  it("auto-mounts into the anchor's nearest [popover] ancestor", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, popoverAncestor: true },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    const popover = screen.getByTestId("popover-ancestor");
+    expect(portalElement.parentElement).toBe(popover);
+    expect(portalElement.getAttribute("style") ?? "").toContain(
+      "position: fixed",
+    );
+  });
+
   describe("intrinsicWidth", () => {
     it("applies width and no translateX when intrinsicWidth is false (default)", async () => {
       render(FloatingPortalTest, {
