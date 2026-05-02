@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.107.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.107.0...v0.107.1) (2026-05-02)
+
+### Bug Fixes
+
+- **date-picker:** support portal menu inside native `dialog` ([3fb3948](https://github.com/carbon-design-system/carbon-components-svelte/commit/3fb3948a7ca3e8499a908ca79f70b464db83a3df)), closes [#2881](https://github.com/carbon-design-system/carbon-components-svelte/issues/2881)
+- **floating-portal:** auto-target accounts for native `popover` ([741ccd4](https://github.com/carbon-design-system/carbon-components-svelte/commit/741ccd4950bdaf8e3b1705ce197419d2d797e381)), closes [#2882](https://github.com/carbon-design-system/carbon-components-svelte/issues/2882)
+
 ### [0.107.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.106.2...v0.107.0) (2026-04-25)
 
 ### Features
