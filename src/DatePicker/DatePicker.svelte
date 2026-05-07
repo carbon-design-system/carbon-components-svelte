@@ -186,9 +186,19 @@
    * @type {(relatedTarget: EventTarget | null) => void}
    */
   const blurInput = (relatedTarget) => {
-    if (calendar && !calendar.calendarContainer.contains(relatedTarget)) {
-      calendar.close();
-    }
+    if (!calendar) return;
+    // No relatedTarget means focus left the document (e.g. switching browser
+    // tabs); refocusing would replay the open animation. Outside clicks are
+    // handled separately by the window click handler below.
+    if (relatedTarget == null) return;
+    // In range mode, focus moves between the two inputs while the calendar
+    // stays open; closing here would replay the open animation on every switch.
+    if (datePickerRef?.contains(/** @type {Node} */ (relatedTarget))) return;
+    if (
+      calendar.calendarContainer.contains(/** @type {Node} */ (relatedTarget))
+    )
+      return;
+    calendar.close();
   };
 
   /**
