@@ -206,3 +206,9 @@
     </div>
   {/if}
 </div>
+
+<style>
+  .bx--date-picker-input__wrapper {
+    width: fit-content;
+  }
+</style>
