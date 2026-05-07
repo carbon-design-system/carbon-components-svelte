@@ -1,0 +1,12 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+@mixin date-picker-input-wrapper {
+  .#{$prefix}--date-picker-input__wrapper {
+    width: fit-content;
+  }
+}
+
+@include exports('datepicker-input-wrapper') {
+  @include date-picker-input-wrapper;
+}
