@@ -788,6 +788,7 @@
         aria-label={ariaLabel}
         {id}
         portal={effectivePortalMenu}
+        portalHostClass="bx--multi-select bx--list-box--expanded"
         {open}
         anchor={fieldRef}
         {direction}
