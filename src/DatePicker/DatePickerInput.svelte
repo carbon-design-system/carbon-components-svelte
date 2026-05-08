@@ -140,6 +140,7 @@
     class:bx--date-picker-input__wrapper--invalid={invalid}
     class:bx--date-picker-input__wrapper--warn={warn}
     class:bx--date-picker-input__wrapper--readonly={readonly}
+    class:bx--date-picker-input__wrapper--disabled={disabled}
   >
     <input
       bind:this={ref}
