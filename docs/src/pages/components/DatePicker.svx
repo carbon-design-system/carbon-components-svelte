@@ -144,3 +144,15 @@ Disable the date picker to prevent user interaction.
 Show a loading state with the skeleton component.
 
 <DatePickerSkeleton />
+
+## Skeleton (range)
+
+Set `range` to `true` to render a skeleton for the range variant.
+
+<DatePickerSkeleton range />
+
+## Skeleton (short)
+
+Set `short` to `true` to render a skeleton for the short variant.
+
+<DatePickerSkeleton short />
