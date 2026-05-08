@@ -463,6 +463,28 @@ describe("DatePicker", () => {
 
       expect(calendar.querySelectorAll(".flatpickr-month").length).toBe(2);
     });
+
+    it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { closeOnSelect: false },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      const day = calendar.querySelector<HTMLElement>(
+        ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+      );
+
+      expect(calendar).toHaveClass("open");
+      expect(day).toBeInTheDocument();
+      if (!day) throw new Error("expected a selectable day");
+
+      await user.click(day);
+
+      expect(calendar).toHaveClass("open");
+    });
   });
 
   describe("bind:calendar", () => {
@@ -471,7 +493,7 @@ describe("DatePicker", () => {
       render(DatePickerCalendar, {
         props: {
           datePickerType: "simple",
-          oncalendar: (cal) => {
+          oncalendar: (cal: Instance | null | undefined) => {
             captured = cal;
           },
         },
@@ -486,7 +508,7 @@ describe("DatePicker", () => {
       render(DatePickerCalendar, {
         props: {
           datePickerType: "single",
-          oncalendar: (cal) => {
+          oncalendar: (cal: Instance | null | undefined) => {
             captured = cal;
           },
         },
@@ -512,7 +534,7 @@ describe("DatePicker", () => {
       render(DatePickerCalendar, {
         props: {
           datePickerType: "single",
-          oncalendar: (cal) => {
+          oncalendar: (cal: Instance | null | undefined) => {
             captured = cal;
           },
         },
@@ -542,7 +564,7 @@ describe("DatePicker", () => {
       render(DatePickerCalendar, {
         props: {
           datePickerType: "range",
-          oncalendar: (cal) => {
+          oncalendar: (cal: Instance | null | undefined) => {
             captured = cal;
           },
         },
