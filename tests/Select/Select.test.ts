@@ -136,6 +136,37 @@ describe("Select", () => {
     expect(selectElement).toBeDisabled();
   });
 
+  it("renders read-only state", () => {
+    render(Select, { readonly: true });
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
+    assert(selectWrapper);
+
+    expect(selectWrapper).toHaveClass("bx--select--readonly");
+    expect(selectElement).toHaveAttribute("aria-readonly", "true");
+    expect(selectElement).not.toBeDisabled();
+  });
+
+  it("suppresses invalid and warn states when read-only", () => {
+    render(Select, {
+      readonly: true,
+      invalid: true,
+      invalidText: "Invalid selection",
+      warn: true,
+      warnText: "Warning message",
+    });
+
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
+    assert(selectWrapper);
+
+    expect(selectWrapper).not.toHaveClass("bx--select--invalid");
+    expect(selectWrapper).not.toHaveClass("bx--select--warning");
+    expect(selectElement).not.toHaveAttribute("aria-invalid");
+    expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+  });
+
   it("renders valid by default", () => {
     render(Select);
     const selectElement = screen.getByLabelText("Select label");
