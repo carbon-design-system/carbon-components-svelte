@@ -33,21 +33,30 @@
    */
   export let direction = "bottom";
 
+  /**
+   * Class applied to a wrapper element inside the portal.
+   * Only used when `portal` is `true`.
+   * @type {string}
+   */
+  export let portalHostClass = undefined;
+
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
 </script>
 
 {#if portal}
   <FloatingPortal {anchor} {direction} {open}>
-    <div
-      bind:this={ref}
-      role="listbox"
-      id="menu-{id}"
-      class:bx--list-box__menu={true}
-      style="position: static; {$$restProps.style || ''}"
-      {...$$restProps}
-      on:scroll
-    >
-      <slot />
+    <div class={portalHostClass}>
+      <div
+        bind:this={ref}
+        role="listbox"
+        id="menu-{id}"
+        class:bx--list-box__menu={true}
+        style="position: static; {$$restProps.style || ''}"
+        {...$$restProps}
+        on:scroll
+      >
+        <slot />
+      </div>
     </div>
   </FloatingPortal>
 {:else}
