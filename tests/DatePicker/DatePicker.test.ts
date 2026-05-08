@@ -52,6 +52,19 @@ describe("DatePicker", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders single-letter weekday shorthands for locale='en'", async () => {
+    const { container } = render(DatePicker, { datePickerType: "single" });
+
+    await user.click(screen.getByLabelText("Date"));
+    await screen.findByLabelText("calendar-container");
+
+    const weekdays = Array.from(
+      container.querySelectorAll(".flatpickr-weekday"),
+    ).map((node) => node.textContent?.trim());
+
+    expect(weekdays).toEqual(["S", "M", "T", "W", "Th", "F", "S"]);
+  });
+
   it("renders range mode", async () => {
     const { container } = render(DatePickerRange);
 
