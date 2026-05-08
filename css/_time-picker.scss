@@ -1,0 +1,25 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// Widen the time picker input when invalid or warn icon is rendered,
+// matching upstream Carbon React's `.cds--time-picker__input-field-error`.
+// Also reveal the sibling form-requirement for the warn state, since
+// carbon-components v10 only ships display rules for `--invalid`.
+@mixin time-picker-error-width {
+  .#{$prefix}--time-picker__input-field.#{$prefix}--text-input--invalid,
+  .#{$prefix}--time-picker__input-field.#{$prefix}--text-input--warning {
+    inline-size: 6.175rem;
+  }
+
+  .#{$prefix}--time-picker--warn ~ .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: to-rem(200px);
+    font-weight: 400;
+  }
+}
+
+@include exports('time-picker-error-width') {
+  @include time-picker-error-width;
+}

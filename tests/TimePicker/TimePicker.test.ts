@@ -77,6 +77,36 @@ describe("TimePicker", () => {
     expect(input).not.toHaveAttribute("aria-invalid");
   });
 
+  it("should handle warn state", () => {
+    render(TimePicker, {
+      props: { warn: true, warnText: "Time may be unusual" },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveClass("bx--text-input--warning");
+    expect(input).not.toHaveClass("bx--text-input--invalid");
+    expect(screen.getByText("Time may be unusual")).toHaveClass(
+      "bx--form-requirement",
+    );
+  });
+
+  it("should prefer invalid over warn when both are set", () => {
+    render(TimePicker, {
+      props: {
+        invalid: true,
+        invalidText: "Invalid time",
+        warn: true,
+        warnText: "Time may be unusual",
+      },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveClass("bx--text-input--invalid");
+    expect(input).not.toHaveClass("bx--text-input--warning");
+    expect(screen.getByText("Invalid time")).toBeInTheDocument();
+    expect(screen.queryByText("Time may be unusual")).not.toBeInTheDocument();
+  });
+
   it("should handle hidden label", () => {
     render(TimePicker, { props: { hideLabel: true } });
 

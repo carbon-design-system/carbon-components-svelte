@@ -18,6 +18,8 @@
   export let hideLabel: ComponentProps<TimePicker>["hideLabel"] = false;
   export let invalid: ComponentProps<TimePicker>["invalid"] = false;
   export let invalidText: ComponentProps<TimePicker>["invalidText"] = "";
+  export let warn: ComponentProps<TimePicker>["warn"] = false;
+  export let warnText: ComponentProps<TimePicker>["warnText"] = "";
   export let id: ComponentProps<TimePicker>["id"] = "ccs-test";
   export let name: ComponentProps<TimePicker>["name"] = "test-time";
   export let ref: ComponentProps<TimePicker>["ref"] = null;
@@ -35,6 +37,8 @@
   {hideLabel}
   {invalid}
   {invalidText}
+  {warn}
+  {warnText}
   {id}
   {name}
   {ref}
