@@ -38,6 +38,12 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
+  /** Set to `true` to indicate a warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Set an id for the input element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -50,6 +56,7 @@
   /** Obtain a reference to the input HTML element */
   export let ref = null;
 
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
 
   $: errorId = `error-${id}`;
@@ -69,6 +76,7 @@
     class:bx--time-picker={true}
     class:bx--time-picker--light={light}
     class:bx--time-picker--invalid={invalid}
+    class:bx--time-picker--warn={warn}
     class:bx--time-picker--sm={size === "sm"}
     class:bx--time-picker--xl={size === "xl"}
     class:bx--select--light={light}
@@ -85,37 +93,53 @@
         </label>
       {/if}
       <Stack orientation="horizontal" gap={0}>
-        <input
-          bind:this={ref}
-          bind:value
-          type="text"
+        <div
           data-invalid={invalid || undefined}
-          aria-invalid={invalid || undefined}
-          aria-describedby={invalid ? errorId : undefined}
-          {pattern}
-          {placeholder}
-          {maxlength}
-          {id}
-          {name}
-          {disabled}
-          {...$$restProps}
-          class:bx--time-picker__input-field={true}
-          class:bx--text-input={true}
-          class:bx--text-input--light={light}
-          class:bx--text-input--invalid={invalid}
-          on:change
-          on:input
-          on:keydown
-          on:keyup
-          on:focus
-          on:blur
-          on:paste
+          data-warn={!invalid && warn ? true : undefined}
+          class:bx--text-input__field-wrapper={true}
+          class:bx--text-input__field-wrapper--warning={!invalid && warn}
+          style:width="auto"
         >
+          {#if !invalid && warn}
+            <WarningAltFilled
+              class="bx--text-input__invalid-icon bx--text-input__invalid-icon--warning"
+            />
+          {/if}
+          <input
+            bind:this={ref}
+            bind:value
+            type="text"
+            data-invalid={invalid || undefined}
+            aria-invalid={invalid || undefined}
+            aria-describedby={invalid ? errorId : undefined}
+            {pattern}
+            {placeholder}
+            {maxlength}
+            {id}
+            {name}
+            {disabled}
+            {...$$restProps}
+            class:bx--time-picker__input-field={true}
+            class:bx--text-input={true}
+            class:bx--text-input--light={light}
+            class:bx--text-input--invalid={invalid}
+            class:bx--text-input--warning={!invalid && warn}
+            on:change
+            on:input
+            on:keydown
+            on:keyup
+            on:focus
+            on:blur
+            on:paste
+          >
+        </div>
         <slot />
       </Stack>
     </div>
   </div>
   {#if invalid}
     <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+  {:else if warn}
+    <div class:bx--form-requirement={true}>{warnText}</div>
   {/if}
 </div>
