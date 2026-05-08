@@ -10,3 +10,25 @@
 @include exports('datepicker-input-wrapper') {
   @include date-picker-input-wrapper;
 }
+
+// Backports readonly date picker styles from carbon-components v11+ to
+// carbon-components v10.58.12.
+
+@mixin date-picker-readonly {
+  .#{$prefix}--date-picker__input[readonly] {
+    background: transparent;
+    border-bottom-color: $disabled-02;
+    cursor: text;
+  }
+
+  // Use a wrapper-level class because flatpickr injects a `.flatpickr-wrapper`
+  // around the first input in `static` mode, which breaks the `~` sibling
+  // combinator from the input to the icon.
+  .#{$prefix}--date-picker-input__wrapper--readonly .#{$prefix}--date-picker__icon {
+    fill: $disabled-02;
+  }
+}
+
+@include exports('datepicker-readonly') {
+  @include date-picker-readonly;
+}
