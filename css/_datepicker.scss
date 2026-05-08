@@ -46,3 +46,23 @@
 @include exports('datepicker-disabled') {
   @include date-picker-disabled;
 }
+
+// Flatpickr 4.6+ applies `.flatpickr-disabled` to the prev/next month nav
+// buttons when navigation is bounded by `minDate`/`maxDate`. Carbon only styles
+// the legacy `.disabled` class.
+@mixin date-picker-month-nav-disabled {
+  .flatpickr-prev-month.flatpickr-disabled,
+  .flatpickr-next-month.flatpickr-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .flatpickr-prev-month.flatpickr-disabled svg,
+  .flatpickr-next-month.flatpickr-disabled svg {
+    fill: $icon-disabled;
+  }
+}
+
+@include exports('datepicker-month-nav-disabled') {
+  @include date-picker-month-nav-disabled;
+}
