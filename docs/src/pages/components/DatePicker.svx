@@ -107,18 +107,32 @@ Use the light variant for light backgrounds.
 
 ## Extra-large size
 
-Use the extra-large size for more prominent date pickers.
+Set `size` to `"xl"` on `DatePickerInput` for a more prominent input.
 
-<DatePicker>
+<DatePicker datePickerType="single">
   <DatePickerInput size="xl" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+## Extra-large size (range)
+
+<DatePicker datePickerType="range">
+  <DatePickerInput size="xl" labelText="Start date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="xl" labelText="End date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Small size
 
-Use the small size for compact date pickers.
+Set `size` to `"sm"` on `DatePickerInput` for a compact input.
 
-<DatePicker>
+<DatePicker datePickerType="single">
   <DatePickerInput size="sm" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+## Small size (range)
+
+<DatePicker datePickerType="range">
+  <DatePickerInput size="sm" labelText="Start date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="sm" labelText="End date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Invalid state
