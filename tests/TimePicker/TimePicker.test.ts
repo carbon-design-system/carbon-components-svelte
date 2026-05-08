@@ -310,7 +310,7 @@ describe("TimePicker", () => {
       props: { selectReadonly: true },
     });
 
-    const selects = screen.getAllByRole("combobox") as HTMLSelectElement[];
+    const selects = screen.getAllByRole("combobox");
     for (const select of selects) {
       expect(select).toHaveAttribute("aria-readonly", "true");
       expect(select.closest(".bx--time-picker__select")).toHaveClass(
@@ -319,6 +319,7 @@ describe("TimePicker", () => {
     }
 
     const [select] = selects;
+    assert.instanceOf(select, HTMLSelectElement);
     const initialValue = select.value;
     await user.click(select);
     await user.keyboard("{ArrowDown}");
