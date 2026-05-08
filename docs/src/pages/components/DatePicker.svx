@@ -29,6 +29,28 @@ Use `bind:valueFrom` and `bind:valueTo` to programmatically update the date rang
 
 <FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
 
+## Minimum and maximum dates
+
+Use `minDate` and `maxDate` to constrain selectable dates. Values may be a `Date`, or a string in the same format as `dateFormat`.
+
+<FileSource src="/framed/DatePicker/DatePickerMinMax" />
+
+## Flatpickr options
+
+Use `flatpickrProps` to pass additional [Flatpickr options](https://flatpickr.js.org/options/). These merge with the options Carbon sets internally (for example `static`, `clickOpens`, and top-layer `appendTo` when using `portalMenu`). Override props such as `static` only when you understand how they interact with portalling and modals.
+
+The example below sets `showMonths` so two months appear side by side in the calendar.
+
+<FileSource src="/framed/DatePicker/DatePickerFlatpickrProps" />
+
+## Calendar-only selection
+
+By default, Carbon enables Flatpickr `allowInput` so typed dates work like an editable field.
+
+Pass `flatpickrProps={{ allowInput: false }}` when you want calendar-only selection: the field still receives the chosen date and remains focusable for accessibility, but users cannot free-type into the input—they must pick a date from the calendar. That reduces invalid or ambiguous typed values when you need strict control.
+
+<FileSource src="/framed/DatePicker/DatePickerAllowInput" />
+
 ## Custom date format
 
 Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The input `pattern` attribute is automatically derived to match, ensuring native form validation works correctly.
