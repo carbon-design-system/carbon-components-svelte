@@ -194,6 +194,85 @@ test.describe("DatePicker", () => {
     );
   });
 
+  test("range: switching between inputs keeps calendar open without replaying animation", async ({
+    page,
+  }) => {
+    await page.getByTestId("date-picker-range-start").click();
+    const calendar = page
+      .getByTestId("date-picker-range")
+      .getByLabel("calendar-container");
+    await expect(calendar).toHaveClass(/open/);
+
+    // Wait for the initial open animation to finish before instrumenting so we
+    // don't catch its animationstart. Switching focus between the two inputs
+    // must not replay the slide-in animation.
+    await page.waitForTimeout(300);
+    await page.evaluate(() => {
+      const cals = document.querySelectorAll(".flatpickr-calendar");
+      const cal = cals[cals.length - 1] as HTMLElement;
+      const w = window as unknown as { __fpAnimStarts: number };
+      w.__fpAnimStarts = 0;
+      cal.addEventListener("animationstart", (e) => {
+        if ((e as AnimationEvent).animationName === "fpFadeInDown") {
+          w.__fpAnimStarts += 1;
+        }
+      });
+    });
+
+    await page.getByTestId("date-picker-range-end").click();
+    await expect(calendar).toHaveClass(/open/);
+    await page.getByTestId("date-picker-range-start").click();
+    await expect(calendar).toHaveClass(/open/);
+    await page.waitForTimeout(300);
+
+    const finalStarts = await page.evaluate(
+      () => (window as unknown as { __fpAnimStarts: number }).__fpAnimStarts,
+    );
+    expect(finalStarts).toBe(0);
+  });
+
+  test("tab blur/refocus does not replay open animation", async ({
+    page,
+    context,
+  }) => {
+    const input = page.getByLabel("Meeting date");
+    await input.click();
+    const calendar = page
+      .getByTestId("date-picker-single")
+      .getByLabel("calendar-container");
+    await expect(calendar).toHaveClass(/open/);
+
+    // Wait for the initial open animation to finish before instrumenting.
+    await page.waitForTimeout(300);
+    await page.evaluate(() => {
+      const cals = document.querySelectorAll(".flatpickr-calendar");
+      const cal = cals[0] as HTMLElement;
+      const w = window as unknown as { __fpAnimStarts: number };
+      w.__fpAnimStarts = 0;
+      cal.addEventListener("animationstart", (e) => {
+        if ((e as AnimationEvent).animationName === "fpFadeInDown") {
+          w.__fpAnimStarts += 1;
+        }
+      });
+    });
+
+    // Simulate a tab blur/refocus: opening another page steals focus from the
+    // input, then bringing the original page back refocuses it.
+    const other = await context.newPage();
+    await other.goto("about:blank");
+    await other.bringToFront();
+    await page.waitForTimeout(100);
+    await page.bringToFront();
+    await other.close();
+    await page.waitForTimeout(300);
+
+    await expect(calendar).toHaveClass(/open/);
+    const finalStarts = await page.evaluate(
+      () => (window as unknown as { __fpAnimStarts: number }).__fpAnimStarts,
+    );
+    expect(finalStarts).toBe(0);
+  });
+
   test("range: Escape closes calendar", async ({ page }) => {
     await page.getByTestId("date-picker-range-start").click();
     const calendar = page
