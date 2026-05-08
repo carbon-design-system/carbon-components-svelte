@@ -29,7 +29,7 @@
     "prismjs": "^1.30.0",
     "rehype-slug": "^6.0.0",
     "svelte": "^5.55.4",
-    "vite": "^8.0.8"
+    "vite": "^8.0.10"
   },
   "type": "module"
 }
