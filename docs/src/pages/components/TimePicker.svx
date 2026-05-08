@@ -83,6 +83,21 @@ Indicate an invalid state with an error message by setting `invalid` to `true` a
   </TimePickerSelect>
 </TimePicker>
 
+## Warning state
+
+Indicate a warning state with a warning message by setting `warn` to `true` and providing `warnText`.
+
+<TimePicker warn warnText="Time is outside business hours" labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="pdt">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
 ## Disabled state
 
 Disable the time picker to prevent user interaction by setting `disabled` to `true`.
