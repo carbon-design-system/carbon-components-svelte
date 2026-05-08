@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { DatePickerSkeleton } from "carbon-components-svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DatePicker from "./DatePicker.test.svelte";
@@ -408,5 +409,14 @@ describe("DatePicker", () => {
       expect(wrapper?.contains(calendar)).toBe(true);
       expect(calendar.classList.contains("static")).toBe(true);
     });
+  });
+});
+
+describe("DatePickerSkeleton", () => {
+  it("renders decorative label placeholders without label elements in range mode", () => {
+    const { container } = render(DatePickerSkeleton, { range: true });
+
+    expect(container.querySelectorAll("label")).toHaveLength(0);
+    expect(container.querySelectorAll("span.bx--label")).toHaveLength(2);
   });
 });
