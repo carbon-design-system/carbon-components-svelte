@@ -49,6 +49,17 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+## Helper text
+
+Add descriptive text below the combobox using the `helperText` prop.
+
+<ComboBox helperText="Choose your preferred contact method" labelText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
 ## Reactive example
 
 See how the combobox responds to user input and selection changes.
