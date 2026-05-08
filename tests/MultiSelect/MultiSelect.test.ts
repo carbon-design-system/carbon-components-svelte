@@ -2192,6 +2192,27 @@ describe("MultiSelect", () => {
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).not.toBeInTheDocument();
     });
+
+    // Regression: when portaled, the menu loses its `.bx--multi-select`
+    // ancestor, so descendant CSS rules (e.g. checkbox-wrapper sizing) stop
+    // matching and the checkbox/label visually shift down inside each row.
+    // The menu must be wrapped with `bx--multi-select bx--list-box--expanded`
+    // so those selectors keep matching.
+    it("should wrap portaled menu with multi-select host classes", () => {
+      render(MultiSelect, {
+        props: {
+          items: [{ id: "0", text: "Slack" }],
+          portalMenu: true,
+          open: true,
+        },
+      });
+
+      const menu = screen.getByRole("listbox");
+      const host = menu.parentElement;
+      expect(host).toHaveClass("bx--multi-select");
+      expect(host).toHaveClass("bx--list-box--expanded");
+      expect(host?.parentElement).toHaveAttribute("data-floating-portal");
+    });
   });
 
   describe("filterable: Backspace/Delete clears selection", () => {
