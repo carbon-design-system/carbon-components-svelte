@@ -1,8 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { DatePickerSkeleton } from "carbon-components-svelte";
+import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DatePicker from "./DatePicker.test.svelte";
+import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
 import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
@@ -379,6 +381,79 @@ describe("DatePicker", () => {
       // This is how browsers evaluate the HTML pattern attribute.
       const re = new RegExp(`^(?:${pattern})$`, "u");
       expect(re.test(sampleValue)).toBe(true);
+    });
+  });
+
+  describe("bind:calendar", () => {
+    it("is null in simple mode (no calendar is created)", async () => {
+      let captured: unknown = "unset";
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "simple",
+          oncalendar: (cal) => {
+            captured = cal;
+          },
+        },
+      });
+
+      await tick();
+      expect(captured).toBeNull();
+    });
+
+    it("exposes the flatpickr instance in single mode", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "single",
+          oncalendar: (cal) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      // Smoke-check the flatpickr API surface — these are the methods
+      // consumers are most likely to call imperatively.
+      expect(typeof instance.open).toBe("function");
+      expect(typeof instance.close).toBe("function");
+      expect(typeof instance.setDate).toBe("function");
+      expect(typeof instance.jumpToDate).toBe("function");
+      expect(typeof instance.set).toBe("function");
+      expect(instance.isOpen).toBe(false);
+    });
+
+    it("can open and close the calendar via the bound instance", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "single",
+          oncalendar: (cal) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      expect(instance.isOpen).toBe(false);
+
+      instance.open();
+      await tick();
+      expect(instance.isOpen).toBe(true);
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).toHaveClass("open");
+
+      instance.close();
+      await tick();
+      expect(instance.isOpen).toBe(false);
+      expect(calendar).not.toHaveClass("open");
     });
   });
 
