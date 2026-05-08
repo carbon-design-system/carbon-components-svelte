@@ -198,7 +198,7 @@ When only some tabs use `secondaryLabel`, the container still applies the taller
   </svelte:fragment>
 </Tabs>
 
-## Container type (`secondaryChildren` slot)
+## Container type (secondaryChildren slot)
 
 Use the `secondaryChildren` slot to customize the secondary label with custom markup (e.g. `<strong>` for emphasis).
 
