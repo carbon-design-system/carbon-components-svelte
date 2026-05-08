@@ -32,3 +32,17 @@
 @include exports('datepicker-readonly') {
   @include date-picker-readonly;
 }
+
+// Carbon's `:disabled ~ .icon` rule fails for the same reason the readonly
+// fix above is needed: flatpickr's `.flatpickr-wrapper` breaks the sibling
+// combinator. Match it via the wrapper class instead.
+@mixin date-picker-disabled {
+  .#{$prefix}--date-picker-input__wrapper--disabled .#{$prefix}--date-picker__icon {
+    cursor: not-allowed;
+    fill: $icon-disabled;
+  }
+}
+
+@include exports('datepicker-disabled') {
+  @include date-picker-disabled;
+}
