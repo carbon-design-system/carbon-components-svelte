@@ -165,5 +165,22 @@ describe("ListBoxMenu", () => {
       expect(component.ref).toHaveClass("bx--list-box__menu");
       expect(component.ref).toContainElement(menu);
     });
+
+    it("should wrap menu with portalHostClass so descendant CSS selectors match", async () => {
+      render(ListBoxMenu, {
+        props: {
+          slotContent: "Wrapped menu",
+          portal: true,
+          open: true,
+          portalHostClass: "bx--multi-select bx--list-box--expanded",
+        },
+      });
+
+      const menu = await screen.findByText("Wrapped menu");
+      const wrapper = menu.closest(".bx--list-box__menu")?.parentElement;
+      expect(wrapper).toHaveClass("bx--multi-select");
+      expect(wrapper).toHaveClass("bx--list-box--expanded");
+      expect(wrapper?.parentElement).toHaveAttribute("data-floating-portal");
+    });
   });
 });
