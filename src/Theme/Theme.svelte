@@ -32,7 +32,7 @@
 
   /**
    * Customize a theme with your own tokens.
-   * @see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme
+   * @see https://carbondesignsystem.com/elements/themes/overview/#customizing-a-theme
    * @type {Tokens}
    */
   export let tokens = /** @type {Tokens} */ ({});
