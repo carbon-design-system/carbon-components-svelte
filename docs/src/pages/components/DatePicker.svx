@@ -137,12 +137,29 @@ Show a warning state to indicate potential issues with the input.
   <DatePickerInput warn warnText="This info will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Disabled state
+## Disabled state (simple)
 
-Disable the date picker to prevent user interaction.
+With the default `datePickerType` (`"simple"`), `disabled` prevents interaction and styles the field as unavailable.
 
-<DatePicker>
+<DatePicker value="01/15/1990">
   <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+## Disabled state (single)
+
+Set `disabled` to `true` to block interaction with the single-date picker and calendar.
+
+<DatePicker datePickerType="single" value="01/15/1990">
+  <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+## Disabled state (range)
+
+Apply `disabled` to each `DatePickerInput` in a range picker when both fields should be unavailable.
+
+<DatePicker datePickerType="range" valueFrom="01/01/2025" valueTo="01/31/2025">
+  <DatePickerInput disabled labelText="Start date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput disabled labelText="End date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Read-only state (simple)
