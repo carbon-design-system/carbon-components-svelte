@@ -67,6 +67,12 @@ When the date picker is inside an open element with a [`popover`](https://develo
 
 <FileSource src="/framed/DatePicker/DatePickerPopover" />
 
+## Programmatic calendar access
+
+Use `bind:calendar` to access the underlying [Flatpickr instance](https://flatpickr.js.org/instance-methods-properties-elements/) for programmatic control, such as opening the calendar from an external trigger or updating options at runtime via `set`.
+
+<FileSource src="/framed/DatePicker/DatePickerCalendarInstance" />
+
 ## Simple
 
 Create a simple date picker without a dropdown calendar.
