@@ -12,6 +12,13 @@
   $: oncalendar(calendar);
 </script>
 
-<DatePicker {datePickerType} bind:calendar>
-  <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
-</DatePicker>
+{#if datePickerType === "range"}
+  <DatePicker {datePickerType} bind:calendar>
+    <DatePickerInput labelText="Start date" placeholder="mm/dd/yyyy" />
+    <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" />
+  </DatePicker>
+{:else}
+  <DatePicker {datePickerType} bind:calendar>
+    <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
+  </DatePicker>
+{/if}

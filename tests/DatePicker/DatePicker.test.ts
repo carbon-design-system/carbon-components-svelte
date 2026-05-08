@@ -427,6 +427,44 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("minDate and maxDate", () => {
+    it("passes bounds to flatpickr config", async () => {
+      const minDate = new Date(2026, 0, 10);
+      const maxDate = new Date(2026, 0, 20);
+      render(DatePicker, {
+        datePickerType: "single",
+        minDate,
+        maxDate,
+      });
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement & {
+        _flatpickr: Instance;
+      };
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+
+      const fp = input._flatpickr;
+      expect(fp).toBeTruthy();
+      expect(fp.config.minDate?.getTime?.()).toBe(minDate.getTime());
+      expect(fp.config.maxDate?.getTime?.()).toBe(maxDate.getTime());
+    });
+  });
+
+  describe("flatpickrProps", () => {
+    it("merges showMonths into the calendar", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { showMonths: 2 },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(calendar.querySelectorAll(".flatpickr-month").length).toBe(2);
+    });
+  });
+
   describe("bind:calendar", () => {
     it("is null in simple mode (no calendar is created)", async () => {
       let captured: unknown = "unset";
@@ -497,6 +535,27 @@ describe("DatePicker", () => {
       await tick();
       expect(instance.isOpen).toBe(false);
       expect(calendar).not.toHaveClass("open");
+    });
+
+    it("exposes the flatpickr instance in range mode", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "range",
+          oncalendar: (cal) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      expect(typeof instance.setDate).toBe("function");
+      expect(typeof instance.open).toBe("function");
+      expect(typeof instance.close).toBe("function");
     });
   });
 
