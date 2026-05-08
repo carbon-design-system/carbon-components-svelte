@@ -124,6 +124,16 @@ Display the dropdown menu above the input by setting `direction` to `"top"`. Thi
     {id: "2", text: "Fax"}]}"
   />
 
+## Helper text
+
+Add descriptive text below the multi-select using the `helperText` prop.
+
+<MultiSelect helperText="Select one or more contact methods" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ## Hidden label
 
 Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
