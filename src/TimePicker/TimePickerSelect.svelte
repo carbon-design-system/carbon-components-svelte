@@ -68,6 +68,10 @@
     on:change={({ target }) => {
       selectedValue.set(target.value);
     }}
+    on:change
+    on:input
+    on:focus
+    on:blur
   >
     <slot />
   </select>
