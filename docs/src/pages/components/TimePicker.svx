@@ -68,6 +68,21 @@ Use the small size for more compact time pickers by setting `size` to `"sm"`.
   </TimePickerSelect>
 </TimePicker>
 
+## Helper text
+
+Add helper text to provide additional context or formatting instructions.
+
+<TimePicker labelText="Cron job" placeholder="hh:mm" helperText="24-hour, e.g. 14:30">
+  <TimePickerSelect value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="pdt">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
 ## Invalid state
 
 Indicate an invalid state with an error message by setting `invalid` to `true` and providing `invalidText`.
