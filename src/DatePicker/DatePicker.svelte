@@ -86,7 +86,7 @@
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
-  import { createCalendar } from "./createCalendar";
+  import { createCalendar, resolveLocale } from "./createCalendar";
   import {
     getTopLayerAncestor,
     isEventTargetInsidePortaledCalendar,
@@ -230,7 +230,7 @@
     if (calendar) {
       calendar.set("minDate", minDate);
       calendar.set("maxDate", maxDate);
-      calendar.set("locale", locale);
+      calendar.set("locale", resolveLocale(locale));
       calendar.set("dateFormat", dateFormat);
       for (const [option, value] of Object.entries(flatpickrProps)) {
         calendar.set(option, value);
