@@ -23,3 +23,30 @@
 @include exports('time-picker-error-width') {
   @include time-picker-error-width;
 }
+
+/// Readonly time picker styles (backported from carbon-components v11+ for v10)
+/// @access private
+/// @group time-picker
+@mixin time-picker-readonly {
+  .#{$prefix}--time-picker--readonly .#{$prefix}--time-picker__input-field[readonly] {
+    background: transparent;
+    border-bottom-color: $disabled-02;
+    cursor: text;
+  }
+
+  // The chevron in `TimePickerSelect` is purely decorative when the time
+  // picker is read-only. The native `<select>` remains focusable so the value
+  // is announced, but pointer-events are disabled to prevent opening the menu.
+  .#{$prefix}--time-picker--readonly .#{$prefix}--select-input {
+    border-bottom-color: $disabled-02;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--time-picker--readonly .#{$prefix}--select__arrow {
+    fill: $disabled-02;
+  }
+}
+
+@include exports('time-picker-readonly') {
+  @include time-picker-readonly;
+}

@@ -50,6 +50,25 @@ describe("TimePicker", () => {
     expect(screen.getByText("Time")).toHaveClass("bx--label--disabled");
   });
 
+  it("should handle readonly state", () => {
+    const { container } = render(TimePicker, { props: { readonly: true } });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("readonly");
+    expect(container.querySelector(".bx--time-picker")).toHaveClass(
+      "bx--time-picker--readonly",
+    );
+    expect(screen.getByText("Time")).toHaveClass("bx--label--readonly");
+  });
+
+  it("should not change value when readonly", async () => {
+    render(TimePicker, { props: { readonly: true, value: "10:30" } });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "11:45");
+    expect(input).toHaveValue("10:30");
+  });
+
   it("should handle invalid state", () => {
     render(TimePicker, {
       props: {
