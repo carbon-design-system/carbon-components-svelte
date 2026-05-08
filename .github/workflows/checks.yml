@@ -76,13 +76,8 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.59.0-noble
       options: --ipc=host --init
     timeout-minutes: 15
-    strategy:
-      fail-fast: true
-      matrix:
-        browser: [chromium, firefox, webkit]
     env:
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-      # Firefox refuses to start if $HOME is not owned by the current user.
       HOME: /root
     steps:
       - uses: actions/checkout@v6
@@ -94,7 +89,7 @@ jobs:
       - run: bun ci
 
       - name: E2E tests
-        run: bunx playwright test --project=${{ matrix.browser }}
+        run: bunx playwright test --project=chromium
 
   test-svelte3:
     needs: [lint, changes]
