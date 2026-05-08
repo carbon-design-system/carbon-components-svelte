@@ -78,6 +78,14 @@
    */
   export let flatpickrProps = { static: true };
 
+  /**
+   * Bind to the Flatpickr calendar instance for programmatic control.
+   * Only available when `datePickerType` is `"single"` or `"range"`.
+   * @see https://flatpickr.js.org/instance-methods-properties-elements/
+   * @type {import("flatpickr/dist/types/instance").Instance | null}
+   */
+  export let calendar = null;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -131,7 +139,6 @@
    */
   const hasCalendar = derived(mode, (_) => _ === "single" || _ === "range");
 
-  let calendar = null;
   let datePickerRef = null;
   let inputRef = null;
   let inputRefTo = null;
