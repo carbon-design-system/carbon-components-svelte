@@ -149,6 +149,22 @@
   let prevValueFrom = valueFrom;
   let prevValueTo = valueTo;
   let lastAppliedOptions = {};
+  let calendarUsesFixedPositioning = false;
+  let onCalendarReposition = null;
+
+  function attachFixedRepositionListeners() {
+    if (!calendar || onCalendarReposition) return;
+    onCalendarReposition = () => positionFlatpickrCalendarFixed(calendar);
+    window.addEventListener("scroll", onCalendarReposition, true);
+    window.addEventListener("resize", onCalendarReposition);
+  }
+
+  function detachFixedRepositionListeners() {
+    if (!onCalendarReposition) return;
+    window.removeEventListener("scroll", onCalendarReposition, true);
+    window.removeEventListener("resize", onCalendarReposition);
+    onCalendarReposition = null;
+  }
 
   /**
    * @type {(data: { id: string; labelText: string }) => void}
@@ -283,6 +299,7 @@
     // calendar can participate in its top layer instead of being clipped behind
     // the backdrop. Computed at creation time — appendTo cannot change after.
     const topLayerAncestor = getTopLayerAncestor(datePickerRef);
+    calendarUsesFixedPositioning = effectivePortalMenu && !!topLayerAncestor;
 
     calendar = await createCalendar({
       options: {
@@ -302,6 +319,10 @@
       base: inputRef,
       input: inputRefTo,
       dispatch: (event) => {
+        if (calendarUsesFixedPositioning) {
+          if (event === "open") attachFixedRepositionListeners();
+          else if (event === "close") detachFixedRepositionListeners();
+        }
         const detail = { selectedDates: calendar?.selectedDates || [] };
 
         if ($range) {
@@ -331,6 +352,7 @@
 
   onMount(() => {
     return () => {
+      detachFixedRepositionListeners();
       if (calendar) {
         calendar.destroy();
         calendar = null;
