@@ -3,6 +3,7 @@ import { user } from "../setup-tests";
 import TimePicker from "./TimePicker.test.svelte";
 import TimePickerCustom from "./TimePickerCustom.test.svelte";
 import TimePickerSelectSlot from "./TimePickerSelect.slot.test.svelte";
+import TimePickerSelectEvents from "./TimePickerSelectEvents.test.svelte";
 
 describe("TimePicker", () => {
   it("should render with default props", () => {
@@ -323,5 +324,33 @@ describe("TimePicker", () => {
     await user.keyboard("{ArrowDown}");
     expect(select.value).toBe(initialValue);
     container.remove();
+  });
+
+  it("forwards select events from TimePickerSelect", async () => {
+    const selectChange = vi.fn();
+    const selectInput = vi.fn();
+    const selectFocus = vi.fn();
+    const selectBlur = vi.fn();
+
+    render(TimePickerSelectEvents, {
+      props: {
+        selectChange,
+        selectInput,
+        selectFocus,
+        selectBlur,
+      },
+    });
+
+    const select = screen.getByRole("combobox");
+
+    select.focus();
+    expect(selectFocus).toHaveBeenCalled();
+
+    await user.selectOptions(select, "pm");
+    expect(selectChange).toHaveBeenCalled();
+    expect(selectInput).toHaveBeenCalled();
+
+    select.blur();
+    expect(selectBlur).toHaveBeenCalled();
   });
 });
