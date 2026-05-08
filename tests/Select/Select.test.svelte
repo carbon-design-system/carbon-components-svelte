@@ -15,6 +15,7 @@
   export let size: ComponentProps<Select>["size"] = undefined;
   export let inline = false;
   export let light = false;
+  export let readonly = false;
 </script>
 
 <Select
@@ -31,6 +32,7 @@
   {size}
   {inline}
   {light}
+  {readonly}
   on:change={() => console.log("change")}
   on:input={() => console.log("input")}
   on:update={(e) => console.log("update", e.detail)}
