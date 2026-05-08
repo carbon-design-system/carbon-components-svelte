@@ -258,6 +258,33 @@ describe("DatePicker", () => {
     expect(inputEnd).toHaveValue("03/31/2024");
   });
 
+  // Regression test: afterUpdate should not call calendar.setDate
+  // when the bound value has not actually changed. Previously every
+  // reactive tick (e.g. an unrelated prop update) re-applied setDate.
+  it("does not call calendar.setDate on unrelated reactive updates", async () => {
+    const { rerender } = render(DatePicker, {
+      props: {
+        datePickerType: "single",
+        value: "01/15/2024",
+      },
+    });
+
+    const input = screen.getByLabelText("Date") as HTMLInputElement;
+    await user.click(input);
+    await screen.findByLabelText("calendar-container");
+
+    const fp = (input as unknown as { _flatpickr: { setDate: () => void } })
+      ._flatpickr;
+    expect(fp).toBeTruthy();
+    const setDateSpy = vi.spyOn(fp, "setDate");
+
+    // Trigger a reactive update that does not change value/min/max/format.
+    await rerender({ light: true });
+    await tick();
+
+    expect(setDateSpy).not.toHaveBeenCalled();
+  });
+
   it("supports custom label slot for DatePickerInput", () => {
     render(DatePickerInputSlot);
 

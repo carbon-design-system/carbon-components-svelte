@@ -135,6 +135,10 @@
   let datePickerRef = null;
   let inputRef = null;
   let inputRefTo = null;
+  let prevValue = value;
+  let prevValueFrom = valueFrom;
+  let prevValueTo = valueTo;
+  let lastAppliedOptions = {};
 
   /**
    * @type {(data: { id: string; labelText: string }) => void}
@@ -236,14 +240,21 @@
     focusCalendar,
   });
 
+  function applyOptionIfChanged(key, value, appliedValue = value) {
+    if (lastAppliedOptions[key] !== value) {
+      calendar.set(key, appliedValue);
+      lastAppliedOptions[key] = value;
+    }
+  }
+
   async function initCalendar(options) {
     if (calendar) {
-      calendar.set("minDate", minDate);
-      calendar.set("maxDate", maxDate);
-      calendar.set("locale", resolveLocale(locale));
-      calendar.set("dateFormat", dateFormat);
+      applyOptionIfChanged("minDate", minDate);
+      applyOptionIfChanged("maxDate", maxDate);
+      applyOptionIfChanged("locale", locale, resolveLocale(locale));
+      applyOptionIfChanged("dateFormat", dateFormat);
       for (const [option, value] of Object.entries(flatpickrProps)) {
-        calendar.set(option, value);
+        applyOptionIfChanged(option, value);
       }
       return;
     }
@@ -310,17 +321,25 @@
   afterUpdate(() => {
     if (calendar) {
       if ($range) {
-        calendar.setDate([$inputValueFrom, $inputValueTo]);
+        if (
+          $inputValueFrom !== prevValueFrom ||
+          $inputValueTo !== prevValueTo
+        ) {
+          calendar.setDate([$inputValueFrom, $inputValueTo]);
+          prevValueFrom = $inputValueFrom;
+          prevValueTo = $inputValueTo;
 
-        // workaround to remove the default range plugin separator "to"
-        if ($inputValueFrom !== "") {
-          inputRef.value = $inputValueFrom;
+          // workaround to remove the default range plugin separator "to"
+          if ($inputValueFrom !== "") {
+            inputRef.value = $inputValueFrom;
+          }
+          if ($inputValueTo !== "") {
+            inputRefTo.value = $inputValueTo;
+          }
         }
-        if ($inputValueTo !== "") {
-          inputRefTo.value = $inputValueTo;
-        }
-      } else {
+      } else if ($inputValue !== prevValue) {
         calendar.setDate($inputValue);
+        prevValue = $inputValue;
       }
     }
   });
