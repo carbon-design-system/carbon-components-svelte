@@ -83,6 +83,17 @@ Add helper text to provide additional context or formatting instructions.
   </TimePickerSelect>
 </TimePicker>
 
+## Hidden label
+
+Hide the label while maintaining accessibility.
+
+<TimePicker hideLabel labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+</TimePicker>
+
 ## Invalid state
 
 Indicate an invalid state with an error message by setting `invalid` to `true` and providing `invalidText`.
