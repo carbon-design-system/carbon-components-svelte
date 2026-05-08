@@ -303,4 +303,25 @@ describe("TimePicker", () => {
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
   });
+
+  it("should support readonly on TimePickerSelect", async () => {
+    const { container } = render(TimePickerCustom, {
+      props: { selectReadonly: true },
+    });
+
+    const selects = screen.getAllByRole("combobox") as HTMLSelectElement[];
+    for (const select of selects) {
+      expect(select).toHaveAttribute("aria-readonly", "true");
+      expect(select.closest(".bx--time-picker__select")).toHaveClass(
+        "bx--select--readonly",
+      );
+    }
+
+    const [select] = selects;
+    const initialValue = select.value;
+    await user.click(select);
+    await user.keyboard("{ArrowDown}");
+    expect(select.value).toBe(initialValue);
+    container.remove();
+  });
 });

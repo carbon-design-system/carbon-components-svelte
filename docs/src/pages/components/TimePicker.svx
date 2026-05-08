@@ -130,14 +130,14 @@ Disable the time picker to prevent user interaction by setting `disabled` to `tr
 
 ## Read-only state
 
-Set `readonly` to `true` to display a value while preventing edits. Unlike `disabled`, the input remains focusable and its value is submitted with the form.
+Set `readonly` to `true` to display a value while preventing edits. Unlike `disabled`, the input remains focusable and its value is submitted with the form. `TimePickerSelect` also accepts a `readonly` prop so the period and timezone selectors match.
 
 <TimePicker readonly labelText="Cron job" placeholder="hh:mm" value="10:30">
-  <TimePickerSelect value="pm">
+  <TimePickerSelect readonly value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
-  <TimePickerSelect value="pdt">
+  <TimePickerSelect readonly value="pdt">
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
