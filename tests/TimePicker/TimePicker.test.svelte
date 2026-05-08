@@ -20,6 +20,7 @@
   export let invalidText: ComponentProps<TimePicker>["invalidText"] = "";
   export let warn: ComponentProps<TimePicker>["warn"] = false;
   export let warnText: ComponentProps<TimePicker>["warnText"] = "";
+  export let helperText: ComponentProps<TimePicker>["helperText"] = "";
   export let id: ComponentProps<TimePicker>["id"] = "ccs-test";
   export let name: ComponentProps<TimePicker>["name"] = "test-time";
   export let ref: ComponentProps<TimePicker>["ref"] = null;
@@ -39,6 +40,7 @@
   {invalidText}
   {warn}
   {warnText}
+  {helperText}
   {id}
   {name}
   {ref}

@@ -209,6 +209,58 @@ describe("TimePicker", () => {
     expect(screen.getByText("Invalid time")).toBeInTheDocument();
   });
 
+  it("should render helper text", () => {
+    render(TimePicker, {
+      props: { id: "test-id", helperText: "24-hour, e.g. 14:30" },
+    });
+
+    const helper = screen.getByText("24-hour, e.g. 14:30");
+    expect(helper).toBeInTheDocument();
+    expect(helper).toHaveClass("bx--form__helper-text");
+    expect(helper).toHaveAttribute("id", "helper-test-id");
+    expect(screen.getByRole("textbox")).toHaveAttribute(
+      "aria-describedby",
+      "helper-test-id",
+    );
+  });
+
+  it("should associate error message via aria-describedby when invalid", () => {
+    render(TimePicker, {
+      props: { id: "test-id", invalid: true, invalidText: "Invalid time" },
+    });
+
+    expect(screen.getByText("Invalid time")).toHaveAttribute(
+      "id",
+      "error-test-id",
+    );
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("aria-describedby", "error-test-id");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("should not render helper text when invalid", () => {
+    render(TimePicker, {
+      props: {
+        helperText: "24-hour, e.g. 14:30",
+        invalid: true,
+        invalidText: "Invalid time",
+      },
+    });
+
+    expect(screen.queryByText("24-hour, e.g. 14:30")).not.toBeInTheDocument();
+    expect(screen.getByText("Invalid time")).toBeInTheDocument();
+  });
+
+  it("should apply disabled class to helper text when disabled", () => {
+    render(TimePicker, {
+      props: { helperText: "24-hour, e.g. 14:30", disabled: true },
+    });
+
+    expect(screen.getByText("24-hour, e.g. 14:30")).toHaveClass(
+      "bx--form__helper-text--disabled",
+    );
+  });
+
   it("should handle label text slot", () => {
     render(TimePickerCustom);
 
