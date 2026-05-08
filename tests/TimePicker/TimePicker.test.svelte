@@ -14,6 +14,7 @@
   export let maxlength: ComponentProps<TimePicker>["maxlength"] = 5;
   export let light: ComponentProps<TimePicker>["light"] = false;
   export let disabled: ComponentProps<TimePicker>["disabled"] = false;
+  export let readonly: ComponentProps<TimePicker>["readonly"] = false;
   export let labelText: ComponentProps<TimePicker>["labelText"] = "Time";
   export let hideLabel: ComponentProps<TimePicker>["hideLabel"] = false;
   export let invalid: ComponentProps<TimePicker>["invalid"] = false;
@@ -34,6 +35,7 @@
   {maxlength}
   {light}
   {disabled}
+  {readonly}
   {labelText}
   {hideLabel}
   {invalid}

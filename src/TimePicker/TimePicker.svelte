@@ -26,6 +26,9 @@
   /** Set to `true` to disable the input */
   export let disabled = false;
 
+  /** Set to `true` to mark the input as read-only */
+  export let readonly = false;
+
   /** Specify the label text */
   export let labelText = "";
 
@@ -82,6 +85,7 @@
     class:bx--time-picker--light={light}
     class:bx--time-picker--invalid={invalid}
     class:bx--time-picker--warn={warn}
+    class:bx--time-picker--readonly={readonly}
     class:bx--time-picker--sm={size === "sm"}
     class:bx--time-picker--xl={size === "xl"}
     class:bx--select--light={light}
@@ -93,6 +97,7 @@
           class:bx--label={true}
           class:bx--visually-hidden={hideLabel}
           class:bx--label--disabled={disabled}
+          class:bx--label--readonly={readonly}
         >
           <slot name="labelChildren"> {labelText} </slot>
         </label>
@@ -129,6 +134,7 @@
             {id}
             {name}
             {disabled}
+            readonly={readonly || undefined}
             {...$$restProps}
             class:bx--time-picker__input-field={true}
             class:bx--text-input={true}
