@@ -26,6 +26,7 @@
   export let portalMenu = false;
   export let pattern: ComponentProps<DatePickerInput>["pattern"] = undefined;
   export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
 </script>
 
 <DatePicker
@@ -54,5 +55,6 @@
     {helperText}
     {hideLabel}
     {pattern}
+    on:focus={(e) => onfocus?.(e)}
   />
 </DatePicker>

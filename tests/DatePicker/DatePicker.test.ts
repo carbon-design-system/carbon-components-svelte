@@ -110,6 +110,21 @@ describe("DatePicker", () => {
     expect(screen.getByText("Date")).toHaveClass("bx--visually-hidden");
   });
 
+  it("forwards focus event from the input", () => {
+    const focusHandler = vi.fn();
+    render(DatePicker, {
+      props: {
+        onfocus: focusHandler,
+      },
+    });
+
+    const input = screen.getByLabelText("Date");
+    input.focus();
+
+    expect(focusHandler).toHaveBeenCalled();
+    expect(focusHandler.mock.lastCall?.[0]).toBeInstanceOf(FocusEvent);
+  });
+
   it("dispatches change event when manually typing in simple mode", async () => {
     const changeHandler = vi.fn();
     render(DatePicker, {

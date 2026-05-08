@@ -167,6 +167,7 @@
         }
       }}
       on:keyup
+      on:focus
       on:blur
       on:blur={({ relatedTarget }) => {
         blurInput(relatedTarget);
