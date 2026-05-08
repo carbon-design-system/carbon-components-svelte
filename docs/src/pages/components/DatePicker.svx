@@ -145,6 +145,31 @@ Disable the date picker to prevent user interaction.
   <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
+## Read-only state (simple)
+
+With the default `datePickerType` (`"simple"`), `readonly` shows a fixed value in the text field without a calendar.
+
+<DatePicker value="01/15/1990">
+  <DatePickerInput readonly labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+## Read-only state (single)
+
+Set `readonly` to `true` to display a value while preventing edits. Unlike `disabled`, the input remains focusable and its value is submitted with the form.
+
+<DatePicker datePickerType="single" value="01/15/1990">
+  <DatePickerInput readonly labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+## Read-only state (range)
+
+The `readonly` state also works with range pickers.
+
+<DatePicker datePickerType="range" valueFrom="01/01/2025" valueTo="01/31/2025">
+  <DatePickerInput readonly labelText="Start date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput readonly labelText="End date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
 ## Skeleton
 
 Show a loading state with the skeleton component.
