@@ -47,6 +47,14 @@ index through the `let:` directive.
 
 <FileSource src="/framed/Dropdown/DropdownSlot" />
 
+## Helper text
+
+Add descriptive text below the dropdown using the `helperText` prop.
+
+<Dropdown helperText="Choose your preferred contact method" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ## Hidden label
 
 Hide the label while maintaining accessibility by setting the `hideLabel` prop to
