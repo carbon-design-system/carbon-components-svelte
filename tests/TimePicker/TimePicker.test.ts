@@ -52,15 +52,29 @@ describe("TimePicker", () => {
 
   it("should handle invalid state", () => {
     render(TimePicker, {
-      props: { invalid: true, invalidText: "Invalid time" },
+      props: {
+        id: "time-input",
+        invalid: true,
+        invalidText: "Invalid time",
+      },
     });
 
     const input = screen.getByRole("textbox");
     expect(input).toHaveClass("bx--text-input--invalid");
     expect(input).toHaveAttribute("data-invalid");
-    expect(screen.getByText("Invalid time")).toHaveClass(
-      "bx--form-requirement",
-    );
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAttribute("aria-describedby", "error-time-input");
+    const errorText = screen.getByText("Invalid time");
+    expect(errorText).toHaveClass("bx--form-requirement");
+    expect(errorText).toHaveAttribute("id", "error-time-input");
+  });
+
+  it("should not set aria-describedby when valid", () => {
+    render(TimePicker);
+
+    const input = screen.getByRole("textbox");
+    expect(input).not.toHaveAttribute("aria-describedby");
+    expect(input).not.toHaveAttribute("aria-invalid");
   });
 
   it("should handle hidden label", () => {

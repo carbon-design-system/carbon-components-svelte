@@ -51,6 +51,8 @@
   export let ref = null;
 
   import Stack from "../Stack/Stack.svelte";
+
+  $: errorId = `error-${id}`;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -88,6 +90,8 @@
           bind:value
           type="text"
           data-invalid={invalid || undefined}
+          aria-invalid={invalid || undefined}
+          aria-describedby={invalid ? errorId : undefined}
           {pattern}
           {placeholder}
           {maxlength}
@@ -112,6 +116,6 @@
     </div>
   </div>
   {#if invalid}
-    <div class:bx--form-requirement={true}>{invalidText}</div>
+    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
 </div>
