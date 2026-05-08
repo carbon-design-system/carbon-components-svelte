@@ -92,6 +92,49 @@ describe("DatePicker", () => {
     expect(input).toBeDisabled();
   });
 
+  describe("readonly", () => {
+    it("forwards the readonly attribute and marks the label", () => {
+      render(DatePicker, { readonly: true });
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveAttribute("readonly");
+      expect(screen.getByText("Date")).toHaveClass("bx--label--readonly");
+    });
+
+    it("prevents typing into the input when readonly", async () => {
+      render(DatePicker, { datePickerType: "single", readonly: true });
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      await user.type(input, "01/15/2024");
+      expect(input.value).toBe("");
+    });
+
+    it("does not open the calendar on click in single mode when readonly", async () => {
+      render(DatePicker, { datePickerType: "single", readonly: true });
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).not.toHaveClass("open");
+    });
+
+    it("does not open the calendar on ArrowDown when readonly", async () => {
+      render(DatePicker, { datePickerType: "single", readonly: true });
+      const input = screen.getByLabelText("Date");
+      input.focus();
+      await user.keyboard("{ArrowDown}");
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).not.toHaveClass("open");
+    });
+
+    it("forwards the readonly attribute to both inputs in range mode", async () => {
+      render(DatePickerRange, { readonly: true });
+      // Wait for flatpickr (including the range plugin's onReady) to finish.
+      await screen.findByLabelText("calendar-container");
+      const start = screen.getByLabelText("Start date");
+      const end = screen.getByLabelText("End date");
+      expect(start).toHaveAttribute("readonly");
+      expect(end).toHaveAttribute("readonly");
+    });
+  });
+
   it("handles invalid state", () => {
     const { container } = render(DatePicker, {
       invalid: true,

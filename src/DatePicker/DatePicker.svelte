@@ -108,6 +108,9 @@
     inputs,
     (_) => _.filter(({ labelText }) => !!labelText).length === 0,
   );
+  const readonlyAny = derived(inputs, (_) =>
+    _.some(({ readonly }) => readonly),
+  );
   /**
    * @type {import("svelte/store").Writable<number | string>}
    */
@@ -140,7 +143,16 @@
    * @type {(data: { id: string; labelText: string }) => void}
    */
   const add = (data) => {
-    inputs.update((_) => [..._, data]);
+    inputs.update((_) => [..._, { readonly: false, ...data }]);
+  };
+
+  /**
+   * @type {(id: string, readonly: boolean) => void}
+   */
+  const setReadonly = (id, readonly) => {
+    inputs.update((_) =>
+      _.map((input) => (input.id === id ? { ...input, readonly } : input)),
+    );
   };
 
   /**
@@ -229,6 +241,7 @@
     hasCalendar,
     dateFormat: dateFormatStore,
     add,
+    setReadonly,
     declareRef,
     updateValue,
     blurInput,
@@ -341,10 +354,18 @@
       // default to static: true so the
       // date picker works inside a modal
       static: true,
+      clickOpens: !$readonlyAny,
+      // The flatpickr range plugin strips the `readonly` attribute when
+      // `allowInput` is true, so disable it to preserve the readonly state.
+      allowInput: !$readonlyAny,
       ...flatpickrProps,
     })
       .then(() => {})
       .catch(() => {});
+  }
+  $: if (calendar) {
+    calendar.set("clickOpens", !$readonlyAny);
+    if ($readonlyAny && calendar.isOpen) calendar.close();
   }
 </script>
 

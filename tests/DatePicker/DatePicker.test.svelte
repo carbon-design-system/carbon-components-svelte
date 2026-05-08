@@ -17,6 +17,7 @@
     static: true,
   };
   export let disabled = false;
+  export let readonly = false;
   export let invalid = false;
   export let invalidText = "";
   export let warn = false;
@@ -48,6 +49,7 @@
     labelText="Date"
     placeholder="mm/dd/yyyy"
     {disabled}
+    {readonly}
     {invalid}
     {invalidText}
     {warn}
