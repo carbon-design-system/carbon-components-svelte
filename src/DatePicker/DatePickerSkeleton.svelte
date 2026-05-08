@@ -1,6 +1,9 @@
 <script>
   /** Set to `true` to use the range variant */
   export let range = false;
+
+  /** Set to `true` to use the short variant */
+  export let short = false;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -16,9 +19,9 @@
   <div
     class:bx--date-picker={true}
     class:bx--skeleton={true}
-    class:bx--date-picker--range={true}
-    class:bx--date-picker--short={!range}
+    class:bx--date-picker--range={range}
     class:bx--date-picker--simple={!range}
+    class:bx--date-picker--short={short}
   >
     {#each Array.from({ length: range ? 2 : 1 }, (_, i) => i) as input (input)}
       <div class:bx--date-picker-container={true}>
