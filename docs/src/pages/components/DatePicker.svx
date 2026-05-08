@@ -81,7 +81,7 @@ Create a simple date picker without a dropdown calendar.
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## With helper text
+## Helper text
 
 Add helper text to provide additional context or formatting instructions.
 

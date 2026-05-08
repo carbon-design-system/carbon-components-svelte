@@ -14,7 +14,7 @@ Create a basic text input with a label and placeholder text.
 
 <TextInput labelText="User name" placeholder="Enter user name..." />
 
-## With helper text
+## Helper text
 
 Add helper text below the input to provide additional context or instructions.
 
