@@ -212,7 +212,12 @@
                     {@html parsed.mainDescription
                       .replace(/\</g, "&lt;")
                       .replace(/\>/g, "&gt;")
-                      .replace(/`(.*?)`/g, "<code>$1</code>")}
+                      .replace(/`(.*?)`/g, "<code>$1</code>")
+                      .replace(/https?:\/\/[^\s<]+/g, (url) => {
+                        const trailing = url.match(/[.,;:!?)\]]+$/)?.[0] ?? "";
+                        const href = url.slice(0, url.length - trailing.length);
+                        return `<a class="bx--link" href="${href}" target="_blank" rel="noopener noreferrer">${href}</a>${trailing}`;
+                      })}
                   </div>
                 {/if}
                 {#if parsed.exampleCode}
