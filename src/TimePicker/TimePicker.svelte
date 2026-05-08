@@ -44,6 +44,9 @@
   /** Specify the warning state text */
   export let warnText = "";
 
+  /** Specify the helper text */
+  export let helperText = "";
+
   /** Set an id for the input element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -59,7 +62,9 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
 
+  $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -111,7 +116,13 @@
             type="text"
             data-invalid={invalid || undefined}
             aria-invalid={invalid || undefined}
-            aria-describedby={invalid ? errorId : undefined}
+            aria-describedby={invalid
+              ? errorId
+              : warn
+                ? warnId
+                : helperText
+                  ? helperId
+                  : undefined}
             {pattern}
             {placeholder}
             {maxlength}
@@ -140,6 +151,14 @@
   {#if invalid}
     <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
   {:else if warn}
-    <div class:bx--form-requirement={true}>{warnText}</div>
+    <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+  {:else if helperText}
+    <div
+      id={helperId}
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
+    >
+      {helperText}
+    </div>
   {/if}
 </div>
