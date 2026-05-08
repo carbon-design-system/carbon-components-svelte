@@ -5,7 +5,7 @@
   let count = 0;
 </script>
 
-<NotificationQueue bind:this={queue} maxNotifications={3} />
+<NotificationQueue bind:this={queue} maxNotifications={5} />
 
 <Button
   on:click={() => {
