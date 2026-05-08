@@ -57,6 +57,7 @@
   export let ref = null;
 
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
 
   $: errorId = `error-${id}`;
@@ -100,7 +101,9 @@
           class:bx--text-input__field-wrapper--warning={!invalid && warn}
           style:width="auto"
         >
-          {#if !invalid && warn}
+          {#if invalid}
+            <WarningFilled class="bx--text-input__invalid-icon" />
+          {:else if warn}
             <WarningAltFilled
               class="bx--text-input__invalid-icon bx--text-input__invalid-icon--warning"
             />
