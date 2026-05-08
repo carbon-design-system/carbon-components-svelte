@@ -35,6 +35,20 @@ Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The
 
 <FileSource src="/framed/DatePicker/DatePickerCustomFormat" />
 
+## Custom locale
+
+The `locale` prop accepts either a [flatpickr locale key](https://github.com/flatpickr/flatpickr/tree/master/src/l10n) or a [`CustomLocale`](https://github.com/flatpickr/flatpickr/blob/master/src/types/locale.ts) object. It defaults to `"en"`, which renders Carbon-spec single-letter weekday abbreviations (`S, M, T, W, Th, F, S`).
+
+To customize the weekday labels (e.g., to restore flatpickr's default English `Sun, Mon, Tue, ...` shorthands), pass a `CustomLocale` object.
+
+<FileSource src="/framed/DatePicker/DatePickerLocale" />
+
+## Non-English locale
+
+Import the corresponding locale module from `flatpickr/dist/l10n/<key>` and pass it to the `locale` prop. The example below uses German (`de`).
+
+<FileSource src="/framed/DatePicker/DatePickerNonEnglishLocale" />
+
 ## Portal menu
 
 Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. When inside a Modal, `portalMenu` defaults to `true` unless explicitly set to `false`.
