@@ -80,6 +80,19 @@ describe("ComboBox", () => {
     expect(input).toHaveAttribute("aria-activedescendant", "2");
   });
 
+  it("should set aria-activedescendant only when an item is highlighted", async () => {
+    render(ComboBox, { props: { shouldFilterItem: () => true } });
+
+    const input = getInput();
+    expect(input).toHaveAttribute("aria-activedescendant", "");
+
+    await user.click(input);
+    expect(input).toHaveAttribute("aria-activedescendant", "");
+
+    await user.keyboard("{ArrowDown}");
+    expect(input.getAttribute("aria-activedescendant")).not.toBe("");
+  });
+
   it("should start keyboard navigation at selected item index", async () => {
     render(ComboBox, {
       props: {
