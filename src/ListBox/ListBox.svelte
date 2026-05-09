@@ -57,9 +57,9 @@
 >
   <slot />
 </div>
-{#if invalid}
+{#if invalid && invalidText}
   <div class:bx--form-requirement={true}>{invalidText}</div>
 {/if}
-{#if !invalid && warn}
+{#if !invalid && warn && warnText}
   <div class:bx--form-requirement={true}>{warnText}</div>
 {/if}
