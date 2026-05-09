@@ -591,7 +591,6 @@
         aria-autocomplete="list"
         aria-expanded={open}
         aria-activedescendant={highlightedId}
-        aria-labelledby={comboId}
         aria-disabled={disabled}
         aria-controls={open ? menuId : undefined}
         aria-owns={open ? menuId : undefined}

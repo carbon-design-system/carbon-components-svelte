@@ -548,6 +548,20 @@ describe("ComboBox", () => {
     expect(listbox).toHaveAttribute("aria-label", "Choose an item");
   });
 
+  // Regression: aria-labelledby on the input pointed at the unnamed ListBox
+  // wrapper, shadowing the <label for> association so the input's accessible
+  // name was the wrapper's aria-label (or empty) instead of labelText.
+  it("should associate the labelText with the combobox input", () => {
+    render(ComboBox, {
+      props: {
+        items: [{ id: "1", text: "Email", price: 200 }],
+        labelText: "Contact method",
+        ariaLabel: "Listbox region",
+      },
+    });
+    expect(screen.getByLabelText("Contact method")).toBe(getInput());
+  });
+
   it("should open menu if open prop is true on mount", () => {
     render(ComboBox, { props: { open: true } });
     const dropdown = screen.getAllByRole("listbox")[1];
