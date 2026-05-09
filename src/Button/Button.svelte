@@ -163,8 +163,7 @@
         (size === "sm" && !expressive) ||
         (size === "small" && !expressive)) &&
         "bx--btn--sm",
-      (size === "field" && !expressive) ||
-        (size === "md" && !expressive && "bx--btn--md"),
+      size === "md" && !expressive && "bx--btn--md",
       size === "field" && "bx--btn--field",
       size === "small" && "bx--btn--sm",
       size === "lg" && "bx--btn--lg",
