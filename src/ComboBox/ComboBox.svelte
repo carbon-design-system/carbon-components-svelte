@@ -285,7 +285,6 @@
   export async function clear(options = {}) {
     prevSelectedId = null;
     highlightedIndex = -1;
-    highlightedId = undefined;
     selectedId = undefined;
     selectedItem = undefined;
     open = false;
@@ -434,7 +433,6 @@
           value = "";
         }
         highlightedIndex = -1;
-        highlightedId = undefined;
       }
     }
   });
@@ -451,7 +449,6 @@
         selectedId = filteredItems[0].id;
         selectedItem = filteredItems[0];
         highlightedIndex = -1;
-        highlightedId = undefined;
       } else {
         selectedItem = itemsById.get(selectedId);
       }
