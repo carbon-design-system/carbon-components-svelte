@@ -445,13 +445,7 @@
       // Only dispatch select event if not initial render (prevSelectedId was not null)
       const isInitialRender = prevSelectedId === null;
       prevSelectedId = selectedId;
-      if (filteredItems?.length === 1 && open) {
-        selectedId = filteredItems[0].id;
-        selectedItem = filteredItems[0];
-        highlightedIndex = -1;
-      } else {
-        selectedItem = itemsById.get(selectedId);
-      }
+      selectedItem = itemsById.get(selectedId);
       if (!isInitialRender) {
         dispatch("select", { selectedId, selectedItem });
       }
