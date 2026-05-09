@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { Accordion, AccordionItem } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
@@ -8,6 +10,7 @@
   export let itemClass = "";
   export let useSlot = false;
   export let iconDescription = "Expand/Collapse";
+  export let ref: ComponentProps<AccordionItem>["ref"] = null;
 </script>
 
 <Accordion
@@ -33,7 +36,9 @@
       Slot content
     </AccordionItem>
   {:else}
-    <AccordionItem title="Natural Language Classifier">1</AccordionItem>
+    <AccordionItem title="Natural Language Classifier" bind:ref
+      >1</AccordionItem
+    >
     <AccordionItem title="Natural Language Understanding" disabled
       >2</AccordionItem
     >

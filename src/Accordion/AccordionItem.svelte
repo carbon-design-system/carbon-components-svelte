@@ -20,6 +20,9 @@
   /** Specify the ARIA label for the accordion item chevron icon */
   export let iconDescription = "Expand/Collapse";
 
+  /** Obtain a reference to the heading button HTML element */
+  export let ref = null;
+
   import { getContext, onMount } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
 
@@ -54,6 +57,7 @@
   }}
 >
   <button
+    bind:this={ref}
     type="button"
     class:bx--accordion__heading={true}
     title={iconDescription}
