@@ -858,6 +858,68 @@ describe("Dropdown", () => {
     expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
+  // Regression: non-virtualized lists that overflow the menu's max-height
+  // must still scroll the selected option into view when the menu opens.
+  // Selected item is aligned to the top of the menu, matching the
+  // virtualized branch's behavior.
+  it("should scroll selected item to top of menu on open (non-virtualized)", async () => {
+    const ITEM_HEIGHT = 40;
+    const rectSpy = vi
+      .spyOn(Element.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: Element) {
+        const role = this.getAttribute("role");
+        if (role === "option") {
+          const index = Number(this.getAttribute("id"));
+          const top = index * ITEM_HEIGHT;
+          return {
+            top,
+            bottom: top + ITEM_HEIGHT,
+            height: ITEM_HEIGHT,
+            left: 0,
+            right: 0,
+            width: 0,
+            x: 0,
+            y: top,
+            toJSON: () => ({}),
+          } as DOMRect;
+        }
+        if (role === "listbox") {
+          return {
+            top: 0,
+            bottom: 0,
+            height: 0,
+            left: 0,
+            right: 0,
+            width: 0,
+            x: 0,
+            y: 0,
+            toJSON: () => ({}),
+          } as DOMRect;
+        }
+        return new DOMRect();
+      });
+
+    try {
+      const manyItems = Array.from({ length: 50 }, (_, i) => ({
+        id: String(i),
+        text: `Item ${i + 1}`,
+      }));
+
+      render(Dropdown, {
+        props: { items: manyItems, selectedId: "42", labelText: "Items" },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expect(menu.scrollTop).toBe(42 * ITEM_HEIGHT);
+      });
+    } finally {
+      rectSpy.mockRestore();
+    }
+  });
+
   describe("virtualization", () => {
     const createLargeItemList = (count: number) => {
       return Array.from({ length: count }, (_, i) => ({

@@ -306,6 +306,27 @@
       }
     }
 
+    // Scroll to selected item when menu opens without virtualization.
+    // The list may overflow its max-height even below the virtualization threshold.
+    if (
+      wasJustOpened &&
+      !shouldVirtualize &&
+      listRef &&
+      selectedId !== undefined &&
+      selectedItem
+    ) {
+      tick().then(() => {
+        if (!listRef) return;
+        const selectedEl = listRef.querySelector('[aria-selected="true"]');
+        if (!selectedEl) return;
+        // Adjust the menu's own scrollTop instead of scrollIntoView,
+        // which would also scroll the document.
+        listRef.scrollTop +=
+          selectedEl.getBoundingClientRect().top -
+          listRef.getBoundingClientRect().top;
+      });
+    }
+
     // Scroll to selected item when menu opens with virtualization
     if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
