@@ -146,7 +146,6 @@
   $: iconProps = {
     "aria-hidden": "true",
     class: "bx--btn__icon",
-    "aria-label": iconDescription,
   };
   $: buttonProps = {
     type: href && !disabled ? undefined : type,
