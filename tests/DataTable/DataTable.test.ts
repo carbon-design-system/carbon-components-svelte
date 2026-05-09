@@ -254,6 +254,24 @@ describe("DataTable", () => {
     expect(within(bodyRows[0]).getByText("Zebra")).toBeInTheDocument();
   });
 
+  it("sort: cancelled sort still reports intended direction in click:header", async () => {
+    const onclickheader = vi.fn();
+    render(DataTableSortPreventDefault, {
+      props: { preventSortDefault: true, onclickheader },
+    });
+
+    await user.click(screen.getByText("Name"));
+    await tick();
+
+    expect(onclickheader).toHaveBeenCalledTimes(1);
+    expect(onclickheader.mock.calls[0][0].detail).toEqual(
+      expect.objectContaining({
+        header: expect.objectContaining({ key: "name" }),
+        sortDirection: "ascending",
+      }),
+    );
+  });
+
   it("sort: without preventDefault applies client-side sort", async () => {
     const onsort = vi.fn();
     render(DataTableSortPreventDefault, {
