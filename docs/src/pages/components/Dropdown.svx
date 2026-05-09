@@ -186,6 +186,14 @@ selections.
   ]}
 />
 
+## Disable typeahead
+
+By default, typing character keys while the menu is open jumps to matching items. Set `disableTypeahead` to `true` to opt out, restricting keyboard interaction to arrow keys only.
+
+<Dropdown disableTypeahead labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ## Virtualized items (large lists)
 
 Virtualization is a technique that allows only the items currently visible in the viewport to be rendered in the DOM, improving performance for large lists.
