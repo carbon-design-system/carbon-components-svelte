@@ -680,6 +680,33 @@ describe("ComboBox", () => {
     expect(screen.queryByText("Help")).not.toBeInTheDocument();
   });
 
+  it("should describe the input by helperText", () => {
+    render(ComboBoxReal, { props: { id: "cb", helperText: "Help" } });
+    expect(getInput()).toHaveAttribute("aria-describedby", "helper-cb");
+    expect(screen.getByText("Help")).toHaveAttribute("id", "helper-cb");
+  });
+
+  it("should describe the input by warnText when warn is true", () => {
+    render(ComboBoxReal, {
+      props: { id: "cb", warn: true, warnText: "Warn" },
+    });
+    expect(getInput()).toHaveAttribute("aria-describedby", "warn-cb");
+    expect(screen.getByText("Warn")).toHaveAttribute("id", "warn-cb");
+  });
+
+  it("should describe the input by invalidText when invalid is true", () => {
+    render(ComboBoxReal, {
+      props: { id: "cb", invalid: true, invalidText: "Bad" },
+    });
+    expect(getInput()).toHaveAttribute("aria-describedby", "error-cb");
+    expect(screen.getByText("Bad")).toHaveAttribute("id", "error-cb");
+  });
+
+  it("should not set aria-describedby when no message is shown", () => {
+    render(ComboBoxReal, { props: { id: "cb" } });
+    expect(getInput()).not.toHaveAttribute("aria-describedby");
+  });
+
   it("should not open menu when input is focused via keyboard", async () => {
     render(ComboBox);
 
