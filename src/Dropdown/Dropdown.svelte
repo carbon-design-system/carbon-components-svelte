@@ -195,6 +195,9 @@
     }
   }
   $: menuId = `menu-${id}`;
+  $: helperId = `helper-${id}`;
+  $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
   $: highlightedId =
     highlightedIndex > -1 && items[highlightedIndex]
       ? items[highlightedIndex].id
@@ -500,10 +503,8 @@
     {disabled}
     {open}
     {invalid}
-    {invalidText}
     {light}
     {warn}
-    {warnText}
   >
     {#if invalid}
       <WarningFilled class="bx--list-box__invalid-icon" />
@@ -523,6 +524,13 @@
       aria-haspopup="listbox"
       aria-activedescendant={highlightedId ?? ""}
       aria-controls={open ? menuId : undefined}
+      aria-describedby={invalid && invalidText
+        ? errorId
+        : !invalid && warn && warnText
+          ? warnId
+          : !inline && !invalid && !warn && helperText
+            ? helperId
+            : undefined}
       on:keydown={(e) => {
         if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
@@ -666,8 +674,15 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
+  {#if invalid && invalidText}
+    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+  {/if}
+  {#if !invalid && warn && warnText}
+    <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+  {/if}
   {#if !inline && !invalid && !warn && helperText}
     <div
+      id={helperId}
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
     >

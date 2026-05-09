@@ -207,6 +207,46 @@ describe("Dropdown", () => {
     expect(screen.getByText("Help text")).toHaveClass("bx--form__helper-text");
   });
 
+  it("should describe the button by helperText", () => {
+    render(Dropdown, {
+      props: { items, id: "dd", helperText: "Help" },
+    });
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "aria-describedby",
+      "helper-dd",
+    );
+    expect(screen.getByText("Help")).toHaveAttribute("id", "helper-dd");
+  });
+
+  it("should describe the button by warnText when warn is true", () => {
+    render(Dropdown, {
+      props: { items, id: "dd", warn: true, warnText: "Warn" },
+    });
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "aria-describedby",
+      "warn-dd",
+    );
+    expect(screen.getByText("Warn")).toHaveAttribute("id", "warn-dd");
+  });
+
+  it("should describe the button by invalidText when invalid is true", () => {
+    render(Dropdown, {
+      props: { items, id: "dd", invalid: true, invalidText: "Bad" },
+    });
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "aria-describedby",
+      "error-dd",
+    );
+    expect(screen.getByText("Bad")).toHaveAttribute("id", "error-dd");
+  });
+
+  it("should not set aria-describedby when no message is shown", () => {
+    render(Dropdown, { props: { items, id: "dd" } });
+    expect(screen.getByRole("combobox")).not.toHaveAttribute(
+      "aria-describedby",
+    );
+  });
+
   it("should handle item selection", async () => {
     const selectHandler = vi.fn();
     render(Dropdown, {
