@@ -89,6 +89,15 @@ describe("Button", () => {
     expect(disabledButton).toHaveClass("bx--btn--disabled");
   });
 
+  it("should strip href when disabled is also set", () => {
+    render(Button);
+
+    const button = screen.getByTestId("btn-disabled-href");
+    expect(button.tagName).toBe("BUTTON");
+    expect(button).toBeDisabled();
+    expect(button).not.toHaveAttribute("href");
+  });
+
   it("should render skeleton state", () => {
     render(Button);
 
