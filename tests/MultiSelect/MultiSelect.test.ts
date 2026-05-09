@@ -6,6 +6,7 @@ import { tick } from "svelte";
 import { user } from "../setup-tests";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
+import MultiSelectBindValue from "./MultiSelectBindValue.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
 import MultiSelectItemToStringId from "./MultiSelectItemToStringId.test.svelte";
@@ -548,6 +549,16 @@ describe("MultiSelect", () => {
           { id: "0", text: "Slack", checked: false },
         ],
       });
+    });
+
+    it("does not clear bound `value` on initial render when not filterable", async () => {
+      render(MultiSelectBindValue, {
+        props: { items, filterable: false, value: "hello" },
+      });
+
+      await tick();
+
+      expect(screen.getByTestId("bound-value")).toHaveTextContent("hello");
     });
   });
 
