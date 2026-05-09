@@ -199,6 +199,14 @@
   export let highlightedId = null;
 
   /**
+   * The post-sort, post-selection-feedback list of items rendered by the dropdown.
+   * Bind to read the resolved order without recomputing it from `items`, `selectedIds`, and `sortItem`.
+   * @type {ReadonlyArray<Item & { checked: boolean }>}
+   * @bindable readonly
+   */
+  export let sortedItems = [];
+
+  /**
    * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
    *
    * By default, virtualization is automatically enabled for lists with more than 100 items.
@@ -505,7 +513,7 @@
     ];
   }
 
-  let sortedItems = sort();
+  sortedItems = sort();
   let prevItemsRef = items;
 
   $: menuId = `menu-${id}`;
