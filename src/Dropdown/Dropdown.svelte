@@ -543,6 +543,7 @@
         } else if (
           open &&
           e.key.length === 1 &&
+          e.key !== " " &&
           !e.ctrlKey &&
           !e.metaKey &&
           !e.altKey
