@@ -77,6 +77,12 @@ Move selected items to the top of the list immediately after selection by settin
     {id: "2", text: "Fax"}]}"
   />
 
+## Bind to sorted items
+
+Bind to `sortedItems` to read the resolved list after sorting and selection feedback is applied. This avoids recomputing the order from `items`, `selectedIds`, and `sortItem` in consumer code.
+
+<FileSource src="/framed/MultiSelect/MultiSelectSortedItems" />
+
 ## Multiple multi-select dropdowns
 
 This example demonstrates how to manage multiple dropdowns in a form with coordinated state.
