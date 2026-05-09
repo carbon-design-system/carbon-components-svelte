@@ -583,7 +583,7 @@
         aria-autocomplete="list"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-activedescendant={highlightedId}
+        aria-activedescendant={highlightedId ?? ""}
         aria-disabled={disabled}
         aria-controls={open ? menuId : undefined}
         aria-owns={open ? menuId : undefined}
