@@ -381,7 +381,6 @@
   const resetSelectedRowIds = () => {
     selectAll = false;
     selectedRowIds = [];
-    if (refSelectAll) refSelectAll.checked = false;
   };
 
   /**
@@ -439,8 +438,6 @@
     a[id] = true;
     return a;
   }, {});
-
-  let refSelectAll = null;
 
   let prevBatchSelected = [];
   $: if (
@@ -695,7 +692,6 @@
           {#if batchSelection && !radio}
             <th scope="col" class:bx--table-column-checkbox={true}>
               <InlineCheckbox
-                bind:ref={refSelectAll}
                 aria-label="Select all rows"
                 name="{id}-select-all"
                 value="all"

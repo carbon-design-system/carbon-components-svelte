@@ -54,6 +54,25 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(selectedIdsElement.textContent).toBe("[]");
   });
 
+  it("unchecks the select-all checkbox after cancel", async () => {
+    render(DataTableBatchSelectionToolbar, {
+      props: {
+        selectedRowIds: ["a", "b", "c", "d", "e", "f"],
+      },
+    });
+
+    const selectAll = screen.getByRole("checkbox", {
+      name: "Select all rows",
+    });
+    expect(selectAll).toBeChecked();
+
+    await user.click(screen.getByText("Cancel"));
+    await tick();
+
+    expect(selectAll).not.toBeChecked();
+    expect(screen.getByTestId("selected-ids").textContent).toBe("[]");
+  });
+
   it("handles custom batch actions", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(DataTableBatchSelectionToolbar, {
