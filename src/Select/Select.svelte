@@ -211,10 +211,20 @@
           {#if invalid && !readonly}
             <WarningFilled class="bx--select__invalid-icon" />
           {/if}
+          {#if !invalid && warn && !readonly}
+            <WarningAltFilled
+              class="bx--select__invalid-icon bx--select__invalid-icon--warning"
+            />
+          {/if}
         </div>
         {#if invalid && !readonly}
           <div class:bx--form-requirement={true} id={errorId}>
             {invalidText}
+          </div>
+        {/if}
+        {#if !invalid && warn && !readonly}
+          <div class:bx--form-requirement={true} id={warnId}>
+            {warnText}
           </div>
         {/if}
       </div>
