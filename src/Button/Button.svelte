@@ -123,13 +123,13 @@
     $activeButtonTooltip !== null &&
     $activeButtonTooltip !== tooltipId;
 
-  function handleMouseEnter() {
+  function showTooltip() {
     if (hasIconOnly && !hideTooltip) {
       activeButtonTooltip.set(tooltipId);
     }
   }
 
-  function handleMouseLeave() {
+  function hideActiveTooltip() {
     if ($activeButtonTooltip === tooltipId) {
       activeButtonTooltip.set(null);
     }
@@ -215,12 +215,14 @@
     {...buttonProps}
     on:click
     on:focus
+    on:focus={showTooltip}
     on:blur
+    on:blur={hideActiveTooltip}
     on:mouseover
     on:mouseenter
-    on:mouseenter={handleMouseEnter}
+    on:mouseenter={showTooltip}
     on:mouseleave
-    on:mouseleave={handleMouseLeave}
+    on:mouseleave={hideActiveTooltip}
   >
     {#if hasIconOnly}
       <span class:bx--assistive-text={true} style:pointer-events="none">
@@ -249,12 +251,14 @@
     {...buttonProps}
     on:click
     on:focus
+    on:focus={showTooltip}
     on:blur
+    on:blur={hideActiveTooltip}
     on:mouseover
     on:mouseenter
-    on:mouseenter={handleMouseEnter}
+    on:mouseenter={showTooltip}
     on:mouseleave
-    on:mouseleave={handleMouseLeave}
+    on:mouseleave={hideActiveTooltip}
   >
     {#if hasIconOnly}
       <span class:bx--assistive-text={true} style:pointer-events="none">

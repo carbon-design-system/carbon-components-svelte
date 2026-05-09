@@ -157,6 +157,33 @@ describe("Button", () => {
     expect(btnB).not.toHaveClass("bx--tooltip--hidden");
   });
 
+  it("should hide other icon-only button tooltips on focus", async () => {
+    render(Button);
+
+    const btnA = screen.getByTestId("btn-icon-a");
+    const btnB = screen.getByTestId("btn-icon-b");
+    const btnC = screen.getByTestId("btn-icon-c");
+
+    await fireEvent.focus(btnA);
+    expect(btnA).not.toHaveClass("bx--tooltip--hidden");
+    expect(btnB).toHaveClass("bx--tooltip--hidden");
+    expect(btnC).toHaveClass("bx--tooltip--hidden");
+  });
+
+  it("should clear tooltip hidden state on blur", async () => {
+    render(Button);
+
+    const btnA = screen.getByTestId("btn-icon-a");
+    const btnB = screen.getByTestId("btn-icon-b");
+
+    await fireEvent.focus(btnA);
+    expect(btnB).toHaveClass("bx--tooltip--hidden");
+
+    await fireEvent.blur(btnA);
+    expect(btnA).not.toHaveClass("bx--tooltip--hidden");
+    expect(btnB).not.toHaveClass("bx--tooltip--hidden");
+  });
+
   it("should hide tooltip but keep accessibility when hideTooltip is true", () => {
     render(Button);
 
