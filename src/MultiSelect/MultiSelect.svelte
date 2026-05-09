@@ -367,7 +367,9 @@
 
     if (!open) {
       highlightedIndex = -1;
-      value = "";
+      if (prevOpen && filterable) {
+        value = "";
+      }
     }
 
     // Scroll to first selected item when menu opens with virtualization
