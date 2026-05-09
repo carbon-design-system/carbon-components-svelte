@@ -557,6 +557,12 @@
       open = false;
     }
   }}
+  on:focusin={({ target }) => {
+    if (!open) return;
+    if (multiSelectRef?.contains(target)) return;
+    if (effectivePortalMenu && listRef?.contains(target)) return;
+    open = false;
+  }}
 />
 
 <div
@@ -849,9 +855,6 @@
                       ? selectAllIndeterminate
                       : false}
                     disabled={item.disabled}
-                    on:blur={() => {
-                      if (actualIndex === itemsToUse.length - 1) open = false;
-                    }}
                   >
                     <slot slot="labelChildren" {item} index={actualIndex}>
                       {itemToString(item)}
@@ -904,9 +907,6 @@
                   ? selectAllIndeterminate
                   : false}
                 disabled={item.disabled}
-                on:blur={() => {
-                  if (i === itemsToUse.length - 1) open = false;
-                }}
               >
                 <slot slot="labelChildren" {item} index={i}>
                   {itemToString(item)}
