@@ -630,6 +630,7 @@
           tabindex="0"
           autocomplete="off"
           aria-autocomplete="list"
+          aria-haspopup="listbox"
           aria-expanded={open}
           aria-activedescendant={highlightedId}
           aria-labelledby={comboId}
