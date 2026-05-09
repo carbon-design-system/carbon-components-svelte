@@ -252,6 +252,7 @@
    *
    * Virtualization is opt-in. Set `virtualize={true}` to enable with default settings, or pass a configuration object to customize.
    * Virtualized tables are intended for use with `stickyHeader={true}` so the header stays visible while scrolling. Pagination is ignored when virtualization is enabled.
+   * Virtualization assumes a uniform row height; combining it with `expandable` rows is not supported and may cause incorrect scroll-spacer sizing when rows are expanded mid-list.
    *
    * Provide an object to customize virtualization behavior:
    * - `itemHeight` (default: 48 for medium size, adjusted for size variant): The height in pixels of each row. Specify a custom value when using custom slots with multi-line content or different heights.
@@ -555,20 +556,6 @@
   $: displayedSortedRows = virtualConfig
     ? sortedRows
     : getDisplayedRows(sortedRows, page, pageSize);
-
-  // Calculate expanded rows height adjustment
-  $: expandedRowsHeight = virtualConfig
-    ? expandedRowIds.reduce((total, id) => {
-        const rowIndex = (
-          sorting ? displayedSortedRows : displayedRows
-        ).findIndex((r) => r.id === id);
-        if (rowIndex >= 0) {
-          // Estimate: expanded content is roughly 2x row height
-          return total + (virtualConfig.itemHeight || defaultRowHeight) * 2;
-        }
-        return total;
-      }, 0)
-    : 0;
 
   $: rowsToVirtualize = sorting ? displayedSortedRows : displayedRows;
   $: virtualData = virtualConfig
