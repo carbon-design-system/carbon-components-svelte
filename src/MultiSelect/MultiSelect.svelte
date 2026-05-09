@@ -477,11 +477,16 @@
   }
 
   let sortedItems = sort();
+  let prevItemsRef = items;
 
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: inline = type === "inline";
   $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
+  $: if (items !== prevItemsRef) {
+    prevItemsRef = items;
+    sortedItems = sort();
+  }
   $: if (
     selectedIds &&
     ((selectionFeedback === "top" && selectedIds !== internalSelectedIdsRef) ||
