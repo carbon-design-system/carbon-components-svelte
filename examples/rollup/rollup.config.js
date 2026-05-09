@@ -14,6 +14,8 @@ export default {
     format: "iife",
     name: "app",
     file: "public/build/bundle.js",
+    // Single-file IIFE cannot load extra chunks.
+    // Dynamic imports (DatePicker flatpickr rangePlugin) must be inlined.
     inlineDynamicImports: true,
   },
   plugins: [

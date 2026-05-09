@@ -8,9 +8,6 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
 
 Date pickers let users select a date or date range using a calendar interface. They use the [flatpickr](https://github.com/flatpickr/flatpickr) library for their calendar implementation.
 
-> [!NOTE]
-> If using Rollup, specify **inlineDynamicImports: true** in your **rollup.config.js**.
-
 ## Single
 
 Set `datePickerType` to `"single"` for single date selection.
