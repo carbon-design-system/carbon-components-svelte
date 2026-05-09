@@ -2135,6 +2135,39 @@ describe("MultiSelect", () => {
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });
+
+    // Regression: with virtualization, the data-last item is not mounted
+    // until scrolled into view, so a per-item blur handler bound to it
+    // never fires when focus leaves the menu. The menu must close based
+    // on focus leaving the wrapper, not blur of a specific list index.
+    it("closes menu when focus moves outside the wrapper (virtualized)", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: { items: largeItems, virtualize: true },
+      });
+
+      const externalButton = document.createElement("button");
+      externalButton.textContent = "Outside";
+      document.body.appendChild(externalButton);
+
+      try {
+        await openMenu();
+        const combobox = screen.getByRole("combobox");
+        expect(combobox).toHaveAttribute("aria-expanded", "true");
+
+        // The data-last item (index 499) is far below the viewport and
+        // not mounted, so any close logic tied to it cannot fire.
+        const visibleOptions = screen.getAllByRole("option");
+        expect(visibleOptions.length).toBeLessThan(500);
+
+        externalButton.focus();
+        await tick();
+
+        expect(combobox).toHaveAttribute("aria-expanded", "false");
+      } finally {
+        externalButton.remove();
+      }
+    });
   });
 
   describe("portalMenu", () => {
