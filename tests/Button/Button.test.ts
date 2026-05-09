@@ -109,6 +109,16 @@ describe("Button", () => {
     expect(icon).toBeInTheDocument();
   });
 
+  it("should not set aria-label on the icon (relies on assistive text)", () => {
+    render(Button);
+
+    const btnA = screen.getByTestId("btn-icon-a");
+    const icon = btnA.querySelector(".bx--btn__icon");
+    assert(icon);
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+    expect(icon).not.toHaveAttribute("aria-label");
+  });
+
   it("should set pointer-events to none on assistive text for icon-only buttons", () => {
     render(Button);
 
