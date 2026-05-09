@@ -311,10 +311,7 @@
       tick().then(() => {
         if (listRef && virtualConfig) {
           if (selectedId !== undefined && selectedItem) {
-            // Find the index of the selected item
-            const selectedIndex = items.findIndex(
-              (item) => item.id === selectedId,
-            );
+            const selectedIndex = itemIndexById.get(selectedId) ?? -1;
             if (selectedIndex >= 0) {
               // Calculate scroll position to show selected item at the top of viewport
               const itemHeight = virtualConfig.itemHeight;
