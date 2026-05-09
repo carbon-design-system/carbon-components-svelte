@@ -370,24 +370,17 @@
   // Store a copy of the original rows for filter restoration.
   let prevRows_ref = rows;
   let originalRows = [...rows];
-  $: if (rows !== prevRows_ref) {
-    originalRows = [...rows];
-    $tableRows = rows;
-    prevRows_ref = rows;
-  }
-
-  /**
-   * @type {() => void}
-   */
-  const resetSelectedRowIds = () => {
-    selectAll = false;
-    selectedRowIds = [];
-  };
+  // Last filter applied via `filterRows`, replayed when `rows` changes so
+  // an active search is not silently dropped on row reassignment.
+  let lastSearchValue = "";
+  let lastCustomFilter = undefined;
 
   /**
    * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}
    */
   const filterRows = (searchValue, customFilter) => {
+    lastSearchValue = searchValue;
+    lastCustomFilter = customFilter;
     const value = searchValue.trim().toLowerCase();
 
     if (value.length === 0) {
@@ -423,6 +416,24 @@
 
     tableRows.set(filteredRows);
     return filteredRows.map((row) => row.id);
+  };
+
+  $: if (rows !== prevRows_ref) {
+    originalRows = [...rows];
+    prevRows_ref = rows;
+    if (lastSearchValue.trim().length > 0) {
+      filterRows(lastSearchValue, lastCustomFilter);
+    } else {
+      $tableRows = rows;
+    }
+  }
+
+  /**
+   * @type {() => void}
+   */
+  const resetSelectedRowIds = () => {
+    selectAll = false;
+    selectedRowIds = [];
   };
 
   setContext("carbon:DataTable", {
