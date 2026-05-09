@@ -1,4 +1,10 @@
-import { render, screen, waitFor, within } from "@testing-library/svelte";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/svelte";
 import type DropdownComponent from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
@@ -830,6 +836,33 @@ describe("Dropdown", () => {
     const bananaText = screen.getByText("Banana");
     const bananaOption = bananaText.closest(".bx--list-box__menu-item");
     expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
+  // Regression: Space must not be added to the typeahead buffer.
+  // Fire keydown only (without keyup) so the menu stays open — this exposes
+  // the buffer state. If Space were treated as a typeahead character, the
+  // buffer would be " " and the next 'c' keydown would search for " c"
+  // (no match), leaving the previous highlight in place.
+  it("should not include Space in typeahead buffer", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Banana" },
+          { id: "2", text: "Cherry" },
+        ],
+        selectedId: "0",
+      },
+    });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+
+    await fireEvent.keyDown(button, { key: " " });
+    await fireEvent.keyDown(button, { key: "c" });
+
+    const cherryOption = screen.getByRole("option", { name: "Cherry" });
+    expect(cherryOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
   it("should wrap around to beginning in typeahead search", async () => {
