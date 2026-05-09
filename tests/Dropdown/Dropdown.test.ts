@@ -1693,6 +1693,25 @@ describe("Dropdown", () => {
     });
   });
 
+  // Regression: aria-controls should only be set when the menu is rendered,
+  // since ListBoxMenu is removed from the DOM when closed.
+  it("should only set aria-controls when the menu is open", async () => {
+    render(Dropdown, {
+      props: { items, selectedId: "0", labelText: "Contact" },
+    });
+
+    const button = screen.getByRole("combobox");
+    expect(button).not.toHaveAttribute("aria-controls");
+
+    await user.click(button);
+    const menu = screen.getByRole("listbox");
+    expect(button).toHaveAttribute("aria-controls", menu.id);
+
+    await user.click(button);
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(button).not.toHaveAttribute("aria-controls");
+  });
+
   // Regression: translateWithId function prop should not be rendered as a DOM attribute.
   it("should not render translateWithId as a DOM attribute on the button", () => {
     const { container } = render(Dropdown, {

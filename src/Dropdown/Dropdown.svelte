@@ -504,7 +504,7 @@
       aria-expanded={open}
       aria-haspopup="listbox"
       aria-activedescendant={highlightedId ?? ""}
-      aria-controls={menuId}
+      aria-controls={open ? menuId : undefined}
       on:keydown={(e) => {
         if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
