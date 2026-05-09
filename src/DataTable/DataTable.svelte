@@ -51,7 +51,7 @@
    * @event click:header
    * @type {object}
    * @property {DataTableHeader<Row>} header
-   * @property {"ascending" | "descending" | "none"} [sortDirection]
+   * @property {"ascending" | "descending" | "none"} [sortDirection] - The intended next sort direction for this click, reported regardless of whether the `sort` event was cancelled.
    * @property {EventTarget} target
    * @property {EventTarget} currentTarget
    * @event click:header--select
@@ -778,7 +778,7 @@
                     }
                     dispatch("click:header", {
                       header,
-                      sortDirection,
+                      sortDirection: nextSortDirection,
                       target: e.target,
                       currentTarget: e.currentTarget,
                     });
