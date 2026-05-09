@@ -151,9 +151,9 @@
     type: href && !disabled ? undefined : type,
     tabindex,
     disabled: disabled === true ? true : undefined,
-    href,
+    href: href && !disabled ? href : undefined,
     rel:
-      href && $$restProps.target === "_blank"
+      href && !disabled && $$restProps.target === "_blank"
         ? "noopener noreferrer"
         : undefined,
     "aria-pressed":
