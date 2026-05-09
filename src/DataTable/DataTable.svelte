@@ -474,30 +474,44 @@
   let tableCellsByRowId = {};
   let prevRows;
   let prevHeaders;
-  let rowRefById = {};
 
   $: if (rows !== prevRows || headers !== prevHeaders) {
-    const headersChanged = headers !== prevHeaders;
     const next = {};
-    const nextRefs = {};
 
     for (const row of rows) {
-      if (!headersChanged && rowRefById[row.id] === row) {
-        next[row.id] = tableCellsByRowId[row.id];
+      const prevCells = tableCellsByRowId[row.id];
+      const newCells = headers.map((header, index) => ({
+        key: header.key ?? `key-${index}`,
+        value: header.key ? resolvePath(row, header.key) : undefined,
+        display: header.display,
+        empty: header.empty,
+        columnMenu: header.columnMenu,
+      }));
+
+      if (prevCells && prevCells.length === newCells.length) {
+        let allEqual = true;
+        for (let i = 0; i < newCells.length; i++) {
+          const a = prevCells[i];
+          const b = newCells[i];
+          if (
+            a.key === b.key &&
+            a.value === b.value &&
+            a.display === b.display &&
+            a.empty === b.empty &&
+            a.columnMenu === b.columnMenu
+          ) {
+            newCells[i] = a;
+          } else {
+            allEqual = false;
+          }
+        }
+        next[row.id] = allEqual ? prevCells : newCells;
       } else {
-        next[row.id] = headers.map((header, index) => ({
-          key: header.key ?? `key-${index}`,
-          value: header.key ? resolvePath(row, header.key) : undefined,
-          display: header.display,
-          empty: header.empty,
-          columnMenu: header.columnMenu,
-        }));
+        next[row.id] = newCells;
       }
-      nextRefs[row.id] = row;
     }
 
     tableCellsByRowId = next;
-    rowRefById = nextRefs;
     prevRows = rows;
     prevHeaders = headers;
   }

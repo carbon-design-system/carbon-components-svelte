@@ -75,6 +75,29 @@ describe("DataTable tableCellsByRowId caching", () => {
     expect(lastCell).toEqual(expect.objectContaining({ value: "Beta" }));
   });
 
+  it("reflects in-place row mutations when the row reference is unchanged", async () => {
+    const row = { id: "a", name: "Alpha" };
+
+    const { rerender } = render(DataTableTableCellsCache, {
+      props: { headers, rows: [row] },
+    });
+
+    expect(
+      within(getFirstBodyRow()).queryByRole("cell", { name: "Alpha" }),
+    ).not.toBeNull();
+
+    row.name = "Beta";
+    await rerender({ rows: [row] });
+    await tick();
+
+    expect(
+      within(getFirstBodyRow()).queryByRole("cell", { name: "Beta" }),
+    ).not.toBeNull();
+    expect(
+      within(getFirstBodyRow()).queryByRole("cell", { name: "Alpha" }),
+    ).toBeNull();
+  });
+
   it("rebuilds cell objects when headers change", async () => {
     const row = { id: "a", name: "Alpha", protocol: "HTTP" };
     const headersWide = [
