@@ -711,7 +711,7 @@
               <th scope="col" style={formatHeaderWidth(header)}></th>
             {:else}
               <TableHeader
-                id={header.key}
+                id="{id}-{header.key}"
                 style={formatHeaderWidth(header)}
                 sortable={sortable && header.sort !== false}
                 sortDirection={sortKey === header.key ? sortDirection : "none"}

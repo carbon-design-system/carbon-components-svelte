@@ -2428,6 +2428,39 @@ describe("DataTable", () => {
     });
   });
 
+  it("scopes the per-header data-header attribute to the DataTable instance to prevent collisions across multiple tables", () => {
+    const { container: container1 } = render(DataTable, {
+      props: { headers, rows },
+    });
+    const { container: container2 } = render(DataTable, {
+      props: { headers, rows },
+    });
+
+    const headerKeys1 = Array.from(
+      container1.querySelectorAll<HTMLElement>("th[data-header]"),
+    ).map((th) => th.getAttribute("data-header"));
+    const headerKeys2 = Array.from(
+      container2.querySelectorAll<HTMLElement>("th[data-header]"),
+    ).map((th) => th.getAttribute("data-header"));
+
+    expect(headerKeys1).toHaveLength(headers.length);
+    expect(headerKeys2).toHaveLength(headers.length);
+
+    for (const header of headers) {
+      expect(headerKeys1).not.toContain(header.key);
+      expect(headerKeys2).not.toContain(header.key);
+      expect(headerKeys1.some((key) => key?.endsWith(`-${header.key}`))).toBe(
+        true,
+      );
+      expect(headerKeys2.some((key) => key?.endsWith(`-${header.key}`))).toBe(
+        true,
+      );
+    }
+
+    const overlap = headerKeys1.filter((key) => headerKeys2.includes(key));
+    expect(overlap).toHaveLength(0);
+  });
+
   describe("virtualization", () => {
     const createLargeRowList = (count: number) => {
       return Array.from({ length: count }, (_, i) => ({
