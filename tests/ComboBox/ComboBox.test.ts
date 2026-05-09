@@ -67,6 +67,19 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Slack");
   });
 
+  it("should set aria-activedescendant to the highlighted filtered item", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+    await user.keyboard("fax");
+    await user.keyboard("{ArrowDown}");
+
+    // After filtering to "Fax" (id="2"), ArrowDown highlights filteredItems[0].
+    // aria-activedescendant must reference that item, not items[0] ("Slack").
+    expect(input).toHaveAttribute("aria-activedescendant", "2");
+  });
+
   it("should start keyboard navigation at selected item index", async () => {
     render(ComboBox, {
       props: {

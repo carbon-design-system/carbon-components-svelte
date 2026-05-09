@@ -462,8 +462,8 @@
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
-  $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
+  $: highlightedId = filteredItems[highlightedIndex]?.id;
   $: filteredItemIndexById = new Map(
     filteredItems.map((item, i) => [item.id, i]),
   );
