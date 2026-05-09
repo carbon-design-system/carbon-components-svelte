@@ -30,6 +30,14 @@ Omit `selectedId` to render the dropdown with no item selected. The `label` prop
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+## With initial selection
+
+Set `selectedId` to the `id` of the item that should appear chosen when the dropdown first renders. The trigger shows that item's label in the closed state.
+
+When the user opens the menu, if the option list is taller than the menu's maximum height, the menu scrolls so the selected option stays visible. That applies to lists rendered in full and to [virtualized lists](#virtualized-items-large-lists).
+
+<FileSource src="/framed/Dropdown/ScrollToSelected" />
+
 ## Custom label
 
 Use the `labelChildren` slot to provide custom label content instead of using the `labelText` prop.
