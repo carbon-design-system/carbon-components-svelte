@@ -220,6 +220,29 @@ describe("Select", () => {
     );
   });
 
+  it("renders warning state for inline variant", () => {
+    render(Select, {
+      id: "test-select",
+      inline: true,
+      warn: true,
+      warnText: "Warning message",
+    });
+
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
+    assert(selectWrapper);
+    expect(selectWrapper).toHaveClass("bx--select--warning");
+
+    const warnElement = screen.getByText("Warning message");
+    expect(warnElement).toHaveAttribute("id", "warn-test-select");
+    expect(warnElement).toHaveClass("bx--form-requirement");
+
+    const warningIcon = selectWrapper.querySelector(
+      ".bx--select__invalid-icon--warning",
+    );
+    expect(warningIcon).toBeInTheDocument();
+  });
+
   it("renders without helper text by default", () => {
     render(Select);
     expect(screen.queryByText(/helper/i)).not.toBeInTheDocument();
