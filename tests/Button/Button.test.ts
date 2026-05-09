@@ -64,6 +64,15 @@ describe("Button", () => {
     expect(linkButton).toHaveAttribute("href", "#");
   });
 
+  it('should set rel="noopener noreferrer" on link when target="_blank"', () => {
+    render(Button);
+
+    const externalLink = screen.getByText("External link");
+    expect(externalLink.tagName).toBe("A");
+    expect(externalLink).toHaveAttribute("target", "_blank");
+    expect(externalLink).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
   it("should render custom element when as prop is used", () => {
     render(Button);
 

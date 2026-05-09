@@ -152,6 +152,10 @@
     tabindex,
     disabled: disabled === true ? true : undefined,
     href,
+    rel:
+      href && $$restProps.target === "_blank"
+        ? "noopener noreferrer"
+        : undefined,
     "aria-pressed":
       hasIconOnly && kind === "ghost" && !href ? isSelected : undefined,
     ...$$restProps,

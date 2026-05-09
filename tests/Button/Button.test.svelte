@@ -30,6 +30,8 @@
 
 <Button href="#">Link button</Button>
 
+<Button href="https://example.com" target="_blank">External link</Button>
+
 <Button as let:props> <p {...props}>Custom element</p> </Button>
 
 <Button disabled>Disabled button</Button>
