@@ -49,10 +49,10 @@ test.describe("MultiSelect", () => {
     await expect(page.getByTestId("selected-count")).not.toBeVisible();
   });
 
-  test("opens with Enter and closes with Escape", async ({ page }) => {
+  test("opens with ArrowDown and closes with Escape", async ({ page }) => {
     const trigger = page.getByTestId("multiselect-fruits");
     await trigger.focus();
-    await page.keyboard.press("Enter");
+    await page.keyboard.press("ArrowDown");
     await expect(page.getByRole("option", { name: "Apple" })).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.getByRole("option", { name: "Apple" })).not.toBeVisible();

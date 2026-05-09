@@ -1138,7 +1138,7 @@ describe("MultiSelect", () => {
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2313
   describe("keyboard navigation (issue #2313)", () => {
-    it("filterable: menu opens when tabbing into field", async () => {
+    it("filterable: menu does not open on focus alone (WAI-ARIA combobox)", async () => {
       render(MultiSelect, {
         props: {
           items,
@@ -1152,6 +1152,10 @@ describe("MultiSelect", () => {
       await user.tab();
       expect(input).toHaveFocus();
 
+      expect(input).toHaveAttribute("aria-expanded", "false");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
+      await user.keyboard("{ArrowDown}");
       expect(input).toHaveAttribute("aria-expanded", "true");
       expect(screen.getByRole("listbox")).toBeInTheDocument();
     });
@@ -1215,7 +1219,7 @@ describe("MultiSelect", () => {
 
       expect(input).toHaveFocus();
       expect(clearButton).not.toHaveFocus();
-      expect(input).toHaveAttribute("aria-expanded", "true");
+      expect(input).toHaveAttribute("aria-expanded", "false");
     });
 
     it("filterable: clear button is not keyboard accessible but works with mouse", async () => {
