@@ -456,6 +456,9 @@
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
+  $: helperId = `helper-${id}`;
+  $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
   $: highlightedId = filteredItems[highlightedIndex]?.id;
   $: filteredItemIndexById = new Map(
@@ -564,12 +567,10 @@
     aria-label={ariaLabel}
     {disabled}
     {invalid}
-    {invalidText}
     {open}
     {light}
     {size}
     {warn}
-    {warnText}
   >
     <div bind:this={fieldRef} class:bx--list-box__field={true}>
       <input
@@ -586,6 +587,13 @@
         aria-disabled={disabled}
         aria-controls={open ? menuId : undefined}
         aria-owns={open ? menuId : undefined}
+        aria-describedby={invalid && invalidText
+          ? errorId
+          : !invalid && warn && warnText
+            ? warnId
+            : !invalid && !warn && helperText
+              ? helperId
+              : undefined}
         {disabled}
         {placeholder}
         {id}
@@ -794,8 +802,15 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
-  {#if !invalid && helperText && !warn}
+  {#if invalid && invalidText}
+    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+  {/if}
+  {#if !invalid && warn && warnText}
+    <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+  {/if}
+  {#if !invalid && !warn && helperText}
     <div
+      id={helperId}
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
     >
