@@ -696,6 +696,45 @@ describe("MultiSelect", () => {
       await openMenu();
       expect(nthRenderedOptionText(0)).toBe("A");
     });
+
+    it("recomputes sortedItems when the items prop changes", async () => {
+      const { rerender } = render(MultiSelect, {
+        props: {
+          items: [
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+          ],
+        },
+      });
+
+      await openMenu();
+      expect(screen.getAllByRole("option")).toHaveLength(2);
+      expect(nthRenderedOptionText(0)).toBe("A");
+      expect(nthRenderedOptionText(1)).toBe("B");
+
+      await rerender({
+        items: [
+          { id: "1", text: "A" },
+          { id: "2", text: "B" },
+          { id: "3", text: "C" },
+        ],
+      });
+      await tick();
+
+      expect(screen.getAllByRole("option")).toHaveLength(3);
+      expect(nthRenderedOptionText(2)).toBe("C");
+
+      await rerender({
+        items: [
+          { id: "1", text: "Alpha" },
+          { id: "2", text: "B" },
+          { id: "3", text: "C" },
+        ],
+      });
+      await tick();
+
+      expect(nthRenderedOptionText(0)).toBe("Alpha");
+    });
   });
 
   describe("variants and states", () => {
