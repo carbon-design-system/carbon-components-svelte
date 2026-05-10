@@ -2,7 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
-const dryRun = process.argv.includes("--dry-run");
 
 const GITHUB_REPO_RE = /github\.com[:/]([^/]+)\/([^/.]+)/;
 const CONVENTIONAL_HEADER_RE = /^(\w+)(?:\(([^)]+)\))?(!)?: (.+)$/;
@@ -240,17 +239,6 @@ if (perfLines.length) {
 const compareUrl = `${baseUrl}/compare/v${currentVersion}...v${nextVersion}`;
 const header = `### [${nextVersion}](${compareUrl}) (${todayIso()})`;
 const newBlock = [header, "", sections.join("\n").trimEnd()].join("\n");
-
-if (dryRun) {
-  console.log(
-    "Next version:",
-    nextVersion,
-    hasMinorBump ? "(minor)" : "(patch)",
-  );
-  console.log("---");
-  console.log(newBlock);
-  process.exit(0);
-}
 
 if (!PKG_VERSION_RE.test(pkgRaw)) {
   throw new Error("Could not find version field in package.json");
