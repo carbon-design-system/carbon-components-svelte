@@ -24,26 +24,27 @@
   import Link from "../Link/Link.svelte";
 
   setContext("carbon:BreadcrumbItem", {});
+
+  $: ({ "aria-current": ariaCurrent, ...liProps } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <li
   class:bx--breadcrumb-item={true}
-  class:bx--breadcrumb-item--current={isCurrentPage ||
-    $$restProps["aria-current"] === "page"}
-  {...$$restProps}
+  class:bx--breadcrumb-item--current={isCurrentPage || ariaCurrent === "page"}
+  {...liProps}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
 >
   {#if href}
-    <Link {href} aria-current={$$restProps["aria-current"]}> <slot /> </Link>
+    <Link {href} aria-current={ariaCurrent}> <slot /> </Link>
   {:else}
     <slot
       props={{
-        "aria-current": $$restProps["aria-current"],
+        "aria-current": ariaCurrent,
         class: "bx--link",
       }}
     />

@@ -94,12 +94,16 @@ describe("Breadcrumb", () => {
     expect(items[2]).toHaveClass("bx--breadcrumb-item--current");
   });
 
-  it("applies current class when aria-current='page' is set alongside isCurrentPage", () => {
+  it("applies current class and forwards aria-current to the link, not the <li>", () => {
     render(BreadcrumbAriaCurrent);
 
     const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(3);
     expect(items[2]).toHaveClass("bx--breadcrumb-item--current");
-    expect(items[2]).toHaveAttribute("aria-current", "page");
+    expect(items[2]).not.toHaveAttribute("aria-current");
+
+    const links = screen.getAllByRole("link");
+    expect(links[2]).toHaveAttribute("aria-current", "page");
   });
 
   it("updates when dynamic items change", async () => {
