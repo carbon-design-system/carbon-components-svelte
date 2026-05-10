@@ -11,6 +11,10 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
+  on:focus
+  on:blur
+  on:keydown
+  on:keyup
   target="_blank"
   icon={Launch}
 >
