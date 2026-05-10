@@ -1,5 +1,6 @@
 import { render, screen, within } from "@testing-library/svelte";
 import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
+import BreadcrumbLabelText from "./Breadcrumb.labelText.test.svelte";
 import BreadcrumbNoTrailingSlash from "./Breadcrumb.noTrailingSlash.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
 import Breadcrumb from "./Breadcrumb.test.svelte";
@@ -30,6 +31,13 @@ describe("Breadcrumb", () => {
     expect(links[2]).toHaveTextContent("2019");
     expect(links[2]).toHaveAttribute("href", "/reports/2019");
     expect(items[2]).toHaveClass("bx--breadcrumb-item--current");
+  });
+
+  it("supports custom labelText", () => {
+    render(BreadcrumbLabelText);
+
+    const nav = screen.getByRole("navigation", { name: "Page navigation" });
+    expect(nav).toBeInTheDocument();
   });
 
   it("renders with noTrailingSlash", () => {

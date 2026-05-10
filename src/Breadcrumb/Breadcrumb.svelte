@@ -7,6 +7,9 @@
   /** Set to `true` to display skeleton state */
   export let skeleton = false;
 
+  /** Specify the ARIA label for the nav */
+  export let labelText = "Breadcrumb";
+
   import BreadcrumbSkeleton from "./BreadcrumbSkeleton.svelte";
 </script>
 
@@ -23,7 +26,7 @@
 {:else}
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <nav
-    aria-label="Breadcrumb"
+    aria-label={labelText}
     {...$$restProps}
     on:click
     on:mouseover
