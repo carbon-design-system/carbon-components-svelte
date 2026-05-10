@@ -31,6 +31,7 @@ describe("Breadcrumb", () => {
     expect(links[2]).toHaveTextContent("2019");
     expect(links[2]).toHaveAttribute("href", "/reports/2019");
     expect(items[2]).toHaveClass("bx--breadcrumb-item--current");
+    expect(links[2]).toHaveAttribute("aria-current", "page");
   });
 
   it("renders with noTrailingSlash", () => {

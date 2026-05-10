@@ -41,11 +41,16 @@
   on:mouseleave
 >
   {#if href}
-    <Link {href} aria-current={ariaCurrent}> <slot /> </Link>
+    <Link
+      {href}
+      aria-current={ariaCurrent ?? (isCurrentPage ? "page" : undefined)}
+    >
+      <slot />
+    </Link>
   {:else}
     <slot
       props={{
-        "aria-current": ariaCurrent,
+        "aria-current": ariaCurrent ?? (isCurrentPage ? "page" : undefined),
         class: "bx--link",
       }}
     />
