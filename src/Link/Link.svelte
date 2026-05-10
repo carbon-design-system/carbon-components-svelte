@@ -54,6 +54,10 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
+    on:focus
+    on:blur
+    on:keydown
+    on:keyup
   >
     <slot />
     {#if !inline && ($$slots.icon || icon)}
@@ -78,6 +82,10 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
+    on:focus
+    on:blur
+    on:keydown
+    on:keyup
   >
     <slot />
     {#if !inline && ($$slots.icon || icon)}
