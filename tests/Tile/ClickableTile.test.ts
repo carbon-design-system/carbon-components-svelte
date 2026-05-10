@@ -67,4 +67,11 @@ describe("ClickableTile", () => {
     await user.click(disabledTile);
     expect(disabledTile).not.toHaveClass("bx--tile--is-clicked");
   });
+
+  it("should expose a reference to the underlying anchor element", () => {
+    const { component } = render(ClickableTile);
+
+    expect(component.ref).toBeInstanceOf(HTMLAnchorElement);
+    expect(component.ref).toHaveClass("bx--tile--clickable");
+  });
 });

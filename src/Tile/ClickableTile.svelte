@@ -16,6 +16,9 @@
    */
   export let href = undefined;
 
+  /** Obtain a reference to the underlying anchor HTML element */
+  export let ref = null;
+
   import Link from "../Link/Link.svelte";
 
   $: linkClass = [
@@ -30,6 +33,7 @@
 </script>
 
 <Link
+  bind:ref
   {...$$restProps}
   {disabled}
   class={linkClass}
