@@ -56,6 +56,22 @@ Build a full breadcrumb trail with multiple items and a current page indicator.
 
 <FileSource src="/framed/Breadcrumbs/Breadcrumbs" />
 
+## Custom link element
+
+Omit `href` and use `let:props` to render a custom link element (for example, a router link). Spread `props` onto the element to apply the Carbon link class and forward `aria-current` when `isCurrentPage` is set.
+
+<Breadcrumb>
+  <BreadcrumbItem let:props>
+    <a {...props} href="/">Dashboard</a>
+  </BreadcrumbItem>
+  <BreadcrumbItem let:props>
+    <a {...props} href="/reports">Annual reports</a>
+  </BreadcrumbItem>
+  <BreadcrumbItem isCurrentPage let:props>
+    <a {...props} href="/reports/2019">2019</a>
+  </BreadcrumbItem>
+</Breadcrumb>
+
 ## Skeleton
 
 Display a loading state with `skeleton` prop. Use `count` to specify the number of items.
