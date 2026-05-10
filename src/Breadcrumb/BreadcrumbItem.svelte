@@ -8,6 +8,7 @@
    *   <a {...props} href="/">Home</a>
    * </BreadcrumbItem>
    * ```
+   * @restProps {li}
    * @slot {{props?: { "aria-current"?: string; class: "bx--link"; }}}
    */
 
