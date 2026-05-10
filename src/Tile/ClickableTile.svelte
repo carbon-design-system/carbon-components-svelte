@@ -27,10 +27,12 @@
   {href}
   on:click
   on:click={() => {
+    if (disabled) return;
     clicked = !clicked;
   }}
   on:keydown
   on:keydown={({ key }) => {
+    if (disabled) return;
     if (key === " " || key === "Enter") {
       clicked = !clicked;
     }
