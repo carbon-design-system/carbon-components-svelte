@@ -49,7 +49,8 @@
   class:bx--accordion__item--collapsing={animation === "collapsing"}
   {...$$restProps}
   on:animationend
-  on:animationend={() => {
+  on:animationend={(e) => {
+    if (e.target !== e.currentTarget) return;
     animation = undefined;
   }}
 >

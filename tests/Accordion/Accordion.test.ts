@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
@@ -400,6 +400,25 @@ describe("Accordion", () => {
     expect(consoleLog).toHaveBeenCalledWith("item-keydown", "Escape");
 
     itemIsCollapsed(/Language Translator/);
+  });
+
+  it("should not clear animation class when animationend bubbles from a descendant", async () => {
+    render(Accordion);
+
+    const item = screen.getByText("Language Translator").closest("li");
+    expect.assert(item instanceof HTMLLIElement);
+
+    await user.click(screen.getByText("Language Translator"));
+
+    expect(item).toHaveClass("bx--accordion__item--expanding");
+
+    // Simulate a descendant (e.g. slotted content) finishing its own CSS
+    // animation. The bubbled event must not clear the item's animating class.
+    const descendant = item.querySelector(".bx--accordion__title");
+    expect.assert(descendant instanceof HTMLElement);
+    await fireEvent.animationEnd(descendant);
+
+    expect(item).toHaveClass("bx--accordion__item--expanding");
   });
 
   it("should use custom iconDescription", () => {
