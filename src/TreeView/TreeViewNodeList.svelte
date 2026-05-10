@@ -156,8 +156,12 @@
         }}
       >
         <CaretDown
-          class="bx--tree-parent-node__toggle-icon {expanded &&
-            'bx--tree-parent-node__toggle-icon--expanded'}"
+          class={[
+            "bx--tree-parent-node__toggle-icon",
+            expanded && "bx--tree-parent-node__toggle-icon--expanded",
+          ]
+            .filter(Boolean)
+            .join(" ")}
         />
       </span>
       <span class:bx--tree-node__label__details={true}>

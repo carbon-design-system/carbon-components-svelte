@@ -11,6 +11,13 @@ describe("ClickableTile", () => {
     expect(tile).toHaveClass("bx--tile", "bx--tile--clickable");
   });
 
+  it("should not include a literal false token in the class attribute", () => {
+    render(ClickableTile);
+
+    const tile = screen.getByText("Link only");
+    expect(tile.className).not.toMatch(/\bfalse\b/);
+  });
+
   it("should render light variant with other attributes", () => {
     render(ClickableTile);
 

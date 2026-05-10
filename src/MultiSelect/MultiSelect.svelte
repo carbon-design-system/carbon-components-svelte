@@ -555,6 +555,19 @@
   $: itemsToRender = virtualData?.isVirtualized
     ? virtualData.visibleItems
     : itemsToUse;
+
+  $: multiSelectListBoxClass = [
+    "bx--multi-select",
+    direction === "top" && "bx--list-box--up",
+    filterable && "bx--combo-box",
+    filterable && "bx--multi-select--filterable",
+    invalid && "bx--multi-select--invalid",
+    inline && "bx--multi-select--inline",
+    selectionCount > 0 && "bx--multi-select--selected",
+    hasSelectAll && "bx--multi-select--selectall",
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 <svelte:window
@@ -602,13 +615,7 @@
     {size}
     {warn}
     {warnText}
-    class="bx--multi-select {direction === 'top' &&
-      'bx--list-box--up'} {filterable && 'bx--combo-box'}
-      {filterable && 'bx--multi-select--filterable'}
-      {invalid && 'bx--multi-select--invalid'}
-      {inline && 'bx--multi-select--inline'}
-      {selectionCount > 0 && 'bx--multi-select--selected'}
-      {hasSelectAll && 'bx--multi-select--selectall'}"
+    class={multiSelectListBoxClass}
   >
     {#if invalid}
       <WarningFilled class="bx--list-box__invalid-icon" />

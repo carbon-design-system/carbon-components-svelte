@@ -25,6 +25,13 @@
   export let iconDescription = "Close icon";
 
   import Close from "../icons/Close.svelte";
+
+  $: iconClass = [
+    notificationType === "toast" && "bx--toast-notification__close-icon",
+    notificationType === "inline" && "bx--inline-notification__close-icon",
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -40,12 +47,5 @@
   on:mouseenter
   on:mouseleave
 >
-  <svelte:component
-    this={icon}
-    size={20}
-    {title}
-    class="{notificationType === 'toast' &&
-      'bx--toast-notification__close-icon'} {notificationType === 'inline' &&
-      'bx--inline-notification__close-icon'}"
-  />
+  <svelte:component this={icon} size={20} {title} class={iconClass} />
 </button>
