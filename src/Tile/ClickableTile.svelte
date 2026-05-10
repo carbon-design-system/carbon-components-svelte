@@ -35,9 +35,12 @@
       clicked = !clicked;
     }
   }}
+  on:keyup
   on:mouseover
   on:mouseenter
   on:mouseleave
+  on:focus
+  on:blur
 >
   <slot />
 </Link>
