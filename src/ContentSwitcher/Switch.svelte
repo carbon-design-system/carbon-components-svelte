@@ -61,11 +61,18 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={({ key }) => {
-    if (key === "ArrowRight") {
+  on:keydown={(e) => {
+    if (e.key === "ArrowRight") {
       ctx.selectionMode === "manual" ? ctx.focus(1) : ctx.change(1);
-    } else if (key === "ArrowLeft") {
+    } else if (e.key === "ArrowLeft") {
       ctx.selectionMode === "manual" ? ctx.focus(-1) : ctx.change(-1);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      ctx.selectionMode === "manual" ? ctx.focusTo(0) : ctx.changeTo(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      const last = ctx.switchCount - 1;
+      ctx.selectionMode === "manual" ? ctx.focusTo(last) : ctx.changeTo(last);
     }
   }}
 >

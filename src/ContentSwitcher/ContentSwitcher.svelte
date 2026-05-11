@@ -74,6 +74,20 @@
   };
 
   /**
+   * @type {(index: number) => Promise<void>}
+   */
+  const changeTo = async (index) => {
+    selectedIndex = index;
+
+    await tick();
+    const tab = document.getElementById(switches[index].id);
+
+    if (tab instanceof HTMLElement) {
+      tab.focus();
+    }
+  };
+
+  /**
    * @type {(direction: number) => Promise<void>}
    */
   const change = async (direction) => {
@@ -85,7 +99,15 @@
       index = 0;
     }
 
-    selectedIndex = index;
+    await changeTo(index);
+  };
+
+  /**
+   * Move focus to a switch at an absolute index without changing selection.
+   * @type {(index: number) => Promise<void>}
+   */
+  const focusTo = async (index) => {
+    focusedIndex = index;
 
     await tick();
     const tab = document.getElementById(switches[index].id);
@@ -109,14 +131,7 @@
       index = 0;
     }
 
-    focusedIndex = index;
-
-    await tick();
-    const tab = document.getElementById(switches[index].id);
-
-    if (tab instanceof HTMLElement) {
-      tab.focus();
-    }
+    await focusTo(index);
   };
 
   setContext("carbon:ContentSwitcher", {
@@ -125,7 +140,12 @@
     remove,
     update,
     change,
+    changeTo,
     focus,
+    focusTo,
+    get switchCount() {
+      return switches.length;
+    },
     get selectionMode() {
       return selectionMode;
     },
