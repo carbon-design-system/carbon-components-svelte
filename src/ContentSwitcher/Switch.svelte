@@ -51,7 +51,7 @@
   class:bx--content-switcher--selected={selected}
   {...$$restProps}
   on:click
-  on:click|preventDefault={() => {
+  on:click={() => {
     ctx.update(id);
   }}
   on:mouseover
