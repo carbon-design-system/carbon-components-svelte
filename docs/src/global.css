@@ -52,16 +52,16 @@ html {
 [theme="g10"] .code-override .bx--copy-btn,
 [theme="white"] .code-override .bx--snippet,
 [theme="g10"] .code-override .bx--snippet,
-[theme="white"] button.bx--btn.bx--snippet-btn--expand,
-[theme="g10"] button.bx--btn.bx--snippet-btn--expand {
+[theme="white"] .code-override button.bx--btn.bx--snippet-btn--expand,
+[theme="g10"] .code-override button.bx--btn.bx--snippet-btn--expand {
   background-color: var(--cds-ui-background);
   color: var(--cds-text-01, #161616);
 }
 
 [theme="white"] .code-override .bx--copy-btn:hover,
 [theme="g10"] .code-override .bx--copy-btn:hover,
-[theme="white"] button.bx--btn.bx--snippet-btn--expand:hover,
-[theme="g10"] button.bx--btn.bx--snippet-btn--expand:hover {
+[theme="white"] .code-override button.bx--btn.bx--snippet-btn--expand:hover,
+[theme="g10"] .code-override button.bx--btn.bx--snippet-btn--expand:hover {
   background-color: var(--cds-field-hover-01, #e8e8e8);
 }
 
