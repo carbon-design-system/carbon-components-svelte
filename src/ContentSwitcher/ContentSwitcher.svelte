@@ -33,9 +33,9 @@
 
   let prevIndex = -1;
 
-  $: currentIndex = -1;
-  $: focusedIndex = -1;
-  $: switches = [];
+  let currentIndex = -1;
+  let focusedIndex = -1;
+  let switches = [];
   $: if (switches[currentIndex]) {
     if (prevIndex > -1 && prevIndex !== currentIndex) {
       dispatch("change", currentIndex);
