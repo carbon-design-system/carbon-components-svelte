@@ -40,6 +40,13 @@ describe("CodeSnippet", () => {
     expect(screen.getByText("npm install -g @carbon/cli")).toBeInTheDocument();
   });
 
+  // Inline copy button defaults its accessible name to "Copy code"
+  // so AT users don't hear the full snippet read as the button name.
+  test("inline copy button has default 'Copy code' aria-label", () => {
+    render(CodeSnippetInline);
+    expect(screen.getByLabelText("Copy code")).toBeInTheDocument();
+  });
+
   test("should render multiline variant", () => {
     const { container } = render(CodeSnippetMultiline);
     expect(container.querySelector(".bx--snippet--multi")).toBeInTheDocument();

@@ -74,7 +74,7 @@
    * Specify the ARIA label of the copy button.
    * @type {string}
    */
-  export let copyLabel = undefined;
+  export let copyLabel = "Copy code";
 
   /** Specify the feedback text displayed when clicking the snippet */
   export let feedback = "Copied!";
