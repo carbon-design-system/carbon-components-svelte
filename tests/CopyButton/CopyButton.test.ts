@@ -140,5 +140,30 @@ describe("CopyButton", () => {
         button.querySelector(".bx--copy-btn__feedback"),
       ).toBeInTheDocument();
     });
+
+    // Regression: observer must re-attach when portalTooltip flips after mount.
+    // Previously, the observer was registered once in onMount; toggling
+    // portalTooltip from false -> true left no observer, so closing the modal
+    // did not dismiss the open portal tooltip.
+    it("should dismiss portal feedback when modal closes after portalTooltip toggled on", async () => {
+      const { rerender } = render(CopyButtonInModal, {
+        props: { modalOpen: true, portalTooltip: false },
+      });
+
+      rerender({ modalOpen: true, portalTooltip: true });
+
+      const button = getCopyButton("Copy");
+      await user.click(button);
+      expect(
+        document.querySelector("[data-floating-portal]"),
+      ).toBeInTheDocument();
+
+      rerender({ modalOpen: false, portalTooltip: true });
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(
+        document.querySelector("[data-floating-portal]"),
+      ).not.toBeInTheDocument();
+    });
   });
 });
