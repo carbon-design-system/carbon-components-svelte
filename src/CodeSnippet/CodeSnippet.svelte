@@ -171,13 +171,18 @@
     prevExpanded = expanded;
   }
 
-  onMount(() => {
+  let disconnectModalObserver = () => {};
+
+  $: {
     const el = inlineButtonRef || ref;
-    const disconnectModalObserver =
+    disconnectModalObserver();
+    disconnectModalObserver =
       effectivePortalTooltip && el
         ? observeModalClose(el, dismissFeedback)
         : () => {};
+  }
 
+  onMount(() => {
     return () => {
       clearTimeout(timeout);
       feedbackOpen = false;
