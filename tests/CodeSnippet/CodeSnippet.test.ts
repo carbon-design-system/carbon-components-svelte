@@ -68,6 +68,16 @@ describe("CodeSnippet", () => {
     expect(screen.getByText("Show more")).toBeInTheDocument();
   });
 
+  // Regression: chevron should not duplicate the button's accessible name
+  test("should not set aria-label on the expand chevron", () => {
+    const { container } = render(CodeSnippetExpandable);
+
+    const chevron = container.querySelector(".bx--icon-chevron--down");
+    assert(chevron);
+    expect(chevron).toHaveAttribute("aria-hidden", "true");
+    expect(chevron).not.toHaveAttribute("aria-label");
+  });
+
   test("should render expanded by default", async () => {
     const { container } = render(CodeSnippetExpandedByDefault);
 
