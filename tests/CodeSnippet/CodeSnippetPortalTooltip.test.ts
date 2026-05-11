@@ -46,5 +46,27 @@ describe("CodeSnippet portal tooltip", () => {
         button.querySelector(".bx--copy-btn__feedback"),
       ).toBeInTheDocument();
     });
+
+    // Regression: observer must re-attach when portalTooltip flips after mount.
+    it("should dismiss portal feedback when modal closes after portalTooltip toggled on", async () => {
+      const { rerender } = render(CodeSnippetInlineInModal, {
+        props: { modalOpen: true, portalTooltip: false },
+      });
+
+      rerender({ modalOpen: true, portalTooltip: true });
+
+      const button = screen.getByRole("button", { name: "Copy code" });
+      await user.click(button);
+      expect(
+        document.querySelector("[data-floating-portal]"),
+      ).toBeInTheDocument();
+
+      rerender({ modalOpen: false, portalTooltip: true });
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(
+        document.querySelector("[data-floating-portal]"),
+      ).not.toBeInTheDocument();
+    });
   });
 });
