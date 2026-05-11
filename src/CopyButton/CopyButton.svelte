@@ -59,12 +59,17 @@
     clearTimeout(timeout);
   }
 
-  onMount(() => {
-    const disconnectModalObserver =
+  let disconnectModalObserver = () => {};
+
+  $: {
+    disconnectModalObserver();
+    disconnectModalObserver =
       effectivePortalTooltip && buttonRef
         ? observeModalClose(buttonRef, dismissFeedback)
         : () => {};
+  }
 
+  onMount(() => {
     return () => {
       clearTimeout(timeout);
       feedbackOpen = false;
