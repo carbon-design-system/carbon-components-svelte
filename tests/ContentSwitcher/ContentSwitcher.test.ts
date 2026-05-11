@@ -3,6 +3,7 @@ import { user } from "../setup-tests";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
 import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
+import ContentSwitcherNested from "./ContentSwitcher.nested.test.svelte";
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
 import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.svelte";
 import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
@@ -155,6 +156,37 @@ describe("ContentSwitcher", () => {
     expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
     expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
     expect(document.activeElement).toBe(tabs[2]);
+  });
+
+  it("ignores nested [role='tab'] elements inside switch slots when navigating", async () => {
+    render(ContentSwitcherNested);
+
+    const tablist = screen.getByRole("tablist");
+    const switchTabs = within(tablist).getAllByRole("tab", {
+      name: /Outer|Nested tab/,
+    });
+    expect(switchTabs).toHaveLength(4);
+
+    const outerTabs = within(tablist)
+      .getAllByRole("tab")
+      .filter((el) => el.tagName === "BUTTON");
+    expect(outerTabs).toHaveLength(3);
+    expect(outerTabs[0]).toHaveClass("bx--content-switcher--selected");
+
+    await user.tab();
+    expect(document.activeElement).toBe(outerTabs[0]);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(outerTabs[1]);
+    expect(outerTabs[1]).toHaveClass("bx--content-switcher--selected");
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(outerTabs[2]);
+    expect(outerTabs[2]).toHaveClass("bx--content-switcher--selected");
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(outerTabs[0]);
+    expect(outerTabs[0]).toHaveClass("bx--content-switcher--selected");
   });
 
   it("respects disabled state", async () => {

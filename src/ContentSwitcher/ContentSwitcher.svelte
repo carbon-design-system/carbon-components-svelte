@@ -88,8 +88,7 @@
     selectedIndex = index;
 
     await tick();
-    const tabs = refContainer?.querySelectorAll("[role='tab']");
-    const tab = tabs?.[index];
+    const tab = document.getElementById(switches[index].id);
 
     if (tab instanceof HTMLElement) {
       tab.focus();
@@ -113,8 +112,7 @@
     focusedIndex = index;
 
     await tick();
-    const tabs = refContainer?.querySelectorAll("[role='tab']");
-    const tab = tabs?.[index];
+    const tab = document.getElementById(switches[index].id);
 
     if (tab instanceof HTMLElement) {
       tab.focus();
