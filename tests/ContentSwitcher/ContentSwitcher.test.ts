@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
+import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
 import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.svelte";
 import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
@@ -242,6 +243,31 @@ describe("ContentSwitcher", () => {
     assert(component.switchRef);
     expect(component.switchRef).toBeInstanceOf(HTMLButtonElement);
     expect(component.switchRef.type).toBe("button");
+  });
+
+  it("unregisters a destroyed Switch so keyboard wrap-around uses the visible tabs", async () => {
+    const { rerender } = render(ContentSwitcherDynamic, {
+      props: { show: true },
+    });
+
+    expect(screen.getAllByRole("tab")).toHaveLength(3);
+
+    await rerender({ show: false });
+
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs).toHaveLength(2);
+    expect(tabs[0]).toHaveTextContent("First");
+    expect(tabs[1]).toHaveTextContent("Last");
+
+    await user.tab();
+    expect(document.activeElement).toBe(tabs[0]);
+
+    // ArrowLeft from the first tab should wrap to the last visible tab.
+    // If the destroyed middle Switch is still in the parent's registry,
+    // currentIndex wraps onto a phantom entry and focus never moves.
+    await user.keyboard("{ArrowLeft}");
+    expect(document.activeElement).toBe(tabs[1]);
+    expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
   });
 
   describe('selectionMode="manual"', () => {
