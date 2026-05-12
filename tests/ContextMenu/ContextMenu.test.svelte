@@ -8,6 +8,7 @@
   export let y = 0;
   export let ref: ComponentProps<ContextMenu>["ref"] = null;
   export let withSubmenu = false;
+  export let withDisabled = false;
 </script>
 
 <div data-testid="target">Right click me</div>
@@ -31,6 +32,8 @@
       <ContextMenuOption labelText="Submenu option 1" />
       <ContextMenuOption labelText="Submenu option 2" />
     </ContextMenuOption>
+  {:else if withDisabled}
+    <ContextMenuOption labelText="Disabled option" disabled />
   {:else}
     <ContextMenuOption labelText="Option 2" />
   {/if}
