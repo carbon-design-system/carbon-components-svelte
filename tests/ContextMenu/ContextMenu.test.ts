@@ -26,6 +26,37 @@ describe("ContextMenu", () => {
     expect(menu[0]).toHaveClass("bx--menu");
   });
 
+  it("should set aria-label on root menu from labelText", () => {
+    render(ContextMenu, {
+      props: { open: true, labelText: "Page actions" },
+    });
+
+    const menu = screen.getAllByRole("menu")[0];
+    expect(menu).toHaveAttribute("aria-label", "Page actions");
+  });
+
+  it("should set aria-label from aria-label prop", () => {
+    render(ContextMenu, {
+      props: { open: true, ariaLabel: "Custom menu name" },
+    });
+
+    const menu = screen.getAllByRole("menu")[0];
+    expect(menu).toHaveAttribute("aria-label", "Custom menu name");
+  });
+
+  it("should prefer aria-label over labelText when both are set", () => {
+    render(ContextMenu, {
+      props: {
+        open: true,
+        labelText: "From labelText",
+        ariaLabel: "From aria-label",
+      },
+    });
+
+    const menu = screen.getAllByRole("menu")[0];
+    expect(menu).toHaveAttribute("aria-label", "From aria-label");
+  });
+
   it("should render menu options", () => {
     render(ContextMenu);
 
