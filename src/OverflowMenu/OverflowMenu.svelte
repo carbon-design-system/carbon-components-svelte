@@ -142,6 +142,7 @@
       index = 0;
     }
 
+    const start = index;
     let disabled = $items[index].disabled;
 
     while (disabled) {
@@ -152,6 +153,8 @@
       } else if (index >= $items.length) {
         index = 0;
       }
+
+      if (index === start) return;
 
       disabled = $items[index].disabled;
     }
