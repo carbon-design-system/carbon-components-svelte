@@ -1,6 +1,6 @@
 <script>
   import { Button, ButtonSet, InlineLoading } from "carbon-components-svelte";
-  import { onDestroy } from "svelte";
+  import { onMount } from "svelte";
 
   const descriptionMap = {
     active: "Submitting...",
@@ -29,7 +29,11 @@
     }
   }
 
-  onDestroy(reset);
+  onMount(() => {
+    return () => {
+      reset();
+    };
+  });
 
   $: reset(stateMap[state]);
 </script>
