@@ -210,6 +210,10 @@
       } else {
         if (focusIndex > 0) focusIndex--;
       }
+    } else if (e.key === "Home") {
+      if (options.length > 0) focusIndex = 0;
+    } else if (e.key === "End") {
+      if (options.length > 0) focusIndex = options.length - 1;
     }
   }}
 >
