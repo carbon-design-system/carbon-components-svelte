@@ -27,6 +27,11 @@
       <ContextMenuOption id="png" labelText="PNG" />
     </ContextMenuGroup>
   </ContextMenuOption>
+  <ContextMenuDivider />
+  <ContextMenuOption disabled indented labelText="Share">
+    <ContextMenuOption labelText="Email link" />
+    <ContextMenuOption labelText="Copy link" />
+  </ContextMenuOption>
 </ContextMenu>
 
 <div data-centered>
