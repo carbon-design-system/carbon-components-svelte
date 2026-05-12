@@ -10,6 +10,7 @@
   export let withSubmenu = false;
   export let withDisabled = false;
   export let submenuDisabled = false;
+  export let optionDisabled = false;
 </script>
 
 <div data-testid="target">Right click me</div>
@@ -39,6 +40,6 @@
   {:else if withDisabled}
     <ContextMenuOption labelText="Disabled option" disabled />
   {:else}
-    <ContextMenuOption labelText="Option 2" />
+    <ContextMenuOption labelText="Option 2" disabled={optionDisabled} />
   {/if}
 </ContextMenu>
