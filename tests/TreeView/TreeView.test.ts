@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type TreeViewNodeComponent from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
@@ -101,9 +101,15 @@ describe.each(testCases)("$name", ({ component }) => {
 
     expect(getAllExpandedItems()).toHaveLength(2);
 
+    const tree = screen.getByRole("tree");
+    const expandedItems = within(tree).getAllByRole("treeitem", {
+      expanded: true,
+    });
     expect(
-      screen.getByText("IBM Analytics Engine").parentNode?.parentNode,
-    ).toHaveAttribute("aria-expanded", "true");
+      expandedItems.some((el) =>
+        el.textContent?.includes("IBM Analytics Engine"),
+      ),
+    ).toBe(true);
   });
 
   it("can collapse all nodes", async () => {
@@ -1522,7 +1528,7 @@ describe("TreeView autoCollapse", () => {
     expect(folder1).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("works when expanding via Enter/Space key", async () => {
+  it("works when expanding via Enter key (Carbon: Space selects parent without toggling expand)", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: true });
 
     const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
@@ -1533,7 +1539,7 @@ describe("TreeView autoCollapse", () => {
     expect(folder1).toHaveAttribute("aria-expanded", "true");
 
     folder2.focus();
-    await user.keyboard(" ");
+    await user.keyboard("{Enter}");
     expect(folder2).toHaveAttribute("aria-expanded", "true");
     expect(folder1).toHaveAttribute("aria-expanded", "false");
   });

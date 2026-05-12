@@ -22,7 +22,23 @@
 
   import { afterUpdate, getContext } from "svelte";
   import CaretDown from "../icons/CaretDown.svelte";
-  import TreeViewNode, { computeTreeLeafDepth } from "./TreeViewNode.svelte";
+  import TreeViewNode, {
+    computeTreeLeafDepth,
+    findParentTreeNode,
+  } from "./TreeViewNode.svelte";
+
+  /**
+   * First focusable tree item in a subtree `ul` (handles `li` rows and `li[role="none"] > a` link rows).
+   * @param {HTMLElement} groupUl
+   * @returns {HTMLElement | null}
+   */
+  function firstTreeItemInGroup(groupUl) {
+    const row = groupUl.firstElementChild;
+    if (!(row instanceof HTMLElement)) return null;
+    if (row.classList.contains("bx--tree-node")) return row;
+    const nested = row.querySelector(".bx--tree-node");
+    return nested instanceof HTMLElement ? nested : null;
+  }
 
   let ref = null;
   let refLabel = null;
@@ -99,6 +115,7 @@
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
     aria-expanded={expanded}
+    aria-owns={`${id}-subtree`}
     on:click|stopPropagation={(e) => {
       if (disabled) return;
       clickNode(node, e);
@@ -113,16 +130,23 @@
       }
 
       if (parent && e.key === "ArrowLeft") {
-        expanded = false;
-        expandNode(node, false);
-        toggleNode(node);
+        if (expanded) {
+          expandNode(node, false);
+          toggleNode(node);
+        } else {
+          const parentNode = findParentTreeNode(ref.parentElement);
+          if (parentNode instanceof HTMLElement) parentNode.focus();
+        }
       }
 
       if (parent && e.key === "ArrowRight") {
         if (expanded) {
-          ref.lastChild.firstElementChild?.focus();
+          const groupUl = ref.lastElementChild;
+          if (groupUl instanceof HTMLElement) {
+            const next = firstTreeItemInGroup(groupUl);
+            next?.focus();
+          }
         } else {
-          expanded = true;
           expandNode(node, true);
           toggleNode(node);
         }
@@ -131,10 +155,12 @@
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         if (disabled) return;
-        expanded = !expanded;
-        toggleNode(node);
+        if (e.key === "Enter" && parent) {
+          const nextExpanded = !expanded;
+          expandNode(node, nextExpanded);
+          toggleNode(node);
+        }
         clickNode(node, e);
-        expandNode(node, expanded);
         ref.focus();
       }
     }}
@@ -150,8 +176,8 @@
         {disabled}
         on:click={() => {
           if (disabled) return;
-          expanded = !expanded;
-          expandNode(node, expanded);
+          const nextExpanded = !expanded;
+          expandNode(node, nextExpanded);
           toggleNode(node);
         }}
       >
@@ -162,11 +188,18 @@
       </span>
       <span class:bx--tree-node__label__details={true}>
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <slot {node} />
+        <span id={`${id}__label`} class:bx--tree-node__label__text={true}>
+          <slot {node} />
+        </span>
       </span>
     </div>
     {#if expanded}
-      <ul role="group" class:bx--tree-node__children={true}>
+      <ul
+        id={`${id}-subtree`}
+        role="group"
+        aria-labelledby={`${id}__label`}
+        class:bx--tree-node__children={true}
+      >
         {#each nodes as child (child.id)}
           {#if Array.isArray(child.nodes)}
             <svelte:self {...child} let:node> <slot {node} /> </svelte:self>
