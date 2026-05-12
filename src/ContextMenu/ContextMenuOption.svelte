@@ -173,7 +173,7 @@
   }
 
   function handleClick(e, opts = {}) {
-    if (disabled) return ctx.close();
+    if (disabled) return;
     if (subOptions) return;
 
     const shouldContinue = dispatch("click", e, { cancelable: true });

@@ -179,6 +179,32 @@ describe("ContextMenu", () => {
     expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
+  it("should not close menu when activating disabled regular option", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContextMenu, {
+      props: {
+        open: true,
+        optionDisabled: true,
+        x: 100,
+        y: 100,
+      },
+    });
+
+    const disabledOption = screen.getByText("Option 2");
+    await user.click(disabledOption);
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+
+    const trigger = disabledOption.closest("li");
+    assert(trigger);
+    trigger.focus();
+
+    await user.keyboard("{Enter}");
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+
+    await user.keyboard(" ");
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
   it("should position submenu to the left when it would overflow right viewport edge", async () => {
     Object.defineProperty(window, "innerWidth", {
