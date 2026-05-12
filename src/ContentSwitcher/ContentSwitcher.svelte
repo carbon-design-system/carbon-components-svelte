@@ -19,6 +19,12 @@
    */
   export let selectionMode = "automatic";
 
+  /**
+   * Obtain a reference to the tablist HTML element.
+   * @type {HTMLDivElement | null}
+   */
+  export let ref = null;
+
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
 
@@ -27,9 +33,6 @@
    * @type {import("svelte/store").Writable<string | null>}
    */
   const currentId = writable(null);
-
-  /** @type {HTMLDivElement | null} */
-  let refContainer = null;
 
   let prevIndex = -1;
 
@@ -162,7 +165,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-interactive-supports-focus -->
 <div
-  bind:this={refContainer}
+  bind:this={ref}
   role="tablist"
   class:bx--content-switcher={true}
   class:bx--content-switcher--sm={size === "sm"}

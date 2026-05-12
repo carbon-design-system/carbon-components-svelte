@@ -320,6 +320,15 @@ describe("ContentSwitcher", () => {
     expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
   });
 
+  it("should bind ref to the tablist element", () => {
+    const { component } = render(ContentSwitcher);
+
+    assert(component.ref);
+    expect(component.ref).toBeInstanceOf(HTMLDivElement);
+    expect(component.ref).toHaveAttribute("role", "tablist");
+    expect(component.ref).toHaveClass("bx--content-switcher");
+  });
+
   describe('selectionMode="manual"', () => {
     it("arrow keys move focus without changing selection", async () => {
       render(ContentSwitcherSelectionMode);

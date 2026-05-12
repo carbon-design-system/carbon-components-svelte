@@ -8,9 +8,11 @@
   export let customClass = "";
   export let switchId: ComponentProps<Switch>["id"] = undefined;
   export let switchRef: ComponentProps<Switch>["ref"] = null;
+  export let ref: ComponentProps<ContentSwitcher>["ref"] = null;
 </script>
 
 <ContentSwitcher
+  bind:ref
   {selectedIndex}
   class={customClass}
   on:change={(e) => {
