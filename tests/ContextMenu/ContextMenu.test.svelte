@@ -11,6 +11,8 @@
   export let withDisabled = false;
   export let submenuDisabled = false;
   export let optionDisabled = false;
+  export let labelText: ComponentProps<ContextMenu>["labelText"] = undefined;
+  export let ariaLabel: string | undefined = undefined;
 </script>
 
 <div data-testid="target">Right click me</div>
@@ -20,6 +22,8 @@
   bind:open
   {x}
   {y}
+  {labelText}
+  aria-label={ariaLabel}
   bind:ref
   on:open={(e) => {
     console.log("open", e.detail);

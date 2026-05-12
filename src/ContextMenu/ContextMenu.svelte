@@ -25,6 +25,14 @@
   /** Obtain a reference to the unordered list HTML element */
   export let ref = null;
 
+  /**
+   * Accessible name for the menu.
+   * Prefer setting this (or `aria-label`) when the menu is opened from the window
+   * (`target` unset), where there is no visible trigger for `aria-labelledby`.
+   * @type {string | undefined}
+   */
+  export let labelText = undefined;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -155,6 +163,7 @@
 
   $: level = ctx ? 2 : 1;
   $: currentIndex.set(focusIndex);
+  $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
 </script>
 
 <svelte:window
@@ -189,6 +198,7 @@
   style:left="{x}px"
   style:top="{y}px"
   {...$$restProps}
+  aria-label={menuAriaLabel}
   on:click
   on:click={({ target }) => {
     const closestOption = target.closest("[tabindex]");
