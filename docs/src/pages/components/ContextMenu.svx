@@ -12,6 +12,8 @@ In the examples, right click anywhere within the iframe.
 ## Basic
 
 The context menu appears when right-clicking anywhere in the window. Use context menu option for menu items and context menu divider for visual separation.
+
+The root element has `role="menu"`. Set `labelText` or `aria-label` on `ContextMenu` so assistive technologies get a meaningful name. This matters most for the default window-wide behavior (`target` unset), where there is no visible trigger to label the menu with `aria-labelledby`.
   
 <FileSource src="/framed/ContextMenu/ContextMenu" />
 
