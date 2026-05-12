@@ -60,6 +60,9 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
+  on:focus
+  on:blur
+  on:keyup
   on:keydown
   on:keydown={({ key }) => {
     if (key === "ArrowRight") {
