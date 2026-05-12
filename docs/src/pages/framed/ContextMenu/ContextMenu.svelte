@@ -9,7 +9,7 @@
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 </script>
 
-<ContextMenu>
+<ContextMenu labelText="Menu actions">
   <ContextMenuOption labelText="Copy" shortcutText="⌘C" icon={CopyFile} />
   <ContextMenuOption labelText="Cut" shortcutText="⌘X" icon={Cut} />
   <ContextMenuDivider />
