@@ -54,6 +54,7 @@
   let direction = 1;
   let prevX = 0;
   let prevY = 0;
+  let prevOpen = false;
   let focusIndex = -1;
   let openDetail = null;
 
@@ -145,10 +146,11 @@
         prevY = y;
       }
 
-      dispatch("open", openDetail);
-    } else {
+      if (!prevOpen) dispatch("open", openDetail);
+    } else if (prevOpen) {
       dispatch("close");
     }
+    prevOpen = open;
 
     if (!$hasPopup && options[focusIndex]) options[focusIndex].focus();
   });
