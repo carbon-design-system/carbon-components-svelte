@@ -8,6 +8,7 @@ import SelectGroup from "./Select.group.test.svelte";
 import SelectSkeleton from "./Select.skeleton.test.svelte";
 import SelectSlot from "./Select.slot.test.svelte";
 import Select from "./Select.test.svelte";
+import SelectToggle from "./Select.toggle.test.svelte";
 
 describe("Select", () => {
   beforeEach(() => {
@@ -49,6 +50,25 @@ describe("Select", () => {
     expect(consoleLog).toHaveBeenCalledWith("input");
     expect(consoleLog).toHaveBeenCalledWith("update", "option-2");
     expect(consoleLog).toHaveBeenCalledTimes(3);
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2871
+  it("does not dispatch update event on initial render", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Select);
+
+    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2871
+  it("does not dispatch update event when toggled into view", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(SelectToggle, { open: false });
+
+    await user.click(screen.getByRole("button", { name: "toggle" }));
+
+    expect(screen.getByLabelText("Toggled select")).toBeInTheDocument();
+    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
   });
 
   it("renders default size", () => {
@@ -116,6 +136,37 @@ describe("Select", () => {
     expect(selectElement).toBeDisabled();
   });
 
+  it("renders read-only state", () => {
+    render(Select, { readonly: true });
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
+    assert(selectWrapper);
+
+    expect(selectWrapper).toHaveClass("bx--select--readonly");
+    expect(selectElement).toHaveAttribute("aria-readonly", "true");
+    expect(selectElement).not.toBeDisabled();
+  });
+
+  it("suppresses invalid and warn states when read-only", () => {
+    render(Select, {
+      readonly: true,
+      invalid: true,
+      invalidText: "Invalid selection",
+      warn: true,
+      warnText: "Warning message",
+    });
+
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
+    assert(selectWrapper);
+
+    expect(selectWrapper).not.toHaveClass("bx--select--invalid");
+    expect(selectWrapper).not.toHaveClass("bx--select--warning");
+    expect(selectElement).not.toHaveAttribute("aria-invalid");
+    expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+  });
+
   it("renders valid by default", () => {
     render(Select);
     const selectElement = screen.getByLabelText("Select label");
@@ -167,6 +218,29 @@ describe("Select", () => {
     expect(screen.getByText("Warning message")).toHaveTextContent(
       "Warning message",
     );
+  });
+
+  it("renders warning state for inline variant", () => {
+    render(Select, {
+      id: "test-select",
+      inline: true,
+      warn: true,
+      warnText: "Warning message",
+    });
+
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
+    assert(selectWrapper);
+    expect(selectWrapper).toHaveClass("bx--select--warning");
+
+    const warnElement = screen.getByText("Warning message");
+    expect(warnElement).toHaveAttribute("id", "warn-test-select");
+    expect(warnElement).toHaveClass("bx--form-requirement");
+
+    const warningIcon = selectWrapper.querySelector(
+      ".bx--select__invalid-icon--warning",
+    );
+    expect(warningIcon).toBeInTheDocument();
   });
 
   it("renders without helper text by default", () => {

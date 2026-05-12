@@ -1,7 +1,6 @@
 <script>
   /**
-   * @generics {Row extends import("./DataTable.svelte").DataTableRow<any> = import("./DataTable.svelte").DataTableRow<any>} Row
-   * @template {import("./DataTable.svelte").DataTableRow<any>} Row
+   * @generics {Row extends import("./DataTable.svelte").DataTableRow = import("./DataTable.svelte").DataTableRow} Row
    * @restProps {input}
    * @event {null} clear
    */
@@ -39,7 +38,10 @@
    */
   export let filteredRowIds = [];
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /**

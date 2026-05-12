@@ -1,7 +1,6 @@
 <script>
   /**
    * @generics {Item extends DropdownItem<any> = DropdownItem<any>} Item
-   * @template {DropdownItem<any>} Item
    * @typedef {object} DropdownItem<Id=any>
    * @property {Id} id
    * @property {string} text
@@ -27,9 +26,9 @@
 
   /**
    * Specify the selected item id.
-   * @type {Item["id"]}
+   * @type {Item["id"] | undefined}
    */
-  export let selectedId;
+  export let selectedId = undefined;
 
   /**
    * Specify the type of dropdown.
@@ -147,6 +146,7 @@
     onMount,
     tick,
   } from "svelte";
+  import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -162,7 +162,9 @@
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
-    portalMenu !== undefined ? portalMenu : !!insideModal;
+    portalMenu === undefined ? !!insideModal : portalMenu;
+
+  $: menuAriaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
 
   /** Default item height in pixels for virtualization */
   const DEFAULT_ITEM_HEIGHT = 40;
@@ -173,6 +175,8 @@
   let typeaheadTimeout = null;
   let listScrollTop = 0;
   let prevOpen = false;
+  let itemsById = new Map();
+  let itemIndexById = new Map();
 
   const TYPEAHEAD_DELAY = 500;
 
@@ -185,7 +189,23 @@
   });
 
   $: inline = type === "inline";
-  $: selectedItem = items.find((item) => item.id === selectedId);
+  $: {
+    itemsById = new Map();
+    itemIndexById = new Map();
+    for (let i = 0; i < items.length; i++) {
+      itemsById.set(items[i].id, items[i]);
+      itemIndexById.set(items[i].id, i);
+    }
+  }
+  $: menuId = `menu-${id}`;
+  $: helperId = `helper-${id}`;
+  $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
+  $: highlightedId =
+    highlightedIndex > -1 && items[highlightedIndex]
+      ? items[highlightedIndex].id
+      : undefined;
+  $: selectedItem = itemsById.get(selectedId);
   $: if (!open) {
     highlightedIndex = -1;
     prevHighlightedIndex = -1;
@@ -283,7 +303,7 @@
     const wasJustOpened = open && !prevOpen;
     if (wasJustOpened) {
       if (selectedId !== undefined && selectedItem) {
-        const selectedIndex = items.findIndex((item) => item.id === selectedId);
+        const selectedIndex = itemIndexById.get(selectedId) ?? -1;
         if (selectedIndex >= 0) {
           // Set highlighted index to selected item so keyboard nav starts there
           highlightedIndex = selectedIndex;
@@ -292,15 +312,33 @@
       }
     }
 
+    // Scroll to selected item when menu opens without virtualization.
+    // The list may overflow its max-height even below the virtualization threshold.
+    if (
+      wasJustOpened &&
+      !shouldVirtualize &&
+      listRef &&
+      selectedId !== undefined &&
+      selectedItem
+    ) {
+      tick().then(() => {
+        if (!listRef) return;
+        const selectedEl = listRef.querySelector('[aria-selected="true"]');
+        if (!selectedEl) return;
+        // Adjust the menu's own scrollTop instead of scrollIntoView,
+        // which would also scroll the document.
+        listRef.scrollTop +=
+          selectedEl.getBoundingClientRect().top -
+          listRef.getBoundingClientRect().top;
+      });
+    }
+
     // Scroll to selected item when menu opens with virtualization
     if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
         if (listRef && virtualConfig) {
           if (selectedId !== undefined && selectedItem) {
-            // Find the index of the selected item
-            const selectedIndex = items.findIndex(
-              (item) => item.id === selectedId,
-            );
+            const selectedIndex = itemIndexById.get(selectedId) ?? -1;
             if (selectedIndex >= 0) {
               // Calculate scroll position to show selected item at the top of viewport
               const itemHeight = virtualConfig.itemHeight;
@@ -348,8 +386,9 @@
     }
 
     let disabled = items[index].disabled;
+    let attempts = 0;
 
-    while (disabled) {
+    while (disabled && attempts < items.length) {
       index = index + dir;
 
       if (index < 0) {
@@ -359,9 +398,10 @@
       }
 
       disabled = items[index].disabled;
+      attempts++;
     }
 
-    highlightedIndex = index;
+    if (!disabled) highlightedIndex = index;
   }
 
   function typeaheadSearch(char) {
@@ -402,15 +442,24 @@
   const dispatchSelect = () => {
     dispatch("select", {
       selectedId,
-      selectedItem: items.find((item) => item.id === selectedId),
+      selectedItem: itemsById.get(selectedId),
     });
   };
+
+  function selectHighlighted() {
+    open = !open;
+    if (highlightedIndex > -1 && items[highlightedIndex].id !== selectedId) {
+      selectedId = items[highlightedIndex].id;
+      dispatchSelect();
+      open = false;
+    }
+  }
 </script>
 
 <svelte:window
   on:click={(e) => {
     if (open && ref && !ref.contains(e.target)) {
-      if (effectivePortalMenu && listRef && listRef.contains(e.target)) return;
+      if (effectivePortalMenu && listRef?.contains(e.target)) return;
       open = false;
     }
   }}
@@ -458,10 +507,8 @@
     {disabled}
     {open}
     {invalid}
-    {invalidText}
     {light}
     {warn}
-    {warnText}
   >
     {#if invalid}
       <WarningFilled class="bx--list-box__invalid-icon" />
@@ -474,28 +521,31 @@
     <button
       bind:this={ref}
       type="button"
+      role="combobox"
       class:bx--list-box__field={true}
       tabindex="0"
       aria-expanded={open}
       aria-disabled={readonly ? true : undefined}
       aria-label={readonly ? `${selectedItem && itemToString(selectedItem)}, read only `  : undefined}
+      aria-haspopup="listbox"
+      aria-activedescendant={highlightedId ?? ""}
+      aria-controls={open ? menuId : undefined}
+      aria-describedby={invalid && invalidText
+        ? errorId
+        : !invalid && warn && warnText
+          ? warnId
+          : !inline && !invalid && !warn && helperText
+            ? helperId
+            : undefined}
       on:keydown={(e) => {
-        if (["Enter", "ArrowDown", "ArrowUp"].includes(e.key)) {
+        if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
         }
 
         if (readonly) return
 
         if (e.key === "Enter") {
-          open = !open;
-          if (
-            highlightedIndex > -1 &&
-            items[highlightedIndex].id !== selectedId
-          ) {
-            selectedId = items[highlightedIndex].id;
-            dispatchSelect();
-            open = false;
-          }
+          selectHighlighted();
         } else if (e.key === "Tab") {
           open = false;
         } else if (e.key === "ArrowDown") {
@@ -509,6 +559,7 @@
         } else if (
           open &&
           e.key.length === 1 &&
+          e.key !== " " &&
           !e.ctrlKey &&
           !e.metaKey &&
           !e.altKey
@@ -518,24 +569,14 @@
         }
       }}
       on:keyup={(e) => {
-        if ([" "].includes(e.key)) {
+        if (e.key === " ") {
           e.preventDefault();
         } else {
           return;
         }
-        open = !open;
-
-        if (
-          highlightedIndex > -1 &&
-          items[highlightedIndex].id !== selectedId
-        ) {
-          selectedId = items[highlightedIndex].id;
-          dispatchSelect();
-          open = false;
-        }
+        selectHighlighted();
       }}
       {disabled}
-      {translateWithId}
       {id}
     >
       <span class:bx--list-box__label={true}>
@@ -557,7 +598,7 @@
     </button>
     {#if open}
       <ListBoxMenu
-        aria-labelledby={id}
+        aria-label={menuAriaLabel}
         {id}
         portal={effectivePortalMenu}
         {open}
@@ -602,6 +643,9 @@
                   }}
                 >
                   <slot {item} index={actualIndex}> {itemToString(item)} </slot>
+                  {#if selectedId === item.id}
+                    <Checkmark class="bx--list-box__menu-item__selected-icon" />
+                  {/if}
                 </ListBoxMenuItem>
               {/each}
             </div>
@@ -629,14 +673,24 @@
               }}
             >
               <slot {item} index={i}> {itemToString(item)} </slot>
+              {#if selectedId === item.id}
+                <Checkmark class="bx--list-box__menu-item__selected-icon" />
+              {/if}
             </ListBoxMenuItem>
           {/each}
         {/if}
       </ListBoxMenu>
     {/if}
   </ListBox>
+  {#if invalid && invalidText}
+    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+  {/if}
+  {#if !invalid && warn && warnText}
+    <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+  {/if}
   {#if !inline && !invalid && !warn && helperText}
     <div
+      id={helperId}
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
     >

@@ -51,7 +51,7 @@ class ResizeObserverMock {
   }
 }
 
-global.ResizeObserver = ResizeObserverMock;
+globalThis.ResizeObserver = ResizeObserverMock;
 
 if (typeof DataTransfer === "undefined") {
   class DataTransferMock {
@@ -90,7 +90,7 @@ if (typeof DataTransfer === "undefined") {
     }
   }
 
-  global.DataTransfer = DataTransferMock as unknown as typeof DataTransfer;
+  globalThis.DataTransfer = DataTransferMock as unknown as typeof DataTransfer;
 }
 
 export const user = userEvent.setup();
@@ -100,9 +100,9 @@ export const setupLocalStorageMock = () => {
   let originalLocalStorage: Storage;
 
   beforeEach(() => {
-    originalLocalStorage = global.localStorage;
+    originalLocalStorage = globalThis.localStorage;
     localStorageMock = {};
-    global.localStorage = {
+    globalThis.localStorage = {
       getItem: vi.fn((key) => localStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         localStorageMock[key] = value;
@@ -119,7 +119,7 @@ export const setupLocalStorageMock = () => {
   });
 
   afterEach(() => {
-    global.localStorage = originalLocalStorage;
+    globalThis.localStorage = originalLocalStorage;
     localStorage.clear();
     vi.restoreAllMocks();
     localStorageMock = {};
@@ -138,9 +138,9 @@ export const setupSessionStorageMock = () => {
   let originalSessionStorage: Storage;
 
   beforeEach(() => {
-    originalSessionStorage = global.sessionStorage;
+    originalSessionStorage = globalThis.sessionStorage;
     sessionStorageMock = {};
-    global.sessionStorage = {
+    globalThis.sessionStorage = {
       getItem: vi.fn((key) => sessionStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         sessionStorageMock[key] = value;
@@ -157,7 +157,7 @@ export const setupSessionStorageMock = () => {
   });
 
   afterEach(() => {
-    global.sessionStorage = originalSessionStorage;
+    globalThis.sessionStorage = originalSessionStorage;
     sessionStorage.clear();
     vi.restoreAllMocks();
     sessionStorageMock = {};
@@ -181,11 +181,11 @@ export const setupSessionStorageEventMock = () => {
   let storageEventListeners: ((event: StorageEvent) => void)[] = [];
 
   beforeEach(() => {
-    originalSessionStorage = global.sessionStorage;
+    originalSessionStorage = globalThis.sessionStorage;
     sessionStorageMock = {};
     storageEventListeners = [];
 
-    global.sessionStorage = {
+    globalThis.sessionStorage = {
       getItem: vi.fn((key) => sessionStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         sessionStorageMock[key] = value;
@@ -213,7 +213,7 @@ export const setupSessionStorageEventMock = () => {
   });
 
   afterEach(() => {
-    global.sessionStorage = originalSessionStorage;
+    globalThis.sessionStorage = originalSessionStorage;
     sessionStorage.clear();
     vi.restoreAllMocks();
     sessionStorageMock = {};
@@ -253,11 +253,11 @@ export const setupStorageEventMock = () => {
   let storageEventListeners: ((event: StorageEvent) => void)[] = [];
 
   beforeEach(() => {
-    originalLocalStorage = global.localStorage;
+    originalLocalStorage = globalThis.localStorage;
     localStorageMock = {};
     storageEventListeners = [];
 
-    global.localStorage = {
+    globalThis.localStorage = {
       getItem: vi.fn((key) => localStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         localStorageMock[key] = value;
@@ -285,7 +285,7 @@ export const setupStorageEventMock = () => {
   });
 
   afterEach(() => {
-    global.localStorage = originalLocalStorage;
+    globalThis.localStorage = originalLocalStorage;
     localStorage.clear();
     vi.restoreAllMocks();
     localStorageMock = {};

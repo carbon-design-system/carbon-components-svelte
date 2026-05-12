@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import TreeViewShowNodeIdEscape from "./TreeView.showNode.idEscape.test.svelte";
 import TreeViewShowNode from "./TreeView.showNode.test.svelte";
 
 describe("TreeView.showNode with options", () => {
@@ -50,5 +51,19 @@ describe("TreeView.showNode with options", () => {
     expect(getSelectedItem()).not.toBeInTheDocument();
     expect(consoleLog).toHaveBeenCalledWith("activeId", "");
     expect(consoleLog).toHaveBeenCalledWith("selectedIds", [3]);
+  });
+});
+
+describe("TreeView.showNode id selector escaping", () => {
+  it("focuses a node whose string id contains characters that must be CSS-escaped", async () => {
+    render(TreeViewShowNodeIdEscape);
+
+    await user.click(screen.getByTestId("show-special-id"));
+
+    const target = screen.getByRole("treeitem", { name: /^Leaf$/ });
+    await waitFor(() => {
+      expect(target).toHaveFocus();
+    });
+    expect(target).toHaveAttribute("aria-selected", "true");
   });
 });

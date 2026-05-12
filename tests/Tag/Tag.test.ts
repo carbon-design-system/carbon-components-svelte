@@ -120,6 +120,31 @@ describe("Tag", () => {
     expect(smallTag.parentElement).toHaveClass("bx--tag--sm");
   });
 
+  it("renders large size variant", () => {
+    render(Tag);
+
+    const largeTag = screen.getByText("Large tag");
+    expect(largeTag.parentElement).toHaveClass("bx--tag--lg");
+  });
+
+  it("renders large filterable tag", () => {
+    render(Tag);
+
+    const largeFilterable = screen.getByText("Large filterable");
+    expect(largeFilterable).toHaveClass("bx--tag--lg");
+    expect(largeFilterable).toHaveClass("bx--tag--filter");
+  });
+
+  it("renders large skeleton tag", () => {
+    render(Tag);
+
+    const skeletons = document.querySelectorAll(".bx--skeleton");
+    const largeSkeleton = Array.from(skeletons).find((el) =>
+      el.classList.contains("bx--tag--lg"),
+    );
+    expect(largeSkeleton).toBeInTheDocument();
+  });
+
   it("renders disabled filterable tag", () => {
     render(Tag);
 

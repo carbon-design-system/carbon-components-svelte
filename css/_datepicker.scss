@@ -1,0 +1,68 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+@mixin date-picker-input-wrapper {
+  .#{$prefix}--date-picker-input__wrapper {
+    width: fit-content;
+  }
+}
+
+@include exports('datepicker-input-wrapper') {
+  @include date-picker-input-wrapper;
+}
+
+// Backports readonly date picker styles from carbon-components v11+ to
+// carbon-components v10.58.12.
+
+@mixin date-picker-readonly {
+  .#{$prefix}--date-picker__input[readonly] {
+    background: transparent;
+    border-bottom-color: $disabled-02;
+    cursor: text;
+  }
+
+  // Use a wrapper-level class because flatpickr injects a `.flatpickr-wrapper`
+  // around the first input in `static` mode, which breaks the `~` sibling
+  // combinator from the input to the icon.
+  .#{$prefix}--date-picker-input__wrapper--readonly .#{$prefix}--date-picker__icon {
+    fill: $disabled-02;
+  }
+}
+
+@include exports('datepicker-readonly') {
+  @include date-picker-readonly;
+}
+
+// Carbon's `:disabled ~ .icon` rule fails for the same reason the readonly
+// fix above is needed: flatpickr's `.flatpickr-wrapper` breaks the sibling
+// combinator. Match it via the wrapper class instead.
+@mixin date-picker-disabled {
+  .#{$prefix}--date-picker-input__wrapper--disabled .#{$prefix}--date-picker__icon {
+    cursor: not-allowed;
+    fill: $icon-disabled;
+  }
+}
+
+@include exports('datepicker-disabled') {
+  @include date-picker-disabled;
+}
+
+// Flatpickr 4.6+ applies `.flatpickr-disabled` to the prev/next month nav
+// buttons when navigation is bounded by `minDate`/`maxDate`. Carbon only styles
+// the legacy `.disabled` class.
+@mixin date-picker-month-nav-disabled {
+  .flatpickr-prev-month.flatpickr-disabled,
+  .flatpickr-next-month.flatpickr-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .flatpickr-prev-month.flatpickr-disabled svg,
+  .flatpickr-next-month.flatpickr-disabled svg {
+    fill: $icon-disabled;
+  }
+}
+
+@include exports('datepicker-month-nav-disabled') {
+  @include date-picker-month-nav-disabled;
+}

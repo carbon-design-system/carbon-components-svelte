@@ -1,0 +1,21 @@
+<script>
+  import { SkeletonIcon } from "carbon-components-svelte";
+</script>
+
+`SkeletonIcon` wraps [SkeletonPlaceholder](/components/SkeletonPlaceholder) to provide a loading-state placeholder for icon-sized areas. Carbon icons use a 16/20/24/32 pixel scale. However, you can use any number of pixels with the `size` prop.
+
+## Default (16px)
+
+<SkeletonIcon />
+
+## Size (20px)
+
+<SkeletonIcon size={20} />
+
+## Size (24px)
+
+<SkeletonIcon size={24} />
+
+## Size (32px)
+
+<SkeletonIcon size={32} />

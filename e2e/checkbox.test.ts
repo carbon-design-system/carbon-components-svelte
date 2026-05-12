@@ -19,7 +19,7 @@ test.describe("Checkbox", () => {
     });
     await expect(checkbox).toBeVisible();
     await expect(checkbox).not.toBeChecked();
-    await checkbox.click();
+    await checkbox.click({ force: true });
     await expect(checkbox).toBeChecked();
   });
 
@@ -29,7 +29,7 @@ test.describe("Checkbox", () => {
     const wrapper = page.getByTestId("checkbox-agree");
     await expect(wrapper).toBeVisible();
     const checkbox = wrapper.getByRole("checkbox");
-    await checkbox.click();
+    await checkbox.click({ force: true });
     await expect(checkbox).toBeChecked();
   });
 

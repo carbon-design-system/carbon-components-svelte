@@ -14,6 +14,10 @@
   export let onChange:
     | ((e: CustomEvent<ReadonlyArray<File>>) => void)
     | undefined = undefined;
+  export let onClear: ((e: CustomEvent<void>) => void) | undefined = undefined;
+  export let onRejected:
+    | ((e: CustomEvent<Array<{ file: File; reason: string }>>) => void)
+    | undefined = undefined;
 
   export let disabled: ComponentProps<FileUploader>["disabled"] = false;
   export let accept: ComponentProps<FileUploader>["accept"] = [];
@@ -26,6 +30,10 @@
     "Add files";
   export let name: ComponentProps<FileUploader>["name"] = "";
   export let maxFileSize: ComponentProps<FileUploader>["maxFileSize"] =
+    undefined;
+  export let preventDuplicate: ComponentProps<FileUploader>["preventDuplicate"] = false;
+  export let orderFiles: ComponentProps<FileUploader>["orderFiles"] = "append";
+  export let iconDescription: ComponentProps<FileUploader>["iconDescription"] =
     undefined;
 
   // Allow initial files to be set
@@ -62,9 +70,14 @@
     {labelDescription}
     {name}
     {maxFileSize}
+    {preventDuplicate}
+    {orderFiles}
+    {iconDescription}
     bind:files
-    on:add={onAdd}
-    on:remove={onRemove}
-    on:change={onChange}
+    on:add={(e) => onAdd?.(e)}
+    on:remove={(e) => onRemove?.(e)}
+    on:change={(e) => onChange?.(e)}
+    on:clear={(e) => onClear?.(e)}
+    on:rejected={(e) => onRejected?.(e)}
   />
 </form>

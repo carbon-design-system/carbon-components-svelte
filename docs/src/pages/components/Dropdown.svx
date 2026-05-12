@@ -22,6 +22,22 @@ must have a unique `id` property.
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+## No initial selection
+
+Omit `selectedId` to render the dropdown with no item selected. The `label` prop is displayed as placeholder text until the user makes a selection.
+
+<Dropdown labelText="Contact" label="Choose a contact method" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+## With initial selection
+
+Set `selectedId` to the `id` of the item that should appear chosen when the dropdown first renders. The trigger shows that item's label in the closed state.
+
+When the user opens the menu, if the option list is taller than the menu's maximum height, the menu scrolls so the selected option stays visible. That applies to lists rendered in full and to [virtualized lists](#virtualized-items-large-lists).
+
+<FileSource src="/framed/Dropdown/ScrollToSelected" />
+
 ## Custom label
 
 Use the `labelChildren` slot to provide custom label content instead of using the `labelText` prop.
@@ -38,6 +54,14 @@ Override the default slot to customize the display of each item. Access the item
 index through the `let:` directive.
 
 <FileSource src="/framed/Dropdown/DropdownSlot" />
+
+## Helper text
+
+Add descriptive text below the dropdown using the `helperText` prop.
+
+<Dropdown helperText="Choose your preferred contact method" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
 
 ## Hidden label
 

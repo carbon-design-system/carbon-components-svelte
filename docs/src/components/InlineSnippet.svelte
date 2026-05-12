@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let code = "";
 
   import { CodeSnippet } from "carbon-components-svelte";

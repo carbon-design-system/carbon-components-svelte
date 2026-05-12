@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import CheckboxGroupComponent from "./CheckboxGroupComponent.test.svelte";
+import CheckboxGroupStaticSelected from "./CheckboxGroupStaticSelected.test.svelte";
 
 describe("CheckboxGroup", () => {
   it("should render with default props", () => {
@@ -26,6 +27,46 @@ describe("CheckboxGroup", () => {
       screen.getByRole("checkbox", { name: "Option 2" }),
     ).not.toBeChecked();
     expect(screen.getByRole("checkbox", { name: "Option 3" })).toBeChecked();
+  });
+
+  it("does not dispatch change event on initial render", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxGroupComponent);
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
+  it("does not dispatch change event on initial render with selected values", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxGroupComponent, { props: { selected: ["2"] } });
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
+  it("does not dispatch change event on initial render with a static selected array", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxGroupStaticSelected);
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
+  it("dispatches one change event after interacting with a static selected array", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxGroupStaticSelected);
+
+    const smsCheckbox = screen.getByRole("checkbox", { name: "SMS" });
+    await user.click(smsCheckbox);
+
+    const changeCalls = consoleLog.mock.calls.filter(
+      ([event]) => event === "change",
+    );
+    expect(changeCalls).toEqual([["change", ["email", "sms"]]]);
   });
 
   it("should handle disabled state", () => {

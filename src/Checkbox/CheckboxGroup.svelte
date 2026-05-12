@@ -55,6 +55,7 @@
     createEventDispatcher,
     onMount,
     setContext,
+    tick,
   } from "svelte";
   import { readonly, writable } from "svelte/store";
 
@@ -67,6 +68,14 @@
   const groupName = writable(name);
   const groupRequired = writable(required);
   const groupDisabled = writable(disabled);
+  let isInitialRender = true;
+  let isSyncingSelected = false;
+
+  function syncSelectedValues() {
+    isSyncingSelected = true;
+    $selectedValues = selected;
+    isSyncingSelected = false;
+  }
 
   /**
    * @type {(value: string | number, checked: boolean) => void}
@@ -89,16 +98,21 @@
   });
 
   onMount(() => {
-    $selectedValues = selected;
+    syncSelectedValues();
+    tick().then(() => {
+      isInitialRender = false;
+    });
   });
 
   beforeUpdate(() => {
-    $selectedValues = selected;
+    syncSelectedValues();
   });
 
   selectedValues.subscribe((value) => {
     selected = value;
-    dispatch("change", value);
+    if (!isInitialRender && !isSyncingSelected) {
+      dispatch("change", value);
+    }
   });
 
   $: $groupName = name;

@@ -4,8 +4,9 @@
     SelectItem,
     SelectItemGroup,
   } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let selected: string | number | undefined = undefined;
+  export let selected: ComponentProps<Select>["selected"] = undefined;
 </script>
 
 <Select bind:selected>

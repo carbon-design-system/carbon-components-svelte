@@ -91,7 +91,10 @@
    */
   export let href = undefined;
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /** Specify the `type` attribute for the button element */
@@ -143,27 +146,24 @@
   $: iconProps = {
     "aria-hidden": "true",
     class: "bx--btn__icon",
-    "aria-label": iconDescription,
   };
   $: buttonProps = {
     type: href && !disabled ? undefined : type,
     tabindex,
     disabled: disabled === true ? true : undefined,
-    href,
+    href: href && !disabled ? href : undefined,
+    rel:
+      href && !disabled && $$restProps.target === "_blank"
+        ? "noopener noreferrer"
+        : undefined,
     "aria-pressed":
       hasIconOnly && kind === "ghost" && !href ? isSelected : undefined,
     ...$$restProps,
     class: [
       "bx--btn",
       expressive && "bx--btn--expressive",
-      ((size === "small" && !expressive) ||
-        (size === "sm" && !expressive) ||
-        (size === "small" && !expressive)) &&
-        "bx--btn--sm",
-      (size === "field" && !expressive) ||
-        (size === "md" && !expressive && "bx--btn--md"),
-      size === "field" && "bx--btn--field",
       size === "small" && "bx--btn--sm",
+      size === "field" && "bx--btn--field",
       size === "lg" && "bx--btn--lg",
       size === "xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,

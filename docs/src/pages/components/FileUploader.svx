@@ -79,12 +79,30 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
+## Per-file status icon labels
+
+Set `iconDescription` to a function for accessible labels that depend on each row. The callback receives `{ file, fileName, status, invalid }`. On `FileUploader`, `file` is that row’s `File` object; on `FileUploaderItem`, `file` is always `undefined` and `fileName` matches the `name` prop.
+
+<FileUploaderItem
+  invalid
+  id="readme"
+  name="README.md"
+  errorSubject="File size exceeds 500kb limit"
+  errorBody="Please select a new file."
+  status="edit"
+  iconDescription={({ fileName, invalid }) =>
+    invalid ? `Remove invalid file ${fileName}` : `Remove ${fileName}`}
+  on:delete
+/>
+
 ## Clear files
 
 Remove uploaded files from the file uploader in two ways:
 
-- programmatically using the **clearFiles** accessor
-- two-way binding by setting **files** to **[]**
+- programmatically using the `clearFiles` accessor
+- two-way binding by setting `files` to `[]`
+
+Calling `clearFiles` or setting `files` to `[]` dispatches `change` (with an empty array) and `clear` so event listeners stay in sync.
 
 <FileSource src="/framed/FileUploader/FileUploaderClearFiles" />
 
@@ -97,16 +115,31 @@ The `maxFileSize` prop accepts values in bytes. File sizes use binary (base 2)
 units, where 1024 bytes = 1 KiB (kibibyte), not 1000 bytes. This matches how
 operating systems and file systems measure file sizes.
 
-This example accepts files up to 1 MB (1,048,576 bytes):
+This example accepts files up to 1 MB (1,048,576 bytes). Files over the limit are not added and a `rejected` event is fired with `{ file, reason: "size" }` for each rejected file.
 
-<FileUploader
-  multiple
-  maxFileSize={1024 * 1024}
-  labelTitle="Upload files"
-  buttonLabel="Add files"
-  labelDescription="Maximum file size: 1 MB"
-  status="edit"
-/>
+<FileSource src="/framed/FileUploader/FileUploaderMaxFileSize" />
+
+## File ordering (prepend)
+
+By default, new files are appended to the end of the list.
+
+Set `orderFiles` to `"prepend"` to show the newest uploads first instead of appending them to the end.
+
+<FileSource src="/framed/FileUploader/FileUploaderOrderFilesPrepend" />
+
+## File ordering (custom)
+
+Pass a custom function to `orderFiles` for full control over the file list order. The function receives `(existingFiles, addedFiles)` and returns the merged array.
+
+This example sorts all files by `lastModified`, newest first.
+
+<FileSource src="/framed/FileUploader/FileUploaderOrderFilesCustom" />
+
+## Duplicate detection
+
+Set `preventDuplicate` to `true` to reject files that match an already-selected file (detected using the file's name, size, and lastModified). Rejected duplicates are reported via the `rejected` event with `reason: "duplicate"`.
+
+<FileSource src="/framed/FileUploader/FileUploaderPreventDuplicate" />
 
 ## File uploader (disabled state)
 

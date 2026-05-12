@@ -17,14 +17,14 @@
   <OverflowMenuItem
     href="https://cloud.ibm.com/docs/api-gateway/"
     text="API documentation"
-    on:click={(e) => {
+    on:click={() => {
       console.log("click", "API documentation");
     }}
   />
   <OverflowMenuItem
     danger
     text="Delete service"
-    on:click={(e) => {
+    on:click={() => {
       console.log("click", "Delete service");
     }}
   />

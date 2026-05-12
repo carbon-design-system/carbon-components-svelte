@@ -236,7 +236,10 @@ export function formatHeaderWidth(header) {
  * @returns {number} Negative if a < b (ascending) or a > b (descending), positive if a > b (ascending) or a < b (descending), 0 if equal
  */
 export function compareValues(itemA, itemB, ascending, customSort) {
-  if (customSort) return customSort(itemA, itemB);
+  if (customSort) {
+    const result = customSort(itemA, itemB);
+    return ascending ? result : -result;
+  }
 
   let result;
 

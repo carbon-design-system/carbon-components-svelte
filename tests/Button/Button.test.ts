@@ -64,6 +64,15 @@ describe("Button", () => {
     expect(linkButton).toHaveAttribute("href", "#");
   });
 
+  it('should set rel="noopener noreferrer" on link when target="_blank"', () => {
+    render(Button);
+
+    const externalLink = screen.getByText("External link");
+    expect(externalLink.tagName).toBe("A");
+    expect(externalLink).toHaveAttribute("target", "_blank");
+    expect(externalLink).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
   it("should render custom element when as prop is used", () => {
     render(Button);
 
@@ -78,6 +87,15 @@ describe("Button", () => {
     const disabledButton = screen.getByText("Disabled button");
     expect(disabledButton).toBeDisabled();
     expect(disabledButton).toHaveClass("bx--btn--disabled");
+  });
+
+  it("should strip href when disabled is also set", () => {
+    render(Button);
+
+    const button = screen.getByTestId("btn-disabled-href");
+    expect(button.tagName).toBe("BUTTON");
+    expect(button).toBeDisabled();
+    expect(button).not.toHaveAttribute("href");
   });
 
   it("should render skeleton state", () => {
@@ -107,6 +125,16 @@ describe("Button", () => {
     const buttonWithIcon = screen.getByRole("button", { name: "With icon" });
     const icon = buttonWithIcon.querySelector(".bx--btn__icon");
     expect(icon).toBeInTheDocument();
+  });
+
+  it("should not set aria-label on the icon (relies on assistive text)", () => {
+    render(Button);
+
+    const btnA = screen.getByTestId("btn-icon-a");
+    const icon = btnA.querySelector(".bx--btn__icon");
+    assert(icon);
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+    expect(icon).not.toHaveAttribute("aria-label");
   });
 
   it("should set pointer-events to none on assistive text for icon-only buttons", () => {

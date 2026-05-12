@@ -1,12 +1,12 @@
 <script>
   /**
    * @generics {Item extends MultiSelectItem<any> = MultiSelectItem<any>} Item
-   * @template {MultiSelectItem<any>} Item
    * @typedef {string} MultiSelectItemText
    * @typedef {object} MultiSelectItem<Id=any>
    * @property {Id} id
    * @property {MultiSelectItemText} text
    * @property {boolean} [disabled] - Whether the item is disabled
+   * @property {boolean} [isSelectAll] - Whether this item acts as a "select all" toggle
    * @event select
    * @type {object}
    * @property {Item["id"][]} selectedIds
@@ -25,7 +25,7 @@
 
   /**
    * Override the display of a multiselect item.
-   * @type {(item: Item) => any}
+   * @type {(item: Item) => string | Item["id"]}
    */
   export let itemToString = (item) => item.text || item.id;
 
@@ -45,7 +45,7 @@
   export let value = "";
 
   /**
-   * Set the size of the combobox.
+   * Set the size of the multiselect.
    * @type {"sm" | "lg" | "xl"}
    */
   export let size = undefined;
@@ -97,7 +97,7 @@
   /**
    * Override the sorting logic.
    * The default sorting compare the item text value.
-   * @type {((a: Item, b: Item) => Item) | (() => void)}
+   * @type {((a: Item, b: Item) => number) | (() => void)}
    */
   export let sortItem = (a, b) =>
     a.text.localeCompare(b.text, locale, { numeric: true });
@@ -237,7 +237,7 @@
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
-    portalMenu !== undefined ? portalMenu : !!insideModal;
+    portalMenu === undefined ? !!insideModal : portalMenu;
 
   /** Default item height in pixels for virtualization */
   const DEFAULT_ITEM_HEIGHT = 40;
@@ -247,6 +247,7 @@
   let isInitialRender = true;
   let listScrollTop = 0;
   let prevOpen = false;
+  let internalSelectedIdsRef = selectedIds;
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement }) => void}
@@ -278,8 +279,9 @@
     }
 
     let disabled = itemsToUse[index].disabled;
+    let attempts = 0;
 
-    while (disabled) {
+    while (disabled && attempts < length) {
       index = index + direction;
 
       if (index < 0) {
@@ -289,20 +291,78 @@
       }
 
       disabled = itemsToUse[index].disabled;
+      attempts++;
     }
 
-    highlightedIndex = index;
+    if (!disabled) highlightedIndex = index;
+  }
+
+  /**
+   * Handle selection of an item, including isSelectAll logic.
+   * @param {Item} item
+   */
+  function selectItem(item) {
+    if (item.disabled) return;
+
+    if (item.isSelectAll) {
+      const target = !allSelected;
+      sortedItems = sortedItems.map((si) =>
+        si.disabled || si.checked === target ? si : { ...si, checked: target },
+      );
+    } else {
+      const idx = sortedItems.indexOf(item);
+      if (idx !== -1) {
+        sortedItems[idx] = { ...item, checked: !item.checked };
+      }
+
+      if (hasSelectAll) {
+        const newSelectableChecked = sortedItems.filter(
+          (si) => !si.disabled && !si.isSelectAll && si.checked,
+        ).length;
+        const newAllSelected =
+          selectableItems.length > 0 &&
+          newSelectableChecked === selectableItems.length;
+        const selectAllIdx = sortedItems.findIndex((si) => si.isSelectAll);
+        if (
+          selectAllIdx !== -1 &&
+          sortedItems[selectAllIdx].checked !== newAllSelected
+        ) {
+          sortedItems[selectAllIdx] = {
+            ...sortedItems[selectAllIdx],
+            checked: newAllSelected,
+          };
+        }
+      }
+
+      sortedItems = [...sortedItems];
+    }
+
+    if (selectionFeedback === "top") {
+      selectedIds = sortedItems
+        .filter((si) => si.checked && !si.isSelectAll)
+        .map((si) => si.id);
+      internalSelectedIdsRef = selectedIds;
+      sortedItems = sort();
+    }
   }
 
   afterUpdate(() => {
+    // Compare by length, not by IDs. This is intentional: `on:select`
+    // should only fire in response to UI interaction (toggle/clear),
+    // not programmatic `selectedIds` changes. A length check is sufficient
+    // because `selectItem` only ever toggles one item at a time, so user-
+    // driven changes always alter the count.
     if (checked.length !== prevChecked.length) {
       prevChecked = checked;
-      selectedIds = checked.map(({ id }) => id);
+      selectedIds = checked
+        .filter((item) => !item.isSelectAll)
+        .map(({ id }) => id);
+      internalSelectedIdsRef = selectedIds;
       if (!isInitialRender) {
         dispatch("select", {
           selectedIds,
-          selected: checked,
-          unselected: unchecked,
+          selected: checked.filter((item) => !item.isSelectAll),
+          unselected: unchecked.filter((item) => !item.isSelectAll),
         });
       }
     }
@@ -310,7 +370,9 @@
 
     if (!open) {
       highlightedIndex = -1;
-      value = "";
+      if (prevOpen && filterable) {
+        value = "";
+      }
     }
 
     // Scroll to first selected item when menu opens with virtualization
@@ -395,18 +457,33 @@
   }
 
   function sort() {
+    const selectedIdsSet = new Set(selectedIds);
+
+    const selectAllEntries = items
+      .filter((item) => item.isSelectAll)
+      .map((item) => {
+        const regularItems = items.filter((i) => !i.isSelectAll && !i.disabled);
+        const allChecked =
+          regularItems.length > 0 &&
+          regularItems.every((i) => selectedIdsSet.has(i.id));
+        return { ...item, checked: allChecked };
+      });
+
+    const regularItems = items.filter((item) => !item.isSelectAll);
+
     if (
       selectionFeedback === "top" ||
       selectionFeedback === "top-after-reopen"
     ) {
-      const checkedItems = items
-        .filter((item) => selectedIds.includes(item.id))
+      const checkedItems = regularItems
+        .filter((item) => selectedIdsSet.has(item.id))
         .map((item) => ({ ...item, checked: true }));
-      const uncheckedItems = items
-        .filter((item) => !selectedIds.includes(item.id))
+      const uncheckedItems = regularItems
+        .filter((item) => !selectedIdsSet.has(item.id))
         .map((item) => ({ ...item, checked: false }));
 
       return [
+        ...selectAllEntries,
         ...(checkedItems.length > 1
           ? checkedItems.sort(sortItem)
           : checkedItems),
@@ -414,30 +491,57 @@
       ];
     }
 
-    return items
-      .map((item) => ({
-        ...item,
-        checked: selectedIds.includes(item.id),
-      }))
-      .sort(sortItem);
+    return [
+      ...selectAllEntries,
+      ...regularItems
+        .map((item) => ({
+          ...item,
+          checked: selectedIdsSet.has(item.id),
+        }))
+        .sort(sortItem),
+    ];
   }
 
   let sortedItems = sort();
+  let prevItemsRef = items;
 
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: inline = type === "inline";
-  $: ariaLabel = $$props["aria-label"] || "Choose an item";
-  $: if (
-    selectedIds &&
-    (selectionFeedback === "top" ||
-      (selectionFeedback === "top-after-reopen" && open === false))
-  ) {
+  $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
+  $: if (items !== prevItemsRef) {
+    prevItemsRef = items;
     sortedItems = sort();
   }
+  $: if (
+    selectedIds &&
+    ((selectionFeedback === "top" && selectedIds !== internalSelectedIdsRef) ||
+      (selectionFeedback === "top-after-reopen" && open === false))
+  ) {
+    internalSelectedIdsRef = selectedIds;
+    sortedItems = sort();
+  }
+  $: sortedItemsById = new Map(sortedItems.map((item) => [item.id, item]));
+  $: hasSelectAll = items.some((item) => item.isSelectAll);
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
-  $: filteredItems = sortedItems.filter((item) => filterItem(item, value));
+  $: selectableItems = sortedItems.filter(
+    (item) => !item.disabled && !item.isSelectAll,
+  );
+  $: selectableCheckedCount = selectableItems.filter(
+    (item) => item.checked,
+  ).length;
+  $: allSelected =
+    selectableItems.length > 0 &&
+    selectableCheckedCount === selectableItems.length;
+  $: selectAllIndeterminate =
+    hasSelectAll && selectableCheckedCount > 0 && !allSelected;
+  $: selectionCount = hasSelectAll
+    ? checked.filter((item) => !item.isSelectAll).length
+    : checked.length;
+  $: filteredItems = sortedItems.filter(
+    (item) => item.isSelectAll || filterItem(item, value),
+  );
   $: highlightedId =
     highlightedIndex > -1
       ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
@@ -480,9 +584,15 @@
 <svelte:window
   on:click={({ target }) => {
     if (open && multiSelectRef && !multiSelectRef.contains(target)) {
-      if (effectivePortalMenu && listRef && listRef.contains(target)) return;
+      if (effectivePortalMenu && listRef?.contains(target)) return;
       open = false;
     }
+  }}
+  on:focusin={({ target }) => {
+    if (!open) return;
+    if (multiSelectRef?.contains(target)) return;
+    if (effectivePortalMenu && listRef?.contains(target)) return;
+    open = false;
   }}
 />
 
@@ -523,8 +633,9 @@
       {invalid && 'bx--multi-select--invalid'}
       {inline && 'bx--multi-select--inline'}
       {readonly && 'bx--multi-select--readonly'}
-      {checked.length > 0 && 'bx--multi-select--selected'}"
-  >
+      {selectionCount > 0 && 'bx--multi-select--selected'}
+      {hasSelectAll && 'bx--multi-select--selectall'}"
+      >
     {#if invalid}
       <WarningFilled class="bx--list-box__invalid-icon" />
     {/if}
@@ -535,10 +646,10 @@
     {/if}
     {#if filterable}
       <div class:bx--list-box__field={true}>
-        {#if checked.length > 0}
+        {#if selectionCount > 0}
           <ListBoxSelection
             {readonly}
-            selectionCount={checked.length}
+            {selectionCount}
             on:clear
             on:clear={() => {
               selectedIds = [];
@@ -559,6 +670,7 @@
           tabindex="0"
           autocomplete="off"
           aria-autocomplete="list"
+          aria-haspopup="listbox"
           aria-expanded={open}
           aria-activedescendant={highlightedId}
           aria-labelledby={comboId}
@@ -574,13 +686,8 @@
             if (readonly) return
             if (key === "Enter") {
               if (highlightedId) {
-                const filteredItemIndex = sortedItems.findIndex(
-                  (item) => item.id === highlightedId,
-                );
-                sortedItems = sortedItems.map((item, i) => {
-                  if (i !== filteredItemIndex) return item;
-                  return { ...item, checked: !item.checked };
-                });
+                const highlightedItem = sortedItemsById.get(highlightedId);
+                if (highlightedItem) selectItem(highlightedItem);
               }
             } else if (key === "Tab") {
               open = false;
@@ -594,6 +701,23 @@
               open = false;
             } else if (key === " ") {
               if (!open) open = true;
+            } else if (key === "Backspace" && value === "") {
+              selectedIds = [];
+              sortedItems = sortedItems.map((item) => ({
+                ...item,
+                checked: false,
+              }));
+            } else if (key === "Delete") {
+              if (open) {
+                value = "";
+              } else {
+                value = "";
+                selectedIds = [];
+                sortedItems = sortedItems.map((item) => ({
+                  ...item,
+                  checked: false,
+                }));
+              }
             }
           }}
           on:input
@@ -602,10 +726,6 @@
           }}
           on:keyup
           on:focus
-          on:focus={() => {
-            if (disabled) return;
-            open = true;
-          }}
           on:blur
           on:paste
           {disabled}
@@ -614,14 +734,6 @@
           {id}
           {name}
         >
-        {#if invalid}
-          <WarningFilled class="bx--list-box__invalid-icon" />
-        {/if}
-        {#if !invalid && warn}
-          <WarningAltFilled
-            class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
-          />
-        {/if}
         {#if value}
           <ListBoxSelection
             {readonly}
@@ -666,7 +778,7 @@
         on:keydown={(e) => {
           if (readonly) return
           const key = e.key;
-          if ([" ", "ArrowUp", "ArrowDown"].includes(key)) {
+          if (key === " " || key === "ArrowUp" || key === "ArrowDown") {
             e.preventDefault();
           }
           if (key === " ") {
@@ -681,10 +793,10 @@
             change(-1);
           } else if (key === "Enter") {
             if (highlightedIndex > -1) {
-              sortedItems = sortedItems.map((item, i) => {
-                if (i !== highlightedIndex) return item;
-                return { ...item, checked: !item.checked };
-              });
+              const item = (filterable ? filteredItems : sortedItems)[
+                highlightedIndex
+              ];
+              if (item) selectItem(item);
             }
           } else if (key === "Escape") {
             open = false;
@@ -698,9 +810,9 @@
         {readonly}
         {translateWithId}
       >
-        {#if checked.length > 0}
+        {#if selectionCount > 0}
           <ListBoxSelection
-            selectionCount={checked.length}
+            {selectionCount}
             on:clear
             on:clear={() => {
               selectedIds = [];
@@ -731,6 +843,7 @@
         aria-label={ariaLabel}
         {id}
         portal={effectivePortalMenu}
+        portalHostClass="bx--multi-select bx--list-box--expanded"
         {open}
         anchor={fieldRef}
         {direction}
@@ -757,9 +870,13 @@
                   id={item.id}
                   role="option"
                   aria-labelledby="checkbox-{item.id}"
-                  aria-selected={item.checked}
-                  aria-checked={item.checked}
-                  active={item.checked}
+                  aria-selected={item.isSelectAll ? allSelected : item.checked}
+                  aria-checked={item.isSelectAll
+                    ? selectAllIndeterminate
+                      ? "mixed"
+                      : allSelected
+                    : item.checked}
+                  active={item.isSelectAll ? false : item.checked}
                   highlighted={highlightedIndex === actualIndex}
                   disabled={item.disabled}
                   on:click={(e) => {
@@ -767,9 +884,7 @@
                       e.stopPropagation();
                       return;
                     }
-                    sortedItems = sortedItems.map((_) =>
-                      _.id === item.id ? { ..._, checked: !_.checked } : _,
-                    );
+                    selectItem(item);
                     if (filterable) {
                       inputRef?.focus();
                     } else {
@@ -787,11 +902,11 @@
                     {...itemToInput(item)}
                     tabindex="-1"
                     id="checkbox-{item.id}"
-                    checked={item.checked}
+                    checked={item.isSelectAll ? allSelected : item.checked}
+                    indeterminate={item.isSelectAll
+                      ? selectAllIndeterminate
+                      : false}
                     disabled={item.disabled}
-                    on:blur={() => {
-                      if (actualIndex === itemsToUse.length - 1) open = false;
-                    }}
                   >
                     <slot slot="labelChildren" {item} index={actualIndex}>
                       {itemToString(item)}
@@ -807,9 +922,13 @@
               id={item.id}
               role="option"
               aria-labelledby="checkbox-{item.id}"
-              aria-selected={item.checked}
-              aria-checked={item.checked}
-              active={item.checked}
+              aria-selected={item.isSelectAll ? allSelected : item.checked}
+              aria-checked={item.isSelectAll
+                ? selectAllIndeterminate
+                  ? "mixed"
+                  : allSelected
+                : item.checked}
+              active={item.isSelectAll ? false : item.checked}
               highlighted={highlightedIndex === i}
               disabled={item.disabled}
               on:click={(e) => {
@@ -817,9 +936,7 @@
                   e.stopPropagation();
                   return;
                 }
-                sortedItems = sortedItems.map((_) =>
-                  _.id === item.id ? { ..._, checked: !_.checked } : _,
-                );
+                selectItem(item);
                 if (filterable) {
                   inputRef?.focus();
                 } else {
@@ -837,11 +954,11 @@
                 {...itemToInput(item)}
                 tabindex="-1"
                 id="checkbox-{item.id}"
-                checked={item.checked}
+                checked={item.isSelectAll ? allSelected : item.checked}
+                indeterminate={item.isSelectAll
+                  ? selectAllIndeterminate
+                  : false}
                 disabled={item.disabled}
-                on:blur={() => {
-                  if (i === itemsToUse.length - 1) open = false;
-                }}
               >
                 <slot slot="labelChildren" {item} index={i}>
                   {itemToString(item)}

@@ -1,5 +1,8 @@
 <script lang="ts">
   import { DataTable } from "carbon-components-svelte";
+  import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import type { DataTableSortValue } from "carbon-components-svelte/DataTable/data-table-utils";
+  import type { ComponentEvents, ComponentProps } from "svelte";
 
   type BaseRow = {
     id: string;
@@ -15,8 +18,8 @@
     sort?:
       | false
       | ((
-          a: string | number | boolean,
-          b: string | number | boolean,
+          a: DataTableSortValue<BaseRow>,
+          b: DataTableSortValue<BaseRow>,
         ) => number);
     sortAlways?: boolean;
   };
@@ -54,11 +57,11 @@
 
   export let title = "";
   export let description = "";
-  export let size: "compact" | "short" | "medium" | "tall" | undefined =
-    undefined;
+  export let size: ComponentProps<DataTable>["size"] = undefined;
   export let zebra = false;
   export let sortable = false;
   export let sortAlways = false;
+  export let sort: ComponentProps<DataTable>["sort"] = undefined;
   export let stickyHeader = false;
   export let useStaticWidth = false;
   export let expandable = false;
@@ -66,37 +69,25 @@
   export let selectable = false;
   export let radio = false;
   export let batchSelection = false;
-  export let nonSelectableRowIds: string[] = [];
-  export let nonExpandableRowIds: string[] = [];
-  export let selectedRowIds: string[] = [];
-  export let expandedRowIds: string[] = [];
+  export let nonSelectableRowIds: ComponentProps<DataTable>["nonSelectableRowIds"] =
+    [];
+  export let nonExpandableRowIds: ComponentProps<DataTable>["nonExpandableRowIds"] =
+    [];
+  export let selectedRowIds: ComponentProps<DataTable>["selectedRowIds"] = [];
+  export let expandedRowIds: ComponentProps<DataTable>["expandedRowIds"] = [];
   export let pageSize = 0;
   export let page = 0;
-  export let sortKey: string | undefined = undefined;
-  export let sortDirection: "none" | "ascending" | "descending" = "none";
-  export let virtualize:
-    | undefined
-    | boolean
-    | {
-        itemHeight?: number;
-        maxVisibleRows?: number;
-        containerHeight?: number;
-        overscan?: number;
-        threshold?: number;
-        maxItems?: number;
-      } = undefined;
-  export let scrollContainerRef: HTMLDivElement | null = null;
-  export let tableHeaderTranslateWithId: ((id: string) => string) | undefined =
+  export let sortKey: ComponentProps<DataTable>["sortKey"] = undefined;
+  export let sortDirection: ComponentProps<DataTable>["sortDirection"] = "none";
+  export let virtualize: ComponentProps<DataTable>["virtualize"] = undefined;
+  export let scrollContainerRef: ComponentProps<DataTable>["scrollContainerRef"] =
+    null;
+  export let tableHeaderTranslateWithId: ComponentProps<DataTable>["tableHeaderTranslateWithId"] =
     undefined;
-  export let rowClass:
-    | string
-    | ((row: {
-        row: BaseRow;
-        rowIndex: number;
-        selected: boolean;
-        expanded: boolean;
-      }) => string | undefined)
+  export let onsort:
+    | ((e: ComponentEvents<DataTableComponent>["sort"]) => void)
     | undefined = undefined;
+  export let rowClass: ComponentProps<DataTable>["rowClass"] = undefined;
 </script>
 
 <DataTable
@@ -108,6 +99,7 @@
   {zebra}
   {sortable}
   {sortAlways}
+  {sort}
   {stickyHeader}
   {useStaticWidth}
   {expandable}
@@ -145,6 +137,7 @@
   on:mouseleave:row={(e) => {
     console.log("mouseleave:row", e.detail);
   }}
+  on:sort={(e) => onsort?.(e)}
 >
   <slot />
 </DataTable>

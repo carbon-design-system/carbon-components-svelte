@@ -3,6 +3,8 @@
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} remove
    * @event {ReadonlyArray<File>} change
+   * @event {void} clear
+   * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
    */
 
   /**
@@ -41,6 +43,22 @@
 
   /** Set to `true` to allow multiple files */
   export let multiple = false;
+
+  /**
+   * Set to `true` to reject files that match an already-selected file
+   * (by name, size, and lastModified). Rejected duplicates are reported
+   * via the `rejected` event with `reason: 'duplicate'`.
+   */
+  export let preventDuplicate = false;
+
+  /**
+   * Control how newly added files are ordered in the list.
+   * - `"append"` (default): new files appear at the end
+   * - `"prepend"`: new files appear at the beginning
+   * - A custom function receiving (existingFiles, newFiles) that returns the merged array
+   * @type {"append" | "prepend" | ((existing: ReadonlyArray<File>, added: ReadonlyArray<File>) => ReadonlyArray<File>)}
+   */
+  export let orderFiles = "append";
 
   /**
    * Programmatically clear the uploaded files.
@@ -94,8 +112,14 @@
   /** Specify the button label */
   export let buttonLabel = "";
 
-  /** Specify the ARIA label used for the status icons */
-  export let iconDescription = "Provide icon description";
+  /**
+   * Accessible label for file row status icons (spinner, remove control, checkmark).
+   * Forwarded to `Filename`. Use a string, or a function with context `{ file, fileName, status, invalid }`
+   * where `file` is the row's `File` (only set from `FileUploader`, not from `FileUploaderItem`).
+   * When omitted or the resolved value is blank after trim, `Filename` uses built-in defaults.
+   * @type {string | undefined | ((ctx: { file?: File; fileName: string; status: "uploading" | "edit" | "complete"; invalid: boolean }) => string | undefined)}
+   */
+  export let iconDescription = undefined;
 
   /** Specify a name attribute for the file button uploader input */
   export let name = "";
@@ -108,19 +132,28 @@
 
   let prevFiles = [];
 
-  /** @type {(file: File) => string} */
-  const getFileId = (file) => file.lastModified + file.name;
+  /** @type {(file: File, index: number) => string} */
+  const getFileId = (file, index) =>
+    `${file.lastModified + file.name}-${index}`;
+
+  /** Stable keys for `{#each}` (and Biome-safe: no commas in the each header). */
+  $: filesWithKeys = files.map((file, index) => ({
+    file,
+    key: getFileId(file, index),
+  }));
 
   afterUpdate(() => {
-    const fileIds = files.map(getFileId);
-    const prevFileIds = prevFiles.map(getFileId);
+    const fileIds = files.map((f, i) => getFileId(f, i));
+    const prevFileIds = prevFiles.map((f, i) => getFileId(f, i));
     const addedIds = fileIds.filter((_) => !prevFileIds.includes(_));
     const removedIds = prevFileIds.filter((_) => !fileIds.includes(_));
 
     if (addedIds.length > 0) {
       dispatch(
         "add",
-        addedIds.map((id) => files.find((file) => id === getFileId(file))),
+        addedIds.map((id) =>
+          files.find((file, i) => id === getFileId(file, i)),
+        ),
       );
     }
 
@@ -128,9 +161,14 @@
       dispatch(
         "remove",
         removedIds.map((id) =>
-          prevFiles.find((file) => id === getFileId(file)),
+          prevFiles.find((file, i) => id === getFileId(file, i)),
         ),
       );
+    }
+
+    if (prevFiles.length > 0 && files.length === 0) {
+      dispatch("change", []);
+      dispatch("clear");
     }
 
     prevFiles = [...files];
@@ -175,32 +213,77 @@
     bind:files
     on:change={(e) => {
       let newFiles = e.detail;
-      
+      const allRejected = [];
+      const existingRefs = new Set(prevFiles);
+
       if (maxFileSize !== undefined) {
+        const rejected = newFiles.filter((file) => file.size > maxFileSize);
         newFiles = newFiles.filter((file) => file.size <= maxFileSize);
+
+        if (rejected.length > 0) {
+          allRejected.push(
+            ...rejected.map((file) => ({ file, reason: "size" })),
+          );
+        }
       }
-      
-      files = newFiles;
-      dispatch("change", newFiles);
+
+      if (preventDuplicate) {
+        // In multiple mode, newFiles includes re-sent existing files
+        // (same reference) plus newly selected ones. Only reject new
+        // objects that match an existing file by content.
+        const existingKeys = new Set(
+          prevFiles.map((f) => `${f.name}\0${f.size}\0${f.lastModified}`),
+        );
+        const isDuplicate = (f) =>
+          !existingRefs.has(f) &&
+          existingKeys.has(`${f.name}\0${f.size}\0${f.lastModified}`);
+        const duplicates = newFiles.filter(isDuplicate);
+        newFiles = newFiles.filter((f) => !isDuplicate(f));
+
+        if (duplicates.length > 0) {
+          allRejected.push(
+            ...duplicates.map((file) => ({ file, reason: "duplicate" })),
+          );
+        }
+      }
+
+      if (allRejected.length > 0) {
+        dispatch("rejected", allRejected);
+      }
+
+      const carried = newFiles.filter((f) => existingRefs.has(f));
+      const added = newFiles.filter((f) => !existingRefs.has(f));
+
+      if (typeof orderFiles === "function") {
+        files = orderFiles(carried, added);
+      } else if (orderFiles === "prepend") {
+        files = [...added, ...carried];
+      } else {
+        files = [...carried, ...added];
+      }
+
+      dispatch("change", files);
     }}
   />
   <div class:bx--file-container={true}>
-    {#each files as { name }, i}
+    {#each filesWithKeys as { file, key } (key)}
       <span class:bx--file__selected-file={true}>
-        <p class:bx--file-filename={true}>{name}</p>
+        <p class:bx--file-filename={true}>{file.name}</p>
         <span class:bx--file__state-container={true}>
           <Filename
+            {file}
+            fileName={file.name}
             {iconDescription}
             {status}
             on:keydown
-            on:keydown={({ key }) => {
-              if (key === " " || key === "Enter") {
-                files = files.filter((_, index) => index !== i);
+            on:keydown={(e) => {
+              if (e.key === " " || e.key === "Enter") {
+                files = files.filter((f) => f !== file);
               }
             }}
             on:click
             on:click={() => {
-              files = files.filter((_, index) => index !== i);
+              files = files.filter((f) => f !== file);
             }}
           />
         </span>

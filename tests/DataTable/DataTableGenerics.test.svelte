@@ -103,6 +103,12 @@
     const row = e.detail.row;
     console.log("Expanded:", row.id);
   }}
+  on:sort={(e) => {
+    // e.detail.key is DataTableKey<ProductRow> | null (`null` when direction is `none`, e.g. third header click without sortAlways)
+    const key = e.detail.key;
+    const direction = e.detail.direction;
+    console.log("Sort:", key, direction);
+  }}
 >
   <svelte:fragment slot="expandedRow" let:row>
     <p>Expanded content for {row.name}</p>

@@ -9,7 +9,7 @@
   text="Hello, World!"
   iconDescription="Copy to clipboard"
   feedback="Copied!"
-  copy={async (text) => {
+  copy={(text) => {
     copiedText = text;
   }}
 />

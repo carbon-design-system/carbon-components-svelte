@@ -3,8 +3,10 @@
   import type { ComponentProps } from "svelte";
 
   export let selected: ComponentProps<TileGroup>["selected"] = undefined;
-  export let ariaDescribedBy: string | undefined = undefined;
-  export let ariaLabelledBy: string | undefined = undefined;
+  export let ariaDescribedBy: ComponentProps<RadioTile>["aria-describedby"] =
+    undefined;
+  export let ariaLabelledBy: ComponentProps<RadioTile>["aria-labelledby"] =
+    undefined;
 </script>
 
 <TileGroup bind:selected>

@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "test:types": "svelte-check --workspace ../tests --tsconfig ../tests/tsconfig.compat-check.json --fail-on-warnings"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/svelte": "^5.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "jsdom": "^29.0.1",
+    "svelte": "^4.2.20",
+    "svelte-check": "^4.4.8",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.5"
+  }
+}

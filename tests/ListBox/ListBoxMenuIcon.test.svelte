@@ -10,4 +10,9 @@
   export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
 </script>
 
-<ListBoxMenuIcon {open} {translateWithId} on:click={onclick} {...$$restProps} />
+<ListBoxMenuIcon
+  {open}
+  {translateWithId}
+  on:click={(e) => onclick?.(e)}
+  {...$$restProps}
+/>

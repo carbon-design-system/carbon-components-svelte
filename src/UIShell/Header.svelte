@@ -83,6 +83,14 @@
    */
   export let ariaLabelMenu = undefined;
 
+  /**
+   * Set to `"classic"` for the mixed UI Shell theme (Gray 100 header).
+   * Use with `SideNav` `theme="classic"` (White side nav).
+   * Requires `carbon-components-svelte/css/all.css`.
+   * @type {"classic" | undefined}
+   */
+  export let theme = undefined;
+
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/Menu.svelte";
   import HamburgerMenu from "./HamburgerMenu.svelte";
@@ -124,7 +132,11 @@
 
 <svelte:window bind:innerWidth={winWidth} />
 
-<header aria-label={ariaLabel} class:bx--header={true}>
+<header
+  aria-label={ariaLabel}
+  class:bx--header={true}
+  class:bx--header--ui-shell-classic={theme === "classic"}
+>
   <slot name="skipToContent" />
   {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
     <HamburgerMenu

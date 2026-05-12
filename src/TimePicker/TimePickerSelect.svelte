@@ -8,8 +8,8 @@
   /** Set to `true` to disable the select */
   export let disabled = false;
 
-  /** Set to `true` to use the read-only variant */
-  export let readonly = false
+  /** Set to `true` for the select to be read-only */
+  export let readonly = false;
 
   /** Specify the ARIA label for the chevron icon */
   export let iconDescription = "Open list of options";
@@ -43,23 +43,6 @@
   $: selectedValue.set(value);
   $: value = $selectedValue;
 
-  const onMouseDown = (evt) => {
-    // NOTE: does not prevent click
-    if (readonly) {
-      evt.preventDefault();
-      // focus on the element as per readonly input behavior
-      evt.target.focus();
-    }
-  }
-
-  const onKeyDown = (evt) => {
-    const selectAccessKeys = ['ArrowDown', 'ArrowUp', ' ', 'Enter'];
-    // This prevents the select from opening for the above keys
-    if (readonly && selectAccessKeys.includes(evt.key)) {
-      evt.preventDefault();
-    }
-  }
-
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -67,6 +50,7 @@
 <div
   class:bx--select={true}
   class:bx--time-picker__select={true}
+  class:bx--select--readonly={readonly}
   {...$$restProps}
   on:click
   on:mouseover
@@ -86,12 +70,31 @@
     {disabled}
     {readonly}
     {value}
+    aria-readonly={readonly || undefined}
     class:bx--select-input={true}
     on:change={({ target }) => {
       selectedValue.set(target.value);
     }}
-    on:mousedown={onMouseDown}
-    on:keydown={onKeyDown}
+    on:change
+    on:input
+    on:focus
+    on:blur
+    on:mousedown={(e) => {
+      if (readonly) {
+        e.preventDefault();
+        e.currentTarget.focus();
+      }
+    }}
+    on:keydown={(e) => {
+      if (
+        readonly &&
+        e.key !== "Tab" &&
+        e.key !== "Shift" &&
+        !(e.altKey && e.key === "ArrowDown")
+      ) {
+        e.preventDefault();
+      }
+    }}
   >
     <slot />
   </select>

@@ -1,0 +1,16 @@
+@import "carbon-components/scss/globals/scss/vars";
+
+@mixin tag-lg {
+  .#{$prefix}--tag--lg {
+    min-height: to-rem(32px);
+    padding: 0 $carbon--spacing-04;
+  }
+
+  .#{$prefix}--tag--lg.#{$prefix}--tag--filter {
+    padding-right: 0;
+  }
+}
+
+@include exports("tag-lg") {
+  @include tag-lg;
+}

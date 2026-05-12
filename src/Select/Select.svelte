@@ -64,8 +64,8 @@
   /** Set to `true` to mark the field as required */
   export let required = false;
 
-  /** Set to `true` to use the read-only variant */
-  export let readonly = false
+  /** Set to `true` for the select to be read-only */
+  export let readonly = false;
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
@@ -136,12 +136,13 @@
     }
   }
 
-  let prevSelected = undefined;
+  let prevSelected = null;
 
   afterUpdate(() => {
     if (selected !== $selectedValue) {
+      const isInitialRender = prevSelected === null;
       selected = $selectedValue;
-      if (prevSelected !== undefined) {
+      if (!isInitialRender) {
         dispatch("update", $selectedValue);
       }
     }
@@ -160,9 +161,9 @@
     class:bx--select={true}
     class:bx--select--inline={inline}
     class:bx--select--light={light}
-    class:bx--select--invalid={invalid}
+    class:bx--select--invalid={invalid && !readonly}
     class:bx--select--disabled={disabled}
-    class:bx--select--warning={warn}
+    class:bx--select--warning={warn && !readonly}
     class:bx--select--readonly={readonly}
   >
     {#if !noLabel && (labelText || $$slots.labelChildren)}
@@ -179,18 +180,18 @@
       <div class:bx--select-input--inline__wrapper={true}>
         <div
           class:bx--select-input__wrapper={true}
-          data-invalid={invalid || undefined}
+          data-invalid={(invalid && !readonly) || undefined}
         >
           <select
             bind:this={ref}
-            aria-describedby={invalid
+            aria-describedby={invalid && !readonly
               ? errorId
-              : warn
+              : warn && !readonly
                 ? warnId
                 : helperText
                   ? helperId
                   : undefined}
-            aria-invalid={invalid || undefined}
+            aria-invalid={(invalid && !readonly) || undefined}
             aria-readonly={readonly || undefined}
             aria-disabled={readonly || undefined}
             aria-label={readonly ? "read only" : undefined}
@@ -209,21 +210,47 @@
             on:input
             on:focus
             on:blur
+            on:mousedown={(e) => {
+              if (readonly) {
+                e.preventDefault();
+                e.currentTarget.focus();
+              }
+            }}
+            on:keydown={(e) => {
+              if (
+                readonly &&
+                (e.key === "ArrowDown" ||
+                  e.key === "ArrowUp" ||
+                  e.key === " ")
+              ) {
+                e.preventDefault();
+              }
+            }}
           >
             <slot />
           </select>
           <ChevronDown class="bx--select__arrow" />
-          {#if invalid}
+          {#if invalid && !readonly}
             <WarningFilled class="bx--select__invalid-icon" />
           {/if}
+          {#if !invalid && warn && !readonly}
+            <WarningAltFilled
+              class="bx--select__invalid-icon bx--select__invalid-icon--warning"
+            />
+          {/if}
         </div>
-        {#if invalid}
+        {#if invalid && !readonly}
           <div class:bx--form-requirement={true} id={errorId}>
             {invalidText}
           </div>
         {/if}
+        {#if !invalid && warn && !readonly}
+          <div class:bx--form-requirement={true} id={warnId}>
+            {warnText}
+          </div>
+        {/if}
       </div>
-      {#if !invalid && !warn && helperText}
+      {#if (!invalid && !warn && helperText) || (readonly && helperText)}
         <div
           id={helperId}
           class:bx--form__helper-text={true}
@@ -236,15 +263,15 @@
     {#if !inline}
       <div
         class:bx--select-input__wrapper={true}
-        data-invalid={invalid || undefined}
+        data-invalid={(invalid && !readonly) || undefined}
       >
         <select
           bind:this={ref}
           {id}
           {name}
-          aria-describedby={invalid
+          aria-describedby={invalid && !readonly
             ? errorId
-            : warn
+            : warn && !readonly
               ? warnId
               : helperText
                 ? helperId
@@ -252,7 +279,7 @@
           aria-readonly={readonly || undefined}
           disabled={disabled || undefined}
           required={required || undefined}
-          aria-invalid={invalid || undefined}
+          aria-invalid={(invalid && !readonly) || undefined}
           aria-disabled={readonly || undefined}
           aria-label={readonly ? "read only" : undefined}
           class:bx--select-input={true}
@@ -266,20 +293,33 @@
           on:input
           on:focus
           on:blur
+          on:mousedown={(e) => {
+            if (readonly) e.preventDefault();
+          }}
+          on:keydown={(e) => {
+            if (
+              readonly &&
+              e.key !== "Tab" &&
+              e.key !== "Shift" &&
+              !(e.altKey && e.key === "ArrowDown")
+            ) {
+              e.preventDefault();
+            }
+          }}
         >
           <slot />
         </select>
         <ChevronDown class="bx--select__arrow" />
-        {#if invalid}
+        {#if invalid && !readonly}
           <WarningFilled class="bx--select__invalid-icon" />
         {/if}
-        {#if !invalid && warn}
+        {#if !invalid && warn && !readonly}
           <WarningAltFilled
             class="bx--select__invalid-icon bx--select__invalid-icon--warning"
           />
         {/if}
       </div>
-      {#if !invalid && !warn && helperText}
+      {#if (!invalid && !warn && helperText) || (readonly && helperText)}
         <div
           id={helperId}
           class:bx--form__helper-text={true}
@@ -288,12 +328,20 @@
           {helperText}
         </div>
       {/if}
-      {#if invalid}
+      {#if invalid && !readonly}
         <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
       {/if}
-      {#if !invalid && warn}
+      {#if !invalid && warn && !readonly}
         <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
       {/if}
     {/if}
   </div>
 </div>
+
+<style>
+  :global(.bx--select--readonly .bx--select-input) {
+    background-color: transparent;
+    border-block-end-color: var(--cds-border-subtle, #c6c6c6);
+    cursor: default;
+  }
+</style>

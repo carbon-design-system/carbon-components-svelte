@@ -51,13 +51,13 @@
   {inline}
   {readonly}
   {type}
-  on:change={onchange}
-  on:input={oninput}
-  on:keydown={onkeydown}
-  on:keyup={onkeyup}
-  on:focus={onfocus}
-  on:blur={onblur}
-  on:paste={onpaste}
+  on:change={(e) => onchange?.(e)}
+  on:input={(e) => oninput?.(e)}
+  on:keydown={(e) => onkeydown?.(e)}
+  on:keyup={(e) => onkeyup?.(e)}
+  on:focus={(e) => onfocus?.(e)}
+  on:blur={(e) => onblur?.(e)}
+  on:paste={(e) => onpaste?.(e)}
 />
 
 <div data-testid="value">{value}</div>

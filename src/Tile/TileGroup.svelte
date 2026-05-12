@@ -1,7 +1,6 @@
 <script>
   /**
    * @generics {T extends string = string} T
-   * @template {string} T
    * @event {T} select
    */
 

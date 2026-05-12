@@ -1,5 +1,5 @@
 <script>
-  import { Button, Stack, TreeView } from "carbon-components-svelte";
+  import { Button, ButtonSet, Stack, TreeView } from "carbon-components-svelte";
 
   let treeview = null;
   let nodes = [
@@ -45,15 +45,23 @@
 </script>
 
 <Stack gap={6}>
-  <div>
+  <ButtonSet>
     <Button
       on:click={() => {
+        treeview?.expandNodes();
+      }}
+    >
+      Expand all nodes
+    </Button>
+    <Button
+      on:click={() => {
+        treeview?.collapseNodes();
         treeview?.expandNodes((node) => /^IBM/.test(node.text));
       }}
     >
       Expand nodes starting with "IBM"
     </Button>
-  </div>
+  </ButtonSet>
   <div>
     <TreeView bind:this={treeview} labelText="Cloud Products" {nodes} />
   </div>

@@ -10,12 +10,13 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:4173",
   },
-  projects: [
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-    },
-  ],
+  projects: process.env.CI
+    ? [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }]
+    : [
+        { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+        { name: "firefox", use: { ...devices["Desktop Firefox"] } },
+        { name: "webkit", use: { ...devices["Desktop Safari"] } },
+      ],
   webServer: {
     command: "bunx vite --config e2e/vite.config.ts --port 4173",
     port: 4173,

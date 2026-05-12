@@ -6,8 +6,10 @@ import { tick } from "svelte";
 import { user } from "../setup-tests";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
+import MultiSelectBindValue from "./MultiSelectBindValue.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
+import MultiSelectItemToStringId from "./MultiSelectItemToStringId.test.svelte";
 import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
 
 const items = [
@@ -208,6 +210,286 @@ describe("MultiSelect", () => {
     });
   });
 
+  describe("isSelectAll behavior", () => {
+    const itemsWithSelectAll = [
+      { id: "select-all", text: "All roles", isSelectAll: true },
+      { id: "editor", text: "Editor" },
+      { id: "owner", text: "Owner" },
+      { id: "uploader", text: "Uploader" },
+      { id: "reader", text: "Reader", disabled: true },
+    ];
+
+    it("renders select-all item first in the list", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveTextContent("All roles");
+    });
+
+    it("applies bx--multi-select--selectall class when an item has isSelectAll", () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      const wrapper = screen.getByRole("combobox").closest(".bx--multi-select");
+      expect(wrapper).toHaveClass("bx--multi-select--selectall");
+    });
+
+    it("does not apply bx--multi-select--selectall when no item has isSelectAll", () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact",
+        },
+      });
+
+      const wrapper = screen.getByRole("combobox").closest(".bx--multi-select");
+      expect(wrapper).not.toHaveClass("bx--multi-select--selectall");
+    });
+
+    it("clicking select-all selects all non-disabled items", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("All roles");
+
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: ["editor", "owner", "uploader"],
+        selected: expect.arrayContaining([
+          expect.objectContaining({
+            id: "editor",
+            text: "Editor",
+            checked: true,
+          }),
+          expect.objectContaining({
+            id: "owner",
+            text: "Owner",
+            checked: true,
+          }),
+          expect.objectContaining({
+            id: "uploader",
+            text: "Uploader",
+            checked: true,
+          }),
+        ]),
+        unselected: expect.arrayContaining([
+          expect.objectContaining({
+            id: "reader",
+            text: "Reader",
+            disabled: true,
+            checked: false,
+          }),
+        ]),
+      });
+      expect(consoleLog.mock.calls[0][1].selected).toHaveLength(3);
+
+      const readerOption = screen.getByRole("option", { name: "Reader" });
+      expect(readerOption).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("disabled items are not selected when clicking select-all", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("All roles");
+
+      const options = screen.getAllByRole("option");
+      const readerOption = options.find(
+        (o) => o.textContent?.trim() === "Reader",
+      );
+      expect(readerOption).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("clicking select-all when all selected deselects all non-disabled items", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          selectedIds: ["editor", "owner", "uploader"],
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("All roles");
+
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: [],
+        selected: [],
+        unselected: expect.arrayContaining([
+          expect.objectContaining({
+            id: "editor",
+            text: "Editor",
+            checked: false,
+          }),
+          expect.objectContaining({
+            id: "owner",
+            text: "Owner",
+            checked: false,
+          }),
+          expect.objectContaining({
+            id: "uploader",
+            text: "Uploader",
+            checked: false,
+          }),
+          expect.objectContaining({
+            id: "reader",
+            text: "Reader",
+            disabled: true,
+            checked: false,
+          }),
+        ]),
+      });
+      expect(consoleLog.mock.calls[0][1].unselected).toHaveLength(4);
+    });
+
+    it("select event excludes isSelectAll item from selectedIds and selected/unselected", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("All roles");
+
+      const detail = consoleLog.mock.calls[0][1];
+      expect(detail.selectedIds).not.toContain("select-all");
+      expect(
+        detail.selected.every((s: { id: string }) => s.id !== "select-all"),
+      ).toBe(true);
+      expect(
+        detail.unselected.every((u: { id: string }) => u.id !== "select-all"),
+      ).toBe(true);
+    });
+
+    it("select-all option shows indeterminate state when some items selected", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          selectedIds: ["editor"],
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "mixed");
+    });
+
+    it("select-all option shows checked when all selectable items selected", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          selectedIds: ["editor", "owner", "uploader"],
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "true");
+    });
+
+    it("select-all option shows unchecked when no items selected", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "false");
+    });
+
+    it("clear button deselects all including select-all state", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          selectedIds: ["editor", "owner", "uploader"],
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const clearButton = screen.getByRole("button", { name: /clear/i });
+      await user.click(clearButton);
+      await closeMenu();
+      await openMenu();
+
+      const allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "false");
+      const editorOption = screen.getByRole("option", { name: "Editor" });
+      expect(editorOption).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("select-all item remains visible when filterable and filter is applied", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          filterable: true,
+          placeholder: "Filter roles...",
+          labelText: "Roles",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter roles...");
+      await user.click(input);
+      await user.type(input, "Ed");
+
+      expect(screen.getByText("All roles")).toBeInTheDocument();
+      expect(screen.getByText("Editor")).toBeInTheDocument();
+      expect(screen.queryByText("Owner")).not.toBeInTheDocument();
+      expect(screen.queryByText("Uploader")).not.toBeInTheDocument();
+    });
+
+    it("selecting individual items updates select-all checked/indeterminate state", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      let allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "false");
+
+      await toggleOption("Editor");
+      allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "mixed");
+
+      await toggleOption("Owner");
+      await toggleOption("Uploader");
+      allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "true");
+    });
+  });
+
   describe("filtering behavior", () => {
     it("filters items based on input", async () => {
       const consoleLog = vi.spyOn(console, "log");
@@ -268,6 +550,16 @@ describe("MultiSelect", () => {
         ],
       });
     });
+
+    it("does not clear bound `value` on initial render when not filterable", async () => {
+      render(MultiSelectBindValue, {
+        props: { items, filterable: false, value: "hello" },
+      });
+
+      await tick();
+
+      expect(screen.getByTestId("bound-value")).toHaveTextContent("hello");
+    });
   });
 
   describe("sorting behavior", () => {
@@ -308,6 +600,67 @@ describe("MultiSelect", () => {
 
       await toggleOption("C");
       expect(nthRenderedOptionText(0)).toBe("A");
+    });
+
+    it("does not double re-sort when toggling with selectionFeedback: top", async () => {
+      let sortCallCount = 0;
+
+      // Wrap sortItem to count how many comparisons occur per toggle.
+      const sortItem = (a: { text: string }, b: { text: string }) => {
+        sortCallCount++;
+        return a.text.localeCompare(b.text);
+      };
+
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+            { id: "3", text: "C" },
+            { id: "4", text: "D" },
+            { id: "5", text: "E" },
+          ],
+          selectionFeedback: "top",
+          sortItem,
+        },
+      });
+
+      await openMenu();
+      sortCallCount = 0;
+
+      // Toggle two items so both checked and unchecked partitions get sorted.
+      await toggleOption("C");
+      await toggleOption("E");
+      const callsForTwoToggles = sortCallCount;
+
+      // With 5 items and 2 checked, a single sort() call produces
+      // at most ~10 comparisons (two small partitions).
+      // A double re-sort per toggle would roughly double this count.
+      // Use a generous upper bound for a single-pass sort per toggle.
+      expect(callsForTwoToggles).toBeLessThanOrEqual(20);
+      expect(callsForTwoToggles).toBeGreaterThan(0);
+    });
+
+    it("re-sorts when selectedIds changes externally with selectionFeedback: top", async () => {
+      const { rerender } = render(MultiSelect, {
+        props: {
+          items: [
+            { id: "3", text: "C" },
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+          ],
+          selectionFeedback: "top",
+        },
+      });
+
+      await openMenu();
+      expect(nthRenderedOptionText(0)).toBe("A");
+
+      // External selectedIds change should still trigger re-sort.
+      await rerender({ selectedIds: ["3"] });
+      await tick();
+
+      expect(nthRenderedOptionText(0)).toBe("C");
     });
 
     it("sorts after reopen with selectionFeedback: top-after-reopen", async () => {
@@ -354,6 +707,45 @@ describe("MultiSelect", () => {
       await openMenu();
       expect(nthRenderedOptionText(0)).toBe("A");
     });
+
+    it("recomputes sortedItems when the items prop changes", async () => {
+      const { rerender } = render(MultiSelect, {
+        props: {
+          items: [
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+          ],
+        },
+      });
+
+      await openMenu();
+      expect(screen.getAllByRole("option")).toHaveLength(2);
+      expect(nthRenderedOptionText(0)).toBe("A");
+      expect(nthRenderedOptionText(1)).toBe("B");
+
+      await rerender({
+        items: [
+          { id: "1", text: "A" },
+          { id: "2", text: "B" },
+          { id: "3", text: "C" },
+        ],
+      });
+      await tick();
+
+      expect(screen.getAllByRole("option")).toHaveLength(3);
+      expect(nthRenderedOptionText(2)).toBe("C");
+
+      await rerender({
+        items: [
+          { id: "1", text: "Alpha" },
+          { id: "2", text: "B" },
+          { id: "3", text: "C" },
+        ],
+      });
+      await tick();
+
+      expect(nthRenderedOptionText(0)).toBe("Alpha");
+    });
   });
 
   describe("variants and states", () => {
@@ -396,6 +788,36 @@ describe("MultiSelect", () => {
       expect(screen.getByText("Invalid selection")).toBeInTheDocument();
       const wrapper = screen.getByRole("combobox").closest(".bx--list-box");
       expect(wrapper).toHaveClass("bx--multi-select--invalid");
+    });
+
+    // Regression: filterable + invalid rendered two WarningFilled icons
+    it("renders only one invalid icon when filterable", () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+        },
+      });
+
+      const icons = container.querySelectorAll(".bx--list-box__invalid-icon");
+      expect(icons).toHaveLength(1);
+    });
+
+    // Regression: filterable + warn rendered two WarningAltFilled icons
+    it("renders only one warning icon when filterable", () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          warn: true,
+          warnText: "Warning message",
+        },
+      });
+
+      const icons = container.querySelectorAll(".bx--list-box__invalid-icon");
+      expect(icons).toHaveLength(1);
     });
 
     it("handles warning state", () => {
@@ -666,6 +1088,32 @@ describe("MultiSelect", () => {
     expect(options[2]).toHaveAttribute("aria-selected", "false");
   });
 
+  it("should not infinite loop when all items are disabled", async () => {
+    render(MultiSelect, {
+      props: {
+        items: [
+          { id: "1", text: "Aa", disabled: true },
+          { id: "2", text: "Ba", disabled: true },
+          { id: "3", text: "Ca", disabled: true },
+        ],
+        filterable: true,
+        placeholder: "Filter...",
+      },
+    });
+    const input = screen.getByPlaceholderText("Filter...");
+    await user.click(input);
+
+    // If the while loop has no guard, this would hang forever.
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowUp}");
+
+    // No item should be selected since all are disabled.
+    const options = screen.getAllByRole("option");
+    for (const option of options) {
+      expect(option).toHaveAttribute("aria-selected", "false");
+    }
+  });
+
   it("skips disabled items during keyboard navigation", async () => {
     render(MultiSelect, {
       props: {
@@ -740,7 +1188,7 @@ describe("MultiSelect", () => {
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2313
   describe("keyboard navigation (issue #2313)", () => {
-    it("filterable: menu opens when tabbing into field", async () => {
+    it("filterable: menu does not open on focus alone (WAI-ARIA combobox)", async () => {
       render(MultiSelect, {
         props: {
           items,
@@ -754,6 +1202,10 @@ describe("MultiSelect", () => {
       await user.tab();
       expect(input).toHaveFocus();
 
+      expect(input).toHaveAttribute("aria-expanded", "false");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
+      await user.keyboard("{ArrowDown}");
       expect(input).toHaveAttribute("aria-expanded", "true");
       expect(screen.getByRole("listbox")).toBeInTheDocument();
     });
@@ -817,7 +1269,7 @@ describe("MultiSelect", () => {
 
       expect(input).toHaveFocus();
       expect(clearButton).not.toHaveFocus();
-      expect(input).toHaveAttribute("aria-expanded", "true");
+      expect(input).toHaveAttribute("aria-expanded", "false");
     });
 
     it("filterable: clear button is not keyboard accessible but works with mouse", async () => {
@@ -921,6 +1373,49 @@ describe("MultiSelect", () => {
 
       expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Tag>();
       expectTypeOf(filterItem).parameter(0).toEqualTypeOf<Tag>();
+    });
+
+    it("sortItem should return number, not Item", () => {
+      type Item = { id: string; text: string };
+
+      const sortItem: ComponentProps<MultiSelectComponent<Item>>["sortItem"] = (
+        a: Item,
+        b: Item,
+      ) => a.text.localeCompare(b.text, "en", { numeric: true });
+
+      expectTypeOf(sortItem).returns.toEqualTypeOf<number>();
+      expectTypeOf(sortItem).parameters.toEqualTypeOf<[Item, Item]>();
+    });
+
+    it('itemToString may return string or Item["id"] (matches default text ?? id)', () => {
+      type Row = { id: number; text: string };
+
+      type ItemToString = NonNullable<
+        ComponentProps<MultiSelectComponent<Row>>["itemToString"]
+      >;
+
+      expectTypeOf<ItemToString>().returns.toEqualTypeOf<string | number>();
+
+      const showText = (item: Row) => item.text;
+      const showId = (item: Row) => item.id;
+      // `text` must be optional so `?? id` is typed as `string | number` (required `text` would infer only `string`).
+      const showFallback = (item: { id: number; text?: string }) =>
+        item.text ?? item.id;
+
+      expectTypeOf(showText).returns.toEqualTypeOf<string>();
+      expectTypeOf(showId).returns.toEqualTypeOf<number>();
+      expectTypeOf(showFallback).returns.toEqualTypeOf<string | number>();
+
+      expectTypeOf(showText).toMatchTypeOf<ItemToString>();
+      expectTypeOf(showId).toMatchTypeOf<ItemToString>();
+      expectTypeOf(showFallback).toMatchTypeOf<ItemToString>();
+    });
+
+    it('itemToString may return numeric Item["id"] for option labels', async () => {
+      render(MultiSelectItemToStringId);
+      await openMenu();
+      const options = screen.getAllByRole("option");
+      expect(options.map((o) => o.textContent?.trim())).toEqual(["101", "102"]);
     });
 
     it("should support slot props with generic item type", () => {
@@ -1694,6 +2189,39 @@ describe("MultiSelect", () => {
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });
+
+    // Regression: with virtualization, the data-last item is not mounted
+    // until scrolled into view, so a per-item blur handler bound to it
+    // never fires when focus leaves the menu. The menu must close based
+    // on focus leaving the wrapper, not blur of a specific list index.
+    it("closes menu when focus moves outside the wrapper (virtualized)", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: { items: largeItems, virtualize: true },
+      });
+
+      const externalButton = document.createElement("button");
+      externalButton.textContent = "Outside";
+      document.body.appendChild(externalButton);
+
+      try {
+        await openMenu();
+        const combobox = screen.getByRole("combobox");
+        expect(combobox).toHaveAttribute("aria-expanded", "true");
+
+        // The data-last item (index 499) is far below the viewport and
+        // not mounted, so any close logic tied to it cannot fire.
+        const visibleOptions = screen.getAllByRole("option");
+        expect(visibleOptions.length).toBeLessThan(500);
+
+        externalButton.focus();
+        await tick();
+
+        expect(combobox).toHaveAttribute("aria-expanded", "false");
+      } finally {
+        externalButton.remove();
+      }
+    });
   });
 
   describe("portalMenu", () => {
@@ -1750,6 +2278,126 @@ describe("MultiSelect", () => {
       expect(menu).toBeInTheDocument();
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).not.toBeInTheDocument();
+    });
+
+    // Regression: when portaled, the menu loses its `.bx--multi-select`
+    // ancestor, so descendant CSS rules (e.g. checkbox-wrapper sizing) stop
+    // matching and the checkbox/label visually shift down inside each row.
+    // The menu must be wrapped with `bx--multi-select bx--list-box--expanded`
+    // so those selectors keep matching.
+    it("should wrap portaled menu with multi-select host classes", () => {
+      render(MultiSelect, {
+        props: {
+          items: [{ id: "0", text: "Slack" }],
+          portalMenu: true,
+          open: true,
+        },
+      });
+
+      const menu = screen.getByRole("listbox");
+      const host = menu.parentElement;
+      expect(host).toHaveClass("bx--multi-select");
+      expect(host).toHaveClass("bx--list-box--expanded");
+      expect(host?.parentElement).toHaveAttribute("data-floating-portal");
+    });
+  });
+
+  describe("filterable: Backspace/Delete clears selection", () => {
+    it("Backspace clears selection when input is empty", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+      expect(options[1]).toHaveAttribute("aria-selected", "true");
+      expect(options[2]).toHaveAttribute("aria-selected", "false");
+
+      await user.keyboard("{Backspace}");
+
+      expect(options[0]).toHaveAttribute("aria-selected", "false");
+      expect(options[1]).toHaveAttribute("aria-selected", "false");
+      expect(options[2]).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("Backspace does not clear selection when input has text", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+      await user.type(input, "Sl");
+
+      // Backspace should remove a character, not clear selection
+      await user.keyboard("{Backspace}");
+
+      // Re-open to check all options since filter may hide some
+      // The selection should still be intact
+      await user.clear(input);
+
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("Delete clears input text when menu is open", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+      await user.type(input, "Sl");
+      expect(input).toHaveValue("Sl");
+
+      await user.keyboard("{Delete}");
+
+      // Delete clears the entire input value when menu is open
+      expect(input).toHaveValue("");
+    });
+
+    it("Delete clears selection when menu is closed", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      // Focus input then close menu
+      await user.click(input);
+      await user.keyboard("{Escape}");
+      expect(input).toHaveAttribute("aria-expanded", "false");
+
+      await user.keyboard("{Delete}");
+
+      // Open menu to verify selections were cleared
+      await user.click(input);
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "false");
+      expect(options[1]).toHaveAttribute("aria-selected", "false");
+      expect(options[2]).toHaveAttribute("aria-selected", "false");
     });
   });
 });

@@ -28,7 +28,7 @@ Add descriptive text below the input using the `helperText` prop. This helps use
 
 ## Minimum and maximum values
 
-Constrain input values using `min` and `max` props. When the value falls outside the specified range, the input automatically shows an invalid visual state. Provide `invalidText` to display an error message.
+Constrain input values using `min` and `max` props. The stepper buttons will not increment or decrement beyond the specified range. If a user types an out-of-range value directly, the input shows an invalid visual state rather than silently clamping. Provide `invalidText` to display an error message.
 
 <NumberInput min="{4}" max="{20}" value="{4}" invalidText="Number must be between 4 and 20." helperText="Clusters provisioned in your region" labelText="Clusters (4 min, 20 max)" />
 

@@ -2,7 +2,9 @@ import { render, screen } from "@testing-library/svelte";
 import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
+import ContextMenuPreventDefault from "./ContextMenu.preventDefault.test.svelte";
 import ContextMenu from "./ContextMenu.test.svelte";
+import ContextMenuOptionIcon from "./ContextMenuOption.icon.test.svelte";
 import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
 
 describe("ContextMenu", () => {
@@ -283,6 +285,106 @@ describe("ContextMenu", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  it("supports preventDefault on click to prevent menu from closing", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContextMenuPreventDefault, {
+      props: { open: true, x: 100, y: 100 },
+    });
+
+    const options = screen.getAllByRole("menuitem");
+    await user.click(options[0]);
+
+    expect(consoleLog).toHaveBeenCalledWith("click", "Stay open");
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+
+    const menu = screen.queryByRole("menu");
+    expect(menu).toBeInTheDocument();
+  });
+
+  it("closes menu normally when preventDefault is not called on click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContextMenuPreventDefault, {
+      props: { open: true, x: 100, y: 100 },
+    });
+
+    const options = screen.getAllByRole("menuitem");
+    await user.click(options[1]);
+
+    expect(consoleLog).toHaveBeenCalledWith("click", "Close menu");
+    expect(consoleLog).toHaveBeenCalledWith("close");
+  });
+
+  describe("ContextMenuOption icon auto-indentation", () => {
+    it("should auto-set indented when icon is provided", () => {
+      render(ContextMenuOptionIcon, {
+        props: { open: true, x: 100, y: 100 },
+      });
+
+      const options = screen.getAllByRole("menuitem");
+      const copyOption = options.find((o) => o.textContent?.includes("Copy"));
+      assert(copyOption);
+
+      const iconEl = copyOption.querySelector(".bx--menu-option__icon");
+      expect(iconEl).toBeInTheDocument();
+    });
+
+    it("should not render icon container when no icon is provided", () => {
+      render(ContextMenuOptionIcon, {
+        props: { open: true, x: 100, y: 100 },
+      });
+
+      const options = screen.getAllByRole("menuitem");
+      const plainOption = options.find((o) => o.textContent?.includes("Plain"));
+      assert(plainOption);
+
+      const iconEl = plainOption.querySelector(".bx--menu-option__icon");
+      expect(iconEl).not.toBeInTheDocument();
+    });
+  });
+
+  describe("ContextMenuOption danger variant", () => {
+    it("should apply danger class when kind is danger", () => {
+      render(ContextMenuOptionIcon, {
+        props: { open: true, x: 100, y: 100 },
+      });
+
+      const options = screen.getAllByRole("menuitem");
+      const deleteOption = options.find((o) =>
+        o.textContent?.includes("Delete"),
+      );
+      assert(deleteOption);
+
+      expect(deleteOption).toHaveClass("bx--menu-option--danger");
+    });
+
+    it("should render icon in danger option", () => {
+      render(ContextMenuOptionIcon, {
+        props: { open: true, x: 100, y: 100 },
+      });
+
+      const options = screen.getAllByRole("menuitem");
+      const deleteOption = options.find((o) =>
+        o.textContent?.includes("Delete"),
+      );
+      assert(deleteOption);
+
+      const iconEl = deleteOption.querySelector(".bx--menu-option__icon");
+      expect(iconEl).toBeInTheDocument();
+    });
+
+    it("should not apply danger class to non-danger options", () => {
+      render(ContextMenuOptionIcon, {
+        props: { open: true, x: 100, y: 100 },
+      });
+
+      const options = screen.getAllByRole("menuitem");
+      const copyOption = options.find((o) => o.textContent?.includes("Copy"));
+      assert(copyOption);
+
+      expect(copyOption).not.toHaveClass("bx--menu-option--danger");
+    });
   });
 
   describe("ContextMenuOption Generics", () => {

@@ -1,7 +1,8 @@
 <script lang="ts">
   import { Select, SelectItem } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let selected: string | number | undefined = undefined;
+  export let selected: ComponentProps<Select>["selected"] = undefined;
   export let disabled = false;
   export let id = "test-select";
   export let invalid = false;
@@ -11,9 +12,10 @@
   export let helperText = "";
   export let hideLabel = false;
   export let labelText = "Select label";
-  export let size: "sm" | "xl" | undefined = undefined;
+  export let size: ComponentProps<Select>["size"] = undefined;
   export let inline = false;
   export let light = false;
+  export let readonly = false;
 </script>
 
 <Select
@@ -30,6 +32,7 @@
   {size}
   {inline}
   {light}
+  {readonly}
   on:change={() => console.log("change")}
   on:input={() => console.log("input")}
   on:update={(e) => console.log("update", e.detail)}

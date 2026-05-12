@@ -2,7 +2,14 @@
   import { ComboBox } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 
-  export let items = [
+  type TestItem = {
+    id: string;
+    text: string;
+    price: number;
+    disabled?: boolean;
+  };
+
+  export let items: TestItem[] = [
     { id: "0", text: "Slack", price: 100 },
     { id: "1", text: "Email", price: 200 },
     { id: "2", text: "Fax", price: 300 },
@@ -20,7 +27,7 @@
   export let warnText = "";
   export let helperText = "";
   export let hideLabel = false;
-  export let size: "sm" | "xl" | undefined = undefined;
+  export let size: ComponentProps<ComboBox>["size"] = undefined;
   export let shouldFilterItem: ComponentProps<ComboBox>["shouldFilterItem"] = (
     item,
     value,
@@ -29,10 +36,13 @@
     undefined;
   export let allowCustomValue = false;
   export let clearFilterOnOpen = false;
+  export let selectTextOnFocus = false;
+  export let openOnClear = false;
   export let typeahead = false;
+  export let autoHighlight: ComponentProps<ComboBox>["autoHighlight"] = "none";
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
-  export let ariaLabel: string | undefined = undefined;
+  export let ariaLabel: ComponentProps<ComboBox>["aria-label"] = undefined;
 </script>
 
 <ComboBox
@@ -56,7 +66,10 @@
   {translateWithIdSelection}
   {allowCustomValue}
   {clearFilterOnOpen}
+  {selectTextOnFocus}
+  {openOnClear}
   {typeahead}
+  {autoHighlight}
   {virtualize}
   {portalMenu}
   on:select={(e) => {

@@ -67,6 +67,16 @@ Pre-select items by passing an array of item IDs to `selectedIds`. This example 
     {id: "2", text: "Fax"}]}" 
   />
 
+## Selection feedback "top"
+
+Move selected items to the top of the list immediately after selection by setting `selectionFeedback` to `"top"`. The default behavior (`"top-after-reopen"`) only reorders items when the dropdown is reopened.
+
+<MultiSelect selectionFeedback="top" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ## Multiple multi-select dropdowns
 
 This example demonstrates how to manage multiple dropdowns in a form with coordinated state.
@@ -109,6 +119,16 @@ renders, along with each respective item's `id` set to the `value` attribute.
 Display the dropdown menu above the input by setting `direction` to `"top"`. This is useful when space below is limited.
 
 <MultiSelect direction="top" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Helper text
+
+Add descriptive text below the multi-select using the `helperText` prop.
+
+<MultiSelect helperText="Select one or more contact methods" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -182,11 +202,31 @@ Indicate an invalid selection by setting `invalid` to `true`. This example shows
     {id: "2", text: "Fax"}]}"
   />
 
+## Invalid state (filterable)
+
+Combine `filterable` and `invalid` to show validation errors on a filterable multi-select.
+
+<MultiSelect filterable invalid invalidText="A contact method is required" labelText="Contact" placeholder="Filter contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ## Warning state
 
 Indicate a warning state by setting `warn` to `true`. This example shows a warning about unassociated accounts.
 
 <MultiSelect warn warnText="One or more contact methods are not associated with your account" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Warning state (filterable)
+
+Combine `filterable` and `warn` to show warnings on a filterable multi-select.
+
+<MultiSelect filterable warn warnText="One or more contact methods are not associated with your account" labelText="Contact" placeholder="Filter contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
@@ -225,6 +265,14 @@ Display a non-editable value by setting `readonly` to `true`.
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
   />
+
+## Select all
+
+Add a "select all" item by setting `isSelectAll: true` on an item. Clicking this item selects or deselects all non-disabled items. Disabled items are not affected by "select all".
+
+The select-all option is styled differently from regular options (with a separator border) so it is visually distinct as a group toggle. Its checkbox supports an **indeterminate** state when only a subset of non-disabled items are selected; it shows checked when all are selected and unchecked when none are selected.
+
+<FileSource src="/framed/MultiSelect/MultiSelectSelectAll" />
 
 ## Virtualized items (large lists)
 

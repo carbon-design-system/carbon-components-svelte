@@ -1,7 +1,6 @@
 <script>
   /**
    * @generics {Item extends ComboBoxItem<any> = ComboBoxItem<any>} Item
-   * @template {ComboBoxItem<any>} Item
    * @typedef {object} ComboBoxItem<Id=any>
    * @property {Id} id
    * @property {string} text
@@ -43,7 +42,7 @@
 
   /**
    * Set the size of the combobox.
-   * @type {"sm" | "xl"}
+   * @type {"sm" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -97,15 +96,39 @@
    */
   export let clearFilterOnOpen = false;
 
+  /**
+   * Set to `true` to select all text in the input when it receives focus (e.g. on tab or click).
+   */
+  export let selectTextOnFocus = false;
+
+  /**
+   * Set to `true` to reopen the dropdown menu after clearing the selection.
+   * This allows users to immediately see all available items after clearing.
+   */
+  export let openOnClear = false;
+
   /** Set to `true` to enable autocomplete with typeahead */
   export let typeahead = false;
 
   /**
+   * Control whether the first matching item is automatically highlighted as the user types.
+   * - `"none"`: No auto-highlighting (default). The user must use arrow keys or hover to highlight items.
+   * - `"first-match"`: Automatically highlight the first non-disabled filtered item on each input change.
+   * @type {"none" | "first-match"}
+   */
+  export let autoHighlight = "none";
+
+  const defaultShouldFilter = () => true;
+
+  /**
    * Determine if an item should be filtered given the current combobox value.
-   * Will be ignored if `typeahead` is enabled.
+   * When `typeahead` is enabled and no custom function is provided,
+   * the default case-insensitive prefix matching is used.
+   * When a custom function is provided, it is used even with `typeahead`.
+   * @default () => true
    * @type {(item: Item, value: string) => boolean}
    */
-  export let shouldFilterItem = () => true;
+  export let shouldFilterItem = defaultShouldFilter;
 
   /**
    * Override the chevron icon label based on the open state.
@@ -182,11 +205,12 @@
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
-    portalMenu !== undefined ? portalMenu : !!insideModal;
+    portalMenu === undefined ? !!insideModal : portalMenu;
 
   /** Default item height in pixels for virtualization */
   const DEFAULT_ITEM_HEIGHT = 40;
 
+  let skipWindowClick = false;
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
@@ -215,7 +239,11 @@
     return lowercaseItem.startsWith(lowercaseInput);
   }
 
-  $: filterFn = typeahead ? autocompleteCustomFilter : shouldFilterItem;
+  $: filterFn = typeahead
+    ? shouldFilterItem === defaultShouldFilter
+      ? autocompleteCustomFilter
+      : shouldFilterItem
+    : shouldFilterItem;
 
   function change(dir) {
     let index = highlightedIndex + dir;
@@ -226,27 +254,30 @@
     } else if (index >= _items.length) {
       index = 0;
     }
-    let disabled = items[index].disabled;
+    let disabled = _items[index].disabled;
+    let attempts = 0;
 
-    while (disabled) {
+    while (disabled && attempts < _items.length) {
       index = index + dir;
 
       if (index < 0) {
-        index = items.length - 1;
-      } else if (index >= items.length) {
+        index = _items.length - 1;
+      } else if (index >= _items.length) {
         index = 0;
       }
 
-      disabled = items[index].disabled;
+      disabled = _items[index].disabled;
+      attempts++;
     }
 
-    highlightedIndex = index;
+    if (!disabled) highlightedIndex = index;
   }
 
   /**
    * Clear the combo box programmatically.
    * By default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.
-   * @type {(options?: { focus?: boolean; }) => Promise<void>}
+   * Set `options.open` to `true` to keep the dropdown open after clearing.
+   * @type {(options?: { focus?: boolean; open?: boolean; }) => Promise<void>}
    * @example
    * ```svelte
    * <ComboBox bind:this={comboBox} items={items} />
@@ -258,13 +289,14 @@
     if (readonly) return
     prevSelectedId = null;
     highlightedIndex = -1;
-    highlightedId = undefined;
     selectedId = undefined;
     selectedItem = undefined;
     open = false;
     value = "";
+    if (options?.open === true) skipWindowClick = true;
     // Ensure binding updates are complete before focusing.
     await tick();
+    if (options?.open === true) open = true;
     if (options?.focus !== false) ref?.focus();
   }
 
@@ -325,9 +357,7 @@
     // Set highlighted index to selected item when menu opens
     if (wasJustOpened) {
       if (selectedId !== undefined && selectedItem) {
-        const selectedIndex = filteredItems.findIndex(
-          (item) => item.id === selectedId,
-        );
+        const selectedIndex = filteredItemIndexById.get(selectedId) ?? -1;
         if (selectedIndex >= 0) {
           // Set highlighted index to selected item so keyboard nav starts there
           highlightedIndex = selectedIndex;
@@ -407,38 +437,37 @@
           value = "";
         }
         highlightedIndex = -1;
-        highlightedId = undefined;
       }
     }
   });
 
-  $: if (selectedId !== undefined) {
+  $: if (selectedId === undefined) {
+    prevSelectedId = selectedId;
+    selectedItem = undefined;
+  } else {
     if (prevSelectedId !== selectedId) {
       // Only dispatch select event if not initial render (prevSelectedId was not null)
       const isInitialRender = prevSelectedId === null;
       prevSelectedId = selectedId;
-      if (filteredItems?.length === 1 && open) {
-        selectedId = filteredItems[0].id;
-        selectedItem = filteredItems[0];
-        highlightedIndex = -1;
-        highlightedId = undefined;
-      } else {
-        selectedItem = items.find((item) => item.id === selectedId);
-      }
+      selectedItem = itemsById.get(selectedId);
       if (!isInitialRender) {
         dispatch("select", { selectedId, selectedItem });
       }
     }
-  } else {
-    prevSelectedId = selectedId;
-    selectedItem = undefined;
   }
 
+  $: itemsById = new Map(items.map((item) => [item.id, item]));
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
-  $: highlightedId = items[highlightedIndex] ? items[highlightedIndex].id : 0;
+  $: helperId = `helper-${id}`;
+  $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
+  $: highlightedId = filteredItems[highlightedIndex]?.id;
+  $: filteredItemIndexById = new Map(
+    filteredItems.map((item, i) => [item.id, i]),
+  );
 
   $: shouldVirtualize =
     virtualize === false
@@ -487,12 +516,38 @@
       });
     }
   }
+
+  $: if (
+    autoHighlight === "first-match" &&
+    open &&
+    value.length > 0 &&
+    filteredItems.length > 0
+  ) {
+    const lowerValue = value.toLowerCase();
+    const firstEnabledIndex = filteredItems.findIndex(
+      (item) =>
+        !item.disabled &&
+        (filterFn !== defaultShouldFilter ||
+          itemToString(item).toLowerCase().includes(lowerValue)),
+    );
+    highlightedIndex = firstEnabledIndex >= 0 ? firstEnabledIndex : -1;
+  } else if (
+    autoHighlight === "first-match" &&
+    open &&
+    (value.length === 0 || filteredItems.length === 0)
+  ) {
+    highlightedIndex = -1;
+  }
 </script>
 
 <svelte:window
   on:click={({ target }) => {
+    if (skipWindowClick) {
+      skipWindowClick = false;
+      return;
+    }
     if (open && ref && !ref.contains(target)) {
-      if (effectivePortalMenu && listRef && listRef.contains(target)) return;
+      if (effectivePortalMenu && listRef?.contains(target)) return;
       open = false;
     }
   }}
@@ -519,12 +574,10 @@
     aria-disabled={readonly}
     {disabled}
     {invalid}
-    {invalidText}
     {open}
     {light}
     {size}
     {warn}
-    {warnText}
   >
     <div bind:this={fieldRef} class:bx--list-box__field={true}>
       <input
@@ -535,13 +588,21 @@
         tabindex="0"
         autocomplete="off"
         aria-autocomplete="list"
+        aria-haspopup="listbox"
         aria-expanded={open}
-        aria-activedescendant={highlightedId}
+        aria-activedescendant={highlightedId ?? ""}
         aria-labelledby={comboId}
         aria-disabled={disabled || readonly}
         aria-readonly={readonly}
         aria-controls={open ? menuId : undefined}
         aria-owns={open ? menuId : undefined}
+        aria-describedby={invalid && invalidText
+          ? errorId
+          : !invalid && warn && warnText
+            ? warnId
+            : !invalid && !warn && helperText
+              ? helperId
+              : undefined}
         {disabled}
         {readonly}
         {placeholder}
@@ -570,7 +631,7 @@
         on:keydown|stopPropagation={(e) => {
           if (readonly) return
           const { key } = e;
-          if (["Enter", "ArrowDown", "ArrowUp"].includes(key)) {
+          if (key === "Enter" || key === "ArrowDown" || key === "ArrowUp") {
             e.preventDefault();
           }
           if (key === "Enter") {
@@ -588,14 +649,14 @@
               }
             } else {
               // searching typed value in text list with lowercase
-              const matchedItem =
-                filteredItems.find(
-                  (e) =>
-                    e.text.toLowerCase() === value?.toLowerCase() &&
-                    !e.disabled,
-                ) ?? filteredItems.find((e) => !e.disabled);
+              const inputValue = ref?.value ?? value;
+              const matchedItem = filteredItems.find(
+                (e) =>
+                  e.text.toLowerCase() === inputValue?.toLowerCase() &&
+                  !e.disabled,
+              );
               if (matchedItem) {
-                // typed value has matched or fallback to first enabled item
+                // typed value has matched
                 open = false;
                 valueBeforeOpen = "";
                 selectedItem = matchedItem;
@@ -616,14 +677,17 @@
         }}
         on:keyup
         on:focus
+        on:focus={() => {
+          if (selectTextOnFocus && ref) {
+            tick().then(() => ref.select());
+          }
+        }}
         on:blur
         on:blur={({ relatedTarget }) => {
           if (!open || !relatedTarget) return;
           if (
-            relatedTarget &&
-            !["INPUT", "SELECT", "TEXTAREA"].includes(relatedTarget.tagName) &&
-            relatedTarget.getAttribute("role") !== "button" &&
-            relatedTarget.getAttribute("role") !== "searchbox"
+            fieldRef?.contains(relatedTarget) ||
+            listRef?.contains(relatedTarget)
           ) {
             ref.focus();
           }
@@ -641,7 +705,7 @@
       {#if value}
         <ListBoxSelection
           on:clear
-          on:clear={clear}
+          on:clear={() => clear({ open: openOnClear })}
           translateWithId={translateWithIdSelection}
           {disabled}
           {readonly}
@@ -750,8 +814,15 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
-  {#if !invalid && helperText && !warn}
+  {#if invalid && invalidText}
+    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+  {/if}
+  {#if !invalid && warn && warnText}
+    <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+  {/if}
+  {#if !invalid && !warn && helperText}
     <div
+      id={helperId}
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
     >

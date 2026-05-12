@@ -9,6 +9,7 @@ import TooltipDirections from "./TooltipDirections.test.svelte";
 import TooltipEvents from "./TooltipEvents.test.svelte";
 import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
 import TooltipOpen from "./TooltipOpen.test.svelte";
+import TooltipPortalDirections from "./TooltipPortalDirections.test.svelte";
 
 describe("Tooltip", () => {
   beforeEach(() => {
@@ -169,6 +170,38 @@ describe("Tooltip", () => {
     expect(rightTooltip).toHaveClass("bx--tooltip--right");
     expect(bottomTooltip).toHaveClass("bx--tooltip--bottom");
     expect(leftTooltip).toHaveClass("bx--tooltip--left");
+  });
+
+  test("should apply correct direction classes when using portal tooltip", async () => {
+    render(TooltipPortalDirections);
+    await vi.advanceTimersByTimeAsync(0);
+
+    const topTooltip = screen
+      .getByText("Portal tooltip top")
+      .closest(".bx--tooltip");
+    const rightTooltip = screen
+      .getByText("Portal tooltip right")
+      .closest(".bx--tooltip");
+    const bottomTooltip = screen
+      .getByText("Portal tooltip bottom")
+      .closest(".bx--tooltip");
+    const leftTooltip = screen
+      .getByText("Portal tooltip left")
+      .closest(".bx--tooltip");
+
+    expect(topTooltip).toHaveClass("bx--tooltip--top");
+    expect(bottomTooltip).toHaveClass("bx--tooltip--bottom");
+    // Portal may flip horizontal direction when space is limited (e.g. in test env)
+    expect(
+      ["bx--tooltip--left", "bx--tooltip--right"].some((c) =>
+        leftTooltip?.classList.contains(c),
+      ),
+    ).toBe(true);
+    expect(
+      ["bx--tooltip--left", "bx--tooltip--right"].some((c) =>
+        rightTooltip?.classList.contains(c),
+      ),
+    ).toBe(true);
   });
 
   test("should apply correct alignment classes", () => {

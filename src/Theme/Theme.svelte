@@ -32,7 +32,7 @@
 
   /**
    * Customize a theme with your own tokens.
-   * @see https://carbondesignsystem.com/guidelines/themes/overview#customizing-a-theme
+   * @see https://carbondesignsystem.com/elements/themes/overview/#customizing-a-theme
    * @type {Tokens}
    */
   export let tokens = /** @type {Tokens} */ ({});
@@ -44,8 +44,8 @@
   export let persistKey = "theme";
 
   /**
-   * Render a toggle or select dropdown to control the theme.
-   * @type {"toggle" | "select"}
+   * Render a toggle, select, or dropdown to control the theme.
+   * @type {"toggle" | "select" | "dropdown"}
    */
   export let render = undefined;
 
@@ -74,7 +74,18 @@
     hideLabel: false,
   };
 
+  /**
+   * Override the default dropdown props.
+   * @type {Omit<import("../Dropdown/Dropdown.svelte").DropdownProps, "items" | "selectedId"> & { themes?: CarbonTheme[]; }}
+   */
+  export let dropdown = {
+    themes: themeKeys,
+    labelText: "Themes",
+    hideLabel: false,
+  };
+
   import { afterUpdate, createEventDispatcher } from "svelte";
+  import Dropdown from "../Dropdown/Dropdown.svelte";
   import LocalStorage from "../LocalStorage/LocalStorage.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
@@ -102,6 +113,10 @@
 
     if (theme in themes) {
       document.documentElement.setAttribute("theme", theme);
+      document.documentElement.style.setProperty(
+        "color-scheme",
+        theme === "white" || theme === "g10" ? "light" : "dark",
+      );
     } else {
       console.warn(
         `[Theme.svelte] invalid theme "${theme}". Value must be one of: ${JSON.stringify(
@@ -132,6 +147,16 @@
       <SelectItem value={theme} text={themes[theme]} />
     {/each}
   </Select>
+{:else if render === "dropdown"}
+  {@const { themes: dropdownThemes, ...dropdownProps } = dropdown}
+  <Dropdown
+    {...dropdownProps}
+    items={dropdownThemes.map((t) => ({ id: t, text: themes[t] }))}
+    selectedId={theme}
+    on:select={({ detail }) => {
+      theme = detail.selectedId;
+    }}
+  />
 {/if}
 
 <slot {theme} />

@@ -80,11 +80,11 @@
     href: href ? href : undefined,
     target: href && target ? target : undefined,
     rel:
-      rel !== undefined
-        ? rel
-        : target === "_blank"
+      rel === undefined
+        ? target === "_blank"
           ? "noopener noreferrer"
-          : undefined,
+          : undefined
+        : rel,
     title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
   };
 

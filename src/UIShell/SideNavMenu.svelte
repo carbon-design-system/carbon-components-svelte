@@ -42,18 +42,18 @@
     }}
   >
     {#if $$slots.icon || icon}
-      <div class:bx--side-nav__icon={true}>
+      <span class:bx--side-nav__icon={true}>
         <slot name="icon"> <svelte:component this={icon} /> </slot>
-      </div>
+      </span>
     {/if}
     <span class:bx--side-nav__submenu-title={true}>{text}</span>
-    <div
+    <span
       class:bx--side-nav__icon={true}
       class:bx--side-nav__icon--small={true}
       class:bx--side-nav__submenu-chevron={true}
     >
       <ChevronDown />
-    </div>
+    </span>
   </button>
   <ul
     inert={expanded ? undefined : "true"}

@@ -18,6 +18,6 @@
   {disabled}
   {translateWithId}
   bind:ref
-  on:clear={onclear}
+  on:clear={(e) => onclear?.(e)}
   {...$$restProps}
 />

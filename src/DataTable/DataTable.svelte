@@ -1,14 +1,23 @@
 <script>
   /**
    * @generics {Row extends DataTableRow = DataTableRow} Row
-   * @template {DataTableRow} Row
-   * @typedef {import('./data-table-utils.d.ts').PropertyPath<Row>} DataTableKey<Row=DataTableRow>
    * @typedef {any} DataTableValue
+   * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
+   * @typedef {(
+   *   [keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row>] extends [never]
+   *     ? import('./data-table-utils.d.ts').PropertyPath<Row>
+   *     : keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row> extends "id"
+   *       ? import('./data-table-utils.d.ts').PropertyPath<Row>
+   *       : Row extends DataTableRow
+   *         ? import('./data-table-utils.d.ts').PropertyPathIgnoringIndexSignatures<Row>
+   *         : import('./data-table-utils.d.ts').PropertyPath<Row>
+   * )} DataTableKey<Row=DataTableRow> Path keys for sort, headers, and cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures in ./data-table-utils.d.ts.
+   * @typedef {import('./data-table-utils.d.ts').DataTableSortValue<Row>} DataTableSortValue<Row=DataTableRow>
    * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {boolean} empty - Whether the header is empty
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {false | ((a: DataTableValue, b: DataTableValue) => number)} [sort]
+   * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {string} [width]
@@ -17,13 +26,12 @@
    * @property {DataTableKey<Row>} key
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {false | ((a: DataTableValue, b: DataTableValue) => number)} [sort]
+   * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
-   * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
    * @typedef {object} DataTableCell<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {DataTableValue} value
@@ -43,7 +51,7 @@
    * @event click:header
    * @type {object}
    * @property {DataTableHeader<Row>} header
-   * @property {"ascending" | "descending" | "none"} [sortDirection]
+   * @property {"ascending" | "descending" | "none"} [sortDirection] - The intended next sort direction for this click, reported regardless of whether the `sort` event was cancelled.
    * @property {EventTarget} target
    * @property {EventTarget} currentTarget
    * @event click:header--select
@@ -65,6 +73,12 @@
    * @type {object}
    * @property {boolean} selected
    * @property {Row} row
+   * @event sort
+   * @type {object}
+   * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
+   * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
+   *
+   * Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client-side sorting for that click (for example full server-side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client-side. Typical uses: server-side sorting, URL or query-string sync, analytics, and persisting sort preferences.
    * @event click:cell
    * @type {object}
    * @property {DataTableCell<Row>} cell
@@ -150,6 +164,31 @@
   export let sortAlways = false;
 
   /**
+   * Specify a default sort comparator for all sortable columns.
+   * Per-header `sort` functions take precedence over this prop.
+   *
+   * With a typed row generic, `a` and `b` are {@link DataTableSortValue} (the union of cell value types over every {@link DataTableKey} on `Row`). Narrow using `context.key` (typed as {@link DataTableKey}) or runtime checks.
+   *
+   * @example
+   * ```svelte
+   * <DataTable
+   *   sort={(a, b, { key }) => {
+   *     switch (key) {
+   *       case "expireDate":
+   *         return new Date(a) - new Date(b);
+   *       case "port":
+   *         return a - b;
+   *       default:
+   *         return String(a).localeCompare(String(b));
+   *     }
+   *   }}
+   * />
+   * ```
+   * @type {(a: DataTableSortValue<Row>, b: DataTableSortValue<Row>, context: { key: DataTableKey<Row>; ascending: boolean; row_a: Row; row_b: Row }) => number}
+   */
+  export let sort = undefined;
+
+  /**
    * Set to `true` for the expandable variant.
    * Automatically set to `true` if `batchExpansion` is `true`.
    */
@@ -213,6 +252,7 @@
    *
    * Virtualization is opt-in. Set `virtualize={true}` to enable with default settings, or pass a configuration object to customize.
    * Virtualized tables are intended for use with `stickyHeader={true}` so the header stays visible while scrolling. Pagination is ignored when virtualization is enabled.
+   * Virtualization assumes a uniform row height; combining it with `expandable` rows is not supported and may cause incorrect scroll-spacer sizing when rows are expanded mid-list.
    *
    * Provide an object to customize virtualization behavior:
    * - `itemHeight` (default: 48 for medium size, adjusted for size variant): The height in pixels of each row. Specify a custom value when using custom slots with multi-line content or different heights.
@@ -237,13 +277,7 @@
    */
   export let tableHeaderTranslateWithId = undefined;
 
-  import {
-    afterUpdate,
-    createEventDispatcher,
-    onMount,
-    setContext,
-    tick,
-  } from "svelte";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
@@ -301,33 +335,27 @@
   }
 
   // Set up scroll listener for sticky header container
-  afterUpdate(() => {
-    if (
-      virtualConfig &&
-      stickyHeader &&
-      tableRef &&
-      calculatedContainerHeight
-    ) {
-      tick().then(() => {
-        const container = tableRef;
-        if (container) {
-          if (scrollListenerCleanup) {
-            scrollListenerCleanup();
-            scrollListenerCleanup = null;
-          }
-          container.style.maxHeight = `${calculatedContainerHeight}px`;
-          container.style.overflowY = "auto";
-          const handleScroll = () => {
-            tableBodyScrollTop = container.scrollTop || 0;
-          };
-          container.addEventListener("scroll", handleScroll, { passive: true });
-          scrollListenerCleanup = () => {
-            container.removeEventListener("scroll", handleScroll);
-          };
-        }
-      });
+  $: if (
+    virtualConfig &&
+    stickyHeader &&
+    tableRef &&
+    calculatedContainerHeight
+  ) {
+    if (scrollListenerCleanup) {
+      scrollListenerCleanup();
+      scrollListenerCleanup = null;
     }
-  });
+    const container = tableRef;
+    container.style.maxHeight = `${calculatedContainerHeight}px`;
+    container.style.overflowY = "auto";
+    const handleScroll = () => {
+      tableBodyScrollTop = container.scrollTop || 0;
+    };
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    scrollListenerCleanup = () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }
 
   onMount(() => {
     return () => {
@@ -340,26 +368,19 @@
   const id = `ccs-${Math.random().toString(36)}`;
 
   // Store a copy of the original rows for filter restoration.
-  $: originalRows = [...rows];
-
-  $: thKeys = headers.reduce((a, c) => {
-    a[c.key] = c.key;
-    return a;
-  }, {});
-
-  /**
-   * @type {() => void}
-   */
-  const resetSelectedRowIds = () => {
-    selectAll = false;
-    selectedRowIds = [];
-    if (refSelectAll) refSelectAll.checked = false;
-  };
+  let prevRows_ref = rows;
+  let originalRows = [...rows];
+  // Last filter applied via `filterRows`, replayed when `rows` changes so
+  // an active search is not silently dropped on row reassignment.
+  let lastSearchValue = "";
+  let lastCustomFilter = undefined;
 
   /**
    * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}
    */
   const filterRows = (searchValue, customFilter) => {
+    lastSearchValue = searchValue;
+    lastCustomFilter = customFilter;
     const value = searchValue.trim().toLowerCase();
 
     if (value.length === 0) {
@@ -397,6 +418,24 @@
     return filteredRows.map((row) => row.id);
   };
 
+  $: if (rows !== prevRows_ref) {
+    originalRows = [...rows];
+    prevRows_ref = rows;
+    if (lastSearchValue.trim().length > 0) {
+      filterRows(lastSearchValue, lastCustomFilter);
+    } else {
+      $tableRows = rows;
+    }
+  }
+
+  /**
+   * @type {() => void}
+   */
+  const resetSelectedRowIds = () => {
+    selectAll = false;
+    selectedRowIds = [];
+  };
+
   setContext("carbon:DataTable", {
     batchSelectedIds,
     tableRows,
@@ -411,8 +450,6 @@
     a[id] = true;
     return a;
   }, {});
-
-  let refSelectAll = null;
 
   let prevBatchSelected = [];
   $: if (
@@ -446,22 +483,48 @@
   let tableCellsByRowId = {};
   let prevRows;
   let prevHeaders;
+
   $: if (rows !== prevRows || headers !== prevHeaders) {
-    tableCellsByRowId = rows.reduce((rowsAcc, row) => {
-      rowsAcc[row.id] = headers.map((header, index) => ({
+    const next = {};
+
+    for (const row of rows) {
+      const prevCells = tableCellsByRowId[row.id];
+      const newCells = headers.map((header, index) => ({
         key: header.key ?? `key-${index}`,
         value: header.key ? resolvePath(row, header.key) : undefined,
         display: header.display,
         empty: header.empty,
         columnMenu: header.columnMenu,
       }));
-      return rowsAcc;
-    }, {});
+
+      if (prevCells && prevCells.length === newCells.length) {
+        let allEqual = true;
+        for (let i = 0; i < newCells.length; i++) {
+          const a = prevCells[i];
+          const b = newCells[i];
+          if (
+            a.key === b.key &&
+            a.value === b.value &&
+            a.display === b.display &&
+            a.empty === b.empty &&
+            a.columnMenu === b.columnMenu
+          ) {
+            newCells[i] = a;
+          } else {
+            allEqual = false;
+          }
+        }
+        next[row.id] = allEqual ? prevCells : newCells;
+      } else {
+        next[row.id] = newCells;
+      }
+    }
+
+    tableCellsByRowId = next;
     prevRows = rows;
     prevHeaders = headers;
   }
 
-  $: $tableRows = rows;
   $: ascending = sortDirection === "ascending";
   $: sorting = sortable && sortKey != null;
   $: sortingHeader = headers.find((header) => header.key === sortKey);
@@ -470,7 +533,22 @@
       ? [...$tableRows].sort((a, b) => {
           const itemA = resolvePath(a, sortKey);
           const itemB = resolvePath(b, sortKey);
-          return compareValues(itemA, itemB, ascending, sortingHeader?.sort);
+          const headerSort = sortingHeader?.sort;
+
+          if (headerSort) {
+            return compareValues(itemA, itemB, ascending, headerSort);
+          }
+
+          if (sort) {
+            const result = sort(itemA, itemB, {
+              key: sortKey,
+              ascending,
+              row_a: a,
+              row_b: b,
+            });
+            return ascending ? result : -result;
+          }
+          return compareValues(itemA, itemB, ascending);
         })
       : $tableRows;
   $: defaultRowHeight = DEFAULT_ROW_HEIGHTS[size] || DEFAULT_ROW_HEIGHTS.medium;
@@ -500,20 +578,6 @@
   $: displayedSortedRows = virtualConfig
     ? sortedRows
     : getDisplayedRows(sortedRows, page, pageSize);
-
-  // Calculate expanded rows height adjustment
-  $: expandedRowsHeight = virtualConfig
-    ? expandedRowIds.reduce((total, id) => {
-        const rowIndex = (
-          sorting ? displayedSortedRows : displayedRows
-        ).findIndex((r) => r.id === id);
-        if (rowIndex >= 0) {
-          // Estimate: expanded content is roughly 2x row height
-          return total + (virtualConfig.itemHeight || defaultRowHeight) * 2;
-        }
-        return total;
-      }, 0)
-    : 0;
 
   $: rowsToVirtualize = sorting ? displayedSortedRows : displayedRows;
   $: virtualData = virtualConfig
@@ -640,7 +704,6 @@
           {#if batchSelection && !radio}
             <th scope="col" class:bx--table-column-checkbox={true}>
               <InlineCheckbox
-                bind:ref={refSelectAll}
                 aria-label="Select all rows"
                 name="{id}-select-all"
                 value="all"
@@ -673,7 +736,7 @@
               <th scope="col" style={formatHeaderWidth(header)}></th>
             {:else}
               <TableHeader
-                id={header.key}
+                id="{id}-{header.key}"
                 style={formatHeaderWidth(header)}
                 sortable={sortable && header.sort !== false}
                 sortDirection={sortKey === header.key ? sortDirection : "none"}
@@ -691,7 +754,7 @@
                       currentTarget: e.currentTarget,
                     });
                   } else {
-                    let currentSortDirection =
+                    const currentSortDirection =
                       sortKey === header.key ? sortDirection : "none";
                     const effectiveSortAlways =
                       header.sortAlways ?? sortAlways;
@@ -706,12 +769,24 @@
                           ascending: "descending",
                           descending: "none",
                         };
-                    sortDirection = sortDirectionMap[currentSortDirection];
-                    sortKey =
-                      sortDirection === "none" ? null : thKeys[header.key];
+                    const nextSortDirection =
+                      sortDirectionMap[currentSortDirection];
+                    const nextSortKey =
+                      nextSortDirection === "none"
+                        ? null
+                        : header.key;
+                    const applySort = dispatch(
+                      "sort",
+                      { key: nextSortKey, direction: nextSortDirection },
+                      { cancelable: true },
+                    );
+                    if (applySort) {
+                      sortDirection = nextSortDirection;
+                      sortKey = nextSortKey;
+                    }
                     dispatch("click:header", {
                       header,
-                      sortDirection,
+                      sortDirection: nextSortDirection,
                       target: e.target,
                       currentTarget: e.currentTarget,
                     });

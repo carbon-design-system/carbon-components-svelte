@@ -7,19 +7,15 @@
   } from "carbon-components-svelte";
   import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
   import Cut from "carbon-icons-svelte/lib/Cut.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 
   let target;
   let target2;
 </script>
 
 <ContextMenu target={[target, target2]} on:open={(e) => console.log(e.detail)}>
-  <ContextMenuOption
-    indented
-    labelText="Copy"
-    shortcutText="⌘C"
-    icon={CopyFile}
-  />
-  <ContextMenuOption indented labelText="Cut" shortcutText="⌘X" icon={Cut} />
+  <ContextMenuOption labelText="Copy" shortcutText="⌘C" icon={CopyFile} />
+  <ContextMenuOption labelText="Cut" shortcutText="⌘X" icon={Cut} />
   <ContextMenuDivider />
   <ContextMenuOption indented labelText="Export as">
     <ContextMenuGroup labelText="Export options">
@@ -37,26 +33,10 @@
     <ContextMenuOption id="2" labelText="Auto-sharpen" />
   </ContextMenuGroup>
   <ContextMenuDivider />
-  <ContextMenuOption indented kind="danger" labelText="Delete" />
+  <ContextMenuOption kind="danger" labelText="Delete" icon={TrashCan} />
 </ContextMenu>
 
-<div>
-  <p bind:this={target}>Right click this element</p>
-  <p bind:this={target2}>... or this one</p>
+<div data-centered>
+  <p data-outline bind:this={target}>Right click this element</p>
+  <p data-outline bind:this={target2}>... or this one</p>
 </div>
-
-<style>
-  div {
-    position: absolute;
-    width: calc(100% - var(--cds-spacing-05));
-    height: calc(100% - var(--cds-spacing-06));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--cds-text-02);
-  }
-
-  p {
-    outline: 1px solid var(--cds-interactive-01);
-  }
-</style>

@@ -6,6 +6,7 @@
     ToolbarContent,
     ToolbarSearch,
   } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   const headers = [
     { key: "name", value: "Name" },
@@ -19,7 +20,7 @@
     { id: "c", name: "Load Balancer 2", port: 80, rule: "DNS delegation" },
   ];
 
-  export let selectedRowIds: string[] = [];
+  export let selectedRowIds: ComponentProps<DataTable>["selectedRowIds"] = [];
 </script>
 
 <DataTable selectable {headers} {rows} bind:selectedRowIds>

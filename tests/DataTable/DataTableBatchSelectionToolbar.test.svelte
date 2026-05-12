@@ -6,6 +6,7 @@
     ToolbarBatchActions,
     ToolbarContent,
   } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
   import { tick } from "svelte";
 
   const headers = [
@@ -23,8 +24,8 @@
     { id: "f", name: "Load Balancer 5", port: 80, rule: "DNS delegation" },
   ];
 
-  export let selectedRowIds: string[] = [];
-  export let active: boolean | undefined = undefined;
+  export let selectedRowIds: ComponentProps<DataTable>["selectedRowIds"] = [];
+  export let active: ComponentProps<ToolbarBatchActions>["active"] = undefined;
   export let controlled = false;
 </script>
 

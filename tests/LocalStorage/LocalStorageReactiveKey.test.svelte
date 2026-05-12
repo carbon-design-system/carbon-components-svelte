@@ -1,8 +1,9 @@
 <script lang="ts">
   import { LocalStorage } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let storageKey: string = "key-a";
-  export let currentValue: string | object = "";
+  export let storageKey: ComponentProps<LocalStorage>["key"] = "key-a";
+  export let currentValue: ComponentProps<LocalStorage>["value"] = "";
 
   $: valueDisplay =
     typeof currentValue === "object"

@@ -6,10 +6,10 @@ describe("LocalStorage - Object Values", () => {
   let originalLocalStorage: Storage;
 
   beforeEach(() => {
-    originalLocalStorage = global.localStorage;
+    originalLocalStorage = globalThis.localStorage;
     localStorageMock = {};
 
-    global.localStorage = {
+    globalThis.localStorage = {
       getItem: vi.fn((key) => localStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         localStorageMock[key] = value;
@@ -26,7 +26,7 @@ describe("LocalStorage - Object Values", () => {
   });
 
   afterEach(() => {
-    global.localStorage = originalLocalStorage;
+    globalThis.localStorage = originalLocalStorage;
     localStorage.clear();
     vi.restoreAllMocks();
     localStorageMock = {};

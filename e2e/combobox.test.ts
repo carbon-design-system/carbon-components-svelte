@@ -73,4 +73,49 @@ test.describe("ComboBox", () => {
     await page.keyboard.press("Escape");
     await expect(page.locator(".bx--list-box__menu")).not.toBeVisible();
   });
+
+  test("does not trap focus when clicking an outside element while menu is open", async ({
+    page,
+  }) => {
+    const combobox = page.getByTestId("combobox-contact");
+    await combobox.click();
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+
+    // Click an outside focusable element while the menu is open.
+    // The blur handler should not yank focus back to the input.
+    const outsideLink = page.getByTestId("outside-link");
+    await outsideLink.focus();
+
+    await expect(outsideLink).toBeFocused();
+  });
+
+  test("selects all text on focus when selectTextOnFocus is true", async ({
+    page,
+  }) => {
+    const combobox = page.getByTestId("combobox-select-on-focus");
+    await expect(combobox).toHaveValue("Email");
+    await combobox.focus();
+    // ComboBox selects on focus after Svelte tick(); WebKit can lag one frame.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(() => {
+            const input = document.activeElement;
+            if (input instanceof HTMLInputElement) {
+              return {
+                selectionStart: input.selectionStart,
+                selectionEnd: input.selectionEnd,
+                valueLength: input.value.length,
+              };
+            }
+            return null;
+          }),
+        { timeout: 10_000 },
+      )
+      .toMatchObject({
+        selectionStart: 0,
+        selectionEnd: 5,
+        valueLength: 5,
+      });
+  });
 });

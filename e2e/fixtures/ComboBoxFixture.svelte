@@ -20,3 +20,15 @@
   {items}
   {shouldFilterItem}
 />
+
+<a href="#" data-testid="outside-link">Outside</a>
+
+<ComboBox
+  data-testid="combobox-select-on-focus"
+  labelText="Select on focus"
+  placeholder="Select"
+  {items}
+  selectTextOnFocus={true}
+  selectedId="1"
+  value="Email"
+/>

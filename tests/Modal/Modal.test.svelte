@@ -4,8 +4,9 @@
 
   export let open = false;
   export let modalHeading = "";
-  export let modalLabel: string | undefined = undefined;
-  export let modalAriaLabel: string | undefined = undefined;
+  export let modalLabel: ComponentProps<Modal>["modalLabel"] = undefined;
+  export let modalAriaLabel: ComponentProps<Modal>["modalAriaLabel"] =
+    undefined;
   export let iconDescription = "Close the modal";
   export let hasForm = false;
   export let hasScrollingContent = false;
@@ -50,8 +51,8 @@
   {danger}
   {alert}
   {passiveModal}
-  on:open={onopen}
-  on:close={onclose}
+  on:open={(e) => onopen?.(e)}
+  on:close={(e) => onclose?.(e)}
   on:submit={onsubmit || (() => console.log("submit"))}
   on:click:button--primary={onclickbuttonprimary || (() => console.log("click:button--primary"))}
   on:click:button--secondary={(e) =>

@@ -175,9 +175,9 @@ Disable the select menu to prevent interaction.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Read only
+## Read-only state
 
-Display a non-editable value by setting `readonly` to `true`.
+Use the read-only state to display the selected value without allowing changes.
 
 <Select readonly labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />

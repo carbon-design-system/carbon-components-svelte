@@ -5,4 +5,8 @@
   export let onkeydown: ((e: KeyboardEvent) => void) | undefined = undefined;
 </script>
 
-<Filename on:click={onclick} on:keydown={onkeydown} {...$$restProps} />
+<Filename
+  on:click={(e) => onclick?.(e)}
+  on:keydown={(e) => onkeydown?.(e)}
+  {...$$restProps}
+/>

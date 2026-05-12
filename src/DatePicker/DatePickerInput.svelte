@@ -22,8 +22,8 @@
   /** Set to `true` to disable the input */
   export let disabled = false;
 
-  /** Set to `true` to use the read-only variant */
-  export let readonly = false
+  /** Set to `true` to mark the input as read-only */
+  export let readonly = false;
 
   /** Specify the helper text */
   export let helperText = "";
@@ -71,6 +71,7 @@
   const {
     range,
     add,
+    setReadonly,
     hasCalendar,
     dateFormat,
     declareRef,
@@ -116,6 +117,7 @@
 
   $: actualPattern = pattern ?? dateFormatToPattern($dateFormat ?? "m/d/Y");
   $: if (ref) declareRef({ id, ref });
+  $: setReadonly(id, readonly);
 </script>
 
 <div
@@ -128,6 +130,7 @@
       class:bx--label={true}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
+      class:bx--label--readonly={readonly}
     >
       <slot name="labelChildren"> {labelText} </slot>
     </label>
@@ -136,6 +139,8 @@
     class:bx--date-picker-input__wrapper={true}
     class:bx--date-picker-input__wrapper--invalid={invalid}
     class:bx--date-picker-input__wrapper--warn={warn}
+    class:bx--date-picker-input__wrapper--readonly={readonly}
+    class:bx--date-picker-input__wrapper--disabled={disabled}
   >
     <input
       bind:this={ref}
@@ -166,11 +171,12 @@
       }}
       on:keydown
       on:keydown={({ key }) => {
-        if (key === "ArrowDown") {
+        if (!readonly && key === "ArrowDown") {
           focusCalendar();
         }
       }}
       on:keyup
+      on:focus
       on:blur
       on:blur={({ relatedTarget }) => {
         blurInput(relatedTarget);

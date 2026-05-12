@@ -1,6 +1,35 @@
 import flatpickr from "flatpickr";
 
 /**
+ * Carbon-styled English locale: single-letter weekday abbreviations
+ * with "Th" disambiguating Thursday from Tuesday.
+ * Longhand is included so flatpickr's shallow locale merge does not
+ * drop the weekday longhand (used by ARIA labels on day cells).
+ */
+const ENGLISH_LOCALE = {
+  weekdays: {
+    shorthand: ["S", "M", "T", "W", "Th", "F", "S"],
+    longhand: [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ],
+  },
+};
+
+/**
+ * @param {unknown} locale
+ * @returns {unknown}
+ */
+export function resolveLocale(locale) {
+  return locale === "en" ? ENGLISH_LOCALE : locale;
+}
+
+/**
  * Minimal flatpickr instance shape used by updateClasses and updateMonthNode.
  * Matches flatpickr's Instance where some elements may be optional.
  * @typedef {{
@@ -15,14 +44,6 @@ import flatpickr from "flatpickr";
  *   monthsDropdownContainer: HTMLElement;
  * }} FlatpickrInstance
  */
-
-/**
- * Locale override with optional en.weekdays.shorthand for custom formatting.
- * @typedef {{ en?: { weekdays: { shorthand: string[] } } }} L10nOverrides
- */
-
-/** @type {L10nOverrides | undefined} */
-let l10n;
 
 /**
  * @param {FlatpickrInstance} instance
@@ -90,22 +111,7 @@ function updateMonthNode(instance) {
  * @param {CreateCalendarArgs} args
  * @returns {Promise<FlatpickrInstance>}
  */
-async function createCalendar({ options, base, input, dispatch }) {
-  /** @type {string | L10nOverrides["en"]} */
-  let locale = options.locale;
-
-  if (options.locale === "en" && l10n && l10n.en) {
-    const shorthand = l10n.en.weekdays.shorthand;
-    if (shorthand) {
-      for (let index = 0; index < shorthand.length; index++) {
-        const _ = shorthand[index];
-        const s = _.slice(0, 2);
-        shorthand[index] = s === "Th" ? "Th" : s.charAt(0);
-      }
-    }
-    locale = l10n.en;
-  }
-
+export async function createCalendar({ options, base, input, dispatch }) {
   /** @type {((new (config: { position: string; input: HTMLInputElement }) => unknown) | undefined)} */
   let RangePlugin;
 
@@ -124,7 +130,6 @@ async function createCalendar({ options, base, input, dispatch }) {
     allowInput: true,
     disableMobile: true,
     clickOpens: true,
-    locale,
     plugins,
     nextArrow:
       '<svg width="16px" height="16px" viewBox="0 0 16 16"><polygon points="11,8 6,13 5.3,12.3 9.6,8 5.3,3.7 6,3 "/><rect width="16" height="16" style="fill: none" /></svg>',
@@ -153,8 +158,7 @@ async function createCalendar({ options, base, input, dispatch }) {
       updateMonthNode(instance);
     },
     ...options,
+    locale: resolveLocale(options.locale),
   };
   return new /** @type {any} */ (flatpickr)(base, config);
 }
-
-export { createCalendar };

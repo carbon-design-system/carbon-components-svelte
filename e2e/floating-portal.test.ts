@@ -79,3 +79,42 @@ test.describe("FloatingPortal", () => {
     }
   });
 });
+
+test.describe("FloatingPortal (intrinsic width)", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/floating-portal-intrinsic.html");
+  });
+
+  test("exposes intrinsicAlign on portal when intrinsicWidth is true", async ({
+    page,
+  }) => {
+    await page.getByTestId("toggle").click();
+
+    const portal = page.locator("[data-floating-portal]");
+    await expect(portal).toBeVisible();
+    await expect(portal).toHaveAttribute(
+      "data-floating-intrinsic-align",
+      "start",
+    );
+  });
+
+  test("portal content is narrower than a wide anchor when intrinsicWidth is true", async ({
+    page,
+  }) => {
+    await page.getByTestId("toggle").click();
+
+    const anchorBox = await page.getByTestId("anchor").boundingBox();
+    const portalBox = await page
+      .locator("[data-floating-portal]")
+      .boundingBox();
+    const innerBox = await page.getByTestId("floating-inner").boundingBox();
+
+    expect(anchorBox).not.toBeNull();
+    expect(portalBox).not.toBeNull();
+    expect(innerBox).not.toBeNull();
+    if (anchorBox && portalBox && innerBox) {
+      expect(portalBox.width).toBeLessThan(anchorBox.width - 4);
+      expect(innerBox.width).toBeLessThanOrEqual(portalBox.width + 2);
+    }
+  });
+});

@@ -17,7 +17,10 @@ test.describe("Toggle", () => {
     const toggle = page.getByRole("switch", { name: "Enable notifications" });
     await expect(toggle).toBeVisible();
     await expect(toggle).not.toBeChecked();
-    await toggle.click();
+    await page
+      .getByTestId("toggle-notifications")
+      .locator("label.bx--toggle-input__label")
+      .click();
     await expect(toggle).toBeChecked();
   });
 
@@ -27,7 +30,7 @@ test.describe("Toggle", () => {
     const wrapper = page.getByTestId("toggle-notifications");
     await expect(wrapper).toBeVisible();
     const toggle = wrapper.getByRole("switch");
-    await toggle.click();
+    await wrapper.locator("label.bx--toggle-input__label").click();
     await expect(toggle).toBeChecked();
   });
 

@@ -1,5 +1,5 @@
-<script>
-  export let href = undefined;
+<script lang="ts">
+  export let href: string | undefined = undefined;
   export let title = "";
   export let subtitle = "";
   export let borderRight = false;

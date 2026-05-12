@@ -6,6 +6,8 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import Theme from "./Theme.test.svelte";
+import ThemeDropdown from "./ThemeDropdown.test.svelte";
+import ThemeDropdownCustom from "./ThemeDropdownCustom.test.svelte";
 import ThemeSelect from "./ThemeSelect.test.svelte";
 import ThemeSelectCustom from "./ThemeSelectCustom.test.svelte";
 import ThemeSelectDynamic from "./ThemeSelectDynamic.test.svelte";
@@ -36,10 +38,10 @@ describe("Theme", () => {
       },
     };
     consoleLog = vi.spyOn(console, "log");
-    originalLocalStorage = global.localStorage;
+    originalLocalStorage = globalThis.localStorage;
     localStorageMock = {};
 
-    global.localStorage = {
+    globalThis.localStorage = {
       getItem: vi.fn((key) => localStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         localStorageMock[key] = value;
@@ -57,7 +59,7 @@ describe("Theme", () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    global.localStorage = originalLocalStorage;
+    globalThis.localStorage = originalLocalStorage;
     localStorage.clear();
     localStorageMock = {};
   });
@@ -81,6 +83,37 @@ describe("Theme", () => {
   it("should set default theme to white", () => {
     render(Theme);
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "white");
+  });
+
+  it.each<[CarbonTheme, "light" | "dark"]>([
+    ["white", "light"],
+    ["g10", "light"],
+    ["g80", "dark"],
+    ["g90", "dark"],
+    ["g100", "dark"],
+  ])("when theme is %s, should set color-scheme to %s", (theme, expected) => {
+    render(Theme, { props: { theme } });
+    expect(documentMock.style.setProperty).toHaveBeenCalledWith(
+      "color-scheme",
+      expected,
+    );
+  });
+
+  it("should update color-scheme when theme changes", async () => {
+    const { rerender } = render(Theme);
+
+    expect(documentMock.style.setProperty).toHaveBeenCalledWith(
+      "color-scheme",
+      "light",
+    );
+
+    rerender({ theme: "g100" });
+    await tick();
+
+    expect(documentMock.style.setProperty).toHaveBeenCalledWith(
+      "color-scheme",
+      "dark",
+    );
   });
 
   it("should update theme attribute when theme changes", async () => {
@@ -243,6 +276,42 @@ describe("Theme", () => {
 
     await user.selectOptions(select, "g10");
     expect(select).toHaveTextContent(themes.g10);
+  });
+
+  it("should render dropdown when render prop is set to dropdown", async () => {
+    render(ThemeDropdown);
+
+    const button = screen.getByLabelText("Themes");
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveTextContent("White");
+
+    await user.click(button);
+    await user.click(screen.getByText("Gray 100"));
+    expect(button).toHaveTextContent("Gray 100");
+    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
+
+    await user.click(button);
+    await user.click(screen.getByText("White"));
+    expect(button).toHaveTextContent("White");
+    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
+  });
+
+  it("should render custom dropdown when render prop is set to dropdown and custom dropdown options are provided", async () => {
+    render(ThemeDropdownCustom);
+
+    const button = screen.getByLabelText("Select a theme");
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveTextContent("White");
+
+    await user.click(button);
+    await user.click(screen.getByText("Gray 100"));
+    expect(button).toHaveTextContent("Gray 100");
+    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "g100" });
+
+    await user.click(button);
+    await user.click(screen.getByText("White"));
+    expect(button).toHaveTextContent("White");
+    expect(consoleLog).toHaveBeenCalledWith("update", { theme: "white" });
   });
 
   describe("Generics", () => {

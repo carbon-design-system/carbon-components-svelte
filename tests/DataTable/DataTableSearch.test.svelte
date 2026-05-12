@@ -34,7 +34,7 @@
     if (toggleRows) {
       rows = Array.from({ length: 4 }).map((_, i) => ({
         id: i,
-        name: "Server instance " + (i + 1),
+        name: `Server instance ${i + 1}`,
         protocol: "HTTP",
         port: 3000 + i * 10,
         rule: i % 2 ? "Round!" : "DNS!",

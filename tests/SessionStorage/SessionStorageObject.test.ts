@@ -6,10 +6,10 @@ describe("SessionStorage - Object Values", () => {
   let originalSessionStorage: Storage;
 
   beforeEach(() => {
-    originalSessionStorage = global.sessionStorage;
+    originalSessionStorage = globalThis.sessionStorage;
     sessionStorageMock = {};
 
-    global.sessionStorage = {
+    globalThis.sessionStorage = {
       getItem: vi.fn((key) => sessionStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         sessionStorageMock[key] = value;
@@ -26,7 +26,7 @@ describe("SessionStorage - Object Values", () => {
   });
 
   afterEach(() => {
-    global.sessionStorage = originalSessionStorage;
+    globalThis.sessionStorage = originalSessionStorage;
     sessionStorage.clear();
     vi.restoreAllMocks();
     sessionStorageMock = {};

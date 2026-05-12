@@ -1,0 +1,60 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// Widen the time picker input when invalid or warn icon is rendered,
+// matching upstream Carbon React's `.cds--time-picker__input-field-error`.
+// Also reveal the sibling form-requirement for the warn state, since
+// carbon-components v10 only ships display rules for `--invalid`.
+@mixin time-picker-error-width {
+  .#{$prefix}--time-picker__input-field.#{$prefix}--text-input--invalid,
+  .#{$prefix}--time-picker__input-field.#{$prefix}--text-input--warning {
+    inline-size: 6.175rem;
+  }
+
+  .#{$prefix}--time-picker--warn ~ .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: to-rem(200px);
+    font-weight: 400;
+  }
+}
+
+@include exports('time-picker-error-width') {
+  @include time-picker-error-width;
+}
+
+/// Readonly time picker styles (backported from carbon-components v11+ for v10)
+/// @access private
+/// @group time-picker
+@mixin time-picker-readonly {
+  .#{$prefix}--time-picker--readonly .#{$prefix}--time-picker__input-field[readonly] {
+    background: transparent;
+    border-bottom-color: $disabled-02;
+    cursor: text;
+  }
+
+  // The chevron in `TimePickerSelect` is purely decorative when the time
+  // picker is read-only. The native `<select>` remains focusable so the value
+  // is announced, but the menu is suppressed via mousedown/keydown handlers.
+  // Apply the same styling whether readonly is set on the parent `TimePicker`
+  // or directly on a `TimePickerSelect` (for standalone use).
+  .#{$prefix}--time-picker--readonly .#{$prefix}--select-input,
+  .#{$prefix}--time-picker__select.#{$prefix}--select--readonly .#{$prefix}--select-input {
+    border-bottom-color: $disabled-02;
+    cursor: default;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  .#{$prefix}--time-picker--readonly .#{$prefix}--select__arrow,
+  .#{$prefix}--time-picker__select.#{$prefix}--select--readonly .#{$prefix}--select__arrow {
+    fill: $disabled-02;
+  }
+}
+
+@include exports('time-picker-readonly') {
+  @include time-picker-readonly;
+}

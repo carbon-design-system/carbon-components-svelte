@@ -1,10 +1,12 @@
 The Carbon Design System [grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints:
 
-- **Small**: less than 672px
-- **Medium**: 672 - 1056px
-- **Large**: 1056 - 1312px
-- **X-Large**: 1312 - 1584px
-- **Max**: greater than 1584px
+| Breakpoint   | Width range           |
+| ------------ | --------------------- |
+| **Small**    | Less than 672px       |
+| **Medium**   | 672px – 1056px        |
+| **Large**    | 1056px – 1312px       |
+| **X-Large**  | 1312px – 1584px       |
+| **Max**      | Greater than 1584px   |
 
 This utility component uses the [Window.matchMedia API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) to declaratively determine the current Carbon breakpoint size.
 

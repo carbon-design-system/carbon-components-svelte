@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import TooltipDefinition from "./TooltipDefinition.test.svelte";
+import TooltipDefinitionPortal from "./TooltipDefinitionPortal.test.svelte";
 
 describe("TooltipDefinition", () => {
   let consoleLog: Console["log"];
@@ -164,6 +165,97 @@ describe("TooltipDefinition", () => {
     expect(tooltip).toHaveAttribute("id", "custom-id");
   });
 
+  it("should not open on hover when clickToOpen is true", async () => {
+    render(TooltipDefinition, { props: { clickToOpen: true } });
+
+    const trigger = screen.getByText("Tooltip trigger");
+    await user.hover(trigger);
+
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+    expect(consoleLog).not.toHaveBeenCalledWith("open");
+  });
+
+  it("should open on click when clickToOpen is true", async () => {
+    render(TooltipDefinition, { props: { clickToOpen: true } });
+
+    const trigger = screen.getByText("Tooltip trigger");
+    await user.click(trigger);
+
+    expect(trigger).toHaveClass("bx--tooltip--visible");
+    expect(consoleLog).toHaveBeenCalledWith("open");
+  });
+
+  it("should close on second click when clickToOpen is true", async () => {
+    render(TooltipDefinition, { props: { clickToOpen: true } });
+
+    const trigger = screen.getByText("Tooltip trigger");
+    await user.click(trigger);
+    await user.click(trigger);
+
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+    expect(consoleLog).toHaveBeenCalledWith("close");
+  });
+
+  it("should close on Escape when clickToOpen is true", async () => {
+    render(TooltipDefinition, { props: { clickToOpen: true } });
+
+    const trigger = screen.getByText("Tooltip trigger");
+    await user.click(trigger);
+    await user.keyboard("{Escape}");
+
+    expect(trigger).toHaveClass("bx--tooltip--hidden");
+    expect(consoleLog).toHaveBeenCalledWith("close");
+  });
+
+  describe("enterDelayMs / leaveDelayMs", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("should delay showing tooltip on mouseenter by enterDelayMs", async () => {
+      render(TooltipDefinition, {
+        props: { enterDelayMs: 200, leaveDelayMs: 0 },
+      });
+
+      const trigger = screen.getByText("Tooltip trigger");
+      const definition = trigger.closest(".bx--tooltip--definition");
+      expect.assert(definition instanceof HTMLElement);
+      await fireEvent.mouseEnter(definition);
+
+      expect(trigger).toHaveClass("bx--tooltip--hidden");
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+    });
+
+    it("should delay hiding tooltip on mouseleave by leaveDelayMs", async () => {
+      render(TooltipDefinition, {
+        props: { enterDelayMs: 0, leaveDelayMs: 200 },
+      });
+
+      const trigger = screen.getByText("Tooltip trigger");
+      const span = trigger.closest(".bx--tooltip--definition");
+      expect.assert(span instanceof HTMLElement);
+
+      await fireEvent.mouseEnter(span);
+
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+
+      await fireEvent.mouseLeave(span);
+
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(trigger).toHaveClass("bx--tooltip--hidden");
+    });
+  });
+
   it("should have correct ARIA attributes", () => {
     render(TooltipDefinition);
 
@@ -172,5 +264,41 @@ describe("TooltipDefinition", () => {
 
     expect(trigger).toHaveAttribute("aria-describedby", tooltip.id);
     expect(tooltip).toHaveClass("bx--assistive-text");
+  });
+
+  describe("portal tooltip", () => {
+    it("should render tooltip content in a portal when open", () => {
+      render(TooltipDefinitionPortal);
+
+      expect(screen.getByText("Portal tooltip bottom")).toBeInTheDocument();
+    });
+
+    it("should not render assistive text div when using portal", () => {
+      render(TooltipDefinition, {
+        props: { portalTooltip: true },
+      });
+
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+    });
+
+    it("should not apply CSS tooltip classes when using portal", () => {
+      render(TooltipDefinition, {
+        props: { portalTooltip: true, direction: "top" },
+      });
+
+      const trigger = screen.getByText("Tooltip trigger");
+      expect(trigger).not.toHaveClass("bx--tooltip--a11y");
+      expect(trigger).not.toHaveClass("bx--tooltip--top");
+    });
+
+    it("should add portal-active class on trigger when using portal", () => {
+      render(TooltipDefinition, {
+        props: { portalTooltip: true },
+      });
+
+      expect(screen.getByText("Tooltip trigger")).toHaveClass(
+        "bx--tooltip--portal-active",
+      );
+    });
   });
 });

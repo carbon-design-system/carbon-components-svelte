@@ -18,22 +18,8 @@
     <ContextMenuOption id="0" labelText="Set as foreground" />
     <ContextMenuOption id="1" labelText="Set as background" />
   </ContextMenuRadioGroup>
-  <ContextMenuDivider />
-  <ContextMenuOption selectable labelText="Lock layer" />
 </ContextMenu>
 
-<div>
+<div data-centered>
   <p>Right click anywhere on this page</p>
 </div>
-
-<style>
-  div {
-    position: absolute;
-    width: calc(100% - var(--cds-spacing-05));
-    height: calc(100% - var(--cds-spacing-06));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--cds-text-02);
-  }
-</style>

@@ -1,6 +1,7 @@
 node_modules
 test-results
 playwright-report
+e2e/fixtures/dist/
 .DS_Store
 .vscode
 .idea

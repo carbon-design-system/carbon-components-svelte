@@ -2,7 +2,6 @@
   /**
    * @restProps {label}
    * @generics {Value extends string = string} Value
-   * @template {string} Value
    */
 
   /** Set to `true` to check the tile */
@@ -23,7 +22,10 @@
    */
   export let value = "";
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 
   /** Specify the ARIA label for the radio tile checkmark icon */

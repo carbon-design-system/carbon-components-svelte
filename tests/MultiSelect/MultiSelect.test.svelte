@@ -30,7 +30,7 @@
   export let portalMenu: ComponentProps<MultiSelect>["portalMenu"] = false;
   export let sortItem: ComponentProps<MultiSelect>["sortItem"] = undefined;
   export let open: ComponentProps<MultiSelect>["open"] = undefined;
-  export let ariaLabel: string | undefined = undefined;
+  export let ariaLabel: ComponentProps<MultiSelect>["aria-label"] = undefined;
 </script>
 
 <MultiSelect

@@ -1,9 +1,9 @@
 ---
-components: ["Tag", "TagSkeleton"]
+components: ["Tag", "SelectableTag", "TagSkeleton"]
 ---
 
 <script>
-  import { Tag, TooltipDefinition } from "carbon-components-svelte";
+  import { Tag, SelectableTag, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
@@ -20,6 +20,12 @@ Create a basic tag with text content.
 Use the small size variant for more compact layouts.
 
 <Tag size="sm">IBM Cloud</Tag>
+
+## Large size
+
+Use the large size variant for more prominent layouts.
+
+<Tag size="lg">IBM Cloud</Tag>
 
 ## Tag types
 
@@ -55,6 +61,12 @@ Disable a filterable tag to prevent interaction.
 Combine the filterable variant with the small size.
 
 <Tag size="sm" filter on:close>carbon-components</Tag>
+
+## Filterable (large)
+
+Combine the filterable variant with the large size.
+
+<Tag size="lg" filter on:close>carbon-components</Tag>
 
 ## Filterable with click and close
 
@@ -97,6 +109,30 @@ Embed a tooltip within a tag to provide additional context.
   </TooltipDefinition>
 </Tag>
 
+## Selectable
+
+Use `SelectableTag` to create a tag that toggles between selected and unselected states.
+
+<FileSource src="/framed/Tag/SelectableTagReactive" />
+
+## Selectable with icon
+
+Combine `SelectableTag` with a custom icon.
+
+<FileSource src="/framed/Tag/SelectableTagIconReactive" />
+
+## Selectable (disabled)
+
+Disable a selectable tag to prevent interaction.
+
+<SelectableTag disabled>Machine learning</SelectableTag>
+
+## Selectable (small)
+
+Use the small size variant for selectable tags.
+
+<SelectableTag size="sm">Small tag</SelectableTag>
+
 ## Skeleton
 
 Show a loading state with the default skeleton variant.
@@ -108,3 +144,9 @@ Show a loading state with the default skeleton variant.
 Show a loading state with the small skeleton variant.
 
 <Tag size="sm" skeleton />
+
+## Skeleton (large)
+
+Show a loading state with the large skeleton variant.
+
+<Tag size="lg" skeleton />

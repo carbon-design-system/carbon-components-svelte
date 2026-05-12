@@ -65,9 +65,12 @@ test.describe("Search", () => {
   }) => {
     const wrapper = page.locator(".bx--search--expandable");
     await wrapper.locator(".bx--search-magnifier").click();
-    await wrapper.getByRole("searchbox").focus();
+    const searchbox = wrapper.getByRole("searchbox");
+    await searchbox.focus();
     await page.keyboard.press("Escape");
-    await page.keyboard.press("Tab");
+    // Blur by focusing the other search field so behavior does not depend on
+    // Tab order (differs across browsers with in-component controls).
+    await page.getByTestId("search-query").click();
     await expect(wrapper).not.toHaveClass(/bx--search--expanded/);
   });
 });

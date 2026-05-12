@@ -45,7 +45,7 @@
         on:click={() => {
           items = [
             ...items,
-            { id: nextId, name: "Item " + nextId, checked: false },
+            { id: nextId, name: `Item ${nextId}`, checked: false },
           ];
           nextId++;
         }}

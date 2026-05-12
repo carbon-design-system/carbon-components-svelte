@@ -80,7 +80,7 @@
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
-    portalMenu !== undefined ? portalMenu : !!insideModal;
+    portalMenu === undefined ? !!insideModal : portalMenu;
 
   const dispatch = createEventDispatcher();
   /**
@@ -222,8 +222,8 @@
 
 <svelte:window
   on:click={({ target }) => {
-    if (buttonRef && buttonRef.contains(target)) return;
-    if (effectivePortalMenu && menuRef && menuRef.contains(target)) return;
+    if (buttonRef?.contains(target)) return;
+    if (effectivePortalMenu && menuRef?.contains(target)) return;
     if (menuRef && !menuRef.contains(target)) {
       const shouldContinue = dispatch("close", null, { cancelable: true });
       if (shouldContinue) {
@@ -250,7 +250,7 @@
   {...$$restProps}
   on:click
   on:click={({ target }) => {
-    if (!(menuRef && menuRef.contains(target))) {
+    if (!menuRef?.contains(target)) {
       open = !open;
       if (!open) {
         const shouldContinue = dispatch("close", null, { cancelable: true });

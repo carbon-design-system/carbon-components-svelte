@@ -1,6 +1,6 @@
 {
   "name": "carbon-components-svelte",
-  "version": "0.103.0",
+  "version": "0.107.1",
   "license": "Apache-2.0",
   "description": "Svelte implementation of the Carbon Design System",
   "type": "module",
@@ -30,53 +30,46 @@
     "css/*.css"
   ],
   "scripts": {
+    "setup": "bun ci && bun build:docs && cd docs && bun ci",
     "test": "vitest",
     "test:src-types": "tsc --project tsconfig.types.json",
     "test:types": "svelte-check --workspace tests --fail-on-warnings",
     "test:svelte3": "cd tests-svelte3 && bunx vitest",
     "test:types:svelte3": "cd tests-svelte3 && bun run test:types",
-    "test:svelte5": "cd tests-svelte5 && bunx vitest",
-    "test:types:svelte5": "cd tests-svelte5 && bun run test:types",
+    "test:svelte4": "cd tests-svelte4 && bunx vitest",
+    "test:types:svelte4": "cd tests-svelte4 && bun run test:types",
     "test:e2e": "playwright test",
     "lint": "biome check --write .",
     "build:css": "bun scripts/build-css",
-    "build:docs": "bun scripts/build-docs && bun scripts/format-component-api",
+    "build:docs": "bun scripts/build-docs",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
-    "release": "standard-version && bun build:docs"
+    "release": "bun scripts/release-changelog"
   },
   "dependencies": {
     "@ibm/telemetry-js": "^1.5.0",
     "flatpickr": "4.6.9"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.6",
-    "@playwright/test": "^1.58.2",
-    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "@biomejs/biome": "2.4.15",
+    "@playwright/test": "^1.59.0",
+    "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
-    "@types/bun": "^1.3.9",
-    "@types/node": "^25.2.3",
+    "@types/bun": "^1.3.11",
+    "@types/node": "^25.5.0",
     "autoprefixer": "^10.4.21",
     "carbon-components": "10.58.12",
-    "carbon-icons-svelte": "^13.7.0",
+    "carbon-icons-svelte": "^13.10.0",
     "culls": "^0.2.0",
-    "jsdom": "^28.1.0",
+    "jsdom": "^29.0.1",
     "postcss": "^8.5.5",
-    "prettier": "^3.8.1",
-    "sass": "^1.49.11",
-    "standard-version": "^9.5.0",
-    "sveld": "^0.27.0",
-    "svelte": "^4.2.20",
-    "svelte-check": "^4.4.4",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
-  },
-  "standard-version": {
-    "skip": {
-      "commit": true,
-      "tag": true
-    }
+    "sass": "^1.98.0",
+    "sveld": "^0.30.2",
+    "svelte": "^5.55.0",
+    "svelte-check": "^4.4.8",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.5"
   },
   "repository": {
     "type": "git",

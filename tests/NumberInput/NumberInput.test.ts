@@ -382,11 +382,11 @@ describe("NumberInput", () => {
     expect(input).not.toHaveAttribute("aria-label");
   });
 
-  it("should set pattern attribute for numeric input", () => {
+  it("should not set pattern attribute on type=number input (ignored per HTML spec)", () => {
     render(NumberInput);
 
     const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("pattern", "[0-9]*");
+    expect(input).not.toHaveAttribute("pattern");
   });
 
   it("should support aria-label override via restProps", () => {
@@ -1520,6 +1520,73 @@ describe("NumberInput", () => {
       await tick();
       expect(input.value).toBe("");
     });
+
+    it("should parse locale input with group separators", async () => {
+      render(NumberInput, {
+        props: { locale: "de-DE", value: null, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
+      await user.type(input, "1.234,56");
+      await user.tab();
+
+      expect(screen.getByTestId("value").textContent).toBe("1234.56");
+    });
+
+    it("should parse locale input without group separators", async () => {
+      render(NumberInput, {
+        props: { locale: "de-DE", value: null, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
+      await user.type(input, "1234,5");
+      await user.tab();
+
+      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+    });
+
+    it("should update separator cache when locale changes", async () => {
+      const { rerender } = render(NumberInput, {
+        props: { locale: "en-US", value: null, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
+
+      // Type in en-US format and blur
+      await user.type(input, "1,234.5");
+      await user.tab();
+      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+
+      // Switch to de-DE
+      rerender({ locale: "de-DE", value: null, allowEmpty: true });
+      await tick();
+
+      await user.clear(input);
+      await user.type(input, "1.234,5");
+      await user.tab();
+      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+    });
+
+    it("should fall back to standard parsing when locale is removed", async () => {
+      const { rerender } = render(NumberInput, {
+        props: { locale: "de-DE", value: 1234.5, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
+      expect(input.value).toBe("1.234,5");
+
+      // Remove locale — should switch to number input
+      rerender({ locale: undefined, value: 1234.5, allowEmpty: true });
+      await tick();
+
+      const spinbutton = screen.getByRole("spinbutton");
+      expect(spinbutton).toHaveAttribute("type", "number");
+      expect(spinbutton).toHaveValue(1234.5);
+    });
   });
 
   describe("click:stepper event", () => {
@@ -1668,6 +1735,49 @@ describe("NumberInput", () => {
 
       const prevented = !input.dispatchEvent(wheelEvent);
       expect(prevented).toBe(true);
+    });
+  });
+
+  describe("text mode parity with type=number attributes", () => {
+    it("should have min, max, and step attributes when allowDecimal is true", () => {
+      render(NumberInput, {
+        props: { allowDecimal: true, min: 0, max: 100, step: 0.5, value: 50 },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input).toHaveAttribute("min", "0");
+      expect(input).toHaveAttribute("max", "100");
+      expect(input).toHaveAttribute("step", "0.5");
+    });
+
+    it("should have min, max, and step attributes when locale is set", () => {
+      render(NumberInput, {
+        props: { locale: "en-US", min: -10, max: 10, step: 1, value: 5 },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input).toHaveAttribute("min", "-10");
+      expect(input).toHaveAttribute("max", "10");
+      expect(input).toHaveAttribute("step", "1");
+    });
+
+    it("should not have min/max attributes when not provided", () => {
+      render(NumberInput, {
+        props: { allowDecimal: true, value: 5 },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input).not.toHaveAttribute("min");
+      expect(input).not.toHaveAttribute("max");
+    });
+
+    it("should have pattern attribute in text mode", () => {
+      render(NumberInput, {
+        props: { allowDecimal: true, value: 5 },
+      });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input).toHaveAttribute("pattern", "[0-9]*");
     });
   });
 });

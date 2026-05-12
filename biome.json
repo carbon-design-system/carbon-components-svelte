@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.6/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -76,6 +76,10 @@
           "level": "error",
           "options": {
             "paths": {
+              "svelte": {
+                "importNames": ["onDestroy"],
+                "message": "Use the return function from onMount instead of onDestroy."
+              },
               "vitest": {
                 "message": "Vitest functions are automatically imported."
               }
@@ -94,6 +98,7 @@
       },
       "nursery": {
         "useFind": "error",
+        "useIframeSandbox": "error",
         "noForIn": "error",
         "noFloatingPromises": "error"
       }
@@ -115,7 +120,6 @@
       "linter": {
         "rules": {
           "correctness": {
-            "noUnusedImports": "off",
             "noUnusedVariables": "off",
             "noSelfAssign": "off"
           },
@@ -140,6 +144,19 @@
       "includes": ["**/*.test.ts"],
       "linter": {
         "rules": {
+          "performance": {
+            "useTopLevelRegex": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.test.svelte", "docs/**/*.svelte"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedFunctionParameters": "off"
+          },
           "performance": {
             "useTopLevelRegex": "off"
           }

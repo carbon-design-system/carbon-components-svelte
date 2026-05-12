@@ -52,7 +52,7 @@
   <ModalFooter
     primaryButtonText="Save"
     secondaryButtonText="Discard changes"
-    on:click:button--secondary={async () => {
+    on:click:button--secondary={() => {
       hasUnsavedChanges = false;
       showWarning = false;
       open = false;

@@ -2,7 +2,10 @@
   /** Specify the `href` attribute */
   export let href = "#main-content";
 
-  /** Specify the tabindex */
+  /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
   export let tabindex = "0";
 </script>
 

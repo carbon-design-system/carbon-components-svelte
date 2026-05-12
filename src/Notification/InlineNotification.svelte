@@ -103,7 +103,7 @@
       <div class:bx--inline-notification__text-wrapper={true}>
         {#if title || $$slots.titleChildren}
           <p class:bx--inline-notification__title={true}>
-            <slot name="titleChildren">{title}</slot>
+            <strong><slot name="titleChildren">{title}</slot></strong>
           </p>
         {/if}
         {#if subtitle || $$slots.subtitleChildren}

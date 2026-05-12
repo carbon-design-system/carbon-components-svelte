@@ -13,7 +13,7 @@
 
 <FileUploaderDropContainer
   bind:files
-  on:add={onadd}
-  on:change={onchange}
+  on:add={(e) => onadd?.(e)}
+  on:change={(e) => onchange?.(e)}
   {...$$restProps}
 />

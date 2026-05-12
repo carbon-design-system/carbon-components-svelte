@@ -189,6 +189,31 @@ describe("FileUploaderItem", () => {
     expect(closeButton).toHaveAttribute("aria-label", "Remove file");
   });
 
+  it("should pass fileName to iconDescription function with file undefined", () => {
+    const iconDescription = vi.fn(
+      (ctx: { file?: File; fileName: string; invalid: boolean }) => {
+        expect(ctx.file).toBeUndefined();
+        expect(ctx.fileName).toBe("ledger.csv");
+        return `Dismiss ${ctx.fileName}`;
+      },
+    );
+
+    const { container } = render(FileUploaderItem, {
+      props: {
+        name: "ledger.csv",
+        status: "edit",
+        iconDescription,
+      },
+    });
+
+    expect(iconDescription).toHaveBeenCalled();
+    const closeButton = container.querySelector(
+      ".bx--file__state-container button",
+    );
+    assert(closeButton instanceof HTMLElement);
+    expect(closeButton).toHaveAttribute("aria-label", "Dismiss ledger.csv");
+  });
+
   it("should handle id prop", () => {
     const { container } = render(FileUploaderItem, {
       props: { name: "test.txt", id: "custom-file-id" },

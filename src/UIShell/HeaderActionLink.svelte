@@ -31,15 +31,5 @@
   {...$$restProps}
   on:click
 >
-  <slot name="icon"> <svelte:component this={icon} size={20} /> </slot>
+  <slot name="icon"><svelte:component this={icon} size={20} /></slot>
 </a>
-
-<style>
-  :global(.bx--header__action) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /** Hot fix to align icon with `HeaderAction` */
-    padding-bottom: 2px;
-  }
-</style>

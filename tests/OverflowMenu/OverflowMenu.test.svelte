@@ -1,16 +1,19 @@
 <script lang="ts">
   import { OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let size: "sm" | "xl" | undefined = undefined;
-  export let light: boolean = false;
-  export let flipped: boolean = false;
-  export let direction: "top" | "bottom" = "bottom";
-  export let menuOptionsClass: string | undefined = undefined;
-  export let iconClass: string | undefined = undefined;
-  export let iconDescription: string = "Open and close list of options";
-  export let id: string = `ccs-${Math.random().toString(36)}`;
-  export let portalMenu: boolean = false;
-  export let ariaLabel: string | undefined = undefined;
+  export let size: ComponentProps<OverflowMenu>["size"] = undefined;
+  export let light: ComponentProps<OverflowMenu>["light"] = false;
+  export let flipped: ComponentProps<OverflowMenu>["flipped"] = false;
+  export let direction: ComponentProps<OverflowMenu>["direction"] = "bottom";
+  export let menuOptionsClass: ComponentProps<OverflowMenu>["menuOptionsClass"] =
+    undefined;
+  export let iconClass: ComponentProps<OverflowMenu>["iconClass"] = undefined;
+  export let iconDescription: ComponentProps<OverflowMenu>["iconDescription"] =
+    "Open and close list of options";
+  export let id: ComponentProps<OverflowMenu>["id"] = `ccs-${Math.random().toString(36)}`;
+  export let portalMenu: ComponentProps<OverflowMenu>["portalMenu"] = false;
+  export let ariaLabel: ComponentProps<OverflowMenu>["aria-label"] = undefined;
 </script>
 
 <OverflowMenu

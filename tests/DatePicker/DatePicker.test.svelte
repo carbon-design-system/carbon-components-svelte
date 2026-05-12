@@ -17,6 +17,7 @@
     static: true,
   };
   export let disabled = false;
+  export let readonly = false;
   export let invalid = false;
   export let invalidText = "";
   export let warn = false;
@@ -24,8 +25,9 @@
   export let helperText = "";
   export let hideLabel = false;
   export let portalMenu = false;
-  export let pattern: string | undefined = undefined;
+  export let pattern: ComponentProps<DatePickerInput>["pattern"] = undefined;
   export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
 </script>
 
 <DatePicker
@@ -41,12 +43,13 @@
   {light}
   {flatpickrProps}
   {portalMenu}
-  on:change={onchange}
+  on:change={(e) => onchange?.(e)}
 >
   <DatePickerInput
     labelText="Date"
     placeholder="mm/dd/yyyy"
     {disabled}
+    {readonly}
     {invalid}
     {invalidText}
     {warn}
@@ -54,5 +57,6 @@
     {helperText}
     {hideLabel}
     {pattern}
+    on:focus={(e) => onfocus?.(e)}
   />
 </DatePicker>

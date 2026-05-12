@@ -20,6 +20,24 @@ describe("RadioButtonGroup", () => {
     expect(screen.getByRole("radio", { name: "Option 2" })).toBeChecked();
   });
 
+  it("does not dispatch change event on initial render", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(RadioButtonGroup);
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
+  it("does not dispatch change event on initial render with selected value", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(RadioButtonGroup, { props: { selected: "2" } });
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
   it("should handle disabled state", () => {
     render(RadioButtonGroup, { props: { disabled: true } });
 

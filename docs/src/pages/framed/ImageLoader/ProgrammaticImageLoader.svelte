@@ -6,18 +6,18 @@
   const srcError = `${src}1`;
 
   let imageLoader;
-  let error;
+  let imageLoadError;
 </script>
 
 <Button
   kind="ghost"
-  disabled={!imageLoader || error}
+  disabled={!imageLoader || imageLoadError}
   on:click={() => imageLoader.loadImage(srcError)}
 >
   Simulate error
 </Button>
 
-<ImageLoader bind:this={imageLoader} bind:error fadeIn {src}>
+<ImageLoader bind:this={imageLoader} bind:error={imageLoadError} fadeIn {src}>
   <svelte:fragment slot="error">
     <Button kind="ghost" on:click={() => imageLoader.loadImage(src)}>
       Error. Try again

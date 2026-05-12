@@ -1,8 +1,13 @@
 <script lang="ts">
   import { TreeView } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let activeId: number = 0;
-  export let selectedIds: number[] = [0, 7, 9];
+  export let multiselect: ComponentProps<TreeView>["multiselect"] = true;
+  export let multiselectMode: ComponentProps<TreeView>["multiselectMode"] =
+    "node";
+  export let activeId: ComponentProps<TreeView>["activeId"] = 0;
+  export let selectedIds: ComponentProps<TreeView>["selectedIds"] = [0, 7, 9];
+  export let expandedIds: ComponentProps<TreeView>["expandedIds"] = [];
   export let nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
@@ -47,9 +52,12 @@
 
 <TreeView
   labelText="Cloud Products"
+  {multiselect}
+  {multiselectMode}
   {nodes}
   bind:activeId
   bind:selectedIds
+  bind:expandedIds
   on:select={({ detail }) => console.log("select", detail)}
   on:toggle={({ detail }) => console.log("toggle", detail)}
   on:focus={({ detail }) => console.log("focus", detail)}

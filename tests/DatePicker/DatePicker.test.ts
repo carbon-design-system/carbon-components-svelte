@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
+import { DatePickerSkeleton } from "carbon-components-svelte";
+import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DatePicker from "./DatePicker.test.svelte";
+import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
 import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
@@ -51,6 +54,19 @@ describe("DatePicker", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders single-letter weekday shorthands for locale='en'", async () => {
+    const { container } = render(DatePicker, { datePickerType: "single" });
+
+    await user.click(screen.getByLabelText("Date"));
+    await screen.findByLabelText("calendar-container");
+
+    const weekdays = Array.from(
+      container.querySelectorAll(".flatpickr-weekday"),
+    ).map((node) => node.textContent?.trim());
+
+    expect(weekdays).toEqual(["S", "M", "T", "W", "Th", "F", "S"]);
+  });
+
   it("renders range mode", async () => {
     const { container } = render(DatePickerRange);
 
@@ -76,6 +92,49 @@ describe("DatePicker", () => {
     render(DatePicker, { disabled: true });
     const input = screen.getByPlaceholderText("mm/dd/yyyy");
     expect(input).toBeDisabled();
+  });
+
+  describe("readonly", () => {
+    it("forwards the readonly attribute and marks the label", () => {
+      render(DatePicker, { readonly: true });
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveAttribute("readonly");
+      expect(screen.getByText("Date")).toHaveClass("bx--label--readonly");
+    });
+
+    it("prevents typing into the input when readonly", async () => {
+      render(DatePicker, { datePickerType: "single", readonly: true });
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      await user.type(input, "01/15/2024");
+      expect(input.value).toBe("");
+    });
+
+    it("does not open the calendar on click in single mode when readonly", async () => {
+      render(DatePicker, { datePickerType: "single", readonly: true });
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).not.toHaveClass("open");
+    });
+
+    it("does not open the calendar on ArrowDown when readonly", async () => {
+      render(DatePicker, { datePickerType: "single", readonly: true });
+      const input = screen.getByLabelText("Date");
+      input.focus();
+      await user.keyboard("{ArrowDown}");
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).not.toHaveClass("open");
+    });
+
+    it("forwards the readonly attribute to both inputs in range mode", async () => {
+      render(DatePickerRange, { readonly: true });
+      // Wait for flatpickr (including the range plugin's onReady) to finish.
+      await screen.findByLabelText("calendar-container");
+      const start = screen.getByLabelText("Start date");
+      const end = screen.getByLabelText("End date");
+      expect(start).toHaveAttribute("readonly");
+      expect(end).toHaveAttribute("readonly");
+    });
   });
 
   it("handles invalid state", () => {
@@ -108,6 +167,21 @@ describe("DatePicker", () => {
     const input = screen.getByLabelText("Date");
     expect(input).toHaveAttribute("placeholder", "mm/dd/yyyy");
     expect(screen.getByText("Date")).toHaveClass("bx--visually-hidden");
+  });
+
+  it("forwards focus event from the input", () => {
+    const focusHandler = vi.fn();
+    render(DatePicker, {
+      props: {
+        onfocus: focusHandler,
+      },
+    });
+
+    const input = screen.getByLabelText("Date");
+    input.focus();
+
+    expect(focusHandler).toHaveBeenCalled();
+    expect(focusHandler.mock.lastCall?.[0]).toBeInstanceOf(FocusEvent);
   });
 
   it("dispatches change event when manually typing in simple mode", async () => {
@@ -229,6 +303,33 @@ describe("DatePicker", () => {
     expect(inputEnd).toHaveValue("03/31/2024");
   });
 
+  // Regression test: afterUpdate should not call calendar.setDate
+  // when the bound value has not actually changed. Previously every
+  // reactive tick (e.g. an unrelated prop update) re-applied setDate.
+  it("does not call calendar.setDate on unrelated reactive updates", async () => {
+    const { rerender } = render(DatePicker, {
+      props: {
+        datePickerType: "single",
+        value: "01/15/2024",
+      },
+    });
+
+    const input = screen.getByLabelText("Date") as HTMLInputElement;
+    await user.click(input);
+    await screen.findByLabelText("calendar-container");
+
+    const fp = (input as unknown as { _flatpickr: { setDate: () => void } })
+      ._flatpickr;
+    expect(fp).toBeTruthy();
+    const setDateSpy = vi.spyOn(fp, "setDate");
+
+    // Trigger a reactive update that does not change value/min/max/format.
+    await rerender({ light: true });
+    await tick();
+
+    expect(setDateSpy).not.toHaveBeenCalled();
+  });
+
   it("supports custom label slot for DatePickerInput", () => {
     render(DatePickerInputSlot);
 
@@ -326,6 +427,160 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("minDate and maxDate", () => {
+    it("passes bounds to flatpickr config", async () => {
+      const minDate = new Date(2026, 0, 10);
+      const maxDate = new Date(2026, 0, 20);
+      render(DatePicker, {
+        datePickerType: "single",
+        minDate,
+        maxDate,
+      });
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement & {
+        _flatpickr: Instance;
+      };
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+
+      const fp = input._flatpickr;
+      expect(fp).toBeTruthy();
+      expect(fp.config.minDate?.getTime?.()).toBe(minDate.getTime());
+      expect(fp.config.maxDate?.getTime?.()).toBe(maxDate.getTime());
+    });
+  });
+
+  describe("flatpickrProps", () => {
+    it("merges showMonths into the calendar", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { showMonths: 2 },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(calendar.querySelectorAll(".flatpickr-month").length).toBe(2);
+    });
+
+    it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { closeOnSelect: false },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      const day = calendar.querySelector<HTMLElement>(
+        ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+      );
+
+      expect(calendar).toHaveClass("open");
+      expect(day).toBeInTheDocument();
+      if (!day) throw new Error("expected a selectable day");
+
+      await user.click(day);
+
+      expect(calendar).toHaveClass("open");
+    });
+  });
+
+  describe("bind:calendar", () => {
+    it("is null in simple mode (no calendar is created)", async () => {
+      let captured: unknown = "unset";
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "simple",
+          oncalendar: (cal: Instance | null | undefined) => {
+            captured = cal;
+          },
+        },
+      });
+
+      await tick();
+      expect(captured).toBeNull();
+    });
+
+    it("exposes the flatpickr instance in single mode", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "single",
+          oncalendar: (cal: Instance | null | undefined) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      // Smoke-check the flatpickr API surface — these are the methods
+      // consumers are most likely to call imperatively.
+      expect(typeof instance.open).toBe("function");
+      expect(typeof instance.close).toBe("function");
+      expect(typeof instance.setDate).toBe("function");
+      expect(typeof instance.jumpToDate).toBe("function");
+      expect(typeof instance.set).toBe("function");
+      expect(instance.isOpen).toBe(false);
+    });
+
+    it("can open and close the calendar via the bound instance", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "single",
+          oncalendar: (cal: Instance | null | undefined) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      expect(instance.isOpen).toBe(false);
+
+      instance.open();
+      await tick();
+      expect(instance.isOpen).toBe(true);
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).toHaveClass("open");
+
+      instance.close();
+      await tick();
+      expect(instance.isOpen).toBe(false);
+      expect(calendar).not.toHaveClass("open");
+    });
+
+    it("exposes the flatpickr instance in range mode", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "range",
+          oncalendar: (cal: Instance | null | undefined) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      expect(typeof instance.setDate).toBe("function");
+      expect(typeof instance.open).toBe("function");
+      expect(typeof instance.close).toBe("function");
+    });
+  });
+
   describe("portalMenu", () => {
     afterEach(() => {
       // Clean up any flatpickr calendars appended to document.body.
@@ -393,5 +648,14 @@ describe("DatePicker", () => {
       expect(wrapper?.contains(calendar)).toBe(true);
       expect(calendar.classList.contains("static")).toBe(true);
     });
+  });
+});
+
+describe("DatePickerSkeleton", () => {
+  it("renders decorative label placeholders without label elements in range mode", () => {
+    const { container } = render(DatePickerSkeleton, { range: true });
+
+    expect(container.querySelectorAll("label")).toHaveLength(0);
+    expect(container.querySelectorAll("span.bx--label")).toHaveLength(2);
   });
 });

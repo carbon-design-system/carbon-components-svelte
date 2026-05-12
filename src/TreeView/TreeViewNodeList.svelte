@@ -1,7 +1,6 @@
 <script>
   /**
-   * @generics {Id = (string|number), Icon = any} Id,Icon
-   * @template {string | number} Id
+   * @generics {Id extends string | number = string | number, Icon = any} Id,Icon
    * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
    * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; } }}
    */
@@ -100,9 +99,9 @@
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
     aria-expanded={expanded}
-    on:click|stopPropagation={() => {
+    on:click|stopPropagation={(e) => {
       if (disabled) return;
-      clickNode(node);
+      clickNode(node, e);
     }}
     on:keydown={(e) => {
       if (
@@ -134,7 +133,7 @@
         if (disabled) return;
         expanded = !expanded;
         toggleNode(node);
-        clickNode(node);
+        clickNode(node, e);
         expandNode(node, expanded);
         ref.focus();
       }

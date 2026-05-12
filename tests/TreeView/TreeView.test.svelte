@@ -67,6 +67,9 @@
   {node.text}
 </TreeView>
 
+<Button on:click={() => treeview.expandNodes()}>
+  Expand nodes (no filter)
+</Button>
 <Button on:click={treeview.expandAll}>Expand all</Button>
 <Button on:click={treeview.collapseAll}>Collapse all</Button>
 <Button

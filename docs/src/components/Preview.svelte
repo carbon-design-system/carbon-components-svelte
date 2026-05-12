@@ -1,16 +1,17 @@
-<script>
+<script lang="ts">
   export let code = "";
   export let codeRaw = "";
   export let src = "";
   export let framed = false;
 
-  import { url } from "@sveltech/routify";
+  import { url } from "@roxi/routify";
   import { Button, CodeSnippet } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import copy from "clipboard-copy";
   import { theme } from "../store";
 
-  $: themedSrcUrl = $url(`${src}?theme=${$theme}`);
+  $: resolvedSrc = src ? $url(src) : "";
+  $: themedSrcUrl = resolvedSrc ? `${resolvedSrc}?theme=${$theme}` : "";
 </script>
 
 <div class="preview">
@@ -28,7 +29,7 @@
         kind="ghost"
         target="_blank"
         size="field"
-        href={$url(src)}
+        href={resolvedSrc}
         icon={Launch}
       >
         Open in new tab
@@ -41,6 +42,7 @@
         loading="lazy"
         title={src.split("/").pop()}
         src={themedSrcUrl}
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
       ></iframe>
     {:else}
       <slot />

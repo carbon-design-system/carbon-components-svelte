@@ -15,7 +15,7 @@ test.describe("Portal", () => {
     page,
   }) => {
     const portalElement = page.locator("[data-portal]");
-    await expect(portalElement).toHaveAttribute("data-portal", "");
+    await expect(portalElement).toHaveAttribute("data-portal", "true");
     await expect(portalElement).toBeVisible();
 
     const isChildOfBody = await page.evaluate(() => {

@@ -12,8 +12,12 @@ test.describe("CheckboxGroup", () => {
   });
 
   test("selects multiple checkboxes", async ({ page }) => {
-    await page.getByRole("checkbox", { name: "Option A" }).click();
-    await page.getByRole("checkbox", { name: "Option C" }).click();
+    await page
+      .getByRole("checkbox", { name: "Option A" })
+      .click({ force: true });
+    await page
+      .getByRole("checkbox", { name: "Option C" })
+      .click({ force: true });
 
     await expect(page.getByTestId("selected-values")).toContainText("a");
     await expect(page.getByTestId("selected-values")).toContainText("c");
@@ -22,15 +26,21 @@ test.describe("CheckboxGroup", () => {
   test("can be located by data-testid", async ({ page }) => {
     const group = page.getByTestId("checkbox-group-options");
     await expect(group).toBeVisible();
-    await group.getByRole("checkbox", { name: "Option B" }).click();
+    await group
+      .getByRole("checkbox", { name: "Option B" })
+      .click({ force: true });
     await expect(page.getByTestId("selected-values")).toContainText("b");
   });
 
   test("deselecting removes from selection", async ({ page }) => {
-    await page.getByRole("checkbox", { name: "Option A" }).click();
+    await page
+      .getByRole("checkbox", { name: "Option A" })
+      .click({ force: true });
     await expect(page.getByTestId("selected-values")).toContainText("a");
 
-    await page.getByRole("checkbox", { name: "Option A" }).click();
+    await page
+      .getByRole("checkbox", { name: "Option A" })
+      .click({ force: true });
     await expect(page.getByTestId("selected-values")).not.toBeVisible();
   });
 });

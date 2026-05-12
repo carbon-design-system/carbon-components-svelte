@@ -3,6 +3,7 @@ import { user } from "../setup-tests";
 import TimePicker from "./TimePicker.test.svelte";
 import TimePickerCustom from "./TimePickerCustom.test.svelte";
 import TimePickerSelectSlot from "./TimePickerSelect.slot.test.svelte";
+import TimePickerSelectEvents from "./TimePickerSelectEvents.test.svelte";
 
 describe("TimePicker", () => {
   it("should render with default props", () => {
@@ -50,17 +51,80 @@ describe("TimePicker", () => {
     expect(screen.getByText("Time")).toHaveClass("bx--label--disabled");
   });
 
+  it("should handle readonly state", () => {
+    const { container } = render(TimePicker, { props: { readonly: true } });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("readonly");
+    expect(container.querySelector(".bx--time-picker")).toHaveClass(
+      "bx--time-picker--readonly",
+    );
+    expect(screen.getByText("Time")).toHaveClass("bx--label--readonly");
+  });
+
+  it("should not change value when readonly", async () => {
+    render(TimePicker, { props: { readonly: true, value: "10:30" } });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "11:45");
+    expect(input).toHaveValue("10:30");
+  });
+
   it("should handle invalid state", () => {
     render(TimePicker, {
-      props: { invalid: true, invalidText: "Invalid time" },
+      props: {
+        id: "time-input",
+        invalid: true,
+        invalidText: "Invalid time",
+      },
     });
 
     const input = screen.getByRole("textbox");
     expect(input).toHaveClass("bx--text-input--invalid");
     expect(input).toHaveAttribute("data-invalid");
-    expect(screen.getByText("Invalid time")).toHaveClass(
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAttribute("aria-describedby", "error-time-input");
+    const errorText = screen.getByText("Invalid time");
+    expect(errorText).toHaveClass("bx--form-requirement");
+    expect(errorText).toHaveAttribute("id", "error-time-input");
+  });
+
+  it("should not set aria-describedby when valid", () => {
+    render(TimePicker);
+
+    const input = screen.getByRole("textbox");
+    expect(input).not.toHaveAttribute("aria-describedby");
+    expect(input).not.toHaveAttribute("aria-invalid");
+  });
+
+  it("should handle warn state", () => {
+    render(TimePicker, {
+      props: { warn: true, warnText: "Time may be unusual" },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveClass("bx--text-input--warning");
+    expect(input).not.toHaveClass("bx--text-input--invalid");
+    expect(screen.getByText("Time may be unusual")).toHaveClass(
       "bx--form-requirement",
     );
+  });
+
+  it("should prefer invalid over warn when both are set", () => {
+    render(TimePicker, {
+      props: {
+        invalid: true,
+        invalidText: "Invalid time",
+        warn: true,
+        warnText: "Time may be unusual",
+      },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveClass("bx--text-input--invalid");
+    expect(input).not.toHaveClass("bx--text-input--warning");
+    expect(screen.getByText("Invalid time")).toBeInTheDocument();
+    expect(screen.queryByText("Time may be unusual")).not.toBeInTheDocument();
   });
 
   it("should handle hidden label", () => {
@@ -165,6 +229,58 @@ describe("TimePicker", () => {
     expect(screen.getByText("Invalid time")).toBeInTheDocument();
   });
 
+  it("should render helper text", () => {
+    render(TimePicker, {
+      props: { id: "test-id", helperText: "24-hour, e.g. 14:30" },
+    });
+
+    const helper = screen.getByText("24-hour, e.g. 14:30");
+    expect(helper).toBeInTheDocument();
+    expect(helper).toHaveClass("bx--form__helper-text");
+    expect(helper).toHaveAttribute("id", "helper-test-id");
+    expect(screen.getByRole("textbox")).toHaveAttribute(
+      "aria-describedby",
+      "helper-test-id",
+    );
+  });
+
+  it("should associate error message via aria-describedby when invalid", () => {
+    render(TimePicker, {
+      props: { id: "test-id", invalid: true, invalidText: "Invalid time" },
+    });
+
+    expect(screen.getByText("Invalid time")).toHaveAttribute(
+      "id",
+      "error-test-id",
+    );
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("aria-describedby", "error-test-id");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("should not render helper text when invalid", () => {
+    render(TimePicker, {
+      props: {
+        helperText: "24-hour, e.g. 14:30",
+        invalid: true,
+        invalidText: "Invalid time",
+      },
+    });
+
+    expect(screen.queryByText("24-hour, e.g. 14:30")).not.toBeInTheDocument();
+    expect(screen.getByText("Invalid time")).toBeInTheDocument();
+  });
+
+  it("should apply disabled class to helper text when disabled", () => {
+    render(TimePicker, {
+      props: { helperText: "24-hour, e.g. 14:30", disabled: true },
+    });
+
+    expect(screen.getByText("24-hour, e.g. 14:30")).toHaveClass(
+      "bx--form__helper-text--disabled",
+    );
+  });
+
   it("should handle label text slot", () => {
     render(TimePickerCustom);
 
@@ -187,5 +303,55 @@ describe("TimePicker", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  it("should support readonly on TimePickerSelect", async () => {
+    const { container } = render(TimePickerCustom, {
+      props: { selectReadonly: true },
+    });
+
+    const selects = screen.getAllByRole("combobox");
+    for (const select of selects) {
+      expect(select).toHaveAttribute("aria-readonly", "true");
+      expect(select.closest(".bx--time-picker__select")).toHaveClass(
+        "bx--select--readonly",
+      );
+    }
+
+    const [select] = selects;
+    assert.instanceOf(select, HTMLSelectElement);
+    const initialValue = select.value;
+    await user.click(select);
+    await user.keyboard("{ArrowDown}");
+    expect(select.value).toBe(initialValue);
+    container.remove();
+  });
+
+  it("forwards select events from TimePickerSelect", async () => {
+    const selectChange = vi.fn();
+    const selectInput = vi.fn();
+    const selectFocus = vi.fn();
+    const selectBlur = vi.fn();
+
+    render(TimePickerSelectEvents, {
+      props: {
+        selectChange,
+        selectInput,
+        selectFocus,
+        selectBlur,
+      },
+    });
+
+    const select = screen.getByRole("combobox");
+
+    select.focus();
+    expect(selectFocus).toHaveBeenCalled();
+
+    await user.selectOptions(select, "pm");
+    expect(selectChange).toHaveBeenCalled();
+    expect(selectInput).toHaveBeenCalled();
+
+    select.blur();
+    expect(selectBlur).toHaveBeenCalled();
   });
 });

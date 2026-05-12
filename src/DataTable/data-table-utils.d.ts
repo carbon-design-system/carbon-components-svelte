@@ -68,6 +68,19 @@ type Join<K, P> = K extends string | number
     : never
   : never;
 
+/**
+ * Drops string/number index signatures so `keyof` is only declared keys.
+ * Used for paths on `DataTableRow` and subtypes, whose index signature would
+ * otherwise widen `PropertyPath` to plain `string`.
+ */
+export type KeysWithoutIndexSignature<T> = {
+  [K in keyof T as string extends K
+    ? never
+    : number extends K
+      ? never
+      : K]: T[K];
+};
+
 // For performance, the maximum traversal depth is 3.
 export type PropertyPath<T, D extends number = 3> = [D] extends [never]
   ? never
@@ -78,3 +91,55 @@ export type PropertyPath<T, D extends number = 3> = [D] extends [never]
           : never;
       }[keyof T]
     : "";
+
+/**
+ * Like {@link PropertyPath}, but ignores string/number index signatures at
+ * each object level so declared keys stay as literal unions (for `DataTableRow` subtypes).
+ */
+export type PropertyPathIgnoringIndexSignatures<T, D extends number = 3> = [
+  D,
+] extends [never]
+  ? never
+  : T extends object
+    ? {
+        [K in keyof KeysWithoutIndexSignature<T>]-?: K extends string | number
+          ?
+              | `${K}`
+              | Join<
+                  K,
+                  PropertyPathIgnoringIndexSignatures<
+                    KeysWithoutIndexSignature<T>[K],
+                    PathDepth[D]
+                  >
+                >
+          : never;
+      }[keyof KeysWithoutIndexSignature<T>]
+    : "";
+
+/**
+ * Cell value type at a column path (e.g. `"port"` or `"contact.company"`).
+ */
+export type DataTableValueAtPath<Row, Path extends string> = Row extends object
+  ? Path extends keyof Row & string
+    ? Row[Path]
+    : Path extends `${infer Head}.${infer Rest}`
+      ? Head extends keyof Row
+        ? DataTableValueAtPath<NonNullable<Row[Head]>, Rest>
+        : unknown
+      : unknown
+  : unknown;
+
+/**
+ * Union of cell value types for all column paths on `Row`.
+ * Used for default and per-column `sort` comparators.
+ *
+ * `Row` is unconstrained so generated `DataTableSortValue<Row = DataTableRow>` aliases stay valid;
+ * non-object `Row` resolves to `never`.
+ */
+export type DataTableSortValue<Row> = Row extends object
+  ? PropertyPath<Row> extends infer K
+    ? K extends string
+      ? DataTableValueAtPath<Row, K>
+      : never
+    : never
+  : never;

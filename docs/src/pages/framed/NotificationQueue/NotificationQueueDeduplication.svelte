@@ -28,7 +28,7 @@
   <Button
     on:click={() => {
       queue.add({
-        id: "id-" + count++,
+        id: `id-${count++}`,
         kind: "info",
         title: "Unique notification",
         subtitle: "This has a unique id, so it will always appear.",

@@ -1,4 +1,10 @@
-import { render, screen, waitFor, within } from "@testing-library/svelte";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/svelte";
 import type DropdownComponent from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
@@ -99,7 +105,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--light");
   });
 
@@ -112,7 +118,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
     expect(button).toHaveTextContent("Slack");
     expect(button.closest(".bx--dropdown__wrapper")).toHaveClass(
@@ -129,7 +135,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--sm");
 
     await rerender({ items, selectedId: "0", size: "xl" });
@@ -146,7 +152,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
     expect(button).toHaveTextContent("Slack");
     expect(button.closest(".bx--dropdown")).toHaveAttribute(
@@ -166,7 +172,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
     expect(button).toHaveTextContent("Slack");
     expect(button.closest(".bx--dropdown")).toHaveClass(
@@ -185,8 +191,8 @@ describe("Dropdown", () => {
     });
 
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(screen.getByRole("button")).toHaveAttribute("disabled");
-    expect(screen.getByRole("button")).toHaveTextContent("Slack");
+    expect(screen.getByRole("combobox")).toHaveAttribute("disabled");
+    expect(screen.getByRole("combobox")).toHaveTextContent("Slack");
   });
 
   it("should handle helper text", () => {
@@ -201,6 +207,46 @@ describe("Dropdown", () => {
     expect(screen.getByText("Help text")).toHaveClass("bx--form__helper-text");
   });
 
+  it("should describe the button by helperText", () => {
+    render(Dropdown, {
+      props: { items, id: "dd", helperText: "Help" },
+    });
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "aria-describedby",
+      "helper-dd",
+    );
+    expect(screen.getByText("Help")).toHaveAttribute("id", "helper-dd");
+  });
+
+  it("should describe the button by warnText when warn is true", () => {
+    render(Dropdown, {
+      props: { items, id: "dd", warn: true, warnText: "Warn" },
+    });
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "aria-describedby",
+      "warn-dd",
+    );
+    expect(screen.getByText("Warn")).toHaveAttribute("id", "warn-dd");
+  });
+
+  it("should describe the button by invalidText when invalid is true", () => {
+    render(Dropdown, {
+      props: { items, id: "dd", invalid: true, invalidText: "Bad" },
+    });
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "aria-describedby",
+      "error-dd",
+    );
+    expect(screen.getByText("Bad")).toHaveAttribute("id", "error-dd");
+  });
+
+  it("should not set aria-describedby when no message is shown", () => {
+    render(Dropdown, { props: { items, id: "dd" } });
+    expect(screen.getByRole("combobox")).not.toHaveAttribute(
+      "aria-describedby",
+    );
+  });
+
   it("should handle item selection", async () => {
     const selectHandler = vi.fn();
     render(Dropdown, {
@@ -211,7 +257,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     const menuItemText = screen.getByText("Email");
@@ -234,7 +280,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.tab();
     expect(button).toHaveFocus();
 
@@ -267,7 +313,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     const menuItemText = screen.getByText("Email");
@@ -303,7 +349,7 @@ describe("Dropdown", () => {
       },
     });
 
-    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("combobox"));
     expect(screen.getByRole("listbox")).toBeVisible();
 
     await user.click(document.body);
@@ -319,8 +365,36 @@ describe("Dropdown", () => {
       },
     });
 
-    const dropdown = screen.getByRole("button").closest(".bx--dropdown");
+    const dropdown = screen.getByRole("combobox").closest(".bx--dropdown");
     expect(dropdown).toHaveClass("bx--list-box--up");
+  });
+
+  it("should not infinite loop when all items are disabled", async () => {
+    const allDisabledItems = [
+      { id: "0", text: "Slack", disabled: true },
+      { id: "1", text: "Email", disabled: true },
+      { id: "2", text: "Fax", disabled: true },
+    ];
+
+    render(Dropdown, {
+      props: {
+        items: allDisabledItems,
+        labelText: "Contact",
+      },
+    });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+
+    // If the while loop has no guard, this would hang forever.
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowUp}");
+
+    // No item should be selected since all are disabled.
+    const options = screen.getAllByRole("option");
+    for (const option of options) {
+      expect(option).not.toHaveAttribute("aria-selected", "true");
+    }
   });
 
   it("should handle keyboard navigation with disabled items", async () => {
@@ -337,7 +411,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Keyboard nav starts at selected item (index 0, Slack)
@@ -356,7 +430,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     await user.keyboard("{ArrowUp}");
@@ -371,6 +445,30 @@ describe("Dropdown", () => {
     expect(button).toHaveTextContent("Slack");
   });
 
+  it("should render with no selected item when selectedId is not provided", async () => {
+    render(Dropdown, {
+      props: {
+        items,
+        label: "Choose an option",
+        labelText: "Contact",
+      },
+    });
+
+    const button = screen.getByLabelText("Contact");
+    // Should display the label placeholder, not any item text
+    expect(within(button).getByText("Choose an option")).toBeInTheDocument();
+
+    // Open the dropdown and select an item
+    await user.click(button);
+    const menuItemText = screen.getByText("Email");
+    const menuItem = menuItemText.closest(".bx--list-box__menu-item");
+    assert(menuItem);
+    await user.click(menuItem);
+
+    // After selection, should display the selected item
+    expect(within(button).getByText("Email")).toBeInTheDocument();
+  });
+
   it("should handle empty items array", () => {
     render(Dropdown, {
       props: {
@@ -379,7 +477,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
     // In Svelte 5, null and undefined are rendered as empty strings in the DOM (expected behavior).
     // See: https://svelte.dev/docs/svelte/v5-migration-guide
@@ -409,7 +507,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     expect(
       within(button).getByRole("img", { name: "Open dropdown" }),
     ).toBeInTheDocument();
@@ -587,6 +685,25 @@ describe("Dropdown", () => {
     });
 
     describe("Id generic parameter", () => {
+      it("should allow selectedId to be undefined (optional)", () => {
+        type ComponentType = DropdownComponent;
+        type Props = ComponentProps<ComponentType>;
+
+        // selectedId should accept undefined
+        expectTypeOf<undefined>().toExtend<Props["selectedId"]>();
+
+        // Should be an optional property (not required)
+        expectTypeOf<Record<string, never>>().toExtend<
+          Pick<Props, "selectedId">
+        >();
+
+        // With a specific item type, selectedId should still accept undefined
+        type StringItem = { id: string; text: string };
+        type StringComponent = DropdownComponent<StringItem>;
+        type StringProps = ComponentProps<StringComponent>;
+        expectTypeOf<undefined>().toExtend<StringProps["selectedId"]>();
+      });
+
       it("should default Id to any when not specified", () => {
         type ComponentType = DropdownComponent;
         type Props = ComponentProps<ComponentType>;
@@ -608,14 +725,14 @@ describe("Dropdown", () => {
         type StringComponent = DropdownComponent<StringItem>;
         expectTypeOf<
           ComponentProps<StringComponent>["selectedId"]
-        >().toEqualTypeOf<string>();
+        >().toEqualTypeOf<string | undefined>();
 
         // Number ID
         type NumberItem = { id: number; text: string };
         type NumberComponent = DropdownComponent<NumberItem>;
         expectTypeOf<
           ComponentProps<NumberComponent>["selectedId"]
-        >().toEqualTypeOf<number>();
+        >().toEqualTypeOf<number | undefined>();
 
         // Union ID
         type UnionId = "a" | "b" | "c";
@@ -646,7 +763,9 @@ describe("Dropdown", () => {
         type ComponentType = DropdownComponent<InferredItem>;
         type Props = ComponentProps<ComponentType>;
 
-        expectTypeOf<Props["selectedId"]>().toEqualTypeOf<InferredId>();
+        expectTypeOf<Props["selectedId"]>().toEqualTypeOf<
+          InferredId | undefined
+        >();
 
         type SelectEvent = ComponentEvents<ComponentType>["select"];
         type SelectEventDetail =
@@ -674,7 +793,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Type 'b' to find Banana
@@ -704,7 +823,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Type 'apr' to find Apricot
@@ -726,7 +845,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Type 'b' - should skip Banana and find Blueberry
@@ -748,7 +867,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Type 'B' (uppercase) to find Banana
@@ -757,6 +876,33 @@ describe("Dropdown", () => {
     const bananaText = screen.getByText("Banana");
     const bananaOption = bananaText.closest(".bx--list-box__menu-item");
     expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
+  // Regression: Space must not be added to the typeahead buffer.
+  // Fire keydown only (without keyup) so the menu stays open — this exposes
+  // the buffer state. If Space were treated as a typeahead character, the
+  // buffer would be " " and the next 'c' keydown would search for " c"
+  // (no match), leaving the previous highlight in place.
+  it("should not include Space in typeahead buffer", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Banana" },
+          { id: "2", text: "Cherry" },
+        ],
+        selectedId: "0",
+      },
+    });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+
+    await fireEvent.keyDown(button, { key: " " });
+    await fireEvent.keyDown(button, { key: "c" });
+
+    const cherryOption = screen.getByRole("option", { name: "Cherry" });
+    expect(cherryOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
   it("should wrap around to beginning in typeahead search", async () => {
@@ -771,7 +917,7 @@ describe("Dropdown", () => {
       },
     });
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("combobox");
     await user.click(button);
 
     // Navigate down to beyond the last item, which should wrap
@@ -783,6 +929,68 @@ describe("Dropdown", () => {
     const bananaText = screen.getByText("Banana");
     const bananaOption = bananaText.closest(".bx--list-box__menu-item");
     expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
+  // Regression: non-virtualized lists that overflow the menu's max-height
+  // must still scroll the selected option into view when the menu opens.
+  // Selected item is aligned to the top of the menu, matching the
+  // virtualized branch's behavior.
+  it("should scroll selected item to top of menu on open (non-virtualized)", async () => {
+    const ITEM_HEIGHT = 40;
+    const rectSpy = vi
+      .spyOn(Element.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: Element) {
+        const role = this.getAttribute("role");
+        if (role === "option") {
+          const index = Number(this.getAttribute("id"));
+          const top = index * ITEM_HEIGHT;
+          return {
+            top,
+            bottom: top + ITEM_HEIGHT,
+            height: ITEM_HEIGHT,
+            left: 0,
+            right: 0,
+            width: 0,
+            x: 0,
+            y: top,
+            toJSON: () => ({}),
+          } as DOMRect;
+        }
+        if (role === "listbox") {
+          return {
+            top: 0,
+            bottom: 0,
+            height: 0,
+            left: 0,
+            right: 0,
+            width: 0,
+            x: 0,
+            y: 0,
+            toJSON: () => ({}),
+          } as DOMRect;
+        }
+        return new DOMRect();
+      });
+
+    try {
+      const manyItems = Array.from({ length: 50 }, (_, i) => ({
+        id: String(i),
+        text: `Item ${i + 1}`,
+      }));
+
+      render(Dropdown, {
+        props: { items: manyItems, selectedId: "42", labelText: "Items" },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      await waitFor(() => {
+        const menu = screen.getByRole("listbox");
+        expect(menu.scrollTop).toBe(42 * ITEM_HEIGHT);
+      });
+    } finally {
+      rectSpy.mockRestore();
+    }
   });
 
   describe("virtualization", () => {
@@ -803,7 +1011,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -832,7 +1040,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -872,7 +1080,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -917,7 +1125,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -939,7 +1147,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -976,7 +1184,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -999,7 +1207,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const options = screen.getAllByRole("option");
@@ -1017,7 +1225,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1041,7 +1249,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1066,7 +1274,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1082,7 +1290,7 @@ describe("Dropdown", () => {
       const firstVisibleOption = optionsAfterScroll[0];
       await user.click(firstVisibleOption);
 
-      const buttonAfterClick = screen.getByRole("button");
+      const buttonAfterClick = screen.getByRole("combobox");
       expect(buttonAfterClick.textContent).toBeTruthy();
     });
 
@@ -1099,7 +1307,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1120,7 +1328,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       expect(button).toHaveTextContent("Item 251");
 
       await user.click(button);
@@ -1147,7 +1355,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{ArrowDown}");
@@ -1178,7 +1386,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -1204,7 +1412,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       await waitFor(() => {
@@ -1256,7 +1464,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       // The ListBoxMenu itself has the style applied
@@ -1276,7 +1484,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1300,7 +1508,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1322,7 +1530,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const options = screen.getAllByRole("option");
@@ -1340,7 +1548,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1363,7 +1571,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1388,7 +1596,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
 
       const menu = screen.getByRole("listbox");
@@ -1445,6 +1653,65 @@ describe("Dropdown", () => {
       expect(floatingPortal?.parentElement).toBe(document.body);
     });
 
+    describe("portaled menu accessible name", () => {
+      it("should set aria-label from labelText and omit aria-labelledby on the menu", () => {
+        render(Dropdown, {
+          props: {
+            items: [{ id: "0", text: "A" }],
+            labelText: "Preferred channel",
+            portalMenu: true,
+            open: true,
+          },
+        });
+
+        const menu = screen.getByRole("listbox", { name: "Preferred channel" });
+        expect(menu).toHaveAttribute("aria-label", "Preferred channel");
+        expect(menu).not.toHaveAttribute("aria-labelledby");
+      });
+
+      it("should use Dropdown aria-label prop for the portaled menu when set", () => {
+        render(Dropdown, {
+          props: {
+            items: [{ id: "0", text: "A" }],
+            labelText: "Field label",
+            "aria-label": "Explicit popup label",
+            portalMenu: true,
+            open: true,
+          },
+        });
+
+        const menu = screen.getByRole("listbox", {
+          name: "Explicit popup label",
+        });
+        expect(menu).toHaveAttribute("aria-label", "Explicit popup label");
+      });
+
+      it("should default portaled menu aria-label to Choose an item without labelText or aria-label", () => {
+        render(Dropdown, {
+          props: {
+            items: [{ id: "0", text: "A" }],
+            portalMenu: true,
+            open: true,
+          },
+        });
+
+        const menu = screen.getByRole("listbox", { name: "Choose an item" });
+        expect(menu).toHaveAttribute("aria-label", "Choose an item");
+      });
+
+      it("should resolve listbox accessible name when portaled outside an open Modal", () => {
+        render(DropdownInModal, {
+          props: { modalOpen: true, dropdownOpen: true },
+        });
+
+        const menu = screen.getByRole("listbox", { name: "Contact" });
+        expect(menu).toHaveAttribute("aria-label", "Contact");
+        expect(menu.closest("[data-floating-portal]")?.parentElement).toBe(
+          document.body,
+        );
+      });
+    });
+
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2699
     it("should close after item click selection with portalMenu", async () => {
       const selectHandler = vi.fn();
@@ -1457,7 +1724,7 @@ describe("Dropdown", () => {
         },
       });
 
-      const button = screen.getByRole("button");
+      const button = screen.getByRole("combobox");
       await user.click(button);
       expect(screen.getByRole("listbox")).toBeInTheDocument();
 
@@ -1488,5 +1755,110 @@ describe("Dropdown", () => {
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).not.toBeInTheDocument();
     });
+  });
+
+  describe("checkmark icon", () => {
+    it("should render a checkmark icon for the selected item", async () => {
+      render(Dropdown, {
+        props: { items, selectedId: "1", labelText: "Contact" },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      const options = screen.getAllByRole("option");
+      // "Email" (index 1) is selected – should have the checkmark icon
+      const selectedOption = options[1];
+      const checkmark = selectedOption.querySelector(
+        ".bx--list-box__menu-item__selected-icon",
+      );
+      expect(checkmark).toBeInTheDocument();
+
+      // Non-selected options should not have the checkmark icon
+      expect(
+        options[0].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).not.toBeInTheDocument();
+      expect(
+        options[2].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should move the checkmark icon when selection changes", async () => {
+      render(Dropdown, {
+        props: { items, selectedId: "0", labelText: "Contact" },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      let options = screen.getAllByRole("option");
+      expect(
+        options[0].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeInTheDocument();
+      expect(
+        options[1].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).not.toBeInTheDocument();
+
+      // Select "Email"
+      await user.click(options[1]);
+
+      // Re-open the menu
+      await user.click(screen.getByRole("combobox"));
+
+      options = screen.getAllByRole("option");
+      expect(
+        options[0].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).not.toBeInTheDocument();
+      expect(
+        options[1].querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeInTheDocument();
+    });
+
+    it("should not render a checkmark when no item is selected", async () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact" },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      const options = screen.getAllByRole("option");
+      for (const option of options) {
+        expect(
+          option.querySelector(".bx--list-box__menu-item__selected-icon"),
+        ).not.toBeInTheDocument();
+      }
+    });
+  });
+
+  // Regression: aria-controls should only be set when the menu is rendered,
+  // since ListBoxMenu is removed from the DOM when closed.
+  it("should only set aria-controls when the menu is open", async () => {
+    render(Dropdown, {
+      props: { items, selectedId: "0", labelText: "Contact" },
+    });
+
+    const button = screen.getByRole("combobox");
+    expect(button).not.toHaveAttribute("aria-controls");
+
+    await user.click(button);
+    const menu = screen.getByRole("listbox");
+    expect(button).toHaveAttribute("aria-controls", menu.id);
+
+    await user.click(button);
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(button).not.toHaveAttribute("aria-controls");
+  });
+
+  // Regression: translateWithId function prop should not be rendered as a DOM attribute.
+  it("should not render translateWithId as a DOM attribute on the button", () => {
+    const { container } = render(Dropdown, {
+      props: {
+        items,
+        labelText: "Contact",
+        translateWithId: (id: string) => id,
+      },
+    });
+    const button = container.querySelector("button.bx--list-box__field");
+    expect(button).toBeInTheDocument();
+    expect(button).not.toHaveAttribute("translateWithId");
+    expect(button).not.toHaveAttribute("translatewithid");
   });
 });

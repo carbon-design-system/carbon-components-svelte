@@ -8,4 +8,8 @@
     | undefined = undefined;
 </script>
 
-<FileUploaderButton bind:files on:change={onchange} {...$$restProps} />
+<FileUploaderButton
+  bind:files
+  on:change={(e) => onchange?.(e)}
+  {...$$restProps}
+/>

@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
+import { ComboBox as ComboBoxReal } from "carbon-components-svelte";
 import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
@@ -64,6 +65,32 @@ describe("ComboBox", () => {
     await user.keyboard("{Enter}");
 
     expect(input).toHaveValue("Slack");
+  });
+
+  it("should set aria-activedescendant to the highlighted filtered item", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+    await user.keyboard("fax");
+    await user.keyboard("{ArrowDown}");
+
+    // After filtering to "Fax" (id="2"), ArrowDown highlights filteredItems[0].
+    // aria-activedescendant must reference that item, not items[0] ("Slack").
+    expect(input).toHaveAttribute("aria-activedescendant", "2");
+  });
+
+  it("should set aria-activedescendant only when an item is highlighted", async () => {
+    render(ComboBox, { props: { shouldFilterItem: () => true } });
+
+    const input = getInput();
+    expect(input).toHaveAttribute("aria-activedescendant", "");
+
+    await user.click(input);
+    expect(input).toHaveAttribute("aria-activedescendant", "");
+
+    await user.keyboard("{ArrowDown}");
+    expect(input.getAttribute("aria-activedescendant")).not.toBe("");
   });
 
   it("should start keyboard navigation at selected item index", async () => {
@@ -269,6 +296,56 @@ describe("ComboBox", () => {
     expect(consoleLog).toHaveBeenCalledWith("clear", "clear");
   });
 
+  it("should not reopen menu after clear button click by default", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+      },
+    });
+
+    await user.click(getClearButton());
+
+    expect(getInput()).toHaveValue("");
+    expect(screen.queryByRole("option")).not.toBeInTheDocument();
+  });
+
+  it("should reopen menu after clear button click when openOnClear is true", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        openOnClear: true,
+      },
+    });
+
+    await user.click(getClearButton());
+
+    expect(getInput()).toHaveValue("");
+    const options = screen.getAllByRole("option");
+    expect(options.length).toBe(3);
+  });
+
+  it("should not reopen menu on Escape even when openOnClear is true", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        openOnClear: true,
+      },
+    });
+
+    const input = getInput();
+    await user.click(input);
+
+    const dropdown = screen.getAllByRole("listbox")[1];
+    expect(dropdown).toBeVisible();
+
+    await user.keyboard("{Escape}");
+    expect(dropdown).not.toBeVisible();
+    expect(getInput()).toHaveValue("");
+  });
+
   it("should handle disabled items", async () => {
     render(ComboBoxCustom);
 
@@ -319,6 +396,20 @@ describe("ComboBox", () => {
     await user.click(screen.getByText("Clear"));
     expect(input).toHaveValue("");
     expect(input).toHaveFocus();
+  });
+
+  it("should programmatically clear and reopen menu", async () => {
+    render(ComboBoxCustom, { props: { selectedId: "1" } });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
+    await user.click(screen.getByText("Clear (reopen)"));
+    expect(input).toHaveValue("");
+    expect(input).toHaveFocus();
+
+    const options = screen.getAllByRole("option");
+    expect(options.length).toBe(3);
   });
 
   it("should not re-focus textbox if clearOptions.focus is false", async () => {
@@ -483,10 +574,95 @@ describe("ComboBox", () => {
     expect(listbox).toHaveAttribute("aria-label", "Choose an item");
   });
 
+  // Regression: aria-labelledby on the input pointed at the unnamed ListBox
+  // wrapper, shadowing the <label for> association so the input's accessible
+  // name was the wrapper's aria-label (or empty) instead of labelText.
+  it("should associate the labelText with the combobox input", () => {
+    render(ComboBox, {
+      props: {
+        items: [{ id: "1", text: "Email", price: 200 }],
+        labelText: "Contact method",
+        ariaLabel: "Listbox region",
+      },
+    });
+    expect(screen.getByLabelText("Contact method")).toBe(getInput());
+  });
+
   it("should open menu if open prop is true on mount", () => {
     render(ComboBox, { props: { open: true } });
     const dropdown = screen.getAllByRole("listbox")[1];
     expect(dropdown).toBeVisible();
+  });
+
+  it("should not infinite loop when all items are disabled", async () => {
+    render(ComboBoxCustom, {
+      props: {
+        items: [
+          { id: "1", text: "A", disabled: true },
+          { id: "2", text: "B", disabled: true },
+          { id: "3", text: "C", disabled: true },
+        ],
+      },
+    });
+    const input = getInput();
+    await user.click(input);
+
+    // If the while loop has no guard, this would hang forever.
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowUp}");
+
+    // No item should be selectable since all are disabled.
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("");
+  });
+
+  it("should not auto-select an unrelated item when Enter is pressed with a partial match", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+    // "a" matches "Slack" and "Fax" via the filter, but is not an exact
+    // text match for either. Pressing Enter should not silently select
+    // the first filtered item.
+    await user.type(input, "a");
+    await user.keyboard("{Enter}");
+
+    expect(input).toHaveValue("a");
+  });
+
+  it("should skip disabled items in filtered list, not unfiltered list", async () => {
+    // Regression: `change()` previously checked `items[index].disabled`
+    // instead of `_items[index].disabled`, indexing into the wrong array
+    // when filtering was active.
+    //
+    // Unfiltered: [Ax, Bx, Ay(disabled), Az]
+    // Filtered by "a": [Ax, Ay(disabled), Az]
+    //
+    // Old bug: at filtered index 1 (Ay), it checked items[1] (Bx, not
+    // disabled) and stopped — highlighting a disabled item. Fixed code
+    // checks _items[1] (Ay, disabled) and correctly skips to Az.
+    render(ComboBoxCustom, {
+      props: {
+        items: [
+          { id: "1", text: "Ax" },
+          { id: "2", text: "Bx" },
+          { id: "3", text: "Ay", disabled: true },
+          { id: "4", text: "Az" },
+        ],
+      },
+    });
+    const input = getInput();
+    await user.click(input);
+
+    // Typing "a" filters to: Ax, Ay (disabled), Az
+    await user.type(input, "a");
+
+    // ArrowDown highlights Ax (index 0)
+    await user.keyboard("{ArrowDown}");
+    // ArrowDown should skip disabled Ay, highlight Az
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("Az");
   });
 
   it("should skip disabled items during keyboard navigation", async () => {
@@ -515,6 +691,33 @@ describe("ComboBox", () => {
   it("should not show helper text if invalid is true", () => {
     render(ComboBox, { props: { helperText: "Help", invalid: true } });
     expect(screen.queryByText("Help")).not.toBeInTheDocument();
+  });
+
+  it("should describe the input by helperText", () => {
+    render(ComboBoxReal, { props: { id: "cb", helperText: "Help" } });
+    expect(getInput()).toHaveAttribute("aria-describedby", "helper-cb");
+    expect(screen.getByText("Help")).toHaveAttribute("id", "helper-cb");
+  });
+
+  it("should describe the input by warnText when warn is true", () => {
+    render(ComboBoxReal, {
+      props: { id: "cb", warn: true, warnText: "Warn" },
+    });
+    expect(getInput()).toHaveAttribute("aria-describedby", "warn-cb");
+    expect(screen.getByText("Warn")).toHaveAttribute("id", "warn-cb");
+  });
+
+  it("should describe the input by invalidText when invalid is true", () => {
+    render(ComboBoxReal, {
+      props: { id: "cb", invalid: true, invalidText: "Bad" },
+    });
+    expect(getInput()).toHaveAttribute("aria-describedby", "error-cb");
+    expect(screen.getByText("Bad")).toHaveAttribute("id", "error-cb");
+  });
+
+  it("should not set aria-describedby when no message is shown", () => {
+    render(ComboBoxReal, { props: { id: "cb" } });
+    expect(getInput()).not.toHaveAttribute("aria-describedby");
   });
 
   it("should not open menu when input is focused via keyboard", async () => {
@@ -688,6 +891,43 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("");
   });
 
+  it("should select all text on focus when selectTextOnFocus is true", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        selectTextOnFocus: true,
+      },
+    });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe(5);
+  });
+
+  it("should not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        selectTextOnFocus: false,
+      },
+    });
+
+    const input = getInput();
+    await user.click(input);
+    await tick();
+
+    // With selectTextOnFocus false, cursor is at end; no full selection
+    expect(input.selectionStart).toBe(input.selectionEnd);
+    expect(input.selectionEnd).toBe(5);
+  });
+
   describe("Typeahead", () => {
     it("should autocomplete with typeahead when typing", async () => {
       render(ComboBox, {
@@ -732,8 +972,7 @@ describe("ComboBox", () => {
       expect(options[0]).toHaveTextContent("Banana");
     });
 
-    it("should ignore shouldFilterItem when typeahead is enabled", async () => {
-      const customFilter = vi.fn(() => true);
+    it("should use default prefix matching when typeahead is enabled without custom filter", async () => {
       render(ComboBox, {
         props: {
           typeahead: true,
@@ -741,16 +980,42 @@ describe("ComboBox", () => {
             { id: "1", text: "Apple", price: 100 },
             { id: "2", text: "Banana", price: 200 },
           ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "B");
+
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(1);
+      expect(options[0]).toHaveTextContent("Banana");
+    });
+
+    it("should use custom shouldFilterItem when typeahead is enabled", async () => {
+      const customFilter = vi.fn((item: { text: string }, value: string) =>
+        item.text.toLowerCase().includes(value.toLowerCase()),
+      );
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Pineapple", price: 200 },
+            { id: "3", text: "Banana", price: 300 },
+          ],
           shouldFilterItem: customFilter,
         },
       });
 
       const input = getInput();
       await user.click(input);
-      await user.type(input, "A");
+      await user.type(input, "apple");
 
-      // shouldFilterItem should not be called when typeahead is enabled
-      expect(customFilter).not.toHaveBeenCalled();
+      // Custom "includes" filter should match both Apple and Pineapple
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(2);
+      expect(customFilter).toHaveBeenCalled();
     });
 
     it("should use case-insensitive prefix matching with typeahead", async () => {
@@ -1765,6 +2030,257 @@ describe("ComboBox", () => {
       expect(menu).toBeInTheDocument();
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).not.toBeInTheDocument();
+    });
+  });
+
+  it("should not trap focus when tabbing away from an open menu", async () => {
+    const { container } = render(ComboBox);
+
+    // Add an external focusable element after the combobox.
+    const externalButton = document.createElement("button");
+    externalButton.textContent = "Outside";
+    container.appendChild(externalButton);
+
+    const input = getInput();
+    await user.click(input);
+
+    // Menu should be open.
+    expect(screen.getAllByRole("listbox")[1]).toBeVisible();
+
+    // Simulate a blur where focus moves to an element outside the combobox.
+    // In a real browser, Tab triggers blur with relatedTarget = next element.
+    // A buggy handler will call ref.focus() synchronously, trapping focus.
+    const focusSpy = vi.spyOn(input, "focus");
+    input.dispatchEvent(
+      new FocusEvent("blur", { relatedTarget: externalButton, bubbles: true }),
+    );
+
+    // The blur handler should NOT refocus the input when focus leaves the component.
+    expect(focusSpy).not.toHaveBeenCalled();
+  });
+
+  describe("autoHighlight", () => {
+    const getHighlightedItems = () =>
+      document.querySelectorAll(
+        ".bx--list-box__menu-item--highlighted:not(.bx--list-box__menu-item--active)",
+      );
+
+    const getHighlightedOption = () => {
+      const items = document.querySelectorAll(
+        ".bx--list-box__menu-item--highlighted",
+      );
+      // Return the highlighted item that isn't highlighted solely due to being active
+      for (const item of items) {
+        return item;
+      }
+      return null;
+    };
+
+    it("should not auto-highlight by default", async () => {
+      render(ComboBox);
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "f");
+
+      await tick();
+
+      // No item should be highlighted (only filtered items visible, none highlighted)
+      const highlighted = getHighlightedItems();
+      expect(highlighted.length).toBe(0);
+    });
+
+    it('should highlight first matching item with autoHighlight="first-match"', async () => {
+      render(ComboBox, {
+        props: { autoHighlight: "first-match" },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "f");
+
+      await tick();
+
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Fax");
+    });
+
+    it("should highlight the correct item without a custom shouldFilterItem", async () => {
+      render(ComboBoxReal, {
+        props: {
+          autoHighlight: "first-match",
+          items: [
+            { id: "0", text: "Apple" },
+            { id: "1", text: "Apricot" },
+            { id: "2", text: "Banana" },
+            { id: "3", text: "Blueberry" },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "b");
+
+      // "Banana" should be highlighted, not "Apple"
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Banana");
+    });
+
+    it("should skip disabled items", async () => {
+      render(ComboBox, {
+        props: {
+          autoHighlight: "first-match",
+          items: [
+            { id: "0", text: "Slack", price: 100 },
+            { id: "1", text: "Safari", price: 200, disabled: true },
+            { id: "2", text: "Signal", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "s");
+
+      await tick();
+
+      // Safari is disabled, so Signal should not be highlighted — Slack matches first
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Slack");
+    });
+
+    it("should reset highlight when no items match", async () => {
+      render(ComboBox, {
+        props: { autoHighlight: "first-match" },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "zzz");
+
+      await tick();
+
+      const highlighted = getHighlightedItems();
+      expect(highlighted.length).toBe(0);
+    });
+
+    it("should not highlight when input is empty", async () => {
+      render(ComboBox, {
+        props: { autoHighlight: "first-match" },
+      });
+
+      const input = getInput();
+      await user.click(input);
+
+      await tick();
+
+      const highlighted = getHighlightedItems();
+      expect(highlighted.length).toBe(0);
+    });
+
+    it("should highlight selected item on re-open, then update on typing", async () => {
+      render(ComboBox, {
+        props: { autoHighlight: "first-match" },
+      });
+
+      const input = getInput();
+
+      // Select "Email"
+      await user.click(input);
+      await user.click(screen.getByText("Email"));
+      expect(input).toHaveValue("Email");
+
+      // Re-open the menu
+      await user.click(input);
+      await tick();
+
+      // The selected item (Email) should be highlighted (via active+highlighted class)
+      const emailOption = screen
+        .getAllByRole("option")
+        .find((el) => el.textContent?.includes("Email"));
+      expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+      // Clear and type a new value
+      await user.clear(input);
+      await user.type(input, "f");
+      await tick();
+
+      // Now "Fax" should be highlighted
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Fax");
+    });
+
+    it("should allow arrow keys to override auto-highlight", async () => {
+      render(ComboBox, {
+        props: {
+          autoHighlight: "first-match",
+          items: [
+            { id: "0", text: "Slack", price: 100 },
+            { id: "1", text: "Signal", price: 200 },
+            { id: "2", text: "Skype", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "s");
+
+      await tick();
+
+      // First filtered item "Slack" should be auto-highlighted
+      let highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Slack");
+
+      // ArrowDown should move to Signal
+      await user.keyboard("{ArrowDown}");
+      await tick();
+
+      highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Signal");
+    });
+
+    it("should work with typeahead: input autocompletes and first match highlights", async () => {
+      render(ComboBox, {
+        props: {
+          autoHighlight: "first-match",
+          typeahead: true,
+          items: [
+            { id: "0", text: "Slack", price: 100 },
+            { id: "1", text: "Signal", price: 200 },
+            { id: "2", text: "Email", price: 300 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "sl");
+
+      await tick();
+
+      // Typeahead should autocomplete the input with the suggestion appended
+      // User typed "sl" (lowercase), typeahead appends "ack" from "Slack"
+      expect(input.value).toBe("slack");
+      // The typed portion ends at index 2, suggestion fills the rest
+      expect(input.selectionStart).toBe(2);
+      expect(input.selectionEnd).toBe(5);
+
+      // Auto-highlight should highlight "Slack" (first filtered match)
+      const highlighted = getHighlightedOption();
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent).toContain("Slack");
+
+      // Pressing Enter should select the highlighted item
+      await user.keyboard("{Enter}");
+      expect(input).toHaveValue("Slack");
     });
   });
 });

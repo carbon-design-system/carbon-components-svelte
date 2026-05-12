@@ -23,6 +23,14 @@ describe("UIShell", () => {
       expect(header).toHaveClass("bx--header");
     });
 
+    it("should apply classic UI Shell class when theme is classic", () => {
+      render(UiShell, { props: { headerTheme: "classic" } });
+
+      expect(screen.getByRole("banner")).toHaveClass(
+        "bx--header--ui-shell-classic",
+      );
+    });
+
     it("should render with company name", () => {
       render(UiShell, { props: { companyName: "IBM" } });
 
@@ -277,6 +285,16 @@ describe("UIShell", () => {
 
       const nav = container.querySelector(".bx--side-nav");
       expect(nav).toBeInTheDocument();
+    });
+
+    it("should apply classic UI Shell class when theme is classic", () => {
+      const { container } = render(UiShell, {
+        props: { sideNavTheme: "classic" },
+      });
+
+      expect(container.querySelector(".bx--side-nav")).toHaveClass(
+        "bx--side-nav--ui-shell-classic",
+      );
     });
 
     describe("body scroll lock", () => {

@@ -1,0 +1,826 @@
+import fs from "node:fs";
+import path from "node:path";
+import { format as prettierFormat } from "prettier";
+import prettierPluginSvelte from "prettier-plugin-svelte";
+import { parse } from "svelte/compiler";
+import { BASE_URL, COMPONENTS_PATH, RAW_COMPONENTS_OUT_DIR } from "./constants";
+import { getComponentNames } from "./utils";
+
+type ComponentApiProp = {
+  name: string;
+  description?: string;
+  type?: string;
+  value?: unknown;
+  isRequired?: boolean;
+  reactive?: boolean;
+};
+
+type ComponentApiTypedef = {
+  ts?: string;
+};
+
+type ComponentApiSlot = {
+  default?: boolean;
+  name?: string | null;
+  slot_props?: string;
+};
+
+type ComponentApiEvent = {
+  type?: string;
+  name?: string;
+  detail?: string;
+  description?: string;
+};
+
+type ComponentApiEntry = {
+  moduleName: string;
+  props?: ComponentApiProp[];
+  typedefs?: ComponentApiTypedef[];
+  slots?: ComponentApiSlot[];
+  events?: ComponentApiEvent[];
+  rest_props?: { type: string; name: string };
+};
+
+type ComponentApiFile = {
+  components: ComponentApiEntry[];
+};
+
+const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---\s*\n/;
+const COMPONENTS_KEY_RE = /^components\s*:/m;
+const QUOTED_COMPONENT_RE = /"([^"]+)"|'([^']+)'/g;
+const TAG_LINE_RE = /^\s*</;
+const WHITESPACE_RE = /\s+/;
+
+const HTML_TAG_RE = /<\s*(\/?)\s*([A-Za-z][\w:-]*)[^>]*?(\/?)\s*>/g;
+const HTML_VOID_TAGS = new Set([
+  "area",
+  "base",
+  "br",
+  "col",
+  "embed",
+  "hr",
+  "img",
+  "input",
+  "link",
+  "meta",
+  "param",
+  "source",
+  "track",
+  "wbr",
+]);
+
+const DOC_KBD_SELF_CLOSING_DQUOT_RE =
+  /<DocKbd\b\s+label\s*=\s*"([^"]*)"\s*\/>/g;
+const DOC_KBD_SELF_CLOSING_SQUOT_RE =
+  /<DocKbd\b\s+label\s*=\s*'([^']*)'\s*\/>/g;
+
+const KBD_HTML_ESCAPE_AMP = /&/g;
+const KBD_HTML_ESCAPE_LT = /</g;
+const KBD_HTML_ESCAPE_GT = />/g;
+const MD_LINE_OPENS_KBD_RE = /^<kbd\b/i;
+const MD_LINE_OPENS_KBD_CLOSE_RE = /^<\/kbd>/i;
+
+const LEADING_SVELTE_SCRIPT_BLOCK_RE = /^\s*<script\b[\s\S]*?<\/script>\s*\n*/i;
+const FILE_SOURCE_SRC_ATTR_RE = /src="([^"]+)"/i;
+const FILE_SOURCE_START_RE = /^\s*<FileSource\b/;
+const HAS_SCRIPT_TAG_RE = /<script\b/i;
+const ICON_NAME_RE = /[A-Z][a-z]*/;
+
+const componentApi = JSON.parse(
+  fs.readFileSync(path.join("src", "COMPONENT_API.json"), "utf8"),
+) as ComponentApiFile;
+
+const componentApiByName = componentApi.components.reduce<Record<string, true>>(
+  (a, c) => {
+    a[c.moduleName] = true;
+    return a;
+  },
+  {},
+);
+
+const componentApiByModuleName = new Map(
+  componentApi.components.map((c) => [c.moduleName, c]),
+);
+
+const PIPE_RE = /\|/g;
+const NEWLINE_RE = /\r?\n/g;
+const AT_EXAMPLE_RE = /@example/;
+const SVELTE_FENCE_RE = /```svelte\s*\n([\s\S]*?)```/;
+const ATX_HEADING_RE = /^(#{1,6})(\s+)(.*)$/;
+
+function splitFrontmatter(source: string) {
+  const match = source.match(FRONTMATTER_RE);
+  if (!match) return { frontmatter: null, body: source };
+  return { frontmatter: match[1], body: source.slice(match[0].length) };
+}
+
+function extractComponents(frontmatter: string | null) {
+  if (!frontmatter) return [];
+
+  const keyIdx = frontmatter.search(COMPONENTS_KEY_RE);
+  if (keyIdx === -1) return [];
+
+  const afterKey = frontmatter.slice(keyIdx);
+  const bracketStart = afterKey.indexOf("[");
+  if (bracketStart === -1) return [];
+
+  let i = bracketStart;
+  let depth = 0;
+  for (; i < afterKey.length; i++) {
+    const ch = afterKey[i];
+    if (ch === "[") depth++;
+    if (ch === "]") {
+      depth--;
+      if (depth === 0) {
+        i++; // include closing ]
+        break;
+      }
+    }
+  }
+
+  const listText = afterKey.slice(bracketStart, i);
+  const out: string[] = [];
+  let match = QUOTED_COMPONENT_RE.exec(listText);
+  while (match) {
+    out.push(match[1] ?? match[2]);
+    match = QUOTED_COMPONENT_RE.exec(listText);
+  }
+
+  return out;
+}
+
+function escapeTableCell(text: unknown) {
+  return String(text ?? "")
+    .replace(PIPE_RE, "\\|")
+    .replace(NEWLINE_RE, "<br />")
+    .trim();
+}
+
+function renderMarkdownTable(headers: string[], rows: string[][]) {
+  const headerLine = `| ${headers.map(escapeTableCell).join(" | ")} |`;
+  const sepLine = `| ${headers.map(() => "---").join(" | ")} |`;
+  const rowLines = rows.map(
+    (cells: string[]) => `| ${cells.map(escapeTableCell).join(" | ")} |`,
+  );
+  return [headerLine, sepLine, ...rowLines].join("\n");
+}
+
+function parseDescription(description: string) {
+  if (!description) return { mainDescription: "", exampleCode: null };
+
+  const exampleIndex = description.search(AT_EXAMPLE_RE);
+  if (exampleIndex === -1) {
+    return { mainDescription: description.trim(), exampleCode: null };
+  }
+
+  const mainDescription = description.slice(0, exampleIndex).trim();
+  const exampleSection = description.slice(exampleIndex);
+  const codeBlockMatch = exampleSection.match(SVELTE_FENCE_RE);
+  const exampleCode = codeBlockMatch ? codeBlockMatch[1].trim() : null;
+
+  return { mainDescription, exampleCode };
+}
+
+function renderPropsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
+  const props = Array.isArray(component.props) ? component.props : [];
+  if (props.length === 0) return "";
+
+  const sorted = [...props].sort((a, b) => {
+    if (a.isRequired !== b.isRequired) return b.isRequired ? 1 : -1;
+    if (a.reactive !== b.reactive) return b.reactive ? 1 : -1;
+    return 0;
+  });
+
+  const rows = sorted.map((prop) => {
+    const markers = [
+      prop.reactive ? "Reactive" : null,
+      prop.isRequired ? "Required" : null,
+    ].filter(Boolean);
+
+    const nameCell = [
+      `\`${prop.name}\``,
+      markers.length ? `(${markers.join(", ")})` : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    const { mainDescription } = parseDescription(prop.description ?? "");
+
+    const typeCell = prop.type ? `\`${prop.type}\`` : "";
+
+    const value = prop.value;
+    const defaultCell =
+      value === undefined || value === "undefined"
+        ? "_undefined_"
+        : `\`${String(value)}\``;
+
+    return [nameCell, typeCell, mainDescription, defaultCell];
+  });
+
+  return `### \`${componentName}\` props\n\n${renderMarkdownTable(
+    ["Prop", "Type", "Description", "Default"],
+    rows,
+  )}`;
+}
+
+function renderTypedefsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
+  const typedefs = Array.isArray(component.typedefs) ? component.typedefs : [];
+  if (typedefs.length === 0) return "";
+
+  const ts = typedefs
+    .map((t: ComponentApiTypedef) => t?.ts)
+    .filter(Boolean)
+    .join("\n")
+    .trim();
+
+  if (!ts) return "";
+
+  return `### \`${componentName}\` typedefs\n\n\`\`\`ts\n${ts}\n\`\`\``;
+}
+
+function renderSlotsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
+  const slots = Array.isArray(component.slots) ? component.slots : [];
+  if (slots.length === 0) return "";
+
+  const rows = slots.map((slot: ComponentApiSlot) => {
+    const name =
+      slot?.default || slot?.name == null ? "default" : String(slot.name);
+    const detail = slot?.slot_props ? String(slot.slot_props) : "";
+    return [`\`${name}\``, detail ? `\`${detail}\`` : ""];
+  });
+
+  return `### \`${componentName}\` slots\n\n${renderMarkdownTable(["Slot", "Detail"], rows)}`;
+}
+
+function renderEventsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
+  const events = Array.isArray(component.events) ? component.events : [];
+  const forwarded = events.filter(
+    (e: ComponentApiEvent) => e?.type === "forwarded",
+  );
+  const dispatched = events.filter(
+    (e: ComponentApiEvent) => e?.type === "dispatched",
+  );
+
+  if (forwarded.length === 0 && dispatched.length === 0) return "";
+
+  const forwardedMd =
+    forwarded.length === 0
+      ? ""
+      : `### \`${componentName}\` forwarded events\n\n${renderMarkdownTable(
+          ["Event"],
+          forwarded.map((e: ComponentApiEvent) => [`\`on:${e.name}\``]),
+        )}`;
+
+  const hasDispatchedDescription = dispatched.some(
+    (e: ComponentApiEvent) => e?.description,
+  );
+  const dispatchedHeaders = hasDispatchedDescription
+    ? ["Event", "Detail", "Description"]
+    : ["Event", "Detail"];
+
+  const dispatchedRows =
+    dispatched.length === 0
+      ? null
+      : dispatched.map((e: ComponentApiEvent) => {
+          const base = [
+            `\`on:${e.name}\``,
+            e.detail ? `\`${String(e.detail)}\`` : "",
+          ];
+          if (hasDispatchedDescription) base.push(e.description ?? "");
+          return base;
+        });
+
+  const dispatchedMd =
+    dispatched.length === 0
+      ? ""
+      : `### \`${componentName}\` dispatched events\n\n${renderMarkdownTable(
+          dispatchedHeaders,
+          dispatchedRows ?? [],
+        )}`;
+
+  const sections = [forwardedMd, dispatchedMd].filter(Boolean);
+  return sections.join("\n\n");
+}
+
+function renderRestPropsSection(
+  component: ComponentApiEntry,
+  componentName: string,
+) {
+  const rest = component?.rest_props;
+  if (!rest) return "";
+
+  if (rest.type === "Element") {
+    return `### \`${componentName}\` $$restProps\n\n\`${component.moduleName}\` spreads \`$$restProps\` to the \`${rest.name}\` element.`;
+  }
+
+  return `### \`${componentName}\` $$restProps\n\n\`${component.moduleName}\` spreads \`$$restProps\` to the \`${rest.name}\` component.`;
+}
+
+function renderComponentApiMarkdown(moduleName: string) {
+  const entry = componentApiByModuleName.get(moduleName);
+  if (!entry) {
+    throw new Error(`API data not found for component: ${moduleName}`);
+  }
+
+  const sections = [
+    renderPropsSection(entry, moduleName),
+    renderTypedefsSection(entry, moduleName),
+    renderSlotsSection(entry, moduleName),
+    renderEventsSection(entry, moduleName),
+    renderRestPropsSection(entry, moduleName),
+  ].filter(Boolean);
+
+  return sections.join("\n\n");
+}
+
+function escapeKbdInnerText(label: string) {
+  return label
+    .replace(KBD_HTML_ESCAPE_AMP, "&amp;")
+    .replace(KBD_HTML_ESCAPE_LT, "&lt;")
+    .replace(KBD_HTML_ESCAPE_GT, "&gt;");
+}
+
+function convertDocKbdToKbdForMarkdown(body: string) {
+  return body
+    .replace(DOC_KBD_SELF_CLOSING_DQUOT_RE, (_m, label: string) => {
+      return `<kbd>${escapeKbdInnerText(label)}</kbd>`;
+    })
+    .replace(DOC_KBD_SELF_CLOSING_SQUOT_RE, (_m, label: string) => {
+      return `<kbd>${escapeKbdInnerText(label)}</kbd>`;
+    });
+}
+
+function lineOpensKbdMarkdownHtml(line: string) {
+  const t = line.trimStart();
+  return MD_LINE_OPENS_KBD_RE.test(t) || MD_LINE_OPENS_KBD_CLOSE_RE.test(t);
+}
+
+function inlineFileSources(body: string) {
+  const lines = body.split("\n");
+  const out: string[] = [];
+
+  let inFence = false;
+  const isFence = (line: string) => line.trimStart().startsWith("```");
+
+  for (const line of lines) {
+    if (isFence(line)) {
+      inFence = !inFence;
+      out.push(line);
+      continue;
+    }
+
+    const trimmed = line.trimStart();
+    if (
+      inFence ||
+      !FILE_SOURCE_START_RE.test(trimmed) ||
+      !trimmed.includes("src=") ||
+      !trimmed.includes("/>")
+    ) {
+      out.push(line);
+      continue;
+    }
+
+    const srcMatch = line.match(FILE_SOURCE_SRC_ATTR_RE);
+    const src = srcMatch?.[1];
+    if (!src) {
+      out.push(line);
+      continue;
+    }
+
+    const rel = src.startsWith("/") ? src.slice(1) : src;
+    const filePath = path.join("src/pages", `${rel}.svelte`);
+
+    try {
+      const source = fs.readFileSync(filePath, "utf8");
+      out.push("```svelte");
+      out.push(source.trimEnd());
+      out.push("```");
+      out.push("");
+    } catch {
+      out.push(line);
+    }
+  }
+
+  return out.join("\n");
+}
+
+function isIconName(text: string): boolean {
+  return ICON_NAME_RE.test(text) && !(text in componentApiByName);
+}
+
+/** Depth-first walk of legacy (`modern: false`) Svelte template AST nodes (no `svelte/compiler` walk in v5). */
+function walkLegacySvelteNode(
+  node: unknown,
+  enter: (n: Record<string, unknown>) => void,
+): void {
+  if (node === null || node === undefined || typeof node !== "object") return;
+  const n = node as Record<string, unknown>;
+  if (typeof n.type === "string") enter(n);
+  for (const v of Object.values(n)) {
+    if (Array.isArray(v)) {
+      for (const item of v) walkLegacySvelteNode(item, enter);
+    } else if (v !== null && typeof v === "object") {
+      walkLegacySvelteNode(v, enter);
+    }
+  }
+}
+
+function injectImportsIntoSvelteSnippet(code: string): string {
+  const trimmed = code.trimStart();
+  if (HAS_SCRIPT_TAG_RE.test(code)) return code;
+  if (FILE_SOURCE_START_RE.test(trimmed)) return code;
+
+  const inlineComponents = new Set<string>();
+  const icons = new Set<string>();
+  const actions = new Set<string>();
+
+  try {
+    const ast = parse(code, { modern: false }) as { html?: unknown };
+    const root = ast.html;
+    if (!root) return code;
+
+    walkLegacySvelteNode(root, (node) => {
+      if (node.type === "InlineComponent" && typeof node.name === "string") {
+        if (isIconName(node.name)) icons.add(node.name);
+        else inlineComponents.add(node.name);
+      } else if (node.type === "MustacheTag") {
+        const expr = node.expression as
+          | { type?: string; name?: string }
+          | undefined;
+        if (expr?.type === "Identifier" && expr.name && isIconName(expr.name)) {
+          icons.add(expr.name);
+        }
+      } else if (node.type === "Action" && typeof node.name === "string") {
+        actions.add(node.name);
+      }
+    });
+  } catch {
+    return code;
+  }
+
+  const actionImports = [...actions];
+  const ccsImports = [...inlineComponents, ...actionImports].filter(Boolean);
+  const iconImports = [...icons].filter(Boolean);
+
+  if (ccsImports.length === 0 && iconImports.length === 0) return code;
+
+  ccsImports.sort();
+  iconImports.sort();
+
+  const scriptLines = [
+    "<script>",
+    ...(ccsImports.length
+      ? [
+          `  import { ${ccsImports.join(", ")} } from "carbon-components-svelte";`,
+        ]
+      : []),
+    ...iconImports.map(
+      (icon) =>
+        `  import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
+    ),
+    "</script>",
+    "",
+  ];
+
+  return scriptLines.join("\n") + code.trimStart();
+}
+
+function fenceInlineSvelte(body: string) {
+  const lines = body.split("\n");
+  const out: string[] = [];
+
+  let inCodeFence = false;
+  let inSvelteFence = false;
+  let tagDepth = 0;
+
+  const isFence = (line: string) => line.trimStart().startsWith("```");
+  const isTagLine = (line: string) => TAG_LINE_RE.test(line);
+
+  const applyTagDepth = (line: string) => {
+    HTML_TAG_RE.lastIndex = 0;
+    let m = HTML_TAG_RE.exec(line);
+    while (m) {
+      const isClosing = m[1] === "/";
+      const tagName = m[2]?.toLowerCase() ?? "";
+      const isSelfClosing = m[3] === "/" || HTML_VOID_TAGS.has(tagName);
+
+      if (isClosing) tagDepth = Math.max(0, tagDepth - 1);
+      else if (!isSelfClosing) tagDepth += 1;
+
+      m = HTML_TAG_RE.exec(line);
+    }
+  };
+
+  for (let idx = 0; idx < lines.length; idx++) {
+    const line = lines[idx];
+    if (isFence(line)) {
+      if (inSvelteFence) {
+        out.push("```");
+        inSvelteFence = false;
+        tagDepth = 0;
+      }
+      inCodeFence = !inCodeFence;
+      out.push(line);
+      continue;
+    }
+
+    if (
+      !inCodeFence &&
+      !inSvelteFence &&
+      isTagLine(line) &&
+      !lineOpensKbdMarkdownHtml(line)
+    ) {
+      out.push("```svelte");
+      inSvelteFence = true;
+      tagDepth = 0;
+    }
+
+    if (inSvelteFence) {
+      applyTagDepth(line);
+      out.push(line);
+
+      const nextLine = lines[idx + 1] ?? "";
+      if (tagDepth === 0 && nextLine.trim() === "") {
+        out.push("```");
+        inSvelteFence = false;
+        tagDepth = 0;
+      }
+      continue;
+    }
+
+    out.push(line);
+  }
+
+  if (inSvelteFence) out.push("```");
+
+  return out.join("\n");
+}
+
+type MdChunk =
+  | { type: "line"; line: string }
+  | {
+      type: "fence";
+      open: string;
+      close: string | null;
+      lang: string;
+      code: string;
+    };
+
+async function formatSvelteFences(markdown: string) {
+  const lines = markdown.split("\n");
+
+  const chunks: MdChunk[] = [];
+  const isFenceLine = (line: string) => line.trimStart().startsWith("```");
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (!isFenceLine(line)) {
+      chunks.push({ type: "line", line });
+      continue;
+    }
+
+    const open = line;
+    const info = line.trim().slice(3).trim();
+    const lang = info.split(WHITESPACE_RE)[0]?.toLowerCase() ?? "";
+
+    const codeLines: string[] = [];
+    let close: string | null = null;
+
+    for (let j = i + 1; j < lines.length; j++) {
+      if (isFenceLine(lines[j])) {
+        close = lines[j];
+        i = j;
+        break;
+      }
+      codeLines.push(lines[j]);
+    }
+
+    if (close === null) i = lines.length;
+
+    chunks.push({
+      type: "fence",
+      open,
+      close,
+      lang,
+      code: codeLines.join("\n"),
+    });
+  }
+
+  const fenceChunks = chunks.filter(
+    (c): c is Extract<MdChunk, { type: "fence" }> => c.type === "fence",
+  );
+  const svelteFences = fenceChunks.filter((c) => c.lang === "svelte");
+
+  const formattedCodes = await Promise.all(
+    svelteFences.map(async (c) => {
+      try {
+        const injected = injectImportsIntoSvelteSnippet(c.code);
+        const formatted = await prettierFormat(injected, {
+          parser: "svelte",
+          plugins: [prettierPluginSvelte],
+          svelteSortOrder: "scripts-markup-styles-options",
+        });
+        return String(formatted).trimEnd();
+      } catch {
+        return null;
+      }
+    }),
+  );
+
+  const out: string[] = [];
+  let formattedIdx = 0;
+
+  for (const chunk of chunks) {
+    if (chunk.type === "line") {
+      out.push(chunk.line);
+      continue;
+    }
+
+    out.push(chunk.open);
+    if (chunk.lang === "svelte") {
+      const formatted = formattedCodes[formattedIdx++];
+      const codeToUse = formatted ?? chunk.code ?? "";
+      if (codeToUse.length > 0) out.push(...codeToUse.split("\n"));
+    } else {
+      const md = chunk.code ?? "";
+      if (md.length > 0) out.push(...md.split("\n"));
+    }
+    if (chunk.close !== null) out.push(chunk.close);
+  }
+
+  return out.join("\n");
+}
+
+async function formatMarkdown(markdown: string) {
+  try {
+    const formatted = await prettierFormat(markdown, {
+      parser: "markdown",
+      proseWrap: "always",
+      printWidth: 80,
+    });
+    return `${String(formatted).trimEnd()}\n`;
+  } catch {
+    return markdown;
+  }
+}
+
+/**
+ * Output is always valid UTF-8, but some clients (browsers, editors, download
+ * tools) assume Windows-1252/Latin-1 and show mojibake for typographic Unicode
+ * (e.g. `â€"` for an em dash). Normalizing to ASCII keeps generated `.md` /
+ * `llms-full.txt` readable everywhere without changing meaning much.
+ */
+function asciiNormalizeGeneratedMarkdown(text: string): string {
+  return (
+    text
+      // Dashes / quotes / spaces (common in prose)
+      .replaceAll("\u2014", "--") // em dash —
+      .replaceAll("\u2013", "-") // en dash –
+      .replaceAll("\u2212", "-") // minus sign −
+      .replaceAll("\u2018", "'")
+      .replaceAll("\u2019", "'")
+      .replaceAll("\u201c", '"')
+      .replaceAll("\u201d", '"')
+      .replaceAll("\u2026", "...")
+      .replaceAll("\u00a0", " ")
+      // Keys / symbols sometimes pasted from macOS docs
+      .replaceAll("\u2318", "Cmd") // ⌘
+      .replaceAll("\u2325", "Option") // ⌥
+      .replaceAll("\u21e7", "Shift") // ⇧
+      .replaceAll("\u238b", "Esc") // ⎋ (less common)
+      // Strip BOM if present upstream
+      .replaceAll("\ufeff", "")
+  );
+}
+
+function shiftMarkdownHeadings(md: string) {
+  const lines = md.split("\n");
+  let inFence = false;
+  const isFence = (line: string) => line.trimStart().startsWith("```");
+
+  return lines
+    .map((line: string) => {
+      if (isFence(line)) {
+        inFence = !inFence;
+        return line;
+      }
+      if (inFence) return line;
+      if (ATX_HEADING_RE.test(line)) return `#${line}`;
+      return line;
+    })
+    .join("\n");
+}
+
+function generateLlmTxt(componentNames: string[]) {
+  const sorted = [...componentNames].sort();
+  const links = sorted.map(
+    (name) => `- [${name}](${BASE_URL}/components/${name}.md)`,
+  );
+  return `# Carbon Components Svelte
+
+## Docs
+
+${links.join("\n")}
+`;
+}
+
+// Fresh output every run.
+fs.rmSync(RAW_COMPONENTS_OUT_DIR, { recursive: true, force: true });
+fs.mkdirSync(RAW_COMPONENTS_OUT_DIR, { recursive: true });
+
+const generatedMdByComponent: { componentName: string; md: string }[] = [];
+
+for (const componentName of getComponentNames()) {
+  const filePath = path.join(COMPONENTS_PATH, `${componentName}.svx`);
+  const fileContent = fs.readFileSync(filePath, "utf8");
+  const { frontmatter, body } = splitFrontmatter(fileContent);
+  const components = extractComponents(frontmatter);
+
+  const componentsForUsage =
+    components.length > 0 ? components : [componentName];
+
+  const bodyWithoutLeadingScript = body.replace(
+    LEADING_SVELTE_SCRIPT_BLOCK_RE,
+    "",
+  );
+  const bodyWithKbd = convertDocKbdToKbdForMarkdown(bodyWithoutLeadingScript);
+  const bodyWithInlinedFileSources = inlineFileSources(bodyWithKbd);
+  const fencedBody = fenceInlineSvelte(bodyWithInlinedFileSources);
+
+  const apiSections = componentsForUsage
+    .map(renderComponentApiMarkdown)
+    .filter(Boolean);
+  const apiMarkdown =
+    apiSections.length > 0
+      ? `\n\n---\n\n## Component API\n\n${apiSections.join("\n\n")}`
+      : "";
+
+  const generatedMd = `# ${componentName}\n\n${fencedBody}${apiMarkdown}`;
+
+  generatedMdByComponent.push({ componentName, md: generatedMd });
+}
+
+await Promise.all(
+  generatedMdByComponent.map(async ({ componentName, md }) => {
+    const svelteFormatted = await formatSvelteFences(md);
+    const docFormatted = await formatMarkdown(svelteFormatted);
+    const docOut = asciiNormalizeGeneratedMarkdown(docFormatted);
+    fs.writeFileSync(
+      path.join(RAW_COMPONENTS_OUT_DIR, `${componentName}.md`),
+      docOut,
+      "utf8",
+    );
+  }),
+);
+
+// Generate llms.txt file
+const componentNames = generatedMdByComponent.map(
+  ({ componentName }) => componentName,
+);
+const llmTxtContent = generateLlmTxt(componentNames);
+fs.writeFileSync(path.join("./public", "llms.txt"), llmTxtContent, "utf8");
+
+// Generate llms-full.txt: overview + all component docs with headings shifted
+const overviewPath = path.join("./content", "overview.md");
+let overviewMd: string;
+try {
+  overviewMd = fs.readFileSync(overviewPath, "utf8").trim();
+} catch (err) {
+  throw new Error(
+    `Overview file required for llms-full.txt not found: ${overviewPath}`,
+    { cause: err },
+  );
+}
+const sortedByComponentName = [...generatedMdByComponent].sort((a, b) =>
+  a.componentName.localeCompare(b.componentName),
+);
+const introPart = `# Carbon Components Svelte\n\n${overviewMd}`;
+const formattedIntro = asciiNormalizeGeneratedMarkdown(
+  (await formatMarkdown(introPart)).trimEnd(),
+);
+const componentParts = sortedByComponentName.map(({ componentName }) => {
+  const formattedPath = path.join(
+    RAW_COMPONENTS_OUT_DIR,
+    `${componentName}.md`,
+  );
+  const formattedMd = fs.readFileSync(formattedPath, "utf8");
+  return shiftMarkdownHeadings(formattedMd);
+});
+const fullParts = [formattedIntro, ...componentParts];
+fs.writeFileSync(
+  path.join("./public", "llms-full.txt"),
+  asciiNormalizeGeneratedMarkdown(fullParts.join("\n\n")),
+  "utf8",
+);

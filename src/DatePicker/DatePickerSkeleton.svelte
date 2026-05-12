@@ -2,8 +2,8 @@
   /** Set to `true` to use the range variant */
   export let range = false;
 
-  /** Set an id to be used by the label element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  /** Set to `true` to use the short variant */
+  export let short = false;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -19,13 +19,13 @@
   <div
     class:bx--date-picker={true}
     class:bx--skeleton={true}
-    class:bx--date-picker--range={true}
-    class:bx--date-picker--short={!range}
+    class:bx--date-picker--range={range}
     class:bx--date-picker--simple={!range}
+    class:bx--date-picker--short={short}
   >
-    {#each Array.from({ length: range ? 2 : 1 }, (_, i) => i) as input, i (input)}
+    {#each Array.from({ length: range ? 2 : 1 }, (_, i) => i) as input (input)}
       <div class:bx--date-picker-container={true}>
-        <label for={id} class:bx--label={true}></label>
+        <span class:bx--label={true}></span>
         <div
           class:bx--date-picker__input={true}
           class:bx--skeleton={true}

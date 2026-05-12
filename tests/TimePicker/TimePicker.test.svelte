@@ -14,10 +14,14 @@
   export let maxlength: ComponentProps<TimePicker>["maxlength"] = 5;
   export let light: ComponentProps<TimePicker>["light"] = false;
   export let disabled: ComponentProps<TimePicker>["disabled"] = false;
+  export let readonly: ComponentProps<TimePicker>["readonly"] = false;
   export let labelText: ComponentProps<TimePicker>["labelText"] = "Time";
   export let hideLabel: ComponentProps<TimePicker>["hideLabel"] = false;
   export let invalid: ComponentProps<TimePicker>["invalid"] = false;
   export let invalidText: ComponentProps<TimePicker>["invalidText"] = "";
+  export let warn: ComponentProps<TimePicker>["warn"] = false;
+  export let warnText: ComponentProps<TimePicker>["warnText"] = "";
+  export let helperText: ComponentProps<TimePicker>["helperText"] = "";
   export let id: ComponentProps<TimePicker>["id"] = "ccs-test";
   export let name: ComponentProps<TimePicker>["name"] = "test-time";
   export let ref: ComponentProps<TimePicker>["ref"] = null;
@@ -31,10 +35,14 @@
   {maxlength}
   {light}
   {disabled}
+  {readonly}
   {labelText}
   {hideLabel}
   {invalid}
   {invalidText}
+  {warn}
+  {warnText}
+  {helperText}
   {id}
   {name}
   {ref}

@@ -82,7 +82,7 @@
         bind:value={searchValue}
         shouldFilterRows
         bind:filteredRowIds
-        on:input={(e) => {
+        on:input={() => {
           // filteredRowIds should be typed as ReadonlyArray<Row["id"]>
           // which is ReadonlyArray<"row-1" | "row-2" | "row-3">
           console.log("Filtered IDs:", filteredRowIds);
@@ -101,7 +101,7 @@
         bind:value={numericSearchValue}
         shouldFilterRows
         bind:filteredRowIds={numericFilteredRowIds}
-        on:input={(e) => {
+        on:input={() => {
           // numericFilteredRowIds should be typed as ReadonlyArray<NumericRow["id"]>
           // which is ReadonlyArray<1 | 2 | 3>
           console.log("Numeric filtered IDs:", numericFilteredRowIds);
@@ -120,7 +120,7 @@
         bind:value={productSearchValue}
         shouldFilterRows={customProductFilter}
         bind:filteredRowIds={productFilteredRowIds}
-        on:input={(e) => {
+        on:input={() => {
           // productFilteredRowIds should be typed as ReadonlyArray<ProductRow["id"]>
           // which is ReadonlyArray<string>
           // customProductFilter receives ProductRow type, not DataTableRow<any>

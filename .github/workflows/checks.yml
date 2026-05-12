@@ -31,8 +31,26 @@ jobs:
       - run: bun ci
       - run: bunx biome ci --error-on-warnings
 
-  test-svelte4:
-    needs: [lint]
+  changes:
+    runs-on: macos-15
+    outputs:
+      src-or-tests: ${{ steps.filter.outputs.src-or-tests }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            src-or-tests:
+              - 'src/**'
+              - 'tests/**'
+              - '.github/**'
+
+  test:
+    needs: [lint, changes]
+    if: needs.changes.outputs.src-or-tests == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -42,40 +60,40 @@ jobs:
       - name: Generate types
         run: bun run build:docs
 
-      - name: Test Svelte 4 Types
+      - name: Test types (Svelte 5)
         run: bun run test:types
 
-      - name: Test Svelte 4
+      - name: Test (Svelte 5)
         run: bun --bun run test
 
   test-e2e:
-    needs: [lint]
-    runs-on: macos-15
+    needs: [lint, test]
+    if: ${{ !failure() && !cancelled() }}
+    runs-on: ubuntu-latest
+    # Official image includes Chromium/Firefox/WebKit + system deps
+    # Bump tag with @playwright/test in bun.lock.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.0-noble
+      options: --ipc=host --init
+    timeout-minutes: 15
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      HOME: /root
     steps:
       - uses: actions/checkout@v6
+
+      # Playwright image is minimal; setup-bun extracts a zip and needs unzip.
+      - run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y unzip
+
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
 
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v5
-        with:
-          path: ~/Library/Caches/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('node_modules/@playwright/test/package.json') }}
-
-      - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: bunx playwright install --with-deps chromium
-
-      - name: Install Playwright OS dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: bunx playwright install-deps chromium
-
       - name: E2E tests
-        run: bun run test:e2e
+        run: bunx playwright test --project=chromium
 
   test-svelte3:
-    needs: [lint]
+    needs: [lint, changes]
+    if: needs.changes.outputs.src-or-tests == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -100,30 +118,31 @@ jobs:
           cd tests-svelte3
           bun --bun run test
 
-  test-svelte5:
-    needs: [lint]
+  test-svelte4:
+    needs: [lint, changes]
+    if: needs.changes.outputs.src-or-tests == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
 
-      - name: Setup Svelte 5
+      - name: Setup Svelte 4 compat
         run: |
-          cd tests-svelte5
+          cd tests-svelte4
           bun ci
 
       - name: Generate types
         run: bun run build:docs
 
-      - name: Test Svelte 5 Types
+      - name: Test types (Svelte 4 compat)
         run: |
-          cd tests-svelte5
+          cd tests-svelte4
           bun run test:types
 
-      - name: Test Svelte 5
+      - name: Test (Svelte 4 compat)
         run: |
-          cd tests-svelte5
+          cd tests-svelte4
           bun --bun run test
 
   types:
@@ -139,7 +158,10 @@ jobs:
       - run: bun run test:src-types
 
   deploy-docs:
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master'
-    needs: [lint, test-svelte4, types]
+    needs: [lint, test, types]
+    if: |
+      always() &&
+      (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master') &&
+      !failure() && !cancelled()
     uses: ./.github/workflows/deploy-docs.yml
     secrets: inherit

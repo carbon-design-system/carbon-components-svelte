@@ -27,7 +27,7 @@ test.describe("Tooltip", () => {
   });
 
   test("shows on hover after enter delay", async ({ page }) => {
-    await page.getByTestId("tooltip-wrapper").hover();
+    await page.getByTestId("tooltip-wrapper").getByRole("button").hover();
     await expect(page.getByTestId("tooltip-content")).toBeVisible();
   });
 

@@ -2,10 +2,11 @@
 
 <script lang="ts">
   import { Toggle } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   let toggled = false;
   let initialToggled = true;
-  export let ref: HTMLInputElement | null = null;
+  export let ref: ComponentProps<Toggle>["ref"] = null;
 </script>
 
 <Toggle

@@ -1,0 +1,19 @@
+// Classic (mixed) UI Shell: Gray 100 header + White side navigation.
+// To minimize the generated CSS bundle size, custom CSS variables are used.
+// Only the all.css supports this since enable-css-custom-properties is true.
+
+@import "carbon-components/scss/globals/scss/vars";
+
+.#{$prefix}--header.#{$prefix}--header--ui-shell-classic {
+  @include carbon--theme($carbon--theme--g100, true) {
+    @include emit-component-tokens($tag-colors);
+    @include emit-component-tokens($notification-colors);
+  }
+}
+
+.#{$prefix}--side-nav.#{$prefix}--side-nav--ui-shell-classic {
+  @include carbon--theme($carbon--theme--white, true) {
+    @include emit-component-tokens($tag-colors);
+    @include emit-component-tokens($notification-colors);
+  }
+}

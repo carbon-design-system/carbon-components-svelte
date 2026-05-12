@@ -20,7 +20,7 @@ Specify the max character count using the `maxCount` prop. A character counter w
 
 <TextArea labelText="App description" placeholder="Enter a description..." maxCount={100} />
 
-## With helper text
+## Helper text
 
 Add helper text below the textarea to provide additional context or instructions.
 

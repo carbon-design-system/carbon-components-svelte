@@ -74,6 +74,32 @@ describe("FloatingPortal", () => {
     expect(portalElement).toHaveAttribute("data-floating-direction", "top");
   });
 
+  it("uses left or right direction when direction prop is left", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, direction: "left" },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    const actualDirection = portalElement?.getAttribute(
+      "data-floating-direction",
+    );
+    expect(["left", "right"]).toContain(actualDirection);
+  });
+
+  it("uses left or right direction when direction prop is right", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, direction: "right" },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    const actualDirection = portalElement?.getAttribute(
+      "data-floating-direction",
+    );
+    expect(["left", "right"]).toContain(actualDirection);
+  });
+
   it("applies z-index from zIndex prop", async () => {
     render(FloatingPortalTest, {
       props: { open: true, zIndex: 10000 },
@@ -96,6 +122,38 @@ describe("FloatingPortal", () => {
     expect(style).toContain("z-index: 9200");
   });
 
+  it("accepts gapTop and gapBottom props", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, gapTop: 8, gapBottom: 10 },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    expect(portalElement).toBeInTheDocument();
+    const style = portalElement?.getAttribute("style") ?? "";
+    expect(style).toContain("position: absolute");
+  });
+
+  it("accepts horizontal gap and vertical align offset props", async () => {
+    render(FloatingPortalTest, {
+      props: {
+        open: true,
+        direction: "right",
+        horizontalGapLeft: 10,
+        horizontalGapRight: 4,
+        verticalAlignOffsetLeft: -10,
+        verticalAlignOffsetRight: 10,
+      },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    expect(portalElement).toBeInTheDocument();
+    expect(["left", "right"]).toContain(
+      portalElement?.getAttribute("data-floating-direction"),
+    );
+  });
+
   it("applies position styles", async () => {
     render(FloatingPortalTest, {
       props: { open: true },
@@ -108,6 +166,133 @@ describe("FloatingPortal", () => {
     expect(style).toMatch(/top:\s*\d+px/);
     expect(style).toMatch(/left:\s*\d+px/);
     expect(style).toMatch(/width:\s*\d+px/);
+  });
+
+  it("uses position: fixed when mounted into a non-body target", async () => {
+    const customTarget = document.createElement("div");
+    document.body.appendChild(customTarget);
+
+    render(FloatingPortalTest, {
+      props: { open: true, target: customTarget },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    expect(portalElement.parentElement).toBe(customTarget);
+    const style = portalElement.getAttribute("style") ?? "";
+    expect(style).toContain("position: fixed");
+    expect(style).not.toContain("position: absolute");
+
+    customTarget.remove();
+  });
+
+  it("auto-mounts into the anchor's nearest <dialog> ancestor", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, dialogAncestor: true },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    const dialog = screen.getByTestId("dialog-ancestor");
+    expect(portalElement.parentElement).toBe(dialog);
+    expect(portalElement.getAttribute("style") ?? "").toContain(
+      "position: fixed",
+    );
+  });
+
+  it("explicit target overrides the auto-detected <dialog> ancestor", async () => {
+    const customTarget = document.createElement("div");
+    document.body.appendChild(customTarget);
+
+    render(FloatingPortalTest, {
+      props: { open: true, dialogAncestor: true, target: customTarget },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    expect(portalElement.parentElement).toBe(customTarget);
+
+    customTarget.remove();
+  });
+
+  it("auto-mounts into the anchor's nearest [popover] ancestor", async () => {
+    render(FloatingPortalTest, {
+      props: { open: true, popoverAncestor: true },
+    });
+
+    const content = await screen.findByText("Floating content");
+    const portalElement = content.closest("[data-floating-portal]");
+    assert(portalElement instanceof HTMLElement);
+
+    const popover = screen.getByTestId("popover-ancestor");
+    expect(portalElement.parentElement).toBe(popover);
+    expect(portalElement.getAttribute("style") ?? "").toContain(
+      "position: fixed",
+    );
+  });
+
+  describe("intrinsicWidth", () => {
+    it("applies width and no translateX when intrinsicWidth is false (default)", async () => {
+      render(FloatingPortalTest, {
+        props: { open: true, intrinsicWidth: false },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest("[data-floating-portal]");
+      const style = portalElement?.getAttribute("style") ?? "";
+      expect(style).toMatch(/width:\s*\d+px/);
+      expect(style).not.toContain("translateX(-50%)");
+    });
+
+    it("applies translateX(-50%) and no width when intrinsicWidth is true", async () => {
+      render(FloatingPortalTest, {
+        props: { open: true, intrinsicWidth: true },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest("[data-floating-portal]");
+      const style = portalElement?.getAttribute("style") ?? "";
+      expect(style).toContain("transform: translateX(-50%)");
+      expect(style).not.toMatch(/\bwidth:\s*\d+px/);
+    });
+
+    it("applies no horizontal transform for intrinsicAlign start", async () => {
+      render(FloatingPortalTest, {
+        props: {
+          open: true,
+          intrinsicWidth: true,
+          intrinsicAlign: "start",
+        },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest("[data-floating-portal]");
+      const style = portalElement?.getAttribute("style") ?? "";
+      expect(style).not.toContain("translateX");
+      expect(style).not.toMatch(/\bwidth:\s*\d+px/);
+    });
+
+    it("applies translateX(-100%) for intrinsicAlign end", async () => {
+      render(FloatingPortalTest, {
+        props: {
+          open: true,
+          intrinsicWidth: true,
+          intrinsicAlign: "end",
+        },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest("[data-floating-portal]");
+      const style = portalElement?.getAttribute("style") ?? "";
+      expect(style).toContain("transform: translateX(-100%)");
+      expect(style).not.toMatch(/\bwidth:\s*\d+px/);
+    });
   });
 
   it("binds ref to the floating portal element", async () => {
