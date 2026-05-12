@@ -280,6 +280,104 @@ describe("ContextMenu", () => {
     expect(submenuX).toBeGreaterThanOrEqual(0);
   });
 
+  // Regression test: a disabled submenu trigger should expose
+  // `aria-disabled` and ignore keyboard, hover, and click activation.
+  describe("disabled submenu trigger", () => {
+    it("should set aria-disabled on a disabled submenu trigger", () => {
+      render(ContextMenu, {
+        props: {
+          open: true,
+          withSubmenu: true,
+          submenuDisabled: true,
+          x: 100,
+          y: 100,
+        },
+      });
+
+      const trigger = screen.getByText("Option with submenu").closest("li");
+      assert(trigger);
+      expect(trigger).toHaveAttribute("aria-disabled", "true");
+      expect(trigger).toHaveAttribute("aria-haspopup", "true");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("should not open submenu via Enter/Space when disabled", async () => {
+      render(ContextMenu, {
+        props: {
+          open: true,
+          withSubmenu: true,
+          submenuDisabled: true,
+          x: 100,
+          y: 100,
+        },
+      });
+
+      const trigger = screen.getByText("Option with submenu").closest("li");
+      assert(trigger);
+      trigger.focus();
+
+      await user.keyboard("{Enter}");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+      await user.keyboard(" ");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+      const submenu = screen
+        .getAllByRole("menu")
+        .find((menu) => menu.getAttribute("data-level") === "2");
+      expect(submenu).not.toHaveClass("bx--menu--open");
+    });
+
+    it("should not open submenu on hover when disabled", async () => {
+      render(ContextMenu, {
+        props: {
+          open: true,
+          withSubmenu: true,
+          submenuDisabled: true,
+          x: 100,
+          y: 100,
+        },
+      });
+
+      const submenuTrigger = screen.getByText("Option with submenu");
+      await user.hover(submenuTrigger);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      const trigger = submenuTrigger.closest("li");
+      assert(trigger);
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+      const submenu = screen
+        .getAllByRole("menu")
+        .find((menu) => menu.getAttribute("data-level") === "2");
+      expect(submenu).not.toHaveClass("bx--menu--open");
+    });
+
+    it("should not open submenu on click when disabled", async () => {
+      render(ContextMenu, {
+        props: {
+          open: true,
+          withSubmenu: true,
+          submenuDisabled: true,
+          x: 100,
+          y: 100,
+        },
+      });
+
+      const submenuTrigger = screen.getByText("Option with submenu");
+      await user.click(submenuTrigger);
+
+      const trigger = submenuTrigger.closest("li");
+      assert(trigger);
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+      const submenu = screen
+        .getAllByRole("menu")
+        .find((menu) => menu.getAttribute("data-level") === "2");
+      expect(submenu).not.toHaveClass("bx--menu--open");
+    });
+  });
+
   it("supports custom label slot for ContextMenuOption", () => {
     render(ContextMenuOptionSlot);
 

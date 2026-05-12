@@ -292,7 +292,7 @@
   bind:this={ref}
   {role}
   tabindex="-1"
-  aria-disabled={!subOptions && disabled}
+  aria-disabled={disabled}
   aria-haspopup={subOptions ? true : undefined}
   aria-expanded={subOptions ? submenuOpen : undefined}
   class:bx--menu-option={true}
@@ -313,6 +313,7 @@
       subOptions &&
       (key === "ArrowRight" || key === " " || key === "Enter")
     ) {
+      if (disabled) return;
       submenuOpen = true;
       await tick();
       options = [...ref.querySelectorAll("li[tabindex]")];
@@ -346,7 +347,7 @@
   }}
   on:mouseenter
   on:mouseenter={() => {
-    if (subOptions) {
+    if (subOptions && !disabled) {
       if (typeof timeoutClose === "number") {
         clearTimeout(timeoutClose);
         timeoutClose = undefined;
@@ -377,6 +378,7 @@
   on:click={(e) => {
     if (subOptions) {
       e.stopPropagation();
+      if (disabled) return;
       submenuOpen = true;
       return;
     }
