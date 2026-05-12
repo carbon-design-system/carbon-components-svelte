@@ -222,6 +222,21 @@ featureLines.sort(compareBulletLines);
 fixLines.sort(compareBulletLines);
 perfLines.sort(compareBulletLines);
 
+function printReleaseSummaryTable(
+  fromVersion: string,
+  toVersion: string,
+): void {
+  const rows = [
+    { Category: "Breaking changes", Count: breakingLines.length },
+    { Category: "Features", Count: featureLines.length },
+    { Category: "Bug fixes", Count: fixLines.length },
+    { Category: "Performance", Count: perfLines.length },
+  ];
+  const total = rows.reduce((sum, r) => sum + r.Count, 0);
+  console.log(`${fromVersion} --> ${toVersion} (${total} total)`);
+  console.table(rows);
+}
+
 const sections: string[] = [];
 if (breakingLines.length) {
   sections.push("### ⚠ BREAKING CHANGES", "", ...breakingLines, "");
@@ -259,4 +274,4 @@ const updated = `${changelog.slice(0, idx)}\n\n${newBlock}\n\n${changelog.slice(
 
 fs.writeFileSync(changelogPath, updated, "utf8");
 
-console.log(`${currentVersion} --> ${nextVersion}`);
+printReleaseSummaryTable(currentVersion, nextVersion);
