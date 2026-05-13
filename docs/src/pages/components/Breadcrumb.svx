@@ -50,6 +50,24 @@ Add an overflow menu to handle long breadcrumb trails. Use overflow menu item co
   </BreadcrumbItem>
 </Breadcrumb>
 
+## Small size
+
+Use `size="sm"` for a compact breadcrumb. This pairs with an overflow menu when space is tight.
+
+<Breadcrumb size="sm">
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/api">API</BreadcrumbItem>
+  <BreadcrumbItem>
+    <OverflowMenu>
+      <OverflowMenuItem href="/api/data" text="Data" />
+      <OverflowMenuItem href="/api/data/latest" text="Latest" />
+    </OverflowMenu>
+  </BreadcrumbItem>
+  <BreadcrumbItem href="/api/data/latest/usage" isCurrentPage>
+    Usage
+  </BreadcrumbItem>
+</Breadcrumb>
+
 ## Breadcrumb trail
 
 Build a full breadcrumb trail with multiple items and a current page indicator.
@@ -77,3 +95,9 @@ Omit `href` and use `let:props` to render a custom link element (for example, a 
 Display a loading state with `skeleton` prop. Use `count` to specify the number of items.
 
 <Breadcrumb noTrailingSlash skeleton count={3} />
+
+## Skeleton (small)
+
+Use `skeleton` with `size="sm"` for a compact loading state.
+
+<Breadcrumb skeleton size="sm" count={3} />
