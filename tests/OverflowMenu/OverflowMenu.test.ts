@@ -4,6 +4,7 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import OverflowMenuAllDisabled from "./OverflowMenu.allDisabled.test.svelte";
+import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
 import OverflowMenuDisabledLink from "./OverflowMenu.disabledLink.test.svelte";
 import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
@@ -113,6 +114,41 @@ describe("OverflowMenu", () => {
     await user.keyboard("{ArrowDown}");
 
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("supports Home and End to jump to first/last item", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menuItems = screen.getAllByRole("menuitem");
+    expect(menuItems[0]).toHaveFocus();
+
+    await user.keyboard("{End}");
+    expect(menuItems[2]).toHaveFocus();
+
+    await user.keyboard("{Home}");
+    expect(menuItems[0]).toHaveFocus();
+  });
+
+  it("Home and End skip disabled items", async () => {
+    render(OverflowMenuDisabled);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menuItems = screen.getAllByRole("menuitem");
+    expect(menuItems).toHaveLength(4);
+    expect(menuItems[0]).toHaveFocus();
+
+    // Last non-disabled item is index 2 ("Third").
+    await user.keyboard("{End}");
+    expect(menuItems[2]).toHaveFocus();
+
+    // First non-disabled item is index 0 ("First").
+    await user.keyboard("{Home}");
+    expect(menuItems[0]).toHaveFocus();
   });
 
   it("closes when clicking outside", async () => {
