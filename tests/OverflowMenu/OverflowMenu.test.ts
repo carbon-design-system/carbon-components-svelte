@@ -3,6 +3,7 @@ import type OverflowMenuComponent from "carbon-components-svelte/OverflowMenu/Ov
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
+import OverflowMenuDisabledLink from "./OverflowMenu.disabledLink.test.svelte";
 import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
@@ -400,6 +401,40 @@ describe("OverflowMenu", () => {
 
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
     expect(screen.queryByRole("menu")).toBeInTheDocument();
+  });
+
+  it("does not navigate, dispatch click, or close menu for disabled link item", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(OverflowMenuDisabledLink);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+    expect(menuButton).toHaveAttribute("aria-expanded", "true");
+
+    const menuItems = screen.getAllByRole("menuitem");
+    const disabledLink = menuItems.find(
+      (item) => item.textContent === "API documentation",
+    );
+    expect(disabledLink?.tagName).toBe("A");
+    expect(disabledLink).toHaveAttribute("aria-disabled", "true");
+    expect(disabledLink).toHaveAttribute("tabindex", "-1");
+    expect(disabledLink?.parentElement).toHaveClass(
+      "bx--overflow-menu-options__option--disabled",
+    );
+
+    const clickEvent = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+    });
+    disabledLink?.dispatchEvent(clickEvent);
+
+    expect(clickEvent.defaultPrevented).toBe(true);
+    expect(consoleLog).not.toHaveBeenCalledWith("click", "API documentation");
+    expect(consoleLog).not.toHaveBeenCalledWith("close", {
+      index: 0,
+      text: "API documentation",
+    });
+    expect(menuButton).toHaveAttribute("aria-expanded", "true");
   });
 
   it("closes menu normally when preventDefault is not called", async () => {
