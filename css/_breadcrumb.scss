@@ -1,0 +1,46 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// Small breadcrumb variant (Carbon React `size="sm"` parity)
+/// @access private
+/// @group components
+@mixin breadcrumb-sm {
+  .#{$prefix}--breadcrumb--sm {
+    @include type-style('label-01');
+  }
+
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--link {
+    font: inherit;
+  }
+
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item {
+    margin-right: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item .#{$prefix}--link {
+    justify-content: center;
+    min-width: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item::after {
+    margin-left: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--breadcrumb--sm
+    .#{$prefix}--breadcrumb-item
+    .#{$prefix}--overflow-menu {
+    width: $carbon--spacing-05;
+    height: $carbon--spacing-05;
+    min-height: $carbon--spacing-05;
+
+    .#{$prefix}--overflow-menu__icon {
+      transform: translateY(3px);
+    }
+  }
+}
+
+@include exports('breadcrumb-sm') {
+  @include breadcrumb-sm;
+}
