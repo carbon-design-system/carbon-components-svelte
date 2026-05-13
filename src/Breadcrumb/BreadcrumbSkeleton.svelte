@@ -4,6 +4,12 @@
 
   /** Specify the number of breadcrumb items to render */
   export let count = 3;
+
+  /**
+   * Specify the size of the breadcrumb.
+   * @type {"sm" | "md"}
+   */
+  export let size = "md";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -13,6 +19,7 @@
   class:bx--skeleton={true}
   class:bx--breadcrumb={true}
   class:bx--breadcrumb--no-trailing-slash={noTrailingSlash}
+  class:bx--breadcrumb--sm={size === "sm"}
   {...$$restProps}
   on:click
   on:mouseover

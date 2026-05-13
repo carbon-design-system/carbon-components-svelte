@@ -3,7 +3,9 @@ import BreadcrumbAriaCurrent from "./Breadcrumb.ariaCurrent.test.svelte";
 import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
 import BreadcrumbLabelText from "./Breadcrumb.labelText.test.svelte";
 import BreadcrumbNoTrailingSlash from "./Breadcrumb.noTrailingSlash.test.svelte";
+import BreadcrumbSize from "./Breadcrumb.size.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
+import BreadcrumbSkeletonSm from "./Breadcrumb.skeleton-sm.test.svelte";
 import Breadcrumb from "./Breadcrumb.test.svelte";
 
 describe("Breadcrumb", () => {
@@ -15,6 +17,7 @@ describe("Breadcrumb", () => {
 
     const list = within(nav).getByRole("list");
     expect(list).toHaveClass("bx--breadcrumb");
+    expect(list).not.toHaveClass("bx--breadcrumb--sm");
     expect(list).not.toHaveClass("bx--breadcrumb--no-trailing-slash");
 
     const items = screen.getAllByRole("listitem");
@@ -139,5 +142,22 @@ describe("Breadcrumb", () => {
     expect(links[1]).toHaveAttribute("href", "/settings");
 
     expect(items[1]).toHaveClass("bx--breadcrumb-item--current");
+  });
+
+  it("renders with size sm", () => {
+    render(BreadcrumbSize);
+
+    const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
+    const list = within(nav).getByRole("list");
+    expect(list).toHaveClass("bx--breadcrumb");
+    expect(list).toHaveClass("bx--breadcrumb--sm");
+  });
+
+  it("renders skeleton with size sm", () => {
+    render(BreadcrumbSkeletonSm);
+
+    const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass("bx--breadcrumb--sm");
   });
 });
