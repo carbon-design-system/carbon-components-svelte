@@ -64,13 +64,14 @@
 
   add({ id, text, primaryFocus, disabled });
 
+  $: focused = $focusedId === id;
+
   afterUpdate(() => {
-    if (ref && primaryFocus) {
+    if (ref && focused) {
       ref.focus();
     }
   });
 
-  $: primaryFocus = $focusedId === id;
   $: buttonProps = {
     role: "menuitem",
     tabindex: "-1",
