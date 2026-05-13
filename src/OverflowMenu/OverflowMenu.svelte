@@ -240,7 +240,7 @@
   aria-haspopup="true"
   aria-expanded={open}
   aria-label={ariaLabel}
-  aria-controls={open ? menuId : undefined}
+  aria-controls={menuId}
   {id}
   class:bx--overflow-menu={true}
   class:bx--overflow-menu--open={open}
