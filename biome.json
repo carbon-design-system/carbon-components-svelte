@@ -120,7 +120,6 @@
       "linter": {
         "rules": {
           "correctness": {
-            "noUnusedVariables": "off",
             "noSelfAssign": "off"
           },
           "complexity": {
@@ -169,6 +168,16 @@
         "rules": {
           "style": {
             "noRestrictedGlobals": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/TreeView/TreeView.svelte"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off"
           }
         }
       }

@@ -69,7 +69,7 @@
     } else {
       try {
         value = JSON.parse(item);
-      } catch (e) {
+      } catch {
         value = item;
       }
     }
@@ -80,7 +80,7 @@
       if (event.key === key && event.newValue !== null) {
         try {
           value = JSON.parse(event.newValue);
-        } catch (e) {
+        } catch {
           value = event.newValue;
         }
         dispatch("update", { prevValue, value });
@@ -103,7 +103,7 @@
     } else {
       try {
         value = JSON.parse(item);
-      } catch (e) {
+      } catch {
         value = item;
       }
     }
