@@ -3,6 +3,7 @@ import type OverflowMenuComponent from "carbon-components-svelte/OverflowMenu/Ov
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
+import OverflowMenuAllDisabled from "./OverflowMenu.allDisabled.test.svelte";
 import OverflowMenuDisabledLink from "./OverflowMenu.disabledLink.test.svelte";
 import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
@@ -98,6 +99,20 @@ describe("OverflowMenu", () => {
     await user.keyboard("{Escape}");
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
     expect(spy).toHaveBeenCalledWith("close", null);
+  });
+
+  it("does not infinite-loop when all items are disabled", async () => {
+    render(OverflowMenuAllDisabled);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+    expect(menuButton).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowUp}");
+    await user.keyboard("{ArrowDown}");
+
+    expect(menuButton).toHaveAttribute("aria-expanded", "true");
   });
 
   it("closes when clicking outside", async () => {
