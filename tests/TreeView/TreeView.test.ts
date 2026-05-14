@@ -1682,6 +1682,32 @@ describe("TreeView autoCollapse", () => {
     });
   });
 
+  it("ArrowRight on an expanded parent focuses link-first-child treeitem", async () => {
+    const { container } = render(TreeViewProps, {
+      expandedIds: ["p"],
+      nodes: [
+        {
+          id: "p",
+          text: "Parent",
+          nodes: [
+            { id: "child-link", text: "Link Child", href: "/x" },
+            { id: "child-leaf", text: "Leaf Child" },
+          ],
+        },
+      ],
+    });
+
+    const parent = container.querySelector("#p");
+    expect.assert(parent instanceof HTMLElement);
+    parent.focus();
+
+    await user.keyboard("{ArrowRight}");
+
+    const linkChild = container.querySelector("#child-link");
+    expect(linkChild?.tagName).toBe("A");
+    expect(linkChild).toHaveFocus();
+  });
+
   describe("findParentTreeNode", () => {
     it("walks up to the nearest bx--tree-parent-node", () => {
       const tree = document.createElement("ul");

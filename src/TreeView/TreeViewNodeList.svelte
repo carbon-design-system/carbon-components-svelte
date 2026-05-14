@@ -27,6 +27,20 @@
     findParentTreeNode,
   } from "./TreeViewNode.svelte";
 
+  /**
+   * First focusable tree item in a subtree `ul` — handles both bare
+   * `li.bx--tree-node` rows and the link variant (`li[role="none"] > a`).
+   * @param {HTMLElement} groupUl
+   * @returns {HTMLElement | null}
+   */
+  function firstTreeItemInGroup(groupUl) {
+    const row = groupUl.firstElementChild;
+    if (!(row instanceof HTMLElement)) return null;
+    if (row.classList.contains("bx--tree-node")) return row;
+    const nested = row.querySelector(".bx--tree-node");
+    return nested instanceof HTMLElement ? nested : null;
+  }
+
   let ref = null;
   let refLabel = null;
   let prevActiveId = undefined;
@@ -130,9 +144,12 @@
 
       if (parent && e.key === "ArrowRight") {
         if (expanded) {
-          ref.lastChild.firstElementChild?.focus();
+          const groupUl = ref.lastElementChild;
+          if (groupUl instanceof HTMLElement) {
+            const next = firstTreeItemInGroup(groupUl);
+            next?.focus();
+          }
         } else {
-          expanded = true;
           expandNode(node, true);
           toggleNode(node);
         }
