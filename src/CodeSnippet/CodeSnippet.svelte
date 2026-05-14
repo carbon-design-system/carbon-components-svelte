@@ -289,8 +289,10 @@
   >
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
-      role={type === "single" ? "textbox" : undefined}
-      tabindex={type === "single" && !disabled ? "0" : undefined}
+      role="textbox"
+      tabindex={disabled ? undefined : "0"}
+      aria-readonly="true"
+      aria-multiline={type === "multi" ? "true" : undefined}
       aria-label={$$restProps["aria-label"] ?? copyLabel ?? "code-snippet"}
       class:bx--snippet-container={true}
       style:width="100%"

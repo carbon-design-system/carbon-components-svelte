@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
+import CodeSnippetDisabled from "./CodeSnippetDisabled.test.svelte";
 import CodeSnippetExpandable from "./CodeSnippetExpandable.test.svelte";
 import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte";
 import CodeSnippetInitialEvent from "./CodeSnippetInitialEvent.test.svelte";
@@ -186,6 +187,47 @@ describe("CodeSnippet", () => {
     expect(root).toBeInTheDocument();
     expect(root.tagName.toLowerCase()).toBe("div");
     expect(root).toHaveClass("bx--snippet--single");
+  });
+
+  // Regression: textbox role must declare aria-readonly since the
+  // container is non-editable (pairs textbox with WAI readonly pattern)
+  test("marks single variant as a readonly textbox", () => {
+    const { container } = render(CodeSnippetCopyButton);
+    const snippet = container.querySelector(".bx--snippet-container");
+    expect(snippet).toHaveAttribute("role", "textbox");
+    expect(snippet).toHaveAttribute("aria-readonly", "true");
+    expect(snippet).toHaveAttribute("tabindex", "0");
+    expect(snippet).not.toHaveAttribute("aria-multiline");
+  });
+
+  test("marks multi variant as a readonly multiline textbox", () => {
+    const { container } = render(CodeSnippetMultiline);
+    const snippet = container.querySelector(".bx--snippet-container");
+    expect(snippet).toHaveAttribute("role", "textbox");
+    expect(snippet).toHaveAttribute("aria-readonly", "true");
+    expect(snippet).toHaveAttribute("aria-multiline", "true");
+    expect(snippet).toHaveAttribute("tabindex", "0");
+  });
+
+  test("omits tabindex when disabled (single)", () => {
+    const { container } = render(CodeSnippetDisabled, {
+      props: { type: "single" },
+    });
+    const snippet = container.querySelector(".bx--snippet-container");
+    expect(snippet).toHaveAttribute("role", "textbox");
+    expect(snippet).toHaveAttribute("aria-readonly", "true");
+    expect(snippet).not.toHaveAttribute("tabindex");
+  });
+
+  test("omits tabindex when disabled (multi)", () => {
+    const { container } = render(CodeSnippetDisabled, {
+      props: { type: "multi" },
+    });
+    const snippet = container.querySelector(".bx--snippet-container");
+    expect(snippet).toHaveAttribute("role", "textbox");
+    expect(snippet).toHaveAttribute("aria-readonly", "true");
+    expect(snippet).toHaveAttribute("aria-multiline", "true");
+    expect(snippet).not.toHaveAttribute("tabindex");
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)
