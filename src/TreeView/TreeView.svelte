@@ -406,7 +406,13 @@
     }
   }
 
-  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
   import { writable } from "svelte/store";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
 
@@ -749,15 +755,24 @@
     }
   }
 
-  onMount(() => {
+  /** @type {ReadonlyArray<Node> | null} */
+  let prevNodesForFirstTab = null;
+
+  afterUpdate(() => {
+    if (!ref) return;
+    if (nodes === prevNodesForFirstTab) return;
+    prevNodesForFirstTab = nodes;
+
     const firstFocusableNode = ref.querySelector(
-      "li.bx--tree-node:not(.bx--tree-node--disabled)",
+      ".bx--tree-node:not(.bx--tree-node--disabled):not(.bx--tree-node--hidden)",
     );
 
-    if (firstFocusableNode != null) {
-      firstFocusableNode.tabIndex = "0";
+    if (firstFocusableNode instanceof HTMLElement) {
+      firstFocusableNode.tabIndex = 0;
     }
+  });
 
+  onMount(() => {
     if (ref && !treeWalker) {
       treeWalker = createTreeWalkerInstance(ref);
     }
