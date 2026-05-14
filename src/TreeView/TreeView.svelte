@@ -664,7 +664,14 @@
   function handleKeyDown(e) {
     e.stopPropagation();
 
-    if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
+    if (
+      e.key === "ArrowUp" ||
+      e.key === "ArrowDown" ||
+      e.key === "Home" ||
+      e.key === "End"
+    ) {
+      e.preventDefault();
+    }
 
     if (!treeWalker || !ref) return;
 
@@ -681,6 +688,41 @@
     }
     if (e.key === "ArrowDown") {
       nextFocusNode = treeWalker.nextNode();
+    }
+
+    if (e.key === "Home" || e.key === "End") {
+      /** @type {Array<string | number>} */
+      const nodeIds = [];
+
+      if (
+        multiselect &&
+        e.shiftKey &&
+        e.ctrlKey &&
+        treeItem instanceof HTMLElement &&
+        !treeItem.getAttribute("aria-disabled") &&
+        !treeItem.classList.contains("bx--tree-node--hidden")
+      ) {
+        const hid = treeItem.id;
+        if (hid) nodeIds.push(hid);
+      }
+      while (
+        e.key === "Home" ? treeWalker.previousNode() : treeWalker.nextNode()
+      ) {
+        nextFocusNode = treeWalker.currentNode;
+        if (
+          multiselect &&
+          e.shiftKey &&
+          e.ctrlKey &&
+          nextFocusNode instanceof Element &&
+          !nextFocusNode.getAttribute("aria-disabled") &&
+          !nextFocusNode.classList.contains("bx--tree-node--hidden")
+        ) {
+          const nid = nextFocusNode.id;
+          if (nid) nodeIds.push(nid);
+        }
+      }
+
+      selectedIds = selectedIds.concat(nodeIds);
     }
 
     if (nextFocusNode && nextFocusNode !== treeItem) {

@@ -23,6 +23,22 @@ function treeItemById(id: string | number): HTMLElement {
   return el;
 }
 
+/**
+ * `getByRole({ name })` matches descendant text (#3007).
+ * Pick the expandable parent row.
+ */
+function getNamedParentTreeitem(name: RegExp): HTMLElement {
+  const found = screen
+    .getAllByRole("treeitem", { name })
+    .find(
+      (n) =>
+        n instanceof HTMLElement &&
+        n.classList.contains("bx--tree-parent-node"),
+    );
+  expect.assert(found instanceof HTMLElement);
+  return found;
+}
+
 const testCases = [
   { name: "TreeView", component: TreeView },
   { name: "TreeView hierarchy", component: TreeViewHierarchy },
@@ -264,6 +280,29 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(analytics).toHaveFocus();
     expect(ibmEngine).not.toHaveFocus();
     expect(apacheSpark).not.toHaveFocus();
+  });
+
+  it("End key moves focus to the last non-disabled treeitem", async () => {
+    render(component);
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    firstItem.focus();
+
+    await user.keyboard("{End}");
+
+    expect(getNamedParentTreeitem(/Databases/)).toHaveFocus();
+  });
+
+  it("Home key moves focus to the first treeitem", async () => {
+    render(component);
+
+    const databases = getNamedParentTreeitem(/Databases/);
+    databases.focus();
+
+    await user.keyboard("{Home}");
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    expect(firstItem).toHaveFocus();
   });
 
   it("expands parent node with ArrowRight key", async () => {
