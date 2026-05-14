@@ -326,7 +326,7 @@
         <span class:bx--snippet-btn--text={true}>{expandText}</span>
         <ChevronDown
           class="bx--icon-chevron--down bx--snippet__icon"
-          aria-label={expandText}
+          aria-hidden="true"
         />
       </Button>
     {/if}
