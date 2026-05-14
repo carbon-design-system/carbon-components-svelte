@@ -29,13 +29,18 @@
     warning: WarningFilled,
     "warning-alt": WarningAltFilled,
   };
+
+  $: iconClass = [
+    notificationType === "toast" && "bx--toast-notification__icon",
+    notificationType === "inline" && "bx--inline-notification__icon",
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 <svelte:component
   this={icons[kind]}
   size={20}
   title={iconDescription}
-  class="{notificationType === 'toast' &&
-    'bx--toast-notification__icon'} {notificationType === 'inline' &&
-    'bx--inline-notification__icon'}"
+  class={iconClass}
 />

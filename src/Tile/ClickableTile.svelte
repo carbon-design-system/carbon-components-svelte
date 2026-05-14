@@ -17,13 +17,22 @@
   export let href = undefined;
 
   import Link from "../Link/Link.svelte";
+
+  $: linkClass = [
+    "bx--tile",
+    "bx--tile--clickable",
+    clicked && "bx--tile--is-clicked",
+    light && "bx--tile--light",
+    $$restProps.class,
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 <Link
   {...$$restProps}
   {disabled}
-  class="bx--tile bx--tile--clickable {clicked &&
-    'bx--tile--is-clicked'} {light && 'bx--tile--light'} {$$restProps.class}"
+  class={linkClass}
   {href}
   on:click
   on:click={() => {

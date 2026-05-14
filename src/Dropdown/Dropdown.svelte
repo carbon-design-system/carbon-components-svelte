@@ -451,6 +451,21 @@
       open = false;
     }
   }
+
+  $: dropdownListBoxClass = [
+    "bx--dropdown",
+    direction === "top" && "bx--list-box--up",
+    invalid && "bx--dropdown--invalid",
+    !invalid && warn && "bx--dropdown--warning",
+    open && "bx--dropdown--open",
+    size === "sm" && "bx--dropdown--sm",
+    size === "xl" && "bx--dropdown--xl",
+    inline && "bx--dropdown--inline",
+    disabled && "bx--dropdown--disabled",
+    light && "bx--dropdown--light",
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 <svelte:window
@@ -486,16 +501,7 @@
     {size}
     {name}
     aria-label={$$props["aria-label"]}
-    class="bx--dropdown
-      {direction === 'top' && 'bx--list-box--up'}
-      {invalid && 'bx--dropdown--invalid'}
-      {!invalid && warn && 'bx--dropdown--warning'}
-      {open && 'bx--dropdown--open'}
-      {size === 'sm' && 'bx--dropdown--sm'}
-      {size === 'xl' && 'bx--dropdown--xl'}
-      {inline && 'bx--dropdown--inline'}
-      {disabled && 'bx--dropdown--disabled'}
-      {light && 'bx--dropdown--light'}"
+    class={dropdownListBoxClass}
     on:click={({ target }) => {
       if (disabled) return;
       open = ref.contains(target) ? !open : false;

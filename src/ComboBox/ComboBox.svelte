@@ -534,6 +534,14 @@
   ) {
     highlightedIndex = -1;
   }
+
+  $: comboBoxListBoxClass = [
+    "bx--combo-box",
+    direction === "top" && "bx--list-box--up",
+    !invalid && warn && "bx--combo-box--warning",
+  ]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 <svelte:window
@@ -561,8 +569,7 @@
     </label>
   {/if}
   <ListBox
-    class="bx--combo-box {direction === 'top' &&
-      'bx--list-box--up'} {!invalid && warn && 'bx--combo-box--warning'}"
+    class={comboBoxListBoxClass}
     id={comboId}
     aria-label={ariaLabel}
     {disabled}
