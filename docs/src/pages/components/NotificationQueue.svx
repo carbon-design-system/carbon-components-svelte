@@ -28,9 +28,17 @@ The `top-right` position assumes usage of the [UIShell](/components/UIShell) com
 
 By default, the `id` prop is optional; a unique id will be generated for the notification. The queue [keys](https://svelte.dev/docs/svelte/each#Keyed-each-blocks) notifications by `id` for performance reasons.
 
-Notifications are deduplicated by `id`. If you add a notification with an `id` that already exists in the queue, the call is ignored. This prevents duplicate notifications from appearing.
+Notifications are deduplicated by `id`. If you add a notification with an `id` that already exists in the queue, the call is ignored. This prevents duplicate notifications from appearing. To change an existing notification in place, use [update](#update).
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueDeduplication" />
+
+## Update
+
+Use `update(id, patch)` to change an existing notification in place. The `patch` is merged into the matching notification, which is useful for reflecting progress (for example, transitioning a "loading" toast to "success" without removing and re-adding it).
+
+`update` returns `true` if a notification with the given `id` was found, `false` otherwise.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueUpdate" />
 
 ## Max notifications
 
