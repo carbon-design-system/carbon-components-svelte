@@ -59,6 +59,7 @@ describe("Breadcrumb", () => {
 
     const firstSkeleton = skeletons[0];
     expect(firstSkeleton).not.toHaveClass("bx--breadcrumb--no-trailing-slash");
+    expect(firstSkeleton).toHaveAttribute("aria-hidden", "true");
 
     const firstSkeletonItems = firstSkeleton.querySelectorAll(
       ".bx--breadcrumb-item",
