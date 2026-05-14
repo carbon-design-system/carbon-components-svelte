@@ -41,7 +41,7 @@
    * @param {HTMLElement | null} node
    * @returns {null | HTMLElement}
    */
-  function findParentTreeNode(node) {
+  export function findParentTreeNode(node) {
     if (node == null || !(node instanceof HTMLElement)) return null;
     if (node.classList.contains("bx--tree-parent-node")) return node;
     if (node.classList.contains("bx--tree-node-link-parent")) {

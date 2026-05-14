@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type TreeViewNodeComponent from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
+import { findParentTreeNode } from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
 import type TreeViewNodeListComponent from "carbon-components-svelte/TreeView/TreeViewNodeList.svelte";
 import type {
   ComponentEvents,
@@ -1661,6 +1662,36 @@ describe("TreeView autoCollapse", () => {
 
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
+  });
+
+  describe("findParentTreeNode", () => {
+    it("walks up to the nearest bx--tree-parent-node", () => {
+      const tree = document.createElement("ul");
+      tree.classList.add("bx--tree");
+
+      const parent = document.createElement("li");
+      parent.classList.add("bx--tree-node", "bx--tree-parent-node");
+      tree.appendChild(parent);
+
+      const group = document.createElement("ul");
+      parent.appendChild(group);
+
+      const child = document.createElement("li");
+      child.classList.add("bx--tree-node");
+      group.appendChild(child);
+
+      expect(findParentTreeNode(child.parentElement)).toBe(parent);
+    });
+
+    it("returns null when there is no enclosing parent tree node", () => {
+      const tree = document.createElement("ul");
+      tree.classList.add("bx--tree");
+      const leaf = document.createElement("li");
+      leaf.classList.add("bx--tree-node");
+      tree.appendChild(leaf);
+
+      expect(findParentTreeNode(leaf.parentElement)).toBeNull();
     });
   });
 
