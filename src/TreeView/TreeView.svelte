@@ -687,35 +687,53 @@
       nextFocusNode = treeWalker.nextNode();
     }
 
-    if (e.key === "Home" || e.key === "End") {
+    const isHomeOrEnd = e.key === "Home" || e.key === "End";
+    const isSelectAll =
+      (e.code === "KeyA" || e.key === "a" || e.key === "A") && e.ctrlKey;
+
+    if (isHomeOrEnd || isSelectAll) {
       /** @type {Array<string | number>} */
       const nodeIds = [];
 
-      if (
-        multiselect &&
-        e.shiftKey &&
-        e.ctrlKey &&
-        treeItem instanceof HTMLElement &&
-        !treeItem.getAttribute("aria-disabled") &&
-        !treeItem.classList.contains("bx--tree-node--hidden")
-      ) {
-        const hid = treeItem.id;
-        if (hid) nodeIds.push(hid);
-      }
-      while (
-        e.key === "Home" ? treeWalker.previousNode() : treeWalker.nextNode()
-      ) {
-        nextFocusNode = treeWalker.currentNode;
+      if (isHomeOrEnd) {
         if (
           multiselect &&
           e.shiftKey &&
           e.ctrlKey &&
-          nextFocusNode instanceof Element &&
-          !nextFocusNode.getAttribute("aria-disabled") &&
-          !nextFocusNode.classList.contains("bx--tree-node--hidden")
+          treeItem instanceof HTMLElement
         ) {
-          const nid = nextFocusNode.id;
-          if (nid) nodeIds.push(nid);
+          const hid = treeItem.id;
+          if (hid) nodeIds.push(hid);
+        }
+        while (
+          e.key === "Home" ? treeWalker.previousNode() : treeWalker.nextNode()
+        ) {
+          nextFocusNode = treeWalker.currentNode;
+          if (
+            multiselect &&
+            e.shiftKey &&
+            e.ctrlKey &&
+            nextFocusNode instanceof Element
+          ) {
+            const nid = nextFocusNode.id;
+            if (nid) nodeIds.push(nid);
+          }
+        }
+      }
+
+      if (isSelectAll) {
+        e.preventDefault();
+        for (const n of flattenedNodes) {
+          if (n.disabled) continue;
+          const el = ref?.querySelector(`[id="${CSS.escape(String(n.id))}"]`);
+          if (!el) continue;
+          if (
+            el.classList.contains("bx--tree-node--hidden") ||
+            isUnderCollapsedSubtree(el)
+          ) {
+            continue;
+          }
+          nodeIds.push(n.id);
         }
       }
 
