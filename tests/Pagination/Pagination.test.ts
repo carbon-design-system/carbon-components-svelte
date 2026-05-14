@@ -300,6 +300,32 @@ describe("Pagination", () => {
     expect(pagination).toBeInTheDocument();
   });
 
+  it("derives select ids with semantic suffixes from the root id", () => {
+    render(Pagination, {
+      props: { id: "page-1", totalItems: 30, pageSizes: [10, 20] },
+    });
+
+    const sizeSelect = document.getElementById(
+      "bx--pagination-select-page-1-sizes",
+    );
+    const pageSelect = document.getElementById(
+      "bx--pagination-select-page-1-pages",
+    );
+    const sizeLabel = document.getElementById(
+      "bx--pagination-select-page-1-sizes-label",
+    );
+
+    expect(sizeSelect).toBeInTheDocument();
+    expect(pageSelect).toBeInTheDocument();
+    expect(sizeLabel).toHaveAttribute(
+      "for",
+      "bx--pagination-select-page-1-sizes",
+    );
+    expect(
+      document.getElementById("bx--pagination-select-page-12"),
+    ).not.toBeInTheDocument();
+  });
+
   it("should apply custom class", () => {
     render(Pagination, {
       props: { customClass: "custom-pagination" },
