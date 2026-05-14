@@ -188,6 +188,87 @@ describe("NotificationQueue", () => {
     expect(removed).toBe(false);
   });
 
+  it("should update an existing notification in place", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    const id = getQueue(component).add({
+      id: "progress",
+      kind: "info",
+      title: "Uploading...",
+      subtitle: "0%",
+    });
+    await tick();
+
+    expect(screen.getByText("Uploading...")).toBeInTheDocument();
+    expect(screen.getByText("0%")).toBeInTheDocument();
+
+    const updated = getQueue(component).update(id, {
+      kind: "success",
+      title: "Upload complete",
+      subtitle: "100%",
+    });
+    await tick();
+
+    expect(updated).toBe(true);
+    expect(screen.queryByText("Uploading...")).not.toBeInTheDocument();
+    expect(screen.queryByText("0%")).not.toBeInTheDocument();
+    expect(screen.getByText("Upload complete")).toBeInTheDocument();
+    expect(screen.getByText("100%")).toBeInTheDocument();
+    expect(screen.getAllByRole("alert")).toHaveLength(1);
+  });
+
+  it("should merge patch into existing notification on update", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    const id = getQueue(component).add({
+      id: "merge",
+      kind: "info",
+      title: "Title",
+      subtitle: "Subtitle",
+    });
+    await tick();
+
+    getQueue(component).update(id, { kind: "success" });
+    await tick();
+
+    expect(screen.getByText("Title")).toBeInTheDocument();
+    expect(screen.getByText("Subtitle")).toBeInTheDocument();
+  });
+
+  it("should ignore id changes on update", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    const id = getQueue(component).add({
+      id: "original",
+      kind: "info",
+      title: "Original",
+    });
+    await tick();
+
+    const updated = getQueue(component).update(id, {
+      id: "different",
+      title: "Updated",
+    });
+    await tick();
+
+    expect(updated).toBe(true);
+    expect(screen.getByText("Updated")).toBeInTheDocument();
+
+    const removed = getQueue(component).remove("original");
+    await tick();
+    expect(removed).toBe(true);
+    expect(screen.queryByText("Updated")).not.toBeInTheDocument();
+  });
+
+  it("should return false when updating non-existent notification", () => {
+    const { component } = render(NotificationQueueTest);
+
+    const updated = getQueue(component).update("non-existent-id", {
+      title: "New title",
+    });
+    expect(updated).toBe(false);
+  });
+
   it("should clear all notifications", async () => {
     const { component } = render(NotificationQueueTest);
 

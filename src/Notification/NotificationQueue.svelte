@@ -51,7 +51,8 @@
 
   /**
    * Add a notification to the queue.
-   * If a notification with the same id exists, the call is ignored.
+   * If a notification with the same id already exists, the call is ignored.
+   * To change an existing notification in place, use `update`.
    * Returns the notification id (either the provided id or a generated one).
    * @type {(notification: NotificationData) => string}
    */
@@ -79,6 +80,21 @@
     notifications = notifications;
 
     return id;
+  }
+
+  /**
+   * Update an existing notification by id, merging `patch` into it.
+   * The id of the notification cannot be changed.
+   * Returns true if the notification was found and updated, false otherwise.
+   * @type {(id: string, patch: Partial<NotificationData>) => boolean}
+   */
+  export function update(id, patch) {
+    const index = notifications.findIndex((n) => n.id === id);
+    if (index === -1) return false;
+
+    notifications[index] = { ...notifications[index], ...patch, id };
+    notifications = notifications;
+    return true;
   }
 
   /**
