@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type TreeViewNodeComponent from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
@@ -126,9 +126,15 @@ describe.each(testCases)("$name", ({ component }) => {
 
     expect(getAllExpandedItems()).toHaveLength(2);
 
+    const tree = screen.getByRole("tree");
+    const expandedItems = within(tree).getAllByRole("treeitem", {
+      expanded: true,
+    });
     expect(
-      screen.getByText("IBM Analytics Engine").parentNode?.parentNode,
-    ).toHaveAttribute("aria-expanded", "true");
+      expandedItems.some((el) =>
+        el.textContent?.includes("IBM Analytics Engine"),
+      ),
+    ).toBe(true);
   });
 
   it("can collapse all nodes", async () => {
@@ -1689,6 +1695,32 @@ describe("TreeView autoCollapse", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
+  });
+
+  it("wires aria-owns and aria-labelledby for expanded subtrees", () => {
+    const { container } = render(TreeViewProps, {
+      expandedIds: ["parent"],
+      nodes: [
+        {
+          id: "parent",
+          text: "Top Parent",
+          nodes: [{ id: "child", text: "Child" }],
+        },
+      ],
+    });
+
+    const parent = container.querySelector("#parent");
+    const subtreeId = parent?.getAttribute("aria-owns");
+    expect(subtreeId).toBe("parent-subtree");
+
+    const subtree = container.querySelector(`#${subtreeId}`);
+    expect(subtree?.getAttribute("role")).toBe("group");
+
+    const labelledBy = subtree?.getAttribute("aria-labelledby");
+    expect(labelledBy).toBe("parent__label");
+
+    const labelEl = container.querySelector(`#${labelledBy}`);
+    expect(labelEl?.textContent?.trim()).toBe("Top Parent");
   });
 
   it("ArrowRight on an expanded parent focuses link-first-child treeitem", async () => {

@@ -116,6 +116,7 @@
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
     aria-expanded={expanded}
+    aria-owns={`${id}-subtree`}
     on:click|stopPropagation={(e) => {
       if (disabled) return;
       clickNode(node, e);
@@ -192,11 +193,15 @@
       </span>
       <span class:bx--tree-node__label__details={true}>
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <slot {node} />
+        <span id={`${id}__label`} class:bx--tree-node__label__text={true}>
+          <slot {node} />
+        </span>
       </span>
     </div>
     <ul
+      id={`${id}-subtree`}
       role="group"
+      aria-labelledby={`${id}__label`}
       class:bx--tree-node__children={true}
       class:bx--tree-node--hidden={!expanded}
     >
