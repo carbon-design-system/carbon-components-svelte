@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Icon = any} Icon
+   * @template [Icon=any]
    */
 
   /** Set to `true` to render a `button` element instead of a `div` */

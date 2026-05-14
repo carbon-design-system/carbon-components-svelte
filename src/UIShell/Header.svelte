@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Icon = any} Icon
+   * @template [Icon=any]
    */
 
   /** Set to `false` to hide the side nav by default */

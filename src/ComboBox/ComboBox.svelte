@@ -1,6 +1,9 @@
 <script>
   /**
-   * @generics {Item extends ComboBoxItem<any> = ComboBoxItem<any>} Item
+   * @template {ComboBoxItem<any>} [Item=ComboBoxItem<any>]
+   */
+
+  /**
    * @typedef {object} ComboBoxItem<Id=any>
    * @property {Id} id
    * @property {string} text

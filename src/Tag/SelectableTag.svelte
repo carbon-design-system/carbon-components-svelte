@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Icon = any} Icon
+   * @template [Icon=any]
    * @restProps {button}
    * @event {{ selected: boolean }} "change"
    */

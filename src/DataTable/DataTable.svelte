@@ -1,6 +1,9 @@
 <script>
   /**
-   * @generics {Row extends DataTableRow = DataTableRow} Row
+   * @template {DataTableRow} [Row=DataTableRow]
+   */
+
+  /**
    * @typedef {any} DataTableValue
    * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
    * @typedef {(

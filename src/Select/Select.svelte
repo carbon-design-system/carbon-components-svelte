@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Value extends string | number = string | number} Value
+   * @template {string | number} [Value=string | number]
    * @event {Value} update The selected value.
    */
 

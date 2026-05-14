@@ -1,6 +1,9 @@
 <script>
   /**
-   * @generics {Item extends DropdownItem<any> = DropdownItem<any>} Item
+   * @template {DropdownItem<any>} [Item=DropdownItem<any>]
+   */
+
+  /**
    * @typedef {object} DropdownItem<Id=any>
    * @property {Id} id
    * @property {string} text

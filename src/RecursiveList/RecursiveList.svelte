@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Node extends RecursiveListNode = RecursiveListNode} Node
+   * @template {RecursiveListNode} [Node=RecursiveListNode]
    * @typedef {object} RecursiveListNode
    * @property {string} [text] - Node text content
    * @property {string} [href] - Node link URL

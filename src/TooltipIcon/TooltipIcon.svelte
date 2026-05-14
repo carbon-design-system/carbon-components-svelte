@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Icon = any} Icon
+   * @template [Icon=any]
    * @event {null} open
    * @event {null} close
    */

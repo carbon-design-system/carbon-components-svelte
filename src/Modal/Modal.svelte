@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Icon = any} Icon
+   * @template [Icon=any]
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "close-button"} trigger
