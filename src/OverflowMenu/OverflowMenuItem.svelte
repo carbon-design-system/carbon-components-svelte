@@ -77,6 +77,7 @@
     class: "bx--overflow-menu-options__btn",
     type: href ? undefined : "button",
     disabled: href ? undefined : disabled,
+    "aria-disabled": href && disabled ? "true" : undefined,
     href: href ? href : undefined,
     target: href && target ? target : undefined,
     rel:
@@ -90,6 +91,11 @@
 
   function handleClick(e) {
     e.stopPropagation();
+
+    if (disabled) {
+      e.preventDefault();
+      return;
+    }
 
     const shouldContinue = dispatch("click", e, { cancelable: true });
 
