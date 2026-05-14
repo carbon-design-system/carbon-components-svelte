@@ -24,6 +24,19 @@ function treeItemById(id: string | number): HTMLElement {
 }
 
 /**
+ * Primary row label: parent markup uses `.bx--tree-node__label__text`.
+ * Leaves use `.bx--tree-node__label` only (#3007).
+ */
+function treeitemPrimaryLabel(el: HTMLElement): string {
+  const labelled = el.querySelector(".bx--tree-node__label__text");
+  if (labelled?.textContent) {
+    return labelled.textContent.replace(/\s+/g, " ").trim();
+  }
+  const label = el.querySelector(".bx--tree-node__label");
+  return label?.textContent?.replace(/\s+/g, " ").trim() ?? "";
+}
+
+/**
  * `getByRole({ name })` matches descendant text (#3007).
  * Pick the expandable parent row.
  */
@@ -465,6 +478,33 @@ describe("TreeView Props", () => {
       expect(label.style.paddingLeft).toBe("1rem");
       expect(label.style.marginLeft).toBe("-1rem");
     });
+  });
+
+  it("Ctrl+A selects every non-disabled visible row in multiselect mode", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    aiItem.focus();
+
+    await user.keyboard("{Control>}a{/Control}");
+
+    const selectedItems = screen.getAllByRole("treeitem", { selected: true });
+    const names = selectedItems.map(treeitemPrimaryLabel).sort();
+    expect(names).toEqual([
+      "AI / Machine learning",
+      "Analytics",
+      "Blockchain",
+      "Databases",
+    ]);
+    // Integration is disabled and excluded.
+    expect(
+      screen.getByRole("treeitem", { name: /Integration/ }),
+    ).toHaveAttribute("aria-disabled", "true");
   });
 
   it("handles multiple selectedIds with multiselect", () => {
