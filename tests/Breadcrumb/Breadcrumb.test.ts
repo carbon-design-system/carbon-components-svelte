@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import BreadcrumbAriaCurrent from "./Breadcrumb.ariaCurrent.test.svelte";
 import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
 import BreadcrumbNoTrailingSlash from "./Breadcrumb.noTrailingSlash.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
@@ -91,6 +92,14 @@ describe("Breadcrumb", () => {
     expect(links[2]).toHaveTextContent("2019");
     expect(links[2]).toHaveAttribute("href", "/reports/2019");
     expect(items[2]).toHaveClass("bx--breadcrumb-item--current");
+  });
+
+  it("applies current class when aria-current='page' is set alongside isCurrentPage", () => {
+    render(BreadcrumbAriaCurrent);
+
+    const items = screen.getAllByRole("listitem");
+    expect(items[2]).toHaveClass("bx--breadcrumb-item--current");
+    expect(items[2]).toHaveAttribute("aria-current", "page");
   });
 
   it("updates when dynamic items change", async () => {

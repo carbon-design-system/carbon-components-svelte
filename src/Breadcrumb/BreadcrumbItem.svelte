@@ -30,8 +30,8 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <li
   class:bx--breadcrumb-item={true}
-  class:bx--breadcrumb-item--current={isCurrentPage &&
-    $$restProps["aria-current"] !== "page"}
+  class:bx--breadcrumb-item--current={isCurrentPage ||
+    $$restProps["aria-current"] === "page"}
   {...$$restProps}
   on:click
   on:mouseover
