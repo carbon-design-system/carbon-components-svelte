@@ -1613,6 +1613,23 @@ describe("TreeView autoCollapse", () => {
     expect(folder1).toHaveAttribute("aria-expanded", "false");
   });
 
+  it("ArrowLeft on a collapsed parent moves focus to its ancestor", async () => {
+    render(TreeViewAutoCollapse, { autoCollapse: false });
+
+    const folder3 = screen.getByRole("treeitem", { name: /Folder 3/ });
+    await user.click(getToggleButton(folder3));
+
+    const subfolder1 = within(folder3).getByRole("treeitem", {
+      name: /^Subfolder 1\b/,
+    });
+    expect(subfolder1).toHaveAttribute("aria-expanded", "false");
+
+    subfolder1.focus();
+    await user.keyboard("{ArrowLeft}");
+
+    expect(folder3).toHaveFocus();
+  });
+
   it("works when expanding via Enter/Space key", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: true });
 

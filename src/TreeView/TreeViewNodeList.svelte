@@ -22,7 +22,10 @@
 
   import { afterUpdate, getContext } from "svelte";
   import CaretDown from "../icons/CaretDown.svelte";
-  import TreeViewNode, { computeTreeLeafDepth } from "./TreeViewNode.svelte";
+  import TreeViewNode, {
+    computeTreeLeafDepth,
+    findParentTreeNode,
+  } from "./TreeViewNode.svelte";
 
   let ref = null;
   let refLabel = null;
@@ -116,9 +119,13 @@
       }
 
       if (parent && e.key === "ArrowLeft") {
-        expanded = false;
-        expandNode(node, false);
-        toggleNode(node);
+        if (expanded) {
+          expandNode(node, false);
+          toggleNode(node);
+        } else {
+          const parentNode = findParentTreeNode(ref.parentElement);
+          if (parentNode instanceof HTMLElement) parentNode.focus();
+        }
       }
 
       if (parent && e.key === "ArrowRight") {
