@@ -16,7 +16,7 @@
 
 <Form
   {...$$restProps}
-  class="bx--form--fluid {$$restProps.class}"
+  class={["bx--form--fluid", $$restProps.class].filter(Boolean).join(" ")}
   on:click
   on:keydown
   on:mouseover
