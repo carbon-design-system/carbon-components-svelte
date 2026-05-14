@@ -168,14 +168,14 @@
   <div class:bx--pagination__left={true}>
     {#if !pageSizeInputDisabled}
       <label
-        id="bx--pagination-select-{id}-count-label"
-        for="bx--pagination-select-{id}"
+        id="bx--pagination-select-{id}-sizes-label"
+        for="bx--pagination-select-{id}-sizes"
         class:bx--pagination__text={true}
       >
         {itemsPerPageText}
       </label>
       <Select
-        id="bx--pagination-select-{id}"
+        id="bx--pagination-select-{id}-sizes"
         class="bx--select__item-count"
         hideLabel
         noLabel
@@ -205,7 +205,7 @@
   <div class:bx--pagination__right={true}>
     {#if !pageInputDisabled}
       <Select
-        id="bx--pagination-select-{id + 2}"
+        id="bx--pagination-select-{id}-pages"
         class="bx--select__page-number"
         labelText="Page number, of {totalPages} pages"
         inline
