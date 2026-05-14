@@ -42,6 +42,40 @@ describe("ContextMenu", () => {
     expect(consoleLog).toHaveBeenCalledWith("open", expect.any(HTMLElement));
   });
 
+  it("should dispatch open only when open transitions to true", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { rerender } = render(ContextMenu, {
+      props: { open: true, x: 100, y: 100 },
+    });
+
+    const openCallsAfterMount = consoleLog.mock.calls.filter(
+      (call) => call[0] === "open",
+    ).length;
+
+    rerender({ open: true, x: 150, y: 150 });
+    rerender({ open: true, x: 200, y: 200 });
+
+    const openCallsAfterRerender = consoleLog.mock.calls.filter(
+      (call) => call[0] === "open",
+    ).length;
+
+    expect(openCallsAfterRerender).toBe(openCallsAfterMount);
+  });
+
+  it("should dispatch close only when open transitions to false", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContextMenu, { props: { open: false } });
+
+    await user.keyboard("{Escape}");
+    await user.click(document.body);
+
+    const closeCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "close",
+    ).length;
+
+    expect(closeCalls).toBe(0);
+  });
+
   it("should close on escape key", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ContextMenu, { props: { open: true } });
