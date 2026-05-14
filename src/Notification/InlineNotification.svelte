@@ -32,7 +32,7 @@
    * Specify the ARIA label for the status icon.
    * @type {string}
    * */
-  export let statusIconDescription = `${kind} icon`;
+  export let statusIconDescription = undefined;
 
   /** Specify the ARIA label for the close button */
   export let closeButtonDescription = "Close notification";
@@ -60,6 +60,8 @@
       open = false;
     }
   }
+
+  $: defaultStatusIconDescription = `${kind} icon`;
 
   $: if (open && timeout) {
     clearTimeout(timeoutId);
@@ -98,7 +100,7 @@
       <NotificationIcon
         notificationType="inline"
         {kind}
-        iconDescription={statusIconDescription}
+        iconDescription={statusIconDescription ?? defaultStatusIconDescription}
       />
       <div class:bx--inline-notification__text-wrapper={true}>
         {#if title || $$slots.titleChildren}

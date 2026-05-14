@@ -196,6 +196,22 @@ describe("InlineNotification", () => {
     expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
   });
 
+  it("default statusIconDescription should track reactive kind changes", async () => {
+    const { rerender } = render(InlineNotificationTest, {
+      props: { kind: "info" },
+    });
+
+    expect(
+      document.querySelector(".bx--inline-notification__icon title"),
+    ).toHaveTextContent("info icon");
+
+    await rerender({ kind: "success" });
+
+    expect(
+      document.querySelector(".bx--inline-notification__icon title"),
+    ).toHaveTextContent("success icon");
+  });
+
   it("should use custom role", () => {
     render(InlineNotificationTest, {
       props: { role: "status" },

@@ -32,7 +32,7 @@
    * Specify the ARIA label for the status icon.
    * @type {string}
    * */
-  export let statusIconDescription = `${kind} icon`;
+  export let statusIconDescription = undefined;
 
   /** Specify the ARIA label for the close button */
   export let closeButtonDescription = "Close notification";
@@ -79,6 +79,8 @@
     };
   });
 
+  $: defaultStatusIconDescription = `${kind} icon`;
+
   $: if (typeof window !== "undefined") {
     /**
      * Clear the timer if {@link timeout} or {@link open} changes.
@@ -113,7 +115,10 @@
     on:mouseenter
     on:mouseleave
   >
-    <NotificationIcon {kind} iconDescription={statusIconDescription} />
+    <NotificationIcon
+      {kind}
+      iconDescription={statusIconDescription ?? defaultStatusIconDescription}
+    />
     <div class:bx--toast-notification__details={true}>
       <h3 class:bx--toast-notification__title={true}>
         <slot name="titleChildren">{title}</slot>
