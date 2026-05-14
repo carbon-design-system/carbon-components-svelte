@@ -108,7 +108,7 @@
   {tabindex}
   {disabled}
   {...$$restProps}
-  searchClass="{classes} {$$restProps.class}"
+  searchClass={[classes, $$restProps.class].filter(Boolean).join(" ")}
   bind:ref
   bind:value
   on:clear
