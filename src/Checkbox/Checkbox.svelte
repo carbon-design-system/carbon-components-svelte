@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {T = any} T
+   * @template [T=any]
    * @restProps {div}
    * @event {boolean} check
    */

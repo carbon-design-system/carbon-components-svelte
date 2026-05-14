@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Value extends string = string} Value
+   * @template {string} [Value=string]
    * @event {Value} change
    */
 

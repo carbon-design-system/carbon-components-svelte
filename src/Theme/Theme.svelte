@@ -16,7 +16,10 @@
    */
 
   /**
-   * @generics {Tokens = Record<string, any>} Tokens
+   * @template [Tokens=Record<string, any>]
+   */
+
+  /**
    * @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme
    * @event update
    * @type {object}

@@ -1,6 +1,7 @@
 <script>
   /**
-   * @generics {T = any, Icon = any} T,Icon
+   * @template [T=any]
+   * @template [Icon=any]
    * @event {null} expand
    * @event {null} collapse
    * @restProps {input}

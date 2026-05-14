@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {T = any} T
+   * @template [T=any]
    * @event {null} save
    * @event update - Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab/window.
    * @property {T} prevValue

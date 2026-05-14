@@ -4,7 +4,7 @@
    */
 
   /**
-   * @generics {Icon = any} Icon
+   * @template [Icon=any]
    */
 
   /**

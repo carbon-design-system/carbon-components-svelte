@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Id = any} Id
+   * @template [Id=any]
    * @event {null} cancel
    */
 

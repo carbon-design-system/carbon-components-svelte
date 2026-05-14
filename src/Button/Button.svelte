@@ -1,6 +1,9 @@
 <script>
   /**
-   * @generics {Icon = any} Icon
+   * @template [Icon=any]
+   */
+
+  /**
    * @extends {"./ButtonSkeleton.svelte"} ButtonSkeletonProps
    * @restProps {button | a | div}
    * @slot {{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }}

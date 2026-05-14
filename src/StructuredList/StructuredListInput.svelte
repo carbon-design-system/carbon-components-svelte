@@ -1,6 +1,6 @@
 <script>
   /**
-   * @generics {Value extends string = string} Value
+   * @template {string} [Value=string]
    */
 
   /** Set to `true` to check the input */
