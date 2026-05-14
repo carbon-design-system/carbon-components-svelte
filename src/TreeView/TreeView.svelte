@@ -26,6 +26,10 @@
     return null;
   }
 
+  function isUnderCollapsedSubtree(el) {
+    return Boolean(el.closest("ul.bx--tree-node--hidden"));
+  }
+
   /**
    * Creates a TreeWalker instance for keyboard navigation.
    * @param {HTMLElement} root - The root element to traverse
@@ -34,14 +38,17 @@
   function createTreeWalkerInstance(root) {
     return document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
       acceptNode: (node) => {
-        if (node.classList.contains("bx--tree-node--disabled"))
+        if (!(node instanceof Element)) return NodeFilter.FILTER_SKIP;
+        if (
+          node.classList.contains("bx--tree-node--disabled") ||
+          node.classList.contains("bx--tree-node--hidden")
+        ) {
           return NodeFilter.FILTER_REJECT;
+        }
         if (node.matches("li.bx--tree-node")) {
-          // Collapsed branches keep children in the DOM under
-          // `ul.bx--tree-node--hidden`; skip them so ArrowUp/ArrowDown follow
-          // visible order only (matches prior unmount behavior).
-          if (node.closest("ul.bx--tree-node--hidden"))
-            return NodeFilter.FILTER_REJECT;
+          // Children stay mounted under a hidden subtree `ul`; skip so Arrow keys
+          // follow visible rows only (same as when branches were unmounted).
+          if (isUnderCollapsedSubtree(node)) return NodeFilter.FILTER_REJECT;
           return NodeFilter.FILTER_ACCEPT;
         }
         return NodeFilter.FILTER_SKIP;
