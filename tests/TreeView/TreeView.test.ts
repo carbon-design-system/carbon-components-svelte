@@ -39,6 +39,9 @@ describe.each(testCases)("$name", ({ component }) => {
     return screen.getAllByRole("treeitem", { expanded: true });
   };
 
+  const getItemByName = (name: string | RegExp): HTMLElement =>
+    screen.getByRole("treeitem", { name }) as HTMLElement;
+
   it("can select a node", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
@@ -218,6 +221,26 @@ describe.each(testCases)("$name", ({ component }) => {
 
     const disabledNode = treeItemById(14);
     expect(disabledNode).not.toHaveFocus();
+  });
+
+  it("skips descendants under collapsed subtree in keyboard navigation", async () => {
+    render(component);
+
+    const firstItem = treeItemById(0);
+    const analytics = treeItemById(1);
+    const ibmEngine = treeItemById(2); // descendant of collapsed Analytics
+    const apacheSpark = treeItemById(3); // leaf, descendant of collapsed IBM Engine
+
+    // Both descendants stay in the DOM but inside `ul.bx--tree-node--hidden`.
+    expect(ibmEngine.closest("ul.bx--tree-node--hidden")).not.toBeNull();
+    expect(apacheSpark.closest("ul.bx--tree-node--hidden")).not.toBeNull();
+
+    firstItem.focus();
+    await user.keyboard("{ArrowDown}");
+
+    expect(analytics).toHaveFocus();
+    expect(ibmEngine).not.toHaveFocus();
+    expect(apacheSpark).not.toHaveFocus();
   });
 
   it("expands parent node with ArrowRight key", async () => {
