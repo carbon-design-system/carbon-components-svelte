@@ -21,7 +21,7 @@ describe("OverflowMenu", () => {
     render(OverflowMenu);
 
     const menuButton = screen.getByRole("button");
-    expect(menuButton).toHaveAttribute("aria-haspopup", "true");
+    expect(menuButton).toHaveAttribute("aria-haspopup", "menu");
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
 
     await user.click(menuButton);

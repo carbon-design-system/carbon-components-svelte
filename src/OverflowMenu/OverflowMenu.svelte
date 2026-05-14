@@ -237,7 +237,7 @@
 <button
   bind:this={buttonRef}
   type="button"
-  aria-haspopup="true"
+  aria-haspopup="menu"
   aria-expanded={open}
   aria-label={ariaLabel}
   aria-controls={open ? menuId : undefined}
