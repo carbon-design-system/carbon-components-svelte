@@ -189,6 +189,24 @@ describe("ContentSwitcher", () => {
     expect(outerTabs[0]).toHaveClass("bx--content-switcher--selected");
   });
 
+  it("Home/End jump to first/last tab", async () => {
+    render(ContentSwitcher);
+
+    const tabs = screen.getAllByRole("tab");
+    await user.tab();
+    expect(document.activeElement).toBe(tabs[0]);
+
+    await user.keyboard("{End}");
+    expect(document.activeElement).toBe(tabs[2]);
+    expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
+    expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
+
+    await user.keyboard("{Home}");
+    expect(document.activeElement).toBe(tabs[0]);
+    expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+    expect(tabs[2]).not.toHaveClass("bx--content-switcher--selected");
+  });
+
   it("respects disabled state", async () => {
     render(ContentSwitcherDisabled);
 
@@ -386,6 +404,23 @@ describe("ContentSwitcher", () => {
       expect(document.activeElement).toBe(tabs[2]);
 
       await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[0]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("Home/End move focus without changing selection", async () => {
+      render(ContentSwitcherSelectionMode);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+      expect(document.activeElement).toBe(tabs[0]);
+
+      await user.keyboard("{End}");
+      expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[2]).not.toHaveClass("bx--content-switcher--selected");
+
+      await user.keyboard("{Home}");
       expect(document.activeElement).toBe(tabs[0]);
       expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
     });
