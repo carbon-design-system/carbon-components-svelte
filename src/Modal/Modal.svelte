@@ -253,6 +253,11 @@
         e.key === "Enter" &&
         !primaryButtonDisabled
       ) {
+        const target = e.target;
+        const tag = target?.tagName;
+        if (tag === "TEXTAREA" || tag === "SELECT" || target?.isContentEditable) {
+          return;
+        }
         if (formId && primaryButtonRef) {
           primaryButtonRef.click();
         } else {

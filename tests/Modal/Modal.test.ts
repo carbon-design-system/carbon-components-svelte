@@ -8,6 +8,7 @@ import ModalFocusReturnTest from "./ModalFocusReturn.test.svelte";
 import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
 import ModalFormIdTest from "./ModalFormId.test.svelte";
 import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
+import ModalTextareaEnterTest from "./ModalTextareaEnter.test.svelte";
 
 describe("Modal", () => {
   beforeEach(() => {
@@ -745,6 +746,28 @@ describe("Modal", () => {
       expect(submitHandler).toHaveBeenCalledTimes(1);
       expect(clickPrimaryHandler).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it("should NOT dispatch submit when pressing Enter inside a textarea", async () => {
+    const submitHandler = vi.fn();
+    const clickPrimaryHandler = vi.fn();
+    render(ModalTextareaEnterTest, {
+      props: {
+        open: true,
+        shouldSubmitOnEnter: true,
+        onsubmit: submitHandler,
+        onclickbuttonprimary: clickPrimaryHandler,
+      },
+    });
+
+    const textarea = screen.getByTestId("modal-textarea");
+    expect.assert(textarea instanceof HTMLTextAreaElement);
+    textarea.focus();
+    await user.keyboard("{Enter}");
+    await tick();
+
+    expect(submitHandler).not.toHaveBeenCalled();
+    expect(clickPrimaryHandler).not.toHaveBeenCalled();
   });
 
   describe("Generics", () => {
