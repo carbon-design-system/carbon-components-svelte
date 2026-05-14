@@ -24,7 +24,11 @@
   /** Set to `true` to use the danger variant */
   export let danger = false;
 
-  /** Set to `true` to enable alert mode */
+  /**
+   * Set to `true` to render the modal as an alert dialog.
+   * Sets `role="alertdialog"` (default: `"dialog"`) and
+   * `aria-describedby` to the modal body.
+   */
   export let alert = false;
 
   /** Set to `true` to use the passive variant */
@@ -285,8 +289,8 @@
   <div
     bind:this={innerModal}
     tabindex="-1"
-    role={alert ? (passiveModal ? "alert" : "alertdialog") : "dialog"}
-    aria-describedby={alert && !passiveModal ? modalBodyId : undefined}
+    role={alert ? "alertdialog" : "dialog"}
+    aria-describedby={alert ? modalBodyId : undefined}
     aria-modal="true"
     aria-label={ariaLabel}
     class:bx--modal-container={true}
