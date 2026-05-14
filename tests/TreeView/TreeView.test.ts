@@ -213,6 +213,33 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
   });
 
+  it("re-applies tabindex=0 to the new first focusable when nodes change", async () => {
+    const { rerender } = render(TreeViewProps, {
+      nodes: [
+        { id: "a", text: "Alpha" },
+        { id: "b", text: "Beta" },
+      ],
+    });
+
+    expect(screen.getByRole("treeitem", { name: /Alpha/ })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+
+    await rerender({
+      nodes: [
+        { id: "x", text: "Xray" },
+        { id: "y", text: "Yankee" },
+      ],
+    });
+
+    expect(screen.getByRole("treeitem", { name: /Xray/ })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+    expect(screen.queryByRole("treeitem", { name: /Alpha/ })).toBeNull();
+  });
+
   it("moves tabindex=0 along with focus (roving tabindex)", async () => {
     render(component);
 
