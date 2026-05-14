@@ -57,4 +57,14 @@ describe("ClickableTile", () => {
     expect(disabledTile).toHaveAttribute("aria-disabled", "true");
     expect(disabledTile).toHaveClass("bx--tile--clickable");
   });
+
+  it("should not toggle clicked state when disabled", async () => {
+    render(ClickableTile);
+
+    const disabledTile = screen.getByTestId("disabled-test");
+    expect(disabledTile).not.toHaveClass("bx--tile--is-clicked");
+
+    await user.click(disabledTile);
+    expect(disabledTile).not.toHaveClass("bx--tile--is-clicked");
+  });
 });
