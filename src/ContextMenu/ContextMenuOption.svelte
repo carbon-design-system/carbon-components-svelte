@@ -296,7 +296,7 @@
   aria-haspopup={subOptions ? true : undefined}
   aria-expanded={subOptions ? submenuOpen : undefined}
   class:bx--menu-option={true}
-  class:bx--menu-option--disabled={true}
+  class:bx--menu-option--disabled={disabled}
   class:bx--menu-option--active={subOptions && submenuOpen}
   class:bx--menu-option--danger={!subOptions && kind === "danger"}
   {indented}

@@ -387,6 +387,28 @@ describe("ContextMenu", () => {
     });
   });
 
+  describe("ContextMenuOption disabled", () => {
+    it("should apply disabled class only when disabled is true", () => {
+      render(ContextMenu, {
+        props: { open: true, x: 100, y: 100, withDisabled: true },
+      });
+
+      const options = screen.getAllByRole("menuitem");
+      const enabledOption = options.find((o) =>
+        o.textContent?.includes("Option 1"),
+      );
+      const disabledOption = options.find((o) =>
+        o.textContent?.includes("Disabled option"),
+      );
+      assert(enabledOption);
+      assert(disabledOption);
+
+      expect(enabledOption).not.toHaveClass("bx--menu-option--disabled");
+      expect(disabledOption).toHaveClass("bx--menu-option--disabled");
+      expect(disabledOption).toHaveAttribute("aria-disabled", "true");
+    });
+  });
+
   describe("ContextMenuOption Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;
