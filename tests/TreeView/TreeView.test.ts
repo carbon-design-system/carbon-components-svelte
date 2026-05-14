@@ -184,6 +184,29 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
   });
 
+  it("moves tabindex=0 along with focus (roving tabindex)", async () => {
+    render(component);
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    expect(firstItem).toHaveAttribute("tabindex", "0");
+
+    firstItem.focus();
+    await user.keyboard("{ArrowDown}");
+
+    const analyticsItems = screen.getAllByRole("treeitem", {
+      name: /Analytics/,
+      selected: false,
+    });
+    const nextItem = analyticsItems[0];
+
+    expect(nextItem).toHaveFocus();
+    expect(nextItem).toHaveAttribute("tabindex", "0");
+    expect(firstItem).toHaveAttribute("tabindex", "-1");
+
+    const tree = screen.getByRole("tree");
+    expect(tree.querySelectorAll('[tabindex="0"]')).toHaveLength(1);
+  });
+
   it("navigates with ArrowDown key", async () => {
     render(component);
 
