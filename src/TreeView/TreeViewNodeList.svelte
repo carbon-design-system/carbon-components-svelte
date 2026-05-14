@@ -155,10 +155,12 @@
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         if (disabled) return;
-        expanded = !expanded;
-        toggleNode(node);
+        if (e.key === "Enter" && parent) {
+          const nextExpanded = !expanded;
+          expandNode(node, nextExpanded);
+          toggleNode(node);
+        }
         clickNode(node, e);
-        expandNode(node, expanded);
         ref.focus();
       }
     }}
@@ -174,8 +176,8 @@
         {disabled}
         on:click={() => {
           if (disabled) return;
-          expanded = !expanded;
-          expandNode(node, expanded);
+          const nextExpanded = !expanded;
+          expandNode(node, nextExpanded);
           toggleNode(node);
         }}
       >

@@ -1630,7 +1630,7 @@ describe("TreeView autoCollapse", () => {
     expect(folder3).toHaveFocus();
   });
 
-  it("works when expanding via Enter/Space key", async () => {
+  it("Enter toggles parent expansion; Space selects without toggling", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: true });
 
     const folder1 = treeItemById("folder1");
@@ -1642,7 +1642,16 @@ describe("TreeView autoCollapse", () => {
 
     folder2.focus();
     await user.keyboard(" ");
+    // Space selects but does NOT toggle expand on parent rows (Carbon parity).
+    expect(folder2).toHaveAttribute("aria-expanded", "false");
+    expect(folder2).toHaveAttribute("aria-selected", "true");
+    // Folder1 is unaffected (still expanded; autoCollapse hasn't fired since
+    // folder2 isn't being expanded).
+    expect(folder1).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{Enter}");
     expect(folder2).toHaveAttribute("aria-expanded", "true");
+    // Now autoCollapse kicks in.
     expect(folder1).toHaveAttribute("aria-expanded", "false");
   });
 
