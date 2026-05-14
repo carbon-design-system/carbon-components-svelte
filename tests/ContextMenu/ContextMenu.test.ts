@@ -6,6 +6,7 @@ import ContextMenuPreventDefault from "./ContextMenu.preventDefault.test.svelte"
 import ContextMenuTarget from "./ContextMenu.target.test.svelte";
 import ContextMenu from "./ContextMenu.test.svelte";
 import ContextMenuOptionIcon from "./ContextMenuOption.icon.test.svelte";
+import ContextMenuOptionRole from "./ContextMenuOption.role.test.svelte";
 import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
 
 describe("ContextMenu", () => {
@@ -586,6 +587,21 @@ describe("ContextMenu", () => {
       expect(enabledOption).not.toHaveClass("bx--menu-option--disabled");
       expect(disabledOption).toHaveClass("bx--menu-option--disabled");
       expect(disabledOption).toHaveAttribute("aria-disabled", "true");
+    });
+  });
+
+  describe("ContextMenuOption role", () => {
+    it("should reset role to menuitem when selectable toggles from true to false", async () => {
+      const { rerender } = render(ContextMenuOptionRole, {
+        props: { selectable: true },
+      });
+
+      expect(screen.getByRole("menuitemcheckbox")).toBeInTheDocument();
+
+      await rerender({ selectable: false });
+
+      expect(screen.queryByRole("menuitemcheckbox")).not.toBeInTheDocument();
+      expect(screen.getByRole("menuitem")).toBeInTheDocument();
     });
   });
 

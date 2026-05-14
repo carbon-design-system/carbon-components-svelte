@@ -259,9 +259,13 @@
       indented = true;
     }
 
+    let nextRole = "menuitem";
+    if (isSelectable) nextRole = "menuitemcheckbox";
+    if (isRadio) nextRole = "menuitemradio";
+    role = nextRole;
+
     if (isSelectable) {
       indented = true;
-      role = "menuitemcheckbox";
 
       if (selected) {
         if (ctxGroup) ctxGroup.addOption({ id });
@@ -273,7 +277,6 @@
 
     if (isRadio) {
       indented = true;
-      role = "menuitemradio";
       ctxRadioGroup.addOption({ id });
 
       if (selected) {
