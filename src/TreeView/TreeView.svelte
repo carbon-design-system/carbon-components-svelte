@@ -641,18 +641,51 @@
     toggleNode,
   });
 
+  /** @param {HTMLElement | null} root */
+  function resetNodeTabIndices(root) {
+    if (!root) return;
+    const items = root.querySelectorAll('[tabindex="0"]');
+    for (let i = 0; i < items.length; i++) {
+      const el = items[i];
+      if (el instanceof HTMLElement) el.tabIndex = -1;
+    }
+  }
+
+  /** @param {EventTarget | null} target */
+  function getTreeItemFromTarget(target) {
+    if (!(target instanceof Element)) return null;
+    if (target.classList.contains("bx--tree-node")) return target;
+    return target.closest(".bx--tree-node");
+  }
+
   function handleKeyDown(e) {
+    e.stopPropagation();
+
     if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
 
-    treeWalker.currentNode = e.target;
+    if (!treeWalker || !ref) return;
 
-    let node = null;
+    const treeItem = getTreeItemFromTarget(e.target);
+    if (!treeItem) return;
 
-    if (e.key === "ArrowUp") node = treeWalker.previousNode();
-    if (e.key === "ArrowDown") node = treeWalker.nextNode();
-    if (node && node !== e.target) {
-      node.tabIndex = "0";
-      node.focus();
+    treeWalker.currentNode = treeItem;
+
+    /** @type {Node | null} */
+    let nextFocusNode = null;
+
+    if (e.key === "ArrowUp") {
+      nextFocusNode = treeWalker.previousNode();
+    }
+    if (e.key === "ArrowDown") {
+      nextFocusNode = treeWalker.nextNode();
+    }
+
+    if (nextFocusNode && nextFocusNode !== treeItem) {
+      resetNodeTabIndices(ref);
+      if (nextFocusNode instanceof HTMLElement) {
+        nextFocusNode.tabIndex = 0;
+        nextFocusNode.focus();
+      }
     }
   }
 
