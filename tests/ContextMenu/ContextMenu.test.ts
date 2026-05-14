@@ -3,6 +3,7 @@ import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMen
 import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import ContextMenuPreventDefault from "./ContextMenu.preventDefault.test.svelte";
+import ContextMenuTarget from "./ContextMenu.target.test.svelte";
 import ContextMenu from "./ContextMenu.test.svelte";
 import ContextMenuOptionIcon from "./ContextMenuOption.icon.test.svelte";
 import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
@@ -115,6 +116,27 @@ describe("ContextMenu", () => {
     const target = screen.getByTestId("target");
     await user.pointer({ target, keys: "[MouseRight]" });
     expect(consoleLog).toHaveBeenCalledWith("open", target);
+  });
+
+  // Regression test: when `target` is updated to a new set of nodes,
+  // the previously-bound nodes should have their `contextmenu`
+  // listener removed. Otherwise, right-clicking a node that is no
+  // longer in `target` still triggers `openMenu`.
+  it("should remove contextmenu listener from nodes no longer in target", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContextMenuTarget);
+
+    // Initial target is [A]. Swap to [B].
+    await user.click(screen.getByTestId("swap"));
+
+    // Right-clicking A should no longer open the menu.
+    const targetA = screen.getByTestId("target-a");
+    await user.pointer({ target: targetA, keys: "[MouseRight]" });
+
+    const openCalls = consoleLog.mock.calls.filter(
+      ([label]) => label === "open",
+    );
+    expect(openCalls).toHaveLength(0);
   });
 
   it("should handle custom position", () => {

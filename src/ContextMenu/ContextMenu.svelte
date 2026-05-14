@@ -97,26 +97,24 @@
     openDetail = e.target;
   }
 
-  $: if (target != null) {
-    if (Array.isArray(target)) {
-      for (const node of target) {
-        node?.addEventListener("contextmenu", openMenu);
-      }
-    } else {
-      target.addEventListener("contextmenu", openMenu);
+  /** @type {Array<HTMLElement | null>} */
+  let boundTargets = [];
+
+  $: {
+    for (const node of boundTargets) {
+      node?.removeEventListener("contextmenu", openMenu);
+    }
+    boundTargets =
+      target == null ? [] : Array.isArray(target) ? [...target] : [target];
+    for (const node of boundTargets) {
+      node?.addEventListener("contextmenu", openMenu);
     }
   }
 
   onMount(() => {
     return () => {
-      if (target != null) {
-        if (Array.isArray(target)) {
-          for (const node of target) {
-            node?.removeEventListener("contextmenu", openMenu);
-          }
-        } else {
-          target.removeEventListener("contextmenu", openMenu);
-        }
+      for (const node of boundTargets) {
+        node?.removeEventListener("contextmenu", openMenu);
       }
     };
   });
