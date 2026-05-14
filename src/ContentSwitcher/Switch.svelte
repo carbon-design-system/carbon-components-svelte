@@ -34,7 +34,10 @@
   });
 
   onMount(() => {
-    return () => unsubscribe();
+    return () => {
+      ctx.remove(id);
+      unsubscribe();
+    };
   });
 </script>
 

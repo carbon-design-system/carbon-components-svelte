@@ -48,11 +48,22 @@
    * @type {(data: { id: string; text: string; selected: boolean }) => void}
    */
   const add = ({ id, text, selected }) => {
+    if (switches.some((s) => s.id === id)) {
+      return;
+    }
+
     if (selected) {
       selectedIndex = switches.length;
     }
 
     switches = [...switches, { id, text, selected }];
+  };
+
+  /**
+   * @type {(id: string) => void}
+   */
+  const remove = (id) => {
+    switches = switches.filter((s) => s.id !== id);
   };
 
   /**
@@ -113,6 +124,7 @@
   setContext("carbon:ContentSwitcher", {
     currentId,
     add,
+    remove,
     update,
     change,
     focus,
