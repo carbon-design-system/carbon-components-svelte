@@ -45,5 +45,6 @@
     <ContextMenuOption labelText="Disabled option" disabled />
   {:else}
     <ContextMenuOption labelText="Option 2" disabled={optionDisabled} />
+    <ContextMenuOption labelText="Option 3" />
   {/if}
 </ContextMenu>
