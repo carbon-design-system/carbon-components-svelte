@@ -1,14 +1,8 @@
 <script lang="ts">
   import { RecursiveList } from "carbon-components-svelte";
+  import type { RecursiveListNode } from "../../src/RecursiveList/RecursiveList.svelte";
 
-  type TestNode = {
-    text?: string;
-    href?: string;
-    html?: string;
-    nodes?: TestNode[];
-  };
-
-  const nodes: TestNode[] = [
+  const nodes: RecursiveListNode[] = [
     {
       text: "Item 1",
       nodes: [
@@ -25,6 +19,17 @@
         {
           href: "https://svelte.dev/",
           text: "Link with custom text",
+        },
+        {
+          href: "https://svelte.dev/",
+          text: "External link",
+          target: "_blank",
+        },
+        {
+          href: "https://svelte.dev/",
+          text: "External link with custom rel",
+          target: "_blank",
+          rel: "noopener",
         },
       ],
     },
