@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type RecursiveListComponent from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
 import type { RecursiveListNode } from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
+import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
 import type { ComponentProps } from "svelte";
 import RecursiveListHierarchyTest from "./RecursiveList.hierarchy.test.svelte";
 import RecursiveListIdTest from "./RecursiveList.id.test.svelte";
@@ -72,6 +73,38 @@ describe("RecursiveList id field", () => {
     expect(screen.getByText("Item B")).toBeInTheDocument();
     expect(screen.getByText("Item C")).toBeInTheDocument();
     expect(screen.getByText("Item C1")).toBeInTheDocument();
+  });
+});
+
+describe("RecursiveList props", () => {
+  const nodes = [
+    { text: "Item 1", nodes: [{ text: "Item 1a" }] },
+    { text: "Item 2" },
+  ];
+
+  it("applies expressive class to the top-level list and nested lists", () => {
+    render(RecursiveList, { nodes, expressive: true });
+
+    const lists = screen.getAllByRole("list");
+    expect(lists.length).toBeGreaterThan(1);
+    for (const list of lists) {
+      expect(list).toHaveClass("bx--list--expressive");
+    }
+  });
+
+  it("does not apply the expressive class by default", () => {
+    render(RecursiveList, { nodes });
+
+    const [topLevel] = screen.getAllByRole("list");
+    expect(topLevel).not.toHaveClass("bx--list--expressive");
+  });
+
+  it("always renders descendant lists as nested", () => {
+    render(RecursiveList, { nodes });
+
+    const lists = screen.getAllByRole("list");
+    expect(lists).toHaveLength(2);
+    expect(lists[1]).toHaveClass("bx--list--nested");
   });
 });
 

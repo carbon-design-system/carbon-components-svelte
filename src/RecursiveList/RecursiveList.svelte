@@ -24,6 +24,9 @@
    */
   export let type = "unordered";
 
+  /** Set to `true` to use Carbon's expressive typesetting */
+  export let expressive = false;
+
   import OrderedList from "../OrderedList/OrderedList.svelte";
   import UnorderedList from "../UnorderedList/UnorderedList.svelte";
   import RecursiveListItem from "./RecursiveListItem.svelte";
@@ -32,12 +35,13 @@
 <svelte:component
   this={type === "unordered" ? UnorderedList : OrderedList}
   native={type === "ordered-native"}
+  {expressive}
   {...$$restProps}
 >
   {#each nodes as child, index (child.id ?? index)}
     {#if Array.isArray(child.nodes)}
       <RecursiveListItem {...child}>
-        <svelte:self {...child} {type} nested />
+        <svelte:self {...child} {type} {expressive} nested />
       </RecursiveListItem>
     {:else}
       <RecursiveListItem {...child} />
