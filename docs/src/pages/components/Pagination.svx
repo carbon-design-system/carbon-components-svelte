@@ -54,9 +54,11 @@ For example, with a total of 9 items and page sizes of `[5, 10, 15]`, the page s
 
 ## Unknown pages
 
-Set `pagesUnknown` to `true` when the total number of pages is unknown. This renders the item range text without factoring in the total number of pages.
+Set `pagesUnknown` to `true` when the total number of pages is unknown (for example, paging through a cursor-based API). The item range text is rendered without a total, and the forward button is not constrained by `totalItems`.
 
-<Pagination pagesUnknown />
+Because the component cannot know when the last page is reached, the consumer is responsible for the page bounds. Bind to `page` and toggle `forwardButtonDisabled` when there is no more data to load.
+
+<FileSource src="/framed/Pagination/PaginationUnknown" />
 
 ## Page window
 
