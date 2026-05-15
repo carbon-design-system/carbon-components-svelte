@@ -25,6 +25,12 @@ Set `type` to `"ordered-native"` to use browser-native numbering styles.
 
 <FileSource src="/framed/RecursiveList/RecursiveListOrderedNative" />
 
+## Expressive styles
+
+Use Carbon's expressive typesetting by setting the `expressive` prop to `true`.
+
+<FileSource src="/framed/RecursiveList/RecursiveListExpressive" />
+
 ## Flat data structure
 
 Convert flat data structures to hierarchical arrays using the `toHierarchy` utility function.
