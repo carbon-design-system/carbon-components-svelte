@@ -20,7 +20,7 @@
 
   /**
    * Specify the `target` attribute if the item is a link
-   * @type {HTMLAnchorElement["target"]}
+   * @type {import("svelte/elements").SvelteHTMLElements["a"]["target"]}
    */
   export let target = "";
 
@@ -28,7 +28,7 @@
    * Specify the `rel` attribute if the item is a link.
    * By default, `noopener noreferrer` is added if
    * `target="_blank"` unless `rel` is specified.
-   * @type {HTMLAnchorElement["rel"]}
+   * @type {import("svelte/elements").SvelteHTMLElements["a"]["rel"]}
    */
   export let rel = undefined;
 
