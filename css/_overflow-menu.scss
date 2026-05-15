@@ -1,0 +1,25 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+@mixin overflow-menu-disabled {
+  .#{$prefix}--overflow-menu:disabled,
+  .#{$prefix}--overflow-menu:disabled:hover {
+    background-color: transparent;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--overflow-menu:disabled .#{$prefix}--overflow-menu__icon,
+  .#{$prefix}--overflow-menu:disabled:hover .#{$prefix}--overflow-menu__icon {
+    fill: $disabled-02;
+  }
+
+  .#{$prefix}--overflow-menu:disabled::after,
+  .#{$prefix}--overflow-menu:disabled:hover::after {
+    opacity: 0;
+  }
+}
+
+@include exports('overflow-menu-disabled') {
+  @include overflow-menu-disabled;
+}

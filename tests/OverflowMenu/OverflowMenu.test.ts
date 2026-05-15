@@ -226,6 +226,17 @@ describe("OverflowMenu", () => {
     expect(menuButton).toHaveClass("bx--overflow-menu--light");
   });
 
+  it("disables the trigger button when disabled is true", async () => {
+    render(OverflowMenu, { props: { disabled: true } });
+
+    const menuButton = screen.getByRole("button");
+    expect(menuButton).toBeDisabled();
+
+    await user.click(menuButton);
+    expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
   it("applies flipped styling", async () => {
     render(OverflowMenu, { props: { flipped: true } });
 

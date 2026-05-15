@@ -4,6 +4,7 @@
 
   export let size: ComponentProps<OverflowMenu>["size"] = undefined;
   export let light: ComponentProps<OverflowMenu>["light"] = false;
+  export let disabled: ComponentProps<OverflowMenu>["disabled"] = false;
   export let flipped: ComponentProps<OverflowMenu>["flipped"] = false;
   export let direction: ComponentProps<OverflowMenu>["direction"] = "bottom";
   export let menuOptionsClass: ComponentProps<OverflowMenu>["menuOptionsClass"] =
@@ -20,6 +21,7 @@
   aria-label={ariaLabel}
   {size}
   {light}
+  {disabled}
   {flipped}
   {direction}
   {menuOptionsClass}

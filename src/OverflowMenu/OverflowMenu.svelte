@@ -24,6 +24,9 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
+  /** Set to `true` to disable the trigger button */
+  export let disabled = false;
+
   /** Set to `true` to flip the menu relative to the button */
   export let flipped = false;
 
@@ -256,6 +259,7 @@
 <button
   bind:this={buttonRef}
   type="button"
+  {disabled}
   aria-haspopup="menu"
   aria-expanded={open}
   aria-label={ariaLabel}
