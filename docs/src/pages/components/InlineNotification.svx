@@ -48,14 +48,13 @@ Title and subtitle are optional and only render when provided.
 <InlineNotification subtitle="An internal server error occurred." />
 <InlineNotification title="An error occurred." />
 
-## Accessible icon descriptions
+## Translating the close button label
 
-Make notifications more accessible by providing custom descriptions for icons.
+The status icon is decorative and hidden from assistive technology. Translate the close button label via `closeButtonDescription`.
 
-<InlineNotification 
+<InlineNotification
   title="错误"
   subtitle="发生内部服务器错误"
-  statusIconDescription="错误图标"
   closeButtonDescription="关闭通知"
 />
 
