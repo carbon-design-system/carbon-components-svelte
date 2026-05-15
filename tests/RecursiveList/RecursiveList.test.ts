@@ -3,6 +3,7 @@ import type RecursiveListComponent from "carbon-components-svelte/RecursiveList/
 import type { RecursiveListNode } from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
 import type { ComponentProps } from "svelte";
 import RecursiveListHierarchyTest from "./RecursiveList.hierarchy.test.svelte";
+import RecursiveListIdTest from "./RecursiveList.id.test.svelte";
 import RecursiveListTest from "./RecursiveList.test.svelte";
 
 const testCases = [
@@ -46,6 +47,17 @@ describe.each(testCases)("$name", ({ component }) => {
       (link) => link.textContent === "https://svelte.dev/",
     );
     expect(plainLink).toHaveAttribute("href", "https://svelte.dev/");
+  });
+});
+
+describe("RecursiveList id field", () => {
+  it("renders nodes that supply an id (string or number)", () => {
+    render(RecursiveListIdTest);
+
+    expect(screen.getByText("Item A")).toBeInTheDocument();
+    expect(screen.getByText("Item B")).toBeInTheDocument();
+    expect(screen.getByText("Item C")).toBeInTheDocument();
+    expect(screen.getByText("Item C1")).toBeInTheDocument();
   });
 });
 
@@ -198,6 +210,16 @@ describe("RecursiveList Generics", () => {
     expectTypeOf<NodesPropType>().toEqualTypeOf<
       ReadonlyArray<MinimalNode & { nodes?: MinimalNode[] }> | undefined
     >();
+  });
+
+  it("should accept an optional id field on RecursiveListNode", () => {
+    const withStringId: RecursiveListNode = { id: "a", text: "Item" };
+    const withNumberId: RecursiveListNode = { id: 1, text: "Item" };
+    const withoutId: RecursiveListNode = { text: "Item" };
+
+    expectTypeOf(withStringId.id).toEqualTypeOf<string | number | undefined>();
+    expectTypeOf(withNumberId.id).toEqualTypeOf<string | number | undefined>();
+    expectTypeOf(withoutId.id).toEqualTypeOf<string | number | undefined>();
   });
 
   it("should enforce RecursiveListNode constraint on generic type", () => {
