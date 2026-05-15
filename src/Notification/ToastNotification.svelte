@@ -31,12 +31,6 @@
   /** Specify the caption text */
   export let caption = "";
 
-  /**
-   * Specify the ARIA label for the status icon.
-   * @type {string}
-   * */
-  export let statusIconDescription = `${kind} icon`;
-
   /** Specify the ARIA label for the close button */
   export let closeButtonDescription = "Close notification";
 
@@ -116,7 +110,7 @@
     on:mouseenter
     on:mouseleave
   >
-    <NotificationIcon {kind} iconDescription={statusIconDescription} />
+    <NotificationIcon {kind} />
     <div class:bx--toast-notification__details={true}>
       <h3 class:bx--toast-notification__title={true}>
         <slot name="titleChildren">{title}</slot>
