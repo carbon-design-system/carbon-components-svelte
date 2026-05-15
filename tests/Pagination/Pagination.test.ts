@@ -191,6 +191,59 @@ describe("Pagination", () => {
     expect(screen.getByText("page 1")).toBeInTheDocument();
   });
 
+  // When `pagesUnknown` is true, the total number of pages is unknown, so the
+  // forward button should remain enabled at page 1 — otherwise the user can
+  // never advance past the first page.
+  it("should not disable the forward button at page 1 when pagesUnknown is true", () => {
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+    const prevButton = screen.getByRole("button", { name: "Previous page" });
+
+    expect(nextButton).not.toBeDisabled();
+    expect(prevButton).toBeDisabled();
+  });
+
+  it("should advance the page when pagesUnknown is true", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Next page" }));
+
+    expect(consoleLog).toHaveBeenCalledWith("next", { page: 2 });
+    expect(screen.getByText("page 2")).toBeInTheDocument();
+  });
+
+  it("should allow overriding forwardButtonDisabled", () => {
+    render(Pagination, {
+      props: {
+        pagesUnknown: true,
+        page: 1,
+        forwardButtonDisabled: true,
+      },
+    });
+
+    expect(screen.getByRole("button", { name: "Next page" })).toBeDisabled();
+  });
+
+  it("should allow overriding backButtonDisabled", () => {
+    render(Pagination, {
+      props: {
+        totalItems: 102,
+        page: 2,
+        backButtonDisabled: true,
+      },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Previous page" }),
+    ).toBeDisabled();
+  });
+
   it("should update when page or pageSize changes", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Pagination, {
