@@ -287,7 +287,7 @@ describe("Pagination", () => {
     });
 
     const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
-    expect(pageNumbers).toHaveLength(1_000 + 1);
+    expect(pageNumbers).toHaveLength(1_000);
   });
 
   it("renders a custom page window", () => {
@@ -296,7 +296,16 @@ describe("Pagination", () => {
     });
 
     const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
-    expect(pageNumbers).toHaveLength(100 + 1);
+    expect(pageNumbers).toHaveLength(100);
+  });
+
+  it("caps total rendered page options at pageWindow when current page is in the middle", () => {
+    render(Pagination, {
+      props: { totalItems: 100_000, pageWindow: 100, page: 5000 },
+    });
+
+    const pageNumbers = screen.getByLabelText(/Page number, of 10000 pages/);
+    expect(pageNumbers).toHaveLength(100);
   });
 
   it("formats larger numbers using `toLocaleString`", () => {

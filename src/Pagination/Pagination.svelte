@@ -149,11 +149,17 @@
    * Returns a subset of page numbers centered around the current page to prevent
    * performance issues with large datasets. Creates a capped window of pages
    * instead of potentially thousands, improving render speed and memory usage.
+   * @param {number} currentPage - The current page number.
+   * @param {number} totalPages - Total number of pages.
+   * @param {number} window - Maximum number of pages to render.
    * @returns {number[]} Array of page numbers to display.
    */
   function getWindowedPages(currentPage, totalPages, window) {
-    const start = Math.max(1, currentPage - window);
-    const end = Math.min(totalPages, currentPage + window);
+    const size = Math.min(window, totalPages);
+    const half = Math.floor(size / 2);
+    let start = Math.max(1, currentPage - half);
+    const end = Math.min(totalPages, start + size - 1);
+    start = Math.max(1, end - size + 1);
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
