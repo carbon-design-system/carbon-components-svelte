@@ -2,6 +2,7 @@
   /**
    * @template {RecursiveListNode} [Node=RecursiveListNode]
    * @typedef {object} RecursiveListNode
+   * @property {string | number} [id] - Unique node identifier; used as the each-block key when provided
    * @property {string} [text] - Node text content
    * @property {string} [href] - Node link URL
    * @property {string} [html] - Node HTML content
@@ -33,7 +34,7 @@
   native={type === "ordered-native"}
   {...$$restProps}
 >
-  {#each nodes as child}
+  {#each nodes as child, index (child.id ?? index)}
     {#if Array.isArray(child.nodes)}
       <RecursiveListItem {...child}>
         <svelte:self {...child} {type} nested />
