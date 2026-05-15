@@ -65,14 +65,13 @@ Subtitle and caption are optional and only render when provided.
 <ToastNotification subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 <ToastNotification title="Success" caption="{new Date().toLocaleString()}" />
 
-## Accessible icon descriptions
+## Translating the close button label
 
-Provide custom descriptions for icons to improve accessibility.
+The status icon is decorative and hidden from assistive technology. Translate the close button label via `closeButtonDescription`.
 
-<ToastNotification 
+<ToastNotification
   title="错误"
   subtitle="发生内部服务器错误"
-  statusIconDescription="错误图标"
   closeButtonDescription="关闭通知"
 />
 

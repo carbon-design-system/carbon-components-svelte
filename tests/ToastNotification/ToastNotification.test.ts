@@ -286,4 +286,14 @@ describe("ToastNotification", () => {
       document.querySelector(".bx--toast-notification"),
     ).toBeInTheDocument();
   });
+
+  it("should render the status icon as decorative (aria-hidden)", () => {
+    render(ToastNotificationTest, { props: { kind: "error" } });
+
+    const icon = document.querySelector(".bx--toast-notification__icon");
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+    expect(icon).not.toHaveAttribute("role", "img");
+    expect(icon?.querySelector("title")).toBeNull();
+  });
 });

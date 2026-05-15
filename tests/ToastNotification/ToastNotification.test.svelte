@@ -9,8 +9,6 @@
   export let title: ComponentProps<ToastNotification>["title"] = "";
   export let subtitle: ComponentProps<ToastNotification>["subtitle"] = "";
   export let caption: ComponentProps<ToastNotification>["caption"] = "";
-  export let statusIconDescription: ComponentProps<ToastNotification>["statusIconDescription"] =
-    undefined;
   export let closeButtonDescription: ComponentProps<ToastNotification>["closeButtonDescription"] =
     "Close notification";
   export let hideCloseButton: ComponentProps<ToastNotification>["hideCloseButton"] = false;
@@ -27,7 +25,6 @@
   {title}
   {subtitle}
   {caption}
-  {statusIconDescription}
   {closeButtonDescription}
   {hideCloseButton}
   {fullWidth}
