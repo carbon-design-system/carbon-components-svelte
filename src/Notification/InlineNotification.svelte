@@ -31,12 +31,6 @@
   /** Set to `true` to hide the close button */
   export let hideCloseButton = false;
 
-  /**
-   * Specify the ARIA label for the status icon.
-   * @type {string}
-   * */
-  export let statusIconDescription = `${kind} icon`;
-
   /** Specify the ARIA label for the close button */
   export let closeButtonDescription = "Close notification";
 
@@ -98,11 +92,7 @@
     on:mouseleave
   >
     <div class:bx--inline-notification__details={true}>
-      <NotificationIcon
-        notificationType="inline"
-        {kind}
-        iconDescription={statusIconDescription}
-      />
+      <NotificationIcon notificationType="inline" {kind} />
       <div class:bx--inline-notification__text-wrapper={true}>
         {#if title || $$slots.titleChildren}
           <p class:bx--inline-notification__title={true}>

@@ -222,6 +222,16 @@ describe("InlineNotification", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("should render the status icon as decorative (aria-hidden)", () => {
+    render(InlineNotificationTest, { props: { kind: "error" } });
+
+    const icon = document.querySelector(".bx--inline-notification__icon");
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+    expect(icon).not.toHaveAttribute("role", "img");
+    expect(icon?.querySelector("title")).toBeNull();
+  });
+
   it("should prevent close when event is cancelled", async () => {
     vi.useRealTimers();
     const closeHandler = vi.fn((e) => {
