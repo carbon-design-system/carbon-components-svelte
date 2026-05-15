@@ -59,6 +59,43 @@
   }
 
   /**
+   * Groups node ids matching `filterNode` by their depth in the tree (BFS).
+   * Used to expand a tree layer by layer so each reactive flush only mounts
+   * one new level of `<svelte:self>` descendants, avoiding the stack
+   * overflow that occurs when many nested levels mount synchronously.
+   *
+   * Preserves the `expandNodes` semantics of also matching a parent when one
+   * of its parent-children matches the filter.
+   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @param {ReadonlyArray<TNode>} roots
+   * @param {(node: TNode) => boolean} filterNode
+   * @returns {Array<Array<string | number>>}
+   */
+  function expandableIdsByDepth(roots, filterNode) {
+    /** @type {Array<Array<string | number>>} */
+    const layers = [];
+    /**
+     * @param {ReadonlyArray<TNode>} list
+     * @param {number} depth
+     */
+    function visit(list, depth) {
+      for (const n of list) {
+        const matches =
+          filterNode(n) ||
+          (Array.isArray(n.nodes) &&
+            n.nodes.some((c) => filterNode(c) && Array.isArray(c.nodes)));
+        if (matches) {
+          if (!layers[depth]) layers[depth] = [];
+          layers[depth].push(n.id);
+        }
+        if (Array.isArray(n.nodes)) visit(n.nodes, depth + 1);
+      }
+    }
+    visit(roots, 0);
+    return layers;
+  }
+
+  /**
    * Like `traverse` but only descends into expanded nodes.
    * Used for Shift+Click range selection (only visible nodes).
    * @template {object} Node
@@ -256,18 +293,20 @@
   export let multiselectMode = "node";
 
   /**
-   * Programmatically expand all nodes
-   * @type {() => void}
+   * Programmatically expand all nodes.
+   *
+   * Returns a `Promise` that resolves once all nodes are expanded. Levels
+   * are expanded progressively across ticks so deeply-nested trees do not
+   * mount every newly-revealed level in a single reactive flush.
+   * @type {() => Promise<void>}
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
    * <button on:click={() => treeView.expandAll()}>Expand All</button>
    * ```
    */
-  export function expandAll() {
-    expandedIdsSet = new Set(nodeIds);
-    expandedIds = Array.from(expandedIdsSet);
-    lastExpandedIdsRef = expandedIds;
+  export async function expandAll() {
+    await expandLayered(() => true);
   }
 
   /**
@@ -289,7 +328,11 @@
    * Programmatically expand a subset of nodes.
    * Expands all nodes if no argument is provided.
    * Filter function should return `true` for nodes to expand. If not provided, expands all nodes.
-   * @type {(filterNode?: (node: Node) => boolean) => void}
+   *
+   * Returns a `Promise` that resolves once the matching nodes are expanded.
+   * Levels are expanded progressively across ticks so deeply-nested trees
+   * do not mount every newly-revealed level in a single reactive flush.
+   * @type {(filterNode?: (node: Node) => boolean) => Promise<void>}
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -298,19 +341,32 @@
    * </button>
    * ```
    */
-  export function expandNodes(filterNode = () => true) {
-    const nodesToExpand = flattenedNodes
-      .filter(
-        (node) =>
-          filterNode(node) ||
-          node.nodes?.some((child) => filterNode(child) && child.nodes),
-      )
-      .map((node) => node.id);
-    for (const id of nodesToExpand) {
-      expandedIdsSet.add(id);
+  export async function expandNodes(filterNode = () => true) {
+    await expandLayered(filterNode);
+  }
+
+  /**
+   * Adds expand-target ids to `expandedIdsSet` layer-by-layer (one tick per
+   * depth) so each reactive flush only mounts one new level of descendants.
+   * @param {(node: Node) => boolean} filterNode
+   */
+  async function expandLayered(filterNode) {
+    const layers = expandableIdsByDepth(nodes, filterNode);
+    for (const layer of layers) {
+      if (!layer) continue;
+      let changed = false;
+      for (const id of layer) {
+        if (!expandedIdsSet.has(id)) {
+          expandedIdsSet.add(id);
+          changed = true;
+        }
+      }
+      if (changed) {
+        expandedIds = Array.from(expandedIdsSet);
+        lastExpandedIdsRef = expandedIds;
+        await tick();
+      }
     }
-    expandedIds = Array.from(expandedIdsSet);
-    lastExpandedIdsRef = expandedIds;
   }
 
   /**
@@ -340,7 +396,12 @@
    * Programmatically show a node by `id`.
    * By default, the matching node will be expanded, selected, and focused.
    * Use the options parameter to customize this behavior.
-   * @type {(id: Node["id"], options?: ShowNodeOptions) => void}
+   *
+   * Returns a `Promise` that resolves once the node is shown. Ancestors are
+   * expanded progressively across ticks so deeply-nested trees do not mount
+   * every newly-revealed level in a single reactive flush. `await` the call
+   * if you need to read `selectedIds`/`activeId`/`expandedIds` afterwards.
+   * @type {(id: Node["id"], options?: ShowNodeOptions) => Promise<void>}
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -352,7 +413,7 @@
    * </button>
    * ```
    */
-  export function showNode(id, options = {}) {
+  export async function showNode(id, options = {}) {
     const { expand = true, select = true, focus = true } = options;
 
     for (const child of nodes) {
@@ -363,12 +424,17 @@
         const lastId = ids[ids.length - 1];
 
         if (expand) {
+          // Expand ancestors progressively (one per tick) so deeply-nested
+          // trees do not mount every newly-expanded level in a single
+          // synchronous reactive flush, which can overflow the call stack.
           const ancestorIds = ids.slice(0, -1);
           for (const ancestorId of ancestorIds) {
+            if (expandedIdsSet.has(ancestorId)) continue;
             expandedIdsSet.add(ancestorId);
+            expandedIds = Array.from(expandedIdsSet);
+            lastExpandedIdsRef = expandedIds;
+            await tick();
           }
-          expandedIds = Array.from(expandedIdsSet);
-          lastExpandedIdsRef = expandedIds;
         }
 
         if (select) {

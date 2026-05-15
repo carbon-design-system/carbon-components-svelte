@@ -72,12 +72,18 @@
   let treeType = "large";
   let lastDeepNodeId = null;
   let selectedIndex = 0;
+  let expandedIds = [];
+  let selectedIds = [];
+  let activeId = "";
 
   async function handleTreeSwitch(event) {
     const index = event.detail;
     selectedIndex = index;
 
     performanceInfo = { expandAll: 0, collapseAll: 0, showNode: 0 };
+    expandedIds = [];
+    selectedIds = [];
+    activeId = "";
 
     const start = performance.now();
     if (index === 0) {
@@ -103,9 +109,9 @@
     }, 0);
   }
 
-  function handleExpandAll() {
+  async function handleExpandAll() {
     const start = performance.now();
-    treeview?.expandAll();
+    await treeview?.expandAll();
     const end = performance.now();
     performanceInfo.expandAll = end - start;
     performanceInfo = performanceInfo;
@@ -119,7 +125,7 @@
     performanceInfo = performanceInfo;
   }
 
-  function handleShowNode() {
+  async function handleShowNode() {
     const start = performance.now();
     const targetId =
       treeType === "large"
@@ -128,7 +134,7 @@
           ? 100
           : lastDeepNodeId;
     if (treeview) {
-      treeview.showNode(targetId);
+      await treeview.showNode(targetId);
     }
     const end = performance.now();
     performanceInfo.showNode = end - start;
