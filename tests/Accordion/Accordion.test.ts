@@ -402,6 +402,16 @@ describe("Accordion", () => {
     itemIsCollapsed(/Language Translator/);
   });
 
+  it("should expose ref to the heading button", () => {
+    const { component } = render(Accordion);
+
+    expect(component.ref).toBeInstanceOf(HTMLButtonElement);
+    expect(component.ref).toHaveAttribute(
+      "class",
+      expect.stringContaining("bx--accordion__heading"),
+    );
+  });
+
   it("should use custom iconDescription", () => {
     render(Accordion, {
       props: { useSlot: true, iconDescription: "Custom description" },
