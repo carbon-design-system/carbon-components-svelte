@@ -169,18 +169,20 @@
         <slot {node} />
       </span>
     </div>
-    {#if expanded}
-      <ul role="group" class:bx--tree-node__children={true}>
-        {#each nodes as child (child.id)}
-          {#if Array.isArray(child.nodes)}
-            <svelte:self {...child} let:node> <slot {node} /> </svelte:self>
-          {:else}
-            <TreeViewNode leaf {...child} let:node>
-              <slot {node}>{node.text}</slot>
-            </TreeViewNode>
-          {/if}
-        {/each}
-      </ul>
-    {/if}
+    <ul
+      role="group"
+      class:bx--tree-node__children={true}
+      class:bx--tree-node--hidden={!expanded}
+    >
+      {#each nodes as child (child.id)}
+        {#if Array.isArray(child.nodes)}
+          <svelte:self {...child} let:node> <slot {node} /> </svelte:self>
+        {:else}
+          <TreeViewNode leaf {...child} let:node>
+            <slot {node}>{node.text}</slot>
+          </TreeViewNode>
+        {/if}
+      {/each}
+    </ul>
   </li>
 {/if}

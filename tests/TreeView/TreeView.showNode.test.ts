@@ -48,7 +48,9 @@ describe("TreeView.showNode with options", () => {
 
     await user.click(getButton("select-only"));
     expect(getExpandedCount()).toBe(0);
-    expect(getSelectedItem()).not.toBeInTheDocument();
+    const selected = screen.getByRole("treeitem", { selected: true });
+    expect(selected).toHaveAttribute("id", "3");
+    expect(selected.closest("ul.bx--tree-node--hidden")).not.toBeNull();
     expect(consoleLog).toHaveBeenCalledWith("activeId", "");
     expect(consoleLog).toHaveBeenCalledWith("selectedIds", [3]);
   });

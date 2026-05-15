@@ -36,7 +36,14 @@
       acceptNode: (node) => {
         if (node.classList.contains("bx--tree-node--disabled"))
           return NodeFilter.FILTER_REJECT;
-        if (node.matches("li.bx--tree-node")) return NodeFilter.FILTER_ACCEPT;
+        if (node.matches("li.bx--tree-node")) {
+          // Collapsed branches keep children in the DOM under
+          // `ul.bx--tree-node--hidden`; skip them so ArrowUp/ArrowDown follow
+          // visible order only (matches prior unmount behavior).
+          if (node.closest("ul.bx--tree-node--hidden"))
+            return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
         return NodeFilter.FILTER_SKIP;
       },
     });
