@@ -162,12 +162,28 @@
     currentIndex.set(index);
   };
 
+  const first = () => {
+    const index = $items.findIndex((_) => !_.disabled);
+    if (index >= 0) currentIndex.set(index);
+  };
+
+  const last = () => {
+    for (let index = $items.length - 1; index >= 0; index--) {
+      if (!$items[index].disabled) {
+        currentIndex.set(index);
+        return;
+      }
+    }
+  };
+
   setContext("carbon:OverflowMenu", {
     focusedId,
     items,
     add,
     update,
     change,
+    first,
+    last,
   });
 
   afterUpdate(() => {
@@ -271,6 +287,12 @@
     if (open) {
       if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
         e.preventDefault();
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        first();
+      } else if (e.key === "End") {
+        e.preventDefault();
+        last();
       } else if (e.key === "Escape") {
         e.stopPropagation();
         const shouldContinue = dispatch("close", null, { cancelable: true });
@@ -341,6 +363,12 @@
       on:keydown={(e) => {
         if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
           e.preventDefault();
+        } else if (e.key === "Home") {
+          e.preventDefault();
+          first();
+        } else if (e.key === "End") {
+          e.preventDefault();
+          last();
         } else if (e.key === "Escape") {
           e.stopPropagation();
           const shouldContinue = dispatch("close", null, { cancelable: true });

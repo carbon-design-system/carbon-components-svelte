@@ -56,7 +56,7 @@
   import { afterUpdate, createEventDispatcher, getContext } from "svelte";
 
   const dispatch = createEventDispatcher();
-  const { focusedId, add, update, change, items } = getContext(
+  const { focusedId, add, update, change, first, last, items } = getContext(
     "carbon:OverflowMenu",
   );
 
@@ -124,11 +124,17 @@
       {...buttonProps}
       on:click={handleClick}
       on:keydown
-      on:keydown={({ key }) => {
-        if (key === "ArrowDown") {
+      on:keydown={(e) => {
+        if (e.key === "ArrowDown") {
           change(1);
-        } else if (key === "ArrowUp") {
+        } else if (e.key === "ArrowUp") {
           change(-1);
+        } else if (e.key === "Home") {
+          e.preventDefault();
+          first();
+        } else if (e.key === "End") {
+          e.preventDefault();
+          last();
         }
       }}
     >
@@ -143,11 +149,17 @@
       {...buttonProps}
       on:click={handleClick}
       on:keydown
-      on:keydown={({ key }) => {
-        if (key === "ArrowDown") {
+      on:keydown={(e) => {
+        if (e.key === "ArrowDown") {
           change(1);
-        } else if (key === "ArrowUp") {
+        } else if (e.key === "ArrowUp") {
           change(-1);
+        } else if (e.key === "Home") {
+          e.preventDefault();
+          first();
+        } else if (e.key === "End") {
+          e.preventDefault();
+          last();
         }
       }}
     >
