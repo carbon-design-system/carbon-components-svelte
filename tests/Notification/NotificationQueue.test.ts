@@ -490,7 +490,6 @@ describe("NotificationQueue", () => {
       timeout: 5000,
       lowContrast: true,
       closeButtonDescription: "Custom close",
-      statusIconDescription: "Custom status",
       hideCloseButton: false,
     });
     await tick();

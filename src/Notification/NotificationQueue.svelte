@@ -9,7 +9,6 @@
    * @property {number} [timeout]
    * @property {boolean} [lowContrast]
    * @property {string} [closeButtonDescription]
-   * @property {string} [statusIconDescription]
    * @property {boolean} [hideCloseButton]
    */
 
