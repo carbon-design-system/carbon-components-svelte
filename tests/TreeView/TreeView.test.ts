@@ -17,26 +17,18 @@ import TreeViewProps from "./TreeView.props.test.svelte";
 import TreeViewSlot from "./TreeView.slot.test.svelte";
 import TreeView from "./TreeView.test.svelte";
 
+function treeItemById(id: string | number): HTMLElement {
+  const el = document.getElementById(String(id));
+  expect.assert(el instanceof HTMLElement);
+  return el;
+}
+
 const testCases = [
   { name: "TreeView", component: TreeView },
   { name: "TreeView hierarchy", component: TreeViewHierarchy },
 ];
 
 describe.each(testCases)("$name", ({ component }) => {
-  const getItemByName = (name: RegExp) => {
-    return screen.getByRole("treeitem", {
-      name,
-      selected: false,
-    });
-  };
-
-  const getSelectedItemByName = (name: RegExp) => {
-    return screen.getByRole("treeitem", {
-      name,
-      selected: true,
-    });
-  };
-
   const noExpandedItems = () => {
     expect(screen.queryAllByRole("treeitem", { expanded: true })).toHaveLength(
       0,
@@ -52,11 +44,11 @@ describe.each(testCases)("$name", ({ component }) => {
 
     render(component);
 
-    const firstItem = getItemByName(/AI \/ Machine learning/);
+    const firstItem = treeItemById(0);
     expect(firstItem).toBeInTheDocument();
 
     await user.click(firstItem);
-    expect(getSelectedItemByName(/AI \/ Machine learning/)).toBeInTheDocument();
+    expect(firstItem).toHaveAttribute("aria-selected", "true");
     expect(consoleLog).toBeCalledWith("selectedIds", [0]);
     expect(consoleLog).toBeCalledWith("select", {
       disabled: false,
@@ -140,11 +132,7 @@ describe.each(testCases)("$name", ({ component }) => {
 
     render(component);
 
-    const analyticsItems = screen.getAllByRole("treeitem", {
-      name: /Analytics/,
-      selected: false,
-    });
-    const analyticsNode = analyticsItems[0];
+    const analyticsNode = treeItemById(1);
     const toggleButton = analyticsNode.querySelector(
       ".bx--tree-parent-node__toggle",
     );
@@ -169,7 +157,7 @@ describe.each(testCases)("$name", ({ component }) => {
 
     render(component);
 
-    const firstItem = getItemByName(/AI \/ Machine learning/);
+    const firstItem = treeItemById(0);
     firstItem.focus();
 
     expect(consoleLog).toHaveBeenCalledWith(
@@ -185,9 +173,7 @@ describe.each(testCases)("$name", ({ component }) => {
   it("handles disabled nodes correctly", async () => {
     render(component);
 
-    const disabledNode = screen.getByRole("treeitem", {
-      name: /Integration/,
-    });
+    const disabledNode = treeItemById(14);
     expect(disabledNode).toHaveAttribute("aria-disabled", "true");
     expect(disabledNode).toHaveClass("bx--tree-node--disabled");
 
@@ -198,32 +184,24 @@ describe.each(testCases)("$name", ({ component }) => {
   it("navigates with ArrowDown key", async () => {
     render(component);
 
-    const firstItem = getItemByName(/AI \/ Machine learning/);
+    const firstItem = treeItemById(0);
     firstItem.focus();
 
     await user.keyboard("{ArrowDown}");
 
-    const analyticsItems = screen.getAllByRole("treeitem", {
-      name: /Analytics/,
-      selected: false,
-    });
-    const nextItem = analyticsItems[0];
+    const nextItem = treeItemById(1);
     expect(nextItem).toHaveFocus();
   });
 
   it("navigates with ArrowUp key", async () => {
     render(component);
 
-    const analyticsItems = screen.getAllByRole("treeitem", {
-      name: /Analytics/,
-      selected: false,
-    });
-    const secondItem = analyticsItems[0];
+    const secondItem = treeItemById(1);
     secondItem.focus();
 
     await user.keyboard("{ArrowUp}");
 
-    const firstItem = getItemByName(/AI \/ Machine learning/);
+    const firstItem = treeItemById(0);
     expect(firstItem).toHaveFocus();
   });
 
@@ -233,29 +211,19 @@ describe.each(testCases)("$name", ({ component }) => {
     const expandAllButton = screen.getByText("Expand all");
     await user.click(expandAllButton);
 
-    const databasesNodes = screen.getAllByRole("treeitem", {
-      name: /Databases/,
-      selected: false,
-    });
-    const databasesNode = databasesNodes[0];
+    const databasesNode = treeItemById(9);
     databasesNode.focus();
 
     await user.keyboard("{ArrowDown}");
 
-    const disabledNode = screen.getByRole("treeitem", {
-      name: /Integration/,
-    });
+    const disabledNode = treeItemById(14);
     expect(disabledNode).not.toHaveFocus();
   });
 
   it("expands parent node with ArrowRight key", async () => {
     render(component);
 
-    const analyticsItems = screen.getAllByRole("treeitem", {
-      name: /Analytics/,
-      selected: false,
-    });
-    const analyticsNode = analyticsItems[0];
+    const analyticsNode = treeItemById(1);
     analyticsNode.focus();
 
     await user.keyboard("{ArrowRight}");
@@ -266,11 +234,7 @@ describe.each(testCases)("$name", ({ component }) => {
   it("collapses parent node with ArrowLeft key", async () => {
     render(component);
 
-    const analyticsItems = screen.getAllByRole("treeitem", {
-      name: /Analytics/,
-      selected: false,
-    });
-    const analyticsNode = analyticsItems[0];
+    const analyticsNode = treeItemById(1);
     analyticsNode.focus();
 
     await user.keyboard("{ArrowRight}");
@@ -285,7 +249,7 @@ describe.each(testCases)("$name", ({ component }) => {
 
     render(component);
 
-    const firstItem = getItemByName(/AI \/ Machine learning/);
+    const firstItem = treeItemById(0);
     firstItem.focus();
 
     await user.keyboard("{Enter}");
@@ -305,7 +269,7 @@ describe.each(testCases)("$name", ({ component }) => {
 
     render(component);
 
-    const firstItem = getItemByName(/AI \/ Machine learning/);
+    const firstItem = treeItemById(0);
     firstItem.focus();
 
     await user.keyboard(" ");
@@ -409,7 +373,7 @@ describe("TreeView Props", () => {
         ],
       });
 
-      const activeNode = screen.getByRole("treeitem", { name: /Node 2/ });
+      const activeNode = treeItemById(1);
       const label = activeNode.querySelector(".bx--tree-node__label");
       expect.assert(label instanceof HTMLElement);
       // Root parent: offset = (1 - 1) + 1 = 1rem
@@ -427,11 +391,9 @@ describe("TreeView Props", () => {
     const tree = screen.getByRole("tree");
     expect(tree).toHaveAttribute("aria-multiselectable", "true");
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
-    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
-    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+    const aiItem = treeItemById(0);
+    const blockchainItem = treeItemById(7);
+    const databasesItem = treeItemById(9);
 
     expect(aiItem).toHaveAttribute("aria-selected", "true");
     expect(blockchainItem).toHaveAttribute("aria-selected", "true");
@@ -454,10 +416,8 @@ describe("TreeView Props", () => {
       selectedIds: [],
     });
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
-    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+    const aiItem = treeItemById(0);
+    const blockchainItem = treeItemById(7);
 
     await user.click(aiItem);
     expect(aiItem).toHaveAttribute("aria-selected", "true");
@@ -484,16 +444,14 @@ describe("TreeView Props", () => {
       selectedIds: [0, 7, 9],
     });
 
-    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+    const blockchainItem = treeItemById(7);
 
     await user.click(blockchainItem);
 
     expect(blockchainItem).toHaveAttribute("aria-selected", "true");
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
-    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+    const aiItem = treeItemById(0);
+    const databasesItem = treeItemById(9);
 
     expect(aiItem).toHaveAttribute("aria-selected", "false");
     expect(databasesItem).toHaveAttribute("aria-selected", "false");
@@ -505,10 +463,8 @@ describe("TreeView Props", () => {
       selectedIds: [],
     });
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
-    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+    const aiItem = treeItemById(0);
+    const blockchainItem = treeItemById(7);
 
     await user.click(aiItem);
     expect(aiItem).toHaveAttribute("aria-selected", "true");
@@ -546,7 +502,7 @@ describe("TreeView Props", () => {
     expect(sqlItem).toHaveAttribute("aria-selected", "true");
     expect(db2Item).toHaveAttribute("aria-selected", "true");
 
-    expect(document.getElementById("3")).toBeNull();
+    expect(treeItemById(3)).toHaveAttribute("aria-selected", "false");
   });
 
   it("multiselectMode deep selects all descendants", async () => {
@@ -610,13 +566,9 @@ describe("TreeView Props", () => {
       selectedIds: [],
     });
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
-    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
-    const analyticsItem = screen.getAllByRole("treeitem", {
-      name: /Analytics/,
-    })[0];
+    const aiItem = treeItemById(0);
+    const blockchainItem = treeItemById(7);
+    const analyticsItem = treeItemById(1);
 
     // Plain click sets anchor on AI
     await user.click(aiItem);
@@ -640,10 +592,8 @@ describe("TreeView Props", () => {
       expandedIds: [], // All collapsed - children are not visible
     });
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
-    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+    const aiItem = treeItemById(0);
+    const databasesItem = treeItemById(9);
 
     await user.click(aiItem);
 
@@ -657,7 +607,7 @@ describe("TreeView Props", () => {
 
     // Children of collapsed parents should NOT be selected
     // (e.g., id=2 "IBM Analytics Engine" is a child of collapsed Analytics)
-    expect(document.getElementById("2")).toBeNull(); // not rendered since collapsed
+    expect(treeItemById(2)).toHaveAttribute("aria-selected", "false");
   });
 
   it("shift+click range includes children when parent is expanded", async () => {
@@ -668,10 +618,8 @@ describe("TreeView Props", () => {
       expandedIds: [1], // Analytics is expanded
     });
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
-    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
+    const aiItem = treeItemById(0);
+    const blockchainItem = treeItemById(7);
 
     await user.click(aiItem);
 
@@ -699,11 +647,9 @@ describe("TreeView Props", () => {
       selectedIds: [],
     });
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
-    const blockchainItem = screen.getByRole("treeitem", { name: /Blockchain/ });
-    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+    const aiItem = treeItemById(0);
+    const blockchainItem = treeItemById(7);
+    const databasesItem = treeItemById(9);
 
     // Click AI, then plain click Databases (resets anchor to Databases)
     await user.click(aiItem);
@@ -733,9 +679,7 @@ describe("TreeView Props", () => {
       expandedIds: [1],
     });
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
+    const aiItem = treeItemById(0);
     const analyticsItem = document.getElementById("1");
     const engineItem = document.getElementById("2");
     const sqlItem = document.getElementById("5");
@@ -779,9 +723,7 @@ describe("TreeView Props", () => {
       selectedIds: [],
     });
 
-    const disabledNode = screen.getByRole("treeitem", {
-      name: /Integration/,
-    });
+    const disabledNode = treeItemById(14);
 
     await user.click(disabledNode);
 
@@ -797,15 +739,13 @@ describe("TreeView Props", () => {
       expandedIds: [],
     });
 
-    const aiItem = screen.getByRole("treeitem", {
-      name: /AI \/ Machine learning/,
-    });
+    const aiItem = treeItemById(0);
 
     // Click AI first
     await user.click(aiItem);
 
     // Shift+click to select range to Databases (Integration is disabled in between)
-    const databasesItem = screen.getByRole("treeitem", { name: /Databases/ });
+    const databasesItem = treeItemById(9);
 
     await user.keyboard("{Shift>}");
     await user.click(databasesItem);
@@ -815,9 +755,7 @@ describe("TreeView Props", () => {
     expect(databasesItem).toHaveAttribute("aria-selected", "true");
 
     // Integration is disabled and should not be selected
-    const disabledNode = screen.getByRole("treeitem", {
-      name: /Integration/,
-    });
+    const disabledNode = treeItemById(14);
     expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
   });
 
@@ -1457,8 +1395,8 @@ describe("TreeView autoCollapse", () => {
   it("collapses sibling nodes when autoCollapse is true", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: true });
 
-    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
-    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+    const folder1 = treeItemById("folder1");
+    const folder2 = treeItemById("folder2");
 
     await user.click(getToggleButton(folder1));
     expect(folder1).toHaveAttribute("aria-expanded", "true");
@@ -1473,8 +1411,8 @@ describe("TreeView autoCollapse", () => {
   it("keeps siblings expanded when autoCollapse is false", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: false });
 
-    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
-    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+    const folder1 = treeItemById("folder1");
+    const folder2 = treeItemById("folder2");
 
     await user.click(getToggleButton(folder1));
     expect(folder1).toHaveAttribute("aria-expanded", "true");
@@ -1489,17 +1427,17 @@ describe("TreeView autoCollapse", () => {
   it("only collapses siblings at the same level, not parent or cousins", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: true });
 
-    const folder3 = screen.getByRole("treeitem", { name: /^Folder 3$/ });
+    const folder3 = treeItemById("folder3");
 
     await user.click(getToggleButton(folder3));
     expect(folder3).toHaveAttribute("aria-expanded", "true");
 
-    const subfolder1 = screen.getByRole("treeitem", { name: /^Subfolder 1$/ });
+    const subfolder1 = treeItemById("subfolder1");
     await user.click(getToggleButton(subfolder1));
     expect(subfolder1).toHaveAttribute("aria-expanded", "true");
     expect(folder3).toHaveAttribute("aria-expanded", "true");
 
-    const subfolder2 = screen.getByRole("treeitem", { name: /^Subfolder 2$/ });
+    const subfolder2 = treeItemById("subfolder2");
     await user.click(getToggleButton(subfolder2));
     expect(subfolder2).toHaveAttribute("aria-expanded", "true");
     expect(subfolder1).toHaveAttribute("aria-expanded", "false");
@@ -1509,8 +1447,8 @@ describe("TreeView autoCollapse", () => {
   it("works with keyboard navigation (ArrowRight to expand)", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: true });
 
-    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
-    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+    const folder1 = treeItemById("folder1");
+    const folder2 = treeItemById("folder2");
 
     folder1.focus();
     await user.keyboard("{ArrowRight}");
@@ -1525,8 +1463,8 @@ describe("TreeView autoCollapse", () => {
   it("works when expanding via Enter/Space key", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: true });
 
-    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
-    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+    const folder1 = treeItemById("folder1");
+    const folder2 = treeItemById("folder2");
 
     folder1.focus();
     await user.keyboard("{Enter}");
@@ -1541,8 +1479,8 @@ describe("TreeView autoCollapse", () => {
   it("applies autoCollapse when activeId changes programmatically", async () => {
     const { rerender } = render(TreeViewAutoCollapse, { autoCollapse: true });
 
-    const folder1 = screen.getByRole("treeitem", { name: /Folder 1/ });
-    const folder2 = screen.getByRole("treeitem", { name: /Folder 2/ });
+    const folder1 = treeItemById("folder1");
+    const folder2 = treeItemById("folder2");
 
     // Manually expand folder1 via click
     await user.click(getToggleButton(folder1));

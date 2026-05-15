@@ -1,6 +1,12 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
+@mixin treeview-hidden {
+  .#{$prefix}--tree-node--hidden {
+    display: none;
+  }
+}
+
 @mixin treeview-multiselect-overrides {
   .#{$prefix}--tree--multiselect
     .#{$prefix}--tree-node--selected
@@ -33,6 +39,10 @@
     user-select: none;
     -webkit-user-select: none;
   }
+}
+
+@include exports('treeview-hidden') {
+  @include treeview-hidden;
 }
 
 @include exports('treeview-multiselect') {
