@@ -30,3 +30,9 @@ Set `type` to `"ordered-native"` to use browser-native numbering styles.
 Convert flat data structures to hierarchical arrays using the `toHierarchy` utility function.
 
 <FileSource src="/framed/RecursiveList/RecursiveListFlatArray" />
+
+## Stable keys
+
+Each node accepts an optional `id` (string or number) which is used as the each-block key. Supply an `id` when node `text` or `href` values can repeat, so reordering or filtering preserves DOM identity.
+
+<FileSource src="/framed/RecursiveList/RecursiveListStableKeys" />
