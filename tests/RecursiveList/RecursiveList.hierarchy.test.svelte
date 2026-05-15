@@ -1,16 +1,7 @@
 <script lang="ts">
   import { RecursiveList, toHierarchy } from "carbon-components-svelte";
 
-  type TestNode = {
-    id?: number;
-    text?: string;
-    href?: string;
-    html?: string;
-    pid?: number;
-    nodes?: TestNode[];
-  };
-
-  let nodes: TestNode[] = toHierarchy(
+  let nodes = toHierarchy(
     [
       { id: 1, text: "Item 1" },
       { id: 2, text: "Item 1a", pid: 1 },
@@ -21,6 +12,21 @@
         id: 6,
         href: "https://svelte.dev/",
         text: "Link with custom text",
+        pid: 4,
+      },
+      {
+        id: 8,
+        href: "https://svelte.dev/",
+        text: "External link",
+        target: "_blank",
+        pid: 4,
+      },
+      {
+        id: 9,
+        href: "https://svelte.dev/",
+        text: "External link with custom rel",
+        target: "_blank",
+        rel: "noopener",
         pid: 4,
       },
       { id: 7, text: "Item 3" },

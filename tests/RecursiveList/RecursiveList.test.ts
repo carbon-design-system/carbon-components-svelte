@@ -35,7 +35,7 @@ describe.each(testCases)("$name", ({ component }) => {
     render(component);
 
     const links = screen.getAllByRole("link");
-    expect(links).toHaveLength(2);
+    expect(links).toHaveLength(4);
 
     // Link with custom text
     const customLink = screen.getByText("Link with custom text");
@@ -43,9 +43,23 @@ describe.each(testCases)("$name", ({ component }) => {
 
     // Plain link
     const plainLink = links.find(
-      (link) => link.textContent === "https://svelte.dev/",
+      (link) => link.textContent?.trim() === "https://svelte.dev/",
     );
     expect(plainLink).toHaveAttribute("href", "https://svelte.dev/");
+  });
+
+  it("renders link target and computes rel for `_blank`", () => {
+    render(component);
+
+    const externalLink = screen.getByText("External link");
+    expect(externalLink).toHaveAttribute("target", "_blank");
+    expect(externalLink).toHaveAttribute("rel", "noopener noreferrer");
+
+    const externalLinkCustomRel = screen.getByText(
+      "External link with custom rel",
+    );
+    expect(externalLinkCustomRel).toHaveAttribute("target", "_blank");
+    expect(externalLinkCustomRel).toHaveAttribute("rel", "noopener");
   });
 });
 

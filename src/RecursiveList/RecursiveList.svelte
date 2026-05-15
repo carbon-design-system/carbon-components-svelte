@@ -5,6 +5,8 @@
    * @property {string} [text] - Node text content
    * @property {string} [href] - Node link URL
    * @property {string} [html] - Node HTML content
+   * @property {import("svelte/elements").SvelteHTMLElements["a"]["target"]} [target] - Node link target
+   * @property {import("svelte/elements").SvelteHTMLElements["a"]["rel"]} [rel] - Node link rel
    * @property {RecursiveListNode[]} [nodes] - Child nodes
    * @restProps {ul | ol}
    */
