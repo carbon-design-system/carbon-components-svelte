@@ -108,6 +108,16 @@ Use the `menu` slot to customize the trigger button content.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
+## Disabled button
+
+Set `disabled` to `true` to disable the trigger button.
+
+<OverflowMenu disabled>
+  <OverflowMenuItem text="Manage credentials" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
+  <OverflowMenuItem danger text="Delete service" />
+</OverflowMenu>
+
 ## Disabled items
 
 Set `disabled` to `true` to disable menu items. Use `hasDivider` to add visual separation between items.
