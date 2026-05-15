@@ -11,9 +11,6 @@
    */
   export let notificationType = "toast";
 
-  /** Specify the ARIA label for the icon */
-  export let iconDescription;
-
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import InformationFilled from "../icons/InformationFilled.svelte";
@@ -38,9 +35,4 @@
     .join(" ");
 </script>
 
-<svelte:component
-  this={icons[kind]}
-  size={20}
-  title={iconDescription}
-  class={iconClass}
-/>
+<svelte:component this={icons[kind]} size={20} class={iconClass} />
