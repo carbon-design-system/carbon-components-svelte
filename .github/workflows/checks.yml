@@ -34,7 +34,10 @@ jobs:
   changes:
     runs-on: macos-15
     outputs:
-      src-or-tests: ${{ steps.filter.outputs.src-or-tests }}
+      unit: ${{ steps.filter.outputs.unit }}
+      e2e: ${{ steps.filter.outputs.e2e }}
+      types: ${{ steps.filter.outputs.types }}
+      docs-deploy: ${{ steps.filter.outputs.docs-deploy }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -43,14 +46,44 @@ jobs:
         id: filter
         with:
           filters: |
-            src-or-tests:
+            unit:
               - 'src/**'
               - 'tests/**'
+              - 'tests-svelte3/**'
+              - 'tests-svelte4/**'
+              - 'scripts/**'
+              - 'vite.config.ts'
+              - 'tsconfig*.json'
+              - 'package.json'
+              - 'bun.lock'
+              - '.github/**'
+            e2e:
+              - 'src/**'
+              - 'e2e/**'
+              - 'scripts/**'
+              - 'playwright.config.ts'
+              - 'tsconfig*.json'
+              - 'package.json'
+              - 'bun.lock'
+              - '.github/**'
+            types:
+              - 'src/**'
+              - 'scripts/**'
+              - 'tsconfig*.json'
+              - 'package.json'
+              - 'bun.lock'
+              - '.github/**'
+            docs-deploy:
+              - 'src/**'
+              - 'css/**'
+              - 'scripts/**'
+              - 'package.json'
+              - 'bun.lock'
               - '.github/**'
 
   test:
     needs: [lint, changes]
-    if: needs.changes.outputs.src-or-tests == 'true'
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -67,8 +100,14 @@ jobs:
         run: bun --bun run test
 
   test-e2e:
-    needs: [lint, test]
-    if: ${{ !failure() && !cancelled() }}
+    needs: [lint, changes, test]
+    if: |
+      always() &&
+      !cancelled() &&
+      needs.lint.result == 'success' &&
+      needs.changes.result == 'success' &&
+      (needs.test.result == 'success' || needs.test.result == 'skipped') &&
+      (github.event_name == 'workflow_dispatch' || needs.changes.outputs.e2e == 'true')
     runs-on: ubuntu-latest
     # Official image includes Chromium/Firefox/WebKit + system deps
     # Bump tag with @playwright/test in bun.lock.
@@ -93,7 +132,7 @@ jobs:
 
   test-svelte3:
     needs: [lint, changes]
-    if: needs.changes.outputs.src-or-tests == 'true'
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -120,7 +159,7 @@ jobs:
 
   test-svelte4:
     needs: [lint, changes]
-    if: needs.changes.outputs.src-or-tests == 'true'
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -146,6 +185,8 @@ jobs:
           bun --bun run test
 
   types:
+    needs: [lint, changes]
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.types == 'true'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -158,10 +199,11 @@ jobs:
       - run: bun run test:src-types
 
   deploy-docs:
-    needs: [lint, test, types]
+    needs: [lint, changes, test, types]
     if: |
       always() &&
       (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master') &&
+      (github.event_name == 'workflow_dispatch' || needs.changes.outputs.docs-deploy == 'true') &&
       !failure() && !cancelled()
     uses: ./.github/workflows/deploy-docs.yml
     secrets: inherit
