@@ -106,8 +106,17 @@
   /** Obtain a reference to the HTML element */
   export let ref = null;
 
+  /**
+   * Set to `true` to render the icon-only tooltip in a portal,
+   * preventing it from being clipped by `overflow: hidden` containers
+   * and enabling auto-flipping when the preferred direction lacks space.
+   * @type {boolean}
+   */
+  export let portalTooltip = false;
+
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
 
@@ -117,8 +126,19 @@
     ctx.declareRef(ref);
   }
   $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
+  $: usePortal = hasIconOnly && portalTooltip && !hideTooltip;
 
   const tooltipId = {};
+
+  // Hardcoded for parity with TooltipIcon defaults; not exposed as props yet.
+  const ENTER_DELAY_MS = 100;
+  const LEAVE_DELAY_MS = 300;
+
+  let hovered = false;
+  let focused = false;
+  let portalTimeout;
+
+  $: portalOpen = usePortal && !disabled && (hovered || focused);
 
   $: tooltipHidden =
     hasIconOnly &&
@@ -138,8 +158,67 @@
     }
   }
 
+  function handlePortalMouseEnter() {
+    if (!usePortal || disabled) return;
+    clearTimeout(portalTimeout);
+    portalTimeout = setTimeout(() => {
+      hovered = true;
+    }, ENTER_DELAY_MS);
+  }
+
+  function handlePortalMouseLeave() {
+    if (!usePortal) return;
+    clearTimeout(portalTimeout);
+    portalTimeout = setTimeout(() => {
+      hovered = false;
+    }, LEAVE_DELAY_MS);
+  }
+
+  function handlePortalFocus() {
+    if (!usePortal || disabled) return;
+    focused = true;
+  }
+
+  function handlePortalBlur() {
+    if (!usePortal) return;
+    focused = false;
+  }
+
+  const PORTAL_HORIZONTAL_GAP_LEFT_PX = 2;
+  const PORTAL_HORIZONTAL_GAP_RIGHT_PX = 2;
+  const PORTAL_VERTICAL_GAP_TOP_PX = 1;
+  const PORTAL_VERTICAL_GAP_BOTTOM_PX = 1;
+  const PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX = -3;
+  const PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX = 1;
+
+  $: portalHorizontalGapLeft =
+    tooltipPosition === "left" || tooltipPosition === "right"
+      ? PORTAL_HORIZONTAL_GAP_LEFT_PX
+      : 0;
+  $: portalHorizontalGapRight =
+    tooltipPosition === "left" || tooltipPosition === "right"
+      ? PORTAL_HORIZONTAL_GAP_RIGHT_PX
+      : 0;
+  $: portalGapTop =
+    tooltipPosition === "top" || tooltipPosition === "bottom"
+      ? PORTAL_VERTICAL_GAP_TOP_PX
+      : 0;
+  $: portalGapBottom =
+    tooltipPosition === "top" || tooltipPosition === "bottom"
+      ? PORTAL_VERTICAL_GAP_BOTTOM_PX
+      : 0;
+  $: portalVerticalAlignOffsetLeft =
+    tooltipPosition === "left" && tooltipAlignment === "start"
+      ? PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX
+      : 0;
+  $: portalVerticalAlignOffsetRight =
+    tooltipPosition === "right" && tooltipAlignment === "end"
+      ? PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX
+      : 0;
+
   onMount(() => {
     return () => {
+      clearTimeout(portalTimeout);
       if (get(activeButtonTooltip) === tooltipId) {
         activeButtonTooltip.set(null);
       }
@@ -172,17 +251,23 @@
       kind && `bx--btn--${kind}`,
       disabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
-      hasIconOnly && !hideTooltip && "bx--tooltip__trigger",
-      hasIconOnly && !hideTooltip && "bx--tooltip--a11y",
+      hasIconOnly && !hideTooltip && !usePortal && "bx--tooltip__trigger",
+      hasIconOnly && !hideTooltip && !usePortal && "bx--tooltip--a11y",
       hasIconOnly &&
         !hideTooltip &&
+        !usePortal &&
         tooltipPosition &&
         `bx--btn--icon-only--${tooltipPosition}`,
       hasIconOnly &&
         !hideTooltip &&
+        !usePortal &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
-      hasIconOnly && !hideTooltip && tooltipHidden && "bx--tooltip--hidden",
+      hasIconOnly &&
+        !hideTooltip &&
+        !usePortal &&
+        tooltipHidden &&
+        "bx--tooltip--hidden",
       hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
       $$restProps.class,
     ]
@@ -215,12 +300,16 @@
     {...buttonProps}
     on:click
     on:focus
+    on:focus={handlePortalFocus}
     on:blur
+    on:blur={handlePortalBlur}
     on:mouseover
     on:mouseenter
     on:mouseenter={handleMouseEnter}
+    on:mouseenter={handlePortalMouseEnter}
     on:mouseleave
     on:mouseleave={handleMouseLeave}
+    on:mouseleave={handlePortalMouseLeave}
   >
     {#if hasIconOnly}
       <span class:bx--assistive-text={true} style:pointer-events="none">
@@ -249,12 +338,16 @@
     {...buttonProps}
     on:click
     on:focus
+    on:focus={handlePortalFocus}
     on:blur
+    on:blur={handlePortalBlur}
     on:mouseover
     on:mouseenter
     on:mouseenter={handleMouseEnter}
+    on:mouseenter={handlePortalMouseEnter}
     on:mouseleave
     on:mouseleave={handleMouseLeave}
+    on:mouseleave={handlePortalMouseLeave}
   >
     {#if hasIconOnly}
       <span class:bx--assistive-text={true} style:pointer-events="none">
@@ -276,4 +369,21 @@
       />
     {/if}
   </button>
+{/if}
+
+{#if usePortal}
+  <PortalTooltip
+    anchor={ref}
+    direction={tooltipPosition}
+    open={portalOpen}
+    text={iconDescription}
+    tooltipType="icon"
+    intrinsicAlign={tooltipAlignment}
+    horizontalGapLeft={portalHorizontalGapLeft}
+    horizontalGapRight={portalHorizontalGapRight}
+    gapTop={portalGapTop}
+    gapBottom={portalGapBottom}
+    verticalAlignOffsetLeft={portalVerticalAlignOffsetLeft}
+    verticalAlignOffsetRight={portalVerticalAlignOffsetRight}
+  />
 {/if}
