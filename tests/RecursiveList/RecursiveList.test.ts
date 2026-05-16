@@ -5,6 +5,7 @@ import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.
 import type { ComponentProps } from "svelte";
 import RecursiveListHierarchyTest from "./RecursiveList.hierarchy.test.svelte";
 import RecursiveListIdTest from "./RecursiveList.id.test.svelte";
+import RecursiveListStringShorthandTest from "./RecursiveList.string-shorthand.test.svelte";
 import RecursiveListTest from "./RecursiveList.test.svelte";
 
 const testCases = [
@@ -105,6 +106,30 @@ describe("RecursiveList props", () => {
     const lists = screen.getAllByRole("list");
     expect(lists).toHaveLength(2);
     expect(lists[1]).toHaveClass("bx--list--nested");
+  });
+});
+
+describe("RecursiveList string shorthand", () => {
+  it("renders string entries as text nodes", () => {
+    render(RecursiveListStringShorthandTest);
+
+    expect(screen.getByText("Item 1")).toBeInTheDocument();
+    expect(screen.getByText("Item 2")).toBeInTheDocument();
+    expect(screen.getByText("Item 3")).toBeInTheDocument();
+  });
+
+  it("renders nested string entries as text nodes", () => {
+    render(RecursiveListStringShorthandTest);
+
+    expect(screen.getByText("Item 2a")).toBeInTheDocument();
+    expect(screen.getByText("Item 2b")).toBeInTheDocument();
+  });
+
+  it("renders the correct number of lists for nested strings", () => {
+    render(RecursiveListStringShorthandTest);
+
+    // One outer list + one nested list under "Item 2"
+    expect(screen.getAllByRole("list")).toHaveLength(2);
   });
 });
 
@@ -282,13 +307,18 @@ describe("RecursiveList Generics", () => {
     type Props = ComponentProps<ComponentType>;
 
     expectTypeOf<NonNullable<Props["nodes"]>>().toEqualTypeOf<
-      ReadonlyArray<CustomNode & { nodes?: CustomNode[] }>
+      ReadonlyArray<
+        string | (CustomNode & { nodes?: Array<string | CustomNode> })
+      >
     >();
 
     type BaseComponentType = RecursiveListComponent<RecursiveListNode>;
     type BaseProps = ComponentProps<BaseComponentType>;
     expectTypeOf<NonNullable<BaseProps["nodes"]>>().toEqualTypeOf<
-      ReadonlyArray<RecursiveListNode & { nodes?: RecursiveListNode[] }>
+      ReadonlyArray<
+        | string
+        | (RecursiveListNode & { nodes?: Array<string | RecursiveListNode> })
+      >
     >();
   });
 });
