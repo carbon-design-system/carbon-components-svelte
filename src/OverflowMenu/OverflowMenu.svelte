@@ -117,6 +117,11 @@
     });
   };
 
+  /** @type {(id: string) => void} */
+  const remove = (id) => {
+    items.update((_) => _.filter((item) => item.id !== id));
+  };
+
   /**
    * @type {(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }) => void}
    */
@@ -183,6 +188,7 @@
     focusedId,
     items,
     add,
+    remove,
     update,
     change,
     first,
@@ -223,7 +229,6 @@
     }
 
     if (!open) {
-      items.set([]);
       currentId.set(undefined);
       currentIndex.set(0);
     }
