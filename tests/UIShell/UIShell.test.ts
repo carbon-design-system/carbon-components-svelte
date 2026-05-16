@@ -195,6 +195,30 @@ describe("UIShell", () => {
         expect(component.isSideNavOpen).toBe(true);
       });
 
+      it("preserves a user-toggled state across the next breakpoint crossing", async () => {
+        // Regression: `userExplicitlySet` was set on hamburger click but never
+        // gated the auto-write, so a viewport resize clobbered the user's choice.
+        setViewportWidth(500); // Mobile
+
+        const { container, component } = render(UiShell, {
+          props: { persistentHamburgerMenu: true, isSideNavOpen: false },
+        });
+
+        const hamburgerButton = container.querySelector(
+          ".bx--header__menu-trigger",
+        );
+        assert(hamburgerButton);
+        await user.click(hamburgerButton);
+        expect(component.isSideNavOpen).toBe(true);
+
+        // With `persistentHamburgerMenu: true`, `shouldAutoExpand` is always
+        // false. Without the gate, crossing to desktop would force-close
+        // the nav the user just opened.
+        setViewportWidth(1200);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(component.isSideNavOpen).toBe(true);
+      });
+
       it("should auto-expand when crossing breakpoint to desktop", async () => {
         setViewportWidth(500); // Start on mobile
 
