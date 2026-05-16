@@ -2400,4 +2400,66 @@ describe("MultiSelect", () => {
       expect(options[2]).toHaveAttribute("aria-selected", "false");
     });
   });
+
+  describe("readonly", () => {
+    it("should apply readonly class on the listbox", () => {
+      const { container } = render(MultiSelect, {
+        props: { items, labelText: "Contact", readonly: true },
+      });
+
+      expect(
+        container.querySelector(".bx--multi-select--readonly"),
+      ).toBeTruthy();
+    });
+
+    it("should not open menu on click when readonly (default)", async () => {
+      render(MultiSelect, {
+        props: { items, labelText: "Contact", readonly: true },
+      });
+
+      const trigger = await screen.findByRole("combobox");
+      await user.click(trigger);
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("should not open menu on click when readonly + filterable", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact",
+          readonly: true,
+          filterable: true,
+          placeholder: "Select",
+        },
+      });
+
+      const input = screen.getByRole("combobox");
+      assert(input instanceof HTMLInputElement);
+      await user.click(input);
+
+      expect(input).toHaveAttribute("readonly");
+      expect(input).toHaveAttribute("aria-readonly", "true");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("should not clear selection when readonly", async () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact",
+          readonly: true,
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      const closeIcon = container.querySelector(".bx--tag__close-icon");
+      assert(closeIcon);
+      await user.click(closeIcon);
+
+      expect(
+        container.querySelectorAll(".bx--tag--filter").length,
+      ).toBeGreaterThan(0);
+    });
+  });
 });

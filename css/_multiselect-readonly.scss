@@ -1,0 +1,57 @@
+// This file backports readonly multi-select styles from carbon-components v11+
+// to ensure compatibility with carbon-components v10.58.12.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Readonly multiselect styles
+/// @access private
+/// @group multiselect
+@mixin multiselect-readonly {
+  //----------------------------------------------
+  // Read-only
+  // ---------------------------------------------
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly,
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly:hover {
+    background-color: transparent;
+    border-block-end-color: $border-subtle;
+  }
+
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly
+    .#{$prefix}--list-box__menu-icon
+    svg {
+    fill: $icon-disabled;
+  }
+
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly
+    .#{$prefix}--tag--filter,
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly
+    .#{$prefix}--tag__close-icon:hover {
+    background-color: transparent;
+    color: $text-primary;
+    cursor: default;
+  }
+
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly
+    .#{$prefix}--tag--filter {
+    box-shadow: 0 0 0 1px $border-subtle;
+  }
+
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly
+    .#{$prefix}--tag--filter
+    svg {
+    fill: $icon-disabled;
+  }
+
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly
+    .#{$prefix}--list-box__field,
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly
+    .#{$prefix}--list-box__menu-icon {
+    cursor: default;
+  }
+}
+
+@include exports("multiselect-readonly") {
+  @include multiselect-readonly;
+}
