@@ -8,6 +8,7 @@ import ModalFocusReturnTest from "./ModalFocusReturn.test.svelte";
 import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
 import ModalFormIdTest from "./ModalFormId.test.svelte";
 import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
+import ModalSideNavBodyLockTest from "./ModalSideNavBodyLock.test.svelte";
 import ModalTextareaEnterTest from "./ModalTextareaEnter.test.svelte";
 
 describe("Modal", () => {
@@ -788,6 +789,67 @@ describe("Modal", () => {
 
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["primaryButtonIcon"]>().toEqualTypeOf<any>();
+    });
+  });
+
+  // Regression: Modal and SideNav must coordinate on the body scroll lock
+  // class via a shared ref counter, so neither component clobbers the other.
+  describe("body scroll lock coordination with SideNav", () => {
+    const setViewportWidth = (width: number) => {
+      Object.defineProperty(window, "innerWidth", {
+        writable: true,
+        configurable: true,
+        value: width,
+      });
+      window.dispatchEvent(new Event("resize"));
+    };
+
+    afterEach(() => {
+      setViewportWidth(1024);
+      document.body.classList.remove("bx--body--with-modal-open");
+    });
+
+    it("keeps the body lock class when SideNav closes while a Modal is still open", async () => {
+      setViewportWidth(500);
+
+      const { component } = render(ModalSideNavBodyLockTest, {
+        props: { modalOpen: false, sideNavOpen: false },
+      });
+
+      component.modalOpen = true;
+      component.sideNavOpen = true;
+      await tick();
+      expect(document.body).toHaveClass("bx--body--with-modal-open");
+
+      component.sideNavOpen = false;
+      await tick();
+      // Modal is still open — the class must remain.
+      expect(document.body).toHaveClass("bx--body--with-modal-open");
+
+      component.modalOpen = false;
+      await tick();
+      expect(document.body).not.toHaveClass("bx--body--with-modal-open");
+    });
+
+    it("keeps the body lock class when a Modal closes while SideNav is still open", async () => {
+      setViewportWidth(500);
+
+      const { component } = render(ModalSideNavBodyLockTest, {
+        props: { modalOpen: false, sideNavOpen: false },
+      });
+
+      component.sideNavOpen = true;
+      component.modalOpen = true;
+      await tick();
+      expect(document.body).toHaveClass("bx--body--with-modal-open");
+
+      component.modalOpen = false;
+      await tick();
+      expect(document.body).toHaveClass("bx--body--with-modal-open");
+
+      component.sideNavOpen = false;
+      await tick();
+      expect(document.body).not.toHaveClass("bx--body--with-modal-open");
     });
   });
 });
