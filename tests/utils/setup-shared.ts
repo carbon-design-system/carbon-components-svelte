@@ -7,12 +7,7 @@ import { userEvent } from "@testing-library/user-event";
 // Using dynamic import() to ensure it loads from the correct location at runtime
 const sveltePkg = await import("svelte/package.json");
 
-export const SVELTE_VERSION = Number.parseInt(
-  sveltePkg.version.split(".")[0],
-  10,
-);
-export const isSvelte3 = SVELTE_VERSION === 3;
-export const isSvelte4 = SVELTE_VERSION === 4;
+const SVELTE_VERSION = Number.parseInt(sveltePkg.version.split(".")[0], 10);
 export const isSvelte5 = SVELTE_VERSION === 5;
 
 Element.prototype.scrollIntoView = vi.fn();
