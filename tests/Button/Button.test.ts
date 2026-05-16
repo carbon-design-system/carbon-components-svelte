@@ -3,6 +3,9 @@ import type ButtonComponent from "carbon-components-svelte/Button/Button.svelte"
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import Button from "./Button.test.svelte";
+import ButtonInModal from "./ButtonInModal.test.svelte";
+import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
+import HeaderGlobalActionPortal from "./HeaderGlobalActionPortal.test.svelte";
 
 describe("Button", () => {
   beforeEach(() => {
@@ -201,6 +204,120 @@ describe("Button", () => {
     const assistiveText = iconButton.querySelector(".bx--assistive-text");
     assert(assistiveText);
     expect(assistiveText).toHaveTextContent("Add item");
+  });
+
+  describe("portalTooltip", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("should not apply legacy CSS tooltip classes when portalTooltip is true", () => {
+      render(Button);
+
+      const button = screen.getByTestId("btn-icon-portal");
+      expect(button).toHaveClass("bx--btn--icon-only");
+      expect(button).not.toHaveClass("bx--tooltip__trigger");
+      expect(button).not.toHaveClass("bx--tooltip--a11y");
+      expect(button).not.toHaveClass("bx--btn--icon-only--top");
+      expect(button).not.toHaveClass("bx--tooltip--align-center");
+    });
+
+    it("should render portal tooltip on mouseenter and remove on mouseleave", async () => {
+      render(Button);
+
+      const button = screen.getByTestId("btn-icon-portal");
+
+      expect(
+        document.body.querySelector(".bx--tooltip-portal"),
+      ).not.toBeInTheDocument();
+
+      await fireEvent.mouseEnter(button);
+      await vi.advanceTimersByTimeAsync(100);
+
+      const portal = document.body.querySelector(".bx--tooltip-portal");
+      expect(portal).toBeInTheDocument();
+      expect(portal).toHaveAttribute("data-tooltip-type", "icon");
+      expect(portal).toHaveTextContent("Portal tooltip text");
+
+      await fireEvent.mouseLeave(button);
+      await vi.advanceTimersByTimeAsync(300);
+
+      expect(
+        document.body.querySelector(".bx--tooltip-portal"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should only show one portal tooltip at a time for adjacent buttons", async () => {
+      render(ButtonPortalAdjacent);
+
+      const btnA = screen.getByTestId("btn-portal-a");
+      const btnB = screen.getByTestId("btn-portal-b");
+
+      await fireEvent.mouseEnter(btnA);
+      await vi.advanceTimersByTimeAsync(100);
+
+      let portals = document.body.querySelectorAll(".bx--tooltip-portal");
+      expect(portals).toHaveLength(1);
+      expect(portals[0]).toHaveTextContent("Tooltip A");
+
+      // Move to the adjacent button: A's tooltip must close as B's opens, so
+      // the two never overlap. Warm handoff skips the enter delay.
+      await fireEvent.mouseEnter(btnB);
+      await vi.advanceTimersByTimeAsync(100);
+
+      portals = document.body.querySelectorAll(".bx--tooltip-portal");
+      expect(portals).toHaveLength(1);
+      expect(portals[0]).toHaveTextContent("Tooltip B");
+    });
+  });
+
+  describe("portalTooltip (modal auto-portal)", () => {
+    it("should portal the tooltip by default when inside a Modal", () => {
+      render(ButtonInModal, { props: { modalOpen: true } });
+
+      const button = screen.getByTestId("btn-icon-modal");
+      expect(button).toHaveClass("bx--btn--icon-only");
+      // Portal mode suppresses the inline CSS tooltip classes.
+      expect(button).not.toHaveClass("bx--tooltip__trigger");
+      expect(button).not.toHaveClass("bx--tooltip--a11y");
+    });
+
+    it("should not portal inside a Modal when portalTooltip is false", () => {
+      render(ButtonInModal, {
+        props: { modalOpen: true, portalTooltip: false },
+      });
+
+      const button = screen.getByTestId("btn-icon-modal");
+      expect(button).toHaveClass("bx--tooltip__trigger");
+      expect(button).toHaveClass("bx--tooltip--a11y");
+    });
+
+    it("should not portal outside a Modal by default", () => {
+      render(Button);
+
+      // Default icon-only button (no portalTooltip, no Modal) stays inline.
+      const button = screen.getByText("Tooltip text").parentElement;
+      assert(button);
+      expect(button).toHaveClass("bx--tooltip__trigger");
+      expect(button).toHaveClass("bx--tooltip--a11y");
+    });
+  });
+
+  describe("HeaderGlobalAction", () => {
+    it("should forward portalTooltip to the underlying Button", () => {
+      render(HeaderGlobalActionPortal);
+
+      const button = screen.getByTestId("header-global-action");
+      expect(button).toHaveClass("bx--header__action");
+      expect(button).toHaveClass("bx--btn--icon-only");
+      // portalTooltip reached the Button: inline CSS tooltip classes suppressed.
+      expect(button).not.toHaveClass("bx--tooltip__trigger");
+      expect(button).not.toHaveClass("bx--tooltip--a11y");
+    });
   });
 
   describe("Generics", () => {
