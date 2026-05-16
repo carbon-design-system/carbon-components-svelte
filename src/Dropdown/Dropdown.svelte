@@ -78,6 +78,9 @@
   /** Specify the helper text */
   export let helperText = "";
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
   /**
    * Specify the list box label.
    * @type {string}
@@ -466,6 +469,7 @@
     inline && "bx--dropdown--inline",
     disabled && "bx--dropdown--disabled",
     light && "bx--dropdown--light",
+    readonly && "bx--dropdown--readonly",
   ]
     .filter(Boolean)
     .join(" ");
@@ -506,7 +510,7 @@
     aria-label={$$props["aria-label"]}
     class={dropdownListBoxClass}
     on:click={({ target }) => {
-      if (disabled) return;
+      if (disabled || readonly) return;
       open = ref.contains(target) ? !open : false;
     }}
     {disabled}
@@ -530,6 +534,8 @@
       class:bx--list-box__field={true}
       tabindex="0"
       aria-expanded={open}
+      aria-disabled={readonly || undefined}
+      aria-readonly={readonly || undefined}
       aria-haspopup="listbox"
       aria-activedescendant={highlightedId ?? ""}
       aria-controls={open ? menuId : undefined}
@@ -544,6 +550,8 @@
         if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
         }
+
+        if (readonly) return;
 
         if (e.key === "Enter") {
           selectHighlighted();
@@ -590,7 +598,7 @@
       <ListBoxMenuIcon
         on:click={(e) => {
           e.stopPropagation();
-          if (disabled) return;
+          if (disabled || readonly) return;
           open = !open;
         }}
         {translateWithId}

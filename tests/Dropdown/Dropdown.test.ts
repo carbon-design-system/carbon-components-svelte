@@ -1861,4 +1861,41 @@ describe("Dropdown", () => {
     expect(button).not.toHaveAttribute("translateWithId");
     expect(button).not.toHaveAttribute("translatewithid");
   });
+
+  describe("readonly", () => {
+    it("should apply readonly class and aria-readonly", () => {
+      const { container } = render(Dropdown, {
+        props: { items, labelText: "Contact", readonly: true },
+      });
+
+      expect(container.querySelector(".bx--dropdown--readonly")).toBeTruthy();
+      expect(screen.getByRole("combobox")).toHaveAttribute(
+        "aria-readonly",
+        "true",
+      );
+    });
+
+    it("should not open menu on click when readonly", async () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", readonly: true },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("should not select on Enter when readonly", async () => {
+      const onselect = vi.fn();
+      render(Dropdown, {
+        props: { items, labelText: "Contact", readonly: true, onselect },
+      });
+
+      const button = screen.getByRole("combobox");
+      button.focus();
+      await user.keyboard("{Enter}");
+
+      expect(onselect).not.toHaveBeenCalled();
+    });
+  });
 });
