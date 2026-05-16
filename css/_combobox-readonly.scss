@@ -1,0 +1,37 @@
+// This file backports readonly combo-box styles from carbon-components v11+
+// to ensure compatibility with carbon-components v10.58.12.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Readonly combobox styles
+/// @access private
+/// @group combobox
+@mixin combobox-readonly {
+  //----------------------------------------------
+  // Read-only
+  // ---------------------------------------------
+  .#{$prefix}--list-box.#{$prefix}--combo-box--readonly,
+  .#{$prefix}--list-box.#{$prefix}--combo-box--readonly:hover {
+    background-color: transparent;
+  }
+
+  .#{$prefix}--combo-box--readonly .#{$prefix}--text-input {
+    border-block-end-color: $border-subtle;
+  }
+
+  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__menu-icon,
+  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__selection {
+    cursor: default;
+  }
+
+  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__menu-icon svg,
+  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__selection svg {
+    fill: $icon-disabled;
+  }
+}
+
+@include exports("combobox-readonly") {
+  @include combobox-readonly;
+}

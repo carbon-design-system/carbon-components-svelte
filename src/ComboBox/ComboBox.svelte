@@ -82,6 +82,9 @@
   /** Set to `true` to open the combobox menu dropdown */
   export let open = false;
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
   /**
    * Set to `true` to allow custom values that are not in the items list.
    * By default, user-entered text is cleared when the combobox loses focus without selecting an item.
@@ -286,6 +289,7 @@
    * ```
    */
   export async function clear(options = {}) {
+    if (readonly) return;
     prevSelectedId = null;
     highlightedIndex = -1;
     selectedId = undefined;
@@ -542,6 +546,7 @@
     "bx--combo-box",
     direction === "top" && "bx--list-box--up",
     !invalid && warn && "bx--combo-box--warning",
+    readonly && "bx--combo-box--readonly",
   ]
     .filter(Boolean)
     .join(" ");
@@ -575,6 +580,7 @@
     class={comboBoxListBoxClass}
     id={comboId}
     aria-label={ariaLabel}
+    aria-disabled={readonly || undefined}
     {disabled}
     {invalid}
     {open}
@@ -594,7 +600,8 @@
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-activedescendant={highlightedId ?? ""}
-        aria-disabled={disabled}
+        aria-disabled={disabled || readonly}
+        aria-readonly={readonly || undefined}
         aria-controls={open ? menuId : undefined}
         aria-owns={open ? menuId : undefined}
         aria-describedby={invalid && invalidText
@@ -605,6 +612,7 @@
               ? helperId
               : undefined}
         {disabled}
+        {readonly}
         {placeholder}
         {id}
         {name}
@@ -613,7 +621,7 @@
         class:bx--text-input--light={light}
         class:bx--text-input--empty={value === ""}
         on:click={() => {
-          if (disabled) return;
+          if (disabled || readonly) return;
           open = true;
         }}
         on:input
@@ -629,6 +637,7 @@
         }}
         on:keydown
         on:keydown|stopPropagation={(e) => {
+          if (readonly) return;
           const { key } = e;
           if (key === "Enter" || key === "ArrowDown" || key === "ArrowUp") {
             e.preventDefault();
@@ -707,12 +716,14 @@
           on:clear={() => clear({ open: openOnClear })}
           translateWithId={translateWithIdSelection}
           {disabled}
+          {readonly}
           {open}
         />
       {/if}
       <ListBoxMenuIcon
+        aria-hidden={readonly || undefined}
         on:click={(e) => {
-          if (disabled) return;
+          if (disabled || readonly) return;
           e.stopPropagation();
           open = !open;
         }}
