@@ -80,6 +80,12 @@ Control the tooltip position and alignment with `tooltipPosition` and `tooltipAl
 
 <Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add} />
 
+## Icon-only button (portalled tooltip)
+
+Set `portalTooltip` to `true` to render the icon-only tooltip in a portal. This prevents the tooltip from being clipped by `overflow: hidden` containers and auto-flips when the preferred direction lacks viewport space.
+
+<Button portalTooltip iconDescription="Tooltip text" icon={Add} />
+
 ## Icon-only button (hidden tooltip)
 
 Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers.
