@@ -25,7 +25,10 @@
   /** Set to `true` to activate and focus the search bar */
   export let active = false;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @type {HTMLInputElement | null}
+   */
   export let ref = null;
 
   /**
@@ -43,6 +46,7 @@
 
   const dispatch = createEventDispatcher();
 
+  /** @type {null | HTMLDivElement} */
   let refSearch = null;
   let prevActive;
 
@@ -73,7 +77,7 @@
 
 <svelte:window
   on:mouseup={({ target }) => {
-    if (active && !refSearch.contains(target)) active = false;
+    if (active && !refSearch?.contains(target)) active = false;
   }}
 />
 
