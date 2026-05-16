@@ -115,9 +115,11 @@
       // Initial mount: set based on current viewport
       isSideNavOpen = shouldAutoExpand;
     } else if (wasAboveBreakpoint !== isAboveBreakpoint) {
-      // Crossed breakpoint threshold - reset user flag and auto-expand if appropriate
+      // Crossed breakpoint threshold: skip auto-write if the user just
+      // toggled the nav so their choice isn't clobbered by the resize.
+      // The flag is one-shot — reset so subsequent crossings auto-expand.
+      if (!userExplicitlySet) isSideNavOpen = shouldAutoExpand;
       userExplicitlySet = false;
-      isSideNavOpen = shouldAutoExpand;
     }
 
     wasAboveBreakpoint = isAboveBreakpoint;
