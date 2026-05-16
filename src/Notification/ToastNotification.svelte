@@ -16,7 +16,10 @@
   /** Set the timeout duration (ms) to hide the notification after opening it */
   export let timeout = 0;
 
-  /** Set the `role` attribute */
+  /**
+   * Specify the ARIA `role` for the notification container.
+   * @type {"alert" | "log" | "status"}
+   */
   export let role = "alert";
 
   /** Specify the title text */
