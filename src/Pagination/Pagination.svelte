@@ -246,6 +246,7 @@
       kind="ghost"
       tooltipAlignment="center"
       tooltipPosition="top"
+      portalTooltip
       icon={CaretLeft}
       iconDescription={backwardText}
       disabled={backButtonDisabled}
@@ -262,6 +263,7 @@
       kind="ghost"
       tooltipAlignment="end"
       tooltipPosition="top"
+      portalTooltip
       icon={CaretRight}
       iconDescription={forwardText}
       disabled={forwardButtonDisabled}
