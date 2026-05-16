@@ -905,6 +905,34 @@ describe("Dropdown", () => {
     expect(cherryOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
+  it("should not perform typeahead when disableTypeahead is true", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Banana" },
+          { id: "2", text: "Cherry" },
+        ],
+        selectedId: "0",
+        disableTypeahead: true,
+      },
+    });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+
+    await user.keyboard("b");
+
+    const bananaOption = screen.getByRole("option", { name: "Banana" });
+    expect(bananaOption).not.toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
+
+    // Arrow keys should still navigate
+    await user.keyboard("{ArrowDown}");
+    expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
   it("should wrap around to beginning in typeahead search", async () => {
     render(Dropdown, {
       props: {

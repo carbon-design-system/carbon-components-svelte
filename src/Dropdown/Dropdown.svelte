@@ -130,6 +130,13 @@
    */
   export let name = undefined;
 
+  /**
+   * Set to `true` to disable typeahead (type-to-search).
+   * When disabled, character keys do not jump to matching items
+   * and only arrow-key navigation is used.
+   */
+  export let disableTypeahead = false;
+
   /** Obtain a reference to the button HTML element */
   export let ref = null;
 
@@ -558,6 +565,7 @@
         } else if (e.key === "Escape") {
           open = false;
         } else if (
+          !disableTypeahead &&
           open &&
           e.key.length === 1 &&
           e.key !== " " &&
