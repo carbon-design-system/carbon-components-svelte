@@ -1,0 +1,58 @@
+// This file backports readonly toggle styles from carbon-components v11+
+// to ensure compatibility with carbon-components v10.58.12.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Readonly toggle styles
+/// @access private
+/// @group toggle
+@mixin toggle-readonly {
+  //----------------------------------------------
+  // Read-only
+  // ---------------------------------------------
+  .#{$prefix}--toggle--readonly .#{$prefix}--toggle-input__label,
+  .#{$prefix}--toggle--readonly
+    .#{$prefix}--toggle-input__label
+    > .#{$prefix}--toggle__switch,
+  .#{$prefix}--toggle--readonly
+    .#{$prefix}--toggle-input__label
+    > .#{$prefix}--toggle__switch::before,
+  .#{$prefix}--toggle--readonly
+    .#{$prefix}--toggle-input__label
+    > .#{$prefix}--toggle__switch::after {
+    cursor: default;
+  }
+
+  .#{$prefix}--toggle--readonly
+    .#{$prefix}--toggle-input__label
+    > .#{$prefix}--toggle__switch::before {
+    border: 1px solid $icon-disabled;
+    background-color: transparent;
+  }
+
+  .#{$prefix}--toggle--readonly
+    .#{$prefix}--toggle-input__label
+    > .#{$prefix}--toggle__switch::after {
+    background-color: $icon-primary;
+  }
+
+  .#{$prefix}--toggle--readonly
+    .#{$prefix}--toggle-input:checked
+    + .#{$prefix}--toggle-input__label
+    > .#{$prefix}--toggle__switch::before {
+    background-color: transparent;
+  }
+
+  .#{$prefix}--toggle--readonly
+    .#{$prefix}--toggle-input:checked
+    + .#{$prefix}--toggle-input__label
+    > .#{$prefix}--toggle__switch::after {
+    background-color: $icon-primary;
+  }
+}
+
+@include exports("toggle-readonly") {
+  @include toggle-readonly;
+}
