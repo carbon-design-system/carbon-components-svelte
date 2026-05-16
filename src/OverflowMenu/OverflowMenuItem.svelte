@@ -53,18 +53,24 @@
   /** Obtain a reference to the HTML element */
   export let ref = null;
 
-  import { afterUpdate, createEventDispatcher, getContext } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    getContext,
+    onMount,
+  } from "svelte";
 
   const dispatch = createEventDispatcher();
-  const { focusedId, add, update, change, first, last, items } = getContext(
-    "carbon:OverflowMenu",
-  );
+  const { focusedId, add, remove, update, change, first, last, items } =
+    getContext("carbon:OverflowMenu");
 
   $: item = $items.find((_) => _.id === id);
 
   add({ id, text, primaryFocus, disabled });
 
   $: focused = $focusedId === id;
+
+  onMount(() => () => remove(id));
 
   afterUpdate(() => {
     if (ref && focused) {

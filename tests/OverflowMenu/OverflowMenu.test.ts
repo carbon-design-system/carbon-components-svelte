@@ -6,6 +6,7 @@ import { user } from "../setup-tests";
 import OverflowMenuAllDisabled from "./OverflowMenu.allDisabled.test.svelte";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
 import OverflowMenuDisabledLink from "./OverflowMenu.disabledLink.test.svelte";
+import OverflowMenuDynamicItems from "./OverflowMenu.dynamicItems.test.svelte";
 import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
@@ -526,6 +527,33 @@ describe("OverflowMenu", () => {
 
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("removes destroyed items from the registry so arrow nav skips them", async () => {
+    const { rerender } = render(OverflowMenuDynamicItems, {
+      props: { showMiddle: true },
+    });
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    let menuItems = screen.getAllByRole("menuitem");
+    expect(menuItems).toHaveLength(3);
+    expect(menuItems[0]).toHaveTextContent("First");
+    expect(menuItems[0]).toHaveFocus();
+
+    await rerender({ showMiddle: false });
+    await tick();
+
+    menuItems = screen.getAllByRole("menuitem");
+    expect(menuItems).toHaveLength(2);
+    expect(menuItems[0]).toHaveTextContent("First");
+    expect(menuItems[1]).toHaveTextContent("Last");
+
+    // ArrowDown from First should jump straight to Last — the removed
+    // "Middle" must no longer be in the internal registry.
+    await user.keyboard("{ArrowDown}");
+    expect(menuItems[1]).toHaveFocus();
   });
 
   describe("portalMenu", () => {
