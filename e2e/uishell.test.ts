@@ -88,13 +88,13 @@ test.describe("UIShell HeaderSearch", () => {
     await page.keyboard.press("ArrowDown");
     await expect(input).toHaveAttribute(
       "aria-activedescendant",
-      "search-menuitem-1",
+      /^ccs-[a-z0-9.]+-menuitem-1$/,
     );
 
     await page.keyboard.press("ArrowDown");
     await expect(input).toHaveAttribute(
       "aria-activedescendant",
-      "search-menuitem-0",
+      /^ccs-[a-z0-9.]+-menuitem-0$/,
     );
 
     await page.getByTestId("outside-header-search").click();

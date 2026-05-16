@@ -41,7 +41,23 @@ describe("HeaderSearch", () => {
 
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).toHaveAttribute("placeholder", "Search...");
-      expect(searchInput).toHaveAttribute("id", "search-input");
+      expect(searchInput.id).toMatch(/^ccs-[a-z0-9.]+-input$/);
+    });
+
+    it("should generate unique ids per instance to avoid collisions", () => {
+      const { container: a } = render(HeaderSearchTest);
+      const { container: b } = render(HeaderSearchTest);
+
+      const inputA = a.querySelector("input");
+      const inputB = b.querySelector("input");
+      expect(inputA?.id).toBeTruthy();
+      expect(inputB?.id).toBeTruthy();
+      expect(inputA?.id).not.toBe(inputB?.id);
+
+      const labelA = a.querySelector("label");
+      const labelB = b.querySelector("label");
+      expect(labelA?.getAttribute("for")).toBe(inputA?.id);
+      expect(labelB?.getAttribute("for")).toBe(inputB?.id);
     });
 
     it("should render search button", () => {
@@ -91,9 +107,8 @@ describe("HeaderSearch", () => {
       render(HeaderSearchTest, { props: { results, selectedResultIndex: 1 } });
 
       const searchInput = screen.getByRole("textbox");
-      expect(searchInput).toHaveAttribute(
-        "aria-activedescendant",
-        "search-menuitem-1",
+      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
+        /^ccs-[a-z0-9.]+-menuitem-1$/,
       );
     });
 
@@ -106,7 +121,8 @@ describe("HeaderSearch", () => {
 
       const menu = screen.getByRole("menu");
       expect(menu).toBeInTheDocument();
-      expect(menu).toHaveAttribute("aria-labelledby", "search-label");
+      const label = screen.getByText("Search", { selector: "label" });
+      expect(menu.getAttribute("aria-labelledby")).toBe(label.id);
 
       const menuItems = screen.getAllByRole("menuitem");
       expect(menuItems).toHaveLength(2);
@@ -217,9 +233,8 @@ describe("HeaderSearch", () => {
       await user.click(searchInput);
       await user.keyboard("{ArrowDown}");
 
-      expect(searchInput).toHaveAttribute(
-        "aria-activedescendant",
-        "search-menuitem-1",
+      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
+        /^ccs-[a-z0-9.]+-menuitem-1$/,
       );
     });
 
@@ -237,9 +252,8 @@ describe("HeaderSearch", () => {
       await user.click(searchInput);
       await user.keyboard("{ArrowUp}");
 
-      expect(searchInput).toHaveAttribute(
-        "aria-activedescendant",
-        "search-menuitem-0",
+      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
+        /^ccs-[a-z0-9.]+-menuitem-0$/,
       );
     });
 
@@ -256,9 +270,8 @@ describe("HeaderSearch", () => {
       await user.click(searchInput);
       await user.keyboard("{ArrowDown}");
 
-      expect(searchInput).toHaveAttribute(
-        "aria-activedescendant",
-        "search-menuitem-0",
+      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
+        /^ccs-[a-z0-9.]+-menuitem-0$/,
       );
     });
 
@@ -275,9 +288,8 @@ describe("HeaderSearch", () => {
       await user.click(searchInput);
       await user.keyboard("{ArrowUp}");
 
-      expect(searchInput).toHaveAttribute(
-        "aria-activedescendant",
-        "search-menuitem-1",
+      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
+        /^ccs-[a-z0-9.]+-menuitem-1$/,
       );
     });
 
@@ -371,7 +383,9 @@ describe("HeaderSearch", () => {
 
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).toHaveAttribute("aria-autocomplete", "list");
-      expect(searchInput).toHaveAttribute("aria-controls", "search-menu");
+      expect(searchInput.getAttribute("aria-controls")).toMatch(
+        /^ccs-[a-z0-9.]+-menu$/,
+      );
     });
 
     it("should have proper tabindex attributes", () => {
