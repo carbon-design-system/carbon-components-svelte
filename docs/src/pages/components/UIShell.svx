@@ -94,6 +94,12 @@ Create a header with a persistent hamburger menu state.
 
 <FileSource src="/framed/UIShell/PersistedHamburgerMenu" />
 
+## Header with modal
+
+Opening a `Modal` while the mobile `SideNav` overlay is also open keeps the body scroll locked until both close. The body lock class is ref-counted across components.
+
+<FileSource src="/framed/UIShell/HeaderWithModal" />
+
 ## Header with toast notification
 
 Integrate toasts with the UI Shell. This example triggers a toast, which appears in the top right corner, below the header.
