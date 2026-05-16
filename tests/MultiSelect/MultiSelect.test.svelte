@@ -16,6 +16,7 @@
   export let warn = false;
   export let warnText = "";
   export let disabled = false;
+  export let readonly = false;
   export let selectionFeedback: ComponentProps<MultiSelect>["selectionFeedback"] =
     "top-after-reopen";
   export let translateWithIdSelection: ComponentProps<MultiSelect>["translateWithIdSelection"] =
@@ -49,6 +50,7 @@
   {warn}
   {warnText}
   {disabled}
+  {readonly}
   {selectionFeedback}
   {translateWithIdSelection}
   {itemToString}

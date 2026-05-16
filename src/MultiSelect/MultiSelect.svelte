@@ -149,6 +149,9 @@
   /** Set an id for the list box component */
   export let id = `ccs-${Math.random().toString(36)}`;
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
   /**
    * Specify a name attribute for the select.
    * @type {string}
@@ -566,6 +569,7 @@
     filterable && "bx--multi-select--filterable",
     invalid && "bx--multi-select--invalid",
     inline && "bx--multi-select--inline",
+    readonly && "bx--multi-select--readonly",
     selectionCount > 0 && "bx--multi-select--selected",
     hasSelectAll && "bx--multi-select--selectall",
   ]
@@ -610,6 +614,7 @@
     role={undefined}
     id={comboId}
     aria-label={ariaLabel}
+    aria-disabled={readonly || undefined}
     {disabled}
     {invalid}
     {invalidText}
@@ -643,6 +648,7 @@
             }}
             translateWithId={translateWithIdSelection}
             {disabled}
+            {readonly}
           />
         {/if}
         <input
@@ -656,18 +662,20 @@
           aria-haspopup="listbox"
           aria-expanded={open}
           aria-activedescendant={highlightedId}
-          aria-disabled={disabled}
+          aria-disabled={disabled || readonly}
+          aria-readonly={readonly || undefined}
           aria-controls={open ? menuId : undefined}
           aria-owns={open ? menuId : undefined}
           class:bx--text-input={true}
           class:bx--text-input--empty={value === ""}
           class:bx--text-input--light={light}
           on:click={() => {
-            if (disabled) return;
+            if (disabled || readonly) return;
             open = true;
           }}
           on:keydown
           on:keydown|stopPropagation={({ key }) => {
+            if (readonly) return;
             if (key === "Enter") {
               if (highlightedId) {
                 const highlightedItem = sortedItemsById.get(highlightedId);
@@ -713,6 +721,7 @@
           on:blur
           on:paste
           {disabled}
+          {readonly}
           {placeholder}
           {id}
           {name}
@@ -725,12 +734,14 @@
             }}
             translateWithId={translateWithIdSelection}
             {disabled}
+            {readonly}
             {open}
           />
         {/if}
         <ListBoxMenuIcon
+          aria-hidden={readonly || undefined}
           on:click={(e) => {
-            if (disabled) return;
+            if (disabled || readonly) return;
             e.stopPropagation();
             open = !open;
           }}
@@ -747,7 +758,7 @@
         aria-controls={open ? menuId : undefined}
         aria-owns={open ? menuId : undefined}
         on:click={() => {
-          if (disabled) return;
+          if (disabled || readonly) return;
           open = !open;
         }}
         on:keydown={(e) => {
@@ -755,6 +766,7 @@
           if (key === " " || key === "ArrowUp" || key === "ArrowDown") {
             e.preventDefault();
           }
+          if (readonly) return;
           if (key === " ") {
             open = !open;
           } else if (key === "Tab") {
@@ -781,6 +793,7 @@
         }}
         {id}
         {disabled}
+        {readonly}
         {translateWithId}
       >
         {#if selectionCount > 0}
@@ -796,10 +809,15 @@
             }}
             translateWithId={translateWithIdSelection}
             {disabled}
+            {readonly}
           />
         {/if}
         <span class:bx--list-box__label={true}>{label}</span>
-        <ListBoxMenuIcon {open} {translateWithId} />
+        <ListBoxMenuIcon
+          aria-hidden={readonly || undefined}
+          {open}
+          {translateWithId}
+        />
       </ListBoxField>
     {/if}
     <div style:display={open || effectivePortalMenu ? "block" : "none"}>
