@@ -256,6 +256,22 @@ Disable specific items using the `disabled` property in the `items` prop. This e
   ]}
 />
 
+## Read-only state
+
+Set `readonly` to `true` to display non-editable values. Selected items remain visible but cannot be cleared.
+
+<MultiSelect
+  readonly
+  selectedIds={["0", "1"]}
+  labelText="Contact"
+  label="Select contact methods..."
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+/>
+
 ## Select all
 
 Add a "select all" item by setting `isSelectAll: true` on an item. Clicking this item selects or deselects all non-disabled items. Disabled items are not affected by "select all".
