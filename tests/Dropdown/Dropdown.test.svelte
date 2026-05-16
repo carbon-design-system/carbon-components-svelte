@@ -11,6 +11,7 @@
   export let open: ComponentProps<Dropdown>["open"] = false;
   export let light: ComponentProps<Dropdown>["light"] = false;
   export let disabled: ComponentProps<Dropdown>["disabled"] = false;
+  export let readonly: ComponentProps<Dropdown>["readonly"] = false;
   export let labelText: ComponentProps<Dropdown>["labelText"] = "";
   export let invalid: ComponentProps<Dropdown>["invalid"] = false;
   export let invalidText: ComponentProps<Dropdown>["invalidText"] = "";
@@ -39,6 +40,7 @@
   bind:open
   {light}
   {disabled}
+  {readonly}
   {labelText}
   {invalid}
   {invalidText}

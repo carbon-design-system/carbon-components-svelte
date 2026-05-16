@@ -1,0 +1,37 @@
+// This file backports readonly dropdown styles from carbon-components v11+
+// to ensure compatibility with carbon-components v10.58.12.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Readonly dropdown styles
+/// @access private
+/// @group dropdown
+@mixin dropdown-readonly {
+  //----------------------------------------------
+  // Read-only
+  // ---------------------------------------------
+  .#{$prefix}--dropdown__wrapper .#{$prefix}--dropdown--readonly,
+  .#{$prefix}--dropdown__wrapper .#{$prefix}--dropdown--readonly:hover {
+    background-color: transparent;
+    border-block-end-color: $border-subtle;
+  }
+
+  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--readonly {
+    border-block-end-color: transparent;
+  }
+
+  .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__field,
+  .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__menu-icon {
+    cursor: default;
+  }
+
+  .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__menu-icon svg {
+    fill: $icon-disabled;
+  }
+}
+
+@include exports("dropdown-readonly") {
+  @include dropdown-readonly;
+}
