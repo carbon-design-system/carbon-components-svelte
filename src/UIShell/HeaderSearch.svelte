@@ -46,6 +46,11 @@
 
   const dispatch = createEventDispatcher();
 
+  const id = `ccs-${Math.random().toString(36)}`;
+  const inputId = `${id}-input`;
+  const labelId = `${id}-label`;
+  const menuId = `${id}-menu`;
+
   /** @type {null | HTMLDivElement} */
   let refSearch = null;
   let prevActive;
@@ -71,7 +76,7 @@
   }
   $: selectedResult = results[selectedResultIndex];
   $: selectedId = selectedResult
-    ? `search-menuitem-${selectedResultIndex}`
+    ? `${id}-menuitem-${selectedResultIndex}`
     : undefined;
 </script>
 
@@ -87,15 +92,12 @@
   role="search"
   class:bx--header__search--active={active}
 >
-  <label
-    class:bx--header__search-label={true}
-    for="search-input"
-    id="search-label"
+  <label class:bx--header__search-label={true} for={inputId} id={labelId}
     >Search</label
   >
   <div
     class:bx--header__search-menu={true}
-    aria-owns="search-menu"
+    aria-owns={menuId}
     aria-haspopup="menu"
   >
     <button
@@ -121,9 +123,9 @@
       class:bx--header__search-input={true}
       class:bx--header__search--active={active}
       {...$$restProps}
-      id="search-input"
+      id={inputId}
       aria-autocomplete="list"
-      aria-controls="search-menu"
+      aria-controls={menuId}
       aria-activedescendant={selectedId}
       bind:value
       on:change
@@ -187,21 +189,21 @@
   {#if active && results.length > 0}
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
-      aria-labelledby="search-label"
+      aria-labelledby={labelId}
       role="menu"
-      id="search-menu"
+      id={menuId}
       class:bx--header-search-menu={true}
     >
       {#each results as result, i}
         <li role="none">
           <a
             tabindex="-1"
-            id="search-menuitem-{i}"
+            id="{id}-menuitem-{i}"
             role="menuitem"
             href={result.href}
             class:bx--header-search-menu-item={true}
             class:bx--header-search-menu-item--selected={selectedId ===
-              `search-menuitem-${i}`}
+              `${id}-menuitem-${i}`}
             on:click|preventDefault={async () => {
               selectedResultIndex = i;
               await tick();
