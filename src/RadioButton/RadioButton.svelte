@@ -53,11 +53,13 @@
 
   const ctx = getContext("carbon:RadioButtonGroup");
 
-  const { add, update, selectedValue, groupName, groupRequired } = ctx ?? {
-    groupName: readable(undefined),
-    groupRequired: readable(undefined),
-    selectedValue: readable(checked ? value : undefined),
-  };
+  const { add, update, selectedValue, groupName, groupRequired, readonly } =
+    ctx ?? {
+      groupName: readable(undefined),
+      groupRequired: readable(undefined),
+      selectedValue: readable(checked ? value : undefined),
+      readonly: false,
+    };
 
   // Track if we're in standalone mode (no RadioButtonGroup context)
   const isStandalone = !ctx;
@@ -155,7 +157,14 @@
     on:focus
     on:blur
     on:change
+    on:click={(e) => {
+      if (readonly) e.preventDefault();
+    }}
     on:change={(e) => {
+      if (readonly) {
+        e.preventDefault();
+        return;
+      }
       if (update) {
         // Inside RadioButtonGroup - use context
         update(value);

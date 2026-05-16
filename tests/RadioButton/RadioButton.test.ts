@@ -4,6 +4,7 @@ import type { ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import RadioButton from "./RadioButton.test.svelte";
 import RadioButtonCustom from "./RadioButtonCustom.test.svelte";
+import RadioButtonGroupReadonly from "./RadioButtonGroup.readonly.test.svelte";
 
 describe("RadioButton", () => {
   it("should render with default props", () => {
@@ -137,6 +138,41 @@ describe("RadioButton", () => {
     expect(component.ref).toBeInstanceOf(HTMLInputElement);
     assert(component.ref);
     expect(component.ref.type).toBe("radio");
+  });
+
+  describe("readonly (group)", () => {
+    it("should apply readonly class on the fieldset", () => {
+      const { container } = render(RadioButtonGroupReadonly, {
+        readonly: true,
+      });
+
+      expect(
+        container.querySelector(".bx--radio-button-group--readonly"),
+      ).toBeTruthy();
+    });
+
+    it("should not change selection when clicking another radio", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(RadioButtonGroupReadonly, { selected: "1", readonly: true });
+
+      const pro = screen.getByRole("radio", { name: "Pro" });
+      await user.click(pro);
+
+      expect(pro).not.toBeChecked();
+      expect(screen.getByRole("radio", { name: "Free" })).toBeChecked();
+      expect(consoleLog).not.toHaveBeenCalledWith("change", "2");
+    });
+
+    it("should allow selection when readonly is false", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(RadioButtonGroupReadonly, { selected: "1", readonly: false });
+
+      const pro = screen.getByRole("radio", { name: "Pro" });
+      await user.click(pro);
+
+      expect(pro).toBeChecked();
+      expect(consoleLog).toHaveBeenCalledWith("change", "2");
+    });
   });
 
   describe("Generics", () => {
