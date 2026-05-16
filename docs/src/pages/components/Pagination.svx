@@ -44,7 +44,7 @@ Set `pagesUnknown` to `true` when the total number of pages is unknown. This ren
 
 The number of native select items rendered is derived from `totalItems`. For large datasets, this can impact performance. Use `pageWindow` to control the number of rendered items.
 
-<Pagination totalItems={100_000} pageSizes={[10, 15, 20]} />
+<FileSource src="/framed/Pagination/PageWindow" />
 
 ## Hidden page input
 
