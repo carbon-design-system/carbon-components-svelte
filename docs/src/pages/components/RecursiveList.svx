@@ -13,6 +13,12 @@ Create a hierarchical list using the `nodes` prop. Each node can contain text, l
 
 <FileSource src="/framed/RecursiveList/RecursiveList" />
 
+## String shorthand
+
+A string entry in `nodes` is shorthand for `{ text: "..." }`. Strings can mix freely with object nodes, including inside nested `nodes` arrays.
+
+<FileSource src="/framed/RecursiveList/RecursiveListStringShorthand" />
+
 ## Ordered
 
 Set `type` to `"ordered"` to use numbered lists with proper indentation.
