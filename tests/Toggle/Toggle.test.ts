@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
+import ToggleReadonly from "./Toggle.readonly.test.svelte";
 import Toggle from "./Toggle.test.svelte";
 import ToggleNullishAriaLabel from "./ToggleNullishAriaLabel.test.svelte";
 import ToggleSkeletonSlot from "./ToggleSkeleton.slot.test.svelte";
@@ -296,6 +297,37 @@ describe("Toggle", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  describe("readonly", () => {
+    it("should apply readonly class and aria-readonly", () => {
+      const { container } = render(ToggleReadonly, { readonly: true });
+
+      expect(container.querySelector(".bx--toggle--readonly")).toBeTruthy();
+      const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
+      expect(toggle).toHaveAttribute("aria-readonly", "true");
+      expect(toggle).toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("should not toggle on click when readonly", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ToggleReadonly, { readonly: true });
+
+      const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
+      expect(toggle).not.toBeChecked();
+
+      await user.click(toggle);
+      expect(toggle).not.toBeChecked();
+      expect(consoleLog).not.toHaveBeenCalledWith("toggle", true);
+    });
+
+    it("should toggle on click when not readonly", async () => {
+      render(ToggleReadonly, { readonly: false });
+
+      const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
+      await user.click(toggle);
+      expect(toggle).toBeChecked();
+    });
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)

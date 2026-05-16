@@ -30,6 +30,9 @@
   /** Set an id for the input element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
   /**
    * Specify a name attribute for the checkbox input.
    * @type {string}
@@ -48,6 +51,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
+  class:bx--toggle--readonly={readonly}
   style:user-select="none"
   {...$$restProps}
   on:click
@@ -63,7 +67,13 @@
     class:bx--toggle-input={true}
     class:bx--toggle-input--small={size === "sm"}
     checked={toggled}
+    aria-disabled={readonly || undefined}
+    aria-readonly={readonly || undefined}
+    on:click={(e) => {
+      if (readonly) e.preventDefault();
+    }}
     on:change={() => {
+      if (readonly) return;
       toggled = !toggled;
       dispatch("toggle", { toggled });
     }}
@@ -71,7 +81,7 @@
     on:keydown={(e) => {
       if (e.key === "Enter") {
         e.preventDefault();
-        ref?.click();
+        if (!readonly) ref?.click();
       }
     }}
     on:keyup
