@@ -11,7 +11,10 @@
    */
   export let text = undefined;
 
-  /** Obtain a reference to the HTML anchor element */
+  /**
+   * Obtain a reference to the HTML anchor element.
+   * @type {HTMLAnchorElement | null}
+   */
   export let ref = null;
 
   import { setContext, tick } from "svelte";
@@ -77,7 +80,7 @@
 
 <svelte:window
   on:click={({ target }) => {
-    if (!ref.contains(target)) {
+    if (!ref?.contains(target)) {
       expanded = false;
     }
   }}
