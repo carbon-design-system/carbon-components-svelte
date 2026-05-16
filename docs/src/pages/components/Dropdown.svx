@@ -186,6 +186,21 @@ selections.
   ]}
 />
 
+## Read-only state
+
+Set `readonly` to `true` to display a non-editable value.
+
+<Dropdown
+  readonly
+  selectedId="0"
+  labelText="Contact"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+/>
+
 ## Virtualized items (large lists)
 
 Virtualization is a technique that allows only the items currently visible in the viewport to be rendered in the DOM, improving performance for large lists.
