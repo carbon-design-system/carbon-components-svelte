@@ -86,6 +86,16 @@ Disable specific radio buttons to prevent selection.
   <RadioButton disabled labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
+## Read-only state
+
+Set `readonly` to `true` on `RadioButtonGroup` to display non-editable values.
+
+<RadioButtonGroup readonly labelPosition="left" legendText="Storage tier (disk)" name="plan-readonly" selected="standard">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
 ## Helper text
 
 Use `helperText` to provide additional context or instructions below the radio button group.
