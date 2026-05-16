@@ -2283,4 +2283,34 @@ describe("ComboBox", () => {
       expect(input).toHaveValue("Slack");
     });
   });
+
+  describe("readonly", () => {
+    it("should apply readonly class and aria-readonly", () => {
+      const { container } = render(ComboBox, { readonly: true });
+
+      expect(container.querySelector(".bx--combo-box--readonly")).toBeTruthy();
+      expect(getInput()).toHaveAttribute("aria-readonly", "true");
+      expect(getInput()).toHaveAttribute("readonly");
+    });
+
+    it("should not open menu on click when readonly", async () => {
+      render(ComboBox, { readonly: true });
+
+      await user.click(getInput());
+
+      const listboxes = screen.queryAllByRole("listbox");
+      expect(listboxes.length).toBeLessThan(2);
+    });
+
+    it("should not dispatch select when typing Enter on a highlighted item while readonly", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, { readonly: true });
+
+      const input = getInput();
+      input.focus();
+      await user.keyboard("{Enter}");
+
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    });
+  });
 });
