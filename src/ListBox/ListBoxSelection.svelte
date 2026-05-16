@@ -16,6 +16,9 @@
   /** Set to `true` to disable the list box selection */
   export let disabled = false;
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
   /** Default translation ids */
   export const translationIds = {
     clearAll: "clearAll",
@@ -61,7 +64,11 @@
     class:bx--tag--high-contrast={true}
     class:bx--tag--disabled={disabled}
   >
-    <span class:bx--tag__label={true} title={selectionCount}>
+    <span
+      class:bx--tag__label={true}
+      title={selectionCount}
+      aria-hidden={readonly || undefined}
+    >
       {selectionCount}
     </span>
     <div
@@ -70,17 +77,19 @@
       tabindex="-1"
       class:bx--tag__close-icon={true}
       on:click|preventDefault|stopPropagation={(e) => {
-        if (!disabled) {
+        if (!disabled && !readonly) {
           dispatch("clear", e);
         }
       }}
       on:keydown|stopPropagation={(e) => {
-        if (!disabled && (e.key === "Enter" || e.key === " ")) {
+        if (!disabled && !readonly && (e.key === "Enter" || e.key === " ")) {
           dispatch("clear", e);
         }
       }}
       {disabled}
+      aria-disabled={readonly || undefined}
       aria-label={buttonLabel}
+      aria-hidden={readonly || undefined}
       title={description}
     >
       <Close />
@@ -96,14 +105,15 @@
     class:bx--list-box__selection={true}
     class:bx--tag--filter={selectionCount}
     class:bx--list-box__selection--multi={selectionCount}
+    aria-disabled={readonly || undefined}
     {...$$restProps}
     on:click|preventDefault|stopPropagation={(e) => {
-      if (!disabled) {
+      if (!disabled && !readonly) {
         dispatch("clear", e);
       }
     }}
     on:keydown|stopPropagation={(e) => {
-      if (!disabled && (e.key === "Enter" || e.key === " ")) {
+      if (!disabled && !readonly && (e.key === "Enter" || e.key === " ")) {
         dispatch("clear", e);
       }
     }}

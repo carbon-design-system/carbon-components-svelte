@@ -5,6 +5,7 @@
   import type { ComponentProps } from "svelte";
 
   export let disabled: ComponentProps<ListBoxField>["disabled"] = false;
+  export let readonly: ComponentProps<ListBoxField>["readonly"] = false;
   export let role: ComponentProps<ListBoxField>["role"] = "combobox";
   export let tabindex: ComponentProps<ListBoxField>["tabindex"] = "-1";
   export let translateWithId: ComponentProps<ListBoxField>["translateWithId"] =
@@ -26,6 +27,7 @@
 
 <ListBoxField
   {disabled}
+  {readonly}
   {role}
   {tabindex}
   {translateWithId}
