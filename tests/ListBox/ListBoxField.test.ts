@@ -266,6 +266,28 @@ describe("ListBoxField", () => {
     expect(component.ref).toBeInstanceOf(HTMLDivElement);
   });
 
+  it("should set aria-readonly when readonly is true", () => {
+    render(ListBoxField, {
+      props: { readonly: true, slotContent: "Readonly field" },
+    });
+
+    const field = screen
+      .getByText("Readonly field")
+      .closest(".bx--list-box__field");
+    expect(field).toHaveAttribute("aria-readonly", "true");
+  });
+
+  it("should not set aria-readonly when readonly is false", () => {
+    render(ListBoxField, {
+      props: { readonly: false, slotContent: "Editable field" },
+    });
+
+    const field = screen
+      .getByText("Editable field")
+      .closest(".bx--list-box__field");
+    expect(field).not.toHaveAttribute("aria-readonly");
+  });
+
   it("should apply custom attributes", () => {
     render(ListBoxField, {
       props: {

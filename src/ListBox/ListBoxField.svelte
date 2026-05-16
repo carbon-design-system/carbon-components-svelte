@@ -6,6 +6,9 @@
   /** Set to `true` to disable the list box field */
   export let disabled = false;
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
   /** Specify the role attribute */
   export let role = "combobox";
 
@@ -54,6 +57,7 @@
   aria-owns={(ariaExpanded && menuId) || undefined}
   aria-controls={(ariaExpanded && menuId) || undefined}
   aria-disabled={disabled}
+  aria-readonly={readonly || undefined}
   aria-label={ariaExpanded ? translateWithId("close") : translateWithId("open")}
   tabindex={disabled ? "-1" : tabindex}
   class:bx--list-box__field={true}

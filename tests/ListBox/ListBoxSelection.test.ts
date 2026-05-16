@@ -251,6 +251,47 @@ describe("ListBoxSelection", () => {
     expect(clickEvent.defaultPrevented).toBe(true);
   });
 
+  it("should not dispatch clear event when readonly (single)", async () => {
+    const clearHandler = vi.fn();
+    const { container } = render(ListBoxSelection, {
+      props: { readonly: true, onclear: clearHandler },
+    });
+
+    const button = container.querySelector(".bx--list-box__selection");
+    assert(button);
+    expect(button).toHaveAttribute("aria-disabled", "true");
+    await user.click(button);
+
+    expect(clearHandler).not.toHaveBeenCalled();
+  });
+
+  it("should not dispatch clear event when readonly (multi)", async () => {
+    const clearHandler = vi.fn();
+    const { container } = render(ListBoxSelection, {
+      props: {
+        selectionCount: 2,
+        readonly: true,
+        onclear: clearHandler,
+      },
+    });
+
+    const closeButton = container.querySelector(".bx--tag__close-icon");
+    assert(closeButton);
+    await user.click(closeButton);
+
+    expect(clearHandler).not.toHaveBeenCalled();
+  });
+
+  it("should mark multi selection close icon aria-hidden when readonly", () => {
+    const { container } = render(ListBoxSelection, {
+      props: { selectionCount: 2, readonly: true },
+    });
+
+    const closeButton = container.querySelector(".bx--tag__close-icon");
+    expect(closeButton).toHaveAttribute("aria-hidden", "true");
+    expect(closeButton).toHaveAttribute("aria-disabled", "true");
+  });
+
   it("should apply custom attributes", () => {
     render(ListBoxSelection, {
       props: {

@@ -7,6 +7,7 @@
   export let selectionCount: ComponentProps<ListBoxSelection>["selectionCount"] =
     undefined;
   export let disabled: ComponentProps<ListBoxSelection>["disabled"] = false;
+  export let readonly: ComponentProps<ListBoxSelection>["readonly"] = false;
   export let translateWithId: ComponentProps<ListBoxSelection>["translateWithId"] =
     undefined;
   export let ref: ComponentProps<ListBoxSelection>["ref"] = null;
@@ -16,6 +17,7 @@
 <ListBoxSelection
   {selectionCount}
   {disabled}
+  {readonly}
   {translateWithId}
   bind:ref
   on:clear={(e) => onclear?.(e)}
