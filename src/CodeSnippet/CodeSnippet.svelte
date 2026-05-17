@@ -132,6 +132,9 @@
    */
   export let ref = null;
 
+  /** Obtain a reference to the underlying copy button element. */
+  export let copyRef = null;
+
   /**
    * Set to `true` to render the feedback tooltip in a portal,
    * preventing it from being clipped by `overflow: hidden` containers.
@@ -154,9 +157,6 @@
 
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
-
-  /** @type {null | HTMLButtonElement} */
-  let inlineButtonRef = null;
 
   const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
 
@@ -202,7 +202,7 @@
   let disconnectModalObserver = () => {};
 
   $: {
-    const el = inlineButtonRef || ref;
+    const el = copyRef || ref;
     disconnectModalObserver();
     disconnectModalObserver =
       effectivePortalTooltip && el
@@ -245,7 +245,7 @@
     </span>
   {:else}
     <button
-      bind:this={inlineButtonRef}
+      bind:this={copyRef}
       type="button"
       aria-live="polite"
       aria-busy={copyPending || undefined}
@@ -295,11 +295,7 @@
     </button>
 
     {#if effectivePortalTooltip}
-      <PortalTooltip
-        anchor={inlineButtonRef}
-        open={feedbackOpen}
-        text={feedback}
-      />
+      <PortalTooltip anchor={copyRef} open={feedbackOpen} text={feedback} />
     {/if}
   {/if}
 {:else}
@@ -335,6 +331,7 @@
     </div>
     {#if !hideCopyButton}
       <CopyButton
+        bind:ref={copyRef}
         text={code}
         {copy}
         {disabled}
