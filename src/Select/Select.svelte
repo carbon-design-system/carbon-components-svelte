@@ -311,11 +311,3 @@
     {/if}
   </div>
 </div>
-
-<style>
-  :global(.bx--select--readonly .bx--select-input) {
-    background-color: transparent;
-    border-block-end-color: var(--cds-border-subtle, #c6c6c6);
-    cursor: default;
-  }
-</style>
