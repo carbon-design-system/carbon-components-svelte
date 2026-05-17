@@ -19,7 +19,7 @@
   /** Set to `true` to use the selection variant */
   export let selection = false;
 
-  import { createEventDispatcher, setContext } from "svelte";
+  import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
@@ -28,7 +28,7 @@
    */
   const selectedValue = writable(selected);
 
-  let prevSelectedValue = undefined;
+  let prevSelectedValue = selected;
   let isInitialRender = true;
 
   /**
@@ -43,13 +43,16 @@
     update,
   });
 
+  onMount(() => {
+    isInitialRender = false;
+  });
+
   $: selected = $selectedValue;
   $: {
     if (!isInitialRender && prevSelectedValue !== $selectedValue) {
       dispatch("change", $selectedValue);
     }
     prevSelectedValue = $selectedValue;
-    isInitialRender = false;
   }
 </script>
 
