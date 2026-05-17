@@ -167,6 +167,56 @@ describe("Select", () => {
     expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
   });
 
+  it.each([
+    "ArrowDown",
+    "ArrowUp",
+    " ",
+  ])("prevents %s keydown when read-only", (key) => {
+    render(Select, { readonly: true });
+    const selectElement = screen.getByLabelText("Select label");
+    const event = new KeyboardEvent("keydown", {
+      key,
+      bubbles: true,
+      cancelable: true,
+    });
+    const preventDefault = vi.spyOn(event, "preventDefault");
+
+    selectElement.dispatchEvent(event);
+
+    expect(preventDefault).toHaveBeenCalled();
+  });
+
+  it("does not prevent Tab keydown when read-only", () => {
+    render(Select, { readonly: true });
+    const selectElement = screen.getByLabelText("Select label");
+    const event = new KeyboardEvent("keydown", {
+      key: "Tab",
+      bubbles: true,
+      cancelable: true,
+    });
+    const preventDefault = vi.spyOn(event, "preventDefault");
+
+    selectElement.dispatchEvent(event);
+
+    expect(preventDefault).not.toHaveBeenCalled();
+  });
+
+  it("prevents mousedown default and focuses when read-only", () => {
+    render(Select, { readonly: true });
+    const selectElement = screen.getByLabelText("Select label");
+    const focus = vi.spyOn(selectElement, "focus");
+    const event = new MouseEvent("mousedown", {
+      bubbles: true,
+      cancelable: true,
+    });
+    const preventDefault = vi.spyOn(event, "preventDefault");
+
+    selectElement.dispatchEvent(event);
+
+    expect(preventDefault).toHaveBeenCalled();
+    expect(focus).toHaveBeenCalled();
+  });
+
   it("renders valid by default", () => {
     render(Select);
     const selectElement = screen.getByLabelText("Select label");

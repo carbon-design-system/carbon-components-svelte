@@ -118,6 +118,23 @@
     selectedValue.set(value);
   };
 
+  const selectReadOnlyKeys = ["ArrowDown", "ArrowUp", " "];
+
+  /** @type {(e: MouseEvent) => void} */
+  const onMouseDown = (e) => {
+    if (readonly) {
+      e.preventDefault();
+      e.currentTarget.focus();
+    }
+  };
+
+  /** @type {(e: KeyboardEvent) => void} */
+  const onKeyDown = (e) => {
+    if (readonly && selectReadOnlyKeys.includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   let prevSelected = null;
 
   afterUpdate(() => {
@@ -188,22 +205,8 @@
             on:input
             on:focus
             on:blur
-            on:mousedown={(e) => {
-              if (readonly) {
-                e.preventDefault();
-                e.currentTarget.focus();
-              }
-            }}
-            on:keydown={(e) => {
-              if (
-                readonly &&
-                (e.key === "ArrowDown" ||
-                  e.key === "ArrowUp" ||
-                  e.key === " ")
-              ) {
-                e.preventDefault();
-              }
-            }}
+            on:mousedown={onMouseDown}
+            on:keydown={onKeyDown}
           >
             <slot />
           </select>
@@ -267,19 +270,8 @@
           on:input
           on:focus
           on:blur
-          on:mousedown={(e) => {
-            if (readonly) e.preventDefault();
-          }}
-          on:keydown={(e) => {
-            if (
-              readonly &&
-              e.key !== "Tab" &&
-              e.key !== "Shift" &&
-              !(e.altKey && e.key === "ArrowDown")
-            ) {
-              e.preventDefault();
-            }
-          }}
+          on:mousedown={onMouseDown}
+          on:keydown={onKeyDown}
         >
           <slot />
         </select>
