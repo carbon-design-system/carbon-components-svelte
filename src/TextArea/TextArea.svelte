@@ -103,6 +103,7 @@
   {/if}
   <div
     class:bx--text-area__wrapper={true}
+    class:bx--text-area__wrapper--readonly={readonly}
     data-invalid={invalid || undefined}
     data-warn={warn || undefined}
   >
