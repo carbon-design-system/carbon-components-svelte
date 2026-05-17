@@ -89,7 +89,7 @@
     ref.focus();
   }
 
-  $: expanded = String(value ?? "").length > 0;
+  $: if (!persistent) expanded = String(value ?? "").length > 0;
   $: classes = [
     expanded && "bx--toolbar-search-container-active",
     persistent
