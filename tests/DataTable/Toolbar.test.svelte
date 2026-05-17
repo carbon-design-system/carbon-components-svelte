@@ -11,6 +11,7 @@
     | "ToolbarContent"
     | "ToolbarBatchActions" = "Toolbar";
   export let size: ComponentProps<Toolbar>["size"] = "default";
+  export let ariaLabel: ComponentProps<Toolbar>["ariaLabel"] = undefined;
   export let slotContent = "";
   export let selectedIds: ComponentProps<ToolbarBatchActions>["selectedIds"] =
     [];
@@ -19,7 +20,7 @@
 </script>
 
 {#if testComponent === "Toolbar"}
-  <Toolbar {size} {...$$restProps}>
+  <Toolbar {size} {ariaLabel} {...$$restProps}>
     {#if slotContent}
       {slotContent}
     {/if}
