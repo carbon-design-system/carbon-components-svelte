@@ -163,4 +163,12 @@ Enable row selection with the `selection` prop and structured list input compone
 
 Show a loading state with the skeleton variant.
 
-<StructuredListSkeleton rows={3} />
+By default, the skeleton renders 3 columns and 5 rows.
+
+<StructuredListSkeleton />
+
+## Skeleton with custom columns and rows
+
+Use `columns` and `rows` to customize the values.
+
+<StructuredListSkeleton columns={5} rows={3} />
