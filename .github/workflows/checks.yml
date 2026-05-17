@@ -97,7 +97,7 @@ jobs:
         run: bun run test:types
 
       - name: Test (Svelte 5)
-        run: bun --bun run test
+        run: bun run test
 
   test-e2e:
     needs: [lint, changes, test]
@@ -155,7 +155,7 @@ jobs:
       - name: Test Svelte 3
         run: |
           cd tests-svelte3
-          bun --bun run test
+          bun run test
 
   test-svelte4:
     needs: [lint, changes]
@@ -182,7 +182,7 @@ jobs:
       - name: Test (Svelte 4 compat)
         run: |
           cd tests-svelte4
-          bun --bun run test
+          bun run test
 
   types:
     needs: [lint, changes]
