@@ -28,7 +28,7 @@
     "prism-svelte": "^0.5.0",
     "prismjs": "^1.30.0",
     "rehype-slug": "^6.0.0",
-    "svelte": "^5.55.4",
+    "svelte": "^5.55.7",
     "vite": "^8.0.10"
   },
   "type": "module"
