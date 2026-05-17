@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { TooltipIcon as TooltipIconSource } from "carbon-components-svelte";
 import type TooltipIconComponent from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import TooltipIconSize from "./TooltipIcon.size.test.svelte";
 import TooltipIcon from "./TooltipIcon.test.svelte";
 import TooltipIconMultiple from "./TooltipIconMultiple.test.svelte";

@@ -1,11 +1,9 @@
 <script lang="ts">
-  import {
-    Button,
-    DataTable,
-    Toolbar,
-    ToolbarBatchActions,
-    ToolbarContent,
-  } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import Toolbar from "carbon-components-svelte/DataTable/Toolbar.svelte";
+  import ToolbarBatchActions from "carbon-components-svelte/DataTable/ToolbarBatchActions.svelte";
+  import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
   import type { ComponentProps } from "svelte";
   import { tick } from "svelte";
 

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type RadioButtonGroupComponent from "carbon-components-svelte/RadioButtonGroup/RadioButtonGroup.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import RadioButtonGroup from "./RadioButtonGroup.test.svelte";
 
 describe("RadioButtonGroup", () => {

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import DataTableToolbarNoBatch from "./DataTableToolbarNoBatch.test.svelte";
 
 // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2404

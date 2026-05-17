@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { DataTable } from "carbon-components-svelte";
   import type {
     DataTableHeader,
     DataTableRow,
   } from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 
   const rows = [
     { id: "row-1", name: "Laptop", price: 999 },

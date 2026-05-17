@@ -1,6 +1,6 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { setupLocalStorageMock } from "../setup-tests";
+import { setupLocalStorageMock } from "../utils/storage-mocks";
 import LocalStorageReactiveKey from "./LocalStorageReactiveKey.test.svelte";
 
 // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1204

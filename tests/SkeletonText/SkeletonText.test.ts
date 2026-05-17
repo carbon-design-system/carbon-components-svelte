@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import SkeletonText from "./SkeletonText.test.svelte";
 
 describe("SkeletonText", () => {

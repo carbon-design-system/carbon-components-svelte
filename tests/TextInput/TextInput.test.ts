@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
-import { isSvelte5, user } from "../setup-tests";
+import { isSvelte5 } from "../utils/svelte-version";
+import { user } from "../utils/user";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
 import TextInputFluid from "./TextInputFluid.test.svelte";

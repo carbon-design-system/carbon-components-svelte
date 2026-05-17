@@ -4,7 +4,7 @@ import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";
 import { themes } from "carbon-components-svelte/Theme/Theme.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import Theme from "./Theme.test.svelte";
 import ThemeDropdown from "./ThemeDropdown.test.svelte";
 import ThemeDropdownCustom from "./ThemeDropdownCustom.test.svelte";

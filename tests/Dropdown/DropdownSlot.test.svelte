@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Dropdown } from "carbon-components-svelte";
+  import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
   import type { ComponentProps } from "svelte";
 
   export let items: ComponentProps<Dropdown>["items"] = [

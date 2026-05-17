@@ -1,5 +1,5 @@
 import { render } from "@testing-library/svelte";
-import { setupSessionStorageMock } from "../setup-tests";
+import { setupSessionStorageMock } from "../utils/storage-mocks";
 import SessionStoragePrimitive from "./SessionStoragePrimitive.test.svelte";
 
 describe("SessionStorage - Primitive Values", () => {

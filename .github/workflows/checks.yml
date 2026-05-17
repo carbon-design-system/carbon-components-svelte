@@ -90,6 +90,14 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun ci
 
+      - name: Cache Vitest
+        uses: actions/cache@v4
+        with:
+          path: tests/node_modules/.vite
+          key: vitest-${{ runner.os }}-${{ hashFiles('bun.lock', 'vite.config.ts', 'tests/**') }}
+          restore-keys: |
+            vitest-${{ runner.os }}-
+
       - name: Generate types
         run: bun run build:docs
 
@@ -144,6 +152,16 @@ jobs:
           cd tests-svelte3
           bun ci
 
+      - name: Cache Vitest
+        uses: actions/cache@v4
+        with:
+          path: |
+            tests-svelte3/node_modules/.vite
+            tests/node_modules/.vite
+          key: vitest-svelte3-${{ runner.os }}-${{ hashFiles('bun.lock', 'tests-svelte3/vite.config.ts', 'tests/**') }}
+          restore-keys: |
+            vitest-svelte3-${{ runner.os }}-
+
       - name: Generate types
         run: bun run build:docs
 
@@ -170,6 +188,16 @@ jobs:
         run: |
           cd tests-svelte4
           bun ci
+
+      - name: Cache Vitest
+        uses: actions/cache@v4
+        with:
+          path: |
+            tests-svelte4/node_modules/.vite
+            tests/node_modules/.vite
+          key: vitest-svelte4-${{ runner.os }}-${{ hashFiles('bun.lock', 'tests-svelte4/vite.config.ts', 'tests/**') }}
+          restore-keys: |
+            vitest-svelte4-${{ runner.os }}-
 
       - name: Generate types
         run: bun run build:docs

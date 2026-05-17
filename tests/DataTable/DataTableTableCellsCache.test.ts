@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import DataTableTableCellsCache from "./DataTableTableCellsCache.test.svelte";
 
 function getFirstBodyRow(): HTMLElement {

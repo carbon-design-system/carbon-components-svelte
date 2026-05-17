@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ToolbarMenuTest from "./ToolbarMenu.test.svelte";
 
 describe("DataTable Toolbar Menu", () => {

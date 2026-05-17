@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type CheckboxComponent from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import CheckboxGroup from "./Checkbox.group.test.svelte";
 import CheckboxReadonly from "./Checkbox.readonly.test.svelte";
 import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";

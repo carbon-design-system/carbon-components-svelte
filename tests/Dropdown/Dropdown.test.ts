@@ -9,7 +9,8 @@ import type DropdownComponent from "carbon-components-svelte/Dropdown/Dropdown.s
 import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { isSvelte5, user } from "../setup-tests";
+import { isSvelte5 } from "../utils/svelte-version";
+import { user } from "../utils/user";
 import DropdownLabelChildren from "./Dropdown.slot.test.svelte";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";

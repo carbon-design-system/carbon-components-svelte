@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
 import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";

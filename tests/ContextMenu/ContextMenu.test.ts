@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ContextMenuPreventDefault from "./ContextMenu.preventDefault.test.svelte";
 import ContextMenuTarget from "./ContextMenu.target.test.svelte";
 import ContextMenu from "./ContextMenu.test.svelte";

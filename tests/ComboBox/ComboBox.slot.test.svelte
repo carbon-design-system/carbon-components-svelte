@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { ComboBox } from "carbon-components-svelte";
   import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+  import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 
   const items: ComboBoxItem[] = [
     { id: "0", text: "Option 1" },

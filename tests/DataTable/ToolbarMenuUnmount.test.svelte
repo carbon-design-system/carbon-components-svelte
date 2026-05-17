@@ -1,10 +1,8 @@
 <script lang="ts">
-  import {
-    Toolbar,
-    ToolbarContent,
-    ToolbarMenu,
-    ToolbarMenuItem,
-  } from "carbon-components-svelte";
+  import Toolbar from "carbon-components-svelte/DataTable/Toolbar.svelte";
+  import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
+  import ToolbarMenu from "carbon-components-svelte/DataTable/ToolbarMenu.svelte";
+  import ToolbarMenuItem from "carbon-components-svelte/DataTable/ToolbarMenuItem.svelte";
 
   export let showMenu = true;
 </script>

@@ -1,5 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import PaginationNav from "./PaginationNav.test.svelte";
 
 describe("PaginationNav", () => {

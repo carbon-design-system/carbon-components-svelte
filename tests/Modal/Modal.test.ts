@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type ModalComponent from "carbon-components-svelte/Modal/Modal.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ModalTest from "./Modal.test.svelte";
 import ModalFocusReturnTest from "./ModalFocusReturn.test.svelte";
 import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";

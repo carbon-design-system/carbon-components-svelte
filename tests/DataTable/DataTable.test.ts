@@ -12,7 +12,7 @@ import type {
 } from "carbon-components-svelte/DataTable/data-table-utils";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import DataTableSortPreventDefault from "./DataTable.sort.preventDefault.test.svelte";
 import DataTable from "./DataTable.test.svelte";
 import DataTableCustomBoth from "./DataTableCustomBoth.test.svelte";

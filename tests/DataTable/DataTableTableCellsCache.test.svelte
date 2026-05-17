@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DataTable } from "carbon-components-svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import type { ComponentProps } from "svelte";
 
   export let headers: ComponentProps<DataTable>["headers"] = [

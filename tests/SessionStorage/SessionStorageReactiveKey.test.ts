@@ -1,6 +1,6 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { setupSessionStorageMock } from "../setup-tests";
+import { setupSessionStorageMock } from "../utils/storage-mocks";
 import SessionStorageReactiveKey from "./SessionStorageReactiveKey.test.svelte";
 
 describe("SessionStorage - reactive key", () => {

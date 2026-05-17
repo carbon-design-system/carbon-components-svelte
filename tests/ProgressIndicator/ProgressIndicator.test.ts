@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import ProgressIndicatorIssue1249 from "./ProgressIndicatorIssue1249.test.svelte";
 import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";

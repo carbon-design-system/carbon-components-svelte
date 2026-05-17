@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DataTable } from "carbon-components-svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 
   const headers = [
     { key: "name", value: "Name" },
