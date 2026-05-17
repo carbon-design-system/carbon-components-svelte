@@ -5,6 +5,11 @@
    */
   export let size = "default";
 
+  /**
+   * Specify the ARIA label for the toolbar.
+   */
+  export let ariaLabel = "data table toolbar";
+
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
 
@@ -37,7 +42,7 @@
 
 <section
   bind:this={ref}
-  aria-label="data table toolbar"
+  aria-label={ariaLabel}
   class:bx--table-toolbar={true}
   class:bx--table-toolbar--small={size === "sm"}
   class:bx--table-toolbar--normal={size === "default"}

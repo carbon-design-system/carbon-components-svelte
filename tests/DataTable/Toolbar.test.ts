@@ -56,6 +56,15 @@ describe("DataTable Toolbar", () => {
       expect(screen.getByText("Custom toolbar content")).toBeInTheDocument();
     });
 
+    it("should support a custom aria-label", () => {
+      const { container } = render(Toolbar, {
+        props: { testComponent: "Toolbar", ariaLabel: "Users table toolbar" },
+      });
+
+      const toolbar = container.querySelector(".bx--table-toolbar");
+      expect(toolbar).toHaveAttribute("aria-label", "Users table toolbar");
+    });
+
     it("should apply custom attributes", () => {
       const { container } = render(Toolbar, {
         props: {
