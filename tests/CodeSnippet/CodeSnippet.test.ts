@@ -7,6 +7,7 @@ import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
 import CodeSnippetCopyButtonMouseEnter from "./CodeSnippetCopyButtonMouseEnter.test.svelte";
 import CodeSnippetCopyButtonMouseLeave from "./CodeSnippetCopyButtonMouseLeave.test.svelte";
 import CodeSnippetCopyError from "./CodeSnippetCopyError.test.svelte";
+import CodeSnippetCopyRef from "./CodeSnippetCopyRef.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
 import CodeSnippetDisabled from "./CodeSnippetDisabled.test.svelte";
 import CodeSnippetDoubleClick from "./CodeSnippetDoubleClick.test.svelte";
@@ -540,6 +541,20 @@ yarn -v`,
     expect(snippet).toHaveAttribute("aria-readonly", "true");
     expect(snippet).toHaveAttribute("aria-multiline", "true");
     expect(snippet).not.toHaveAttribute("tabindex");
+  });
+
+  test.each([
+    { type: "inline" as const, expectedClass: "bx--snippet--inline" },
+    { type: "single" as const, expectedClass: "bx--copy-btn" },
+    { type: "multi" as const, expectedClass: "bx--copy-btn" },
+  ])("binds copyRef to the copy button ($type)", ({ type, expectedClass }) => {
+    const { component } = render(CodeSnippetCopyRef, {
+      props: { type },
+    });
+
+    expect(component.copyRef).toBeInstanceOf(HTMLButtonElement);
+    assert(component.copyRef instanceof HTMLButtonElement);
+    expect(component.copyRef).toHaveClass(expectedClass);
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)
