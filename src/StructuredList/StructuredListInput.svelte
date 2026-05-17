@@ -25,10 +25,15 @@
   export let ref = null;
 
   import { getContext } from "svelte";
+  import { writable } from "svelte/store";
 
-  const { selectedValue, update } = getContext("carbon:StructuredListWrapper");
+  const initialChecked = checked;
+  const ctx = getContext("carbon:StructuredListWrapper");
+  const selectedValue =
+    ctx?.selectedValue ?? writable(initialChecked ? value : undefined);
+  const update = ctx?.update ?? ((v) => selectedValue.set(v));
 
-  if (checked) {
+  if (initialChecked && ctx) {
     update(value);
   }
 
