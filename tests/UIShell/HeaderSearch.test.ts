@@ -339,6 +339,41 @@ describe("HeaderSearch", () => {
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).not.toHaveFocus();
     });
+
+    // Regression: focus/blur must only fire on `active` transitions, not on
+    // every reactive update (e.g. selectedResultIndex changes from arrow keys).
+    it("should not refocus on unrelated reactive updates while active", async () => {
+      const focusSpy = vi.spyOn(HTMLInputElement.prototype, "focus");
+      const blurSpy = vi.spyOn(HTMLInputElement.prototype, "blur");
+
+      const { component } = render(HeaderSearchTest, {
+        props: {
+          active: true,
+          results: [
+            { href: "/1", text: "Result 1" },
+            { href: "/2", text: "Result 2" },
+            { href: "/3", text: "Result 3" },
+          ],
+        },
+      });
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      const focusCallsAfterMount = focusSpy.mock.calls.length;
+      const blurCallsAfterMount = blurSpy.mock.calls.length;
+
+      component.selectedResultIndex = 1;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      component.selectedResultIndex = 2;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      component.value = "typed";
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(focusSpy.mock.calls.length).toBe(focusCallsAfterMount);
+      expect(blurSpy.mock.calls.length).toBe(blurCallsAfterMount);
+
+      focusSpy.mockRestore();
+      blurSpy.mockRestore();
+    });
   });
 
   describe("Ref Binding", () => {

@@ -66,11 +66,13 @@
     reset();
   }
 
-  $: if (active && ref) ref.focus();
-  $: if (!active && ref) ref.blur();
   $: {
-    if (prevActive !== undefined) {
+    if (prevActive !== undefined && prevActive !== active) {
       dispatch(active ? "active" : "inactive");
+      if (ref) {
+        if (active) ref.focus();
+        else ref.blur();
+      }
     }
     prevActive = active;
   }
