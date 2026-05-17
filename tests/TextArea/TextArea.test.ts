@@ -55,7 +55,11 @@ describe("TextArea", () => {
   it("should handle readonly state", () => {
     render(TextArea, { props: { readonly: true } });
 
-    expect(screen.getByRole("textbox")).toHaveAttribute("readonly");
+    const textarea = screen.getByRole("textbox");
+    expect(textarea).toHaveAttribute("readonly");
+    expect(textarea.parentElement).toHaveClass(
+      "bx--text-area__wrapper--readonly",
+    );
   });
 
   it("should handle helper text", () => {
