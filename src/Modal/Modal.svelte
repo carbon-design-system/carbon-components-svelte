@@ -217,16 +217,6 @@
             return false;
           }
 
-          // Check for zero dimensions, but only if the element has been laid out
-          // (offsetParent is null for hidden elements or elements not in the DOM.
-          if (
-            el.offsetParent !== null &&
-            el.offsetWidth === 0 &&
-            el.offsetHeight === 0
-          ) {
-            return false;
-          }
-          
           return true;
         });
 

@@ -27,29 +27,6 @@
   }
 
   /**
-   * Creates a TreeWalker instance for keyboard navigation.
-   * @param {HTMLElement} root - The root element to traverse
-   * @returns {TreeWalker} A TreeWalker configured to navigate tree nodes
-   */
-  function createTreeWalkerInstance(root) {
-    return document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
-      acceptNode: (node) => {
-        if (node.classList.contains("bx--tree-node--disabled"))
-          return NodeFilter.FILTER_REJECT;
-        if (node.matches("li.bx--tree-node")) {
-          // Collapsed branches keep children in the DOM under
-          // `ul.bx--tree-node--hidden`; skip them so ArrowUp/ArrowDown follow
-          // visible order only (matches prior unmount behavior).
-          if (node.closest("ul.bx--tree-node--hidden"))
-            return NodeFilter.FILTER_REJECT;
-          return NodeFilter.FILTER_ACCEPT;
-        }
-        return NodeFilter.FILTER_SKIP;
-      },
-    });
-  }
-
-  /**
    * Recursively flattens a tree of nodes into a single array
    * @template {object} Node
    * @param {ReadonlyArray<Node & { nodes?: Node[] }>} nodes
@@ -390,7 +367,10 @@
 
         if (focus) {
           tick().then(() => {
-            ref?.querySelector(`[id="${CSS.escape(lastId)}"]`)?.focus();
+            const target = Array.from(ref?.querySelectorAll("[id]") ?? []).find(
+              (node) => node.id === String(lastId),
+            );
+            target?.focus();
           });
         }
 
@@ -481,8 +461,6 @@
   $: setMultiselectKeyListeners(multiselect);
 
   /** @type {TreeWalker | null} */
-  let treeWalker = null;
-
   /** @type {ReadonlyArray<Node> | null} */
   let cachedNodes = null;
   /** @type {Array<Node> | null} */
@@ -637,12 +615,20 @@
   function handleKeyDown(e) {
     if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
 
-    treeWalker.currentNode = e.target;
+    const currentNode =
+      e.target instanceof Element ? e.target.closest(".bx--tree-node") : null;
+    const visibleNodes = Array.from(
+      ref.querySelectorAll(".bx--tree-node"),
+    ).filter((node) => {
+      if (node.classList.contains("bx--tree-node--disabled")) return false;
+      return !node.closest("ul.bx--tree-node--hidden");
+    });
+    const index = visibleNodes.indexOf(currentNode);
 
     let node = null;
 
-    if (e.key === "ArrowUp") node = treeWalker.previousNode();
-    if (e.key === "ArrowDown") node = treeWalker.nextNode();
+    if (e.key === "ArrowUp" && index > 0) node = visibleNodes[index - 1];
+    if (e.key === "ArrowDown" && index >= 0) node = visibleNodes[index + 1];
     if (node && node !== e.target) {
       node.tabIndex = "0";
       node.focus();
@@ -656,10 +642,6 @@
 
     if (firstFocusableNode != null) {
       firstFocusableNode.tabIndex = "0";
-    }
-
-    if (ref && !treeWalker) {
-      treeWalker = createTreeWalkerInstance(ref);
     }
 
     return () => {

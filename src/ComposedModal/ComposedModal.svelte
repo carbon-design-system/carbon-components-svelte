@@ -144,6 +144,10 @@
       }
     } else if (open) {
       opened = true;
+      previouslyFocusedElement =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
       dispatch("open");
     }
   });
@@ -178,16 +182,6 @@
           // Filter out elements that are not visible.
           const style = getComputedStyle(el);
           if (style.visibility === "hidden" || style.display === "none") {
-            return false;
-          }
-
-          // Check for zero dimensions, but only if the element has been laid out
-          // (offsetParent is null for hidden elements or elements not in the DOM.
-          if (
-            el.offsetParent !== null &&
-            el.offsetWidth === 0 &&
-            el.offsetHeight === 0
-          ) {
             return false;
           }
 
@@ -235,10 +229,6 @@
     }
 
     if (didOpen) {
-      previouslyFocusedElement =
-        document.activeElement instanceof HTMLElement
-          ? document.activeElement
-          : null;
       focus(currentTarget);
       didOpen = false;
     }
