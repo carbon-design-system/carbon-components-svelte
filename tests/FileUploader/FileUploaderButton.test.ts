@@ -187,6 +187,74 @@ describe("FileUploaderButton", () => {
     expect(event.detail[0].name).toBe("test.txt");
   });
 
+  it("should dedupe re-selected files when preventDuplicate and multiple are true", async () => {
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderButton, {
+      props: {
+        multiple: true,
+        preventDuplicate: true,
+        onchange: changeHandler,
+      },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+
+    const lastModified = 1700000000000;
+    const fileA = new File(["a"], "a.txt", {
+      type: "text/plain",
+      lastModified,
+    });
+    simulateFileSelection(input, [fileA]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+    });
+    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(1);
+
+    const fileADup = new File(["a"], "a.txt", {
+      type: "text/plain",
+      lastModified,
+    });
+    const fileB = new File(["b"], "b.txt", { type: "text/plain" });
+    simulateFileSelection(input, [fileADup, fileB]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalledTimes(2);
+    });
+    const second = changeHandler.mock.calls[1][0].detail;
+    expect(second).toHaveLength(2);
+    expect(second.map((f: File) => f.name)).toEqual(["a.txt", "b.txt"]);
+  });
+
+  it("should concatenate duplicates when preventDuplicate is false (default)", async () => {
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderButton, {
+      props: { multiple: true, onchange: changeHandler },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+
+    const lastModified = 1700000000000;
+    const fileA = new File(["a"], "a.txt", {
+      type: "text/plain",
+      lastModified,
+    });
+    simulateFileSelection(input, [fileA]);
+
+    const fileADup = new File(["a"], "a.txt", {
+      type: "text/plain",
+      lastModified,
+    });
+    simulateFileSelection(input, [fileADup]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalledTimes(2);
+    });
+    expect(changeHandler.mock.calls[1][0].detail).toHaveLength(2);
+  });
+
   it("should handle different button kinds", () => {
     const { container: container1 } = render(FileUploaderButton, {
       props: { kind: "primary" },
