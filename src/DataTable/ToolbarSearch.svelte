@@ -92,7 +92,7 @@
     ref.focus();
   }
 
-  $: expanded = !!value.length;
+  $: expanded = String(value ?? "").length > 0;
   $: classes = [
     expanded && "bx--toolbar-search-container-active",
     persistent
@@ -119,7 +119,7 @@
   on:focus={expandSearch}
   on:blur
   on:blur={() => {
-    expanded = !persistent && !!value.length;
+    expanded = !persistent && String(value ?? "").length > 0;
   }}
   on:keyup
   on:keydown
