@@ -89,6 +89,21 @@
     ref.focus();
   }
 
+  /**
+   * Programmatically clear the search input.
+   * Resets `value` and collapses the search bar (unless `persistent`).
+   * @type {() => void}
+   * @example
+   * ```svelte
+   * <ToolbarSearch bind:this={search} />
+   * <Button on:click={() => search.clear()}>Clear search</Button>
+   * ```
+   */
+  export function clear() {
+    value = "";
+    if (!persistent) expanded = false;
+  }
+
   $: if (!persistent) expanded = String(value ?? "").length > 0;
   $: classes = [
     expanded && "bx--toolbar-search-container-active",
@@ -109,7 +124,7 @@
   bind:ref
   bind:value
   on:clear
-  on:clear={expandSearch}
+  on:clear={clear}
   on:change
   on:input
   on:focus
