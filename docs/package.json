@@ -14,22 +14,22 @@
   },
   "devDependencies": {
     "@roxi/routify": "^3.6.4",
-    "@sveltejs/vite-plugin-svelte": "^7.0.0",
+    "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@types/prismjs": "^1.26.5",
-    "carbon-icons-svelte": "^13.10.0",
+    "carbon-icons-svelte": "^13.11.0",
     "clipboard-copy": "^4.0.1",
     "estree-walker": "^3.0.3",
     "github-slugger": "^2.0.0",
     "mdast": "^3.0.0",
     "mdsvex": "^0.12.7",
     "minisearch": "^7.1.0",
-    "prettier": "^3.8.2",
-    "prettier-plugin-svelte": "^3.5.1",
+    "prettier": "^3.8.3",
+    "prettier-plugin-svelte": "^3.5.2",
     "prism-svelte": "^0.5.0",
     "prismjs": "^1.30.0",
     "rehype-slug": "^6.0.0",
     "svelte": "^5.55.7",
-    "vite": "^8.0.10"
+    "vite": "^8.0.13"
   },
   "type": "module"
 }
