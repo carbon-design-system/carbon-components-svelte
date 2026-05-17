@@ -101,6 +101,26 @@ describe("DataTableSearch", () => {
     allRowsRendered();
   });
 
+  it("persistent search bar does not toggle the active class when typing", async () => {
+    render(DataTableSearch, {
+      props: {
+        persistent: true,
+      } satisfies ComponentProps<DataTableSearch>,
+    });
+
+    const searchBar = screen.getByRole("search");
+    expect(searchBar).toHaveClass("bx--toolbar-search-container-persistent");
+    expect(searchBar).not.toHaveClass("bx--toolbar-search-container-active");
+
+    const searchInput = screen.getByRole("searchbox");
+    await user.type(searchInput, "dns");
+
+    // Persistent search should remain persistent only; the "active" class
+    // (meant for expandable mode) should not coexist with "persistent".
+    expect(searchBar).toHaveClass("bx--toolbar-search-container-persistent");
+    expect(searchBar).not.toHaveClass("bx--toolbar-search-container-active");
+  });
+
   it("renders with initial search value in non-persistent search input", async () => {
     render(DataTableSearch, {
       props: {
