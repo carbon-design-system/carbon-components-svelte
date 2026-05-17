@@ -121,7 +121,9 @@ describe("NumberInput", () => {
   it("should handle readonly state", () => {
     render(NumberInput, { props: { readonly: true } });
 
-    expect(screen.getByRole("spinbutton")).toHaveAttribute("readonly");
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveAttribute("readonly");
+    expect(input).toHaveAttribute("aria-readonly", "true");
   });
 
   it("should handle hidden steppers", () => {
