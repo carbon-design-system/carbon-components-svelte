@@ -79,7 +79,9 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
   tabindex="-1"
-  role="presentation"
+  role="tab"
+  aria-selected={selected}
+  aria-disabled={disabled}
   class:bx--tabs__nav-item={true}
   class:bx--tabs__nav-item--disabled={disabled}
   class:bx--tabs__nav-item--selected={selected}
@@ -107,10 +109,7 @@
 >
   <a
     bind:this={ref}
-    role="tab"
     tabindex={disabled ? "-1" : tabindex}
-    aria-selected={selected}
-    aria-disabled={disabled}
     {id}
     {href}
     class:bx--tabs__nav-link={true}
