@@ -1,0 +1,42 @@
+// This file backports readonly select styles from carbon-components v11+
+// to ensure compatibility with carbon-components v10.58.12.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Readonly select styles
+/// @access private
+/// @group select
+@mixin select-readonly {
+  //----------------------------------------------
+  // Read-only
+  // ---------------------------------------------
+  .#{$prefix}--select--readonly .#{$prefix}--select-input {
+    background-color: transparent;
+    border-block-end-color: $border-subtle;
+    cursor: default;
+  }
+
+  .#{$prefix}--select--readonly .#{$prefix}--select-input:hover {
+    background-color: transparent;
+  }
+
+  .#{$prefix}--select--readonly .#{$prefix}--select__arrow {
+    fill: $icon-disabled;
+  }
+
+  .#{$prefix}--select--readonly.#{$prefix}--select--inline
+    .#{$prefix}--select-input:hover {
+    background-color: transparent;
+  }
+
+  .#{$prefix}--select--readonly.#{$prefix}--select--light
+    .#{$prefix}--select-input:hover {
+    background-color: transparent;
+  }
+}
+
+@include exports("select-readonly") {
+  @include select-readonly;
+}
