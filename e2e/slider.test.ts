@@ -43,4 +43,16 @@ test.describe("Slider", () => {
     // step=1, range=100, stepMultiplier=4 -> delta = 100/4 = 25
     await expect(page.getByTestId("value-display")).toHaveText("75");
   });
+
+  test("keyboard cannot move the value past max", async ({ page }) => {
+    const thumb = page.getByTestId("slider").locator('[role="slider"]');
+    await thumb.focus();
+    // Shift+ArrowRight adds 25 per press; from 50 three presses would land
+    // at 125 without clamping against max (100).
+    await page.keyboard.press("Shift+ArrowRight");
+    await page.keyboard.press("Shift+ArrowRight");
+    await page.keyboard.press("Shift+ArrowRight");
+    await expect(page.getByTestId("value-display")).toHaveText("100");
+    await expect(thumb).toHaveAttribute("aria-valuenow", "100");
+  });
 });
