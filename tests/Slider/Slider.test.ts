@@ -663,6 +663,33 @@ describe("Slider", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", 0);
   });
 
+  it("should clamp keyboard arrow values to min and max", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Slider, { props: { min: 0, max: 100, value: 100 } });
+
+    const slider = screen.getByRole("slider");
+    await user.tab();
+    expect(slider).toHaveFocus();
+
+    await user.keyboard("{ArrowRight}");
+    expect(consoleLog).toHaveBeenCalledWith("input", 100);
+    expect(consoleLog).toHaveBeenCalledWith("change", 100);
+
+    vi.clearAllMocks();
+    await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
+    expect(consoleLog).toHaveBeenCalledWith("input", 100);
+    expect(consoleLog).toHaveBeenCalledWith("change", 100);
+  });
+
+  it("should not dispatch change on programmatic value updates", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { rerender } = render(Slider, { props: { value: 10 } });
+
+    await rerender({ value: 20 });
+
+    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+  });
+
   // Regression: ?? for aria-label so empty string is used (not fallback)
   it("uses empty aria-label when passed (nullish coalescing)", () => {
     render(Slider, {
