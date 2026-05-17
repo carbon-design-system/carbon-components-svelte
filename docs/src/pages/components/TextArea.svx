@@ -62,6 +62,12 @@ Disable the textarea to prevent user interaction by setting `disabled` to `true`
 
 <TextArea disabled labelText="App description" placeholder="Enter a description..." />
 
+## Read-only state
+
+Display a non-editable value by setting `readonly` to `true`.
+
+<TextArea readonly labelText="App description" value="I'm read-only" />
+
 ## Skeleton
 
 Show a loading state with the default skeleton variant.
