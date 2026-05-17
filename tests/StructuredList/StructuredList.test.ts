@@ -5,6 +5,7 @@ import { user } from "../setup-tests";
 import StructuredList from "./StructuredList.test.svelte";
 import StructuredListChecked from "./StructuredListChecked.test.svelte";
 import StructuredListCustom from "./StructuredListCustom.test.svelte";
+import StructuredListInputStandalone from "./StructuredListInputStandalone.test.svelte";
 
 describe("StructuredList", () => {
   it("should render with default props", () => {
@@ -117,6 +118,10 @@ describe("StructuredList", () => {
     for (const cell of noWrapCells) {
       expect(cell).toHaveClass("bx--structured-list-td");
     }
+  });
+
+  it("should not throw when rendered outside a StructuredList", () => {
+    expect(() => render(StructuredListInputStandalone)).not.toThrow();
   });
 
   it("should emit change event on selection", async () => {
