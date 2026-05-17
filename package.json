@@ -62,14 +62,14 @@
     "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^13.10.0",
     "culls": "^0.2.0",
-    "jsdom": "^29.0.1",
+    "jsdom": "^29.1.1",
     "postcss": "^8.5.5",
-    "sass": "^1.98.0",
+    "sass": "^1.99.0",
     "sveld": "0.31.0",
     "svelte": "^5.55.7",
     "svelte-check": "^4.4.8",
-    "typescript": "^6.0.2",
-    "vitest": "^4.1.5"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
   },
   "repository": {
     "type": "git",
