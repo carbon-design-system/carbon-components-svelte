@@ -191,7 +191,7 @@
   bind:this={ref}
   type="file"
   tabindex="-1"
-  {accept}
+  accept={typeof accept === "string" ? accept : accept.join(",")}
   {disabled}
   {id}
   {multiple}
