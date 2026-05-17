@@ -61,7 +61,6 @@
     </div>
   {/if}
   <ul
-    role="list"
     aria-labelledby={labelText || $$slots.labelChildren ? labelId : undefined}
   >
     <slot />
