@@ -489,6 +489,7 @@
           data-invalid={effectiveInvalid || undefined}
           aria-invalid={effectiveInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
+          aria-readonly={readonly || undefined}
           {disabled}
           {id}
           {name}
@@ -523,6 +524,7 @@
           data-invalid={effectiveInvalid || undefined}
           aria-invalid={effectiveInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
+          aria-readonly={readonly || undefined}
           {disabled}
           {id}
           {name}
