@@ -50,7 +50,7 @@
    */
   export let ref = null;
 
-  import { afterUpdate, getContext, onMount, tick } from "svelte";
+  import { getContext, onMount, tick } from "svelte";
   import Search from "../Search/Search.svelte";
   import { rowsEqual } from "./data-table-utils.js";
 
@@ -77,12 +77,9 @@
     };
   });
 
-  afterUpdate(() => {
-    // Only filter rows in a callback to avoid an infinite update loop.
-    if (rows !== null) {
-      filteredRowIds = ctx?.filterRows(value, shouldFilterRows);
-    }
-  });
+  $: if (rows !== null) {
+    filteredRowIds = ctx.filterRows(value, shouldFilterRows);
+  }
 
   async function expandSearch() {
     await tick();
