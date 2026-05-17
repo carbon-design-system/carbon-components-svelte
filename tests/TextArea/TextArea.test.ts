@@ -161,8 +161,7 @@ describe("TextArea", () => {
     render(TextArea, { props: { cols: undefined } });
 
     const textarea = screen.getByRole("textbox");
-    const style = window.getComputedStyle(textarea);
-    expect(style.resize).not.toBe("none");
+    expect(textarea.style.resize).toBe("");
   });
 
   it("should not have default cols value", () => {

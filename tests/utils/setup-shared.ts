@@ -23,18 +23,22 @@ class ResizeObserverMock {
 
   observe(element: Element) {
     this.elements.push(element);
-    this.callback(
-      [
-        {
-          target: element,
-          contentRect: { height: 100 } as DOMRectReadOnly,
-          borderBoxSize: [],
-          contentBoxSize: [],
-          devicePixelContentBoxSize: [],
-        },
-      ],
-      this,
-    );
+    // Defer like the real ResizeObserver so the first paint can use unmeasured state.
+    queueMicrotask(() => {
+      if (!this.elements.includes(element)) return;
+      this.callback(
+        [
+          {
+            target: element,
+            contentRect: { height: 100 } as DOMRectReadOnly,
+            borderBoxSize: [],
+            contentBoxSize: [],
+            devicePixelContentBoxSize: [],
+          },
+        ],
+        this,
+      );
+    });
   }
 
   unobserve(element: Element) {
