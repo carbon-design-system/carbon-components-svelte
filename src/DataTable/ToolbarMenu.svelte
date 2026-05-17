@@ -1,15 +1,26 @@
 <script>
   /** @extends {"../OverflowMenu/OverflowMenu.svelte"} OverflowMenuProps */
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import Settings from "../icons/Settings.svelte";
   import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
 
   const ctx = getContext("carbon:Toolbar") ?? {};
 
   let menuRef = null;
+  let lastVisible = false;
 
-  $: ctx.setOverflowVisible?.(menuRef != null);
+  $: {
+    const visible = menuRef != null;
+    if (visible !== lastVisible) {
+      lastVisible = visible;
+      ctx.setOverflowVisible?.(visible);
+    }
+  }
+
+  onMount(() => () => {
+    if (lastVisible) ctx.setOverflowVisible?.(false);
+  });
 </script>
 
 <OverflowMenu
