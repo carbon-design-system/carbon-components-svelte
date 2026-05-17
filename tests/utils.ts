@@ -6,8 +6,6 @@ export const testConfig = {
   clearMocks: true,
   // Suppress `console` output in CI.
   silent: !!process.env.CI,
-  // pool: threads is typically faster than forks on macOS CI runners.
-  pool: "threads",
   experimental: {
     fsModuleCache: true,
   },
