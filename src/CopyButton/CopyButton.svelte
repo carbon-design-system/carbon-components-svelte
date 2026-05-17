@@ -43,6 +43,9 @@
    */
   export let portalTooltip = undefined;
 
+  /** Obtain a reference to the underlying button element. */
+  export let ref = null;
+
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import Copy from "../icons/Copy.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
@@ -54,9 +57,6 @@
 
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
-
-  /** @type {null | HTMLButtonElement} */
-  let buttonRef = null;
 
   const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
 
@@ -80,8 +80,8 @@
   $: {
     disconnectModalObserver();
     disconnectModalObserver =
-      effectivePortalTooltip && buttonRef
-        ? observeModalClose(buttonRef, dismissFeedback)
+      effectivePortalTooltip && ref
+        ? observeModalClose(ref, dismissFeedback)
         : () => {};
   }
 
@@ -94,7 +94,7 @@
 </script>
 
 <button
-  bind:this={buttonRef}
+  bind:this={ref}
   type="button"
   aria-live="polite"
   aria-busy={copyPending || undefined}
@@ -146,5 +146,5 @@
 </button>
 
 {#if effectivePortalTooltip}
-  <PortalTooltip anchor={buttonRef} open={feedbackOpen} text={feedback} />
+  <PortalTooltip anchor={ref} open={feedbackOpen} text={feedback} />
 {/if}
