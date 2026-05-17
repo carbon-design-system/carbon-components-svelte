@@ -24,17 +24,11 @@
    */
   export let selectedIds = [];
 
-  import {
-    afterUpdate,
-    createEventDispatcher,
-    getContext,
-    onMount,
-  } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
 
   import Button from "../Button/Button.svelte";
 
   let batchSelectedIds = [];
-  let prevActive;
 
   const dispatch = createEventDispatcher();
 
@@ -62,14 +56,7 @@
     batchSelectedIds = selectedIds;
   }
 
-  $: showActions = batchSelectedIds.length > 0 || active;
-  $: {
-    if (prevActive !== active && active === false) {
-      showActions = false;
-    }
-
-    prevActive = active;
-  }
+  $: showActions = active ?? batchSelectedIds.length > 0;
   $: inertProps = showActions ? {} : { inert: true };
 
   let overflowVisible = false;
@@ -92,12 +79,6 @@
       unsubscribe?.();
       unsubscribeOverflow?.();
     };
-  });
-
-  afterUpdate(() => {
-    if (active === false && showActions) {
-      active = true;
-    }
   });
 </script>
 
