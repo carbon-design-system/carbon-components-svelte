@@ -109,6 +109,21 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(toolbar).toHaveClass("bx--batch-actions--active");
   });
 
+  it("does not silently flip controlled active=false back to true when rows are selected", async () => {
+    const { container, rerender } = render(DataTableBatchSelectionToolbar, {
+      props: {
+        selectedRowIds: [],
+        active: false,
+      },
+    });
+
+    rerender({ selectedRowIds: ["a", "b"], active: false });
+    await tick();
+
+    const toolbar = container.querySelector(".bx--batch-actions");
+    expect(toolbar).not.toHaveClass("bx--batch-actions--active");
+  });
+
   it("prevents default cancel behavior when controlled", async () => {
     render(DataTableBatchSelectionToolbar, {
       props: {
