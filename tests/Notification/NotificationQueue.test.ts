@@ -46,12 +46,10 @@ describe("NotificationQueue", () => {
 
     const queueContainer = document.querySelector('[style*="position: fixed"]');
     expect(queueContainer).toBeInTheDocument();
-    expect(queueContainer).toHaveStyle({
-      position: "fixed",
-      right: "1rem",
-      top: "3rem",
-      "z-index": "9000",
-    });
+    expect(queueContainer?.getAttribute("style")).toContain("position: fixed");
+    expect(queueContainer?.getAttribute("style")).toContain("right: 1rem");
+    expect(queueContainer?.getAttribute("style")).toContain("top: 3rem");
+    expect(queueContainer?.getAttribute("style")).toContain("z-index: 9000");
   });
 
   it("should add a notification", async () => {
@@ -361,7 +359,8 @@ describe("NotificationQueue", () => {
     await tick();
 
     const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toHaveStyle({ top: "3rem", right: "1rem" });
+    expect(queueContainer?.getAttribute("style")).toContain("top: 3rem");
+    expect(queueContainer?.getAttribute("style")).toContain("right: 1rem");
     const bottomValue = queueContainer
       ?.getAttribute("style")
       ?.match(/bottom:\s*([^;]+)/)?.[1]
@@ -381,7 +380,8 @@ describe("NotificationQueue", () => {
     await tick();
 
     const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toHaveStyle({ bottom: "1rem", right: "1rem" });
+    expect(queueContainer?.getAttribute("style")).toContain("bottom: 1rem");
+    expect(queueContainer?.getAttribute("style")).toContain("right: 1rem");
     const topValue = queueContainer
       ?.getAttribute("style")
       ?.match(/top:\s*([^;]+)/)?.[1]
@@ -405,7 +405,8 @@ describe("NotificationQueue", () => {
     await tick();
 
     const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toHaveStyle({ top: "5rem", right: "2rem" });
+    expect(queueContainer?.getAttribute("style")).toContain("top: 5rem");
+    expect(queueContainer?.getAttribute("style")).toContain("right: 2rem");
   });
 
   it("should use custom z-index", async () => {

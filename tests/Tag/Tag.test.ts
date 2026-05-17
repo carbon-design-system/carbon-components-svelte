@@ -14,7 +14,9 @@ describe("Tag", () => {
 
     const basicTag = screen.getByText("IBM Cloud");
     expect(basicTag.parentElement).toHaveClass("my-class");
-    expect(basicTag.parentElement).toHaveStyle({ margin: "1rem" });
+    expect(basicTag.parentElement?.getAttribute("style")).toContain(
+      "margin: 1rem",
+    );
 
     const colors = [
       "red",

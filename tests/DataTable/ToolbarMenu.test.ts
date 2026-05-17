@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../setup-tests";
 import ToolbarMenuTest from "./ToolbarMenu.test.svelte";
 
@@ -129,12 +129,12 @@ describe("DataTable Toolbar Menu", () => {
       await user.click(button);
 
       const menuItem = container.querySelector(
-        ".bx--overflow-menu-options__option",
+        ".bx--overflow-menu-options__btn",
       );
       assert(menuItem instanceof HTMLElement);
 
       menuItem.focus();
-      await user.keyboard("{Enter}");
+      await fireEvent.keyDown(menuItem, { key: "Enter" });
 
       expect(consoleLog).toHaveBeenCalledWith("keydown");
     });

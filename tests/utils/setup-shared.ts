@@ -92,7 +92,7 @@ if (typeof DataTransfer === "undefined") {
   globalThis.DataTransfer = DataTransferMock as unknown as typeof DataTransfer;
 }
 
-export const user = userEvent.setup();
+export const user = userEvent.setup({ document });
 
 export const setupLocalStorageMock = () => {
   let localStorageMock: { [key: string]: string } = {};
@@ -292,7 +292,6 @@ export const setupStorageEventMock = () => {
   });
 
   function dispatchStorageEvent(key: string, newValue: string | null) {
-    // jsdom doesn't accept mock localStorage as storageArea, so we create a plain object
     const event = {
       key,
       newValue,

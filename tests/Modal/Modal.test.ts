@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type ModalComponent from "carbon-components-svelte/Modal/Modal.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
@@ -15,6 +15,30 @@ describe("Modal", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
+
+  async function tabThroughModal(shiftKey = false) {
+    const modalWrapper = document.querySelector(".bx--modal");
+    assert(modalWrapper instanceof HTMLElement);
+    modalWrapper.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        cancelable: true,
+        shiftKey,
+      }),
+    );
+    await tick();
+  }
+
+  async function transitionModal(modalWrapper: Element) {
+    const event = new Event("transitionend", {
+      bubbles: true,
+      cancelable: true,
+    });
+    Object.defineProperty(event, "propertyName", { value: "transform" });
+    modalWrapper.dispatchEvent(event);
+    await tick();
+  }
 
   it("renders with default props", () => {
     render(ModalTest, {
@@ -245,6 +269,7 @@ describe("Modal", () => {
     });
 
     const trigger = screen.getByRole("button", { name: "Open Modal" });
+    trigger.focus();
     await user.click(trigger);
     await tick();
 
@@ -256,10 +281,7 @@ describe("Modal", () => {
 
     const modalWrapper = container.querySelector(".bx--modal");
     assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+    await transitionModal(modalWrapper);
 
     expect(trigger).toHaveFocus();
   });
@@ -270,20 +292,18 @@ describe("Modal", () => {
     });
 
     const trigger = screen.getByRole("button", { name: "Open Modal" });
+    trigger.focus();
     await user.click(trigger);
     await tick();
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    await user.keyboard("{Escape}");
+    await fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
     await tick();
 
     const modalWrapper = container.querySelector(".bx--modal");
     assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+    await transitionModal(modalWrapper);
 
     expect(trigger).toHaveFocus();
   });
@@ -294,6 +314,7 @@ describe("Modal", () => {
     });
 
     const trigger = screen.getByRole("button", { name: "Open Modal" });
+    trigger.focus();
     await user.click(trigger);
     await tick();
 
@@ -304,10 +325,7 @@ describe("Modal", () => {
     await user.click(modalWrapper);
     await tick();
 
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+    await transitionModal(modalWrapper);
 
     expect(trigger).toHaveFocus();
   });
@@ -575,8 +593,7 @@ describe("Modal", () => {
       dropdownButton.focus();
       expect(dropdownButton).toHaveFocus();
 
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
 
       expect(loginInput).toHaveFocus();
     });
@@ -594,8 +611,7 @@ describe("Modal", () => {
       loginInput.focus();
       expect(loginInput).toHaveFocus();
 
-      await user.keyboard("{Shift>}{Tab}{/Shift}");
-      await tick();
+      await tabThroughModal(true);
 
       expect(dropdownButton).toHaveFocus();
     });
@@ -618,23 +634,19 @@ describe("Modal", () => {
       expect(dropdownButton).toHaveFocus();
 
       // Tab to login input.
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
       expect(loginInput).toHaveFocus();
 
       // Tab to password input.
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
       expect(passwordInput).toHaveFocus();
 
       // Tab to Cancel button.
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
       expect(cancelButton).toHaveFocus();
 
       // Tab to OK button.
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
       expect(okButton).toHaveFocus();
     });
   });

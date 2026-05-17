@@ -16,7 +16,8 @@ describe("SkeletonPlaceholder", () => {
     });
 
     const element = screen.getByTestId("skeleton-placeholder");
-    expect(element).toHaveStyle({ height: "12rem", width: "12rem" });
+    expect(element.getAttribute("style")).toContain("height: 12rem");
+    expect(element.getAttribute("style")).toContain("width: 12rem");
   });
 
   it("should render with size prop (number)", () => {
@@ -34,7 +35,8 @@ describe("SkeletonPlaceholder", () => {
     });
 
     const element = screen.getByTestId("skeleton-placeholder");
-    expect(element).toHaveStyle({ width: "20rem", height: "10rem" });
+    expect(element.getAttribute("style")).toContain("width: 20rem");
+    expect(element.getAttribute("style")).toContain("height: 10rem");
   });
 
   it("should allow width/height to override size", () => {
@@ -43,7 +45,8 @@ describe("SkeletonPlaceholder", () => {
     });
 
     const element = screen.getByTestId("skeleton-placeholder");
-    expect(element).toHaveStyle({ width: "10rem", height: "8rem" });
+    expect(element.getAttribute("style")).toContain("width: 10rem");
+    expect(element.getAttribute("style")).toContain("height: 8rem");
   });
 
   it("should handle mouse events", async () => {

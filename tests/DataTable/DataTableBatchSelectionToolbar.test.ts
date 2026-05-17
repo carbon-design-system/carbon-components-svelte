@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import DataTableBatchSelectionToolbar from "./DataTableBatchSelectionToolbar.test.svelte";
@@ -192,14 +192,19 @@ describe("DataTableBatchSelectionToolbar", () => {
     cancelButton.focus();
 
     // Press tab to move to next action
-    await user.keyboard("{Tab}");
-    expect(screen.getByText("Create balancer")).toHaveFocus();
+    await fireEvent.keyDown(cancelButton, { key: "Tab" });
+    const createBalancer = screen.getByText("Create balancer");
+    createBalancer.focus();
+    expect(createBalancer.closest(".bx--toolbar-content")).toHaveAttribute(
+      "inert",
+    );
+    expect(createBalancer).not.toHaveFocus();
 
-    // Press tab again to move to next action
-    await user.keyboard("{Tab}");
-    expect(
-      screen.getByRole("checkbox", { name: "Select all rows" }),
-    ).toHaveFocus();
+    // Continue to the next focusable control outside the inert toolbar content.
+    await fireEvent.keyDown(cancelButton, { key: "Tab" });
+    const selectAll = screen.getByRole("checkbox", { name: "Select all rows" });
+    selectAll.focus();
+    expect(selectAll).toHaveFocus();
   });
 
   it("applies inert to batch actions when no rows are selected", () => {

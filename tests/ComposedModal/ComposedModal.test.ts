@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../setup-tests";
 import ComposedModalTest from "./ComposedModal.test.svelte";
@@ -9,6 +9,30 @@ describe("ComposedModal", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
+
+  async function tabThroughModal(shiftKey = false) {
+    const modalWrapper = document.querySelector(".bx--modal");
+    assert(modalWrapper instanceof HTMLElement);
+    modalWrapper.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        cancelable: true,
+        shiftKey,
+      }),
+    );
+    await tick();
+  }
+
+  async function transitionModal(modalWrapper: Element) {
+    const event = new Event("transitionend", {
+      bubbles: true,
+      cancelable: true,
+    });
+    Object.defineProperty(event, "propertyName", { value: "transform" });
+    modalWrapper.dispatchEvent(event);
+    await tick();
+  }
 
   it("should render with default props", () => {
     render(ComposedModalTest, {
@@ -274,6 +298,7 @@ describe("ComposedModal", () => {
     });
 
     const trigger = screen.getByRole("button", { name: "Open Modal" });
+    trigger.focus();
     await user.click(trigger);
     await tick();
 
@@ -281,19 +306,13 @@ describe("ComposedModal", () => {
 
     const modalWrapper = container.querySelector(".bx--modal");
     assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+    await transitionModal(modalWrapper);
 
     const closeButton = screen.getByLabelText("Close");
     await user.click(closeButton);
     await tick();
 
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+    await transitionModal(modalWrapper);
 
     expect(trigger).toHaveFocus();
   });
@@ -304,6 +323,7 @@ describe("ComposedModal", () => {
     });
 
     const trigger = screen.getByRole("button", { name: "Open Modal" });
+    trigger.focus();
     await user.click(trigger);
     await tick();
 
@@ -311,18 +331,12 @@ describe("ComposedModal", () => {
 
     const modalWrapper = container.querySelector(".bx--modal");
     assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
+    await transitionModal(modalWrapper);
+
+    await fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
     await tick();
 
-    await user.keyboard("{Escape}");
-    await tick();
-
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+    await transitionModal(modalWrapper);
 
     expect(trigger).toHaveFocus();
   });
@@ -333,6 +347,7 @@ describe("ComposedModal", () => {
     });
 
     const trigger = screen.getByRole("button", { name: "Open Modal" });
+    trigger.focus();
     await user.click(trigger);
     await tick();
 
@@ -340,18 +355,12 @@ describe("ComposedModal", () => {
 
     const modalWrapper = container.querySelector(".bx--modal");
     assert(modalWrapper);
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+    await transitionModal(modalWrapper);
 
     await user.click(modalWrapper);
     await tick();
 
-    modalWrapper.dispatchEvent(
-      new TransitionEvent("transitionend", { propertyName: "transform" }),
-    );
-    await tick();
+    await transitionModal(modalWrapper);
 
     expect(trigger).toHaveFocus();
   });
@@ -592,8 +601,7 @@ describe("ComposedModal", () => {
       dropdownButton.focus();
       expect(dropdownButton).toHaveFocus();
 
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
 
       expect(loginInput).toHaveFocus();
     });
@@ -611,8 +619,7 @@ describe("ComposedModal", () => {
       loginInput.focus();
       expect(loginInput).toHaveFocus();
 
-      await user.keyboard("{Shift>}{Tab}{/Shift}");
-      await tick();
+      await tabThroughModal(true);
 
       expect(dropdownButton).toHaveFocus();
     });
@@ -635,23 +642,19 @@ describe("ComposedModal", () => {
       expect(dropdownButton).toHaveFocus();
 
       // Tab to login input.
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
       expect(loginInput).toHaveFocus();
 
       // Tab to password input.
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
       expect(passwordInput).toHaveFocus();
 
       // Tab to Cancel button.
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
       expect(cancelButton).toHaveFocus();
 
       // Tab to OK button.
-      await user.keyboard("{Tab}");
-      await tick();
+      await tabThroughModal();
       expect(okButton).toHaveFocus();
     });
   });

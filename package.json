@@ -63,7 +63,7 @@
     "carbon-components": "10.58.12",
     "carbon-icons-svelte": "^13.10.0",
     "culls": "^0.2.0",
-    "jsdom": "^29.1.1",
+    "happy-dom": "^20",
     "postcss": "^8.5.5",
     "sass": "^1.99.0",
     "sveld": "0.31.0",

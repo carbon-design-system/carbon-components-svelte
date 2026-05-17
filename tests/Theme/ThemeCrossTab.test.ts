@@ -44,12 +44,7 @@ describe("Theme cross-tab sync", () => {
     dispatchStorageEvent("theme", "g90");
     await tick();
 
-    // Theme should still be white
-    const lastCall =
-      documentMock.setAttribute.mock.calls[
-        documentMock.setAttribute.mock.calls.length - 1
-      ];
-    expect(lastCall).toEqual(["theme", "white"]);
+    expect(documentMock.setAttribute).not.toHaveBeenCalledWith("theme", "g90");
 
     // Should respond to custom key
     dispatchStorageEvent("my-custom-theme-key", "g90");

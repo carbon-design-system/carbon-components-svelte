@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type TreeViewNodeComponent from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
@@ -199,7 +199,7 @@ describe.each(testCases)("$name", ({ component }) => {
     const secondItem = treeItemById(1);
     secondItem.focus();
 
-    await user.keyboard("{ArrowUp}");
+    await fireEvent.keyDown(secondItem, { key: "ArrowUp" });
 
     const firstItem = treeItemById(0);
     expect(firstItem).toHaveFocus();

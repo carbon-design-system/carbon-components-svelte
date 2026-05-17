@@ -2,7 +2,7 @@
 
 export const testConfig = {
   globals: true,
-  environment: "jsdom",
+  environment: "happy-dom",
   clearMocks: true,
   // Suppress `console` output in CI.
   silent: !!process.env.CI,
