@@ -56,6 +56,12 @@ Bind to the `value` prop for reactive updates.
 
 <FileSource src="/framed/Toolbar/ToolbarSearchReactive" />
 
+## Programmatically clear the search
+
+Use `bind:this` to obtain a reference to `ToolbarSearch` and call `clear()` to reset the value.
+
+<FileSource src="/framed/Toolbar/ToolbarSearchClear" />
+
 ## With menu
 
 Add an overflow menu using toolbar menu and toolbar menu item.
