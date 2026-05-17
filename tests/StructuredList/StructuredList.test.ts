@@ -3,6 +3,7 @@ import type StructuredListComponent from "carbon-components-svelte/StructuredLis
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../setup-tests";
 import StructuredList from "./StructuredList.test.svelte";
+import StructuredListChecked from "./StructuredListChecked.test.svelte";
 import StructuredListCustom from "./StructuredListCustom.test.svelte";
 
 describe("StructuredList", () => {
@@ -129,6 +130,13 @@ describe("StructuredList", () => {
 
     await user.click(screen.getAllByRole("radio")[0]);
     expect(consoleLog).toHaveBeenCalledWith("change", "row-1-value");
+  });
+
+  it("should not emit change event on initial render when a child has checked={true}", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(StructuredListChecked);
+
+    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
   });
 });
 
