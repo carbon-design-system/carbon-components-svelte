@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Button, DataTable } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import FilterRowsCaller from "./FilterRowsCaller.svelte";
 
   const initialRows = Array.from({ length: 10 }).map((_, i) => ({

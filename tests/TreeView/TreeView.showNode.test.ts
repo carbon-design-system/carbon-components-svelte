@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import TreeViewShowNodeIdEscape from "./TreeView.showNode.idEscape.test.svelte";
 import TreeViewShowNode from "./TreeView.showNode.test.svelte";
 

@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/svelte";
 import type SelectComponent from "carbon-components-svelte/Select/Select.svelte";
 import type SelectItemComponent from "carbon-components-svelte/Select/SelectItem.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import SelectFalsy from "./Select.falsy.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
 import SelectSkeleton from "./Select.skeleton.test.svelte";

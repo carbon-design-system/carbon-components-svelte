@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
     "test:types": "svelte-check --workspace ../tests --tsconfig ../tests/tsconfig.compat-check.json --fail-on-warnings"
   },
   "devDependencies": {

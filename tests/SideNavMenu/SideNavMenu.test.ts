@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { isSideNavCollapsed, isSideNavRail } from "../../src/UIShell/nav-store";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import SideNavMenuRail from "./SideNavMenu.rail.test.svelte";
 
 // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/746

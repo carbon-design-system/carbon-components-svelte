@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type TileGroupComponent from "carbon-components-svelte/Tile/TileGroup.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import TileGroup from "./TileGroup.test.svelte";
 
 describe("TileGroup", () => {

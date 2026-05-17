@@ -3,7 +3,7 @@ import type NotificationButtonComponent from "carbon-components-svelte/Notificat
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import NotificationQueueTest from "./NotificationQueue.test.svelte";
 
 function getQueue(

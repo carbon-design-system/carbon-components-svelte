@@ -1,5 +1,5 @@
 import { render } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import Filename from "./Filename.test.svelte";
 
 describe("Filename", () => {

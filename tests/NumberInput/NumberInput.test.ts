@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { isSvelte5, user } from "../setup-tests";
+import { isSvelte5 } from "../utils/svelte-version";
+import { user } from "../utils/user";
 import NumberInput from "./NumberInput.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
 

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ListBoxMenuItem from "./ListBoxMenuItem.test.svelte";
 
 describe("ListBoxMenuItem", () => {

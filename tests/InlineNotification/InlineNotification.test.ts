@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import InlineNotificationTest from "./InlineNotification.test.svelte";
 import InlineNotificationSubtitleSlotTest from "./InlineNotificationSubtitleSlot.test.svelte";
 import InlineNotificationTitleSlotTest from "./InlineNotificationTitleSlot.test.svelte";

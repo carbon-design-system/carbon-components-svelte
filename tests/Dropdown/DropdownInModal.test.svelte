@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Dropdown, Modal } from "carbon-components-svelte";
+  import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
   import type { ComponentProps } from "svelte";
 
   export let modalOpen = true;

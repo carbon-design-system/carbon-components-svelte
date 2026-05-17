@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Dropdown } from "carbon-components-svelte";
   import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+  import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 
   const items: DropdownItem[] = [
     { id: "0", text: "Option 1" },

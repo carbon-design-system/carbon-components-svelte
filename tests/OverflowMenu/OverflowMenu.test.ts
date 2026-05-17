@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import type OverflowMenuComponent from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import OverflowMenuAllDisabled from "./OverflowMenu.allDisabled.test.svelte";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
 import OverflowMenuDisabledLink from "./OverflowMenu.disabledLink.test.svelte";

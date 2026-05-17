@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type ContainedListItemComponent from "carbon-components-svelte/ContainedList/ContainedListItem.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ContainedListLabelChildren from "./ContainedList.labelChildren.test.svelte";
 import ContainedList from "./ContainedList.test.svelte";
 import ContainedListItemAction from "./ContainedListItem.action.test.svelte";

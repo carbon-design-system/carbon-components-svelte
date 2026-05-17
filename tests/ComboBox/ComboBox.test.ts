@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
-import { ComboBox as ComboBoxReal } from "carbon-components-svelte";
 import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+import ComboBoxReal from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";

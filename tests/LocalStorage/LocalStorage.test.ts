@@ -1,7 +1,7 @@
 import { render } from "@testing-library/svelte";
 import type LocalStorageComponent from "carbon-components-svelte/LocalStorage/LocalStorage.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
-import { setupLocalStorageMock } from "../setup-tests";
+import { setupLocalStorageMock } from "../utils/storage-mocks";
 import LocalStorage from "./LocalStorage.test.svelte";
 
 describe("LocalStorage", () => {

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type TagComponent from "carbon-components-svelte/Tag/Tag.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import Tag from "./Tag.test.svelte";
 
 describe("Tag", () => {

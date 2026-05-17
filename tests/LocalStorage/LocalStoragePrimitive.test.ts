@@ -1,5 +1,5 @@
 import { render } from "@testing-library/svelte";
-import { setupLocalStorageMock } from "../setup-tests";
+import { setupLocalStorageMock } from "../utils/storage-mocks";
 import LocalStoragePrimitive from "./LocalStoragePrimitive.test.svelte";
 
 describe("LocalStorage - Primitive Values", () => {

@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import Pagination from "./Pagination.test.svelte";
 
 describe("Pagination", () => {

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ListBoxField from "./ListBoxField.test.svelte";
 
 describe("ListBoxField", () => {

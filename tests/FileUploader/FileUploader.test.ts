@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import FileUploader from "./FileUploader.test.svelte";
 import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
 import FileUploaderDropContainerSlot from "./FileUploaderDropContainer.slot.test.svelte";

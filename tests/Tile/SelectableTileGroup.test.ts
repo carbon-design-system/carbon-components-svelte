@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type SelectableTileGroupComponent from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
 
 describe("SelectableTileGroup", () => {

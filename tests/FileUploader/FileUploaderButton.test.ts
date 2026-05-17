@@ -3,7 +3,7 @@ import type FileUploaderButtonComponent from "carbon-components-svelte/FileUploa
 import Add from "carbon-icons-svelte/lib/Add.svelte";
 import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import FileUploaderButton from "./FileUploaderButton.test.svelte";
 
 describe("FileUploaderButton", () => {

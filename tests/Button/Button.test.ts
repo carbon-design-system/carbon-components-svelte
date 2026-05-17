@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import Button from "./Button.test.svelte";
 
 describe("Button", () => {

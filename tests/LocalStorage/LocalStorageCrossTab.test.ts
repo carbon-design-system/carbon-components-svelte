@@ -1,6 +1,6 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { setupStorageEventMock } from "../setup-tests";
+import { setupStorageEventMock } from "../utils/storage-mocks";
 import LocalStorageCrossTab from "./LocalStorageCrossTab.test.svelte";
 
 describe("LocalStorage cross-tab sync", () => {

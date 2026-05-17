@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import CopyButton from "./CopyButton.test.svelte";
 import CopyButtonInModal from "./CopyButtonInModal.test.svelte";
 

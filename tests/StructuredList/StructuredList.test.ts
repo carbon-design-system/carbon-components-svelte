@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type StructuredListComponent from "carbon-components-svelte/StructuredList/StructuredList.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import StructuredList from "./StructuredList.test.svelte";
 import StructuredListChecked from "./StructuredListChecked.test.svelte";
 import StructuredListCustom from "./StructuredListCustom.test.svelte";

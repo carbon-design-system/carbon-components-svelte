@@ -3,7 +3,7 @@ import type TabComponent from "carbon-components-svelte/Tabs/Tab.svelte";
 import type { ComponentProps } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import Settings from "../../src/icons/Settings.svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import Tab from "./Tab.test.svelte";
 import TabIcon from "./TabIcon.test.svelte";
 import TabIconContainer from "./TabIconContainer.test.svelte";

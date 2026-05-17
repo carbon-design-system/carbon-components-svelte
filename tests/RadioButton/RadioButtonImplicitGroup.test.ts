@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { clearAllGroups } from "../../src/RadioButton/RadioButtonRegistry";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import RadioButtonImplicitGroup from "./RadioButtonImplicitGroup.test.svelte";
 
 describe("RadioButton (Implicit Group via name)", () => {

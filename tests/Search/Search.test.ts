@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type SearchComponent from "carbon-components-svelte/Search/Search.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";

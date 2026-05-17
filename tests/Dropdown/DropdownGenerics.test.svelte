@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Dropdown } from "carbon-components-svelte";
+  import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 
   const items = [
     { id: "1", text: "Laptop", price: 999, category: "Electronics" },

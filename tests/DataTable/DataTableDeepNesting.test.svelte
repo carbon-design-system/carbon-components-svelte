@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { DataTable } from "carbon-components-svelte";
   import type {
     DataTableHeader,
     DataTableRow,
   } from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 
   // This example showcases type-safe `key` values in headers, done via
   // `PropertyPath<T>`, which infers the type of the key from the object type.

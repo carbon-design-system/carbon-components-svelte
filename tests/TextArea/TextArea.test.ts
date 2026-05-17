@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import TextArea from "./TextArea.test.svelte";
 import TextAreaCustom from "./TextAreaCustom.test.svelte";
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DataTableSkeleton } from "carbon-components-svelte";
+  import DataTableSkeleton from "carbon-components-svelte/DataTable/DataTableSkeleton.svelte";
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2869
   // DataTableSkeletonProps should not require `key` / `empty` from DataTableHeader.

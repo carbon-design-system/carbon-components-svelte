@@ -8,7 +8,7 @@ import type {
   ComponentProps,
   ComponentType as SvelteComponentType,
 } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import TreeViewAutoCollapse from "./TreeView.autoCollapse.test.svelte";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
 import TreeViewHref from "./TreeView.href.test.svelte";
