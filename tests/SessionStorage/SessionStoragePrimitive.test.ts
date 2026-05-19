@@ -1,4 +1,5 @@
 import { render } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { setupSessionStorageMock } from "../utils/storage-mocks";
 import SessionStoragePrimitive from "./SessionStoragePrimitive.test.svelte";
 
@@ -35,5 +36,17 @@ describe("SessionStorage - Primitive Values", () => {
 
     render(SessionStoragePrimitive);
     expect(sessionStorage.getItem).toHaveBeenCalledWith("test-key");
+  });
+
+  it("does not dispatch a spurious update event when hydrating from storage on mount", async () => {
+    setMockItem("test-key", "existing-value");
+
+    render(SessionStoragePrimitive);
+    await tick();
+
+    expect(consoleLog).not.toHaveBeenCalledWith(
+      "update event",
+      expect.anything(),
+    );
   });
 });
