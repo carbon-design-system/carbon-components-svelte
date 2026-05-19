@@ -7,6 +7,7 @@ import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
 import TooltipDefault from "./TooltipDefault.test.svelte";
 import TooltipDirections from "./TooltipDirections.test.svelte";
 import TooltipEvents from "./TooltipEvents.test.svelte";
+import TooltipFooterStandalone from "./TooltipFooterStandalone.test.svelte";
 import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
 import TooltipOpen from "./TooltipOpen.test.svelte";
 import TooltipPortalDirections from "./TooltipPortalDirections.test.svelte";
@@ -251,6 +252,10 @@ describe("Tooltip", () => {
     await fireEvent.focus(trigger);
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  test("TooltipFooter should not throw when rendered outside a Tooltip", () => {
+    expect(() => render(TooltipFooterStandalone)).not.toThrow();
   });
 
   describe("Generics", () => {
