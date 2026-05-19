@@ -65,6 +65,18 @@
   };
 
   /**
+   * @type {(id: string) => void}
+   */
+  const remove = (id) => {
+    steps.update((_) =>
+      _.filter((step) => step.id !== id).map((step, i) => ({
+        ...step,
+        index: i,
+      })),
+    );
+  };
+
+  /**
    * @type {(index: number) => void}
    */
   const change = (index) => {
@@ -80,6 +92,7 @@
     stepsById,
     preventChangeOnClick: preventChangeOnClickReadable,
     add,
+    remove,
     change,
   });
 
