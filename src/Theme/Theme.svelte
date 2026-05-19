@@ -30,6 +30,7 @@
   /**
    * Set the current Carbon theme.
    * @type {CarbonTheme}
+   * @bindable writable
    */
   export let theme = "white";
 

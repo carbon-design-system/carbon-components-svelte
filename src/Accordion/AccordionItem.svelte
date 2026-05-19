@@ -11,16 +11,25 @@
    */
   export let title = "title";
 
-  /** Set to `true` to open the first accordion item */
+  /**
+   * Set to `true` to open the first accordion item.
+   * @bindable writable
+   */
   export let open = false;
 
-  /** Set to `true` to disable the accordion item */
+  /**
+   * Set to `true` to disable the accordion item.
+   * @bindable writable
+   */
   export let disabled = false;
 
   /** Specify the ARIA label for the accordion item chevron icon */
   export let iconDescription = "Expand/Collapse";
 
-  /** Obtain a reference to the heading button HTML element */
+  /**
+   * Obtain a reference to the heading button HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { getContext, onMount } from "svelte";

@@ -1,5 +1,8 @@
 <script>
-  /** Specify the current step index */
+  /**
+   * Specify the current step index.
+   * @bindable writable
+   */
   export let currentIndex = 0;
 
   /** Set to `true` to use the vertical variant */

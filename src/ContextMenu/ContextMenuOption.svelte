@@ -16,13 +16,17 @@
   /** Set to `true` to enable the disabled state */
   export let disabled = false;
 
-  /** Set to `true` to indent the label */
+  /**
+   * Set to `true` to indent the label.
+   * @bindable writable
+   */
   export let indented = false;
 
   /**
    * Specify the icon to render.
    * Icon is rendered to the left of the label text.
    * @type {Icon}
+   * @bindable writable
    */
   export let icon = /** @type {Icon} */ (undefined);
 
@@ -38,12 +42,16 @@
    */
   export let labelText = "";
 
-  /** Set to `true` to use the selected variant */
+  /**
+   * Set to `true` to use the selected variant.
+   * @bindable writable
+   */
   export let selected = false;
 
   /**
    * Set to `true` to enable the selectable variant.
    * Automatically set to `true` if `selected` is `true`.
+   * @bindable writable
    */
   export let selectable = false;
 
@@ -65,7 +73,10 @@
    */
   export let id = `ccs-${Math.random().toString(36)}`;
 
-  /** Obtain a reference to the list item HTML element */
+  /**
+   * Obtain a reference to the list item HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";

@@ -5,7 +5,10 @@
    */
   export let href = undefined;
 
-  /** Obtain a reference to the HTML anchor element */
+  /**
+   * Obtain a reference to the HTML anchor element.
+   * @bindable readonly
+   */
   export let ref = null;
 </script>
 

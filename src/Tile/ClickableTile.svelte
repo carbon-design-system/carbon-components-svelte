@@ -1,7 +1,10 @@
 <script>
   /** @restProps {a | p} */
 
-  /** Set to `true` to click the tile */
+  /**
+   * Set to `true` to click the tile.
+   * @bindable readonly
+   */
   export let clicked = false;
 
   /** Set to `true` to enable the light variant */
@@ -16,7 +19,10 @@
    */
   export let href = undefined;
 
-  /** Obtain a reference to the underlying anchor HTML element */
+  /**
+   * Obtain a reference to the underlying anchor HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import Link from "../Link/Link.svelte";

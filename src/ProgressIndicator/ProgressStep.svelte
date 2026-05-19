@@ -2,7 +2,10 @@
   /** Set to `true` for the complete variant */
   export let complete = false;
 
-  /** Set to `true` to use the current variant */
+  /**
+   * Set to `true` to use the current variant.
+   * @bindable writable
+   */
   export let current = false;
 
   /** Set to `true` to disable the progress step */

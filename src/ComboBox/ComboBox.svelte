@@ -31,10 +31,14 @@
   /**
    * Set the selected item by value id.
    * @type {Item["id"]}
+   * @bindable writable
    */
   export let selectedId = undefined;
 
-  /** Specify the selected combobox value */
+  /**
+   * Specify the selected combobox value.
+   * @bindable writable
+   */
   export let value = "";
 
   /**
@@ -79,7 +83,10 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /** Set to `true` to open the combobox menu dropdown */
+  /**
+   * Set to `true` to open the combobox menu dropdown.
+   * @bindable writable
+   */
   export let open = false;
 
   /** Set to `true` to use the read-only variant */
@@ -156,12 +163,16 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /**
    * Obtain a reference to the list HTML element.
    * @type {null | HTMLDivElement}
+   * @bindable readonly
    */
   export let listRef = null;
 

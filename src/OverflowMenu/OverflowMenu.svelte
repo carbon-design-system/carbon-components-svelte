@@ -18,7 +18,10 @@
    */
   export let direction = "bottom";
 
-  /** Set to `true` to open the menu */
+  /**
+   * Set to `true` to open the menu.
+   * @bindable writable
+   */
   export let open = false;
 
   /** Set to `true` to enable the light variant */
@@ -39,6 +42,7 @@
   /**
    * Specify the icon to render.
    * @type {Icon}
+   * @bindable writable
    */
   export let icon = /** @type {Icon} */ (OverflowMenuVertical);
 
@@ -54,10 +58,16 @@
   /** Set an id for the button element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
-  /** Obtain a reference to the trigger button element */
+  /**
+   * Obtain a reference to the trigger button element.
+   * @bindable readonly
+   */
   export let buttonRef = null;
 
-  /** Obtain a reference to the overflow menu element */
+  /**
+   * Obtain a reference to the overflow menu element.
+   * @bindable readonly
+   */
   export let menuRef = null;
 
   /**

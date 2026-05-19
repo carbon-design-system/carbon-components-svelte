@@ -41,10 +41,14 @@
   /**
    * Set the selected ids.
    * @type {ReadonlyArray<Item["id"]>}
+   * @bindable writable
    */
   export let selectedIds = [];
 
-  /** Specify the multiselect value */
+  /**
+   * Specify the multiselect value.
+   * @bindable writable
+   */
   export let value = "";
 
   /**
@@ -85,7 +89,10 @@
   export let filterItem = (item, value) =>
     item.text.toLowerCase().includes(value.trim().toLowerCase());
 
-  /** Set to `true` to open the dropdown */
+  /**
+   * Set to `true` to open the dropdown.
+   * @bindable writable
+   */
   export let open = false;
 
   /** Set to `true` to enable the light variant */
@@ -158,27 +165,36 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let inputRef = null;
 
-  /** Obtain a reference to the outer div element */
+  /**
+   * Obtain a reference to the outer div element.
+   * @bindable readonly
+   */
   export let multiSelectRef = null;
 
   /**
    * Obtain a reference to the field box element.
    * @type {null | HTMLDivElement}
+   * @bindable readonly
    */
   export let fieldRef = null;
 
   /**
    * Obtain a reference to the selection element.
    * @type {null | HTMLDivElement}
+   * @bindable readonly
    */
   export let selectionRef = null;
 
   /**
    * Id of the highlighted ListBoxMenuItem.
    * @type {null | Item["id"]}
+   * @bindable readonly
    */
   export let highlightedId = null;
 
@@ -212,6 +228,7 @@
   /**
    * Obtain a reference to the list HTML element.
    * @type {null | HTMLDivElement}
+   * @bindable readonly
    */
   export let listRef = null;
 

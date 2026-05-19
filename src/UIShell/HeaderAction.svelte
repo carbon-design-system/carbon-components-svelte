@@ -5,7 +5,10 @@
    * @event {null} close
    */
 
-  /** Set to `true` to open the panel */
+  /**
+   * Set to `true` to open the panel.
+   * @bindable writable
+   */
   export let isOpen = false;
 
   /**
@@ -47,7 +50,10 @@
    */
   export let tooltipAlignment = "center";
 
-  /** Obtain a reference to the button HTML element */
+  /**
+   * Obtain a reference to the button HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /**

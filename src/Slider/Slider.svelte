@@ -4,7 +4,10 @@
    * @event {number} input
    */
 
-  /** Specify the value of the slider */
+  /**
+   * Specify the value of the slider.
+   * @bindable writable
+   */
   export let value = 0;
 
   /** Set the maximum slider value */
@@ -82,7 +85,10 @@
   /** Set a name for the slider element */
   export let name = "";
 
-  /** Obtain a reference to the HTML element */
+  /**
+   * Obtain a reference to the HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

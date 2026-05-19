@@ -7,6 +7,7 @@
   /**
    * Specify the selected item value.
    * @type {Value | undefined}
+   * @bindable writable
    */
   export let selected = undefined;
 
@@ -58,7 +59,10 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
-  /** Obtain a reference to the select HTML element */
+  /**
+   * Obtain a reference to the select HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /** Set to `true` to mark the field as required */

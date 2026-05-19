@@ -10,6 +10,7 @@
   /**
    * Specify the value of the search input.
    * @type {T}
+   * @bindable writable
    */
   export let value = /** @type {T} */ ("");
 
@@ -34,7 +35,10 @@
   /** Set to `true` to enable the expandable variant */
   export let expandable = false;
 
-  /** Set to `true to expand the search input */
+  /**
+   * Set to `true to expand the search input.
+   * @bindable writable
+   */
   export let expanded = false;
 
   /** Specify the `placeholder` attribute of the search input */
@@ -64,7 +68,10 @@
   /** Set an id for the input element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

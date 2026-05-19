@@ -13,8 +13,10 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
-  /** Obtain a reference to the HTML button element.
+  /**
+   * Obtain a reference to the HTML button element.
    * @type {HTMLButtonElement}
+   * @bindable readonly
    */
   export let ref = null;
 

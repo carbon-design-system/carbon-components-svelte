@@ -18,6 +18,7 @@
    * Specify the input value.
    * Use `null` to denote "no value".
    * @type {null | number}
+   * @bindable writable
    */
   export let value = null;
 
@@ -153,7 +154,10 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

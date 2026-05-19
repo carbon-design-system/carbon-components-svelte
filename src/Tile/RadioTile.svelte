@@ -4,7 +4,10 @@
    * @template {string} [Value=string]
    */
 
-  /** Set to `true` to check the tile */
+  /**
+   * Set to `true` to check the tile.
+   * @bindable writable
+   */
   export let checked = false;
 
   /** Set to `true` to enable the light variant */

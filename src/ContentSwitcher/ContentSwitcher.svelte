@@ -3,7 +3,10 @@
    * @event {number} change
    */
 
-  /** Set the selected index of the switch item */
+  /**
+   * Set the selected index of the switch item.
+   * @bindable writable
+   */
   export let selectedIndex = 0;
 
   /**
@@ -22,6 +25,7 @@
   /**
    * Obtain a reference to the tablist HTML element.
    * @type {HTMLDivElement | null}
+   * @bindable readonly
    */
   export let ref = null;
 

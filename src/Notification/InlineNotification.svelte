@@ -36,6 +36,7 @@
 
   /**
    * Set to `true` to show the notification, `false` to hide it.
+   * @bindable writable
    */
   export let open = true;
 

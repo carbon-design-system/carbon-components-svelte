@@ -11,16 +11,23 @@
    */
   export let value = /** @type {T} */ ("");
 
-  /** Specify whether the checkbox is checked */
+  /**
+   * Specify whether the checkbox is checked.
+   * @bindable writable
+   */
   export let checked = false;
 
   /**
    * Specify the bound group.
    * @type {ReadonlyArray<T> | undefined}
+   * @bindable writable
    */
   export let group = undefined;
 
-  /** Specify whether the checkbox is indeterminate */
+  /**
+   * Specify whether the checkbox is indeterminate.
+   * @bindable writable
+   */
   export let indeterminate = false;
 
   /** Set to `true` to display the skeleton state */
@@ -50,13 +57,17 @@
   /**
    * Specify the title attribute for the label element.
    * @type {string}
+   * @bindable readonly
    */
   export let title = undefined;
 
   /** Set an id for the input label */
   export let id = `ccs-${Math.random().toString(36)}`;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { createEventDispatcher, getContext } from "svelte";

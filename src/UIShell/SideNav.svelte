@@ -17,7 +17,10 @@
    */
   export let ariaLabel = undefined;
 
-  /** Set to `true` to toggle the expanded state */
+  /**
+   * Set to `true` to toggle the expanded state.
+   * @bindable writable
+   */
   export let isOpen = false;
 
   /**

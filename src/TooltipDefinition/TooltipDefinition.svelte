@@ -9,6 +9,7 @@
 
   /**
    * Set to `true` to open the tooltip.
+   * @bindable writable
    */
   export let open = false;
 
@@ -46,7 +47,10 @@
    */
   export let leaveDelayMs = 300;
 
-  /** Obtain a reference to the button HTML element */
+  /**
+   * Obtain a reference to the button HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /**

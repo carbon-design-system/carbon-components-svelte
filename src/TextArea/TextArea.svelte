@@ -2,6 +2,7 @@
   /**
    * Specify the textarea value.
    * @type {null | string}
+   * @bindable writable
    */
   export let value = "";
 
@@ -64,7 +65,10 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the textarea HTML element */
+  /**
+   * Obtain a reference to the textarea HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";

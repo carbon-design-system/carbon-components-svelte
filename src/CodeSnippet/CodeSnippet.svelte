@@ -39,7 +39,10 @@
     }
   };
 
-  /** Set to `true` to expand a multi-line code snippet (type="multi") */
+  /**
+   * Set to `true` to expand a multi-line code snippet (type="multi").
+   * @bindable writable
+   */
   export let expanded = false;
 
   /** Set to `true` to hide the copy button */
@@ -100,13 +103,17 @@
    * Set to `false` to hide the show more/less button.
    *
    * NOTE: this prop only works with the `type="multi"` variant.
+   * @bindable writable
    */
   export let showMoreLess = true;
 
   /** Set an id for the code element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
-  /** Obtain a reference to the pre HTML element */
+  /**
+   * Obtain a reference to the pre HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /**

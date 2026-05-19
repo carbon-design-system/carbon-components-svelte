@@ -214,18 +214,21 @@
    * Set the current active node id.
    * Only one node can be active.
    * @type {Node["id"]}
+   * @bindable writable
    */
   export let activeId = "";
 
   /**
    * Set the node ids to be selected.
    * @type {ReadonlyArray<Node["id"]>}
+   * @bindable writable
    */
   export let selectedIds = [];
 
   /**
    * Set the node ids to be expanded.
    * @type {ReadonlyArray<Node["id"]>}
+   * @bindable writable
    */
   export let expandedIds = [];
 

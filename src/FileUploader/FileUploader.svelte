@@ -38,6 +38,7 @@
   /**
    * Obtain a reference to the uploaded files.
    * @type {ReadonlyArray<File>}
+   * @bindable writable
    */
   export let files = [];
 

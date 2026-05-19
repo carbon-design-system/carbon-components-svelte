@@ -1,5 +1,8 @@
 <script>
-  /** Obtain a reference to the form element */
+  /**
+   * Obtain a reference to the form element.
+   * @bindable readonly
+   */
   export let ref = null;
 </script>
 

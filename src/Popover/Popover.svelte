@@ -4,7 +4,10 @@
    * @property {HTMLElement} target
    */
 
-  /** Set to `true` to display the popover */
+  /**
+   * Set to `true` to display the popover.
+   * @bindable writable
+   */
   export let open = false;
 
   /** Set to `true` to close the popover on an outside click */

@@ -8,6 +8,7 @@
   /**
    * Specify the selected tile values.
    * @type {T[]}
+   * @bindable writable
    */
   export let selected = [];
 

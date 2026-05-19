@@ -103,7 +103,10 @@
   /** Specify the `type` attribute for the button element */
   export let type = "button";
 
-  /** Obtain a reference to the HTML element */
+  /**
+   * Obtain a reference to the HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { getContext, onMount } from "svelte";

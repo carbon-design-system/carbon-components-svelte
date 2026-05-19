@@ -7,6 +7,7 @@
   /**
    * Specify the selected structured list row value.
    * @type {Value | undefined}
+   * @bindable writable
    */
   export let selected = undefined;
 

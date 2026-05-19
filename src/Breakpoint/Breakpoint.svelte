@@ -12,12 +12,14 @@
   /**
    * Determine the current Carbon grid breakpoint size.
    * @type {BreakpointSize}
+   * @bindable readonly
    */
   export let size = undefined;
 
   /**
    * Carbon grid sizes as an object.
    * @type {Record<BreakpointSize, boolean>}
+   * @bindable readonly
    */
   export let sizes = {
     sm: false,

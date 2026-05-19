@@ -7,6 +7,7 @@
   /**
    * Set the selected radio button value.
    * @type {Value | undefined}
+   * @bindable writable
    */
   export let selected = undefined;
 
