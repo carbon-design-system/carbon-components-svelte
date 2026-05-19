@@ -102,14 +102,11 @@
   let holding = false;
   let currentEvent = null;
 
-  function startDragging() {
+  function startInteraction(e) {
     if (disabled || readonly) return;
-    dragging = true;
-  }
-
-  function startHolding() {
-    if (disabled || readonly) return;
+    currentEvent = e;
     holding = true;
+    dragging = true;
   }
 
   function stopHolding() {
@@ -121,7 +118,7 @@
   function move(e) {
     if (holding) {
       currentEvent = e;
-      startDragging();
+      dragging = true;
     }
   }
 
@@ -209,9 +206,8 @@
       class:bx--slider--disabled={disabled}
       class:bx--slider--readonly={readonly}
       style:max-width={fullWidth ? "none" : undefined}
-      on:mousedown={startDragging}
-      on:mousedown={startHolding}
-      on:touchstart={startHolding}
+      on:mousedown={startInteraction}
+      on:touchstart={startInteraction}
       on:keydown={({ shiftKey, key }) => {
         if (disabled || readonly) return;
         const keys = {

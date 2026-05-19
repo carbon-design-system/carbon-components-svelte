@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import Slider from "./Slider.test.svelte";
 
@@ -552,6 +553,39 @@ describe("Slider", () => {
 
     const formItem = container.querySelector(".bx--form-item");
     expect(formItem).toHaveClass("custom-slider");
+  });
+
+  // Regression: a stationary click on the track should move the thumb,
+  // not only a click followed by a mousemove.
+  it("should update value on a click without dragging", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(Slider, {
+      props: { value: 0, min: 0, max: 100 },
+    });
+
+    const slider = container.querySelector(".bx--slider");
+    const track = container.querySelector(".bx--slider__track");
+    assert(slider instanceof HTMLElement);
+    assert(track instanceof HTMLElement);
+
+    vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+      left: 0,
+      right: 200,
+      width: 200,
+      top: 0,
+      bottom: 0,
+      height: 2,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+
+    await fireEvent.mouseDown(slider, { clientX: 100 });
+    await tick();
+    await fireEvent.mouseUp(window);
+
+    expect(consoleLog).toHaveBeenCalledWith("input", 50);
+    expect(screen.getByRole("spinbutton")).toHaveValue(50);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1980
