@@ -1,7 +1,7 @@
 import { render } from "@testing-library/svelte";
 import type SessionStorageComponent from "carbon-components-svelte/SessionStorage/SessionStorage.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
-import { setupSessionStorageMock } from "../setup-tests";
+import { setupSessionStorageMock } from "../utils/storage-mocks";
 import SessionStorage from "./SessionStorage.test.svelte";
 
 describe("SessionStorage", () => {

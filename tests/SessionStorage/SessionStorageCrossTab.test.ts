@@ -1,6 +1,6 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { setupSessionStorageEventMock } from "../setup-tests";
+import { setupSessionStorageEventMock } from "../utils/storage-mocks";
 import SessionStorageCrossTab from "./SessionStorageCrossTab.test.svelte";
 
 describe("SessionStorage cross-tab sync", () => {

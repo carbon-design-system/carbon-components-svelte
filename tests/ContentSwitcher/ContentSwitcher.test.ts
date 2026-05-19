@@ -1,5 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
 import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { ComboBox, Modal } from "carbon-components-svelte";
+  import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
   import type { ComponentProps } from "svelte";
 
   export let modalOpen = true;

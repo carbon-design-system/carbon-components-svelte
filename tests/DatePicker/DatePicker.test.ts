@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { DatePickerSkeleton } from "carbon-components-svelte";
 import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type { DataTableRow } from "carbon-components-svelte/DataTable/DataTable.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import DataTableSearch from "./DataTableSearch.test.svelte";
 
 describe("DataTableSearch", () => {

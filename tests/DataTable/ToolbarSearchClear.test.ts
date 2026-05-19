@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ToolbarSearchClear from "./ToolbarSearchClear.test.svelte";
 
 describe("ToolbarSearch clear()", () => {

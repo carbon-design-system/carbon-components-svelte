@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
 import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
 import ToastNotificationSubtitleSlotTest from "./ToastNotificationSubtitleSlot.test.svelte";

@@ -6,7 +6,7 @@ import type HeaderGlobalActionComponent from "carbon-components-svelte/UIShell/H
 import type SideNavLinkComponent from "carbon-components-svelte/UIShell/SideNavLink.svelte";
 import type SideNavMenuComponent from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import HeaderSlot from "./Header.slot.test.svelte";
 import UiShell from "./UIShell.test.svelte";
 

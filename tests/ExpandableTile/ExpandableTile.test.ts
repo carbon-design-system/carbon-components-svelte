@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ExpandableTile from "./ExpandableTile.test.svelte";
 import ExpandableTileCustom from "./ExpandableTileCustom.test.svelte";
 

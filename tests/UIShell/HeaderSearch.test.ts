@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import type HeaderSearchComponent from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
 
 describe("HeaderSearch", () => {

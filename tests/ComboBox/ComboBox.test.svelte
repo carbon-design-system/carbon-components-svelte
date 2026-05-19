@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ComboBox } from "carbon-components-svelte";
+  import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
   import type { ComponentProps } from "svelte";
 
   type TestItem = {

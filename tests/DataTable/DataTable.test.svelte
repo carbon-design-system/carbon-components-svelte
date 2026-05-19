@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { DataTable } from "carbon-components-svelte";
   import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import type { DataTableSortValue } from "carbon-components-svelte/DataTable/data-table-utils";
   import type { ComponentEvents, ComponentProps } from "svelte";
 

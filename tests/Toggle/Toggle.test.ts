@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ToggleReadonly from "./Toggle.readonly.test.svelte";
 import Toggle from "./Toggle.test.svelte";
 import ToggleNullishAriaLabel from "./ToggleNullishAriaLabel.test.svelte";

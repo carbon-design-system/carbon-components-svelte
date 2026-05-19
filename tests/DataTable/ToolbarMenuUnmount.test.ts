@@ -1,6 +1,6 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ToolbarMenuUnmount from "./ToolbarMenuUnmount.test.svelte";
 
 describe("ToolbarMenu overflow cleanup", () => {

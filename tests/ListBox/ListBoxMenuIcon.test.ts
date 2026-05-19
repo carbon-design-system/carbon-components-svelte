@@ -1,6 +1,6 @@
 import { render } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import ListBoxMenuIcon from "./ListBoxMenuIcon.test.svelte";
 
 describe("ListBoxMenuIcon", () => {

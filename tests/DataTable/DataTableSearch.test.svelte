@@ -1,12 +1,10 @@
 <script lang="ts">
-  import {
-    Button,
-    DataTable,
-    Pagination,
-    Toolbar,
-    ToolbarContent,
-    ToolbarSearch,
-  } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import Toolbar from "carbon-components-svelte/DataTable/Toolbar.svelte";
+  import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
+  import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
+  import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
   import type { ComponentProps } from "svelte";
 
   export let value = "";

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type LinkComponent from "carbon-components-svelte/Link/Link.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import Link from "./Link.test.svelte";
 
 describe("Link", () => {

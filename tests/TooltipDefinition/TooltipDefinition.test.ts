@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import TooltipDefinition from "./TooltipDefinition.test.svelte";
 import TooltipDefinitionPortal from "./TooltipDefinitionPortal.test.svelte";
 

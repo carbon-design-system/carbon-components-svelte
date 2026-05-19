@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type RadioTileComponent from "carbon-components-svelte/Tile/RadioTile.svelte";
 import type { ComponentProps } from "svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import RadioTileGroup from "./RadioTile.group.test.svelte";
 import RadioTileSingle from "./RadioTile.single.test.svelte";
 import RadioTile from "./RadioTile.test.svelte";

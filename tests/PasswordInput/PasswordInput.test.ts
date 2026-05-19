@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import PasswordInputSlot from "./PasswordInput.slot.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
 import PasswordInputInModal from "./PasswordInputInModal.test.svelte";

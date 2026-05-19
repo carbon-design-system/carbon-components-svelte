@@ -1,12 +1,10 @@
 <script lang="ts">
-  import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-  } from "carbon-components-svelte";
+  import Table from "carbon-components-svelte/DataTable/Table.svelte";
+  import TableBody from "carbon-components-svelte/DataTable/TableBody.svelte";
+  import TableCell from "carbon-components-svelte/DataTable/TableCell.svelte";
+  import TableContainer from "carbon-components-svelte/DataTable/TableContainer.svelte";
+  import TableHead from "carbon-components-svelte/DataTable/TableHead.svelte";
+  import TableRow from "carbon-components-svelte/DataTable/TableRow.svelte";
   import type { ComponentProps } from "svelte";
 
   export let testComponent:

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { user } from "../setup-tests";
+import { user } from "../utils/user";
 import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
 import CodeSnippetDisabled from "./CodeSnippetDisabled.test.svelte";

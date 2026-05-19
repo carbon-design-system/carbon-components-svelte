@@ -1,10 +1,8 @@
 <script lang="ts">
-  import {
-    DataTable,
-    Toolbar,
-    ToolbarContent,
-    ToolbarSearch,
-  } from "carbon-components-svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import Toolbar from "carbon-components-svelte/DataTable/Toolbar.svelte";
+  import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
+  import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
 
   export let value: number | string = "";
 </script>

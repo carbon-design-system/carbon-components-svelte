@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { DataTable } from "carbon-components-svelte";
   import type { DataTableHeader } from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 
   // This example showcases generic types, allowing type-safety
   // and IDE autocomplete for both header keys and row properties.

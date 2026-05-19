@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ComboBox } from "carbon-components-svelte";
+  import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 
   const items = [
     { id: "1", text: "Laptop", price: 999, category: "Electronics" },
