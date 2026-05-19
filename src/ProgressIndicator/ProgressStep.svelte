@@ -89,15 +89,17 @@
     on:focus
     on:blur
   >
-    {#if invalid}
-      <Warning class="bx--progress__warning" title={description} />
-    {:else if current}
-      <Incomplete title={description} />
-    {:else if complete}
-      <CheckmarkOutline title={description} />
-    {:else}
-      <CircleDash title={description} />
-    {/if}
+    <slot name="icon" {complete} {current} {invalid} {description}>
+      {#if invalid}
+        <Warning class="bx--progress__warning" title={description} />
+      {:else if current}
+        <Incomplete title={description} />
+      {:else if complete}
+        <CheckmarkOutline title={description} />
+      {:else}
+        <CircleDash title={description} />
+      {/if}
+    </slot>
     <div class:bx--progress-text={true}>
       <slot props={{ class: "bx--progress-label" }}>
         <p class:bx--progress-label={true}>{label}</p>

@@ -4,6 +4,8 @@
     ComboBox,
     DataTable,
     Dropdown,
+    ProgressIndicator,
+    ProgressStep,
     Tab,
     TabContent,
     Tabs,
@@ -74,6 +76,42 @@
     {/snippet}
   </Theme>
 </div>
+
+<ProgressIndicator data-testid="progress-step-icon-snippet" currentIndex={1}>
+  <ProgressStep complete label="Step 1" description="Completed">
+    {#snippet icon({ complete, current, invalid })}
+      <span
+        data-testid="progress-step-icon-1"
+        data-complete={complete}
+        data-current={current}
+        data-invalid={invalid}
+        >1</span
+      >
+    {/snippet}
+  </ProgressStep>
+  <ProgressStep label="Step 2" description="Current">
+    {#snippet icon({ complete, current, invalid })}
+      <span
+        data-testid="progress-step-icon-2"
+        data-complete={complete}
+        data-current={current}
+        data-invalid={invalid}
+        >2</span
+      >
+    {/snippet}
+  </ProgressStep>
+  <ProgressStep invalid label="Step 3" description="Invalid">
+    {#snippet icon({ complete, current, invalid })}
+      <span
+        data-testid="progress-step-icon-3"
+        data-complete={complete}
+        data-current={current}
+        data-invalid={invalid}
+        >3</span
+      >
+    {/snippet}
+  </ProgressStep>
+</ProgressIndicator>
 
 <Tabs
   type="container"
