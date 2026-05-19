@@ -3,6 +3,7 @@ import { user } from "../utils/user";
 import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import ProgressIndicatorIssue1249 from "./ProgressIndicatorIssue1249.test.svelte";
 import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";
+import ProgressStepIconSlot from "./ProgressStepIconSlot.test.svelte";
 
 describe("ProgressIndicator", () => {
   describe("Default (horizontal)", () => {
@@ -245,6 +246,24 @@ describe("ProgressIndicator", () => {
 
       await user.keyboard(" ");
       expect(consoleLog).toHaveBeenCalledWith("change", 0);
+    });
+  });
+
+  describe("Icon slot", () => {
+    it("should render custom icon slot content with state props", () => {
+      render(ProgressStepIconSlot);
+
+      const icon1 = screen.getByTestId("icon-1");
+      expect(icon1).toHaveTextContent("c:true|cur:false|inv:false");
+
+      const icon2 = screen.getByTestId("icon-2");
+      expect(icon2).toHaveTextContent("c:false|cur:true|inv:false");
+
+      const icon3 = screen.getByTestId("icon-3");
+      expect(icon3).toHaveTextContent("c:false|cur:false|inv:true");
+
+      // Default icons should not render when the slot is overridden.
+      expect(document.querySelector(".bx--progress__warning")).toBeNull();
     });
   });
 
