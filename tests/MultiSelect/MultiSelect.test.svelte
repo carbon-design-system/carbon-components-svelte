@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { MultiSelect } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
@@ -32,6 +34,7 @@
   export let sortItem: ComponentProps<MultiSelect>["sortItem"] = undefined;
   export let open: ComponentProps<MultiSelect>["open"] = undefined;
   export let ariaLabel: ComponentProps<MultiSelect>["aria-label"] = undefined;
+  export let sortedItems: ComponentProps<MultiSelect>["sortedItems"] = [];
 </script>
 
 <MultiSelect
@@ -60,6 +63,7 @@
   {portalMenu}
   {sortItem}
   {open}
+  bind:sortedItems
   on:select={(e) => {
     console.log("select", e.detail);
   }}

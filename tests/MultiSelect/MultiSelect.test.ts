@@ -746,6 +746,40 @@ describe("MultiSelect", () => {
 
       expect(nthRenderedOptionText(0)).toBe("Alpha");
     });
+
+    it("exposes sortedItems via bind", async () => {
+      const { component } = render(MultiSelect, {
+        props: {
+          items: [
+            { id: "3", text: "C" },
+            { id: "1", text: "A" },
+            { id: "2", text: "B" },
+          ],
+          selectionFeedback: "top",
+        },
+      });
+
+      await tick();
+      expect(component.sortedItems?.map((item) => item.id)).toEqual([
+        "1",
+        "2",
+        "3",
+      ]);
+      expect(component.sortedItems?.every((item) => !item.checked)).toBe(true);
+
+      await openMenu();
+      await toggleOption("C");
+      await tick();
+
+      expect(component.sortedItems?.map((item) => item.id)).toEqual([
+        "3",
+        "1",
+        "2",
+      ]);
+      expect(
+        component.sortedItems?.find((item) => item.id === "3")?.checked,
+      ).toBe(true);
+    });
   });
 
   describe("variants and states", () => {
