@@ -156,6 +156,10 @@ describe("Toggle", () => {
     await user.keyboard(" ");
     expect(toggle).not.toBeChecked();
     expect(consoleLog).not.toHaveBeenCalled();
+
+    await user.keyboard("{Enter}");
+    expect(toggle).not.toBeChecked();
+    expect(consoleLog).not.toHaveBeenCalled();
   });
 
   it("supports initial toggled state", () => {
