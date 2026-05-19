@@ -7,14 +7,14 @@
   let ref = null;
   let open = false;
 
-  const ctx = getContext("carbon:Tooltip");
-  const unsubscribe = ctx.tooltipOpen.subscribe((tooltipOpen) => {
+  const ctx = getContext("carbon:Tooltip") ?? null;
+  const unsubscribe = ctx?.tooltipOpen.subscribe((tooltipOpen) => {
     open = tooltipOpen;
   });
 
   onMount(() => {
     return () => {
-      unsubscribe();
+      unsubscribe?.();
     };
   });
 
