@@ -84,6 +84,6 @@ Components inside the `dialog` must still enable `portalMenu` for its menu or co
 
 ## Inside a native popover
 
-When the anchor is inside an element with a [`popover`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover) attribute (see the [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), the same default `target` applies: floating content mounts into that popover element so it participates in the popover top layer.
+When the anchor is inside an element with a [popover](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover) attribute (see the [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), the same default `target` applies: floating content mounts into that popover element so it participates in the popover top layer.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalPopover" />

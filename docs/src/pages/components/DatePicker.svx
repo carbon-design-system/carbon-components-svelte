@@ -56,7 +56,7 @@ Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The
 
 ## Custom locale
 
-The `locale` prop accepts either a [flatpickr locale key](https://github.com/flatpickr/flatpickr/tree/master/src/l10n) or a [`CustomLocale`](https://github.com/flatpickr/flatpickr/blob/master/src/types/locale.ts) object. It defaults to `"en"`, which renders Carbon-spec single-letter weekday abbreviations (`S, M, T, W, Th, F, S`).
+The `locale` prop accepts either a [flatpickr locale key](https://github.com/flatpickr/flatpickr/tree/master/src/l10n) or a [CustomLocale](https://github.com/flatpickr/flatpickr/blob/master/src/types/locale.ts) object. It defaults to `"en"`, which renders Carbon-spec single-letter weekday abbreviations (`S, M, T, W, Th, F, S`).
 
 To customize the weekday labels (e.g., to restore flatpickr's default English `Sun, Mon, Tue, ...` shorthands), pass a `CustomLocale` object.
 
@@ -82,7 +82,7 @@ When the date picker is inside a native `<dialog>` opened with `showModal()`, `p
 
 ## Inside a native popover
 
-When the date picker is inside an open element with a [`popover`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover) attribute (see the [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), `portalMenu` mounts the calendar into that ancestor so it stays in the popover top layer.
+When the date picker is inside an open element with a [popover](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover) attribute (see the [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), `portalMenu` mounts the calendar into that ancestor so it stays in the popover top layer.
 
 <FileSource src="/framed/DatePicker/DatePickerPopover" />
 
