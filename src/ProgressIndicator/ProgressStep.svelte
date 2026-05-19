@@ -27,6 +27,7 @@
   export let id = `ccs-${Math.random().toString(36)}`;
 
   import { getContext, onMount } from "svelte";
+  import { writable } from "svelte/store";
   import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
   import CircleDash from "../icons/CircleDash.svelte";
   import Incomplete from "../icons/Incomplete.svelte";
@@ -34,9 +35,12 @@
 
   let step = {};
 
-  const { stepsById, add, remove, change, preventChangeOnClick } = getContext(
-    "carbon:ProgressIndicator",
-  );
+  const ctx = getContext("carbon:ProgressIndicator");
+  const stepsById = ctx?.stepsById ?? writable({});
+  const add = ctx?.add ?? (() => {});
+  const remove = ctx?.remove ?? (() => {});
+  const change = ctx?.change ?? (() => {});
+  const preventChangeOnClick = ctx?.preventChangeOnClick ?? writable(false);
 
   $: add({ id, complete, disabled });
 

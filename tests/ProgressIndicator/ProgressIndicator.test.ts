@@ -4,6 +4,7 @@ import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import ProgressIndicatorConditional from "./ProgressIndicatorConditional.test.svelte";
 import ProgressIndicatorIssue1249 from "./ProgressIndicatorIssue1249.test.svelte";
 import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";
+import ProgressStepStandalone from "./ProgressStepStandalone.test.svelte";
 
 describe("ProgressIndicator", () => {
   describe("Default (horizontal)", () => {
@@ -291,6 +292,11 @@ describe("ProgressIndicator", () => {
       await user.click(screen.getByText("Step 3"));
       expect(consoleLog).toHaveBeenLastCalledWith("change", 1);
     });
+  });
+
+  it("should not throw when ProgressStep is rendered outside a ProgressIndicator", () => {
+    expect(() => render(ProgressStepStandalone)).not.toThrow();
+    expect(screen.getByText("Standalone step")).toBeInTheDocument();
   });
 
   describe("Reactive complete prop (#1249)", () => {
