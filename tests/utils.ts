@@ -6,7 +6,4 @@ export const testConfig = {
   clearMocks: true,
   // Suppress `console` output in CI.
   silent: !!process.env.CI,
-  experimental: {
-    fsModuleCache: true,
-  },
 };
