@@ -75,6 +75,7 @@
       }
     }
 
+    prevValue = value;
     mounted = true;
 
     function handleStorageChange(event) {
