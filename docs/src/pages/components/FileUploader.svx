@@ -31,7 +31,7 @@ allows users to select multiple files at once.
 Set `preventDuplicate` to `true` to skip re-selected files that match an
 already-selected file (by name, size, and lastModified). Only applies when
 `multiple` is `true`. For richer behavior with rejection events, use
-[`FileUploader`](#duplicate-detection) instead.
+[FileUploader](#duplicate-detection) instead.
 
 <FileUploaderButton multiple preventDuplicate labelText="Add files" />
 
