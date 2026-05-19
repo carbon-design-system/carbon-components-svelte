@@ -26,6 +26,15 @@ allows users to select multiple files at once.
 
 <FileUploaderButton multiple labelText="Add files" />
 
+## Prevent duplicate files
+
+Set `preventDuplicate` to `true` to skip re-selected files that match an
+already-selected file (by name, size, and lastModified). Only applies when
+`multiple` is `true`. For richer behavior with rejection events, use
+[`FileUploader`](#duplicate-detection) instead.
+
+<FileUploaderButton multiple preventDuplicate labelText="Add files" />
+
 ## Custom button kind, size
 
 Customize the button appearance using the `kind` and `size` props. The default is
