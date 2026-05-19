@@ -3,7 +3,10 @@
    * @event {number} change
    */
 
-  /** Specify the selected tab index */
+  /**
+   * Specify the selected tab index.
+   * @bindable writable
+   */
   export let selected = 0;
 
   /**

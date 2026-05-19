@@ -6,6 +6,7 @@
   /**
    * Set the selected checkbox values.
    * @type {ReadonlyArray<string | number>}
+   * @bindable writable
    */
   export let selected = [];
 

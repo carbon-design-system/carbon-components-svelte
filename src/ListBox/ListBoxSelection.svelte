@@ -31,7 +31,10 @@
    */
   export let translateWithId = (id) => defaultTranslations[id];
 
-  /** Obtain a reference to the top-level HTML element */
+  /**
+   * Obtain a reference to the top-level HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { createEventDispatcher, getContext } from "svelte";

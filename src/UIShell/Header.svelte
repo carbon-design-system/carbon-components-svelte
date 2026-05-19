@@ -6,7 +6,10 @@
   /** Set to `false` to hide the side nav by default */
   export let expandedByDefault = true;
 
-  /** Set to `true` to open the side nav */
+  /**
+   * Set to `true` to open the side nav.
+   * @bindable writable
+   */
   export let isSideNavOpen = false;
 
   /**
@@ -61,7 +64,10 @@
    */
   export let expansionBreakpoint = 1056;
 
-  /** Obtain a reference to the HTML anchor element */
+  /**
+   * Obtain a reference to the HTML anchor element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /**

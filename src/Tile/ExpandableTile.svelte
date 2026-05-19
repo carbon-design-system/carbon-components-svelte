@@ -1,14 +1,23 @@
 <script>
-  /** Set to `true` to expand the tile */
+  /**
+   * Set to `true` to expand the tile.
+   * @bindable writable
+   */
   export let expanded = false;
 
   /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /** Specify the max height of the tile  (number of pixels) */
+  /**
+   * Specify the max height of the tile  (number of pixels).
+   * @bindable writable
+   */
   export let tileMaxHeight = 0;
 
-  /** Specify the padding of the tile (number of pixels) */
+  /**
+   * Specify the padding of the tile (number of pixels).
+   * @bindable writable
+   */
   export let tilePadding = 0;
 
   /** Specify the icon text of the collapsed tile */
@@ -40,7 +49,10 @@
    */
   export let hasInteractiveContent = false;
 
-  /** Obtain a reference to the top-level element */
+  /**
+   * Obtain a reference to the top-level element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { afterUpdate, onMount } from "svelte";

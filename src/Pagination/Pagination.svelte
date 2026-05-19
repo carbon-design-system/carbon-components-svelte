@@ -20,7 +20,10 @@
    * @property {number} page
    */
 
-  /** Specify the current page index */
+  /**
+   * Specify the current page index.
+   * @bindable writable
+   */
   export let page = 1;
 
   /** Specify the total number of items */
@@ -68,7 +71,10 @@
   /** Set to `true` to disable the page size input */
   export let pageSizeInputDisabled = false;
 
-  /** Specify the number of items to display in a page */
+  /**
+   * Specify the number of items to display in a page.
+   * @bindable writable
+   */
   export let pageSize = 10;
 
   /**

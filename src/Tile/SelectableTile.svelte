@@ -4,7 +4,10 @@
    * @event {string} "deselect"
    */
 
-  /** Set to `true` to select the tile */
+  /**
+   * Set to `true` to select the tile.
+   * @bindable writable
+   */
   export let selected = false;
 
   /** Set to `true` to enable the light variant */
@@ -37,7 +40,10 @@
    */
   export let name = "";
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { createEventDispatcher, getContext } from "svelte";

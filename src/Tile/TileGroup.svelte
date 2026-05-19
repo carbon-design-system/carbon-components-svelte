@@ -7,6 +7,7 @@
   /**
    * Specify the selected tile value.
    * @type {T | undefined}
+   * @bindable writable
    */
   export let selected = undefined;
 

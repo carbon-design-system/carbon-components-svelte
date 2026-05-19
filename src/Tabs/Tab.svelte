@@ -44,7 +44,10 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
-  /** Obtain a reference to the anchor HTML element */
+  /**
+   * Obtain a reference to the anchor HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { getContext, onMount } from "svelte";

@@ -12,6 +12,7 @@
   /**
    * Specify the date picker input value.
    * @type {number | string}
+   * @bindable writable
    */
   export let value = "";
 
@@ -19,6 +20,7 @@
    * Specify the date picker start date value (from).
    * Only works with the "range" date picker type.
    * @type {string}
+   * @bindable writable
    */
   export let valueFrom = "";
 
@@ -26,6 +28,7 @@
    * Specify the date picker end date value (to).
    * Only works with the "range" date picker type.
    * @type {string}
+   * @bindable writable
    */
   export let valueTo = "";
 
@@ -83,6 +86,7 @@
    * Only available when `datePickerType` is `"single"` or `"range"`.
    * @see https://flatpickr.js.org/instance-methods-properties-elements/
    * @type {import("flatpickr/dist/types/instance").Instance | null}
+   * @bindable readonly
    */
   export let calendar = null;
 

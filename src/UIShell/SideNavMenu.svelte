@@ -3,7 +3,10 @@
    * @template [Icon=any]
    */
 
-  /** Set to `true` to toggle the expanded state */
+  /**
+   * Set to `true` to toggle the expanded state.
+   * @bindable writable
+   */
   export let expanded = false;
 
   /**
@@ -18,7 +21,10 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
-  /** Obtain a reference to the HTML button element */
+  /**
+   * Obtain a reference to the HTML button element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import ChevronDown from "../icons/ChevronDown.svelte";

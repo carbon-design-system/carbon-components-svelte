@@ -5,7 +5,10 @@
    * @event {{ selected: boolean }} "change"
    */
 
-  /** Set to `true` to select the tag */
+  /**
+   * Set to `true` to select the tag.
+   * @bindable writable
+   */
   export let selected = false;
 
   /**

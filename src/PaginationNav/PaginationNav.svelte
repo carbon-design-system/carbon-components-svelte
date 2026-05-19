@@ -8,7 +8,10 @@
    * @property {number} page
    */
 
-  /** Specify the current page index */
+  /**
+   * Specify the current page index.
+   * @bindable writable
+   */
   export let page = 1;
 
   /** Specify the total number of pages */

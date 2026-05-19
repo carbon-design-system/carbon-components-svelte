@@ -1,5 +1,8 @@
 <script>
-  /** Set to `true` to toggle the expanded state */
+  /**
+   * Set to `true` to toggle the expanded state.
+   * @bindable writable
+   */
   export let expanded = false;
 
   /** Specify the `href` attribute */
@@ -14,6 +17,7 @@
   /**
    * Obtain a reference to the HTML anchor element.
    * @type {HTMLAnchorElement | null}
+   * @bindable readonly
    */
   export let ref = null;
 

@@ -8,6 +8,7 @@
   /**
    * Specify the input value.
    * @type {string}
+   * @bindable writable
    */
   export let value = "";
 
@@ -59,7 +60,10 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";

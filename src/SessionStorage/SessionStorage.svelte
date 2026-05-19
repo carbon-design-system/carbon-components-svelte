@@ -15,6 +15,7 @@
   /**
    * Provide a value to persist.
    * @type {T}
+   * @bindable writable
    */
   export let value = /** @type {T} */ ("");
 

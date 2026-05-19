@@ -2,6 +2,7 @@
   /**
    * Specify the select value.
    * @type {number | string}
+   * @bindable writable
    */
   export let value = "";
 
@@ -26,7 +27,10 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the select HTML element */
+  /**
+   * Obtain a reference to the select HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { setContext } from "svelte";

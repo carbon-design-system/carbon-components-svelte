@@ -12,7 +12,10 @@
    */
   export let size = undefined;
 
-  /** Set to `true` to open the modal */
+  /**
+   * Set to `true` to open the modal.
+   * @bindable writable
+   */
   export let open = false;
 
   /** Set to `true` to use the danger variant */
@@ -30,7 +33,10 @@
    */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
-  /** Obtain a reference to the top-level HTML element */
+  /**
+   * Obtain a reference to the top-level HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import {

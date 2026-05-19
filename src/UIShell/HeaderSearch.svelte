@@ -19,15 +19,22 @@
    * @slot {{ result: Result; index: number }}
    */
 
-  /** Specify the search input value */
+  /**
+   * Specify the search input value.
+   * @bindable writable
+   */
   export let value = "";
 
-  /** Set to `true` to activate and focus the search bar */
+  /**
+   * Set to `true` to activate and focus the search bar.
+   * @bindable writable
+   */
   export let active = false;
 
   /**
    * Obtain a reference to the input HTML element.
    * @type {HTMLInputElement | null}
+   * @bindable readonly
    */
   export let ref = null;
 
@@ -37,7 +44,10 @@
    */
   export let results = [];
 
-  /** Specify the selected result index. */
+  /**
+   * Specify the selected result index.
+   * @bindable readonly
+   */
   export let selectedResultIndex = 0;
 
   import { createEventDispatcher, tick } from "svelte";

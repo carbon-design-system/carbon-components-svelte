@@ -14,7 +14,10 @@
   /** Set to `true` to select the item */
   export let isSelected = false;
 
-  /** Obtain a reference to the HTML anchor element */
+  /**
+   * Obtain a reference to the HTML anchor element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { getContext, onMount } from "svelte";

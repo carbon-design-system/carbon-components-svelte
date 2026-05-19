@@ -13,16 +13,26 @@
   /**
    * Set to `true` to open the menu.
    * Either `x` and `y` must be greater than zero.
+   * @bindable writable
    */
   export let open = false;
 
-  /** Specify the horizontal offset of the menu position */
+  /**
+   * Specify the horizontal offset of the menu position.
+   * @bindable writable
+   */
   export let x = 0;
 
-  /** Specify the vertical offset of the menu position */
+  /**
+   * Specify the vertical offset of the menu position.
+   * @bindable writable
+   */
   export let y = 0;
 
-  /** Obtain a reference to the unordered list HTML element */
+  /**
+   * Obtain a reference to the unordered list HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /**

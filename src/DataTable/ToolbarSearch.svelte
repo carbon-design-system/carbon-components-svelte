@@ -8,10 +8,14 @@
   /**
    * Specify the value of the search input.
    * @type {number | string}
+   * @bindable writable
    */
   export let value = "";
 
-  /** Set to `true` to expand the search bar */
+  /**
+   * Set to `true` to expand the search bar.
+   * @bindable writable
+   */
   export let expanded = false;
 
   /** Set to `true` to keep the search bar expanded */
@@ -35,6 +39,7 @@
   /**
    * The filtered row ids.
    * @type {ReadonlyArray<Row["id"]>}
+   * @bindable readonly
    */
   export let filteredRowIds = [];
 
@@ -47,6 +52,7 @@
   /**
    * Obtain a reference to the input HTML element.
    * @type {null | HTMLInputElement}
+   * @bindable readonly
    */
   export let ref = null;
 

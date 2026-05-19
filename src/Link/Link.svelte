@@ -31,7 +31,10 @@
   /** Set to `true` to allow visited styles */
   export let visited = false;
 
-  /** Obtain a reference to the top-level HTML element */
+  /**
+   * Obtain a reference to the top-level HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 </script>
 

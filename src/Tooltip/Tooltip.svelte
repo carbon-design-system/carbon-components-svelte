@@ -20,6 +20,7 @@
   /**
    * Set to `true` to open the tooltip.
    * @type {boolean}
+   * @bindable writable
    */
   export let open = false;
 
@@ -75,13 +76,22 @@
    */
   export let leaveDelayMs = 300;
 
-  /** Obtain a reference to the trigger text HTML element */
+  /**
+   * Obtain a reference to the trigger text HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
-  /** Obtain a reference to the tooltip HTML element */
+  /**
+   * Obtain a reference to the tooltip HTML element.
+   * @bindable readonly
+   */
   export let refTooltip = null;
 
-  /** Obtain a reference to the icon HTML element */
+  /**
+   * Obtain a reference to the icon HTML element.
+   * @bindable readonly
+   */
   export let refIcon = null;
 
   /**

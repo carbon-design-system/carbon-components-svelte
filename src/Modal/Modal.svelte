@@ -18,7 +18,10 @@
    */
   export let size = undefined;
 
-  /** Set to `true` to open the modal */
+  /**
+   * Set to `true` to open the modal.
+   * @bindable writable
+   */
   export let open = false;
 
   /** Set to `true` to use the danger variant */
@@ -101,7 +104,10 @@
   /** Set an id for the top-level element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
-  /** Obtain a reference to the top-level HTML element */
+  /**
+   * Obtain a reference to the top-level HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";

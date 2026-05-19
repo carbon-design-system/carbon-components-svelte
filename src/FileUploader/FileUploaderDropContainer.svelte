@@ -13,6 +13,7 @@
   /**
    * Obtain a reference to the uploaded files.
    * @type {ReadonlyArray<File>}
+   * @bindable writable
    */
   export let files = [];
 
@@ -47,7 +48,10 @@
   /** Specify a name attribute for the input */
   export let name = "";
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

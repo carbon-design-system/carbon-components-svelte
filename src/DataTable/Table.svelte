@@ -26,6 +26,7 @@
   /**
    * Obtain a reference to the section HTML element (when stickyHeader is enabled) or table HTML element.
    * @type {null | HTMLElement | HTMLTableElement}
+   * @bindable readonly
    */
   export let ref = null;
 </script>

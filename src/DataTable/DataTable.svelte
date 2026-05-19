@@ -151,12 +151,14 @@
   /**
    * Specify the header key to sort by.
    * @type {DataTableKey<Row>}
+   * @bindable writable
    */
   export let sortKey = null;
 
   /**
    * Specify the sort direction.
    * @type {"none" | "ascending" | "descending"}
+   * @bindable writable
    */
   export let sortDirection = "none";
 
@@ -194,6 +196,7 @@
   /**
    * Set to `true` for the expandable variant.
    * Automatically set to `true` if `batchExpansion` is `true`.
+   * @bindable writable
    */
   export let expandable = false;
 
@@ -205,6 +208,7 @@
   /**
    * Specify the row ids to be expanded.
    * @type {ReadonlyArray<Row["id"]>}
+   * @bindable writable
    */
   export let expandedRowIds = [];
 
@@ -220,6 +224,7 @@
   /**
    * Set to `true` for the selectable variant.
    * Automatically set to `true` if `radio` or `batchSelection` are `true`.
+   * @bindable writable
    */
   export let selectable = false;
 
@@ -229,6 +234,7 @@
   /**
    * Specify the row ids to be selected.
    * @type {ReadonlyArray<Row["id"]>}
+   * @bindable writable
    */
   export let selectedRowIds = [];
 
@@ -271,6 +277,7 @@
   /**
    * Obtain a reference to the table wrapper element. When virtualization is enabled and `stickyHeader` is false, this element is the scroll container—use `bind:scrollContainerRef` to programmatically control scroll position (e.g. `scrollContainerRef.scrollTop = 0`).
    * @type {null | HTMLDivElement}
+   * @bindable readonly
    */
   export let scrollContainerRef = null;
 

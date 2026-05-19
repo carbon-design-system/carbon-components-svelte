@@ -11,7 +11,10 @@
    */
   export let text = "Provide text";
 
-  /** Set to `true` for the switch to be selected */
+  /**
+   * Set to `true` for the switch to be selected.
+   * @bindable writable
+   */
   export let selected = false;
 
   /** Set to `true` to disable the switch */
@@ -20,7 +23,10 @@
   /** Set an id for the button element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
-  /** Obtain a reference to the button HTML element */
+  /**
+   * Obtain a reference to the button HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { getContext, onMount } from "svelte";

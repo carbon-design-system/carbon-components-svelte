@@ -9,7 +9,10 @@
    */
   export let size = "default";
 
-  /** Set to `true` to toggle the checkbox input */
+  /**
+   * Set to `true` to toggle the checkbox input.
+   * @bindable writable
+   */
   export let toggled = false;
 
   /** Set to `true` to disable checkbox input */
@@ -39,7 +42,10 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";

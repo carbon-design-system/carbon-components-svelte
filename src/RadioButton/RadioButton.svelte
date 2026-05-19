@@ -9,7 +9,10 @@
    */
   export let value = "";
 
-  /** Set to `true` to check the radio button */
+  /**
+   * Set to `true` to check the radio button.
+   * @bindable writable
+   */
   export let checked = false;
 
   /** Set to `true` to disable the radio button */
@@ -41,7 +44,10 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { getContext, onMount } from "svelte";

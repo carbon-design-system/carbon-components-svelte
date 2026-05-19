@@ -8,12 +8,14 @@
   /**
    * Specify the input value.
    * @type {number | string}
+   * @bindable writable
    */
   export let value = "";
 
   /**
    * Set to `"text"` to toggle the password visibility.
    * @type {"text" | "password"}
+   * @bindable writable
    */
   export let type = "password";
 
@@ -77,7 +79,10 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /**

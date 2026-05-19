@@ -30,6 +30,7 @@
   /**
    * Specify the selected item id.
    * @type {Item["id"] | undefined}
+   * @bindable writable
    */
   export let selectedId = undefined;
 
@@ -51,7 +52,10 @@
    */
   export let size = undefined;
 
-  /** Set to `true` to open the dropdown */
+  /**
+   * Set to `true` to open the dropdown.
+   * @bindable writable
+   */
   export let open = false;
 
   /** Set to `true` to enable the light variant */
@@ -133,12 +137,16 @@
    */
   export let name = undefined;
 
-  /** Obtain a reference to the button HTML element */
+  /**
+   * Obtain a reference to the button HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /**
    * Obtain a reference to the list HTML element.
    * @type {null | HTMLDivElement}
+   * @bindable readonly
    */
   export let listRef = null;
 

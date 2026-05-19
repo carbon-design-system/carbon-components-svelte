@@ -13,6 +13,7 @@
   /**
    * Obtain a reference to the uploaded files.
    * @type {ReadonlyArray<File>}
+   * @bindable writable
    */
   export let files = [];
 
@@ -37,7 +38,10 @@
    */
   export let size = "small";
 
-  /** Specify the label text */
+  /**
+   * Specify the label text.
+   * @bindable writable
+   */
   export let labelText = "Add file";
 
   /** Set an id for the input element */
@@ -46,7 +50,10 @@
   /** Specify a name attribute for the input */
   export let name = "";
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /**

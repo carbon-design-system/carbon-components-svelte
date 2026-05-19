@@ -15,6 +15,7 @@
    *
    * `value` will be set to `null` if type="number" and the value is empty.
    * @type {null | number | string}
+   * @bindable writable
    */
   export let value = "";
 
@@ -57,7 +58,10 @@
   /** Specify the warning state text */
   export let warnText = "";
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   /** Set to `true` to mark the field as required */

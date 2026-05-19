@@ -87,6 +87,7 @@
   /**
    * Obtain a reference to the floating portal element.
    * @type {null | HTMLElement}
+   * @bindable readonly
    */
   export let ref = null;
 

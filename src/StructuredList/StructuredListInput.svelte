@@ -3,7 +3,10 @@
    * @template {string} [Value=string]
    */
 
-  /** Set to `true` to check the input */
+  /**
+   * Set to `true` to check the input.
+   * @bindable writable
+   */
   export let checked = false;
 
   /** Specify the title of the input */
@@ -21,7 +24,10 @@
   /** Specify a name attribute for the input */
   export let name = "";
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
   export let ref = null;
 
   import { getContext } from "svelte";

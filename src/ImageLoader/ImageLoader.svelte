@@ -22,16 +22,19 @@
 
   /**
    * Set to `true` when `loaded` is `true` and `error` is false.
+   * @bindable readonly
    */
   export let loading = false;
 
   /**
    * Set to `true` when the image is loaded.
+   * @bindable readonly
    */
   export let loaded = false;
 
   /**
    * Set to `true` if an error occurs when loading the image.
+   * @bindable readonly
    */
   export let error = false;
 

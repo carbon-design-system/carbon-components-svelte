@@ -1,5 +1,8 @@
 <script>
-  /** Set the selected radio group id */
+  /**
+   * Set the selected radio group id.
+   * @bindable writable
+   */
   export let selectedId = "";
 
   /** Specify the label text */

@@ -15,6 +15,7 @@
   /**
    * Obtain a reference to the portal element.
    * @type {null | HTMLElement}
+   * @bindable readonly
    */
   export let ref = null;
 
