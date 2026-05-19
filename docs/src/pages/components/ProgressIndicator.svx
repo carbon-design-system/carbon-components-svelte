@@ -4,6 +4,9 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
 
 <script>
   import { ProgressIndicator, ProgressStep, ProgressIndicatorSkeleton } from "carbon-components-svelte";
+  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
+  import InProgress from "carbon-icons-svelte/lib/InProgress.svelte";
+  import Circle from "carbon-icons-svelte/lib/CircleDash.svelte";
 </script>
 
 Progress indicators provide a visual representation of progress through a sequence of steps. They support horizontal and vertical layouts, step completion states, and interactive navigation.
@@ -96,6 +99,22 @@ Disable specific steps to prevent user interaction.
     label="Step 3"
     description="The progress indicator will listen for clicks on the steps"
   />
+</ProgressIndicator>
+
+## Custom step icon (slot)
+
+Override the default step icon using the `icon` named slot. The slot exposes `complete`, `current`, `invalid`, and `description` so the override can mirror the step state.
+
+<ProgressIndicator currentIndex={1}>
+  <ProgressStep complete label="Step 1" description="Completed step">
+    <CheckmarkFilled slot="icon" />
+  </ProgressStep>
+  <ProgressStep label="Step 2" description="Current step">
+    <InProgress slot="icon" />
+  </ProgressStep>
+  <ProgressStep label="Step 3" description="Upcoming step">
+    <Circle slot="icon" />
+  </ProgressStep>
 </ProgressIndicator>
 
 ## Spaced-equally
