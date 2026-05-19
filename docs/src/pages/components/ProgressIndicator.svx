@@ -147,3 +147,9 @@ Show a loading state with the specified number of steps.
 Show a vertical loading state with the specified number of steps.
 
 <ProgressIndicatorSkeleton vertical />
+
+## Skeleton (spaced-equally)
+
+Show a loading state with steps distributed evenly across the available space.
+
+<ProgressIndicatorSkeleton spaceEqually />
