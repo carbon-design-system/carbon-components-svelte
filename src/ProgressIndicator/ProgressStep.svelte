@@ -82,6 +82,8 @@
     on:mouseenter
     on:mouseleave
     on:keydown
+    on:focus
+    on:blur
   >
     {#if invalid}
       <Warning class="bx--progress__warning" title={description} />

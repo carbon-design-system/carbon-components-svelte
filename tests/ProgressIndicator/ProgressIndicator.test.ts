@@ -226,6 +226,24 @@ describe("ProgressIndicator", () => {
       expect(disabledButton).toHaveAttribute("tabindex", "-1");
     });
 
+    it("should forward focus and blur events from step button", () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: [
+          { label: "Step 1", description: "First step", complete: true },
+          { label: "Step 2", description: "Second step", complete: false },
+        ],
+      });
+
+      const completeStepButton = screen.getAllByRole("button")[0];
+      completeStepButton.focus();
+      expect(consoleLog).toHaveBeenCalledWith("focus", "Step 1");
+
+      completeStepButton.blur();
+      expect(consoleLog).toHaveBeenCalledWith("blur", "Step 1");
+    });
+
     it("should support keyboard navigation for complete steps", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(ProgressIndicator, {
