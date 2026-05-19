@@ -113,6 +113,27 @@ describe("Svelte 5 Snippets", () => {
     });
   });
 
+  describe("ProgressStep icon", () => {
+    it("should render icon snippet with complete, current, and invalid arguments", () => {
+      render(Snippets);
+
+      const icon1 = screen.getByTestId("progress-step-icon-1");
+      expect(icon1).toHaveAttribute("data-complete", "true");
+      expect(icon1).toHaveAttribute("data-current", "false");
+      expect(icon1).toHaveAttribute("data-invalid", "false");
+
+      const icon2 = screen.getByTestId("progress-step-icon-2");
+      expect(icon2).toHaveAttribute("data-complete", "false");
+      expect(icon2).toHaveAttribute("data-current", "true");
+      expect(icon2).toHaveAttribute("data-invalid", "false");
+
+      const icon3 = screen.getByTestId("progress-step-icon-3");
+      expect(icon3).toHaveAttribute("data-complete", "false");
+      expect(icon3).toHaveAttribute("data-current", "false");
+      expect(icon3).toHaveAttribute("data-invalid", "true");
+    });
+  });
+
   describe("Tabs secondary label", () => {
     it("should render container tabs with secondary label via prop", () => {
       render(Snippets);
