@@ -328,6 +328,22 @@ describe("Toggle", () => {
       await user.click(toggle);
       expect(toggle).toBeChecked();
     });
+
+    it("should not toggle on keyboard when readonly", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ToggleReadonly, { readonly: true });
+
+      const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
+      toggle.focus();
+
+      await user.keyboard(" ");
+      expect(toggle).not.toBeChecked();
+      expect(consoleLog).not.toHaveBeenCalledWith("toggle", true);
+
+      await user.keyboard("{Enter}");
+      expect(toggle).not.toBeChecked();
+      expect(consoleLog).not.toHaveBeenCalledWith("toggle", true);
+    });
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)
