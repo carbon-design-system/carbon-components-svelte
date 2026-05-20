@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type RadioButtonGroupComponent from "carbon-components-svelte/RadioButtonGroup/RadioButtonGroup.svelte";
-import type { ComponentEvents, ComponentProps } from "svelte";
+import { type ComponentEvents, type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
 import RadioButtonGroup from "./RadioButtonGroup.test.svelte";
 
@@ -141,6 +141,20 @@ describe("RadioButtonGroup", () => {
     const formItem = fieldset.closest(".bx--form-item");
     assert(formItem);
     expect(formItem).toHaveClass("custom-group");
+  });
+
+  it("should propagate external selected updates to child radios", async () => {
+    const { component } = render(RadioButtonGroup, {
+      props: { selected: "1" },
+    });
+
+    expect(screen.getByRole("radio", { name: "Option 1" })).toBeChecked();
+
+    component.selected = "3";
+    await tick();
+
+    expect(screen.getByRole("radio", { name: "Option 3" })).toBeChecked();
+    expect(screen.getByRole("radio", { name: "Option 1" })).not.toBeChecked();
   });
 
   it("should update selected value on radio change", async () => {
