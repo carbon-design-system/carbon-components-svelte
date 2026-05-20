@@ -84,6 +84,7 @@
   const selectedValue = writable(selected);
   const groupName = writable(name);
   const groupRequired = writable(required);
+  const groupReadonly = writable(readonly);
   let isInitialRender = true;
 
   /**
@@ -107,9 +108,9 @@
     selectedValue,
     groupName: readOnly(groupName),
     groupRequired: readOnly(groupRequired),
+    readonly: readOnly(groupReadonly),
     add,
     update,
-    readonly,
   });
 
   beforeUpdate(() => {
@@ -136,6 +137,7 @@
 
   $: $groupName = name;
   $: $groupRequired = required;
+  $: $groupReadonly = readonly;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
