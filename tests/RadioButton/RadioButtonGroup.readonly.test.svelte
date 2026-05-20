@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { RadioButton, RadioButtonGroup } from "carbon-components-svelte";
 

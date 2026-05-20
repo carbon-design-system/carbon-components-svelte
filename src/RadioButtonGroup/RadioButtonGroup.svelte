@@ -70,7 +70,6 @@
 
   import {
     afterUpdate,
-    beforeUpdate,
     createEventDispatcher,
     onMount,
     setContext,
@@ -117,10 +116,7 @@
     update,
   });
 
-  beforeUpdate(() => {
-    if (readonly) return;
-    $selectedValue = selected;
-  });
+  $: if (!readonly) $selectedValue = selected;
 
   const unsubscribe = selectedValue.subscribe((value) => {
     if (readonly) return;
