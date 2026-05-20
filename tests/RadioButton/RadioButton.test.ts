@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type RadioButtonComponent from "carbon-components-svelte/RadioButton/RadioButton.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import RadioButton from "./RadioButton.test.svelte";
 import RadioButtonCustom from "./RadioButtonCustom.test.svelte";
 import RadioButtonGroupReadonly from "./RadioButtonGroup.readonly.test.svelte";
+import RadioButtonReadonlyChange from "./RadioButtonReadonlyChange.test.svelte";
 
 describe("RadioButton", () => {
   it("should render with default props", () => {
@@ -161,6 +162,16 @@ describe("RadioButton", () => {
       expect(pro).not.toBeChecked();
       expect(screen.getByRole("radio", { name: "Free" })).toBeChecked();
       expect(consoleLog).not.toHaveBeenCalledWith("change", "2");
+    });
+
+    it("should not forward a child RadioButton's on:change when the group is readonly", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(RadioButtonReadonlyChange);
+
+      const pro = screen.getByRole("radio", { name: "Pro" });
+      await fireEvent.change(pro);
+
+      expect(consoleLog).not.toHaveBeenCalledWith("radio-change", "2");
     });
 
     it("should allow selection when readonly is false", async () => {
