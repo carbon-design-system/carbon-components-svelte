@@ -133,39 +133,45 @@
 
   let prevFiles = [];
 
-  /** @type {(file: File, index: number) => string} */
-  const getFileId = (file, index) =>
-    `${file.lastModified + file.name}-${index}`;
+  // Per-file stable id: assigned once on first sight and carried with the
+  // File reference, so reorders and removals don't shift other files' ids.
+  // Two files with the same name/size/lastModified get distinct ids via a
+  // `#n` suffix.
+  /** @type {WeakMap<File, string>} */
+  const fileKeys = new WeakMap();
+
+  /** @param {ReadonlyArray<File>} list */
+  function keyFiles(list) {
+    const used = new Set();
+    for (const f of list) {
+      const cached = fileKeys.get(f);
+      if (cached !== undefined) used.add(cached);
+    }
+    return list.map((file) => {
+      let key = fileKeys.get(file);
+      if (key === undefined) {
+        const base = `${file.name}-${file.size}-${file.lastModified}`;
+        key = base;
+        let n = 1;
+        while (used.has(key)) key = `${base}#${n++}`;
+        fileKeys.set(file, key);
+        used.add(key);
+      }
+      return { file, key };
+    });
+  }
 
   /** Stable keys for `{#each}` (and Biome-safe: no commas in the each header). */
-  $: filesWithKeys = files.map((file, index) => ({
-    file,
-    key: getFileId(file, index),
-  }));
+  $: filesWithKeys = keyFiles(files);
 
   afterUpdate(() => {
-    const fileIds = files.map((f, i) => getFileId(f, i));
-    const prevFileIds = prevFiles.map((f, i) => getFileId(f, i));
-    const addedIds = fileIds.filter((_) => !prevFileIds.includes(_));
-    const removedIds = prevFileIds.filter((_) => !fileIds.includes(_));
+    const prevSet = new Set(prevFiles);
+    const currentSet = new Set(files);
+    const added = files.filter((f) => !prevSet.has(f));
+    const removed = prevFiles.filter((f) => !currentSet.has(f));
 
-    if (addedIds.length > 0) {
-      dispatch(
-        "add",
-        addedIds.map((id) =>
-          files.find((file, i) => id === getFileId(file, i)),
-        ),
-      );
-    }
-
-    if (removedIds.length > 0) {
-      dispatch(
-        "remove",
-        removedIds.map((id) =>
-          prevFiles.find((file, i) => id === getFileId(file, i)),
-        ),
-      );
-    }
+    if (added.length > 0) dispatch("add", added);
+    if (removed.length > 0) dispatch("remove", removed);
 
     if (prevFiles.length > 0 && files.length === 0) {
       dispatch("change", []);
