@@ -64,7 +64,7 @@
       groupName: readable(undefined),
       groupRequired: readable(undefined),
       selectedValue: readable(checked ? value : undefined),
-      readonly: false,
+      readonly: readable(false),
     };
 
   // Track if we're in standalone mode (no RadioButtonGroup context)
@@ -164,10 +164,10 @@
     on:blur
     on:change
     on:click={(e) => {
-      if (readonly) e.preventDefault();
+      if ($readonly) e.preventDefault();
     }}
     on:change={(e) => {
-      if (readonly) {
+      if ($readonly) {
         e.preventDefault();
         return;
       }

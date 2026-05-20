@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type RadioButtonComponent from "carbon-components-svelte/RadioButton/RadioButton.svelte";
-import type { ComponentProps } from "svelte";
+import { type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
 import RadioButton from "./RadioButton.test.svelte";
 import RadioButtonCustom from "./RadioButtonCustom.test.svelte";
@@ -172,6 +172,24 @@ describe("RadioButton", () => {
 
       expect(pro).toBeChecked();
       expect(consoleLog).toHaveBeenCalledWith("change", "2");
+    });
+
+    it("should not change selection when readonly flips to true after mount", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = render(RadioButtonGroupReadonly, {
+        selected: "1",
+        readonly: false,
+      });
+
+      await rerender({ selected: "1", readonly: true });
+      await tick();
+
+      const pro = screen.getByRole("radio", { name: "Pro" });
+      await user.click(pro);
+
+      expect(screen.getByRole("radio", { name: "Free" })).toBeChecked();
+      expect(pro).not.toBeChecked();
+      expect(consoleLog).not.toHaveBeenCalledWith("change", "2");
     });
   });
 
