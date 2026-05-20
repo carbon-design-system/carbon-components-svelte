@@ -10,6 +10,20 @@ describe("FluidForm", () => {
     expect(form).toHaveClass("bx--form--fluid");
   });
 
+  it("exposes ref to the underlying form element", () => {
+    let captured: null | HTMLFormElement = null;
+    render(FluidFormTest, {
+      onRef: (ref) => {
+        captured = ref;
+      },
+    });
+    const form = screen.getByTestId("fluid-form");
+    expect(captured).toBe(form);
+    expect((captured as unknown as HTMLFormElement | null)?.tagName).toBe(
+      "FORM",
+    );
+  });
+
   it("renders form elements correctly", () => {
     render(FluidFormTest);
 
