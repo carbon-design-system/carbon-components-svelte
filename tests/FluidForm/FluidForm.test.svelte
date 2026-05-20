@@ -7,9 +7,13 @@
   } from "carbon-components-svelte";
 
   export let preventDefault = false;
+  export let onRef: (ref: null | HTMLFormElement) => void = () => {};
+  let ref: null | HTMLFormElement = null;
+  $: onRef(ref);
 </script>
 
 <FluidForm
+  bind:ref
   data-testid="fluid-form"
   on:submit={(e) => {
     if (preventDefault) {
