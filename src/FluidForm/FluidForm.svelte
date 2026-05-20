@@ -7,6 +7,13 @@
   import Form from "../Form/Form.svelte";
 
   /**
+   * Obtain a reference to the form element.
+   * @type {null | HTMLFormElement}
+   * @bindable readonly
+   */
+  export let ref = null;
+
+  /**
    * @type {{ isFluid: boolean }}
    */
   const formContext = { isFluid: true };
@@ -15,6 +22,7 @@
 </script>
 
 <Form
+  bind:ref
   {...$$restProps}
   class={["bx--form--fluid", $$restProps.class].filter(Boolean).join(" ")}
   on:click
