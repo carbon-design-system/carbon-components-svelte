@@ -87,6 +87,8 @@
         change(step.index);
       }
     }}
+    on:focus
+    on:blur
   >
     {#if invalid}
       <Warning class="bx--progress__warning" title={description} />
