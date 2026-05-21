@@ -34,7 +34,7 @@
 
   let step = {};
 
-  const { stepsById, add, change, preventChangeOnClick } = getContext(
+  const { stepsById, add, remove, change, preventChangeOnClick } = getContext(
     "carbon:ProgressIndicator",
   );
 
@@ -50,6 +50,7 @@
   onMount(() => {
     return () => {
       unsubscribe();
+      remove(id);
     };
   });
 </script>

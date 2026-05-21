@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ProgressIndicator from "./ProgressIndicator.test.svelte";
+import ProgressIndicatorConditional from "./ProgressIndicatorConditional.test.svelte";
 import ProgressIndicatorIssue1249 from "./ProgressIndicatorIssue1249.test.svelte";
 import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";
 
@@ -245,6 +246,28 @@ describe("ProgressIndicator", () => {
 
       await user.keyboard(" ");
       expect(consoleLog).toHaveBeenCalledWith("change", 0);
+    });
+  });
+
+  describe("Conditional step rendering", () => {
+    it("should remove unmounted steps and re-index, so change emits the correct index", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = render(ProgressIndicatorConditional, {
+        showOptional: true,
+        currentIndex: 0,
+      });
+
+      expect(screen.getAllByRole("listitem")).toHaveLength(3);
+
+      rerender({ showOptional: false, currentIndex: 0 });
+
+      await waitFor(() => {
+        expect(screen.getAllByRole("listitem")).toHaveLength(2);
+      });
+
+      // The remaining "Step 3" must now report index 1, not 2.
+      await user.click(screen.getByText("Step 3"));
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 1);
     });
   });
 
