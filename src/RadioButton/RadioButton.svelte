@@ -129,7 +129,7 @@
   }
 
   if (add) {
-    add({ id, checked, disabled, value });
+    add({ checked, value });
   }
 
   // Only sync checked when inside RadioButtonGroup.
