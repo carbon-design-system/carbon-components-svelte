@@ -8,13 +8,14 @@
    * @property {string} [html] - Node HTML content
    * @property {import("svelte/elements").SvelteHTMLElements["a"]["target"]} [target] - Node link target
    * @property {import("svelte/elements").SvelteHTMLElements["a"]["rel"]} [rel] - Node link rel
-   * @property {RecursiveListNode[]} [nodes] - Child nodes
+   * @property {Array<string | RecursiveListNode>} [nodes] - Child nodes
    * @restProps {ul | ol}
    */
 
   /**
    * Specify the nodes to render.
-   * @type {ReadonlyArray<Node & { nodes?: Node[] }>}
+   * A string entry is shorthand for `{ text: "..." }`.
+   * @type {ReadonlyArray<string | (Node & { nodes?: Array<string | Node> })>}
    */
   export let nodes = [];
 
@@ -38,13 +39,14 @@
   {expressive}
   {...$$restProps}
 >
-  {#each nodes as child, index (child.id ?? index)}
-    {#if Array.isArray(child.nodes)}
-      <RecursiveListItem {...child}>
-        <svelte:self {...child} {type} {expressive} nested />
+  {#each nodes as child, index (typeof child === "string" ? child : child.id ?? index)}
+    {@const node = typeof child === "string" ? { text: child } : child}
+    {#if Array.isArray(node.nodes)}
+      <RecursiveListItem {...node}>
+        <svelte:self {...node} {type} {expressive} nested />
       </RecursiveListItem>
     {:else}
-      <RecursiveListItem {...child} />
+      <RecursiveListItem {...node} />
     {/if}
   {/each}
 </svelte:component>
