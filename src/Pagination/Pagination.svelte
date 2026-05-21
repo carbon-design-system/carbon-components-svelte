@@ -96,6 +96,22 @@
   export let pagesUnknown = false;
 
   /**
+   * Override the disabled state of the forward (next page) button.
+   * Intended for use with `pagesUnknown` (controlled), where the consumer
+   * knows when there is no more data to load.
+   * @type {boolean | undefined}
+   */
+  export let forwardButtonDisabled = undefined;
+
+  /**
+   * Override the disabled state of the backward (previous page) button.
+   * Intended for use with `pagesUnknown` (controlled), where the consumer
+   * manages page bounds.
+   * @type {boolean | undefined}
+   */
+  export let backButtonDisabled = undefined;
+
+  /**
    * Override the page text.
    * @type {(page: number) => string}
    */
@@ -156,7 +172,7 @@
   }
 
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
-  $: if (page > totalPages) page = totalPages;
+  $: if (!pagesUnknown && page > totalPages) page = totalPages;
   $: if (prevPage !== page || prevPageSize !== pageSize) {
     dispatch("update", { pageSize, page });
     prevPage = page;
@@ -166,8 +182,11 @@
   $: effectivePageSizes = dynamicPageSizes
     ? getFilteredPageSizes(pageSizes, totalItems)
     : pageSizes;
-  $: backButtonDisabled = disabled || page === 1;
-  $: forwardButtonDisabled = disabled || page === totalPages;
+  $: internalBackButtonDisabled =
+    backButtonDisabled ?? (disabled || page === 1);
+  $: internalForwardButtonDisabled =
+    forwardButtonDisabled ??
+    (disabled || (!pagesUnknown && page === totalPages));
 </script>
 
 <div {id} class:bx--pagination={true} {...$$restProps}>
@@ -239,8 +258,8 @@
       tooltipPosition="top"
       icon={CaretLeft}
       iconDescription={backwardText}
-      disabled={backButtonDisabled}
-      class="bx--pagination__button bx--pagination__button--backward {backButtonDisabled
+      disabled={internalBackButtonDisabled}
+      class="bx--pagination__button bx--pagination__button--backward {internalBackButtonDisabled
         ? 'bx--pagination__button--no-index'
         : ''}"
       on:click={() => {
@@ -255,8 +274,8 @@
       tooltipPosition="top"
       icon={CaretRight}
       iconDescription={forwardText}
-      disabled={forwardButtonDisabled}
-      class="bx--pagination__button bx--pagination__button--forward {forwardButtonDisabled
+      disabled={internalForwardButtonDisabled}
+      class="bx--pagination__button bx--pagination__button--forward {internalForwardButtonDisabled
         ? 'bx--pagination__button--no-index'
         : ''}"
       on:click={() => {

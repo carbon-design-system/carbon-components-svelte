@@ -22,6 +22,10 @@
     undefined;
   export let id: ComponentProps<Pagination>["id"] = undefined;
   export let customClass = "";
+  export let forwardButtonDisabled: ComponentProps<Pagination>["forwardButtonDisabled"] =
+    undefined;
+  export let backButtonDisabled: ComponentProps<Pagination>["backButtonDisabled"] =
+    undefined;
 </script>
 
 <Pagination
@@ -42,6 +46,8 @@
   {pageRangeText}
   {itemRangeText}
   {id}
+  {forwardButtonDisabled}
+  {backButtonDisabled}
   class={customClass}
   on:change={(e) => {
     console.log("change", e.detail);
