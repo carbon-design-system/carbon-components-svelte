@@ -203,6 +203,52 @@ describe("Button", () => {
     expect(assistiveText).toHaveTextContent("Add item");
   });
 
+  describe("portalTooltip", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("should not apply legacy CSS tooltip classes when portalTooltip is true", () => {
+      render(Button);
+
+      const button = screen.getByTestId("btn-icon-portal");
+      expect(button).toHaveClass("bx--btn--icon-only");
+      expect(button).not.toHaveClass("bx--tooltip__trigger");
+      expect(button).not.toHaveClass("bx--tooltip--a11y");
+      expect(button).not.toHaveClass("bx--btn--icon-only--top");
+      expect(button).not.toHaveClass("bx--tooltip--align-center");
+    });
+
+    it("should render portal tooltip on mouseenter and remove on mouseleave", async () => {
+      render(Button);
+
+      const button = screen.getByTestId("btn-icon-portal");
+
+      expect(
+        document.body.querySelector(".bx--tooltip-portal"),
+      ).not.toBeInTheDocument();
+
+      await fireEvent.mouseEnter(button);
+      await vi.advanceTimersByTimeAsync(100);
+
+      const portal = document.body.querySelector(".bx--tooltip-portal");
+      expect(portal).toBeInTheDocument();
+      expect(portal).toHaveAttribute("data-tooltip-type", "icon");
+      expect(portal).toHaveTextContent("Portal tooltip text");
+
+      await fireEvent.mouseLeave(button);
+      await vi.advanceTimersByTimeAsync(300);
+
+      expect(
+        document.body.querySelector(".bx--tooltip-portal"),
+      ).not.toBeInTheDocument();
+    });
+  });
+
   describe("Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;

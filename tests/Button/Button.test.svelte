@@ -28,6 +28,15 @@
   iconDescription="Add item"
 />
 
+<Button
+  data-testid="btn-icon-portal"
+  icon={Add}
+  portalTooltip
+  tooltipPosition="top"
+  tooltipAlignment="center"
+  iconDescription="Portal tooltip text"
+/>
+
 <Button href="#">Link button</Button>
 
 <Button href="https://example.com" target="_blank">External link</Button>
