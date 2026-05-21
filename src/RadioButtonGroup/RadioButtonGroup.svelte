@@ -112,21 +112,22 @@
     readonly,
   });
 
-  onMount(() => {
-    $selectedValue = selected;
-  });
-
   beforeUpdate(() => {
     if (readonly) return;
     $selectedValue = selected;
   });
 
-  selectedValue.subscribe((value) => {
+  const unsubscribe = selectedValue.subscribe((value) => {
     if (readonly) return;
     selected = value;
     if (!isInitialRender) {
       dispatch("change", value);
     }
+  });
+
+  onMount(() => {
+    $selectedValue = selected;
+    return unsubscribe;
   });
 
   afterUpdate(() => {
