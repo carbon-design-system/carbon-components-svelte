@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type RadioButtonComponent from "carbon-components-svelte/RadioButton/RadioButton.svelte";
-import type { ComponentProps } from "svelte";
+import { type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
 import RadioButton from "./RadioButton.test.svelte";
 import RadioButtonCustom from "./RadioButtonCustom.test.svelte";
@@ -172,6 +172,21 @@ describe("RadioButton", () => {
 
       expect(pro).toBeChecked();
       expect(consoleLog).toHaveBeenCalledWith("change", "2");
+    });
+
+    it("should not propagate external selected updates to children when readonly", async () => {
+      const { component } = render(RadioButtonGroupReadonly, {
+        selected: "1",
+        readonly: true,
+      });
+
+      expect(screen.getByRole("radio", { name: "Free" })).toBeChecked();
+
+      component.selected = "2";
+      await tick();
+
+      expect(screen.getByRole("radio", { name: "Free" })).toBeChecked();
+      expect(screen.getByRole("radio", { name: "Pro" })).not.toBeChecked();
     });
   });
 
