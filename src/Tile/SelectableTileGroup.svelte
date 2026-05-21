@@ -60,6 +60,15 @@
   };
 
   /**
+   * @type {(value: T) => void}
+   */
+  const remove = (value) => {
+    if ($selectedValues.includes(value)) {
+      selectedValues.update((values) => values.filter((v) => v !== value));
+    }
+  };
+
+  /**
    * @type {(data: { value: T; selected: boolean }) => void}
    */
   const update = ({ value, selected: isSelected }) => {
@@ -80,6 +89,7 @@
     selectedValues,
     groupName: groupNameReadonly,
     add,
+    remove,
     update,
   });
 
