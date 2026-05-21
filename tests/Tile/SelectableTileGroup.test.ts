@@ -27,6 +27,15 @@ describe("SelectableTileGroup", () => {
     expect(screen.getByText("Select options")).toHaveClass("bx--label");
   });
 
+  it("should hide legend visually", () => {
+    render(SelectableTileGroup, {
+      props: { legendText: "Legend", hideLegend: true },
+    });
+
+    const legend = screen.getByText("Legend");
+    expect(legend).toHaveClass("bx--visually-hidden");
+  });
+
   it("should handle disabled state", () => {
     render(SelectableTileGroup, { props: { disabled: true } });
 

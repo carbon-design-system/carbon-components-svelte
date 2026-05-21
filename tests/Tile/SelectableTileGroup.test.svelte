@@ -11,6 +11,7 @@
   export let disabled: ComponentProps<SelectableTileGroup>["disabled"] = false;
   export let name: ComponentProps<SelectableTileGroup>["name"] = undefined;
   export let legendText: ComponentProps<SelectableTileGroup>["legendText"] = "";
+  export let hideLegend: ComponentProps<SelectableTileGroup>["hideLegend"] = false;
   export let customClass = "";
 </script>
 
@@ -19,6 +20,7 @@
   {disabled}
   {name}
   {legendText}
+  {hideLegend}
   class={customClass}
   on:select={(e) => {
     console.log("select", e.detail);

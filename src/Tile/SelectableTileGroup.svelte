@@ -33,6 +33,9 @@
    */
   export let legendText = "";
 
+  /** Set to `true` to visually hide the legend */
+  export let hideLegend = false;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { readonly, writable } from "svelte/store";
 
@@ -90,7 +93,7 @@
 
 <fieldset {disabled} class:bx--tile-group={true} {...$$restProps}>
   {#if legendText || $$slots.legendChildren}
-    <legend class:bx--label={true}>
+    <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>
       <slot name="legendChildren">{legendText}</slot>
     </legend>
   {/if}
