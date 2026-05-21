@@ -36,6 +36,22 @@ Bind to the `selected` prop for simpler state management.
 
 <FileSource src="/framed/SelectableTile/SelectableTileReactive" />
 
+## Hidden legend
+
+Visually hide the legend while maintaining accessibility.
+
+<SelectableTileGroup hideLegend legendText="Select options" name="options-hidden-legend" selected={["option1"]}>
+  <SelectableTile value="option1">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option2">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option3">
+    Multi-select Tile
+  </SelectableTile>
+</SelectableTileGroup>
+
 ## Light variant
 
 Use the light variant for light backgrounds.
