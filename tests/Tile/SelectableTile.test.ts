@@ -26,6 +26,14 @@ describe("SelectableTile", () => {
     render(SelectableTileTest, { disabled: true });
     const tile = screen.getByTestId("selectable-tile");
     expect(tile).toHaveClass("bx--tile--disabled");
+    expect(tile).toHaveAttribute("aria-disabled", "true");
+    expect(tile).not.toHaveAttribute("tabindex");
+  });
+
+  it("omits aria-disabled when enabled", () => {
+    render(SelectableTileTest);
+    const tile = screen.getByTestId("selectable-tile");
+    expect(tile).not.toHaveAttribute("aria-disabled");
   });
 
   it("renders with custom title and value", () => {
