@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type TreeViewNodeComponent from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
+import { findParentTreeNode } from "carbon-components-svelte/TreeView/TreeViewNode.svelte";
 import type TreeViewNodeListComponent from "carbon-components-svelte/TreeView/TreeViewNodeList.svelte";
 import type {
   ComponentEvents,
@@ -23,6 +24,35 @@ function treeItemById(id: string | number): HTMLElement {
   return el;
 }
 
+/**
+ * Primary row label: parent markup uses `.bx--tree-node__label__text`.
+ * Leaves use `.bx--tree-node__label` only (#3007).
+ */
+function treeitemPrimaryLabel(el: HTMLElement): string {
+  const labelled = el.querySelector(".bx--tree-node__label__text");
+  if (labelled?.textContent) {
+    return labelled.textContent.replace(/\s+/g, " ").trim();
+  }
+  const label = el.querySelector(".bx--tree-node__label");
+  return label?.textContent?.replace(/\s+/g, " ").trim() ?? "";
+}
+
+/**
+ * `getByRole({ name })` matches descendant text (#3007).
+ * Pick the expandable parent row.
+ */
+function getNamedParentTreeitem(name: RegExp): HTMLElement {
+  const found = screen
+    .getAllByRole("treeitem", { name })
+    .find(
+      (n) =>
+        n instanceof HTMLElement &&
+        n.classList.contains("bx--tree-parent-node"),
+    );
+  expect.assert(found instanceof HTMLElement);
+  return found;
+}
+
 const testCases = [
   { name: "TreeView", component: TreeView },
   { name: "TreeView hierarchy", component: TreeViewHierarchy },
@@ -38,6 +68,9 @@ describe.each(testCases)("$name", ({ component }) => {
   const getAllExpandedItems = () => {
     return screen.getAllByRole("treeitem", { expanded: true });
   };
+
+  const getItemByName = (name: string | RegExp): HTMLElement =>
+    screen.getByRole("treeitem", { name }) as HTMLElement;
 
   it("can select a node", async () => {
     const consoleLog = vi.spyOn(console, "log");
@@ -93,9 +126,15 @@ describe.each(testCases)("$name", ({ component }) => {
 
     expect(getAllExpandedItems()).toHaveLength(2);
 
+    const tree = screen.getByRole("tree");
+    const expandedItems = within(tree).getAllByRole("treeitem", {
+      expanded: true,
+    });
     expect(
-      screen.getByText("IBM Analytics Engine").parentNode?.parentNode,
-    ).toHaveAttribute("aria-expanded", "true");
+      expandedItems.some((el) =>
+        el.textContent?.includes("IBM Analytics Engine"),
+      ),
+    ).toBe(true);
   });
 
   it("can collapse all nodes", async () => {
@@ -181,6 +220,56 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
   });
 
+  it("re-applies tabindex=0 to the new first focusable when nodes change", async () => {
+    const { rerender } = render(TreeViewProps, {
+      nodes: [
+        { id: "a", text: "Alpha" },
+        { id: "b", text: "Beta" },
+      ],
+    });
+
+    expect(screen.getByRole("treeitem", { name: /Alpha/ })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+
+    await rerender({
+      nodes: [
+        { id: "x", text: "Xray" },
+        { id: "y", text: "Yankee" },
+      ],
+    });
+
+    expect(screen.getByRole("treeitem", { name: /Xray/ })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+    expect(screen.queryByRole("treeitem", { name: /Alpha/ })).toBeNull();
+  });
+
+  it("moves tabindex=0 along with focus (roving tabindex)", async () => {
+    render(component);
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    expect(firstItem).toHaveAttribute("tabindex", "0");
+
+    firstItem.focus();
+    await user.keyboard("{ArrowDown}");
+
+    const analyticsItems = screen.getAllByRole("treeitem", {
+      name: /Analytics/,
+      selected: false,
+    });
+    const nextItem = analyticsItems[0];
+
+    expect(nextItem).toHaveFocus();
+    expect(nextItem).toHaveAttribute("tabindex", "0");
+    expect(firstItem).toHaveAttribute("tabindex", "-1");
+
+    const tree = screen.getByRole("tree");
+    expect(tree.querySelectorAll('[tabindex="0"]')).toHaveLength(1);
+  });
+
   it("navigates with ArrowDown key", async () => {
     render(component);
 
@@ -218,6 +307,49 @@ describe.each(testCases)("$name", ({ component }) => {
 
     const disabledNode = treeItemById(14);
     expect(disabledNode).not.toHaveFocus();
+  });
+
+  it("skips descendants under collapsed subtree in keyboard navigation", async () => {
+    render(component);
+
+    const firstItem = treeItemById(0);
+    const analytics = treeItemById(1);
+    const ibmEngine = treeItemById(2); // descendant of collapsed Analytics
+    const apacheSpark = treeItemById(3); // leaf, descendant of collapsed IBM Engine
+
+    // Both descendants stay in the DOM but inside `ul.bx--tree-node--hidden`.
+    expect(ibmEngine.closest("ul.bx--tree-node--hidden")).not.toBeNull();
+    expect(apacheSpark.closest("ul.bx--tree-node--hidden")).not.toBeNull();
+
+    firstItem.focus();
+    await user.keyboard("{ArrowDown}");
+
+    expect(analytics).toHaveFocus();
+    expect(ibmEngine).not.toHaveFocus();
+    expect(apacheSpark).not.toHaveFocus();
+  });
+
+  it("End key moves focus to the last non-disabled treeitem", async () => {
+    render(component);
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    firstItem.focus();
+
+    await user.keyboard("{End}");
+
+    expect(getNamedParentTreeitem(/Databases/)).toHaveFocus();
+  });
+
+  it("Home key moves focus to the first treeitem", async () => {
+    render(component);
+
+    const databases = getNamedParentTreeitem(/Databases/);
+    databases.focus();
+
+    await user.keyboard("{Home}");
+
+    const firstItem = getItemByName(/AI \/ Machine learning/);
+    expect(firstItem).toHaveFocus();
   });
 
   it("expands parent node with ArrowRight key", async () => {
@@ -380,6 +512,33 @@ describe("TreeView Props", () => {
       expect(label.style.paddingLeft).toBe("1rem");
       expect(label.style.marginLeft).toBe("-1rem");
     });
+  });
+
+  it("Ctrl+A selects every non-disabled visible row in multiselect mode", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    const aiItem = screen.getByRole("treeitem", {
+      name: /AI \/ Machine learning/,
+    });
+    aiItem.focus();
+
+    await user.keyboard("{Control>}a{/Control}");
+
+    const selectedItems = screen.getAllByRole("treeitem", { selected: true });
+    const names = selectedItems.map(treeitemPrimaryLabel).sort();
+    expect(names).toEqual([
+      "AI / Machine learning",
+      "Analytics",
+      "Blockchain",
+      "Databases",
+    ]);
+    // Integration is disabled and excluded.
+    expect(
+      screen.getByRole("treeitem", { name: /Integration/ }),
+    ).toHaveAttribute("aria-disabled", "true");
   });
 
   it("handles multiple selectedIds with multiselect", () => {
@@ -1460,7 +1619,24 @@ describe("TreeView autoCollapse", () => {
     expect(folder1).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("works when expanding via Enter/Space key", async () => {
+  it("ArrowLeft on a collapsed parent moves focus to its ancestor", async () => {
+    render(TreeViewAutoCollapse, { autoCollapse: false });
+
+    const folder3 = screen.getByRole("treeitem", { name: /Folder 3/ });
+    await user.click(getToggleButton(folder3));
+
+    const subfolder1 = within(folder3).getByRole("treeitem", {
+      name: /^Subfolder 1\b/,
+    });
+    expect(subfolder1).toHaveAttribute("aria-expanded", "false");
+
+    subfolder1.focus();
+    await user.keyboard("{ArrowLeft}");
+
+    expect(folder3).toHaveFocus();
+  });
+
+  it("Enter toggles parent expansion; Space selects without toggling", async () => {
     render(TreeViewAutoCollapse, { autoCollapse: true });
 
     const folder1 = treeItemById("folder1");
@@ -1472,7 +1648,16 @@ describe("TreeView autoCollapse", () => {
 
     folder2.focus();
     await user.keyboard(" ");
+    // Space selects but does NOT toggle expand on parent rows (Carbon parity).
+    expect(folder2).toHaveAttribute("aria-expanded", "false");
+    expect(folder2).toHaveAttribute("aria-selected", "true");
+    // Folder1 is unaffected (still expanded; autoCollapse hasn't fired since
+    // folder2 isn't being expanded).
+    expect(folder1).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{Enter}");
     expect(folder2).toHaveAttribute("aria-expanded", "true");
+    // Now autoCollapse kicks in.
     expect(folder1).toHaveAttribute("aria-expanded", "false");
   });
 
@@ -1509,6 +1694,88 @@ describe("TreeView autoCollapse", () => {
 
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
+  });
+
+  it("wires aria-owns and aria-labelledby for expanded subtrees", () => {
+    const { container } = render(TreeViewProps, {
+      expandedIds: ["parent"],
+      nodes: [
+        {
+          id: "parent",
+          text: "Top Parent",
+          nodes: [{ id: "child", text: "Child" }],
+        },
+      ],
+    });
+
+    const parent = container.querySelector("#parent");
+    const subtreeId = parent?.getAttribute("aria-owns");
+    expect(subtreeId).toBe("parent-subtree");
+
+    const subtree = container.querySelector(`#${subtreeId}`);
+    expect(subtree?.getAttribute("role")).toBe("group");
+
+    const labelledBy = subtree?.getAttribute("aria-labelledby");
+    expect(labelledBy).toBe("parent__label");
+
+    const labelEl = container.querySelector(`#${labelledBy}`);
+    expect(labelEl?.textContent?.trim()).toBe("Top Parent");
+  });
+
+  it("ArrowRight on an expanded parent focuses link-first-child treeitem", async () => {
+    const { container } = render(TreeViewProps, {
+      expandedIds: ["p"],
+      nodes: [
+        {
+          id: "p",
+          text: "Parent",
+          nodes: [
+            { id: "child-link", text: "Link Child", href: "/x" },
+            { id: "child-leaf", text: "Leaf Child" },
+          ],
+        },
+      ],
+    });
+
+    const parent = container.querySelector("#p");
+    expect.assert(parent instanceof HTMLElement);
+    parent.focus();
+
+    await user.keyboard("{ArrowRight}");
+
+    const linkChild = container.querySelector("#child-link");
+    expect(linkChild?.tagName).toBe("A");
+    expect(linkChild).toHaveFocus();
+  });
+
+  describe("findParentTreeNode", () => {
+    it("walks up to the nearest bx--tree-parent-node", () => {
+      const tree = document.createElement("ul");
+      tree.classList.add("bx--tree");
+
+      const parent = document.createElement("li");
+      parent.classList.add("bx--tree-node", "bx--tree-parent-node");
+      tree.appendChild(parent);
+
+      const group = document.createElement("ul");
+      parent.appendChild(group);
+
+      const child = document.createElement("li");
+      child.classList.add("bx--tree-node");
+      group.appendChild(child);
+
+      expect(findParentTreeNode(child.parentElement)).toBe(parent);
+    });
+
+    it("returns null when there is no enclosing parent tree node", () => {
+      const tree = document.createElement("ul");
+      tree.classList.add("bx--tree");
+      const leaf = document.createElement("li");
+      leaf.classList.add("bx--tree-node");
+      tree.appendChild(leaf);
+
+      expect(findParentTreeNode(leaf.parentElement)).toBeNull();
     });
   });
 

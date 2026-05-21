@@ -26,6 +26,10 @@
     return null;
   }
 
+  function isUnderCollapsedSubtree(el) {
+    return Boolean(el.closest("ul.bx--tree-node--hidden"));
+  }
+
   /**
    * Creates a TreeWalker instance for keyboard navigation.
    * @param {HTMLElement} root - The root element to traverse
@@ -34,14 +38,17 @@
   function createTreeWalkerInstance(root) {
     return document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
       acceptNode: (node) => {
-        if (node.classList.contains("bx--tree-node--disabled"))
+        if (!(node instanceof Element)) return NodeFilter.FILTER_SKIP;
+        if (
+          node.classList.contains("bx--tree-node--disabled") ||
+          node.classList.contains("bx--tree-node--hidden")
+        ) {
           return NodeFilter.FILTER_REJECT;
+        }
         if (node.matches("li.bx--tree-node")) {
-          // Collapsed branches keep children in the DOM under
-          // `ul.bx--tree-node--hidden`; skip them so ArrowUp/ArrowDown follow
-          // visible order only (matches prior unmount behavior).
-          if (node.closest("ul.bx--tree-node--hidden"))
-            return NodeFilter.FILTER_REJECT;
+          // Children stay mounted under a hidden subtree `ul`; skip so Arrow keys
+          // follow visible rows only (same as when branches were unmounted).
+          if (isUnderCollapsedSubtree(node)) return NodeFilter.FILTER_REJECT;
           return NodeFilter.FILTER_ACCEPT;
         }
         return NodeFilter.FILTER_SKIP;
@@ -402,7 +409,13 @@
     }
   }
 
-  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
   import { writable } from "svelte/store";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
 
@@ -637,30 +650,132 @@
     toggleNode,
   });
 
-  function handleKeyDown(e) {
-    if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
-
-    treeWalker.currentNode = e.target;
-
-    let node = null;
-
-    if (e.key === "ArrowUp") node = treeWalker.previousNode();
-    if (e.key === "ArrowDown") node = treeWalker.nextNode();
-    if (node && node !== e.target) {
-      node.tabIndex = "0";
-      node.focus();
+  /** @param {HTMLElement | null} root */
+  function resetNodeTabIndices(root) {
+    if (!root) return;
+    const items = root.querySelectorAll('[tabindex="0"]');
+    for (let i = 0; i < items.length; i++) {
+      const el = items[i];
+      if (el instanceof HTMLElement) el.tabIndex = -1;
     }
   }
 
-  onMount(() => {
-    const firstFocusableNode = ref.querySelector(
-      "li.bx--tree-node:not(.bx--tree-node--disabled)",
-    );
+  /** @param {EventTarget | null} target */
+  function getTreeItemFromTarget(target) {
+    if (!(target instanceof Element)) return null;
+    if (target.classList.contains("bx--tree-node")) return target;
+    return target.closest(".bx--tree-node");
+  }
 
-    if (firstFocusableNode != null) {
-      firstFocusableNode.tabIndex = "0";
+  function handleKeyDown(e) {
+    e.stopPropagation();
+
+    if (
+      e.key === "ArrowUp" ||
+      e.key === "ArrowDown" ||
+      e.key === "Home" ||
+      e.key === "End"
+    ) {
+      e.preventDefault();
     }
 
+    if (!treeWalker || !ref) return;
+
+    const treeItem = getTreeItemFromTarget(e.target);
+    if (!treeItem) return;
+
+    treeWalker.currentNode = treeItem;
+
+    /** @type {Node | null} */
+    let nextFocusNode = null;
+
+    if (e.key === "ArrowUp") {
+      nextFocusNode = treeWalker.previousNode();
+    }
+    if (e.key === "ArrowDown") {
+      nextFocusNode = treeWalker.nextNode();
+    }
+
+    const isHomeOrEnd = e.key === "Home" || e.key === "End";
+    const isSelectAll =
+      (e.code === "KeyA" || e.key === "a" || e.key === "A") && e.ctrlKey;
+
+    if (isHomeOrEnd || isSelectAll) {
+      /** @type {Array<string | number>} */
+      const nodeIds = [];
+
+      if (isHomeOrEnd) {
+        if (
+          multiselect &&
+          e.shiftKey &&
+          e.ctrlKey &&
+          treeItem instanceof HTMLElement
+        ) {
+          const hid = treeItem.id;
+          if (hid) nodeIds.push(hid);
+        }
+        while (
+          e.key === "Home" ? treeWalker.previousNode() : treeWalker.nextNode()
+        ) {
+          nextFocusNode = treeWalker.currentNode;
+          if (
+            multiselect &&
+            e.shiftKey &&
+            e.ctrlKey &&
+            nextFocusNode instanceof Element
+          ) {
+            const nid = nextFocusNode.id;
+            if (nid) nodeIds.push(nid);
+          }
+        }
+      }
+
+      if (isSelectAll) {
+        e.preventDefault();
+        for (const n of flattenedNodes) {
+          if (n.disabled) continue;
+          const el = ref?.querySelector(`[id="${CSS.escape(String(n.id))}"]`);
+          if (!el) continue;
+          if (
+            el.classList.contains("bx--tree-node--hidden") ||
+            isUnderCollapsedSubtree(el)
+          ) {
+            continue;
+          }
+          nodeIds.push(n.id);
+        }
+      }
+
+      selectedIds = selectedIds.concat(nodeIds);
+    }
+
+    if (nextFocusNode && nextFocusNode !== treeItem) {
+      resetNodeTabIndices(ref);
+      if (nextFocusNode instanceof HTMLElement) {
+        nextFocusNode.tabIndex = 0;
+        nextFocusNode.focus();
+      }
+    }
+  }
+
+  /** @type {ReadonlyArray<Node> | null} */
+  let prevNodesForFirstTab = null;
+
+  afterUpdate(() => {
+    if (!ref) return;
+    if (nodes === prevNodesForFirstTab) return;
+    prevNodesForFirstTab = nodes;
+
+    const firstFocusableNode = ref.querySelector(
+      ".bx--tree-node:not(.bx--tree-node--disabled):not(.bx--tree-node--hidden)",
+    );
+
+    if (firstFocusableNode instanceof HTMLElement) {
+      firstFocusableNode.tabIndex = 0;
+    }
+  });
+
+  onMount(() => {
     if (ref && !treeWalker) {
       treeWalker = createTreeWalkerInstance(ref);
     }
