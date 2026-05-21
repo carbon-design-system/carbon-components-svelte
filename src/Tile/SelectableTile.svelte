@@ -101,6 +101,7 @@
 <label
   for={id}
   tabindex={disabled ? undefined : tabindex}
+  aria-disabled={disabled || undefined}
   class:bx--tile={true}
   class:bx--tile--selectable={true}
   class:bx--tile--is-selected={selected}
