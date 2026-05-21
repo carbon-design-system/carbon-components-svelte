@@ -110,9 +110,13 @@
   }
 
   function stopHolding() {
+    const wasHolding = holding;
     holding = false;
     dragging = false;
     currentEvent = null;
+    if (wasHolding && !disabled && !readonly) {
+      dispatch("change", value);
+    }
   }
 
   function move(e) {
@@ -157,10 +161,6 @@
     if (dragging && currentEvent) {
       calcValue(currentEvent);
       dragging = false;
-    }
-
-    if (!holding && !disabled && !readonly) {
-      dispatch("change", value);
     }
   }
 </script>
@@ -219,8 +219,12 @@
         if (keys[key]) {
           const delta =
             step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
-          value = Math.round((value + delta) / step) * step;
+          let next = Math.round((value + delta) / step) * step;
+          if (next < min) next = min;
+          else if (next > max) next = max;
+          value = next;
           dispatch("input", value);
+          dispatch("change", value);
         }
       }}
     >
@@ -276,7 +280,11 @@
         {step}
         on:change={({ target }) => {
           if (!readonly) {
-            value = Number(target.value);
+            let next = Number(target.value);
+            if (next < min) next = min;
+            else if (next > max) next = max;
+            value = next;
+            dispatch("change", value);
           }
         }}
         data-invalid={invalid || null}
