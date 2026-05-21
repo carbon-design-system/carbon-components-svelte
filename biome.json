@@ -98,7 +98,6 @@
       },
       "nursery": {
         "useFind": "error",
-        "useIframeSandbox": "error",
         "noForIn": "error",
         "noFloatingPromises": "error"
       }
