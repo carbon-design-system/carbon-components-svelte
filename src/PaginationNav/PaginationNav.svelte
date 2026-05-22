@@ -188,6 +188,6 @@
     aria-atomic="true"
     class:bx--pagination-nav__accessibility-label={true}
   >
-    Page {page + 1}{" of "}{total}
+    Page {page}{" of "}{total}
   </div>
 </nav>
