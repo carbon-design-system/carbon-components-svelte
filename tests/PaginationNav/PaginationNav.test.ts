@@ -138,6 +138,19 @@ describe("PaginationNav", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
   });
 
+  it("should announce current 1-based page in the live region", async () => {
+    render(PaginationNav, { props: { page: 1, total: 10 } });
+    expect(screen.getByText("Page 1 of 10")).toBeInTheDocument();
+
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+    await user.click(nextButton);
+    expect(screen.getByText("Page 2 of 10")).toBeInTheDocument();
+
+    const prevButton = screen.getByRole("button", { name: "Previous page" });
+    await user.click(prevButton);
+    expect(screen.getByText("Page 1 of 10")).toBeInTheDocument();
+  });
+
   it("should handle overflow selection", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(PaginationNav, {
