@@ -136,7 +136,7 @@
           dispatch("change", { page });
         }}
       >
-        {page === item ? "Active, Page" : "Page"}
+        {page === item + 1 ? "Active, Page" : "Page"}
       </PaginationItem>
     {/each}
     <PaginationOverflow
