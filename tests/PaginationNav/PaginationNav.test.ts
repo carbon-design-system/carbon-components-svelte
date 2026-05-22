@@ -151,6 +151,16 @@ describe("PaginationNav", () => {
     expect(screen.getByText("Page 1 of 10")).toBeInTheDocument();
   });
 
+  it("should announce active middle page with 'Active, Page' label", () => {
+    render(PaginationNav, {
+      props: { page: 3, total: 5 },
+    });
+
+    const activeButton = screen.getByRole("button", { current: "page" });
+    expect(activeButton).toHaveAttribute("data-page", "3");
+    expect(within(activeButton).getByText("Active, Page")).toBeInTheDocument();
+  });
+
   it("should handle overflow selection", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(PaginationNav, {
