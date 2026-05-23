@@ -11,13 +11,13 @@ describe("SelectableTileGroup", () => {
   });
 
   it("should render with default props", () => {
-    render(SelectableTileGroup);
+    const { container } = render(SelectableTileGroup);
 
     const fieldset = screen.getByRole("group");
     expect(fieldset).toHaveClass("bx--tile-group");
     expect(fieldset).not.toBeDisabled();
 
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     expect(checkboxes).toHaveLength(3);
   });
 
@@ -38,32 +38,36 @@ describe("SelectableTileGroup", () => {
   });
 
   it("should handle disabled state", () => {
-    render(SelectableTileGroup, { props: { disabled: true } });
+    const { container } = render(SelectableTileGroup, {
+      props: { disabled: true },
+    });
 
     const fieldset = screen.getByRole("group");
     expect(fieldset).toBeDisabled();
 
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     for (const checkbox of checkboxes) {
       expect(checkbox).toBeDisabled();
     }
   });
 
   it("should handle custom name", () => {
-    render(SelectableTileGroup, { props: { name: "custom-group" } });
+    const { container } = render(SelectableTileGroup, {
+      props: { name: "custom-group" },
+    });
 
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     for (const checkbox of checkboxes) {
       expect(checkbox).toHaveAttribute("name", "custom-group");
     }
   });
 
   it("should handle initial selected values", () => {
-    render(SelectableTileGroup, {
+    const { container } = render(SelectableTileGroup, {
       props: { selected: ["option1", "option3"] },
     });
 
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     expect(checkboxes[0]).toBeChecked();
     expect(checkboxes[1]).not.toBeChecked();
     expect(checkboxes[2]).toBeChecked();
@@ -131,12 +135,12 @@ describe("SelectableTileGroup", () => {
   });
 
   it("should handle programmatic selected value changes", async () => {
-    const { component } = render(SelectableTileGroup);
+    const { component, container } = render(SelectableTileGroup);
 
     component.selected = ["option2"];
     await new Promise((resolve) => setTimeout(resolve, 0));
 
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     expect(checkboxes[0]).not.toBeChecked();
     expect(checkboxes[1]).toBeChecked();
     expect(checkboxes[2]).not.toBeChecked();
@@ -182,9 +186,11 @@ describe("SelectableTileGroup", () => {
   });
 
   it("should handle empty selected array", () => {
-    render(SelectableTileGroup, { props: { selected: [] } });
+    const { container } = render(SelectableTileGroup, {
+      props: { selected: [] },
+    });
 
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     for (const checkbox of checkboxes) {
       expect(checkbox).not.toBeChecked();
     }
