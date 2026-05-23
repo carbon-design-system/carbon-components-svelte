@@ -59,6 +59,7 @@
   let prevKey = key;
   let mounted = false;
 
+  /** @type {() => void} */
   function setItem() {
     if (typeof value === "object") {
       localStorage.setItem(key, JSON.stringify(value));
@@ -71,7 +72,7 @@
     const item = localStorage.getItem(key);
 
     if (item == null) {
-      setItem(value);
+      setItem();
       dispatch("save");
     } else {
       try {
@@ -106,7 +107,7 @@
     const item = localStorage.getItem(key);
 
     if (item == null) {
-      setItem(value);
+      setItem();
     } else {
       try {
         value = JSON.parse(item);
@@ -120,7 +121,7 @@
 
   afterUpdate(() => {
     if (prevValue !== value) {
-      setItem(value);
+      setItem();
       dispatch("update", { prevValue, value });
     }
 
