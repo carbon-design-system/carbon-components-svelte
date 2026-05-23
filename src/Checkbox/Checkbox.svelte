@@ -146,7 +146,7 @@
       }}
       on:change={(event) => {
         if (readonly) {
-          event.preventDefault();
+          event.stopImmediatePropagation();
           return;
         }
         if (ctxUpdate) {
