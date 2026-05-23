@@ -31,6 +31,12 @@
       complete={step.complete}
       invalid={step.invalid}
       disabled={step.disabled}
+      on:focus={() => {
+        console.log("focus", step.label);
+      }}
+      on:blur={() => {
+        console.log("blur", step.label);
+      }}
     />
   {/each}
 </ProgressIndicator>
