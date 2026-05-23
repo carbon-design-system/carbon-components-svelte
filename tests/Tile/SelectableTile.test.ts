@@ -1,8 +1,13 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import SelectableTileTest from "./SelectableTile.test.svelte";
+import SelectableTileStandalone from "./SelectableTileStandalone.test.svelte";
 
 describe("SelectableTile", () => {
+  it("does not throw when rendered outside a SelectableTileGroup", () => {
+    expect(() => render(SelectableTileStandalone)).not.toThrow();
+  });
+
   it("renders with default props", () => {
     render(SelectableTileTest);
     const tile = screen.getByTestId("selectable-tile");

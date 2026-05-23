@@ -54,13 +54,11 @@
 
   const ctx = getContext("carbon:SelectableTileGroup");
   const hasGroup = ctx !== undefined;
-  const {
-    add = () => {},
-    remove = () => {},
-    update = () => {},
-    selectedValues = readable([]),
-    groupName = readable(undefined),
-  } = ctx ?? {};
+  const add = ctx?.add ?? (() => {});
+  const remove = ctx?.remove ?? (() => {});
+  const update = ctx?.update ?? (() => {});
+  const selectedValues = ctx?.selectedValues ?? readable([]);
+  const groupName = ctx?.groupName ?? readable(undefined);
 
   add({ value, selected });
 
