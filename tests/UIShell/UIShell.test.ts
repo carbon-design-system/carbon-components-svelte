@@ -277,6 +277,20 @@ describe("UIShell", () => {
       const nav = screen.getByRole("navigation");
       expect(nav).toHaveClass("custom-nav");
     });
+
+    // Regression: aria-label belongs on the <nav> landmark only, not on the
+    // inner <ul role="menubar"> (avoids screen readers announcing the label
+    // twice).
+    it("should not duplicate aria-label onto the menubar", () => {
+      render(UiShell);
+
+      const nav = screen.getByRole("navigation", { name: "Navigation" });
+      expect(nav).toHaveAttribute("aria-label", "Navigation");
+
+      const menubar = screen.getByRole("menubar");
+      expect(menubar).not.toHaveAttribute("aria-label");
+      expect(menubar).not.toHaveAttribute("aria-labelledby");
+    });
   });
 
   describe("SideNav", () => {
