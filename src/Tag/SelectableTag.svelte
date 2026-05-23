@@ -46,8 +46,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   type="button"
-  role="checkbox"
-  aria-checked={selected}
+  aria-pressed={selected}
   {id}
   {disabled}
   aria-disabled={disabled}
