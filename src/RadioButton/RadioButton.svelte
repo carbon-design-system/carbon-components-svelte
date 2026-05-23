@@ -162,13 +162,12 @@
     class:bx--radio-button={true}
     on:focus
     on:blur
-    on:change
     on:click={(e) => {
       if (readonly) e.preventDefault();
     }}
     on:change={(e) => {
       if (readonly) {
-        e.preventDefault();
+        e.stopImmediatePropagation();
         return;
       }
       if (update) {
@@ -183,6 +182,7 @@
         checked = e.currentTarget.checked;
       }
     }}
+    on:change
   >
   <label class:bx--radio-button__label={true} for={id}>
     <span class:bx--radio-button__appearance={true}></span>
