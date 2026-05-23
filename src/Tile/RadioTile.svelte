@@ -56,14 +56,13 @@
     ),
   );
 
-  const { add, update, selectedValue, groupName, groupRequired } = getContext(
-    "carbon:TileGroup",
-  ) ?? {
-    add: () => {},
-    groupName: readable(undefined),
-    groupRequired: readable(undefined),
-    selectedValue: readable(checked ? value : undefined),
-  };
+  const ctx = getContext("carbon:TileGroup");
+  const add = ctx?.add ?? (() => {});
+  const update = ctx?.update ?? (() => {});
+  const selectedValue =
+    ctx?.selectedValue ?? readable(checked ? value : undefined);
+  const groupName = ctx?.groupName ?? readable(undefined);
+  const groupRequired = ctx?.groupRequired ?? readable(undefined);
 
   add({ value, checked });
 
