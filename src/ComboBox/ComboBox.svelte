@@ -371,7 +371,9 @@
     // Set highlighted index to selected item when menu opens
     if (wasJustOpened) {
       if (selectedId !== undefined && selectedItem) {
-        const selectedIndex = filteredItemIndexById.get(selectedId) ?? -1;
+        const selectedIndex = filteredItems.findIndex(
+          (item) => item.id === selectedId,
+        );
         if (selectedIndex >= 0) {
           // Set highlighted index to selected item so keyboard nav starts there
           highlightedIndex = selectedIndex;
@@ -479,9 +481,6 @@
   $: warnId = `warn-${id}`;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
   $: highlightedId = filteredItems[highlightedIndex]?.id;
-  $: filteredItemIndexById = new Map(
-    filteredItems.map((item, i) => [item.id, i]),
-  );
 
   $: shouldVirtualize =
     virtualize === false
