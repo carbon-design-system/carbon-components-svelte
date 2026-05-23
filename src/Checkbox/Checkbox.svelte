@@ -105,7 +105,7 @@
   let refLabel = null;
 
   $: isTruncated = refLabel?.offsetWidth < refLabel?.scrollWidth;
-  $: title = !title && isTruncated ? refLabel?.innerText : title;
+  $: computedTitle = title ?? (isTruncated ? refLabel?.innerText : undefined);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -169,7 +169,7 @@
       on:focus
       on:blur
     >
-    <label for={id} {title} class:bx--checkbox-label={true}>
+    <label for={id} title={computedTitle} class:bx--checkbox-label={true}>
       <span
         bind:this={refLabel}
         class:bx--checkbox-label-text={true}

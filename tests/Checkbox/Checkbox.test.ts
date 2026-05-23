@@ -11,6 +11,7 @@ import Checkbox from "./Checkbox.test.svelte";
 import CheckboxGroupEvents from "./CheckboxGroupEvents.test.svelte";
 import CheckboxGroupReactive from "./CheckboxGroupReactive.test.svelte";
 import CheckboxReactiveBind from "./CheckboxReactiveBind.test.svelte";
+import CheckboxTitleTruncation from "./CheckboxTitleTruncation.test.svelte";
 import MultipleCheckboxes from "./MultipleCheckboxes.test.svelte";
 import MultipleCheckboxesObject from "./MultipleCheckboxesObject.test.svelte";
 
@@ -504,6 +505,35 @@ describe("Checkbox", () => {
     render(Checkbox);
     const helperElement = screen.queryByText("Helper text message");
     expect(helperElement).not.toBeInTheDocument();
+  });
+
+  it("does not overwrite an explicitly-empty title when label is truncated", async () => {
+    const offsetWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+      .mockReturnValue(10);
+    const scrollWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+      .mockReturnValue(100);
+
+    try {
+      render(CheckboxTitleTruncation, {
+        title: "",
+        labelText: "A very long label that should be truncated",
+      });
+      await tick();
+
+      const label = document
+        .querySelector('[data-testid="checkbox-title"]')
+        ?.querySelector("label.bx--checkbox-label");
+      assert(label);
+
+      // The consumer passed title="" deliberately — the component must not
+      // replace it with refLabel.innerText just because truncation triggered.
+      expect(label.getAttribute("title")).toBe("");
+    } finally {
+      offsetWidthSpy.mockRestore();
+      scrollWidthSpy.mockRestore();
+    }
   });
 
   describe("Generics", () => {
