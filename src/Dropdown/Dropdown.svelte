@@ -187,7 +187,6 @@
   let listScrollTop = 0;
   let prevOpen = false;
   let itemsById = new Map();
-  let itemIndexById = new Map();
 
   const TYPEAHEAD_DELAY = 500;
 
@@ -202,10 +201,8 @@
   $: inline = type === "inline";
   $: {
     itemsById = new Map();
-    itemIndexById = new Map();
     for (let i = 0; i < items.length; i++) {
       itemsById.set(items[i].id, items[i]);
-      itemIndexById.set(items[i].id, i);
     }
   }
   $: menuId = `menu-${id}`;
@@ -312,14 +309,15 @@
 
     // Set highlighted index to selected item when menu opens
     const wasJustOpened = open && !prevOpen;
+    const selectedIndex =
+      wasJustOpened && selectedId !== undefined && selectedItem
+        ? items.findIndex((item) => item.id === selectedId)
+        : -1;
     if (wasJustOpened) {
-      if (selectedId !== undefined && selectedItem) {
-        const selectedIndex = itemIndexById.get(selectedId) ?? -1;
-        if (selectedIndex >= 0) {
-          // Set highlighted index to selected item so keyboard nav starts there
-          highlightedIndex = selectedIndex;
-          prevHighlightedIndex = selectedIndex;
-        }
+      if (selectedIndex >= 0) {
+        // Set highlighted index to selected item so keyboard nav starts there
+        highlightedIndex = selectedIndex;
+        prevHighlightedIndex = selectedIndex;
       }
     }
 
@@ -348,29 +346,23 @@
     if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
         if (listRef && virtualConfig) {
-          if (selectedId !== undefined && selectedItem) {
-            const selectedIndex = itemIndexById.get(selectedId) ?? -1;
-            if (selectedIndex >= 0) {
-              // Calculate scroll position to show selected item at the top of viewport
-              const itemHeight = virtualConfig.itemHeight;
-              const containerHeight = virtualConfig.containerHeight;
-              const scrollPosition = selectedIndex * itemHeight;
-              // Ensure scroll position is within bounds
-              const maxScroll = Math.max(
-                0,
-                items.length * itemHeight - containerHeight,
-              );
-              const finalScrollPosition = Math.max(
-                0,
-                Math.min(scrollPosition, maxScroll),
-              );
+          if (selectedIndex >= 0) {
+            // Calculate scroll position to show selected item at the top of viewport
+            const itemHeight = virtualConfig.itemHeight;
+            const containerHeight = virtualConfig.containerHeight;
+            const scrollPosition = selectedIndex * itemHeight;
+            // Ensure scroll position is within bounds
+            const maxScroll = Math.max(
+              0,
+              items.length * itemHeight - containerHeight,
+            );
+            const finalScrollPosition = Math.max(
+              0,
+              Math.min(scrollPosition, maxScroll),
+            );
 
-              listScrollTop = finalScrollPosition;
-              listRef.scrollTop = finalScrollPosition;
-            } else {
-              listRef.scrollTop = 0;
-              listScrollTop = 0;
-            }
+            listScrollTop = finalScrollPosition;
+            listRef.scrollTop = finalScrollPosition;
           } else {
             listRef.scrollTop = 0;
             listScrollTop = 0;
