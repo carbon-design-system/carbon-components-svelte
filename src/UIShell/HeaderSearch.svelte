@@ -5,6 +5,7 @@
 
   /**
    * @typedef {object} HeaderSearchResult
+   * @property {string | number} [id] - Unique result identifier; used as the each-block key when provided
    * @property {string} href
    * @property {string} text
    * @property {string} [description]
@@ -86,7 +87,7 @@
   }
   $: selectedResult = results[selectedResultIndex];
   $: selectedId = selectedResult
-    ? `${id}-menuitem-${selectedResultIndex}`
+    ? `${id}-menuitem-${selectedResult.id ?? selectedResultIndex}`
     : undefined;
 </script>
 
@@ -204,16 +205,16 @@
       id={menuId}
       class:bx--header-search-menu={true}
     >
-      {#each results as result, i}
+      {#each results as result, i (result.id ?? i)}
         <li role="none">
           <a
             tabindex="-1"
-            id="{id}-menuitem-{i}"
+            id="{id}-menuitem-{result.id ?? i}"
             role="menuitem"
             href={result.href}
             class:bx--header-search-menu-item={true}
             class:bx--header-search-menu-item--selected={selectedId ===
-              `${id}-menuitem-${i}`}
+              `${id}-menuitem-${result.id ?? i}`}
             on:click|preventDefault={async () => {
               selectedResultIndex = i;
               await tick();
