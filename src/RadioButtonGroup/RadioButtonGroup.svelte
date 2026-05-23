@@ -85,6 +85,9 @@
   const groupName = writable(name);
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
+  const fallbackHelperId = `ccs-${Math.random().toString(36)}`;
+  /** @type {import("svelte/store").Writable<string | undefined>} */
+  const helperId = writable(undefined);
   let isInitialRender = true;
 
   /**
@@ -109,6 +112,7 @@
     groupName: readOnly(groupName),
     groupRequired: readOnly(groupRequired),
     readonly: readOnly(groupReadonly),
+    helperId: readOnly(helperId),
     add,
     update,
   });
@@ -138,6 +142,11 @@
   $: $groupName = name;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
+  $: $helperId = helperText
+    ? id
+      ? `helper-${id}`
+      : fallbackHelperId
+    : undefined;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -168,6 +177,7 @@
   </fieldset>
   {#if helperText}
     <div
+      id={$helperId}
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
     >

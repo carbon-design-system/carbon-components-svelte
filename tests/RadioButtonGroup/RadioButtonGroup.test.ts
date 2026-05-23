@@ -170,6 +170,31 @@ describe("RadioButtonGroup", () => {
     expect(helperElement).not.toBeInTheDocument();
   });
 
+  it("should associate helper text with each radio via aria-describedby", () => {
+    render(RadioButtonGroup, {
+      props: { id: "group-1", helperText: "Helper text message" },
+    });
+
+    const helperElement = screen.getByText("Helper text message");
+    const helperId = helperElement.getAttribute("id");
+    expect(helperId).toBe("helper-group-1");
+
+    const radios = screen.getAllByRole("radio");
+    expect(radios.length).toBeGreaterThan(0);
+    for (const radio of radios) {
+      expect(radio).toHaveAttribute("aria-describedby", helperId);
+    }
+  });
+
+  it("should not set aria-describedby on radios when no helper text", () => {
+    render(RadioButtonGroup);
+
+    const radios = screen.getAllByRole("radio");
+    for (const radio of radios) {
+      expect(radio).not.toHaveAttribute("aria-describedby");
+    }
+  });
+
   describe("Generics", () => {
     it("should support custom string literal types with generics", () => {
       type CustomValue = "option1" | "option2" | "option3";
