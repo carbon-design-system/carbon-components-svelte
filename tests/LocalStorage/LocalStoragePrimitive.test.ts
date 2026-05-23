@@ -1,4 +1,5 @@
 import { render } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { setupLocalStorageMock } from "../utils/storage-mocks";
 import LocalStoragePrimitive from "./LocalStoragePrimitive.test.svelte";
 
@@ -32,5 +33,17 @@ describe("LocalStorage - Primitive Values", () => {
 
     render(LocalStoragePrimitive);
     expect(localStorage.getItem).toHaveBeenCalledWith("test-key");
+  });
+
+  it("does not dispatch a spurious update event when hydrating from storage on mount", async () => {
+    setMockItem("test-key", "existing-value");
+
+    render(LocalStoragePrimitive);
+    await tick();
+
+    expect(consoleLog).not.toHaveBeenCalledWith(
+      "update event",
+      expect.anything(),
+    );
   });
 });
