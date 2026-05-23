@@ -84,6 +84,18 @@ describe("ProgressBar", () => {
     expect(underZero).toHaveAttribute("aria-valuenow", "0");
   });
 
+  it("associates the label with the progressbar via aria-labelledby", () => {
+    render(ProgressBar);
+
+    const progressBar = within(screen.getByTestId("progress-40%")).getByRole(
+      "progressbar",
+    );
+    const label = screen.getByText("Progress 40%");
+    expect(progressBar).toHaveAttribute("aria-labelledby", label.id);
+    expect(label).toHaveClass("bx--progress-bar__label");
+    expect(progressBar).not.toHaveAttribute("for");
+  });
+
   it("supports custom label slot", () => {
     render(ProgressBarSlot);
 

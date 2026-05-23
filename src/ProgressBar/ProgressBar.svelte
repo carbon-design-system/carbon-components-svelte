@@ -72,8 +72,8 @@
   class:bx--progress-bar--finished={status === "finished"}
   {...$$restProps}
 >
-  <label
-    for={id}
+  <div
+    id="{id}-label"
     class:bx--progress-bar__label={true}
     class:bx--visually-hidden={hideLabel}
   >
@@ -84,12 +84,13 @@
         class="bx--progress-bar__status-icon"
       />
     {/if}
-  </label>
+  </div>
   <div
     role="progressbar"
     {id}
     class:bx--progress-bar__track={true}
     aria-busy={status === "active"}
+    aria-labelledby="{id}-label"
     aria-valuemin={indeterminate ? undefined : 0}
     aria-valuemax={indeterminate ? undefined : max}
     aria-valuenow={indeterminate ? undefined : capped}
