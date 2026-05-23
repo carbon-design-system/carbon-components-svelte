@@ -247,6 +247,28 @@ describe("ProgressIndicator", () => {
       await user.keyboard(" ");
       expect(consoleLog).toHaveBeenCalledWith("change", 0);
     });
+
+    it("should dispatch change exactly once per keypress on a complete step", async () => {
+      const changeHandler = vi.fn();
+      render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: [
+          { label: "Step 1", description: "First step", complete: true },
+          { label: "Step 2", description: "Second step", complete: false },
+        ],
+        onchange: changeHandler,
+      });
+
+      const completeStepButton = screen.getAllByRole("button")[0];
+      await user.tab();
+      expect(completeStepButton).toHaveFocus();
+
+      await user.keyboard("{Enter}");
+      expect(changeHandler).toHaveBeenCalledTimes(1);
+
+      await user.keyboard(" ");
+      expect(changeHandler).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe("Conditional step rendering", () => {
