@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import type SelectableTileGroupComponent from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
-import type { ComponentEvents, ComponentProps } from "svelte";
+import { type ComponentEvents, type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
+import SelectableTileGroupReactive from "./SelectableTileGroupReactive.test.svelte";
 
 describe("SelectableTileGroup", () => {
   beforeEach(() => {
@@ -201,6 +202,20 @@ describe("SelectableTileGroup", () => {
     await user.click(tiles[2]);
 
     expect(component.selected).toHaveLength(0);
+  });
+
+  it("should re-register with group when tile value changes after mount", async () => {
+    const { component } = render(SelectableTileGroupReactive, {
+      props: { tileValue: "a", tileSelected: true },
+    });
+
+    await tick();
+    expect(component.groupSelected).toEqual(["a"]);
+
+    component.tileValue = "b";
+    await tick();
+
+    expect(component.groupSelected).toEqual(["b"]);
   });
 
   describe("Generics", () => {

@@ -56,6 +56,7 @@
   const hasGroup = ctx !== undefined;
   const {
     add = () => {},
+    remove = () => {},
     update = () => {},
     selectedValues = readable([]),
     groupName = readable(undefined),
@@ -63,7 +64,14 @@
 
   add({ value, selected });
 
+  let prevValue = value;
+
   $: if (hasGroup) {
+    if (value !== prevValue) {
+      remove(prevValue);
+      add({ value, selected });
+      prevValue = value;
+    }
     selected = $selectedValues.includes(value);
   }
 </script>
