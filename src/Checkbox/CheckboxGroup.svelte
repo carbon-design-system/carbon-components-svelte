@@ -101,6 +101,9 @@
 
   $: $groupName = name;
   $: $groupRequired = required;
+
+  const fallbackHelperId = `ccs-${Math.random().toString(36)}`;
+  $: helperId = id ? `helper-${id}` : fallbackHelperId;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -114,7 +117,11 @@
   on:mouseenter
   on:mouseleave
 >
-  <fieldset class:bx--checkbox-group={true} {disabled}>
+  <fieldset
+    class:bx--checkbox-group={true}
+    {disabled}
+    aria-describedby={helperText ? helperId : undefined}
+  >
     {#if legendText || $$slots.legendChildren}
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>
         <slot name="legendChildren">{legendText}</slot>
@@ -124,6 +131,7 @@
   </fieldset>
   {#if helperText}
     <div
+      id={helperId}
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
     >

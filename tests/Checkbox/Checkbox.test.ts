@@ -506,6 +506,24 @@ describe("Checkbox", () => {
     expect(helperElement).not.toBeInTheDocument();
   });
 
+  it("associates helper text with the input via aria-describedby", () => {
+    render(Checkbox, { helperText: "Helper text message" });
+
+    const input = screen.getByRole("checkbox");
+    const helperId = input.getAttribute("aria-describedby");
+    assert(helperId);
+
+    const helper = document.getElementById(helperId);
+    expect(helper).toHaveTextContent("Helper text message");
+  });
+
+  it("does not set aria-describedby when helper text is absent", () => {
+    render(Checkbox);
+
+    const input = screen.getByRole("checkbox");
+    expect(input).not.toHaveAttribute("aria-describedby");
+  });
+
   describe("Generics", () => {
     it("should support custom types with generics", () => {
       type CustomValue = "option1" | "option2" | "option3";

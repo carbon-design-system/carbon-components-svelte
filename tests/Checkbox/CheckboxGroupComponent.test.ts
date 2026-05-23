@@ -207,6 +207,26 @@ describe("CheckboxGroup", () => {
     expect(helperElement).not.toBeInTheDocument();
   });
 
+  it("associates helper text with the fieldset via aria-describedby", () => {
+    render(CheckboxGroupComponent, {
+      props: { helperText: "Helper text message" },
+    });
+
+    const fieldset = screen.getByRole("group");
+    const helperId = fieldset.getAttribute("aria-describedby");
+    assert(helperId);
+
+    const helper = document.getElementById(helperId);
+    expect(helper).toHaveTextContent("Helper text message");
+  });
+
+  it("does not set aria-describedby on the fieldset when helper text is absent", () => {
+    render(CheckboxGroupComponent);
+
+    const fieldset = screen.getByRole("group");
+    expect(fieldset).not.toHaveAttribute("aria-describedby");
+  });
+
   it("should support multiple selections", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(CheckboxGroupComponent);
