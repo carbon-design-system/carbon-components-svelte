@@ -1,7 +1,12 @@
 import { render, screen } from "@testing-library/svelte";
 import RadioTileTest from "./RadioTile.test.svelte";
+import RadioTileStandalone from "./RadioTileStandalone.test.svelte";
 
 describe("RadioTile", () => {
+  it("does not throw when rendered outside a TileGroup", () => {
+    expect(() => render(RadioTileStandalone)).not.toThrow();
+  });
+
   describe("aria attributes", () => {
     it("should apply aria-describedby to the input element, not the label", () => {
       render(RadioTileTest, { ariaDescribedBy: "description-id" });
