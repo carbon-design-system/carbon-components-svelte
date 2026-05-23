@@ -520,7 +520,6 @@
     internalSelectedIdsRef = selectedIds;
     sortedItems = sort();
   }
-  $: sortedItemsById = new Map(sortedItems.map((item) => [item.id, item]));
   $: hasSelectAll = items.some((item) => item.isSelectAll);
   $: checked = sortedItems.filter(({ checked }) => checked);
   $: unchecked = sortedItems.filter(({ checked }) => !checked);
@@ -695,7 +694,9 @@
             if (readonly) return;
             if (key === "Enter") {
               if (highlightedId) {
-                const highlightedItem = sortedItemsById.get(highlightedId);
+                const highlightedItem = sortedItems.find(
+                  (item) => item.id === highlightedId,
+                );
                 if (highlightedItem) selectItem(highlightedItem);
               }
             } else if (key === "Tab") {
