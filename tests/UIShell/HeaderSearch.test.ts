@@ -112,6 +112,27 @@ describe("HeaderSearch", () => {
       );
     });
 
+    it("should use result id for selected menu item id when provided", () => {
+      const results = [
+        { id: "result-a", href: "/1", text: "Result 1" },
+        { id: 2, href: "/2", text: "Result 2" },
+      ];
+      render(HeaderSearchTest, {
+        props: { active: true, results, selectedResultIndex: 1 },
+      });
+
+      const searchInput = screen.getByRole("textbox");
+      expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
+        /^ccs-[a-z0-9.]+-menuitem-2$/,
+      );
+      expect(
+        screen.getByRole("menuitem", { name: "Result 2" }),
+      ).toHaveAttribute(
+        "id",
+        searchInput.getAttribute("aria-activedescendant"),
+      );
+    });
+
     it("should render results when active and results exist", () => {
       const results = [
         { href: "/1", text: "Result 1", description: "Description 1" },
@@ -601,6 +622,24 @@ describe("HeaderSearch Generics", () => {
     expectTypeOf<ResultsPropType>().toEqualTypeOf<
       ReadonlyArray<MinimalResult> | undefined
     >();
+  });
+
+  it("should accept an optional id field on HeaderSearchResult", () => {
+    const withStringId: HeaderSearchResult = {
+      id: "result-a",
+      href: "/1",
+      text: "Result",
+    };
+    const withNumberId: HeaderSearchResult = {
+      id: 1,
+      href: "/1",
+      text: "Result",
+    };
+    const withoutId: HeaderSearchResult = { href: "/1", text: "Result" };
+
+    expectTypeOf(withStringId.id).toEqualTypeOf<string | number | undefined>();
+    expectTypeOf(withNumberId.id).toEqualTypeOf<string | number | undefined>();
+    expectTypeOf(withoutId.id).toEqualTypeOf<string | number | undefined>();
   });
 
   it("should provide type-safe access in slot props", () => {
