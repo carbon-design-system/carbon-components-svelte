@@ -80,14 +80,12 @@
   const selectedValues = ctx?.selectedValues ?? readable([]);
   const groupName = ctx?.groupName ?? readable(undefined);
   const groupRequired = ctx?.groupRequired ?? readable(undefined);
-  const groupDisabled = ctx?.groupDisabled ?? readable(false);
   const ctxUpdate = ctx?.update;
 
   $: useGroup = !ctx && Array.isArray(group);
   $: if (ctx) checked = $selectedValues.includes(value);
   $: if (useGroup) checked = group.includes(value);
 
-  $: effectiveDisabled = ctx ? $groupDisabled || disabled : disabled;
   $: effectiveName = ctx ? ($groupName ?? name) : name;
   $: effectiveRequired = ctx ? ($groupRequired ?? required) : required;
 
@@ -134,7 +132,7 @@
       type="checkbox"
       {value}
       {checked}
-      disabled={effectiveDisabled}
+      {disabled}
       {id}
       bind:indeterminate
       name={effectiveName}

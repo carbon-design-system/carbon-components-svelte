@@ -74,6 +74,13 @@ describe("CheckboxGroup", () => {
 
     const fieldset = screen.getByRole("group");
     expect(fieldset).toBeDisabled();
+
+    // Native `<fieldset disabled>` propagates to nested inputs; individual
+    // checkboxes should not carry their own `disabled` attribute.
+    for (const checkbox of screen.getAllByRole("checkbox")) {
+      expect(checkbox).toBeDisabled();
+      expect(checkbox).not.toHaveAttribute("disabled");
+    }
   });
 
   it("should handle required state", () => {

@@ -68,7 +68,6 @@
   const selectedValues = writable(selected);
   const groupName = writable(name);
   const groupRequired = writable(required);
-  const groupDisabled = writable(disabled);
   let isInitialRender = true;
   let isSyncingSelected = false;
 
@@ -94,7 +93,6 @@
     selectedValues,
     groupName: readonly(groupName),
     groupRequired: readonly(groupRequired),
-    groupDisabled: readonly(groupDisabled),
     update,
   });
 
@@ -118,7 +116,6 @@
 
   $: $groupName = name;
   $: $groupRequired = required;
-  $: $groupDisabled = disabled;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
