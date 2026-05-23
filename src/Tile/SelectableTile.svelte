@@ -101,6 +101,8 @@
 <label
   for={id}
   tabindex={disabled ? undefined : tabindex}
+  role="checkbox"
+  aria-checked={selected}
   aria-disabled={disabled || undefined}
   class:bx--tile={true}
   class:bx--tile--selectable={true}

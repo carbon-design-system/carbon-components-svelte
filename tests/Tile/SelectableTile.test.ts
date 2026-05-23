@@ -37,26 +37,41 @@ describe("SelectableTile", () => {
   });
 
   it("renders with custom title and value", () => {
-    render(SelectableTileTest, {
+    const { container } = render(SelectableTileTest, {
       title: "Custom Title",
       value: "custom-value",
     });
-    const input = screen.getByRole("checkbox");
+    const input = container.querySelector('input[type="checkbox"]');
     expect(input).toHaveAttribute("title", "Custom Title");
     expect(input).toHaveAttribute("value", "custom-value");
   });
 
   it("renders with custom name and icon description", () => {
-    render(SelectableTileTest, {
+    const { container } = render(SelectableTileTest, {
       name: "custom-name",
       iconDescription: "Custom checkmark",
     });
 
-    const input = screen.getByRole("checkbox");
+    const input = container.querySelector('input[type="checkbox"]');
     expect(input).toHaveAttribute("name", "custom-name");
 
     const icon = screen.getByTestId("selectable-tile").querySelector("svg");
     expect(icon).toHaveAttribute("aria-label", "Custom checkmark");
+  });
+
+  it("exposes checkbox semantics on the focusable label", () => {
+    render(SelectableTileTest);
+    const tile = screen.getByTestId("selectable-tile");
+    expect(tile).toHaveAttribute("role", "checkbox");
+    expect(tile).toHaveAttribute("aria-checked", "false");
+    expect(tile).not.toHaveAttribute("aria-disabled");
+  });
+
+  it("reflects selected and disabled state in ARIA attributes", () => {
+    render(SelectableTileTest, { selected: true, disabled: true });
+    const tile = screen.getByTestId("selectable-tile");
+    expect(tile).toHaveAttribute("aria-checked", "true");
+    expect(tile).toHaveAttribute("aria-disabled", "true");
   });
 
   describe("interaction", () => {
