@@ -72,6 +72,7 @@
     .slice(0, 10)
     .map(
       (r): ModuleSearchResult => ({
+        id: String(r.id),
         href: String(r.href),
         text: String(r.text),
         description: r.description == null ? undefined : String(r.description),
