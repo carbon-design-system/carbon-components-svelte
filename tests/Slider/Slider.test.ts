@@ -168,7 +168,8 @@ describe("Slider", () => {
     const slider = screen.getByRole("slider");
     const initialValue = slider.getAttribute("aria-valuenow");
 
-    const container = screen.getByRole("presentation");
+    const container = slider.parentElement;
+    assert(container);
     await user.click(container);
 
     // Value should not change
@@ -417,7 +418,8 @@ describe("Slider", () => {
   it("should handle mouse dragging without errors", async () => {
     render(Slider);
 
-    const container = screen.getByRole("presentation");
+    const container = screen.getByRole("slider").parentElement;
+    assert(container);
     const { left, width } = container.getBoundingClientRect();
 
     await user.pointer({ target: container, keys: "[MouseLeft]" });
@@ -439,7 +441,8 @@ describe("Slider", () => {
     });
 
     const slider = screen.getByRole("slider");
-    const container = screen.getByRole("presentation");
+    const container = slider.parentElement;
+    assert(container);
 
     await user.pointer({ target: slider, keys: "[MouseLeft]" });
 
@@ -617,6 +620,30 @@ describe("Slider", () => {
     });
     const input = screen.getByRole("spinbutton");
     expect(input).toHaveAttribute("aria-label", "");
+  });
+
+  // Regression: keyboard handling must live on the role="slider" thumb, not a
+  // role="presentation" parent (which strips ARIA semantics from the
+  // keyboard-handling element).
+  it("attaches keyboard handling to the thumb with role=slider", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Slider);
+
+    const slider = screen.getByRole("slider");
+    expect(slider).toHaveAttribute("role", "slider");
+
+    // No presentation-role wrapper should swallow the thumb's semantics.
+    expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
+
+    slider.focus();
+    expect(slider).toHaveFocus();
+
+    // Dispatch keydown directly on the thumb (not the parent track) and
+    // confirm the value changes — proves the handler is on the thumb.
+    slider.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }),
+    );
+    expect(consoleLog).toHaveBeenCalledWith("input", 1);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1219
