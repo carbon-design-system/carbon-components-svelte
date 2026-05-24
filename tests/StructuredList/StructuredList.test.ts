@@ -80,6 +80,34 @@ describe("StructuredList", () => {
     expect(screen.getByTestId("value").textContent).toBe("row-2-value");
   });
 
+  it("should activate selectable row via Space/Enter keys", async () => {
+    render(StructuredList, { props: { selection: true } });
+
+    const rows = screen.getAllByRole("radio");
+    rows[1].focus();
+    await user.keyboard(" ");
+    expect(screen.getByTestId("value").textContent).toBe("row-2-value");
+
+    rows[2].focus();
+    await user.keyboard("{Enter}");
+    expect(screen.getByTestId("value").textContent).toBe("row-3-value");
+  });
+
+  it("should expose selectable rows as radio with aria-checked", () => {
+    render(StructuredList, {
+      props: { selection: true, selected: "row-2-value" },
+    });
+
+    const rows = screen.getAllByRole("radio");
+    expect(rows).toHaveLength(3);
+    for (const row of rows) {
+      expect(row.tagName).toBe("LABEL");
+    }
+    expect(rows[0]).toHaveAttribute("aria-checked", "false");
+    expect(rows[1]).toHaveAttribute("aria-checked", "true");
+    expect(rows[2]).toHaveAttribute("aria-checked", "false");
+  });
+
   it("should handle custom content", () => {
     render(StructuredListCustom);
 
