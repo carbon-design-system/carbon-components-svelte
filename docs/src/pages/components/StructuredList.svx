@@ -16,26 +16,26 @@ Display a basic structured list with headers and rows by default.
 <StructuredList>
   <StructuredListHead>
     <StructuredListRow head>
-      <StructuredListCell head>Column A</StructuredListCell>
-      <StructuredListCell head>Column B</StructuredListCell>
-      <StructuredListCell head>Column C</StructuredListCell>
+      <StructuredListCell head>Name</StructuredListCell>
+      <StructuredListCell head>Type</StructuredListCell>
+      <StructuredListCell head>Latest version</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
     <StructuredListRow>
-      <StructuredListCell>Row 1</StructuredListCell>
-      <StructuredListCell>Row 1</StructuredListCell>
-      <StructuredListCell>Row 1</StructuredListCell>
+      <StructuredListCell>PostgreSQL</StructuredListCell>
+      <StructuredListCell>Relational</StructuredListCell>
+      <StructuredListCell>16.2</StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell>Row 2</StructuredListCell>
-      <StructuredListCell>Row 2</StructuredListCell>
-      <StructuredListCell>Row 2</StructuredListCell>
+      <StructuredListCell>MongoDB</StructuredListCell>
+      <StructuredListCell>Document</StructuredListCell>
+      <StructuredListCell>7.0</StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell>Row 3</StructuredListCell>
-      <StructuredListCell>Row 3</StructuredListCell>
-      <StructuredListCell>Row 3</StructuredListCell>
+      <StructuredListCell>Redis</StructuredListCell>
+      <StructuredListCell>Key-value</StructuredListCell>
+      <StructuredListCell>7.2</StructuredListCell>
     </StructuredListRow>
   </StructuredListBody>
 </StructuredList>
@@ -47,26 +47,26 @@ Use the condensed variant for more compact rows.
 <StructuredList condensed>
   <StructuredListHead>
     <StructuredListRow head>
-      <StructuredListCell head>Column A</StructuredListCell>
-      <StructuredListCell head>Column B</StructuredListCell>
-      <StructuredListCell head>Column C</StructuredListCell>
+      <StructuredListCell head>Name</StructuredListCell>
+      <StructuredListCell head>Type</StructuredListCell>
+      <StructuredListCell head>Latest version</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
     <StructuredListRow>
-      <StructuredListCell>Row 1</StructuredListCell>
-      <StructuredListCell>Row 1</StructuredListCell>
-      <StructuredListCell>Row 1</StructuredListCell>
+      <StructuredListCell>PostgreSQL</StructuredListCell>
+      <StructuredListCell>Relational</StructuredListCell>
+      <StructuredListCell>16.2</StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell>Row 2</StructuredListCell>
-      <StructuredListCell>Row 2</StructuredListCell>
-      <StructuredListCell>Row 2</StructuredListCell>
+      <StructuredListCell>MongoDB</StructuredListCell>
+      <StructuredListCell>Document</StructuredListCell>
+      <StructuredListCell>7.0</StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell>Row 3</StructuredListCell>
-      <StructuredListCell>Row 3</StructuredListCell>
-      <StructuredListCell>Row 3</StructuredListCell>
+      <StructuredListCell>Redis</StructuredListCell>
+      <StructuredListCell>Key-value</StructuredListCell>
+      <StructuredListCell>7.2</StructuredListCell>
     </StructuredListRow>
   </StructuredListBody>
 </StructuredList>
@@ -78,40 +78,34 @@ Use the flush variant to remove padding from the list.
 <StructuredList flush>
   <StructuredListHead>
     <StructuredListRow head>
-      <StructuredListCell head>Column A</StructuredListCell>
-      <StructuredListCell head>Column B</StructuredListCell>
-      <StructuredListCell head>Column C</StructuredListCell>
+      <StructuredListCell head>Name</StructuredListCell>
+      <StructuredListCell head>Type</StructuredListCell>
+      <StructuredListCell head>Description</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
     <StructuredListRow>
-      <StructuredListCell noWrap>Row 1</StructuredListCell>
-      <StructuredListCell>Row 1</StructuredListCell>
+      <StructuredListCell noWrap>PostgreSQL</StructuredListCell>
+      <StructuredListCell>Relational</StructuredListCell>
       <StructuredListCell>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        Open-source object-relational database known for reliability,
+        extensibility, and strong SQL standards compliance.
       </StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell noWrap>Row 2</StructuredListCell>
-      <StructuredListCell>Row 2</StructuredListCell>
+      <StructuredListCell noWrap>MongoDB</StructuredListCell>
+      <StructuredListCell>Document</StructuredListCell>
       <StructuredListCell>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        Document-oriented NoSQL database designed for flexible schemas and
+        horizontal scaling across distributed clusters.
       </StructuredListCell>
     </StructuredListRow>
     <StructuredListRow>
-      <StructuredListCell noWrap>Row 3</StructuredListCell>
-      <StructuredListCell>Row 3</StructuredListCell>
+      <StructuredListCell noWrap>Redis</StructuredListCell>
+      <StructuredListCell>Key-value</StructuredListCell>
       <StructuredListCell>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-        magna, finibus id tortor sed, aliquet bibendum augue. Aenean posuere
-        sem vel euismod dignissim. Nulla ut cursus dolor. Pellentesque
-        vulputate nisl a porttitor interdum.
+        In-memory key-value store used as a cache, message broker, and
+        real-time data platform with sub-millisecond latency.
       </StructuredListCell>
     </StructuredListRow>
   </StructuredListBody>
@@ -121,31 +115,30 @@ Use the flush variant to remove padding from the list.
 
 Enable row selection with the `selection` prop and structured list input components.
 
-<StructuredList selection selected="row-1-value">
+<StructuredList selection selected="postgresql-value">
   <StructuredListHead>
     <StructuredListRow head>
-      <StructuredListCell head>ColumnA</StructuredListCell>
-      <StructuredListCell head>ColumnB</StructuredListCell>
-      <StructuredListCell head>ColumnC</StructuredListCell>
+      <StructuredListCell head>Name</StructuredListCell>
+      <StructuredListCell head>Type</StructuredListCell>
+      <StructuredListCell head>Description</StructuredListCell>
       <StructuredListCell head>{''}</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
-    {#each [1, 2, 3] as item}
-      <StructuredListRow label for="row-{item}">
-        <StructuredListCell>Row {item}</StructuredListCell>
-        <StructuredListCell>Row {item}</StructuredListCell>
-        <StructuredListCell>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dui
-          magna, finibus id tortor sed, aliquet bibendum augue. Aenean
-          posuere sem vel euismod dignissim. Nulla ut cursus dolor.
-          Pellentesque vulputate nisl a porttitor interdum.
-        </StructuredListCell>
+    {#each [
+      { id: "postgresql", name: "PostgreSQL", type: "Relational", description: "Open-source object-relational database known for reliability, extensibility, and strong SQL standards compliance." },
+      { id: "mongodb", name: "MongoDB", type: "Document", description: "Document-oriented NoSQL database designed for flexible schemas and horizontal scaling across distributed clusters." },
+      { id: "redis", name: "Redis", type: "Key-value", description: "In-memory key-value store used as a cache, message broker, and real-time data platform with sub-millisecond latency." },
+    ] as db}
+      <StructuredListRow label for={db.id}>
+        <StructuredListCell>{db.name}</StructuredListCell>
+        <StructuredListCell>{db.type}</StructuredListCell>
+        <StructuredListCell>{db.description}</StructuredListCell>
         <StructuredListInput
-          id="row-{item}"
-          value="row-{item}-value"
-          title="row-{item}-title"
-          name="row-{item}-name"
+          id={db.id}
+          value="{db.id}-value"
+          title="{db.name} option"
+          name="database"
         />
         <StructuredListCell>
           <CheckmarkFilled
