@@ -1,15 +1,22 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
 
   const ctx = getContext("carbon:Toolbar") ?? {};
 
   let batchActionsActive = false;
 
+  let unsubscribe;
   if (ctx?.batchActionsActive) {
-    ctx.batchActionsActive.subscribe((value) => {
+    unsubscribe = ctx.batchActionsActive.subscribe((value) => {
       batchActionsActive = value;
     });
   }
+
+  onMount(() => {
+    return () => {
+      unsubscribe?.();
+    };
+  });
 
   $: inertProps = batchActionsActive ? { inert: true } : {};
 </script>
