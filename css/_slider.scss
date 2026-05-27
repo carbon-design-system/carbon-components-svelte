@@ -80,6 +80,161 @@
   }
 }
 
+/// Two-handle (range) slider styles (Carbon v11 port for v10 compatibility)
+/// @access private
+/// @group slider
+@mixin slider-two-handle {
+  .#{$prefix}--slider-container--two-handles {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .#{$prefix}--slider-container--two-handles .#{$prefix}--slider {
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  .#{$prefix}--slider-text-input-wrapper--hidden {
+    display: none;
+  }
+
+  // Thumb wrapper — positions each handle along the track.
+  .#{$prefix}--slider__thumb-wrapper {
+    position: absolute;
+    z-index: 3;
+    height: 24px;
+    width: 16px;
+    transform: translate(-50%, -50%);
+    top: 50%;
+  }
+
+  .#{$prefix}--slider__thumb-wrapper--lower {
+    transform: translate(-100%, -50%);
+  }
+
+  .#{$prefix}--slider__thumb-wrapper--upper {
+    transform: translate(0, -50%);
+  }
+
+  // Override the round single-handle thumb when in two-handle mode.
+  // Chain `.bx--slider__thumb` to win specificity over the v10 base styles,
+  // which are imported after this file in `all.scss`.
+  .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--lower,
+  .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--upper {
+    position: absolute;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    // Reset the v10 single-handle `translate(-50%, -50%)` that would otherwise
+    // pull the arrow icon up/left off the track at rest.
+    transform: none;
+    transition: none;
+
+    &::before {
+      position: absolute;
+      z-index: -1;
+      display: block;
+      background: $ui-background;
+      height: 2px;
+      content: "";
+      width: 6px;
+      top: calc(50% - 1px);
+    }
+
+    &:hover {
+      background: transparent;
+      box-shadow: none;
+      transform: none;
+
+      // Only recolor the non-focus icon; the focus-state icon must keep its
+      // $interactive-01 fill even when the focused thumb is hovered.
+      .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus) {
+        fill: $text-02;
+      }
+    }
+
+    &:active {
+      background: transparent;
+      box-shadow: none;
+      transform: none;
+    }
+
+    &:focus {
+      background: transparent;
+      box-shadow: none;
+      transform: none;
+      outline: none;
+
+      .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus) {
+        display: none;
+      }
+
+      .#{$prefix}--slider__thumb-icon--focus {
+        display: block;
+      }
+    }
+  }
+
+  .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--lower::before {
+    right: 0;
+  }
+
+  .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--upper::before {
+    left: 0;
+  }
+
+  .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--lower:focus::before,
+  .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--upper:focus::before {
+    width: 100%;
+  }
+
+  .#{$prefix}--slider__thumb-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    // $ui-05 is the highest-contrast UI color in v10 (dark on light themes,
+    // light on dark themes); equivalent to v11's $layer-selected-inverse used
+    // by Carbon React for the range-slider arrow handles.
+    fill: $ui-05;
+  }
+
+  .#{$prefix}--slider__thumb-icon--focus {
+    display: none;
+    fill: $interactive-01;
+  }
+
+  // When either handle is focused, recolor the filled track.
+  .#{$prefix}--slider__thumb-wrapper:focus-within
+    ~ .#{$prefix}--slider__filled-track {
+    background-color: $interactive-04;
+  }
+
+  // Disabled state for the two-handle thumb icons.
+  .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--lower,
+  .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--upper {
+    background: transparent;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: transparent;
+      transform: none;
+    }
+
+    .#{$prefix}--slider__thumb-icon {
+      fill: $disabled-02;
+    }
+  }
+}
+
 @include exports('slider-validation') {
   @include slider-validation;
+  @include slider-two-handle;
 }

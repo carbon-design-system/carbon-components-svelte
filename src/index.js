@@ -116,6 +116,8 @@ export { default as SessionStorage } from "./SessionStorage/SessionStorage.svelt
 export { default as SkeletonIcon } from "./SkeletonIcon/SkeletonIcon.svelte";
 export { default as SkeletonPlaceholder } from "./SkeletonPlaceholder/SkeletonPlaceholder.svelte";
 export { default as SkeletonText } from "./SkeletonText/SkeletonText.svelte";
+export { default as RangeSlider } from "./Slider/RangeSlider.svelte";
+export { default as RangeSliderSkeleton } from "./Slider/RangeSliderSkeleton.svelte";
 export { default as Slider } from "./Slider/Slider.svelte";
 export { default as SliderSkeleton } from "./Slider/SliderSkeleton.svelte";
 export { default as Stack } from "./Stack/Stack.svelte";
