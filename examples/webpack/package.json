@@ -7,14 +7,18 @@
   "dependencies": {
     "carbon-components-svelte": "^0.103.0"
   },
+  "overrides": {
+    "uuid": "11.1.1",
+    "ws": "8.21.0"
+  },
   "devDependencies": {
-    "carbon-preprocess-svelte": "^0.11.28",
+    "carbon-preprocess-svelte": "^0.11.30",
     "css-loader": "^7.1.4",
-    "html-webpack-plugin": "^5.6.6",
+    "html-webpack-plugin": "^5.6.7",
     "mini-css-extract-plugin": "^2.10.2",
-    "svelte": "^5.55.7",
+    "svelte": "^5.55.9",
     "svelte-loader": "^3.2.4",
-    "webpack": "^5.105.4",
+    "webpack": "^5.107.2",
     "webpack-cli": "^7.0.2",
     "webpack-dev-server": "^5.2.4"
   }
