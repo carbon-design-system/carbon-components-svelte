@@ -363,7 +363,7 @@ function carbonify() {
 
         const bq = node as Blockquote;
         const firstChild = bq.children[0];
-        if (!firstChild || firstChild.type !== "paragraph") return;
+        if (firstChild?.type !== "paragraph") return;
 
         const para = firstChild as Paragraph;
         const first = para.children[0];
