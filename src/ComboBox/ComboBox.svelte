@@ -369,16 +369,14 @@
     }
 
     // Set highlighted index to selected item when menu opens
-    if (wasJustOpened) {
-      if (selectedId !== undefined && selectedItem) {
-        const selectedIndex = filteredItems.findIndex(
-          (item) => item.id === selectedId,
-        );
-        if (selectedIndex >= 0) {
-          // Set highlighted index to selected item so keyboard nav starts there
-          highlightedIndex = selectedIndex;
-          prevHighlightedIndex = selectedIndex;
-        }
+    if (wasJustOpened && selectedId !== undefined && selectedItem) {
+      const selectedIndex = filteredItems.findIndex(
+        (item) => item.id === selectedId,
+      );
+      if (selectedIndex >= 0) {
+        // Set highlighted index to selected item so keyboard nav starts there
+        highlightedIndex = selectedIndex;
+        prevHighlightedIndex = selectedIndex;
       }
     }
 

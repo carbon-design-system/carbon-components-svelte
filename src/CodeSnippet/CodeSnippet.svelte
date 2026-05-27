@@ -165,12 +165,10 @@
   // Show more/less only applies to multi-line code snippets
   $: if (type !== "multi") showMoreLess = false;
 
-  $: if (type === "multi" && ref) {
-    if (showMoreLess) {
-      // Only compute the show more/less button if the consumer has not opted out
-      if (code === undefined) setShowMoreLess();
-      if (code) tick().then(setShowMoreLess);
-    }
+  $: if (type === "multi" && ref && showMoreLess) {
+    // Only compute the show more/less button if the consumer has not opted out
+    if (code === undefined) setShowMoreLess();
+    if (code) tick().then(setShowMoreLess);
   }
 
   $: if (type === "multi" && prevExpanded !== expanded) {

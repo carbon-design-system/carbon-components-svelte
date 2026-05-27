@@ -313,12 +313,10 @@
       wasJustOpened && selectedId !== undefined && selectedItem
         ? items.findIndex((item) => item.id === selectedId)
         : -1;
-    if (wasJustOpened) {
-      if (selectedIndex >= 0) {
-        // Set highlighted index to selected item so keyboard nav starts there
-        highlightedIndex = selectedIndex;
-        prevHighlightedIndex = selectedIndex;
-      }
+    if (wasJustOpened && selectedIndex >= 0) {
+      // Set highlighted index to selected item so keyboard nav starts there
+      highlightedIndex = selectedIndex;
+      prevHighlightedIndex = selectedIndex;
     }
 
     // Scroll to selected item when menu opens without virtualization.

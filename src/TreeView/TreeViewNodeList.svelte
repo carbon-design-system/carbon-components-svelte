@@ -48,9 +48,12 @@
   };
 
   afterUpdate(() => {
-    if (id === $activeNodeId && prevActiveId !== $activeNodeId) {
-      if (!$selectedIdsSetStore.has(id)) selectNode(node);
-    }
+    if (
+      id === $activeNodeId &&
+      prevActiveId !== $activeNodeId &&
+      !$selectedIdsSetStore.has(id)
+    )
+      selectNode(node);
 
     prevActiveId = $activeNodeId;
   });
