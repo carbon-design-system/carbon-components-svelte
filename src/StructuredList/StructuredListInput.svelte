@@ -50,6 +50,7 @@
   bind:this={ref}
   type="radio"
   tabindex="-1"
+  aria-hidden={ctx ? "true" : undefined}
   {checked}
   {id}
   {name}

@@ -10,6 +10,32 @@
    * @type {number | string | undefined}
    */
   export let tabindex = "0";
+
+  import { getContext, onMount } from "svelte";
+  import { writable } from "svelte/store";
+
+  const ctx = getContext("carbon:StructuredListWrapper");
+  const selectedValue = ctx?.selectedValue ?? writable(undefined);
+
+  let labelRef;
+  let inputValue;
+
+  onMount(() => {
+    if (label && labelRef) {
+      const input = labelRef.querySelector('input[type="radio"]');
+      if (input) inputValue = input.value;
+    }
+  });
+
+  $: isRadio = label && inputValue !== undefined;
+  $: ariaChecked = isRadio ? $selectedValue === inputValue : undefined;
+
+  function handleKeydown(event) {
+    if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
+      event.currentTarget.click();
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -18,6 +44,9 @@
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
+    bind:this={labelRef}
+    role={isRadio ? "radio" : undefined}
+    aria-checked={ariaChecked}
     {tabindex}
     class:bx--structured-list-row={true}
     class:bx--structured-list-row--header-row={head}
@@ -27,6 +56,7 @@
     on:mouseenter
     on:mouseleave
     on:keydown
+    on:keydown={handleKeydown}
   >
     <slot />
   </label>
