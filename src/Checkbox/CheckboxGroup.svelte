@@ -98,22 +98,23 @@
     update,
   });
 
+  beforeUpdate(() => {
+    syncSelectedValues();
+  });
+
+  const unsubscribe = selectedValues.subscribe((value) => {
+    selected = value;
+    if (!isInitialRender && !isSyncingSelected) {
+      dispatch("change", value);
+    }
+  });
+
   onMount(() => {
     syncSelectedValues();
     tick().then(() => {
       isInitialRender = false;
     });
-  });
-
-  beforeUpdate(() => {
-    syncSelectedValues();
-  });
-
-  selectedValues.subscribe((value) => {
-    selected = value;
-    if (!isInitialRender && !isSyncingSelected) {
-      dispatch("change", value);
-    }
+    return unsubscribe;
   });
 
   $: $groupName = name;
