@@ -200,29 +200,12 @@
     <span class:bx--slider__range-label={true}>{minLabel ?? min}</span>
     <div
       bind:this={ref}
-      role="presentation"
-      tabindex="-1"
       class:bx--slider={true}
       class:bx--slider--disabled={disabled}
       class:bx--slider--readonly={readonly}
       style:max-width={fullWidth ? "none" : undefined}
       on:mousedown={startInteraction}
       on:touchstart={startInteraction}
-      on:keydown={({ shiftKey, key }) => {
-        if (disabled || readonly) return;
-        const keys = {
-          ArrowDown: -1,
-          ArrowLeft: -1,
-          ArrowRight: 1,
-          ArrowUp: 1,
-        };
-        if (keys[key]) {
-          const delta =
-            step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
-          value = Math.round((value + delta) / step) * step;
-          dispatch("input", value);
-        }
-      }}
     >
       <div
         role="slider"
@@ -240,6 +223,21 @@
             : undefined}
         aria-invalid={invalid || undefined}
         {id}
+        on:keydown={({ shiftKey, key }) => {
+          if (disabled || readonly) return;
+          const keys = {
+            ArrowDown: -1,
+            ArrowLeft: -1,
+            ArrowRight: 1,
+            ArrowUp: 1,
+          };
+          if (keys[key]) {
+            const delta =
+              step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
+            value = Math.round((value + delta) / step) * step;
+            dispatch("input", value);
+          }
+        }}
       ></div>
       <div bind:this={trackRef} class:bx--slider__track={true}></div>
       <div
