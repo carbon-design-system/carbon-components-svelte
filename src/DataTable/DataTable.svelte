@@ -337,11 +337,9 @@
   let scrollListenerCleanup = null;
 
   // Clean up scroll listener when virtualization or sticky header is disabled
-  $: if (!virtualConfig || !stickyHeader) {
-    if (scrollListenerCleanup) {
-      scrollListenerCleanup();
-      scrollListenerCleanup = null;
-    }
+  $: if ((!virtualConfig || !stickyHeader) && scrollListenerCleanup) {
+    scrollListenerCleanup();
+    scrollListenerCleanup = null;
   }
 
   // Set up scroll listener for sticky header container

@@ -93,6 +93,7 @@
         "useNodejsImportProtocol": "error",
         "useNumberNamespace": "error",
         "useSingleVarDeclarator": "error",
+        "useCollapsedIf": "error",
         "noCommonJs": "error",
         "noDescendingSpecificity": "off"
       },

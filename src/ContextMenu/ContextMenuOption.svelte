@@ -210,11 +210,12 @@
     if (subOptions && submenuOpen) {
       mousePosition = { x: e.clientX, y: e.clientY };
 
-      if (isInSafeTriangle(e.clientX, e.clientY)) {
-        if (typeof timeoutClose === "number") {
-          clearTimeout(timeoutClose);
-          timeoutClose = undefined;
-        }
+      if (
+        isInSafeTriangle(e.clientX, e.clientY) &&
+        typeof timeoutClose === "number"
+      ) {
+        clearTimeout(timeoutClose);
+        timeoutClose = undefined;
       }
     }
   }
@@ -352,8 +353,8 @@
         }
       } else if (key === "Home") {
         if (options.length > 0) focusIndex = 0;
-      } else if (key === "End") {
-        if (options.length > 0) focusIndex = options.length - 1;
+      } else if (key === "End" && options.length > 0) {
+        focusIndex = options.length - 1;
       }
 
       if (options[focusIndex]) options[focusIndex].focus();

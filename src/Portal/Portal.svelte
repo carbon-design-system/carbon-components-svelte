@@ -38,14 +38,17 @@
   $: effectiveTarget =
     target ?? (typeof document === "undefined" ? null : document.body);
 
-  $: if (mounted && ref && effectiveTarget) {
-    if (ref.parentNode !== effectiveTarget) {
-      const activeEl = document.activeElement;
-      const hadFocus = ref.contains(activeEl);
-      effectiveTarget.appendChild(ref);
-      if (hadFocus && activeEl instanceof HTMLElement) {
-        activeEl.focus();
-      }
+  $: if (
+    mounted &&
+    ref &&
+    effectiveTarget &&
+    ref.parentNode !== effectiveTarget
+  ) {
+    const activeEl = document.activeElement;
+    const hadFocus = ref.contains(activeEl);
+    effectiveTarget.appendChild(ref);
+    if (hadFocus && activeEl instanceof HTMLElement) {
+      activeEl.focus();
     }
   }
 </script>
