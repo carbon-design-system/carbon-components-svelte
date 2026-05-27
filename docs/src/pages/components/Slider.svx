@@ -1,9 +1,9 @@
 ---
-components: ["Slider", "SliderSkeleton"]
+components: ["Slider", "RangeSlider", "SliderSkeleton", "RangeSliderSkeleton"]
 ---
 
 <script>
-  import { Slider, SliderSkeleton } from "carbon-components-svelte";
+  import { Slider, RangeSlider, SliderSkeleton, RangeSliderSkeleton } from "carbon-components-svelte";
 </script>
 
 Sliders provide a visual way to select a value from a range. They support keyboard navigation, custom ranges, step values, and various states.
@@ -85,3 +85,63 @@ Show a loading state with the skeleton variant.
 Show a loading state without a label.
 
 <SliderSkeleton hideLabel />
+
+## Range slider
+
+Use `RangeSlider` to select a range of values with two handles. Bind `value` for the lower bound and `valueUpper` for the upper bound.
+
+<RangeSlider labelText="Range" value={10} valueUpper={90} />
+
+## Range slider (full width)
+
+Set `fullWidth` to `true` for the range slider to span the full width of its containing element.
+
+<RangeSlider labelText="Range" fullWidth value={10} valueUpper={90} />
+
+## Range slider with hidden text inputs
+
+Hide both text inputs while keeping the slider functional.
+
+<RangeSlider labelText="Range" hideTextInput value={0} valueUpper={100} />
+
+## Range slider with custom range and step
+
+Set custom `min`, `max`, and `step` values for the range.
+
+<RangeSlider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" step={10} value={100} valueUpper={500} />
+
+## Range slider (disabled)
+
+Disable the range slider to prevent interaction.
+
+<RangeSlider disabled labelText="Range" value={10} valueUpper={90} />
+
+## Range slider (read-only)
+
+Set the range slider to read-only to display values without allowing changes.
+
+<RangeSlider readonly labelText="Range" value={10} valueUpper={90} />
+
+## Range slider (invalid)
+
+Indicate an invalid state with the `invalid` prop. The invalid state takes precedence over the warning state when both are set.
+
+<RangeSlider invalid invalidText="Values must be a multiple of 10" labelText="Range" min={0} max={100} step={10} value={15} valueUpper={85} />
+
+## Range slider (warning)
+
+Indicate a warning state with the `warn` prop. A warning icon appears next to each input field, and a warning message is displayed below the slider.
+
+<RangeSlider warn warnText="Values must be an increment of 5" labelText="Range" min={0} max={100} step={5} value={11} valueUpper={89} />
+
+## Range slider skeleton
+
+Show a loading state with the range slider skeleton variant.
+
+<RangeSliderSkeleton />
+
+## Range slider skeleton without label
+
+Show a loading state without a label.
+
+<RangeSliderSkeleton hideLabel />
