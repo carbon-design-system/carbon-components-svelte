@@ -45,7 +45,9 @@
         ) {
           return NodeFilter.FILTER_REJECT;
         }
-        if (node.matches("li.bx--tree-node")) {
+        // Link rows render `role="treeitem"` on `<a class="bx--tree-node">`
+        // inside `<li role="none">`, so we can't constrain by tag name.
+        if (node.matches(".bx--tree-node")) {
           // Children stay mounted under a hidden subtree `ul`; skip so Arrow keys
           // follow visible rows only (same as when branches were unmounted).
           if (isUnderCollapsedSubtree(node)) return NodeFilter.FILTER_REJECT;

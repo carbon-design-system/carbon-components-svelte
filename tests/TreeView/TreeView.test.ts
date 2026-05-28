@@ -1538,6 +1538,22 @@ describe("TreeViewNode href", () => {
     });
     expect(disabledLink).not.toHaveAttribute("target");
   });
+
+  it("ArrowDown/ArrowUp navigate between link rows", async () => {
+    render(TreeViewHref);
+
+    const first = screen.getByRole("treeitem", { name: /Link Node/ });
+    const second = screen.getByRole("treeitem", { name: /Another Link/ });
+    expect(first.tagName).toBe("A");
+    expect(second.tagName).toBe("A");
+
+    first.focus();
+    await user.keyboard("{ArrowDown}");
+    expect(second).toHaveFocus();
+
+    await user.keyboard("{ArrowUp}");
+    expect(first).toHaveFocus();
+  });
 });
 
 describe("TreeView autoCollapse", () => {
