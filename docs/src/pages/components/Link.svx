@@ -27,9 +27,20 @@ For external links that open in a new tab, the component automatically adds secu
 
 ## Outbound link
 
-Use the outbound link as a convenient alternative for external links.
+Use the outbound link as a convenient alternative for external links. Because it opens in a new tab (`target="_blank"`), it adds visually-hidden text ("(opens in a new tab)") so screen readers announce the behavior.
 
 <OutboundLink href="https://www.carbondesignsystem.com/">
+  Carbon Design System
+</OutboundLink>
+
+## Customize the new tab announcement
+
+External links open in a new tab and append `assistiveText` automatically for screen readers. You can override the `assistiveText` prop if needed, and set it to an empty string to opt out.
+
+<OutboundLink
+  href="https://www.carbondesignsystem.com/"
+  assistiveText="(opens in a new window)"
+>
   Carbon Design System
 </OutboundLink>
 
