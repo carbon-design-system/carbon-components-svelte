@@ -507,6 +507,9 @@
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: inline = type === "inline";
+  // Invalid/warn states are suppressed when the multi-select is disabled or read-only.
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
   $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
   $: if (items !== prevItemsRef) {
     prevItemsRef = items;
@@ -583,7 +586,7 @@
     direction === "top" && "bx--list-box--up",
     filterable && "bx--combo-box",
     filterable && "bx--multi-select--filterable",
-    invalid && "bx--multi-select--invalid",
+    showInvalid && "bx--multi-select--invalid",
     inline && "bx--multi-select--inline",
     readonly && "bx--multi-select--readonly",
     selectionCount > 0 && "bx--multi-select--selected",
@@ -614,7 +617,7 @@
   class:bx--list-box__wrapper={true}
   class:bx--multi-select__wrapper--inline={inline}
   class:bx--list-box__wrapper--inline={inline}
-  class:bx--multi-select__wrapper--inline--invalid={inline && invalid}
+  class:bx--multi-select__wrapper--inline--invalid={inline && showInvalid}
 >
   {#if labelText || $$slots.labelChildren}
     <label
@@ -632,19 +635,19 @@
     aria-label={ariaLabel}
     aria-disabled={readonly || undefined}
     {disabled}
-    {invalid}
+    invalid={showInvalid}
     {invalidText}
     {open}
     {light}
     {size}
-    {warn}
+    warn={showWarn}
     {warnText}
     class={multiSelectListBoxClass}
   >
-    {#if invalid}
+    {#if showInvalid}
       <WarningFilled class="bx--list-box__invalid-icon" />
     {/if}
-    {#if !invalid && warn}
+    {#if showWarn}
       <WarningAltFilled
         class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
@@ -970,7 +973,7 @@
       </ListBoxMenu>
     </div>
   </ListBox>
-  {#if !inline && !invalid && !warn && helperText}
+  {#if !inline && !showInvalid && !showWarn && helperText}
     <div
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
