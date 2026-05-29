@@ -477,6 +477,9 @@
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
+  // Invalid/warn states are suppressed when the combo box is disabled or read-only.
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
   $: highlightedId = filteredItems[highlightedIndex]?.id;
 
@@ -553,7 +556,7 @@
   $: comboBoxListBoxClass = [
     "bx--combo-box",
     direction === "top" && "bx--list-box--up",
-    !invalid && warn && "bx--combo-box--warning",
+    showWarn && "bx--combo-box--warning",
     readonly && "bx--combo-box--readonly",
   ]
     .filter(Boolean)
@@ -590,11 +593,11 @@
     aria-label={ariaLabel}
     aria-disabled={readonly || undefined}
     {disabled}
-    {invalid}
+    invalid={showInvalid}
     {open}
     {light}
     {size}
-    {warn}
+    warn={showWarn}
   >
     <div bind:this={fieldRef} class:bx--list-box__field={true}>
       <input
@@ -612,11 +615,11 @@
         aria-readonly={readonly || undefined}
         aria-controls={open ? menuId : undefined}
         aria-owns={open ? menuId : undefined}
-        aria-describedby={invalid && invalidText
+        aria-describedby={showInvalid && invalidText
           ? errorId
-          : !invalid && warn && warnText
+          : showWarn && warnText
             ? warnId
-            : !invalid && !warn && helperText
+            : !showInvalid && !showWarn && helperText
               ? helperId
               : undefined}
         {disabled}
@@ -710,10 +713,10 @@
         }}
         on:paste
       >
-      {#if invalid}
+      {#if showInvalid}
         <WarningFilled class="bx--list-box__invalid-icon" />
       {/if}
-      {#if !invalid && warn}
+      {#if showWarn}
         <WarningAltFilled
           class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
         />
@@ -831,13 +834,13 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
-  {#if invalid && invalidText}
+  {#if showInvalid && invalidText}
     <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
-  {#if !invalid && warn && warnText}
+  {#if showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
-  {#if !invalid && !warn && helperText}
+  {#if !showInvalid && !showWarn && helperText}
     <div
       id={helperId}
       class:bx--form__helper-text={true}

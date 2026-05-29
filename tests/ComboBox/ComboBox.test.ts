@@ -235,6 +235,26 @@ describe("ComboBox", () => {
     expect(screen.getByText("Warning message")).toBeInTheDocument();
   });
 
+  it.each([
+    "disabled",
+    "readonly",
+  ] as const)("should suppress invalid and warn states when %s", (state) => {
+    const { container } = render(ComboBox, {
+      props: {
+        [state]: true,
+        invalid: true,
+        invalidText: "Invalid selection",
+        warn: true,
+        warnText: "Warning message",
+      },
+    });
+
+    expect(screen.getByRole("listbox")).not.toHaveAttribute("data-invalid");
+    expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
+    expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+  });
+
   it("should handle helper text", () => {
     render(ComboBox, { props: { helperText: "Helper message" } });
 
