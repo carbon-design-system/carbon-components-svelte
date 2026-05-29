@@ -1,6 +1,8 @@
 <script lang="ts">
   import type {
+    DataTableEmptyHeader,
     DataTableHeader,
+    DataTableNonEmptyHeader,
     DataTableRow,
   } from "carbon-components-svelte/DataTable/DataTable.svelte";
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
@@ -56,6 +58,25 @@
 
   let productSelectedRowIds: ReadonlyArray<ProductRow["id"]> = ["prod-1"];
   let productExpandedRowIds: ReadonlyArray<ProductRow["id"]> = [];
+
+  const discriminantHeaders = [
+    { key: "name", value: "Name" },
+    { key: "overflow", empty: true },
+  ] as const satisfies ReadonlyArray<DataTableHeader<Row>>;
+
+  function readHeader(h: DataTableHeader<Row>) {
+    if (h.empty === true) {
+      const _empty: DataTableEmptyHeader<Row> = h;
+      return _empty.key;
+    }
+    const _nonEmpty: DataTableNonEmptyHeader<Row> = h;
+    return _nonEmpty.value;
+  }
+  void readHeader;
+
+  // @ts-expect-error
+  const _badEmpty: DataTableEmptyHeader<Row> = { key: "x", empty: false };
+  void _badEmpty;
 </script>
 
 <DataTable
@@ -114,3 +135,8 @@
     <p>Expanded content for {row.name}</p>
   </svelte:fragment>
 </DataTable>
+
+<DataTable
+  headers={discriminantHeaders}
+  rows={[{ id: "row-1", name: "Item" }]}
+/>
