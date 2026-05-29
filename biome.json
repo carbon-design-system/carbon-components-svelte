@@ -18,14 +18,7 @@
     }
   },
   "files": {
-    "includes": [
-      "**",
-      "!!**/.*/**/*",
-      "!!**/docs/src/pages/index.svelte",
-      "!!**/docs/src/pages/framed/ComboBox/ComboBoxSlot.svelte",
-      "!!**/docs/src/pages/framed/Dropdown/DropdownSlot.svelte",
-      "!!**/docs/src/pages/framed/MultiSelect/MultiSelectSlot.svelte"
-    ]
+    "includes": ["**", "!!**/.*/**/*", "!!**/docs/src/pages/index.svelte"]
   },
   "linter": {
     "enabled": true,

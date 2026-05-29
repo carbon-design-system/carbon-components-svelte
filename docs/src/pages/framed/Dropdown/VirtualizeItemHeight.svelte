@@ -24,7 +24,8 @@
 </Dropdown>
 
 <style>
-  :global(.bx--list-box__menu-item, .bx--list-box__menu-item__option) {
+  :global(.bx--list-box__menu-item),
+  :global(.bx--list-box__menu-item__option) {
     height: auto;
   }
 </style>
