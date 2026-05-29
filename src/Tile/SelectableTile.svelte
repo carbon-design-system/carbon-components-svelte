@@ -150,7 +150,7 @@
     }
   }}
 >
-  <span class:bx--tile__checkmark={true}>
+  <span aria-hidden="true" class:bx--tile__checkmark={true}>
     <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
   </span>
   <span class:bx--tile-content={true}> <slot /> </span>
