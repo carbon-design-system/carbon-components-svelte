@@ -209,6 +209,9 @@
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
+  // Invalid/warn states are suppressed when the dropdown is disabled or read-only.
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
   $: highlightedId =
     highlightedIndex > -1 && items[highlightedIndex]
       ? items[highlightedIndex].id
@@ -459,8 +462,8 @@
   $: dropdownListBoxClass = [
     "bx--dropdown",
     direction === "top" && "bx--list-box--up",
-    invalid && "bx--dropdown--invalid",
-    !invalid && warn && "bx--dropdown--warning",
+    showInvalid && "bx--dropdown--invalid",
+    showWarn && "bx--dropdown--warning",
     open && "bx--dropdown--open",
     size === "sm" && "bx--dropdown--sm",
     size === "xl" && "bx--dropdown--xl",
@@ -487,7 +490,7 @@
   class:bx--list-box__wrapper={true}
   class:bx--dropdown__wrapper--inline={inline}
   class:bx--list-box__wrapper--inline={inline}
-  class:bx--dropdown__wrapper--inline--invalid={inline && invalid}
+  class:bx--dropdown__wrapper--inline--invalid={inline && showInvalid}
   {...$$restProps}
 >
   {#if labelText || $$slots.labelChildren}
@@ -513,14 +516,14 @@
     }}
     {disabled}
     {open}
-    {invalid}
+    invalid={showInvalid}
     {light}
-    {warn}
+    warn={showWarn}
   >
-    {#if invalid}
+    {#if showInvalid}
       <WarningFilled class="bx--list-box__invalid-icon" />
     {/if}
-    {#if !invalid && warn}
+    {#if showWarn}
       <WarningAltFilled
         class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
@@ -537,11 +540,11 @@
       aria-haspopup="listbox"
       aria-activedescendant={highlightedId ?? ""}
       aria-controls={open ? menuId : undefined}
-      aria-describedby={invalid && invalidText
+      aria-describedby={showInvalid && invalidText
         ? errorId
-        : !invalid && warn && warnText
+        : showWarn && warnText
           ? warnId
-          : !inline && !invalid && !warn && helperText
+          : !inline && !showInvalid && !showWarn && helperText
             ? helperId
             : undefined}
       on:keydown={(e) => {
@@ -689,13 +692,13 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
-  {#if invalid && invalidText}
+  {#if showInvalid && invalidText}
     <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
-  {#if !invalid && warn && warnText}
+  {#if showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
-  {#if !inline && !invalid && !warn && helperText}
+  {#if !inline && !showInvalid && !showWarn && helperText}
     <div
       id={helperId}
       class:bx--form__helper-text={true}
