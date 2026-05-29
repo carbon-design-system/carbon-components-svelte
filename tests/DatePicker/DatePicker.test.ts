@@ -157,6 +157,29 @@ describe("DatePicker", () => {
     expect(wrapper).toHaveClass("bx--date-picker-input__wrapper--warn");
   });
 
+  it.each([
+    "disabled",
+    "readonly",
+  ] as const)("suppresses invalid and warn states when %s", (state) => {
+    const { container } = render(DatePicker, {
+      [state]: true,
+      invalid: true,
+      invalidText: "Invalid date",
+      warn: true,
+      warnText: "Warning message",
+    });
+
+    const wrapper = container.querySelector(".bx--date-picker-input__wrapper");
+    expect(wrapper).not.toHaveClass("bx--date-picker-input__wrapper--invalid");
+    expect(wrapper).not.toHaveClass("bx--date-picker-input__wrapper--warn");
+    expect(
+      container.querySelector(".bx--date-picker__icon--invalid"),
+    ).toBeNull();
+    expect(container.querySelector(".bx--date-picker__icon--warn")).toBeNull();
+    expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+  });
+
   it("handles helper text", () => {
     render(DatePicker, { helperText: "Helper message" });
     expect(screen.getByText("Helper message")).toBeInTheDocument();

@@ -121,6 +121,9 @@
   $: actualPattern = pattern ?? dateFormatToPattern($dateFormat ?? "m/d/Y");
   $: if (ref) declareRef({ id, ref });
   $: setReadonly(id, readonly);
+  // Invalid/warn states are suppressed when the input is disabled or read-only.
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
 </script>
 
 <div
@@ -140,14 +143,14 @@
   {/if}
   <div
     class:bx--date-picker-input__wrapper={true}
-    class:bx--date-picker-input__wrapper--invalid={invalid}
-    class:bx--date-picker-input__wrapper--warn={warn}
+    class:bx--date-picker-input__wrapper--invalid={showInvalid}
+    class:bx--date-picker-input__wrapper--warn={showWarn}
     class:bx--date-picker-input__wrapper--readonly={readonly}
     class:bx--date-picker-input__wrapper--disabled={disabled}
   >
     <input
       bind:this={ref}
-      data-invalid={invalid || undefined}
+      data-invalid={showInvalid || undefined}
       {id}
       {name}
       {placeholder}
@@ -162,7 +165,7 @@
           : $inputValueTo
         : $inputValue}
       class:bx--date-picker__input={true}
-      class:bx--date-picker__input--invalid={invalid}
+      class:bx--date-picker__input--invalid={showInvalid}
       class:bx--date-picker__input--sm={size === "sm"}
       class:bx--date-picker__input--xl={size === "xl"}
       on:input
@@ -186,17 +189,17 @@
       }}
       on:paste
     >
-    {#if invalid}
+    {#if showInvalid}
       <WarningFilled
         class="bx--date-picker__icon bx--date-picker__icon--invalid"
       />
     {/if}
-    {#if !invalid && warn}
+    {#if showWarn}
       <WarningAltFilled
         class="bx--date-picker__icon bx--date-picker__icon--warn"
       />
     {/if}
-    {#if $hasCalendar && !invalid && !warn}
+    {#if $hasCalendar && !showInvalid && !showWarn}
       <Calendar
         class="bx--date-picker__icon"
         aria-label={iconDescription}
@@ -204,13 +207,13 @@
       />
     {/if}
   </div>
-  {#if invalid}
+  {#if showInvalid}
     <div class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
-  {#if !invalid && warn}
+  {#if showWarn}
     <div class:bx--form-requirement={true}>{warnText}</div>
   {/if}
-  {#if !invalid && !warn && helperText}
+  {#if !showInvalid && !showWarn && helperText}
     <div
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
