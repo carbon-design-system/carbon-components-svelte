@@ -45,9 +45,12 @@ describe("SelectableTileGroup", () => {
     const fieldset = screen.getByRole("group");
     expect(fieldset).toBeDisabled();
 
+    // Native `<fieldset disabled>` propagates to nested inputs; individual
+    // tiles should not carry their own `disabled` attribute.
     const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     for (const checkbox of checkboxes) {
       expect(checkbox).toBeDisabled();
+      expect(checkbox).not.toHaveAttribute("disabled");
     }
   });
 
