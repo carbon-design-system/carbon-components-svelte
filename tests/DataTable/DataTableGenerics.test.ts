@@ -346,7 +346,7 @@ describe("DataTable Generics", () => {
 
       // Verify all three tables render independently
       const tables = container.querySelectorAll("table.bx--data-table");
-      expect(tables.length).toBe(3);
+      expect(tables.length).toBe(4);
 
       // Verify each table has its own rows
       const firstTableRows = getTableRows(container, 0);
@@ -370,7 +370,7 @@ describe("DataTable Generics", () => {
       const { container } = render(DataTableGenerics);
 
       const tables = container.querySelectorAll("table.bx--data-table");
-      expect(tables.length).toBe(3);
+      expect(tables.length).toBe(4);
 
       // Each table should have its own selection state
       // TypeScript prevents assigning wrong ID types at compile time
@@ -382,6 +382,22 @@ describe("DataTable Generics", () => {
       expect(firstTable).toBeInTheDocument();
       expect(secondTable).toBeInTheDocument();
       expect(thirdTable).toBeInTheDocument();
+    });
+  });
+
+  describe("Header empty discriminant", () => {
+    it("renders an empty header alongside a non-empty header", () => {
+      const { container } = render(DataTableGenerics);
+
+      const tables = container.querySelectorAll("table.bx--data-table");
+      expect(tables.length).toBeGreaterThanOrEqual(4);
+
+      const fourthTable = tables[3];
+      expect.assert(fourthTable instanceof HTMLElement);
+      const headerCells = fourthTable.querySelectorAll("thead th");
+      expect(headerCells).toHaveLength(2);
+      expect(headerCells[0]?.textContent?.trim()).toBe("Name");
+      expect(headerCells[1]?.textContent?.trim()).toBe("");
     });
   });
 

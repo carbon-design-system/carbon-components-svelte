@@ -18,7 +18,7 @@
    * @typedef {import('./data-table-utils.d.ts').DataTableSortValue<Row>} DataTableSortValue<Row=DataTableRow>
    * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
-   * @property {boolean} empty - Whether the header is empty
+   * @property {true} empty - Whether the header is empty
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
    * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
@@ -27,6 +27,7 @@
    * @property {string} [minWidth]
    * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row>} key
+   * @property {false} [empty]
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
    * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
@@ -81,7 +82,7 @@
    * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
    * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
    *
-   * Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client-side sorting for that click (for example full server-side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client-side. Typical uses: server-side sorting, URL or query-string sync, analytics, and persisting sort preferences.
+   * Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client-side sorting for that click (for example full server-side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client-side. Typical uses: server-side sorting, URL or query-string sync, analytics, and persisting sort preferences. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client-side sorting for that click (for example full server-side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client-side. Typical uses: server-side sorting, URL or query-string sync, analytics, and persisting sort preferences.
    * @event click:cell
    * @type {object}
    * @property {DataTableCell<Row>} cell
