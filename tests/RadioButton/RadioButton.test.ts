@@ -202,6 +202,21 @@ describe("RadioButton", () => {
       expect(pro).not.toBeChecked();
       expect(consoleLog).not.toHaveBeenCalledWith("change", "2");
     });
+
+    it("should not propagate external selected updates to children when readonly", async () => {
+      const { component } = render(RadioButtonGroupReadonly, {
+        selected: "1",
+        readonly: true,
+      });
+
+      expect(screen.getByRole("radio", { name: "Free" })).toBeChecked();
+
+      component.selected = "2";
+      await tick();
+
+      expect(screen.getByRole("radio", { name: "Free" })).toBeChecked();
+      expect(screen.getByRole("radio", { name: "Pro" })).not.toBeChecked();
+    });
   });
 
   describe("Generics", () => {
