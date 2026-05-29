@@ -77,12 +77,9 @@
    * @type {object}
    * @property {boolean} selected
    * @property {Row} row
-   * @event sort
-   * @type {object}
+   * @event {{ key: null; direction: "none" } | { key: DataTableKey<Row>; direction: "ascending" | "descending" }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
    * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
    * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
-   *
-   * Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client-side sorting for that click (for example full server-side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client-side. Typical uses: server-side sorting, URL or query-string sync, analytics, and persisting sort preferences. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client-side sorting for that click (for example full server-side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client-side. Typical uses: server-side sorting, URL or query-string sync, analytics, and persisting sort preferences.
    * @event click:cell
    * @type {object}
    * @property {DataTableCell<Row>} cell

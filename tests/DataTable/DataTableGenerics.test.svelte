@@ -2,6 +2,7 @@
   import type {
     DataTableEmptyHeader,
     DataTableHeader,
+    DataTableKey,
     DataTableNonEmptyHeader,
     DataTableRow,
   } from "carbon-components-svelte/DataTable/DataTable.svelte";
@@ -77,6 +78,25 @@
   // @ts-expect-error
   const _badEmpty: DataTableEmptyHeader<Row> = { key: "x", empty: false };
   void _badEmpty;
+
+  type ProductSortDetail =
+    | { key: null; direction: "none" }
+    | {
+        key: DataTableKey<ProductRow>;
+        direction: "ascending" | "descending";
+      };
+
+  function readSortDetail(detail: ProductSortDetail) {
+    if (detail.direction === "none") {
+      return detail.key;
+    }
+    return detail.key;
+  }
+  void readSortDetail;
+
+  export let onProductSort:
+    | ((e: CustomEvent<ProductSortDetail>) => void)
+    | undefined = undefined;
 </script>
 
 <DataTable
@@ -108,6 +128,7 @@
 <DataTable
   headers={productHeaders}
   rows={productRows}
+  sortable
   selectable
   expandable
   batchSelection
@@ -125,10 +146,16 @@
     console.log("Expanded:", row.id);
   }}
   on:sort={(e) => {
-    // e.detail.key is DataTableKey<ProductRow> | null (`null` when direction is `none`, e.g. third header click without sortAlways)
-    const key = e.detail.key;
-    const direction = e.detail.direction;
-    console.log("Sort:", key, direction);
+    readSortDetail(e.detail);
+    onProductSort?.(e);
+    const detail = e.detail;
+
+    if (detail.direction === "none") {
+      console.log("Clear sort", detail.key);
+      return;
+    }
+
+    console.log("Sort:", detail.key, detail.direction);
   }}
 >
   <svelte:fragment slot="expandedRow" let:row>
