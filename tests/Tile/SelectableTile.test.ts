@@ -79,6 +79,15 @@ describe("SelectableTile", () => {
     expect(tile).toHaveAttribute("aria-disabled", "true");
   });
 
+  it("hides the checkmark icon from assistive technology", () => {
+    render(SelectableTileTest);
+
+    const checkmark = screen
+      .getByTestId("selectable-tile")
+      .querySelector(".bx--tile__checkmark");
+    expect(checkmark).toHaveAttribute("aria-hidden", "true");
+  });
+
   describe("interaction", () => {
     it("handles click selection", async () => {
       const consoleLog = vi.spyOn(console, "log");
