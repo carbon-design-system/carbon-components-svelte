@@ -834,6 +834,30 @@ describe("MultiSelect", () => {
       expect(wrapper).toHaveClass("bx--list-box--warning");
     });
 
+    it.each([
+      "disabled",
+      "readonly",
+    ] as const)("suppresses invalid and warn states when %s", (state) => {
+      const { container } = render(MultiSelect, {
+        props: {
+          items,
+          [state]: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+          warn: true,
+          warnText: "Warning message",
+        },
+      });
+
+      const wrapper = screen.getByRole("combobox").closest(".bx--list-box");
+      expect(wrapper).not.toHaveClass("bx--multi-select--invalid");
+      expect(wrapper).not.toHaveClass("bx--list-box--warning");
+      expect(wrapper).not.toHaveAttribute("data-invalid");
+      expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
+      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+    });
+
     it("handles disabled state", () => {
       render(MultiSelect, {
         props: {
