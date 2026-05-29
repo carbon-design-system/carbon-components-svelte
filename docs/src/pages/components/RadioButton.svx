@@ -86,6 +86,16 @@ Disable specific radio buttons to prevent selection.
   <RadioButton disabled labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
+## Disabled group
+
+Set `disabled` to `true` on `RadioButtonGroup` to disable all radio buttons in the group. Their labels are also visually muted.
+
+<RadioButtonGroup disabled legendText="Storage tier (disk)" name="plan-disabled-group" selected="standard">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
 ## Read-only state
 
 Set `readonly` to `true` on `RadioButtonGroup` to display non-editable values.
