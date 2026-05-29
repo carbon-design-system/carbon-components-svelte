@@ -145,6 +145,9 @@
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
   $: inputId = `input-${id}`;
+  // Invalid/warn states are suppressed when the slider is disabled or read-only.
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
   $: range = max - min;
   $: left = ((value - min) / range) * 100;
   $: {
@@ -216,12 +219,12 @@
         aria-valuemin={min}
         aria-valuenow={value}
         aria-labelledby={labelId}
-        aria-describedby={invalid
+        aria-describedby={showInvalid
           ? errorId
-          : warn
+          : showWarn
             ? warnId
             : undefined}
-        aria-invalid={invalid || undefined}
+        aria-invalid={showInvalid || undefined}
         {id}
         on:keydown={({ shiftKey, key }) => {
           if (disabled || readonly) return;
@@ -247,9 +250,9 @@
     </div>
     <span class:bx--slider__range-label={true}>{maxLabel ?? max}</span>
     <div class:bx--slider-text-input-wrapper={true}>
-      {#if invalid}
+      {#if showInvalid}
         <WarningFilled class="bx--slider__invalid-icon" />
-      {:else if warn}
+      {:else if showWarn}
         <WarningAltFilled
           class="bx--slider__invalid-icon bx--slider__invalid-icon--warning"
         />
@@ -261,8 +264,8 @@
         class:bx--text-input={true}
         class:bx--slider-text-input={true}
         class:bx--text-input--light={light}
-        class:bx--text-input--invalid={invalid}
-        class:bx--slider-text-input--warn={warn}
+        class:bx--text-input--invalid={showInvalid}
+        class:bx--slider-text-input--warn={showWarn}
         {value}
         aria-labelledby={$$props["aria-label"] ? undefined : labelId}
         aria-label={$$props["aria-label"] ?? "Slider number input"}
@@ -277,18 +280,18 @@
             value = Number(target.value);
           }
         }}
-        data-invalid={invalid || null}
-        data-warn={warn && !invalid || null}
-        aria-invalid={invalid || null}
-        aria-describedby={invalid
+        data-invalid={showInvalid || null}
+        data-warn={showWarn || null}
+        aria-invalid={showInvalid || null}
+        aria-describedby={showInvalid
           ? errorId
-          : warn
+          : showWarn
             ? warnId
             : undefined}
       >
     </div>
   </div>
-  {#if invalid}
+  {#if showInvalid}
     <div
       id={errorId}
       class:bx--slider__validation-msg={true}
@@ -298,7 +301,7 @@
       {invalidText}
     </div>
   {/if}
-  {#if warn && !invalid}
+  {#if showWarn}
     <div
       id={warnId}
       class:bx--slider__validation-msg={true}
