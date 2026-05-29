@@ -59,13 +59,21 @@
 
   const ctx = getContext("carbon:RadioButtonGroup");
 
-  const { add, update, selectedValue, groupName, groupRequired, readonly } =
-    ctx ?? {
-      groupName: readable(undefined),
-      groupRequired: readable(undefined),
-      selectedValue: readable(checked ? value : undefined),
-      readonly: readable(false),
-    };
+  const {
+    add,
+    update,
+    selectedValue,
+    groupName,
+    groupRequired,
+    readonly,
+    helperId,
+  } = ctx ?? {
+    groupName: readable(undefined),
+    groupRequired: readable(undefined),
+    selectedValue: readable(checked ? value : undefined),
+    readonly: readable(false),
+    helperId: readable(undefined),
+  };
 
   // Track if we're in standalone mode (no RadioButtonGroup context)
   const isStandalone = !ctx;
@@ -159,6 +167,7 @@
     {disabled}
     required={$groupRequired ?? required}
     {value}
+    aria-describedby={$helperId}
     class:bx--radio-button={true}
     on:focus
     on:blur
