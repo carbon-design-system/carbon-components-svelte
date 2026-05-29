@@ -41,8 +41,10 @@ describe("RadioButtonGroup", () => {
   it("should handle disabled state", () => {
     render(RadioButtonGroup, { props: { disabled: true } });
 
-    const fieldset = screen.getByRole("group");
-    expect(fieldset).toBeDisabled();
+    expect(screen.getByRole("group")).toBeDisabled();
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toBeDisabled();
+    }
   });
 
   it("should handle required state", () => {
