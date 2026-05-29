@@ -196,6 +196,31 @@ describe("Dropdown", () => {
     expect(screen.getByRole("combobox")).toHaveTextContent("Slack");
   });
 
+  it.each([
+    "disabled",
+    "readonly",
+  ] as const)("should suppress invalid and warn states when %s", (state) => {
+    const { container } = render(Dropdown, {
+      props: {
+        items,
+        selectedId: "0",
+        [state]: true,
+        invalid: true,
+        invalidText: "Invalid selection",
+        warn: true,
+        warnText: "Warning message",
+      },
+    });
+
+    const listbox = container.querySelector(".bx--dropdown");
+    expect(listbox).not.toHaveAttribute("data-invalid");
+    expect(listbox).not.toHaveClass("bx--dropdown--invalid");
+    expect(listbox).not.toHaveClass("bx--dropdown--warning");
+    expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
+    expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+  });
+
   it("should handle helper text", () => {
     render(Dropdown, {
       props: {
