@@ -364,6 +364,60 @@ describe("Slider", () => {
     expect(warnIcon).not.toBeInTheDocument();
   });
 
+  it("should suppress invalid state when disabled", () => {
+    const { container } = render(Slider, {
+      props: {
+        disabled: true,
+        invalid: true,
+        invalidText: "Error message",
+        warn: true,
+        warnText: "Warning message",
+      },
+    });
+
+    expect(container.querySelector(".bx--slider__invalid-icon")).toBeNull();
+    expect(screen.queryByText("Error message")).not.toBeInTheDocument();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+
+    const slider = container.querySelector('[role="slider"]');
+    const input = container.querySelector("input.bx--slider-text-input");
+    expect(slider).not.toHaveAttribute("aria-invalid");
+    expect(slider).not.toHaveAttribute("aria-describedby");
+    expect(input).not.toHaveClass("bx--text-input--invalid");
+    expect(input).not.toHaveAttribute("data-invalid");
+  });
+
+  it("should suppress invalid/warn state when readonly", () => {
+    const { container } = render(Slider, {
+      props: {
+        readonly: true,
+        invalid: true,
+        invalidText: "Error message",
+        warn: true,
+        warnText: "Warning message",
+      },
+    });
+
+    expect(container.querySelector(".bx--slider__invalid-icon")).toBeNull();
+    expect(screen.queryByText("Error message")).not.toBeInTheDocument();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+
+    const slider = container.querySelector('[role="slider"]');
+    expect(slider).not.toHaveAttribute("aria-invalid");
+    expect(slider).not.toHaveAttribute("aria-describedby");
+  });
+
+  it("should suppress warn state when disabled", () => {
+    const { container } = render(Slider, {
+      props: { disabled: true, warn: true, warnText: "Warning message" },
+    });
+
+    expect(
+      container.querySelector(".bx--slider__invalid-icon--warning"),
+    ).toBeNull();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+  });
+
   it("should handle custom labels", () => {
     render(Slider, {
       props: {
