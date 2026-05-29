@@ -42,8 +42,12 @@ describe("RadioButtonGroup", () => {
     render(RadioButtonGroup, { props: { disabled: true } });
 
     expect(screen.getByRole("group")).toBeDisabled();
+
+    // Native `<fieldset disabled>` propagates to nested inputs; individual
+    // radio buttons should not carry their own `disabled` attribute.
     for (const radio of screen.getAllByRole("radio")) {
       expect(radio).toBeDisabled();
+      expect(radio).not.toHaveAttribute("disabled");
     }
   });
 

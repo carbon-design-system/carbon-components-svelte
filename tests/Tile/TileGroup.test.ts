@@ -33,9 +33,12 @@ describe("TileGroup", () => {
     const fieldset = screen.getByRole("group");
     expect(fieldset).toBeDisabled();
 
+    // Native `<fieldset disabled>` propagates to nested inputs; individual
+    // tiles should not carry their own `disabled` attribute.
     const radios = screen.getAllByRole("radio");
     for (const radio of radios) {
       expect(radio).toBeDisabled();
+      expect(radio).not.toHaveAttribute("disabled");
     }
   });
 
