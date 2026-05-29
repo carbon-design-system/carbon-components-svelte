@@ -219,6 +219,38 @@ describe("UIShell", () => {
         expect(component.isSideNavOpen).toBe(true);
       });
 
+      it("auto-expands on desktop after toggling the mobile hamburger (open then close)", async () => {
+        // Regression: in the default (non-persistent) mode the hamburger
+        // appears only on mobile, so clicking it set `userExplicitlySet`,
+        // which then suppressed the desktop auto-expand. Repro: desktop ->
+        // mobile -> open + close menu -> desktop must re-expand the side nav.
+        setViewportWidth(1200); // Desktop
+        const { container, component } = render(UiShell, {
+          props: { isSideNavOpen: true },
+        });
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(component.isSideNavOpen).toBe(true);
+
+        // Desktop -> mobile: auto-collapses, hamburger appears.
+        setViewportWidth(500);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(component.isSideNavOpen).toBe(false);
+
+        const hamburgerButton = container.querySelector(
+          ".bx--header__menu-trigger",
+        );
+        assert(hamburgerButton);
+        await user.click(hamburgerButton); // open
+        expect(component.isSideNavOpen).toBe(true);
+        await user.click(hamburgerButton); // close
+        expect(component.isSideNavOpen).toBe(false);
+
+        // Mobile -> desktop: should auto-expand again.
+        setViewportWidth(1200);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(component.isSideNavOpen).toBe(true);
+      });
+
       it("should auto-expand when crossing breakpoint to desktop", async () => {
         setViewportWidth(500); // Start on mobile
 

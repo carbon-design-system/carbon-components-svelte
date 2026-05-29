@@ -121,10 +121,16 @@
       // Initial mount: set based on current viewport
       isSideNavOpen = shouldAutoExpand;
     } else if (wasAboveBreakpoint !== isAboveBreakpoint) {
-      // Crossed breakpoint threshold: skip auto-write if the user just
-      // toggled the nav so their choice isn't clobbered by the resize.
+      // Crossed breakpoint threshold: apply the responsive default for the
+      // new viewport. In `persistentHamburgerMenu` mode there is no responsive
+      // default (the hamburger is always shown and the nav is fully
+      // user-controlled), so preserve a state the user just toggled. In the
+      // default mode the hamburger only appears on mobile, so a mobile toggle
+      // must NOT suppress auto-expand when returning to desktop.
       // The flag is one-shot — reset so subsequent crossings auto-expand.
-      if (!userExplicitlySet) isSideNavOpen = shouldAutoExpand;
+      if (!(persistentHamburgerMenu && userExplicitlySet)) {
+        isSideNavOpen = shouldAutoExpand;
+      }
       userExplicitlySet = false;
     }
 
