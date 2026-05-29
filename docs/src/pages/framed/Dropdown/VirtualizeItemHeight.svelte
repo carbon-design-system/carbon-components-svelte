@@ -22,3 +22,9 @@
     <span>{item.description}</span>
   </Stack>
 </Dropdown>
+
+<style>
+  :global(.bx--list-box__menu-item, .bx--list-box__menu-item__option) {
+    height: auto;
+  }
+</style>
