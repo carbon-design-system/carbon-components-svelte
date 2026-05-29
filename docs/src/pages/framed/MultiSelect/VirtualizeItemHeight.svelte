@@ -23,3 +23,13 @@
     <span>{item.description}</span>
   </Stack>
 </MultiSelect>
+
+<style>
+  :global(.bx--list-box__menu-item, .bx--list-box__menu-item__option) {
+    height: auto;
+  }
+
+  :global(.bx--checkbox-label-text) {
+    display: block;
+  }
+</style>
