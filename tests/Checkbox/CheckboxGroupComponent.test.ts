@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import CheckboxGroupComponent from "./CheckboxGroupComponent.test.svelte";
 import CheckboxGroupStaticSelected from "./CheckboxGroupStaticSelected.test.svelte";
@@ -153,6 +154,26 @@ describe("CheckboxGroup", () => {
     const formItem = fieldset.closest(".bx--form-item");
     assert(formItem);
     expect(formItem).toHaveClass("custom-group");
+  });
+
+  it("should propagate external selected updates to child checkboxes", async () => {
+    const { component } = render(CheckboxGroupComponent, {
+      props: { selected: ["1"] },
+    });
+
+    expect(screen.getByRole("checkbox", { name: "Option 1" })).toBeChecked();
+    expect(
+      screen.getByRole("checkbox", { name: "Option 2" }),
+    ).not.toBeChecked();
+
+    component.selected = ["2", "3"];
+    await tick();
+
+    expect(
+      screen.getByRole("checkbox", { name: "Option 1" }),
+    ).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Option 2" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Option 3" })).toBeChecked();
   });
 
   it("should update selected value on checkbox clicks", async () => {
