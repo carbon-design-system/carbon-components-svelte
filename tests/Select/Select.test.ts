@@ -167,6 +167,27 @@ describe("Select", () => {
     expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
   });
 
+  it("suppresses invalid and warn states when disabled", () => {
+    render(Select, {
+      disabled: true,
+      invalid: true,
+      invalidText: "Invalid selection",
+      warn: true,
+      warnText: "Warning message",
+    });
+
+    const selectElement = screen.getByLabelText("Select label");
+    const selectWrapper = selectElement.closest(".bx--select");
+    assert(selectWrapper);
+
+    expect(selectWrapper).not.toHaveClass("bx--select--invalid");
+    expect(selectWrapper).not.toHaveClass("bx--select--warning");
+    expect(selectElement).not.toHaveAttribute("aria-invalid");
+    expect(selectWrapper.querySelector(".bx--select__invalid-icon")).toBeNull();
+    expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+  });
+
   it.each([
     "ArrowDown",
     "ArrowUp",

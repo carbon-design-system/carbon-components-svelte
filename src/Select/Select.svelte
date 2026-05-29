@@ -157,6 +157,9 @@
   $: warnId = `warn-${id}`;
   $: helperId = `helper-${id}`;
   $: selectedValue.set(selected ?? $defaultValue);
+  // Invalid/warn states are suppressed when the select is disabled or read-only.
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
 </script>
 
 <div class:bx--form-item={true}>
@@ -164,9 +167,9 @@
     class:bx--select={true}
     class:bx--select--inline={inline}
     class:bx--select--light={light}
-    class:bx--select--invalid={invalid && !readonly}
+    class:bx--select--invalid={showInvalid}
     class:bx--select--disabled={disabled}
-    class:bx--select--warning={warn && !readonly}
+    class:bx--select--warning={showWarn}
     class:bx--select--readonly={readonly}
   >
     {#if !noLabel && (labelText || $$slots.labelChildren)}
@@ -183,18 +186,18 @@
       <div class:bx--select-input--inline__wrapper={true}>
         <div
           class:bx--select-input__wrapper={true}
-          data-invalid={(invalid && !readonly) || undefined}
+          data-invalid={showInvalid || undefined}
         >
           <select
             bind:this={ref}
-            aria-describedby={invalid && !readonly
+            aria-describedby={showInvalid
               ? errorId
-              : warn && !readonly
+              : showWarn
                 ? warnId
                 : helperText
                   ? helperId
                   : undefined}
-            aria-invalid={(invalid && !readonly) || undefined}
+            aria-invalid={showInvalid || undefined}
             aria-readonly={readonly || undefined}
             disabled={disabled || undefined}
             required={required || undefined}
@@ -215,27 +218,27 @@
             <slot />
           </select>
           <ChevronDown class="bx--select__arrow" />
-          {#if invalid && !readonly}
+          {#if showInvalid}
             <WarningFilled class="bx--select__invalid-icon" />
           {/if}
-          {#if !invalid && warn && !readonly}
+          {#if showWarn}
             <WarningAltFilled
               class="bx--select__invalid-icon bx--select__invalid-icon--warning"
             />
           {/if}
         </div>
-        {#if invalid && !readonly}
+        {#if showInvalid}
           <div class:bx--form-requirement={true} id={errorId}>
             {invalidText}
           </div>
         {/if}
-        {#if !invalid && warn && !readonly}
+        {#if showWarn}
           <div class:bx--form-requirement={true} id={warnId}>
             {warnText}
           </div>
         {/if}
       </div>
-      {#if (!invalid && !warn && helperText) || (readonly && helperText)}
+      {#if helperText && !showInvalid && !showWarn}
         <div
           id={helperId}
           class:bx--form__helper-text={true}
@@ -248,22 +251,22 @@
     {#if !inline}
       <div
         class:bx--select-input__wrapper={true}
-        data-invalid={(invalid && !readonly) || undefined}
+        data-invalid={showInvalid || undefined}
       >
         <select
           bind:this={ref}
           {id}
           {name}
-          aria-describedby={invalid && !readonly
+          aria-describedby={showInvalid
             ? errorId
-            : warn && !readonly
+            : showWarn
               ? warnId
               : helperText
                 ? helperId
                 : undefined}
           disabled={disabled || undefined}
           required={required || undefined}
-          aria-invalid={(invalid && !readonly) || undefined}
+          aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
           class:bx--select-input={true}
           class:bx--select-input--sm={size === "sm"}
@@ -280,16 +283,16 @@
           <slot />
         </select>
         <ChevronDown class="bx--select__arrow" />
-        {#if invalid && !readonly}
+        {#if showInvalid}
           <WarningFilled class="bx--select__invalid-icon" />
         {/if}
-        {#if !invalid && warn && !readonly}
+        {#if showWarn}
           <WarningAltFilled
             class="bx--select__invalid-icon bx--select__invalid-icon--warning"
           />
         {/if}
       </div>
-      {#if (!invalid && !warn && helperText) || (readonly && helperText)}
+      {#if helperText && !showInvalid && !showWarn}
         <div
           id={helperId}
           class:bx--form__helper-text={true}
@@ -298,10 +301,10 @@
           {helperText}
         </div>
       {/if}
-      {#if invalid && !readonly}
+      {#if showInvalid}
         <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
       {/if}
-      {#if !invalid && warn && !readonly}
+      {#if showWarn}
         <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
       {/if}
     {/if}
