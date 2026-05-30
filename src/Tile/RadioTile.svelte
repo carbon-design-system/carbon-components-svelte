@@ -52,7 +52,8 @@
   $: ariaLabelledBy = $$restProps["aria-labelledby"];
   $: labelRestProps = Object.fromEntries(
     Object.entries($$restProps).filter(
-      ([key]) => key !== "aria-describedby" && propKey !== "aria-labelledby",
+      ([propKey]) =>
+        propKey !== "aria-describedby" && propKey !== "aria-labelledby",
     ),
   );
 

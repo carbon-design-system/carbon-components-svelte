@@ -30,7 +30,7 @@
     </div>
   </div>
   <div class:bx--structured-list-tbody={true}>
-    {#each Array.from({ length: rows }, (_, i) => i) as row, i (row)}
+    {#each Array.from({ length: rows }, (_, i) => i) as row, index (row)}
       <div class:bx--structured-list-row={true}>
         {#each cols as col (col)}
           <div class:bx--structured-list-td={true}></div>

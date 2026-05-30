@@ -412,10 +412,10 @@
       // for a basic, case-insensitive match (non-fuzzy).
       // This supports nested keys like "contact.company".
       filteredRows = originalRows.filter((row) => {
-        return searchableKeys.some((key) => {
-          const _value = resolvePath(row, key);
-          if (typeof _value === "string" || typeof _value === "number") {
-            return `${_value}`?.toLowerCase().includes(value);
+        return searchableKeys.some((searchKey) => {
+          const cellValue = resolvePath(row, searchKey);
+          if (typeof cellValue === "string" || typeof cellValue === "number") {
+            return `${cellValue}`?.toLowerCase().includes(value);
           }
           return false;
         });
@@ -817,8 +817,8 @@
           {/if}
 
           <!-- Visible rows -->
-          {#each rowsToRender as row, i (row.id)}
-            {@const actualIndex = virtualData.startIndex + i}
+          {#each rowsToRender as row, index (row.id)}
+            {@const actualIndex = virtualData.startIndex + index}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = !!expandedRows[row.id]}
             {@const rowClassValue =
@@ -1035,14 +1035,14 @@
           {/if}
         {:else}
           <!-- Non-virtualized: render all rows normally -->
-          {#each rowsToRender as row, i (row.id)}
+          {#each rowsToRender as row, index (row.id)}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = !!expandedRows[row.id]}
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
             {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
-                ? rowClass({ row, rowIndex: i, selected: isSelected, expanded: isExpanded })
+                ? rowClass({ row, rowIndex: index, selected: isSelected, expanded: isExpanded })
                 : rowClass}
             <TableRow
               data-row={row.id}
@@ -1162,7 +1162,7 @@
                       name="cell"
                       {row}
                       {cell}
-                      rowIndex={i}
+                      rowIndex={index}
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
@@ -1185,7 +1185,7 @@
                       name="cell"
                       {row}
                       {cell}
-                      rowIndex={i}
+                      rowIndex={index}
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}

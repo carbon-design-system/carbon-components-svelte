@@ -437,11 +437,11 @@
   }
 
   function handleBlur(event) {
-    dispatch("blur", { event: event, value });
+    dispatch("blur", { event, value });
   }
 
   function handleStepperBlur(event, direction) {
-    dispatch("blur:stepper", { event: event, value, direction });
+    dispatch("blur:stepper", { event, value, direction });
   }
 </script>
 

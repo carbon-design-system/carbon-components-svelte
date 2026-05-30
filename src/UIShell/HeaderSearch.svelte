@@ -205,23 +205,23 @@
       id={menuId}
       class:bx--header-search-menu={true}
     >
-      {#each results as result, i (result.id ?? i)}
+      {#each results as result, index (result.id ?? index)}
         <li role="none">
           <a
             tabindex="-1"
-            id="{id}-menuitem-{result.id ?? i}"
+            id="{id}-menuitem-{result.id ?? index}"
             role="menuitem"
             href={result.href}
             class:bx--header-search-menu-item={true}
             class:bx--header-search-menu-item--selected={selectedId ===
-              `${id}-menuitem-${result.id ?? i}`}
+              `${id}-menuitem-${result.id ?? index}`}
             on:click|preventDefault={async () => {
-              selectedResultIndex = i;
+              selectedResultIndex = index;
               await tick();
               selectResult();
             }}
           >
-            <slot {result} index={i}>
+            <slot {result} {index}>
               {result.text}
               {#if result.description}
                 <span class:bx--header-search-menu-description={true}

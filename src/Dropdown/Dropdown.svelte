@@ -201,8 +201,8 @@
   $: inline = type === "inline";
   $: {
     itemsById = new Map();
-    for (let i = 0; i < items.length; i++) {
-      itemsById.set(items[i].id, items[i]);
+    for (let index = 0; index < items.length; index++) {
+      itemsById.set(items[index].id, items[index]);
     }
   }
   $: menuId = `menu-${id}`;
@@ -379,43 +379,43 @@
     }
   });
 
-  function change(dir) {
-    let index = highlightedIndex + dir;
+  function change(step) {
+    let candidateIndex = highlightedIndex + step;
 
     if (items.length === 0) return;
-    if (index < 0) {
-      index = items.length - 1;
-    } else if (index >= items.length) {
-      index = 0;
+    if (candidateIndex < 0) {
+      candidateIndex = items.length - 1;
+    } else if (candidateIndex >= items.length) {
+      candidateIndex = 0;
     }
 
-    let disabled = items[i].disabled;
+    let itemDisabled = items[candidateIndex].disabled;
     let attempts = 0;
 
-    while (disabled && attempts < items.length) {
-      index = index + dir;
+    while (itemDisabled && attempts < items.length) {
+      candidateIndex = candidateIndex + step;
 
-      if (index < 0) {
-        index = items.length - 1;
-      } else if (index >= items.length) {
-        index = 0;
+      if (candidateIndex < 0) {
+        candidateIndex = items.length - 1;
+      } else if (candidateIndex >= items.length) {
+        candidateIndex = 0;
       }
 
-      disabled = items[i].disabled;
+      itemDisabled = items[candidateIndex].disabled;
       attempts++;
     }
 
-    if (!disabled) highlightedIndex = index;
+    if (!itemDisabled) highlightedIndex = candidateIndex;
   }
 
-  function typeaheadSearch(char) {
+  function typeaheadSearch(character) {
     if (items.length === 0) return;
 
     if (typeaheadTimeout) {
       clearTimeout(typeaheadTimeout);
     }
 
-    typeaheadBuffer += char.toLowerCase();
+    typeaheadBuffer += character.toLowerCase();
 
     typeaheadTimeout = setTimeout(() => {
       typeaheadBuffer = "";
@@ -425,19 +425,19 @@
     // Start search from the next index after current highlight, or from 0 if none highlighted.
     const startIndex = highlightedIndex >= 0 ? highlightedIndex + 1 : 0;
 
-    for (let i = startIndex; i < items.length; i++) {
-      const itemText = itemToString(items[i]).toLowerCase();
-      if (itemText.startsWith(typeaheadBuffer) && !items[i].disabled) {
-        highlightedIndex = i;
+    for (let index = startIndex; index < items.length; index++) {
+      const itemText = itemToString(items[index]).toLowerCase();
+      if (itemText.startsWith(typeaheadBuffer) && !items[index].disabled) {
+        highlightedIndex = index;
         return;
       }
     }
 
     // Wrap around: search from beginning to startIndex.
-    for (let i = 0; i < startIndex; i++) {
-      const itemText = itemToString(items[i]).toLowerCase();
-      if (itemText.startsWith(typeaheadBuffer) && !items[i].disabled) {
-        highlightedIndex = i;
+    for (let index = 0; index < startIndex; index++) {
+      const itemText = itemToString(items[index]).toLowerCase();
+      if (itemText.startsWith(typeaheadBuffer) && !items[index].disabled) {
+        highlightedIndex = index;
         return;
       }
     }
@@ -634,8 +634,8 @@
         {#if virtualData?.isVirtualized}
           <div style="height: {virtualData.totalHeight}px; position: relative;">
             <div style="transform: translateY({virtualData.offsetY}px);">
-              {#each itemsToRender as item, i (item.id)}
-                {@const actualIndex = virtualData.startIndex + i}
+              {#each itemsToRender as item, index (item.id)}
+                {@const actualIndex = virtualData.startIndex + index}
                 <ListBoxMenuItem
                   id={item.id}
                   active={selectedId === item.id}
@@ -665,11 +665,11 @@
             </div>
           </div>
         {:else}
-          {#each itemsToRender as item, i (item.id)}
+          {#each itemsToRender as item, index (item.id)}
             <ListBoxMenuItem
               id={item.id}
               active={selectedId === item.id}
-              highlighted={highlightedIndex === i}
+              highlighted={highlightedIndex === index}
               disabled={item.disabled}
               on:click={(event) => {
                 if (item.disabled) {
@@ -683,10 +683,10 @@
               }}
               on:mouseenter={() => {
                 if (item.disabled) return;
-                highlightedIndex = i;
+                highlightedIndex = index;
               }}
             >
-              <slot {item} index={i}> {itemToString(item)} </slot>
+              <slot {item} {index}> {itemToString(item)} </slot>
               {#if selectedId === item.id}
                 <Checkmark class="bx--list-box__menu-item__selected-icon" />
               {/if}
