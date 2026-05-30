@@ -149,17 +149,18 @@
     };
   });
 
+  $: isDisabled = Boolean(disabled);
   $: iconProps = {
     "aria-hidden": "true",
     class: "bx--btn__icon",
   };
   $: buttonProps = {
-    type: href && !disabled ? undefined : type,
+    type: href && !isDisabled ? undefined : type,
     tabindex,
-    disabled: disabled === true ? true : undefined,
-    href: href && !disabled ? href : undefined,
+    disabled: isDisabled ? true : undefined,
+    href: href && !isDisabled ? href : undefined,
     rel:
-      href && !disabled && $$restProps.target === "_blank"
+      href && !isDisabled && $$restProps.target === "_blank"
         ? "noopener noreferrer"
         : undefined,
     "aria-pressed":
@@ -173,7 +174,7 @@
       size === "lg" && "bx--btn--lg",
       size === "xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,
-      disabled && "bx--btn--disabled",
+      isDisabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
       hasIconOnly && !hideTooltip && "bx--tooltip__trigger",
       hasIconOnly && !hideTooltip && "bx--tooltip--a11y",
@@ -210,7 +211,7 @@
   />
 {:else if as}
   <slot props={buttonProps} />
-{:else if href && !disabled}
+{:else if href && !isDisabled}
   <!-- svelte-ignore a11y-missing-attribute -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <a
