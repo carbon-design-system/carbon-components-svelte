@@ -139,14 +139,14 @@
       required={effectiveRequired}
       aria-readonly={readonly || undefined}
       class:bx--checkbox={true}
-      on:click={(e) => {
+      on:click={(event) => {
         if (readonly) {
-          e.preventDefault();
+          event.preventDefault();
         }
       }}
-      on:change={(e) => {
+      on:change={(event) => {
         if (readonly) {
-          e.preventDefault();
+          event.preventDefault();
           return;
         }
         if (ctxUpdate) {

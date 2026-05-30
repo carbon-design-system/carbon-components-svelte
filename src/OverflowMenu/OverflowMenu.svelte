@@ -258,10 +258,10 @@
 </script>
 
 <svelte:window
-  on:click={({ target }) => {
-    if (buttonRef?.contains(target)) return;
-    if (effectivePortalMenu && menuRef?.contains(target)) return;
-    if (menuRef && !menuRef.contains(target)) {
+  on:click={(event) => {
+    if (buttonRef?.contains(event.target)) return;
+    if (effectivePortalMenu && menuRef?.contains(event.target)) return;
+    if (menuRef && !menuRef.contains(event.target)) {
       const shouldContinue = dispatch("close", null, { cancelable: true });
       if (shouldContinue) {
         open = false;
@@ -287,8 +287,8 @@
   class:bx--overflow-menu--xl={size === "xl"}
   {...$$restProps}
   on:click
-  on:click={({ target }) => {
-    if (!menuRef?.contains(target)) {
+  on:click={(event) => {
+    if (!menuRef?.contains(event.target)) {
       open = !open;
       if (!open) {
         const shouldContinue = dispatch("close", null, { cancelable: true });
@@ -302,18 +302,18 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={(e) => {
+  on:keydown={(event) => {
     if (open) {
-      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
-        e.preventDefault();
-      } else if (e.key === "Home") {
-        e.preventDefault();
+      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
+        event.preventDefault();
+      } else if (event.key === "Home") {
+        event.preventDefault();
         first();
-      } else if (e.key === "End") {
-        e.preventDefault();
+      } else if (event.key === "End") {
+        event.preventDefault();
         last();
-      } else if (e.key === "Escape") {
-        e.stopPropagation();
+      } else if (event.key === "Escape") {
+        event.stopPropagation();
         const shouldContinue = dispatch("close", null, { cancelable: true });
         if (shouldContinue) {
           open = false;
@@ -379,17 +379,17 @@
       class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
       class={menuOptionsClass}
       style="position: relative; top: auto; left: auto; --overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
-      on:keydown={(e) => {
-        if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
-          e.preventDefault();
-        } else if (e.key === "Home") {
-          e.preventDefault();
+      on:keydown={(event) => {
+        if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
+          event.preventDefault();
+        } else if (event.key === "Home") {
+          event.preventDefault();
           first();
-        } else if (e.key === "End") {
-          e.preventDefault();
+        } else if (event.key === "End") {
+          event.preventDefault();
           last();
-        } else if (e.key === "Escape") {
-          e.stopPropagation();
+        } else if (event.key === "Escape") {
+          event.stopPropagation();
           const shouldContinue = dispatch("close", null, { cancelable: true });
           if (shouldContinue) {
             open = false;

@@ -52,7 +52,7 @@
   $: ariaLabelledBy = $$restProps["aria-labelledby"];
   $: labelRestProps = Object.fromEntries(
     Object.entries($$restProps).filter(
-      ([key]) => key !== "aria-describedby" && key !== "aria-labelledby",
+      ([key]) => key !== "aria-describedby" && propKey !== "aria-labelledby",
     ),
   );
 
@@ -87,10 +87,10 @@
     update(value);
   }}
   on:keydown
-  on:keydown={(e) => {
+  on:keydown={(event) => {
     if (disabled) return;
-    if (e.key === " " || e.key === "Enter") {
-      e.preventDefault();
+    if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
       update(value);
     }
   }}

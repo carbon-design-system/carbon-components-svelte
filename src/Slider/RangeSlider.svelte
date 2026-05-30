@@ -131,16 +131,16 @@
   let currentEvent = null;
 
   /** @type {(e: PointerLikeEvent) => number | null} */
-  function getClientX(e) {
-    if ("touches" in e) return e.touches[0]?.clientX ?? null;
-    return e.clientX;
+  function getClientX(event) {
+    if ("touches" in event) return event.touches[0]?.clientX ?? null;
+    return event.clientX;
   }
 
   /** @type {(e: PointerLikeEvent) => ActiveHandle} */
-  function pickHandle(e) {
-    if (e.target === lowerThumbRef) return "lower";
-    if (e.target === upperThumbRef) return "upper";
-    const clientX = getClientX(e);
+  function pickHandle(event) {
+    if (event.target === lowerThumbRef) return "lower";
+    if (event.target === upperThumbRef) return "upper";
+    const clientX = getClientX(event);
     if (clientX == null) return activeHandle;
     const lowerRect = lowerThumbRef?.getBoundingClientRect();
     const upperRect = upperThumbRef?.getBoundingClientRect();
@@ -154,15 +154,15 @@
   }
 
   /** @type {(e: MouseEvent | TouchEvent) => void} */
-  function startInteraction(e) {
+  function startInteraction(event) {
     if (disabled || readonly) return;
-    activeHandle = pickHandle(e);
+    activeHandle = pickHandle(event);
     if (activeHandle === "lower") {
       lowerThumbRef?.focus({ preventScroll: true });
     } else {
       upperThumbRef?.focus({ preventScroll: true });
     }
-    currentEvent = e;
+    currentEvent = event;
     holding = true;
     dragging = true;
   }
@@ -175,18 +175,18 @@
   }
 
   /** @type {(e: PointerLikeEvent) => void} */
-  function move(e) {
+  function move(event) {
     if (holding) {
-      currentEvent = e;
+      currentEvent = event;
       dragging = true;
     }
   }
 
   /** @type {(e: PointerLikeEvent | null) => void} */
-  function calcValue(e) {
-    if (disabled || readonly || !e || !trackRef) return;
+  function calcValue(event) {
+    if (disabled || readonly || !event || !trackRef) return;
 
-    const offsetX = getClientX(e);
+    const offsetX = getClientX(event);
     if (offsetX == null) return;
     const { left, width } = trackRef.getBoundingClientRect();
     let nextValue =
@@ -210,7 +210,7 @@
   }
 
   /** @type {(e: KeyboardEvent) => void} */
-  function onKeyDown(e) {
+  function onKeyDown(event) {
     if (disabled || readonly) return;
     /** @type {Record<string, number>} */
     const keys = {
@@ -219,10 +219,11 @@
       ArrowRight: 1,
       ArrowUp: 1,
     };
-    const dir = keys[e.key];
+    const dir = keys[event.key];
     if (!dir) return;
     const range = max - min;
-    const delta = step * (e.shiftKey ? range / step / stepMultiplier : 1) * dir;
+    const delta =
+      step * (event.shiftKey ? range / step / stepMultiplier : 1) * dir;
     if (activeHandle === "lower") {
       let next = Math.round((value + delta) / step) * step;
       if (next < min) next = min;

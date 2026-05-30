@@ -75,8 +75,8 @@
     checked={toggled}
     aria-disabled={readonly || undefined}
     aria-readonly={readonly || undefined}
-    on:click={(e) => {
-      if (readonly) e.preventDefault();
+    on:click={(event) => {
+      if (readonly) event.preventDefault();
     }}
     on:change={() => {
       if (readonly) return;
@@ -84,9 +84,9 @@
       dispatch("toggle", { toggled });
     }}
     on:change
-    on:keydown={(e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
+    on:keydown={(event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
         if (!readonly) ref?.click();
       }
     }}

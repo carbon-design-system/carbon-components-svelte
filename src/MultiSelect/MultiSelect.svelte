@@ -317,9 +317,8 @@
     if (!disabled) highlightedIndex = index;
   }
 
-  /**
+    /**
    * Handle selection of an item, including isSelectAll logic.
-   * @param {Item} item
    */
   function selectItem(item) {
     if (item.disabled) return;
@@ -597,16 +596,16 @@
 </script>
 
 <svelte:window
-  on:click={({ target }) => {
-    if (open && multiSelectRef && !multiSelectRef.contains(target)) {
-      if (effectivePortalMenu && listRef?.contains(target)) return;
+  on:click={(event) => {
+    if (open && multiSelectRef && !multiSelectRef.contains(event.target)) {
+      if (effectivePortalMenu && listRef?.contains(event.target)) return;
       open = false;
     }
   }}
-  on:focusin={({ target }) => {
+  on:focusin={(event) => {
     if (!open) return;
-    if (multiSelectRef?.contains(target)) return;
-    if (effectivePortalMenu && listRef?.contains(target)) return;
+    if (multiSelectRef?.contains(event.target)) return;
+    if (effectivePortalMenu && listRef?.contains(event.target)) return;
     open = false;
   }}
 />
@@ -693,34 +692,34 @@
             open = true;
           }}
           on:keydown
-          on:keydown|stopPropagation={({ key }) => {
+          on:keydown|stopPropagation={(event) => {
             if (readonly) return;
-            if (key === "Enter") {
+            if (event.key === "Enter") {
               if (highlightedId) {
                 const highlightedItem = sortedItems.find(
                   (item) => item.id === highlightedId,
                 );
                 if (highlightedItem) selectItem(highlightedItem);
               }
-            } else if (key === "Tab") {
+            } else if (event.key === "Tab") {
               open = false;
-            } else if (key === "ArrowDown") {
+            } else if (event.key === "ArrowDown") {
               if (!open) open = true;
               change(1);
-            } else if (key === "ArrowUp") {
+            } else if (event.key === "ArrowUp") {
               if (!open) open = true;
               change(-1);
-            } else if (key === "Escape") {
+            } else if (event.key === "Escape") {
               open = false;
-            } else if (key === " ") {
+            } else if (event.key === " ") {
               if (!open) open = true;
-            } else if (key === "Backspace" && value === "") {
+            } else if (event.key === "Backspace" && value === "") {
               selectedIds = [];
               sortedItems = sortedItems.map((item) => ({
                 ...item,
                 checked: false,
               }));
-            } else if (key === "Delete") {
+            } else if (event.key === "Delete") {
               if (open) {
                 value = "";
               } else {
@@ -761,9 +760,9 @@
         {/if}
         <ListBoxMenuIcon
           aria-hidden={readonly || undefined}
-          on:click={(e) => {
+          on:click={(event) => {
             if (disabled || readonly) return;
-            e.stopPropagation();
+            event.stopPropagation();
             open = !open;
           }}
           {translateWithId}
@@ -782,35 +781,38 @@
           if (disabled || readonly) return;
           open = !open;
         }}
-        on:keydown={(e) => {
-          const key = e.key;
-          if (key === " " || key === "ArrowUp" || key === "ArrowDown") {
-            e.preventDefault();
+        on:keydown={(event) => {
+          if (
+            event.key === " " ||
+            event.key === "ArrowUp" ||
+            event.key === "ArrowDown"
+          ) {
+            event.preventDefault();
           }
           if (readonly) return;
-          if (key === " ") {
+          if (event.key === " ") {
             open = !open;
-          } else if (key === "Tab") {
+          } else if (event.key === "Tab") {
             open = false;
-          } else if (key === "ArrowDown") {
+          } else if (event.key === "ArrowDown") {
             if (!open) open = true;
             change(1);
-          } else if (key === "ArrowUp") {
+          } else if (event.key === "ArrowUp") {
             if (!open) open = true;
             change(-1);
-          } else if (key === "Enter") {
+          } else if (event.key === "Enter") {
             if (highlightedIndex > -1) {
               const item = (filterable ? filteredItems : sortedItems)[
                 highlightedIndex
               ];
               if (item) selectItem(item);
             }
-          } else if (key === "Escape") {
+          } else if (event.key === "Escape") {
             open = false;
           }
         }}
-        on:blur={(e) => {
-          dispatch("blur", e);
+        on:blur={(event) => {
+          dispatch("blur", event);
         }}
         {id}
         {disabled}
@@ -852,8 +854,8 @@
         {direction}
         aria-multiselectable="true"
         on:scroll
-        on:scroll={(e) => {
-          listScrollTop = e.target.scrollTop;
+        on:scroll={(event) => {
+          listScrollTop = event.target.scrollTop;
         }}
         bind:ref={listRef}
         style={effectivePortalMenu
@@ -882,9 +884,9 @@
                   active={item.isSelectAll ? false : item.checked}
                   highlighted={highlightedIndex === actualIndex}
                   disabled={item.disabled}
-                  on:click={(e) => {
+                  on:click={(event) => {
                     if (item.disabled) {
-                      e.stopPropagation();
+                      event.stopPropagation();
                       return;
                     }
                     selectItem(item);
@@ -934,9 +936,9 @@
               active={item.isSelectAll ? false : item.checked}
               highlighted={highlightedIndex === i}
               disabled={item.disabled}
-              on:click={(e) => {
+              on:click={(event) => {
                 if (item.disabled) {
-                  e.stopPropagation();
+                  event.stopPropagation();
                   return;
                 }
                 selectItem(item);

@@ -155,8 +155,8 @@
         }
       }}
       on:keydown
-      on:keydown={({ key }) => {
-        if (key === "Escape") {
+      on:keydown={(event) => {
+        if (event.key === "Escape") {
           value = "";
           dispatch("clear");
         }

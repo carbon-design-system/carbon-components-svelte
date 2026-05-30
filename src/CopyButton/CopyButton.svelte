@@ -106,8 +106,8 @@
     }, feedbackTimeout);
   }}
   on:animationend
-  on:animationend={({ animationName }) => {
-    if (animationName === "hide-feedback") {
+  on:animationend={(event) => {
+    if (event.animationName === "hide-feedback") {
       animation = undefined;
       feedbackOpen = false;
     }

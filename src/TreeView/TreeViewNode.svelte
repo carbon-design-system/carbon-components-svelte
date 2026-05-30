@@ -149,28 +149,28 @@
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
-      on:click|stopPropagation={(e) => {
+      on:click|stopPropagation={(event) => {
         if (disabled) return;
-        clickNode(node, e);
+        clickNode(node, event);
       }}
-      on:keydown={(e) => {
+      on:keydown={(event) => {
         if (
-          e.key === "ArrowLeft" ||
-          e.key === "ArrowRight" ||
-          e.key === "Enter"
+          event.key === "ArrowLeft" ||
+          event.key === "ArrowRight" ||
+          event.key === "Enter"
         ) {
-          e.stopPropagation();
+          event.stopPropagation();
         }
 
-        if (e.key === "ArrowLeft") {
+        if (event.key === "ArrowLeft") {
           const parentNode = findParentTreeNode(ref.parentNode?.parentNode);
           if (parentNode) parentNode.focus();
         }
 
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
           if (disabled) return;
-          clickNode(node, e);
+          clickNode(node, event);
         }
       }}
       on:focus={() => {
@@ -199,28 +199,28 @@
     class:bx--tree-node--selected={selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
-    on:click|stopPropagation={(e) => {
+    on:click|stopPropagation={(event) => {
       if (disabled) return;
-      clickNode(node, e);
+      clickNode(node, event);
     }}
-    on:keydown={(e) => {
+    on:keydown={(event) => {
       if (
-        e.key === "ArrowLeft" ||
-        e.key === "ArrowRight" ||
-        e.key === "Enter"
+        event.key === "ArrowLeft" ||
+        event.key === "ArrowRight" ||
+        event.key === "Enter"
       ) {
-        e.stopPropagation();
+        event.stopPropagation();
       }
 
-      if (e.key === "ArrowLeft") {
+      if (event.key === "ArrowLeft") {
         const parentNode = findParentTreeNode(ref.parentNode);
         if (parentNode) parentNode.focus();
       }
 
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
         if (disabled) return;
-        clickNode(node, e);
+        clickNode(node, event);
       }
     }}
     on:focus={() => {

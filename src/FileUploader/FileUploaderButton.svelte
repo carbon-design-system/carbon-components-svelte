@@ -199,9 +199,9 @@
   aria-label={hasIconOnly ? iconDescription : labelText}
   class:bx--visually-hidden={true}
   {...$$restProps}
-  on:change|stopPropagation={({ target }) => {
+  on:change|stopPropagation={(event) => {
     if (multiple) {
-      let incoming = [...target.files];
+      let incoming = [...event.target.files];
       if (preventDuplicate) {
         const existingKeys = new Set(
           files.map((f) => `${f.name}\0${f.size}\0${f.lastModified}`),
@@ -212,7 +212,7 @@
       }
       files = [...files, ...incoming];
     } else {
-      files = [...target.files];
+      files = [...event.target.files];
     }
 
     if (files && files.length > 0 && !disableLabelChanges) {
@@ -222,7 +222,7 @@
     dispatch("change", files);
   }}
   on:click
-  on:click={({ target }) => {
-    target.value = "";
+  on:click={(event) => {
+    event.target.value = "";
   }}
 >

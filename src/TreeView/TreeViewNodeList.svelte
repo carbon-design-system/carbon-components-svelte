@@ -30,7 +30,6 @@
   /**
    * First focusable tree item in a subtree `ul` — handles both bare
    * `li.bx--tree-node` rows and the link variant (`li[role="none"] > a`).
-   * @param {HTMLElement} groupUl
    * @returns {HTMLElement | null}
    */
   function firstTreeItemInGroup(groupUl) {
@@ -120,20 +119,20 @@
     class:bx--tree-node--with-icon={icon}
     aria-expanded={expanded}
     aria-owns={`${id}-subtree`}
-    on:click|stopPropagation={(e) => {
+    on:click|stopPropagation={(event) => {
       if (disabled) return;
-      clickNode(node, e);
+      clickNode(node, event);
     }}
-    on:keydown={(e) => {
+    on:keydown={(event) => {
       if (
-        e.key === "ArrowLeft" ||
-        e.key === "ArrowRight" ||
-        e.key === "Enter"
+        event.key === "ArrowLeft" ||
+        event.key === "ArrowRight" ||
+        event.key === "Enter"
       ) {
-        e.stopPropagation();
+        event.stopPropagation();
       }
 
-      if (parent && e.key === "ArrowLeft") {
+      if (parent && event.key === "ArrowLeft") {
         if (expanded) {
           expandNode(node, false);
           toggleNode(node);
@@ -143,7 +142,7 @@
         }
       }
 
-      if (parent && e.key === "ArrowRight") {
+      if (parent && event.key === "ArrowRight") {
         if (expanded) {
           const groupUl = ref.lastElementChild;
           if (groupUl instanceof HTMLElement) {
@@ -156,15 +155,15 @@
         }
       }
 
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
         if (disabled) return;
-        if (e.key === "Enter" && parent) {
+        if (event.key === "Enter" && parent) {
           const nextExpanded = !expanded;
           expandNode(node, nextExpanded);
           toggleNode(node);
         }
-        clickNode(node, e);
+        clickNode(node, event);
         ref.focus();
       }
     }}

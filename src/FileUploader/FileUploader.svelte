@@ -212,8 +212,8 @@
     {kind}
     {size}
     bind:files
-    on:change={(e) => {
-      let newFiles = e.detail;
+    on:change={(event) => {
+      let newFiles = event.detail;
       const allRejected = [];
       const existingRefs = new Set(prevFiles);
 
@@ -277,8 +277,8 @@
             {iconDescription}
             {status}
             on:keydown
-            on:keydown={(e) => {
-              if (e.key === " " || e.key === "Enter") {
+            on:keydown={(event) => {
+              if (event.key === " " || event.key === "Enter") {
                 files = files.filter((f) => f !== file);
               }
             }}

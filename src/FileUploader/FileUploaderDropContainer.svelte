@@ -66,24 +66,24 @@
   class:bx--file={true}
   {...$$restProps}
   on:dragover
-  on:dragover|preventDefault|stopPropagation={({ dataTransfer }) => {
+  on:dragover|preventDefault|stopPropagation={(event) => {
     if (!disabled) {
       over = true;
-      dataTransfer.dropEffect = "copy";
+      event.dataTransfer.dropEffect = "copy";
     }
   }}
   on:dragleave
-  on:dragleave|preventDefault|stopPropagation={({ dataTransfer }) => {
+  on:dragleave|preventDefault|stopPropagation={(event) => {
     if (!disabled) {
       over = false;
-      dataTransfer.dropEffect = "move";
+      event.dataTransfer.dropEffect = "move";
     }
   }}
   on:drop
-  on:drop|preventDefault|stopPropagation={({ dataTransfer }) => {
+  on:drop|preventDefault|stopPropagation={(event) => {
     if (!disabled) {
       over = false;
-      const newFiles = validateFiles([...dataTransfer.files]);
+      const newFiles = validateFiles([...event.dataTransfer.files]);
       files = multiple ? [...files, ...newFiles] : newFiles;
       dispatch("add", files);
       dispatch("change", files);
@@ -98,8 +98,8 @@
     class:bx--file-browse-btn={true}
     class:bx--file-browse-btn--disabled={disabled}
     on:keydown
-    on:keydown={({ key }) => {
-      if (key === " " || key === "Enter") {
+    on:keydown={(event) => {
+      if (event.key === " " || event.key === "Enter") {
         ref.click();
       }
     }}
@@ -122,15 +122,15 @@
     {name}
     {multiple}
     class:bx--file-input={true}
-    on:change={({ target }) => {
-      const newFiles = validateFiles([...target.files]);
+    on:change={(event) => {
+      const newFiles = validateFiles([...event.target.files]);
       files = multiple ? [...files, ...newFiles] : newFiles;
       dispatch("add", files);
       dispatch("change", files);
     }}
     on:click
-    on:click={({ target }) => {
-      target.value = null;
+    on:click={(event) => {
+      event.target.value = null;
     }}
   >
 </div>

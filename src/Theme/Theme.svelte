@@ -140,8 +140,8 @@
   <Toggle
     {...toggleProps}
     toggled={theme === toggleThemes[1]}
-    on:toggle={({ detail }) => {
-      theme = detail.toggled ? toggleThemes[1] : toggleThemes[0];
+    on:toggle={(event) => {
+      theme = event.detail.toggled ? toggleThemes[1] : toggleThemes[0];
     }}
   />
 {:else if render === "select"}
@@ -157,8 +157,8 @@
     {...dropdownProps}
     items={dropdownThemes.map((t) => ({ id: t, text: themes[t] }))}
     selectedId={theme}
-    on:select={({ detail }) => {
-      theme = detail.selectedId;
+    on:select={(event) => {
+      theme = event.detail.selectedId;
     }}
   />
 {/if}

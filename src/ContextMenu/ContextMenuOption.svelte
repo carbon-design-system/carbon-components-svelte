@@ -183,11 +183,11 @@
     return inTopTriangle || inBottomTriangle;
   }
 
-  function handleClick(e, opts = {}) {
+  function handleClick(event, opts = {}) {
     if (disabled) return;
     if (subOptions) return;
 
-    const shouldContinue = dispatch("click", e, { cancelable: true });
+    const shouldContinue = dispatch("click", event, { cancelable: true });
 
     if (shouldContinue) {
       if (ctxGroup) {
@@ -206,12 +206,12 @@
     }
   }
 
-  function handleGlobalMouseMove(e) {
+  function handleGlobalMouseMove(event) {
     if (subOptions && submenuOpen) {
-      mousePosition = { x: e.clientX, y: e.clientY };
+      mousePosition = { x: event.clientX, y: event.clientY };
 
       if (
-        isInSafeTriangle(e.clientX, e.clientY) &&
+        isInSafeTriangle(event.clientX, event.clientY) &&
         typeof timeoutClose === "number"
       ) {
         clearTimeout(timeoutClose);
@@ -322,11 +322,10 @@
   data-id={id}
   {...$$restProps}
   on:keydown
-  on:keydown={async (e) => {
-    const { key, target } = e;
+  on:keydown={async (event) => {
     if (
       subOptions &&
-      (key === "ArrowRight" || key === " " || key === "Enter")
+      (event.key === "ArrowRight" || event.key === " " || event.key === "Enter")
     ) {
       if (disabled) return;
       submenuOpen = true;
@@ -337,31 +336,34 @@
     }
 
     if (submenuOpen) {
-      if (key === "ArrowLeft") {
+      if (event.key === "ArrowLeft") {
         submenuOpen = false;
         focusIndex = 0;
         return;
       }
 
-      if (key === "ArrowDown") {
+      if (event.key === "ArrowDown") {
         if (focusIndex < options.length - 1) focusIndex++;
-      } else if (key === "ArrowUp") {
+      } else if (event.key === "ArrowUp") {
         if (focusIndex === -1) {
           focusIndex = options.length - 1;
         } else {
           if (focusIndex > 0) focusIndex--;
         }
-      } else if (key === "Home") {
+      } else if (event.key === "Home") {
         if (options.length > 0) focusIndex = 0;
-      } else if (key === "End" && options.length > 0) {
+      } else if (event.key === "End" && options.length > 0) {
         focusIndex = options.length - 1;
       }
 
       if (options[focusIndex]) options[focusIndex].focus();
     }
 
-    if (key === " " || key === "Enter") {
-      handleClick(e, { fromKeyboard: true, id: target.getAttribute("data-id") });
+    if (event.key === " " || event.key === "Enter") {
+      handleClick(event, {
+        fromKeyboard: true,
+        id: event.target.getAttribute("data-id"),
+      });
     }
   }}
   on:mouseenter
@@ -377,9 +379,9 @@
       }, moderate01);
     }
   }}
-  on:mousemove={(e) => {
+  on:mousemove={(event) => {
     if (subOptions && submenuOpen) {
-      mousePosition = { x: e.clientX, y: e.clientY };
+      mousePosition = { x: event.clientX, y: event.clientY };
     }
   }}
   on:mouseleave
@@ -394,14 +396,14 @@
       }, closeDelay);
     }
   }}
-  on:click={(e) => {
+  on:click={(event) => {
     if (subOptions) {
-      e.stopPropagation();
+      event.stopPropagation();
       if (disabled) return;
       submenuOpen = true;
       return;
     }
-    handleClick(e);
+    handleClick(event);
   }}
 >
   {#if subOptions}

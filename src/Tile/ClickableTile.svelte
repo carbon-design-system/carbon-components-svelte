@@ -50,9 +50,9 @@
     clicked = !clicked;
   }}
   on:keydown
-  on:keydown={({ key }) => {
+  on:keydown={(event) => {
     if (disabled) return;
-    if (key === " " || key === "Enter") {
+    if (event.key === " " || event.key === "Enter") {
       clicked = !clicked;
     }
   }}

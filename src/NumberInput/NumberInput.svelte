@@ -365,34 +365,38 @@
     return min === undefined ? 0 : min;
   }
 
-  function onInput({ target }) {
+  function onInput(event) {
     if (useTextMode) {
       userInputActive = true;
-      inputValue = target.value;
+      inputValue = event.target.value;
       const parsed = locale
-        ? parseLocaleValue(target.value)
-        : parse(target.value);
+        ? parseLocaleValue(event.target.value)
+        : parse(event.target.value);
       // Preserve last valid value when input is invalid (e.g., "1.5." with two decimals).
       // This provides better UX by letting users see and correct typos without losing data.
-      if (parsed !== null || target.value === "" || target.value === "-") {
+      if (
+        parsed !== null ||
+        event.target.value === "" ||
+        event.target.value === "-"
+      ) {
         value = parsed;
       }
     } else {
-      value = parse(target.value);
+      value = parse(event.target.value);
     }
 
     dispatch("input", value);
   }
 
-  function onChange({ target }) {
+  function onChange(event) {
     userInputActive = false;
     let parsedValue = locale
-      ? parseLocaleValue(target.value)
-      : parse(target.value, useTextMode);
+      ? parseLocaleValue(event.target.value)
+      : parse(event.target.value, useTextMode);
 
     // If allowEmpty is false and value would be null, use default value
     // This prevents the input from staying empty when allowEmpty is false
-    if (!allowEmpty && parsedValue === null && target.value === "") {
+    if (!allowEmpty && parsedValue === null && event.target.value === "") {
       parsedValue = getDefaultValue();
       // Update the input to show the default value
       if (useTextMode) {
@@ -407,7 +411,7 @@
     } else if (
       useTextMode &&
       parsedValue === null &&
-      target.value !== "" &&
+      event.target.value !== "" &&
       value !== null
     ) {
       // In text mode, normalize invalid input (e.g., "1.5.") back to
@@ -432,12 +436,12 @@
     }
   }
 
-  function handleBlur(e) {
-    dispatch("blur", { event: e, value });
+  function handleBlur(event) {
+    dispatch("blur", { event: event, value });
   }
 
-  function handleStepperBlur(e, direction) {
-    dispatch("blur:stepper", { event: e, value, direction });
+  function handleStepperBlur(event, direction) {
+    dispatch("blur:stepper", { event: event, value, direction });
   }
 </script>
 
@@ -510,8 +514,8 @@
           on:focus
           on:blur={handleBlur}
           on:paste
-          on:wheel|nonpassive={(e) => {
-            if (disableWheel) e.preventDefault();
+          on:wheel|nonpassive={(event) => {
+            if (disableWheel) event.preventDefault();
           }}
         >
       {:else}
@@ -546,8 +550,8 @@
           on:focus
           on:blur={handleBlur}
           on:paste
-          on:wheel|nonpassive={(e) => {
-            if (disableWheel) e.preventDefault();
+          on:wheel|nonpassive={(event) => {
+            if (disableWheel) event.preventDefault();
           }}
         >
       {/if}
@@ -576,7 +580,7 @@
               updateValue(false);
               dispatch("click:stepper", { value, direction: "down" });
             }}
-            on:blur={(e) => handleStepperBlur(e, "down")}
+            on:blur={(event) => handleStepperBlur(event, "down")}
             {disabled}
           >
             <Subtract class="down-icon" />
@@ -593,7 +597,7 @@
               updateValue(true);
               dispatch("click:stepper", { value, direction: "up" });
             }}
-            on:blur={(e) => handleStepperBlur(e, "up")}
+            on:blur={(event) => handleStepperBlur(event, "up")}
             {disabled}
           >
             <Add class="up-icon" />

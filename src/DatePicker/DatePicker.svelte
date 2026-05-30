@@ -422,13 +422,13 @@
 </script>
 
 <svelte:window
-  on:click={({ target }) => {
+  on:click={(event) => {
     if (!calendar?.isOpen) return;
     if (
       isEventTargetInsidePortaledCalendar(
         datePickerRef,
         calendar.calendarContainer,
-        target,
+        event.target,
       )
     ) {
       return;
@@ -459,9 +459,9 @@
     class:bx--date-picker--range={datePickerType === "range"}
     class:bx--date-picker--nolabel={datePickerType === "range" &&
       $labelTextEmpty}
-    on:keydown={(e) => {
-      if (calendar?.isOpen && e.key === "Escape") {
-        e.stopPropagation();
+    on:keydown={(event) => {
+      if (calendar?.isOpen && event.key === "Escape") {
+        event.stopPropagation();
         calendar.close();
       }
     }}

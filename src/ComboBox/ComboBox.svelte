@@ -238,8 +238,6 @@
   let fieldRef = null;
 
   /**
-   * @param {Item} item
-   * @param {string} inputValue
    * @returns {boolean}
    */
   function autocompleteCustomFilter(item, inputValue) {
@@ -564,13 +562,13 @@
 </script>
 
 <svelte:window
-  on:click={({ target }) => {
+  on:click={(event) => {
     if (skipWindowClick) {
       skipWindowClick = false;
       return;
     }
-    if (open && ref && !ref.contains(target)) {
-      if (effectivePortalMenu && listRef?.contains(target)) return;
+    if (open && ref && !ref.contains(event.target)) {
+      if (effectivePortalMenu && listRef?.contains(event.target)) return;
       open = false;
     }
   }}
@@ -636,8 +634,8 @@
           open = true;
         }}
         on:input
-        on:input={({ target }) => {
-          if (!open && target.value.length > 0) {
+        on:input={(event) => {
+          if (!open && event.target.value.length > 0) {
             open = true;
           }
 
@@ -647,13 +645,16 @@
           }
         }}
         on:keydown
-        on:keydown|stopPropagation={(e) => {
+        on:keydown|stopPropagation={(event) => {
           if (readonly) return;
-          const { key } = e;
-          if (key === "Enter" || key === "ArrowDown" || key === "ArrowUp") {
-            e.preventDefault();
+          if (
+            event.key === "Enter" ||
+            event.key === "ArrowDown" ||
+            event.key === "ArrowUp"
+          ) {
+            event.preventDefault();
           }
-          if (key === "Enter") {
+          if (event.key === "Enter") {
             open = !open;
             if (
               highlightedIndex > -1 &&
@@ -684,13 +685,13 @@
               }
             }
             highlightedIndex = -1;
-          } else if (key === "Tab") {
+          } else if (event.key === "Tab") {
             open = false;
-          } else if (key === "ArrowDown") {
+          } else if (event.key === "ArrowDown") {
             change(1);
-          } else if (key === "ArrowUp") {
+          } else if (event.key === "ArrowUp") {
             change(-1);
-          } else if (key === "Escape") {
+          } else if (event.key === "Escape") {
             clear();
           }
         }}
@@ -702,11 +703,11 @@
           }
         }}
         on:blur
-        on:blur={({ relatedTarget }) => {
-          if (!open || !relatedTarget) return;
+        on:blur={(event) => {
+          if (!open || !event.relatedTarget) return;
           if (
-            fieldRef?.contains(relatedTarget) ||
-            listRef?.contains(relatedTarget)
+            fieldRef?.contains(event.relatedTarget) ||
+            listRef?.contains(event.relatedTarget)
           ) {
             ref.focus();
           }
@@ -733,9 +734,9 @@
       {/if}
       <ListBoxMenuIcon
         aria-hidden={readonly || undefined}
-        on:click={(e) => {
+        on:click={(event) => {
           if (disabled || readonly) return;
-          e.stopPropagation();
+          event.stopPropagation();
           open = !open;
         }}
         {translateWithId}
@@ -751,8 +752,8 @@
         anchor={fieldRef}
         {direction}
         on:scroll
-        on:scroll={(e) => {
-          listScrollTop = e.target.scrollTop;
+        on:scroll={(event) => {
+          listScrollTop = event.target.scrollTop;
         }}
         bind:ref={listRef}
         style={effectivePortalMenu
@@ -773,9 +774,9 @@
                   active={selectedId === item.id}
                   highlighted={highlightedIndex === actualIndex}
                   disabled={item.disabled}
-                  on:click={(e) => {
+                  on:click={(event) => {
                     if (item.disabled) {
-                      e.stopPropagation();
+                      event.stopPropagation();
                       return;
                     }
                     selectedId = item.id;
@@ -806,9 +807,9 @@
               active={selectedId === item.id}
               highlighted={highlightedIndex === i}
               disabled={item.disabled}
-              on:click={(e) => {
+              on:click={(event) => {
                 if (item.disabled) {
-                  e.stopPropagation();
+                  event.stopPropagation();
                   return;
                 }
                 selectedId = item.id;

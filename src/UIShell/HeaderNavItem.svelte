@@ -68,44 +68,44 @@
     on:mouseleave
     on:keyup
     on:keydown
-    on:keydown={(e) => {
+    on:keydown={(event) => {
       if (!ctx) return;
 
       const currentIndex = menuItems.indexOf(ref);
       if (currentIndex === -1) return;
 
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
         // Move to next item, wrap to first
         const nextIndex = (currentIndex + 1) % menuItems.length;
         menuItems[nextIndex]?.focus();
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
         // Move to previous item, wrap to last
         const prevIndex =
           (currentIndex - 1 + menuItems.length) % menuItems.length;
         menuItems[prevIndex]?.focus();
-      } else if (e.key === "Home") {
-        e.preventDefault();
+      } else if (event.key === "Home") {
+        event.preventDefault();
         // Focus first item
         menuItems[0]?.focus();
-      } else if (e.key === "End") {
-        e.preventDefault();
+      } else if (event.key === "End") {
+        event.preventDefault();
         // Focus last item
         menuItems[menuItems.length - 1]?.focus();
-      } else if (e.key === "Escape") {
-        e.preventDefault();
+      } else if (event.key === "Escape") {
+        event.preventDefault();
         ctx.closeMenu();
       }
     }}
     on:focus
     on:blur
-    on:blur={(e) => {
+    on:blur={(event) => {
       // Only close menu if blur is moving focus outside the menu
       // (not when navigating between menu items with arrow keys)
       if (
         selectedItemIds.indexOf(id) === selectedItemIds.length - 1 &&
-        (!e.relatedTarget || !menuItems.includes(e.relatedTarget))
+        (!event.relatedTarget || !menuItems.includes(event.relatedTarget))
       ) {
         ctx?.closeMenu();
       }

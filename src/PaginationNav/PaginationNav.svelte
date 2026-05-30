@@ -122,8 +122,8 @@
     <PaginationOverflow
       fromIndex={startOffset}
       count={front}
-      on:select={({ detail }) => {
-        page = detail.index;
+      on:select={(event) => {
+        page = event.detail.index;
         dispatch("change", { page });
       }}
     />
@@ -142,8 +142,8 @@
     <PaginationOverflow
       fromIndex={total - back - 1}
       count={back}
-      on:select={({ detail }) => {
-        page = detail.index;
+      on:select={(event) => {
+        page = event.detail.index;
         dispatch("change", { page });
       }}
     />
