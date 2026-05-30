@@ -18,6 +18,8 @@ The `key` prop is also reactive, allowing you to dynamically switch between diff
 
 In this example, each user has their own theme preference stored under a separate key. When you switch users, the component automatically loads that user's saved preference.
 
+Switching the `key` only hydrates `value` from storage; it does not dispatch an `on:update` event. The event log below should remain empty when you change users and only record entries when you change the theme.
+
 <FileSource src="/framed/SessionStorage/SessionStorageReactiveKey" />
 
 ## Clear item, clear all
