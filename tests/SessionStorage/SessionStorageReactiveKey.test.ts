@@ -4,7 +4,7 @@ import { setupSessionStorageMock } from "../utils/storage-mocks";
 import SessionStorageReactiveKey from "./SessionStorageReactiveKey.test.svelte";
 
 describe("SessionStorage - reactive key", () => {
-  const { setMockItem } = setupSessionStorageMock();
+  const { setMockItem, getMockItem } = setupSessionStorageMock();
 
   it("should update value when key prop changes", async () => {
     setMockItem("key-a", "value-a");
@@ -47,9 +47,12 @@ describe("SessionStorage - reactive key", () => {
     expect(JSON.parse(valueDisplay?.textContent || "{}")).toEqual({
       theme: "light",
     });
-    expect(sessionStorage.setItem).toHaveBeenLastCalledWith(
-      "user-2-settings",
+    expect(getMockItem("user-2-settings")).toBe(
       JSON.stringify({ theme: "light" }),
+    );
+    expect(sessionStorage.setItem).not.toHaveBeenCalledWith(
+      "user-2-settings",
+      JSON.stringify({ theme: "dark" }),
     );
   });
 
