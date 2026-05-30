@@ -1,0 +1,239 @@
+---
+components: ["PinCodeInput"]
+---
+
+<script>
+  import { Link, PinCodeInput } from "carbon-components-svelte";
+</script>
+
+Pin code inputs collect a short verification code (such as a one-time passcode) across a row of single-character segments. Each segment is an independent text field with shared labeling, validation, and keyboard navigation (typing advances focus, <DocKbd label="Backspace" /> moves to the previous segment, <DocKbd label="←" /> and <DocKbd label="→" /> move between segments), plus paste support and optional masking.
+
+> [!WARNING]
+> For OTP/MFA, use this as a capture UI only. Submit the assembled code to a server for verification. Never compare against an expected OTP in the browser.
+
+## Default
+
+By default, four numeric segments are rendered. Typing a digit advances focus to the next segment; pressing <DocKbd label="Backspace" /> on an empty segment moves focus back. The component emits the following events:
+
+| Event | When | Detail |
+| --- | --- | --- |
+| `on:change` | Any edit (type, paste, delete). | `{ value: string, code: string[] }` |
+| `on:complete` | All segments become filled. This does not fire on mount with a prefilled value, but fires after user interaction fills every segment. | `{ value: string, code: string[] }` |
+| `on:clear` | All segments are emptied. | `null` |
+| `on:paste` | A paste inserts one or more characters. Whitespace is stripped. | `{ value: string }` |
+
+<PinCodeInput
+  labelText="Verification code"
+  on:complete={(e) => console.log("complete", e.detail)}
+  on:change={(e) => console.log("change", e.detail)}
+  on:clear={() => console.log("clear")}
+  on:paste={(e) => console.log("paste", e.detail)}
+/>
+
+## Custom length
+
+Use `count` to set the number of segments. For example, six is common for SMS, email, and authenticator OTP flows.
+
+<PinCodeInput
+  count={6}
+  labelText="Verification code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Alphanumeric
+
+The default input mode is `"numeric"`. Set `type` to `"alphanumeric"` to allow letters and digits.
+
+<PinCodeInput
+  type="alphanumeric"
+  labelText="Invite code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Uppercase display
+
+Set `uppercase` to `true` to display characters in uppercase. The bound `value` and `code` retain the original casing.
+
+<PinCodeInput
+  type="alphanumeric"
+  uppercase
+  labelText="Invite code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Masked
+
+Set `mask` to `true` to obscure the entered characters. Each segment is masked while it is not focused and reveals its character when focused.
+
+<PinCodeInput
+  mask
+  labelText="Security code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Small size
+
+Set `size` to `"sm"` to render small segments.
+
+<PinCodeInput
+  size="sm"
+  labelText="Verification code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Extra-large size
+
+Set `size` to `"xl"` to render extra-large segments.
+
+<PinCodeInput
+  size="xl"
+  labelText="Verification code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Light variant
+
+Use the light variant for light-themed backgrounds by setting `light` to `true`.
+
+<PinCodeInput
+  light
+  labelText="Verification code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Helper text
+
+Add helper text below the input to provide additional context or instructions.
+
+<PinCodeInput
+  labelText="Verification code"
+  helperText="Enter the 4-digit code sent to your device"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Hidden label
+
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+
+<PinCodeInput
+  hideLabel
+  labelText="Verification code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Custom label
+
+Use the `labelChildren` slot to render custom label content.
+
+<PinCodeInput
+  labelText="Verification code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+>
+  <span slot="labelChildren">
+    Verification code (<Link href="/">resend</Link>)
+  </span>
+</PinCodeInput>
+
+## Paste support
+
+Paste a full code into any segment to fill all segments at once. A partial paste fills from the focused segment forward. Non-matching characters are ignored. `on:paste` fires with the clipboard value (whitespace stripped) before segments are updated.
+
+<PinCodeInput
+  labelText="Verification code"
+  on:paste={(e) => console.log("paste", e.detail)}
+/>
+
+## Select on focus
+
+Set `selectTextOnFocus` to `true` to select a segment's value when it receives focus. Without this prop, browsers typically select the value only when the segment receives keyboard focus (for example, via <DocKbd label="Tab" />), not on click.
+
+<PinCodeInput
+  selectTextOnFocus
+  labelText="Verification code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
+## Invalid state
+
+Set `invalid` to `true` and provide `invalidText` to describe the error.
+
+<PinCodeInput invalid value="018" invalidText="The code you entered is incorrect" labelText="Verification code" />
+
+## Warning state
+
+Set `warn` to `true` and provide `warnText` to surface a non-blocking warning.
+
+<PinCodeInput warn value="018" warnText="This code is about to expire" labelText="Verification code" />
+
+## Disabled state
+
+Set `disabled` to `true` to disable every segment.
+
+<PinCodeInput disabled value="0182" labelText="Verification code" />
+
+## Read-only state
+
+Set `readonly` to `true` to display a code that cannot be edited.
+
+<PinCodeInput readonly value="0182" labelText="Verification code" />
+
+## Bindable value
+
+Bind to `value` for the concatenated code, to `complete` when every segment is filled, or to `code` for per-segment characters. Useful for controlled UI state; for OTP submission, prefer the dispatched `on:change` / `on:complete` payloads instead of branching on bound values locally.
+
+<FileSource src="/framed/PinCodeInput/PinCodeInputBindable" />
+
+## Programmatic usage
+
+Use `bind:this` to obtain a reference to the component instance and call its accessor methods.
+
+| Method | Description | Signature |
+| --- | --- | --- |
+| `focusFirstInput` | Focus the first segment. | `(options?: { selectTextOnFocus?: boolean }) => void` |
+| `focusLastInput` | Focus the last segment. | `(options?: { selectTextOnFocus?: boolean }) => void` |
+| `focusNextEmptyInput` | Focus the first empty segment, or the last if all are filled. | `(options?: { selectTextOnFocus?: boolean }) => void` |
+| `focusNext` | Focus the next segment from the active or last focused one; does not wrap at the last segment. Uses the last focused segment when focus has moved elsewhere (for example, a submit button). | `(options?: { selectTextOnFocus?: boolean }) => void` |
+| `clear` | Clear all segments. Focus is not moved by default; pass `{ focus: true }` to focus the first segment afterward. | `(options?: { focus?: boolean }) => void` |
+
+<FileSource src="/framed/PinCodeInput/PinCodeInputProgrammatic" />
+
+## UX example
+
+End-to-end flow using `on:complete`: normalize the payload, simulate an async verification request, then set `invalid` / `invalidText` or show success from the response.
+
+The hardcoded expected code is for demo purposes only. In production, POST `event.detail.value` to your verification API and derive UI state from the server response.
+
+<FileSource src="/framed/PinCodeInput/PinCodeInputUx" />
