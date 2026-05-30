@@ -4,7 +4,20 @@ import { setupSessionStorageEventMock } from "../utils/storage-mocks";
 import SessionStorageCrossTab from "./SessionStorageCrossTab.test.svelte";
 
 describe("SessionStorage cross-tab sync", () => {
-  const { dispatchStorageEvent } = setupSessionStorageEventMock();
+  const { dispatchStorageEvent, setMockItem } = setupSessionStorageEventMock();
+
+  it("does not dispatch update on mount when hydrating from existing storage", async () => {
+    setMockItem("hydrate-key", JSON.stringify("persisted-value"));
+
+    const onUpdate = vi.fn();
+    const { component } = render(SessionStorageCrossTab, {
+      props: { key: "hydrate-key", value: "initial", onUpdate },
+    });
+    await tick();
+
+    expect(component.value).toBe("persisted-value");
+    expect(onUpdate).not.toHaveBeenCalled();
+  });
 
   it("registers a storage event listener on mount", async () => {
     render(SessionStorageCrossTab);
@@ -62,6 +75,23 @@ describe("SessionStorage cross-tab sync", () => {
     await tick();
 
     expect(component.value).toBe("initial");
+  });
+
+  it("does not dispatch update when key changes to an existing entry", async () => {
+    setMockItem("key-b", JSON.stringify("b-value"));
+
+    const onUpdate = vi.fn();
+    const { component } = render(SessionStorageCrossTab, {
+      props: { key: "key-a", value: "a-value", onUpdate },
+    });
+    await tick();
+    onUpdate.mockClear();
+
+    component.key = "key-b";
+    await tick();
+
+    expect(component.value).toBe("b-value");
+    expect(onUpdate).not.toHaveBeenCalled();
   });
 
   it("handles invalid JSON gracefully by using raw string", async () => {

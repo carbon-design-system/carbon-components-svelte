@@ -82,6 +82,7 @@
       }
     }
 
+    prevValue = value;
     mounted = true;
 
     function handleStorageChange(event) {
@@ -117,6 +118,7 @@
     }
 
     prevKey = key;
+    prevValue = value;
   }
 
   afterUpdate(() => {
