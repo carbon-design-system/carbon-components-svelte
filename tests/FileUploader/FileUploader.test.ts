@@ -102,6 +102,84 @@ describe("FileUploader", () => {
     expect(screen.queryByText("file3.txt")).toBeInTheDocument();
   });
 
+  it("should dispatch remove with only the deleted middle file (not shifted neighbors)", async () => {
+    const addHandler = vi.fn();
+    const removeHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { onAdd: addHandler, onRemove: removeHandler, multiple: true },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    const file3 = new File(["content3"], "file3.txt", { type: "text/plain" });
+
+    const input = component.getInputElement();
+    simulateFileSelection(input, [file1, file2, file3]);
+
+    await vi.waitFor(() => {
+      const fileNames = screen.queryAllByText(/file\d\.txt/);
+      expect(fileNames).toHaveLength(3);
+    });
+
+    addHandler.mockClear();
+    removeHandler.mockClear();
+
+    const closeButtons = document.querySelectorAll(
+      ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
+    );
+    expect(closeButtons.length).toBe(3);
+    const middleCloseButton = closeButtons[1];
+    assert(middleCloseButton instanceof HTMLElement);
+    await user.click(middleCloseButton);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file2.txt")).not.toBeInTheDocument();
+    });
+
+    expect(addHandler).not.toHaveBeenCalled();
+    expect(removeHandler).toHaveBeenCalledTimes(1);
+    const removed = removeHandler.mock.calls[0][0].detail;
+    expect(removed).toHaveLength(1);
+    expect(removed[0].name).toBe("file2.txt");
+  });
+
+  it("should not dispatch spurious add/remove when new files are prepended", async () => {
+    const addHandler = vi.fn();
+    const removeHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: {
+        onAdd: addHandler,
+        onRemove: removeHandler,
+        multiple: true,
+        orderFiles: "prepend",
+      },
+    });
+
+    const fileA = new File(["a"], "a.txt", { type: "text/plain" });
+    const input = component.getInputElement();
+    simulateFileSelection(input, [fileA]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("a.txt")).toBeInTheDocument();
+    });
+
+    addHandler.mockClear();
+    removeHandler.mockClear();
+
+    const fileB = new File(["b"], "b.txt", { type: "text/plain" });
+    simulateFileSelection(input, [fileB]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("b.txt")).toBeInTheDocument();
+    });
+
+    expect(removeHandler).not.toHaveBeenCalled();
+    expect(addHandler).toHaveBeenCalledTimes(1);
+    const added = addHandler.mock.calls[0][0].detail;
+    expect(added).toHaveLength(1);
+    expect(added[0].name).toBe("b.txt");
+  });
+
   it("should clear input.files when all files are removed", async () => {
     const { component } = render(FileUploader);
 
