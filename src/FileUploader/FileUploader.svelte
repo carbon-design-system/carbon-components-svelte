@@ -125,6 +125,12 @@
   /** Specify a name attribute for the file button uploader input */
   export let name = "";
 
+  /**
+   * Obtain a reference to the input HTML element.
+   * @type {null | HTMLInputElement}
+   */
+  export let ref = null;
+
   import { afterUpdate, createEventDispatcher } from "svelte";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
@@ -217,6 +223,7 @@
     {multiple}
     {kind}
     {size}
+    bind:ref
     bind:files
     on:change={(event) => {
       let newFiles = event.detail;
