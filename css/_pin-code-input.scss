@@ -1,0 +1,105 @@
+// Segmented verification-code input.
+// Borrows the look of the Carbon text input, laying out single-character
+// segments in a row with auto-advance and validation states.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/css--reset";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// @access private
+/// @group components
+@mixin pin-code-input {
+  .#{$prefix}--pin-code-input .#{$prefix}--pin-code-input__fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .#{$prefix}--pin-code-input__fields {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--pin-code-input__field.#{$prefix}--text-input {
+    @include type-style('body-short-01');
+
+    width: to-rem(40px);
+    min-width: to-rem(40px);
+    height: to-rem(40px);
+    padding: 0;
+    text-align: center;
+    font-family: carbon--font-family('mono');
+  }
+
+  .#{$prefix}--pin-code-input__field--uppercase {
+    text-transform: uppercase;
+  }
+
+  // Mask each segment, revealing its character only while it is focused.
+  .#{$prefix}--pin-code-input__field--masked:not(:focus) {
+    -webkit-text-security: disc;
+    text-security: disc;
+  }
+
+  // Read-only variant: borrow the text input read-only treatment.
+  .#{$prefix}--pin-code-input--readonly .#{$prefix}--pin-code-input__field {
+    background-color: transparent;
+    border-bottom-color: $text-05;
+  }
+
+  .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--sm {
+    width: to-rem(32px);
+    min-width: to-rem(32px);
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--xl {
+    width: to-rem(48px);
+    min-width: to-rem(48px);
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--pin-code-input__icon {
+    flex-shrink: 0;
+    margin-left: $carbon--spacing-03;
+    fill: $support-01;
+  }
+
+  .#{$prefix}--pin-code-input__icon--warning {
+    fill: $support-03;
+  }
+
+  // Carbon does not theme the warning icon's inner triangle by default.
+  .#{$prefix}--pin-code-input__icon--warning path[fill] {
+    fill: $carbon--black-100;
+    opacity: 1;
+  }
+
+  // carbon-components v10 only reveals `.bx--form-requirement` for invalid
+  // inputs that are direct siblings. Pin code uses a fields wrapper instead.
+  .#{$prefix}--pin-code-input__fields[data-invalid]
+    + .#{$prefix}--form-requirement,
+  .#{$prefix}--pin-code-input__fields--invalid + .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: to-rem(200px);
+    font-weight: 400;
+    color: $text-error;
+  }
+
+  .#{$prefix}--pin-code-input__fields[data-warn] + .#{$prefix}--form-requirement,
+  .#{$prefix}--pin-code-input__fields--warning + .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: to-rem(200px);
+    font-weight: 400;
+  }
+}
+
+@include exports('pin-code-input') {
+  @include pin-code-input;
+}
