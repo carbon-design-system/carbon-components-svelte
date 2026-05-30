@@ -1,9 +1,12 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { FileUploader } from "carbon-components-svelte";
   import type { ComponentProps } from "svelte";
 
-  let files: ComponentProps<FileUploader>["files"] = [];
-  let fileUploader: FileUploader;
+  export let files: ComponentProps<FileUploader>["files"] = [];
+  export let ref: ComponentProps<FileUploader>["ref"] = null;
+  export let fileUploader: FileUploader | undefined = undefined;
 
   export let onAdd:
     | ((e: CustomEvent<ReadonlyArray<File>>) => void)
@@ -35,27 +38,6 @@
   export let orderFiles: ComponentProps<FileUploader>["orderFiles"] = "append";
   export let iconDescription: ComponentProps<FileUploader>["iconDescription"] =
     undefined;
-
-  // Allow initial files to be set
-  $: if (typeof $$props.files !== "undefined" && $$props.files !== files) {
-    files = $$props.files;
-  }
-
-  export function getInputElement() {
-    const input = document.querySelector('input[type="file"]');
-    if (!(input instanceof HTMLInputElement)) {
-      throw new Error("Expected input[type='file'] to be an HTMLInputElement");
-    }
-    return input;
-  }
-
-  export function clearFiles() {
-    fileUploader.clearFiles();
-  }
-
-  export function setFiles(newFiles: ComponentProps<FileUploader>["files"]) {
-    files = newFiles;
-  }
 </script>
 
 <form data-testid="file-form">
@@ -73,6 +55,7 @@
     {preventDuplicate}
     {orderFiles}
     {iconDescription}
+    bind:ref
     bind:files
     on:add={(e) => onAdd?.(e)}
     on:remove={(e) => onRemove?.(e)}

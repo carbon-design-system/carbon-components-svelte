@@ -32,7 +32,8 @@ describe("FileUploader", () => {
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
     const file3 = new File(["content3"], "file3.txt", { type: "text/plain" });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2, file3]);
 
     await vi.waitFor(() => {
@@ -74,7 +75,8 @@ describe("FileUploader", () => {
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
     const file3 = new File(["content3"], "file3.txt", { type: "text/plain" });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2, file3]);
 
     await vi.waitFor(() => {
@@ -113,7 +115,8 @@ describe("FileUploader", () => {
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
     const file3 = new File(["content3"], "file3.txt", { type: "text/plain" });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2, file3]);
 
     await vi.waitFor(() => {
@@ -156,7 +159,8 @@ describe("FileUploader", () => {
     });
 
     const fileA = new File(["a"], "a.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [fileA]);
 
     await vi.waitFor(() => {
@@ -187,7 +191,8 @@ describe("FileUploader", () => {
       type: "text/plain",
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1]);
 
     await vi.waitFor(() => {
@@ -219,7 +224,8 @@ describe("FileUploader", () => {
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2]);
 
     await vi.waitFor(() => {
@@ -230,7 +236,8 @@ describe("FileUploader", () => {
     assert(input.files);
     expect(input.files).toHaveLength(2);
 
-    component.clearFiles();
+    assert(component.fileUploader);
+    component.fileUploader.clearFiles();
 
     await vi.waitFor(() => {
       const fileNames = screen.queryAllByText(/file\d\.txt/);
@@ -247,7 +254,8 @@ describe("FileUploader", () => {
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2]);
 
     await vi.waitFor(() => {
@@ -258,7 +266,7 @@ describe("FileUploader", () => {
     assert(input.files);
     expect(input.files).toHaveLength(2);
 
-    component.setFiles([]);
+    component.files = [];
 
     await vi.waitFor(() => {
       const fileNames = screen.queryAllByText(/file\d\.txt/);
@@ -292,7 +300,8 @@ describe("FileUploader", () => {
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2]);
 
     await vi.waitFor(() => {
@@ -312,7 +321,8 @@ describe("FileUploader", () => {
     });
 
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1]);
 
     await vi.waitFor(() => {
@@ -356,7 +366,8 @@ describe("FileUploader", () => {
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     expect(input).not.toHaveAttribute("multiple");
 
     simulateFileSelection(input, [file1, file2]);
@@ -376,7 +387,8 @@ describe("FileUploader", () => {
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     expect(input).toHaveAttribute("multiple");
 
     simulateFileSelection(input, [file1, file2]);
@@ -444,11 +456,19 @@ describe("FileUploader", () => {
     expect(input).toHaveAttribute("name", "file-upload");
   });
 
+  it("should expose ref to the inner input element", () => {
+    const { component } = render(FileUploader);
+
+    assert(component.ref instanceof HTMLInputElement);
+    expect(component.ref.type).toBe("file");
+  });
+
   it("should remove file on click", async () => {
     const { component } = render(FileUploader);
 
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1]);
 
     await vi.waitFor(() => {
@@ -470,7 +490,8 @@ describe("FileUploader", () => {
     const { component } = render(FileUploader);
 
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1]);
 
     await vi.waitFor(() => {
@@ -498,7 +519,8 @@ describe("FileUploader", () => {
       type: "text/plain",
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [smallFile]);
 
     await vi.waitFor(() => {
@@ -519,7 +541,8 @@ describe("FileUploader", () => {
       type: "text/plain",
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [largeFile]);
 
     await vi.waitFor(() => {
@@ -545,7 +568,8 @@ describe("FileUploader", () => {
       type: "text/plain",
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [smallFile1, largeFile, smallFile2]);
 
     await vi.waitFor(() => {
@@ -569,7 +593,8 @@ describe("FileUploader", () => {
       type: "text/plain",
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [exactSizeFile]);
 
     await vi.waitFor(() => {
@@ -590,7 +615,8 @@ describe("FileUploader", () => {
       type: "text/plain",
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [largeFile]);
 
     await vi.waitFor(() => {
@@ -615,7 +641,8 @@ describe("FileUploader", () => {
       type: "text/plain",
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [smallFile]);
 
     await vi.waitFor(() => {
@@ -653,7 +680,8 @@ describe("FileUploader", () => {
 
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2]);
 
     await vi.waitFor(() => {
@@ -663,7 +691,7 @@ describe("FileUploader", () => {
     changeHandler.mockClear();
     clearHandler.mockClear();
     removeHandler.mockClear();
-    component.setFiles([]);
+    component.files = [];
 
     await vi.waitFor(() => {
       expect(changeHandler).toHaveBeenCalled();
@@ -692,7 +720,8 @@ describe("FileUploader", () => {
 
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2]);
 
     await vi.waitFor(() => {
@@ -702,7 +731,8 @@ describe("FileUploader", () => {
     changeHandler.mockClear();
     clearHandler.mockClear();
     removeHandler.mockClear();
-    component.clearFiles();
+    assert(component.fileUploader);
+    component.fileUploader.clearFiles();
 
     await vi.waitFor(() => {
       expect(changeHandler).toHaveBeenCalled();
@@ -724,7 +754,8 @@ describe("FileUploader", () => {
 
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
     const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2]);
 
     await vi.waitFor(() => {
@@ -752,7 +783,8 @@ describe("FileUploader", () => {
     });
 
     const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1]);
 
     await vi.waitFor(() => {
@@ -784,7 +816,8 @@ describe("FileUploader", () => {
       type: "text/plain",
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [largeFile]);
 
     await vi.waitFor(() => {
@@ -819,7 +852,8 @@ describe("FileUploader", () => {
       type: "text/plain",
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [smallFile1, largeFile, smallFile2]);
 
     await vi.waitFor(() => {
@@ -855,7 +889,8 @@ describe("FileUploader", () => {
       lastModified: 1000,
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1]);
 
     await vi.waitFor(() => {
@@ -897,7 +932,8 @@ describe("FileUploader", () => {
       lastModified: 1000,
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1]);
 
     await vi.waitFor(() => {
@@ -924,7 +960,8 @@ describe("FileUploader", () => {
     });
 
     const fileA = new File(["a"], "a.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [fileA]);
 
     await vi.waitFor(() => {
@@ -950,7 +987,8 @@ describe("FileUploader", () => {
     });
 
     const fileA = new File(["a"], "a.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [fileA]);
 
     await vi.waitFor(() => {
@@ -981,7 +1019,8 @@ describe("FileUploader", () => {
     });
 
     const fileB = new File(["b"], "banana.txt", { type: "text/plain" });
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [fileB]);
 
     await vi.waitFor(() => {
@@ -1021,7 +1060,8 @@ describe("FileUploader", () => {
       },
     });
 
-    const input = component.getInputElement();
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
     simulateFileSelection(input, [file1, file2]);
 
     await vi.waitFor(() => {
