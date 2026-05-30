@@ -4,7 +4,20 @@ import { setupStorageEventMock } from "../utils/storage-mocks";
 import LocalStorageCrossTab from "./LocalStorageCrossTab.test.svelte";
 
 describe("LocalStorage cross-tab sync", () => {
-  const { dispatchStorageEvent } = setupStorageEventMock();
+  const { dispatchStorageEvent, setMockItem } = setupStorageEventMock();
+
+  it("does not dispatch update on mount when hydrating from existing storage", async () => {
+    setMockItem("hydrate-key", JSON.stringify("persisted-value"));
+
+    const onUpdate = vi.fn();
+    const { component } = render(LocalStorageCrossTab, {
+      props: { key: "hydrate-key", value: "initial", onUpdate },
+    });
+    await tick();
+
+    expect(component.value).toBe("persisted-value");
+    expect(onUpdate).not.toHaveBeenCalled();
+  });
 
   it("registers a storage event listener on mount", async () => {
     render(LocalStorageCrossTab);
@@ -66,6 +79,23 @@ describe("LocalStorage cross-tab sync", () => {
     await tick();
 
     expect(component.value).toBe("initial");
+  });
+
+  it("does not dispatch update when key changes to an existing entry", async () => {
+    setMockItem("key-b", JSON.stringify("b-value"));
+
+    const onUpdate = vi.fn();
+    const { component } = render(LocalStorageCrossTab, {
+      props: { key: "key-a", value: "a-value", onUpdate },
+    });
+    await tick();
+    onUpdate.mockClear();
+
+    component.key = "key-b";
+    await tick();
+
+    expect(component.value).toBe("b-value");
+    expect(onUpdate).not.toHaveBeenCalled();
   });
 
   it("handles invalid JSON gracefully by using raw string", async () => {
