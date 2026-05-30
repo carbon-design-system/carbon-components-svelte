@@ -257,32 +257,32 @@
       : shouldFilterItem
     : shouldFilterItem;
 
-  function change(dir) {
-    let index = highlightedIndex + dir;
-    let _items = filteredItems?.length ? filteredItems : items;
-    if (_items.length === 0) return;
-    if (index < 0) {
-      index = _items.length - 1;
-    } else if (index >= _items.length) {
-      index = 0;
+  function change(step) {
+    let candidateIndex = highlightedIndex + step;
+    const navigableItems = filteredItems?.length ? filteredItems : items;
+    if (navigableItems.length === 0) return;
+    if (candidateIndex < 0) {
+      candidateIndex = navigableItems.length - 1;
+    } else if (candidateIndex >= navigableItems.length) {
+      candidateIndex = 0;
     }
-    let disabled = _items[index].disabled;
+    let itemDisabled = navigableItems[candidateIndex].disabled;
     let attempts = 0;
 
-    while (disabled && attempts < _items.length) {
-      index = index + dir;
+    while (itemDisabled && attempts < navigableItems.length) {
+      candidateIndex = candidateIndex + step;
 
-      if (index < 0) {
-        index = _items.length - 1;
-      } else if (index >= _items.length) {
-        index = 0;
+      if (candidateIndex < 0) {
+        candidateIndex = navigableItems.length - 1;
+      } else if (candidateIndex >= navigableItems.length) {
+        candidateIndex = 0;
       }
 
-      disabled = _items[index].disabled;
+      itemDisabled = navigableItems[candidateIndex].disabled;
       attempts++;
     }
 
-    if (!disabled) highlightedIndex = index;
+    if (!itemDisabled) highlightedIndex = candidateIndex;
   }
 
   /**
@@ -448,7 +448,6 @@
         if (!ref.contains(document.activeElement) && !allowCustomValue) {
           value = "";
         }
-        highlightedIndex = -1;
       }
     }
   });
@@ -668,15 +667,14 @@
                 selectedId = filteredItems[highlightedIndex].id;
               }
             } else {
-              // searching typed value in text list with lowercase
+              // Match typed value case-insensitively against item text
               const inputValue = ref?.value ?? value;
               const matchedItem = filteredItems.find(
-                (e) =>
-                  e.text.toLowerCase() === inputValue?.toLowerCase() &&
-                  !e.disabled,
+                (item) =>
+                  item.text.toLowerCase() === inputValue?.toLowerCase() &&
+                  !item.disabled,
               );
               if (matchedItem) {
-                // typed value has matched
                 open = false;
                 valueBeforeOpen = "";
                 selectedItem = matchedItem;
@@ -767,8 +765,8 @@
         {#if virtualData?.isVirtualized}
           <div style="height: {virtualData.totalHeight}px; position: relative;">
             <div style="transform: translateY({virtualData.offsetY}px);">
-              {#each itemsToRender as item, i (item.id)}
-                {@const actualIndex = virtualData.startIndex + i}
+              {#each itemsToRender as item, index (item.id)}
+                {@const actualIndex = virtualData.startIndex + index}
                 <ListBoxMenuItem
                   id={item.id}
                   active={selectedId === item.id}
@@ -801,11 +799,11 @@
             </div>
           </div>
         {:else}
-          {#each itemsToRender as item, i (item.id)}
+          {#each itemsToRender as item, index (item.id)}
             <ListBoxMenuItem
               id={item.id}
               active={selectedId === item.id}
-              highlighted={highlightedIndex === i}
+              highlighted={highlightedIndex === index}
               disabled={item.disabled}
               on:click={(event) => {
                 if (item.disabled) {
@@ -816,16 +814,16 @@
                 open = false;
                 valueBeforeOpen = "";
 
-                if (filteredItems[i]) {
-                  value = itemToString(filteredItems[i]);
+                if (filteredItems[index]) {
+                  value = itemToString(filteredItems[index]);
                 }
               }}
               on:mouseenter={() => {
                 if (item.disabled) return;
-                highlightedIndex = i;
+                highlightedIndex = index;
               }}
             >
-              <slot {item} index={i}> {itemToString(item)} </slot>
+              <slot {item} {index}> {itemToString(item)} </slot>
               {#if selectedItem && selectedItem.id === item.id}
                 <Checkmark class="bx--list-box__menu-item__selected-icon" />
               {/if}

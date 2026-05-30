@@ -22,7 +22,7 @@
   on:mouseenter
   on:mouseleave
 >
-  {#each Array.from({ length: count }, (_, i) => i) as item, i (item)}
+  {#each Array.from({ length: count }, (_, i) => i) as item, index (item)}
     <li
       class:bx--progress-step={true}
       class:bx--progress-step--incomplete={true}

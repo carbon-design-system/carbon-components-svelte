@@ -21,8 +21,8 @@
   export let copy = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
     }
   };
 

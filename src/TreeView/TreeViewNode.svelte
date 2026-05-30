@@ -38,8 +38,7 @@
 
   /**
    * Finds the nearest parent tree node
-   * @param {HTMLElement | null} node
-   * @returns {null | HTMLElement}
+   * @type {(node: HTMLElement | null) => null | HTMLElement}
    */
   export function findParentTreeNode(node) {
     if (node == null || !(node instanceof HTMLElement)) return null;

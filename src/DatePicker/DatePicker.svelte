@@ -280,10 +280,10 @@
     focusCalendar,
   });
 
-  function applyOptionIfChanged(key, value, appliedValue = value) {
-    if (lastAppliedOptions[key] !== value) {
-      calendar.set(key, appliedValue);
-      lastAppliedOptions[key] = value;
+  function applyOptionIfChanged(optionKey, value, appliedValue = value) {
+    if (lastAppliedOptions[optionKey] !== value) {
+      calendar.set(optionKey, appliedValue);
+      lastAppliedOptions[optionKey] = value;
     }
   }
 

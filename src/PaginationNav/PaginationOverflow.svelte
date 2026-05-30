@@ -33,12 +33,12 @@
         }}
       >
         <option value="" hidden></option>
-        {#each Array.from({ length: count }, (_, i) => i) as i}
+        {#each Array.from({ length: count }, (_, index) => index) as pageOffset}
           <option
-            value={fromIndex + i + 1}
-            data-page={fromIndex + i + 1}
+            value={fromIndex + pageOffset + 1}
+            data-page={fromIndex + pageOffset + 1}
           >
-            {fromIndex + i + 1}
+            {fromIndex + pageOffset + 1}
           </option>
         {/each}
       </select>

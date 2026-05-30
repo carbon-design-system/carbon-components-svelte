@@ -287,67 +287,72 @@
     declareRef,
   });
 
-  function change(direction) {
-    let index = highlightedIndex + direction;
-    const itemsToUse = filterable ? filteredItems : sortedItems;
-    const length = itemsToUse.length;
+  function change(step) {
+    let candidateIndex = highlightedIndex + step;
+    const navigableItems = filterable ? filteredItems : sortedItems;
+    const length = navigableItems.length;
     if (length === 0) return;
-    if (index < 0) {
-      index = length - 1;
-    } else if (index >= length) {
-      index = 0;
+    if (candidateIndex < 0) {
+      candidateIndex = length - 1;
+    } else if (candidateIndex >= length) {
+      candidateIndex = 0;
     }
 
-    let disabled = itemsToUse[index].disabled;
+    let itemDisabled = navigableItems[candidateIndex].disabled;
     let attempts = 0;
 
-    while (disabled && attempts < length) {
-      index = index + direction;
+    while (itemDisabled && attempts < length) {
+      candidateIndex = candidateIndex + step;
 
-      if (index < 0) {
-        index = length - 1;
-      } else if (index >= length) {
-        index = 0;
+      if (candidateIndex < 0) {
+        candidateIndex = length - 1;
+      } else if (candidateIndex >= length) {
+        candidateIndex = 0;
       }
 
-      disabled = itemsToUse[index].disabled;
+      itemDisabled = navigableItems[candidateIndex].disabled;
       attempts++;
     }
 
-    if (!disabled) highlightedIndex = index;
+    if (!itemDisabled) highlightedIndex = candidateIndex;
   }
 
-    /**
-   * Handle selection of an item, including isSelectAll logic.
-   */
+  /** Handle selection of an item, including isSelectAll logic. */
   function selectItem(item) {
     if (item.disabled) return;
 
     if (item.isSelectAll) {
       const target = !allSelected;
-      sortedItems = sortedItems.map((si) =>
-        si.disabled || si.checked === target ? si : { ...si, checked: target },
+      sortedItems = sortedItems.map((sortedItem) =>
+        sortedItem.disabled || sortedItem.checked === target
+          ? sortedItem
+          : { ...sortedItem, checked: target },
       );
     } else {
-      const idx = sortedItems.indexOf(item);
-      if (idx !== -1) {
-        sortedItems[idx] = { ...item, checked: !item.checked };
+      const itemIndex = sortedItems.indexOf(item);
+      if (itemIndex !== -1) {
+        sortedItems[itemIndex] = { ...item, checked: !item.checked };
       }
 
       if (hasSelectAll) {
         const newSelectableChecked = sortedItems.filter(
-          (si) => !si.disabled && !si.isSelectAll && si.checked,
+          (sortedItem) =>
+            !sortedItem.disabled &&
+            !sortedItem.isSelectAll &&
+            sortedItem.checked,
         ).length;
         const newAllSelected =
           selectableItems.length > 0 &&
           newSelectableChecked === selectableItems.length;
-        const selectAllIdx = sortedItems.findIndex((si) => si.isSelectAll);
+        const selectAllIndex = sortedItems.findIndex(
+          (sortedItem) => sortedItem.isSelectAll,
+        );
         if (
-          selectAllIdx !== -1 &&
-          sortedItems[selectAllIdx].checked !== newAllSelected
+          selectAllIndex !== -1 &&
+          sortedItems[selectAllIndex].checked !== newAllSelected
         ) {
-          sortedItems[selectAllIdx] = {
-            ...sortedItems[selectAllIdx],
+          sortedItems[selectAllIndex] = {
+            ...sortedItems[selectAllIndex],
             checked: newAllSelected,
           };
         }
@@ -358,8 +363,8 @@
 
     if (selectionFeedback === "top") {
       selectedIds = sortedItems
-        .filter((si) => si.checked && !si.isSelectAll)
-        .map((si) => si.id);
+        .filter((sortedItem) => sortedItem.checked && !sortedItem.isSelectAll)
+        .map((sortedItem) => sortedItem.id);
       internalSelectedIdsRef = selectedIds;
       sortedItems = sort();
     }
@@ -375,7 +380,7 @@
       prevChecked = checked;
       selectedIds = checked
         .filter((item) => !item.isSelectAll)
-        .map(({ id }) => id);
+        .map((item) => item.id);
       internalSelectedIdsRef = selectedIds;
       if (!isInitialRender) {
         dispatch("select", {
@@ -523,8 +528,8 @@
     sortedItems = sort();
   }
   $: hasSelectAll = items.some((item) => item.isSelectAll);
-  $: checked = sortedItems.filter(({ checked }) => checked);
-  $: unchecked = sortedItems.filter(({ checked }) => !checked);
+  $: checked = sortedItems.filter((item) => item.checked);
+  $: unchecked = sortedItems.filter((item) => !item.checked);
   $: selectableItems = sortedItems.filter(
     (item) => !item.disabled && !item.isSelectAll,
   );
@@ -869,8 +874,8 @@
         {#if virtualData?.isVirtualized}
           <div style="height: {virtualData.totalHeight}px; position: relative;">
             <div style="transform: translateY({virtualData.offsetY}px);">
-              {#each itemsToRender as item, i (item.id)}
-                {@const actualIndex = virtualData.startIndex + i}
+              {#each itemsToRender as item, index (item.id)}
+                {@const actualIndex = virtualData.startIndex + index}
                 <ListBoxMenuItem
                   id={item.id}
                   role="option"
@@ -922,7 +927,7 @@
             </div>
           </div>
         {:else}
-          {#each itemsToRender as item, i (item.id)}
+          {#each itemsToRender as item, index (item.id)}
             <ListBoxMenuItem
               id={item.id}
               role="option"
@@ -934,7 +939,7 @@
                   : allSelected
                 : item.checked}
               active={item.isSelectAll ? false : item.checked}
-              highlighted={highlightedIndex === i}
+              highlighted={highlightedIndex === index}
               disabled={item.disabled}
               on:click={(event) => {
                 if (item.disabled) {
@@ -950,7 +955,7 @@
               }}
               on:mouseenter={() => {
                 if (item.disabled) return;
-                highlightedIndex = i;
+                highlightedIndex = index;
               }}
             >
               <Checkbox
@@ -965,7 +970,7 @@
                   : false}
                 disabled={item.disabled}
               >
-                <slot slot="labelChildren" {item} index={i}>
+                <slot slot="labelChildren" {item} {index}>
                   {itemToString(item)}
                 </slot>
               </Checkbox>

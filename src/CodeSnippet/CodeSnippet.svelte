@@ -34,8 +34,8 @@
   export let copy = async (code) => {
     try {
       await navigator.clipboard.writeText(code);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
     }
   };
 
