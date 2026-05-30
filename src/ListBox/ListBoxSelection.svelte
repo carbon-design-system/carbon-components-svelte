@@ -79,14 +79,14 @@
       role="button"
       tabindex="-1"
       class:bx--tag__close-icon={true}
-      on:click|preventDefault|stopPropagation={(e) => {
+      on:click|preventDefault|stopPropagation={(event) => {
         if (!disabled && !readonly) {
-          dispatch("clear", e);
+          dispatch("clear", event);
         }
       }}
-      on:keydown|stopPropagation={(e) => {
-        if (!disabled && !readonly && (e.key === "Enter" || e.key === " ")) {
-          dispatch("clear", e);
+      on:keydown|stopPropagation={(event) => {
+        if (!disabled && !readonly && (event.key === "Enter" || event.key === " ")) {
+          dispatch("clear", event);
         }
       }}
       {disabled}
@@ -110,14 +110,14 @@
     class:bx--list-box__selection--multi={selectionCount}
     aria-disabled={readonly || undefined}
     {...$$restProps}
-    on:click|preventDefault|stopPropagation={(e) => {
+    on:click|preventDefault|stopPropagation={(event) => {
       if (!disabled && !readonly) {
-        dispatch("clear", e);
+        dispatch("clear", event);
       }
     }}
-    on:keydown|stopPropagation={(e) => {
-      if (!disabled && !readonly && (e.key === "Enter" || e.key === " ")) {
-        dispatch("clear", e);
+    on:keydown|stopPropagation={(event) => {
+      if (!disabled && !readonly && (event.key === "Enter" || event.key === " ")) {
+        dispatch("clear", event);
       }
     }}
   >

@@ -83,8 +83,8 @@
 </script>
 
 <svelte:window
-  on:click={({ target }) => {
-    if (!ref?.contains(target)) {
+  on:click={(event) => {
+    if (!ref?.contains(event.target)) {
       expanded = false;
     }
   }}
@@ -94,15 +94,15 @@
   role="none"
   class:bx--header__submenu={true}
   class:bx--header__submenu--current={isCurrentSubmenu}
-  on:click={(e) => {
-    if (!menuRef.contains(e.target)) {
-      e.preventDefault();
+  on:click={(event) => {
+    if (!menuRef.contains(event.target)) {
+      event.preventDefault();
     }
     expanded = !expanded;
   }}
-  on:keydown={(e) => {
-    if (e.key === "Enter") {
-      e.stopPropagation();
+  on:keydown={(event) => {
+    if (event.key === "Enter") {
+      event.stopPropagation();
       expanded = !expanded;
     }
   }}
@@ -120,10 +120,10 @@
     style:z-index={1}
     {...$$restProps}
     on:keydown
-    on:keydown={async (e) => {
-      if (e.key === " ") {
-        e.preventDefault();
-        e.stopPropagation();
+    on:keydown={async (event) => {
+      if (event.key === " ") {
+        event.preventDefault();
+        event.stopPropagation();
         const wasExpanded = expanded;
         expanded = !expanded;
         if (!wasExpanded && expanded && $menuItems.length > 0) {
@@ -131,32 +131,32 @@
           await tick();
           $menuItems[0]?.focus();
         }
-      } else if (e.key === "Enter") {
-        e.preventDefault();
+      } else if (event.key === "Enter") {
+        event.preventDefault();
         // Let the li handler toggle the expanded state
         // Just focus the first item if opening
         if (!expanded && $menuItems.length > 0) {
           await tick();
           $menuItems[0]?.focus();
         }
-      } else if (e.key === "ArrowDown") {
-        e.preventDefault();
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
         if (!expanded) {
           expanded = true;
         }
         // Focus first item
         await tick();
         $menuItems[0]?.focus();
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
         if (!expanded) {
           expanded = true;
         }
         // Focus last item
         await tick();
         $menuItems[$menuItems.length - 1]?.focus();
-      } else if (e.key === "Escape") {
-        e.preventDefault();
+      } else if (event.key === "Escape") {
+        event.preventDefault();
         expanded = false;
         await tick();
         ref?.focus();

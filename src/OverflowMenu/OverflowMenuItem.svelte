@@ -99,15 +99,15 @@
     title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
   };
 
-  function handleClick(e) {
-    e.stopPropagation();
+  function handleClick(event) {
+    event.stopPropagation();
 
     if (disabled) {
-      e.preventDefault();
+      event.preventDefault();
       return;
     }
 
-    const shouldContinue = dispatch("click", e, { cancelable: true });
+    const shouldContinue = dispatch("click", event, { cancelable: true });
 
     // Only update (close menu) if preventDefault was not called.
     if (shouldContinue) {
@@ -133,16 +133,16 @@
       {...buttonProps}
       on:click={handleClick}
       on:keydown
-      on:keydown={(e) => {
-        if (e.key === "ArrowDown") {
+      on:keydown={(event) => {
+        if (event.key === "ArrowDown") {
           change(1);
-        } else if (e.key === "ArrowUp") {
+        } else if (event.key === "ArrowUp") {
           change(-1);
-        } else if (e.key === "Home") {
-          e.preventDefault();
+        } else if (event.key === "Home") {
+          event.preventDefault();
           first();
-        } else if (e.key === "End") {
-          e.preventDefault();
+        } else if (event.key === "End") {
+          event.preventDefault();
           last();
         }
       }}
@@ -158,16 +158,16 @@
       {...buttonProps}
       on:click={handleClick}
       on:keydown
-      on:keydown={(e) => {
-        if (e.key === "ArrowDown") {
+      on:keydown={(event) => {
+        if (event.key === "ArrowDown") {
           change(1);
-        } else if (e.key === "ArrowUp") {
+        } else if (event.key === "ArrowUp") {
           change(-1);
-        } else if (e.key === "Home") {
-          e.preventDefault();
+        } else if (event.key === "Home") {
+          event.preventDefault();
           first();
-        } else if (e.key === "End") {
-          e.preventDefault();
+        } else if (event.key === "End") {
+          event.preventDefault();
           last();
         }
       }}

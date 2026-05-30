@@ -389,7 +389,7 @@
       index = 0;
     }
 
-    let disabled = items[index].disabled;
+    let disabled = items[i].disabled;
     let attempts = 0;
 
     while (disabled && attempts < items.length) {
@@ -401,7 +401,7 @@
         index = 0;
       }
 
-      disabled = items[index].disabled;
+      disabled = items[i].disabled;
       attempts++;
     }
 
@@ -477,9 +477,9 @@
 </script>
 
 <svelte:window
-  on:click={(e) => {
-    if (open && ref && !ref.contains(e.target)) {
-      if (effectivePortalMenu && listRef?.contains(e.target)) return;
+  on:click={(event) => {
+    if (open && ref && !ref.contains(event.target)) {
+      if (effectivePortalMenu && listRef?.contains(event.target)) return;
       open = false;
     }
   }}
@@ -510,9 +510,9 @@
     {name}
     aria-label={$$props["aria-label"]}
     class={dropdownListBoxClass}
-    on:click={({ target }) => {
+    on:click={(event) => {
       if (disabled || readonly) return;
-      open = ref.contains(target) ? !open : false;
+      open = ref.contains(event.target) ? !open : false;
     }}
     {disabled}
     {open}
@@ -547,40 +547,44 @@
           : !inline && !showInvalid && !showWarn && helperText
             ? helperId
             : undefined}
-      on:keydown={(e) => {
-        if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
-          e.preventDefault();
+      on:keydown={(event) => {
+        if (
+          event.key === "Enter" ||
+          event.key === "ArrowDown" ||
+          event.key === "ArrowUp"
+        ) {
+          event.preventDefault();
         }
 
         if (readonly) return;
 
-        if (e.key === "Enter") {
+        if (event.key === "Enter") {
           selectHighlighted();
-        } else if (e.key === "Tab") {
+        } else if (event.key === "Tab") {
           open = false;
-        } else if (e.key === "ArrowDown") {
+        } else if (event.key === "ArrowDown") {
           if (!open) open = true;
           change(1);
-        } else if (e.key === "ArrowUp") {
+        } else if (event.key === "ArrowUp") {
           if (!open) open = true;
           change(-1);
-        } else if (e.key === "Escape") {
+        } else if (event.key === "Escape") {
           open = false;
         } else if (
           open &&
-          e.key.length === 1 &&
-          e.key !== " " &&
-          !e.ctrlKey &&
-          !e.metaKey &&
-          !e.altKey
+          event.key.length === 1 &&
+          event.key !== " " &&
+          !event.ctrlKey &&
+          !event.metaKey &&
+          !event.altKey
         ) {
-          e.preventDefault();
-          typeaheadSearch(e.key);
+          event.preventDefault();
+          typeaheadSearch(event.key);
         }
       }}
-      on:keyup={(e) => {
-        if (e.key === " ") {
-          e.preventDefault();
+      on:keyup={(event) => {
+        if (event.key === " ") {
+          event.preventDefault();
         } else {
           return;
         }
@@ -597,8 +601,8 @@
         {/if}
       </span>
       <ListBoxMenuIcon
-        on:click={(e) => {
-          e.stopPropagation();
+        on:click={(event) => {
+          event.stopPropagation();
           if (disabled || readonly) return;
           open = !open;
         }}
@@ -615,8 +619,8 @@
         anchor={ref}
         {direction}
         on:scroll
-        on:scroll={(e) => {
-          listScrollTop = e.target.scrollTop;
+        on:scroll={(event) => {
+          listScrollTop = event.target.scrollTop;
         }}
         bind:ref={listRef}
         style={effectivePortalMenu
@@ -637,9 +641,9 @@
                   active={selectedId === item.id}
                   highlighted={highlightedIndex === actualIndex}
                   disabled={item.disabled}
-                  on:click={(e) => {
+                  on:click={(event) => {
                     if (item.disabled) {
-                      e.stopPropagation();
+                      event.stopPropagation();
                       return;
                     }
                     selectedId = item.id;
@@ -667,9 +671,9 @@
               active={selectedId === item.id}
               highlighted={highlightedIndex === i}
               disabled={item.disabled}
-              on:click={(e) => {
+              on:click={(event) => {
                 if (item.disabled) {
-                  e.stopPropagation();
+                  event.stopPropagation();
                   return;
                 }
                 selectedId = item.id;

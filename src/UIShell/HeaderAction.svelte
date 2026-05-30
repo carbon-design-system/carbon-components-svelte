@@ -57,7 +57,7 @@
   export let ref = null;
 
   /**
-   * Customize the panel transition (i.e., `transition:slide`).
+   * Customize the panel transition (i.event., `transition:slide`).
    * Set to `false` to disable the transition.
    * @type {false | import("svelte/transition").SlideParams}
    */
@@ -88,11 +88,11 @@
 </script>
 
 <svelte:window
-  on:click={({ target }) => {
+  on:click={(event) => {
     if (
       isOpen &&
-      !ref.contains(target) &&
-      !refPanel.contains(target) &&
+      !ref.contains(event.target) &&
+      !refPanel.contains(event.target) &&
       !preventCloseOnClickOutside
     ) {
       isOpen = false;

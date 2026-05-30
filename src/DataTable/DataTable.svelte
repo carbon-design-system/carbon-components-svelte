@@ -653,7 +653,7 @@
       : undefined}
     style:overflow-y={virtualScrollContainer ? "auto" : undefined}
     on:scroll={virtualScrollContainer
-      ? (e) => { tableBodyScrollTop = e.target.scrollTop || 0; }
+      ? (event) => { tableBodyScrollTop = event.target.scrollTop || 0; }
       : undefined}
   >
     <Table
@@ -717,20 +717,20 @@
                 value="all"
                 checked={selectAll}
                 {indeterminate}
-                on:change={(e) => {
+                on:change={(event) => {
                   dispatch("click:header--select", {
                     indeterminate,
-                    selected: !indeterminate && e.target.checked,
+                    selected: !indeterminate && event.target.checked,
                   });
 
                   if (indeterminate) {
-                    e.target.checked = false;
+                    event.target.checked = false;
                     selectAll = false;
                     selectedRowIds = [];
                     return;
                   }
 
-                  if (e.target.checked) {
+                  if (event.target.checked) {
                     selectedRowIds = selectableRowIds;
                   } else {
                     selectedRowIds = [];
@@ -752,14 +752,14 @@
                 {...(tableHeaderTranslateWithId
                   ? { translateWithId: tableHeaderTranslateWithId }
                   : {})}
-                on:click={(e) => {
+                on:click={(event) => {
                   dispatch("click", { header });
 
                   if (header.sort === false) {
                     dispatch("click:header", {
                       header,
-                      target: e.target,
-                      currentTarget: e.currentTarget,
+                      target: event.target,
+                      currentTarget: event.currentTarget,
                     });
                   } else {
                     const currentSortDirection =
@@ -795,8 +795,8 @@
                     dispatch("click:header", {
                       header,
                       sortDirection: nextSortDirection,
-                      target: e.target,
-                      currentTarget: e.currentTarget,
+                      target: event.target,
+                      currentTarget: event.currentTarget,
                     });
                   }
                 }}
@@ -834,17 +834,17 @@
               parentRowId === row.id
                 ? 'bx--expandable-row--hover'
                 : ''} {rowClassValue ?? ''}"
-              on:click={(e) => {
+              on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
-                if (shouldIgnoreRowClick(e.target)) {
+                if (shouldIgnoreRowClick(event.target)) {
                   return;
                 }
                 dispatch("click", { row });
                 dispatch("click:row", {
                   row,
-                  target: e.target,
-                  currentTarget: e.currentTarget,
+                  target: event.target,
+                  currentTarget: event.currentTarget,
                 });
               }}
               on:mouseenter={() => {
@@ -964,12 +964,12 @@
                   </td>
                 {:else}
                   <TableCell
-                    on:click={(e) => {
+                    on:click={(event) => {
                       dispatch("click", { row, cell });
                       dispatch("click:cell", {
                         cell,
-                        target: e.target,
-                        currentTarget: e.currentTarget,
+                        target: event.target,
+                        currentTarget: event.currentTarget,
                       });
                     }}
                   >
@@ -1054,17 +1054,17 @@
                 : ''} {expandable && parentRowId === row.id
                 ? 'bx--expandable-row--hover'
                 : ''} {rowClassValue ?? ''}"
-              on:click={(e) => {
+              on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
-                if (shouldIgnoreRowClick(e.target)) {
+                if (shouldIgnoreRowClick(event.target)) {
                   return;
                 }
                 dispatch("click", { row });
                 dispatch("click:row", {
                   row,
-                  target: e.target,
-                  currentTarget: e.currentTarget,
+                  target: event.target,
+                  currentTarget: event.currentTarget,
                 });
               }}
               on:mouseenter={() => {
@@ -1172,12 +1172,12 @@
                   </td>
                 {:else}
                   <TableCell
-                    on:click={(e) => {
+                    on:click={(event) => {
                       dispatch("click", { row, cell });
                       dispatch("click:cell", {
                         cell,
-                        target: e.target,
-                        currentTarget: e.currentTarget,
+                        target: event.target,
+                        currentTarget: event.currentTarget,
                       });
                     }}
                   >

@@ -87,14 +87,14 @@
   }
 
   /** @type {(e: Event) => void} */
-  const onInput = (e) => {
-    value = parse(e.target.value);
+  const onInput = (event) => {
+    value = parse(event.target.value);
     dispatch("input", value);
   };
 
   /** @type {(e: Event) => void} */
-  const onChange = (e) => {
-    dispatch("change", parse(e.target.value));
+  const onChange = (event) => {
+    dispatch("change", parse(event.target.value));
   };
 
   const isFluid = !!ctx && ctx.isFluid;

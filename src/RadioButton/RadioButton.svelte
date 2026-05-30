@@ -94,7 +94,6 @@
 
   /**
    * Initialize registry for standalone mode with name.
-   * @param {string | undefined} radioName
    */
   function initRegistry(radioName) {
     // Clean up previous registration if any
@@ -171,12 +170,12 @@
     class:bx--radio-button={true}
     on:focus
     on:blur
-    on:click={(e) => {
-      if ($readonly) e.preventDefault();
+    on:click={(event) => {
+      if ($readonly) event.preventDefault();
     }}
-    on:change={(e) => {
+    on:change={(event) => {
       if ($readonly) {
-        e.stopImmediatePropagation();
+        event.stopImmediatePropagation();
         return;
       }
       if (update) {
@@ -184,11 +183,11 @@
         update(value);
       } else if (name && registryStore) {
         // Standalone with name - update local checked and notify siblings via registry
-        checked = e.currentTarget.checked;
+        checked = event.currentTarget.checked;
         updateGroupSelection(name, instanceKey);
       } else {
         // Standalone without name - just update local checked
-        checked = e.currentTarget.checked;
+        checked = event.currentTarget.checked;
       }
     }}
     on:change

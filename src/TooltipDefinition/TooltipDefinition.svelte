@@ -110,8 +110,8 @@
 </script>
 
 <svelte:window
-  on:keydown={({ key }) => {
-    if (key === "Escape") hide();
+  on:keydown={(event) => {
+    if (event.key === "Escape") hide();
   }}
 />
 

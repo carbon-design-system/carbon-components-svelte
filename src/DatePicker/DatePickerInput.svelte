@@ -169,23 +169,23 @@
       class:bx--date-picker__input--sm={size === "sm"}
       class:bx--date-picker__input--xl={size === "xl"}
       on:input
-      on:input={({ target }) => {
-        updateValue({ type: "input", value: target.value });
+      on:input={(event) => {
+        updateValue({ type: "input", value: event.target.value });
       }}
-      on:change={({ target }) => {
-        updateValue({ type: "change", value: target.value });
+      on:change={(event) => {
+        updateValue({ type: "change", value: event.target.value });
       }}
       on:keydown
-      on:keydown={({ key }) => {
-        if (!readonly && key === "ArrowDown") {
+      on:keydown={(event) => {
+        if (!readonly && event.key === "ArrowDown") {
           focusCalendar();
         }
       }}
       on:keyup
       on:focus
       on:blur
-      on:blur={({ relatedTarget }) => {
-        blurInput(relatedTarget);
+      on:blur={(event) => {
+        blurInput(event.relatedTarget);
       }}
       on:paste
     >

@@ -149,16 +149,16 @@
     setOpenDelayed(false, leaveDelayMs);
   }
 
-  function onKeydown(e) {
-    if (e.key === "Escape") {
-      e.stopPropagation();
+  function onKeydown(event) {
+    if (event.key === "Escape") {
+      event.stopPropagation();
       refIcon?.focus();
       open = false;
     }
   }
 
-  function onBlur({ relatedTarget }) {
-    if (refTooltip && !refTooltip.contains(relatedTarget)) {
+  function onBlur(event) {
+    if (refTooltip && !refTooltip.contains(event.relatedTarget)) {
       open = false;
     }
     focusByMouse = false;

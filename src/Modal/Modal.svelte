@@ -199,11 +199,11 @@
   inert={open ? undefined : true}
   {...$$restProps}
   on:keydown
-  on:keydown={(e) => {
+  on:keydown={(event) => {
     if (open) {
-      if (e.key === "Escape") {
+      if (event.key === "Escape") {
         close("escape-key");
-      } else if (e.key === "Tab") {
+      } else if (event.key === "Tab") {
         // trap focus
 
         // taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
@@ -237,7 +237,7 @@
         });
 
         if (tabbable.length === 0) {
-          e.preventDefault();
+          event.preventDefault();
           return;
         }
 
@@ -246,20 +246,20 @@
           // Active element not in tabbable list, find closest tabbable element
           // For forward Tab, start from beginning (-1 + 1 = 0)
           // For Shift+Tab, start from end (length + -1 = length - 1)
-          index = e.shiftKey ? tabbable.length : -1;
+          index = event.shiftKey ? tabbable.length : -1;
         }
 
-        index += e.shiftKey ? -1 : 1;
+        index += event.shiftKey ? -1 : 1;
         index = (index + tabbable.length) % tabbable.length;
 
         tabbable[index].focus();
-        e.preventDefault();
+        event.preventDefault();
       } else if (
         shouldSubmitOnEnter &&
-        e.key === "Enter" &&
+        event.key === "Enter" &&
         !primaryButtonDisabled
       ) {
-        const target = e.target;
+        const target = event.target;
         const tag = target?.tagName;
         if (tag === "TEXTAREA" || tag === "SELECT" || target?.isContentEditable) {
           return;
@@ -283,8 +283,8 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:transitionend={(e) => {
-    if (e.propertyName === "transform") {
+  on:transitionend={(event) => {
+    if (event.propertyName === "transform") {
       dispatch("transitionend", { open });
       if (!open && previouslyFocusedElement?.isConnected) {
         previouslyFocusedElement.focus();

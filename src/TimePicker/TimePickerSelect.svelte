@@ -74,27 +74,27 @@
     {value}
     aria-readonly={readonly || undefined}
     class:bx--select-input={true}
-    on:change={({ target }) => {
-      selectedValue.set(target.value);
+    on:change={(event) => {
+      selectedValue.set(event.target.value);
     }}
     on:change
     on:input
     on:focus
     on:blur
-    on:mousedown={(e) => {
+    on:mousedown={(event) => {
       if (readonly) {
-        e.preventDefault();
-        e.currentTarget.focus();
+        event.preventDefault();
+        event.currentTarget.focus();
       }
     }}
-    on:keydown={(e) => {
+    on:keydown={(event) => {
       if (
         readonly &&
-        e.key !== "Tab" &&
-        e.key !== "Shift" &&
-        !(e.altKey && e.key === "ArrowDown")
+        event.key !== "Tab" &&
+        event.key !== "Shift" &&
+        !(event.altKey && event.key === "ArrowDown")
       ) {
-        e.preventDefault();
+        event.preventDefault();
       }
     }}
   >

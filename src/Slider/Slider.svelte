@@ -102,9 +102,9 @@
   let holding = false;
   let currentEvent = null;
 
-  function startInteraction(e) {
+  function startInteraction(event) {
     if (disabled || readonly) return;
-    currentEvent = e;
+    currentEvent = event;
     holding = true;
     dragging = true;
   }
@@ -115,17 +115,17 @@
     currentEvent = null;
   }
 
-  function move(e) {
+  function move(event) {
     if (holding) {
-      currentEvent = e;
+      currentEvent = event;
       dragging = true;
     }
   }
 
-  function calcValue(e) {
-    if (disabled || readonly || !e) return;
+  function calcValue(event) {
+    if (disabled || readonly || !event) return;
 
-    const offsetX = e.touches ? e.touches[0].clientX : e.clientX;
+    const offsetX = event.touches ? event.touches[0].clientX : event.clientX;
     const { left, width } = trackRef.getBoundingClientRect();
     let nextValue =
       min +
@@ -226,7 +226,7 @@
             : undefined}
         aria-invalid={showInvalid || undefined}
         {id}
-        on:keydown={({ shiftKey, key }) => {
+        on:keydown={(event) => {
           if (disabled || readonly) return;
           const keys = {
             ArrowDown: -1,
@@ -234,9 +234,11 @@
             ArrowRight: 1,
             ArrowUp: 1,
           };
-          if (keys[key]) {
+          if (keys[event.key]) {
             const delta =
-              step * (shiftKey ? range / step / stepMultiplier : 1) * keys[key];
+              step *
+              (event.shiftKey ? range / step / stepMultiplier : 1) *
+              keys[event.key];
             value = Math.round((value + delta) / step) * step;
             dispatch("input", value);
           }
@@ -275,9 +277,9 @@
         {min}
         {max}
         {step}
-        on:change={({ target }) => {
+        on:change={(event) => {
           if (!readonly) {
-            value = Number(target.value);
+            value = Number(event.target.value);
           }
         }}
         data-invalid={showInvalid || null}

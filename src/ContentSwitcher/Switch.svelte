@@ -70,16 +70,16 @@
   on:blur
   on:keyup
   on:keydown
-  on:keydown={(e) => {
-    if (e.key === "ArrowRight") {
+  on:keydown={(event) => {
+    if (event.key === "ArrowRight") {
       ctx.selectionMode === "manual" ? ctx.focus(1) : ctx.change(1);
-    } else if (e.key === "ArrowLeft") {
+    } else if (event.key === "ArrowLeft") {
       ctx.selectionMode === "manual" ? ctx.focus(-1) : ctx.change(-1);
-    } else if (e.key === "Home") {
-      e.preventDefault();
+    } else if (event.key === "Home") {
+      event.preventDefault();
       ctx.selectionMode === "manual" ? ctx.focusTo(0) : ctx.changeTo(0);
-    } else if (e.key === "End") {
-      e.preventDefault();
+    } else if (event.key === "End") {
+      event.preventDefault();
       const last = ctx.switchCount - 1;
       ctx.selectionMode === "manual" ? ctx.focusTo(last) : ctx.changeTo(last);
     }

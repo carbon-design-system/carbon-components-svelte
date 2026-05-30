@@ -3,8 +3,6 @@
    * Depth-first search to find a node by id; returns an array
    * of nodes from the initial node to the matching leaf.
    * @template {{ id: string | number; nodes?: TNode[] }} TNode
-   * @param {TNode | null} node
-   * @param {string | number} id
    * @returns {null | TNode[]}
    */
   function findNodeById(node, id) {
@@ -32,7 +30,6 @@
 
   /**
    * Creates a TreeWalker instance for keyboard navigation.
-   * @param {HTMLElement} root - The root element to traverse
    * @returns {TreeWalker} A TreeWalker configured to navigate tree nodes
    */
   function createTreeWalkerInstance(root) {
@@ -61,7 +58,6 @@
   /**
    * Recursively flattens a tree of nodes into a single array
    * @template {object} Node
-   * @param {ReadonlyArray<Node & { nodes?: Node[] }>} nodes
    * @returns {Array<Node>}
    */
   function traverse(nodes) {
@@ -78,8 +74,6 @@
    * Like `traverse` but only descends into expanded nodes.
    * Used for Shift+Click range selection (only visible nodes).
    * @template {object} Node
-   * @param {ReadonlyArray<Node & { id: string | number; nodes?: Node[] }>} nodes
-   * @param {Set<string | number>} expandedIdsSet
    * @returns {Array<Node>}
    */
   function traverseVisible(nodes, expandedIdsSet) {
@@ -99,8 +93,6 @@
   /**
    * Finds sibling node IDs for a given node ID within a tree structure.
    * @template {{ id: string | number; nodes?: TNode[] }} TNode
-   * @param {ReadonlyArray<TNode>} nodes - The tree nodes to search
-   * @param {string | number} id - The ID of the node to find siblings for
    * @returns {Array<string | number>} Array of sibling IDs (excluding the node itself)
    */
   function findSiblingIds(nodes, id) {
@@ -143,8 +135,6 @@
   /**
    * Finds a node by id across top-level tree roots.
    * @template {{ id: string | number; disabled?: boolean; nodes?: TNode[] }} TNode
-   * @param {ReadonlyArray<TNode>} roots
-   * @param {string | number} id
    * @returns {TNode | null}
    */
   function findForestNodeById(roots, id) {
@@ -159,8 +149,6 @@
    * IDs to select for multiselect expansion from `node` (non-disabled only).
    * Disabled nodes are omitted; subtrees under a disabled node are not traversed.
    * @template {{ id: string | number; disabled?: boolean; nodes?: TNode[] }} TNode
-   * @param {TNode} node
-   * @param {'node' | 'shallow' | 'deep'} mode
    * @returns {Array<string | number>}
    */
   function multiselectExpansionIds(node, mode) {
@@ -445,9 +433,10 @@
   let multiselectModifierActive = false;
 
   /** @param {KeyboardEvent} e */
-  function syncModifierFromKeyboard(e) {
+  function syncModifierFromKeyboard(event) {
     if (!multiselect) return;
-    multiselectModifierActive = e.ctrlKey || e.metaKey || e.shiftKey;
+    multiselectModifierActive =
+      event.ctrlKey || event.metaKey || event.shiftKey;
   }
 
   function clearMultiselectModifierKeys() {
@@ -455,15 +444,16 @@
   }
 
   /** @param {MouseEvent} e */
-  function syncModifierFromTreeMouseDown(e) {
+  function syncModifierFromTreeMouseDown(event) {
     if (!multiselect) return;
-    multiselectModifierActive = e.ctrlKey || e.metaKey || e.shiftKey;
+    multiselectModifierActive =
+      event.ctrlKey || event.metaKey || event.shiftKey;
   }
 
   /** @param {Event} e */
-  function handleMultiselectSelectStart(e) {
+  function handleMultiselectSelectStart(event) {
     if (multiselect && multiselectModifierActive) {
-      e.preventDefault();
+      event.preventDefault();
     }
   }
 
@@ -523,8 +513,6 @@
   let lastExpandedIdsPushed = expandedIds;
 
   /**
-   * @param {ReadonlyArray<Node["id"]>} a
-   * @param {ReadonlyArray<Node["id"]>} b
    * @returns {boolean}
    */
   function arrayIdsEqual(a, b) {
@@ -662,28 +650,27 @@
     }
   }
 
-  /** @param {EventTarget | null} target */
   function getTreeItemFromTarget(target) {
     if (!(target instanceof Element)) return null;
     if (target.classList.contains("bx--tree-node")) return target;
     return target.closest(".bx--tree-node");
   }
 
-  function handleKeyDown(e) {
-    e.stopPropagation();
+  function handleKeyDown(event) {
+    event.stopPropagation();
 
     if (
-      e.key === "ArrowUp" ||
-      e.key === "ArrowDown" ||
-      e.key === "Home" ||
-      e.key === "End"
+      event.key === "ArrowUp" ||
+      event.key === "ArrowDown" ||
+      event.key === "Home" ||
+      event.key === "End"
     ) {
-      e.preventDefault();
+      event.preventDefault();
     }
 
     if (!treeWalker || !ref) return;
 
-    const treeItem = getTreeItemFromTarget(e.target);
+    const treeItem = getTreeItemFromTarget(event.target);
     if (!treeItem) return;
 
     treeWalker.currentNode = treeItem;
@@ -691,16 +678,17 @@
     /** @type {Node | null} */
     let nextFocusNode = null;
 
-    if (e.key === "ArrowUp") {
+    if (event.key === "ArrowUp") {
       nextFocusNode = treeWalker.previousNode();
     }
-    if (e.key === "ArrowDown") {
+    if (event.key === "ArrowDown") {
       nextFocusNode = treeWalker.nextNode();
     }
 
-    const isHomeOrEnd = e.key === "Home" || e.key === "End";
+    const isHomeOrEnd = event.key === "Home" || event.key === "End";
     const isSelectAll =
-      (e.code === "KeyA" || e.key === "a" || e.key === "A") && e.ctrlKey;
+      (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
+      event.ctrlKey;
 
     if (isHomeOrEnd || isSelectAll) {
       /** @type {Array<string | number>} */
@@ -709,21 +697,23 @@
       if (isHomeOrEnd) {
         if (
           multiselect &&
-          e.shiftKey &&
-          e.ctrlKey &&
+          event.shiftKey &&
+          event.ctrlKey &&
           treeItem instanceof HTMLElement
         ) {
           const hid = treeItem.id;
           if (hid) nodeIds.push(hid);
         }
         while (
-          e.key === "Home" ? treeWalker.previousNode() : treeWalker.nextNode()
+          event.key === "Home"
+            ? treeWalker.previousNode()
+            : treeWalker.nextNode()
         ) {
           nextFocusNode = treeWalker.currentNode;
           if (
             multiselect &&
-            e.shiftKey &&
-            e.ctrlKey &&
+            event.shiftKey &&
+            event.ctrlKey &&
             nextFocusNode instanceof Element
           ) {
             const nid = nextFocusNode.id;
@@ -733,7 +723,7 @@
       }
 
       if (isSelectAll) {
-        e.preventDefault();
+        event.preventDefault();
         for (const n of flattenedNodes) {
           if (n.disabled) continue;
           const el = ref?.querySelector(`[id="${CSS.escape(String(n.id))}"]`);

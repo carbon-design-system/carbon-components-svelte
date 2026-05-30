@@ -212,8 +212,8 @@
         {...$$restProps}
         on:change
         on:input
-        on:input={({ target }) => {
-          value = target.value;
+        on:input={(event) => {
+          value = event.target.value;
         }}
         on:keydown
         on:keyup

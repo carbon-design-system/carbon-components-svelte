@@ -112,8 +112,8 @@
     setDefaultValue,
   });
 
-  const handleChange = ({ target }) => {
-    let value = target.value;
+  const handleChange = (event) => {
+    let value = event.target.value;
 
     if ($itemTypesByValue[value] === "number") {
       value = Number(value);
@@ -125,17 +125,17 @@
   const selectReadOnlyKeys = ["ArrowDown", "ArrowUp", " "];
 
   /** @type {(e: MouseEvent) => void} */
-  const onMouseDown = (e) => {
+  const onMouseDown = (event) => {
     if (readonly) {
-      e.preventDefault();
-      e.currentTarget.focus();
+      event.preventDefault();
+      event.currentTarget.focus();
     }
   };
 
   /** @type {(e: KeyboardEvent) => void} */
-  const onKeyDown = (e) => {
-    if (readonly && selectReadOnlyKeys.includes(e.key)) {
-      e.preventDefault();
+  const onKeyDown = (event) => {
+    if (readonly && selectReadOnlyKeys.includes(event.key)) {
+      event.preventDefault();
     }
   };
 

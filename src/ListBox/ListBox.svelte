@@ -48,9 +48,9 @@
   class:bx--list-box--warning={!invalid && warn}
   {...$$restProps}
   on:keydown
-  on:keydown={(e) => {
-    if (e.key === "Escape") {
-      e.stopPropagation();
+  on:keydown={(event) => {
+    if (event.key === "Escape") {
+      event.stopPropagation();
     }
   }}
   on:click|preventDefault

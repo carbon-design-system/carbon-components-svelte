@@ -81,8 +81,8 @@
     on:mouseenter
     on:mouseleave
     on:keydown
-    on:keydown={({ key }) => {
-      if (open && key === "Escape") {
+    on:keydown={(event) => {
+      if (open && event.key === "Escape") {
         open = false;
       }
     }}

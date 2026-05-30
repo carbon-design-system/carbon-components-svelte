@@ -96,13 +96,13 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:keydown={({ key }) => {
+  on:keydown={(event) => {
     if (!disabled) {
-      if (key === "ArrowRight") {
+      if (event.key === "ArrowRight") {
         change(1);
-      } else if (key === "ArrowLeft") {
+      } else if (event.key === "ArrowLeft") {
         change(-1);
-      } else if (key === " " || key === "Enter") {
+      } else if (event.key === " " || event.key === "Enter") {
         update(id);
       }
     }

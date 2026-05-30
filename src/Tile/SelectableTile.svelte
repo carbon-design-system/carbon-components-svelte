@@ -140,10 +140,10 @@
   on:mouseenter
   on:mouseleave
   on:keydown
-  on:keydown={(e) => {
+  on:keydown={(event) => {
     if (disabled) return;
-    if (e.key === " " || e.key === "Enter") {
-      e.preventDefault();
+    if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
       if (ref) {
         ref.click();
       }

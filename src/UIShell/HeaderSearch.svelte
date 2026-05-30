@@ -92,8 +92,8 @@
 </script>
 
 <svelte:window
-  on:mouseup={({ target }) => {
-    if (active && !refSearch?.contains(target)) active = false;
+  on:mouseup={(event) => {
+    if (active && !refSearch?.contains(event.target)) active = false;
   }}
 />
 
@@ -144,13 +144,13 @@
       on:focus
       on:blur
       on:keydown
-      on:keydown={(e) => {
-        switch (e.key) {
+      on:keydown={(event) => {
+        switch (event.key) {
           case "Enter":
             selectResult();
             break;
           case "ArrowDown":
-            e.preventDefault();
+            event.preventDefault();
             if (selectedResultIndex === results.length - 1) {
               selectedResultIndex = 0;
             } else {
@@ -158,7 +158,7 @@
             }
             break;
           case "ArrowUp":
-            e.preventDefault();
+            event.preventDefault();
             if (selectedResultIndex === 0) {
               selectedResultIndex = results.length - 1;
             } else {

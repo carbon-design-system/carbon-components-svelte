@@ -114,7 +114,6 @@
   /**
    * Walk up from the anchor element and collect every
    * scrollable ancestor so we can listen for their scroll events.
-   * @param {HTMLElement} node
    * @returns {Array<HTMLElement | Document>}
    */
   function getScrollableAncestors(node) {

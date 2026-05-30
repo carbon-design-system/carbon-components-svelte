@@ -127,9 +127,6 @@
    * Returns a subset of page numbers centered around the current page to prevent
    * performance issues with large datasets. Creates a capped window of pages
    * instead of potentially thousands, improving render speed and memory usage.
-   * @param {number} currentPage - The current page number.
-   * @param {number} totalPages - Total number of pages.
-   * @param {number} window - How many pages to show before/after current page.
    * @returns {number[]} Array of page numbers to display.
    */
   function getWindowedPages(currentPage, totalPages, window) {
@@ -141,8 +138,6 @@
   /**
    * Filters page sizes to remove redundant options based on total items.
    * Keeps all sizes up to and including the first one >= totalItems.
-   * @param {ReadonlyArray<number>} sizes - Available page sizes.
-   * @param {number} total - Total number of items.
    * @returns {number[]} Filtered array of page sizes.
    */
   function getFilteredPageSizes(sizes, total) {

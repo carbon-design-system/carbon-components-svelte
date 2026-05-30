@@ -39,10 +39,10 @@
 </script>
 
 <svelte:window
-  on:click={(e) => {
+  on:click={(event) => {
     if (!open) return;
-    if (!ref.contains(e.target)) {
-      dispatch("click:outside", { target: e.target });
+    if (!ref.contains(event.target)) {
+      dispatch("click:outside", { target: event.target });
       if (closeOnOutsideClick) open = false;
     }
   }}

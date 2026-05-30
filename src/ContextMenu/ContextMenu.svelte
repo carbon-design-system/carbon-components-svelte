@@ -89,30 +89,30 @@
   }
 
   /** @type {(e: MouseEvent) => void} */
-  function openMenu(e) {
-    e.preventDefault();
+  function openMenu(event) {
+    event.preventDefault();
     const { height, width } = ref.getBoundingClientRect();
 
     if (open || x === 0) {
-      if (window.innerWidth - width < e.x) {
-        x = e.x - width;
+      if (window.innerWidth - width < event.x) {
+        x = event.x - width;
       } else {
-        x = e.x;
+        x = event.x;
       }
     }
 
     if (open || y === 0) {
-      menuOffsetX.set(e.x);
+      menuOffsetX.set(event.x);
 
-      if (window.innerHeight - height < e.y) {
-        y = e.y - height;
+      if (window.innerHeight - height < event.y) {
+        y = event.y - height;
       } else {
-        y = e.y;
+        y = event.y;
       }
     }
     position.set([x, y]);
     open = true;
-    openDetail = e.target;
+    openDetail = event.target;
   }
 
   /** @type {Array<HTMLElement | null>} */
@@ -177,20 +177,20 @@
 </script>
 
 <svelte:window
-  on:contextmenu={(e) => {
+  on:contextmenu={(event) => {
     if (target != null) return;
     if (level > 1) return;
     if (!ref) return;
-    openMenu(e);
+    openMenu(event);
   }}
-  on:click={(e) => {
+  on:click={(event) => {
     if (!open) return;
-    if (ref && !ref.contains(e.target)) {
+    if (ref && !ref.contains(event.target)) {
       close();
     }
   }}
-  on:keydown={(e) => {
-    if (open && e.key === "Escape") close();
+  on:keydown={(event) => {
+    if (open && event.key === "Escape") close();
   }}
 />
 
@@ -210,29 +210,29 @@
   {...$$restProps}
   aria-label={menuAriaLabel}
   on:click
-  on:click={({ target }) => {
-    const closestOption = target.closest("[tabindex]");
+  on:click={(event) => {
+    const closestOption = event.target.closest("[tabindex]");
 
     if (closestOption && closestOption.getAttribute("role") !== "menuitem") {
       close();
     }
   }}
   on:keydown
-  on:keydown={(e) => {
-    if (open) e.preventDefault();
+  on:keydown={(event) => {
+    if (open) event.preventDefault();
     if ($hasPopup) return;
 
-    if (e.key === "ArrowDown") {
+    if (event.key === "ArrowDown") {
       if (focusIndex < options.length - 1) focusIndex++;
-    } else if (e.key === "ArrowUp") {
+    } else if (event.key === "ArrowUp") {
       if (focusIndex === -1) {
         focusIndex = options.length - 1;
       } else {
         if (focusIndex > 0) focusIndex--;
       }
-    } else if (e.key === "Home") {
+    } else if (event.key === "Home") {
       if (options.length > 0) focusIndex = 0;
-    } else if (e.key === "End" && options.length > 0) {
+    } else if (event.key === "End" && options.length > 0) {
       focusIndex = options.length - 1;
     }
   }}
