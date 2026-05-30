@@ -5,7 +5,7 @@ import LocalStorageReactiveKey from "./LocalStorageReactiveKey.test.svelte";
 
 // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1204
 describe("LocalStorage - reactive key", () => {
-  const { setMockItem } = setupLocalStorageMock();
+  const { setMockItem, getMockItem } = setupLocalStorageMock();
 
   it("should update value when key prop changes", async () => {
     setMockItem("key-a", "value-a");
@@ -48,9 +48,12 @@ describe("LocalStorage - reactive key", () => {
     expect(JSON.parse(valueDisplay?.textContent || "{}")).toEqual({
       theme: "light",
     });
-    expect(localStorage.setItem).toHaveBeenLastCalledWith(
-      "user-2-settings",
+    expect(getMockItem("user-2-settings")).toBe(
       JSON.stringify({ theme: "light" }),
+    );
+    expect(localStorage.setItem).not.toHaveBeenCalledWith(
+      "user-2-settings",
+      JSON.stringify({ theme: "dark" }),
     );
   });
 
