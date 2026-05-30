@@ -8,6 +8,7 @@
 
   let selectedUser = "user-1";
   let theme = "white";
+  let events = [];
 
   $: storageKey = `local-storage-reactive-example-${selectedUser}`;
 </script>
@@ -17,7 +18,13 @@
     Try selecting different users and changing their theme preferences. Each
     user's preference is stored separately and persists across page reloads.
   </div>
-  <LocalStorage key={storageKey} bind:value={theme} />
+  <LocalStorage
+    key={storageKey}
+    bind:value={theme}
+    on:update={({ detail }) => {
+      events = [...events, { event: "on:update", detail }];
+    }}
+  />
   <RadioButtonGroup legendText="Select user" bind:selected={selectedUser}>
     <RadioButton labelText="User 1" value="user-1" />
     <RadioButton labelText="User 2" value="user-2" />
@@ -40,4 +47,6 @@
       {theme}
     </div>
   </Stack>
+  <strong> Updates: </strong>
+  <pre>{JSON.stringify(events, null, 2)}</pre>
 </Stack>
