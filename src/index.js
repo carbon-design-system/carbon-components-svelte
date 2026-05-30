@@ -95,6 +95,7 @@ export { default as OverflowMenuItem } from "./OverflowMenu/OverflowMenuItem.sve
 export { default as Pagination } from "./Pagination/Pagination.svelte";
 export { default as PaginationSkeleton } from "./Pagination/PaginationSkeleton.svelte";
 export { default as PaginationNav } from "./PaginationNav/PaginationNav.svelte";
+export { default as PinCodeInput } from "./PinCodeInput/PinCodeInput.svelte";
 export { default as Popover } from "./Popover/Popover.svelte";
 export { default as FloatingPortal } from "./Portal/FloatingPortal.svelte";
 export { default as Portal } from "./Portal/Portal.svelte";
