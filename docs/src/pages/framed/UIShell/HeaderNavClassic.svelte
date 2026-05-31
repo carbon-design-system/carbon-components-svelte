@@ -4,9 +4,14 @@
     Content,
     Grid,
     Header,
+    HeaderAction,
     HeaderNav,
     HeaderNavItem,
     HeaderNavMenu,
+    HeaderPanelDivider,
+    HeaderPanelLink,
+    HeaderPanelLinks,
+    HeaderUtilities,
     Row,
     SideNav,
     SideNavDivider,
@@ -18,6 +23,7 @@
   } from "carbon-components-svelte";
 
   let isSideNavOpen = false;
+  let isOpen = false;
 </script>
 
 <Header
@@ -38,6 +44,18 @@
     </HeaderNavMenu>
     <HeaderNavItem href="/" text="Link 4" />
   </HeaderNav>
+  <HeaderUtilities>
+    <HeaderAction bind:isOpen>
+      <HeaderPanelLinks>
+        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
+        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+        <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
+        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+        <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
+        <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
+      </HeaderPanelLinks>
+    </HeaderAction>
+  </HeaderUtilities>
 </Header>
 
 <SideNav theme="classic" bind:isOpen={isSideNavOpen}>
