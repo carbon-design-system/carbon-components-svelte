@@ -3,25 +3,32 @@
     name: string;
     description?: string;
     type?: string;
+    typesHighlighted?: string[];
     value?: string;
+    valueHighlighted?: string;
+    exampleCode?: string;
+    exampleCodeHighlighted?: string;
     isRequired?: boolean;
     reactive?: boolean;
   };
 
   type ComponentApiTypedef = {
     ts?: string;
+    tsHighlighted?: string;
   };
 
   type ComponentApiSlot = {
     default?: boolean;
     name?: string | null;
     slot_props?: string;
+    slot_propsHighlighted?: string;
   };
 
   type ComponentApiEvent = {
     type?: string;
     name?: string;
     detail?: string;
+    detailHighlighted?: string;
     description?: string;
   };
 
@@ -37,6 +44,7 @@
     slots: ComponentApiSlot[];
     events: ComponentApiEvent[];
     typedefs: ComponentApiTypedef[];
+    typedefsHighlighted?: string;
     rest_props?: ComponentApiRestProps;
   };
 
@@ -50,6 +58,8 @@
     rest_props: undefined,
   };
 
+  export let highlightedPrimitives: Record<string, string> = {};
+
   import {
     ListItem,
     OutboundLink,
@@ -61,17 +71,8 @@
     Tag,
     UnorderedList,
   } from "carbon-components-svelte";
-  import { onMount } from "svelte";
+  import HighlightedCodeSnippet from "./HighlightedCodeSnippet.svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
-
-  let AsyncPreviewTypeScript:
-    | typeof import("./PreviewTypeScript.svelte").default
-    | undefined;
-
-  onMount(async () => {
-    AsyncPreviewTypeScript = (await import("./PreviewTypeScript.svelte"))
-      .default;
-  });
 
   const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
   const typeMap: Record<string, string> = {
@@ -82,29 +83,20 @@
     Date: "JavaScript Date",
   };
 
-  // Regex to extract code blocks from @example annotations
-  // Pattern: ```svelte\n...code...\n``` or ```svelte\n...code...```
-  // The regex uses [\s\S]*? to match any character including newlines (non-greedy)
-  const EXAMPLE_CODE_BLOCK_REGEX = /```svelte\s*\n([\s\S]*?)```/;
-
   function parseDescription(description: string) {
     if (!description) {
-      return { mainDescription: "", exampleCode: null };
+      return { mainDescription: "", hasExample: false };
     }
 
     const exampleIndex = description.indexOf("@example");
     if (exampleIndex === -1) {
-      return { mainDescription: description, exampleCode: null };
+      return { mainDescription: description, hasExample: false };
     }
 
-    const mainDescription = description.slice(0, exampleIndex).trim();
-    const exampleSection = description.slice(exampleIndex);
-
-    // Extract code block from example section
-    const codeBlockMatch = exampleSection.match(EXAMPLE_CODE_BLOCK_REGEX);
-    const exampleCode = codeBlockMatch ? codeBlockMatch[1].trim() : null;
-
-    return { mainDescription, exampleCode };
+    return {
+      mainDescription: description.slice(0, exampleIndex).trim(),
+      hasExample: true,
+    };
   }
 
   $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
@@ -180,25 +172,25 @@
                     >
                       {type}
                     </OutboundLink>
-                  {:else if type in typeMap}
+                  {:else if type in typeMap && highlightedPrimitives[type]}
                     <div
                       style="display: inline-flex; max-width: 220px; white-space: nowrap;"
                     >
-                      <svelte:component
-                        this={AsyncPreviewTypeScript}
+                      <HighlightedCodeSnippet
                         type="inline"
                         code={typeMap[type] ?? type}
+                        highlighted={highlightedPrimitives[type]}
                         portalTooltip
                       />
                     </div>
-                  {:else}
+                  {:else if prop.typesHighlighted?.[i]}
                     <div
                       style="display: inline-flex; max-width: 220px; word-break: break-word;"
                     >
-                      <svelte:component
-                        this={AsyncPreviewTypeScript}
+                      <HighlightedCodeSnippet
                         type="inline"
                         code={type}
+                        highlighted={prop.typesHighlighted[i]}
                         portalTooltip
                       />
                     </div>
@@ -222,7 +214,7 @@
                       })}
                   </div>
                 {/if}
-                {#if parsed.exampleCode}
+                {#if prop.exampleCode && prop.exampleCodeHighlighted}
                   <div
                     style:margin-top="var(--cds-layout-02)"
                     style:margin-bottom="var(--cds-spacing-03)"
@@ -233,10 +225,10 @@
                     style:margin-bottom="var(--cds-layout-02)"
                     style:max-width="85%"
                   >
-                    <svelte:component
-                      this={AsyncPreviewTypeScript}
+                    <HighlightedCodeSnippet
                       type="multi"
-                      code={parsed.exampleCode}
+                      code={prop.exampleCode}
+                      highlighted={prop.exampleCodeHighlighted}
                       portalTooltip
                     />
                   </div>
@@ -254,11 +246,11 @@
               >
                 {#if prop.value === undefined}
                   <em>undefined</em>
-                {:else}
-                  <svelte:component
-                    this={AsyncPreviewTypeScript}
+                {:else if prop.valueHighlighted}
+                  <HighlightedCodeSnippet
                     type={/\n/.test(prop.value ?? "") ? "multi" : "inline"}
                     code={prop.value ?? ""}
+                    highlighted={prop.valueHighlighted}
                     portalTooltip
                   />
                 {/if}
@@ -275,11 +267,11 @@
 
 <h2 id="typedefs">Typedefs</h2>
 
-{#if component.typedefs.length > 0}
+{#if component.typedefs.length > 0 && component.typedefsHighlighted}
   <div class="my-layout-01-03">
-    <svelte:component
-      this={AsyncPreviewTypeScript}
+    <HighlightedCodeSnippet
       code={component.typedefs.map((t) => t.ts ?? "").join("\n")}
+      highlighted={component.typedefsHighlighted}
     />
   </div>
 {:else}
@@ -302,12 +294,14 @@
             <strong>{slot.default ? "default" : slot.name}</strong>
           </StructuredListCell>
           <StructuredListCell>
-            <svelte:component
-              this={AsyncPreviewTypeScript}
-              type={/\n/.test(slot.slot_props ?? "") ? "multi" : "inline"}
-              code={slot.slot_props ?? ""}
-              portalTooltip
-            />
+            {#if slot.slot_props && slot.slot_propsHighlighted}
+              <HighlightedCodeSnippet
+                type={/\n/.test(slot.slot_props ?? "") ? "multi" : "inline"}
+                code={slot.slot_props ?? ""}
+                highlighted={slot.slot_propsHighlighted}
+                portalTooltip
+              />
+            {/if}
           </StructuredListCell>
         </StructuredListRow>
       {/each}
@@ -349,12 +343,16 @@
             <strong>on:{dispatched_event.name}</strong>
           </StructuredListCell>
           <StructuredListCell>
-            <svelte:component
-              this={AsyncPreviewTypeScript}
-              type={/\n/.test(dispatched_event.detail ?? "") ? "multi" : "inline"}
-              code={dispatched_event.detail ?? ""}
-              portalTooltip
-            />
+            {#if dispatched_event.detailHighlighted}
+              <HighlightedCodeSnippet
+                type={/\n/.test(dispatched_event.detail ?? "")
+                  ? "multi"
+                  : "inline"}
+                code={dispatched_event.detail ?? ""}
+                highlighted={dispatched_event.detailHighlighted}
+                portalTooltip
+              />
+            {/if}
           </StructuredListCell>
           <StructuredListCell>
             {dispatched_event.description ?? ""}

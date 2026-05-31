@@ -1,29 +1,20 @@
 <script lang="ts">
   export let code = "";
-  export let type = "multi";
+  export let highlighted = "";
+  export let type: "multi" | "inline" = "multi";
   export let portalTooltip: boolean | undefined = undefined;
 
   import { CodeSnippet } from "carbon-components-svelte";
-  import Prism, { highlight } from "prismjs";
-  import "prismjs/components/prism-typescript";
   import copy from "clipboard-copy";
-
-  $: highlightedCode = highlight(
-    code,
-    Prism.languages.typescript,
-    "typescript",
-  );
 </script>
 
 {#if type === "multi"}
   <div class="code-override">
     <CodeSnippet type="multi" {code} {copy} {portalTooltip}>
-      {@html highlightedCode}
+      {@html highlighted}
     </CodeSnippet>
   </div>
-{/if}
-
-{#if type === "inline"}
+{:else}
   <CodeSnippet
     type="inline"
     class="code-override-inline"
@@ -31,6 +22,6 @@
     {copy}
     {portalTooltip}
   >
-    {@html highlightedCode}
+    {@html highlighted}
   </CodeSnippet>
 {/if}

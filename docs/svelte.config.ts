@@ -7,17 +7,11 @@ import type { Blockquote, List, Paragraph, PhrasingContent } from "mdast";
 import { escapeSvelte, mdsvex } from "mdsvex";
 import { format } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
-import Prism from "prismjs";
 import rehypeSlug from "rehype-slug";
 import { parse } from "svelte/compiler";
 import visit from "unist-util-visit";
+import { highlightCode, normalizeLang } from "./scripts/shiki-highlighter.ts";
 import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
-import "prismjs/components/prism-markup.js";
-import "prismjs/components/prism-css.js";
-import "prismjs/components/prism-clike.js";
-import "prismjs/components/prism-javascript.js";
-import "prismjs/components/prism-typescript.js";
-import "prism-svelte";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -43,13 +37,6 @@ const SNIPPET_ICON_MUSTACHE_RE = /\{\s*[A-Z][A-Za-z0-9]*\s*[},]/;
 const SNIPPET_TAG_RE = /<[a-zA-Z]/;
 const SNIPPET_MUSTACHE_ANY_RE = /\{/;
 
-const MDSVEX_LANG_ALIASES = {
-  js: "javascript",
-  ts: "typescript",
-  html: "markup",
-  svg: "markup",
-} as const;
-
 const SKIP_MDSVEX_PRETTIER = process.env.NODE_ENV === "development";
 
 const previewCodeCache = new Map<
@@ -70,32 +57,24 @@ function escapeHtmlText(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function mdsvexPrismHighlighter(
+async function mdsvexShikiHighlighter(
   code: string,
   lang: string | null | undefined,
   _meta: string | null | undefined,
   _filename?: string,
   optimize = true,
-): string {
-  const raw = lang?.toLowerCase().trim() ?? "";
-  const classLang = raw || "text";
+): Promise<string> {
+  const classLang = lang?.toLowerCase().trim() || "text";
+  const normalized = normalizeLang(lang);
 
-  const grammarKey = raw
-    ? (MDSVEX_LANG_ALIASES[raw as keyof typeof MDSVEX_LANG_ALIASES] ?? raw)
-    : "";
-  const grammar =
-    grammarKey && Prism.languages[grammarKey as keyof typeof Prism.languages]
-      ? Prism.languages[grammarKey as keyof typeof Prism.languages]
-      : null;
+  const html =
+    normalized === "text"
+      ? `<pre class="language-${classLang}"><code>${escapeHtmlText(code)}</code></pre>`
+      : await highlightCode(code, lang);
 
-  const inner = grammar
-    ? Prism.highlight(code, grammar, grammarKey)
-    : escapeHtmlText(code);
-  const highlighted = escapeSvelte(inner);
+  if (!optimize) return html;
 
-  return optimize
-    ? `<pre class="language-${classLang}">{@html \`<code class="language-${classLang}">${highlighted}</code>\`}</pre>`
-    : `<pre class="language-${classLang}"><code class="language-${classLang}">${highlighted}</code></pre>`;
+  return `{@html \`${escapeSvelte(html)}\`}`;
 }
 
 const prettierSvelte = {
@@ -207,11 +186,9 @@ async function formatAndHighlightPreviewSvelte(combinedSource: string) {
   const formattedCode = SKIP_MDSVEX_PRETTIER
     ? combinedSource
     : await format(combinedSource, prettierSvelte);
-  const highlightedCode = Prism.highlight(
-    formattedCode,
-    Prism.languages.svelte,
-    "svelte",
-  );
+  const highlightedCode = await highlightCode(formattedCode, "svelte", {
+    fragment: true,
+  });
   const out = { formattedCode, highlightedCode };
   previewCodeCache.set(cacheKey, out);
   return out;
@@ -230,11 +207,9 @@ async function formatAndHighlightFileSourceSvelte(
   const formattedCode = SKIP_MDSVEX_PRETTIER
     ? sourceCode
     : await format(sourceCode, prettierSvelte);
-  const highlightedCode = Prism.highlight(
-    formattedCode,
-    Prism.languages.svelte,
-    "svelte",
-  );
+  const highlightedCode = await highlightCode(formattedCode, "svelte", {
+    fragment: true,
+  });
   const out = { formattedCode, highlightedCode };
   previewCodeCache.set(cacheKey, out);
   return out;
@@ -445,7 +420,7 @@ export default {
   preprocess: [
     mdsvex({
       smartypants: false,
-      highlight: { highlighter: mdsvexPrismHighlighter },
+      highlight: { highlighter: mdsvexShikiHighlighter },
       remarkPlugins: [plugin, carbonify],
       rehypePlugins: [rehypeSlug],
       layout: {

@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { format } from "prettier";
 import plugin from "prettier/plugins/typescript";
 import componentApi from "../src/COMPONENT_API.json" with { type: "json" };
+import { extractExampleCode, highlightCode } from "./shiki-highlighter.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outFile = path.join(__dirname, "../src/COMPONENT_API.json");
@@ -12,6 +13,14 @@ const WHITESPACE_REGEX = /\s{2,}/;
 const TRAILING_SEMICOLON_REGEX = /;\s*$/;
 const EVENT_DETAIL_PREFIX_REGEX = /type EventDetail = /;
 const SLOT_PROPS_PREFIX_REGEX = /type SlotProps = /;
+
+const PRIMITIVE_TYPES = [
+  "string",
+  "boolean",
+  "number",
+  "null",
+  "Date",
+] as const;
 
 /** Avoid `type EventDetail = type EventDetail = …` when re-running the formatter. */
 const stripLeadingTypeAlias = (
@@ -37,35 +46,79 @@ const formatTypeScript = async (value: string) => {
   });
 };
 
+async function highlightTypeScriptFragment(code: string) {
+  if (!code) return "";
+  return await highlightCode(code, "typescript", { fragment: true });
+}
+
+async function highlightSvelteFragment(code: string) {
+  if (!code) return "";
+  return await highlightCode(code, "svelte", { fragment: true });
+}
+
 console.time("formatComponentApi");
+
+const highlightedPrimitives = Object.fromEntries(
+  await Promise.all(
+    PRIMITIVE_TYPES.map(async (type) => {
+      const display = type === "Date" ? "JavaScript Date" : type;
+      return [type, await highlightTypeScriptFragment(display)] as const;
+    }),
+  ),
+);
 
 const modified = {
   ...componentApi,
+  highlightedPrimitives,
   components: await Promise.all(
     componentApi.components.map(async (component) => {
       const props = await Promise.all(
         component.props.map(async (prop) => {
-          if (!prop.value || !WHITESPACE_REGEX.test(prop.value)) {
-            return prop;
+          let nextProp = { ...prop };
+
+          if (prop.value && WHITESPACE_REGEX.test(prop.value)) {
+            let normalizedValue = prop.value;
+            const prefix = `const ${prop.name} = `;
+
+            if (prop.isFunction || prop.value.startsWith("{")) {
+              normalizedValue = prefix + prop.value;
+            }
+
+            const formatted = (await formatTypeScript(normalizedValue))
+              .replace(new RegExp(`^${prefix}`), "")
+              .replace(TRAILING_SEMICOLON_REGEX, "");
+
+            nextProp = { ...nextProp, value: formatted };
           }
 
-          let normalizedValue = prop.value;
-          const prefix = `const ${prop.name} = `;
+          const typeSegments = (prop.type || "").split(" | ").filter(Boolean);
+          const typesHighlighted = await Promise.all(
+            typeSegments.map((type) => {
+              if (type.startsWith("HTML") || type in highlightedPrimitives) {
+                return Promise.resolve("");
+              }
+              return highlightTypeScriptFragment(type);
+            }),
+          );
 
-          if (prop.isFunction || prop.value.startsWith("{")) {
-            normalizedValue = prefix + prop.value;
-          }
+          const exampleCode = prop.description
+            ? extractExampleCode(prop.description)
+            : null;
 
-          const formatted = (await formatTypeScript(normalizedValue))
-            // Remove prefix needed for formatting.
-            .replace(new RegExp(`^${prefix}`), "")
-            // Remove trailing semi-colon.
-            .replace(TRAILING_SEMICOLON_REGEX, "");
-
-          return {
-            ...prop,
-            value: formatted,
+          nextProp = {
+            ...nextProp,
+            typesHighlighted,
+            valueHighlighted:
+              nextProp.value === undefined
+                ? undefined
+                : await highlightTypeScriptFragment(nextProp.value),
+            exampleCode: exampleCode ?? undefined,
+            exampleCodeHighlighted: exampleCode
+              ? await highlightSvelteFragment(exampleCode)
+              : undefined,
           };
+
+          return nextProp;
         }),
       );
 
@@ -75,9 +128,11 @@ const modified = {
             return typedef;
           }
 
+          const ts = await formatTypeScript(typedef.ts);
           return {
             ...typedef,
-            ts: await formatTypeScript(typedef.ts),
+            ts,
+            tsHighlighted: await highlightTypeScriptFragment(ts),
           };
         }),
       );
@@ -100,14 +155,13 @@ const modified = {
           const normalizedValue = `type EventDetail = ${detailBody}`;
 
           const formatted = (await formatTypeScript(normalizedValue))
-            // Remove prefix needed for formatting.
             .replace(EVENT_DETAIL_PREFIX_REGEX, "")
-            // Remove trailing semi-colon.
             .replace(TRAILING_SEMICOLON_REGEX, "");
 
           return {
             ...event,
             detail: formatted,
+            detailHighlighted: await highlightTypeScriptFragment(formatted),
           };
         }),
       );
@@ -128,22 +182,27 @@ const modified = {
           }
 
           const formatted = (await formatTypeScript(normalizedValue))
-            // Remove prefix needed for formatting.
             .replace(SLOT_PROPS_PREFIX_REGEX, "")
-            // Remove trailing semi-colon.
             .replace(TRAILING_SEMICOLON_REGEX, "");
 
           return {
             ...slot,
             slot_props: formatted,
+            slot_propsHighlighted: await highlightTypeScriptFragment(formatted),
           };
         }),
       );
+
+      const typedefTs = typedefs.map((t) => t.ts ?? "").join("\n");
 
       return {
         ...component,
         props,
         typedefs,
+        typedefsHighlighted:
+          typedefTs.length > 0
+            ? await highlightTypeScriptFragment(typedefTs)
+            : undefined,
         events,
         slots,
       };

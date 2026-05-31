@@ -3,6 +3,7 @@ html {
 }
 
 .prose > pre,
+.prose > pre.shiki,
 .code-override .bx--snippet {
   color-scheme: dark;
   max-width: none;
@@ -11,12 +12,15 @@ html {
 /* Light themes use light color scheme */
 [theme="white"] .prose > pre,
 [theme="g10"] .prose > pre,
+[theme="white"] .prose > pre.shiki,
+[theme="g10"] .prose > pre.shiki,
 [theme="white"] .code-override .bx--snippet,
 [theme="g10"] .code-override .bx--snippet {
   color-scheme: light;
 }
 
-.prose > pre {
+.prose > pre,
+.prose > pre.shiki {
   padding: 1rem;
   margin-bottom: 1rem;
   overflow: auto;
@@ -29,6 +33,7 @@ html {
 
 /* Dark theme code block styles (default for g80, g90, g100) */
 .prose > pre,
+.prose > pre.shiki,
 .code-override .bx--copy-btn,
 .code-override .bx--snippet,
 .code-override button.bx--btn.bx--snippet-btn--expand {
@@ -48,6 +53,8 @@ html {
 /* Light theme code block styles (white, g10) */
 [theme="white"] .prose > pre,
 [theme="g10"] .prose > pre,
+[theme="white"] .prose > pre.shiki,
+[theme="g10"] .prose > pre.shiki,
 [theme="white"] .code-override .bx--copy-btn,
 [theme="g10"] .code-override .bx--copy-btn,
 [theme="white"] .code-override .bx--snippet,
@@ -71,6 +78,7 @@ html {
 }
 
 .prose > pre,
+.prose > pre.shiki,
 .code-override .bx--snippet-container pre {
   font-size: var(--cds-code-01-font-size);
   line-height: var(--cds-code-01-line-height);
@@ -87,9 +95,38 @@ html {
   min-width: 0;
 }
 
-.token.tag,
-.token.operator {
-  color: #6ea6ff;
+/* Shiki dual-theme syntax highlighting (Carbon palette) */
+[theme="white"] .shiki span,
+[theme="g10"] .shiki span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+  font-style: var(--shiki-light-font-style) !important;
+  font-weight: var(--shiki-light-font-weight) !important;
+  text-decoration: var(--shiki-light-text-decoration) !important;
+}
+
+[theme="g80"] .shiki span,
+[theme="g90"] .shiki span,
+[theme="g100"] .shiki span,
+html:not([theme="white"]):not([theme="g10"]) .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+.shiki {
+  background-color: transparent !important;
+}
+
+.prose > pre.shiki {
+  background-color: var(--cds-ui-background);
+}
+
+[theme="white"] .prose > pre.shiki,
+[theme="g10"] .prose > pre.shiki {
+  background-color: var(--cds-ui-background);
 }
 
 /* Light theme inline code background */
@@ -102,110 +139,6 @@ html {
 [theme="g80"] .code-override,
 [theme="g80"] .code-override-inline {
   background-color: var(--cds-ui-background);
-}
-
-.token.builtin,
-.token.attr-name {
-  color: #3ddbd9; /* teal 30 */
-}
-
-.token.function {
-  color: #9ef0f0;
-}
-
-.token.token.language-javascript,
-.token.attr-value {
-  color: #d4bbff; /* purple 30 */
-}
-
-.token.keyword {
-  color: #bb8eff;
-}
-
-.token.punctuation {
-  color: #a8a8a8; /* gray 40 */
-}
-
-.token.script .token.language-javascript {
-  color: #3ddbd9; /* teal 30 */
-}
-
-.token.string {
-  color: #fa75a6;
-}
-
-.token.boolean {
-  color: #bb8eff;
-}
-
-.token.number {
-  color: #a7f0ba;
-}
-
-.token.comment {
-  color: #bebebe;
-}
-
-/* Light theme syntax highlighting (white, g10) */
-[theme="white"] .token.tag,
-[theme="g10"] .token.tag,
-[theme="white"] .token.operator,
-[theme="g10"] .token.operator {
-  color: #0043ce; /* blue 70 */
-}
-
-[theme="white"] .token.builtin,
-[theme="g10"] .token.builtin,
-[theme="white"] .token.attr-name,
-[theme="g10"] .token.attr-name {
-  color: #005d5d; /* teal 70 */
-}
-
-[theme="white"] .token.function,
-[theme="g10"] .token.function {
-  color: #007d79; /* teal 60 */
-}
-
-[theme="white"] .token.token.language-javascript,
-[theme="g10"] .token.token.language-javascript,
-[theme="white"] .token.attr-value,
-[theme="g10"] .token.attr-value {
-  color: #8a3ffc; /* purple 60 */
-}
-
-[theme="white"] .token.keyword,
-[theme="g10"] .token.keyword {
-  color: #6929c4; /* purple 70 */
-}
-
-[theme="white"] .token.punctuation,
-[theme="g10"] .token.punctuation {
-  color: #525252; /* gray 70 */
-}
-
-[theme="white"] .token.script .token.language-javascript,
-[theme="g10"] .token.script .token.language-javascript {
-  color: #005d5d; /* teal 70 */
-}
-
-[theme="white"] .token.string,
-[theme="g10"] .token.string {
-  color: #9f1853; /* magenta 70 */
-}
-
-[theme="white"] .token.boolean,
-[theme="g10"] .token.boolean {
-  color: #6929c4; /* purple 70 */
-}
-
-[theme="white"] .token.number,
-[theme="g10"] .token.number {
-  color: #0e6027; /* green 70 */
-}
-
-[theme="white"] .token.comment,
-[theme="g10"] .token.comment {
-  color: #6f6f6f; /* gray 60 */
 }
 
 .override-tabs a.bx--tabs__nav-link,

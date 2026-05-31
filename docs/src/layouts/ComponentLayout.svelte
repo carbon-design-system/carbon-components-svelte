@@ -250,12 +250,20 @@
             {/each}
             <div slot="content" class="tab-content-spacing">
               {#each api_components as component (component.moduleName)}
-                <TabContent><ComponentApi {component} /></TabContent>
+                <TabContent
+                  ><ComponentApi
+                    {component}
+                    highlightedPrimitives={COMPONENT_API.highlightedPrimitives ?? {}}
+                  /></TabContent
+                >
               {/each}
             </div>
           </Tabs>
         {:else}
-          <ComponentApi component={api_components[0]} />
+          <ComponentApi
+            component={api_components[0]}
+            highlightedPrimitives={COMPONENT_API.highlightedPrimitives ?? {}}
+          />
         {/if}
       </Column>
     </Row>
