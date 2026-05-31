@@ -1,8 +1,10 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import CheckboxGroupReadonly from "./CheckboxGroup.readonly.test.svelte";
 import CheckboxGroupComponent from "./CheckboxGroupComponent.test.svelte";
 import CheckboxGroupStaticSelected from "./CheckboxGroupStaticSelected.test.svelte";
+import CheckboxReadonlyChange from "./CheckboxReadonlyChange.test.svelte";
 
 describe("CheckboxGroup", () => {
   it("should render with default props", () => {
@@ -270,5 +272,93 @@ describe("CheckboxGroup", () => {
     expect(
       screen.getByRole("checkbox", { name: "Option 3" }),
     ).not.toBeChecked();
+  });
+
+  describe("readonly (group)", () => {
+    it("should apply readonly class on the fieldset", () => {
+      const { container } = render(CheckboxGroupReadonly, {
+        readonly: true,
+      });
+
+      expect(
+        container.querySelector(".bx--checkbox-group--readonly"),
+      ).toBeTruthy();
+    });
+
+    it("should not change selection when clicking another checkbox", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(CheckboxGroupReadonly, { selected: ["1"], readonly: true });
+
+      const option2 = screen.getByRole("checkbox", { name: "Option 2" });
+      await user.click(option2);
+
+      expect(option2).not.toBeChecked();
+      expect(screen.getByRole("checkbox", { name: "Option 1" })).toBeChecked();
+      expect(consoleLog).not.toHaveBeenCalledWith("change", ["1", "2"]);
+    });
+
+    it("should not forward a child Checkbox's on:change when the group is readonly", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(CheckboxReadonlyChange);
+
+      const option2 = screen.getByRole("checkbox", { name: "Option 2" });
+      await fireEvent.change(option2);
+
+      expect(consoleLog).not.toHaveBeenCalledWith("checkbox-change", "2");
+    });
+
+    it("should allow selection when readonly is false", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(CheckboxGroupReadonly, { selected: ["1"], readonly: false });
+
+      const option2 = screen.getByRole("checkbox", { name: "Option 2" });
+      await user.click(option2);
+
+      expect(option2).toBeChecked();
+      expect(consoleLog).toHaveBeenCalledWith("change", ["1", "2"]);
+    });
+
+    it("should not change selection when readonly flips to true after mount", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = render(CheckboxGroupReadonly, {
+        selected: ["1"],
+        readonly: false,
+      });
+
+      await rerender({ selected: ["1"], readonly: true });
+      await tick();
+
+      const option2 = screen.getByRole("checkbox", { name: "Option 2" });
+      await user.click(option2);
+
+      expect(screen.getByRole("checkbox", { name: "Option 1" })).toBeChecked();
+      expect(option2).not.toBeChecked();
+      expect(consoleLog).not.toHaveBeenCalledWith("change", ["1", "2"]);
+    });
+
+    it("should not propagate external selected updates to children when readonly", async () => {
+      const { component } = render(CheckboxGroupReadonly, {
+        selected: ["1"],
+        readonly: true,
+      });
+
+      expect(screen.getByRole("checkbox", { name: "Option 1" })).toBeChecked();
+
+      component.selected = ["2"];
+      await tick();
+
+      expect(screen.getByRole("checkbox", { name: "Option 1" })).toBeChecked();
+      expect(
+        screen.getByRole("checkbox", { name: "Option 2" }),
+      ).not.toBeChecked();
+    });
+
+    it("should set aria-readonly on children when the group is readonly", () => {
+      render(CheckboxGroupReadonly, { selected: ["1"], readonly: true });
+
+      for (const checkbox of screen.getAllByRole("checkbox")) {
+        expect(checkbox).toHaveAttribute("aria-readonly", "true");
+      }
+    });
   });
 });

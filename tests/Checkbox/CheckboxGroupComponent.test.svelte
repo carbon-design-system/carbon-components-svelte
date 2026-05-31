@@ -12,6 +12,7 @@
   export let hideLegend: ComponentProps<CheckboxGroup>["hideLegend"] = false;
   export let helperText: ComponentProps<CheckboxGroup>["helperText"] = "";
   export let id: ComponentProps<CheckboxGroup>["id"] = undefined;
+  export let readonly: ComponentProps<CheckboxGroup>["readonly"] = false;
   export let customClass = "";
   export let useSlot = false;
 </script>
@@ -25,6 +26,7 @@
     {hideLegend}
     {id}
     {helperText}
+    {readonly}
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);
@@ -45,6 +47,7 @@
     {hideLegend}
     {id}
     {helperText}
+    {readonly}
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);
