@@ -9,6 +9,12 @@
     @include emit-component-tokens($tag-colors);
     @include emit-component-tokens($notification-colors);
   }
+
+  // The header panel is always g100 (dark) in the classic variant, regardless of
+  // the page theme, so force a dark color scheme rather than inheriting the root's.
+  .#{$prefix}--header-panel.#{$prefix}--header-panel {
+    color-scheme: dark;
+  }
 }
 
 .#{$prefix}--side-nav.#{$prefix}--side-nav--ui-shell-classic {

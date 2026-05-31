@@ -136,8 +136,6 @@
     bind:this={refPanel}
     class:bx--header-panel={true}
     class:bx--header-panel--expanded={true}
-    style:overflow-y="auto"
-    style:color-scheme="dark"
     transition:slide|local={{
       ...transition,
       duration: transition === false ? 0 : transition.duration,
