@@ -80,6 +80,7 @@
   const selectedValues = ctx?.selectedValues ?? readable([]);
   const groupName = ctx?.groupName ?? readable(undefined);
   const groupRequired = ctx?.groupRequired ?? readable(undefined);
+  const groupReadonly = ctx?.readonly ?? readable(false);
   const ctxUpdate = ctx?.update;
 
   $: useGroup = !ctx && Array.isArray(group);
@@ -88,6 +89,7 @@
 
   $: effectiveName = ctx ? ($groupName ?? name) : name;
   $: effectiveRequired = ctx ? ($groupRequired ?? required) : required;
+  $: effectiveReadonly = $groupReadonly || readonly;
 
   // Track previous checked value to avoid duplicate dispatches in Svelte 5
   // The reactive statement will only dispatch when checked changes externally (e.g., via bind:checked)
@@ -121,7 +123,7 @@
   <div
     class:bx--form-item={true}
     class:bx--checkbox-wrapper={true}
-    class:bx--checkbox-wrapper--readonly={readonly}
+    class:bx--checkbox-wrapper--readonly={effectiveReadonly}
     {...$$restProps}
     on:click
     on:mouseover
@@ -138,16 +140,16 @@
       bind:indeterminate
       name={effectiveName}
       required={effectiveRequired}
-      aria-readonly={readonly || undefined}
+      aria-readonly={effectiveReadonly || undefined}
       aria-describedby={helperText ? helperId : undefined}
       class:bx--checkbox={true}
       on:click={(event) => {
-        if (readonly) {
+        if (effectiveReadonly) {
           event.preventDefault();
         }
       }}
       on:change={(event) => {
-        if (readonly) {
+        if (effectiveReadonly) {
           event.stopImmediatePropagation();
           return;
         }

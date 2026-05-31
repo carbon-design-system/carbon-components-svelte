@@ -45,6 +45,9 @@
   /** Specify the helper text */
   export let helperText = "";
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
   /**
    * Set an id for the container div element.
    * @type {string}
@@ -52,7 +55,7 @@
   export let id = undefined;
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
-  import { readonly, writable } from "svelte/store";
+  import { readonly as readOnly, writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
 
@@ -62,12 +65,14 @@
   const selectedValues = writable(selected);
   const groupName = writable(name);
   const groupRequired = writable(required);
+  const groupReadonly = writable(readonly);
   let isInitialRender = true;
 
   /**
    * @type {(value: string | number, checked: boolean) => void}
    */
   const update = (value, checked) => {
+    if (readonly) return;
     selectedValues.update((prev) => {
       if (checked) {
         return prev.includes(value) ? prev : [...prev, value];
@@ -78,12 +83,14 @@
 
   setContext("carbon:CheckboxGroup", {
     selectedValues,
-    groupName: readonly(groupName),
-    groupRequired: readonly(groupRequired),
+    groupName: readOnly(groupName),
+    groupRequired: readOnly(groupRequired),
+    readonly: readOnly(groupReadonly),
     update,
   });
 
   const unsubscribe = selectedValues.subscribe((value) => {
+    if (readonly) return;
     selected = value;
     if (!isInitialRender) {
       dispatch("change", value);
@@ -97,10 +104,11 @@
     return unsubscribe;
   });
 
-  $: if (selected !== $selectedValues) $selectedValues = selected;
+  $: if (!readonly && selected !== $selectedValues) $selectedValues = selected;
 
   $: $groupName = name;
   $: $groupRequired = required;
+  $: $groupReadonly = readonly;
 
   const fallbackHelperId = `ccs-${Math.random().toString(36)}`;
   $: helperId = id ? `helper-${id}` : fallbackHelperId;
@@ -119,6 +127,7 @@
 >
   <fieldset
     class:bx--checkbox-group={true}
+    class:bx--checkbox-group--readonly={readonly}
     {disabled}
     aria-describedby={helperText ? helperId : undefined}
   >
