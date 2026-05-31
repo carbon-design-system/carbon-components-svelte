@@ -43,6 +43,10 @@
   let currentIndex = -1;
   let focusedIndex = -1;
   let switches = [];
+
+  // Flag to trigger DOM reordering only when switches change.
+  // This is necessary to avoid infinite loops in Svelte 5.
+  let needsDomSync = false;
   $: if (switches[currentIndex]) {
     if (prevIndex > -1 && prevIndex !== currentIndex) {
       dispatch("change", currentIndex);
@@ -63,6 +67,7 @@
       selectedIndex = switches.length;
     }
 
+    needsDomSync = true;
     switches = [...switches, { id, text, selected }];
   };
 
@@ -70,6 +75,7 @@
    * @type {(id: string) => void}
    */
   const remove = (id) => {
+    needsDomSync = true;
     switches = switches.filter((s) => s.id !== id);
   };
 
@@ -159,6 +165,28 @@
   });
 
   afterUpdate(() => {
+    // Sync the switches array with DOM order only when switches are
+    // added/removed. The flag avoids infinite loops in Svelte 5 by not
+    // running on every update. The selected switch is preserved by id so
+    // selection survives reordering. Nested [role='tab'] elements inside
+    // switch slots are dropped because their ids are not in the registry.
+    if (needsDomSync && ref) {
+      needsDomSync = false;
+
+      const selectedId = switches[selectedIndex]?.id;
+      const switchesById = new Map(switches.map((s) => [s.id, s]));
+      switches = Array.from(ref.querySelectorAll("[role='tab']"))
+        .map((el) => switchesById.get(el.id))
+        .filter(Boolean);
+
+      if (selectedId !== undefined) {
+        const nextIndex = switches.findIndex((s) => s.id === selectedId);
+        if (nextIndex > -1) {
+          selectedIndex = nextIndex;
+        }
+      }
+    }
+
     if (selectedIndex !== currentIndex) {
       currentIndex = selectedIndex;
       focusedIndex = -1;

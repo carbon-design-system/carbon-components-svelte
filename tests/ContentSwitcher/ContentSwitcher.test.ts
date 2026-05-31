@@ -320,6 +320,40 @@ describe("ContentSwitcher", () => {
     expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
   });
 
+  it("syncs switch order to the DOM when a middle Switch is re-added", async () => {
+    const { rerender } = render(ContentSwitcherDynamic, {
+      props: { show: false },
+    });
+
+    expect(
+      screen.getAllByRole("tab").map((tab) => tab.textContent?.trim()),
+    ).toEqual(["First", "Last"]);
+
+    // Re-adding the middle Switch mounts it last, so the parent's registry
+    // would append it after "Last" without DOM-order syncing.
+    await rerender({ show: true });
+
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs.map((tab) => tab.textContent?.trim())).toEqual([
+      "First",
+      "Middle",
+      "Last",
+    ]);
+
+    // Arrow navigation must follow visual order, not mount order.
+    await user.tab();
+    expect(document.activeElement).toBe(tabs[0]);
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(tabs[1]);
+    expect(tabs[1]).toHaveTextContent("Middle");
+    expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
+
+    await user.keyboard("{ArrowRight}");
+    expect(document.activeElement).toBe(tabs[2]);
+    expect(tabs[2]).toHaveTextContent("Last");
+  });
+
   it("should bind ref to the tablist element", () => {
     const { component } = render(ContentSwitcher);
 
