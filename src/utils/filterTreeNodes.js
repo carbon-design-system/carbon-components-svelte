@@ -1,20 +1,23 @@
 // @ts-check
 /**
- * Filter tree nodes by a predicate function.
- * Returns a new tree containing only matching nodes and their ancestors.
- *
  * @typedef {Object} TreeNode
  * @property {string | number} id - Unique identifier for the node
  * @property {string} [text] - Optional text/name for the node
  * @property {TreeNode[]} [nodes] - Optional array of child nodes
  * @property {Record<string, unknown>} [additionalProperties] - Any additional properties
- *
+ */
+
+/**
  * @typedef {Object} FilterOptions
  * @property {boolean} [includeChildren=false] - Include all descendants of matching nodes
  * @property {boolean} [includeAncestors=true] - Include all ancestors of matching nodes
- *
+ */
+
+/**
+ * Filter tree nodes by a predicate function.
+ * Returns a new tree containing only matching nodes and their ancestors.
  * @param {TreeNode[]} tree - Hierarchical tree structure to filter
- * @param {function(TreeNode): boolean} predicate - Function to test each node
+ * @param {(node: TreeNode) => boolean} predicate - Function to test each node
  * @param {FilterOptions} [options] - Filtering options
  * @returns {TreeNode[]} Filtered tree structure
  */
