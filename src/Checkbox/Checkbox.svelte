@@ -104,6 +104,7 @@
 
   $: isTruncated = refLabel?.offsetWidth < refLabel?.scrollWidth;
   $: title = !title && isTruncated ? refLabel?.innerText : title;
+  $: helperId = `helper-${id}`;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -138,6 +139,7 @@
       name={effectiveName}
       required={effectiveRequired}
       aria-readonly={readonly || undefined}
+      aria-describedby={helperText ? helperId : undefined}
       class:bx--checkbox={true}
       on:click={(event) => {
         if (readonly) {
@@ -178,6 +180,7 @@
     </label>
     {#if helperText}
       <div
+        id={helperId}
         class:bx--form__helper-text={true}
         class:bx--form__helper-text--disabled={disabled}
       >
