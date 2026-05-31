@@ -33,6 +33,7 @@
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { syncDomOrder } from "../utils/syncDomOrder.js";
 
   const dispatch = createEventDispatcher();
 
@@ -183,35 +184,23 @@
     if (needsDomSync && refTabList) {
       needsDomSync = false;
 
-      const domTabs = Array.from(refTabList.querySelectorAll("[role='tab']"));
-      const domTabIds = domTabs.map((el) => el.id);
+      tabs.update((currentTabs) =>
+        syncDomOrder({
+          root: refTabList,
+          selector: "[role='tab']",
+          items: currentTabs,
+        }),
+      );
 
-      tabs.update((currentTabs) => {
-        const tabsMap = new Map(currentTabs.map((tab) => [tab.id, tab]));
-        return domTabIds
-          .map((id, index) => {
-            const tab = tabsMap.get(id);
-            return tab ? { ...tab, index } : undefined;
-          })
-          .filter(Boolean);
-      });
-
-      const contentElements = refRoot?.parentElement
-        ? Array.from(
-            refRoot.parentElement.querySelectorAll("[role='tabpanel']"),
-          )
-        : [];
-      const contentIds = contentElements.map((el) => el.id);
-
-      content.update((currentContent) => {
-        const contentMap = new Map(currentContent.map((c) => [c.id, c]));
-        return contentIds
-          .map((id, index) => {
-            const c = contentMap.get(id);
-            return c ? { ...c, index } : undefined;
-          })
-          .filter(Boolean);
-      });
+      if (refRoot?.parentElement) {
+        content.update((currentContent) =>
+          syncDomOrder({
+            root: refRoot.parentElement,
+            selector: "[role='tabpanel']",
+            items: currentContent,
+          }),
+        );
+      }
     }
 
     if (selected !== currentIndex) {
