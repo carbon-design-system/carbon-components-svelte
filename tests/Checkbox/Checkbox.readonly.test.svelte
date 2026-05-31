@@ -10,4 +10,5 @@
   {readonly}
   labelText="Readonly checkbox test"
   data-testid="checkbox"
+  on:change={() => console.log("change")}
 />

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type CheckboxComponent from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
@@ -481,6 +481,21 @@ describe("Checkbox", () => {
 
     await user.click(input);
     expect(input).toBeChecked();
+  });
+
+  it("does not forward change event when readonly", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxReadonly, { checked: false, readonly: true });
+
+    const input = screen.getByRole("checkbox");
+    consoleLog.mockClear();
+
+    await fireEvent.change(input);
+
+    const changeCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "change",
+    );
+    expect(changeCalls).toHaveLength(0);
   });
 
   it("allows state change when not readonly", async () => {
