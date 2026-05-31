@@ -135,10 +135,10 @@ Disable all checkboxes in the group.
 
 ## CheckboxGroup (read-only)
 
-Set `readonly` on each checkbox to display selected values without allowing user interaction. Unlike `disabled`, the readonly state keeps labels readable.
+Set `readonly` to `true` on `CheckboxGroup` to display non-editable values. Unlike `disabled`, the readonly state keeps labels readable. You can also set `readonly` on individual checkboxes when needed.
 
-<CheckboxGroup legendText="Notification preferences" name="prefs-readonly" selected={["email", "push"]}>
-<Checkbox value="email" labelText="Email" readonly />
-<Checkbox value="sms" labelText="SMS" readonly />
-<Checkbox value="push" labelText="Push notifications" readonly />
+<CheckboxGroup readonly legendText="Notification preferences" name="prefs-readonly" selected={["email", "push"]}>
+<Checkbox value="email" labelText="Email" />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
