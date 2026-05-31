@@ -8,6 +8,8 @@ import { extractExampleCode, highlightCode } from "./shiki-highlighter.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outFile = path.join(__dirname, "../src/COMPONENT_API.json");
+const componentApiDir = path.join(__dirname, "../src/component-api");
+const componentApiComponentsDir = path.join(componentApiDir, "components");
 
 const WHITESPACE_REGEX = /\s{2,}/;
 const TRAILING_SEMICOLON_REGEX = /;\s*$/;
@@ -211,5 +213,21 @@ const modified = {
 };
 
 fs.writeFileSync(outFile, JSON.stringify(modified, null, 2));
+
+fs.mkdirSync(componentApiComponentsDir, { recursive: true });
+for (const component of modified.components) {
+  fs.writeFileSync(
+    path.join(componentApiComponentsDir, `${component.moduleName}.json`),
+    JSON.stringify(component),
+  );
+}
+fs.writeFileSync(
+  path.join(componentApiDir, "highlighted-primitives.json"),
+  JSON.stringify(highlightedPrimitives),
+);
+fs.writeFileSync(
+  path.join(componentApiDir, "module-names.json"),
+  JSON.stringify(modified.components.map((component) => component.moduleName)),
+);
 
 console.timeEnd("formatComponentApi");

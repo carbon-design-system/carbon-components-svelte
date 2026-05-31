@@ -27,12 +27,12 @@
   import Document from "carbon-icons-svelte/lib/Document.svelte";
   import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
   import { onMount } from "svelte";
-  import COMPONENT_API from "../COMPONENT_API.json";
   import COMPONENT_MD_SIZES_JSON from "../COMPONENT_MD_SIZES.json";
-  import ComponentApi from "../components/ComponentApi.svelte";
+  import type {
+    ComponentApiEntry,
+    HighlightedPrimitives,
+  } from "../component-api/types";
   import { theme } from "../store";
-
-  type DocComponent = (typeof COMPONENT_API.components)[number];
 
   const COMPONENT_MD_SIZES: Record<string, number> = COMPONENT_MD_SIZES_JSON;
 
@@ -78,14 +78,56 @@
   export let component = $activeRoute?.leaf?.node?.name ?? "";
   export let components = [component];
 
-  const componentMap = new Map(
-    COMPONENT_API.components.map((c) => [c.moduleName, c]),
-  );
+  type ComponentApiComponent =
+    typeof import("../components/ComponentApi.svelte").default;
 
-  $: api_components = components
-    .map((i) => componentMap.get(i))
-    .filter((c): c is DocComponent => c != null);
+  function loadComponentApiEntry(
+    moduleName: string,
+  ): Promise<ComponentApiEntry> {
+    return import(
+      `../component-api/components/${moduleName}.json`
+    ) as Promise<ComponentApiEntry>;
+  }
+
+  let AsyncComponentApi: ComponentApiComponent | undefined;
+  let highlightedPrimitives: HighlightedPrimitives = {};
+  let api_components: ComponentApiEntry[] = [];
+  let apiLoading = true;
+  let apiRequestId = 0;
+
   $: multiple = api_components.length > 1;
+
+  async function loadApiDocs(moduleNames: string[]) {
+    const requestId = ++apiRequestId;
+    apiLoading = true;
+
+    try {
+      const [componentApiModule, primitivesModule, ...entries] =
+        await Promise.all([
+          AsyncComponentApi
+            ? Promise.resolve(AsyncComponentApi)
+            : import("../components/ComponentApi.svelte").then(
+                (module) => module.default,
+              ),
+          import("../component-api/highlighted-primitives.json").then(
+            (module) => module.default,
+          ),
+          ...moduleNames.map((moduleName) => loadComponentApiEntry(moduleName)),
+        ]);
+
+      if (requestId !== apiRequestId) return;
+
+      AsyncComponentApi = componentApiModule;
+      highlightedPrimitives = primitivesModule;
+      api_components = entries;
+    } finally {
+      if (requestId === apiRequestId) {
+        apiLoading = false;
+      }
+    }
+  }
+
+  $: loadApiDocs(components);
 
   onMount(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -102,10 +144,10 @@
     };
   });
 
-  function formatSourceURL(multiple: boolean) {
+  function formatSourceURL(multipleComponents: boolean) {
     const filePath = api_components[0]?.filePath ?? "";
 
-    if (multiple) {
+    if (multipleComponents) {
       /**
        * Link to folder for doc with multiple components.
        * @example "src/Breadcrumb"
@@ -243,27 +285,33 @@
 
     <Row>
       <Column class="prose" noGutter={multiple}>
-        {#if multiple}
-          <Tabs class="override-tabs">
-            {#each api_components as component (component.moduleName)}
-              <Tab label={component.moduleName} />
-            {/each}
-            <div slot="content" class="tab-content-spacing">
-              {#each api_components as component (component.moduleName)}
-                <TabContent
-                  ><ComponentApi
-                    {component}
-                    highlightedPrimitives={COMPONENT_API.highlightedPrimitives ?? {}}
-                  /></TabContent
-                >
+        {#if apiLoading}
+          <p class="api-loading">Loading component API…</p>
+        {:else if AsyncComponentApi && api_components.length > 0}
+          {#if multiple}
+            <Tabs class="override-tabs">
+              {#each api_components as apiComponent (apiComponent.moduleName)}
+                <Tab label={apiComponent.moduleName} />
               {/each}
-            </div>
-          </Tabs>
-        {:else}
-          <ComponentApi
-            component={api_components[0]}
-            highlightedPrimitives={COMPONENT_API.highlightedPrimitives ?? {}}
-          />
+              <div slot="content" class="tab-content-spacing">
+                {#each api_components as apiComponent (apiComponent.moduleName)}
+                  <TabContent>
+                    <svelte:component
+                      this={AsyncComponentApi}
+                      component={apiComponent}
+                      {highlightedPrimitives}
+                    />
+                  </TabContent>
+                {/each}
+              </div>
+            </Tabs>
+          {:else}
+            <svelte:component
+              this={AsyncComponentApi}
+              component={api_components[0]}
+              {highlightedPrimitives}
+            />
+          {/if}
         {/if}
       </Column>
     </Row>
@@ -296,6 +344,12 @@
   .bar :global(.copy-markdown-btn .bx--assistive-text) {
     white-space: pre-line;
     text-align: center;
+  }
+
+  .api-loading {
+    margin-top: var(--cds-layout-01);
+    margin-bottom: var(--cds-layout-03);
+    color: var(--cds-text-02);
   }
 
   :global(.toc h5) {

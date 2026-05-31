@@ -37,6 +37,13 @@ const EMBEDDED_LITERAL_PROPERTY_SCOPES = [
   "meta.objectliteral.js",
 ] as const;
 
+const IMPORT_BINDING_SCOPES = [
+  "meta.import variable.other.readwrite",
+  "meta.import variable.other.readwrite.js",
+  "meta.import variable.other.readwrite.ts",
+  "meta.import variable.other.readwrite.tsx",
+] as const;
+
 const carbonDark = {
   name: CARBON_DARK_THEME,
   colors: {
@@ -83,14 +90,27 @@ const carbonDark = {
       settings: { foreground: "#3ddbd9" },
     },
     {
-      scope: ["entity.name.function", "support.function", "meta.function-call"],
+      scope: [
+        "variable",
+        "variable.other",
+        "variable.other.readwrite",
+        "variable.other.object",
+        "variable.other.constant",
+      ],
+      settings: { foreground: "#f4f4f4" },
+    },
+    {
+      scope: [...IMPORT_BINDING_SCOPES],
+      settings: { foreground: "#d4bbff" },
+    },
+    {
+      scope: ["entity.name.function", "support.function"],
       settings: { foreground: "#9ef0f0" },
     },
     {
       scope: [
         "string.quoted.attribute-value",
         "meta.embedded.line.js",
-        "source.js",
         ...EMBEDDED_LITERAL_PROPERTY_SCOPES,
       ],
       settings: { foreground: "#d4bbff" },
@@ -149,14 +169,27 @@ const carbonLight = {
       settings: { foreground: "#005d5d" },
     },
     {
-      scope: ["entity.name.function", "support.function", "meta.function-call"],
+      scope: [
+        "variable",
+        "variable.other",
+        "variable.other.readwrite",
+        "variable.other.object",
+        "variable.other.constant",
+      ],
+      settings: { foreground: "#161616" },
+    },
+    {
+      scope: [...IMPORT_BINDING_SCOPES],
+      settings: { foreground: "#8a3ffc" },
+    },
+    {
+      scope: ["entity.name.function", "support.function"],
       settings: { foreground: "#007d79" },
     },
     {
       scope: [
         "string.quoted.attribute-value",
         "meta.embedded.line.js",
-        "source.js",
         ...EMBEDDED_LITERAL_PROPERTY_SCOPES,
       ],
       settings: { foreground: "#8a3ffc" },
