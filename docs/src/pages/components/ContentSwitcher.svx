@@ -49,6 +49,12 @@ interactions or application state.
 
 <FileSource src="/framed/ContentSwitcher/ContentSwitcherReactive" />
 
+## Conditional switches
+
+Switches can be conditionally rendered using Svelte's `{#if}` blocks. The component automatically maintains correct indices even when switches are dynamically added or removed.
+
+<FileSource src="/framed/ContentSwitcher/ContentSwitcherConditional" />
+
 ## Custom switch slot
 
 Override the default slot in the switch to customize how each option displays.
