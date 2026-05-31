@@ -31,6 +31,7 @@
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import { syncDomOrder } from "../utils/syncDomOrder.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -174,10 +175,11 @@
       needsDomSync = false;
 
       const selectedId = switches[selectedIndex]?.id;
-      const switchesById = new Map(switches.map((s) => [s.id, s]));
-      switches = Array.from(ref.querySelectorAll("[role='tab']"))
-        .map((el) => switchesById.get(el.id))
-        .filter(Boolean);
+      switches = syncDomOrder({
+        root: ref,
+        selector: "[role='tab']",
+        items: switches,
+      });
 
       if (selectedId !== undefined) {
         const nextIndex = switches.findIndex((s) => s.id === selectedId);
