@@ -41,4 +41,13 @@ await Promise.all(
     await Bun.write(outFile, prefixed.css);
   }),
 );
+
+const cssTypes = scss
+  .map(
+    ({ name }) => `declare module "carbon-components-svelte/css/${name}.css";`,
+  )
+  .join("\n");
+
+await Bun.write("css/css.d.ts", `${cssTypes}\n`);
+
 console.timeEnd("[build-css]");
