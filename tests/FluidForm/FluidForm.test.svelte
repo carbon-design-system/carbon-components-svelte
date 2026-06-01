@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import {
     Button,
@@ -7,9 +9,7 @@
   } from "carbon-components-svelte";
 
   export let preventDefault = false;
-  export let onRef: (ref: null | HTMLFormElement) => void = () => {};
-  let ref: null | HTMLFormElement = null;
-  $: onRef(ref);
+  export let ref: null | HTMLFormElement = null;
 </script>
 
 <FluidForm

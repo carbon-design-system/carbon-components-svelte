@@ -364,11 +364,11 @@ describe("HeaderSearch", () => {
 
   describe("Ref Binding", () => {
     it("should bind ref to input element", () => {
-      render(HeaderSearchTest);
+      const { component } = render(HeaderSearchTest);
+      const searchInput = screen.getByRole("textbox");
 
-      expect(screen.getByTestId("ref-type")).toHaveTextContent(
-        "HTMLInputElement",
-      );
+      assert(component.ref instanceof HTMLInputElement);
+      expect(component.ref).toBe(searchInput);
     });
   });
 

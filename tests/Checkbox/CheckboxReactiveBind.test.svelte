@@ -1,11 +1,9 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { Checkbox } from "carbon-components-svelte";
 
   export let checked = false;
-
-  export function setChecked(value: boolean) {
-    checked = value;
-  }
 </script>
 
 <Checkbox

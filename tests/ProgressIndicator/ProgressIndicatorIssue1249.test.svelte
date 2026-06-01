@@ -11,7 +11,7 @@
     currentIndex = 0;
   });
 
-  export function completeStep3() {
+  function completeStep3() {
     stepsCompleted[2] = true;
   }
 </script>

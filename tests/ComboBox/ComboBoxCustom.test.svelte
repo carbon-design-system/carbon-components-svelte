@@ -1,9 +1,11 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
   import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
   import type { ComponentProps } from "svelte";
 
-  let comboBoxRef: ComboBox;
+  export let comboBoxRef: ComboBox | undefined = undefined;
 
   export let items: ComponentProps<ComboBox>["items"] = [
     { id: "0", text: "Slack" },
@@ -39,9 +41,9 @@
   <span>Item {item.text}</span>
 </ComboBox>
 
-<button type="button" on:click={() => comboBoxRef.clear(clearOptions)}>
+<button type="button" on:click={() => comboBoxRef?.clear(clearOptions)}>
   Clear
 </button>
-<button type="button" on:click={() => comboBoxRef.clear({ open: true })}>
+<button type="button" on:click={() => comboBoxRef?.clear({ open: true })}>
   Clear (reopen)
 </button>

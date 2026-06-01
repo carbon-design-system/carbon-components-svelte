@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { ImageLoader, InlineLoading } from "carbon-components-svelte";
   import type ImageLoaderComponent from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
@@ -9,15 +11,8 @@
   const invalidImageSrc = "https://invalid-url/nonexistent.png";
 
   export let imageLoader: ImageLoaderComponent | undefined = undefined;
-  export let onImageLoaderReady:
-    | ((loader: ImageLoaderComponent) => void)
-    | undefined = undefined;
   export let onload: ((event: Event) => void) | undefined = undefined;
   export let onerror: ((event: Event) => void) | undefined = undefined;
-
-  $: if (imageLoader && onImageLoaderReady) {
-    onImageLoaderReady(imageLoader);
-  }
 </script>
 
 <!-- Default image loader -->

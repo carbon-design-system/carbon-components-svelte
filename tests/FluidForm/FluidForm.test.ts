@@ -11,17 +11,10 @@ describe("FluidForm", () => {
   });
 
   it("exposes ref to the underlying form element", () => {
-    let captured: null | HTMLFormElement = null;
-    render(FluidFormTest, {
-      onRef: (ref) => {
-        captured = ref;
-      },
-    });
+    const { component } = render(FluidFormTest);
     const form = screen.getByTestId("fluid-form");
-    expect(captured).toBe(form);
-    expect((captured as unknown as HTMLFormElement | null)?.tagName).toBe(
-      "FORM",
-    );
+    expect(component.ref).toBe(form);
+    expect(component.ref?.tagName).toBe("FORM");
   });
 
   it("renders form elements correctly", () => {
