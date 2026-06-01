@@ -859,6 +859,48 @@ describe("Dropdown", () => {
     expect(apricotOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
+  // The typeahead buffer must reset after a delay of inactivity so a
+  // later keystroke starts a fresh search instead of appending to a
+  // stale buffer. Without the reset, typing "b" then (after a delay) "c"
+  // would search "bc" (no match) and leave Banana highlighted instead of
+  // moving to Cherry. The selected item (Apple) is intentionally excluded
+  // from the assertions because it always carries the highlighted class
+  // regardless of typeahead state.
+  it("should reset the typeahead buffer after the delay", async () => {
+    render(Dropdown, {
+      props: {
+        items: [
+          { id: "0", text: "Apple" },
+          { id: "1", text: "Banana" },
+          { id: "2", text: "Cherry" },
+        ],
+        selectedId: "0",
+      },
+    });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+
+    // Fire keydown only (no keyup) so the menu stays open between keystrokes.
+    await fireEvent.keyDown(button, { key: "b" });
+    expect(screen.getByRole("option", { name: "Banana" })).toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
+
+    // Wait past the delay so the buffer clears.
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    // A fresh keystroke starts a new search ("c" -> Cherry) rather than
+    // appending to the stale buffer ("bc" -> no match -> Banana highlighted).
+    await fireEvent.keyDown(button, { key: "c" });
+    expect(screen.getByRole("option", { name: "Cherry" })).toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
+    expect(screen.getByRole("option", { name: "Banana" })).not.toHaveClass(
+      "bx--list-box__menu-item--highlighted",
+    );
+  });
+
   it("should skip disabled items in typeahead search", async () => {
     render(Dropdown, {
       props: {
