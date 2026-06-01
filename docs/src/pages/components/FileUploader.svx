@@ -115,6 +115,13 @@ Calling `clearFiles` or setting `files` to `[]` dispatches `change` (with an emp
 
 <FileSource src="/framed/FileUploader/FileUploaderClearFiles" />
 
+## Programmatic input access
+
+Use `bind:ref` to capture the underlying `<input type="file">` and trigger it
+programmatically.
+
+<FileSource src="/framed/FileUploader/FileUploaderProgrammaticInputAccess" />
+
 ## Maximum file size
 
 Limit the size of uploaded files using the `maxFileSize` prop. Files exceeding the
