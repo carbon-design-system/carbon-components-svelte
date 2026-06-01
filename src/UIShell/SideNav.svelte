@@ -46,7 +46,7 @@
   import {
     acquireBodyScrollLock,
     releaseBodyScrollLock,
-  } from "../Modal/modalStore";
+  } from "../utils/bodyScrollLock.js";
   import {
     isSideNavCollapsed,
     isSideNavMobile,
