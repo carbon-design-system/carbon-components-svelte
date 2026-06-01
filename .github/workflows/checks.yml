@@ -198,6 +198,8 @@ jobs:
 
       - run: bun run test:src-types
 
+      - run: bun run test:package-exports
+
   deploy-docs:
     needs: [lint, changes, test, types]
     if: |

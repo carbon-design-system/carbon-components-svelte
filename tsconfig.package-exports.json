@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["tests/package-exports.test-d.ts"]
+}

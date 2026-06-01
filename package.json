@@ -36,6 +36,7 @@
     "setup": "bun ci && bun build:docs && cd docs && bun ci",
     "test": "vitest",
     "test:src-types": "tsgo --project tsconfig.types.json",
+    "test:package-exports": "tsgo --project tsconfig.package-exports.json",
     "test:types": "svelte-check --workspace tests --tsgo --fail-on-warnings",
     "test:svelte3": "cd tests-svelte3 && bunx vitest",
     "test:types:svelte3": "cd tests-svelte3 && bun run test:types",
