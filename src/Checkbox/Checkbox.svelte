@@ -77,11 +77,19 @@
   const dispatch = createEventDispatcher();
 
   const ctx = getContext("carbon:CheckboxGroup");
-  const selectedValues = ctx?.selectedValues ?? readable([]);
-  const groupName = ctx?.groupName ?? readable(undefined);
-  const groupRequired = ctx?.groupRequired ?? readable(undefined);
-  const groupReadonly = ctx?.readonly ?? readable(false);
-  const ctxUpdate = ctx?.update;
+
+  const {
+    selectedValues,
+    groupName,
+    groupRequired,
+    readonly: groupReadonly,
+    update: ctxUpdate,
+  } = ctx ?? {
+    selectedValues: readable([]),
+    groupName: readable(undefined),
+    groupRequired: readable(undefined),
+    readonly: readable(false),
+  };
 
   $: useGroup = !ctx && Array.isArray(group);
   $: if (ctx) checked = $selectedValues.includes(value);

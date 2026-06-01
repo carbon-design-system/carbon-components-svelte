@@ -58,7 +58,6 @@
   import { readonly as readOnly, writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
-
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<string | number>>}
    */
@@ -89,6 +88,8 @@
     update,
   });
 
+  $: if (!readonly && selected !== $selectedValues) $selectedValues = selected;
+
   const unsubscribe = selectedValues.subscribe((value) => {
     if (readonly) return;
     selected = value;
@@ -103,8 +104,6 @@
     });
     return unsubscribe;
   });
-
-  $: if (!readonly && selected !== $selectedValues) $selectedValues = selected;
 
   $: $groupName = name;
   $: $groupRequired = required;
