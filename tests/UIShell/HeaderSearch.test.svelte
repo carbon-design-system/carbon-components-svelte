@@ -9,7 +9,7 @@
   export let selectedResultIndex = 0;
   export let results: ComponentProps<HeaderSearch>["results"] = [];
 
-  let ref: ComponentProps<HeaderSearch>["ref"] = null;
+  export let ref: ComponentProps<HeaderSearch>["ref"] = null;
   let activeEvent = false;
   let inactiveEvent = false;
   let clearEvent = false;
@@ -53,4 +53,3 @@
 <div data-testid="inactive-event">{inactiveEvent}</div>
 <div data-testid="clear-event">{clearEvent}</div>
 <div data-testid="select-event">{JSON.stringify(selectEvent)}</div>
-<div data-testid="ref-type">{ref ? "HTMLInputElement" : "null"}</div>

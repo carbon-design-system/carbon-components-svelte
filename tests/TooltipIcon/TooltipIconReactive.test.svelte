@@ -1,16 +1,10 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { TooltipIcon } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
 
-  let open = true;
-
-  export function toggle() {
-    open = !open;
-  }
-
-  export function getOpen() {
-    return open;
-  }
+  export let open = true;
 </script>
 
 <TooltipIcon

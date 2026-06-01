@@ -89,14 +89,14 @@ describe("Checkbox", () => {
     const { component } = render(CheckboxReactiveBind);
 
     consoleLog.mockClear();
-    component.setChecked(true);
+    component.checked = true;
     await tick();
 
     expect(consoleLog).toHaveBeenCalledWith("check");
     expect(consoleLog).toHaveBeenCalledTimes(1);
 
     consoleLog.mockClear();
-    component.setChecked(false);
+    component.checked = false;
     await tick();
 
     expect(consoleLog).toHaveBeenCalledWith("check");
@@ -252,7 +252,7 @@ describe("Checkbox", () => {
     const checkbox1 = screen.getByRole("checkbox", { name: "Option 1" });
 
     consoleLog.mockClear();
-    component.setGroup(["option-2", "option-1"]);
+    component.group = ["option-2", "option-1"];
     await tick();
 
     expect(checkbox1).toBeChecked();

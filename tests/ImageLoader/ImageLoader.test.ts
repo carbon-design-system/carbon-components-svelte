@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/svelte";
-import type ImageLoaderComponent from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import ImageLoader from "./ImageLoader.test.svelte";
 
 describe("ImageLoader", () => {
@@ -83,12 +82,7 @@ describe("ImageLoader", () => {
   });
 
   it("supports programmatic image loading", async () => {
-    let imageLoaderComponent: ImageLoaderComponent | undefined;
-    const onReady = (loader: ImageLoaderComponent) => {
-      imageLoaderComponent = loader;
-    };
-
-    render(ImageLoader, { props: { onImageLoaderReady: onReady } });
+    const { component } = render(ImageLoader);
 
     const wrapper = screen.getByTestId("programmatic-loader");
     const img = wrapper.querySelector("img");
@@ -96,11 +90,11 @@ describe("ImageLoader", () => {
 
     // Wait for the component to be ready
     await vi.runOnlyPendingTimersAsync();
-    expect(imageLoaderComponent).toBeDefined();
+    assert(component.imageLoader);
 
     const newSrc = "https://example.com/new-image.jpg";
 
-    imageLoaderComponent?.loadImage(newSrc);
+    component.imageLoader.loadImage(newSrc);
     if (img) {
       expect(img.getAttribute("src")).toBe(newSrc);
     }
