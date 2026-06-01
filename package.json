@@ -12,7 +12,10 @@
       "types": "./src/index.d.ts",
       "svelte": "./src/index.js"
     },
-    "./css/*": "./css/*",
+    "./css/*.css": {
+      "types": "./css/css.d.ts",
+      "default": "./css/*.css"
+    },
     "./src/*.svelte": {
       "types": "./src/*.svelte.d.ts",
       "import": "./src/*.svelte"
