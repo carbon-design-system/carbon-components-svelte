@@ -167,6 +167,7 @@
     ListBoxMenuItem,
   } from "../ListBox";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
+  import { debounce } from "../utils/debounce.js";
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
@@ -183,18 +184,20 @@
   let highlightedIndex = -1;
   let prevHighlightedIndex = -1;
   let typeaheadBuffer = "";
-  let typeaheadTimeout = null;
   let listScrollTop = 0;
   let prevOpen = false;
   let itemsById = new Map();
 
   const TYPEAHEAD_DELAY = 500;
 
+  // Clear the typeahead buffer once the user stops typing for TYPEAHEAD_DELAY ms.
+  const resetTypeaheadBuffer = debounce(() => {
+    typeaheadBuffer = "";
+  }, TYPEAHEAD_DELAY);
+
   onMount(() => {
     return () => {
-      if (typeaheadTimeout) {
-        clearTimeout(typeaheadTimeout);
-      }
+      resetTypeaheadBuffer.cancel();
     };
   });
 
@@ -221,10 +224,7 @@
     highlightedIndex = -1;
     prevHighlightedIndex = -1;
     typeaheadBuffer = "";
-    if (typeaheadTimeout) {
-      clearTimeout(typeaheadTimeout);
-      typeaheadTimeout = null;
-    }
+    resetTypeaheadBuffer.cancel();
   }
 
   $: shouldVirtualize =
@@ -411,16 +411,8 @@
   function typeaheadSearch(character) {
     if (items.length === 0) return;
 
-    if (typeaheadTimeout) {
-      clearTimeout(typeaheadTimeout);
-    }
-
     typeaheadBuffer += character.toLowerCase();
-
-    typeaheadTimeout = setTimeout(() => {
-      typeaheadBuffer = "";
-      typeaheadTimeout = null;
-    }, TYPEAHEAD_DELAY);
+    resetTypeaheadBuffer();
 
     // Start search from the next index after current highlight, or from 0 if none highlighted.
     const startIndex = highlightedIndex >= 0 ? highlightedIndex + 1 : 0;
