@@ -259,7 +259,12 @@
     ListBoxSelection,
   } from "../ListBox";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
-  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
+  import {
+    resetVirtualScrollOnClose,
+    scrollHighlightedIntoView,
+    scrollSelectedIntoView,
+    virtualListState,
+  } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
@@ -267,10 +272,8 @@
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
 
-  /** Default item height in pixels for virtualization */
-  const DEFAULT_ITEM_HEIGHT = 40;
-
   let highlightedIndex = -1;
+  let prevHighlightedIndex = -1;
   let prevChecked = [];
   let isInitialRender = true;
   let listScrollTop = 0;
@@ -402,9 +405,39 @@
 
     if (!open) {
       highlightedIndex = -1;
+      prevHighlightedIndex = -1;
       if (prevOpen && filterable) {
         value = "";
       }
+    }
+
+    // Scroll to highlighted item when it changes via keyboard navigation.
+    // Only scroll if the item is outside the visible viewport.
+    if (
+      open &&
+      shouldVirtualize &&
+      virtualConfig &&
+      highlightedIndex !== prevHighlightedIndex &&
+      highlightedIndex >= 0 &&
+      listRef
+    ) {
+      tick().then(() => {
+        if (listRef && virtualConfig && highlightedIndex >= 0) {
+          const nextScrollTop = scrollHighlightedIntoView({
+            highlightedIndex,
+            currentScrollTop: listRef.scrollTop ?? listScrollTop,
+            itemCount: itemsToUse.length,
+            itemHeight: virtualConfig.itemHeight,
+            containerHeight: virtualConfig.containerHeight,
+            overscan: virtualConfig.overscan ?? 3,
+          });
+          if (nextScrollTop !== null) {
+            listScrollTop = nextScrollTop;
+            listRef.scrollTop = nextScrollTop;
+          }
+        }
+      });
+      prevHighlightedIndex = highlightedIndex;
     }
 
     // Scroll to first selected item when menu opens with virtualization
@@ -412,47 +445,26 @@
     if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
         if (listRef && virtualConfig) {
-          if (selectedIds && selectedIds.length > 0) {
-            // Find the index of the first selected item in the itemsToUse array
-            // (the actual rendered list, which may be sorted/filtered)
-            const firstSelectedId = selectedIds[0];
-            const selectedIndex = itemsToUse.findIndex(
-              (item) => item.id === firstSelectedId,
-            );
-            if (selectedIndex >= 0) {
-              // Calculate scroll position to show selected item at the top of viewport
-              const itemHeight = virtualConfig.itemHeight;
-              const containerHeight = virtualConfig.containerHeight;
-              const scrollPosition = selectedIndex * itemHeight;
-              // Ensure scroll position is within bounds
-              const maxScroll = Math.max(
-                0,
-                itemsToUse.length * itemHeight - containerHeight,
-              );
-              const finalScrollPosition = Math.max(
-                0,
-                Math.min(scrollPosition, maxScroll),
-              );
+          // Find the index of the first selected item in the itemsToUse array
+          // (the actual rendered list, which may be sorted/filtered).
+          const selectedIndex =
+            selectedIds && selectedIds.length > 0
+              ? itemsToUse.findIndex((item) => item.id === selectedIds[0])
+              : -1;
+          const nextScrollTop = scrollSelectedIntoView({
+            selectedIndex,
+            itemCount: itemsToUse.length,
+            itemHeight: virtualConfig.itemHeight,
+            containerHeight: virtualConfig.containerHeight,
+          });
 
-              listScrollTop = finalScrollPosition;
-              // Use requestAnimationFrame to ensure DOM is ready
-              requestAnimationFrame(() => {
-                if (listRef) {
-                  listRef.scrollTop = finalScrollPosition;
-                }
-              });
-            } else {
-              if (listRef) {
-                listRef.scrollTop = 0;
-              }
-              listScrollTop = 0;
-            }
-          } else {
+          listScrollTop = nextScrollTop;
+          // Use requestAnimationFrame to ensure DOM is ready
+          requestAnimationFrame(() => {
             if (listRef) {
-              listRef.scrollTop = 0;
+              listRef.scrollTop = nextScrollTop;
             }
-            listScrollTop = 0;
-          }
+          });
         }
       });
     }
@@ -460,9 +472,9 @@
 
     // Reset scroll position when menu closes
     if (!open && prevOpen && shouldVirtualize) {
-      listScrollTop = 0;
+      listScrollTop = resetVirtualScrollOnClose();
       if (listRef) {
-        listRef.scrollTop = 0;
+        listRef.scrollTop = listScrollTop;
       }
     }
   });
@@ -566,32 +578,19 @@
       ? false
       : virtualize !== undefined || items.length > 100;
 
-  $: virtualConfig = shouldVirtualize
-    ? {
-        itemHeight: DEFAULT_ITEM_HEIGHT,
-        containerHeight: 300,
-        overscan: 3,
-        threshold: 100,
-        maxItems: undefined,
-        ...(typeof virtualize === "object" ? virtualize : {}),
-      }
-    : null;
-
   $: itemsToUse = filterable ? filteredItems : sortedItems;
 
   $: menuMaxHeight = getMenuMaxHeight(size);
 
-  $: virtualData = virtualConfig
-    ? virtualizeUtil({
-        items: itemsToUse,
-        scrollTop: listScrollTop,
-        ...virtualConfig,
-      })
-    : null;
-
-  $: itemsToRender = virtualData?.isVirtualized
-    ? virtualData.visibleItems
-    : itemsToUse;
+  $: virtualState = virtualListState({
+    items: itemsToUse,
+    scrollTop: listScrollTop,
+    shouldVirtualize,
+    virtualize,
+  });
+  $: virtualConfig = virtualState.config;
+  $: virtualData = virtualState.data;
+  $: itemsToRender = virtualState.itemsToRender;
 
   $: multiSelectListBoxClass = [
     "bx--multi-select",
