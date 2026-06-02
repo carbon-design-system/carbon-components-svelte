@@ -9,9 +9,8 @@ const selectorTabbable = `
 `;
 
 /**
- * Trap Tab/Shift+Tab focus within `container`, cycling focus across its
- * visible tabbable descendants. Call from a `keydown` handler when the
- * pressed key is `Tab`; always calls `event.preventDefault()`.
+ * Trap Tab/Shift+Tab focus within `container`. Call on Tab keydown; always
+ * calls `event.preventDefault()`.
  *
  * @param {Object} options
  * @param {Element} options.container - Element whose tabbable descendants form the focus loop.
@@ -22,14 +21,12 @@ export function trapFocus({ container, event }) {
   const tabbable = /** @type {HTMLElement[]} */ (
     Array.from(container.querySelectorAll(selectorTabbable))
   ).filter((el) => {
-    // Filter out elements that are not visible.
     const style = getComputedStyle(el);
     if (style.visibility === "hidden" || style.display === "none") {
       return false;
     }
 
-    // Check for zero dimensions, but only if the element has been laid out
-    // (offsetParent is null for hidden elements or elements not in the DOM.
+    // Zero dimensions after layout; offsetParent is null when not in the DOM.
     if (
       el.offsetParent !== null &&
       el.offsetWidth === 0 &&
@@ -50,9 +47,6 @@ export function trapFocus({ container, event }) {
     /** @type {HTMLElement} */ (document.activeElement),
   );
   if (index === -1) {
-    // Active element not in tabbable list, find closest tabbable element
-    // For forward Tab, start from beginning (-1 + 1 = 0)
-    // For Shift+Tab, start from end (length + -1 = length - 1)
     index = event.shiftKey ? tabbable.length : -1;
   }
 

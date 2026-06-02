@@ -1,16 +1,15 @@
 /**
- * Virtualizes a list to render only visible items for performance.
+ * Render only the visible slice of a fixed-height list.
  *
- * @template {Record<string, unknown>} Item The type of items in the array (must be a Record)
+ * @template {Record<string, unknown>} Item
  * @param {Object} config
- * @param {Item[]} config.items - Full array of items to virtualize
- * @param {number} config.itemHeight - Height of each item in pixels
- * @param {number} config.containerHeight - Visible container height in pixels
- * @param {number} config.scrollTop - Current scroll position
- * @param {number} [config.overscan=3] - Extra items to render above/below viewport
- * @param {number} [config.maxItems] - Cap maximum rendered items
- * @param {number} [config.threshold=100] - Minimum items before virtualization activates
- *
+ * @param {Item[]} config.items
+ * @param {number} config.itemHeight
+ * @param {number} config.containerHeight
+ * @param {number} config.scrollTop
+ * @param {number} [config.overscan=3]
+ * @param {number} [config.maxItems]
+ * @param {number} [config.threshold=100]
  * @returns {{
  *   visibleItems: Item[],
  *   startIndex: number,
@@ -29,7 +28,6 @@ export function virtualize({
   maxItems = undefined,
   threshold = 100,
 }) {
-  // Auto-disable if below threshold
   if (items.length < threshold) {
     return {
       visibleItems: items,
@@ -43,14 +41,12 @@ export function virtualize({
 
   const totalHeight = items.length * itemHeight;
 
-  // Calculate visible range.
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   let endIndex = Math.min(
     items.length,
     Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan,
   );
 
-  // Apply maxItems cap if specified.
   if (maxItems && endIndex - startIndex > maxItems) {
     endIndex = startIndex + maxItems;
   }
@@ -67,10 +63,7 @@ export function virtualize({
   };
 }
 
-/**
- * Default virtualization config shared by the listbox-like components
- * (`Dropdown`, `ComboBox`, `MultiSelect`).
- */
+/** Default virtualization config for listbox-like components. */
 export const DEFAULT_VIRTUAL_LIST_CONFIG = {
   itemHeight: 40,
   containerHeight: 300,
@@ -80,19 +73,16 @@ export const DEFAULT_VIRTUAL_LIST_CONFIG = {
 };
 
 /**
- * Derive the virtualization state for a listbox-like menu in a single call:
- * the resolved config, the virtualize result, and the items to render.
- *
- * Builds on {@link virtualize}. When virtualization is disabled, `config` is
- * `null`, `data` is `null`, and `itemsToRender` is the full `items` array.
+ * Resolve config, virtualize result, and items to render for a listbox menu.
+ * When disabled, `config` and `data` are `null` and `itemsToRender` is all `items`.
  *
  * @template {Record<string, unknown>} Item
  * @param {Object} options
- * @param {Item[]} options.items - Items to render (already filtered/sorted by the caller).
- * @param {number} options.scrollTop - Current scroll position.
- * @param {boolean} options.shouldVirtualize - Whether virtualization is active.
- * @param {boolean | object | undefined} options.virtualize - The component's `virtualize` prop; object values override the defaults.
- * @param {Partial<typeof DEFAULT_VIRTUAL_LIST_CONFIG>} [options.defaults] - Overrides for the shared defaults.
+ * @param {Item[]} options.items
+ * @param {number} options.scrollTop
+ * @param {boolean} options.shouldVirtualize
+ * @param {boolean | object | undefined} options.virtualize
+ * @param {Partial<typeof DEFAULT_VIRTUAL_LIST_CONFIG>} [options.defaults]
  * @returns {{
  *   config: (typeof DEFAULT_VIRTUAL_LIST_CONFIG & Record<string, unknown>) | null,
  *   data: ReturnType<typeof virtualize<Item>> | null,
@@ -122,19 +112,15 @@ export function virtualListState({
 }
 
 /**
- * Compute the scroll position that brings the item at `index` to the top of a
- * virtualized list's viewport, clamped to the scrollable range.
- *
- * The position is `index * itemHeight`, bounded below by `0` and above by the
- * maximum scroll offset (`itemCount * itemHeight - containerHeight`, itself
- * floored at `0` when the content is shorter than the container).
+ * `scrollTop` to place the item at `index` at the top of the viewport, clamped
+ * to the scrollable range.
  *
  * @param {Object} options
- * @param {number} options.index - Index of the item to scroll to the top.
- * @param {number} options.itemHeight - Height of each item in pixels.
- * @param {number} options.containerHeight - Visible container height in pixels.
- * @param {number} options.itemCount - Total number of items in the list.
- * @returns {number} The clamped `scrollTop` value.
+ * @param {number} options.index
+ * @param {number} options.itemHeight
+ * @param {number} options.containerHeight
+ * @param {number} options.itemCount
+ * @returns {number}
  */
 export function getBoundedScrollTop({
   index,
@@ -147,21 +133,17 @@ export function getBoundedScrollTop({
 }
 
 /**
- * Compute the scroll position needed to bring a keyboard-highlighted item into
- * the visible viewport of a virtualized list.
- *
- * Returns `null` when the highlighted item is already within the currently
- * visible range (including overscan), signalling that no scroll is needed.
- * Otherwise returns the clamped `scrollTop` that brings the item into view.
+ * `scrollTop` to bring a keyboard-highlighted item into view, or `null` if it
+ * is already within the visible range (including overscan).
  *
  * @param {Object} options
- * @param {number} options.highlightedIndex - Index of the highlighted item.
- * @param {number} options.currentScrollTop - Current scroll position of the list.
- * @param {number} options.itemCount - Total number of items in the list.
- * @param {number} options.itemHeight - Height of each item in pixels.
- * @param {number} options.containerHeight - Visible container height in pixels.
- * @param {number} [options.overscan=3] - Extra items rendered above/below the viewport.
- * @returns {number | null} The `scrollTop` to apply, or `null` if already visible.
+ * @param {number} options.highlightedIndex
+ * @param {number} options.currentScrollTop
+ * @param {number} options.itemCount
+ * @param {number} options.itemHeight
+ * @param {number} options.containerHeight
+ * @param {number} [options.overscan=3]
+ * @returns {number | null}
  */
 export function scrollHighlightedIntoView({
   highlightedIndex,
@@ -196,19 +178,14 @@ export function scrollHighlightedIntoView({
 }
 
 /**
- * Compute the scroll position that brings the selected item to the top of a
- * virtualized list's viewport when the menu opens.
- *
- * Returns `0` when there is no selection (`selectedIndex < 0`), so the list
- * opens scrolled to the top. Otherwise returns the clamped `scrollTop` for the
- * selected item.
+ * `scrollTop` for the selected item on open, or `0` when `selectedIndex < 0`.
  *
  * @param {Object} options
- * @param {number} options.selectedIndex - Index of the selected item, or `-1` if none.
- * @param {number} options.itemCount - Total number of items in the list.
- * @param {number} options.itemHeight - Height of each item in pixels.
- * @param {number} options.containerHeight - Visible container height in pixels.
- * @returns {number} The `scrollTop` to apply.
+ * @param {number} options.selectedIndex
+ * @param {number} options.itemCount
+ * @param {number} options.itemHeight
+ * @param {number} options.containerHeight
+ * @returns {number}
  */
 export function scrollSelectedIntoView({
   selectedIndex,
@@ -227,13 +204,9 @@ export function scrollSelectedIntoView({
 }
 
 /**
- * Return the scroll position a virtualized listbox-like component should reset
- * to when its menu closes, so it reopens scrolled to the top.
+ * Scroll position to reset when a virtualized menu closes.
  *
- * Callers assign the result to their tracked scroll state (and, where they
- * manage one, the list element's `scrollTop`).
- *
- * @returns {number} Always `0`.
+ * @returns {number}
  */
 export function resetVirtualScrollOnClose() {
   return 0;

@@ -1,16 +1,9 @@
 // @ts-check
-// Cyclic index movement for keyboard navigation. Components like Dropdown,
-// ComboBox, MultiSelect, Tabs, OverflowMenu, and ContentSwitcher move a
-// highlighted/selected index by a step, wrap at the ends, and (for most) skip
-// disabled items. `moveIndex` is the wrap-only primitive; `nextEnabledIndex`
-// layers disabled-skipping on top.
 
 /**
- * Move `index` by `step` and wrap once at either end: a result past the end
- * becomes the first item and a result before the start becomes the last item.
- * Returns -1 for an empty range. Designed for single-step moves (`step` ±1), so
- * stepping up from -1 ("nothing selected") lands on the last item and stepping
- * down from -1 lands on the first.
+ * Move `index` by `step` and wrap once at either end. Returns -1 for an empty
+ * range. For single-step moves (`step` ±1), stepping from -1 lands on the
+ * last item (step +1) or first item (step -1).
  *
  * @param {number} index - Current index (may be -1 when nothing is selected).
  * @param {number} step - Amount/direction to move (e.g. 1 or -1).
@@ -26,11 +19,8 @@ export function moveIndex(index, step, length) {
 }
 
 /**
- * From `index`, move by `step` cyclically and return the first index whose item
- * is enabled. Returns the original `index` when no enabled item exists (e.g. all
- * items disabled), so callers can leave selection unchanged. `index` may be -1
- * (nothing selected) — `moveIndex(-1, 1, n)` → 0 and `moveIndex(-1, -1, n)` →
- * n-1, landing on the first/last item respectively.
+ * Cyclically move from `index` by `step` to the first enabled item. Returns
+ * `index` when no enabled item exists. `index` may be -1.
  *
  * @template T
  * @param {object} options

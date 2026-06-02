@@ -1,13 +1,7 @@
 // @ts-check
 /**
- * Create a debounced version of `fn` that postpones invocation until `delay`
- * milliseconds have elapsed since the last call. Repeated calls within that
- * window reset the timer, so `fn` runs once after activity settles, using the
- * arguments from the most recent call.
- *
- * The returned function exposes `cancel()` to discard a pending invocation
- * (e.g. on component teardown) and `flush()` to invoke a pending call
- * immediately.
+ * Debounce `fn` until `delay` ms after the last call. Exposes `cancel()` and
+ * `flush()` on the returned function.
  *
  * @template {(...args: any[]) => void} Fn
  * @param {Fn} fn - Function to debounce.

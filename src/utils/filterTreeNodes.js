@@ -1,16 +1,15 @@
 // @ts-check
 /**
  * @typedef {Object} TreeNode
- * @property {string | number} id - Unique identifier for the node
- * @property {string} [text] - Optional text/name for the node
- * @property {TreeNode[]} [nodes] - Optional array of child nodes
- * @property {Record<string, unknown>} [additionalProperties] - Any additional properties
+ * @property {string | number} id
+ * @property {string} [text]
+ * @property {TreeNode[]} [nodes]
  */
 
 /**
  * @typedef {Object} FilterOptions
- * @property {boolean} [includeChildren=false] - Include all descendants of matching nodes
- * @property {boolean} [includeAncestors=true] - Include all ancestors of matching nodes
+ * @property {boolean} [includeChildren]
+ * @property {boolean} [includeAncestors]
  */
 
 /**
@@ -28,11 +27,6 @@ export function filterTreeNodes(
 ) {
   const { includeChildren = false, includeAncestors = true } = options;
 
-  /**
-   * Deep clone a node and all its children
-   * @param {TreeNode} node
-   * @returns {TreeNode}
-   */
   function cloneNode(node) {
     const cloned = { ...node };
     if (Array.isArray(node.nodes)) {
@@ -41,15 +35,9 @@ export function filterTreeNodes(
     return cloned;
   }
 
-  /**
-   * Recursively filter tree nodes
-   * @param {TreeNode} node
-   * @returns {{ node: TreeNode | null, hasMatch: boolean }}
-   */
   function filterNode(node) {
     const matches = predicate(node);
 
-    // Process children first
     const filteredChildren = [];
     let childHasMatch = false;
 
@@ -63,23 +51,15 @@ export function filterTreeNodes(
       }
     }
 
-    // If this node matches and we include children, use all original children
     if (matches && includeChildren) {
       return { node: cloneNode(node), hasMatch: true };
     }
 
-    // Include this node if:
-    // 1. It matches the predicate, OR
-    // 2. includeAncestors is true AND a descendant matches
     if (matches || (includeAncestors && childHasMatch)) {
       const newNode = { ...node };
       if (filteredChildren.length > 0) {
         newNode.nodes = filteredChildren;
-      } else if (matches && !includeChildren) {
-        // If node matches but has no matching children, remove nodes array
-        newNode.nodes = undefined;
       } else {
-        // Remove empty nodes array when just including ancestors
         newNode.nodes = undefined;
       }
       return { node: newNode, hasMatch: true };
