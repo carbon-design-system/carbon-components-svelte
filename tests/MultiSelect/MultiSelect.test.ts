@@ -2402,11 +2402,11 @@ describe("MultiSelect", () => {
 
         await openMenu();
         const combobox = screen.getByRole("combobox");
+        const menu = screen.getByRole("listbox");
         expect(combobox).toHaveAttribute("aria-expanded", "true");
-        expect(
-          screen.getByRole("listbox").closest("[data-floating-portal]")
-            ?.parentElement,
-        ).toBe(document.body);
+        expect(menu.closest("[data-floating-portal]")?.parentElement).toBe(
+          document.body,
+        );
 
         externalButton.focus();
         await tick();
