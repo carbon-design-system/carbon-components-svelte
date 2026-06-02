@@ -51,6 +51,7 @@
     setContext,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { clampIndex } from "../utils/clampIndex.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -223,13 +224,9 @@
     if ($hasPopup) return;
 
     if (event.key === "ArrowDown") {
-      if (focusIndex < options.length - 1) focusIndex++;
+      focusIndex = clampIndex(focusIndex, 1, options.length);
     } else if (event.key === "ArrowUp") {
-      if (focusIndex === -1) {
-        focusIndex = options.length - 1;
-      } else {
-        if (focusIndex > 0) focusIndex--;
-      }
+      focusIndex = clampIndex(focusIndex, -1, options.length);
     } else if (event.key === "Home") {
       if (options.length > 0) focusIndex = 0;
     } else if (event.key === "End" && options.length > 0) {

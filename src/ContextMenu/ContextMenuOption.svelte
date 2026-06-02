@@ -82,6 +82,7 @@
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
+  import { clampIndex } from "../utils/clampIndex.js";
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();
@@ -343,13 +344,9 @@
       }
 
       if (event.key === "ArrowDown") {
-        if (focusIndex < options.length - 1) focusIndex++;
+        focusIndex = clampIndex(focusIndex, 1, options.length);
       } else if (event.key === "ArrowUp") {
-        if (focusIndex === -1) {
-          focusIndex = options.length - 1;
-        } else {
-          if (focusIndex > 0) focusIndex--;
-        }
+        focusIndex = clampIndex(focusIndex, -1, options.length);
       } else if (event.key === "Home") {
         if (options.length > 0) focusIndex = 0;
       } else if (event.key === "End" && options.length > 0) {
