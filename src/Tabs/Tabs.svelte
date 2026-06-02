@@ -33,6 +33,7 @@
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { keyBy } from "../utils/keyBy.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
 
@@ -42,12 +43,7 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
    */
   const tabs = writable([]);
-  const tabsById = derived(tabs, (_) =>
-    _.reduce((a, c) => {
-      a[c.id] = c;
-      return a;
-    }, {}),
-  );
+  const tabsById = derived(tabs, (_) => keyBy(_));
   /**
    * @type {import("svelte/store").Writable<boolean>}
    */
@@ -67,12 +63,7 @@
   /**
    * @type {import("svelte/store").Readable<Record<string, { id: string; index: number }>>}
    */
-  const contentById = derived(content, (_) =>
-    _.reduce((a, c) => {
-      a[c.id] = c;
-      return a;
-    }, {}),
-  );
+  const contentById = derived(content, (_) => keyBy(_));
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
    */
