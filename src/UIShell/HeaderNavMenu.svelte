@@ -24,6 +24,7 @@
   import { setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   /**
    * @type {import("svelte/store").Writable<Record<string, boolean>>}
@@ -84,9 +85,7 @@
 
 <svelte:window
   on:click={(event) => {
-    if (!ref?.contains(event.target)) {
-      expanded = false;
-    }
+    if (isOutsideClick(event, ref)) expanded = false;
   }}
 />
 
