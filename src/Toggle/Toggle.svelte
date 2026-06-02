@@ -96,9 +96,11 @@
     for={id}
     class:bx--toggle-input__label={true}
   >
-    <span class:bx--visually-hidden={hideLabel}>
-      <slot name="labelChildren"> {labelText} </slot>
-    </span>
+    {#if labelText || $$slots.labelChildren}
+      <span class:bx--visually-hidden={hideLabel}>
+        <slot name="labelChildren"> {labelText} </slot>
+      </span>
+    {/if}
     <span
       class:bx--toggle__switch={true}
       style:margin-top={hideLabel ? 0 : undefined}
