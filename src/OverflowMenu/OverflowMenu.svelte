@@ -88,6 +88,7 @@
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { nextEnabledIndex } from "../utils/moveIndex.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext("carbon:Modal");
@@ -152,32 +153,13 @@
    * @type {(direction: number) => void}
    */
   const change = (direction) => {
-    let index = $currentIndex + direction;
-
-    if (index < 0) {
-      index = $items.length - 1;
-    } else if (index >= $items.length) {
-      index = 0;
-    }
-
-    const start = index;
-    let disabled = $items[index].disabled;
-
-    while (disabled) {
-      index = index + direction;
-
-      if (index < 0) {
-        index = $items.length - 1;
-      } else if (index >= $items.length) {
-        index = 0;
-      }
-
-      if (index === start) return;
-
-      disabled = $items[index].disabled;
-    }
-
-    currentIndex.set(index);
+    currentIndex.set(
+      nextEnabledIndex({
+        items: $items,
+        index: $currentIndex,
+        step: direction,
+      }),
+    );
   };
 
   const first = () => {
