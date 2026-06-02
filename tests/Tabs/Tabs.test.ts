@@ -10,6 +10,7 @@ import TabIconContainer from "./TabIconContainer.test.svelte";
 import TabIconSecondaryLabel from "./TabIconSecondaryLabel.test.svelte";
 import TabSecondaryLabel from "./TabSecondaryLabel.test.svelte";
 import Tabs from "./Tabs.test.svelte";
+import TabsAllDisabled from "./TabsAllDisabled.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 
@@ -68,6 +69,21 @@ describe("Tabs", () => {
 
     expect(tab2).toHaveAttribute("aria-selected", "false");
     expect(screen.getByText("Content 1")).toBeVisible();
+  });
+
+  it("does not infinite-loop when all items are disabled", async () => {
+    render(TabsAllDisabled);
+
+    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    await user.click(tab1);
+    expect(tab1).toHaveAttribute("aria-selected", "true");
+
+    await user.keyboard("{ArrowRight}");
+    await user.keyboard("{ArrowLeft}");
+    await user.keyboard("{ArrowRight}");
+
+    expect(screen.getByText("Content 1")).toBeVisible();
+    expect(tab1).toHaveAttribute("aria-selected", "true");
   });
 
   it("should support keyboard navigation", async () => {
