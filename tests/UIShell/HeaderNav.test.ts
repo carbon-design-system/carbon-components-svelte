@@ -60,6 +60,19 @@ describe("HeaderNav keyboard navigation", () => {
       await user.keyboard(" ");
       expect(menuTrigger).toHaveAttribute("aria-expanded", "false");
     });
+
+    it("should collapse when clicking outside", async () => {
+      render(HeaderNavTest);
+
+      const menuTrigger = screen.getByRole("menuitem", { name: "Menu" });
+      menuTrigger.focus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(menuTrigger).toHaveAttribute("aria-expanded", "true");
+
+      await user.click(document.body);
+      expect(menuTrigger).toHaveAttribute("aria-expanded", "false");
+    });
   });
 
   describe("HeaderNavItem within menu", () => {
