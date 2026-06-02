@@ -1,4 +1,11 @@
-import { virtualize } from "../../src/utils/virtualize.js";
+import {
+  getBoundedScrollTop,
+  resetVirtualScrollOnClose,
+  scrollHighlightedIntoView,
+  scrollSelectedIntoView,
+  virtualize,
+  virtualListState,
+} from "../../src/utils/virtualize.js";
 
 describe("virtualize", () => {
   test("should return all items when below threshold", () => {
@@ -361,5 +368,227 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
     // With zero container height, should still calculate based on overscan
     expect(result.visibleItems.length).toBeGreaterThan(0);
+  });
+});
+
+describe("virtualListState", () => {
+  const makeItems = (length: number) =>
+    Array.from({ length }, (_, i) => ({ id: i, name: `Item ${i}` }));
+
+  test("returns null config and full items when not virtualizing", () => {
+    const items = makeItems(10);
+    const result = virtualListState({
+      items,
+      scrollTop: 0,
+      shouldVirtualize: false,
+      virtualize: undefined,
+    });
+
+    expect(result.config).toBeNull();
+    expect(result.data).toBeNull();
+    expect(result.itemsToRender).toBe(items);
+  });
+
+  test("merges object-virtualize overrides over the defaults", () => {
+    const result = virtualListState({
+      items: makeItems(500),
+      scrollTop: 0,
+      shouldVirtualize: true,
+      virtualize: { itemHeight: 50, containerHeight: 400 },
+    });
+
+    expect(result.config).toMatchObject({
+      itemHeight: 50,
+      containerHeight: 400,
+      overscan: 3,
+      threshold: 100,
+    });
+  });
+
+  test("applies caller defaults beneath the virtualize prop", () => {
+    const result = virtualListState({
+      items: makeItems(500),
+      scrollTop: 0,
+      shouldVirtualize: true,
+      virtualize: true,
+      defaults: { containerHeight: 250 },
+    });
+
+    expect(result.config?.containerHeight).toBe(250);
+  });
+
+  test("returns a visible slice when virtualized above the threshold", () => {
+    const items = makeItems(500);
+    const result = virtualListState({
+      items,
+      scrollTop: 0,
+      shouldVirtualize: true,
+      virtualize: true,
+    });
+
+    expect(result.data?.isVirtualized).toBe(true);
+    expect(result.itemsToRender.length).toBeLessThan(items.length);
+  });
+
+  test("renders all items when virtualized but below the threshold", () => {
+    const items = makeItems(50);
+    const result = virtualListState({
+      items,
+      scrollTop: 0,
+      shouldVirtualize: true,
+      virtualize: true,
+    });
+
+    expect(result.data?.isVirtualized).toBe(false);
+    expect(result.itemsToRender).toBe(items);
+  });
+});
+
+describe("getBoundedScrollTop", () => {
+  test("returns the exact position for a mid-list item", () => {
+    expect(
+      getBoundedScrollTop({
+        index: 10,
+        itemHeight: 40,
+        containerHeight: 300,
+        itemCount: 100,
+      }),
+    ).toBe(400);
+  });
+
+  test("clamps to 0 for a negative index", () => {
+    expect(
+      getBoundedScrollTop({
+        index: -5,
+        itemHeight: 40,
+        containerHeight: 300,
+        itemCount: 100,
+      }),
+    ).toBe(0);
+  });
+
+  test("clamps to maxScroll when past the end", () => {
+    // maxScroll = 100 * 40 - 300 = 3700
+    expect(
+      getBoundedScrollTop({
+        index: 99,
+        itemHeight: 40,
+        containerHeight: 300,
+        itemCount: 100,
+      }),
+    ).toBe(3700);
+  });
+
+  test("floors maxScroll at 0 when content is shorter than the container", () => {
+    expect(
+      getBoundedScrollTop({
+        index: 4,
+        itemHeight: 40,
+        containerHeight: 300,
+        itemCount: 5,
+      }),
+    ).toBe(0);
+  });
+});
+
+describe("scrollHighlightedIntoView", () => {
+  const base = {
+    itemCount: 500,
+    itemHeight: 40,
+    containerHeight: 300,
+    overscan: 3,
+  };
+
+  test("returns null when the highlighted item is already visible", () => {
+    // At scrollTop 0, the visible+overscan range covers the first several items.
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 2,
+        currentScrollTop: 0,
+      }),
+    ).toBeNull();
+  });
+
+  test("returns a bounded scrollTop when the item is below the viewport", () => {
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 100,
+        currentScrollTop: 0,
+      }),
+    ).toBe(4000);
+  });
+
+  test("returns a bounded scrollTop when the item is above the viewport", () => {
+    // Scrolled to item 100; highlight item 10, which is above the range.
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 10,
+        currentScrollTop: 4000,
+      }),
+    ).toBe(400);
+  });
+
+  test("respects overscan when deciding visibility", () => {
+    // scrollTop 4000 => floor(100) - 3 = 97 start. Item 96 is just outside.
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 96,
+        currentScrollTop: 4000,
+      }),
+    ).toBe(3840);
+    // Item 97 is within overscan, so no scroll.
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 97,
+        currentScrollTop: 4000,
+      }),
+    ).toBeNull();
+  });
+});
+
+describe("scrollSelectedIntoView", () => {
+  test("returns 0 when there is no selection", () => {
+    expect(
+      scrollSelectedIntoView({
+        selectedIndex: -1,
+        itemCount: 500,
+        itemHeight: 40,
+        containerHeight: 300,
+      }),
+    ).toBe(0);
+  });
+
+  test("returns the bounded position for a selected item", () => {
+    expect(
+      scrollSelectedIntoView({
+        selectedIndex: 50,
+        itemCount: 500,
+        itemHeight: 40,
+        containerHeight: 300,
+      }),
+    ).toBe(2000);
+  });
+
+  test("clamps the selected position to maxScroll near the end", () => {
+    // maxScroll = 500 * 40 - 300 = 19700
+    expect(
+      scrollSelectedIntoView({
+        selectedIndex: 499,
+        itemCount: 500,
+        itemHeight: 40,
+        containerHeight: 300,
+      }),
+    ).toBe(19700);
+  });
+});
+
+describe("resetVirtualScrollOnClose", () => {
+  test("returns 0", () => {
+    expect(resetVirtualScrollOnClose()).toBe(0);
   });
 });
