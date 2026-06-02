@@ -33,6 +33,7 @@
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { nextEnabledIndex } from "../utils/moveIndex.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
 
   const dispatch = createEventDispatcher();
@@ -132,33 +133,15 @@
    * @type {(direction: number) => Promise<void>}
    */
   const change = async (direction) => {
-    let index = currentIndex + direction;
+    const nextIndex = nextEnabledIndex({
+      items: $tabs,
+      index: currentIndex,
+      step: direction,
+    });
 
-    if (index < 0) {
-      index = $tabs.length - 1;
-    } else if (index >= $tabs.length) {
-      index = 0;
-    }
+    if (nextIndex === currentIndex) return;
 
-    let disabled = $tabs[index].disabled;
-    let attempts = 0;
-
-    while (disabled && attempts < $tabs.length) {
-      index = index + direction;
-
-      if (index < 0) {
-        index = $tabs.length - 1;
-      } else if (index >= $tabs.length) {
-        index = 0;
-      }
-
-      disabled = $tabs[index].disabled;
-      attempts++;
-    }
-
-    if (disabled) return;
-
-    currentIndex = index;
+    currentIndex = nextIndex;
 
     await tick();
     const activeTab =
