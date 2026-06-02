@@ -70,6 +70,7 @@
   import { slide } from "svelte/transition";
   import Close from "../icons/Close.svelte";
   import Switcher from "../icons/Switcher.svelte";
+  import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
 
@@ -91,9 +92,8 @@
   on:click={(event) => {
     if (
       isOpen &&
-      !ref.contains(event.target) &&
-      !refPanel.contains(event.target) &&
-      !preventCloseOnClickOutside
+      !preventCloseOnClickOutside &&
+      isOutsideClick(event, [ref, refPanel])
     ) {
       isOpen = false;
       dispatch("close");
