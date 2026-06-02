@@ -2358,6 +2358,64 @@ describe("MultiSelect", () => {
       expect(host).toHaveClass("bx--list-box--expanded");
       expect(host?.parentElement).toHaveAttribute("data-floating-portal");
     });
+
+    it("should close portaled menu when clicking outside", async () => {
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "0", text: "Slack" },
+            { id: "1", text: "Email" },
+          ],
+          portalMenu: true,
+        },
+      });
+
+      await openMenu();
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeInTheDocument();
+      expect(menu.closest("[data-floating-portal]")?.parentElement).toBe(
+        document.body,
+      );
+
+      await user.click(document.body);
+      expect(screen.getByRole("combobox")).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+    });
+
+    it("should close portaled menu when focus moves outside", async () => {
+      const externalButton = document.createElement("button");
+      externalButton.textContent = "Outside";
+      document.body.appendChild(externalButton);
+
+      try {
+        render(MultiSelect, {
+          props: {
+            items: [
+              { id: "0", text: "Slack" },
+              { id: "1", text: "Email" },
+            ],
+            portalMenu: true,
+          },
+        });
+
+        await openMenu();
+        const combobox = screen.getByRole("combobox");
+        expect(combobox).toHaveAttribute("aria-expanded", "true");
+        expect(
+          screen.getByRole("listbox").closest("[data-floating-portal]")
+            ?.parentElement,
+        ).toBe(document.body);
+
+        externalButton.focus();
+        await tick();
+
+        expect(combobox).toHaveAttribute("aria-expanded", "false");
+      } finally {
+        externalButton.remove();
+      }
+    });
   });
 
   describe("filterable: Backspace/Delete clears selection", () => {
