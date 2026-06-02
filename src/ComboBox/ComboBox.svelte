@@ -215,6 +215,7 @@
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
+  import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
@@ -498,8 +499,7 @@
       skipWindowClick = false;
       return;
     }
-    if (open && ref && !ref.contains(event.target)) {
-      if (effectivePortalMenu && listRef?.contains(event.target)) return;
+    if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {
       open = false;
     }
   }}
