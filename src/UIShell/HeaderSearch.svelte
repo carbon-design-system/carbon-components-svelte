@@ -54,6 +54,7 @@
   import { createEventDispatcher, tick } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
+  import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
 
@@ -93,7 +94,7 @@
 
 <svelte:window
   on:mouseup={(event) => {
-    if (active && !refSearch?.contains(event.target)) active = false;
+    if (active && isOutsideClick(event, refSearch)) active = false;
   }}
 />
 
