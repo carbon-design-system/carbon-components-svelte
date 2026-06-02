@@ -168,6 +168,7 @@
   } from "../ListBox";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
   import { debounce } from "../utils/debounce.js";
+  import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
@@ -403,8 +404,7 @@
 
 <svelte:window
   on:click={(event) => {
-    if (open && ref && !ref.contains(event.target)) {
-      if (effectivePortalMenu && listRef?.contains(event.target)) return;
+    if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {
       open = false;
     }
   }}
