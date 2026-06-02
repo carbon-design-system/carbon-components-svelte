@@ -213,6 +213,7 @@
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
+  import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,
@@ -260,31 +261,12 @@
     : shouldFilterItem;
 
   function change(step) {
-    let candidateIndex = highlightedIndex + step;
     const navigableItems = filteredItems?.length ? filteredItems : items;
-    if (navigableItems.length === 0) return;
-    if (candidateIndex < 0) {
-      candidateIndex = navigableItems.length - 1;
-    } else if (candidateIndex >= navigableItems.length) {
-      candidateIndex = 0;
-    }
-    let itemDisabled = navigableItems[candidateIndex].disabled;
-    let attempts = 0;
-
-    while (itemDisabled && attempts < navigableItems.length) {
-      candidateIndex = candidateIndex + step;
-
-      if (candidateIndex < 0) {
-        candidateIndex = navigableItems.length - 1;
-      } else if (candidateIndex >= navigableItems.length) {
-        candidateIndex = 0;
-      }
-
-      itemDisabled = navigableItems[candidateIndex].disabled;
-      attempts++;
-    }
-
-    if (!itemDisabled) highlightedIndex = candidateIndex;
+    highlightedIndex = nextEnabledIndex({
+      items: navigableItems,
+      index: highlightedIndex,
+      step,
+    });
   }
 
   /**
