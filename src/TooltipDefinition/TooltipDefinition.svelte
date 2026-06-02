@@ -87,11 +87,17 @@
     }
   }
 
-  const hide = () => (open = false);
+  function hide() {
+    open = false;
+  }
 
-  const show = () => (open = true);
+  function show() {
+    open = true;
+  }
 
-  const toggle = () => (open = !open);
+  function toggle() {
+    open = !open;
+  }
 
   let isInitialRender = true;
 
