@@ -88,6 +88,7 @@
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
@@ -241,9 +242,7 @@
 
 <svelte:window
   on:click={(event) => {
-    if (buttonRef?.contains(event.target)) return;
-    if (effectivePortalMenu && menuRef?.contains(event.target)) return;
-    if (menuRef && !menuRef.contains(event.target)) {
+    if (menuRef && isOutsideClick(event, [buttonRef, menuRef])) {
       const shouldContinue = dispatch("close", null, { cancelable: true });
       if (shouldContinue) {
         open = false;
