@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ExpandableTile from "./ExpandableTile.test.svelte";
 import ExpandableTileCustom from "./ExpandableTileCustom.test.svelte";
+import ExpandableTileVariants from "./ExpandableTileVariants.test.svelte";
 
 describe("ExpandableTile", () => {
   it("should render with default props", () => {
@@ -9,10 +10,21 @@ describe("ExpandableTile", () => {
 
     const tile = screen.getByRole("button");
     expect(tile).toBeInTheDocument();
+    expect(tile).toHaveClass("bx--tile", "bx--tile--expandable");
     expect(tile).toHaveAttribute("aria-expanded", "false");
     expect(tile).toHaveAttribute("title", "Interact to expand Tile");
-    expect(screen.getByTestId("above-content")).toBeInTheDocument();
-    expect(screen.getByTestId("below-content")).toBeInTheDocument();
+
+    const aboveContent = screen.getByTestId("above-content");
+    const belowContent = screen.getByTestId("below-content");
+    expect(aboveContent).toHaveTextContent("Above the fold content here");
+    expect(belowContent).toHaveTextContent("Below the fold content here");
+  });
+
+  it("should render with expandable classes", () => {
+    render(ExpandableTileVariants);
+
+    const tile = screen.getByTestId("basic");
+    expect(tile).toHaveClass("bx--tile", "bx--tile--expandable");
   });
 
   it("should handle expanded state", () => {
@@ -21,6 +33,14 @@ describe("ExpandableTile", () => {
     const tile = screen.getByRole("button");
     expect(tile).toHaveAttribute("aria-expanded", "true");
     expect(tile).toHaveAttribute("title", "Interact to collapse Tile");
+    expect(tile).toHaveClass("bx--tile--is-expanded");
+  });
+
+  it("should render pre-expanded", () => {
+    render(ExpandableTileVariants);
+
+    const tile = screen.getByTestId("pre-expanded");
+    expect(tile).toHaveAttribute("aria-expanded", "true");
     expect(tile).toHaveClass("bx--tile--is-expanded");
   });
 
@@ -98,21 +118,61 @@ describe("ExpandableTile", () => {
     expect(tile).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("should handle interactive content without toggling", async () => {
-    render(ExpandableTileCustom);
+  describe("with interactive content", () => {
+    it("should not toggle expanded state when clicking an interactive child element", async () => {
+      render(ExpandableTileVariants);
 
-    const tile = document.querySelector(".bx--tile--expandable");
-    const chevronButton = tile?.querySelector("button.bx--tile__chevron");
-    const link = screen.getByTestId("test-link");
-    const button = screen.getByTestId("test-button");
+      const tile = screen.getByTestId("interactive");
+      const link = screen.getByTestId("inner-link");
 
-    expect(chevronButton).toHaveAttribute("aria-expanded", "false");
+      expect(tile).not.toHaveClass("bx--tile--is-expanded");
 
-    await user.click(link);
-    expect(chevronButton).toHaveAttribute("aria-expanded", "false");
+      await user.click(link);
+      expect(tile).not.toHaveClass("bx--tile--is-expanded");
+    });
 
-    await user.click(button);
-    expect(chevronButton).toHaveAttribute("aria-expanded", "false");
+    it("should only toggle expanded state when clicking the chevron button", async () => {
+      render(ExpandableTileVariants);
+
+      const tile = screen.getByTestId("interactive");
+      expect(tile).not.toHaveClass("bx--tile--is-expanded");
+
+      const chevronButton = tile.querySelector("button.bx--tile__chevron");
+      expect.assert(chevronButton);
+      expect(chevronButton).toHaveAttribute("aria-expanded", "false");
+
+      await user.click(chevronButton);
+      expect(tile).toHaveClass("bx--tile--is-expanded");
+      expect(chevronButton).toHaveAttribute("aria-expanded", "true");
+
+      await user.click(chevronButton);
+      expect(tile).not.toHaveClass("bx--tile--is-expanded");
+      expect(chevronButton).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("should render as a div (not button) when it contains interactive content", () => {
+      render(ExpandableTileVariants);
+
+      const tile = screen.getByTestId("interactive");
+      expect(tile.tagName).not.toBe("BUTTON");
+    });
+
+    it("should not toggle when clicking interactive button or link", async () => {
+      render(ExpandableTileCustom);
+
+      const tile = document.querySelector(".bx--tile--expandable");
+      const chevronButton = tile?.querySelector("button.bx--tile__chevron");
+      const link = screen.getByTestId("test-link");
+      const button = screen.getByTestId("test-button");
+
+      expect(chevronButton).toHaveAttribute("aria-expanded", "false");
+
+      await user.click(link);
+      expect(chevronButton).toHaveAttribute("aria-expanded", "false");
+
+      await user.click(button);
+      expect(chevronButton).toHaveAttribute("aria-expanded", "false");
+    });
   });
 
   it("should handle mouse events", async () => {
@@ -121,16 +181,6 @@ describe("ExpandableTile", () => {
     const tile = screen.getByRole("button");
     await user.hover(tile);
     await user.unhover(tile);
-  });
-
-  it("should handle custom content slots", () => {
-    render(ExpandableTile);
-
-    const aboveContent = screen.getByTestId("above-content");
-    const belowContent = screen.getByTestId("below-content");
-
-    expect(aboveContent).toHaveTextContent("Above the fold content here");
-    expect(belowContent).toHaveTextContent("Below the fold content here");
   });
 
   it("should handle max height and padding", async () => {
@@ -155,13 +205,6 @@ describe("ExpandableTile", () => {
         tilePadding: 20,
       },
     });
-
-    const tile = screen.getByRole("button");
-    expect(tile.getAttribute("style")).toBe("max-height: none;");
-  });
-
-  it("should set max-height to none when tileMaxHeight is 0 with default props", () => {
-    render(ExpandableTile);
 
     const tile = screen.getByRole("button");
     expect(tile.getAttribute("style")).toBe("max-height: none;");
