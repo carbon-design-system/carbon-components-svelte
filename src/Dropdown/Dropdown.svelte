@@ -168,7 +168,12 @@
   } from "../ListBox";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
   import { debounce } from "../utils/debounce.js";
-  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
+  import {
+    resetVirtualScrollOnClose,
+    scrollHighlightedIntoView,
+    scrollSelectedIntoView,
+    virtualListState,
+  } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
@@ -177,9 +182,6 @@
     portalMenu === undefined ? !!insideModal : portalMenu;
 
   $: menuAriaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
-
-  /** Default item height in pixels for virtualization */
-  const DEFAULT_ITEM_HEIGHT = 40;
 
   let highlightedIndex = -1;
   let prevHighlightedIndex = -1;
@@ -232,30 +234,17 @@
       ? false
       : virtualize !== undefined || items.length > 100;
 
-  $: virtualConfig = shouldVirtualize
-    ? {
-        itemHeight: DEFAULT_ITEM_HEIGHT,
-        containerHeight: 300,
-        overscan: 3,
-        threshold: 100,
-        maxItems: undefined,
-        ...(typeof virtualize === "object" ? virtualize : {}),
-      }
-    : null;
-
   $: menuMaxHeight = getMenuMaxHeight(size);
 
-  $: virtualData = virtualConfig
-    ? virtualizeUtil({
-        items,
-        scrollTop: listScrollTop,
-        ...virtualConfig,
-      })
-    : null;
-
-  $: itemsToRender = virtualData?.isVirtualized
-    ? virtualData.visibleItems
-    : items;
+  $: virtualState = virtualListState({
+    items,
+    scrollTop: listScrollTop,
+    shouldVirtualize,
+    virtualize,
+  });
+  $: virtualConfig = virtualState.config;
+  $: virtualData = virtualState.data;
+  $: itemsToRender = virtualState.itemsToRender;
 
   afterUpdate(() => {
     // Scroll to highlighted item when it changes via keyboard navigation
@@ -270,40 +259,17 @@
     ) {
       tick().then(() => {
         if (listRef && virtualConfig && highlightedIndex >= 0) {
-          const itemHeight = virtualConfig.itemHeight;
-          const containerHeight = virtualConfig.containerHeight;
-          const overscan = virtualConfig.overscan ?? 3;
-
-          // Calculate current visible range based on current scroll position
-          const currentScrollTop = listRef.scrollTop ?? listScrollTop;
-          const visibleStartIndex = Math.max(
-            0,
-            Math.floor(currentScrollTop / itemHeight) - overscan,
-          );
-          const visibleEndIndex = Math.min(
-            items.length,
-            Math.ceil((currentScrollTop + containerHeight) / itemHeight) +
-              overscan,
-          );
-
-          // Only scroll if highlighted item is outside visible range
-          if (
-            highlightedIndex < visibleStartIndex ||
-            highlightedIndex >= visibleEndIndex
-          ) {
-            const scrollPosition = highlightedIndex * itemHeight;
-            // Ensure scroll position is within bounds
-            const maxScroll = Math.max(
-              0,
-              items.length * itemHeight - containerHeight,
-            );
-            const finalScrollPosition = Math.max(
-              0,
-              Math.min(scrollPosition, maxScroll),
-            );
-
-            listScrollTop = finalScrollPosition;
-            listRef.scrollTop = finalScrollPosition;
+          const nextScrollTop = scrollHighlightedIntoView({
+            highlightedIndex,
+            currentScrollTop: listRef.scrollTop ?? listScrollTop,
+            itemCount: items.length,
+            itemHeight: virtualConfig.itemHeight,
+            containerHeight: virtualConfig.containerHeight,
+            overscan: virtualConfig.overscan ?? 3,
+          });
+          if (nextScrollTop !== null) {
+            listScrollTop = nextScrollTop;
+            listRef.scrollTop = nextScrollTop;
           }
         }
       });
@@ -347,27 +313,14 @@
     if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
         if (listRef && virtualConfig) {
-          if (selectedIndex >= 0) {
-            // Calculate scroll position to show selected item at the top of viewport
-            const itemHeight = virtualConfig.itemHeight;
-            const containerHeight = virtualConfig.containerHeight;
-            const scrollPosition = selectedIndex * itemHeight;
-            // Ensure scroll position is within bounds
-            const maxScroll = Math.max(
-              0,
-              items.length * itemHeight - containerHeight,
-            );
-            const finalScrollPosition = Math.max(
-              0,
-              Math.min(scrollPosition, maxScroll),
-            );
-
-            listScrollTop = finalScrollPosition;
-            listRef.scrollTop = finalScrollPosition;
-          } else {
-            listRef.scrollTop = 0;
-            listScrollTop = 0;
-          }
+          const nextScrollTop = scrollSelectedIntoView({
+            selectedIndex,
+            itemCount: items.length,
+            itemHeight: virtualConfig.itemHeight,
+            containerHeight: virtualConfig.containerHeight,
+          });
+          listScrollTop = nextScrollTop;
+          listRef.scrollTop = nextScrollTop;
         }
       });
     }
@@ -375,7 +328,7 @@
 
     // Reset scroll position when menu closes
     if (!open && shouldVirtualize) {
-      listScrollTop = 0;
+      listScrollTop = resetVirtualScrollOnClose();
     }
   });
 
