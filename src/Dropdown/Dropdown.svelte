@@ -368,12 +368,12 @@
     }
   }
 
-  const dispatchSelect = () => {
+  function dispatchSelect() {
     dispatch("select", {
       selectedId,
       selectedItem: itemsById.get(selectedId),
     });
-  };
+  }
 
   function selectHighlighted() {
     open = !open;

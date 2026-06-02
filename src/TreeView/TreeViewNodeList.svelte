@@ -55,13 +55,13 @@
     toggleNode,
   } = getContext("carbon:TreeView");
 
-  const offset = () => {
+  function offset() {
     const depth = computeTreeLeafDepth(refLabel) - 1;
 
     if (parent) return depth + 1;
     if (icon) return depth + 2;
     return depth + 2.5;
-  };
+  }
 
   afterUpdate(() => {
     if (

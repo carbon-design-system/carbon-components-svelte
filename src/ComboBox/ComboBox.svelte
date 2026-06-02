@@ -128,7 +128,9 @@
    */
   export let autoHighlight = "none";
 
-  const defaultShouldFilter = () => true;
+  function defaultShouldFilter() {
+    return true;
+  }
 
   /**
    * Determine if an item should be filtered given the current combobox value.

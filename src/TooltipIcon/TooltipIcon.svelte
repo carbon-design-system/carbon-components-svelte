@@ -108,12 +108,12 @@
   let hovered = false;
   let focused = false;
 
-  const show = () => {
+  function show() {
     open = true;
     activeTooltipIcon.set(tooltipId);
-  };
+  }
 
-  const hide = () => {
+  function hide() {
     clicked = false;
     open = false;
     hovered = false;
@@ -121,7 +121,7 @@
     if (get(activeTooltipIcon) === tooltipId) {
       activeTooltipIcon.set(null);
     }
-  };
+  }
 
   $: tooltipHidden =
     $activeTooltipIcon !== null && $activeTooltipIcon !== tooltipId;

@@ -46,7 +46,9 @@
 
   let idCounter = 0;
 
-  const generateId = () => `notification-${idCounter++}`;
+  function generateId() {
+    return `notification-${idCounter++}`;
+  }
 
   /**
    * Add a notification to the queue.
