@@ -48,16 +48,17 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import { trackModal } from "../Modal/modalStore";
+  import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { trapFocus } from "../utils/trapFocus.js";
 
   const dispatch = createEventDispatcher();
   const label = writable(undefined);
+  const focusReturn = restoreFocus();
 
   let buttonRef = null;
   let innerModal = null;
   let didClickInnerModal = false;
   let closeDispatched = false;
-  let previouslyFocusedElement = null;
 
   function close(trigger) {
     closeDispatched = true;
@@ -107,24 +108,18 @@
   });
 
   function focus(element) {
-    // If selectorPrimaryFocus is purposefully falsy, don't focus anything.
-    if (selectorPrimaryFocus == null) return;
     const container = element || innerModal;
-    /**
-     * First, use the selectorPrimaryFocus to find the element.
-     * Otherwise, try the first input for transactional dialogs.
-     * Fall back to the primary button, then the close button.
-     */
-    const selectorFirstInput =
-      'input:not([type="hidden"]):not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"])';
-    const node =
-      container?.querySelector(selectorPrimaryFocus) ||
-      container?.querySelector(selectorFirstInput) ||
-      (danger
-        ? container?.querySelector(".bx--btn--secondary")
-        : container?.querySelector(".bx--btn--primary")) ||
-      container?.querySelector(".bx--modal-close");
-    if (node != null) node.focus();
+    const node = initialFocus({
+      container,
+      selectorPrimaryFocus,
+      fallbacks: [
+        danger
+          ? container?.querySelector(".bx--btn--secondary")
+          : container?.querySelector(".bx--btn--primary"),
+        container?.querySelector(".bx--modal-close"),
+      ],
+    });
+    node?.focus();
   }
 
   let opened = false;
@@ -188,17 +183,11 @@
   on:transitionend={(event) => {
     if (event.propertyName === "transform") {
       dispatch("transitionend", { open });
-      if (!open && previouslyFocusedElement?.isConnected) {
-        previouslyFocusedElement.focus();
-        previouslyFocusedElement = null;
-      }
+      if (!open) focusReturn.restore();
     }
 
     if (didOpen) {
-      previouslyFocusedElement =
-        document.activeElement instanceof HTMLElement
-          ? document.activeElement
-          : null;
+      focusReturn.save();
       focus(event.currentTarget);
       didOpen = false;
     }
