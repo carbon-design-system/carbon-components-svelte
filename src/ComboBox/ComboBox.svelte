@@ -213,16 +213,18 @@
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
-  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
+  import {
+    resetVirtualScrollOnClose,
+    scrollHighlightedIntoView,
+    scrollSelectedIntoView,
+    virtualListState,
+  } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
-
-  /** Default item height in pixels for virtualization */
-  const DEFAULT_ITEM_HEIGHT = 40;
 
   let skipWindowClick = false;
   let selectedItem = undefined;
@@ -326,40 +328,17 @@
     ) {
       tick().then(() => {
         if (listRef && virtualConfig && highlightedIndex >= 0) {
-          const itemHeight = virtualConfig.itemHeight;
-          const containerHeight = virtualConfig.containerHeight;
-          const overscan = virtualConfig.overscan ?? 3;
-
-          // Calculate current visible range based on current scroll position
-          const currentScrollTop = listRef.scrollTop ?? listScrollTop;
-          const visibleStartIndex = Math.max(
-            0,
-            Math.floor(currentScrollTop / itemHeight) - overscan,
-          );
-          const visibleEndIndex = Math.min(
-            filteredItems.length,
-            Math.ceil((currentScrollTop + containerHeight) / itemHeight) +
-              overscan,
-          );
-
-          // Only scroll if highlighted item is outside visible range
-          if (
-            highlightedIndex < visibleStartIndex ||
-            highlightedIndex >= visibleEndIndex
-          ) {
-            const scrollPosition = highlightedIndex * itemHeight;
-            // Ensure scroll position is within bounds
-            const maxScroll = Math.max(
-              0,
-              filteredItems.length * itemHeight - containerHeight,
-            );
-            const finalScrollPosition = Math.max(
-              0,
-              Math.min(scrollPosition, maxScroll),
-            );
-
-            listScrollTop = finalScrollPosition;
-            listRef.scrollTop = finalScrollPosition;
+          const nextScrollTop = scrollHighlightedIntoView({
+            highlightedIndex,
+            currentScrollTop: listRef.scrollTop ?? listScrollTop,
+            itemCount: filteredItems.length,
+            itemHeight: virtualConfig.itemHeight,
+            containerHeight: virtualConfig.containerHeight,
+            overscan: virtualConfig.overscan ?? 3,
+          });
+          if (nextScrollTop !== null) {
+            listScrollTop = nextScrollTop;
+            listRef.scrollTop = nextScrollTop;
           }
         }
       });
@@ -382,36 +361,18 @@
     if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
         if (listRef && virtualConfig) {
-          if (selectedId !== undefined && selectedItem) {
-            // Find the index of the selected item
-            const selectedIndex = filteredItems.findIndex(
-              (item) => item.id === selectedId,
-            );
-            if (selectedIndex >= 0) {
-              // Calculate scroll position to show selected item at the top of viewport
-              const itemHeight = virtualConfig.itemHeight;
-              const containerHeight = virtualConfig.containerHeight;
-              const scrollPosition = selectedIndex * itemHeight;
-              // Ensure scroll position is within bounds
-              const maxScroll = Math.max(
-                0,
-                filteredItems.length * itemHeight - containerHeight,
-              );
-              const finalScrollPosition = Math.max(
-                0,
-                Math.min(scrollPosition, maxScroll),
-              );
-
-              listScrollTop = finalScrollPosition;
-              listRef.scrollTop = finalScrollPosition;
-            } else {
-              listRef.scrollTop = 0;
-              listScrollTop = 0;
-            }
-          } else {
-            listRef.scrollTop = 0;
-            listScrollTop = 0;
-          }
+          const selectedIndex =
+            selectedId !== undefined && selectedItem
+              ? filteredItems.findIndex((item) => item.id === selectedId)
+              : -1;
+          const nextScrollTop = scrollSelectedIntoView({
+            selectedIndex,
+            itemCount: filteredItems.length,
+            itemHeight: virtualConfig.itemHeight,
+            containerHeight: virtualConfig.containerHeight,
+          });
+          listScrollTop = nextScrollTop;
+          listRef.scrollTop = nextScrollTop;
         }
       });
     }
@@ -428,7 +389,7 @@
     } else {
       // Reset scroll position when menu closes
       if (shouldVirtualize) {
-        listScrollTop = 0;
+        listScrollTop = resetVirtualScrollOnClose();
       }
       highlightedIndex = -1;
       prevHighlightedIndex = -1;
@@ -485,30 +446,17 @@
       ? false
       : virtualize !== undefined || items.length > 100;
 
-  $: virtualConfig = shouldVirtualize
-    ? {
-        itemHeight: DEFAULT_ITEM_HEIGHT,
-        containerHeight: 300,
-        overscan: 3,
-        threshold: 100,
-        maxItems: undefined,
-        ...(typeof virtualize === "object" ? virtualize : {}),
-      }
-    : null;
-
   $: menuMaxHeight = getMenuMaxHeight(size);
 
-  $: virtualData = virtualConfig
-    ? virtualizeUtil({
-        items: filteredItems,
-        scrollTop: listScrollTop,
-        ...virtualConfig,
-      })
-    : null;
-
-  $: itemsToRender = virtualData?.isVirtualized
-    ? virtualData.visibleItems
-    : filteredItems;
+  $: virtualState = virtualListState({
+    items: filteredItems,
+    scrollTop: listScrollTop,
+    shouldVirtualize,
+    virtualize,
+  });
+  $: virtualConfig = virtualState.config;
+  $: virtualData = virtualState.data;
+  $: itemsToRender = virtualState.itemsToRender;
 
   $: if (typeahead) {
     const showNewSuggestion =
