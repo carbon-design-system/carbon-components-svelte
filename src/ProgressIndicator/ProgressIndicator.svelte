@@ -16,6 +16,7 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { derived, writable } from "svelte/store";
+  import { keyBy } from "../utils/keyBy.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -25,12 +26,7 @@
   /**
    * @type {import("svelte/store").Readable<Record<string, { id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>}
    */
-  const stepsById = derived(steps, (steps) =>
-    steps.reduce((a, c) => {
-      a[c.id] = c;
-      return a;
-    }, {}),
-  );
+  const stepsById = derived(steps, (steps) => keyBy(steps));
   const preventChangeOnClickStore = writable(preventChangeOnClick);
 
   /**
