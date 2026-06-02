@@ -32,6 +32,7 @@
   export let relative = false;
 
   import { createEventDispatcher } from "svelte";
+  import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
 
@@ -40,8 +41,7 @@
 
 <svelte:window
   on:click={(event) => {
-    if (!open) return;
-    if (!ref.contains(event.target)) {
+    if (open && isOutsideClick(event, ref)) {
       dispatch("click:outside", { target: event.target });
       if (closeOnOutsideClick) open = false;
     }
