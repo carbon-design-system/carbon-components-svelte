@@ -129,14 +129,6 @@ describe("Accordion", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("is all disabled", () => {
-    render(AccordionDisabled);
-
-    itemIsDisabled(/Natural Language Classifier/);
-    itemIsDisabled(/Natural Language Understanding/);
-    itemIsDisabled(/Language Translator/);
-  });
-
   it("disables all items when Accordion disabled prop is true", () => {
     render(AccordionDisabled);
 
