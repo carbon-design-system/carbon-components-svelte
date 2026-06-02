@@ -259,6 +259,7 @@
     ListBoxSelection,
   } from "../ListBox";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
+  import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,
@@ -299,33 +300,12 @@
   });
 
   function change(step) {
-    let candidateIndex = highlightedIndex + step;
     const navigableItems = filterable ? filteredItems : sortedItems;
-    const length = navigableItems.length;
-    if (length === 0) return;
-    if (candidateIndex < 0) {
-      candidateIndex = length - 1;
-    } else if (candidateIndex >= length) {
-      candidateIndex = 0;
-    }
-
-    let itemDisabled = navigableItems[candidateIndex].disabled;
-    let attempts = 0;
-
-    while (itemDisabled && attempts < length) {
-      candidateIndex = candidateIndex + step;
-
-      if (candidateIndex < 0) {
-        candidateIndex = length - 1;
-      } else if (candidateIndex >= length) {
-        candidateIndex = 0;
-      }
-
-      itemDisabled = navigableItems[candidateIndex].disabled;
-      attempts++;
-    }
-
-    if (!itemDisabled) highlightedIndex = candidateIndex;
+    highlightedIndex = nextEnabledIndex({
+      items: navigableItems,
+      index: highlightedIndex,
+      step,
+    });
   }
 
   /** Handle selection of an item, including isSelectAll logic. */
