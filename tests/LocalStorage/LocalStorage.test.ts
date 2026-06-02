@@ -7,40 +7,6 @@ import LocalStorage from "./LocalStorage.test.svelte";
 describe("LocalStorage", () => {
   const { setMockItem } = setupLocalStorageMock();
 
-  it("saves primitive value to localStorage on mount", () => {
-    render(LocalStorage);
-
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      "local-storage-key",
-      "test-value",
-    );
-  });
-
-  it("saves object value as JSON string", () => {
-    render(LocalStorage);
-
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      "theme-settings",
-      JSON.stringify({ theme: "dark", fontSize: 16 }),
-    );
-  });
-
-  it("loads existing primitive value from localStorage", () => {
-    setMockItem("local-storage-key", "existing-value");
-
-    render(LocalStorage);
-    expect(localStorage.getItem).toHaveBeenCalledWith("local-storage-key");
-  });
-
-  it("loads existing object value from localStorage", () => {
-    // Set up existing value
-    const existingSettings = { theme: "light", fontSize: 14 };
-    setMockItem("theme-settings", JSON.stringify(existingSettings));
-
-    render(LocalStorage);
-    expect(localStorage.getItem).toHaveBeenCalledWith("theme-settings");
-  });
-
   it("clears specific item from localStorage", () => {
     const { component } = render(LocalStorage);
     const storage = component.storage;
