@@ -52,6 +52,7 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import { clampIndex } from "../utils/clampIndex.js";
+  import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -185,10 +186,7 @@
     openMenu(event);
   }}
   on:click={(event) => {
-    if (!open) return;
-    if (ref && !ref.contains(event.target)) {
-      close();
-    }
+    if (open && isOutsideClick(event, ref)) close();
   }}
   on:keydown={(event) => {
     if (open && event.key === "Escape") close();
