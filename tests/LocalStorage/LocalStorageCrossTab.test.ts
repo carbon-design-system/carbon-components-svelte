@@ -68,17 +68,37 @@ describe("LocalStorage cross-tab sync", () => {
     expect(component.value).toBe("initial");
   });
 
-  it("ignores storage events with null newValue", async () => {
+  it("resets value when another tab removes the key", async () => {
     const { component } = render(LocalStorageCrossTab, {
       props: { key: "test-key", value: "initial" },
     });
     await tick();
 
-    // Simulate a storage event with null (key was removed)
+    // Another tab calls localStorage.removeItem("test-key"),
+    // which fires a storage event with newValue === null.
     dispatchStorageEvent("test-key", null);
     await tick();
 
-    expect(component.value).toBe("initial");
+    // The in-memory value should not silently retain the stale data;
+    // otherwise the next local mutation re-persists it and defeats
+    // the cross-tab delete.
+    expect(component.value).toBeUndefined();
+  });
+
+  it("dispatches update with prevValue when another tab removes the key", async () => {
+    const handleUpdate = vi.fn();
+    render(LocalStorageCrossTab, {
+      props: { key: "test-key", value: "initial", onUpdate: handleUpdate },
+    });
+    await tick();
+
+    dispatchStorageEvent("test-key", null);
+    await tick();
+
+    expect(handleUpdate).toHaveBeenCalledWith({
+      prevValue: "initial",
+      value: undefined,
+    });
   });
 
   it("does not dispatch update when key changes to an existing entry", async () => {

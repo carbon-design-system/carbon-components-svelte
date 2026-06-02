@@ -92,11 +92,20 @@
     mounted = true;
 
     function handleStorageChange(event) {
-      if (event.key === key && event.newValue !== null) {
+      if (event.key === key) {
         const prevValue = parseStoredValue(prevSerialized);
-        value = parseStoredValue(event.newValue);
+
+        if (event.newValue === null) {
+          // Another tab removed the key (or called clear()).
+          // Reset so the next local mutation does not re-persist stale state.
+          value = /** @type {T} */ (undefined);
+          prevSerialized = serializeStoredValue(value);
+        } else {
+          value = parseStoredValue(event.newValue);
+          prevSerialized = event.newValue;
+        }
+
         dispatch("update", { prevValue, value });
-        prevSerialized = event.newValue;
       }
     }
 
