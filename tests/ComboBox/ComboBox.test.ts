@@ -2051,6 +2051,22 @@ describe("ComboBox", () => {
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).not.toBeInTheDocument();
     });
+
+    it("should close portaled menu when clicking outside", async () => {
+      render(ComboBox, {
+        props: { portalMenu: true },
+      });
+
+      await user.click(getInput());
+      const menu = screen.getAllByRole("listbox")[1];
+      expect(menu).toBeVisible();
+      expect(menu.closest("[data-floating-portal]")?.parentElement).toBe(
+        document.body,
+      );
+
+      await user.click(document.body);
+      expect(screen.getAllByRole("listbox")).toHaveLength(1);
+    });
   });
 
   it("should not trap focus when tabbing away from an open menu", async () => {
