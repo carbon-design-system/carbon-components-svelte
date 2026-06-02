@@ -141,8 +141,9 @@
     }
 
     let disabled = $tabs[index].disabled;
+    let attempts = 0;
 
-    while (disabled) {
+    while (disabled && attempts < $tabs.length) {
       index = index + direction;
 
       if (index < 0) {
@@ -152,7 +153,10 @@
       }
 
       disabled = $tabs[index].disabled;
+      attempts++;
     }
+
+    if (disabled) return;
 
     currentIndex = index;
 
