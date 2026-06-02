@@ -31,6 +31,7 @@
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import { moveIndex } from "../utils/moveIndex.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
 
   const dispatch = createEventDispatcher();
@@ -105,15 +106,7 @@
    * @type {(direction: number) => Promise<void>}
    */
   const change = async (direction) => {
-    let index = currentIndex + direction;
-
-    if (index < 0) {
-      index = switches.length - 1;
-    } else if (index >= switches.length) {
-      index = 0;
-    }
-
-    await changeTo(index);
+    await changeTo(moveIndex(currentIndex, direction, switches.length));
   };
 
   /**
@@ -137,15 +130,7 @@
    */
   const focus = async (direction) => {
     const base = focusedIndex >= 0 ? focusedIndex : currentIndex;
-    let index = base + direction;
-
-    if (index < 0) {
-      index = switches.length - 1;
-    } else if (index >= switches.length) {
-      index = 0;
-    }
-
-    await focusTo(index);
+    await focusTo(moveIndex(base, direction, switches.length));
   };
 
   setContext("carbon:ContentSwitcher", {
