@@ -382,6 +382,24 @@ describe("Dropdown", () => {
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
+  it("should stay open when window click has a non-Node target", () => {
+    render(Dropdown, {
+      props: {
+        items,
+        selectedId: "0",
+        open: true,
+      },
+    });
+
+    expect(screen.getByRole("listbox")).toBeVisible();
+
+    const event = new Event("click", { bubbles: true });
+    Object.defineProperty(event, "target", { value: null });
+    window.dispatchEvent(event);
+
+    expect(screen.getByRole("listbox")).toBeVisible();
+  });
+
   it("should handle direction prop", () => {
     render(Dropdown, {
       props: {
@@ -1778,6 +1796,27 @@ describe("Dropdown", () => {
           document.body,
         );
       });
+    });
+
+    it("should close portaled menu when clicking outside", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          portalMenu: true,
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(combobox);
+      const menu = screen.getByRole("listbox");
+      expect(menu).toBeInTheDocument();
+      expect(menu.closest("[data-floating-portal]")?.parentElement).toBe(
+        document.body,
+      );
+
+      await user.click(document.body);
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
     // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2699
