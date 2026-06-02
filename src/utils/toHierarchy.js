@@ -1,9 +1,8 @@
 // @ts-check
 /**
  * @typedef {Object} NodeLike
- * @property {string | number} id - Unique identifier for the node
- * @property {NodeLike[]} [nodes] - Optional array of child nodes
- * @property {Record<string, unknown>} [additionalProperties] - Any additional properties
+ * @property {string | number} id
+ * @property {NodeLike[]} [nodes]
  */
 
 /**
@@ -21,13 +20,11 @@ export function toHierarchy(flatArray, getParentId) {
   for (const item of flatArray) {
     const parentId = getParentId(item);
 
-    // Only create nodes array if we have children.
     const children = childrenOf.get(item.id);
     if (children) {
       item.nodes = children;
     }
 
-    // Check if parentId exists using Map instead of array lookup.
     const parentExists = parentId && itemsMap.has(parentId);
 
     if (parentId && parentExists) {

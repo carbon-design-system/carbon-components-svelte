@@ -1,13 +1,10 @@
 // @ts-check
 /**
- * Reorder a collection of id-bearing items to match the DOM order of the
- * elements matching `selector` within `root`.
+ * Reorder id-bearing items to match DOM order of `selector` within `root`.
  *
- * Slotted children register with their parent in mount order, which can
- * diverge from visual DOM order when children are conditionally rendered or
- * reordered. This re-sorts the collection to the DOM and reassigns a
- * contiguous `index` to each item. Items with no matching DOM element (e.g.
- * removed mid-update) are dropped.
+ * Slotted children register in mount order, which can diverge from visual DOM
+ * order when children are conditionally rendered or reordered. Re-sorts to DOM
+ * order, reassigns contiguous `index`, and drops items with no matching element.
  *
  * @template {{ id: string }} T
  * @param {Object} options
