@@ -168,6 +168,7 @@
   } from "../ListBox";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
   import { debounce } from "../utils/debounce.js";
+  import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,
@@ -333,32 +334,11 @@
   });
 
   function change(step) {
-    let candidateIndex = highlightedIndex + step;
-
-    if (items.length === 0) return;
-    if (candidateIndex < 0) {
-      candidateIndex = items.length - 1;
-    } else if (candidateIndex >= items.length) {
-      candidateIndex = 0;
-    }
-
-    let itemDisabled = items[candidateIndex].disabled;
-    let attempts = 0;
-
-    while (itemDisabled && attempts < items.length) {
-      candidateIndex = candidateIndex + step;
-
-      if (candidateIndex < 0) {
-        candidateIndex = items.length - 1;
-      } else if (candidateIndex >= items.length) {
-        candidateIndex = 0;
-      }
-
-      itemDisabled = items[candidateIndex].disabled;
-      attempts++;
-    }
-
-    if (!itemDisabled) highlightedIndex = candidateIndex;
+    highlightedIndex = nextEnabledIndex({
+      items,
+      index: highlightedIndex,
+      step,
+    });
   }
 
   function typeaheadSearch(character) {
