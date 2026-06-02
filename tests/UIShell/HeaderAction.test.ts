@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import type HeaderActionComponent from "carbon-components-svelte/UIShell/HeaderAction.svelte";
 import type { ComponentProps } from "svelte";
+import { user } from "../utils/user";
+import HeaderActionOutsideClick from "./HeaderAction.outsideClick.test.svelte";
 import HeaderActionSlot from "./HeaderAction.slot.test.svelte";
 
 describe("HeaderAction", () => {
@@ -20,6 +22,39 @@ describe("HeaderAction", () => {
 
     const customIcon = screen.getByTestId("custom-icon");
     expect(customIcon).toBeInTheDocument();
+  });
+
+  describe("outside click", () => {
+    const getActionButton = () =>
+      screen.getByRole("button", { name: "Switcher" });
+
+    it("closes when clicking outside", async () => {
+      render(HeaderActionOutsideClick);
+
+      await user.click(getActionButton());
+      expect(getActionButton()).toHaveClass("bx--header__action--active");
+
+      await user.click(document.body);
+      expect(getActionButton()).not.toHaveClass("bx--header__action--active");
+    });
+
+    it("stays open when clicking panel content", async () => {
+      render(HeaderActionOutsideClick);
+
+      await user.click(getActionButton());
+      await user.click(screen.getByTestId("panel-content"));
+      expect(screen.getByTestId("panel-content")).toBeInTheDocument();
+    });
+
+    it("respects preventCloseOnClickOutside", async () => {
+      render(HeaderActionOutsideClick, {
+        props: { preventCloseOnClickOutside: true },
+      });
+
+      await user.click(getActionButton());
+      await user.click(document.body);
+      expect(screen.getByTestId("panel-content")).toBeInTheDocument();
+    });
   });
 
   describe("Generics", () => {
