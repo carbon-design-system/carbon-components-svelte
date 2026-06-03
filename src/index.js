@@ -144,6 +144,7 @@ export { default as StructuredListInput } from "./StructuredList/StructuredListI
 export { default as StructuredListRow } from "./StructuredList/StructuredListRow.svelte";
 export { default as StructuredListSkeleton } from "./StructuredList/StructuredListSkeleton.svelte";
 export { breakpoint } from "./stores/breakpoint";
+export { colorScheme } from "./stores/colorScheme";
 export { containerQuery } from "./stores/containerQuery";
 export { mediaQuery } from "./stores/mediaQuery";
 export { prefersContrast } from "./stores/prefersContrast";
