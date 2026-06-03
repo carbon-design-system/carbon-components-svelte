@@ -1,9 +1,20 @@
 <script>
+  /**
+   * @template [Icon=any]
+   */
+
   /** Set the feedback text shown after clicking the button */
   export let feedback = "Copied!";
 
   /** Set the timeout duration (ms) to display feedback text */
   export let feedbackTimeout = 2000;
+
+  /**
+   * Specify an icon to render during the feedback window (e.g. after copying).
+   * When unset, the copy icon is always shown.
+   * @type {Icon}
+   */
+  export let feedbackIcon = /** @type {Icon} */ (undefined);
 
   /** Set the title and ARIA label for the copy button */
   export let iconDescription = "Copy to clipboard";
@@ -114,7 +125,11 @@
     copyFeedback.onAnimationEnd(event);
   }}
 >
-  <Copy class="bx--snippet__icon" />
+  {#if feedbackIcon && feedbackOpen}
+    <svelte:component this={feedbackIcon} class="bx--snippet__icon" />
+  {:else}
+    <Copy class="bx--snippet__icon" />
+  {/if}
   {#if !effectivePortalTooltip}
     <span
       aria-hidden="true"
