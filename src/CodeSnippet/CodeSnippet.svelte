@@ -1,5 +1,9 @@
 <script>
   /**
+   * @template [Icon=any]
+   */
+
+  /**
    * @event {null} expand
    * @event {null} collapse
    * @event {null} copy
@@ -84,6 +88,15 @@
 
   /** Set the timeout duration (ms) to display feedback text */
   export let feedbackTimeout = 2000;
+
+  /**
+   * Specify an icon to render on the copy button during the feedback window
+   * (e.g. after copying). When unset, the copy icon is always shown.
+   *
+   * NOTE: this prop does not apply to the `type="inline"` variant.
+   * @type {Icon}
+   */
+  export let feedbackIcon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify the show less text.
@@ -320,6 +333,7 @@
         {disabled}
         {feedback}
         {feedbackTimeout}
+        {feedbackIcon}
         iconDescription={copyButtonDescription}
         portalTooltip={effectivePortalTooltip}
         on:click
