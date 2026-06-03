@@ -64,10 +64,10 @@
   } from "svelte";
 
   const dispatch = createEventDispatcher();
-  const { focusedId, add, remove, update, change, first, last, items } =
+  const { focusedId, add, remove, update, change, first, last, itemsById } =
     getContext("carbon:OverflowMenu");
 
-  $: item = $items.find((_) => _.id === id);
+  $: item = $itemsById[id];
 
   add({ id, text, primaryFocus, disabled });
 

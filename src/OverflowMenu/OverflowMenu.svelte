@@ -84,11 +84,12 @@
     getContext,
     setContext,
   } from "svelte";
-  import { writable } from "svelte/store";
+  import { derived, writable } from "svelte/store";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { keyBy } from "../utils/keyBy.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
@@ -102,6 +103,10 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
    */
   const items = writable([]);
+  /**
+   * @type {import("svelte/store").Readable<Record<string, { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
+   */
+  const itemsById = derived(items, (_) => keyBy(_));
   const currentId = writable(undefined);
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
@@ -180,6 +185,7 @@
   setContext("carbon:OverflowMenu", {
     focusedId,
     items,
+    itemsById,
     add,
     remove,
     update,
