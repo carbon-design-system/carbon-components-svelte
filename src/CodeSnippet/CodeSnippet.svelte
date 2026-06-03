@@ -130,6 +130,7 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { createCopyFeedbackState } from "../utils/copyFeedback.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -141,16 +142,22 @@
   /** @type {null | HTMLButtonElement} */
   let inlineButtonRef = null;
 
+  const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
+
   /** @type {"fade-in" | "fade-out"} */
   let animation = undefined;
   let timeout = undefined;
   let feedbackOpen = false;
   let prevExpanded = expanded;
 
+  function syncCopyFeedback() {
+    animation = copyFeedback.animation;
+    feedbackOpen = copyFeedback.feedbackOpen;
+    timeout = copyFeedback.timeout;
+  }
+
   function dismissFeedback() {
-    feedbackOpen = false;
-    animation = undefined;
-    clearTimeout(timeout);
+    copyFeedback.dismiss();
   }
 
   function setShowMoreLess() {
@@ -189,8 +196,7 @@
 
   onMount(() => {
     return () => {
-      clearTimeout(timeout);
-      feedbackOpen = false;
+      copyFeedback.cleanup();
       disconnectModalObserver();
     };
   });
@@ -241,20 +247,16 @@
       {...$$restProps}
       on:click
       on:click={() => {
-        copy(code);
-        dispatch("copy");
-        if (animation === "fade-in") return;
-        animation = "fade-in";
-        feedbackOpen = true;
-        timeout = setTimeout(() => {
-          animation = "fade-out";
-        }, feedbackTimeout);
+        copyFeedback.onClick(
+          () => {
+            copy(code);
+            dispatch("copy");
+          },
+          feedbackTimeout,
+        );
       }}
       on:animationend={(event) => {
-        if (event.animationName === "hide-feedback") {
-          animation = undefined;
-          feedbackOpen = false;
-        }
+        copyFeedback.onAnimationEnd(event);
       }}
       on:mouseover
       on:mouseenter
