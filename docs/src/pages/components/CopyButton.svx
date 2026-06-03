@@ -1,5 +1,6 @@
 <script>
   import { CopyButton } from "carbon-components-svelte";
+  import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
 </script>
 
 Copy buttons let users copy text to their clipboard with a single click. Use them to provide quick access to code snippets, links, or other text content.
@@ -17,6 +18,12 @@ Create a copy button with the `text` prop to specify what to copy.
 Set `feedback` to customize the message shown after copying.
 
 <CopyButton text="Carbon svelte" feedback="Copied to clipboard" />
+
+## Custom feedback icon
+
+Set `feedbackIcon` to swap the copy icon for a different icon during the feedback window. The icon reverts to the default copy icon once the feedback dismisses.
+
+<CopyButton text="Carbon svelte" feedbackIcon={Checkmark} />
 
 ## Overriding copy functionality
 
