@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import CopyButton from "./CopyButton.test.svelte";
+import CopyButtonDoubleClick from "./CopyButtonDoubleClick.test.svelte";
 import CopyButtonInModal from "./CopyButtonInModal.test.svelte";
 
 describe("CopyButton", () => {
@@ -66,6 +67,19 @@ describe("CopyButton", () => {
     const button = getCopyButton("Basic");
     await user.click(button);
     expect(consoleLog).toHaveBeenCalledWith("Clipboard error");
+  });
+
+  it("should not copy again while feedback is active", async () => {
+    const copy = vi.fn();
+    render(CopyButtonDoubleClick, {
+      props: { copy },
+    });
+
+    const button = getCopyButton("Copy");
+    await user.dblClick(button);
+
+    expect(copy).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
   });
 
   describe("Portal tooltip", () => {

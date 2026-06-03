@@ -93,12 +93,13 @@
   {...$$restProps}
   on:click
   on:click={() => {
+    if (animation === "fade-in") return;
+
     if (text !== undefined) {
       copy(text);
       dispatch("copy");
     }
 
-    if (animation === "fade-in") return;
     animation = "fade-in";
     feedbackOpen = true;
     timeout = setTimeout(() => {
