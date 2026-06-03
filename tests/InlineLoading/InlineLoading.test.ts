@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import InlineLoading from "./InlineLoading.test.svelte";
+import InlineLoadingRerender from "./InlineLoadingRerender.test.svelte";
 
 describe("InlineLoading", () => {
   beforeEach(() => {
@@ -98,6 +99,18 @@ describe("InlineLoading", () => {
     ).toBeInTheDocument();
 
     vi.advanceTimersByTime(1500);
+    expect(consoleLog).toHaveBeenCalledWith("success");
+  });
+
+  it("dispatches success once when parent re-renders while finished", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { rerender } = render(InlineLoadingRerender, { props: { tick: 0 } });
+
+    rerender({ tick: 1 });
+    rerender({ tick: 2 });
+
+    vi.advanceTimersByTime(1500);
+    expect(consoleLog).toHaveBeenCalledTimes(1);
     expect(consoleLog).toHaveBeenCalledWith("success");
   });
 
