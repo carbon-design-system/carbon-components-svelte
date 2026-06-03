@@ -21,6 +21,7 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
+  import { moveIndex } from "../utils/moveIndex.js";
 
   const id = `ccs-${Math.random().toString(36)}`;
   const ctx = getContext("carbon:HeaderNavMenu");
@@ -77,14 +78,11 @@
       if (event.key === "ArrowDown") {
         event.preventDefault();
         // Move to next item, wrap to first
-        const nextIndex = (currentIndex + 1) % menuItems.length;
-        menuItems[nextIndex]?.focus();
+        menuItems[moveIndex(currentIndex, 1, menuItems.length)]?.focus();
       } else if (event.key === "ArrowUp") {
         event.preventDefault();
         // Move to previous item, wrap to last
-        const prevIndex =
-          (currentIndex - 1 + menuItems.length) % menuItems.length;
-        menuItems[prevIndex]?.focus();
+        menuItems[moveIndex(currentIndex, -1, menuItems.length)]?.focus();
       } else if (event.key === "Home") {
         event.preventDefault();
         // Focus first item
