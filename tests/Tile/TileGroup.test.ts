@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type TileGroupComponent from "carbon-components-svelte/Tile/TileGroup.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../utils/user";
+import TileGroupSlot from "./TileGroup.slot.test.svelte";
 import TileGroup from "./TileGroup.test.svelte";
 
 describe("TileGroup", () => {
@@ -25,6 +26,12 @@ describe("TileGroup", () => {
 
     expect(screen.getByText("Select an option")).toBeInTheDocument();
     expect(screen.getByText("Select an option")).toHaveClass("bx--label");
+  });
+
+  it("should render legendChildren slot", () => {
+    render(TileGroupSlot);
+
+    expect(screen.getByText("Custom legend content")).toBeInTheDocument();
   });
 
   it("should handle disabled state", () => {

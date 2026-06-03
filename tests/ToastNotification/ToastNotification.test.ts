@@ -3,6 +3,8 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
 import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
+import ToastNotificationCustomTest from "./ToastNotificationCustom.test.svelte";
+import ToastNotificationReusableTest from "./ToastNotificationReusable.test.svelte";
 import ToastNotificationSubtitleSlotTest from "./ToastNotificationSubtitleSlot.test.svelte";
 import ToastNotificationTitleSlotTest from "./ToastNotificationTitleSlot.test.svelte";
 
@@ -295,5 +297,30 @@ describe("ToastNotification", () => {
     expect(icon).toHaveAttribute("aria-hidden", "true");
     expect(icon).not.toHaveAttribute("role", "img");
     expect(icon?.querySelector("title")).toBeNull();
+  });
+
+  it("should render custom title, subtitle, and caption slots", () => {
+    render(ToastNotificationCustomTest);
+
+    expect(screen.getByText("Custom Title:")).toBeInTheDocument();
+    expect(screen.getByText("Custom subtitle content.")).toBeInTheDocument();
+    expect(screen.getByText("Custom caption content.")).toBeInTheDocument();
+  });
+
+  it("should support bind:open", async () => {
+    const { rerender } = render(ToastNotificationReusableTest, {
+      props: { open: true },
+    });
+
+    expect(
+      document.querySelector(".bx--toast-notification"),
+    ).toBeInTheDocument();
+
+    rerender({ open: false });
+    await tick();
+
+    expect(
+      document.querySelector(".bx--toast-notification"),
+    ).not.toBeInTheDocument();
   });
 });

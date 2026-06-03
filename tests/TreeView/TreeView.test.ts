@@ -16,6 +16,7 @@ import TreeViewHref from "./TreeView.href.test.svelte";
 import TreeViewMultiselect from "./TreeView.multiselect.test.svelte";
 import TreeViewProps from "./TreeView.props.test.svelte";
 import TreeViewSlot from "./TreeView.slot.test.svelte";
+import TreeViewGenerics from "./TreeViewGenerics.test.svelte";
 import TreeView from "./TreeView.test.svelte";
 
 function treeItemById(id: string | number): HTMLElement {
@@ -1167,6 +1168,12 @@ describe("TreeView Generics", () => {
     expectTypeOf<NonNullable<BaseProps["nodes"]>>().toEqualTypeOf<
       readonly TreeNode[]
     >();
+  });
+
+  it("renders discriminated union node fixture", () => {
+    const { container } = render(TreeViewGenerics);
+
+    expect(container.querySelector(".bx--tree")).toBeInTheDocument();
   });
 
   describe("Id generic parameter", () => {

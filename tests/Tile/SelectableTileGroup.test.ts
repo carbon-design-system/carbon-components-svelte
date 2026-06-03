@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type SelectableTileGroupComponent from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 import { type ComponentEvents, type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
+import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
 import SelectableTileGroupReactive from "./SelectableTileGroupReactive.test.svelte";
 
@@ -26,6 +27,12 @@ describe("SelectableTileGroup", () => {
 
     expect(screen.getByText("Select options")).toBeInTheDocument();
     expect(screen.getByText("Select options")).toHaveClass("bx--label");
+  });
+
+  it("should render legendChildren slot", () => {
+    render(SelectableTileGroupSlot);
+
+    expect(screen.getByText("Custom legend content")).toBeInTheDocument();
   });
 
   it("should hide legend visually", () => {
