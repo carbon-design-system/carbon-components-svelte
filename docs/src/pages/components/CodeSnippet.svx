@@ -1,5 +1,6 @@
 <script>
   import { CodeSnippet } from "carbon-components-svelte";
+  import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
 </script>
 
 Code snippets display and copy code examples. They support single-line, multi-line, and inline formats with customizable copy and expand functionality.
@@ -57,6 +58,12 @@ The multi-line code snippet dispatches "expand" and "collapse" events.
 Set `feedback` to customize the copy button feedback text.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetFeedback" />
+
+## Custom feedback icon
+
+Set `feedbackIcon` to swap the copy button icon for a different icon during the feedback window. This applies to the `"single"` and `"multi"` types; it has no effect on the `"inline"` variant.
+
+<CodeSnippet code="npm i carbon-components-svelte" feedbackIcon={Checkmark} />
 
 ## Hidden copy button
 
