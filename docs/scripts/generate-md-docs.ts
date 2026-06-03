@@ -3,7 +3,12 @@ import path from "node:path";
 import { format as prettierFormat } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
 import { parse } from "svelte/compiler";
-import { BASE_URL, COMPONENTS_PATH, RAW_COMPONENTS_OUT_DIR } from "./constants";
+import {
+  BASE_URL,
+  COMPONENT_MD_SIZES_PATH,
+  COMPONENTS_PATH,
+  RAW_COMPONENTS_OUT_DIR,
+} from "./constants";
 import { getComponentNames } from "./utils";
 
 type ComponentApiProp = {
@@ -772,6 +777,8 @@ for (const componentName of getComponentNames()) {
   generatedMdByComponent.push({ componentName, md: generatedMd });
 }
 
+const componentMdSizes: Record<string, number> = {};
+
 await Promise.all(
   generatedMdByComponent.map(async ({ componentName, md }) => {
     const svelteFormatted = await formatSvelteFences(md);
@@ -782,7 +789,14 @@ await Promise.all(
       docOut,
       "utf8",
     );
+    componentMdSizes[componentName] = Buffer.byteLength(docOut, "utf8");
   }),
+);
+
+fs.writeFileSync(
+  COMPONENT_MD_SIZES_PATH,
+  `${JSON.stringify(componentMdSizes, null, 2)}\n`,
+  "utf8",
 );
 
 // Generate llms.txt file
