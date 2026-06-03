@@ -9,6 +9,7 @@
    * @property {string} href
    * @property {string} text
    * @property {string} [description]
+   * @event {MouseEvent} click - Dispatched when the search button is clicked. Cancelable: call `preventDefault()` to skip activating the inline search bar (e.g. open a command palette instead).
    * @event {null} active
    * @event {null} inactive
    * @event {null} clear
@@ -120,8 +121,11 @@
       class:bx--header-search-button={true}
       class:bx--header__action={true}
       class:bx--header-search-button--disabled={active}
-      on:click={() => {
-        active = true;
+      on:click={(event) => {
+        const shouldContinue = dispatch("click", event, { cancelable: true });
+        if (shouldContinue) {
+          active = true;
+        }
       }}
     >
       <IconSearch size={20} title="Search" />

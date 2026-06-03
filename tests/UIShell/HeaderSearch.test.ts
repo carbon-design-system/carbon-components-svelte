@@ -178,6 +178,23 @@ describe("HeaderSearch", () => {
       expect(screen.getByTestId("active-event")).toHaveTextContent("true");
     });
 
+    it("should prevent activation when click event is cancelled", async () => {
+      const clickHandler = vi.fn((e: MouseEvent) => {
+        e.preventDefault();
+      });
+      render(HeaderSearchTest, { props: { onclick: clickHandler } });
+
+      const searchButton = screen.getByRole("button", { name: "Search" });
+      await user.click(searchButton);
+
+      expect(clickHandler).toHaveBeenCalledTimes(1);
+      expect(searchButton).toHaveAttribute("aria-expanded", "false");
+      expect(screen.getByRole("search")).not.toHaveClass(
+        "bx--header__search--active",
+      );
+      expect(screen.getByTestId("active-event")).toHaveTextContent("false");
+    });
+
     it("should dispatch inactive event when deactivated", async () => {
       render(HeaderSearchTest, { props: { active: true } });
 
