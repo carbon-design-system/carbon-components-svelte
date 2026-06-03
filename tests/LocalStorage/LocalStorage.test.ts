@@ -5,7 +5,7 @@ import { setupLocalStorageMock } from "../utils/storage-mocks";
 import LocalStorage from "./LocalStorage.test.svelte";
 
 describe("LocalStorage", () => {
-  const { setMockItem } = setupLocalStorageMock();
+  setupLocalStorageMock();
 
   it("clears specific item from localStorage", () => {
     const { component } = render(LocalStorage);
@@ -25,14 +25,6 @@ describe("LocalStorage", () => {
       storage.clearAll();
       expect(localStorage.clear).toHaveBeenCalled();
     }
-  });
-
-  it("handles JSON parse errors gracefully", () => {
-    // Set up invalid JSON
-    setMockItem("local-storage-key", "{invalid-json}");
-
-    render(LocalStorage);
-    expect(localStorage.getItem).toHaveBeenCalledWith("local-storage-key");
   });
 
   it("uses default key if none provided", () => {

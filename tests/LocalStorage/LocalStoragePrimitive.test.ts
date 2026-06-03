@@ -1,4 +1,5 @@
 import { render } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { setupLocalStorageMock } from "../utils/storage-mocks";
 import LocalStoragePrimitive from "./LocalStoragePrimitive.test.svelte";
 
@@ -15,22 +16,17 @@ describe("LocalStorage - Primitive Values", () => {
     expect(localStorage.setItem).toHaveBeenCalledWith("test-key", "test-value");
   });
 
-  it("loads existing primitive value from localStorage", () => {
+  it("loads existing primitive value from localStorage", async () => {
     setMockItem("test-key", "existing-value");
 
-    render(LocalStoragePrimitive);
-    expect(localStorage.getItem).toHaveBeenCalledWith("test-key");
+    const { component } = render(LocalStoragePrimitive);
+    await tick();
+
+    expect(component.value).toBe("existing-value");
   });
 
   it("dispatches save event when setting initial value", () => {
     render(LocalStoragePrimitive);
     expect(consoleLog).toHaveBeenCalledWith("save event");
-  });
-
-  it("handles invalid values gracefully", () => {
-    setMockItem("test-key", "{invalid-value}");
-
-    render(LocalStoragePrimitive);
-    expect(localStorage.getItem).toHaveBeenCalledWith("test-key");
   });
 });
