@@ -166,6 +166,13 @@
   import Subtract from "../icons/Subtract.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    clamp,
+    getDefaultValue,
+    parse,
+    parseLocaleValue,
+    roundToStep,
+  } from "../utils/numericFormat.js";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
@@ -173,11 +180,6 @@
   };
 
   const dispatch = createEventDispatcher();
-
-  /** Regex to match period/dot characters globally */
-  const RE_DOT = /\./g;
-  /** Regex to match comma and Arabic decimal separator (٫) globally */
-  const RE_COMMA = /[,\u066B]/g;
 
   function updateValue(isIncrementing) {
     // When the input is empty (null) or zero and stepStartValue is set,
@@ -195,24 +197,13 @@
     }
 
     if (useTextMode) {
-      const currentValue = value ?? getDefaultValue();
-      let newValue;
-
-      if (isIncrementing) {
-        newValue = currentValue + step;
-        if (max !== undefined && newValue > max) {
-          newValue = max;
-        }
-      } else {
-        newValue = currentValue - step;
-        if (min !== undefined && newValue < min) {
-          newValue = min;
-        }
-      }
-
-      // Round to avoid floating point precision issues.
-      const decimalPlaces = step.toString().split(".")[1]?.length || 0;
-      newValue = Number(newValue.toFixed(decimalPlaces));
+      const currentValue = value ?? getDefaultValue(stepStartValue, min);
+      const newValue = roundToStep(
+        isIncrementing
+          ? clamp(currentValue + step, undefined, max)
+          : clamp(currentValue - step, min, undefined),
+        step,
+      );
 
       value = newValue;
       inputValue = formatter ? formatter.format(newValue) : newValue.toString();
@@ -222,7 +213,7 @@
     } else {
       // When allowEmpty is false and value is null, set to default value first
       if (!allowEmpty && value === null) {
-        const defaultValue = getDefaultValue();
+        const defaultValue = getDefaultValue(stepStartValue, min);
         if (ref) {
           ref.value = defaultValue.toString();
         }
@@ -293,7 +284,7 @@
     } else if (value != null) {
       const valueStr = formatter ? formatter.format(value) : value.toString();
       const parsedInput = locale
-        ? parseLocaleValue(inputValue)
+        ? parseLocaleValue(inputValue, groupSeparator, decimalSeparator)
         : parse(inputValue);
       // Sync inputValue to value when:
       // - The numeric values differ AND input is valid (preserves "1.0" formatting)
@@ -307,70 +298,12 @@
     }
   }
 
-  /**
-   * Simple normalization: treat comma/٫ as decimal separator.
-   * Used during typing to avoid mid-keystroke value jumps.
-   */
-  function normalize(raw) {
-    return raw.replace(RE_COMMA, ".");
-  }
-
-  /**
-   * Locale-aware normalization for completed input (on blur).
-   * When both period and comma/٫ are present, the last separator
-   * is the decimal mark; earlier ones are thousands separators.
-   * e.g., "1.000,5" → 1000.5, "1,000.5" → 1000.5
-   */
-  function normalizeLocale(raw) {
-    const lastComma = Math.max(raw.lastIndexOf(","), raw.lastIndexOf("\u066B"));
-    const lastDot = raw.lastIndexOf(".");
-
-    if (lastComma !== -1 && lastDot !== -1) {
-      if (lastComma > lastDot) {
-        return raw.replace(RE_DOT, "").replace(RE_COMMA, ".");
-      }
-      return raw.replace(RE_COMMA, "");
-    }
-
-    return normalize(raw);
-  }
-
-  function parse(raw, useLocaleNormalize = false) {
-    if (raw === "" || raw === "-") return null;
-    const num = Number(
-      useLocaleNormalize ? normalizeLocale(raw) : normalize(raw),
-    );
-    return Number.isNaN(num) ? null : num;
-  }
-
-  /**
-   * Parse a locale-formatted number string back to a number.
-   * Uses Intl.NumberFormat to detect the locale's grouping/decimal separators.
-   */
-  function parseLocaleValue(raw) {
-    if (raw === "" || raw === "-") return null;
-    let normalized = raw;
-    if (groupSeparator) {
-      normalized = normalized.split(groupSeparator).join("");
-    }
-    if (decimalSeparator !== ".") {
-      normalized = normalized.replace(decimalSeparator, ".");
-    }
-    const num = Number(normalized);
-    return Number.isNaN(num) ? null : num;
-  }
-
-  function getDefaultValue() {
-    if (stepStartValue !== undefined) return stepStartValue;
-    return min === undefined ? 0 : min;
-  }
-
   function onInput(event) {
     if (useTextMode) {
       userInputActive = true;
       inputValue = event.target.value;
       const parsed = locale
-        ? parseLocaleValue(event.target.value)
+        ? parseLocaleValue(event.target.value, groupSeparator, decimalSeparator)
         : parse(event.target.value);
       // Preserve last valid value when input is invalid (e.g., "1.5." with two decimals).
       // This provides better UX by letting users see and correct typos without losing data.
@@ -391,13 +324,13 @@
   function onChange(event) {
     userInputActive = false;
     let parsedValue = locale
-      ? parseLocaleValue(event.target.value)
+      ? parseLocaleValue(event.target.value, groupSeparator, decimalSeparator)
       : parse(event.target.value, useTextMode);
 
     // If allowEmpty is false and value would be null, use default value
     // This prevents the input from staying empty when allowEmpty is false
     if (!allowEmpty && parsedValue === null && event.target.value === "") {
-      parsedValue = getDefaultValue();
+      parsedValue = getDefaultValue(stepStartValue, min);
       // Update the input to show the default value
       if (useTextMode) {
         inputValue = formatter
