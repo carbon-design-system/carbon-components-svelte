@@ -55,4 +55,18 @@ test.describe("CodeSnippet", () => {
     const expandedHeight = (await codeBlock.boundingBox())?.height ?? 0;
     expect(expandedHeight).toBeGreaterThanOrEqual(collapsedHeight);
   });
+
+  test("copy button swaps to feedback icon during feedback window and reverts", async ({
+    page,
+  }) => {
+    const copyButton = page.getByRole("button", {
+      name: "Copy with feedback icon",
+    });
+    const feedbackIcon = copyButton.getByTestId("feedback-icon");
+
+    await expect(feedbackIcon).toBeHidden();
+    await copyButton.click();
+    await expect(feedbackIcon).toBeVisible();
+    await expect(feedbackIcon).toBeHidden();
+  });
 });
