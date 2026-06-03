@@ -50,16 +50,16 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
+  import { createTimeoutDismiss } from "../utils/timeoutDismiss.js";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
 
   const dispatch = createEventDispatcher();
 
-  let timeoutId = undefined;
+  const dismiss = createTimeoutDismiss();
 
   function close(closeFromTimeout) {
-    // Clear the timer if the close button was clicked.
-    clearTimeout(timeoutId);
+    dismiss.clear();
 
     const shouldContinue = dispatch(
       "close",
@@ -71,25 +71,9 @@
     }
   }
 
-  onMount(() => {
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  });
+  $: dismiss.sync(open, timeout, () => close(true));
 
-  $: if (typeof window !== "undefined") {
-    /**
-     * Clear the timer if {@link timeout} or {@link open} changes.
-     * If set to `0`, no new timeout is started.
-     * Else, a new timeout is started if {@link open} is not set to `false`.
-     */
-    clearTimeout(timeoutId);
-
-    /** Only start the timer if {@link open} has not been set to `false`. */
-    if (open && timeout) {
-      timeoutId = setTimeout(() => close(true), timeout);
-    }
-  }
+  onMount(() => () => dismiss.clear());
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
