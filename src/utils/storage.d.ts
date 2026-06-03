@@ -11,7 +11,11 @@ interface SafeStorage {
   /** null when the key is missing or storage cannot be read. */
   getItem(key: string): string | null;
   /** false when the write throws (quota, blocked storage, etc.). */
-  setItem(key: string, value: string): boolean;
+  setItem(
+    key: string,
+    value: string,
+    onError?: (error: unknown) => void,
+  ): boolean;
   /** Swallows errors when storage is unavailable. */
   removeItem(key: string): void;
   /** Swallows errors when storage is unavailable. */
