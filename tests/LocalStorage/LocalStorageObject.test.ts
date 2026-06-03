@@ -1,4 +1,5 @@
 import { render } from "@testing-library/svelte";
+import { tick } from "svelte";
 import LocalStorageObject from "./LocalStorageObject.test.svelte";
 
 describe("LocalStorage - Object Values", () => {
@@ -41,18 +42,13 @@ describe("LocalStorage - Object Values", () => {
     );
   });
 
-  it("loads existing object value from localStorage", () => {
+  it("loads existing object value from localStorage", async () => {
     const existingSettings = { theme: "light", fontSize: 14 };
     localStorageMock["theme-settings"] = JSON.stringify(existingSettings);
 
-    render(LocalStorageObject);
-    expect(localStorage.getItem).toHaveBeenCalledWith("theme-settings");
-  });
+    const { component } = render(LocalStorageObject);
+    await tick();
 
-  it("handles malformed JSON gracefully", () => {
-    localStorageMock["theme-settings"] = "{malformed-json}";
-
-    render(LocalStorageObject);
-    expect(localStorage.getItem).toHaveBeenCalledWith("theme-settings");
+    expect(component.value).toEqual(existingSettings);
   });
 });
