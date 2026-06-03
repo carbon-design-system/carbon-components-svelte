@@ -41,14 +41,17 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
+  import { createTimeoutDismiss } from "../utils/timeoutDismiss.js";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
 
   const dispatch = createEventDispatcher();
 
-  let timeoutId = undefined;
+  const dismiss = createTimeoutDismiss();
 
   function close(closeFromTimeout) {
+    dismiss.clear();
+
     const shouldContinue = dispatch(
       "close",
       { timeout: closeFromTimeout === true },
@@ -59,18 +62,9 @@
     }
   }
 
-  $: if (open && timeout) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => close(true), timeout);
-  } else {
-    clearTimeout(timeoutId);
-  }
+  $: dismiss.sync(open, timeout, () => close(true));
 
-  onMount(() => {
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  });
+  onMount(() => () => dismiss.clear());
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
