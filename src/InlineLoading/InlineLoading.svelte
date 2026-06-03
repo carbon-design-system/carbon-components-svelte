@@ -38,6 +38,7 @@
 
   afterUpdate(() => {
     if (status === "finished") {
+      clearTimeout(timeout);
       timeout = setTimeout(() => {
         dispatch("success");
       }, successDelay);
