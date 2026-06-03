@@ -5,6 +5,7 @@
    * @event update - Fires when the stored value changes, either from a bound value update or when sessionStorage is modified from another tab/window.
    * @property {T} prevValue
    * @property {T} value
+   * @event {{ error: unknown }} error - Fires when a write to sessionStorage fails (e.g. quota exceeded or access denied).
    */
 
   /**
@@ -67,7 +68,9 @@
 
   /** @type {() => void} */
   function setItem() {
-    storage.setItem(key, serializeStoredValue(value));
+    storage.setItem(key, serializeStoredValue(value), (error) => {
+      dispatch("error", { error });
+    });
   }
 
   onMount(() => {
