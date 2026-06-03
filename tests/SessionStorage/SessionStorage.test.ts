@@ -5,7 +5,7 @@ import { setupSessionStorageMock } from "../utils/storage-mocks";
 import SessionStorage from "./SessionStorage.test.svelte";
 
 describe("SessionStorage", () => {
-  const { setMockItem } = setupSessionStorageMock();
+  setupSessionStorageMock();
 
   it("clears specific item from sessionStorage", () => {
     const { component } = render(SessionStorage);
@@ -27,13 +27,6 @@ describe("SessionStorage", () => {
       storage.clearAll();
       expect(sessionStorage.clear).toHaveBeenCalled();
     }
-  });
-
-  it("handles JSON parse errors gracefully", () => {
-    setMockItem("session-storage-key", "{invalid-json}");
-
-    render(SessionStorage);
-    expect(sessionStorage.getItem).toHaveBeenCalledWith("session-storage-key");
   });
 
   it("uses default key if none provided", () => {

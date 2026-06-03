@@ -1,13 +1,15 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { SessionStorage } from "carbon-components-svelte";
 
-  const primitiveValue = "test-value";
+  export let value = "test-value";
 </script>
 
 <div data-testid="primitive-storage">
   <SessionStorage
     key="test-key"
-    value={primitiveValue}
+    bind:value
     on:save={() => {
       console.log("save event");
     }}
