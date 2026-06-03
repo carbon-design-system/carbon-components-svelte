@@ -38,6 +38,7 @@
   import Copy from "../icons/Copy.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { createCopyFeedbackState } from "../utils/copyFeedback.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
@@ -48,15 +49,21 @@
   /** @type {null | HTMLButtonElement} */
   let buttonRef = null;
 
+  const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
+
   /** @type {"fade-in" | "fade-out"} */
   let animation = undefined;
   let timeout = undefined;
   let feedbackOpen = false;
 
+  function syncCopyFeedback() {
+    animation = copyFeedback.animation;
+    feedbackOpen = copyFeedback.feedbackOpen;
+    timeout = copyFeedback.timeout;
+  }
+
   function dismissFeedback() {
-    feedbackOpen = false;
-    animation = undefined;
-    clearTimeout(timeout);
+    copyFeedback.dismiss();
   }
 
   let disconnectModalObserver = () => {};
@@ -71,8 +78,7 @@
 
   onMount(() => {
     return () => {
-      clearTimeout(timeout);
-      feedbackOpen = false;
+      copyFeedback.cleanup();
       disconnectModalObserver();
     };
   });
@@ -93,25 +99,19 @@
   {...$$restProps}
   on:click
   on:click={() => {
-    if (animation === "fade-in") return;
-
-    if (text !== undefined) {
-      copy(text);
-      dispatch("copy");
-    }
-
-    animation = "fade-in";
-    feedbackOpen = true;
-    timeout = setTimeout(() => {
-      animation = "fade-out";
-    }, feedbackTimeout);
+    copyFeedback.onClick(
+      () => {
+        if (text !== undefined) {
+          copy(text);
+          dispatch("copy");
+        }
+      },
+      feedbackTimeout,
+    );
   }}
   on:animationend
   on:animationend={(event) => {
-    if (event.animationName === "hide-feedback") {
-      animation = undefined;
-      feedbackOpen = false;
-    }
+    copyFeedback.onAnimationEnd(event);
   }}
 >
   <Copy class="bx--snippet__icon" />
