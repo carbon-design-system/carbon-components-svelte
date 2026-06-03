@@ -25,6 +25,7 @@
   import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
   import { onMount } from "svelte";
   import COMPONENT_API from "../COMPONENT_API.json";
+  import COMPONENT_MD_SIZES from "../COMPONENT_MD_SIZES.json";
   import ComponentApi from "../components/ComponentApi.svelte";
   import { theme } from "../store";
 
@@ -42,6 +43,27 @@
 
   function isCarbonTheme(value: string | null): value is CarbonTheme {
     return value !== null && URL_THEMES.includes(value as CarbonTheme);
+  }
+
+  /** 1 token ≈ 4 characters; 1 kB (1,000 bytes) ≈ 250 tokens. */
+  const BYTES_PER_TOKEN = 4;
+
+  function formatFileSize(bytes: number): string {
+    if (bytes < 1000) return `${bytes} B`;
+    if (bytes < 1_000_000) return `${Math.round(bytes / 1000)} kB`;
+    return `${(bytes / 1_000_000).toFixed(1)} MB`;
+  }
+
+  function formatTokenEstimate(bytes: number): string {
+    const tokens = bytes / BYTES_PER_TOKEN;
+    if (tokens < 1000) return `~${Math.round(tokens)} tokens`;
+    const k = tokens / 1000;
+    const rounded = k >= 10 ? Math.round(k) : Math.round(k * 10) / 10;
+    return `~${rounded}k tokens`;
+  }
+
+  function formatMarkdownMetadata(bytes: number): string {
+    return `${formatFileSize(bytes)} (${formatTokenEstimate(bytes)})`;
   }
 
   const REPO_URL = __PKG_REPO;
@@ -93,9 +115,14 @@
 
   $: sourceCode = `${REPO_URL}/tree/master/${formatSourceURL(multiple)}`;
   $: markdownUrl = `/components/${component}.md`;
+  $: markdownMetadata = COMPONENT_MD_SIZES[component]
+    ? formatMarkdownMetadata(COMPONENT_MD_SIZES[component])
+    : "";
 
   let copying = false;
   let copied = false;
+
+  $: copyIconDescription = copied ? "Copied!" : "Copy page";
 
   let copyTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -152,15 +179,18 @@
               theme.set(detail.selectedId);
             }}
           />
-          <Stack orientation="horizontal">
+          <Stack orientation="horizontal" align="center" gap={3}>
+            {#if markdownMetadata}
+              <span class="markdown-metadata">{markdownMetadata}</span>
+            {/if}
             <Button
               kind="ghost"
               size="field"
               icon={Copy}
+              iconDescription={copyIconDescription}
+              tooltipPosition="bottom"
               on:click={copyMarkdown}
-            >
-              {copied ? "Copied!" : "Copy page"}
-            </Button>
+            />
             <OverflowMenu flipped icon={OverflowMenuVertical}>
               <OverflowMenuItem
                 text="Source code"
@@ -237,6 +267,16 @@
     justify-content: space-between;
     margin-bottom: var(--cds-layout-02);
     border-bottom: 1px solid var(--cds-ui-03);
+  }
+
+  .markdown-metadata {
+    color: var(--cds-text-02);
+    font-size: var(--cds-helper-text-01-font-size);
+    font-weight: var(--cds-helper-text-01-font-weight);
+    letter-spacing: var(--cds-helper-text-01-letter-spacing);
+    line-height: var(--cds-helper-text-01-line-height);
+    user-select: none;
+    white-space: nowrap;
   }
 
   :global(.toc h5) {

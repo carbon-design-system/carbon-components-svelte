@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import routify from "@roxi/routify/vite-plugin";
@@ -8,6 +9,11 @@ import pkg from "../package.json" with { type: "json" };
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const carbonRoot = path.resolve(__dirname, "..");
 const outDir = path.resolve(__dirname, "dist");
+const componentMdSizesPath = path.resolve(
+  __dirname,
+  "src/COMPONENT_MD_SIZES.json",
+);
+const componentMdSizesId = "\0component-md-sizes";
 
 export default defineConfig({
   resolve: {
@@ -16,6 +22,23 @@ export default defineConfig({
     },
   },
   plugins: [
+    {
+      name: "component-md-sizes",
+      resolveId(source) {
+        if (source.endsWith("COMPONENT_MD_SIZES.json")) {
+          return componentMdSizesId;
+        }
+      },
+      load(id) {
+        if (id !== componentMdSizesId) return;
+
+        const json = fs.existsSync(componentMdSizesPath)
+          ? fs.readFileSync(componentMdSizesPath, "utf8")
+          : "{}";
+
+        return `export default ${JSON.stringify(JSON.parse(json))}`;
+      },
+    },
     routify({
       routesDir: { default: "src/pages" },
       extensions: [".svelte", ".svx"],
