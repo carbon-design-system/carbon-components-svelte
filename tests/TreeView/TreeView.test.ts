@@ -16,8 +16,8 @@ import TreeViewHref from "./TreeView.href.test.svelte";
 import TreeViewMultiselect from "./TreeView.multiselect.test.svelte";
 import TreeViewProps from "./TreeView.props.test.svelte";
 import TreeViewSlot from "./TreeView.slot.test.svelte";
-import TreeViewGenerics from "./TreeViewGenerics.test.svelte";
 import TreeView from "./TreeView.test.svelte";
+import TreeViewGenerics from "./TreeViewGenerics.test.svelte";
 
 function treeItemById(id: string | number): HTMLElement {
   const el = document.getElementById(String(id));
@@ -1170,10 +1170,75 @@ describe("TreeView Generics", () => {
     >();
   });
 
-  it("renders discriminated union node fixture", () => {
-    const { container } = render(TreeViewGenerics);
+  describe("discriminated union fixture", () => {
+    it("renders categories with custom label slot content", () => {
+      render(TreeViewGenerics);
 
-    expect(container.querySelector(".bx--tree")).toBeInTheDocument();
+      expect(screen.getByText("Products")).toHaveClass("bx--label");
+      expect(screen.getByRole("tree")).toHaveClass("bx--tree");
+
+      const electronics = treeItemById("electronics");
+      const furniture = treeItemById("furniture");
+
+      expect(electronics).toHaveClass("bx--tree-parent-node");
+      expect(treeitemPrimaryLabel(electronics)).toContain("Electronics");
+      expect(furniture).toHaveClass("bx--tree-parent-node");
+      expect(treeitemPrimaryLabel(furniture)).toContain("Furniture");
+    });
+
+    it("renders leaf price in the slot after expanding a category", async () => {
+      render(TreeViewGenerics);
+
+      const electronics = treeItemById("electronics");
+      const toggle = electronics.querySelector(".bx--tree-parent-node__toggle");
+      expect.assert(toggle instanceof HTMLElement);
+
+      await user.click(toggle);
+      expect(electronics).toHaveAttribute("aria-expanded", "true");
+
+      const laptop = treeItemById("laptop");
+      const phone = treeItemById("phone");
+
+      expect(laptop).toHaveTextContent("Laptop");
+      expect(laptop).toHaveTextContent("- $999");
+      expect(phone).toHaveTextContent("Phone");
+      expect(phone).toHaveTextContent("- $599");
+    });
+
+    it("dispatches select detail with leaf price for product nodes", async () => {
+      const onselect = vi.fn();
+      render(TreeViewGenerics, { props: { onselect } });
+
+      await user.click(treeItemById("electronics"));
+      await user.click(treeItemById("laptop"));
+
+      expect(onselect).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          id: "laptop",
+          text: "Laptop",
+          price: 999,
+          category: "Electronics",
+          leaf: true,
+        }),
+      );
+    });
+
+    it("dispatches select detail without price for category nodes", async () => {
+      const onselect = vi.fn();
+      render(TreeViewGenerics, { props: { onselect } });
+
+      await user.click(treeItemById("furniture"));
+
+      expect(onselect).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          id: "furniture",
+          text: "Furniture",
+          category: "Furniture",
+          leaf: false,
+        }),
+      );
+      expect(onselect.mock.calls.at(-1)?.[0]).not.toHaveProperty("price");
+    });
   });
 
   describe("Id generic parameter", () => {
