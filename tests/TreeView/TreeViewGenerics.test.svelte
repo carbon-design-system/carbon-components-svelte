@@ -39,10 +39,18 @@
     },
   ] as const satisfies ProductNode[];
 
+  type SelectDetail = ProductNode & {
+    expanded: boolean;
+    leaf: boolean;
+    selected: boolean;
+  };
+
   // Use a type guard to check if the node is a product leaf.
   function isProductLeaf(node: ProductNode): node is ProductLeafNode {
     return "price" in node;
   }
+
+  export let onselect: ((detail: SelectDetail) => void) | undefined = undefined;
 </script>
 
 <TreeView
@@ -50,11 +58,11 @@
   labelText="Products"
   on:select={(e) => {
     const node = e.detail;
-    console.log("selected:", node);
+    onselect?.(node);
     if (isProductLeaf(node)) {
-      console.log("Price:", node.price);
+      void node.price;
     }
-    console.log("Category:", node.category);
+    void node.category;
   }}
   let:node
 >
