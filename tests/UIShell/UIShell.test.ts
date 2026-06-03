@@ -8,6 +8,8 @@ import type SideNavMenuComponent from "carbon-components-svelte/UIShell/SideNavM
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import HeaderSlot from "./Header.slot.test.svelte";
+import HeaderSwitcher from "./HeaderSwitcher.test.svelte";
+import HeaderUtilities from "./HeaderUtilities.test.svelte";
 import UiShell from "./UIShell.test.svelte";
 
 describe("UIShell", () => {
@@ -322,6 +324,27 @@ describe("UIShell", () => {
       const menubar = screen.getByRole("menubar");
       expect(menubar).not.toHaveAttribute("aria-label");
       expect(menubar).not.toHaveAttribute("aria-labelledby");
+    });
+  });
+
+  describe("Header panels", () => {
+    it("renders HeaderSwitcher fixture", () => {
+      const { container } = render(HeaderSwitcher);
+
+      expect(screen.getByRole("banner")).toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--header__global"),
+      ).toBeInTheDocument();
+    });
+
+    it("renders HeaderUtilities fixture", () => {
+      const { container } = render(HeaderUtilities);
+
+      expect(screen.getByRole("banner")).toBeInTheDocument();
+      expect(screen.getByText("Settings")).toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--header__global"),
+      ).toBeInTheDocument();
     });
   });
 

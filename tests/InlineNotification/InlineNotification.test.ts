@@ -2,6 +2,9 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import InlineNotificationTest from "./InlineNotification.test.svelte";
+import InlineNotificationActionHrefTest from "./InlineNotificationActionHref.test.svelte";
+import InlineNotificationCustomTest from "./InlineNotificationCustom.test.svelte";
+import InlineNotificationReusableTest from "./InlineNotificationReusable.test.svelte";
 import InlineNotificationSubtitleSlotTest from "./InlineNotificationSubtitleSlot.test.svelte";
 import InlineNotificationTitleSlotTest from "./InlineNotificationTitleSlot.test.svelte";
 
@@ -247,5 +250,40 @@ describe("InlineNotification", () => {
     expect(
       document.querySelector(".bx--inline-notification"),
     ).toBeInTheDocument();
+  });
+
+  it("should render custom title, subtitle, and action slots", () => {
+    render(InlineNotificationCustomTest);
+
+    expect(screen.getByText("Custom Title:")).toBeInTheDocument();
+    expect(screen.getByText("Custom subtitle content.")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Learn more" }),
+    ).toBeInTheDocument();
+  });
+
+  it("should render action button with href", () => {
+    render(InlineNotificationActionHrefTest);
+
+    const link = screen.getByRole("link", { name: "View release notes" });
+    expect(link).toHaveAttribute("href", "https://example.com/releases");
+    expect(link).toHaveAttribute("target", "_blank");
+  });
+
+  it("should support bind:open", async () => {
+    const { rerender } = render(InlineNotificationReusableTest, {
+      props: { open: true },
+    });
+
+    expect(
+      document.querySelector(".bx--inline-notification"),
+    ).toBeInTheDocument();
+
+    rerender({ open: false });
+    await tick();
+
+    expect(
+      document.querySelector(".bx--inline-notification"),
+    ).not.toBeInTheDocument();
   });
 });
