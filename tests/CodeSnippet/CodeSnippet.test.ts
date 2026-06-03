@@ -3,6 +3,7 @@ import { user } from "../utils/user";
 import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
 import CodeSnippetDisabled from "./CodeSnippetDisabled.test.svelte";
+import CodeSnippetDoubleClick from "./CodeSnippetDoubleClick.test.svelte";
 import CodeSnippetExpandable from "./CodeSnippetExpandable.test.svelte";
 import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte";
 import CodeSnippetInitialEvent from "./CodeSnippetInitialEvent.test.svelte";
@@ -46,6 +47,40 @@ describe("CodeSnippet", () => {
   test("inline copy button has default 'Copy code' aria-label", () => {
     render(CodeSnippetInline);
     expect(screen.getByLabelText("Copy code")).toBeInTheDocument();
+  });
+
+  test.each([
+    {
+      variant: "inline",
+      label: "Copy code",
+      code: "npm install -g @carbon/cli",
+    },
+    {
+      variant: "single",
+      label: "Copy to clipboard",
+      code: "npm install --save @carbon/icons",
+    },
+    {
+      variant: "multi",
+      label: "Copy to clipboard",
+      code: `node -v
+npm -v
+yarn -v`,
+    },
+  ] as const)("should not copy again on $variant snippet while feedback is active", async ({
+    variant,
+    label,
+    code,
+  }) => {
+    const copy = vi.fn();
+    render(CodeSnippetDoubleClick, {
+      props: { type: variant, code, copy },
+    });
+
+    await user.dblClick(screen.getByLabelText(label));
+
+    expect(copy).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
   });
 
   test("should render multiline variant", () => {
