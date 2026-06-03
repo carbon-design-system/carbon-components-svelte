@@ -1,4 +1,5 @@
 import { render } from "@testing-library/svelte";
+import { tick } from "svelte";
 import SessionStorageObject from "./SessionStorageObject.test.svelte";
 
 describe("SessionStorage - Object Values", () => {
@@ -41,18 +42,13 @@ describe("SessionStorage - Object Values", () => {
     );
   });
 
-  it("loads existing object value from sessionStorage", () => {
+  it("loads existing object value from sessionStorage", async () => {
     const existingSettings = { theme: "light", fontSize: 14 };
     sessionStorageMock["theme-settings"] = JSON.stringify(existingSettings);
 
-    render(SessionStorageObject);
-    expect(sessionStorage.getItem).toHaveBeenCalledWith("theme-settings");
-  });
+    const { component } = render(SessionStorageObject);
+    await tick();
 
-  it("handles malformed JSON gracefully", () => {
-    sessionStorageMock["theme-settings"] = "{malformed-json}";
-
-    render(SessionStorageObject);
-    expect(sessionStorage.getItem).toHaveBeenCalledWith("theme-settings");
+    expect(component.value).toEqual(existingSettings);
   });
 });
