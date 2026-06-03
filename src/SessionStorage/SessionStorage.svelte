@@ -32,7 +32,7 @@
    * ```
    */
   export function clearItem() {
-    sessionStorage.removeItem(key);
+    storage.removeItem(key);
   }
 
   /**
@@ -48,12 +48,18 @@
    * ```
    */
   export function clearAll() {
-    sessionStorage.clear();
+    storage.clear();
   }
 
   import { afterUpdate, createEventDispatcher, onMount } from "svelte";
+  import {
+    parseStoredValue,
+    safeBrowserStorage,
+    serializeStoredValue,
+  } from "../utils/storage.js";
 
   const dispatch = createEventDispatcher();
+  const storage = safeBrowserStorage("sessionStorage");
 
   let prevValue = value;
   let prevKey = key;
@@ -61,25 +67,17 @@
 
   /** @type {() => void} */
   function setItem() {
-    if (typeof value === "object") {
-      sessionStorage.setItem(key, JSON.stringify(value));
-    } else {
-      sessionStorage.setItem(key, value);
-    }
+    storage.setItem(key, serializeStoredValue(value));
   }
 
   onMount(() => {
-    const item = sessionStorage.getItem(key);
+    const item = storage.getItem(key);
 
     if (item == null) {
       setItem();
       dispatch("save");
     } else {
-      try {
-        value = JSON.parse(item);
-      } catch {
-        value = item;
-      }
+      value = parseStoredValue(item);
     }
 
     prevValue = value;
@@ -87,11 +85,7 @@
 
     function handleStorageChange(event) {
       if (event.key === key && event.newValue !== null) {
-        try {
-          value = JSON.parse(event.newValue);
-        } catch {
-          value = event.newValue;
-        }
+        value = parseStoredValue(event.newValue);
         dispatch("update", { prevValue, value });
         prevValue = value;
       }
@@ -105,16 +99,12 @@
   });
 
   $: if (mounted && key !== prevKey) {
-    const item = sessionStorage.getItem(key);
+    const item = storage.getItem(key);
 
     if (item == null) {
       setItem();
     } else {
-      try {
-        value = JSON.parse(item);
-      } catch {
-        value = item;
-      }
+      value = parseStoredValue(item);
     }
 
     prevKey = key;
