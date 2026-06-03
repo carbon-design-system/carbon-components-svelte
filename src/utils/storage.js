@@ -56,15 +56,17 @@ export function safeBrowserStorage(type) {
     /**
      * @param {string} key
      * @param {string} value
+     * @param {(error: unknown) => void} [onError]
      * @returns {boolean}
      */
-    setItem(key, value) {
+    setItem(key, value, onError) {
       const s = store();
       if (!s) return false;
       try {
         s.setItem(key, value);
         return true;
-      } catch {
+      } catch (error) {
+        onError?.(error);
         return false;
       }
     },
