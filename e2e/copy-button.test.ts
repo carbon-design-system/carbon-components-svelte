@@ -28,4 +28,16 @@ test.describe("CopyButton", () => {
       "Hello, World!",
     );
   });
+
+  test("swaps to feedback icon during feedback window and reverts", async ({
+    page,
+  }) => {
+    const button = page.getByTestId("copy-button-feedback-icon");
+    const feedbackIcon = button.getByTestId("feedback-icon");
+
+    await expect(feedbackIcon).toBeHidden();
+    await button.click();
+    await expect(feedbackIcon).toBeVisible();
+    await expect(feedbackIcon).toBeHidden();
+  });
 });

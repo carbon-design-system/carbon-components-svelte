@@ -1,5 +1,6 @@
 <script lang="ts">
   import { CopyButton } from "carbon-components-svelte";
+  import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import type { ComponentProps } from "svelte";
 
   export let portalTooltip: ComponentProps<CopyButton>["portalTooltip"] =
@@ -29,5 +30,12 @@
   copy={(text) => {
     console.log(`Custom copy: ${text}`);
   }}
+  {portalTooltip}
+/>
+
+<CopyButton
+  text="text"
+  iconDescription="Custom feedback icon"
+  feedbackIcon={Checkmark}
   {portalTooltip}
 />
