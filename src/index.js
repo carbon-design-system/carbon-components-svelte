@@ -144,6 +144,7 @@ export { default as StructuredListInput } from "./StructuredList/StructuredListI
 export { default as StructuredListRow } from "./StructuredList/StructuredListRow.svelte";
 export { default as StructuredListSkeleton } from "./StructuredList/StructuredListSkeleton.svelte";
 export { mediaQuery } from "./stores/mediaQuery";
+export { prefersContrast } from "./stores/prefersContrast";
 export { prefersDarkMode } from "./stores/prefersDarkMode";
 export { prefersReducedMotion } from "./stores/prefersReducedMotion";
 export { default as Tab } from "./Tabs/Tab.svelte";
