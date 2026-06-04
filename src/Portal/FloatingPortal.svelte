@@ -99,6 +99,7 @@
   export let target = null;
 
   import { onMount, tick } from "svelte";
+  import { floatingPosition } from "../utils/floatingPosition.js";
   import { getScrollableAncestors } from "../utils/getScrollableAncestors.js";
   import { rafThrottle } from "../utils/rafThrottle.js";
   import Portal from "./Portal.svelte";
@@ -172,167 +173,26 @@
   function updatePosition() {
     if (!mounted || !anchor || !ref) return;
 
-    const rect = anchor.getBoundingClientRect();
-    const floatingRect = ref.getBoundingClientRect();
-    const scrollYOffset = useFixedPosition ? 0 : window.scrollY;
-    const scrollXOffset = useFixedPosition ? 0 : window.scrollX;
-
-    const isVertical = direction === "top" || direction === "bottom";
-    let actualDirection = direction;
-
-    if (isVertical) {
-      const spaceBelow = window.innerHeight - rect.bottom;
-      const spaceAbove = rect.top;
-
-      if (
-        direction === "bottom" &&
-        spaceBelow < floatingRect.height &&
-        spaceAbove > spaceBelow
-      ) {
-        actualDirection = "top";
-      } else if (
-        direction === "top" &&
-        spaceAbove < floatingRect.height &&
-        spaceBelow > spaceAbove
-      ) {
-        actualDirection = "bottom";
-      }
-    } else {
-      const spaceRight = window.innerWidth - rect.right;
-      const spaceLeft = rect.left;
-
-      if (
-        direction === "right" &&
-        spaceRight < floatingRect.width + horizontalGapRight &&
-        spaceLeft > spaceRight
-      ) {
-        actualDirection = "left";
-      } else if (
-        direction === "left" &&
-        spaceLeft < floatingRect.width + horizontalGapLeft &&
-        spaceRight > spaceLeft
-      ) {
-        actualDirection = "right";
-      }
-    }
-
-    /** @type {number} */
-    let top;
-    /** @type {number} */
-    let left;
-    /** @type {number | undefined} */
-    let width;
-
-    if (actualDirection === "bottom") {
-      top = rect.bottom + scrollYOffset + gapBottom;
-      left = rect.left + scrollXOffset;
-      width = rect.width;
-    } else if (actualDirection === "top") {
-      top = rect.top + scrollYOffset - floatingRect.height - gapTop;
-      left = rect.left + scrollXOffset;
-      width = rect.width;
-    } else if (actualDirection === "right") {
-      if (intrinsicWidth) {
-        if (intrinsicAlign === "start") {
-          top = rect.top + scrollYOffset + verticalAlignOffsetRight;
-        } else if (intrinsicAlign === "end") {
-          top =
-            rect.bottom +
-            scrollYOffset -
-            floatingRect.height +
-            verticalAlignOffsetRight;
-        } else {
-          top =
-            rect.top +
-            scrollYOffset +
-            rect.height / 2 -
-            floatingRect.height / 2 +
-            verticalAlignOffsetRight;
-        }
-      } else {
-        top =
-          rect.top +
-          scrollYOffset +
-          rect.height / 2 -
-          floatingRect.height / 2 +
-          verticalAlignOffsetRight;
-      }
-      left = rect.right + scrollXOffset + horizontalGapRight;
-    } else {
-      // left
-      if (intrinsicWidth) {
-        if (intrinsicAlign === "start") {
-          top = rect.top + scrollYOffset + verticalAlignOffsetLeft;
-        } else if (intrinsicAlign === "end") {
-          top =
-            rect.bottom +
-            scrollYOffset -
-            floatingRect.height +
-            verticalAlignOffsetLeft;
-        } else {
-          top =
-            rect.top +
-            scrollYOffset +
-            rect.height / 2 -
-            floatingRect.height / 2 +
-            verticalAlignOffsetLeft;
-        }
-      } else {
-        top =
-          rect.top +
-          scrollYOffset +
-          rect.height / 2 -
-          floatingRect.height / 2 +
-          verticalAlignOffsetLeft;
-      }
-      left = rect.left + scrollXOffset - floatingRect.width - horizontalGapLeft;
-    }
-
-    let posLeft = left;
-    /** @type {number | undefined} */
-    let posWidth = width;
-
-    if (
-      intrinsicWidth &&
-      (actualDirection === "top" || actualDirection === "bottom")
-    ) {
-      if (intrinsicAlign === "center") {
-        posLeft = rect.left + scrollXOffset + rect.width / 2;
-      } else if (intrinsicAlign === "start") {
-        posLeft = rect.left + scrollXOffset;
-      } else {
-        posLeft = rect.right + scrollXOffset;
-      }
-      posWidth = undefined;
-    }
-
-    /** @type {number | undefined} */
-    let caretNudgePx = undefined;
-    if (
-      ref &&
-      intrinsicWidth &&
-      (actualDirection === "top" || actualDirection === "bottom") &&
-      (intrinsicAlign === "start" || intrinsicAlign === "end")
-    ) {
-      const fr = ref.getBoundingClientRect();
-      const anchorCx = rect.left + rect.width / 2;
-      // End + translateX(-100%): right edges meet anchor.right. Derive portal left from
-      // width so caret nudge is not thrown off by fr.left read in the same turn as a
-      // pending left/transform style update (measured left can be one frame stale).
-      const portalLeftViewport =
-        intrinsicAlign === "end" && fr.width > 0
-          ? rect.right - fr.width
-          : fr.left;
-      caretNudgePx = anchorCx - portalLeftViewport;
-    }
-
-    pos = {
-      top,
-      left: posLeft,
-      ...(posWidth !== undefined && { width: posWidth }),
-      actualDirection,
-      caretNudgePx,
-    };
+    pos = floatingPosition({
+      anchorRect: anchor.getBoundingClientRect(),
+      floatingRect: ref.getBoundingClientRect(),
+      viewport: {
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight,
+        scrollX: window.scrollX,
+        scrollY: window.scrollY,
+      },
+      direction,
+      useFixedPosition,
+      intrinsicWidth,
+      intrinsicAlign,
+      gapTop,
+      gapBottom,
+      horizontalGapLeft,
+      horizontalGapRight,
+      verticalAlignOffsetLeft,
+      verticalAlignOffsetRight,
+    });
   }
 
   const scheduleUpdate = rafThrottle(updatePosition);
@@ -382,7 +242,7 @@
     observeAnchor();
     tick().then(() => {
       updatePosition();
-      // Second pass: left/right need final width; top/bottom intrinsic needs stable rect for caret nudge.
+      // Second pass after layout: side placements need width; intrinsic caret needs stable rect.
       const needsSecondLayoutPass =
         direction === "left" ||
         direction === "right" ||
