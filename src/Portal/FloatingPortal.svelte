@@ -100,6 +100,7 @@
 
   import { onMount, tick } from "svelte";
   import { getScrollableAncestors } from "../utils/getScrollableAncestors.js";
+  import { rafThrottle } from "../utils/rafThrottle.js";
   import Portal from "./Portal.svelte";
 
   let mounted = true;
@@ -124,10 +125,7 @@
       mounted = false;
       unobserveAnchor();
       removeScrollListeners();
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-      }
+      scheduleUpdate.cancel();
     };
   });
 
@@ -139,9 +137,6 @@
     actualDirection: direction,
     caretNudgePx: undefined,
   };
-
-  /** @type {number | null} */
-  let rafId = null;
 
   /** @type {MutationObserver | null} */
   let anchorObserver = null;
@@ -340,15 +335,8 @@
     };
   }
 
-  function scheduleUpdate() {
-    if (rafId !== null) return;
-    rafId = requestAnimationFrame(() => {
-      rafId = null;
-      updatePosition();
-    });
-  }
+  const scheduleUpdate = rafThrottle(updatePosition);
 
-  // The actual rendered direction after auto-flipping.
   $: actualDirection = pos.actualDirection;
 
   $: useIntrinsicWidthVertical =
@@ -383,10 +371,7 @@
     unobserveAnchor();
     removeScrollListeners();
     scrollableAncestors = [];
-    if (rafId !== null) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
-    }
+    scheduleUpdate.cancel();
   }
 
   $: if (open && anchor && ref) {
