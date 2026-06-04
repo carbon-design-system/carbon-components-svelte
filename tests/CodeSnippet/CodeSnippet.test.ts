@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import CodeSnippetAsync from "./CodeSnippetAsync.test.svelte";
+import CodeSnippetAsyncDoubleClick from "./CodeSnippetAsyncDoubleClick.test.svelte";
 import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
 import CodeSnippetDisabled from "./CodeSnippetDisabled.test.svelte";
@@ -81,6 +83,134 @@ yarn -v`,
 
     expect(copy).toHaveBeenCalledTimes(1);
     expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+  });
+
+  const snippetVariants = [
+    { type: "single" as const, label: "Copy to clipboard" },
+    { type: "inline" as const, label: "Copy code" },
+    { type: "multi" as const, label: "Copy to clipboard" },
+  ];
+
+  it.each(
+    snippetVariants,
+  )("async copy delays feedback until resolved ($type)", async ({
+    type,
+    label,
+  }) => {
+    let resolveCopy: () => void = () => {};
+    const copy = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveCopy = resolve;
+        }),
+    );
+
+    render(CodeSnippetAsync, { props: { type, copy } });
+
+    const button = screen.getByLabelText(label);
+    fireEvent.click(button);
+    await Promise.resolve();
+
+    expect(copy).toHaveBeenCalledTimes(1);
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).not.toHaveClass("bx--copy-btn--fade-in");
+
+    resolveCopy();
+    await waitFor(() => {
+      expect(button).toHaveClass("bx--copy-btn--fade-in");
+    });
+
+    expect(button).not.toHaveAttribute("aria-busy");
+    expect(button.querySelector(".bx--copy-btn__feedback")).toHaveTextContent(
+      "Copied!",
+    );
+  });
+
+  it.each(
+    snippetVariants,
+  )("dispatches copy event after async copy resolves ($type)", async ({
+    type,
+    label,
+  }) => {
+    const order: string[] = [];
+    let resolveCopy: () => void = () => {};
+    const copy = vi.fn(async () => {
+      order.push("copyStart");
+      await new Promise<void>((resolve) => {
+        resolveCopy = resolve;
+      });
+      order.push("copyEnd");
+    });
+
+    render(CodeSnippetAsync, {
+      props: {
+        type,
+        copy,
+        onCopy: () => {
+          order.push("copyEvent");
+        },
+      },
+    });
+
+    const button = screen.getByLabelText(label);
+    fireEvent.click(button);
+    await Promise.resolve();
+
+    expect(order).toEqual(["copyStart"]);
+
+    resolveCopy();
+    await waitFor(() => {
+      expect(order).toEqual(["copyStart", "copyEnd", "copyEvent"]);
+    });
+  });
+
+  it.each([
+    {
+      type: "inline" as const,
+      label: "Copy code",
+      code: "npm install -g @carbon/cli",
+    },
+    {
+      type: "single" as const,
+      label: "Copy to clipboard",
+      code: "npm install --save @carbon/icons",
+    },
+    {
+      type: "multi" as const,
+      label: "Copy to clipboard",
+      code: `node -v
+npm -v
+yarn -v`,
+    },
+  ] as const)("should not copy again while async copy is pending ($type)", async ({
+    type,
+    label,
+    code,
+  }) => {
+    let resolveCopy: () => void = () => {};
+    const copy = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveCopy = resolve;
+        }),
+    );
+
+    render(CodeSnippetAsyncDoubleClick, {
+      props: { type, code, copy },
+    });
+
+    const button = screen.getByLabelText(label);
+    fireEvent.click(button);
+    await Promise.resolve();
+    await user.click(button);
+
+    expect(copy).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("Copy events: 0")).toBeInTheDocument();
+
+    resolveCopy();
+    await waitFor(() => {
+      expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+    });
   });
 
   test("should render multiline variant", () => {

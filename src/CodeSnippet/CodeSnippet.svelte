@@ -33,7 +33,7 @@
    * By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.
    *
    * Provide a custom function to override this behavior.
-   * @type {(code: string) => void}
+   * @type {(code: string) => void | Promise<void>}
    */
   export let copy = async (code) => {
     try {
@@ -161,12 +161,14 @@
   let animation = undefined;
   let timeout = undefined;
   let feedbackOpen = false;
+  let copyPending = false;
   let prevExpanded = expanded;
 
   function syncCopyFeedback() {
     animation = copyFeedback.animation;
     feedbackOpen = copyFeedback.feedbackOpen;
     timeout = copyFeedback.timeout;
+    copyPending = copyFeedback.copyPending;
   }
 
   function dismissFeedback() {
@@ -245,6 +247,7 @@
       bind:this={inlineButtonRef}
       type="button"
       aria-live="polite"
+      aria-busy={copyPending || undefined}
       class:bx--copy={true}
       class:bx--btn--copy={true}
       class:bx--copy-btn--animating={animation}
@@ -259,14 +262,15 @@
       aria-label={copyLabel}
       {...$$restProps}
       on:click
-      on:click={() => {
-        copyFeedback.onClick(
-          () => {
-            copy(code);
+      on:click={async () => {
+        try {
+          await copyFeedback.onClick(async () => {
+            await copy(code);
             dispatch("copy");
-          },
-          feedbackTimeout,
-        );
+          }, feedbackTimeout);
+        } catch (error) {
+          dispatch("copy:error", { error });
+        }
       }}
       on:animationend={(event) => {
         copyFeedback.onAnimationEnd(event);
