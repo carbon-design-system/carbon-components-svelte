@@ -1,6 +1,8 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import CopyButton from "./CopyButton.test.svelte";
+import CopyButtonAsync from "./CopyButtonAsync.test.svelte";
+import CopyButtonAsyncDoubleClick from "./CopyButtonAsyncDoubleClick.test.svelte";
 import CopyButtonDoubleClick from "./CopyButtonDoubleClick.test.svelte";
 import CopyButtonInModal from "./CopyButtonInModal.test.svelte";
 
@@ -56,17 +58,102 @@ describe("CopyButton", () => {
   });
 
   it("handles clipboard API errors", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onCopyError = vi.fn();
     Object.defineProperty(navigator, "clipboard", {
       value: { writeText: () => Promise.reject("Clipboard error") },
       writable: true,
     });
 
-    render(CopyButton);
+    render(CopyButton, { props: { onCopyError } });
 
     const button = getCopyButton("Basic");
     await user.click(button);
-    expect(consoleLog).toHaveBeenCalledWith("Clipboard error");
+    expect(onCopyError).toHaveBeenCalledWith({ error: "Clipboard error" });
+    expect(button).not.toHaveClass("bx--copy-btn--fade-in");
+    expect(button.querySelector(".bx--copy-btn__feedback")).not.toHaveClass(
+      "bx--copy-btn--fade-in",
+    );
+  });
+
+  it("async copy delays feedback until resolved", async () => {
+    let resolveCopy: () => void = () => {};
+    const copy = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveCopy = resolve;
+        }),
+    );
+
+    render(CopyButtonAsync, { props: { copy } });
+
+    const button = getCopyButton("Async copy");
+    fireEvent.click(button);
+    await Promise.resolve();
+
+    expect(copy).toHaveBeenCalledTimes(1);
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).not.toHaveClass("bx--copy-btn--fade-in");
+
+    resolveCopy();
+    await waitFor(() => {
+      expect(button).toHaveClass("bx--copy-btn--fade-in");
+    });
+
+    expect(button).not.toHaveAttribute("aria-busy");
+    expect(button.querySelector(".bx--copy-btn__feedback")).toHaveTextContent(
+      "Copied!",
+    );
+  });
+
+  it("async copy failure does not show feedback and dispatches copy:error", async () => {
+    const error = new Error("copy failed");
+    const copy = vi.fn().mockRejectedValue(error);
+    const onCopyError = vi.fn();
+
+    render(CopyButtonAsync, {
+      props: { copy, onCopyError },
+    });
+
+    const button = getCopyButton("Async copy");
+    await user.click(button);
+
+    expect(onCopyError).toHaveBeenCalledWith({ error });
+    expect(button).not.toHaveClass("bx--copy-btn--fade-in");
+
+    await user.click(button);
+    expect(copy).toHaveBeenCalledTimes(2);
+  });
+
+  it("dispatches copy event after async copy resolves", async () => {
+    const order: string[] = [];
+    let resolveCopy: () => void = () => {};
+    const copy = vi.fn(async () => {
+      order.push("copyStart");
+      await new Promise<void>((resolve) => {
+        resolveCopy = resolve;
+      });
+      order.push("copyEnd");
+    });
+
+    render(CopyButtonAsync, {
+      props: {
+        copy,
+        onCopy: () => {
+          order.push("copyEvent");
+        },
+      },
+    });
+
+    const button = getCopyButton("Async copy");
+    fireEvent.click(button);
+    await Promise.resolve();
+
+    expect(order).toEqual(["copyStart"]);
+
+    resolveCopy();
+    await waitFor(() => {
+      expect(order).toEqual(["copyStart", "copyEnd", "copyEvent"]);
+    });
   });
 
   it("should not copy again while feedback is active", async () => {
@@ -80,6 +167,31 @@ describe("CopyButton", () => {
 
     expect(copy).toHaveBeenCalledTimes(1);
     expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+  });
+
+  it("should not copy again while async copy is in flight", async () => {
+    let resolveCopy: () => void = () => {};
+    const copy = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveCopy = resolve;
+        }),
+    );
+
+    render(CopyButtonAsyncDoubleClick, { props: { copy } });
+
+    const button = getCopyButton("Async double click");
+    fireEvent.click(button);
+    await Promise.resolve();
+    fireEvent.click(button);
+
+    expect(copy).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("Copy events: 0")).toBeInTheDocument();
+
+    resolveCopy();
+    await waitFor(() => {
+      expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+    });
   });
 
   describe("Portal tooltip", () => {
