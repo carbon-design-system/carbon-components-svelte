@@ -3,6 +3,8 @@ import { user } from "../utils/user";
 import CodeSnippetAsync from "./CodeSnippetAsync.test.svelte";
 import CodeSnippetAsyncDoubleClick from "./CodeSnippetAsyncDoubleClick.test.svelte";
 import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
+import CodeSnippetCopyButtonMouseEnter from "./CodeSnippetCopyButtonMouseEnter.test.svelte";
+import CodeSnippetCopyButtonMouseLeave from "./CodeSnippetCopyButtonMouseLeave.test.svelte";
 import CodeSnippetCopyError from "./CodeSnippetCopyError.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
 import CodeSnippetDisabled from "./CodeSnippetDisabled.test.svelte";
@@ -11,6 +13,7 @@ import CodeSnippetExpandable from "./CodeSnippetExpandable.test.svelte";
 import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte";
 import CodeSnippetInitialEvent from "./CodeSnippetInitialEvent.test.svelte";
 import CodeSnippetInline from "./CodeSnippetInline.test.svelte";
+import CodeSnippetMouseEnter from "./CodeSnippetMouseEnter.test.svelte";
 import CodeSnippetMultiline from "./CodeSnippetMultiline.test.svelte";
 import CodeSnippetNullishAriaLabel from "./CodeSnippetNullishAriaLabel.test.svelte";
 import CodeSnippetRestPropsButton from "./CodeSnippetRestPropsButton.test.svelte";
@@ -19,6 +22,7 @@ import CodeSnippetRestPropsSpan from "./CodeSnippetRestPropsSpan.test.svelte";
 import CodeSnippetWithCustomCopyText from "./CodeSnippetWithCustomCopyText.test.svelte";
 import CodeSnippetWithHideShowMore from "./CodeSnippetWithHideShowMore.test.svelte";
 import CodeSnippetWithWrapText from "./CodeSnippetWithWrapText.test.svelte";
+import CodeSnippetWrapperMouseEnter from "./CodeSnippetWrapperMouseEnter.test.svelte";
 
 describe("CodeSnippet", () => {
   // Regression test for initial event dispatch in Svelte 5
@@ -327,6 +331,88 @@ yarn -v`,
     const copyButton = screen.getByLabelText("Copy to clipboard");
     await user.click(copyButton);
     expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+  });
+
+  it.each([
+    { type: "single" as const, label: "Copy to clipboard" },
+    { type: "inline" as const, label: "Copy code" },
+    { type: "multi" as const, label: "Copy to clipboard" },
+  ])("dispatches mouseenter:copy-button from $type snippet copy control", ({
+    type,
+    label,
+  }) => {
+    const onMouseEnterCopyButton = vi.fn();
+    render(CodeSnippetMouseEnter, {
+      props: { type, onMouseEnterCopyButton },
+    });
+
+    fireEvent.mouseEnter(screen.getByLabelText(label));
+
+    expect(onMouseEnterCopyButton).toHaveBeenCalledTimes(1);
+    expect(onMouseEnterCopyButton.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
+  });
+
+  test("does not dispatch mouseenter:copy-button from single snippet code area", () => {
+    const onMouseEnterCopyButton = vi.fn();
+    const { container } = render(CodeSnippetMouseEnter, {
+      props: { type: "single", onMouseEnterCopyButton },
+    });
+
+    const pre = container.querySelector("pre");
+    assert(pre);
+    fireEvent.mouseEnter(pre);
+
+    expect(onMouseEnterCopyButton).not.toHaveBeenCalled();
+  });
+
+  test("forwards mouseenter on single snippet wrapper", () => {
+    const onMouseEnter = vi.fn();
+    const { container } = render(CodeSnippetWrapperMouseEnter, {
+      props: { onMouseEnter },
+    });
+
+    const snippet = container.querySelector(".bx--snippet");
+    assert(snippet);
+    fireEvent.mouseEnter(snippet);
+
+    expect(onMouseEnter).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([
+    { type: "inline" as const, label: "Copy code" },
+  ])("forwards mouseenter from inline snippet copy control", ({
+    type,
+    label,
+  }) => {
+    const onMouseEnter = vi.fn();
+    render(CodeSnippetCopyButtonMouseEnter, {
+      props: { type, onMouseEnter },
+    });
+
+    fireEvent.mouseEnter(screen.getByLabelText(label));
+
+    expect(onMouseEnter).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([
+    { type: "single" as const, label: "Copy to clipboard" },
+    { type: "inline" as const, label: "Copy code" },
+    { type: "multi" as const, label: "Copy to clipboard" },
+  ])("dispatches mouseleave:copy-button from $type snippet copy control", ({
+    type,
+    label,
+  }) => {
+    const onMouseleaveCopyButton = vi.fn();
+    render(CodeSnippetCopyButtonMouseLeave, {
+      props: { type, onMouseleaveCopyButton },
+    });
+
+    const button = screen.getByLabelText(label);
+    fireEvent.mouseEnter(button);
+    fireEvent.mouseLeave(button);
+
+    expect(onMouseleaveCopyButton).toHaveBeenCalledTimes(1);
+    expect(onMouseleaveCopyButton.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
   });
 
   it.each([

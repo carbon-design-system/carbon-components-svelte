@@ -8,6 +8,8 @@
    * @event {null} collapse
    * @event {null} copy
    * @event {{ error: unknown }} copy:error
+   * @event {MouseEvent} mouseenter:copy-button
+   * @event {MouseEvent} mouseleave:copy-button
    * @restProps {button | span} Rest props are spread to the span (inline variant) or the copy button (single/multi).
    */
 
@@ -279,6 +281,8 @@
       on:mouseover
       on:mouseenter
       on:mouseleave
+      on:mouseenter={(event) => dispatch("mouseenter:copy-button", event)}
+      on:mouseleave={(event) => dispatch("mouseleave:copy-button", event)}
     >
       <code {id}> <slot>{code}</slot> </code>
       {#if !effectivePortalTooltip}
@@ -345,6 +349,8 @@
         on:copy
         on:copy:error
         on:animationend
+        on:mouseenter={(event) => dispatch("mouseenter:copy-button", event)}
+        on:mouseleave={(event) => dispatch("mouseleave:copy-button", event)}
       />
     {/if}
     {#if showMoreLess}
