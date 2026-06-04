@@ -3,6 +3,7 @@ import { user } from "../utils/user";
 import CodeSnippetAsync from "./CodeSnippetAsync.test.svelte";
 import CodeSnippetAsyncDoubleClick from "./CodeSnippetAsyncDoubleClick.test.svelte";
 import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
+import CodeSnippetCopyError from "./CodeSnippetCopyError.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
 import CodeSnippetDisabled from "./CodeSnippetDisabled.test.svelte";
 import CodeSnippetDoubleClick from "./CodeSnippetDoubleClick.test.svelte";
@@ -124,6 +125,27 @@ yarn -v`,
     expect(button.querySelector(".bx--copy-btn__feedback")).toHaveTextContent(
       "Copied!",
     );
+  });
+
+  it.each(
+    snippetVariants,
+  )("async copy failure does not show feedback ($type)", async ({
+    type,
+    label,
+  }) => {
+    const error = new Error("copy failed");
+    const copy = vi.fn().mockRejectedValue(error);
+    const onCopyError = vi.fn();
+
+    render(CodeSnippetAsync, {
+      props: { type, copy, onCopyError },
+    });
+
+    const button = screen.getByLabelText(label);
+    await user.click(button);
+
+    expect(onCopyError).toHaveBeenCalledWith({ error });
+    expect(button).not.toHaveClass("bx--copy-btn--fade-in");
   });
 
   it.each(
@@ -305,6 +327,28 @@ yarn -v`,
     const copyButton = screen.getByLabelText("Copy to clipboard");
     await user.click(copyButton);
     expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+  });
+
+  it.each([
+    { type: "single" as const, label: "Copy to clipboard" },
+    { type: "inline" as const, label: "Copy code" },
+    {
+      type: "multi" as const,
+      label: "Copy to clipboard",
+    },
+  ])("forwards copy:error from $type snippet copy control", async ({
+    type,
+    label,
+  }) => {
+    const error = new Error("copy failed");
+    const onCopyError = vi.fn();
+    render(CodeSnippetCopyError, {
+      props: { type, onCopyError },
+    });
+
+    await user.click(screen.getByLabelText(label));
+
+    expect(onCopyError).toHaveBeenCalledWith({ error });
   });
 
   test("should wrap text when wrapText is true", () => {

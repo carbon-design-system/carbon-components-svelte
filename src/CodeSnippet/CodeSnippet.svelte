@@ -7,6 +7,7 @@
    * @event {null} expand
    * @event {null} collapse
    * @event {null} copy
+   * @event {{ error: unknown }} copy:error
    * @restProps {button | span} Rest props are spread to the span (inline variant) or the copy button (single/multi).
    */
 
@@ -342,6 +343,7 @@
         portalTooltip={effectivePortalTooltip}
         on:click
         on:copy
+        on:copy:error
         on:animationend
       />
     {/if}
