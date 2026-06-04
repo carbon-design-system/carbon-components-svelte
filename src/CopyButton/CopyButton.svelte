@@ -130,6 +130,12 @@
   on:animationend={(event) => {
     copyFeedback.onAnimationEnd(event);
   }}
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+  on:mouseout
+  on:focus
+  on:blur
 >
   {#if feedbackIcon && feedbackOpen}
     <svelte:component this={feedbackIcon} class="bx--snippet__icon" />

@@ -5,6 +5,7 @@ import CopyButtonAsync from "./CopyButtonAsync.test.svelte";
 import CopyButtonAsyncDoubleClick from "./CopyButtonAsyncDoubleClick.test.svelte";
 import CopyButtonDoubleClick from "./CopyButtonDoubleClick.test.svelte";
 import CopyButtonInModal from "./CopyButtonInModal.test.svelte";
+import CopyButtonMouseEnter from "./CopyButtonMouseEnter.test.svelte";
 
 describe("CopyButton", () => {
   const getCopyButton = (label: string) =>
@@ -154,6 +155,16 @@ describe("CopyButton", () => {
     await waitFor(() => {
       expect(order).toEqual(["copyStart", "copyEnd", "copyEvent"]);
     });
+  });
+
+  it("forwards mouseenter events to parent handlers", () => {
+    const onMouseEnter = vi.fn();
+    render(CopyButtonMouseEnter, { props: { onMouseEnter } });
+
+    const button = getCopyButton("Hover test");
+    fireEvent.mouseEnter(button);
+
+    expect(onMouseEnter).toHaveBeenCalledTimes(1);
   });
 
   it("should not copy again while feedback is active", async () => {
