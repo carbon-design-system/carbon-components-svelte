@@ -10,9 +10,10 @@
  * @returns {{
  *   get animation(): CopyFeedbackAnimation,
  *   get feedbackOpen(): boolean,
+ *   get copyPending(): boolean,
  *   get timeout(): ReturnType<typeof setTimeout> | undefined,
  *   dismiss: () => void,
- *   onClick: (performCopy: () => void, feedbackTimeout: number) => void,
+ *   onClick: (performCopy: () => void | Promise<void>, feedbackTimeout: number) => Promise<void>,
  *   onAnimationEnd: (event: { animationName: string }) => void,
  *   cleanup: () => void,
  * }}
@@ -24,6 +25,7 @@ export function createCopyFeedbackState(onSync) {
   /** @type {ReturnType<typeof setTimeout> | undefined} */
   let timeout;
   let copyActive = false;
+  let copyPending = false;
 
   function notify() {
     onSync?.();
@@ -33,6 +35,7 @@ export function createCopyFeedbackState(onSync) {
     feedbackOpen = false;
     animation = undefined;
     copyActive = false;
+    copyPending = false;
     clearTimeout(timeout);
     timeout = undefined;
     notify();
@@ -42,19 +45,33 @@ export function createCopyFeedbackState(onSync) {
     feedbackOpen = false;
     animation = undefined;
     copyActive = false;
+    copyPending = false;
     clearTimeout(timeout);
     timeout = undefined;
   }
 
   /**
-   * @param {() => void} performCopy
+   * @param {() => void | Promise<void>} performCopy
    * @param {number} feedbackTimeout
+   * @returns {Promise<void>}
    */
-  function onClick(performCopy, feedbackTimeout) {
+  async function onClick(performCopy, feedbackTimeout) {
     if (copyActive || animation === "fade-in") return;
 
     copyActive = true;
-    performCopy();
+    copyPending = true;
+    notify();
+
+    try {
+      await performCopy();
+    } catch (error) {
+      copyActive = false;
+      copyPending = false;
+      notify();
+      throw error;
+    }
+
+    copyPending = false;
     animation = "fade-in";
     feedbackOpen = true;
     clearTimeout(timeout);
@@ -81,6 +98,9 @@ export function createCopyFeedbackState(onSync) {
     },
     get feedbackOpen() {
       return feedbackOpen;
+    },
+    get copyPending() {
+      return copyPending;
     },
     get timeout() {
       return timeout;
