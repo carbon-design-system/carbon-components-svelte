@@ -23,6 +23,16 @@ In this example, we use the open source module [clipboard-copy](https://github.c
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
 
+## Async copy
+
+Pass an async function to `copy` when clipboard text is not ready at render time, such as a longer install command fetched on click. The copy feedback text appears after `copy()` resolves.
+
+During the request, the copy control sets `aria-busy="true"` and ignores further clicks. A rejected copy skips the success message and emits `copy:error`.
+
+Prefetch on hover with `on:mouseenter:copy-button` on the copy control. The example below shows async copy for each variant (`single`, `inline`, `multi`).
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetAsync" />
+
 ## Preventing copy functionality
 
 Pass a no-op function to the `copy` prop to disable copying.
