@@ -171,6 +171,7 @@
         <h1>{component}</h1>
         <div class="bar">
           <Dropdown
+            class="theme-dropdown"
             type="inline"
             labelText="Theme"
             items={themeItems}
@@ -179,7 +180,7 @@
               theme.set(detail.selectedId);
             }}
           />
-          <Stack orientation="horizontal" align="center" gap={3}>
+          <Stack orientation="horizontal" align="center" gap={2}>
             {#if markdownMetadata}
               <span class="markdown-metadata">{markdownMetadata}</span>
             {/if}
@@ -267,6 +268,10 @@
     justify-content: space-between;
     margin-bottom: var(--cds-layout-02);
     border-bottom: 1px solid var(--cds-ui-03);
+  }
+
+  .bar :global(.theme-dropdown .bx--list-box__menu) {
+    min-width: 8rem;
   }
 
   .markdown-metadata {
