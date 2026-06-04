@@ -92,47 +92,20 @@
   export let ref = null;
 
   /**
-   * Specify the DOM element to mount the portal into.
-   * When not set, mounts into the anchor's nearest top-layer ancestor —
-   * a `<dialog>` or `[popover]` element — if one exists, so the portal
-   * participates in the dialog/popover top layer. Otherwise falls back
-   * to `document.body`.
+   * DOM node to mount the portal into. When unset, uses the anchor's nearest
+   * `<dialog>` or `[popover]`, else `document.body`.
    * @type {HTMLElement | null}
    */
   export let target = null;
 
   import { onMount, tick } from "svelte";
+  import { getScrollableAncestors } from "../utils/getScrollableAncestors.js";
   import Portal from "./Portal.svelte";
-
-  const SCROLLABLE_OVERFLOW_REGEX = /(auto|scroll)/;
 
   let mounted = true;
 
   /** @type {Array<HTMLElement | Document>} */
   let scrollableAncestors = [];
-
-  /**
-   * Walk up from the anchor element and collect every
-   * scrollable ancestor so we can listen for their scroll events.
-   * @returns {Array<HTMLElement | Document>}
-   */
-  function getScrollableAncestors(node) {
-    /** @type {Array<HTMLElement | Document>} */
-    const result = [];
-    let current = node.parentElement;
-
-    while (current) {
-      const { overflow, overflowX, overflowY } = getComputedStyle(current);
-
-      if (SCROLLABLE_OVERFLOW_REGEX.test(overflow + overflowY + overflowX)) {
-        result.push(current);
-      }
-
-      current = current.parentElement;
-    }
-
-    return result;
-  }
 
   function addScrollListeners() {
     for (const el of scrollableAncestors) {
@@ -191,17 +164,11 @@
     }
   }
 
-  // Auto-detect the nearest top-layer ancestor of the anchor — a <dialog> or
-  // [popover] element — so portalled content participates in their top layer
-  // by default. An explicit `target` prop overrides this.
+  // Default portal target: nearest <dialog> or [popover] on the anchor. `target` wins.
   $: effectiveTarget = target ?? anchor?.closest("dialog,[popover]") ?? null;
 
-  // When the portal is mounted into a custom target (e.g. a native <dialog>
-  // opened with showModal() or an open [popover]), `position: absolute`
-  // resolves against the target's containing block rather than the viewport.
-  // Use `position: fixed` in that case — fixed stays viewport-relative even
-  // inside a top-layer element — and skip the document scroll offsets, which
-  // only apply to absolute positioning relative to `document.body`.
+  // Inside dialog/popover, absolute is relative to the target, not the viewport.
+  // Use fixed + zero scroll offsets; scroll offsets only apply on document.body.
   $: useFixedPosition =
     effectiveTarget != null &&
     typeof document !== "undefined" &&
