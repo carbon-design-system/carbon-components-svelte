@@ -5,6 +5,7 @@
 
   export let portalTooltip: ComponentProps<CopyButton>["portalTooltip"] =
     undefined;
+  export let onCopyError = (_detail: { error: unknown }) => {};
 </script>
 
 <CopyButton
@@ -14,6 +15,7 @@
   on:copy={() => {
     console.log("copied");
   }}
+  on:copy:error={(event) => onCopyError(event.detail)}
 />
 
 <CopyButton

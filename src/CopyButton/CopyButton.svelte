@@ -23,19 +23,21 @@
    * Specify the text to copy.
    * @type {string}
    */
-  export let text;
+  export let text = undefined;
 
   /**
    * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text.
-   * @type {(text: string) => void}
+   * @type {(text: string) => void | Promise<void>}
    */
-  export let copy = async (text) => {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch (error) {
-      console.log(error);
-    }
+  const defaultCopy = async (text) => {
+    await navigator.clipboard.writeText(text);
   };
+
+  /**
+   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text.
+   * @type {(text: string) => void | Promise<void>}
+   */
+  export let copy = defaultCopy;
 
   /**
    * Set to `true` to render the feedback tooltip in a portal,
@@ -66,11 +68,13 @@
   let animation = undefined;
   let timeout = undefined;
   let feedbackOpen = false;
+  let copyPending = false;
 
   function syncCopyFeedback() {
     animation = copyFeedback.animation;
     feedbackOpen = copyFeedback.feedbackOpen;
     timeout = copyFeedback.timeout;
+    copyPending = copyFeedback.copyPending;
   }
 
   function dismissFeedback() {
@@ -99,6 +103,7 @@
   bind:this={buttonRef}
   type="button"
   aria-live="polite"
+  aria-busy={copyPending || undefined}
   class:bx--copy-btn={true}
   class:bx--copy={true}
   class:bx--copy-btn--animating={animation}
@@ -109,16 +114,17 @@
   title={iconDescription}
   {...$$restProps}
   on:click
-  on:click={() => {
-    copyFeedback.onClick(
-      () => {
-        if (text !== undefined) {
-          copy(text);
+  on:click={async () => {
+    try {
+      await copyFeedback.onClick(async () => {
+        if (copy === defaultCopy ? text !== undefined : true) {
+          await copy(text ?? "");
           dispatch("copy");
         }
-      },
-      feedbackTimeout,
-    );
+      }, feedbackTimeout);
+    } catch (error) {
+      dispatch("copy:error", { error });
+    }
   }}
   on:animationend
   on:animationend={(event) => {
