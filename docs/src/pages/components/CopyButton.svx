@@ -35,9 +35,9 @@ This example uses the NPM package [clipboard-copy](https://github.com/feross/cli
 
 ## Async copy
 
-Pass an async function to `copy` when the text is not ready at render time, such as markdown fetched on click. **Copied!** appears after `copy()` resolves.
+Pass an async function to `copy` when the text is not ready at render time, such as markdown fetched on click. The copy feedback text appears after `copy()` resolves.
 
-During the request, the button sets `aria-busy="true"` and ignores further clicks. A rejected copy skips the success message and emits `copy:error` with `{ error }`.
+During the request, the button sets `aria-busy="true"` and ignores further clicks. A rejected copy skips the success message and emits `copy:error`.
 
 Prefetch on hover with `on:mouseenter`.
 
