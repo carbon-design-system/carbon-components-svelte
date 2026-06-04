@@ -21,15 +21,18 @@
   } from "carbon-components-svelte";
   import type { CarbonTheme } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import { themes as themeLabels } from "carbon-components-svelte/src/Theme/Theme.svelte";
+  import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";
   import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
   import { onMount } from "svelte";
   import COMPONENT_API from "../COMPONENT_API.json";
-  import COMPONENT_MD_SIZES from "../COMPONENT_MD_SIZES.json";
+  import COMPONENT_MD_SIZES_JSON from "../COMPONENT_MD_SIZES.json";
   import ComponentApi from "../components/ComponentApi.svelte";
   import { theme } from "../store";
 
   type DocComponent = (typeof COMPONENT_API.components)[number];
+
+  const COMPONENT_MD_SIZES: Record<string, number> = COMPONENT_MD_SIZES_JSON;
 
   const URL_THEMES: readonly CarbonTheme[] = [
     "white",
@@ -62,8 +65,10 @@
     return `~${rounded}k tokens`;
   }
 
-  function formatMarkdownMetadata(bytes: number): string {
-    return `${formatFileSize(bytes)} (${formatTokenEstimate(bytes)})`;
+  function formatCopyIconDescription(copied: boolean, bytes: number): string {
+    if (copied) return "Copied!";
+    if (bytes <= 0) return "Copy Markdown";
+    return `Copy Markdown\n${formatFileSize(bytes)} (${formatTokenEstimate(bytes)})`;
   }
 
   const REPO_URL = __PKG_REPO;
@@ -115,14 +120,13 @@
 
   $: sourceCode = `${REPO_URL}/tree/master/${formatSourceURL(multiple)}`;
   $: markdownUrl = `/components/${component}.md`;
-  $: markdownMetadata = COMPONENT_MD_SIZES[component]
-    ? formatMarkdownMetadata(COMPONENT_MD_SIZES[component])
-    : "";
+  $: markdownBytes = COMPONENT_MD_SIZES[component] ?? 0;
 
   let copying = false;
   let copied = false;
 
-  $: copyIconDescription = copied ? "Copied!" : "Copy page";
+  $: copyIcon = copied ? Checkmark : Copy;
+  $: copyIconDescription = formatCopyIconDescription(copied, markdownBytes);
 
   let copyTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -181,13 +185,11 @@
             }}
           />
           <Stack orientation="horizontal" align="center" gap={2}>
-            {#if markdownMetadata}
-              <span class="markdown-metadata">{markdownMetadata}</span>
-            {/if}
             <Button
+              class="copy-markdown-btn"
               kind="ghost"
               size="field"
-              icon={Copy}
+              icon={copyIcon}
               iconDescription={copyIconDescription}
               tooltipPosition="bottom"
               on:click={copyMarkdown}
@@ -274,14 +276,9 @@
     min-width: 8rem;
   }
 
-  .markdown-metadata {
-    color: var(--cds-text-02);
-    font-size: var(--cds-helper-text-01-font-size);
-    font-weight: var(--cds-helper-text-01-font-weight);
-    letter-spacing: var(--cds-helper-text-01-letter-spacing);
-    line-height: var(--cds-helper-text-01-line-height);
-    user-select: none;
-    white-space: nowrap;
+  .bar :global(.copy-markdown-btn .bx--assistive-text) {
+    white-space: pre-line;
+    text-align: center;
   }
 
   :global(.toc h5) {
