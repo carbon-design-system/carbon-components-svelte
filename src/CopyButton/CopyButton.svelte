@@ -26,17 +26,13 @@
   export let text = undefined;
 
   /**
-   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text.
+   * Override the default copy behavior (navigator.clipboard.writeText).
    * @type {(text: string) => void | Promise<void>}
    */
   const defaultCopy = async (text) => {
     await navigator.clipboard.writeText(text);
   };
 
-  /**
-   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text.
-   * @type {(text: string) => void | Promise<void>}
-   */
   export let copy = defaultCopy;
 
   /**
