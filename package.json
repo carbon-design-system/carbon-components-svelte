@@ -72,9 +72,9 @@
     "sass": "^1.100.0",
     "sveld": "^0.32.5",
     "svelte": "^5.55.10",
-    "svelte-check": "^4.4.8",
+    "svelte-check": "^4.6.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.8"
   },
   "repository": {
     "type": "git",
