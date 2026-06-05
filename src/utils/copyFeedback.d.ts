@@ -4,7 +4,6 @@ export type CopyFeedbackState = {
   readonly animation: CopyFeedbackAnimation;
   readonly feedbackOpen: boolean;
   readonly copyPending: boolean;
-  readonly timeout: ReturnType<typeof setTimeout> | undefined;
   dismiss: () => void;
   onClick: (
     performCopy: () => void | Promise<void>,
