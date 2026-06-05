@@ -5,17 +5,10 @@
   const fullInstallCommand =
     "npm install --save-dev carbon-components-svelte carbon-icons-svelte";
 
-  const multiDisplayCode = `export function add(a, b) {
-    return a + b;
-  }`;
+  const multiDisplayCode = "export function add(a, b) {\n  return a + b;\n}";
 
-  const multiFullCode = `export function add(a, b) {
-    return a + b;
-  }
-
-  export function subtract(a, b) {
-    return a - b;
-  }`;
+  const multiFullCode =
+    "export function add(a, b) {\n  return a + b;\n}\n\nexport function subtract(a, b) {\n  return a - b;\n}";
 
   let cachedSingleCommand = null;
   let cachedInlineCommand = null;
