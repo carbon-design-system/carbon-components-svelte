@@ -82,6 +82,18 @@ Add a global search component to the header.
 
 <FileSource src="/framed/UIShell/HeaderSearch" />
 
+The search button dispatches a cancelable `click` event. Call `preventDefault()` to skip activating the inline search bar, for example to open a command palette instead:
+
+```svelte
+<HeaderSearch
+  on:click={(e) => {
+    e.preventDefault();
+    openCommandPalette();
+  }}
+  ...
+/>
+```
+
 ## Header with utilities
 
 Include utility components in the header using header utilities.

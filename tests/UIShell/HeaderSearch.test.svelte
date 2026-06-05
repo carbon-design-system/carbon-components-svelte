@@ -10,6 +10,7 @@
   export let results: ComponentProps<HeaderSearch>["results"] = [];
 
   export let ref: ComponentProps<HeaderSearch>["ref"] = null;
+  export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
   let activeEvent = false;
   let inactiveEvent = false;
   let clearEvent = false;
@@ -43,6 +44,7 @@
   on:inactive={handleInactive}
   on:clear={handleClear}
   on:select={handleSelect}
+  on:click={(e) => onclick?.(e)}
   let:result
   let:index
 >
