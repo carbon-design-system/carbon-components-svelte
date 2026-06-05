@@ -414,6 +414,11 @@
     color: $text-primary;
   }
 
+  .#{$prefix}--switcher__item-link.#{$prefix}--switcher__item-link:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
   //--------------------------------------------------------------------------
   // Side Nav - Base styles (overriding Carbon v10 hardcoded colors)
   //--------------------------------------------------------------------------
