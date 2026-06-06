@@ -71,6 +71,23 @@ describe("ComposedModal", () => {
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
 
+  it("does not dispatch open or close when mounted closed", async () => {
+    const openHandler = vi.fn();
+    const closeHandler = vi.fn();
+    render(ComposedModalTest, {
+      props: {
+        open: false,
+        headerTitle: "Test Modal",
+        onopen: openHandler,
+        onclose: closeHandler,
+      },
+    });
+
+    await tick();
+    expect(openHandler).not.toHaveBeenCalled();
+    expect(closeHandler).not.toHaveBeenCalled();
+  });
+
   it("should handle size variants", () => {
     const sizes = ["xs", "sm", "lg"] as const;
 

@@ -38,6 +38,22 @@ describe("RadioButtonGroup", () => {
     );
   });
 
+  it("dispatches change when selected is set programmatically after mount", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { component } = render(RadioButtonGroup, {
+      props: { selected: "1" },
+    });
+
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+
+    component.selected = "3";
+    await tick();
+
+    expect(consoleLog).toHaveBeenCalledWith("change", "3");
+  });
+
   it("should handle disabled state", () => {
     render(RadioButtonGroup, { props: { disabled: true } });
 
