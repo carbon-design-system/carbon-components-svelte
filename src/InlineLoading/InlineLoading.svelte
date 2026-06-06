@@ -21,7 +21,7 @@
   /** Specify the timeout delay (ms) after `status` is set to "success" */
   export let successDelay = 1500;
 
-  import { afterUpdate, createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import Loading from "../Loading/Loading.svelte";
@@ -36,14 +36,12 @@
     };
   });
 
-  afterUpdate(() => {
-    if (status === "finished") {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        dispatch("success");
-      }, successDelay);
-    }
-  });
+  $: if (status === "finished") {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      dispatch("success");
+    }, successDelay);
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
