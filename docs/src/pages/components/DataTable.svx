@@ -453,7 +453,7 @@ Add a toolbar with search, menu, and actions above the table.
 
 ## With toolbar (small size)
 
-Use `size="short"` to create a more compact table with a small toolbar.
+Use `size="short"` for a more compact table. The `Toolbar` inherits a matching size from the parent `DataTable`: `short` uses the small toolbar and `compact` uses the [extra small toolbar](#with-toolbar-compact-size). Set `size` on the `Toolbar` to override the inherited value (see [toolbar size override](#with-toolbar-size-override)).
 
 <DataTable size="short" title="Load balancers" description="Your organization's active load balancers."
   headers="{[
@@ -507,6 +507,54 @@ Use `size="short"` to create a more compact table with a small toolbar.
     },
   ]}"
 >
+  <Toolbar>
+    <ToolbarContent>
+      <ToolbarSearch />
+      <ToolbarMenu>
+        <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
+        <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API documentation</ToolbarMenuItem>
+        <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
+      </ToolbarMenu>
+      <Button>Create balancer</Button>
+    </ToolbarContent>
+  </Toolbar>
+</DataTable>
+
+## With toolbar (size override)
+
+Set `size` on the `Toolbar` to override the size inherited from the `DataTable`. Here, a `size="tall"` table uses a `size="sm"` toolbar.
+
+<DataTable size="tall" title="Load balancers" description="Your organization's active load balancers."
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+>
   <Toolbar size="sm">
     <ToolbarContent>
       <ToolbarSearch />
@@ -522,7 +570,7 @@ Use `size="short"` to create a more compact table with a small toolbar.
 
 ## With toolbar (compact size)
 
-Use `size="compact"` for the table together with `size="xs"` on the toolbar to align the toolbar with a compact (24px row) table.
+Use `size="compact"` for the table. The `Toolbar` inherits the extra small (`xs`) size to match the compact 24px row height.
 
 <DataTable size="compact" title="Load balancers" description="Your organization's active load balancers."
   headers="{[
@@ -576,7 +624,7 @@ Use `size="compact"` for the table together with `size="xs"` on the toolbar to a
     },
   ]}"
 >
-  <Toolbar size="xs">
+  <Toolbar>
     <ToolbarContent>
       <ToolbarSearch />
       <ToolbarMenu size="sm">
@@ -645,7 +693,7 @@ Set `selectable` to `true` to enable selectable rows. Here, the toolbar is used 
     },
   ]}"
 >
-  <Toolbar size="sm">
+  <Toolbar>
     <ToolbarContent>
       <ToolbarSearch persistent />
       <Button>Action</Button>
