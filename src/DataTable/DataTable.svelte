@@ -962,6 +962,7 @@
                   </td>
                 {:else}
                   <TableCell
+                    headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
                       dispatch("click:cell", {
@@ -1170,6 +1171,7 @@
                   </td>
                 {:else}
                   <TableCell
+                    headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
                       dispatch("click:cell", {
