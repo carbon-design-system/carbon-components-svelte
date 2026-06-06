@@ -404,12 +404,12 @@ describe("Accordion", () => {
     );
   });
 
-  it("should use custom iconDescription", () => {
+  it("should use custom ariaLabel on the heading button", () => {
     render(Accordion, {
-      props: { useSlot: true, iconDescription: "Custom description" },
+      props: { useSlot: true, ariaLabel: "Custom description" },
     });
 
     const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("title", "Custom description");
+    expect(button).toHaveAttribute("aria-label", "Custom description");
   });
 });
