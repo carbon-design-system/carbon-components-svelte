@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import CodeSnippetInlineInModal from "./CodeSnippetInlineInModal.test.svelte";
+import CodeSnippetPortalTooltipTimeout from "./CodeSnippetPortalTooltipTimeout.test.svelte";
 
 describe("CodeSnippet portal tooltip", () => {
   beforeEach(() => {
@@ -45,6 +46,43 @@ describe("CodeSnippet portal tooltip", () => {
       expect(
         button.querySelector(".bx--copy-btn__feedback"),
       ).toBeInTheDocument();
+    });
+
+    describe("feedback timeout", () => {
+      beforeEach(() => {
+        vi.useFakeTimers();
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
+
+      // Regression: portalled feedback hides the inline element, so the
+      // hide-feedback animation (and animationend) never runs; feedbackTimeout
+      // must close the portal directly or the tooltip stays open.
+      it("should dismiss portal feedback after feedbackTimeout", async () => {
+        render(CodeSnippetPortalTooltipTimeout);
+
+        const button = screen.getByRole("button", { name: "Copy code" });
+        await fireEvent.click(button);
+        await Promise.resolve();
+
+        expect(
+          document.querySelector("[data-floating-portal]"),
+        ).toBeInTheDocument();
+
+        await vi.advanceTimersByTimeAsync(100);
+
+        expect(
+          document.querySelector("[data-floating-portal]"),
+        ).not.toBeInTheDocument();
+
+        await fireEvent.click(button);
+        await Promise.resolve();
+        expect(
+          document.querySelector("[data-floating-portal]"),
+        ).toBeInTheDocument();
+      });
     });
 
     // Regression: observer must re-attach when portalTooltip flips after mount.
