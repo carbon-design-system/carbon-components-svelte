@@ -155,10 +155,20 @@
       }}
       on:keydown={(event) => {
         if (
+          event.key === "ArrowUp" ||
+          event.key === "ArrowDown" ||
+          event.key === "Home" ||
+          event.key === "End"
+        ) {
+          event.preventDefault();
+        }
+
+        if (
           event.key === "ArrowLeft" ||
           event.key === "ArrowRight" ||
           event.key === "Enter"
         ) {
+          event.preventDefault();
           event.stopPropagation();
         }
 
@@ -205,10 +215,20 @@
     }}
     on:keydown={(event) => {
       if (
+        event.key === "ArrowUp" ||
+        event.key === "ArrowDown" ||
+        event.key === "Home" ||
+        event.key === "End"
+      ) {
+        event.preventDefault();
+      }
+
+      if (
         event.key === "ArrowLeft" ||
         event.key === "ArrowRight" ||
         event.key === "Enter"
       ) {
+        event.preventDefault();
         event.stopPropagation();
       }
 

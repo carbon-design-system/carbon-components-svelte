@@ -662,6 +662,8 @@
     if (
       event.key === "ArrowUp" ||
       event.key === "ArrowDown" ||
+      event.key === "ArrowLeft" ||
+      event.key === "ArrowRight" ||
       event.key === "Home" ||
       event.key === "End"
     ) {
