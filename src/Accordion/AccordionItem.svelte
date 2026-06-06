@@ -23,8 +23,12 @@
    */
   export let disabled = false;
 
-  /** Specify the ARIA label for the accordion item chevron icon */
-  export let iconDescription = "Expand/Collapse";
+  /**
+   * Specify a custom label for the accordion button.
+   * This is important for accessibility when the accordion has no visible title.
+   * @type {string}
+   */
+  export let ariaLabel = undefined;
 
   /**
    * Obtain a reference to the heading button HTML element.
@@ -69,7 +73,7 @@
     bind:this={ref}
     type="button"
     class:bx--accordion__heading={true}
-    title={iconDescription}
+    aria-label={ariaLabel}
     aria-expanded={open}
     {disabled}
     on:click
