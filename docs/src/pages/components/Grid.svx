@@ -23,8 +23,7 @@ same value across all breakpoints.
 
 ## Default
 
-Create a basic grid layout with equal-width columns. This example demonstrates the
-default grid behavior.
+Create a basic grid layout with equal-width columns.
 
 <FileSource src="/framed/Grid/Grid" />
 
@@ -81,8 +80,8 @@ you need to scale your column spans proportionally. Here are common patterns:
 
 ## Offset columns
 
-Create space between columns using the offset feature. This allows for more
-flexible layouts without empty columns.
+Create space between columns using the offset feature for more flexible layouts
+without empty columns.
 
 <FileSource src="/framed/Grid/OffsetColumns" />
 

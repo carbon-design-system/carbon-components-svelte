@@ -84,7 +84,7 @@ The component supports different sizes to match your design needs:
 
 ## Disabled state
 
-Disabled links render as plain text while maintaining accessibility.
+Disabled links render as plain text while remaining accessible.
 
 <Link disabled href="https://www.carbondesignsystem.com/">
   Disabled link

@@ -4,7 +4,7 @@
 
 Combo boxes combine a text input with a dropdown menu to let users select from predefined options or enter custom values. They support filtering, custom item rendering, and various states.
 
-Combo boxes are keyed for performance reasons.
+Combo boxes are keyed for performance.
 
 > [!NOTE]
 > Every `items` object must have a unique "id" property.
@@ -28,7 +28,7 @@ Override the default slot to customize how each item displays. Access the item a
 
 ## Hidden label
 
-Set `hideLabel` to `true` to visually hide the label while keeping it accessible to screen readers.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <ComboBox hideLabel labelText="Hidden Label" placeholder="Select contact method"
 items={[
@@ -70,9 +70,9 @@ See how the combobox responds to user input and selection changes.
 
 By default, no item is automatically highlighted when typing.
 
-Set `autoHighlight` to `"first-match"` to automatically highlight the first matching item as you type. This makes it easy to select by pressing <DocKbd label="Enter" /> without using arrow keys.
+Set `autoHighlight` to `"first-match"` to automatically highlight the first matching item as you type. Select it by pressing <DocKbd label="Enter" /> without using arrow keys.
 
-The default filter is case-insensitive substring matching (e.g., "app" matches "Apple").
+The default filter is case-insensitive substring matching (for example, "app" matches "Apple").
 
 <ComboBox autoHighlight="first-match"
 labelText="Item"
@@ -127,7 +127,7 @@ You can provide a custom `shouldFilterItem` to change the filtering logic. See [
 
 ## Typeahead with custom filter
 
-Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. In this example, a simple fuzzy filter is used where each typed character must appear in order within the item text (e.g., "ba" matches "Banana" and "Blackberry").
+Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. In this example, a simple fuzzy filter is used where each typed character must appear in order within the item text (for example, "ba" matches "Banana" and "Blackberry").
 
 <FileSource src="/framed/ComboBox/TypeaheadCustomFilter" />
 
@@ -192,7 +192,7 @@ Set `itemToString` to customize how items display in the filterable combobox.
 
 ## Clear filter on open
 
-When using a filterable combobox, reopening the dropdown after making a selection will normally show only the filtered results matching the selected item. Set `clearFilterOnOpen` to `true` to temporarily clear the filter when opening, showing all available items. This makes it easier to browse and change selections.
+When using a filterable combobox, reopening the dropdown after making a selection will normally show only the filtered results matching the selected item. Set `clearFilterOnOpen` to `true` to temporarily clear the filter when opening, showing all available items so you can browse and change selections.
 
 The original value is automatically restored if you close the dropdown without making a new selection.
 
@@ -202,7 +202,7 @@ The original value is automatically restored if you close the dropdown without m
 
 By default, combobox filtering is synchronous and client-side.
 
-For async (e.g., server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async/await behavior with a debounced input value change.
+For async (for example, server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async/await behavior with a debounced input value change.
 
 <FileSource src="/framed/ComboBox/AsyncComboBox" />
 
@@ -214,7 +214,7 @@ Set `allowCustomValue` to `true` to let users enter custom text that isn't in th
 
 ## Select text on focus
 
-Set `selectTextOnFocus` to `true` to select all text in the input when it receives focus (e.g. on tab or click). This lets users replace the value by typing without manually selecting first.
+Set `selectTextOnFocus` to `true` to select all text in the input when it receives focus (for example, on tab or click). Users can replace the value by typing without manually selecting first.
 
 An alternative is [clear filter on open](#clear-filter-on-open), which clears the filter when opening so all options are visible.
 
@@ -346,7 +346,7 @@ Set `readonly` to `true` to display a non-editable value.
 
 ## Virtualized items (large lists)
 
-Virtualization is a technique that allows only the items currently visible in the viewport to be rendered in the DOM, improving performance for large lists.
+Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
 
 By default, the combo box will virtualize lists with more than 100 items.
 
@@ -377,6 +377,6 @@ Specify a custom value for `threshold` to control when virtualization activates.
 
 ## Virtualized items (custom item height)
 
-The default item height for virtualization is 40 pixels. When using custom slots to render items with different heights (e.g., multi-line items with descriptions), specify a custom `itemHeight` value to match your item's actual height.
+The default item height for virtualization is 40 pixels. When using custom slots to render items with different heights (for example, multi-line items with descriptions), specify a custom `itemHeight` value to match your item's actual height.
 
 <FileSource src="/framed/ComboBox/VirtualizeItemHeight" />

@@ -58,7 +58,7 @@ Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The
 
 The `locale` prop accepts either a [flatpickr locale key](https://github.com/flatpickr/flatpickr/tree/master/src/l10n) or a [CustomLocale](https://github.com/flatpickr/flatpickr/blob/master/src/types/locale.ts) object. It defaults to `"en"`, which renders Carbon-spec single-letter weekday abbreviations (`S, M, T, W, Th, F, S`).
 
-To customize the weekday labels (e.g., to restore flatpickr's default English `Sun, Mon, Tue, ...` shorthands), pass a `CustomLocale` object.
+To customize the weekday labels (for example, to restore flatpickr's default English `Sun, Mon, Tue, ...` shorthands), pass a `CustomLocale` object.
 
 <FileSource src="/framed/DatePicker/DatePickerLocale" />
 
@@ -116,7 +116,7 @@ Add helper text to provide additional context or formatting instructions.
 
 ## Hidden label
 
-Hide the label while maintaining accessibility.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <DatePicker>
   <DatePickerInput hideLabel labelText="Date of birth" placeholder="mm/dd/yyyy" />

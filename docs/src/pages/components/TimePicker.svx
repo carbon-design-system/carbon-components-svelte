@@ -85,7 +85,7 @@ Add helper text to provide additional context or formatting instructions.
 
 ## Hidden label
 
-Hide the label while maintaining accessibility.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <TimePicker hideLabel labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">

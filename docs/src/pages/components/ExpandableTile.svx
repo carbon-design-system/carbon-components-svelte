@@ -2,10 +2,9 @@
   import { ExpandableTile, Button, Stack, OutboundLink } from "carbon-components-svelte";
 </script>
 
-Expandable tiles create a collapsible content container that can
-show and hide content with a smooth animation. They are ideal for managing content
-overflow and progressive disclosure of information. They automatically
-measure content height using a resize observer.
+Expandable tiles show and hide content with a smooth animation. They suit content
+overflow and progressive disclosure, and automatically measure content height with
+a resize observer.
 
 ## Default
 
@@ -32,8 +31,8 @@ content that appears before and after expansion.
 
 ## Custom tile heights
 
-Set custom heights for the tile content using CSS. This is useful when you need to
-control the exact dimensions of the visible and hidden content.
+Set custom heights for the tile content using CSS to control the exact dimensions
+of the visible and hidden content.
 
 <ExpandableTile>
   <div slot="above" style="height: 10rem">Above the fold content here</div>
@@ -74,9 +73,9 @@ Customize the expand/collapse button labels using the `tileExpandedLabel` and
 
 By default, the tile uses a `<button>` element to toggle the expand/collapse state.
 
-If you need to use interactive content inside the tile, set the `hasInteractiveContent` prop to `true`. This will render the tile as a `<div>` element to avoid invalid HTML nesting. 
+If you need to use interactive content inside the tile, set the `hasInteractiveContent` prop to `true`. This renders the tile as a `<div>` element to avoid invalid HTML nesting.
 
-Only the expand/collapse toggle with affect the tile's expand/collapse state.
+Only the expand/collapse toggle affects the tile's expand/collapse state.
 
 <ExpandableTile hasInteractiveContent tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <Stack slot="above" gap={4} inline>

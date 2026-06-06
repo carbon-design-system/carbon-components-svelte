@@ -42,7 +42,7 @@ Control the increment/decrement step size using the `step` prop. This example us
 
 Configure a starting point for stepping when the input is empty or zero using `stepStartValue`. When the user clicks increment or decrement, the value jumps directly to `stepStartValue` instead of stepping from zero.
 
-This is useful when zero is not within the `min`/`max` range, or when there is a more sensible default (e.g., the current year when asking for a year). Combined with `allowEmpty`, it ensures the user must interact with the input before submitting a value.
+This is useful when zero is not within the `min`/`max` range, or when there is a more sensible default (for example, the current year when asking for a year). Combined with `allowEmpty`, it ensures the user must interact with the input before submitting a value.
 
 <NumberInput stepStartValue={2026} allowEmpty min={2026} max={2100} labelText="Year" />
 
@@ -110,13 +110,13 @@ Use `on:blur:stepper` to listen for when a stepper button loses focus. The event
 
 ## Hidden label
 
-Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <NumberInput hideLabel labelText="Clusters" value={0} />
 
 ## Extra-large size
 
-Use the extra-large size for prominent inputs by setting `size` to `"xl"`. This provides more visual emphasis.
+Use the extra-large size for prominent inputs by setting `size` to `"xl"`.
 
 <NumberInput size="xl" labelText="Clusters" value={0} />
 
@@ -128,7 +128,7 @@ Use the small size for compact layouts by setting `size` to `"sm"`. This is idea
 
 ## Light variant
 
-Use the light variant for dark backgrounds by setting `light` to `true`. This provides better contrast in dark themes.
+Use the light variant for dark backgrounds by setting `light` to `true`.
 
 <NumberInput light labelText="Clusters" value={0} />
 
@@ -146,7 +146,7 @@ Indicate a warning state by setting `warn` to `true`. This example shows a warni
 
 ## Disabled state
 
-Disable the input by setting `disabled` to `true`. This prevents all user interaction.
+Disable the input by setting `disabled` to `true`.
 
 <NumberInput disabled labelText="Clusters" value={0} />
 
@@ -158,7 +158,7 @@ Make the input read-only by setting `readonly` to `true`. This allows viewing bu
 
 ## Hidden steppers
 
-Hide the increment/decrement controls by setting `hideSteppers` to `true`. This provides a simpler input interface.
+Hide the increment/decrement controls by setting `hideSteppers` to `true`.
 
 <NumberInput hideSteppers labelText="Clusters" value={0} />
 
@@ -176,6 +176,6 @@ Show a loading state using the number input skeleton. This is useful while data 
 
 ## Skeleton without label
 
-Show a loading state without a label by setting `hideLabel` to `true`. This maintains layout consistency.
+Show a loading state without a label by setting `hideLabel` to `true`.
 
 <NumberInputSkeleton hideLabel />

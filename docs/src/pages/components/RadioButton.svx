@@ -6,7 +6,7 @@ components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
   import { RadioButton, RadioButtonSkeleton, RadioButtonGroup, Tooltip, Stack } from "carbon-components-svelte";
 </script>
 
-Radio buttons provide a selection control that allows users to choose a single option from a set. They support both individual and grouped usage, with options for horizontal and vertical layouts.
+Radio buttons are a selection control for choosing a single option from a set. They support both individual and grouped usage, with options for horizontal and vertical layouts.
 
 ## Default
 
@@ -28,13 +28,13 @@ Use a radio button individually with a bindable `checked` prop for simple use ca
 
 ## Implicit grouping
 
-Multiple standalone radio button components sharing the same `name` attribute automatically form a group and synchronize their checked state. This allows you to create radio button groups without using a radio button group.
+Multiple standalone radio button components sharing the same `name` attribute automatically form a group and synchronize their checked state — no radio button group component required.
 
 <FileSource src="/framed/RadioButton/RadioButtonImplicitGroup" />
 
 ## Hidden legend
 
-Visually hide the legend while maintaining accessibility.
+Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
 
 <RadioButtonGroup hideLegend legendText="Storage tier (disk)" name="plan-legend" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />

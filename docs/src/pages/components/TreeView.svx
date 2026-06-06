@@ -144,7 +144,7 @@ Configure `TreeView.showNode` behavior using optional parameters. By default, al
 
 ## Performance with large and deep trees
 
-The tree view is optimized to handle large datasets efficiently. This example demonstrates performance with both a large tree (1000+ nodes) and a deeply nested tree (100 levels deep).
+The tree view is optimized to handle large datasets efficiently, as shown here with a large tree (1000+ nodes) and a deeply nested tree (100 levels deep).
 
 <FileSource src="/framed/TreeView/TreeViewPerformance" />
 

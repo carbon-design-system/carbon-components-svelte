@@ -2,9 +2,9 @@
   import { Portal } from "carbon-components-svelte";
 </script>
 
-Portals render their content directly into `document.body`, allowing you to escape parent overflow constraints and z-index stacking contexts.
+Portals render their content directly into `document.body` to escape parent overflow constraints and z-index stacking contexts.
 
-For anchored, positioned content (e.g., dropdowns, popovers, overflow menus), use [FloatingPortal](/components/FloatingPortal) instead.
+For anchored, positioned content (for example, dropdowns, popovers, overflow menus), use [FloatingPortal](/components/FloatingPortal) instead.
 
 ## Default Portal
 

@@ -5,7 +5,7 @@ components: ["Theme"]
 <script>
 </script>
 
-Theme provides dynamic client-side theming using CSS variables. It supports five themes: `white`, `g10`, `g80`, `g90`, and `g100`, and allows for custom theme token overrides.
+Theme provides dynamic client-side theming using CSS variables. It supports five themes: `white`, `g10`, `g80`, `g90`, and `g100`, and supports custom theme token overrides.
 
 The component can persist theme preferences using [window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and provides built-in toggle and select controls for theme switching.
 
@@ -25,7 +25,7 @@ Create a basic theme component that can be controlled programmatically.
 
 Set `persist` to `true` to save the theme preference in [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). Use `persistKey` to specify a custom storage key.
 
-When `persist` is enabled, theme changes are automatically synchronized across browser tabs. When the theme is changed in one tab, all other tabs with the same `persistKey` will update immediately.
+When `persist` is enabled, theme changes are automatically synchronized across browser tabs. When the theme is changed in one tab, all other tabs with the same `persistKey` update immediately.
 
 <FileSource src="/framed/Theme/ThemePersist" />
 

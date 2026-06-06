@@ -7,8 +7,7 @@ components: ["Dropdown", "DropdownSkeleton"]
 </script>
 
 Dropdowns provide a select input with a dropdown menu. They support
-various states, sizes, and customization options. Each item in the dropdown must
-have a unique `id` property for proper functionality.
+multiple states, sizes, and customization options.
 
 > [!NOTE]
 > Every `items` object must have a unique "id" property.
@@ -65,8 +64,8 @@ Add descriptive text below the dropdown using the `helperText` prop.
 
 ## Hidden label
 
-Hide the label while maintaining accessibility by setting the `hideLabel` prop to
-`true`. The label will still be available to screen readers.
+Hide the label visually by setting `hideLabel` to `true`. The label remains
+available to screen readers.
 
 <Dropdown hideLabel labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -85,8 +84,7 @@ receives the item object and returns the formatted string.
 
 ## Multiple dropdowns
 
-Create multiple dropdowns that work together. This example demonstrates how to
-manage the state of multiple dropdowns.
+Create multiple dropdowns that work together.
 
 <FileSource src="/framed/Dropdown/MultipleDropdown" />
 
@@ -127,8 +125,7 @@ Display the dropdown inline with other content by setting the `type` prop to
 
 ## Extra-large size
 
-Increase the size of the dropdown by setting the `size` prop to `"xl"`. This
-provides more visual emphasis for important selections.
+Increase the size of the dropdown by setting the `size` prop to `"xl"`.
 
 <Dropdown size="xl" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -163,8 +160,7 @@ context with the `warnText` prop.
 
 ## Disabled state
 
-Disable the entire dropdown by setting the `disabled` prop to `true`. This prevents
-user interaction with the component.
+Disable the entire dropdown by setting the `disabled` prop to `true`.
 
 <Dropdown disabled labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -173,8 +169,7 @@ user interaction with the component.
 ## Disabled items
 
 Disable specific items in the dropdown by setting the `disabled` property to
-`true` in the item object. This allows for more granular control over available
-selections.
+`true` in the item object for finer control over available selections.
 
 <Dropdown
   selectedId="0"
@@ -203,9 +198,9 @@ Set `readonly` to `true` to display a non-editable value.
 
 ## Virtualized items (large lists)
 
-Virtualization is a technique that allows only the items currently visible in the viewport to be rendered in the DOM, improving performance for large lists.
+Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
 
-By default, the dropdown will virtualize lists with more than 100 items.
+By default, the dropdown virtualizes lists with more than 100 items.
 
 In the example below, 10,000 items are provided to the dropdown but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
 
@@ -234,13 +229,12 @@ Specify a custom value for `threshold` to control when virtualization activates.
 
 ## Virtualized items (custom item height)
 
-The default item height for virtualization is 40 pixels. When using custom slots to render items with different heights (e.g., multi-line items with descriptions), specify a custom `itemHeight` value to match your item's actual height.
+The default item height for virtualization is 40 pixels. When using custom slots to render items with different heights (for example, multi-line items with descriptions), specify a custom `itemHeight` value to match your item's actual height.
 
 <FileSource src="/framed/Dropdown/VirtualizeItemHeight" />
 
 ## Skeleton
 
-Display a loading state using the dropdown skeleton. This provides
-visual feedback while the dropdown content is being loaded.
+Display a loading state using the dropdown skeleton.
 
 <DropdownSkeleton />
