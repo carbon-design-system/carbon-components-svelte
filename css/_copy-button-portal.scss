@@ -10,6 +10,15 @@
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--portal-active.#{$prefix}--copy-btn--animating::before,
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--portal-active .#{$prefix}--copy-btn__feedback,
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--portal-active.#{$prefix}--copy-btn--animating
+    .#{$prefix}--copy-btn__feedback,
+  // The inline code snippet variant renders its own button without the
+  // `bx--copy-btn` class, so the rules above do not reach it. Carbon's
+  // `.bx--snippet--inline.bx--copy-btn--animating::before` still shows the
+  // native caret beside the portalled tooltip.
+  .#{$prefix}--snippet--inline.#{$prefix}--copy-btn--portal-active.#{$prefix}--copy-btn--animating::before,
+  .#{$prefix}--snippet--inline.#{$prefix}--copy-btn--portal-active
+    .#{$prefix}--copy-btn__feedback,
+  .#{$prefix}--snippet--inline.#{$prefix}--copy-btn--portal-active.#{$prefix}--copy-btn--animating
     .#{$prefix}--copy-btn__feedback {
     display: none;
   }
