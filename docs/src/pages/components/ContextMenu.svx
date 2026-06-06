@@ -52,7 +52,7 @@ Toggling a checkbox or radio item in a nested submenu leaves that flyout open so
 
 ## Custom target
 
-By default, the context menu will trigger when right clicking anywhere in the `window`.
+By default, the context menu triggers when you right-click anywhere in the `window`.
 
 Set `target` to specify which element triggers the context menu.
 
@@ -90,6 +90,6 @@ Put `ContextMenuRadioGroup` inside a parent `ContextMenuOption` to show the radi
 
 ## Prevent menu from closing
 
-Use `preventDefault()` on individual context menu option click events to prevent the menu from closing when that option is clicked. This is useful for scenarios where you want to keep the menu open after performing an action.
+Use `preventDefault()` on individual context menu option click events to prevent the menu from closing when that option is clicked. Use this to keep the menu open after performing an action.
 
 <FileSource src="/framed/ContextMenu/ContextMenuPreventDefault" />

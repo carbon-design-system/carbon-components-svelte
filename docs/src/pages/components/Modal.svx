@@ -77,7 +77,7 @@ Stack multiple modals for complex workflows. Each modal maintains its own state 
 
 ## Multiple secondary buttons
 
-Add up to two secondary actions using the `secondaryButtons` prop. This provides more flexibility than the single `secondaryButtonText` option.
+Add up to two secondary actions using the `secondaryButtons` prop, which replaces the single `secondaryButtonText` option.
 
 <FileSource src="/framed/Modal/3ButtonModal" />
 
@@ -89,19 +89,19 @@ Use the extra-small size for compact notifications by setting `size` to `"xs"`. 
 
 ## Small size
 
-Use the small size for simple confirmations by setting `size` to `"sm"`. This provides a more focused dialog.
+Use the small size for simple confirmations by setting `size` to `"sm"`.
 
 <FileSource src="/framed/Modal/ModalSmall" />
 
 ## Large size
 
-Use the large size for complex content by setting `size` to `"lg"`. This provides more space for detailed information.
+Use the large size for complex content by setting `size` to `"lg"`.
 
 <FileSource src="/framed/Modal/ModalLarge" />
 
 ## Prevent default close behavior
 
-The modal dispatches a cancelable `close` event, allowing you to prevent the modal from closing using `e.preventDefault()`. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, or `"close-button"`.
+The modal dispatches a cancelable `close` event. Call `e.preventDefault()` to keep the modal open. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, or `"close-button"`.
 
 <FileSource src="/framed/Modal/ModalPreventClose" />
 
@@ -113,6 +113,6 @@ Disable closing the modal when clicking outside by setting `preventCloseOnClickO
 
 ## Button with icon
 
-Enhance modal buttons with icons for better visual context and clarity. This example shows how to add icons to modal actions.
+Enhance modal buttons with icons for better visual context and clarity.
 
 <FileSource src="/framed/Modal/ModalButtonWithIcon" />

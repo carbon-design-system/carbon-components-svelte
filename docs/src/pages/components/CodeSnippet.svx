@@ -19,7 +19,7 @@ Display a single-line code snippet by default.
 
 Pass a custom function to the `copy` prop to override the default copy behavior.
 
-In this example, we use the open source module [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
+This example uses the open source module [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
 

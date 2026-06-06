@@ -138,6 +138,6 @@ Set `disabled` to `true` to disable menu items. Use `hasDivider` to add visual s
 
 ## Prevent menu from closing
 
-Use `preventDefault()` on individual overflow menu item click events to prevent the menu from closing when that item is clicked. This is useful for scenarios where you want to keep the menu open after performing an action.
+Use `preventDefault()` on individual overflow menu item click events to prevent the menu from closing when that item is clicked. Use this to keep the menu open after performing an action.
 
 <FileSource src="/framed/OverflowMenu/OverflowMenuPreventDefault" />

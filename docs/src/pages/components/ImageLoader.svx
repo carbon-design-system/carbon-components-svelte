@@ -18,8 +18,7 @@ process automatically.
 
 ## Slots
 
-Customize the loading and error states using named slots. This example shows how
-to display a loading indicator and error message.
+Customize the loading and error states using named slots.
 
 <ImageLoader src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg">
     <svelte:fragment slot="loading">
@@ -42,22 +41,20 @@ Supported aspect ratios include `"2x1"`, `"2x3"`, `"16x9"`, `"4x3"`, `"1x1"`,
 
 ## Fade in
 
-Enable a smooth fade-in animation when the image loads successfully. This provides
-a better user experience for image loading.
+Enable a smooth fade-in animation when the image loads successfully.
 
 <Button kind="ghost" on:click="{() => { key++;}}">Reload image</Button>
 {#key key}<ImageLoader fadeIn ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />{/key}
 
 ## Programmatic usage
 
-Control image loading programmatically using component references. This example
-demonstrates how to trigger image loading manually.
+Control image loading programmatically using component references.
 
 <FileSource src="/framed/ImageLoader/ProgrammaticImageLoader" />
 
 ## Dynamic image source
 
-Update the image source dynamically using the same image loader instance. This
-allows for smooth transitions between different images.
+Update the image source dynamically using the same image loader instance for
+smooth transitions between images.
 
 <FileSource src="/framed/ImageLoader/DynamicImageLoader" />

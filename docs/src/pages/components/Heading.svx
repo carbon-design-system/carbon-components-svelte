@@ -10,7 +10,7 @@ Heading and section components work together to automatically manage semantic he
 
 ## Default
 
-A top-level heading inside a section renders as an `h1` element. This provides a semantic starting point for your document structure.
+A top-level heading inside a section renders as an `h1` element, a semantic starting point for your document structure.
 
 <Section>
   <Heading>Heading 1</Heading>

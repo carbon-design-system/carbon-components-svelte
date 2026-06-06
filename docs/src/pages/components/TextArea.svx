@@ -28,7 +28,7 @@ Add helper text below the textarea to provide additional context or instructions
 
 ## Hidden label
 
-Visually hide the label while maintaining accessibility by setting `hideLabel` to `true`.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <TextArea hideLabel labelText="App description" placeholder="Enter a description..." />
 

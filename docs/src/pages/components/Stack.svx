@@ -25,7 +25,7 @@ The `gap` scale can be set from `0` to `13`:
 | **12** | 6rem (96px)       |
 | **13** | 10rem (160px)     |
 
-Alternatively, you can specify an arbitrary `gap` value (e.g., `200px`). You can also set `gap` to `0` to omit any gap class.
+Alternatively, you can specify an arbitrary `gap` value (for example, `200px`). You can also set `gap` to `0` to omit any gap class.
 
 ## Vertical (gap 0)
 
@@ -179,7 +179,7 @@ Set `inline` to `true` to use `display: inline-flex` instead of `display: flex`.
 
 ## Vertical (custom value)
 
-Use an arbitrary gap value (e.g., 22px) instead of the scale.
+Use an arbitrary gap value (for example, 22px) instead of the scale.
 
 <Stack gap="22px">
   <div>Item 1</div>
@@ -339,7 +339,7 @@ Gap scale of `13` (160px).
 
 ## Horizontal (custom value)
 
-Use an arbitrary gap value (e.g., 22px) instead of the scale.
+Use an arbitrary gap value (for example, 22px) instead of the scale.
 
 <Stack orientation="horizontal" gap="22px">
   <div>Item 1</div>

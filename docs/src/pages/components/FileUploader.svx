@@ -21,8 +21,7 @@ accepts a single file. Set `multiple` to `true` to allow multiple file selection
 
 ## Multiple files
 
-Enable multiple file selection by setting the `multiple` prop to `true`. This
-allows users to select multiple files at once.
+Enable multiple file selection by setting the `multiple` prop to `true`.
 
 <FileUploaderButton multiple labelText="Add files" />
 
@@ -125,7 +124,7 @@ programmatically.
 ## Maximum file size
 
 Limit the size of uploaded files using the `maxFileSize` prop. Files exceeding the
-limit (in bytes) will be automatically filtered out.
+limit (in bytes) are automatically filtered out.
 
 The `maxFileSize` prop accepts values in bytes. File sizes use binary (base 2)
 units, where 1024 bytes = 1 KiB (kibibyte), not 1000 bytes. This matches how
@@ -159,8 +158,7 @@ Set `preventDuplicate` to `true` to reject files that match an already-selected 
 
 ## File uploader (disabled state)
 
-Disable the file uploader by setting the `disabled` prop to `true`. This prevents
-user interaction with the component.
+Disable the file uploader by setting the `disabled` prop to `true`.
 
 <FileUploader disabled multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
@@ -239,7 +237,6 @@ console.
 
 ## Skeleton
 
-Display a loading state using the file uploader skeleton. This provides
-visual feedback while the file uploader content is being loaded.
+Display a loading state using the file uploader skeleton.
 
 <FileUploaderSkeleton />

@@ -8,7 +8,7 @@ components: ["ContainedList", "ContainedListItem"]
   import Close from "carbon-icons-svelte/lib/Close.svelte";
 </script>
 
-Contained lists provide a structured way to display a list of items within a container. They support various sizes, interactive items, icons, actions, and search functionality. They are useful for displaying hierarchical or grouped content with consistent spacing and styling.
+Contained lists display a list of items within a container. They support multiple sizes, interactive items, icons, actions, and search — useful for hierarchical or grouped content with consistent spacing and styling.
 
 ## Default
 
@@ -73,7 +73,7 @@ Set the `inset` prop to `true` to make the divider lines between list items inse
 
 ## Disclosed variant
 
-Set `kind="disclosed"` to use a more compact header style with sticky positioning. When scrolling, the list header will stick to the top of the container, making it useful for long lists where you want to keep the context visible. The header in the disclosed variant has a fixed height.
+Set `kind="disclosed"` to use a more compact header style with sticky positioning. When scrolling, the list header sticks to the top of the container, keeping context visible in long lists. The header in the disclosed variant has a fixed height.
 
 <div style:height="200px" style:overflow-y="auto">
   <ContainedList labelText="List title 1" kind="disclosed">
@@ -129,7 +129,7 @@ Set the `interactive` prop to `true` on a contained list item to render the item
 
 ## Interactive items with actions
 
-Add interactive elements to individual list items using the `action` slot on a contained list item. This is useful for adding buttons, icons, or other controls that appear on the right side of each item. Actions are positioned absolutely and don't interfere with the item's clickable area.
+Add interactive elements to individual list items using the `action` slot on a contained list item, such as buttons, icons, or other controls that appear on the trailing side of each item. Actions are positioned absolutely and don't interfere with the item's clickable area.
 
 <ContainedList labelText="List title">
   <ContainedListItem interactive on:click={() => console.log('click')}>

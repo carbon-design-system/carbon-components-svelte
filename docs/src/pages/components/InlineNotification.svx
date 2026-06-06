@@ -19,7 +19,7 @@ Display a basic error notification with title and subtitle by default.
 
 ## Prevent default close behavior
 
-The component is controlled, allowing you to prevent the default close behavior using `e.preventDefault()`.
+The component is controlled, so you can prevent the default close behavior with `e.preventDefault()`.
 
 <InlineNotification title="Error" subtitle="An internal server error occurred." on:close={(e) => {
   e.preventDefault();
@@ -28,7 +28,7 @@ The component is controlled, allowing you to prevent the default close behavior 
 
 ## Reusable notification
 
-Control the notification visibility by binding to the `open` prop. This allows you to show, hide, and reuse the same notification component with different messages. The `open` prop defaults to `true`.
+Control the notification visibility by binding to the `open` prop to show, hide, and reuse the same notification component with different messages. The `open` prop defaults to `true`.
 
 <FileSource src="/framed/InlineNotification/InlineNotificationReusable" />
 

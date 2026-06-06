@@ -36,7 +36,7 @@ Prevent the default close behavior using `e.preventDefault()` in the `on:close` 
 
 ## Reusable notification
 
-Control the notification visibility by binding to the `open` prop. This allows you to show, hide, and reuse the same notification component with different messages. The `open` prop defaults to `true`.
+Control the notification visibility by binding to the `open` prop to show, hide, and reuse the same notification component with different messages. The `open` prop defaults to `true`.
 
 <FileSource src="/framed/ToastNotification/ToastNotificationReusable" />
 

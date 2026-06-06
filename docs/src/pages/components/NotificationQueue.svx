@@ -6,7 +6,7 @@ components: ["NotificationQueue"]
   import { NotificationQueue } from "carbon-components-svelte";
 </script>
 
-Notification queues provide an imperative API for managing toast notifications. They handle positioning, deduplication, and overflow management, making it easy to display notifications from anywhere in your application.
+Notification queues provide an imperative API for managing toast notifications. They handle positioning, deduplication, and overflow management, so you can display notifications from anywhere in your application.
 
 The queue uses the underlying [ToastNotification](ToastNotification) to display notifications.
 
@@ -26,7 +26,7 @@ The `top-right` position assumes usage of the [UIShell](/components/UIShell) com
 
 ## Deduplication
 
-By default, the `id` prop is optional; a unique id will be generated for the notification. The queue [keys](https://svelte.dev/docs/svelte/each#Keyed-each-blocks) notifications by `id` for performance reasons.
+By default, the `id` prop is optional; a unique id will be generated for the notification. The queue [keys](https://svelte.dev/docs/svelte/each#Keyed-each-blocks) notifications by `id` for performance.
 
 Notifications are deduplicated by `id`. If you add a notification with an `id` that already exists in the queue, the call is ignored. This prevents duplicate notifications from appearing. To change an existing notification in place, use [update](#update).
 
