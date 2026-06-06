@@ -315,6 +315,13 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<Row>>}
    */
   const tableRows = writable(rows);
+  /**
+   * Exposes the table size to slotted content (e.g. `Toolbar`)
+   * so it can derive a matching size unless explicitly overridden.
+   * @type {import("svelte/store").Writable<"compact" | "short" | "medium" | "tall" | undefined>}
+   */
+  const tableSize = writable(size);
+  $: $tableSize = size;
 
   /** Default row heights based on size variant */
   const DEFAULT_ROW_HEIGHTS = {
@@ -445,6 +452,7 @@
   setContext("carbon:DataTable", {
     batchSelectedIds,
     tableRows,
+    tableSize,
     resetSelectedRowIds,
     filterRows,
   });

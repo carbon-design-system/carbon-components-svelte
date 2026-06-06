@@ -1,19 +1,39 @@
 <script>
   /**
    * Specify the toolbar size.
+   * If unset, the size is inherited from the parent `DataTable`
+   * ("xs" for "compact", "sm" for "short", "default" otherwise).
    * @type {"xs" | "sm" | "default"}
    */
-  export let size = "default";
+  export let size = undefined;
 
   /**
    * Specify the ARIA label for the toolbar.
    */
   export let ariaLabel = "data table toolbar";
 
-  import { setContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   import { writable } from "svelte/store";
 
   let ref = null;
+
+  const dataTableCtx = getContext("carbon:DataTable");
+  /** @type {import("svelte/store").Writable<"compact" | "short" | "medium" | "tall" | undefined> | undefined} */
+  const tableSize = dataTableCtx?.tableSize;
+
+  /** @type {Record<"compact" | "short" | "medium" | "tall", "xs" | "sm" | "default">} */
+  const TOOLBAR_SIZE_BY_TABLE_SIZE = {
+    compact: "xs",
+    short: "sm",
+    medium: "default",
+    tall: "default",
+  };
+
+  // `$tableSize` is safe when `tableSize` is undefined: Svelte's auto-subscription no-ops on null/undefined stores.
+  $: inheritedSize = $tableSize
+    ? TOOLBAR_SIZE_BY_TABLE_SIZE[$tableSize]
+    : undefined;
+  $: effectiveSize = size ?? inheritedSize ?? "default";
 
   /**
    * @type {import("svelte/store").Writable<boolean>}
@@ -44,9 +64,9 @@
   bind:this={ref}
   aria-label={ariaLabel}
   class:bx--table-toolbar={true}
-  class:bx--table-toolbar--xs={size === "xs"}
-  class:bx--table-toolbar--small={size === "sm"}
-  class:bx--table-toolbar--normal={size === "default"}
+  class:bx--table-toolbar--xs={effectiveSize === "xs"}
+  class:bx--table-toolbar--small={effectiveSize === "sm"}
+  class:bx--table-toolbar--normal={effectiveSize === "default"}
   style:z-index={1}
   {...$$restProps}
 >
