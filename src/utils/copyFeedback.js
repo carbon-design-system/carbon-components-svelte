@@ -11,7 +11,6 @@
  *   get animation(): CopyFeedbackAnimation,
  *   get feedbackOpen(): boolean,
  *   get copyPending(): boolean,
- *   get timeout(): ReturnType<typeof setTimeout> | undefined,
  *   dismiss: () => void,
  *   onClick: (performCopy: () => void | Promise<void>, feedbackTimeout: number) => Promise<void>,
  *   onAnimationEnd: (event: { animationName: string }) => void,
@@ -101,9 +100,6 @@ export function createCopyFeedbackState(onSync) {
     },
     get copyPending() {
       return copyPending;
-    },
-    get timeout() {
-      return timeout;
     },
     dismiss,
     onClick,
