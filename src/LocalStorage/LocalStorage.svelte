@@ -52,7 +52,7 @@
     storage.clear();
   }
 
-  import { afterUpdate, createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import {
     parseStoredValue,
     safeBrowserStorage,
@@ -129,7 +129,7 @@
     prevSerialized = serializeStoredValue(value);
   }
 
-  afterUpdate(() => {
+  $: if (mounted) {
     const serialized = serializeStoredValue(value);
 
     if (serialized !== prevSerialized) {
@@ -138,5 +138,5 @@
       dispatch("update", { prevValue, value });
       prevSerialized = serialized;
     }
-  });
+  }
 </script>
