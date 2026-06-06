@@ -62,14 +62,12 @@
 
   /** @type {"fade-in" | "fade-out"} */
   let animation = undefined;
-  let timeout = undefined;
   let feedbackOpen = false;
   let copyPending = false;
 
   function syncCopyFeedback() {
     animation = copyFeedback.animation;
     feedbackOpen = copyFeedback.feedbackOpen;
-    timeout = copyFeedback.timeout;
     copyPending = copyFeedback.copyPending;
   }
 
