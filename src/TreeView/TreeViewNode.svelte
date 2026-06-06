@@ -86,7 +86,7 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
-  import { afterUpdate, getContext } from "svelte";
+  import { getContext } from "svelte";
 
   let ref = null;
   let refLabel = null;
@@ -103,17 +103,6 @@
     return computeTreeLeafDepth(refLabel) - 1 + (leaf && icon ? 2 : 2.5);
   }
 
-  afterUpdate(() => {
-    if (
-      id === $activeNodeId &&
-      prevActiveId !== $activeNodeId &&
-      !$selectedIdsSetStore.has(id)
-    )
-      selectNode(node);
-
-    prevActiveId = $activeNodeId;
-  });
-
   $: selected = $selectedIdsSetStore.has(id);
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
@@ -124,6 +113,16 @@
     leaf,
     selected,
   };
+  $: {
+    if (
+      id === $activeNodeId &&
+      prevActiveId !== $activeNodeId &&
+      !$selectedIdsSetStore.has(id)
+    )
+      selectNode(node);
+
+    prevActiveId = $activeNodeId;
+  }
   $: if (refLabel) {
     refLabel.style.marginLeft = `-${offset()}rem`;
     refLabel.style.paddingLeft = `${offset()}rem`;
