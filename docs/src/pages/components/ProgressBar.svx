@@ -42,7 +42,7 @@ Set a custom maximum value for the progress bar.
 
 ## Hidden label
 
-Visually hide the label while maintaining accessibility.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <ProgressBar hideLabel value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 

@@ -22,7 +22,7 @@ Set `fullWidth` to `true` for the slider to span the full width of its containin
 
 ## Hidden label
 
-Visually hide the label while maintaining accessibility.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <Slider labelText="Instances" hideLabel value={0} />
 
@@ -70,7 +70,7 @@ Disable the slider to prevent interaction.
 
 ## Read-only state
 
-Set the slider to read-only to display a value without allowing changes.
+Set the slider to read-only to display a value while preventing changes.
 
 <Slider readonly labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
@@ -118,7 +118,7 @@ Disable the range slider to prevent interaction.
 
 ## Range slider (read-only)
 
-Set the range slider to read-only to display values without allowing changes.
+Set the range slider to read-only to display values while preventing changes.
 
 <RangeSlider readonly labelText="Range" value={10} valueUpper={90} />
 

@@ -58,7 +58,7 @@ Set `fullWidth` to `true` for tabs to evenly span the full width of the containe
 
 ## Reactive example
 
-Use `bind:selected` to create a two-way binding with the selected tab index. This allows you to programmatically control the selected tab and react to tab changes.
+Use `bind:selected` for a two-way binding with the selected tab index, so you can programmatically control the selected tab and react to tab changes.
 
 <FileSource src="/framed/Tabs/TabsReactive" />
 
@@ -66,7 +66,7 @@ Use `bind:selected` to create a two-way binding with the selected tab index. Thi
 
 Tabs can be conditionally rendered using Svelte's `{#if}` blocks. The component automatically maintains correct indices even when tabs are dynamically added or removed.
 
-If the current selected tab is removed, the next tab will be selected.
+If the current selected tab is removed, the next tab is selected.
 
 <FileSource src="/framed/Tabs/TabsConditional" />
 
@@ -200,7 +200,7 @@ When only some tabs use `secondaryLabel`, the container still applies the taller
 
 ## Container type (secondaryChildren slot)
 
-Use the `secondaryChildren` slot to customize the secondary label with custom markup (e.g. `<strong>` for emphasis).
+Use the `secondaryChildren` slot to customize the secondary label with custom markup (for example, `<strong>` for emphasis).
 
 <Tabs type="container">
   <Tab label="Engage">
@@ -221,7 +221,7 @@ Use the `secondaryChildren` slot to customize the secondary label with custom ma
 
 ## Container type with icons and secondary label
 
-Container type tabs can use both `icon` and `secondaryLabel` for a primary label, icon, and optional secondary line (e.g. counts or status).
+Container type tabs can use both `icon` and `secondaryLabel` for a primary label, icon, and optional secondary line (for example, counts or status).
 
 <Tabs type="container">
   <Tab label="Calendar" icon={Calendar} secondaryLabel="(12 events)" />

@@ -29,7 +29,6 @@ shows a basic login form with required fields.
 ## Invalid state
 
 Handle form validation and display error states using the `invalid` and
-`invalidText` props on form inputs. This example demonstrates how to show
-validation errors in a fluid form.
+`invalidText` props on form inputs.
 
 <FileSource src="/framed/FluidForm/FluidFormInvalid" />

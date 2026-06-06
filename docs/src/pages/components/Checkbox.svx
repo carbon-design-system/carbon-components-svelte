@@ -26,7 +26,7 @@ Set `indeterminate` to `true` to show a mixed state, typically used in parent ch
 
 ## Hidden label
 
-Set `hideLabel` to `true` to visually hide the label while keeping it accessible to screen readers.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <Checkbox labelText="Label text" hideLabel />
 
@@ -87,7 +87,7 @@ Use two-way binding with `bind:selected` to track and update the selected values
 
 ## CheckboxGroup (hidden legend)
 
-Visually hide the legend while maintaining accessibility.
+Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
 
 <CheckboxGroup hideLegend legendText="Notification preferences" name="prefs-hidden" selected={["email"]}>
 <Checkbox value="email" labelText="Email" />

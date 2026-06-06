@@ -17,7 +17,7 @@ See how the component maintains state across page reloads. Toggle the switch and
 
 ## Reactive key
 
-The `key` prop is also reactive, allowing you to dynamically switch between different storage keys. This is useful for managing per-user settings or multiple contexts.
+The `key` prop is also reactive, so you can dynamically switch between storage keys — useful for per-user settings or multiple contexts.
 
 In this example, each user has their own theme preference stored under a separate key. When you switch users, the component automatically loads that user's saved preference.
 

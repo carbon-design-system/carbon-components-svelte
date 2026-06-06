@@ -64,7 +64,7 @@ Add descriptive text below the select menu.
 
 ## Hidden label
 
-Visually hide the label while maintaining accessibility.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <Select hideLabel labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -177,7 +177,7 @@ Disable the select menu to prevent interaction.
 
 ## Read-only state
 
-Use the read-only state to display the selected value without allowing changes.
+Use the read-only state to display the selected value while preventing changes.
 
 <Select readonly labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />

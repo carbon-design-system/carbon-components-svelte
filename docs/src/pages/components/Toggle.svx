@@ -6,7 +6,7 @@ components: ["Toggle", "ToggleSkeleton"]
   import { Toggle, ToggleSkeleton } from "carbon-components-svelte";
 </script>
 
-Toggles provide a switch-like control that allows users to turn options on or off. They support custom labels, different sizes, and various states to match your application's needs.
+Toggles are a switch-like control for turning options on or off. They support custom labels, different sizes, and multiple states to match your application's needs.
 
 ## Default
 
@@ -34,7 +34,7 @@ Listen for toggle state changes using the `on:toggle` event.
 
 ## Hidden label text
 
-Set `hideLabel` to `true` to visually hide the label while maintaining accessibility.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <Toggle labelText="Push notifications" hideLabel />
 

@@ -2,7 +2,7 @@
   import { MultiSelect } from "carbon-components-svelte";
 </script>
 
-Multi-selects provide a dropdown interface for selecting multiple options using checkboxes. They support filtering, custom formatting, and various states. Each item must have a unique `id` property for proper functionality.
+Multi-selects provide a dropdown interface for selecting multiple options using checkboxes. They support filtering, custom formatting, and multiple states.
 
 > [!NOTE]
 > Every `items` object must have a unique "id" property.
@@ -85,7 +85,7 @@ Bind to `sortedItems` to read the resolved list after sorting and selection feed
 
 ## Multiple multi-select dropdowns
 
-This example demonstrates how to manage multiple dropdowns in a form with coordinated state.
+Manage multiple dropdowns in a form with coordinated state.
 
 <FileSource src="/framed/MultiSelect/MultipleMultiSelect" />
 
@@ -142,7 +142,7 @@ Add descriptive text below the multi-select using the `helperText` prop.
 
 ## Hidden label
 
-Hide the label visually while maintaining accessibility by setting `hideLabel` to `true`. The label is still available to screen readers.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <MultiSelect labelText="Contact" label="Select contact methods..." hideLabel
     items="{[{id: "0", text: "Slack"},
@@ -152,7 +152,7 @@ Hide the label visually while maintaining accessibility by setting `hideLabel` t
 
 ## Light variant
 
-Use the light variant for dark backgrounds by setting `light` to `true`. This provides better contrast in dark themes.
+Use the light variant for dark backgrounds by setting `light` to `true`.
 
 <MultiSelect light labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -180,7 +180,7 @@ Display the dropdown inline with other content by setting `type` to `"inline"`. 
 
 ## Extra-large size
 
-Use the extra-large size for prominent selections by setting `size` to `"xl"`. This provides more visual emphasis.
+Use the extra-large size for prominent selections by setting `size` to `"xl"`.
 
 <MultiSelect size="xl" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -288,9 +288,9 @@ The select-all option is styled differently from regular options (with a separat
 
 ## Virtualized items (large lists)
 
-Virtualization is a technique that allows only the items currently visible in the viewport to be rendered in the DOM, improving performance for large lists.
+Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
 
-By default, the multi-select will virtualize lists with more than 100 items.
+By default, the multi-select virtualizes lists with more than 100 items.
 
 In the example below, 10,000 items are provided to the multi-select but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
 
@@ -319,6 +319,6 @@ Specify a custom value for `threshold` to control when virtualization activates.
 
 ## Virtualized items (custom item height)
 
-The default item height for virtualization is 40 pixels. When using custom slots to render items with different heights (e.g., multi-line items with descriptions), specify a custom `itemHeight` value to match your item's actual height.
+The default item height for virtualization is 40 pixels. When using custom slots to render items with different heights (for example, multi-line items with descriptions), specify a custom `itemHeight` value to match your item's actual height.
 
 <FileSource src="/framed/MultiSelect/VirtualizeItemHeight" />

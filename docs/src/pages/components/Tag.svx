@@ -88,7 +88,7 @@ Add a custom icon to the tag. Note: custom icons cannot be used with the filtera
 
 ## Interactive variant
 
-Set `interactive` to `true` to render a `button` element instead of a `div`. This is useful for clickable tags.
+Set `interactive` to `true` to render a `button` element instead of a `div` for clickable tags.
 
 <Tag interactive>Machine learning</Tag>
 

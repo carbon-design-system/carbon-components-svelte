@@ -32,7 +32,7 @@ Create a basic header with the header component.
 
 ## Header with side navigation
 
-The hamburger menu will automatically be rendered if the side nav component is used.
+The hamburger menu is automatically rendered if the side nav component is used.
 
 <FileSource src="/framed/UIShell/HeaderNav" />
 
@@ -108,7 +108,7 @@ Integrate toasts with the UI Shell. This example triggers a toast, which appears
 
 ## Classic theme
 
-Before version 0.105.0, the UI Shell defaulted to a mixed theme: **Gray 100** header and **White** side navigation. Now, the UI Shell respects the current theme (e.g., `white`, `g10`, `g80`, `g90`, `g100`).
+Before version 0.105.0, the UI Shell defaulted to a mixed theme: **Gray 100** header and **White** side navigation. Now, the UI Shell respects the current theme (for example, `white`, `g10`, `g80`, `g90`, `g100`).
 
 Set `theme="classic"` on both `Header` and `SideNav` for the classic look: **Gray 100** header and **White** side navigation, independent of the global theme.
 
