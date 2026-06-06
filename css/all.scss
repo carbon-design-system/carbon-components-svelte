@@ -98,6 +98,7 @@ $css--plex: true;
 @import "carbon-components/scss/globals/scss/styles";
 
 // Custom component overrides (must come after Carbon styles; same order as white/g10/etc.)
+@import "./data-table-toolbar";
 @import "./multiselect";
 @import "./treeview";
 @import "./selectable-tag";

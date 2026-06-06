@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the toolbar size.
-   * @type {"sm" | "default"}
+   * @type {"xs" | "sm" | "default"}
    */
   export let size = "default";
 
@@ -44,6 +44,7 @@
   bind:this={ref}
   aria-label={ariaLabel}
   class:bx--table-toolbar={true}
+  class:bx--table-toolbar--xs={size === "xs"}
   class:bx--table-toolbar--small={size === "sm"}
   class:bx--table-toolbar--normal={size === "default"}
   style:z-index={1}

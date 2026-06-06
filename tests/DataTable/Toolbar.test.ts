@@ -36,6 +36,17 @@ describe("DataTable Toolbar", () => {
       expect(toolbar).not.toHaveClass("bx--table-toolbar--normal");
     });
 
+    it("should handle xs size", () => {
+      const { container } = render(Toolbar, {
+        props: { testComponent: "Toolbar", size: "xs" },
+      });
+
+      const toolbar = container.querySelector(".bx--table-toolbar");
+      expect(toolbar).toHaveClass("bx--table-toolbar--xs");
+      expect(toolbar).not.toHaveClass("bx--table-toolbar--small");
+      expect(toolbar).not.toHaveClass("bx--table-toolbar--normal");
+    });
+
     it("should have z-index style", () => {
       const { container } = render(Toolbar, {
         props: { testComponent: "Toolbar" },
