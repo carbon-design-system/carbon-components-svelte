@@ -51,6 +51,17 @@
     findAndUpdate(nodes);
     nodes = nodes;
   }
+
+  function syncContenteditable(element, text) {
+    element.textContent = text;
+    return {
+      update(text) {
+        if (document.activeElement !== element) {
+          element.textContent = text;
+        }
+      },
+    };
+  }
 </script>
 
 <Stack gap={6}>
@@ -64,11 +75,11 @@
           style="align-items: center; outline: none"
         >
           <span
+            use:syncContenteditable={node.text}
             contenteditable={!node.disabled}
-            on:input={(e) => updateNodeText(node.id, e.target.textContent)}
-          >
-            {node.text}
-          </span>
+            on:input={(e) => updateNodeText(node.id, e.currentTarget.textContent)}
+            style:outline="none"
+          ></span>
           <Edit aria-hidden="true" />
         </Stack>
       </div>
