@@ -88,7 +88,7 @@
     hideLabel: false,
   };
 
-  import { afterUpdate, createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import Dropdown from "../Dropdown/Dropdown.svelte";
   import LocalStorage from "../LocalStorage/LocalStorage.svelte";
   import Select from "../Select/Select.svelte";
@@ -98,17 +98,17 @@
   const dispatch = createEventDispatcher();
 
   let prevTheme = theme;
-  let isInitialRender = true;
+  let mounted = false;
 
-  afterUpdate(() => {
-    if (prevTheme !== theme) {
-      prevTheme = theme;
-      if (!isInitialRender) {
-        dispatch("update", { theme });
-      }
-    }
-    isInitialRender = false;
+  onMount(() => {
+    prevTheme = theme;
+    mounted = true;
   });
+
+  $: if (mounted && theme !== prevTheme) {
+    prevTheme = theme;
+    dispatch("update", { theme });
+  }
 
   $: if (typeof window !== "undefined") {
     for (const [token, value] of Object.entries(tokens)) {
