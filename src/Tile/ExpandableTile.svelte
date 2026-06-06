@@ -101,6 +101,8 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
+  on:focus
+  on:blur
 >
   <div>
     <div bind:this={refAbove} class:bx--tile-content={true}>
