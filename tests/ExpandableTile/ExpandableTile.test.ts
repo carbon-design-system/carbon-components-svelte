@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ExpandableTile from "./ExpandableTile.test.svelte";
 import ExpandableTileCustom from "./ExpandableTileCustom.test.svelte";
+import ExpandableTileToggle from "./ExpandableTileToggle.test.svelte";
 import ExpandableTileVariants from "./ExpandableTileVariants.test.svelte";
 
 describe("ExpandableTile", () => {
@@ -208,5 +209,60 @@ describe("ExpandableTile", () => {
 
     const tile = screen.getByRole("button");
     expect(tile.getAttribute("style")).toBe("max-height: none;");
+  });
+
+  it("should re-observe the above-the-fold element when hasInteractiveContent toggles", async () => {
+    // Toggling `hasInteractiveContent` swaps the root tag via <svelte:element>,
+    // which destroys and re-creates the subtree — including the element bound
+    // to `refAbove`. The ResizeObserver must follow the new node, otherwise it
+    // keeps watching the detached original and `tileMaxHeight` stops updating.
+    const observed = new Set<Element>();
+    const OriginalResizeObserver = globalThis.ResizeObserver;
+
+    class TrackingResizeObserver {
+      private elements = new Set<Element>();
+      observe(el: Element) {
+        this.elements.add(el);
+        observed.add(el);
+      }
+      unobserve(el: Element) {
+        this.elements.delete(el);
+        observed.delete(el);
+      }
+      disconnect() {
+        for (const el of this.elements) observed.delete(el);
+        this.elements.clear();
+      }
+    }
+
+    globalThis.ResizeObserver =
+      TrackingResizeObserver as unknown as typeof ResizeObserver;
+
+    try {
+      const { rerender } = render(ExpandableTileToggle, {
+        props: { interactive: false },
+      });
+
+      const firstRefAbove = screen
+        .getByTestId("toggle")
+        .querySelector(".bx--tile-content");
+      expect(firstRefAbove).not.toBeNull();
+      expect(observed.has(firstRefAbove as Element)).toBe(true);
+
+      await rerender({ interactive: true });
+
+      const newRefAbove = screen
+        .getByTestId("toggle")
+        .querySelector(".bx--tile-content");
+      expect(newRefAbove).not.toBeNull();
+      // The root element is recreated, so the above-the-fold node is new.
+      expect(newRefAbove).not.toBe(firstRefAbove);
+      // The observer must follow the new node…
+      expect(observed.has(newRefAbove as Element)).toBe(true);
+      // …and let go of the detached original.
+      expect(observed.has(firstRefAbove as Element)).toBe(false);
+    } finally {
+      globalThis.ResizeObserver = OriginalResizeObserver;
+    }
   });
 });
