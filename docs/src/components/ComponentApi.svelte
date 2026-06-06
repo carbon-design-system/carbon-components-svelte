@@ -151,7 +151,7 @@
         }) as prop (prop.name)}
           <StructuredListRow>
             <StructuredListCell noWrap>
-              <InlineSnippet code={prop.name} />
+              <InlineSnippet code={prop.name} portalTooltip />
               {#if prop.reactive}
                 <div
                   style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-{prop.isRequired
@@ -188,6 +188,7 @@
                         this={AsyncPreviewTypeScript}
                         type="inline"
                         code={typeMap[type] ?? type}
+                        portalTooltip
                       />
                     </div>
                   {:else}
@@ -198,6 +199,7 @@
                         this={AsyncPreviewTypeScript}
                         type="inline"
                         code={type}
+                        portalTooltip
                       />
                     </div>
                   {/if}
@@ -235,6 +237,7 @@
                       this={AsyncPreviewTypeScript}
                       type="multi"
                       code={parsed.exampleCode}
+                      portalTooltip
                     />
                   </div>
                 {/if}
@@ -256,6 +259,7 @@
                     this={AsyncPreviewTypeScript}
                     type={/\n/.test(prop.value ?? "") ? "multi" : "inline"}
                     code={prop.value ?? ""}
+                    portalTooltip
                   />
                 {/if}
               </div>
@@ -302,6 +306,7 @@
               this={AsyncPreviewTypeScript}
               type={/\n/.test(slot.slot_props ?? "") ? "multi" : "inline"}
               code={slot.slot_props ?? ""}
+              portalTooltip
             />
           </StructuredListCell>
         </StructuredListRow>
@@ -348,6 +353,7 @@
               this={AsyncPreviewTypeScript}
               type={/\n/.test(dispatched_event.detail ?? "") ? "multi" : "inline"}
               code={dispatched_event.detail ?? ""}
+              portalTooltip
             />
           </StructuredListCell>
           <StructuredListCell>
