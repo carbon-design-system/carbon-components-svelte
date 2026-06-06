@@ -1,0 +1,24 @@
+<script lang="ts">
+  import { DataTable, Toolbar, ToolbarContent } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
+
+  export let tableSize: ComponentProps<DataTable>["size"] = undefined;
+  export let toolbarSize: ComponentProps<Toolbar>["size"] = undefined;
+  export let standalone = false;
+</script>
+
+{#if standalone}
+  <Toolbar size={toolbarSize}>
+    <ToolbarContent />
+  </Toolbar>
+{:else}
+  <DataTable
+    size={tableSize}
+    headers={[{ key: "name", value: "Name" }]}
+    rows={[{ id: "a", name: "Row A" }]}
+  >
+    <Toolbar size={toolbarSize}>
+      <ToolbarContent />
+    </Toolbar>
+  </DataTable>
+{/if}
