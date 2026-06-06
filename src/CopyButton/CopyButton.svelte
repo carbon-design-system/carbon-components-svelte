@@ -115,7 +115,7 @@
           await copy(text ?? "");
           dispatch("copy");
         }
-      }, feedbackTimeout);
+      }, feedbackTimeout, effectivePortalTooltip);
     } catch (error) {
       dispatch("copy:error", { error });
     }
