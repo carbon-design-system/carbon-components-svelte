@@ -20,7 +20,7 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
-  import { afterUpdate, getContext } from "svelte";
+  import { getContext } from "svelte";
   import CaretDown from "../icons/CaretDown.svelte";
   import TreeViewNode, {
     computeTreeLeafDepth,
@@ -63,17 +63,6 @@
     return depth + 2.5;
   }
 
-  afterUpdate(() => {
-    if (
-      id === $activeNodeId &&
-      prevActiveId !== $activeNodeId &&
-      !$selectedIdsSetStore.has(id)
-    )
-      selectNode(node);
-
-    prevActiveId = $activeNodeId;
-  });
-
   $: parent = Array.isArray(nodes);
   $: expanded = $expandedIdsSetStore.has(id);
   $: selected = $selectedIdsSetStore.has(id);
@@ -87,6 +76,16 @@
     leaf: !parent,
     selected,
   };
+  $: {
+    if (
+      id === $activeNodeId &&
+      prevActiveId !== $activeNodeId &&
+      !$selectedIdsSetStore.has(id)
+    )
+      selectNode(node);
+
+    prevActiveId = $activeNodeId;
+  }
   $: if (refLabel) {
     refLabel.style.marginLeft = `-${offset()}rem`;
     refLabel.style.paddingLeft = `${offset()}rem`;
