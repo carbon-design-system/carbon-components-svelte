@@ -87,7 +87,7 @@
       }
     }}
   >
-    <ChevronRight class="bx--accordion__arrow" aria-label={iconDescription} />
+    <ChevronRight class="bx--accordion__arrow" />
     <div class:bx--accordion__title={true}>
       <slot name="title">{title}</slot>
     </div>
