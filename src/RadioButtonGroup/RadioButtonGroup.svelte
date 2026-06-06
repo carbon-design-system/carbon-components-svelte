@@ -68,12 +68,7 @@
    */
   export let id = undefined;
 
-  import {
-    afterUpdate,
-    createEventDispatcher,
-    onMount,
-    setContext,
-  } from "svelte";
+  import { createEventDispatcher, onMount, setContext } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
@@ -128,11 +123,8 @@
 
   onMount(() => {
     $selectedValue = selected;
-    return unsubscribe;
-  });
-
-  afterUpdate(() => {
     isInitialRender = false;
+    return unsubscribe;
   });
 
   $: $groupName = name;
