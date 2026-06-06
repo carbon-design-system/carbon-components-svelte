@@ -101,6 +101,29 @@ describe("DataTable", () => {
     }
   });
 
+  // a11y: each data cell should reference its column header via headers/id
+  it("associates data cells with their column headers", () => {
+    render(DataTable);
+
+    const columnHeaders = screen.getAllByRole("columnheader");
+    headers.forEach((header, i) => {
+      expect(columnHeaders[i]).toHaveAttribute(
+        "id",
+        expect.stringMatching(new RegExp(`-${header.key}$`)),
+      );
+    });
+
+    const bodyRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    for (const row of bodyRows) {
+      const cells = within(row).getAllByRole("cell");
+      cells.forEach((cell, i) => {
+        expect(cell).toHaveAttribute("headers", columnHeaders[i].id);
+      });
+    }
+  });
+
   it("renders with title and description", () => {
     render(DataTable, {
       props: {
