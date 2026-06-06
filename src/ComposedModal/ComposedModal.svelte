@@ -39,13 +39,7 @@
    */
   export let ref = null;
 
-  import {
-    afterUpdate,
-    createEventDispatcher,
-    onMount,
-    setContext,
-    tick,
-  } from "svelte";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import { trackModal } from "../Modal/modalStore";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
@@ -139,7 +133,7 @@
     });
   });
 
-  afterUpdate(() => {
+  $: {
     if (opened) {
       if (!open) {
         opened = false;
@@ -152,7 +146,7 @@
       opened = true;
       dispatch("open");
     }
-  });
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
