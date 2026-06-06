@@ -131,7 +131,7 @@
    */
   export let ref = null;
 
-  import { afterUpdate, createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
 
@@ -170,22 +170,24 @@
   /** Stable keys for `{#each}` (and Biome-safe: no commas in the each header). */
   $: filesWithKeys = keyFiles(files);
 
-  afterUpdate(() => {
+  $: {
     const prevSet = new Set(prevFiles);
     const currentSet = new Set(files);
     const added = files.filter((f) => !prevSet.has(f));
     const removed = prevFiles.filter((f) => !currentSet.has(f));
 
-    if (added.length > 0) dispatch("add", added);
-    if (removed.length > 0) dispatch("remove", removed);
+    if (added.length > 0 || removed.length > 0) {
+      if (added.length > 0) dispatch("add", added);
+      if (removed.length > 0) dispatch("remove", removed);
 
-    if (prevFiles.length > 0 && files.length === 0) {
-      dispatch("change", []);
-      dispatch("clear");
+      if (prevFiles.length > 0 && files.length === 0) {
+        dispatch("change", []);
+        dispatch("clear");
+      }
+
+      prevFiles = [...files];
     }
-
-    prevFiles = [...files];
-  });
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
