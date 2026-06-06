@@ -55,6 +55,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if sortable}
   <th
+    {id}
     aria-sort={active ? sortDirection : "none"}
     {scope}
     data-header={id}
@@ -81,6 +82,7 @@
   </th>
 {:else}
   <th
+    {id}
     {scope}
     data-header={id}
     {...$$restProps}
