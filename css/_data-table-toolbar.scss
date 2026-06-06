@@ -1,0 +1,146 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+@mixin data-table-toolbar-xs {
+  .#{$prefix}--table-toolbar--xs {
+    height: $spacing-06;
+    min-height: $spacing-06;
+
+    .#{$prefix}--toolbar-search-container-expandable,
+    .#{$prefix}--toolbar-search-container-persistent {
+      height: $spacing-06;
+    }
+
+    .#{$prefix}--toolbar-search-container-expandable .#{$prefix}--search-input,
+    .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-input {
+      height: $spacing-06;
+    }
+
+    .#{$prefix}--toolbar-search-container-expandable .#{$prefix}--search-close,
+    .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-close {
+      width: $spacing-06;
+      height: $spacing-06;
+    }
+
+    .#{$prefix}--toolbar-search-container-expandable
+      .#{$prefix}--search-magnifier-icon,
+    .#{$prefix}--toolbar-search-container-persistent
+      .#{$prefix}--search-magnifier-icon {
+      width: $spacing-06;
+      height: $spacing-06;
+      padding: $spacing-02;
+    }
+
+    .#{$prefix}--toolbar-action.#{$prefix}--toolbar-search-container-persistent {
+      width: 100%;
+    }
+
+    // The magnifier icon fills the 24px leading square (left: 0), matching how
+    // the default toolbar's icon fills its 48px square. The 16px glyph centers
+    // via the $spacing-02 padding above.
+    .#{$prefix}--toolbar-search-container-expandable
+      .#{$prefix}--search-magnifier-icon,
+    .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-magnifier-icon,
+    .#{$prefix}--toolbar-search-container-persistent
+      .#{$prefix}--search-magnifier-icon {
+      left: 0;
+    }
+
+    .#{$prefix}--toolbar-search-container-expandable {
+      width: $spacing-06;
+    }
+
+    .#{$prefix}--toolbar-search-container-expandable
+      .#{$prefix}--search
+      .#{$prefix}--search-input,
+    .#{$prefix}--toolbar-search-container-active .#{$prefix}--search-input,
+    .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-input {
+      padding: 0 $spacing-06;
+    }
+
+    .#{$prefix}--toolbar-search-container-active {
+      flex: auto;
+      transition: flex 175ms $carbon--standard-easing;
+    }
+
+    .#{$prefix}--toolbar-search-container-active .#{$prefix}--search-input {
+      visibility: inherit;
+    }
+
+    .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-input:focus {
+      @include focus-outline('outline');
+
+      background-color: $field-hover;
+    }
+
+    .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-input:active,
+    .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-input:not(:placeholder-shown) {
+      background-color: $field-hover;
+    }
+
+    .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-magnifier-icon:focus,
+    .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-magnifier-icon:active,
+    .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-magnifier-icon:hover {
+      @include focus-outline('reset');
+
+      background-color: transparent;
+    }
+
+    .#{$prefix}--overflow-menu.#{$prefix}--toolbar-action {
+      width: $spacing-06;
+      min-width: $spacing-06;
+      height: $spacing-06;
+    }
+
+    .#{$prefix}--toolbar-content {
+      height: $spacing-06;
+    }
+  }
+
+  .#{$prefix}--table-toolbar--xs
+    .#{$prefix}--batch-actions
+    .#{$prefix}--action-list {
+    height: $spacing-06;
+  }
+
+  .#{$prefix}--table-toolbar--xs .#{$prefix}--toolbar-action {
+    width: $spacing-06;
+    height: $spacing-06;
+    padding: $spacing-02 0;
+  }
+
+  .#{$prefix}--table-toolbar--xs .#{$prefix}--btn--primary {
+    height: $spacing-06;
+    min-height: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .#{$prefix}--table-toolbar--xs
+    .#{$prefix}--btn--primary.#{$prefix}--batch-summary__cancel::before {
+    top: to-rem(4px);
+  }
+
+  .#{$prefix}--table-toolbar--xs
+    .#{$prefix}--toolbar-action
+    ~ .#{$prefix}--btn {
+    overflow: hidden;
+    height: $spacing-06;
+  }
+
+  .#{$prefix}--table-toolbar--xs .#{$prefix}--batch-summary {
+    min-height: $spacing-06;
+  }
+}
+
+@include exports('data-table-toolbar-xs') {
+  @include data-table-toolbar-xs;
+}
