@@ -41,6 +41,25 @@ describe("createCopyFeedbackState", () => {
     expect(state.animation).toBe("fade-out");
   });
 
+  test("portalled closes feedback directly after feedbackTimeout", async () => {
+    const state = createCopyFeedbackState();
+    const performCopy = vi.fn();
+
+    await state.onClick(performCopy, 100, true);
+    expect(state.feedbackOpen).toBe(true);
+
+    vi.advanceTimersByTime(100);
+
+    // No hide-feedback animationend fires when portalled, so the timeout must
+    // close the tooltip itself.
+    expect(state.feedbackOpen).toBe(false);
+    expect(state.animation).toBeUndefined();
+
+    // copyActive is also cleared, so a subsequent copy works.
+    await state.onClick(performCopy, 100, true);
+    expect(performCopy).toHaveBeenCalledTimes(2);
+  });
+
   test("resets on hide-feedback animation end", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi.fn();
