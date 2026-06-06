@@ -269,6 +269,102 @@ describe("FileUploaderDropContainer", () => {
     expect(event.detail[0].name).toBe("small.txt");
   });
 
+  it("should dispatch rejected event on drop when validateFiles filters files", async () => {
+    const validateFiles = vi.fn((files: File[]) =>
+      files.filter((f: File) => f.size < 1000),
+    );
+    const rejectedHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        validateFiles,
+        onrejected: rejectedHandler,
+        onchange: changeHandler,
+      },
+    });
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+
+    const smallFile = new File(["x".repeat(500)], "small.txt", {
+      type: "text/plain",
+    });
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+    const dropEvent = createDragEvent("drop", [smallFile, largeFile]);
+
+    dropDiv.dispatchEvent(dropEvent);
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+    });
+
+    const event = rejectedHandler.mock.calls[0][0];
+    expect(event.detail).toHaveLength(1);
+    expect(event.detail[0].file.name).toBe("large.txt");
+    expect(event.detail[0].reason).toBe("invalid");
+  });
+
+  it("should not dispatch rejected event when validateFiles accepts all files", async () => {
+    const validateFiles = vi.fn((files: File[]) => files);
+    const rejectedHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        validateFiles,
+        onrejected: rejectedHandler,
+        onchange: changeHandler,
+      },
+    });
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+
+    const file = new File(["content"], "ok.txt", { type: "text/plain" });
+    dropDiv.dispatchEvent(createDragEvent("drop", [file]));
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    expect(rejectedHandler).not.toHaveBeenCalled();
+  });
+
+  it("should dispatch rejected event from input change when validateFiles filters files", async () => {
+    const validateFiles = vi.fn((files: File[]) =>
+      files.filter((f: File) => f.size < 1000),
+    );
+    const rejectedHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        multiple: true,
+        validateFiles,
+        onrejected: rejectedHandler,
+      },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+
+    const smallFile = new File(["x".repeat(500)], "small.txt", {
+      type: "text/plain",
+    });
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+    simulateFileSelection(input, [smallFile, largeFile]);
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+    });
+
+    const event = rejectedHandler.mock.calls[0][0];
+    expect(event.detail).toHaveLength(1);
+    expect(event.detail[0].file.name).toBe("large.txt");
+    expect(event.detail[0].reason).toBe("invalid");
+  });
+
   it("should handle file input change event", async () => {
     const changeHandler = vi.fn();
     const { container } = render(FileUploaderDropContainer, {
