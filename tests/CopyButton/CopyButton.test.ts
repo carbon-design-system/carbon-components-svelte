@@ -6,6 +6,7 @@ import CopyButtonAsyncDoubleClick from "./CopyButtonAsyncDoubleClick.test.svelte
 import CopyButtonDoubleClick from "./CopyButtonDoubleClick.test.svelte";
 import CopyButtonInModal from "./CopyButtonInModal.test.svelte";
 import CopyButtonMouseEnter from "./CopyButtonMouseEnter.test.svelte";
+import CopyButtonPortalTooltipTimeout from "./CopyButtonPortalTooltipTimeout.test.svelte";
 
 describe("CopyButton", () => {
   const getCopyButton = (label: string) =>
@@ -276,6 +277,43 @@ describe("CopyButton", () => {
       expect(
         button.querySelector(".bx--copy-btn__feedback"),
       ).toBeInTheDocument();
+    });
+
+    describe("feedback timeout", () => {
+      beforeEach(() => {
+        vi.useFakeTimers();
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
+
+      // Regression: portalled feedback hides the inline element, so the
+      // hide-feedback animation (and animationend) never runs; feedbackTimeout
+      // must close the portal directly or the tooltip stays open.
+      it("should dismiss portal feedback after feedbackTimeout", async () => {
+        render(CopyButtonPortalTooltipTimeout);
+
+        const button = getCopyButton("Copy");
+        await fireEvent.click(button);
+        await Promise.resolve();
+
+        expect(
+          document.querySelector("[data-floating-portal]"),
+        ).toBeInTheDocument();
+
+        await vi.advanceTimersByTimeAsync(100);
+
+        expect(
+          document.querySelector("[data-floating-portal]"),
+        ).not.toBeInTheDocument();
+
+        await fireEvent.click(button);
+        await Promise.resolve();
+        expect(
+          document.querySelector("[data-floating-portal]"),
+        ).toBeInTheDocument();
+      });
     });
 
     // Regression: observer must re-attach when portalTooltip flips after mount.
