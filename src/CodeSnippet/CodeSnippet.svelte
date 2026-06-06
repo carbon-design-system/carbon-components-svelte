@@ -265,10 +265,14 @@
       on:click
       on:click={async () => {
         try {
-          await copyFeedback.onClick(async () => {
-            await copy(code);
-            dispatch("copy");
-          }, feedbackTimeout);
+          await copyFeedback.onClick(
+            async () => {
+              await copy(code);
+              dispatch("copy");
+            },
+            feedbackTimeout,
+            effectivePortalTooltip,
+          );
         } catch (error) {
           dispatch("copy:error", { error });
         }
