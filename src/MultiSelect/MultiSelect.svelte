@@ -871,7 +871,7 @@
                 <ListBoxMenuItem
                   id={item.id}
                   role="option"
-                  aria-labelledby="checkbox-{item.id}"
+                  aria-labelledby="checkbox-{id}-{item.id}"
                   aria-selected={item.isSelectAll ? allSelected : item.checked}
                   aria-checked={item.isSelectAll
                     ? selectAllIndeterminate
@@ -903,7 +903,7 @@
                     title={useTitleInItem ? itemToString(item) : undefined}
                     {...itemToInput(item)}
                     tabindex="-1"
-                    id="checkbox-{item.id}"
+                    id="checkbox-{id}-{item.id}"
                     checked={item.isSelectAll ? allSelected : item.checked}
                     indeterminate={item.isSelectAll
                       ? selectAllIndeterminate
@@ -923,7 +923,7 @@
             <ListBoxMenuItem
               id={item.id}
               role="option"
-              aria-labelledby="checkbox-{item.id}"
+              aria-labelledby="checkbox-{id}-{item.id}"
               aria-selected={item.isSelectAll ? allSelected : item.checked}
               aria-checked={item.isSelectAll
                 ? selectAllIndeterminate
@@ -955,7 +955,7 @@
                 title={useTitleInItem ? itemToString(item) : undefined}
                 {...itemToInput(item)}
                 tabindex="-1"
-                id="checkbox-{item.id}"
+                id="checkbox-{id}-{item.id}"
                 checked={item.isSelectAll ? allSelected : item.checked}
                 indeterminate={item.isSelectAll
                   ? selectAllIndeterminate

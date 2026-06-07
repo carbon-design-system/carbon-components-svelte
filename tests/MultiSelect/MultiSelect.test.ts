@@ -7,6 +7,7 @@ import { user } from "../utils/user";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectBindValue from "./MultiSelectBindValue.test.svelte";
+import MultiSelectDuplicateIds from "./MultiSelectDuplicateIds.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
 import MultiSelectItemToStringId from "./MultiSelectItemToStringId.test.svelte";
@@ -2577,5 +2578,40 @@ describe("MultiSelect", () => {
         container.querySelectorAll(".bx--tag--filter").length,
       ).toBeGreaterThan(0);
     });
+  });
+
+  // Regression: checkbox ids are scoped by the MultiSelect `id` so that two
+  // instances sharing the same item ids do not emit duplicate DOM ids (which
+  // would make a label click on one instance toggle the other instance's input).
+  it("scopes checkbox ids per instance to avoid clashes between instances", () => {
+    const { container } = render(MultiSelectDuplicateIds);
+
+    const checkboxes = Array.from(
+      container.querySelectorAll<HTMLInputElement>('input[id^="checkbox-"]'),
+    );
+    const ids = checkboxes.map((checkbox) => checkbox.id);
+
+    // Two instances of 3 items each.
+    expect(ids).toHaveLength(6);
+    // Every id is unique across instances.
+    expect(new Set(ids).size).toBe(ids.length);
+    // Ids are scoped by the instance `id` prop.
+    expect(ids).toEqual(
+      expect.arrayContaining([
+        "checkbox-first-0",
+        "checkbox-first-1",
+        "checkbox-first-2",
+        "checkbox-second-0",
+        "checkbox-second-1",
+        "checkbox-second-2",
+      ]),
+    );
+
+    // Each option's aria-labelledby resolves to the checkbox within the same instance.
+    for (const option of container.querySelectorAll('[role="option"]')) {
+      const labelledby = option.getAttribute("aria-labelledby");
+      assert(labelledby);
+      expect(container.querySelector(`#${labelledby}`)).not.toBeNull();
+    }
   });
 });
