@@ -1573,7 +1573,7 @@ describe("DataTable", () => {
 
     // Verify expanded content is visible
     const expandedContent = container.querySelector(
-      "#expandable-row-a .bx--child-row-inner-container",
+      "[id$='-expandable-row-a'] .bx--child-row-inner-container",
     );
     expect(expandedContent).toBeInTheDocument();
   });
@@ -1627,7 +1627,7 @@ describe("DataTable", () => {
 
     // Verify row is now expanded
     expandedContent = container.querySelector(
-      "#expandable-row-a .bx--child-row-inner-container",
+      "[id$='-expandable-row-a'] .bx--child-row-inner-container",
     );
     expect(expandedContent).toBeInTheDocument();
   });
