@@ -277,11 +277,14 @@
   class:bx--overflow-menu--xl={size === "xl"}
   {...$$restProps}
   on:click
-  on:click={() => {
-    open = !open;
-    if (!open) {
-      const shouldContinue = dispatch("close", null, { cancelable: true });
-      if (!shouldContinue) {
+  on:click={({ target }) => {
+    if (!menuRef?.contains(target)) {
+      if (open) {
+        const shouldContinue = dispatch("close", null, { cancelable: true });
+        if (shouldContinue) {
+          open = false;
+        }
+      } else {
         open = true;
       }
     }

@@ -10,6 +10,7 @@ import OverflowMenuDynamicItems from "./OverflowMenu.dynamicItems.test.svelte";
 import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
+import OverflowMenuTriggerClose from "./OverflowMenu.triggerClose.test.svelte";
 import OverflowMenuInModal from "./OverflowMenuInModal.test.svelte";
 
 describe("OverflowMenu", () => {
@@ -524,6 +525,24 @@ describe("OverflowMenu", () => {
       text: "API documentation",
     });
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("dispatches close before flipping `open` when trigger click closes the menu", async () => {
+    const spy = vi.spyOn(console, "log");
+    render(OverflowMenuTriggerClose);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+    expect(menuButton).toHaveAttribute("aria-expanded", "true");
+
+    spy.mockClear();
+    await user.click(menuButton);
+    expect(menuButton).toHaveAttribute("aria-expanded", "false");
+
+    // The `close` event must be dispatched while `open` is still `true`
+    // so listeners can preventDefault before any subscriber observes the
+    // transition.
+    expect(spy).toHaveBeenCalledWith("close:open-at-dispatch", true);
   });
 
   it("closes menu normally when preventDefault is not called", async () => {
