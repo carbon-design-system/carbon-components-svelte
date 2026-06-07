@@ -115,6 +115,7 @@
   import Button from "../Button/Button.svelte";
   import Close from "../icons/Close.svelte";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
+  import { createOutsideDismiss } from "../utils/outsideDismiss.js";
   import { trapFocus } from "../utils/trapFocus.js";
   import { trackModal } from "./modalStore";
 
@@ -125,7 +126,6 @@
   let primaryButtonRef = null;
   let innerModal = null;
   let opened = false;
-  let didClickInnerModal = false;
   let closeDispatched = false;
 
   function focus(element) {
@@ -151,6 +151,10 @@
       closeDispatched = false;
     }
   }
+
+  const outsideDismiss = createOutsideDismiss(() => {
+    if (!preventCloseOnClickOutside) close("outside-click");
+  });
 
   const openStore = writable(open);
   $: $openStore = open;
@@ -220,12 +224,7 @@
     }
   }}
   on:click
-  on:mouseup={() => {
-    if (!didClickInnerModal && !preventCloseOnClickOutside) {
-      close("outside-click");
-    }
-    didClickInnerModal = false;
-  }}
+  on:mouseup={outsideDismiss.release}
   on:mouseover
   on:mouseenter
   on:mouseleave
@@ -247,9 +246,7 @@
     class:bx--modal-container--xs={size === "xs"}
     class:bx--modal-container--sm={size === "sm"}
     class:bx--modal-container--lg={size === "lg"}
-    on:mousedown={() => {
-      didClickInnerModal = true;
-    }}
+    on:mousedown={outsideDismiss.pressInside}
   >
     <div class:bx--modal-header={true}>
       {#if passiveModal}
