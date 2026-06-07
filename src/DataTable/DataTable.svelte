@@ -683,7 +683,7 @@
                     ? "Collapse all rows"
                     : "Expand all rows"}
                   aria-controls={expandableRowIds
-                    .map((id) => `expandable-row-${id}`)
+                    .map((rid) => `${id}-expandable-row-${rid}`)
                     .join(" ")}
                   on:click={() => {
                     expanded = !expanded;
@@ -865,7 +865,7 @@
                     <button
                       type="button"
                       class:bx--table-expand__button={true}
-                      aria-controls={`expandable-row-${row.id}`}
+                      aria-controls={`${id}-expandable-row-${row.id}`}
                       aria-label={expandedRows[row.id]
                         ? "Collapse current row"
                         : "Expand current row"}
@@ -992,7 +992,7 @@
 
             {#if expandable}
               <tr
-                id={`expandable-row-${row.id}`}
+                id={`${id}-expandable-row-${row.id}`}
                 data-child-row
                 class:bx--expandable-row={true}
                 on:mouseenter={() => {
@@ -1085,7 +1085,7 @@
                     <button
                       type="button"
                       class:bx--table-expand__button={true}
-                      aria-controls={`expandable-row-${row.id}`}
+                      aria-controls={`${id}-expandable-row-${row.id}`}
                       aria-label={isExpanded
                         ? "Collapse current row"
                         : "Expand current row"}
@@ -1199,7 +1199,7 @@
 
             {#if expandable}
               <tr
-                id={`expandable-row-${row.id}`}
+                id={`${id}-expandable-row-${row.id}`}
                 data-child-row
                 class:bx--expandable-row={true}
                 on:mouseenter={() => {
