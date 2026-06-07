@@ -94,7 +94,7 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
     for={id}
-    {tabindex}
+    tabindex={disabled ? -1 : tabindex}
     class:bx--file-browse-btn={true}
     class:bx--file-browse-btn--disabled={disabled}
     on:keydown
@@ -106,6 +106,7 @@
   >
     <div
       {role}
+      aria-disabled={disabled || undefined}
       class:bx--file__drop-container={true}
       class:bx--file__drop-container--drag-over={over}
     >
