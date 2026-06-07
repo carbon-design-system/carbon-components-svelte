@@ -12,6 +12,17 @@ See how the component maintains state within a session. Toggle the switch and re
 
 <FileSource src="/framed/SessionStorage/SessionStorage" />
 
+## Persisting objects and arrays
+
+`value` can be any JSON-serializable value; objects and arrays are serialized with `JSON.stringify`. The component compares the serialized form to decide when to write, which has two consequences:
+
+- Reassigning `value` to a new object/array with **identical contents** does not trigger a redundant write.
+- **In-place mutations** (for example, `value.theme = "light"`) are persisted only when you signal the change to Svelte. Reassign the value (`value = { ...value, theme: "light" }`) or use the self-assignment idiom (`value = value`); a bare mutation alone will not re-render the component and therefore will not persist.
+
+In this example, the text inputs bind directly to nested properties and the button mutates the object in place. Edit a field and refresh the page to confirm the change is persisted within the session.
+
+<FileSource src="/framed/SessionStorage/SessionStorageObject" />
+
 ## Reactive key
 
 The `key` prop is also reactive, so you can dynamically switch between storage keys — useful for per-user settings or multiple contexts.
