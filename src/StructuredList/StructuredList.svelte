@@ -1,12 +1,13 @@
 <script>
   /**
    * @template {string} [Value=string]
-   * @event {Value} change
+   * @event {Value | Value[]} change
    */
 
   /**
    * Specify the selected structured list row value.
-   * @type {Value | undefined}
+   * When `multiple` is `true`, this is an array of selected values.
+   * @type {Value | Value[] | undefined}
    * @bindable writable
    */
   export let selected = undefined;
@@ -20,28 +21,43 @@
   /** Set to `true` to use the selection variant */
   export let selection = false;
 
+  /** Set to `true` to allow selecting multiple rows */
+  export let multiple = false;
+
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<Value | undefined>}
+   * @type {import("svelte/store").Writable<Value | Value[] | undefined>}
    */
-  const selectedValue = writable(selected);
+  const selectedValue = writable(
+    multiple ? (Array.isArray(selected) ? selected : []) : selected,
+  );
 
-  let prevSelectedValue = selected;
+  let prevSelectedValue = $selectedValue;
   let isInitialRender = true;
 
   /**
    * @type {(value: Value) => void}
    */
   const update = (value) => {
-    selectedValue.set(value);
+    if (multiple) {
+      selectedValue.update((current) => {
+        const list = Array.isArray(current) ? current : [];
+        return list.includes(value)
+          ? list.filter((v) => v !== value)
+          : [...list, value];
+      });
+    } else {
+      selectedValue.set(value);
+    }
   };
 
   setContext("carbon:StructuredListWrapper", {
     selectedValue,
     update,
+    multiple,
   });
 
   onMount(() => {

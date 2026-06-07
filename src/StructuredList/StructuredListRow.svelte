@@ -16,19 +16,26 @@
 
   const ctx = getContext("carbon:StructuredListWrapper");
   const selectedValue = ctx?.selectedValue ?? writable(undefined);
+  const multiple = ctx?.multiple ?? false;
 
   let labelRef;
   let inputValue;
 
   onMount(() => {
     if (label && labelRef) {
-      const input = labelRef.querySelector('input[type="radio"]');
+      const input = labelRef.querySelector(
+        'input[type="radio"], input[type="checkbox"]',
+      );
       if (input) inputValue = input.value;
     }
   });
 
-  $: isRadio = label && inputValue !== undefined;
-  $: ariaChecked = isRadio ? $selectedValue === inputValue : undefined;
+  $: isSelectable = label && inputValue !== undefined;
+  $: ariaChecked = isSelectable
+    ? multiple
+      ? Array.isArray($selectedValue) && $selectedValue.includes(inputValue)
+      : $selectedValue === inputValue
+    : undefined;
 
   function handleKeydown(event) {
     if (event.key === " " || event.key === "Enter") {
@@ -45,7 +52,7 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
     bind:this={labelRef}
-    role={isRadio ? "radio" : undefined}
+    role={isSelectable ? (multiple ? "checkbox" : "radio") : undefined}
     aria-checked={ariaChecked}
     {tabindex}
     class:bx--structured-list-row={true}

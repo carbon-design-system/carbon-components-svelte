@@ -6,6 +6,7 @@ import StructuredList from "./StructuredList.test.svelte";
 import StructuredListChecked from "./StructuredListChecked.test.svelte";
 import StructuredListCustom from "./StructuredListCustom.test.svelte";
 import StructuredListInputStandalone from "./StructuredListInputStandalone.test.svelte";
+import StructuredListMultiple from "./StructuredListMultiple.test.svelte";
 
 describe("StructuredList", () => {
   it("should render with default props", () => {
@@ -171,6 +172,36 @@ describe("StructuredList", () => {
 
     expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
   });
+
+  it("should support multi-select via the `multiple` prop", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(StructuredListMultiple);
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    expect(checkboxes).toHaveLength(3);
+    expect(screen.queryAllByRole("radio")).toHaveLength(0);
+    expect(screen.getByTestId("value").textContent).toBe("[]");
+    // a11y: each selectable row exposes its checked state to assistive tech.
+    for (const checkbox of checkboxes) {
+      expect(checkbox).toHaveAttribute("aria-checked", "false");
+    }
+
+    await user.click(checkboxes[0]);
+    expect(screen.getByTestId("value").textContent).toBe('["row-1-value"]');
+    expect(consoleLog).toHaveBeenLastCalledWith("change", ["row-1-value"]);
+    expect(checkboxes[0]).toHaveAttribute("aria-checked", "true");
+
+    await user.click(checkboxes[2]);
+    expect(screen.getByTestId("value").textContent).toBe(
+      '["row-1-value","row-3-value"]',
+    );
+    expect(checkboxes[2]).toHaveAttribute("aria-checked", "true");
+
+    // toggling re-selects off
+    await user.click(checkboxes[0]);
+    expect(screen.getByTestId("value").textContent).toBe('["row-3-value"]');
+    expect(checkboxes[0]).toHaveAttribute("aria-checked", "false");
+  });
 });
 
 describe("Generics", () => {
@@ -181,12 +212,16 @@ describe("Generics", () => {
     type Props = ComponentProps<ComponentType>;
     type Events = ComponentEvents<ComponentType>;
 
-    expectTypeOf<Props["selected"]>().toEqualTypeOf<CustomValue | undefined>();
+    expectTypeOf<Props["selected"]>().toEqualTypeOf<
+      CustomValue | CustomValue[] | undefined
+    >();
 
     type ChangeEvent = Events["change"];
     type ChangeEventDetail =
       ChangeEvent extends CustomEvent<infer T> ? T : never;
-    expectTypeOf<ChangeEventDetail>().toEqualTypeOf<CustomValue>();
+    expectTypeOf<ChangeEventDetail>().toEqualTypeOf<
+      CustomValue | CustomValue[]
+    >();
   });
 
   it("should default to string when generic is not specified", () => {
@@ -194,25 +229,24 @@ describe("Generics", () => {
     type Props = ComponentProps<ComponentType>;
     type Events = ComponentEvents<ComponentType>;
 
-    expectTypeOf<Props["selected"]>().toEqualTypeOf<string | undefined>();
+    expectTypeOf<Props["selected"]>().toEqualTypeOf<
+      string | string[] | undefined
+    >();
 
     type ChangeEvent = Events["change"];
     type ChangeEventDetail =
       ChangeEvent extends CustomEvent<infer T> ? T : never;
-    expectTypeOf<ChangeEventDetail>().toEqualTypeOf<string>();
+    expectTypeOf<ChangeEventDetail>().toEqualTypeOf<string | string[]>();
   });
 
   it("should provide type-safe access to custom string literal types in event handlers", () => {
     type Status = "pending" | "approved" | "rejected";
 
-    const handleChange = (value: Status) => {
-      expectTypeOf(value).toEqualTypeOf<Status>();
-      if (value === "pending") {
-        expectTypeOf(value).toEqualTypeOf<"pending">();
-      }
+    const handleChange = (value: Status | Status[]) => {
+      expectTypeOf(value).toEqualTypeOf<Status | Status[]>();
     };
 
-    expectTypeOf(handleChange).parameter(0).toEqualTypeOf<Status>();
+    expectTypeOf(handleChange).parameter(0).toEqualTypeOf<Status | Status[]>();
 
     type ComponentType = StructuredListComponent<Status>;
     type Events = ComponentEvents<ComponentType>;
