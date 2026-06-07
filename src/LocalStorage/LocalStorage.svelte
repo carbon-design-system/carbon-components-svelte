@@ -62,13 +62,18 @@
   const dispatch = createEventDispatcher();
   const storage = safeBrowserStorage("localStorage");
 
-  let prevValue = value;
+  // Change detection compares the serialized form (what actually lands in
+  // storage) rather than the raw `value` reference. This persists in-place
+  // mutations signalled via the Svelte `value = value` idiom — a referential
+  // `prevValue !== value` check cannot, since `prevValue` would alias `value` —
+  // and skips redundant writes when a new reference serializes identically.
+  let prevSerialized = serializeStoredValue(value);
   let prevKey = key;
   let mounted = false;
 
-  /** @type {() => void} */
-  function setItem() {
-    storage.setItem(key, serializeStoredValue(value), (error) => {
+  /** @param {string} [serialized] */
+  function setItem(serialized = serializeStoredValue(value)) {
+    storage.setItem(key, serialized, (error) => {
       dispatch("error", { error });
     });
   }
@@ -83,14 +88,15 @@
       value = parseStoredValue(item);
     }
 
-    prevValue = value;
+    prevSerialized = serializeStoredValue(value);
     mounted = true;
 
     function handleStorageChange(event) {
       if (event.key === key && event.newValue !== null) {
+        const prevValue = parseStoredValue(prevSerialized);
         value = parseStoredValue(event.newValue);
         dispatch("update", { prevValue, value });
-        prevValue = value;
+        prevSerialized = event.newValue;
       }
     }
 
@@ -111,15 +117,17 @@
     }
 
     prevKey = key;
-    prevValue = value;
+    prevSerialized = serializeStoredValue(value);
   }
 
   afterUpdate(() => {
-    if (prevValue !== value) {
-      setItem();
-      dispatch("update", { prevValue, value });
-    }
+    const serialized = serializeStoredValue(value);
 
-    prevValue = value;
+    if (serialized !== prevSerialized) {
+      const prevValue = parseStoredValue(prevSerialized);
+      setItem(serialized);
+      dispatch("update", { prevValue, value });
+      prevSerialized = serialized;
+    }
   });
 </script>
