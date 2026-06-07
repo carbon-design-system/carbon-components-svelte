@@ -219,9 +219,12 @@
   // Invalid/warn states are suppressed when the dropdown is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
+  // Scope the option id with the instance `id` so multiple Dropdowns on a
+  // page do not produce duplicate DOM ids. `aria-activedescendant` references
+  // this same scoped value (see the `ListBoxMenuItem` ids below).
   $: highlightedId =
     highlightedIndex > -1 && items[highlightedIndex]
-      ? items[highlightedIndex].id
+      ? `${id}-${items[highlightedIndex].id}`
       : undefined;
   $: selectedItem = itemsById.get(selectedId);
   $: if (!open) {
@@ -562,7 +565,7 @@
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
                 <ListBoxMenuItem
-                  id={item.id}
+                  id={`${id}-${item.id}`}
                   active={selectedId === item.id}
                   highlighted={highlightedIndex === actualIndex}
                   disabled={item.disabled}
@@ -592,7 +595,7 @@
         {:else}
           {#each itemsToRender as item, index (item.id)}
             <ListBoxMenuItem
-              id={item.id}
+              id={`${id}-${item.id}`}
               active={selectedId === item.id}
               highlighted={highlightedIndex === index}
               disabled={item.disabled}
