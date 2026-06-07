@@ -553,6 +553,8 @@
       ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
         null)
       : null;
+  $: activeDescendantId =
+    highlightedId == null ? null : `${id}-${highlightedId}`;
 
   $: shouldVirtualize =
     virtualize === false
@@ -676,7 +678,7 @@
           aria-autocomplete="list"
           aria-haspopup="listbox"
           aria-expanded={open}
-          aria-activedescendant={highlightedId}
+          aria-activedescendant={activeDescendantId}
           aria-disabled={disabled || readonly}
           aria-readonly={readonly || undefined}
           aria-controls={open ? menuId : undefined}
@@ -771,7 +773,7 @@
         role="combobox"
         tabindex="0"
         aria-expanded={open}
-        aria-activedescendant={highlightedId}
+        aria-activedescendant={activeDescendantId}
         aria-controls={open ? menuId : undefined}
         aria-owns={open ? menuId : undefined}
         on:click={() => {
@@ -869,7 +871,7 @@
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
                 <ListBoxMenuItem
-                  id={item.id}
+                  id={`${id}-${item.id}`}
                   role="option"
                   aria-labelledby="checkbox-{id}-{item.id}"
                   aria-selected={item.isSelectAll ? allSelected : item.checked}
@@ -921,7 +923,7 @@
         {:else}
           {#each itemsToRender as item, index (item.id)}
             <ListBoxMenuItem
-              id={item.id}
+              id={`${id}-${item.id}`}
               role="option"
               aria-labelledby="checkbox-{id}-{item.id}"
               aria-selected={item.isSelectAll ? allSelected : item.checked}

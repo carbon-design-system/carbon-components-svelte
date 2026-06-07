@@ -2613,5 +2613,57 @@ describe("MultiSelect", () => {
       assert(labelledby);
       expect(container.querySelector(`#${labelledby}`)).not.toBeNull();
     }
+
+    // Every option id is globally unique and prefixed by its instance id,
+    // even though both instances share the same raw item ids.
+    const optionIds = Array.from(
+      container.querySelectorAll('[role="option"]'),
+    ).map((option) => option.id);
+    expect(optionIds).toHaveLength(6);
+    expect(new Set(optionIds).size).toBe(optionIds.length);
+    expect(optionIds).toEqual(
+      expect.arrayContaining([
+        "first-0",
+        "first-1",
+        "first-2",
+        "second-0",
+        "second-1",
+        "second-2",
+      ]),
+    );
+  });
+
+  it("scopes aria-activedescendant to options within the same instance", async () => {
+    const { container } = render(MultiSelectDuplicateIds);
+
+    const comboboxes = Array.from(
+      container.querySelectorAll<HTMLElement>('[role="combobox"]'),
+    );
+    expect(comboboxes).toHaveLength(2);
+
+    // Highlight the first item of an instance and verify the active descendant
+    // resolves to an option belonging to that same instance.
+    const expectScopedActiveDescendant = async (
+      combobox: HTMLElement,
+      prefix: string,
+    ) => {
+      combobox.focus();
+      await user.keyboard("{ArrowDown}");
+
+      const activeDescendant = combobox.getAttribute("aria-activedescendant");
+      assert(activeDescendant);
+      expect(activeDescendant.startsWith(`${prefix}-`)).toBe(true);
+
+      const active = container.querySelector(`#${activeDescendant}`);
+      expect(active).not.toBeNull();
+      expect(active?.getAttribute("role")).toBe("option");
+      // The resolved option lives inside the same instance's list box.
+      expect(combobox.closest(".bx--list-box")).toBe(
+        active?.closest(".bx--list-box"),
+      );
+    };
+
+    await expectScopedActiveDescendant(comboboxes[0], "first");
+    await expectScopedActiveDescendant(comboboxes[1], "second");
   });
 });
