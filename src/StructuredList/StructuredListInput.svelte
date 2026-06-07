@@ -35,6 +35,8 @@
 
   const initialChecked = checked;
   const ctx = getContext("carbon:StructuredListWrapper");
+  const multiple = ctx?.multiple ?? false;
+  // Standalone (no wrapper context) is always single-select.
   const selectedValue =
     ctx?.selectedValue ?? writable(initialChecked ? value : undefined);
   const update = ctx?.update ?? ((v) => selectedValue.set(v));
@@ -43,12 +45,14 @@
     update(value);
   }
 
-  $: checked = $selectedValue === value;
+  $: checked = multiple
+    ? Array.isArray($selectedValue) && $selectedValue.includes(value)
+    : $selectedValue === value;
 </script>
 
 <input
   bind:this={ref}
-  type="radio"
+  type={multiple ? "checkbox" : "radio"}
   tabindex="-1"
   aria-hidden={ctx ? "true" : undefined}
   {checked}
