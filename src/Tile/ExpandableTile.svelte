@@ -59,20 +59,22 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
 
   let refAbove = null;
+  let resizeObserver;
 
   onMount(() => {
-    const resizeObserver = new ResizeObserver(([elem]) => {
+    resizeObserver = new ResizeObserver(([elem]) => {
       tileMaxHeight = elem.contentRect.height;
     });
-
-    if (refAbove) {
-      resizeObserver.observe(refAbove);
-    }
 
     return () => {
       resizeObserver.disconnect();
     };
   });
+
+  $: if (resizeObserver) {
+    resizeObserver.disconnect();
+    if (refAbove) resizeObserver.observe(refAbove);
+  }
 
   afterUpdate(() => {
     if (!ref) return;
