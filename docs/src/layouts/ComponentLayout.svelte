@@ -66,9 +66,9 @@
   }
 
   function formatCopyIconDescription(copied: boolean, bytes: number): string {
-    if (copied) return "Copied!";
-    if (bytes <= 0) return "Copy Markdown";
-    return `Copy Markdown\n${formatFileSize(bytes)} (${formatTokenEstimate(bytes)})`;
+    const label = copied ? "Copied!" : "Copy Markdown";
+    if (bytes <= 0) return label;
+    return `${label}\n${formatFileSize(bytes)} (${formatTokenEstimate(bytes)})`;
   }
 
   const REPO_URL = __PKG_REPO;
