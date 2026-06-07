@@ -165,6 +165,7 @@
   let feedbackOpen = false;
   let copyPending = false;
   let prevExpanded = expanded;
+  let exceedsThreshold = true;
 
   function syncCopyFeedback() {
     animation = copyFeedback.animation;
@@ -176,23 +177,22 @@
     copyFeedback.dismiss();
   }
 
-  function setShowMoreLess() {
+  function measureHeight() {
     const { height } = ref.getBoundingClientRect();
-    if (height > 0) showMoreLess = ref.getBoundingClientRect().height > 255;
+    if (height > 0) exceedsThreshold = height > 255;
   }
 
   $: expandText = expanded ? showLessText : showMoreText;
   $: minHeight = expanded ? 16 * 15 : 48;
   $: maxHeight = expanded ? "none" : `${16 * 15}px`;
 
-  // Show more/less only applies to multi-line code snippets
-  $: if (type !== "multi") showMoreLess = false;
-
   $: if (type === "multi" && ref && showMoreLess) {
-    // Only compute the show more/less button if the consumer has not opted out
-    if (code === undefined) setShowMoreLess();
-    if (code) tick().then(setShowMoreLess);
+    // Only measure when the consumer has not opted out
+    if (code === undefined) measureHeight();
+    if (code) tick().then(measureHeight);
   }
+
+  $: showExpandButton = showMoreLess && type === "multi" && exceedsThreshold;
 
   $: if (type === "multi" && prevExpanded !== expanded) {
     dispatch(expanded ? "expand" : "collapse");
@@ -355,7 +355,7 @@
         on:mouseleave={(event) => dispatch("mouseleave:copy-button", event)}
       />
     {/if}
-    {#if showMoreLess}
+    {#if showExpandButton}
       <Button
         kind="ghost"
         size="small"

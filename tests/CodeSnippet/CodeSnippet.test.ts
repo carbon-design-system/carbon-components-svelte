@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import CodeSnippetAsync from "./CodeSnippetAsync.test.svelte";
 import CodeSnippetAsyncDoubleClick from "./CodeSnippetAsyncDoubleClick.test.svelte";
+import CodeSnippetBindShowMoreLess from "./CodeSnippetBindShowMoreLess.test.svelte";
 import CodeSnippetCopyButton from "./CodeSnippetCopyButton.test.svelte";
 import CodeSnippetCopyButtonMouseEnter from "./CodeSnippetCopyButtonMouseEnter.test.svelte";
 import CodeSnippetCopyButtonMouseLeave from "./CodeSnippetCopyButtonMouseLeave.test.svelte";
@@ -447,6 +448,22 @@ yarn -v`,
   test("should hide show more button when hideShowMore is true", () => {
     render(CodeSnippetWithHideShowMore);
     expect(screen.queryByText("Show more")).not.toBeInTheDocument();
+  });
+
+  // Regression: the exported `showMoreLess` prop is consumer-controlled and
+  // must not be silently overwritten by the component's internal logic.
+  test("does not overwrite bound showMoreLess prop", async () => {
+    const { rerender } = render(CodeSnippetBindShowMoreLess, {
+      props: { type: "multi", showMoreLess: true },
+    });
+
+    // Content is short and type is "multi"; the component's auto-hide must
+    // not flip the consumer's bound value to false.
+    expect(screen.getByTestId("bound-value")).toHaveTextContent("true");
+
+    // Switching type away from "multi" must also not mutate the bound prop.
+    await rerender({ type: "single", showMoreLess: true });
+    expect(screen.getByTestId("bound-value")).toHaveTextContent("true");
   });
 
   test("should display custom copy text", async () => {
