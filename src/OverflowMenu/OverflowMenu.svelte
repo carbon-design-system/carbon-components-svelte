@@ -206,21 +206,24 @@
       }
 
       if (!effectivePortalMenu) {
-        if (flipped) {
-          menuRef.style.left = "auto";
-          menuRef.style.right = 0;
-        }
+        // Menu is a button sibling; position from offsetTop/offsetLeft.
+        const { offsetTop, offsetLeft } = buttonRef;
 
         if (direction === "top") {
-          menuRef.style.top = "auto";
-          menuRef.style.bottom = `${height}px`;
-        } else if (direction === "bottom") {
-          menuRef.style.top = `${height}px`;
+          menuRef.style.top = `${offsetTop - menuRef.offsetHeight}px`;
+        } else {
+          menuRef.style.top = `${offsetTop + height}px`;
+        }
+
+        if (flipped) {
+          menuRef.style.left = `${offsetLeft + width - menuRef.offsetWidth}px`;
+        } else {
+          menuRef.style.left = `${offsetLeft}px`;
         }
 
         if (ctxBreadcrumbItem) {
-          menuRef.style.top = `${height + 10}px`;
-          menuRef.style.left = `${-11}px`;
+          menuRef.style.top = `${offsetTop + height + 10}px`;
+          menuRef.style.left = `${offsetLeft - 11}px`;
         }
       } else if (flipped && menuRef) {
         menuRef.style.marginLeft = `${width - menuRef.offsetWidth}px`;
@@ -274,14 +277,12 @@
   class:bx--overflow-menu--xl={size === "xl"}
   {...$$restProps}
   on:click
-  on:click={(event) => {
-    if (!menuRef?.contains(event.target)) {
-      open = !open;
-      if (!open) {
-        const shouldContinue = dispatch("close", null, { cancelable: true });
-        if (!shouldContinue) {
-          open = true;
-        }
+  on:click={() => {
+    open = !open;
+    if (!open) {
+      const shouldContinue = dispatch("close", null, { cancelable: true });
+      if (!shouldContinue) {
+        open = true;
       }
     }
   }}
@@ -318,29 +319,42 @@
       class="bx--overflow-menu__icon {iconClass}"
     />
   </slot>
-  {#if open && !effectivePortalMenu}
-    <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-    <ul
-      bind:this={menuRef}
-      role="menu"
-      tabindex="-1"
-      id={menuId}
-      aria-label={ariaLabel}
-      data-floating-menu-direction={direction}
-      class:bx--overflow-menu-options={true}
-      class:bx--overflow-menu--flip={flipped}
-      class:bx--overflow-menu-options--open={open}
-      class:bx--overflow-menu-options--light={light}
-      class:bx--overflow-menu-options--sm={size === "sm"}
-      class:bx--overflow-menu-options--xl={size === "xl"}
-      class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
-      class={menuOptionsClass}
-      style="--overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
-    >
-      <slot />
-    </ul>
-  {/if}
 </button>
+
+{#if open && !effectivePortalMenu}
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+  <ul
+    bind:this={menuRef}
+    role="menu"
+    tabindex="-1"
+    id={menuId}
+    aria-label={ariaLabel}
+    data-floating-menu-direction={direction}
+    class:bx--overflow-menu-options={true}
+    class:bx--overflow-menu--flip={flipped}
+    class:bx--overflow-menu-options--open={open}
+    class:bx--overflow-menu-options--light={light}
+    class:bx--overflow-menu-options--sm={size === "sm"}
+    class:bx--overflow-menu-options--xl={size === "xl"}
+    class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
+    class={menuOptionsClass}
+    style="--overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
+    on:keydown={(e) => {
+      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
+        e.preventDefault();
+      } else if (e.key === "Escape") {
+        e.stopPropagation();
+        const shouldContinue = dispatch("close", null, { cancelable: true });
+        if (shouldContinue) {
+          open = false;
+          buttonRef.focus();
+        }
+      }
+    }}
+  >
+    <slot />
+  </ul>
+{/if}
 
 {#if effectivePortalMenu}
   <FloatingPortal
