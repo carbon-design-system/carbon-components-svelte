@@ -2,7 +2,7 @@
   /**
    * @template [T=any]
    * @event {null} save
-   * @event update - Fires when the stored value changes, either from a bound value update or when sessionStorage is modified from another tab/window.
+   * @event update - Fires when the stored value changes, either from a bound value update or when sessionStorage is modified by another same-origin document in this tab (e.g. an iframe).
    * @property {T} prevValue
    * @property {T} value
    */
