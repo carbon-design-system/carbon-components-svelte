@@ -13,6 +13,7 @@ import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import DropdownLabelChildren from "./Dropdown.slot.test.svelte";
 import Dropdown from "./Dropdown.test.svelte";
+import DropdownDuplicateIds from "./DropdownDuplicateIds.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
 import DropdownInModal from "./DropdownInModal.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
@@ -1028,7 +1029,9 @@ describe("Dropdown", () => {
       .mockImplementation(function (this: Element) {
         const role = this.getAttribute("role");
         if (role === "option") {
-          const index = Number(this.getAttribute("id"));
+          // Option ids are scoped as `${dropdownId}-${itemId}`; the item id
+          // (a numeric string here) is the last hyphen-delimited segment.
+          const index = Number(this.getAttribute("id")?.split("-").pop());
           const top = index * ITEM_HEIGHT;
           return {
             top,
@@ -2003,6 +2006,53 @@ describe("Dropdown", () => {
       await user.keyboard("{Enter}");
 
       expect(onselect).not.toHaveBeenCalled();
+    });
+  });
+
+  // Regression: option DOM ids must be scoped to the Dropdown instance id so
+  // two Dropdowns sharing item ids don't emit duplicate (invalid) DOM ids, and
+  // aria-activedescendant resolves unambiguously.
+  describe("option id scoping", () => {
+    it("should prefix each option id with the instance id", async () => {
+      render(Dropdown, {
+        props: { items, id: "contact", labelText: "Contact" },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      const ids = screen.getAllByRole("option").map((option) => option.id);
+      expect(ids).toEqual(["contact-0", "contact-1", "contact-2"]);
+    });
+
+    it("should keep option ids globally unique across instances", () => {
+      render(DropdownDuplicateIds);
+
+      const ids = screen.getAllByRole("option").map((option) => option.id);
+      // Two dropdowns, three items each.
+      expect(ids).toHaveLength(6);
+      expect(new Set(ids).size).toBe(ids.length);
+      expect(ids).toEqual([
+        "dropdown-a-0",
+        "dropdown-a-1",
+        "dropdown-a-2",
+        "dropdown-b-0",
+        "dropdown-b-1",
+        "dropdown-b-2",
+      ]);
+    });
+
+    it("should point aria-activedescendant at the scoped option id", async () => {
+      render(Dropdown, {
+        props: { items, id: "contact", selectedId: "0", labelText: "Contact" },
+      });
+
+      const button = screen.getByRole("combobox");
+      await user.click(button);
+      // Opening highlights the selected item (index 0).
+      expect(button).toHaveAttribute("aria-activedescendant", "contact-0");
+
+      await user.keyboard("{ArrowDown}");
+      expect(button).toHaveAttribute("aria-activedescendant", "contact-1");
     });
   });
 });
