@@ -4,7 +4,7 @@ components: ["SessionStorage"]
 
 Session storage provides a reactive wrapper around the [Window.sessionStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage). Unlike [LocalStorage](/components/LocalStorage), data is cleared when the browser tab is closed and is isolated per tab—each tab has its own storage. Use session storage for temporary state that should not persist across sessions (for example, form drafts or wizard progress).
 
-The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) for consistency with the storage API.
+The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so that updates from another same-origin document in the same tab (e.g., an iframe) stay in sync. Note that `sessionStorage` is isolated per tab, so this event does not propagate across tabs or windows.
 
 ## Basic example
 
