@@ -8,6 +8,7 @@ import { user } from "../utils/user";
 import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
+import ComboBoxDuplicateIds from "./ComboBoxDuplicateIds.test.svelte";
 import ComboBoxGenerics from "./ComboBoxGenerics.test.svelte";
 import ComboBoxInModal from "./ComboBoxInModal.test.svelte";
 
@@ -77,7 +78,13 @@ describe("ComboBox", () => {
 
     // After filtering to "Fax" (id="2"), ArrowDown highlights filteredItems[0].
     // aria-activedescendant must reference that item, not items[0] ("Slack").
-    expect(input).toHaveAttribute("aria-activedescendant", "2");
+    // The option id is scoped with the instance id (`${id}-${item.id}`), so it
+    // ends with "-2" and resolves to exactly one [role="option"] in the document.
+    const activeId = input.getAttribute("aria-activedescendant");
+    expect(activeId).toMatch(/-2$/);
+    const activeOptions = document.querySelectorAll(`[id="${activeId}"]`);
+    expect(activeOptions).toHaveLength(1);
+    expect(activeOptions[0]).toHaveAttribute("role", "option");
   });
 
   it("should set aria-activedescendant only when an item is highlighted", async () => {
@@ -91,6 +98,32 @@ describe("ComboBox", () => {
 
     await user.keyboard("{ArrowDown}");
     expect(input.getAttribute("aria-activedescendant")).not.toBe("");
+  });
+
+  it("scopes option ids per instance to avoid duplicate ids across ComboBoxes", () => {
+    render(ComboBoxDuplicateIds);
+
+    const ids = Array.from(
+      document.querySelectorAll<HTMLElement>('[role="option"]'),
+    ).map((option) => option.id);
+
+    // Two ComboBoxes render the same three items, so there are six options.
+    expect(ids).toHaveLength(6);
+
+    // Every option id is globally unique despite shared item ids.
+    expect(new Set(ids).size).toBe(ids.length);
+
+    // Ids are scoped with each instance's id prop.
+    expect(ids.filter((id) => id.startsWith("combo-a-"))).toEqual([
+      "combo-a-0",
+      "combo-a-1",
+      "combo-a-2",
+    ]);
+    expect(ids.filter((id) => id.startsWith("combo-b-"))).toEqual([
+      "combo-b-0",
+      "combo-b-1",
+      "combo-b-2",
+    ]);
   });
 
   it("should start keyboard navigation at selected item index", async () => {

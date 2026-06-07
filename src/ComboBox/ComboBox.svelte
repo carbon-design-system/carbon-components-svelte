@@ -424,7 +424,10 @@
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
-  $: highlightedId = filteredItems[highlightedIndex]?.id;
+  $: highlightedId =
+    filteredItems[highlightedIndex] == null
+      ? undefined
+      : `${id}-${filteredItems[highlightedIndex].id}`;
 
   $: shouldVirtualize =
     virtualize === false
@@ -700,7 +703,7 @@
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
                 <ListBoxMenuItem
-                  id={item.id}
+                  id={`${id}-${item.id}`}
                   active={selectedId === item.id}
                   highlighted={highlightedIndex === actualIndex}
                   disabled={item.disabled}
@@ -733,7 +736,7 @@
         {:else}
           {#each itemsToRender as item, index (item.id)}
             <ListBoxMenuItem
-              id={item.id}
+              id={`${id}-${item.id}`}
               active={selectedId === item.id}
               highlighted={highlightedIndex === index}
               disabled={item.disabled}
