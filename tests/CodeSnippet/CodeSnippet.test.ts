@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
+import { CodeSnippet } from "carbon-components-svelte";
 import { user } from "../utils/user";
 import CodeSnippetAsync from "./CodeSnippetAsync.test.svelte";
 import CodeSnippetAsyncDoubleClick from "./CodeSnippetAsyncDoubleClick.test.svelte";
@@ -532,5 +533,50 @@ yarn -v`,
     });
     const snippet = container.querySelector(".bx--snippet-container");
     expect(snippet).toHaveAttribute("aria-label", "");
+  });
+
+  test("uses default codeLabel for container aria-label", () => {
+    const { container } = render(CodeSnippet, {
+      props: { type: "single", code: "test" },
+    });
+    const snippet = container.querySelector(".bx--snippet-container");
+    expect(snippet).toHaveAttribute("aria-label", "Code snippet");
+  });
+
+  test("uses custom codeLabel for container aria-label", () => {
+    const { container } = render(CodeSnippet, {
+      props: {
+        type: "multi",
+        code: "test",
+        codeLabel: "Install command",
+      },
+    });
+    const snippet = container.querySelector(".bx--snippet-container");
+    expect(snippet).toHaveAttribute("aria-label", "Install command");
+  });
+
+  test("aria-label rest prop takes precedence over codeLabel", () => {
+    const { container } = render(CodeSnippet, {
+      props: {
+        type: "single",
+        code: "test",
+        codeLabel: "Install command",
+        "aria-label": "Custom label",
+      },
+    });
+    const snippet = container.querySelector(".bx--snippet-container");
+    expect(snippet).toHaveAttribute("aria-label", "Custom label");
+  });
+
+  test("copyLabel does not affect container aria-label", () => {
+    const { container } = render(CodeSnippet, {
+      props: {
+        type: "single",
+        code: "test",
+        copyLabel: "Copy code",
+      },
+    });
+    const snippet = container.querySelector(".bx--snippet-container");
+    expect(snippet).toHaveAttribute("aria-label", "Code snippet");
   });
 });
