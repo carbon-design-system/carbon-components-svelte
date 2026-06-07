@@ -80,6 +80,28 @@ describe("FileUploaderDropContainer", () => {
     expect(label).toHaveClass("bx--file-browse-btn--disabled");
   });
 
+  it("should expose aria-disabled and remove from tab order when disabled", () => {
+    const { container } = render(FileUploaderDropContainer, {
+      props: { disabled: true },
+    });
+
+    const dropContainer = container.querySelector(".bx--file__drop-container");
+    assert(dropContainer instanceof HTMLElement);
+    expect(dropContainer).toHaveAttribute("aria-disabled", "true");
+
+    const label = container.querySelector("label");
+    assert(label instanceof HTMLElement);
+    expect(label).toHaveAttribute("tabindex", "-1");
+  });
+
+  it("should not expose aria-disabled when not disabled", () => {
+    const { container } = render(FileUploaderDropContainer);
+
+    const dropContainer = container.querySelector(".bx--file__drop-container");
+    assert(dropContainer instanceof HTMLElement);
+    expect(dropContainer).not.toHaveAttribute("aria-disabled");
+  });
+
   it("should respect accept prop", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { accept: [".pdf", ".doc"] },
