@@ -348,15 +348,27 @@ This compiles every non-partial `*.scss` (sass, compressed) through autoprefixer
 
 See [Best practices](#best-practices) for scoping. Run checks against what you changed. Full-repo runs are slow and surface unrelated failures.
 
-For format and lint, prefer changed files only:
+For format and lint, scope Biome to what you touched:
 
 ```sh
-# Files changed relative to master
-bunx biome check --write --changed
-
-# Or specific paths
+# Specific paths — always lints the current working tree
 bunx biome check --write src/DataTable
+
+# Staged files only (what a commit would include)
+bunx biome check --write --staged
+
+# Files committed on this branch relative to master
+bunx biome check --write --changed --since=master
 ```
+
+Pick the form that matches your state. `--changed` and `--staged` resolve their file
+list from git, so each sees a different slice:
+
+- Path scoping (`src/DataTable`) lints whatever is on disk now, committed or not. Use it
+  while editing.
+- `--staged` lints the git index. Run it after `git add`.
+- `--changed` diffs commits against the default branch. It does **not** see uncommitted
+  or unstaged edits, so it reports nothing until you commit.
 
 `bun run lint` runs Biome over the entire repository. Reserve it for broad sweeps.
 
