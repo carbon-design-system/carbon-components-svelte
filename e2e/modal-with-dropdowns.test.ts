@@ -57,6 +57,37 @@ test.describe("Modal with Dropdowns", () => {
     ).toBeChecked();
   });
 
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/3170
+  test("MultiSelect keeps sequential label clicks selected and syncs bind:selectedIds", async ({
+    page,
+  }) => {
+    const trigger = page.getByRole("combobox", { name: "Open menu" });
+    await trigger.click();
+
+    const menu = page.getByRole("listbox", { name: "Choose an item" });
+    await expect(menu).toBeVisible();
+
+    const picks = ["Slack", "Email", "Phone"];
+    for (const name of picks) {
+      const option = menu.getByRole("option", { name });
+      // Click label text, not the checkbox input. That path double-toggled.
+      // biome-ignore lint/performance/noAwaitInLoops: each click must finish before the next
+      await option.getByText(name, { exact: true }).click();
+      await expect(option.getByRole("checkbox")).toBeChecked();
+    }
+
+    await Promise.all(
+      picks.map((name) =>
+        expect(
+          menu.getByRole("option", { name }).getByRole("checkbox"),
+        ).toBeChecked(),
+      ),
+    );
+
+    await expect(page.getByTestId("notification-count")).toHaveText("3");
+    await expect(page.getByTestId("notification-ids")).toHaveText("0,1,4");
+  });
+
   test("Dropdown menu renders outside the dialog (portal)", async ({
     page,
   }) => {

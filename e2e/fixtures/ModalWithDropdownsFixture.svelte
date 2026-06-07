@@ -9,6 +9,7 @@
   } from "carbon-components-svelte";
 
   let open = false;
+  let notificationIds = [];
 
   const contactItems = [
     { id: "0", text: "Slack" },
@@ -22,6 +23,11 @@
 <button type="button" data-testid="open-modal" on:click={() => (open = true)}>
   Open modal
 </button>
+
+<!-- bind:selectedIds from MultiSelect. Outside the Modal so it stays on screen
+     when the dialog closes; this pair failed to update during the bug. -->
+<p data-testid="notification-ids">{[...notificationIds].sort().join(",")}</p>
+<p data-testid="notification-count">{notificationIds.length}</p>
 
 <Modal
   bind:open
@@ -47,6 +53,7 @@
       labelText="Notification methods"
       label="Select methods..."
       items={contactItems}
+      bind:selectedIds={notificationIds}
     />
   </Stack>
 </Modal>

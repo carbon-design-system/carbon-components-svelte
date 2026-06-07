@@ -888,6 +888,9 @@
                       event.stopPropagation();
                       return;
                     }
+                    // Label default synthesizes a second click; without this,
+                    // selectItem runs twice and the toggle nets to no change.
+                    event.preventDefault();
                     selectItem(item);
                     if (filterable) {
                       inputRef?.focus();
@@ -940,6 +943,9 @@
                   event.stopPropagation();
                   return;
                 }
+                // Label default synthesizes a second click; without this,
+                // selectItem runs twice and the toggle nets to no change.
+                event.preventDefault();
                 selectItem(item);
                 if (filterable) {
                   inputRef?.focus();
