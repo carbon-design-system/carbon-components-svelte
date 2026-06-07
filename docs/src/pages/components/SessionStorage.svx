@@ -4,7 +4,7 @@ components: ["SessionStorage"]
 
 Session storage provides a reactive wrapper around the [Window.sessionStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage). Unlike [LocalStorage](/components/LocalStorage), data is cleared when the browser tab is closed and is isolated per tab—each tab has its own storage. Use session storage for temporary state that should not persist across sessions (for example, form drafts or wizard progress).
 
-The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so that updates from another same-origin document in the same tab (e.g., an iframe) stay in sync. Note that `sessionStorage` is isolated per tab, so this event does not propagate across tabs or windows.
+The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so that updates from another same-origin document in the same tab (e.g., an iframe) stay in sync. Note that `sessionStorage` is isolated per tab, so this event does not propagate across tabs or windows. Received storage updates dispatch `on:update` with `{ prevValue, value }`. When the key is removed from a context sharing the session (for example, via `sessionStorage.removeItem()` or `sessionStorage.clear()`), the bound `value` resets to `undefined` so the next local mutation does not re-persist stale data.
 
 ## Basic example
 
@@ -42,6 +42,8 @@ The component provides methods to manage stored data:
 | `clearItem`  | Remove a specific key-value pair.   |
 | `clearAll`   | Remove all stored data.             |
 
-Use `bind:this` to access these methods. In this example, try toggling the switch, refreshing the page, then clearing the storage.
+Use `bind:this` to access these methods. These methods only clear browser storage in the current tab; they do not reset the bound `value`. If you want to clear both storage and the bound value, reset `value` yourself after calling `clearItem` or `clearAll`.
+
+In this example, try toggling the switch, refreshing the page, then clearing the storage.
 
 <FileSource src="/framed/SessionStorage/SessionStorageClear" />
