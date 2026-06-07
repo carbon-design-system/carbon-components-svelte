@@ -1,6 +1,16 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import { ExpandableTile } from "carbon-components-svelte";
+
+  export let tileMaxHeight = 100;
+  export let tilePadding = 50;
 </script>
+
+<ExpandableTile data-testid="bound" bind:tileMaxHeight bind:tilePadding>
+  <div slot="above">Above bound</div>
+  <div slot="below">Below bound</div>
+</ExpandableTile>
 
 <!-- Basic expandable tile (no interactive content) -->
 <ExpandableTile data-testid="basic">

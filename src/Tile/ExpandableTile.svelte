@@ -61,9 +61,17 @@
   let refAbove = null;
   let resizeObserver;
 
+  /**
+   * Internal, measured fallbacks. These are only used when the consumer has
+   * not explicitly set the corresponding public prop, so that `bind:` values
+   * used to *control* the layout are never clobbered by measurements.
+   */
+  let measuredMaxHeight = 0;
+  let measuredPadding = 0;
+
   onMount(() => {
     resizeObserver = new ResizeObserver(([elem]) => {
-      tileMaxHeight = elem.contentRect.height;
+      measuredMaxHeight = elem.contentRect.height;
     });
 
     return () => {
@@ -79,15 +87,15 @@
   afterUpdate(() => {
     if (!ref) return;
 
-    if (tileMaxHeight === 0 && refAbove) {
-      tileMaxHeight = refAbove.getBoundingClientRect().height;
+    if (measuredMaxHeight === 0 && refAbove) {
+      measuredMaxHeight = refAbove.getBoundingClientRect().height;
     }
 
     const style = getComputedStyle(ref);
 
-    tilePadding =
-      Number.parseInt(style.getPropertyValue("padding-top"), 10) +
-      Number.parseInt(style.getPropertyValue("padding-bottom"), 10);
+    measuredPadding =
+      (Number.parseInt(style.getPropertyValue("padding-top"), 10) || 0) +
+      (Number.parseInt(style.getPropertyValue("padding-bottom"), 10) || 0);
   });
 </script>
 
@@ -105,7 +113,7 @@
   class:bx--tile--expandable={true}
   class:bx--tile--is-expanded={expanded}
   class:bx--tile--light={light}
-  style:max-height={expanded || tileMaxHeight <= 0 ? "none" : `${tileMaxHeight + tilePadding}px`}
+  style:max-height={expanded || (tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight) <= 0 ? "none" : `${(tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight) + (tilePadding > 0 ? tilePadding : measuredPadding)}px`}
   {...$$restProps}
   on:click
   on:click={() => {
