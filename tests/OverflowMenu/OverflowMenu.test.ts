@@ -73,6 +73,17 @@ describe("OverflowMenu", () => {
     });
   });
 
+  it("renders the menu as a sibling of the button, not nested inside it", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menu = screen.getByRole("menu");
+    expect(menu).toBeInTheDocument();
+    expect(menuButton.contains(menu)).toBe(false);
+  });
+
   it("handles keyboard navigation", async () => {
     render(OverflowMenu);
 
