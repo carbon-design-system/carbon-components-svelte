@@ -49,6 +49,7 @@
   import { writable } from "svelte/store";
   import { trackModal } from "../Modal/modalStore";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
+  import { createOutsideDismiss } from "../utils/outsideDismiss.js";
   import { trapFocus } from "../utils/trapFocus.js";
 
   const dispatch = createEventDispatcher();
@@ -57,7 +58,6 @@
 
   let buttonRef = null;
   let innerModal = null;
-  let didClickInnerModal = false;
   let closeDispatched = false;
 
   function close(trigger) {
@@ -69,6 +69,10 @@
       closeDispatched = false;
     }
   }
+
+  const outsideDismiss = createOutsideDismiss(() => {
+    if (!preventCloseOnClickOutside) close("outside-click");
+  });
 
   /**
    * @type {() => void}
@@ -171,12 +175,7 @@
     }
   }}
   on:click
-  on:mouseup={() => {
-    if (!didClickInnerModal && !preventCloseOnClickOutside) {
-      close("outside-click");
-    }
-    didClickInnerModal = false;
-  }}
+  on:mouseup={outsideDismiss.release}
   on:mouseover
   on:mouseenter
   on:mouseleave
@@ -206,9 +205,7 @@
     class:bx--modal-container--sm={size === "sm"}
     class:bx--modal-container--lg={size === "lg"}
     class={containerClass}
-    on:mousedown={() => {
-      didClickInnerModal = true;
-    }}
+    on:mousedown={outsideDismiss.pressInside}
   >
     <slot />
   </div>
