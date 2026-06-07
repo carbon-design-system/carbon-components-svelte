@@ -152,6 +152,12 @@ Enable row selection with the `selection` prop and structured list input compone
   </StructuredListBody>
 </StructuredList>
 
+## Multi-select rows
+
+Set `multiple` to allow selecting more than one row. `selected` becomes an array of values.
+
+<FileSource src="/framed/StructuredList/StructuredListMultiSelect" />
+
 ## Skeleton
 
 Show a loading state with the skeleton variant.
