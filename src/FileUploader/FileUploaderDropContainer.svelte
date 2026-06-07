@@ -114,7 +114,7 @@
     tabindex="-1"
     {id}
     {disabled}
-    {accept}
+    accept={typeof accept === "string" ? accept : accept.join(",")}
     {name}
     {multiple}
     class:bx--file-input={true}
