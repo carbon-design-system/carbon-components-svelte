@@ -29,6 +29,14 @@ content that appears before and after expansion.
   <div slot="below">Below the fold content here</div>
 </ExpandableTile>
 
+## Reactive (two-way binding)
+
+Bind to the `expanded` prop to control and read the tile state outside the component.
+Grow the above-the-fold content while collapsed to see the resize observer remeasure
+and update the tile height.
+
+<FileSource src="/framed/ExpandableTile/ExpandableTileReactive" />
+
 ## Custom tile heights
 
 Set custom heights for the tile content using CSS to control the exact dimensions
