@@ -240,3 +240,11 @@ console.
 Display a loading state using the file uploader skeleton.
 
 <FileUploaderSkeleton />
+
+## Skeleton without labels
+
+Set `hideLabelTitle` or `hideLabelDescription` to hide the corresponding
+skeleton line. This is useful when the live component is configured without
+those labels, preventing layout shift when toggling between the two.
+
+<FileUploaderSkeleton hideLabelTitle hideLabelDescription />
