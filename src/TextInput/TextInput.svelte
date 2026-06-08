@@ -87,15 +87,15 @@
   }
 
   /** @type {(e: Event) => void} */
-  const onInput = (event) => {
+  function onInput(event) {
     value = parse(event.target.value);
     dispatch("input", value);
-  };
+  }
 
   /** @type {(e: Event) => void} */
-  const onChange = (event) => {
+  function onChange(event) {
     dispatch("change", parse(event.target.value));
-  };
+  }
 
   const isFluid = !!ctx && ctx.isFluid;
   $: hasError = invalid && !readonly;
