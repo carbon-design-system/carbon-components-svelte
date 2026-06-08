@@ -2,6 +2,7 @@
   /**
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} change
+   * @event {Array<{ file: File; reason: string }>} rejected
    */
 
   /**
@@ -83,7 +84,13 @@
   on:drop|preventDefault|stopPropagation={(event) => {
     if (!disabled) {
       over = false;
-      const newFiles = validateFiles([...event.dataTransfer.files]);
+      const incoming = [...event.dataTransfer.files];
+      const newFiles = validateFiles(incoming);
+      const accepted = new Set(newFiles);
+      const rejected = incoming
+        .filter((file) => !accepted.has(file))
+        .map((file) => ({ file, reason: "invalid" }));
+      if (rejected.length > 0) dispatch("rejected", rejected);
       files = multiple ? [...files, ...newFiles] : newFiles;
       dispatch("add", files);
       dispatch("change", files);
@@ -123,8 +130,14 @@
     {name}
     {multiple}
     class:bx--file-input={true}
-    on:change={(event) => {
-      const newFiles = validateFiles([...event.target.files]);
+    on:change={({ target }) => {
+      const incoming = [...target.files];
+      const newFiles = validateFiles(incoming);
+      const accepted = new Set(newFiles);
+      const rejected = incoming
+        .filter((file) => !accepted.has(file))
+        .map((file) => ({ file, reason: "invalid" }));
+      if (rejected.length > 0) dispatch("rejected", rejected);
       files = multiple ? [...files, ...newFiles] : newFiles;
       dispatch("add", files);
       dispatch("change", files);

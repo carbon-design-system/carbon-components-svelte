@@ -9,11 +9,15 @@
   export let onchange:
     | ((e: CustomEvent<ReadonlyArray<File>>) => void)
     | undefined = undefined;
+  export let onrejected:
+    | ((e: CustomEvent<Array<{ file: File; reason: string }>>) => void)
+    | undefined = undefined;
 </script>
 
 <FileUploaderDropContainer
   bind:files
   on:add={(e) => onadd?.(e)}
   on:change={(e) => onchange?.(e)}
+  on:rejected={(e) => onrejected?.(e)}
   {...$$restProps}
 />
