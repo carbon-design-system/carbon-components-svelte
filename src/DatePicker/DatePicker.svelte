@@ -173,34 +173,34 @@
   /**
    * @type {(data: { id: string; labelText: string }) => void}
    */
-  const add = (data) => {
+  function add(data) {
     inputs.update((_) => [..._, { readonly: false, ...data }]);
-  };
+  }
 
   /**
    * @type {(id: string, readonly: boolean) => void}
    */
-  const setReadonly = (id, readonly) => {
+  function setReadonly(id, readonly) {
     inputs.update((_) =>
       _.map((input) => (input.id === id ? { ...input, readonly } : input)),
     );
-  };
+  }
 
   /**
    * @type {(data: { id: string; ref: HTMLInputElement }) => void}
    */
-  const declareRef = ({ id, ref }) => {
+  function declareRef({ id, ref }) {
     if ($inputIds.indexOf(id) === 0) {
       inputRef = ref;
     } else {
       inputRefTo = ref;
     }
-  };
+  }
 
   /**
    * @type {(data: { type: "input" | "change"; value: string }) => void}
    */
-  const updateValue = ({ type, value }) => {
+  function updateValue({ type, value }) {
     if ((!calendar && type === "input") || type === "change") {
       inputValue.set(value);
     }
@@ -223,12 +223,12 @@
         dispatch("change", value);
       }
     }
-  };
+  }
 
   /**
    * @type {(relatedTarget: EventTarget | null) => void}
    */
-  const blurInput = (relatedTarget) => {
+  function blurInput(relatedTarget) {
     if (!calendar) return;
     // No relatedTarget means focus left the document (e.g. switching browser
     // tabs); refocusing would replay the open animation. Outside clicks are
@@ -242,26 +242,26 @@
     )
       return;
     calendar.close();
-  };
+  }
 
   /**
    * @type {() => void}
    */
-  const openCalendar = () => {
+  function openCalendar() {
     calendar.open();
-  };
+  }
 
   /**
    * @type {() => void}
    */
-  const focusCalendar = () => {
+  function focusCalendar() {
     (
       calendar.selectedDateElem ||
       calendar.todayDateElem ||
       calendar.calendarContainer.querySelector(".flatpickr-day[tabindex]") ||
       calendar.calendarContainer
     ).focus();
-  };
+  }
 
   setContext("carbon:DatePicker", {
     range,
