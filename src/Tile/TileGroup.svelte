@@ -66,19 +66,19 @@
   /**
    * @type {(data: { checked: boolean; value: T }) => void}
    */
-  const add = ({ checked, value }) => {
+  function add({ checked, value }) {
     if (checked) {
       selectedValue.set(value);
     }
-  };
+  }
 
   /**
    * @type {(value: T) => void}
    */
-  const update = (value) => {
+  function update(value) {
     selectedValue.set(value);
     dispatch("select", value);
-  };
+  }
 
   setContext("carbon:TileGroup", {
     selectedValue,
