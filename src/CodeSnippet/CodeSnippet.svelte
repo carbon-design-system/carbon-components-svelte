@@ -86,6 +86,11 @@
    */
   export let copyLabel = "Copy code";
 
+  /**
+   * Specify the ARIA label of the code snippet container (single/multi variants).
+   */
+  export let codeLabel = "Code snippet";
+
   /** Specify the feedback text displayed when clicking the snippet */
   export let feedback = "Copied!";
 
@@ -325,7 +330,7 @@
       tabindex={disabled ? undefined : "0"}
       aria-readonly="true"
       aria-multiline={type === "multi" ? "true" : undefined}
-      aria-label={$$restProps["aria-label"] ?? copyLabel ?? "code-snippet"}
+      aria-label={$$restProps["aria-label"] ?? codeLabel}
       class:bx--snippet-container={true}
       style:width="100%"
       style:min-height="{minHeight}px"
