@@ -411,6 +411,7 @@
 
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
+  const treeId = `tree-${Math.random().toString(36)}`;
 
   /** @type {import("svelte/store").Writable<boolean>} */
   const multiselectStore = writable(multiselect);
@@ -627,6 +628,7 @@
   const toggleNode = (node) => dispatch("toggle", node);
 
   setContext("carbon:TreeView", {
+    treeId,
     activeNodeId,
     selectedNodeIds,
     expandedNodeIds,
