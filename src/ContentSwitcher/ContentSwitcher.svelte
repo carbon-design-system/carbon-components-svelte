@@ -31,7 +31,7 @@
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
-  import { nextEnabledIndex } from "../utils/moveIndex.js";
+  import { rovingFocus } from "../utils/rovingFocus.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
 
   const dispatch = createEventDispatcher();
@@ -58,9 +58,9 @@
   }
 
   /**
-   * @type {(data: { id: string; text: string; selected: boolean; disabled?: boolean }) => void}
+   * @type {(data: { id: string; text: string; selected: boolean }) => void}
    */
-  const add = ({ id, text, selected, disabled = false }) => {
+  const add = ({ id, text, selected }) => {
     if (switches.some((s) => s.id === id)) {
       return;
     }
@@ -70,21 +70,7 @@
     }
 
     needsDomSync = true;
-    switches = [...switches, { id, text, selected, disabled }];
-  };
-
-  /**
-   * Keep a switch's disabled state in sync so keyboard navigation skips it.
-   * @type {(id: string, disabled: boolean) => void}
-   */
-  const setDisabled = (id, disabled) => {
-    const index = switches.findIndex((s) => s.id === id);
-    if (index === -1 || switches[index].disabled === disabled) {
-      return;
-    }
-
-    switches[index] = { ...switches[index], disabled };
-    switches = switches;
+    switches = [...switches, { id, text, selected }];
   };
 
   /**
@@ -118,19 +104,6 @@
   };
 
   /**
-   * @type {(direction: number) => Promise<void>}
-   */
-  const change = async (direction) => {
-    await changeTo(
-      nextEnabledIndex({
-        items: switches,
-        index: currentIndex,
-        step: direction,
-      }),
-    );
-  };
-
-  /**
    * Move focus to a switch at an absolute index without changing selection.
    * @type {(index: number) => Promise<void>}
    */
@@ -146,45 +119,11 @@
     }
   };
 
-  /**
-   * Move focus to the next/previous switch without changing selection.
-   * @type {(direction: number) => Promise<void>}
-   */
-  const focus = async (direction) => {
-    const base = focusedIndex >= 0 ? focusedIndex : currentIndex;
-    await focusTo(
-      nextEnabledIndex({ items: switches, index: base, step: direction }),
-    );
-  };
-
-  /**
-   * Resolve the first or last enabled switch index for Home/End. Returns -1
-   * when every switch is disabled.
-   * @type {(edge: "first" | "last") => number}
-   */
-  const edgeEnabledIndex = (edge) => {
-    const start = edge === "first" ? -1 : switches.length;
-    const step = edge === "first" ? 1 : -1;
-    return nextEnabledIndex({ items: switches, index: start, step });
-  };
-
   setContext("carbon:ContentSwitcher", {
     currentId,
     add,
     remove,
     update,
-    setDisabled,
-    change,
-    changeTo,
-    focus,
-    focusTo,
-    edgeEnabledIndex,
-    get switchCount() {
-      return switches.length;
-    },
-    get selectionMode() {
-      return selectionMode;
-    },
   });
 
   afterUpdate(() => {
@@ -223,6 +162,17 @@
 <div
   bind:this={ref}
   role="tablist"
+  use:rovingFocus={{
+    selector: "[role='tab']",
+    skipDisabled: true,
+    getItems: () =>
+      switches
+        .map((s) => document.getElementById(s.id))
+        .filter((el) => el instanceof HTMLElement),
+    getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : currentIndex),
+    onMove: (index) =>
+      selectionMode === "manual" ? focusTo(index) : changeTo(index),
+  }}
   class:bx--content-switcher={true}
   class:bx--content-switcher--sm={size === "sm"}
   class:bx--content-switcher--xl={size === "xl"}

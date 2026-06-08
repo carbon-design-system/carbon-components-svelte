@@ -33,11 +33,7 @@
 
   const ctx = getContext("carbon:ContentSwitcher");
 
-  ctx.add({ id, text, selected, disabled });
-
-  // Keep the parent registry in sync when `disabled` changes reactively so
-  // keyboard navigation continues to skip the correct switches.
-  $: ctx.setDisabled?.(id, disabled);
+  ctx.add({ id, text, selected });
 
   const unsubscribe = ctx.currentId.subscribe((currentId) => {
     selected = currentId === id;
@@ -74,21 +70,6 @@
   on:blur
   on:keyup
   on:keydown
-  on:keydown={(event) => {
-    if (event.key === "ArrowRight") {
-      ctx.selectionMode === "manual" ? ctx.focus(1) : ctx.change(1);
-    } else if (event.key === "ArrowLeft") {
-      ctx.selectionMode === "manual" ? ctx.focus(-1) : ctx.change(-1);
-    } else if (event.key === "Home") {
-      event.preventDefault();
-      const first = ctx.edgeEnabledIndex("first");
-      ctx.selectionMode === "manual" ? ctx.focusTo(first) : ctx.changeTo(first);
-    } else if (event.key === "End") {
-      event.preventDefault();
-      const last = ctx.edgeEnabledIndex("last");
-      ctx.selectionMode === "manual" ? ctx.focusTo(last) : ctx.changeTo(last);
-    }
-  }}
 >
   <span class:bx--content-switcher__label={true}> <slot>{text}</slot> </span>
 </button>
