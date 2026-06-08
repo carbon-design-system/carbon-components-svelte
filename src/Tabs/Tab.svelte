@@ -60,8 +60,6 @@
     add,
     remove,
     update,
-    change,
-    changeToEdge,
   } = getContext("carbon:Tabs");
 
   add({
@@ -98,17 +96,7 @@
   on:mouseenter
   on:mouseleave
   on:keydown={(event) => {
-    if (event.key === "ArrowRight") {
-      change(1);
-    } else if (event.key === "ArrowLeft") {
-      change(-1);
-    } else if (event.key === "Home") {
-      event.preventDefault();
-      changeToEdge("first");
-    } else if (event.key === "End") {
-      event.preventDefault();
-      changeToEdge("last");
-    } else if (!disabled && (event.key === " " || event.key === "Enter")) {
+    if (!disabled && (event.key === " " || event.key === "Enter")) {
       update(id);
     }
   }}
