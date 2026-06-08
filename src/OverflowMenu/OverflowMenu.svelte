@@ -124,7 +124,7 @@
   /**
    * @type {(data: { id: string; text: string; primaryFocus: boolean; disabled: boolean }) => void}
    */
-  const add = ({ id, text, primaryFocus, disabled }) => {
+  function add({ id, text, primaryFocus, disabled }) {
     items.update((_) => {
       if (primaryFocus) {
         currentIndex.set(_.length);
@@ -132,17 +132,17 @@
 
       return [..._, { id, text, primaryFocus, disabled, index: _.length }];
     });
-  };
+  }
 
   /** @type {(id: string) => void} */
-  const remove = (id) => {
+  function remove(id) {
     items.update((_) => _.filter((item) => item.id !== id));
-  };
+  }
 
   /**
    * @type {(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }) => void}
    */
-  const update = (id, item) => {
+  function update(id, item) {
     currentId.set(id);
 
     const shouldContinue = dispatch(
@@ -153,21 +153,21 @@
     if (shouldContinue) {
       open = false;
     }
-  };
+  }
 
-  const first = () => {
+  function first() {
     const index = $items.findIndex((_) => !_.disabled);
     if (index >= 0) currentIndex.set(index);
-  };
+  }
 
-  const last = () => {
+  function last() {
     for (let index = $items.length - 1; index >= 0; index--) {
       if (!$items[index].disabled) {
         currentIndex.set(index);
         return;
       }
     }
-  };
+  }
 
   setContext("carbon:OverflowMenu", {
     focusedId,
