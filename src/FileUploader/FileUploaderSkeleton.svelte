@@ -1,6 +1,12 @@
 <script>
   import ButtonSkeleton from "../Button/ButtonSkeleton.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+
+  /** Set to `true` to hide the label title skeleton line */
+  export let hideLabelTitle = false;
+
+  /** Set to `true` to hide the label description skeleton line */
+  export let hideLabelDescription = false;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -13,7 +19,11 @@
   on:mouseenter
   on:mouseleave
 >
-  <SkeletonText heading width="100px" />
-  <SkeletonText width="225px" class="bx--label-description" />
+  {#if !hideLabelTitle}
+    <SkeletonText heading width="100px" />
+  {/if}
+  {#if !hideLabelDescription}
+    <SkeletonText width="225px" class="bx--label-description" />
+  {/if}
   <ButtonSkeleton />
 </div>
