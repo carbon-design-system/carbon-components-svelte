@@ -40,35 +40,35 @@
   /**
    * @type {(item: { id: string; isSelected: boolean }) => void}
    */
-  const updateSelectedItems = (item) => {
+  function updateSelectedItems(item) {
     selectedItems.update((_items) => ({
       ..._items,
       [item.id]: item.isSelected,
     }));
-  };
+  }
 
   /**
    * @type {(element: HTMLElement) => void}
    */
-  const registerMenuItem = (element) => {
+  function registerMenuItem(element) {
     menuItems.update((items) => [...items, element]);
-  };
+  }
 
   /**
    * @type {(element: HTMLElement) => void}
    */
-  const unregisterMenuItem = (element) => {
+  function unregisterMenuItem(element) {
     menuItems.update((items) => items.filter((item) => item !== element));
-  };
+  }
 
   /**
    * @type {() => Promise<void>}
    */
-  const closeMenu = async () => {
+  async function closeMenu() {
     expanded = false;
     await tick();
     ref?.focus();
-  };
+  }
 
   setContext("carbon:HeaderNavMenu", {
     selectedItems,
