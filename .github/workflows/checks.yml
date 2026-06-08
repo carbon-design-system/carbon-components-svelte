@@ -122,10 +122,14 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       # Playwright image is minimal; setup-bun extracts a zip and needs unzip.
-      - run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y unzip
+      # Try installing first (fast path) and only refresh apt lists if needed.
+      - run: DEBIAN_FRONTEND=noninteractive apt-get install -y unzip || { apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y unzip; }
 
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-      - run: bun ci
+      # --ignore-scripts skips the ibmtelemetry postinstall (already disabled
+      # via IBM_TELEMETRY_DISABLED) and Playwright's browser download (browsers
+      # are baked into the image at PLAYWRIGHT_BROWSERS_PATH).
+      - run: bun ci --ignore-scripts
 
       - name: E2E tests
         run: bunx playwright test --project=chromium
