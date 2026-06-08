@@ -101,7 +101,7 @@ describe("Tabs", () => {
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
-  it("should jump to first and last tab with Home and End keys", async () => {
+  it("supports Home/End keyboard navigation", async () => {
     render(Tabs);
 
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
@@ -111,10 +111,12 @@ describe("Tabs", () => {
     await user.keyboard("{End}");
     expect(tab3).toHaveFocus();
     expect(tab3).toHaveAttribute("aria-selected", "true");
+    expect(consoleLog).toHaveBeenCalledWith("change event", 2);
 
     await user.keyboard("{Home}");
     expect(tab1).toHaveFocus();
     expect(tab1).toHaveAttribute("aria-selected", "true");
+    expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)

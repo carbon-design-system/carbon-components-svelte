@@ -34,7 +34,7 @@
   import { derived, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { keyBy } from "../utils/keyBy.js";
-  import { nextEnabledIndex } from "../utils/moveIndex.js";
+  import { rovingFocus } from "../utils/rovingFocus.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
 
   const dispatch = createEventDispatcher();
@@ -121,51 +121,18 @@
   };
 
   /**
+   * Move selection/focus to a tab at an absolute index. Roving focus resolves
+   * the index (skipping disabled, wrapping); selection follows focus.
    * @type {(index: number) => Promise<void>}
    */
-  const focusTab = async (index) => {
+  const selectTab = async (index) => {
+    if (index === currentIndex) return;
+
     currentIndex = index;
 
     await tick();
     const activeTab = refTabList?.querySelectorAll("[role='tab']")[index];
     activeTab?.focus();
-  };
-
-  /**
-   * @type {(direction: number) => Promise<void>}
-   */
-  const change = async (direction) => {
-    const nextIndex = nextEnabledIndex({
-      items: $tabs,
-      index: currentIndex,
-      step: direction,
-    });
-
-    if (nextIndex === currentIndex) return;
-
-    await focusTab(nextIndex);
-  };
-
-  /**
-   * @type {(edge: "first" | "last") => Promise<void>}
-   */
-  const changeToEdge = async (edge) => {
-    const nextIndex = nextEnabledIndex({
-      items: $tabs,
-      index: edge === "first" ? -1 : $tabs.length,
-      step: edge === "first" ? 1 : -1,
-    });
-
-    // nextEnabledIndex leaves index out of range when every tab is disabled.
-    if (
-      nextIndex === currentIndex ||
-      nextIndex < 0 ||
-      nextIndex >= $tabs.length
-    ) {
-      return;
-    }
-
-    await focusTab(nextIndex);
   };
 
   setContext("carbon:Tabs", {
@@ -181,8 +148,6 @@
     addContent,
     removeContent,
     update,
-    change,
-    changeToEdge,
   });
 
   afterUpdate(() => {
@@ -285,6 +250,13 @@
   <ul
     bind:this={refTabList}
     role="tablist"
+    use:rovingFocus={{
+      selector: "[role='tab']",
+      orientation: "horizontal",
+      skipDisabled: true,
+      getActiveIndex: () => currentIndex,
+      onMove: (index) => selectTab(index),
+    }}
     class:bx--tabs__nav={true}
     class:bx--tabs__nav--hidden={dropdownHidden}
   >
