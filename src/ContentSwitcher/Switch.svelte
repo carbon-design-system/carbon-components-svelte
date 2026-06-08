@@ -33,7 +33,11 @@
 
   const ctx = getContext("carbon:ContentSwitcher");
 
-  ctx.add({ id, text, selected });
+  ctx.add({ id, text, selected, disabled });
+
+  // Keep the parent registry in sync when `disabled` changes reactively so
+  // keyboard navigation continues to skip the correct switches.
+  $: ctx.setDisabled?.(id, disabled);
 
   const unsubscribe = ctx.currentId.subscribe((currentId) => {
     selected = currentId === id;
@@ -77,10 +81,11 @@
       ctx.selectionMode === "manual" ? ctx.focus(-1) : ctx.change(-1);
     } else if (event.key === "Home") {
       event.preventDefault();
-      ctx.selectionMode === "manual" ? ctx.focusTo(0) : ctx.changeTo(0);
+      const first = ctx.edgeEnabledIndex("first");
+      ctx.selectionMode === "manual" ? ctx.focusTo(first) : ctx.changeTo(first);
     } else if (event.key === "End") {
       event.preventDefault();
-      const last = ctx.switchCount - 1;
+      const last = ctx.edgeEnabledIndex("last");
       ctx.selectionMode === "manual" ? ctx.focusTo(last) : ctx.changeTo(last);
     }
   }}

@@ -31,7 +31,7 @@
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
-  import { moveIndex } from "../utils/moveIndex.js";
+  import { nextEnabledIndex } from "../utils/moveIndex.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
 
   const dispatch = createEventDispatcher();
@@ -58,9 +58,9 @@
   }
 
   /**
-   * @type {(data: { id: string; text: string; selected: boolean }) => void}
+   * @type {(data: { id: string; text: string; selected: boolean; disabled?: boolean }) => void}
    */
-  const add = ({ id, text, selected }) => {
+  const add = ({ id, text, selected, disabled = false }) => {
     if (switches.some((s) => s.id === id)) {
       return;
     }
@@ -70,7 +70,21 @@
     }
 
     needsDomSync = true;
-    switches = [...switches, { id, text, selected }];
+    switches = [...switches, { id, text, selected, disabled }];
+  };
+
+  /**
+   * Keep a switch's disabled state in sync so keyboard navigation skips it.
+   * @type {(id: string, disabled: boolean) => void}
+   */
+  const setDisabled = (id, disabled) => {
+    const index = switches.findIndex((s) => s.id === id);
+    if (index === -1 || switches[index].disabled === disabled) {
+      return;
+    }
+
+    switches[index] = { ...switches[index], disabled };
+    switches = switches;
   };
 
   /**
@@ -92,6 +106,7 @@
    * @type {(index: number) => Promise<void>}
    */
   const changeTo = async (index) => {
+    if (index < 0 || index >= switches.length) return;
     selectedIndex = index;
 
     await tick();
@@ -106,7 +121,13 @@
    * @type {(direction: number) => Promise<void>}
    */
   const change = async (direction) => {
-    await changeTo(moveIndex(currentIndex, direction, switches.length));
+    await changeTo(
+      nextEnabledIndex({
+        items: switches,
+        index: currentIndex,
+        step: direction,
+      }),
+    );
   };
 
   /**
@@ -114,6 +135,7 @@
    * @type {(index: number) => Promise<void>}
    */
   const focusTo = async (index) => {
+    if (index < 0 || index >= switches.length) return;
     focusedIndex = index;
 
     await tick();
@@ -130,7 +152,20 @@
    */
   const focus = async (direction) => {
     const base = focusedIndex >= 0 ? focusedIndex : currentIndex;
-    await focusTo(moveIndex(base, direction, switches.length));
+    await focusTo(
+      nextEnabledIndex({ items: switches, index: base, step: direction }),
+    );
+  };
+
+  /**
+   * Resolve the first or last enabled switch index for Home/End. Returns -1
+   * when every switch is disabled.
+   * @type {(edge: "first" | "last") => number}
+   */
+  const edgeEnabledIndex = (edge) => {
+    const start = edge === "first" ? -1 : switches.length;
+    const step = edge === "first" ? 1 : -1;
+    return nextEnabledIndex({ items: switches, index: start, step });
   };
 
   setContext("carbon:ContentSwitcher", {
@@ -138,10 +173,12 @@
     add,
     remove,
     update,
+    setDisabled,
     change,
     changeTo,
     focus,
     focusTo,
+    edgeEnabledIndex,
     get switchCount() {
       return switches.length;
     },
