@@ -71,31 +71,31 @@
   /**
    * @type {() => void}
    */
-  const closeModal = () => {
+  function closeModal() {
     close("close-button");
-  };
+  }
 
   /**
    * @type {() => void}
    */
-  const submit = () => {
+  function submit() {
     dispatch("submit");
     dispatch("click:button--primary");
-  };
+  }
 
   /**
    * @type {(ref: HTMLButtonElement) => void}
    */
-  const declareRef = (ref) => {
+  function declareRef(ref) {
     buttonRef = ref;
-  };
+  }
 
   /**
    * @type {(value: string | undefined) => void}
    */
-  const updateLabel = (value) => {
+  function updateLabel(value) {
     label.set(value);
-  };
+  }
 
   setContext("carbon:Modal", {});
   setContext("carbon:ComposedModal", {
