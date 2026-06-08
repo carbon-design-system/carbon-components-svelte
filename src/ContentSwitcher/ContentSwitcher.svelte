@@ -60,7 +60,7 @@
   /**
    * @type {(data: { id: string; text: string; selected: boolean }) => void}
    */
-  const add = ({ id, text, selected }) => {
+  function add({ id, text, selected }) {
     if (switches.some((s) => s.id === id)) {
       return;
     }
@@ -71,27 +71,27 @@
 
     needsDomSync = true;
     switches = [...switches, { id, text, selected }];
-  };
+  }
 
   /**
    * @type {(id: string) => void}
    */
-  const remove = (id) => {
+  function remove(id) {
     needsDomSync = true;
     switches = switches.filter((s) => s.id !== id);
-  };
+  }
 
   /**
    * @type {(id: string) => void}
    */
-  const update = (id) => {
+  function update(id) {
     selectedIndex = switches.map(({ id }) => id).indexOf(id);
-  };
+  }
 
   /**
    * @type {(index: number) => Promise<void>}
    */
-  const changeTo = async (index) => {
+  async function changeTo(index) {
     if (index < 0 || index >= switches.length) return;
     selectedIndex = index;
 
@@ -101,13 +101,13 @@
     if (tab instanceof HTMLElement) {
       tab.focus();
     }
-  };
+  }
 
   /**
    * Move focus to a switch at an absolute index without changing selection.
    * @type {(index: number) => Promise<void>}
    */
-  const focusTo = async (index) => {
+  async function focusTo(index) {
     if (index < 0 || index >= switches.length) return;
     focusedIndex = index;
 
@@ -117,7 +117,7 @@
     if (tab instanceof HTMLElement) {
       tab.focus();
     }
-  };
+  }
 
   setContext("carbon:ContentSwitcher", {
     currentId,
