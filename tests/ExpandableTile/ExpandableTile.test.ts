@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import ExpandableTile from "./ExpandableTile.test.svelte";
 import ExpandableTileCustom from "./ExpandableTileCustom.test.svelte";
@@ -193,7 +194,7 @@ describe("ExpandableTile", () => {
     });
 
     const tile = screen.getByRole("button");
-    expect(tile.getAttribute("style")).toBe("max-height: 200px;");
+    expect(tile.getAttribute("style")).toBe("max-height: 220px;");
 
     await user.click(tile);
     expect(tile.getAttribute("style")).toBe("max-height: none;");
@@ -209,6 +210,27 @@ describe("ExpandableTile", () => {
 
     const tile = screen.getByRole("button");
     expect(tile.getAttribute("style")).toBe("max-height: none;");
+  });
+
+  it("should not overwrite consumer-bound tilePadding after afterUpdate runs", async () => {
+    const { component } = render(ExpandableTileVariants, {
+      props: { tilePadding: 50, tileMaxHeight: 300 },
+    });
+
+    await tick();
+
+    expect(component.tilePadding).toBe(50);
+  });
+
+  it("should not overwrite consumer-bound tileMaxHeight after the ResizeObserver measures", async () => {
+    const { component } = render(ExpandableTileVariants, {
+      props: { tilePadding: 50, tileMaxHeight: 300 },
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await tick();
+
+    expect(component.tileMaxHeight).toBe(300);
   });
 
   it("should re-observe the above-the-fold element when hasInteractiveContent toggles", async () => {
