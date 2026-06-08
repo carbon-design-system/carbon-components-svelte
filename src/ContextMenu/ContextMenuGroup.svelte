@@ -19,22 +19,22 @@
   /**
    * @type {(data: { id: string }) => void}
    */
-  const addOption = ({ id }) => {
+  function addOption({ id }) {
     if (!selectedIds.includes(id)) {
       selectedIds = [...selectedIds, id];
     }
-  };
+  }
 
   /**
    * @type {(data: { id: string }) => void}
    */
-  const toggleOption = ({ id }) => {
+  function toggleOption({ id }) {
     if (selectedIds.includes(id)) {
       selectedIds = selectedIds.filter((_) => _ !== id);
     } else {
       selectedIds = [...selectedIds, id];
     }
-  };
+  }
 
   setContext("carbon:ContextMenuGroup", {
     currentIds,

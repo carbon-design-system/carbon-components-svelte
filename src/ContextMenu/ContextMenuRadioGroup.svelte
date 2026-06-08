@@ -23,18 +23,18 @@
   /**
    * @type {(data: { id: string }) => void}
    */
-  const addOption = ({ id }) => {
+  function addOption({ id }) {
     if (!$radioIds.includes(id)) {
       radioIds.update((_) => [..._, id]);
     }
-  };
+  }
 
   /**
    * @type {(data: { id: string }) => void}
    */
-  const setOption = ({ id }) => {
+  function setOption({ id }) {
     selectedId = id;
-  };
+  }
 
   setContext("carbon:ContextMenuRadioGroup", {
     currentId,

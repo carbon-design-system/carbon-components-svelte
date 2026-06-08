@@ -142,9 +142,9 @@
   /**
    * @type {(popup: boolean) => void}
    */
-  const setPopup = (popup) => {
+  function setPopup(popup) {
     hasPopup.set(popup);
-  };
+  }
 
   setContext("carbon:ContextMenu", {
     menuOffsetX,
