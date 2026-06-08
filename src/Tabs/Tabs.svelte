@@ -84,48 +84,48 @@
   /**
    * @type {(data: { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean }) => void}
    */
-  const add = (data) => {
+  function add(data) {
     needsDomSync = true;
     tabs.update((_) => [..._, { ...data, index: _.length }]);
-  };
+  }
 
   /**
    * @type {(id: string) => void}
    */
-  const remove = (id) => {
+  function remove(id) {
     needsDomSync = true;
     tabs.update((_) => _.filter((tab) => tab.id !== id));
-  };
+  }
 
   /**
    * @type {(data: { id: string }) => void}
    */
-  const addContent = (data) => {
+  function addContent(data) {
     needsDomSync = true;
     content.update((_) => [..._, { ...data, index: _.length }]);
-  };
+  }
 
   /**
    * @type {(id: string) => void}
    */
-  const removeContent = (id) => {
+  function removeContent(id) {
     needsDomSync = true;
     content.update((_) => _.filter((item) => item.id !== id));
-  };
+  }
 
   /**
    * @type {(id: string) => void}
    */
-  const update = (id) => {
+  function update(id) {
     currentIndex = $tabsById[id].index;
-  };
+  }
 
   /**
    * Move selection/focus to a tab at an absolute index. Roving focus resolves
    * the index (skipping disabled, wrapping); selection follows focus.
    * @type {(index: number) => Promise<void>}
    */
-  const selectTab = async (index) => {
+  async function selectTab(index) {
     if (index === currentIndex) return;
 
     currentIndex = index;
@@ -133,7 +133,7 @@
     await tick();
     const activeTab = refTabList?.querySelectorAll("[role='tab']")[index];
     activeTab?.focus();
-  };
+  }
 
   setContext("carbon:Tabs", {
     tabs,
