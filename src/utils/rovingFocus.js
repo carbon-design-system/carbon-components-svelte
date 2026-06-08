@@ -35,8 +35,11 @@ export function rovingFocus(node, options) {
   let opts = options;
 
   /** @param {HTMLElement} el */
-  const defaultIsDisabled = (el) =>
-    el.hasAttribute("disabled") || el.getAttribute("aria-disabled") === "true";
+  function defaultIsDisabled(el) {
+    return (
+      el.hasAttribute("disabled") || el.getAttribute("aria-disabled") === "true"
+    );
+  }
 
   function getItems() {
     if (opts.getItems) return opts.getItems();
