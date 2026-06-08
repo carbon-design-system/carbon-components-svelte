@@ -361,9 +361,9 @@
     const container = tableRef;
     container.style.maxHeight = `${calculatedContainerHeight}px`;
     container.style.overflowY = "auto";
-    const handleScroll = () => {
+    function handleScroll() {
       tableBodyScrollTop = container.scrollTop || 0;
-    };
+    }
     container.addEventListener("scroll", handleScroll, { passive: true });
     scrollListenerCleanup = () => {
       container.removeEventListener("scroll", handleScroll);
@@ -391,7 +391,7 @@
   /**
    * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}
    */
-  const filterRows = (searchValue, customFilter) => {
+  function filterRows(searchValue, customFilter) {
     lastSearchValue = searchValue;
     lastCustomFilter = customFilter;
     const value = searchValue.trim().toLowerCase();
@@ -429,7 +429,7 @@
 
     tableRows.set(filteredRows);
     return filteredRows.map((row) => row.id);
-  };
+  }
 
   $: if (rows !== prevRows_ref) {
     originalRows = [...rows];
@@ -444,10 +444,10 @@
   /**
    * @type {() => void}
    */
-  const resetSelectedRowIds = () => {
+  function resetSelectedRowIds() {
     selectAll = false;
     selectedRowIds = [];
-  };
+  }
 
   setContext("carbon:DataTable", {
     batchSelectedIds,
