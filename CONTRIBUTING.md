@@ -523,6 +523,25 @@ bunx playwright test e2e/breakpoint.test.ts
 bunx playwright test --grep "Breakpoint"
 ```
 
+#### How fixtures are served (local vs CI)
+
+The fixtures are a Vite multi-page app, one `.html` entry per fixture. How they are served depends on the environment, controlled by the `CI` env var in `playwright.config.ts`:
+
+- **Locally**: Playwright starts the Vite **dev server**. It transforms modules on demand, so there is no build step and edits show up immediately.
+- **In CI**: Playwright runs `vite build` once and serves the static output with `vite preview`. Bundled assets load faster and with less run-to-run variance than the dev server, which transforms unbundled modules on demand through a single process that competes with the browser workers for CPU.
+
+Neither path needs a manual build. To reproduce the CI build locally, for example to debug a build-only failure, build the fixtures once:
+
+```sh
+bunx vite build --config e2e/vite.config.ts
+```
+
+The output lands in `e2e/fixtures/dist/` (gitignored). Serve it with `bunx vite preview --config e2e/vite.config.ts`, or run the whole CI path in one command:
+
+```sh
+CI=true bunx playwright test --project=chromium
+```
+
 To add a new E2E test, copy the Breakpoint example. Create these files:
 
 | File                                     | Purpose                                                                                                          |
