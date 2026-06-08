@@ -70,9 +70,9 @@
    * <button on:click={() => uploader.clearFiles()}>Clear Files</button>
    * ```
    */
-  export const clearFiles = () => {
+  export function clearFiles() {
     files = [];
-  };
+  }
 
   /**
    * Specify the label title.
@@ -250,9 +250,12 @@
         const existingKeys = new Set(
           prevFiles.map((f) => `${f.name}\0${f.size}\0${f.lastModified}`),
         );
-        const isDuplicate = (f) =>
-          !existingRefs.has(f) &&
-          existingKeys.has(`${f.name}\0${f.size}\0${f.lastModified}`);
+        function isDuplicate(f) {
+          return (
+            !existingRefs.has(f) &&
+            existingKeys.has(`${f.name}\0${f.size}\0${f.lastModified}`)
+          );
+        }
         const duplicates = newFiles.filter(isDuplicate);
         newFiles = newFiles.filter((f) => !isDuplicate(f));
 
