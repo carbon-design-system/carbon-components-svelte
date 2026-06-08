@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
+import ContentSwitcherDisabledNav from "./ContentSwitcher.disabledNav.test.svelte";
 import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
 import ContentSwitcherNested from "./ContentSwitcher.nested.test.svelte";
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
@@ -221,6 +222,106 @@ describe("ContentSwitcher", () => {
     await user.click(tabs[2]);
     expect(tabs[0]).not.toHaveClass("bx--content-switcher--selected");
     expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
+  });
+
+  describe("skips disabled switches during keyboard navigation", () => {
+    // Fixture order: A (enabled), B (disabled), C (enabled), D (disabled)
+    it("ArrowRight skips a disabled switch (automatic)", async () => {
+      render(ContentSwitcherDisabledNav);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+      expect(document.activeElement).toBe(tabs[0]);
+
+      // A -> (skip B) -> C
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[1]).not.toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("ArrowRight wraps past a trailing disabled switch (automatic)", async () => {
+      render(ContentSwitcherDisabledNav);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[2]);
+
+      // C -> (skip D, wrap) -> A
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[0]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("ArrowLeft skips a disabled switch (automatic)", async () => {
+      render(ContentSwitcherDisabledNav);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+      expect(document.activeElement).toBe(tabs[0]);
+
+      // A -> (skip D, skip nothing) wraps left past D to C
+      await user.keyboard("{ArrowLeft}");
+      expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("End lands on the last enabled switch (automatic)", async () => {
+      render(ContentSwitcherDisabledNav);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+
+      // D (last) is disabled, so End should land on C
+      await user.keyboard("{End}");
+      expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[3]).not.toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("Home lands on the first enabled switch (automatic)", async () => {
+      render(ContentSwitcherDisabledNav);
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+      await user.keyboard("{End}");
+      expect(document.activeElement).toBe(tabs[2]);
+
+      // A (first) is enabled, so Home should land on A
+      await user.keyboard("{Home}");
+      expect(document.activeElement).toBe(tabs[0]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("ArrowRight moves focus past a disabled switch without selecting it (manual)", async () => {
+      render(ContentSwitcherDisabledNav, {
+        props: { selectionMode: "manual" },
+      });
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+      expect(document.activeElement).toBe(tabs[0]);
+
+      // Focus moves A -> (skip B) -> C; selection stays on A
+      await user.keyboard("{ArrowRight}");
+      expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+      expect(tabs[2]).not.toHaveClass("bx--content-switcher--selected");
+    });
+
+    it("End moves focus to the last enabled switch (manual)", async () => {
+      render(ContentSwitcherDisabledNav, {
+        props: { selectionMode: "manual" },
+      });
+
+      const tabs = screen.getAllByRole("tab");
+      await user.tab();
+
+      await user.keyboard("{End}");
+      expect(document.activeElement).toBe(tabs[2]);
+      expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
+    });
   });
 
   it("renders custom content", () => {
