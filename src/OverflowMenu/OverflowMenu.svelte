@@ -90,7 +90,7 @@
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { keyBy } from "../utils/keyBy.js";
-  import { nextEnabledIndex } from "../utils/moveIndex.js";
+  import { rovingFocus } from "../utils/rovingFocus.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext("carbon:Modal");
@@ -155,19 +155,6 @@
     }
   };
 
-  /**
-   * @type {(direction: number) => void}
-   */
-  const change = (direction) => {
-    currentIndex.set(
-      nextEnabledIndex({
-        items: $items,
-        index: $currentIndex,
-        step: direction,
-      }),
-    );
-  };
-
   const first = () => {
     const index = $items.findIndex((_) => !_.disabled);
     if (index >= 0) currentIndex.set(index);
@@ -189,10 +176,21 @@
     add,
     remove,
     update,
-    change,
     first,
     last,
   });
+
+  // Roving focus over the registry (`$items`), not the DOM: the focused item
+  // is the one whose id matches `focusedId`, set reactively from `currentIndex`.
+  const menuRovingFocus = {
+    selector: "[role='menuitem']",
+    orientation: /** @type {const} */ ("vertical"),
+    skipDisabled: true,
+    getItems: () => $items,
+    isDisabled: (item) => item.disabled,
+    getActiveIndex: () => $currentIndex,
+    onMove: (index) => currentIndex.set(index),
+  };
 
   afterUpdate(() => {
     if (open) {
@@ -328,6 +326,7 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     bind:this={menuRef}
+    use:rovingFocus={menuRovingFocus}
     role="menu"
     tabindex="-1"
     id={menuId}
@@ -369,6 +368,7 @@
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       bind:this={menuRef}
+      use:rovingFocus={menuRovingFocus}
       role="menu"
       tabindex="-1"
       id={menuId}
@@ -386,12 +386,6 @@
       on:keydown={(event) => {
         if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
           event.preventDefault();
-        } else if (event.key === "Home") {
-          event.preventDefault();
-          first();
-        } else if (event.key === "End") {
-          event.preventDefault();
-          last();
         } else if (event.key === "Escape") {
           event.stopPropagation();
           const shouldContinue = dispatch("close", null, { cancelable: true });
