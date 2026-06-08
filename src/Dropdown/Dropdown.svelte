@@ -170,6 +170,7 @@
   import { debounce } from "../utils/debounce.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
+  import { typeaheadIndex } from "../utils/typeahead.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,
@@ -351,25 +352,12 @@
     typeaheadBuffer += character.toLowerCase();
     resetTypeaheadBuffer();
 
-    // Start search from the next index after current highlight, or from 0 if none highlighted.
-    const startIndex = highlightedIndex >= 0 ? highlightedIndex + 1 : 0;
-
-    for (let index = startIndex; index < items.length; index++) {
-      const itemText = itemToString(items[index]).toLowerCase();
-      if (itemText.startsWith(typeaheadBuffer) && !items[index].disabled) {
-        highlightedIndex = index;
-        return;
-      }
-    }
-
-    // Wrap around: search from beginning to startIndex.
-    for (let index = 0; index < startIndex; index++) {
-      const itemText = itemToString(items[index]).toLowerCase();
-      if (itemText.startsWith(typeaheadBuffer) && !items[index].disabled) {
-        highlightedIndex = index;
-        return;
-      }
-    }
+    highlightedIndex = typeaheadIndex({
+      items,
+      query: typeaheadBuffer,
+      itemToString,
+      index: highlightedIndex,
+    });
   }
 
   function dispatchSelect() {
