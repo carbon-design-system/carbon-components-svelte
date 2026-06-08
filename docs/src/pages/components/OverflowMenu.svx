@@ -136,8 +136,14 @@ Set `disabled` to `true` to disable menu items. Use `hasDivider` to add visual s
   <OverflowMenuItem hasDivider danger text="Delete service" />
 </OverflowMenu>
 
-## Prevent menu from closing
+## Prevent an item from closing the menu
 
-Use `preventDefault()` on individual overflow menu item click events to prevent the menu from closing when that item is clicked. Use this to keep the menu open after performing an action.
+Use `e.preventDefault()` on an individual overflow menu item click event to prevent the menu from closing when that item is clicked. Use this to keep the menu open after performing an action.
 
 <FileSource src="/framed/OverflowMenu/OverflowMenuPreventDefault" />
+
+## Cancel the close event
+
+The `close` event is cancelable. Call `e.preventDefault()` on it to keep the menu open when it would otherwise close from the trigger, the `Escape` key, or an outside click. The example below guards against accidentally dismissing unsaved changes: toggle a setting, then try to close the menu without saving.
+
+<FileSource src="/framed/OverflowMenu/OverflowMenuCancelableClose" />
