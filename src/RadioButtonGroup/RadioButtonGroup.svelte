@@ -87,19 +87,19 @@
   /**
    * @type {(data: { checked: boolean; value: Value }) => void}
    */
-  const add = ({ checked, value }) => {
+  function add({ checked, value }) {
     if (checked) {
       selectedValue.set(value);
     }
-  };
+  }
 
   /**
    * @type {(value: Value) => void}
    */
-  const update = (value) => {
+  function update(value) {
     if (readonly) return;
     selected = value;
-  };
+  }
 
   setContext("carbon:RadioButtonGroup", {
     selectedValue,
