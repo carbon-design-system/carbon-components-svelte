@@ -56,7 +56,7 @@
    * </button>
    * ```
    */
-  export const loadImage = (url) => {
+  export function loadImage(url) {
     if (image != null) image = null;
     loaded = false;
     error = false;
@@ -64,7 +64,7 @@
     image.src = url || src;
     image.onload = () => (loaded = true);
     image.onerror = () => (error = true);
-  };
+  }
 
   import { createEventDispatcher, onMount } from "svelte";
   import { fade } from "svelte/transition";
