@@ -91,7 +91,7 @@
    * default value if `selected` is `undefined`.
    * @type {(id: string, value: string | number) => void}
    */
-  const setDefaultValue = (id, value) => {
+  function setDefaultValue(id, value) {
     if ($defaultValue === null) {
       defaultSelectId.set(id);
       defaultValue.set(value);
@@ -105,14 +105,14 @@
       ...types,
       [value]: typeof value,
     }));
-  };
+  }
 
   setContext("carbon:Select", {
     selectedValue,
     setDefaultValue,
   });
 
-  const handleChange = (event) => {
+  function handleChange(event) {
     let value = event.target.value;
 
     if ($itemTypesByValue[value] === "number") {
@@ -120,24 +120,24 @@
     }
 
     selectedValue.set(value);
-  };
+  }
 
   const selectReadOnlyKeys = ["ArrowDown", "ArrowUp", " "];
 
   /** @type {(e: MouseEvent) => void} */
-  const onMouseDown = (event) => {
+  function onMouseDown(event) {
     if (readonly) {
       event.preventDefault();
       event.currentTarget.focus();
     }
-  };
+  }
 
   /** @type {(e: KeyboardEvent) => void} */
-  const onKeyDown = (event) => {
+  function onKeyDown(event) {
     if (readonly && selectReadOnlyKeys.includes(event.key)) {
       event.preventDefault();
     }
-  };
+  }
 
   let prevSelected = null;
 
