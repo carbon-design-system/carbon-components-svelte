@@ -132,23 +132,23 @@ describe("ContextMenu", () => {
     const menu = screen.getAllByRole("menu")[0];
     menu.focus();
 
-    // Arrow down
-    await user.keyboard("{ArrowDown}");
     const options = screen.getAllByRole("menuitem");
-    expect(options[0].parentElement).toHaveFocus();
 
-    // Arrow up wraps to the last option from the initial position.
-    // After ArrowDown, focusIndex is 0, so ArrowUp stays at 0.
+    // ArrowDown from the focused menu moves to the first option.
+    await user.keyboard("{ArrowDown}");
+    expect(options[0]).toHaveFocus();
+
+    // ArrowUp clamps at the first option (no wrap).
     await user.keyboard("{ArrowUp}");
-    expect(options[0].parentElement).toHaveFocus();
+    expect(options[0]).toHaveFocus();
 
     // End jumps to the last option.
     await user.keyboard("{End}");
-    expect(options[options.length - 1].parentElement).toHaveFocus();
+    expect(options[options.length - 1]).toHaveFocus();
 
     // Home jumps back to the first option.
     await user.keyboard("{Home}");
-    expect(options[0].parentElement).toHaveFocus();
+    expect(options[0]).toHaveFocus();
   });
 
   it("should handle custom target", async () => {
