@@ -61,6 +61,7 @@
     remove,
     update,
     change,
+    changeToEdge,
   } = getContext("carbon:Tabs");
 
   add({
@@ -101,6 +102,12 @@
       change(1);
     } else if (event.key === "ArrowLeft") {
       change(-1);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      changeToEdge("first");
+    } else if (event.key === "End") {
+      event.preventDefault();
+      changeToEdge("last");
     } else if (!disabled && (event.key === " " || event.key === "Enter")) {
       update(id);
     }
