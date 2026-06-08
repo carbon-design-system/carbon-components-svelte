@@ -285,7 +285,7 @@
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement }) => void}
    */
-  const declareRef = ({ key, ref }) => {
+  function declareRef({ key, ref }) {
     switch (key) {
       case "field":
         fieldRef = ref;
@@ -294,7 +294,7 @@
         selectionRef = ref;
         break;
     }
-  };
+  }
 
   setContext("carbon:MultiSelect", {
     declareRef,
