@@ -29,9 +29,9 @@
    * Override the default copy behavior (navigator.clipboard.writeText).
    * @type {(text: string) => void | Promise<void>}
    */
-  const defaultCopy = async (text) => {
+  async function defaultCopy(text) {
     await navigator.clipboard.writeText(text);
-  };
+  }
 
   export let copy = defaultCopy;
 
