@@ -333,7 +333,7 @@ describe("Toggle", () => {
       expect(toggle).toBeChecked();
     });
 
-    it("should not toggle on keyboard when readonly", async () => {
+    it("should not toggle on Space when readonly", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(ToggleReadonly, { readonly: true });
 
@@ -343,6 +343,14 @@ describe("Toggle", () => {
       await user.keyboard(" ");
       expect(toggle).not.toBeChecked();
       expect(consoleLog).not.toHaveBeenCalledWith("toggle", true);
+    });
+
+    it("should not toggle on Enter when readonly", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ToggleReadonly, { readonly: true });
+
+      const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
+      toggle.focus();
 
       await user.keyboard("{Enter}");
       expect(toggle).not.toBeChecked();
