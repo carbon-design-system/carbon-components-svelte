@@ -164,6 +164,6 @@ Use `e.preventDefault()` on an individual overflow menu item click event to prev
 
 ## Cancel the close event
 
-The `close` event is cancelable. Call `e.preventDefault()` on it to keep the menu open when it would otherwise close from the trigger, the `Escape` key, or an outside click. The example below guards against accidentally dismissing unsaved changes: toggle a setting, then try to close the menu without saving.
+The `close` event is cancelable. Call `e.preventDefault()` on it to keep the menu open when it would otherwise close from the trigger, <DocKbd label="Escape" />, or an outside click. The example below guards against accidentally dismissing unsaved changes: toggle a setting, then try to close the menu without saving.
 
 <FileSource src="/framed/OverflowMenu/OverflowMenuCancelableClose" />
