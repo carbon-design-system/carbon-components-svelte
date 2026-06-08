@@ -314,6 +314,26 @@ describe("FileUploader", () => {
     expect(event.detail[1].name).toBe("file2.txt");
   });
 
+  it("dispatches add when files are set programmatically via two-way binding", async () => {
+    const addHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { onAdd: addHandler, multiple: true },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    component.files = [file1, file2];
+
+    await vi.waitFor(() => {
+      expect(addHandler).toHaveBeenCalled();
+    });
+
+    const added = addHandler.mock.calls[0][0].detail;
+    expect(added).toHaveLength(2);
+    expect(added[0].name).toBe("file1.txt");
+    expect(added[1].name).toBe("file2.txt");
+  });
+
   it("should dispatch change event when files change", async () => {
     const changeHandler = vi.fn();
     const { component } = render(FileUploader, {

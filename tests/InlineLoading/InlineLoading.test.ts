@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import InlineLoading from "./InlineLoading.test.svelte";
 import InlineLoadingRerender from "./InlineLoadingRerender.test.svelte";
+import InlineLoadingTransition from "./InlineLoadingTransition.test.svelte";
 
 describe("InlineLoading", () => {
   beforeEach(() => {
@@ -110,6 +112,23 @@ describe("InlineLoading", () => {
     rerender({ tick: 2 });
 
     vi.advanceTimersByTime(1500);
+    expect(consoleLog).toHaveBeenCalledTimes(1);
+    expect(consoleLog).toHaveBeenCalledWith("success");
+  });
+
+  it("dispatches success when status transitions to finished after mount", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { component } = render(InlineLoadingTransition, {
+      props: { status: "active" },
+    });
+
+    vi.advanceTimersByTime(1500);
+    expect(consoleLog).not.toHaveBeenCalled();
+
+    component.status = "finished";
+    await tick();
+    vi.advanceTimersByTime(1500);
+
     expect(consoleLog).toHaveBeenCalledTimes(1);
     expect(consoleLog).toHaveBeenCalledWith("success");
   });

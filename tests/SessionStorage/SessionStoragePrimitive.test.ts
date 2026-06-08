@@ -32,4 +32,28 @@ describe("SessionStorage - Primitive Values", () => {
     render(SessionStoragePrimitive);
     expect(consoleLog).toHaveBeenCalledWith("save event");
   });
+
+  it("does not dispatch update event on initial render", () => {
+    render(SessionStoragePrimitive);
+    expect(consoleLog).not.toHaveBeenCalledWith(
+      "update event",
+      expect.anything(),
+    );
+  });
+
+  it("dispatches update event and persists when value changes after mount", async () => {
+    const { component } = render(SessionStoragePrimitive);
+
+    component.value = "next-value";
+    await tick();
+
+    expect(consoleLog).toHaveBeenCalledWith("update event", {
+      prevValue: "test-value",
+      value: "next-value",
+    });
+    expect(sessionStorage.setItem).toHaveBeenCalledWith(
+      "test-key",
+      "next-value",
+    );
+  });
 });

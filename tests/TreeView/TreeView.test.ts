@@ -95,6 +95,19 @@ describe.each(testCases)("$name", ({ component }) => {
     });
   });
 
+  it("moves selection to the newly active node", async () => {
+    render(component);
+
+    const firstItem = treeItemById(0);
+    await user.click(firstItem);
+    expect(firstItem).toHaveAttribute("aria-selected", "true");
+
+    const secondItem = treeItemById(1);
+    await user.click(secondItem);
+    expect(secondItem).toHaveAttribute("aria-selected", "true");
+    expect(firstItem).toHaveAttribute("aria-selected", "false");
+  });
+
   it("can expand all nodes", async () => {
     render(component);
 

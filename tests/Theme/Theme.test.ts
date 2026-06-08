@@ -161,6 +161,16 @@ describe("Theme", () => {
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g90");
   });
 
+  it("does not fire update event when loading a persisted theme on mount", async () => {
+    localStorageMock.theme = "g90";
+
+    render(Theme, { props: { persist: true } });
+    await tick();
+
+    expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "g90");
+    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+  });
+
   it("should warn on invalid theme", async () => {
     const consoleWarn = vi.spyOn(console, "warn");
     const { rerender } = render(Theme);
