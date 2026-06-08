@@ -17,6 +17,7 @@ import TreeViewMultiselect from "./TreeView.multiselect.test.svelte";
 import TreeViewProps from "./TreeView.props.test.svelte";
 import TreeViewSlot from "./TreeView.slot.test.svelte";
 import TreeView from "./TreeView.test.svelte";
+import TreeViewDuplicateIds from "./TreeViewDuplicateIds.test.svelte";
 import TreeViewGenerics from "./TreeViewGenerics.test.svelte";
 
 function treeItemById(id: string | number): HTMLElement {
@@ -1812,15 +1813,15 @@ describe("TreeView autoCollapse", () => {
 
     const parent = container.querySelector("#parent");
     const subtreeId = parent?.getAttribute("aria-owns");
-    expect(subtreeId).toBe("parent-subtree");
+    expect(subtreeId).toMatch(/^tree-.+-parent-subtree$/);
 
-    const subtree = container.querySelector(`#${subtreeId}`);
+    const subtree = document.getElementById(subtreeId as string);
     expect(subtree?.getAttribute("role")).toBe("group");
 
     const labelledBy = subtree?.getAttribute("aria-labelledby");
-    expect(labelledBy).toBe("parent__label");
+    expect(labelledBy).toMatch(/^tree-.+-parent__label$/);
 
-    const labelEl = container.querySelector(`#${labelledBy}`);
+    const labelEl = document.getElementById(labelledBy as string);
     expect(labelEl?.textContent?.trim()).toBe("Top Parent");
   });
 
@@ -1897,5 +1898,38 @@ describe("TreeView autoCollapse", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
+  });
+});
+
+describe("TreeView duplicate ids", () => {
+  it("keeps internal ids unique when two trees share node ids", () => {
+    const { container } = render(TreeViewDuplicateIds);
+
+    const labels = Array.from(
+      container.querySelectorAll<HTMLElement>(
+        ".bx--tree-node__label__text[id]",
+      ),
+    );
+    const labelIds = labels.map((label) => label.id);
+
+    expect(labelIds).toHaveLength(2);
+    expect(new Set(labelIds).size).toBe(labelIds.length);
+
+    const trees = Array.from(
+      container.querySelectorAll<HTMLElement>('[role="tree"]'),
+    );
+    expect(trees).toHaveLength(2);
+
+    for (const tree of trees) {
+      const subtree = tree.querySelector<HTMLElement>('[role="group"]');
+      expect(subtree).not.toBeNull();
+
+      const labelledby = subtree?.getAttribute("aria-labelledby");
+      expect(labelledby).toBeTruthy();
+
+      const referenced = document.getElementById(labelledby as string);
+      expect(referenced).not.toBeNull();
+      expect(tree.contains(referenced)).toBe(true);
+    }
   });
 });

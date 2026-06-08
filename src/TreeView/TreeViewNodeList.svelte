@@ -45,6 +45,7 @@
   let prevActiveId = undefined;
 
   const {
+    treeId,
     activeNodeId,
     selectedIdsSetStore,
     expandedIdsSetStore,
@@ -117,7 +118,7 @@
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
     aria-expanded={expanded}
-    aria-owns={`${id}-subtree`}
+    aria-owns={`${treeId}-${id}-subtree`}
     on:click|stopPropagation={(event) => {
       if (disabled) return;
       clickNode(node, event);
@@ -204,15 +205,18 @@
       </span>
       <span class:bx--tree-node__label__details={true}>
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <span id={`${id}__label`} class:bx--tree-node__label__text={true}>
+        <span
+          id={`${treeId}-${id}__label`}
+          class:bx--tree-node__label__text={true}
+        >
           <slot {node} />
         </span>
       </span>
     </div>
     <ul
-      id={`${id}-subtree`}
+      id={`${treeId}-${id}-subtree`}
       role="group"
-      aria-labelledby={`${id}__label`}
+      aria-labelledby={`${treeId}-${id}__label`}
       class:bx--tree-node__children={true}
       class:bx--tree-node--hidden={!expanded}
     >
