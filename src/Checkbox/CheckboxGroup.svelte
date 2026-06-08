@@ -70,7 +70,7 @@
   /**
    * @type {(value: string | number, checked: boolean) => void}
    */
-  const update = (value, checked) => {
+  function update(value, checked) {
     if (readonly) return;
     selectedValues.update((prev) => {
       if (checked) {
@@ -78,7 +78,7 @@
       }
       return prev.filter((v) => v !== value);
     });
-  };
+  }
 
   setContext("carbon:CheckboxGroup", {
     selectedValues,
