@@ -48,10 +48,10 @@
   /**
    * @type {(visible: boolean) => void}
    */
-  const setOverflowVisible = (visible) => {
+  function setOverflowVisible(visible) {
     overflowVisible.set(visible);
     if (ref) ref.style.overflow = visible ? "visible" : "inherit";
-  };
+  }
 
   setContext("carbon:Toolbar", {
     overflowVisible,
