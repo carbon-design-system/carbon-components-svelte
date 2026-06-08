@@ -101,6 +101,22 @@ describe("Tabs", () => {
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
+  it("should jump to first and last tab with Home and End keys", async () => {
+    render(Tabs);
+
+    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+    await user.click(tab1);
+
+    await user.keyboard("{End}");
+    expect(tab3).toHaveFocus();
+    expect(tab3).toHaveAttribute("aria-selected", "true");
+
+    await user.keyboard("{Home}");
+    expect(tab1).toHaveFocus();
+    expect(tab1).toHaveAttribute("aria-selected", "true");
+  });
+
   // Regression: ?? for aria-label so empty string is used (not fallback)
   it("uses empty aria-label when passed (nullish coalescing)", () => {
     render(Tabs, { props: { ariaLabel: "" } });

@@ -121,6 +121,17 @@
   };
 
   /**
+   * @type {(index: number) => Promise<void>}
+   */
+  const focusTab = async (index) => {
+    currentIndex = index;
+
+    await tick();
+    const activeTab = refTabList?.querySelectorAll("[role='tab']")[index];
+    activeTab?.focus();
+  };
+
+  /**
    * @type {(direction: number) => Promise<void>}
    */
   const change = async (direction) => {
@@ -132,12 +143,29 @@
 
     if (nextIndex === currentIndex) return;
 
-    currentIndex = nextIndex;
+    await focusTab(nextIndex);
+  };
 
-    await tick();
-    const activeTab =
-      refTabList?.querySelectorAll("[role='tab']")[currentIndex];
-    activeTab?.focus();
+  /**
+   * @type {(edge: "first" | "last") => Promise<void>}
+   */
+  const changeToEdge = async (edge) => {
+    const nextIndex = nextEnabledIndex({
+      items: $tabs,
+      index: edge === "first" ? -1 : $tabs.length,
+      step: edge === "first" ? 1 : -1,
+    });
+
+    // nextEnabledIndex leaves index out of range when every tab is disabled.
+    if (
+      nextIndex === currentIndex ||
+      nextIndex < 0 ||
+      nextIndex >= $tabs.length
+    ) {
+      return;
+    }
+
+    await focusTab(nextIndex);
   };
 
   setContext("carbon:Tabs", {
@@ -154,6 +182,7 @@
     removeContent,
     update,
     change,
+    changeToEdge,
   });
 
   afterUpdate(() => {
