@@ -51,6 +51,7 @@
         "noUselessRename": "error",
         "noUselessSwitchCase": "error",
         "noUselessTypeConstraint": "error",
+        "noUselessUndefinedInitialization": "error",
         "useArrowFunction": "error",
         "useLiteralKeys": "error",
         "noImportantStyles": "off"

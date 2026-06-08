@@ -172,7 +172,7 @@ export function floatingPosition({
   }
 
   /** @type {number | undefined} */
-  let caretNudgePx = undefined;
+  let caretNudgePx;
   if (
     intrinsicWidth &&
     (actualDirection === "top" || actualDirection === "bottom") &&
