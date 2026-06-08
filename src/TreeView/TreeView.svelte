@@ -525,7 +525,7 @@
   }
 
   /** @type {(node: Node, event?: Event) => void} */
-  const clickNode = (node, event) => {
+  function clickNode(node, event) {
     activeId = node.id;
 
     const mode =
@@ -589,10 +589,10 @@
     }
 
     dispatch("select", node);
-  };
+  }
 
   /** @type {(node: Node) => void} */
-  const selectNode = (node) => {
+  function selectNode(node) {
     if (multiselect) {
       const mode = multiselectMode === "node" ? "node" : multiselectMode;
       const expansion = multiselectExpansionIds(node, mode);
@@ -602,10 +602,10 @@
     } else {
       selectedIds = [node.id];
     }
-  };
+  }
 
   /** @type {(node: Node, expanded: boolean) => void} */
-  const expandNode = (node, expanded) => {
+  function expandNode(node, expanded) {
     if (expanded) {
       if (autoCollapse) {
         const siblingIds = findSiblingIds(nodes, node.id);
@@ -619,13 +619,17 @@
     }
     expandedIds = Array.from(expandedIdsSet);
     lastExpandedIdsRef = expandedIds;
-  };
+  }
 
   /** @type {(node: Node) => void} */
-  const focusNode = (node) => dispatch("focus", node);
+  function focusNode(node) {
+    dispatch("focus", node);
+  }
 
   /** @type {(node: Node) => void} */
-  const toggleNode = (node) => dispatch("toggle", node);
+  function toggleNode(node) {
+    dispatch("toggle", node);
+  }
 
   setContext("carbon:TreeView", {
     treeId,
