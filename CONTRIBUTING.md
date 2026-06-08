@@ -228,7 +228,7 @@ Inline vs framed:
 Other patterns:
 
 - `[!NOTE]` admonitions for accessibility and non-obvious caveats
-- `<DocKbd label="Enter" />` for keyboard shortcuts
+- Keyboard keys in prose: use `<DocKbd label="Enter" />` for named keys (`Enter`, `Escape`, `Shift`, `Ctrl`, `Space`, etc.). mdsvex auto-imports `DocKbd`; do not add a manual import. Do not use backticks (`Escape`), raw `<kbd>`, or bold (`**Enter**`). For combinations, use one component per key: `<DocKbd label="⌘" />+<DocKbd label="C" />`. Keep collective phrases as plain text ("arrow keys", "modifier keys", "keyboard navigation"). Prop values and UI copy inside component examples are out of scope (e.g. `placeholder="Enter user name..."`, `shortcutText="⌘C"`).
 - Cross-links to related components: `[Modal](/components/Modal#modal-with-dropdowns)`
 - Reuse the same sample data shapes as neighboring examples on that page
 
@@ -276,6 +276,14 @@ Virtualization allows you to render large lists efficiently for performance reas
 
 # After
 Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
+```
+
+```
+# Before
+The menu closes from the trigger, the `Escape` key, or an outside click.
+
+# After
+The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click.
 ```
 
 #### New component checklist
