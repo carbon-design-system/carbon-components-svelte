@@ -51,8 +51,8 @@
     setContext,
   } from "svelte";
   import { writable } from "svelte/store";
-  import { clampIndex } from "../utils/clampIndex.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { rovingFocus } from "../utils/rovingFocus.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -196,6 +196,16 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
 <ul
   bind:this={ref}
+  use:rovingFocus={{
+    selector: "li[data-nested='false']",
+    orientation: "vertical",
+    wrap: false,
+    getActiveIndex: () => focusIndex,
+    onMove: (index) => {
+      if ($hasPopup) return;
+      focusIndex = index;
+    },
+  }}
   role="menu"
   tabindex="-1"
   data-direction={direction}
@@ -219,17 +229,6 @@
   on:keydown
   on:keydown={(event) => {
     if (open) event.preventDefault();
-    if ($hasPopup) return;
-
-    if (event.key === "ArrowDown") {
-      focusIndex = clampIndex(focusIndex, 1, options.length);
-    } else if (event.key === "ArrowUp") {
-      focusIndex = clampIndex(focusIndex, -1, options.length);
-    } else if (event.key === "Home") {
-      if (options.length > 0) focusIndex = 0;
-    } else if (event.key === "End" && options.length > 0) {
-      focusIndex = options.length - 1;
-    }
   }}
 >
   <slot />
