@@ -64,8 +64,9 @@
   } from "svelte";
 
   const dispatch = createEventDispatcher();
-  const { focusedId, add, remove, update, change, first, last, itemsById } =
-    getContext("carbon:OverflowMenu");
+  const { focusedId, add, remove, update, itemsById } = getContext(
+    "carbon:OverflowMenu",
+  );
 
   $: item = $itemsById[id];
 
@@ -128,25 +129,7 @@
   {#if href}
     <!-- svelte-ignore a11y-missing-attribute -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <a
-      bind:this={ref}
-      {...buttonProps}
-      on:click={handleClick}
-      on:keydown
-      on:keydown={(event) => {
-        if (event.key === "ArrowDown") {
-          change(1);
-        } else if (event.key === "ArrowUp") {
-          change(-1);
-        } else if (event.key === "Home") {
-          event.preventDefault();
-          first();
-        } else if (event.key === "End") {
-          event.preventDefault();
-          last();
-        }
-      }}
-    >
+    <a bind:this={ref} {...buttonProps} on:click={handleClick} on:keydown>
       <slot>
         <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
       </slot>
@@ -158,19 +141,6 @@
       {...buttonProps}
       on:click={handleClick}
       on:keydown
-      on:keydown={(event) => {
-        if (event.key === "ArrowDown") {
-          change(1);
-        } else if (event.key === "ArrowUp") {
-          change(-1);
-        } else if (event.key === "Home") {
-          event.preventDefault();
-          first();
-        } else if (event.key === "End") {
-          event.preventDefault();
-          last();
-        }
-      }}
     >
       <slot>
         <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
