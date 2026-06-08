@@ -56,25 +56,25 @@
   /**
    * @type {(data: { selected: boolean; value: T }) => void}
    */
-  const add = ({ selected: isSelected, value }) => {
+  function add({ selected: isSelected, value }) {
     if (isSelected && !$selectedValues.includes(value)) {
       selectedValues.update((values) => [...values, value]);
     }
-  };
+  }
 
   /**
    * @type {(value: T) => void}
    */
-  const remove = (value) => {
+  function remove(value) {
     if ($selectedValues.includes(value)) {
       selectedValues.update((values) => values.filter((v) => v !== value));
     }
-  };
+  }
 
   /**
    * @type {(data: { value: T; selected: boolean }) => void}
    */
-  const update = ({ value, selected: isSelected }) => {
+  function update({ value, selected: isSelected }) {
     if (isSelected) {
       if (!$selectedValues.includes(value)) {
         selectedValues.update((values) => [...values, value]);
@@ -86,7 +86,7 @@
         dispatch("deselect", value);
       }
     }
-  };
+  }
 
   setContext("carbon:SelectableTileGroup", {
     selectedValues,
