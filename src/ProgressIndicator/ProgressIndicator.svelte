@@ -39,7 +39,7 @@
   /**
    * @type {(step: { id: string; complete: boolean; disabled: boolean }) => void}
    */
-  const add = (step) => {
+  function add(step) {
     steps.update((_) => {
       if (step.id in $stepsById) {
         return _.map((_step) => {
@@ -58,30 +58,30 @@
         },
       ];
     });
-  };
+  }
 
   /**
    * @type {(id: string) => void}
    */
-  const remove = (id) => {
+  function remove(id) {
     steps.update((_) =>
       _.filter((step) => step.id !== id).map((step, i) => ({
         ...step,
         index: i,
       })),
     );
-  };
+  }
 
   /**
    * @type {(index: number) => void}
    */
-  const change = (index) => {
+  function change(index) {
     if (preventChangeOnClick) return;
     currentIndex = index;
 
     /** @event {number} change */
     dispatch("change", index);
-  };
+  }
 
   setContext("carbon:ProgressIndicator", {
     steps,
