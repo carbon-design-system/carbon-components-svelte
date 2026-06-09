@@ -81,6 +81,16 @@ Set `size` to `"sm"` for a small overflow menu.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
+## Extra-small size
+
+Set `size` to `"xs"` for an extra-small overflow menu.
+
+<OverflowMenu size="xs">
+  <OverflowMenuItem text="Manage credentials" />
+  <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
+  <OverflowMenuItem danger text="Delete service" />
+</OverflowMenu>
+
 ## Custom primary focus
 
 Set `primaryFocus` to `true` on a menu item to focus it when opening the dropdown.
