@@ -627,7 +627,7 @@ Use `size="compact"` for the table. The `Toolbar` inherits the extra small (`xs`
   <Toolbar>
     <ToolbarContent>
       <ToolbarSearch />
-      <ToolbarMenu size="sm">
+      <ToolbarMenu size="xs">
         <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
         <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">API documentation</ToolbarMenuItem>
         <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
