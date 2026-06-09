@@ -39,27 +39,14 @@ const SNIPPET_MUSTACHE_ANY_RE = /\{/;
 
 const SKIP_MDSVEX_PRETTIER = process.env.NODE_ENV === "development";
 
-const PREVIEW_SNIPPETS_DIR = path.join(__dirname, "src/preview-snippets");
-
 const previewCodeCache = new Map<
   string,
-  { formattedCode: string; codeId: string }
+  { formattedCode: string; highlightedCode: string }
 >();
 const createImportsCache = new Map<string, string>();
 
 function hashKey(s: string): string {
   return createHash("sha256").update(s, "utf8").digest("hex").slice(0, 32);
-}
-
-function writePreviewSnippet(codeId: string, highlightedCode: string) {
-  fs.mkdirSync(PREVIEW_SNIPPETS_DIR, { recursive: true });
-  const filePath = path.join(PREVIEW_SNIPPETS_DIR, `${codeId}.json`);
-
-  fs.writeFileSync(
-    filePath,
-    JSON.stringify({ html: highlightedCode }),
-    "utf-8",
-  );
 }
 
 function escapeHtmlText(str: string): string {
@@ -202,9 +189,7 @@ async function formatAndHighlightPreviewSvelte(combinedSource: string) {
   const highlightedCode = await highlightCode(formattedCode, "svelte", {
     fragment: true,
   });
-  const codeId = hashKey(formattedCode);
-  writePreviewSnippet(codeId, highlightedCode);
-  const out = { formattedCode, codeId };
+  const out = { formattedCode, highlightedCode };
   previewCodeCache.set(cacheKey, out);
   return out;
 }
@@ -225,9 +210,7 @@ async function formatAndHighlightFileSourceSvelte(
   const highlightedCode = await highlightCode(formattedCode, "svelte", {
     fragment: true,
   });
-  const codeId = hashKey(formattedCode);
-  writePreviewSnippet(codeId, highlightedCode);
-  const out = { formattedCode, codeId };
+  const out = { formattedCode, highlightedCode };
   previewCodeCache.set(cacheKey, out);
   return out;
 }
@@ -244,11 +227,10 @@ function plugin() {
       !NO_PREVIEW_HTML_RE.test(node.value)
     ) {
       const scriptBlock = createImports(node.value);
-      const { formattedCode, codeId } = await formatAndHighlightPreviewSvelte(
-        scriptBlock + node.value,
-      );
+      const { formattedCode, highlightedCode } =
+        await formatAndHighlightPreviewSvelte(scriptBlock + node.value);
 
-      node.value = `<Preview codeRaw={${JSON.stringify(formattedCode)}} codeId="${codeId}">${node.value}</Preview>`;
+      node.value = `<Preview codeRaw={${JSON.stringify(formattedCode)}} codeHighlighted={${JSON.stringify(highlightedCode)}}>${node.value}</Preview>`;
     }
 
     if (node.value.startsWith("<FileSource")) {
@@ -258,10 +240,10 @@ function plugin() {
       const filePath = path.join(__dirname, "src/pages", `${src}.svelte`);
       const sourceCode = fs.readFileSync(filePath, "utf-8");
       const mtimeMs = fs.statSync(filePath).mtimeMs;
-      const { formattedCode, codeId } =
+      const { formattedCode, highlightedCode } =
         await formatAndHighlightFileSourceSvelte(src, sourceCode, mtimeMs);
 
-      node.value = `<Preview framed src="${src}" codeRaw={${JSON.stringify(formattedCode)}} codeId="${codeId}" />`;
+      node.value = `<Preview framed src="${src}" codeRaw={${JSON.stringify(formattedCode)}} codeHighlighted={${JSON.stringify(highlightedCode)}} />`;
     }
   }
 

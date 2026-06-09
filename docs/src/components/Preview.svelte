@@ -1,6 +1,6 @@
 <script lang="ts">
-  export let codeId = "";
   export let codeRaw = "";
+  export let codeHighlighted = "";
   export let src = "";
   export let framed = false;
 
@@ -8,38 +8,13 @@
   import { Button, CodeSnippet } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import copy from "clipboard-copy";
-  import { onMount } from "svelte";
   import { theme } from "../store";
-
-  let highlightedHtml = "";
-  let previewEl: HTMLDivElement | undefined;
 
   $: resolvedSrc = src ? $url(src) : "";
   $: themedSrcUrl = resolvedSrc ? `${resolvedSrc}?theme=${$theme}` : "";
-
-  onMount(() => {
-    if (!codeId || !previewEl) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry?.isIntersecting || highlightedHtml) return;
-
-        observer.disconnect();
-        void import(`../preview-snippets/${codeId}.json`).then((module) => {
-          highlightedHtml = module.default.html;
-        });
-      },
-      { rootMargin: "200px" },
-    );
-
-    observer.observe(previewEl);
-
-    return () => observer.disconnect();
-  });
 </script>
 
-<div class="preview" bind:this={previewEl}>
+<div class="preview">
   {#if framed}
     <div class="framed-header">
       <div
@@ -74,11 +49,7 @@
   </div>
   <div class="code-override">
     <CodeSnippet type="multi" code={codeRaw} copy={(text) => copy(text)}>
-      {#if highlightedHtml}
-        {@html highlightedHtml}
-      {:else}
-        <pre class="language-svelte"><code>{codeRaw}</code></pre>
-      {/if}
+      {@html codeHighlighted}
     </CodeSnippet>
   </div>
 </div>
