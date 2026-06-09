@@ -10,7 +10,9 @@ import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
 import ComboBoxDuplicateIds from "./ComboBoxDuplicateIds.test.svelte";
 import ComboBoxGenerics from "./ComboBoxGenerics.test.svelte";
+import ComboBoxIconSlots from "./ComboBoxIconSlots.test.svelte";
 import ComboBoxInModal from "./ComboBoxInModal.test.svelte";
+import ComboBoxItemIcon from "./ComboBoxItemIcon.test.svelte";
 import ComboBoxItemSlot from "./ComboBoxItemSlot.test.svelte";
 
 describe("ComboBox", () => {
@@ -2433,6 +2435,73 @@ describe("ComboBox", () => {
       await user.keyboard("{Enter}");
 
       expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    });
+  });
+
+  describe("item icons", () => {
+    it("should render item.icon left of the label", () => {
+      render(ComboBoxItemIcon);
+
+      const withIcon = screen
+        .getByTestId("item-0")
+        .closest(".bx--list-box__menu-item");
+      expect(
+        withIcon?.querySelector(".bx--list-box__menu-item__icon svg"),
+      ).toBeInTheDocument();
+
+      const noIcon = screen
+        .getByTestId("item-1")
+        .closest(".bx--list-box__menu-item");
+      expect(
+        noIcon?.querySelector(".bx--list-box__menu-item__icon"),
+      ).toBeNull();
+    });
+
+    it("should expose selected and highlighted on the item slot", () => {
+      render(ComboBoxItemIcon);
+
+      expect(screen.getByTestId("item-0")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("item-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+    });
+
+    it("should render the checkmark when iconRight is absent", () => {
+      render(ComboBoxItemIcon);
+
+      const selected = screen
+        .getByTestId("item-0")
+        .closest(".bx--list-box__menu-item");
+      expect(
+        selected?.querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeInTheDocument();
+    });
+
+    it("should prefer the icon slot over item.icon", () => {
+      render(ComboBoxIconSlots);
+
+      expect(screen.getByTestId("left-0")).toBeInTheDocument();
+      expect(screen.getByTestId("left-1")).toBeInTheDocument();
+    });
+
+    it("should render iconRight instead of the checkmark", () => {
+      render(ComboBoxIconSlots);
+
+      expect(screen.getByTestId("right-0")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("right-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+      expect(
+        document.querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeNull();
     });
   });
 });

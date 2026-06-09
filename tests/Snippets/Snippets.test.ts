@@ -83,6 +83,11 @@ describe("Svelte 5 Snippets", () => {
       expect(item0).toHaveTextContent("Option 1 - index 0");
       expect(item1).toHaveTextContent("Option 2 - index 1");
       expect(item2).toHaveTextContent("Option 3 - index 2");
+
+      // items have ids "1","2","3"; selectedId="2" -> index 1 (item1)
+      expect(item0).toHaveAttribute("data-selected", "false");
+      expect(item1).toHaveAttribute("data-selected", "true");
+      expect(item2).toHaveAttribute("data-selected", "false");
     });
   });
 

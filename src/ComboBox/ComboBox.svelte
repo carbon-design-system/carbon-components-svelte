@@ -8,12 +8,15 @@
    * @property {Id} id
    * @property {string} text
    * @property {boolean} [disabled] - Whether the item is disabled
+   * @property {any} [icon] - Icon component shown left of the item text
    * @event select
    * @type {object}
    * @property {Item["id"]} selectedId
    * @property {Item} selectedItem
    * @event {KeyboardEvent | MouseEvent} clear
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
+   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
+   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
    */
 
   /**
@@ -707,10 +710,12 @@
             <div style="transform: translateY({virtualData.offsetY}px);">
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
+                {@const selected = selectedItem?.id === item.id}
+                {@const highlighted = highlightedIndex === actualIndex}
                 <ListBoxMenuItem
                   id="{id}-{item.id}"
                   active={selectedId === item.id}
-                  highlighted={highlightedIndex === actualIndex}
+                  {highlighted}
                   disabled={item.disabled}
                   on:click={(event) => {
                     if (item.disabled) {
@@ -730,15 +735,39 @@
                     highlightedIndex = actualIndex;
                   }}
                 >
-                  <slot
-                    {item}
-                    index={actualIndex}
-                    selected={selectedId === item.id}
-                    highlighted={highlightedIndex === actualIndex}
-                  >
+                  {#if $$slots.icon || item.icon}
+                    <span
+                      class:bx--list-box__menu-item__icon={true}
+                      class:bx--list-box__menu-item__icon--left={true}
+                    >
+                      <slot
+                        name="icon"
+                        {item}
+                        index={actualIndex}
+                        {selected}
+                        {highlighted}
+                      >
+                        <svelte:component this={item.icon} />
+                      </slot>
+                    </span>
+                  {/if}
+                  <slot {item} index={actualIndex} {selected} {highlighted}>
                     {itemToString(item)}
                   </slot>
-                  {#if selectedItem && selectedItem.id === item.id}
+                  {#if $$slots.iconRight}
+                    <span
+                      class:bx--list-box__menu-item__icon={true}
+                      class:bx--list-box__menu-item__icon--right={true}
+                    >
+                      <slot
+                        name="iconRight"
+                        {item}
+                        index={actualIndex}
+                        {selected}
+                        {highlighted}
+                      />
+                    </span>
+                  {:else if selected}
                     <Checkmark class="bx--list-box__menu-item__selected-icon" />
                   {/if}
                 </ListBoxMenuItem>
@@ -747,10 +776,12 @@
           </div>
         {:else}
           {#each itemsToRender as item, index (item.id)}
+            {@const selected = selectedItem?.id === item.id}
+            {@const highlighted = highlightedIndex === index}
             <ListBoxMenuItem
               id="{id}-{item.id}"
               active={selectedId === item.id}
-              highlighted={highlightedIndex === index}
+              {highlighted}
               disabled={item.disabled}
               on:click={(event) => {
                 if (item.disabled) {
@@ -770,15 +801,33 @@
                 highlightedIndex = index;
               }}
             >
-              <slot
-                {item}
-                {index}
-                selected={selectedId === item.id}
-                highlighted={highlightedIndex === index}
-              >
+              {#if $$slots.icon || item.icon}
+                <span
+                  class:bx--list-box__menu-item__icon={true}
+                  class:bx--list-box__menu-item__icon--left={true}
+                >
+                  <slot name="icon" {item} {index} {selected} {highlighted}>
+                    <svelte:component this={item.icon} />
+                  </slot>
+                </span>
+              {/if}
+              <slot {item} {index} {selected} {highlighted}>
                 {itemToString(item)}
               </slot>
-              {#if selectedItem && selectedItem.id === item.id}
+              {#if $$slots.iconRight}
+                <span
+                  class:bx--list-box__menu-item__icon={true}
+                  class:bx--list-box__menu-item__icon--right={true}
+                >
+                  <slot
+                    name="iconRight"
+                    {item}
+                    {index}
+                    {selected}
+                    {highlighted}
+                  />
+                </span>
+              {:else if selected}
                 <Checkmark class="bx--list-box__menu-item__selected-icon" />
               {/if}
             </ListBoxMenuItem>
