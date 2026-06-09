@@ -35,12 +35,29 @@
     height: $carbon--spacing-05;
     min-height: $carbon--spacing-05;
 
+    // Carbon shifts this icon down 4px inside breadcrumb items. At 1rem trigger
+    // size the icon is already centered, so reset `transform`.
     .#{$prefix}--overflow-menu__icon {
-      transform: translateY(3px);
+      transform: none;
     }
   }
 }
 
 @include exports('breadcrumb-sm') {
   @include breadcrumb-sm;
+}
+
+/// Carbon's `--sm`/`--xl` caret sets `width: 40px` on `::after`. Same
+/// specificity as the breadcrumb rule, but Carbon loads first. Force `width: 0`
+/// here so the caret stays a triangle.
+/// @access private
+/// @group components
+@mixin breadcrumb-menu-caret {
+  .#{$prefix}--breadcrumb-menu-options.#{$prefix}--overflow-menu-options[data-floating-menu-direction='bottom']::after {
+    width: 0;
+  }
+}
+
+@include exports('breadcrumb-menu-caret') {
+  @include breadcrumb-menu-caret;
 }
