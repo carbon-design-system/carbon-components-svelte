@@ -10,6 +10,7 @@ import MultiSelectBindValue from "./MultiSelectBindValue.test.svelte";
 import MultiSelectDuplicateIds from "./MultiSelectDuplicateIds.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
+import MultiSelectItemSlot from "./MultiSelectItemSlot.test.svelte";
 import MultiSelectItemToStringId from "./MultiSelectItemToStringId.test.svelte";
 import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
 
@@ -63,6 +64,29 @@ describe("MultiSelect", () => {
     expect(screen.getByText("1 Email 0")).toBeInTheDocument();
     expect(screen.getByText("2 Fax 1")).toBeInTheDocument();
     expect(screen.getByText("0 Slack 2")).toBeInTheDocument();
+  });
+
+  it("should pass selected and highlighted to the default slot", async () => {
+    render(MultiSelectItemSlot, { props: { selectedIds: ["1"] } });
+
+    await openMenu();
+
+    const customItems = screen.getAllByTestId("custom-item");
+    const byText = (text: string) => {
+      const el = customItems.find((item) => item.textContent?.includes(text));
+      if (!el) throw new Error(`No custom item matching "${text}"`);
+      return el;
+    };
+
+    // selectedIds ["1"] is "Option 2". Items may be sorted selected-to-top,
+    // so assert by content rather than position.
+    expect(byText("Option 2")).toHaveAttribute("data-selected", "true");
+    expect(byText("Option 1")).toHaveAttribute("data-selected", "false");
+    expect(byText("Option 3")).toHaveAttribute("data-selected", "false");
+
+    await user.hover(byText("Option 3"));
+    expect(byText("Option 3")).toHaveAttribute("data-highlighted", "true");
+    expect(byText("Option 1")).toHaveAttribute("data-highlighted", "false");
   });
 
   // Regression: ?? for itemToString so item.text "" is used (not id)
