@@ -1,6 +1,6 @@
 <script>
   import Query from "carbon-icons-svelte/lib/Query.svelte";
-  import { Search } from "carbon-components-svelte";
+  import { Search, SearchSkeleton } from "carbon-components-svelte";
 </script>
 
 Search provides a flexible search input with support for expandable variants, different sizes, and custom icons. It includes built-in functionality for clearing input and handling keyboard events.
@@ -94,3 +94,9 @@ Display a loading state for the small search variant.
 Display a loading state for the extra-small search variant.
 
 <Search size="xs" skeleton />
+
+## Skeleton without label
+
+Show a loading state without a label by setting `hideLabel` to `true`.
+
+<SearchSkeleton hideLabel />
