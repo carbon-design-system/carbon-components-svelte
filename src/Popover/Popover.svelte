@@ -32,24 +32,24 @@
   export let relative = false;
 
   import { createEventDispatcher } from "svelte";
+  import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
 
   let ref = null;
-</script>
 
-<svelte:window
-  on:click={(event) => {
+  function handleOutsideClick(event) {
     if (open && isOutsideClick(event, ref)) {
       dispatch("click:outside", { target: event.target });
       if (closeOnOutsideClick) open = false;
     }
-  }}
-/>
+  }
+</script>
 
 <div
   bind:this={ref}
+  use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
   class:bx--popover={true}
   class:bx--popover--caret={caret}
   class:bx--popover--light={light}
