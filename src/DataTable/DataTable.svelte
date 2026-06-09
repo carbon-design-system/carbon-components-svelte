@@ -248,6 +248,18 @@
   /** Set to `true` to use static width */
   export let useStaticWidth = false;
 
+  /**
+   * Set the filtering strategy used by `ToolbarSearch`.
+   * - `"remove"`: remove non-matching rows from the DOM and recreate them when the
+   *   filter clears.
+   * - `"hide"`: keep all rows mounted and hide non-matching rows with the `hidden`
+   *   attribute, preserving focus, inputs, and open menus.
+   *
+   * `"hide"` falls back to `"remove"` when `pageSize` is set or `virtualize` is enabled.
+   * @type {"remove" | "hide"}
+   */
+  export let filterMode = "remove";
+
   /** Specify the number of items to display in a page */
   export let pageSize = 0;
 
@@ -383,6 +395,9 @@
   // Store a copy of the original rows for filter restoration.
   let prevRows_ref = rows;
   let originalRows = [...rows];
+  // Row ids that match the active filter. In "hide" mode this toggles `hidden` on rows
+  // instead of shrinking `tableRows`.
+  let matchedRowIdsSet = new Set(originalRows.map((row) => row.id));
   // Last filter applied via `filterRows`, replayed when `rows` changes so
   // an active search is not silently dropped on row reassignment.
   let lastSearchValue = "";
@@ -398,8 +413,10 @@
 
     if (value.length === 0) {
       // Reset to original rows.
+      const ids = originalRows.map((row) => row.id);
+      matchedRowIdsSet = new Set(ids);
       tableRows.set(originalRows);
-      return originalRows.map((row) => row.id);
+      return ids;
     }
 
     let filteredRows = [];
@@ -427,8 +444,12 @@
       });
     }
 
-    tableRows.set(filteredRows);
-    return filteredRows.map((row) => row.id);
+    const ids = filteredRows.map((row) => row.id);
+    matchedRowIdsSet = new Set(ids);
+    // "hide" mode keeps every row mounted and drives visibility via `matchedRowIdsSet`;
+    // otherwise shrink the rendered set as before.
+    tableRows.set(hideMode ? originalRows : filteredRows);
+    return ids;
   }
 
   $: if (rows !== prevRows_ref) {
@@ -437,7 +458,19 @@
     if (lastSearchValue.trim().length > 0) {
       filterRows(lastSearchValue, lastCustomFilter);
     } else {
+      matchedRowIdsSet = new Set(rows.map((row) => row.id));
       $tableRows = rows;
+    }
+  }
+
+  // Replay the active filter when the strategy flips so the rendered set and the
+  // matched ids stay consistent (for example switching to "remove" must re-shrink
+  // `tableRows`, and switching to "hide" must restore the full mounted set).
+  let prevHideModeRef = hideMode;
+  $: if (hideMode !== prevHideModeRef) {
+    prevHideModeRef = hideMode;
+    if (lastSearchValue.trim().length > 0) {
+      filterRows(lastSearchValue, lastCustomFilter);
     }
   }
 
@@ -473,7 +506,12 @@
     prevBatchSelected = selectedRowIds;
     batchSelectedIds.set(selectedRowIds);
   }
-  $: rowIds = $tableRows.map((row) => row.id);
+  // In "hide" mode `tableRows` holds every row; selection, "select all", and the empty
+  // state must reflect only the rows matching the active filter.
+  $: matchedRows = hideMode
+    ? $tableRows.filter((row) => matchedRowIdsSet.has(row.id))
+    : $tableRows;
+  $: rowIds = matchedRows.map((row) => row.id);
 
   // Use Sets for faster row lookups.
   $: selectedRowIdsSet = new Set(selectedRowIds);
@@ -578,6 +616,11 @@
       }
     : null;
 
+  // "hide" filtering keeps every row mounted; it is incompatible with strategies that
+  // already render a bounded subset (pagination, virtualization), so fall back to
+  // "remove" when either is active.
+  $: hideMode = filterMode === "hide" && !virtualConfig && !(pageSize > 0);
+
   $: calculatedContainerHeight = virtualConfig
     ? (virtualConfig.containerHeight ??
       virtualConfig.itemHeight * virtualConfig.maxVisibleRows)
@@ -620,6 +663,23 @@
   $: rowsToRender = virtualData?.isVirtualized
     ? virtualData.visibleItems
     : rowsToVirtualize;
+
+  // In "hide" mode hidden rows still occupy `:nth-child` positions, which breaks
+  // Carbon's CSS zebra striping. Recompute parity over the visible (matched) rows and
+  // drive striping with a data attribute the stylesheet keys off instead.
+  $: zebraVisibleEvenIds =
+    hideMode && zebra
+      ? (() => {
+          const set = new Set();
+          let visibleIndex = 0;
+          for (const row of rowsToRender) {
+            if (!matchedRowIdsSet.has(row.id)) continue;
+            visibleIndex += 1;
+            if (visibleIndex % 2 === 0) set.add(row.id);
+          }
+          return set;
+        })()
+      : null;
 
   $: hasCustomHeaderWidth = headers.some(
     (header) => header.width ?? header.minWidth,
@@ -664,7 +724,7 @@
   >
     <Table
       bind:ref={tableRef}
-      {zebra}
+      zebra={zebra && !hideMode}
       {size}
       {stickyHeader}
       {sortable}
@@ -1054,6 +1114,12 @@
             <TableRow
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
+              hidden={hideMode && !matchedRowIdsSet.has(row.id)
+                ? true
+                : undefined}
+              data-zebra-even={zebraVisibleEvenIds?.has(row.id)
+                ? ""
+                : undefined}
               class="{isSelected
                 ? 'bx--data-table--selected'
                 : ''} {isExpanded ? 'bx--expandable-row' : ''} {expandable
@@ -1209,6 +1275,9 @@
               <tr
                 id="{id}-expandable-row-{row.id}"
                 data-child-row
+                hidden={hideMode && !matchedRowIdsSet.has(row.id)
+                  ? true
+                  : undefined}
                 class:bx--expandable-row={true}
                 on:mouseenter={() => {
                   if (!isExpandable) return;
