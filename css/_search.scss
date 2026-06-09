@@ -1,0 +1,41 @@
+// Extends the v10 search with the extra-small (`xs`) size added in newer
+// Carbon (React `size="xs"`, 24px height). v10 only ships sm/lg/xl.
+// Mirrors the v10 `--sm` block scaled to 24px: 4px gap + 16px icon + 4px.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Extra-small search variant (Carbon React `size="xs"` parity)
+/// @access private
+/// @group components
+@mixin search-xs {
+  .#{$prefix}--search--xs .#{$prefix}--search-input,
+  .#{$prefix}--search--xs.#{$prefix}--search--expandable.#{$prefix}--search--expanded
+    .#{$prefix}--search-input {
+    height: to-rem(24px);
+    padding: 0 to-rem(24px);
+  }
+
+  .#{$prefix}--search--xs .#{$prefix}--search-magnifier-icon {
+    left: to-rem(4px);
+  }
+
+  .#{$prefix}--search--xs {
+    .#{$prefix}--search-close,
+    &.#{$prefix}--search--expandable,
+    &.#{$prefix}--search--expandable .#{$prefix}--search-magnifier {
+      width: to-rem(24px);
+      height: to-rem(24px);
+    }
+  }
+
+  .#{$prefix}--search--xs.#{$prefix}--skeleton .#{$prefix}--search-input {
+    height: to-rem(24px);
+  }
+}
+
+@include exports("search-xs") {
+  @include search-xs;
+}
