@@ -66,6 +66,12 @@ Use the small size for more compact inputs by setting `size` to `"sm"`.
 
 <TextInput size="sm" labelText="User name" placeholder="Enter user name..." />
 
+## Extra-small size
+
+Use the extra-small size for the most compact inputs by setting `size` to `"xs"`.
+
+<TextInput size="xs" labelText="User name" placeholder="Enter user name..." />
+
 ## Invalid state
 
 Indicate an invalid state with an error message by setting `invalid` to `true` and providing `invalidText`.
