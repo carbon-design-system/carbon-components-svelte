@@ -168,6 +168,7 @@
   } from "../ListBox";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
   import { debounce } from "../utils/debounce.js";
+  import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import { typeaheadIndex } from "../utils/typeahead.js";
@@ -391,15 +392,13 @@
   ]
     .filter(Boolean)
     .join(" ");
-</script>
 
-<svelte:window
-  on:click={(event) => {
+  function handleOutsideClick(event) {
     if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {
       open = false;
     }
-  }}
-/>
+  }
+</script>
 
 <div
   class:bx--dropdown__wrapper={true}
@@ -407,6 +406,7 @@
   class:bx--dropdown__wrapper--inline={inline}
   class:bx--list-box__wrapper--inline={inline}
   class:bx--dropdown__wrapper--inline--invalid={inline && showInvalid}
+  use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
   {...$$restProps}
 >
   {#if labelText || $$slots.labelChildren}
