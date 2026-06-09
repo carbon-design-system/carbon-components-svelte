@@ -49,8 +49,7 @@ Use the `labelChildren` slot to provide custom label content instead of using th
 
 ## Custom slot
 
-Override the default slot to customize the display of each item. Access the item and
-index through the `let:` directive.
+Override the default slot to customize the display of each item. Use `let:item`, `let:index`, `let:selected`, and `let:highlighted` to style highlighted and selected rows.
 
 <FileSource src="/framed/Dropdown/DropdownSlot" />
 
