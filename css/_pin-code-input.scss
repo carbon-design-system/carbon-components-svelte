@@ -51,6 +51,12 @@
     border-bottom-color: $text-05;
   }
 
+  .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--xs {
+    width: to-rem(24px);
+    min-width: to-rem(24px);
+    height: to-rem(24px);
+  }
+
   .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--sm {
     width: to-rem(32px);
     min-width: to-rem(32px);

@@ -25,6 +25,13 @@ describe("PinCodeInput", () => {
     expect(getInputs()).toHaveLength(6);
   });
 
+  it("applies the extra-small size to each field", () => {
+    render(PinCodeInput, { props: { size: "xs" } });
+    for (const input of getInputs()) {
+      expect(input).toHaveClass("bx--text-input--xs");
+    }
+  });
+
   it("auto-advances focus on input", async () => {
     render(PinCodeInput);
     const inputs = getInputs();
