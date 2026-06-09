@@ -1,0 +1,43 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Left/right icons for list box menu items (Dropdown, ComboBox).
+/// @access private
+/// @group components
+@mixin list-box-menu-item-icon {
+  .#{$prefix}--list-box__menu-item__icon {
+    display: flex;
+    align-items: center;
+
+    svg {
+      fill: currentColor;
+    }
+  }
+
+  // Match the selected checkmark positioning.
+  .#{$prefix}--list-box__menu-item__icon--left,
+  .#{$prefix}--list-box__menu-item__icon--right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .#{$prefix}--list-box__menu-item__icon--left {
+    left: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--list-box__menu-item__icon--right {
+    right: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--list-box__menu-item__option:has(
+      .#{$prefix}--list-box__menu-item__icon--left
+    ) {
+    padding-left: $carbon--spacing-06;
+  }
+}
+
+@include exports('list-box-menu-item-icon') {
+  @include list-box-menu-item-icon;
+}
