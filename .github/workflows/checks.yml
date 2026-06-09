@@ -23,7 +23,7 @@ env:
   IBM_TELEMETRY_DISABLED: true
 
 jobs:
-  lint:
+  static-checks:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -31,12 +31,18 @@ jobs:
       - run: bun ci
       - run: bunx biome ci --error-on-warnings
 
+      - name: Build docs
+        run: bun run build:docs
+
+      - run: bun run test:src-types
+
+      - run: bun run test:package-exports
+
   changes:
     runs-on: macos-15
     outputs:
       unit: ${{ steps.filter.outputs.unit }}
       e2e: ${{ steps.filter.outputs.e2e }}
-      types: ${{ steps.filter.outputs.types }}
       docs-deploy: ${{ steps.filter.outputs.docs-deploy }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -66,13 +72,6 @@ jobs:
               - 'package.json'
               - 'bun.lock'
               - '.github/**'
-            types:
-              - 'src/**'
-              - 'scripts/**'
-              - 'tsconfig*.json'
-              - 'package.json'
-              - 'bun.lock'
-              - '.github/**'
             docs-deploy:
               - 'src/**'
               - 'css/**'
@@ -82,7 +81,7 @@ jobs:
               - '.github/**'
 
   test:
-    needs: [lint, changes]
+    needs: [static-checks, changes]
     if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: macos-15
     steps:
@@ -100,11 +99,11 @@ jobs:
         run: bun run test
 
   test-e2e:
-    needs: [lint, changes, test]
+    needs: [static-checks, changes, test]
     if: |
       always() &&
       !cancelled() &&
-      needs.lint.result == 'success' &&
+      needs.static-checks.result == 'success' &&
       needs.changes.result == 'success' &&
       (needs.test.result == 'success' || needs.test.result == 'skipped') &&
       (github.event_name == 'workflow_dispatch' || needs.changes.outputs.e2e == 'true')
@@ -135,7 +134,7 @@ jobs:
         run: bunx playwright test --project=chromium
 
   test-svelte3:
-    needs: [lint, changes]
+    needs: [static-checks, changes]
     if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: macos-15
     steps:
@@ -162,7 +161,7 @@ jobs:
           bun run test
 
   test-svelte4:
-    needs: [lint, changes]
+    needs: [static-checks, changes]
     if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: macos-15
     steps:
@@ -188,24 +187,8 @@ jobs:
           cd tests-svelte4
           bun run test
 
-  types:
-    needs: [lint, changes]
-    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.types == 'true'
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-      - run: bun ci
-
-      - name: Build docs
-        run: bun run build:docs
-
-      - run: bun run test:src-types
-
-      - run: bun run test:package-exports
-
   deploy-docs:
-    needs: [lint, changes, test, types]
+    needs: [static-checks, changes, test]
     if: |
       always() &&
       (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master') &&
