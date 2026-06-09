@@ -219,6 +219,27 @@ Use the `secondaryChildren` slot to customize the secondary label with custom ma
   </svelte:fragment>
 </Tabs>
 
+## Custom label slot
+
+Override the default slot to customize the tab label. Use `let:selected` to render custom content based on whether the tab is selected.
+
+<Tabs>
+  <Tab label="Tab label 1" let:selected>
+    Tab label 1 {#if selected}(selected){/if}
+  </Tab>
+  <Tab label="Tab label 2" let:selected>
+    Tab label 2 {#if selected}(selected){/if}
+  </Tab>
+  <Tab label="Tab label 3" let:selected>
+    Tab label 3 {#if selected}(selected){/if}
+  </Tab>
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ## Container type with icons and secondary label
 
 Container type tabs can use both `icon` and `secondaryLabel` for a primary label, icon, and optional secondary line (for example, counts or status).
