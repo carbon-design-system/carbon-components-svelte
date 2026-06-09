@@ -8,6 +8,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { dismiss } from "../utils/dismiss.js";
   import { activeTooltipIcon } from "./tooltip-icon-store.js";
 
   /**
@@ -190,18 +191,17 @@
       }
     };
   });
-</script>
 
-<svelte:window
-  on:keydown={(event) => {
+  function handleEscape(event) {
     if (event.key === "Escape") {
       hide();
     }
-  }}
-/>
+  }
+</script>
 
 <button
   bind:this={ref}
+  use:dismiss={{ enabled: open, type: "keydown", handler: handleEscape }}
   {disabled}
   type="button"
   aria-describedby={id}
