@@ -112,6 +112,37 @@ describe("HeaderSearch", () => {
       );
     });
 
+    it("should pass selected to the result slot", async () => {
+      const results = [
+        { href: "/1", text: "Result 1" },
+        { href: "/2", text: "Result 2" },
+        { href: "/3", text: "Result 3" },
+      ];
+      render(HeaderSearchTest, {
+        props: { active: true, results, selectedResultIndex: 0 },
+      });
+
+      expect(screen.getByTestId("result-0")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("result-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+
+      await user.keyboard("{ArrowDown}");
+
+      expect(screen.getByTestId("result-0")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+      expect(screen.getByTestId("result-1")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+    });
+
     it("should use result id for selected menu item id when provided", () => {
       const results = [
         { id: "result-a", href: "/1", text: "Result 1" },
