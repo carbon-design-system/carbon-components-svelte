@@ -3,15 +3,25 @@
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
 </script>
 
-Copy buttons let users copy text to their clipboard with a single click. Use them to provide quick access to code snippets, links, or other text content.
+Copy buttons copy text to the clipboard as a standalone control. Use them for links, table cells, and other one-off copy actions. For code examples, use [CodeSnippet](/components/CodeSnippet), which composes the copy button for single- and multi-line variants.
 
-This component uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text. Override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
+Copy buttons support [async copy](#async-copy) when clipboard text is not ready at render time, for example content fetched on click.
 
 ## Default
 
-Create a copy button with the `text` prop to specify what to copy.
+Set `text` to the string to copy. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText). Pass a function to `copy` to replace it. See [Overriding copy functionality](#overriding-copy-functionality).
 
 <CopyButton text="Carbon svelte" />
+
+## Async copy
+
+Pass an async `copy` function when the text is not available at render time, for example markdown fetched on click. Feedback appears after `copy()` resolves.
+
+While `copy()` is pending, the button sets `aria-busy="true"` and ignores clicks. On failure, skip feedback and listen for `copy:error`.
+
+Prefetch on hover with `on:mouseenter`.
+
+<FileSource src="/framed/CopyButton/CopyButtonAsync" />
 
 ## Custom feedback text
 
@@ -21,44 +31,32 @@ Set `feedback` to customize the message shown after copying.
 
 ## Custom feedback icon
 
-Set `feedbackIcon` to swap the copy icon for a different icon during the feedback window. The icon reverts to the default copy icon once the feedback dismisses.
+Set `feedbackIcon` to show a different icon while feedback is visible. The copy icon returns when feedback closes.
 
 <CopyButton text="Carbon svelte" feedbackIcon={Checkmark} />
 
 ## Overriding copy functionality
 
-Pass a custom function to the `copy` prop to override the default copy behavior.
+Pass a function to `copy` to replace the default Clipboard API behavior.
 
-This example uses the NPM package [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
+This example uses the [clipboard-copy](https://github.com/feross/clipboard-copy) package instead of the Clipboard API.
 
 <FileSource src="/framed/CopyButton/CopyButtonOverride" />
 
-## Async copy
-
-Pass an async function to `copy` when the text is not ready at render time, such as markdown fetched on click. The copy feedback text appears after `copy()` resolves.
-
-During the request, the button sets `aria-busy="true"` and ignores further clicks. A rejected copy skips the success message and emits `copy:error`.
-
-Prefetch on hover with `on:mouseenter`.
-
-<FileSource src="/framed/CopyButton/CopyButtonAsync" />
-
 ## Preventing copy functionality
 
-Pass a no-op function to the `copy` prop to disable copying.
+Set `copy` to a no-op function to disable copying.
 
 <CopyButton text="This text should not be copied" copy={() => {}} />
 
 ## Portal tooltip
 
-Set `portalTooltip` to `true` to render the feedback tooltip in a floating portal. This prevents the tooltip from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. The example below uses a container with hidden overflow; with `portalTooltip`, the tooltip breaks out of the container.
-
-When inside a [Modal](/components/Modal), `portalTooltip` defaults to `true` unless explicitly set to `false`.
+Set `portalTooltip` to render the feedback tooltip in a portal so it is not clipped by `overflow: hidden` containers. Inside a [Modal](/components/Modal), portalling is enabled by default unless you set `portalTooltip` to `false`.
 
 <FileSource src="/framed/CopyButton/CopyButtonPortalTooltip" />
 
 ## Inside a modal
 
-When used inside a `Modal`, the feedback tooltip is automatically portalled to prevent it from being clipped by `overflow: hidden`. Set `portalTooltip` to explicitly control this behavior.
+When used inside a `Modal`, the feedback tooltip is automatically portalled so it is not clipped by `overflow: hidden`. Set `portalTooltip` to explicitly control this behavior.
 
 <FileSource src="/framed/CopyButton/CopyButtonInModal" />
