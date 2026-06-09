@@ -58,8 +58,28 @@ Disable the page size selector by setting `pageSizeInputDisabled` to `true`.
 
 <Pagination totalItems={102} pageSizeInputDisabled />
 
+## Small size
+
+Set `size` to `"sm"` for a small pagination.
+
+<Pagination size="sm" totalItems={102} pageSizes={[10, 15, 20]} />
+
+## Large size
+
+Set `size` to `"lg"` for a large pagination.
+
+<Pagination size="lg" totalItems={102} pageSizes={[10, 15, 20]} />
+
 ## Skeleton
 
 Use the pagination skeleton to show a loading state.
 
 <PaginationSkeleton />
+
+## Skeleton sizes
+
+The skeleton accepts the same `size` prop as `Pagination`.
+
+<PaginationSkeleton size="sm" />
+<PaginationSkeleton />
+<PaginationSkeleton size="lg" />
