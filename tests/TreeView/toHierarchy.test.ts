@@ -1,4 +1,4 @@
-import { toHierarchy } from "carbon-components-svelte";
+import { toHierarchy } from "carbon-components-svelte/utils/toHierarchy";
 
 describe("toHierarchy", () => {
   test("should create a flat hierarchy when no items have parents", () => {

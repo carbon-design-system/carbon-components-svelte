@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CopyInput } from "carbon-components-svelte";
+  import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 
   export let onMouseEnterCopyButton = (_event: MouseEvent) => {};
 </script>

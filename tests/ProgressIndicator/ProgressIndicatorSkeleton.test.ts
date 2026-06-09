@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { ProgressIndicatorSkeleton } from "carbon-components-svelte";
+import ProgressIndicatorSkeleton from "carbon-components-svelte/ProgressIndicator/ProgressIndicatorSkeleton.svelte";
 
 describe("ProgressIndicatorSkeleton", () => {
   it("applies space-equal class when spaceEqually is true", () => {
