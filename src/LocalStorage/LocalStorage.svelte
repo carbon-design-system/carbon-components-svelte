@@ -2,7 +2,7 @@
   /**
    * @template [T=any]
    * @event {null} save
-   * @event update - Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab/window.
+   * @event update - Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab or window. Set `sync` to `"off"` to ignore updates from other tabs.
    * @property {T} prevValue
    * @property {T} value
    * @event {{ error: unknown }} error - Fires when a write to localStorage fails (e.g. quota exceeded or access denied).
@@ -19,6 +19,13 @@
    * @bindable writable
    */
   export let value = /** @type {T} */ ("");
+
+  /**
+   * `"off"` ignores storage events from other tabs or windows on the same
+   * origin. `"on"` (default) keeps the previous behavior.
+   * @type {"on" | "off"}
+   */
+  export let sync = "on";
 
   /**
    * Remove the persisted key value from the browser's local storage.
@@ -78,6 +85,24 @@
     });
   }
 
+  function handleStorageChange(event) {
+    if (event.key !== key) return;
+
+    const prevValue = parseStoredValue(prevSerialized);
+
+    if (event.newValue === null) {
+      // Another tab removed the key (or called clear()).
+      // Reset so the next local mutation does not re-persist stale state.
+      value = /** @type {T} */ (undefined);
+      prevSerialized = serializeStoredValue(value);
+    } else {
+      value = parseStoredValue(event.newValue);
+      prevSerialized = event.newValue;
+    }
+
+    dispatch("update", { prevValue, value });
+  }
+
   onMount(() => {
     const item = storage.getItem(key);
 
@@ -91,30 +116,19 @@
     prevSerialized = serializeStoredValue(value);
     mounted = true;
 
-    function handleStorageChange(event) {
-      if (event.key === key) {
-        const prevValue = parseStoredValue(prevSerialized);
-
-        if (event.newValue === null) {
-          // Another tab removed the key (or called clear()).
-          // Reset so the next local mutation does not re-persist stale state.
-          value = /** @type {T} */ (undefined);
-          prevSerialized = serializeStoredValue(value);
-        } else {
-          value = parseStoredValue(event.newValue);
-          prevSerialized = event.newValue;
-        }
-
-        dispatch("update", { prevValue, value });
-      }
-    }
-
-    window.addEventListener("storage", handleStorageChange);
-
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   });
+
+  // Attach storage listener when sync is on. Re-run when sync changes.
+  $: if (mounted) {
+    window.removeEventListener("storage", handleStorageChange);
+
+    if (sync === "on") {
+      window.addEventListener("storage", handleStorageChange);
+    }
+  }
 
   $: if (mounted && key !== prevKey) {
     const item = storage.getItem(key);
