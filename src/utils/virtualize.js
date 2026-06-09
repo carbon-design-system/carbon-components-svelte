@@ -41,10 +41,20 @@ export function virtualize({
 
   const totalHeight = items.length * itemHeight;
 
-  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
+  // Clamp scrollTop to the scrollable range. A stale scrollTop (e.g. left over
+  // from a longer list after the filter narrows it) would otherwise push
+  // startIndex past the end and slice to an empty array, rendering a blank menu
+  // until the browser fires a corrective scroll event.
+  const maxScroll = Math.max(0, totalHeight - containerHeight);
+  const clampedScrollTop = Math.min(Math.max(0, scrollTop), maxScroll);
+
+  const startIndex = Math.max(
+    0,
+    Math.floor(clampedScrollTop / itemHeight) - overscan,
+  );
   let endIndex = Math.min(
     items.length,
-    Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan,
+    Math.ceil((clampedScrollTop + containerHeight) / itemHeight) + overscan,
   );
 
   if (maxItems && endIndex - startIndex > maxItems) {

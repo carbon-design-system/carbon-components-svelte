@@ -130,7 +130,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
   });
 
-  test("should handle scroll position beyond the list", () => {
+  test("should clamp scroll position beyond the list to the last page", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -143,12 +143,40 @@ describe("virtualize", () => {
       threshold: 100,
     });
 
-    // When scrollTop is beyond the list, startIndex can be >= items.length
-    // which results in an empty visibleItems array
+    // A scrollTop beyond the scrollable range is clamped to maxScroll, so the
+    // last page of items renders rather than an empty slice.
     expect(result.endIndex).toBe(500);
     expect(result.startIndex).toBeGreaterThanOrEqual(0);
-    expect(result.visibleItems.length).toBe(0);
+    expect(result.visibleItems.length).toBeGreaterThan(0);
+    expect(result.visibleItems[result.visibleItems.length - 1].id).toBe(499);
     expect(result.isVirtualized).toBe(true);
+  });
+
+  test("renders matching items when a stale deep scrollTop survives a filter narrowing", () => {
+    // Reproduces the blank-menu bug: a list of 500 is scrolled deep, then the
+    // filter narrows it to 150 items (still above the threshold) while the old
+    // scrollTop lingers. Without clamping, startIndex (~397) exceeds the new
+    // length and the slice is empty.
+    const narrowed = Array.from({ length: 150 }, (_, i) => ({
+      id: i,
+      name: `Item ${i}`,
+    }));
+    const staleScrollTop = 400 * 40; // scrolled to ~item 400 of the old 500
+
+    const result = virtualize({
+      items: narrowed,
+      itemHeight: 40,
+      containerHeight: 300,
+      scrollTop: staleScrollTop,
+      threshold: 100,
+    });
+
+    expect(result.isVirtualized).toBe(true);
+    expect(result.visibleItems.length).toBeGreaterThan(0);
+    // Last page of the narrowed list, not a blank menu.
+    expect(result.endIndex).toBe(150);
+    expect(result.visibleItems[result.visibleItems.length - 1].id).toBe(149);
+    expect(result.offsetY).toBe(result.startIndex * 40);
   });
 
   test("should handle empty items array", () => {
