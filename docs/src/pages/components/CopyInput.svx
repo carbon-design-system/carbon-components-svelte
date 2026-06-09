@@ -29,9 +29,17 @@ Prefetch on hover with `on:mouseenter:copy-button`.
 
 ## Obscured value
 
-Set `type` to `"password"` to obscure the value. The value is revealed while the input is focused. The copy button still copies the full value while obscured.
+Set `type` to `"password"` to obscure the value. By default the value stays obscured; the copy button still copies the full value.
 
 <CopyInput labelText="API token" type="password" value="sk-1234567890abcdef" />
+
+Set `revealMode` to opt into revealing the value on interaction. Use `"focus"` to reveal while the input is focused.
+
+<CopyInput labelText="API token" type="password" revealMode="focus" value="sk-1234567890abcdef" />
+
+Use `"hover-focus"` to reveal while the input is hovered or focused.
+
+<CopyInput labelText="API token" type="password" revealMode="hover-focus" value="sk-1234567890abcdef" />
 
 ## Truncation
 
