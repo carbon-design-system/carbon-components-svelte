@@ -4,6 +4,7 @@
 
   export let value = "secret-token-123";
   export let type: ComponentProps<CopyInput>["type"] = "text";
+  export let revealMode: ComponentProps<CopyInput>["revealMode"] = undefined;
   export let selectOnFocus: ComponentProps<CopyInput>["selectOnFocus"] =
     undefined;
   export let labelText = "API token";
@@ -15,6 +16,7 @@
 <CopyInput
   {value}
   {type}
+  {revealMode}
   selectOnFocus={selectOnFocus ?? true}
   {labelText}
   {helperText}

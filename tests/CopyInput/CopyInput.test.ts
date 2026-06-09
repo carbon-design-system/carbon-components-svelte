@@ -52,8 +52,18 @@ describe("CopyInput", () => {
     expect(select).not.toHaveBeenCalled();
   });
 
-  it("obscures the value and reveals it on focus", async () => {
+  it("stays obscured on focus when revealMode is unset", async () => {
     render(CopyInput, { props: { type: "password" } });
+
+    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    expect(input).toHaveAttribute("type", "password");
+
+    await fireEvent.focus(input);
+    expect(input).toHaveAttribute("type", "password");
+  });
+
+  it("reveals the value on focus when revealMode is focus", async () => {
+    render(CopyInput, { props: { type: "password", revealMode: "focus" } });
 
     const input = screen.getByLabelText("API token") as HTMLInputElement;
     expect(input).toHaveAttribute("type", "password");
@@ -65,13 +75,44 @@ describe("CopyInput", () => {
     expect(input).toHaveAttribute("type", "password");
   });
 
-  it("does not reveal the obscured value on hover", async () => {
+  it("does not reveal the value on hover when revealMode is focus", async () => {
+    render(CopyInput, { props: { type: "password", revealMode: "focus" } });
+
+    const input = screen.getByLabelText("API token") as HTMLInputElement;
+
+    await fireEvent.mouseEnter(input);
+    expect(input).toHaveAttribute("type", "password");
+  });
+
+  it("reveals the value on hover and focus when revealMode is hover-focus", async () => {
+    render(CopyInput, {
+      props: { type: "password", revealMode: "hover-focus" },
+    });
+
+    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    expect(input).toHaveAttribute("type", "password");
+
+    await fireEvent.mouseEnter(input);
+    expect(input).toHaveAttribute("type", "text");
+
+    await fireEvent.mouseLeave(input);
+    expect(input).toHaveAttribute("type", "password");
+
+    await fireEvent.focus(input);
+    expect(input).toHaveAttribute("type", "text");
+
+    await fireEvent.blur(input);
+    expect(input).toHaveAttribute("type", "password");
+  });
+
+  it("does not reveal the obscured value on hover when revealMode is unset", async () => {
     render(CopyInput, { props: { type: "password" } });
 
     const input = screen.getByLabelText("API token") as HTMLInputElement;
     const fieldWrapper = input.closest(".bx--copy-input__field-wrapper");
     expect(fieldWrapper).toBeInTheDocument();
 
+    await fireEvent.mouseEnter(input);
     await fireEvent.mouseEnter(fieldWrapper as Element);
     expect(input).toHaveAttribute("type", "password");
   });

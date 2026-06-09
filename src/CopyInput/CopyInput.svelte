@@ -15,10 +15,20 @@
 
   /**
    * Set to `"password"` to obscure the value.
-   * The value is revealed while the input is focused.
+   * Use `revealMode` to reveal the value on interaction.
    * @type {"text" | "password"}
    */
   export let type = "text";
+
+  /**
+   * Control when a `type="password"` value is revealed.
+   * Has no effect unless `type` is `"password"`.
+   * - `"focus"`: reveal while the input is focused.
+   * - `"hover-focus"`: reveal while the input is hovered or focused.
+   * When unset, the value stays obscured; the copy button still copies the full value.
+   * @type {"focus" | "hover-focus"}
+   */
+  export let revealMode = undefined;
 
   /**
    * Set to `false` to skip selecting the full value when the input receives focus.
@@ -103,8 +113,14 @@
   const isFluid = !!ctx && ctx.isFluid;
 
   let focused = false;
+  let hovered = false;
 
-  $: revealed = focused;
+  $: revealed =
+    revealMode === "hover-focus"
+      ? focused || hovered
+      : revealMode === "focus"
+        ? focused
+        : false;
   $: inputType = type === "password" && !revealed ? "password" : "text";
   $: helperId = `helper-${id}`;
 
@@ -195,6 +211,8 @@
         on:focus={handleFocus}
         on:blur
         on:blur={handleBlur}
+        on:mouseenter={() => (hovered = true)}
+        on:mouseleave={() => (hovered = false)}
       >
       {#if isFluid}
         <hr class:bx--text-input__divider={true}>
