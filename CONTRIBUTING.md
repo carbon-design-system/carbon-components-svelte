@@ -71,6 +71,9 @@ Patterns:
 - Use Carbon v10 markup: `bx--` BEM classes in templates; SCSS patches use `$prefix` and tokens. See [Custom styles](#custom-styles-patching-carbon-v10).
 - Do not add themeable styles in per-component `<style>` blocks (see [Custom styles](#custom-styles-patching-carbon-v10)).
 - Use the legacy Svelte 5 API. Components use `export let`, `$:`, and `createEventDispatcher`. Do not introduce runes (`$state`, `$derived`, `$effect`) unless the project explicitly migrates.
+- Bind per-iteration values once with `{@const}` inside `{#each}` blocks, then reuse them across the markup instead of recomputing inline. See `isSelected` / `isExpanded` / `rowClassValue` in [`DataTable.svelte`](src/DataTable/DataTable.svelte) and `actualIndex` in [`ComboBox.svelte`](src/ComboBox/ComboBox.svelte).
+- Use `Set` / `Map` for membership and id lookups instead of `.includes()` / `.find()`. The O(1) lookup matters in components that can hold large datasets. See the `selectedRowIdsSet` / `nonSelectableRowIdsSet` sets in [`DataTable.svelte`](src/DataTable/DataTable.svelte) and the `itemsById` map in [`ComboBox.svelte`](src/ComboBox/ComboBox.svelte).
+- Gate expensive lookups by state. When an O(n) array computation is only needed in a certain state (on open, on hover), compute it imperatively in that state rather than in an always-on reactive statement or derivation. See `filteredItems = open ? items.filter(...) : []` in [`ComboBox.svelte`](src/ComboBox/ComboBox.svelte).
 
 The `{#if skeleton}` early-return pattern is being phased out. Follow it only when maintaining existing skeleton code.
 
