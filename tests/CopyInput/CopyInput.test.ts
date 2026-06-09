@@ -32,24 +32,24 @@ describe("CopyInput", () => {
     expect(consoleLog).toHaveBeenCalledWith("copied");
   });
 
-  it("selects the full value on focus by default", async () => {
+  it("does not select the value on focus by default", async () => {
     render(CopyInput);
 
     const input = screen.getByLabelText("API token") as HTMLInputElement;
     const select = vi.spyOn(input, "select");
     await fireEvent.focus(input);
 
-    expect(select).toHaveBeenCalled();
+    expect(select).not.toHaveBeenCalled();
   });
 
-  it("does not select the value on focus when selectOnFocus is false", async () => {
-    render(CopyInput, { props: { selectOnFocus: false } });
+  it("selects the full value on focus when selectOnFocus is true", async () => {
+    render(CopyInput, { props: { selectOnFocus: true } });
 
     const input = screen.getByLabelText("API token") as HTMLInputElement;
     const select = vi.spyOn(input, "select");
     await fireEvent.focus(input);
 
-    expect(select).not.toHaveBeenCalled();
+    expect(select).toHaveBeenCalled();
   });
 
   it("stays obscured on focus when revealMode is unset", async () => {
