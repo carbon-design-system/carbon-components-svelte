@@ -7,7 +7,7 @@ Search provides a flexible search input with support for expandable variants, di
 
 ## Default
 
-The search input is extra-large by default. Use the `size` prop to choose between [large](#large-size) and [small](#small-size) variants.
+The search input is extra-large by default. Use the `size` prop to choose between [large](#large-size), [small](#small-size), and [extra-small](#extra-small-size) variants.
 
 <Search />
 
@@ -53,6 +53,12 @@ Set `size` to `"sm"` for a small search input.
 
 <Search size="sm" />
 
+## Extra-small size
+
+Set `size` to `"xs"` for an extra-small search input.
+
+<Search size="xs" />
+
 ## Disabled state
 
 Disable the search input using the `disabled` prop.
@@ -82,3 +88,9 @@ Display a loading state for the large search variant.
 Display a loading state for the small search variant.
 
 <Search size="sm" skeleton />
+
+## Skeleton (extra-small)
+
+Display a loading state for the extra-small search variant.
+
+<Search size="xs" skeleton />
