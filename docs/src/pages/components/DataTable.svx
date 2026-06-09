@@ -1163,6 +1163,42 @@ Bind to `pageSize` and `page` props of the pagination component and pass them to
 
 <FileSource src="/framed/DataTable/DataTablePagination" />
 
+## Matching pagination size
+
+Match the `Pagination` `size` to the `DataTable` `size` for consistent heights. Pair a `short` table with a small (`sm`) pagination.
+
+<DataTable size="short" title="Load balancers" description="Your organization's active load balancers."
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    { id: "a", name: "Load Balancer 3", protocol: "HTTP", port: 3000, rule: "Round robin" },
+    { id: "b", name: "Load Balancer 1", protocol: "HTTP", port: 443, rule: "Round robin" },
+    { id: "c", name: "Load Balancer 2", protocol: "HTTP", port: 80, rule: "DNS delegation" },
+  ]}"
+/>
+<Pagination size="sm" totalItems={3} pageSizes={[10, 15, 20]} />
+
+Pair a `tall` table with a large (`lg`) pagination.
+
+<DataTable size="tall" title="Load balancers" description="Your organization's active load balancers."
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    { id: "a", name: "Load Balancer 3", protocol: "HTTP", port: 3000, rule: "Round robin" },
+    { id: "b", name: "Load Balancer 1", protocol: "HTTP", port: 443, rule: "Round robin" },
+    { id: "c", name: "Load Balancer 2", protocol: "HTTP", port: 80, rule: "DNS delegation" },
+  ]}"
+/>
+<Pagination size="lg" totalItems={3} pageSizes={[10, 15, 20]} />
+
 ## Sortable with custom display and sort methods
 
 Use `display` and `sort` functions in header objects to customize cell rendering and sorting.
