@@ -111,6 +111,12 @@
   /** Set an id for the top-level element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
+  /**
+   * Specify the size of the pagination.
+   * @type {"sm" | "md" | "lg"}
+   */
+  export let size = "md";
+
   import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
@@ -165,7 +171,13 @@
   $: forwardButtonDisabled = disabled || page === totalPages;
 </script>
 
-<div {id} class:bx--pagination={true} {...$$restProps}>
+<div
+  {id}
+  class:bx--pagination={true}
+  class:bx--pagination--sm={size === "sm"}
+  class:bx--pagination--lg={size === "lg"}
+  {...$$restProps}
+>
   <div class:bx--pagination__left={true}>
     {#if !pageSizeInputDisabled}
       <label

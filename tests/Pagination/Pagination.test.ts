@@ -337,6 +337,35 @@ describe("Pagination", () => {
     expect(pagination).toHaveClass("custom-pagination");
   });
 
+  describe("size", () => {
+    function getRoot() {
+      const nextButton = screen.getByRole("button", { name: "Next page" });
+      const pagination = nextButton.closest(".bx--pagination");
+      assert(pagination);
+      return pagination;
+    }
+
+    it("does not apply a size modifier class by default (md)", () => {
+      render(Pagination);
+
+      const pagination = getRoot();
+      expect(pagination).not.toHaveClass("bx--pagination--sm");
+      expect(pagination).not.toHaveClass("bx--pagination--lg");
+    });
+
+    it("applies the small size modifier class", () => {
+      render(Pagination, { props: { size: "sm" } });
+
+      expect(getRoot()).toHaveClass("bx--pagination--sm");
+    });
+
+    it("applies the large size modifier class", () => {
+      render(Pagination, { props: { size: "lg" } });
+
+      expect(getRoot()).toHaveClass("bx--pagination--lg");
+    });
+  });
+
   describe("dynamicPageSizes", () => {
     it("should show all page sizes when dynamicPageSizes is false (default)", () => {
       render(Pagination, {
