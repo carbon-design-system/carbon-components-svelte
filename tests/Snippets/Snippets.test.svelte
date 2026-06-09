@@ -48,14 +48,31 @@
 </DataTable>
 
 <Dropdown data-testid="dropdown-snippet" {items} selectedId="1">
-  {#snippet children({ item, index })}
-    <span data-testid="dropdown-item-{index}">{item.text} (#{index})</span>
+  {#snippet children({ item, index, selected, highlighted })}
+    <span
+      data-testid="dropdown-item-{index}"
+      data-selected={selected}
+      data-highlighted={highlighted}
+      >{item.text}
+      (#{index})</span
+    >
   {/snippet}
 </Dropdown>
 
 <Dropdown data-testid="dropdown-label-children" {items} selectedId="1">
   {#snippet labelChildren()}
     <span data-testid="dropdown-custom-label">Custom label content</span>
+  {/snippet}
+</Dropdown>
+
+<Dropdown data-testid="dropdown-icon-snippets" {items} selectedId="1">
+  {#snippet icon({ item })}
+    <span data-testid="dropdown-icon-{item.id}">L</span>
+  {/snippet}
+  {#snippet iconRight({ item, selected })}
+    <span data-testid="dropdown-icon-right-{item.id}" data-selected={selected}
+      >R</span
+    >
   {/snippet}
 </Dropdown>
 
