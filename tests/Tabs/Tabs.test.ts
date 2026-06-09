@@ -9,6 +9,7 @@ import TabIcon from "./TabIcon.test.svelte";
 import TabIconContainer from "./TabIconContainer.test.svelte";
 import TabIconSecondaryLabel from "./TabIconSecondaryLabel.test.svelte";
 import TabSecondaryLabel from "./TabSecondaryLabel.test.svelte";
+import TabSlot from "./TabSlot.test.svelte";
 import Tabs from "./Tabs.test.svelte";
 import TabsAllDisabled from "./TabsAllDisabled.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
@@ -37,6 +38,30 @@ describe("Tabs", () => {
 
     const tabsContainer = screen.getByRole("navigation");
     expect(tabsContainer).not.toHaveClass("bx--tabs--full-width");
+  });
+
+  it("should pass selected to the Tab default slot", async () => {
+    render(TabSlot);
+
+    expect(screen.getByTestId("tab-0")).toHaveAttribute(
+      "data-selected",
+      "true",
+    );
+    expect(screen.getByTestId("tab-1")).toHaveAttribute(
+      "data-selected",
+      "false",
+    );
+
+    await user.click(screen.getByRole("tab", { name: "Tab 2" }));
+
+    expect(screen.getByTestId("tab-0")).toHaveAttribute(
+      "data-selected",
+      "false",
+    );
+    expect(screen.getByTestId("tab-1")).toHaveAttribute(
+      "data-selected",
+      "true",
+    );
   });
 
   it("should select initial tab based on selected prop", () => {
