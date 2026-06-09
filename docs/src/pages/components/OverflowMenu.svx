@@ -5,6 +5,10 @@ components: ["OverflowMenu", "OverflowMenuItem"]
 <script>
   import { OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import Document from "carbon-icons-svelte/lib/Document.svelte";
+  import Edit from "carbon-icons-svelte/lib/Edit.svelte";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 </script>
 
 Overflow menus provide a compact way to display a list of actions or options. They render as a button that opens a dropdown menu when clicked, making them ideal for secondary actions or overflow content.
@@ -85,6 +89,22 @@ Set `primaryFocus` to `true` on a menu item to focus it when opening the dropdow
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem primaryFocus danger text="Delete service" />
+</OverflowMenu>
+
+## Item icons
+
+Set `icon` for a left icon or `iconRight` for a right icon. The label fills the space between them. Use the `icon` and `iconRight` slots for custom markup.
+
+<OverflowMenu>
+  <OverflowMenuItem icon={Edit} text="Rename" />
+  <OverflowMenuItem
+    icon={Document}
+    iconRight={Launch}
+    text="Open docs"
+    href="https://www.ibm.com/docs"
+    target="_blank"
+  />
+  <OverflowMenuItem hasDivider danger icon={TrashCan} text="Delete" />
 </OverflowMenu>
 
 ## Custom trigger icon
