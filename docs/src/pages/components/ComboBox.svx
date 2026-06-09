@@ -22,7 +22,7 @@ items={[
 
 ## Custom slot
 
-Override the default slot to customize how each item displays. Access the item and index through the `let:` directive.
+Override the default slot to customize how each item displays. Use `let:item`, `let:index`, `let:selected`, and `let:highlighted` to style highlighted and selected rows.
 
 <FileSource src="/framed/ComboBox/ComboBoxSlot" />
 
