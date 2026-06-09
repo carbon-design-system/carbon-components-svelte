@@ -11,6 +11,7 @@ import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
 import ComboBoxDuplicateIds from "./ComboBoxDuplicateIds.test.svelte";
 import ComboBoxGenerics from "./ComboBoxGenerics.test.svelte";
 import ComboBoxInModal from "./ComboBoxInModal.test.svelte";
+import ComboBoxItemSlot from "./ComboBoxItemSlot.test.svelte";
 
 describe("ComboBox", () => {
   const getInput = () => {
@@ -1519,6 +1520,23 @@ describe("ComboBox", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  it("should pass selected and highlighted to the default slot", async () => {
+    render(ComboBoxItemSlot, { props: { selectedId: "1" } });
+
+    await user.click(getInput());
+
+    const customItems = screen.getAllByTestId("custom-item");
+
+    // selectedId "1" is the second item, not index 1.
+    expect(customItems[0]).toHaveAttribute("data-selected", "false");
+    expect(customItems[1]).toHaveAttribute("data-selected", "true");
+    expect(customItems[2]).toHaveAttribute("data-selected", "false");
+
+    await user.hover(customItems[2]);
+    expect(customItems[2]).toHaveAttribute("data-highlighted", "true");
+    expect(customItems[0]).toHaveAttribute("data-highlighted", "false");
   });
 
   describe("virtualization", () => {
