@@ -31,10 +31,10 @@
   export let revealMode = undefined;
 
   /**
-   * Set to `false` to skip selecting the full value when the input receives focus.
+   * Set to `true` to select the full value when the input receives focus.
    * @type {boolean}
    */
-  export let selectOnFocus = true;
+  export let selectOnFocus = false;
 
   /**
    * Set the size of the input.

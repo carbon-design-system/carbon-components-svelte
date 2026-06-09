@@ -17,7 +17,7 @@
   {value}
   {type}
   {revealMode}
-  selectOnFocus={selectOnFocus ?? true}
+  {selectOnFocus}
   {labelText}
   {helperText}
   {disabled}
