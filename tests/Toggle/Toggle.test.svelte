@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { Toggle } from "carbon-components-svelte";
+  import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
   import type { ComponentProps } from "svelte";
 
   let toggled = false;

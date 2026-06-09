@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TreeView } from "carbon-components-svelte";
+  import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
 
   export let nodes: ComponentProps<TreeView>["nodes"] = [

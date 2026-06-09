@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { HeaderAction } from "carbon-components-svelte";
+  import HeaderAction from "carbon-components-svelte/UIShell/HeaderAction.svelte";
 </script>
 
 <HeaderAction text="Default text">

@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { ListBoxMenu } from "carbon-components-svelte";
+  import ListBoxMenu from "carbon-components-svelte/ListBox/ListBoxMenu.svelte";
   import type { ComponentProps } from "svelte";
 
   export let id: ComponentProps<ListBoxMenu>["id"] = undefined;

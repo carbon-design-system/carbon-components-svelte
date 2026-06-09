@@ -1,8 +1,8 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { NotificationQueue } from "carbon-components-svelte";
   import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
+  import NotificationQueue from "carbon-components-svelte/Notification/NotificationQueue.svelte";
   import type { ComponentProps } from "svelte";
 
   export let position: ComponentProps<NotificationQueue>["position"] =

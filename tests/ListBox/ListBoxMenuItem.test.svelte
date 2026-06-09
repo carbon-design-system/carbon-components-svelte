@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ListBoxMenuItem } from "carbon-components-svelte";
+  import ListBoxMenuItem from "carbon-components-svelte/ListBox/ListBoxMenuItem.svelte";
   import type { ComponentProps } from "svelte";
 
   export let active: ComponentProps<ListBoxMenuItem>["active"] = false;

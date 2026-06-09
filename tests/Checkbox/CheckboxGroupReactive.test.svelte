@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { Checkbox } from "carbon-components-svelte";
+  import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 
   export let group = ["option-2"];
 </script>

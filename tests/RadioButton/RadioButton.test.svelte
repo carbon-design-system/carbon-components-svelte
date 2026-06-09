@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { RadioButton } from "carbon-components-svelte";
+  import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
   import type { ComponentProps } from "svelte";
 
   export let value: ComponentProps<RadioButton>["value"] = "";

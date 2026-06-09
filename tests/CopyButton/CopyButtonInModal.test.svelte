@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { CopyButton, Modal } from "carbon-components-svelte";
+  import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
   import type { ComponentProps } from "svelte";
 
   export let modalOpen = true;

@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { ListBoxMenuIcon } from "carbon-components-svelte";
+  import ListBoxMenuIcon from "carbon-components-svelte/ListBox/ListBoxMenuIcon.svelte";
   import type { ComponentProps } from "svelte";
 
   export let open: ComponentProps<ListBoxMenuIcon>["open"] = false;

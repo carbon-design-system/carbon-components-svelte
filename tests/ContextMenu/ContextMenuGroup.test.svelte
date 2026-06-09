@@ -1,9 +1,7 @@
 <script lang="ts">
-  import {
-    ContextMenu,
-    ContextMenuGroup,
-    ContextMenuOption,
-  } from "carbon-components-svelte";
+  import ContextMenu from "carbon-components-svelte/ContextMenu/ContextMenu.svelte";
+  import ContextMenuGroup from "carbon-components-svelte/ContextMenu/ContextMenuGroup.svelte";
+  import ContextMenuOption from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
   import type { ComponentProps } from "svelte";
 
   export let selectedIds: ComponentProps<ContextMenuGroup>["selectedIds"] = [];

@@ -1,9 +1,7 @@
 <script lang="ts">
-  import {
-    Header,
-    HeaderAction,
-    HeaderUtilities,
-  } from "carbon-components-svelte";
+  import Header from "carbon-components-svelte/UIShell/Header.svelte";
+  import HeaderAction from "carbon-components-svelte/UIShell/HeaderAction.svelte";
+  import HeaderUtilities from "carbon-components-svelte/UIShell/HeaderUtilities.svelte";
 
   export let preventCloseOnClickOutside = false;
 

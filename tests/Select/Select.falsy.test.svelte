@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Select, SelectItem } from "carbon-components-svelte";
+  import Select from "carbon-components-svelte/Select/Select.svelte";
+  import SelectItem from "carbon-components-svelte/Select/SelectItem.svelte";
 </script>
 
 <Select labelText="Falsy text">

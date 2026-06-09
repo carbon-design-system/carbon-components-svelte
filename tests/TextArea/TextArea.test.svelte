@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TextArea } from "carbon-components-svelte";
+  import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
   import type { ComponentProps } from "svelte";
 
   export let value: ComponentProps<TextArea>["value"] = "";

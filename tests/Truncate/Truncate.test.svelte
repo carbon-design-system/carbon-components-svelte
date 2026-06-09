@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Truncate } from "carbon-components-svelte";
+  import Truncate from "carbon-components-svelte/Truncate/Truncate.svelte";
   import type { ComponentProps } from "svelte";
 
   export let clamp: ComponentProps<Truncate>["clamp"] = "end";

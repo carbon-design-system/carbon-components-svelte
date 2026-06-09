@@ -1,9 +1,7 @@
 <script lang="ts">
-  import {
-    Button,
-    ContainedList,
-    ContainedListItem,
-  } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import ContainedList from "carbon-components-svelte/ContainedList/ContainedList.svelte";
+  import ContainedListItem from "carbon-components-svelte/ContainedList/ContainedListItem.svelte";
   import Close from "carbon-icons-svelte/lib/Close.svelte";
 </script>
 

@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { LocalStorage } from "carbon-components-svelte";
+  import LocalStorage from "carbon-components-svelte/LocalStorage/LocalStorage.svelte";
 
   // Example values for testing
   const primitiveValue = "test-value";

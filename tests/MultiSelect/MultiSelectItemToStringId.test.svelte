@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MultiSelect } from "carbon-components-svelte";
+  import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 
   /** itemToString may return Item["id"] (e.g. number), matching default `text ?? id`. */
   const items = [

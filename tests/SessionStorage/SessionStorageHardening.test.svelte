@@ -1,8 +1,8 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { SessionStorage } from "carbon-components-svelte";
   import type SessionStorageComponent from "carbon-components-svelte/SessionStorage/SessionStorage.svelte";
+  import SessionStorage from "carbon-components-svelte/SessionStorage/SessionStorage.svelte";
 
   export let value: unknown = "initial";
   export let key = "hardening-key";

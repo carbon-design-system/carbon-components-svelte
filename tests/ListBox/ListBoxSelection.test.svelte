@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { ListBoxSelection } from "carbon-components-svelte";
+  import ListBoxSelection from "carbon-components-svelte/ListBox/ListBoxSelection.svelte";
   import type { ComponentProps } from "svelte";
 
   export let selectionCount: ComponentProps<ListBoxSelection>["selectionCount"] =

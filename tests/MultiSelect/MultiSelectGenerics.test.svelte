@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MultiSelect } from "carbon-components-svelte";
+  import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 
   const items = [
     { id: "1", text: "Laptop", price: 999, category: "Electronics" },

@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { Button, Checkbox, Form, FormGroup } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
+  import Form from "carbon-components-svelte/Form/Form.svelte";
+  import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 
   export let preventDefault = false;
 </script>

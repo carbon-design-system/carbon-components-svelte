@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Button, TreeView } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
 
   /** Id contains `"`, which breaks a naive `[id="..."]` selector without CSS.escape */

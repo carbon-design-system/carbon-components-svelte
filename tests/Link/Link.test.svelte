@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { Link } from "carbon-components-svelte";
+  import Link from "carbon-components-svelte/Link/Link.svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
 </script>
 

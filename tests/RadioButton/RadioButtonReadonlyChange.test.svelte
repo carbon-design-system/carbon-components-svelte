@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { RadioButton, RadioButtonGroup } from "carbon-components-svelte";
+  import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
+  import RadioButtonGroup from "carbon-components-svelte/RadioButtonGroup/RadioButtonGroup.svelte";
 </script>
 
 <RadioButtonGroup legendText="Plan" readonly selected="1">

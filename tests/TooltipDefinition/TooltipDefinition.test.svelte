@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TooltipDefinition } from "carbon-components-svelte";
+  import TooltipDefinition from "carbon-components-svelte/TooltipDefinition/TooltipDefinition.svelte";
   import type { ComponentProps } from "svelte";
 
   export let tooltipText = "Test tooltip text";

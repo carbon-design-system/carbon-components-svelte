@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { ContentSwitcher, Switch } from "carbon-components-svelte";
+  import ContentSwitcher from "carbon-components-svelte/ContentSwitcher/ContentSwitcher.svelte";
+  import Switch from "carbon-components-svelte/ContentSwitcher/Switch.svelte";
   import type { ComponentProps } from "svelte";
 
   export let selectionMode: ComponentProps<ContentSwitcher>["selectionMode"] =

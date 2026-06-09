@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileUploaderDropContainer } from "carbon-components-svelte";
+  import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
 </script>
 
 <FileUploaderDropContainer labelText="Default label">

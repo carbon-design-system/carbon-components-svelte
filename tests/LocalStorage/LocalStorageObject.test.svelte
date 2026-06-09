@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { LocalStorage } from "carbon-components-svelte";
+  import LocalStorage from "carbon-components-svelte/LocalStorage/LocalStorage.svelte";
 
   export let value: { theme: string; fontSize: number } = {
     theme: "dark",

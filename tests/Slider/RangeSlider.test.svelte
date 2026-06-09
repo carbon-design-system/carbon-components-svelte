@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RangeSlider } from "carbon-components-svelte";
+  import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 
   export let value = 0;
   export let valueUpper = 100;

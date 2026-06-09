@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Accordion, AccordionItem } from "carbon-components-svelte";
+  import Accordion from "carbon-components-svelte/Accordion/Accordion.svelte";
+  import AccordionItem from "carbon-components-svelte/Accordion/AccordionItem.svelte";
 </script>
 
 <Accordion disabled>

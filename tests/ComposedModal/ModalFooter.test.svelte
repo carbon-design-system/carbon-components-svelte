@@ -1,10 +1,8 @@
 <script lang="ts">
-  import {
-    ComposedModal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-  } from "carbon-components-svelte";
+  import ComposedModal from "carbon-components-svelte/ComposedModal/ComposedModal.svelte";
+  import ModalBody from "carbon-components-svelte/ComposedModal/ModalBody.svelte";
+  import ModalFooter from "carbon-components-svelte/ComposedModal/ModalFooter.svelte";
+  import ModalHeader from "carbon-components-svelte/ComposedModal/ModalHeader.svelte";
   import type { ComponentProps } from "svelte";
 
   export let open = true;

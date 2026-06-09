@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DatePickerSkeleton } from "carbon-components-svelte";
+  import DatePickerSkeleton from "carbon-components-svelte/DatePicker/DatePickerSkeleton.svelte";
 </script>
 
 <DatePickerSkeleton

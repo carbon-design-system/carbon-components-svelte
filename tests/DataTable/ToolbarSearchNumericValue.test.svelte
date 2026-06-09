@@ -3,8 +3,9 @@
   import Toolbar from "carbon-components-svelte/DataTable/Toolbar.svelte";
   import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let value: number | string = "";
+  export let value: ComponentProps<ToolbarSearch>["value"] = "";
 </script>
 
 <DataTable

@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { FloatingPortal } from "carbon-components-svelte";
+  import FloatingPortal from "carbon-components-svelte/Portal/FloatingPortal.svelte";
   import type { ComponentProps } from "svelte";
 
   export let open = false;

@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { Portal } from "carbon-components-svelte";
+  import Portal from "carbon-components-svelte/Portal/Portal.svelte";
   import type { ComponentProps } from "svelte";
 
   export let showPortal = true;

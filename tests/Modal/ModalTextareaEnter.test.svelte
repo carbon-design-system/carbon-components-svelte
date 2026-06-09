@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Modal } from "carbon-components-svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
 
   export let open = true;
   export let shouldSubmitOnEnter = true;

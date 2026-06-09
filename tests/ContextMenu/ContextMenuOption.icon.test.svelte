@@ -1,9 +1,7 @@
 <script lang="ts">
-  import {
-    ContextMenu,
-    ContextMenuDivider,
-    ContextMenuOption,
-  } from "carbon-components-svelte";
+  import ContextMenu from "carbon-components-svelte/ContextMenu/ContextMenu.svelte";
+  import ContextMenuDivider from "carbon-components-svelte/ContextMenu/ContextMenuDivider.svelte";
+  import ContextMenuOption from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
   import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 

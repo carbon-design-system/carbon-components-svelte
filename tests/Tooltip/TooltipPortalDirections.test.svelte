@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tooltip } from "carbon-components-svelte";
+  import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 
   const directions = ["top", "right", "bottom", "left"] as const;
 </script>

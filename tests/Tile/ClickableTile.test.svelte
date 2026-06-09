@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { ClickableTile } from "carbon-components-svelte";
+  import ClickableTile from "carbon-components-svelte/Tile/ClickableTile.svelte";
   import type { ComponentProps } from "svelte";
 
   export let ref: ComponentProps<ClickableTile>["ref"] = undefined;

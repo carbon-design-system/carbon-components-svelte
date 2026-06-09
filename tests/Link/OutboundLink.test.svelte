@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { OutboundLink } from "carbon-components-svelte";
+  import OutboundLink from "carbon-components-svelte/Link/OutboundLink.svelte";
 </script>
 
 <!-- Default outbound link -->

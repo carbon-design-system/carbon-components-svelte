@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { Dropdown, Modal, TextInput } from "carbon-components-svelte";
+  import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
+  import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 
   export let open = false;
 </script>

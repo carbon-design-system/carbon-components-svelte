@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { MultiSelect } from "carbon-components-svelte";
   import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+  import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 
   const items: MultiSelectItem[] = [
     { id: "0", text: "Option 1" },

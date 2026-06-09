@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { HeaderSearch } from "carbon-components-svelte";
+  import HeaderSearch from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
   import type { ComponentEvents, ComponentProps } from "svelte";
 
   export let active = false;

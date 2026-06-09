@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RecursiveList } from "carbon-components-svelte";
+  import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
 
   type TestNode = {
     id?: string | number;

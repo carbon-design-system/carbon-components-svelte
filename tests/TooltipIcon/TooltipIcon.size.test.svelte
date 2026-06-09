@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TooltipIcon } from "carbon-components-svelte";
+  import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
   import MockIcon from "./MockIcon.svelte";
 
   export let size = 16;

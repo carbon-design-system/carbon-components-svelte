@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TileGroup } from "carbon-components-svelte";
+  import TileGroup from "carbon-components-svelte/Tile/TileGroup.svelte";
 </script>
 
 <TileGroup legendText="Default legend">

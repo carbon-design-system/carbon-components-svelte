@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FormItem } from "carbon-components-svelte";
+  import FormItem from "carbon-components-svelte/FormItem/FormItem.svelte";
 
   export let slotContent = "";
 </script>

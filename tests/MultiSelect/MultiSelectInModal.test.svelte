@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Modal, MultiSelect } from "carbon-components-svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
+  import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
   import type { ComponentProps } from "svelte";
 
   export let modalOpen = true;

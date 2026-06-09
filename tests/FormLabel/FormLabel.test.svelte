@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { FormLabel } from "carbon-components-svelte";
+  import FormLabel from "carbon-components-svelte/FormLabel/FormLabel.svelte";
   import type { ComponentProps } from "svelte";
 
   export let id: ComponentProps<FormLabel>["id"] = undefined;

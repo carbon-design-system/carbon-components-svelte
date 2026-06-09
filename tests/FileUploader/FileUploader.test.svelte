@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { FileUploader } from "carbon-components-svelte";
+  import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
   import type { ComponentProps } from "svelte";
 
   export let files: ComponentProps<FileUploader>["files"] = [];

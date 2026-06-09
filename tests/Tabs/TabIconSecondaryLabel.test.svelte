@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { Tab, TabContent, Tabs } from "carbon-components-svelte";
+  import Tab from "carbon-components-svelte/Tabs/Tab.svelte";
+  import TabContent from "carbon-components-svelte/Tabs/TabContent.svelte";
+  import Tabs from "carbon-components-svelte/Tabs/Tabs.svelte";
   import Calendar from "../../src/icons/Calendar.svelte";
   import Information from "../../src/icons/Information.svelte";
   import Settings from "../../src/icons/Settings.svelte";

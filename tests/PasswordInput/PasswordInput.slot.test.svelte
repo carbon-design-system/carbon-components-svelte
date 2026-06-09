@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PasswordInput } from "carbon-components-svelte";
+  import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 </script>
 
 <PasswordInput labelText="Default label">

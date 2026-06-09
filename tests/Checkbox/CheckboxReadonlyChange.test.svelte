@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Checkbox, CheckboxGroup } from "carbon-components-svelte";
+  import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
+  import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 </script>
 
 <CheckboxGroup legendText="Options" readonly selected={["1"]}>

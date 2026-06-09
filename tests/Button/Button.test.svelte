@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
 

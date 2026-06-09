@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileUploaderDropContainer } from "carbon-components-svelte";
+  import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
   import type { ComponentProps } from "svelte";
 
   export let files: ComponentProps<FileUploaderDropContainer>["files"] = [];

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Header } from "carbon-components-svelte";
+  import Header from "carbon-components-svelte/UIShell/Header.svelte";
 </script>
 
 <Header companyName="Default company">

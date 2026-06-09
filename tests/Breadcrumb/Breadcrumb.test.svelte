@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Breadcrumb, BreadcrumbItem } from "carbon-components-svelte";
+  import Breadcrumb from "carbon-components-svelte/Breadcrumb/Breadcrumb.svelte";
+  import BreadcrumbItem from "carbon-components-svelte/Breadcrumb/BreadcrumbItem.svelte";
 </script>
 
 <Breadcrumb>

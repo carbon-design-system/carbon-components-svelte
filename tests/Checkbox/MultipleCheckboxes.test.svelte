@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Button, Checkbox } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 
   export let values = ["Apple", "Banana", "Coconut"];
   export let group = values.slice(0, 2);

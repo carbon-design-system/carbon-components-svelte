@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Row } from "carbon-components-svelte";
+  import Row from "carbon-components-svelte/Grid/Row.svelte";
   import type { ComponentProps } from "svelte";
 
   export let condensed: ComponentProps<Row>["condensed"] = false;

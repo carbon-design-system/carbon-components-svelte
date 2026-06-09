@@ -1,15 +1,13 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import {
-    Content,
-    Header,
-    HeaderNav,
-    HeaderNavItem,
-    SideNav,
-    SideNavItems,
-    SideNavLink,
-  } from "carbon-components-svelte";
+  import Content from "carbon-components-svelte/UIShell/Content.svelte";
+  import Header from "carbon-components-svelte/UIShell/Header.svelte";
+  import HeaderNav from "carbon-components-svelte/UIShell/HeaderNav.svelte";
+  import HeaderNavItem from "carbon-components-svelte/UIShell/HeaderNavItem.svelte";
+  import SideNav from "carbon-components-svelte/UIShell/SideNav.svelte";
+  import SideNavItems from "carbon-components-svelte/UIShell/SideNavItems.svelte";
+  import SideNavLink from "carbon-components-svelte/UIShell/SideNavLink.svelte";
   import type { ComponentProps } from "svelte";
 
   export let headerHref: ComponentProps<Header>["href"] = undefined;

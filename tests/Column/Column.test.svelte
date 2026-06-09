@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Column } from "carbon-components-svelte";
+  import Column from "carbon-components-svelte/Grid/Column.svelte";
   import type { ComponentProps } from "svelte";
 
   export let as = false;

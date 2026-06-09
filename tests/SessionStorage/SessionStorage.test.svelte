@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { SessionStorage } from "carbon-components-svelte";
+  import SessionStorage from "carbon-components-svelte/SessionStorage/SessionStorage.svelte";
 
   // Example values for testing
   const primitiveValue = "test-value";

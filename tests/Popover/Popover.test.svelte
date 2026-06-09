@@ -1,20 +1,9 @@
 <script lang="ts">
-  import { Popover } from "carbon-components-svelte";
+  import Popover from "carbon-components-svelte/Popover/Popover.svelte";
+  import type { ComponentProps } from "svelte";
 
   export let open = false;
-  export let align:
-    | "top"
-    | "top-left"
-    | "top-right"
-    | "bottom"
-    | "bottom-left"
-    | "bottom-right"
-    | "left"
-    | "left-bottom"
-    | "left-top"
-    | "right"
-    | "right-bottom"
-    | "right-top" = "top";
+  export let align: ComponentProps<Popover>["align"] = "top";
   export let caret = false;
   export let light = false;
   export let highContrast = false;

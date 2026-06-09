@@ -1,9 +1,7 @@
 <script lang="ts">
-  import {
-    Select,
-    SelectItem,
-    SelectItemGroup,
-  } from "carbon-components-svelte";
+  import Select from "carbon-components-svelte/Select/Select.svelte";
+  import SelectItem from "carbon-components-svelte/Select/SelectItem.svelte";
+  import SelectItemGroup from "carbon-components-svelte/Select/SelectItemGroup.svelte";
   import type { ComponentProps } from "svelte";
 
   export let selected: ComponentProps<Select>["selected"] = undefined;

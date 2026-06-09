@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { truncate } from "carbon-components-svelte";
+  import { truncate } from "carbon-components-svelte/Truncate/truncate";
 
   export let clamp: "end" | "front" = "end";
   export let text =

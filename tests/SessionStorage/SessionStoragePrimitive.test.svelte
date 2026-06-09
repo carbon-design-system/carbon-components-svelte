@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { SessionStorage } from "carbon-components-svelte";
+  import SessionStorage from "carbon-components-svelte/SessionStorage/SessionStorage.svelte";
 
   export let value = "test-value";
 </script>
