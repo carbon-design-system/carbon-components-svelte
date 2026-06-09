@@ -97,7 +97,7 @@ describe("Search", () => {
     render(SearchSkeleton);
 
     const skeletons = document.querySelectorAll(".bx--skeleton");
-    expect(skeletons).toHaveLength(3);
+    expect(skeletons).toHaveLength(4);
 
     // Default (xl) skeleton
     expect(skeletons[0]).toHaveClass("bx--search--xl");
@@ -107,6 +107,10 @@ describe("Search", () => {
 
     // Small (sm) skeleton
     expect(skeletons[2]).toHaveClass("bx--search--sm");
+
+    // Skeleton with hidden label has no label element
+    const hideLabelSkeleton = screen.getByTestId("skeleton-hide-label");
+    expect(hideLabelSkeleton.querySelector(".bx--label")).toBeNull();
   });
 
   it("supports custom label slot", () => {

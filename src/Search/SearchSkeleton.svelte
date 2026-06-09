@@ -4,6 +4,9 @@
    * @type {"xs" | "sm" | "lg" | "xl"}
    */
   export let size = "xl";
+
+  /** Set to `true` to hide the label text */
+  export let hideLabel = false;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -20,6 +23,8 @@
   on:mouseenter
   on:mouseleave
 >
-  <span class:bx--label={true}></span>
+  {#if !hideLabel}
+    <span class:bx--label={true}></span>
+  {/if}
   <div class:bx--search-input={true}></div>
 </div>
