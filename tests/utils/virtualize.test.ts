@@ -1,5 +1,6 @@
 import {
   getBoundedScrollTop,
+  getVisibleRange,
   resetVirtualScrollOnClose,
   scrollHighlightedIntoView,
   scrollSelectedIntoView,
@@ -469,6 +470,46 @@ describe("virtualListState", () => {
 
     expect(result.data?.isVirtualized).toBe(false);
     expect(result.itemsToRender).toBe(items);
+  });
+});
+
+describe("getVisibleRange", () => {
+  const base = {
+    itemHeight: 40,
+    containerHeight: 300,
+    itemCount: 500,
+  };
+
+  test("clamps startIndex to 0 with overscan at the top", () => {
+    expect(getVisibleRange({ ...base, scrollTop: 0 })).toEqual({
+      startIndex: 0,
+      endIndex: Math.ceil(300 / 40) + 3,
+    });
+  });
+
+  test("offsets the range by scroll position", () => {
+    // scrollTop 2000 => floor(50) - 3 = 47 start.
+    const { startIndex, endIndex } = getVisibleRange({
+      ...base,
+      scrollTop: 2000,
+    });
+    expect(startIndex).toBe(47);
+    expect(endIndex).toBe(Math.ceil((2000 + 300) / 40) + 3);
+  });
+
+  test("clamps endIndex to itemCount", () => {
+    const { endIndex } = getVisibleRange({
+      ...base,
+      scrollTop: 500 * 40,
+    });
+    expect(endIndex).toBe(500);
+  });
+
+  test("caps the window to maxItems", () => {
+    expect(getVisibleRange({ ...base, scrollTop: 0, maxItems: 5 })).toEqual({
+      startIndex: 0,
+      endIndex: 5,
+    });
   });
 });
 
