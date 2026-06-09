@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Checkbox } from "carbon-components-svelte";
+  import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 </script>
 
 <Checkbox data-testid="checkbox-slot">

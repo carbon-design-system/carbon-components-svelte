@@ -1,16 +1,14 @@
 <script lang="ts">
-  import {
-    Button,
-    ComboBox,
-    DataTable,
-    Dropdown,
-    ProgressIndicator,
-    ProgressStep,
-    Tab,
-    TabContent,
-    Tabs,
-    Theme,
-  } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+  import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
+  import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+  import ProgressIndicator from "carbon-components-svelte/ProgressIndicator/ProgressIndicator.svelte";
+  import ProgressStep from "carbon-components-svelte/ProgressIndicator/ProgressStep.svelte";
+  import Tab from "carbon-components-svelte/Tabs/Tab.svelte";
+  import TabContent from "carbon-components-svelte/Tabs/TabContent.svelte";
+  import Tabs from "carbon-components-svelte/Tabs/Tabs.svelte";
+  import Theme from "carbon-components-svelte/Theme/Theme.svelte";
 
   const items = [
     { id: "1", text: "Option 1" },

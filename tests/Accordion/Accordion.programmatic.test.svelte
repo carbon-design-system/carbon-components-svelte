@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { Accordion, AccordionItem, Button } from "carbon-components-svelte";
+  import Accordion from "carbon-components-svelte/Accordion/Accordion.svelte";
+  import AccordionItem from "carbon-components-svelte/Accordion/AccordionItem.svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
 
   const items = [
     {

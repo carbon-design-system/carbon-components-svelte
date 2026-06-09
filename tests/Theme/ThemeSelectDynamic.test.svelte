@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Theme } from "carbon-components-svelte";
+  import Theme from "carbon-components-svelte/Theme/Theme.svelte";
   import type { ComponentProps } from "svelte";
 
   export let themes: NonNullable<ComponentProps<Theme>["select"]>["themes"] =

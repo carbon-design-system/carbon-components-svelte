@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { FluidForm, TextInput } from "carbon-components-svelte";
+  import FluidForm from "carbon-components-svelte/FluidForm/FluidForm.svelte";
+  import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
   import type { ComponentProps } from "svelte";
 
   export let value: ComponentProps<TextInput>["value"] = "";

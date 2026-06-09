@@ -1,9 +1,7 @@
 <script lang="ts">
-  import {
-    SelectItem,
-    TimePicker,
-    TimePickerSelect,
-  } from "carbon-components-svelte";
+  import SelectItem from "carbon-components-svelte/Select/SelectItem.svelte";
+  import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
+  import TimePickerSelect from "carbon-components-svelte/TimePicker/TimePickerSelect.svelte";
 
   export let selectReadonly = false;
 </script>

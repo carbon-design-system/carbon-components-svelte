@@ -1,9 +1,7 @@
 <script lang="ts">
-  import {
-    Modal,
-    OverflowMenu,
-    OverflowMenuItem,
-  } from "carbon-components-svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
+  import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
+  import OverflowMenuItem from "carbon-components-svelte/OverflowMenu/OverflowMenuItem.svelte";
   import type { ComponentProps } from "svelte";
 
   export let modalOpen = true;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonText } from "carbon-components-svelte";
+  import SkeletonText from "carbon-components-svelte/SkeletonText/SkeletonText.svelte";
 
   export let lines = 3;
   export let heading = false;

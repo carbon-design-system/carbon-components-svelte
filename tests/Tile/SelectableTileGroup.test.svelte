@@ -1,10 +1,8 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import {
-    SelectableTile,
-    SelectableTileGroup,
-  } from "carbon-components-svelte";
+  import SelectableTile from "carbon-components-svelte/Tile/SelectableTile.svelte";
+  import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
   import type { ComponentProps } from "svelte";
 
   export let selected: ComponentProps<SelectableTileGroup>["selected"] = [];

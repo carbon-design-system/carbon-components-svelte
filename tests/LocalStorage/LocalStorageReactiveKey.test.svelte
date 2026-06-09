@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { LocalStorage } from "carbon-components-svelte";
+  import LocalStorage from "carbon-components-svelte/LocalStorage/LocalStorage.svelte";
   import type { ComponentProps } from "svelte";
 
   export let storageKey: ComponentProps<LocalStorage>["key"] = "key-a";

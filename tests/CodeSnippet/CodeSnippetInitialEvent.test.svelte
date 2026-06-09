@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CodeSnippet } from "carbon-components-svelte";
+  import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
 
   export let expanded = false;
 

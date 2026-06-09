@@ -1,7 +1,8 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { Checkbox, CheckboxGroup } from "carbon-components-svelte";
+  import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
+  import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 
   export let selected: string[] = ["1"];
   export let readonly = false;

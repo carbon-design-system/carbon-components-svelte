@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { ContainedList, ContainedListItem } from "carbon-components-svelte";
+  import ContainedList from "carbon-components-svelte/ContainedList/ContainedList.svelte";
+  import ContainedListItem from "carbon-components-svelte/ContainedList/ContainedListItem.svelte";
 </script>
 
 <ContainedList>

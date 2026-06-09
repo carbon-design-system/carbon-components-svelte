@@ -1,10 +1,8 @@
 <script lang="ts">
-  import {
-    Accordion,
-    AccordionItem,
-    Button,
-    ButtonSet,
-  } from "carbon-components-svelte";
+  import Accordion from "carbon-components-svelte/Accordion/Accordion.svelte";
+  import AccordionItem from "carbon-components-svelte/Accordion/AccordionItem.svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import ButtonSet from "carbon-components-svelte/Button/ButtonSet.svelte";
 
   export let disabled = false;
 

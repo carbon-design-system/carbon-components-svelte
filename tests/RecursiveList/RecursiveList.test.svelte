@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RecursiveList } from "carbon-components-svelte";
+  import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
   import type { RecursiveListNode } from "../../src/RecursiveList/RecursiveList.svelte";
 
   const nodes: RecursiveListNode[] = [

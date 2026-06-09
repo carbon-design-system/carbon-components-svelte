@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileUploaderItem } from "carbon-components-svelte";
+  import FileUploaderItem from "carbon-components-svelte/FileUploader/FileUploaderItem.svelte";
 
   export let ondelete: ((e: CustomEvent<string>) => void) | undefined =
     undefined;

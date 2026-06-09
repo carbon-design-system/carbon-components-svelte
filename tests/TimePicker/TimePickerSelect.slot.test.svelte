@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { SelectItem, TimePickerSelect } from "carbon-components-svelte";
+  import SelectItem from "carbon-components-svelte/Select/SelectItem.svelte";
+  import TimePickerSelect from "carbon-components-svelte/TimePicker/TimePickerSelect.svelte";
 </script>
 
 <TimePickerSelect labelText="Default label">

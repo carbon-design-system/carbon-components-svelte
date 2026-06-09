@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Stack } from "carbon-components-svelte";
+  import Stack from "carbon-components-svelte/Stack/Stack.svelte";
   import type { ComponentProps } from "svelte";
 
   const gaps: ComponentProps<Stack>["gap"][] = [

@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { Button, TreeView, toHierarchy } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
   import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
+  import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
+  import { toHierarchy } from "carbon-components-svelte/utils/toHierarchy";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 
   type HierarchyNode = TreeNode<number> & { pid?: number };

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Toggle } from "carbon-components-svelte";
+  import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
   import type { ComponentProps } from "svelte";
 
   export let ariaLabel: NonNullable<ComponentProps<Toggle>["aria-label"]> = "";

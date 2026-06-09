@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Portal } from "carbon-components-svelte";
+  import Portal from "carbon-components-svelte/Portal/Portal.svelte";
 
   export let showPortal = true;
 </script>

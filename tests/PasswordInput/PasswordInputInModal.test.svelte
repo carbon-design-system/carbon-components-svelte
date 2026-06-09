@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Modal, PasswordInput } from "carbon-components-svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
+  import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
   import type { ComponentProps } from "svelte";
 
   export let modalOpen = true;

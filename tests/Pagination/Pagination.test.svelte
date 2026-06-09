@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Pagination } from "carbon-components-svelte";
+  import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
   import type { ComponentProps } from "svelte";
 
   export let page = 1;

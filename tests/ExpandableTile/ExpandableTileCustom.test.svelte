@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Button, ExpandableTile } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 
   export let buttonClicked = false;
   export let linkClicked = false;

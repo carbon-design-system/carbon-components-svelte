@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { DatePicker, DatePickerInput, Modal } from "carbon-components-svelte";
+  import DatePicker from "carbon-components-svelte/DatePicker/DatePicker.svelte";
+  import DatePickerInput from "carbon-components-svelte/DatePicker/DatePickerInput.svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
   import type { ComponentProps } from "svelte";
 
   export let modalOpen = true;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SkeletonIcon } from "carbon-components-svelte";
+  import SkeletonIcon from "carbon-components-svelte/SkeletonIcon/SkeletonIcon.svelte";
 </script>
 
 <SkeletonIcon

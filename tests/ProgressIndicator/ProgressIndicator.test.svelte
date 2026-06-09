@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { ProgressIndicator, ProgressStep } from "carbon-components-svelte";
+  import ProgressIndicator from "carbon-components-svelte/ProgressIndicator/ProgressIndicator.svelte";
+  import ProgressStep from "carbon-components-svelte/ProgressIndicator/ProgressStep.svelte";
 
   export let currentIndex = 0;
   export let vertical = false;

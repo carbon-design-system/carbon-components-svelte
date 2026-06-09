@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Search } from "carbon-components-svelte";
+  import Search from "carbon-components-svelte/Search/Search.svelte";
 
   let value = "";
 </script>

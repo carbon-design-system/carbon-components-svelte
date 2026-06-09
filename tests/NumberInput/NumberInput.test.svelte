@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { NumberInput } from "carbon-components-svelte";
+  import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
   import type { ComponentProps } from "svelte";
 
   export let value: ComponentProps<NumberInput>["value"] = 0;

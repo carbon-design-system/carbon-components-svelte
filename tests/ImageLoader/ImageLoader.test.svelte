@@ -1,8 +1,9 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { ImageLoader, InlineLoading } from "carbon-components-svelte";
   import type ImageLoaderComponent from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
+  import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
+  import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 
   // Valid image URL for testing successful loads
   const validImageSrc =

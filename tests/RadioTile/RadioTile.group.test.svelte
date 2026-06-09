@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { Button, RadioTile, TileGroup } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import RadioTile from "carbon-components-svelte/Tile/RadioTile.svelte";
+  import TileGroup from "carbon-components-svelte/Tile/TileGroup.svelte";
 
   const values = ["Lite plan", "Standard plan", "Plus plan"];
 

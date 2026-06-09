@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CopyButton } from "carbon-components-svelte";
+  import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
 
   export let copy: (text: string) => void | Promise<void>;
 

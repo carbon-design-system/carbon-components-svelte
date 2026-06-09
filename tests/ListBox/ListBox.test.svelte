@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ListBox } from "carbon-components-svelte";
+  import ListBox from "carbon-components-svelte/ListBox/ListBox.svelte";
   import type { ComponentProps } from "svelte";
 
   export let size: ComponentProps<ListBox>["size"] = undefined;

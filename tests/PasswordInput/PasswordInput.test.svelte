@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PasswordInput } from "carbon-components-svelte";
+  import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
   import type { ComponentProps } from "svelte";
 
   export let size: ComponentProps<PasswordInput>["size"] = undefined;

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { ContextMenu, ContextMenuOption } from "carbon-components-svelte";
+  import ContextMenu from "carbon-components-svelte/ContextMenu/ContextMenu.svelte";
+  import ContextMenuOption from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
   import { onMount } from "svelte";
 
   let targetA: HTMLElement | null = null;

@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { ExpandableTile } from "carbon-components-svelte";
+  import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 
   export let tileMaxHeight = 100;
   export let tilePadding = 50;

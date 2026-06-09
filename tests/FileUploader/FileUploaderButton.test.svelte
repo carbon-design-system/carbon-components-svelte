@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileUploaderButton } from "carbon-components-svelte";
+  import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
   import type { ComponentProps } from "svelte";
 
   export let files: ComponentProps<FileUploaderButton>["files"] = [];

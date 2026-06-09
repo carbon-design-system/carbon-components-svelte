@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SelectableTileGroup } from "carbon-components-svelte";
+  import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 </script>
 
 <SelectableTileGroup legendText="Default legend">

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { DatePicker, DatePickerInput } from "carbon-components-svelte";
+  import DatePicker from "carbon-components-svelte/DatePicker/DatePicker.svelte";
+  import DatePickerInput from "carbon-components-svelte/DatePicker/DatePickerInput.svelte";
   import type { ComponentProps } from "svelte";
 
   export let datePickerType: ComponentProps<DatePicker>["datePickerType"] =

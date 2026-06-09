@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SessionStorage } from "carbon-components-svelte";
+  import SessionStorage from "carbon-components-svelte/SessionStorage/SessionStorage.svelte";
   import type { ComponentProps } from "svelte";
 
   export let storageKey: ComponentProps<SessionStorage>["key"] = "key-a";

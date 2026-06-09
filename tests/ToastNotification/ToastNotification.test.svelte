@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ToastNotification } from "carbon-components-svelte";
+  import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
   import type { ComponentProps } from "svelte";
 
   export let kind: ComponentProps<ToastNotification>["kind"] = "error";

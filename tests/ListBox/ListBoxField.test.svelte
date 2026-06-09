@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { ListBoxField } from "carbon-components-svelte";
+  import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
   import type { ComponentProps } from "svelte";
 
   export let disabled: ComponentProps<ListBoxField>["disabled"] = false;

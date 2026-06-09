@@ -1,8 +1,8 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { LocalStorage } from "carbon-components-svelte";
   import type LocalStorageComponent from "carbon-components-svelte/LocalStorage/LocalStorage.svelte";
+  import LocalStorage from "carbon-components-svelte/LocalStorage/LocalStorage.svelte";
 
   export let value: unknown = "initial";
   export let key = "hardening-key";

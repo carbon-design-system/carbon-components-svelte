@@ -1,7 +1,8 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { RadioButton, RadioButtonGroup } from "carbon-components-svelte";
+  import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
+  import RadioButtonGroup from "carbon-components-svelte/RadioButtonGroup/RadioButtonGroup.svelte";
   import type { ComponentProps } from "svelte";
 
   export let selected: ComponentProps<RadioButtonGroup>["selected"] = undefined;

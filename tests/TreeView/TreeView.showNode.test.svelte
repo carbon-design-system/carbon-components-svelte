@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Button, TreeView } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
   import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
+  import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
 
   let treeview: TreeView;

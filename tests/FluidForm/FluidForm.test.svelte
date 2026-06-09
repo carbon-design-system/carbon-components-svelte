@@ -1,12 +1,10 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import {
-    Button,
-    Checkbox,
-    FluidForm,
-    FormGroup,
-  } from "carbon-components-svelte";
+  import Button from "carbon-components-svelte/Button/Button.svelte";
+  import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
+  import FluidForm from "carbon-components-svelte/FluidForm/FluidForm.svelte";
+  import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 
   export let preventDefault = false;
   export let ref: null | HTMLFormElement = null;

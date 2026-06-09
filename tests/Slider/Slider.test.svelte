@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Slider } from "carbon-components-svelte";
+  import Slider from "carbon-components-svelte/Slider/Slider.svelte";
   import type { ComponentProps } from "svelte";
 
   export let value = 0;

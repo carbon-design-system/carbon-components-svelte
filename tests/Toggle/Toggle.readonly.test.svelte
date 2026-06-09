@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Toggle } from "carbon-components-svelte";
+  import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 
   export let toggled = false;
   export let readonly = false;

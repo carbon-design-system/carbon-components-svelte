@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Heading, Section } from "carbon-components-svelte";
+  import Heading from "carbon-components-svelte/Heading/Heading.svelte";
+  import Section from "carbon-components-svelte/Heading/Section.svelte";
 </script>
 
 <Section> <Heading>Default Heading 1</Heading> </Section>

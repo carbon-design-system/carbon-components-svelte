@@ -1,12 +1,10 @@
 <script lang="ts">
-  import {
-    ComposedModal,
-    Dropdown,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    TextInput,
-  } from "carbon-components-svelte";
+  import ComposedModal from "carbon-components-svelte/ComposedModal/ComposedModal.svelte";
+  import ModalBody from "carbon-components-svelte/ComposedModal/ModalBody.svelte";
+  import ModalFooter from "carbon-components-svelte/ComposedModal/ModalFooter.svelte";
+  import ModalHeader from "carbon-components-svelte/ComposedModal/ModalHeader.svelte";
+  import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+  import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 
   export let open = false;
 </script>

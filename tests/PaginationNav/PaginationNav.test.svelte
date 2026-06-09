@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { PaginationNav } from "carbon-components-svelte";
+  import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
+  import type { ComponentProps } from "svelte";
 
   export let page = 1;
   export let total = 10;
@@ -7,13 +8,8 @@
   export let loop = false;
   export let forwardText = "Next page";
   export let backwardText = "Previous page";
-  export let tooltipPosition:
-    | "top"
-    | "right"
-    | "bottom"
-    | "left"
-    | "outside"
-    | "inside" = "bottom";
+  export let tooltipPosition: ComponentProps<PaginationNav>["tooltipPosition"] =
+    "bottom";
 </script>
 
 <PaginationNav

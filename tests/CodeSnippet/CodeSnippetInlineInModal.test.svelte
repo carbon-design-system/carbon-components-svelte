@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { CodeSnippet, Modal } from "carbon-components-svelte";
+  import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
+  import Modal from "carbon-components-svelte/Modal/Modal.svelte";
   import type { ComponentProps } from "svelte";
 
   export let modalOpen = true;

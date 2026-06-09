@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { Breakpoint } from "carbon-components-svelte";
   import type {
     BreakpointSize,
     BreakpointValue,
   } from "carbon-components-svelte/Breakpoint/Breakpoint.svelte";
+  import Breakpoint from "carbon-components-svelte/Breakpoint/Breakpoint.svelte";
   import type { ComponentProps } from "svelte";
 
   export let size: ComponentProps<Breakpoint>["size"] = undefined;

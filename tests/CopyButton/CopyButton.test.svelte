@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CopyButton } from "carbon-components-svelte";
+  import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import type { ComponentProps } from "svelte";
 

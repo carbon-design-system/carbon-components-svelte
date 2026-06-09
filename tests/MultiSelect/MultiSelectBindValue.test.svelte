@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MultiSelect } from "carbon-components-svelte";
+  import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
   import type { ComponentProps } from "svelte";
 
   export let items: ComponentProps<MultiSelect>["items"] = [];

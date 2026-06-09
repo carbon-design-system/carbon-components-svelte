@@ -1,9 +1,10 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { InlineLoading } from "carbon-components-svelte";
+  import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
+  import type { ComponentProps } from "svelte";
 
-  export let status: "active" | "finished" = "active";
+  export let status: ComponentProps<InlineLoading>["status"] = "active";
 </script>
 
 <InlineLoading

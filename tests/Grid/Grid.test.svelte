@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Grid } from "carbon-components-svelte";
+  import Grid from "carbon-components-svelte/Grid/Grid.svelte";
 
   export let condensed = false;
   export let narrow = false;

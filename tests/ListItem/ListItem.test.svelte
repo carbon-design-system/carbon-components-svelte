@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ListItem } from "carbon-components-svelte";
+  import ListItem from "carbon-components-svelte/ListItem/ListItem.svelte";
 
   export let slotContent = "";
 </script>

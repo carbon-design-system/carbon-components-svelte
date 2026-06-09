@@ -1,7 +1,7 @@
 <svelte:options accessors />
 
 <script lang="ts">
-  import { RadioButton } from "carbon-components-svelte";
+  import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
 
   export let checked = false;
 </script>
