@@ -45,8 +45,9 @@
   on:select={handleSelect}
   let:result
   let:index
+  let:selected
 >
-  <div data-testid="result-{index}">{result.text}</div>
+  <div data-testid="result-{index}" data-selected={selected}>{result.text}</div>
 </HeaderSearch>
 
 <div data-testid="active-event">{activeEvent}</div>

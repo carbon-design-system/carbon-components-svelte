@@ -17,7 +17,7 @@
    * @property {string} value
    * @property {number} selectedResultIndex
    * @property {Result} selectedResult
-   * @slot {{ result: Result; index: number }}
+   * @slot {{ result: Result; index: number; selected: boolean; }}
    */
 
   /**
@@ -222,7 +222,7 @@
               selectResult();
             }}
           >
-            <slot {result} {index}>
+            <slot {result} {index} selected={selectedResultIndex === index}>
               {result.text}
               {#if result.description}
                 <span class:bx--header-search-menu-description={true}
