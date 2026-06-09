@@ -1,4 +1,38 @@
 /**
+ * Compute the `[startIndex, endIndex)` slice of items to render for a given
+ * scroll position, including `overscan` padding and an optional `maxItems` cap.
+ *
+ * @param {Object} options
+ * @param {number} options.scrollTop
+ * @param {number} options.itemHeight
+ * @param {number} options.containerHeight
+ * @param {number} options.itemCount
+ * @param {number} [options.overscan=3]
+ * @param {number} [options.maxItems]
+ * @returns {{ startIndex: number, endIndex: number }}
+ */
+export function getVisibleRange({
+  scrollTop,
+  itemHeight,
+  containerHeight,
+  itemCount,
+  overscan = 3,
+  maxItems = undefined,
+}) {
+  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
+  let endIndex = Math.min(
+    itemCount,
+    Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan,
+  );
+
+  if (maxItems && endIndex - startIndex > maxItems) {
+    endIndex = startIndex + maxItems;
+  }
+
+  return { startIndex, endIndex };
+}
+
+/**
  * Render only the visible slice of a fixed-height list.
  *
  * @template {Record<string, unknown>} Item
@@ -48,18 +82,14 @@ export function virtualize({
   const maxScroll = Math.max(0, totalHeight - containerHeight);
   const clampedScrollTop = Math.min(Math.max(0, scrollTop), maxScroll);
 
-  const startIndex = Math.max(
-    0,
-    Math.floor(clampedScrollTop / itemHeight) - overscan,
-  );
-  let endIndex = Math.min(
-    items.length,
-    Math.ceil((clampedScrollTop + containerHeight) / itemHeight) + overscan,
-  );
-
-  if (maxItems && endIndex - startIndex > maxItems) {
-    endIndex = startIndex + maxItems;
-  }
+  const { startIndex, endIndex } = getVisibleRange({
+    scrollTop: clampedScrollTop,
+    itemHeight,
+    containerHeight,
+    itemCount: items.length,
+    overscan,
+    maxItems,
+  });
 
   const offsetY = startIndex * itemHeight;
 
@@ -163,14 +193,14 @@ export function scrollHighlightedIntoView({
   containerHeight,
   overscan = 3,
 }) {
-  const visibleStartIndex = Math.max(
-    0,
-    Math.floor(currentScrollTop / itemHeight) - overscan,
-  );
-  const visibleEndIndex = Math.min(
-    itemCount,
-    Math.ceil((currentScrollTop + containerHeight) / itemHeight) + overscan,
-  );
+  const { startIndex: visibleStartIndex, endIndex: visibleEndIndex } =
+    getVisibleRange({
+      scrollTop: currentScrollTop,
+      itemHeight,
+      containerHeight,
+      itemCount,
+      overscan,
+    });
 
   if (
     highlightedIndex < visibleStartIndex ||

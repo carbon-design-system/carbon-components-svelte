@@ -23,6 +23,22 @@ export type VirtualizeResult<
   isVirtualized: boolean;
 };
 
+export type GetVisibleRangeOptions = {
+  scrollTop: number;
+  itemHeight: number;
+  containerHeight: number;
+  itemCount: number;
+  /** @default 3 */
+  overscan?: number;
+  maxItems?: number;
+};
+
+/** Compute the `[startIndex, endIndex)` slice of items to render. */
+export function getVisibleRange(options: GetVisibleRangeOptions): {
+  startIndex: number;
+  endIndex: number;
+};
+
 /** Render only the visible slice of a fixed-height list. */
 export function virtualize<
   Item extends Record<string, unknown> = Record<string, unknown>,
