@@ -1,0 +1,105 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+@mixin copy-input {
+  // Reserve room so the value never sits under the copy button.
+  .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input {
+    padding-right: 2.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--sm {
+    padding-right: 2rem;
+  }
+
+  .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--xl {
+    padding-right: 3rem;
+  }
+
+  // Fluid form shorthand padding must not collapse right padding below button width.
+  .#{$prefix}--form--fluid
+    .#{$prefix}--copy-input__field-wrapper
+    .#{$prefix}--text-input {
+    padding-right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--form--fluid
+    .#{$prefix}--copy-input__field-wrapper
+    .#{$prefix}--text-input--sm {
+    padding-right: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--form--fluid
+    .#{$prefix}--copy-input__field-wrapper
+    .#{$prefix}--text-input--xl {
+    padding-right: $carbon--spacing-09;
+  }
+
+  // Transparent overlay pinned to the right edge of the field.
+  .#{$prefix}--copy-input__field-wrapper .#{$prefix}--copy-btn {
+    @include focus-outline("reset");
+
+    position: absolute;
+    right: 0;
+    display: flex;
+    width: to-rem(40px);
+    height: 100%;
+    min-height: auto;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transition: outline $duration--fast-01 motion(standard, productive);
+
+    &:hover,
+    &:active {
+      background: none;
+    }
+
+    // Show the button's own focus ring when it (not the input) is focused.
+    &:focus {
+      @include focus-outline("outline");
+    }
+
+    .#{$prefix}--snippet__icon {
+      fill: $icon-secondary;
+      transition: fill $duration--fast-01 motion(standard, productive);
+    }
+
+    &:hover .#{$prefix}--snippet__icon,
+    &:focus .#{$prefix}--snippet__icon {
+      fill: $icon-primary;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:disabled .#{$prefix}--snippet__icon {
+      fill: $icon-disabled;
+    }
+  }
+
+  // Match the copy button width to the input height for each size.
+  .#{$prefix}--copy-input__field-wrapper
+    .#{$prefix}--text-input--sm
+    ~ .#{$prefix}--copy-btn {
+    width: to-rem(32px);
+  }
+
+  .#{$prefix}--copy-input__field-wrapper
+    .#{$prefix}--text-input--xl
+    ~ .#{$prefix}--copy-btn {
+    width: to-rem(48px);
+  }
+}
+
+@include exports("copy-input") {
+  @include copy-input;
+}

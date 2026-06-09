@@ -10,7 +10,7 @@
   export let feedbackTimeout = 2000;
 
   /**
-   * Specify an icon to render during the feedback window (e.g. after copying).
+   * Specify an icon to render during the feedback window (for example, after copying).
    * When unset, the copy icon is always shown.
    * @type {Icon}
    */
