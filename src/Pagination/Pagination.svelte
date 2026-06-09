@@ -113,7 +113,7 @@
 
   /**
    * Specify the size of the pagination.
-   * @type {"sm" | "md" | "lg"}
+   * @type {"xs" | "sm" | "md" | "lg"}
    */
   export let size = "md";
 
@@ -174,7 +174,9 @@
 <div
   {id}
   class:bx--pagination={true}
+  class:bx--pagination--xs={size === "xs"}
   class:bx--pagination--sm={size === "sm"}
+  class:bx--pagination--md={size === "md"}
   class:bx--pagination--lg={size === "lg"}
   {...$$restProps}
 >

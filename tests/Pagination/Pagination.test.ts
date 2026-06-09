@@ -31,6 +31,25 @@ describe("Pagination", () => {
     ).toBeInTheDocument();
   });
 
+  it("defaults to the md size class", () => {
+    const { container } = render(Pagination);
+
+    const pagination = container.querySelector(".bx--pagination");
+    expect(pagination).toHaveClass("bx--pagination--md");
+  });
+
+  it.each([
+    "xs",
+    "sm",
+    "md",
+    "lg",
+  ] as const)("applies the %s size class", (size) => {
+    const { container } = render(Pagination, { props: { size } });
+
+    const pagination = container.querySelector(".bx--pagination");
+    expect(pagination).toHaveClass(`bx--pagination--${size}`);
+  });
+
   it("should render with custom total items", () => {
     render(Pagination, {
       props: { totalItems: 102 },
@@ -335,35 +354,6 @@ describe("Pagination", () => {
     const pagination = nextButton.closest(".bx--pagination");
     assert(pagination);
     expect(pagination).toHaveClass("custom-pagination");
-  });
-
-  describe("size", () => {
-    function getRoot() {
-      const nextButton = screen.getByRole("button", { name: "Next page" });
-      const pagination = nextButton.closest(".bx--pagination");
-      assert(pagination);
-      return pagination;
-    }
-
-    it("does not apply a size modifier class by default (md)", () => {
-      render(Pagination);
-
-      const pagination = getRoot();
-      expect(pagination).not.toHaveClass("bx--pagination--sm");
-      expect(pagination).not.toHaveClass("bx--pagination--lg");
-    });
-
-    it("applies the small size modifier class", () => {
-      render(Pagination, { props: { size: "sm" } });
-
-      expect(getRoot()).toHaveClass("bx--pagination--sm");
-    });
-
-    it("applies the large size modifier class", () => {
-      render(Pagination, { props: { size: "lg" } });
-
-      expect(getRoot()).toHaveClass("bx--pagination--lg");
-    });
   });
 
   describe("dynamicPageSizes", () => {

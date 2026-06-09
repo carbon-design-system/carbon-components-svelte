@@ -1,0 +1,34 @@
+// Extra-small (xs, 24px) pagination variant. Carbon v10 ships only --sm/--lg;
+// this patches in the size="xs" parity added upstream (carbon#21695). The v11
+// source sizes pagination off `layout.size('height')`; at the xs step that
+// resolves to 24px, which in v10 is the `$size-xs` token (1.5rem).
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/layout/scss/generated/size";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Extra small pagination variant (Carbon `size="xs"` parity, 24px)
+/// @access private
+/// @group components
+@mixin pagination-xs {
+  .#{$prefix}--pagination--xs {
+    min-height: $size-xs;
+  }
+
+  .#{$prefix}--pagination--xs .#{$prefix}--select-input {
+    line-height: $size-xs;
+  }
+
+  .#{$prefix}--pagination--xs .#{$prefix}--pagination__button,
+  .#{$prefix}--pagination--xs
+    .#{$prefix}--btn--ghost.#{$prefix}--pagination__button {
+    width: $size-xs;
+    height: $size-xs;
+    min-height: $size-xs;
+  }
+}
+
+@include exports("pagination-xs") {
+  @include pagination-xs;
+}

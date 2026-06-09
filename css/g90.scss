@@ -51,6 +51,7 @@ $css--plex: true;
 
 // Custom component overrides (must come after Carbon styles)
 @import "./data-table-toolbar";
+@import "./pagination";
 @import "./multiselect";
 @import "./treeview";
 @import "./selectable-tag";
