@@ -1,5 +1,10 @@
 <script>
   import { ComboBox } from "carbon-components-svelte";
+  import Chat from "carbon-icons-svelte/lib/Chat.svelte";
+  import Email from "carbon-icons-svelte/lib/Email.svelte";
+  import Document from "carbon-icons-svelte/lib/Document.svelte";
+  import Star from "carbon-icons-svelte/lib/Star.svelte";
+  import StarFilled from "carbon-icons-svelte/lib/StarFilled.svelte";
 </script>
 
 Combo boxes combine a text input with a dropdown menu to let users select from predefined options or enter custom values. They support filtering, custom item rendering, and various states.
@@ -25,6 +30,29 @@ items={[
 Override the default slot to customize how each item displays. Use `let:item`, `let:index`, `let:selected`, and `let:highlighted` to style highlighted and selected rows.
 
 <FileSource src="/framed/ComboBox/ComboBoxSlot" />
+
+## Item icons
+
+Set `icon` on an item for a left icon. The label sits between the icon and the checkmark. Use the `icon` slot for custom markup.
+
+<ComboBox labelText="Contact" placeholder="Select contact method" selectedId="0" items={[
+  {id: "0", text: "Slack", icon: Chat},
+  {id: "1", text: "Email", icon: Email},
+  {id: "2", text: "Fax", icon: Document}]} />
+
+Use `iconRight` to replace the checkmark. Both slots receive `item`, `index`, `selected`, and `highlighted`.
+
+<ComboBox labelText="Contact" placeholder="Select contact method" selectedId="0" items={[
+  {id: "0", text: "Slack", icon: Chat},
+  {id: "1", text: "Email", icon: Email},
+  {id: "2", text: "Fax", icon: Document}]}>
+  <svelte:fragment slot="icon" let:item>
+    <svelte:component this={item.icon} />
+  </svelte:fragment>
+  <svelte:fragment slot="iconRight" let:selected>
+    {#if selected}<StarFilled />{:else}<Star />{/if}
+  </svelte:fragment>
+</ComboBox>
 
 ## Hidden label
 
