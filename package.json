@@ -70,7 +70,7 @@
     "culls": "^0.2.0",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.15",
-    "sass": "^1.100.0",
+    "sass-embedded": "^1.100.0",
     "sveld": "^0.32.5",
     "svelte": "^5.56.3",
     "svelte-check": "^4.6.0",
