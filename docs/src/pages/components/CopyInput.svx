@@ -9,13 +9,15 @@ Use [CodeSnippet](/components/CodeSnippet) for install commands and code samples
 
 ## Default
 
-Set `value` to the string to show and copy. By default, focusing the field selects the full value.
+Set `value` to the string to show and copy.
 
 <CopyInput labelText="API endpoint" value="https://api.example.com/v1" />
 
-Set `selectOnFocus` to `false` to leave the caret placement unchanged.
+## Select on focus
 
-<CopyInput selectOnFocus={false} labelText="API endpoint" value="https://api.example.com/v1" />
+Set `selectOnFocus` to `true` to select the full value when the field receives focus.
+
+<CopyInput selectOnFocus labelText="API endpoint" value="https://api.example.com/v1" />
 
 ## Async copy
 
