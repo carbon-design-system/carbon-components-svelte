@@ -22,7 +22,9 @@
   import type { CarbonTheme } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import { themes as themeLabels } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
+  import Code from "carbon-icons-svelte/lib/Code.svelte";
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";
+  import Document from "carbon-icons-svelte/lib/Document.svelte";
   import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
   import { onMount } from "svelte";
   import COMPONENT_API from "../COMPONENT_API.json";
@@ -201,12 +203,14 @@
             />
             <OverflowMenu flipped icon={OverflowMenuVertical}>
               <OverflowMenuItem
+                icon={Code}
                 text="Source code"
                 href={sourceCode}
                 target="_blank"
               />
               <OverflowMenuItem
-                text="View as Markdown"
+                icon={Document}
+                text="View Markdown"
                 href={markdownUrl}
                 target="_blank"
               />
