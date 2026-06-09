@@ -78,6 +78,13 @@ describe("Select", () => {
     expect(selectElement).not.toHaveClass("bx--select-input--xl");
   });
 
+  it("renders extra small size variant", () => {
+    render(Select, { size: "xs" });
+    const selectElement = screen.getByLabelText("Select label");
+    expect(selectElement).toHaveClass("bx--select-input--xs");
+    expect(selectElement).not.toHaveClass("bx--select-input--sm");
+  });
+
   it("renders small size variant", () => {
     render(Select, { size: "sm" });
     const selectElement = screen.getByLabelText("Select label");

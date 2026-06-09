@@ -1,0 +1,21 @@
+// Extends the v10 select with the extra-small (`xs`) size added in newer
+// Carbon (React `size="xs"`, 24px height). v10 only ships sm/md/lg.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Extra-small select variant (Carbon React `size="xs"` parity)
+/// @access private
+/// @group components
+@mixin select-xs {
+  .#{$prefix}--select-input--xs {
+    height: to-rem(24px);
+    max-height: to-rem(24px);
+  }
+}
+
+@include exports("select-xs") {
+  @include select-xs;
+}
