@@ -111,7 +111,7 @@
    * Set `virtualize={true}` to explicitly enable virtualization with default settings.
    *
    * Provide an object to customize virtualization behavior:
-   * - `itemHeight` (default: 40): The height in pixels of each item. Specify a custom value when using custom slots with multi-line items or different heights.
+   * - `itemHeight` (default: 40 for md, adjusted for size): Height of each item in pixels. Override when custom slots change row height.
    * - `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.
    * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
    * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
@@ -166,7 +166,10 @@
     ListBoxMenuIcon,
     ListBoxMenuItem,
   } from "../ListBox";
-  import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
+  import {
+    getMenuItemHeight,
+    getMenuMaxHeight,
+  } from "../ListBox/list-box-utils.js";
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
@@ -248,6 +251,7 @@
     scrollTop: listScrollTop,
     shouldVirtualize,
     virtualize,
+    defaults: { itemHeight: getMenuItemHeight(size) },
   });
   $: virtualConfig = virtualState.config;
   $: virtualData = virtualState.data;
