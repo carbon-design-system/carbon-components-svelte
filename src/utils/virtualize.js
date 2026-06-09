@@ -62,13 +62,15 @@ export function virtualize({
   maxItems = undefined,
   threshold = 100,
 }) {
-  if (items.length < threshold) {
+  // A non-positive itemHeight can't be virtualized (the math divides by it and
+  // yields NaN indices), so render the full list unvirtualized.
+  if (items.length < threshold || itemHeight <= 0) {
     return {
       visibleItems: items,
       startIndex: 0,
       endIndex: items.length,
       offsetY: 0,
-      totalHeight: items.length * itemHeight,
+      totalHeight: itemHeight > 0 ? items.length * itemHeight : 0,
       isVirtualized: false,
     };
   }

@@ -361,7 +361,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
   });
 
-  test("should handle zero item height", () => {
+  test("falls back to unvirtualized for a non-positive item height", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -374,11 +374,14 @@ describe("virtualize", () => {
       threshold: 100,
     });
 
+    // A zero height can't be virtualized, so render every item with no offset
+    // rather than producing NaN indices and a blank slice.
+    expect(result.isVirtualized).toBe(false);
+    expect(result.visibleItems).toBe(items);
+    expect(result.startIndex).toBe(0);
+    expect(result.endIndex).toBe(500);
+    expect(result.offsetY).toBe(0);
     expect(result.totalHeight).toBe(0);
-    // Division by zero results in NaN for offsetY (0/0 = NaN)
-    expect(Number.isNaN(result.offsetY) || result.offsetY >= 0).toBe(true);
-    // With zero height, calculation produces NaN but function still returns
-    expect(result.isVirtualized).toBe(true);
   });
 
   test("should handle zero container height", () => {
