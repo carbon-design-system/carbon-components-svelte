@@ -8,7 +8,7 @@
 
   /**
    * Specify the size of the overflow menu.
-   * @type {"sm" | "xl"}
+   * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
 
@@ -271,6 +271,7 @@
   class:bx--overflow-menu={true}
   class:bx--overflow-menu--open={open}
   class:bx--overflow-menu--light={light}
+  class:bx--overflow-menu--xs={size === "xs"}
   class:bx--overflow-menu--sm={size === "sm"}
   class:bx--overflow-menu--xl={size === "xl"}
   {...$$restProps}
@@ -336,6 +337,7 @@
     class:bx--overflow-menu--flip={flipped}
     class:bx--overflow-menu-options--open={open}
     class:bx--overflow-menu-options--light={light}
+    class:bx--overflow-menu-options--xs={size === "xs"}
     class:bx--overflow-menu-options--sm={size === "sm"}
     class:bx--overflow-menu-options--xl={size === "xl"}
     class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
@@ -378,6 +380,7 @@
       class:bx--overflow-menu--flip={flipped}
       class:bx--overflow-menu-options--open={open}
       class:bx--overflow-menu-options--light={light}
+      class:bx--overflow-menu-options--xs={size === "xs"}
       class:bx--overflow-menu-options--sm={size === "sm"}
       class:bx--overflow-menu-options--xl={size === "xl"}
       class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}

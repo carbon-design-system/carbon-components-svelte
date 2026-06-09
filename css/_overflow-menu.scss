@@ -59,3 +59,35 @@
 @include exports('overflow-menu-option-icons') {
   @include overflow-menu-option-icons;
 }
+
+/// Extra-small overflow menu trigger + options (Carbon React `size="xs"`
+/// parity, 24px). v10 only ships sm/md/lg. Mirrors the v10 `--sm` rules.
+/// @access private
+/// @group components
+@mixin overflow-menu-xs {
+  .#{$prefix}--overflow-menu--xs {
+    width: to-rem(24px);
+    height: to-rem(24px);
+  }
+
+  .#{$prefix}--overflow-menu-options--xs.#{$prefix}--overflow-menu-options {
+    &[data-floating-menu-direction='bottom']::after,
+    &[data-floating-menu-direction='top']::after {
+      width: to-rem(24px);
+    }
+
+    &[data-floating-menu-direction='left']::after,
+    &[data-floating-menu-direction='right']::after {
+      height: to-rem(24px);
+    }
+  }
+
+  .#{$prefix}--overflow-menu-options--xs
+    .#{$prefix}--overflow-menu-options__option {
+    height: to-rem(24px);
+  }
+}
+
+@include exports('overflow-menu-xs') {
+  @include overflow-menu-xs;
+}
