@@ -1741,6 +1741,24 @@ describe("MultiSelect", () => {
       expect(options.length).toBeGreaterThan(0);
     });
 
+    it("should default itemHeight to the size row height", async () => {
+      const largeItems = createLargeItemList(500);
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          size: "sm",
+          virtualize: true,
+        },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      // 500 items at 32px (sm), spacer height 16000px
+      const spacer = menu.querySelector<HTMLElement>(":scope > div");
+      expect(spacer?.style.height).toBe("16000px");
+    });
+
     it.each([
       { virtualize: true, description: "with explicit virtualization" },
       {
