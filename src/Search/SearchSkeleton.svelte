@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the size of the search input.
-   * @type {"sm" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "lg" | "xl"}
    */
   export let size = "xl";
 </script>
@@ -10,6 +10,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--skeleton={true}
+  class:bx--search--xs={size === "xs"}
   class:bx--search--sm={size === "sm"}
   class:bx--search--lg={size === "lg"}
   class:bx--search--xl={size === "xl"}

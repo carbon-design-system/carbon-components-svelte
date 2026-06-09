@@ -16,7 +16,7 @@
 
   /**
    * Specify the size of the search input.
-   * @type {"sm" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "lg" | "xl"}
    */
   export let size = "xl";
 
@@ -108,6 +108,7 @@
     class:bx--search={true}
     class:bx--search--light={light}
     class:bx--search--disabled={disabled}
+    class:bx--search--xs={size === "xs"}
     class:bx--search--sm={size === "sm"}
     class:bx--search--lg={size === "lg"}
     class:bx--search--xl={size === "xl"}

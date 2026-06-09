@@ -1,11 +1,15 @@
 <script lang="ts">
   import Search from "carbon-components-svelte/Search/Search.svelte";
+  import type { ComponentProps } from "svelte";
+
+  export let size: ComponentProps<Search>["size"] = undefined;
 
   let value = "";
 </script>
 
 <Search
   bind:value
+  {size}
   labelText="Default search"
   placeholder="Search"
   closeButtonLabelText="Clear value"

@@ -57,6 +57,13 @@ describe("Search", () => {
     expect(search).toBeDisabled();
   });
 
+  it("supports the extra-small size", () => {
+    render(Search, { props: { size: "xs" } });
+
+    const search = getSearchInput("Default search");
+    expect(search.closest(".bx--search")).toHaveClass("bx--search--xs");
+  });
+
   it("handles expandable variant", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(SearchExpandable);
