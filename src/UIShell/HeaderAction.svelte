@@ -70,6 +70,7 @@
   import { slide } from "svelte/transition";
   import Close from "../icons/Close.svelte";
   import Switcher from "../icons/Switcher.svelte";
+  import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
@@ -86,10 +87,8 @@
   ]
     .filter(Boolean)
     .join(" ");
-</script>
 
-<svelte:window
-  on:click={(event) => {
+  function handleOutsideClick(event) {
     if (
       isOpen &&
       !preventCloseOnClickOutside &&
@@ -98,11 +97,12 @@
       isOpen = false;
       dispatch("close");
     }
-  }}
-/>
+  }
+</script>
 
 <button
   bind:this={ref}
+  use:dismiss={{ enabled: isOpen, type: "click", handler: handleOutsideClick }}
   type="button"
   class:bx--header__action={true}
   class:bx--header__action--active={isOpen}

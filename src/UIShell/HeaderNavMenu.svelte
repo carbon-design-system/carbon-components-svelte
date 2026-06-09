@@ -24,6 +24,7 @@
   import { setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   /**
@@ -81,16 +82,15 @@
 
   $: isCurrentSubmenu =
     Object.values($selectedItems).filter(Boolean).length > 0;
-</script>
 
-<svelte:window
-  on:click={(event) => {
+  function handleOutsideClick(event) {
     if (isOutsideClick(event, ref)) expanded = false;
-  }}
-/>
+  }
+</script>
 
 <li
   role="none"
+  use:dismiss={{ enabled: expanded, type: "click", handler: handleOutsideClick }}
   class:bx--header__submenu={true}
   class:bx--header__submenu--current={isCurrentSubmenu}
   on:click={(event) => {

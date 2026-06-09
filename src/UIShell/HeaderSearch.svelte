@@ -54,6 +54,7 @@
   import { createEventDispatcher, tick } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
+  import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
@@ -90,16 +91,15 @@
   $: selectedId = selectedResult
     ? `${id}-menuitem-${selectedResult.id ?? selectedResultIndex}`
     : undefined;
-</script>
 
-<svelte:window
-  on:mouseup={(event) => {
+  function handleOutsideMouseup(event) {
     if (active && isOutsideClick(event, refSearch)) active = false;
-  }}
-/>
+  }
+</script>
 
 <div
   bind:this={refSearch}
+  use:dismiss={{ enabled: active, type: "mouseup", handler: handleOutsideMouseup }}
   class:bx--header__search={true}
   role="search"
   class:bx--header__search--active={active}
