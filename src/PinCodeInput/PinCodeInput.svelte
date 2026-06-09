@@ -63,7 +63,7 @@
 
   /**
    * Set the size of the input.
-   * @type {"default" | "sm" | "xl"}
+   * @type {"default" | "xs" | "sm" | "xl"}
    */
   export let size = "default";
 
@@ -427,6 +427,7 @@
           class:bx--text-input--light={light}
           class:bx--text-input--invalid={hasError}
           class:bx--text-input--warning={hasWarn}
+          class:bx--text-input--xs={size === "xs"}
           class:bx--text-input--sm={size === "sm"}
           class:bx--text-input--xl={size === "xl"}
           on:input={(event) => handleInput(index, event)}

@@ -22,6 +22,7 @@
   export let helperText: ComponentProps<PinCodeInput>["helperText"] = "";
   export let id: ComponentProps<PinCodeInput>["id"] = undefined;
   export let selectTextOnFocus: ComponentProps<PinCodeInput>["selectTextOnFocus"] = false;
+  export let size: ComponentProps<PinCodeInput>["size"] = "default";
 </script>
 
 <PinCodeInput
@@ -29,6 +30,7 @@
   bind:value
   bind:code
   bind:complete
+  {size}
   {type}
   {mask}
   {uppercase}
