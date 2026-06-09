@@ -30,6 +30,7 @@ export { default as ContextMenuGroup } from "./ContextMenu/ContextMenuGroup.svel
 export { default as ContextMenuOption } from "./ContextMenu/ContextMenuOption.svelte";
 export { default as ContextMenuRadioGroup } from "./ContextMenu/ContextMenuRadioGroup.svelte";
 export { default as CopyButton } from "./CopyButton/CopyButton.svelte";
+export { default as CopyInput } from "./CopyInput/CopyInput.svelte";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
 export { default as Table } from "./DataTable/Table.svelte";
