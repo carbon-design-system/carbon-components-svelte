@@ -58,7 +58,7 @@ Use `size="sm"` for a compact breadcrumb. This pairs with an overflow menu when 
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
   <BreadcrumbItem href="/api">API</BreadcrumbItem>
   <BreadcrumbItem>
-    <OverflowMenu>
+    <OverflowMenu size="sm">
       <OverflowMenuItem href="/api/data" text="Data" />
       <OverflowMenuItem href="/api/data/latest" text="Latest" />
     </OverflowMenu>
