@@ -17,7 +17,7 @@
    * @property {Item[]} unselected
    * @event {null} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
-   * @slot {{ item: Item; index: number }}
+   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    */
 
   /**
@@ -911,7 +911,13 @@
                       : false}
                     disabled={item.disabled}
                   >
-                    <slot slot="labelChildren" {item} index={actualIndex}>
+                    <slot
+                      slot="labelChildren"
+                      {item}
+                      index={actualIndex}
+                      selected={item.isSelectAll ? allSelected : item.checked}
+                      highlighted={highlightedIndex === actualIndex}
+                    >
                       {itemToString(item)}
                     </slot>
                   </Checkbox>
@@ -966,7 +972,13 @@
                   : false}
                 disabled={item.disabled}
               >
-                <slot slot="labelChildren" {item} {index}>
+                <slot
+                  slot="labelChildren"
+                  {item}
+                  {index}
+                  selected={item.isSelectAll ? allSelected : item.checked}
+                  highlighted={highlightedIndex === index}
+                >
                   {itemToString(item)}
                 </slot>
               </Checkbox>
