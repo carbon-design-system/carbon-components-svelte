@@ -1,4 +1,10 @@
 <script>
+  /**
+   * Specify the size of the pagination.
+   * @type {"sm" | "md" | "lg"}
+   */
+  export let size = "md";
+
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
 </script>
 
@@ -6,6 +12,8 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--pagination={true}
+  class:bx--pagination--sm={size === "sm"}
+  class:bx--pagination--lg={size === "lg"}
   class:bx--skeleton={true}
   {...$$restProps}
   on:click
