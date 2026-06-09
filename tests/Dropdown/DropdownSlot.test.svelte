@@ -18,6 +18,14 @@
   labelText="Custom slot dropdown"
   let:item
   let:index
+  let:selected
+  let:highlighted
 >
-  <span data-testid="custom-item"> Item {index + 1}: {item.text} </span>
+  <span
+    data-testid="custom-item"
+    data-selected={selected}
+    data-highlighted={highlighted}
+  >
+    Item {index + 1}: {item.text}
+  </span>
 </Dropdown>

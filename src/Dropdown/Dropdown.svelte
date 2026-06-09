@@ -12,7 +12,7 @@
    * @type {object}
    * @property {Item["id"]} selectedId
    * @property {Item} selectedItem
-   * @slot {{ item: Item; index: number; }}
+   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    */
 
   /**
@@ -572,7 +572,14 @@
                     highlightedIndex = actualIndex;
                   }}
                 >
-                  <slot {item} index={actualIndex}> {itemToString(item)} </slot>
+                  <slot
+                    {item}
+                    index={actualIndex}
+                    selected={selectedId === item.id}
+                    highlighted={highlightedIndex === actualIndex}
+                  >
+                    {itemToString(item)}
+                  </slot>
                   {#if selectedId === item.id}
                     <Checkmark class="bx--list-box__menu-item__selected-icon" />
                   {/if}
@@ -602,7 +609,14 @@
                 highlightedIndex = index;
               }}
             >
-              <slot {item} {index}> {itemToString(item)} </slot>
+              <slot
+                {item}
+                {index}
+                selected={selectedId === item.id}
+                highlighted={highlightedIndex === index}
+              >
+                {itemToString(item)}
+              </slot>
               {#if selectedId === item.id}
                 <Checkmark class="bx--list-box__menu-item__selected-icon" />
               {/if}
