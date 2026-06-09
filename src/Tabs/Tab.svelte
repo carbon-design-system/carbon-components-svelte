@@ -4,6 +4,10 @@
    */
 
   /**
+   * @slot {{ selected: boolean; }}
+   */
+
+  /**
    * Specify the tab label.
    * Alternatively, use the default slot.
    * @example
@@ -115,7 +119,7 @@
     {#if $hasSecondaryLabel}
       <div class:bx--tabs__nav-item-label-wrapper={true}>
         <span class:bx--tabs__nav-item-label={true}>
-          <slot>{label}</slot>
+          <slot {selected}>{label}</slot>
         </span>
         {#if icon}
           <div class:bx--tabs__nav-item--icon={true}>
@@ -137,7 +141,9 @@
         ></div>
       {/if}
     {:else}
-      <span class:bx--tabs__nav-item-label={true}> <slot>{label}</slot> </span>
+      <span class:bx--tabs__nav-item-label={true}>
+        <slot {selected}>{label}</slot>
+      </span>
       {#if icon}
         <div class:bx--tabs__nav-item--icon={true}>
           <svelte:component this={icon} />
