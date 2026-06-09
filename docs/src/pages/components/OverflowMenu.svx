@@ -103,7 +103,7 @@ Set `primaryFocus` to `true` on a menu item to focus it when opening the dropdow
 
 ## Item icons
 
-Set `icon` for a left icon or `iconRight` for a right icon. The label fills the space between them. Use the `icon` and `iconRight` slots for custom markup.
+Set `icon` for a left icon or `iconRight` for a right icon. The label fills the space between them. Use the `icon` and `iconRight` slots for custom markup. Note that item icons are not intended for use with small (`sm`) or extra-small (`xs`) menu sizes.
 
 <OverflowMenu>
   <OverflowMenuItem icon={Edit} text="Rename" />
