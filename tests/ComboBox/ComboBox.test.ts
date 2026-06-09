@@ -1781,6 +1781,41 @@ describe("ComboBox", () => {
       expect(options.length).toBeLessThan(15);
     });
 
+    it("should default itemHeight to the size row height", async () => {
+      const largeItems = createLargeItemList(500);
+      render(ComboBox, {
+        props: {
+          items: largeItems,
+          size: "sm",
+          virtualize: true,
+        },
+      });
+
+      await user.click(getInput());
+
+      const menu = screen.getAllByRole("listbox")[1];
+      // 500 items at 32px (sm), spacer height 16000px
+      const spacer = menu.querySelector<HTMLElement>(":scope > div");
+      expect(spacer?.style.height).toBe("16000px");
+    });
+
+    it("should use explicit itemHeight instead of the size default", async () => {
+      const largeItems = createLargeItemList(500);
+      render(ComboBox, {
+        props: {
+          items: largeItems,
+          size: "sm",
+          virtualize: { itemHeight: 50 },
+        },
+      });
+
+      await user.click(getInput());
+
+      const menu = screen.getAllByRole("listbox")[1];
+      const spacer = menu.querySelector<HTMLElement>(":scope > div");
+      expect(spacer?.style.height).toBe("25000px");
+    });
+
     it("should maintain selection when virtualized", async () => {
       const largeItems = createLargeItemList(500);
       render(ComboBox, {
