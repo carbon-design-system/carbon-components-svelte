@@ -1,7 +1,7 @@
 <script>
   /**
    * Specify the size of the pagination.
-   * @type {"sm" | "md" | "lg"}
+   * @type {"xs" | "sm" | "md" | "lg"}
    */
   export let size = "md";
 
@@ -12,6 +12,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--pagination={true}
+  class:bx--pagination--xs={size === "xs"}
   class:bx--pagination--sm={size === "sm"}
   class:bx--pagination--lg={size === "lg"}
   class:bx--skeleton={true}

@@ -16,6 +16,12 @@ describe("PaginationSkeleton", () => {
     expect(pagination).not.toHaveClass("bx--pagination--lg");
   });
 
+  it("applies the extra small size modifier class", () => {
+    const { container } = render(PaginationSkeleton, { props: { size: "xs" } });
+
+    expect(getRoot(container)).toHaveClass("bx--pagination--xs");
+  });
+
   it("applies the small size modifier class", () => {
     const { container } = render(PaginationSkeleton, { props: { size: "sm" } });
 
