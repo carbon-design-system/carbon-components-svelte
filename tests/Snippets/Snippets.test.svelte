@@ -59,9 +59,12 @@
   {/snippet}
 </Dropdown>
 
-<ComboBox data-testid="combobox-snippet" {items}>
-  {#snippet children({ item, index })}
-    <span data-testid="combobox-item-{index}">{item.text} - index {index}</span>
+<ComboBox data-testid="combobox-snippet" {items} selectedId="2">
+  {#snippet children({ item, index, selected })}
+    <span data-testid="combobox-item-{index}" data-selected={selected}
+      >{item.text}
+      - index {index}</span
+    >
   {/snippet}
 </ComboBox>
 
