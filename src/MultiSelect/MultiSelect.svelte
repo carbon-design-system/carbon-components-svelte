@@ -867,7 +867,7 @@
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
                 <ListBoxMenuItem
-                  id={`${id}-${item.id}`}
+                  id="{id}-{item.id}"
                   role="option"
                   aria-labelledby="checkbox-{id}-{item.id}"
                   aria-selected={item.isSelectAll ? allSelected : item.checked}
@@ -928,7 +928,7 @@
         {:else}
           {#each itemsToRender as item, index (item.id)}
             <ListBoxMenuItem
-              id={`${id}-${item.id}`}
+              id="{id}-{item.id}"
               role="option"
               aria-labelledby="checkbox-{id}-{item.id}"
               aria-selected={item.isSelectAll ? allSelected : item.checked}
