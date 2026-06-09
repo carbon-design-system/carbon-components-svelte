@@ -32,7 +32,7 @@ Format the display text of items using the `itemToString` prop. This example app
 
 ## Custom slot
 
-Override the default slot to customize item rendering. This example shows how to access and use the item and index values.
+Override the default slot to customize item rendering. Use `let:item`, `let:index`, `let:selected`, and `let:highlighted` to access each item's data and its derived selected and highlighted state.
 
 <FileSource src="/framed/MultiSelect/MultiSelectSlot" />
 
