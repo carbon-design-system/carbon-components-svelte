@@ -156,3 +156,137 @@ describe("dismiss action", () => {
     action.destroy();
   });
 });
+
+describe("dismiss listener pooling", () => {
+  const clickAdds = (spy: ReturnType<typeof vi.spyOn>) =>
+    spy.mock.calls.filter((c: unknown[]) => c[0] === "click").length;
+
+  test("many open consumers share one window listener", () => {
+    const addSpy = vi.spyOn(window, "addEventListener");
+    const removeSpy = vi.spyOn(window, "removeEventListener");
+
+    const handlers = Array.from({ length: 5 }, () => vi.fn());
+    const actions = handlers.map((handler) =>
+      dismiss(document.createElement("div"), {
+        enabled: true,
+        type: "click",
+        handler,
+      }),
+    );
+
+    expect(clickAdds(addSpy)).toBe(1);
+
+    window.dispatchEvent(new MouseEvent("click"));
+    for (const h of handlers) expect(h).toHaveBeenCalledTimes(1);
+
+    // Listener stays until the last consumer is destroyed.
+    for (const a of actions.slice(0, -1)) a.destroy();
+    expect(removeSpy.mock.calls.filter((c) => c[0] === "click").length).toBe(0);
+    actions[actions.length - 1].destroy();
+    expect(removeSpy.mock.calls.filter((c) => c[0] === "click").length).toBe(1);
+
+    addSpy.mockRestore();
+    removeSpy.mockRestore();
+  });
+
+  test("calls consumers in registration order", () => {
+    const order: number[] = [];
+    const a = dismiss(document.createElement("div"), {
+      enabled: true,
+      type: "click",
+      handler: () => order.push(1),
+    });
+    const b = dismiss(document.createElement("div"), {
+      enabled: true,
+      type: "click",
+      handler: () => order.push(2),
+    });
+    const c = dismiss(document.createElement("div"), {
+      enabled: true,
+      type: "click",
+      handler: () => order.push(3),
+    });
+
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(order).toEqual([1, 2, 3]);
+
+    a.destroy();
+    b.destroy();
+    c.destroy();
+  });
+
+  test("unregister during dispatch skips removed consumer", () => {
+    const calls: string[] = [];
+    let inner: ReturnType<typeof dismiss>;
+    const outer = dismiss(document.createElement("div"), {
+      enabled: true,
+      type: "click",
+      handler: () => {
+        calls.push("outer");
+        inner.destroy();
+      },
+    });
+    inner = dismiss(document.createElement("div"), {
+      enabled: true,
+      type: "click",
+      handler: () => calls.push("inner"),
+    });
+
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(calls).toEqual(["outer"]);
+
+    outer.destroy();
+  });
+
+  test("consumer added mid-dispatch waits for the next event", () => {
+    const calls: string[] = [];
+    let added: ReturnType<typeof dismiss> | undefined;
+
+    const first = dismiss(document.createElement("div"), {
+      enabled: true,
+      type: "click",
+      handler: () => {
+        calls.push("first");
+        if (added) return;
+        added = dismiss(document.createElement("div"), {
+          enabled: true,
+          type: "click",
+          handler: () => calls.push("added"),
+        });
+      },
+    });
+
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(calls).toEqual(["first"]);
+
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(calls).toEqual(["first", "first", "added"]);
+
+    first.destroy();
+    added?.destroy();
+  });
+
+  test("capture and bubble get separate listeners", () => {
+    const addSpy = vi.spyOn(window, "addEventListener");
+    const bubble = vi.fn();
+    const capture = vi.fn();
+
+    const a = dismiss(document.createElement("div"), {
+      enabled: true,
+      type: "click",
+      handler: bubble,
+    });
+    const b = dismiss(document.createElement("div"), {
+      enabled: true,
+      type: "click",
+      handler: capture,
+      options: { capture: true },
+    });
+
+    expect(clickAdds(addSpy)).toBe(2);
+
+    a.destroy();
+    b.destroy();
+    addSpy.mockRestore();
+  });
+});
