@@ -1,7 +1,7 @@
 <script>
   /**
    * Set the size of the input.
-   * @type {"sm" | "xl"}
+   * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
 
@@ -138,6 +138,7 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
       class:bx--label--inline={inline}
+      class:bx--label--inline--xs={inline && size === "xs"}
       class:bx--label--inline--sm={inline && size === "sm"}
       class:bx--label--inline--xl={inline && size === "xl"}
     >
@@ -161,6 +162,7 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
       class:bx--label--inline={inline}
+      class:bx--label--inline--xs={inline && size === "xs"}
       class:bx--label--inline--sm={inline && size === "sm"}
       class:bx--label--inline--xl={inline && size === "xl"}
     >
@@ -207,6 +209,7 @@
         class:bx--text-input--light={light}
         class:bx--text-input--invalid={invalid}
         class:bx--text-input--warning={warn}
+        class:bx--text-input--xs={size === "xs"}
         class:bx--text-input--sm={size === "sm"}
         class:bx--text-input--xl={size === "xl"}
         {...$$restProps}
