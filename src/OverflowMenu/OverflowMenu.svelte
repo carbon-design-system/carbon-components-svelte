@@ -88,6 +88,7 @@
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { keyBy } from "../utils/keyBy.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
@@ -245,22 +246,21 @@
   // performance. The previous approach created individual `style` tags per
   // instance, causing overhead when many OverflowMenu components are rendered.
   $: overflowMenuOptionsAfterWidth = buttonWidth ? `${buttonWidth}px` : "2rem";
-</script>
 
-<svelte:window
-  on:click={(event) => {
+  function handleOutsideClick(event) {
     if (menuRef && isOutsideClick(event, [buttonRef, menuRef])) {
       const shouldContinue = dispatch("close", null, { cancelable: true });
       if (shouldContinue) {
         open = false;
       }
     }
-  }}
-/>
+  }
+</script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   bind:this={buttonRef}
+  use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
   type="button"
   {disabled}
   aria-haspopup="menu"
