@@ -361,6 +361,23 @@ describe("Dropdown", () => {
     expect(customItems[2]).toHaveTextContent("Item 3: Option 3");
   });
 
+  it("should pass selected and highlighted to the default slot", async () => {
+    render(DropdownSlot, { props: { selectedId: "1" } });
+
+    await user.click(screen.getByLabelText("Custom slot dropdown"));
+
+    const customItems = screen.getAllByTestId("custom-item");
+
+    // selectedId "1" is the second item, not index 1.
+    expect(customItems[0]).toHaveAttribute("data-selected", "false");
+    expect(customItems[1]).toHaveAttribute("data-selected", "true");
+    expect(customItems[2]).toHaveAttribute("data-selected", "false");
+
+    await user.hover(customItems[2]);
+    expect(customItems[2]).toHaveAttribute("data-highlighted", "true");
+    expect(customItems[0]).toHaveAttribute("data-highlighted", "false");
+  });
+
   it("supports custom label slot", () => {
     render(DropdownLabelChildren);
 
