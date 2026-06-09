@@ -715,6 +715,17 @@ Pass a function to `shouldFilterRows` to implement custom filtering logic.
 
 <FileSource src="/framed/DataTable/DataTableFilterCustom" />
 
+## Filtering strategy
+
+By default (`filterMode="remove"`), filtering unmounts non-matching rows, resetting their focus, draft inputs, and open menus. This keeps the DOM small for large tables.
+
+Set `filterMode` to `"hide"` to keep every row mounted and hide non-matching rows instead, preserving row state when cells hold inputs or other widgets. In the example below, type a note, filter the row away, then clear the search—the note remains.
+
+> [!NOTE]
+> `filterMode="hide"` has no effect when `pageSize` is set or `virtualize` is enabled. Selection, "select all", and `filteredRowIds` still reflect matching rows only.
+
+<FileSource src="/framed/DataTable/DataTableFilterMode" />
+
 ## Zebra stripes
 
 Set `zebra` to `true` to add alternating row colors.
