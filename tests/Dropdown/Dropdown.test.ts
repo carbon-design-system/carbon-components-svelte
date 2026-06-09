@@ -15,7 +15,9 @@ import DropdownLabelChildren from "./Dropdown.slot.test.svelte";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownDuplicateIds from "./DropdownDuplicateIds.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
+import DropdownIconSlots from "./DropdownIconSlots.test.svelte";
 import DropdownInModal from "./DropdownInModal.test.svelte";
+import DropdownItemIcon from "./DropdownItemIcon.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
 
 const items = [
@@ -2089,6 +2091,73 @@ describe("Dropdown", () => {
 
       await user.keyboard("{ArrowDown}");
       expect(button).toHaveAttribute("aria-activedescendant", "contact-1");
+    });
+  });
+
+  describe("item icons", () => {
+    it("should render item.icon left of the label", () => {
+      render(DropdownItemIcon);
+
+      const withIcon = screen
+        .getByTestId("item-0")
+        .closest(".bx--list-box__menu-item");
+      expect(
+        withIcon?.querySelector(".bx--list-box__menu-item__icon svg"),
+      ).toBeInTheDocument();
+
+      const noIcon = screen
+        .getByTestId("item-1")
+        .closest(".bx--list-box__menu-item");
+      expect(
+        noIcon?.querySelector(".bx--list-box__menu-item__icon"),
+      ).toBeNull();
+    });
+
+    it("should expose selected and highlighted on the item slot", () => {
+      render(DropdownItemIcon);
+
+      expect(screen.getByTestId("item-0")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("item-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+    });
+
+    it("should render the checkmark when iconRight is absent", () => {
+      render(DropdownItemIcon);
+
+      const selected = screen
+        .getByTestId("item-0")
+        .closest(".bx--list-box__menu-item");
+      expect(
+        selected?.querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeInTheDocument();
+    });
+
+    it("should prefer the icon slot over item.icon", () => {
+      render(DropdownIconSlots);
+
+      expect(screen.getByTestId("left-0")).toBeInTheDocument();
+      expect(screen.getByTestId("left-1")).toBeInTheDocument();
+    });
+
+    it("should render iconRight instead of the checkmark", () => {
+      render(DropdownIconSlots);
+
+      expect(screen.getByTestId("right-0")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("right-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+      expect(
+        document.querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeNull();
     });
   });
 });

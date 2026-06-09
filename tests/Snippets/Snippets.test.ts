@@ -54,6 +54,11 @@ describe("Svelte 5 Snippets", () => {
       expect(item0).toHaveTextContent("Option 1 (#0)");
       expect(item1).toHaveTextContent("Option 2 (#1)");
       expect(item2).toHaveTextContent("Option 3 (#2)");
+
+      // items have ids "1","2","3"; selectedId="1" -> index 0 (item0)
+      expect(item0).toHaveAttribute("data-selected", "true");
+      expect(item1).toHaveAttribute("data-selected", "false");
+      expect(item2).toHaveAttribute("data-selected", "false");
     });
   });
 
@@ -64,6 +69,28 @@ describe("Svelte 5 Snippets", () => {
       const customLabel = screen.getByTestId("dropdown-custom-label");
       expect(customLabel).toBeInTheDocument();
       expect(customLabel).toHaveTextContent("Custom label content");
+    });
+  });
+
+  describe("Dropdown icon/iconRight", () => {
+    it("should render icon and iconRight snippets with selected", async () => {
+      render(Snippets);
+
+      const dropdown = screen.getByTestId("dropdown-icon-snippets");
+      const button = dropdown.querySelector("button");
+      if (!button) throw new Error("expected dropdown trigger button");
+      await user.click(button);
+
+      // items have ids "1","2","3"; selectedId="1" is selected
+      expect(screen.getByTestId("dropdown-icon-1")).toBeInTheDocument();
+      expect(screen.getByTestId("dropdown-icon-right-1")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("dropdown-icon-right-2")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
     });
   });
 
