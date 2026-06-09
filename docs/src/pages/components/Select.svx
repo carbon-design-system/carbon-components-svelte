@@ -91,6 +91,18 @@ Group related options using select item group components.
   </SelectItemGroup>
 </Select>
 
+## Extra-small size
+
+Use the extra-small size variant for the most compact layouts.
+
+<Select size="xs" labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
 ## Small size
 
 Use the small size variant for compact layouts.
