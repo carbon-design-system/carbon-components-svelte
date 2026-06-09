@@ -124,6 +124,7 @@
 
   let copying = false;
   let copied = false;
+  let copyButtonRef: HTMLElement | null = null;
 
   $: copyIcon = copied ? Checkmark : Copy;
   $: copyIconDescription = formatCopyIconDescription(copied, markdownBytes);
@@ -152,6 +153,9 @@
         copyTimeout = setTimeout(() => {
           copied = false;
           copyTimeout = null;
+          // Blur the button so the icon-only tooltip closes; it otherwise
+          // stays open while the button retains focus after the click.
+          copyButtonRef?.blur();
         }, 2000);
       }
     }
@@ -186,6 +190,7 @@
           />
           <Stack orientation="horizontal" align="center" gap={2}>
             <Button
+              bind:ref={copyButtonRef}
               class="copy-markdown-btn"
               kind="ghost"
               size="field"
