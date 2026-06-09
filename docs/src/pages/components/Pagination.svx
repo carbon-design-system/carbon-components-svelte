@@ -10,9 +10,27 @@ Pagination provides navigation controls for large data sets. It shows the curren
 
 ## Default
 
-Create a basic pagination component with default page size options.
+Create a basic pagination component with default page size options. The default size is `"md"` (40px).
 
 <Pagination totalItems={102} pageSizes={[10, 15, 20]} />
+
+## Extra small size
+
+Set `size` to `"xs"` (24px) to pair pagination with a compact (`size="compact"`) data table.
+
+<Pagination size="xs" totalItems={102} pageSizes={[10, 15, 20]} />
+
+## Small size
+
+Set `size` to `"sm"` (32px) for a small pagination.
+
+<Pagination size="sm" totalItems={102} pageSizes={[10, 15, 20]} />
+
+## Large size
+
+Set `size` to `"lg"` (48px) for a large pagination.
+
+<Pagination size="lg" totalItems={102} pageSizes={[10, 15, 20]} />
 
 ## Current page
 
@@ -58,28 +76,26 @@ Disable the page size selector by setting `pageSizeInputDisabled` to `true`.
 
 <Pagination totalItems={102} pageSizeInputDisabled />
 
-## Small size
-
-Set `size` to `"sm"` for a small pagination.
-
-<Pagination size="sm" totalItems={102} pageSizes={[10, 15, 20]} />
-
-## Large size
-
-Set `size` to `"lg"` for a large pagination.
-
-<Pagination size="lg" totalItems={102} pageSizes={[10, 15, 20]} />
-
 ## Skeleton
 
 Use the pagination skeleton to show a loading state.
 
 <PaginationSkeleton />
 
-## Skeleton sizes
+## Skeleton (extra-small)
 
-The skeleton accepts the same `size` prop as `Pagination`.
+Display a loading state for the extra small pagination variant.
+
+<PaginationSkeleton size="xs" />
+
+## Skeleton (small)
+
+Display a loading state for the small pagination variant.
 
 <PaginationSkeleton size="sm" />
-<PaginationSkeleton />
+
+## Skeleton (large)
+
+Display a loading state for the large pagination variant.
+
 <PaginationSkeleton size="lg" />
