@@ -36,6 +36,16 @@ Switching the `key` only hydrates `value` from storage; it does not dispatch an 
 
 <FileSource src="/framed/LocalStorage/LocalStorageReactiveKey" />
 
+## Disabling cross-tab sync
+
+With `sync="on"` (the default), another tab writing the same key updates `value` and fires `on:update`. Set `sync="off"` to ignore those writes. The component still loads storage on mount and saves your own changes.
+
+Use `sync="off"` when each tab should keep separate state: drafts, forms in progress, or a second login tab that should not clobber the first. You can also turn sync off if the app resolves conflicts itself. `sync` is reactive, so you can change it at runtime.
+
+```svelte
+<LocalStorage key="draft" bind:value sync="off" />
+```
+
 ## Clear item, clear all
 
 The component provides methods to manage stored data:
