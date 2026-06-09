@@ -359,7 +359,7 @@ The compiled `css/*.css` files are committed to the repo. After any edit under `
 bun build:css
 ```
 
-This compiles every non-partial `*.scss` (sass, compressed) through autoprefixer and rewrites `css/*.css` and `css/css.d.ts`. Commit the regenerated CSS with your SCSS changes.
+This compiles every non-partial `*.scss` (sass, compressed) through Lightning CSS (Svelte 5 browser targets) and rewrites `css/*.css` and `css/css.d.ts`. Commit the regenerated CSS with your SCSS changes.
 
 ### Checks
 
