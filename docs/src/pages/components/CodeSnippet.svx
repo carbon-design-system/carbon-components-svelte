@@ -5,23 +5,11 @@
 
 Code snippets display and copy code examples. They support single-line, multi-line, and inline formats with customizable copy and expand functionality.
 
-This component uses the native, asynchronous [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text.
-
-You can override the default copy functionality with your own implementation. See [Overriding copy functionality](#overriding-copy-functionality).
-
 ## Default
 
-Display a single-line code snippet by default.
+Display a single-line code snippet by default. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text. Pass a function to `copy` to replace it. See [Overriding copy functionality](#overriding-copy-functionality).
 
 <CodeSnippet code="npm i carbon-components-svelte" />
-
-## Overriding copy functionality
-
-Pass a custom function to the `copy` prop to override the default copy behavior.
-
-This example uses the open source module [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
-
-<FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
 
 ## Async copy
 
@@ -32,6 +20,14 @@ During the request, the copy control sets `aria-busy="true"` and ignores further
 Prefetch on hover with `on:mouseenter:copy-button` on the copy control. The example below shows async copy for each variant (`single`, `inline`, `multi`).
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetAsync" />
+
+## Overriding copy functionality
+
+Pass a custom function to the `copy` prop to override the default copy behavior.
+
+This example uses [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
 
 ## Preventing copy functionality
 
