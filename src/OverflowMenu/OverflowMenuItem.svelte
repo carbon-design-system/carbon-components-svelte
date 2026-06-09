@@ -1,6 +1,12 @@
 <script>
   /**
+   * @template [Icon=any]
+   */
+
+  /**
    * @event {MouseEvent} click
+   * @slot {{}} icon
+   * @slot {{}} iconRight
    */
 
   /**
@@ -14,6 +20,32 @@
    * ```
    */
   export let text = "Provide text";
+
+  /**
+   * Specify an icon to render to the left of the item text.
+   * Alternatively, use the "icon" slot.
+   * @type {Icon}
+   * @example
+   * ```svelte
+   * <OverflowMenuItem>
+   *   <Icon slot="icon" />
+   * </OverflowMenuItem>
+   * ```
+   */
+  export let icon = /** @type {Icon} */ (undefined);
+
+  /**
+   * Specify an icon to render pinned to the right edge of the item.
+   * Alternatively, use the "iconRight" slot.
+   * @type {Icon}
+   * @example
+   * ```svelte
+   * <OverflowMenuItem>
+   *   <Icon slot="iconRight" />
+   * </OverflowMenuItem>
+   * ```
+   */
+  export let iconRight = /** @type {Icon} */ (undefined);
 
   /** Specify the `href` attribute if the item is a link */
   export let href = "";
@@ -130,9 +162,25 @@
     <!-- svelte-ignore a11y-missing-attribute -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <a bind:this={ref} {...buttonProps} on:click={handleClick} on:keydown>
+      {#if $$slots.icon || icon}
+        <div
+          class:bx--overflow-menu-options__option-icon={true}
+          class:bx--overflow-menu-options__option-icon--left={true}
+        >
+          <slot name="icon"><svelte:component this={icon} /></slot>
+        </div>
+      {/if}
       <slot>
         <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
       </slot>
+      {#if $$slots.iconRight || iconRight}
+        <div
+          class:bx--overflow-menu-options__option-icon={true}
+          class:bx--overflow-menu-options__option-icon--right={true}
+        >
+          <slot name="iconRight"><svelte:component this={iconRight} /></slot>
+        </div>
+      {/if}
     </a>
   {:else}
     <button
@@ -142,9 +190,25 @@
       on:click={handleClick}
       on:keydown
     >
+      {#if $$slots.icon || icon}
+        <div
+          class:bx--overflow-menu-options__option-icon={true}
+          class:bx--overflow-menu-options__option-icon--left={true}
+        >
+          <slot name="icon"><svelte:component this={icon} /></slot>
+        </div>
+      {/if}
       <slot>
         <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
       </slot>
+      {#if $$slots.iconRight || iconRight}
+        <div
+          class:bx--overflow-menu-options__option-icon={true}
+          class:bx--overflow-menu-options__option-icon--right={true}
+        >
+          <slot name="iconRight"><svelte:component this={iconRight} /></slot>
+        </div>
+      {/if}
     </button>
   {/if}
 </li>

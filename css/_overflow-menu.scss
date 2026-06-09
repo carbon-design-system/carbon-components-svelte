@@ -23,3 +23,39 @@
 @include exports('overflow-menu-disabled') {
   @include overflow-menu-disabled;
 }
+
+/// Left/right icon support for overflow menu items (non-standard Carbon layout).
+/// @access private
+/// @group components
+@mixin overflow-menu-option-icons {
+  .#{$prefix}--overflow-menu-options__option-icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+
+    // Follow the button text color across hover, danger, and disabled states.
+    svg {
+      fill: currentColor;
+    }
+  }
+
+  .#{$prefix}--overflow-menu-options__option-icon--left {
+    margin-right: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--overflow-menu-options__option-icon--right {
+    margin-left: auto;
+    padding-left: $carbon--spacing-05;
+  }
+
+  // Let the text region grow so the right icon pins to the edge while the text truncates.
+  .#{$prefix}--overflow-menu-options__btn
+    .#{$prefix}--overflow-menu-options__option-content:not(:only-child) {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@include exports('overflow-menu-option-icons') {
+  @include overflow-menu-option-icons;
+}
