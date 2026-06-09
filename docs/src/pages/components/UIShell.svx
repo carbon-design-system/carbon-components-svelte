@@ -82,6 +82,12 @@ Add a global search component to the header.
 
 <FileSource src="/framed/UIShell/HeaderSearch" />
 
+## Header with custom search results
+
+Override the default slot to customize how each result displays. Use `let:result`, `let:index`, and `let:selected` to style the highlighted result.
+
+<FileSource src="/framed/UIShell/HeaderSearchSlot" />
+
 ## Header with utilities
 
 Include utility components in the header using header utilities.
