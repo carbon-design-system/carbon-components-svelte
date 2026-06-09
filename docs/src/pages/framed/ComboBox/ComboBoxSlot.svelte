@@ -12,11 +12,16 @@
   ]}
   let:item
   let:index
+  let:selected
+  let:highlighted
 >
   <div>
     <strong>{item.text}</strong>
   </div>
-  <div>id: {item.id} - index:{index}</div>
+  <div>
+    id: {item.id} - index: {index} - selected: {selected} - highlighted:
+    {highlighted}
+  </div>
 </ComboBox>
 
 <style>
