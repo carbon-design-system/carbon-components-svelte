@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
-import { CodeSnippet } from "carbon-components-svelte";
+import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
 import { user } from "../utils/user";
 import CodeSnippetAsync from "./CodeSnippetAsync.test.svelte";
 import CodeSnippetAsyncDoubleClick from "./CodeSnippetAsyncDoubleClick.test.svelte";

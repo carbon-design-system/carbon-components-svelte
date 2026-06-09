@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CopyInput } from "carbon-components-svelte";
+  import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
   import type { ComponentProps } from "svelte";
 
   export let value = "secret-token-123";

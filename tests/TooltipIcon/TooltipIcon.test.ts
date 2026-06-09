@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import type { TooltipIcon as TooltipIconSource } from "carbon-components-svelte";
 import type TooltipIconComponent from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
@@ -9,7 +8,7 @@ import TooltipIconMultiple from "./TooltipIconMultiple.test.svelte";
 import TooltipIconPortal from "./TooltipIconPortal.test.svelte";
 import TooltipIconReactive from "./TooltipIconReactive.test.svelte";
 
-type Props = ComponentProps<TooltipIconSource>;
+type Props = ComponentProps<TooltipIconComponent>;
 
 describe("TooltipIcon", () => {
   let consoleLog: Console["log"];

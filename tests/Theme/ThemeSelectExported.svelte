@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-  import { Theme } from "carbon-components-svelte";
+  import Theme from "carbon-components-svelte/Theme/Theme.svelte";
 </script>
 
 <Theme

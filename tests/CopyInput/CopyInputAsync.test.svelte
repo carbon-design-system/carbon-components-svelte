@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CopyInput } from "carbon-components-svelte";
+  import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 
   export let copy: (text: string) => void | Promise<void> = async () => {};
   export let onCopy = () => {};
