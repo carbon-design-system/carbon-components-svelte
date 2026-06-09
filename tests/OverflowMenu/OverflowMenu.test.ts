@@ -216,6 +216,7 @@ describe("OverflowMenu", () => {
   });
 
   test.each([
+    ["xs", "bx--overflow-menu--xs"],
     ["sm", "bx--overflow-menu--sm"],
     ["xl", "bx--overflow-menu--xl"],
   ] as const)("should support %s size", (size, expectedClass) => {
