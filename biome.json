@@ -73,9 +73,6 @@
               "svelte": {
                 "importNames": ["onDestroy"],
                 "message": "Use the return function from onMount instead of onDestroy."
-              },
-              "vitest": {
-                "message": "Vitest functions are automatically imported."
               }
             }
           }
@@ -184,6 +181,28 @@
         "rules": {
           "correctness": {
             "noUnusedVariables": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["tests/**", "!tests/package-exports.test-d.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "carbon-components-svelte": {
+                    "message": "Avoid the barrel import in tests; import directly (e.g. \"carbon-components-svelte/Button/Button.svelte\") to keep Vitest transforms fast."
+                  },
+                  "vitest": {
+                    "message": "Vitest functions are automatically imported."
+                  }
+                }
+              }
+            }
           }
         }
       }
