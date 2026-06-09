@@ -259,6 +259,7 @@
     ListBoxSelection,
   } from "../ListBox";
   import { getMenuMaxHeight } from "../ListBox/list-box-utils.js";
+  import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
@@ -588,29 +589,24 @@
   ]
     .filter(Boolean)
     .join(" ");
-</script>
 
-<svelte:window
-  on:click={(event) => {
+  function handleOutsideInteraction(event) {
     if (
       open &&
       isOutsideClick(event, [multiSelectRef, effectivePortalMenu && listRef])
     ) {
       open = false;
     }
-  }}
-  on:focusin={(event) => {
-    if (
-      open &&
-      isOutsideClick(event, [multiSelectRef, effectivePortalMenu && listRef])
-    ) {
-      open = false;
-    }
-  }}
-/>
+  }
+</script>
 
 <div
   bind:this={multiSelectRef}
+  use:dismiss={{
+    enabled: open,
+    type: ["click", "focusin"],
+    handler: handleOutsideInteraction,
+  }}
   class:bx--multi-select__wrapper={true}
   class:bx--list-box__wrapper={true}
   class:bx--multi-select__wrapper--inline={inline}
