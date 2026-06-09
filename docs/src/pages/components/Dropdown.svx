@@ -228,7 +228,7 @@ Specify a custom value for `threshold` to control when virtualization activates.
 
 ## Virtualized items (custom item height)
 
-The default item height for virtualization is 40 pixels. When using custom slots to render items with different heights (for example, multi-line items with descriptions), specify a custom `itemHeight` value to match your item's actual height.
+By default, item height matches the menu row for each size: 32px (`sm`), 40px (`md`), 48px (`lg`, `xl`). Set `itemHeight` when custom slots change row height.
 
 <FileSource src="/framed/Dropdown/VirtualizeItemHeight" />
 

@@ -1274,6 +1274,25 @@ describe("Dropdown", () => {
       });
     });
 
+    it("should default itemHeight to the size row height", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          size: "sm",
+          virtualize: true,
+        },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      const menu = screen.getByRole("listbox");
+      // 500 items at 32px (sm), spacer height 16000px
+      const spacer = menu.querySelector<HTMLElement>(":scope > div");
+      expect(spacer?.style.height).toBe("16000px");
+    });
+
     it("should accept virtualization configuration object", async () => {
       const largeItems = createLargeItemList(500);
       render(Dropdown, {
