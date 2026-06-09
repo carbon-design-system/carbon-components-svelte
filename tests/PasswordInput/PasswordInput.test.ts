@@ -162,6 +162,13 @@ describe("PasswordInput", () => {
       expect(wrapper).toHaveClass("bx--text-input-wrapper--inline");
     });
 
+    it("should render in extra-small size", () => {
+      render(PasswordInput, { labelText: "Password", size: "xs" });
+
+      const input = screen.getByLabelText("Password");
+      expect(input).toHaveClass("bx--text-input--xs");
+    });
+
     it("should render in small size", () => {
       render(PasswordInput, { labelText: "Password", size: "sm" });
 
