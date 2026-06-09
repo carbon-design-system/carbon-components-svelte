@@ -24,7 +24,7 @@ describe("TextInput", () => {
   });
 
   it("should handle different sizes", () => {
-    const sizes = ["sm", "xl"] as const;
+    const sizes = ["xs", "sm", "xl"] as const;
     for (const size of sizes) {
       const { unmount } = render(TextInput, {
         props: { size },

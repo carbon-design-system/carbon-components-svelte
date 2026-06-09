@@ -1,0 +1,26 @@
+// Extends the v10 text input with the extra-small (`xs`) size added in
+// newer Carbon (React `size="xs"`, 24px height). v10 only ships sm/md/lg.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Extra-small text input variant (Carbon React `size="xs"` parity)
+/// @access private
+/// @group components
+@mixin text-input-xs {
+  .#{$prefix}--text-input--xs {
+    height: to-rem(24px);
+  }
+
+  // Vertically center the inline label against the 24px field
+  // (v10 uses 9px for sm/32px, 13px for md/40px — 4px per 8px step).
+  .#{$prefix}--text-input-wrapper .#{$prefix}--label--inline--xs {
+    margin-top: to-rem(5px);
+  }
+}
+
+@include exports("text-input-xs") {
+  @include text-input-xs;
+}
