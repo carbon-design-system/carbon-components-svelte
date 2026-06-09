@@ -63,6 +63,7 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { dismiss } from "../utils/dismiss.js";
 
   const insideModal = getContext("carbon:Modal");
 
@@ -113,16 +114,14 @@
       clearTimeout(openTimeout);
     };
   });
-</script>
-
-<svelte:window
-  on:keydown={(event) => {
+  function handleEscape(event) {
     if (event.key === "Escape") hide();
-  }}
-/>
+  }
+</script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
+  use:dismiss={{ enabled: open, type: "keydown", handler: handleEscape }}
   class:bx--tooltip--definition={true}
   class:bx--tooltip--a11y={true}
   {...$$restProps}
