@@ -83,6 +83,19 @@ Set `mask` to `true` to obscure the entered characters. Each segment is masked w
   on:paste
 />
 
+## Extra-small size
+
+Set `size` to `"xs"` to render extra-small segments.
+
+<PinCodeInput
+  size="xs"
+  labelText="Verification code"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
 ## Small size
 
 Set `size` to `"sm"` to render small segments.
