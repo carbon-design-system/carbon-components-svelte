@@ -51,6 +51,7 @@
     setContext,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
 
@@ -176,6 +177,13 @@
   $: level = ctx ? 2 : 1;
   $: currentIndex.set(focusIndex);
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
+
+  function handleOutsideClick(event) {
+    if (open && isOutsideClick(event, ref)) close();
+  }
+  function handleEscape(event) {
+    if (open && event.key === "Escape") close();
+  }
 </script>
 
 <svelte:window
@@ -184,12 +192,6 @@
     if (level > 1) return;
     if (!ref) return;
     openMenu(event);
-  }}
-  on:click={(event) => {
-    if (open && isOutsideClick(event, ref)) close();
-  }}
-  on:keydown={(event) => {
-    if (open && event.key === "Escape") close();
   }}
 />
 
@@ -205,6 +207,13 @@
       if ($hasPopup) return;
       focusIndex = index;
     },
+  }}
+  use:dismiss={{
+    enabled: open,
+    listeners: [
+      { type: "click", handler: handleOutsideClick },
+      { type: "keydown", handler: handleEscape },
+    ],
   }}
   role="menu"
   tabindex="-1"
