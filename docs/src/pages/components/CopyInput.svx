@@ -1,0 +1,103 @@
+<script>
+  import { CopyInput, FluidForm } from "carbon-components-svelte";
+  import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
+</script>
+
+Copy inputs display read-only values in a text field with a built-in copy button. Use them in forms and settings panels for labeled copyable values such as API tokens, endpoint URLs, and resource IDs.
+
+Use [CodeSnippet](/components/CodeSnippet) for install commands and code samples in content. Use [TextInput](/components/TextInput#readonly) with `readonly` when the value is display-only and copying is not the primary action.
+
+## Default
+
+Set `value` to the string to show and copy. By default, focusing the field selects the full value.
+
+<CopyInput labelText="API endpoint" value="https://api.example.com/v1" />
+
+Set `selectOnFocus` to `false` to leave the caret placement unchanged.
+
+<CopyInput selectOnFocus={false} labelText="API endpoint" value="https://api.example.com/v1" />
+
+## Async copy
+
+Pass an async `copy` function when the text is not available at render time, for example a token fetched on click. Feedback appears after `copy()` resolves.
+
+While `copy()` is pending, the copy button sets `aria-busy="true"` and ignores clicks. On failure, skip feedback and listen for `copy:error`.
+
+Prefetch on hover with `on:mouseenter:copy-button`.
+
+<FileSource src="/framed/CopyInput/CopyInputAsync" />
+
+## Obscured value
+
+Set `type` to `"password"` to obscure the value. The value is revealed while the input is focused. The copy button still copies the full value while obscured.
+
+<CopyInput labelText="API token" type="password" value="sk-1234567890abcdef" />
+
+## Truncation
+
+Long values truncate with an ellipsis when the field is narrower than the text. Focus or select the field to see the full value. Copy always uses the complete `value`.
+
+<div style="max-width: 20rem;">
+  <CopyInput
+    labelText="Repository"
+    value="git@github.com:carbon-design-system/carbon-components-svelte.git"
+  />
+</div>
+
+## Helper text
+
+<CopyInput
+  labelText="Cluster ID"
+  value="prod-cluster-9f2a"
+  helperText="Use this ID when contacting support."
+/>
+
+## Sizes
+
+Set `size` to `"sm"` or `"xl"`.
+
+<CopyInput size="sm" labelText="Small" value="npm install carbon-components-svelte" />
+<br />
+<CopyInput labelText="Default" value="npm install carbon-components-svelte" />
+<br />
+<CopyInput size="xl" labelText="Extra large" value="npm install carbon-components-svelte" />
+
+## Inline label
+
+<CopyInput inline labelText="Token" value="sk-1234567890abcdef" />
+
+## Custom feedback text
+
+Set `feedback` to customize the message shown after copying.
+
+<CopyInput labelText="Repository" value="git@github.com:carbon-design-system/carbon-components-svelte.git" feedback="Copied to clipboard" />
+
+## Custom feedback icon
+
+Set `feedbackIcon` to show a different icon while feedback is visible. The copy icon returns when feedback closes.
+
+<CopyInput labelText="API endpoint" value="https://api.example.com/v1" feedbackIcon={Checkmark} />
+
+## Light variant
+
+<CopyInput light labelText="API endpoint" value="https://api.example.com/v1" />
+
+## Portal tooltip
+
+Set `portalTooltip` to render the copy feedback tooltip in a portal so it is not clipped by `overflow: hidden` containers. Inside a [Modal](/components/Modal), portalling is enabled by default unless you set `portalTooltip` to `false`.
+
+<FileSource src="/framed/CopyInput/CopyInputPortalTooltip" />
+
+## Inside a modal
+
+When used inside a `Modal`, the copy feedback tooltip is automatically portalled so it is not clipped by `overflow: hidden`. Set `portalTooltip` to explicitly control this behavior.
+
+<FileSource src="/framed/CopyInput/CopyInputInModal" />
+
+## Fluid
+
+Wrap in `FluidForm` for the fluid layout.
+
+<FluidForm>
+  <CopyInput labelText="API token" value="sk-1234567890abcdef" />
+</FluidForm>
