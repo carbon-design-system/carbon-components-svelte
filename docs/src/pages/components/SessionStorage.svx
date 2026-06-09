@@ -33,6 +33,16 @@ Switching the `key` only hydrates `value` from storage; it does not dispatch an 
 
 <FileSource src="/framed/SessionStorage/SessionStorageReactiveKey" />
 
+## Disabling sync
+
+With `sync="on"` (the default), the component listens for the `storage` event and updates `value` when another same-origin document in this tab writes the same key, such as an iframe. Set `sync="off"` to ignore those writes. The component still loads storage on mount and saves your own changes.
+
+`sessionStorage` is already per tab, so this matters mainly when an iframe shares the session. Turn sync off when the host page should not follow iframe writes, or when the app handles conflicts itself. `sync` is reactive, so you can change it at runtime.
+
+```svelte
+<SessionStorage key="draft" bind:value sync="off" />
+```
+
 ## Clear item, clear all
 
 The component provides methods to manage stored data:
