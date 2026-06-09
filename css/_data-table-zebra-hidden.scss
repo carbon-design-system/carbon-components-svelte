@@ -1,0 +1,24 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Zebra striping for DataTable `filterMode="hide"`.
+/// Hidden rows keep their `:nth-child` index, so Carbon's `:nth-child` zebra
+/// rules are disabled (the `--zebra` class is dropped) and parity is recomputed
+/// in JS over visible rows, written to `[data-zebra-even]`.
+/// @access private
+/// @group components
+@mixin data-table-zebra-hidden {
+  .#{$prefix}--data-table tr[hidden] {
+    display: none;
+  }
+
+  .#{$prefix}--data-table tbody tr[data-zebra-even] td {
+    border-top: 1px solid $data-table-zebra-color;
+    border-bottom: 1px solid $data-table-zebra-color;
+    background-color: $data-table-zebra-color;
+  }
+}
+
+@include exports('data-table-zebra-hidden') {
+  @include data-table-zebra-hidden;
+}
