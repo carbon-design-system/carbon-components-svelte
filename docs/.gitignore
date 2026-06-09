@@ -7,3 +7,6 @@
 /.routify
 src/SEARCH_INDEX.json
 src/COMPONENT_MD_SIZES.json
+src/component-api/components/
+src/component-api/highlighted-primitives.json
+src/component-api/module-names.json

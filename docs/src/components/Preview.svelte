@@ -1,6 +1,6 @@
 <script lang="ts">
-  export let code = "";
   export let codeRaw = "";
+  export let codeHighlighted = "";
   export let src = "";
   export let framed = false;
 
@@ -49,7 +49,7 @@
   </div>
   <div class="code-override">
     <CodeSnippet type="multi" code={codeRaw} copy={(text) => copy(text)}>
-      {@html code}
+      {@html codeHighlighted}
     </CodeSnippet>
   </div>
 </div>

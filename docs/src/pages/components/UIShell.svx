@@ -121,7 +121,7 @@ Set `theme="classic"` on both `Header` and `SideNav` for the classic look: **Gra
 > [!NOTE]
 > The classic theme requires **carbon-components-svelte/css/all.css** because it uses CSS custom properties.
 
-```css
+```js
 import "carbon-components-svelte/css/all.css";
 ```
 

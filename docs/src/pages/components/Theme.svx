@@ -11,7 +11,7 @@ The component can persist theme preferences using [window.localStorage](https://
 
 You must use the `all.css` StyleSheet for dynamic theming, which uses [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties).
 
-```css
+```js
 import "carbon-components-svelte/css/all.css";
 ```
 
