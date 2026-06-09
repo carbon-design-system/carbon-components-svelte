@@ -323,6 +323,7 @@
             itemHeight: virtualConfig.itemHeight,
             containerHeight: virtualConfig.containerHeight,
             overscan: virtualConfig.overscan ?? 3,
+            maxItems: virtualConfig.maxItems,
           });
           if (nextScrollTop !== null) {
             listScrollTop = nextScrollTop;

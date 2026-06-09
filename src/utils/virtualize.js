@@ -183,6 +183,7 @@ export function getBoundedScrollTop({
  * @param {number} options.itemHeight
  * @param {number} options.containerHeight
  * @param {number} [options.overscan=3]
+ * @param {number} [options.maxItems]
  * @returns {number | null}
  */
 export function scrollHighlightedIntoView({
@@ -192,6 +193,7 @@ export function scrollHighlightedIntoView({
   itemHeight,
   containerHeight,
   overscan = 3,
+  maxItems = undefined,
 }) {
   const { startIndex: visibleStartIndex, endIndex: visibleEndIndex } =
     getVisibleRange({
@@ -200,6 +202,7 @@ export function scrollHighlightedIntoView({
       containerHeight,
       itemCount,
       overscan,
+      maxItems,
     });
 
   if (

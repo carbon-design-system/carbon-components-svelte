@@ -98,6 +98,7 @@ export type ScrollHighlightedIntoViewOptions = {
   containerHeight: number;
   /** @default 3 */
   overscan?: number;
+  maxItems?: number;
 };
 
 /**

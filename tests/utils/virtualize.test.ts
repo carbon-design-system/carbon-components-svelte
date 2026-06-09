@@ -618,6 +618,27 @@ describe("scrollHighlightedIntoView", () => {
       }),
     ).toBeNull();
   });
+
+  test("scrolls to an item inside the raw viewport but beyond the maxItems cap", () => {
+    // scrollTop 0 raw range is [0, 11), but maxItems caps the rendered window
+    // to [0, 5). Item 7 looks visible to the raw formula yet is not rendered.
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 7,
+        currentScrollTop: 0,
+        maxItems: 5,
+      }),
+    ).toBe(280);
+    // Without the cap the same item is treated as already visible.
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 7,
+        currentScrollTop: 0,
+      }),
+    ).toBeNull();
+  });
 });
 
 describe("scrollSelectedIntoView", () => {
