@@ -553,7 +553,7 @@
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
                 <ListBoxMenuItem
-                  id={`${id}-${item.id}`}
+                  id="{id}-{item.id}"
                   active={selectedId === item.id}
                   highlighted={highlightedIndex === actualIndex}
                   disabled={item.disabled}
@@ -590,7 +590,7 @@
         {:else}
           {#each itemsToRender as item, index (item.id)}
             <ListBoxMenuItem
-              id={`${id}-${item.id}`}
+              id="{id}-{item.id}"
               active={selectedId === item.id}
               highlighted={highlightedIndex === index}
               disabled={item.disabled}
