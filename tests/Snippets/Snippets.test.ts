@@ -86,6 +86,24 @@ describe("Svelte 5 Snippets", () => {
     });
   });
 
+  describe("OverflowMenuItem icon/iconRight", () => {
+    it("should render icon and iconRight slots as snippets", () => {
+      render(Snippets);
+
+      const leftIcon = screen.getByTestId("overflow-item-icon-left");
+      expect(leftIcon).toBeInTheDocument();
+      expect(
+        leftIcon.closest(".bx--overflow-menu-options__option-icon--left"),
+      ).toBeInTheDocument();
+
+      const rightIcon = screen.getByTestId("overflow-item-icon-right");
+      expect(rightIcon).toBeInTheDocument();
+      expect(
+        rightIcon.closest(".bx--overflow-menu-options__option-icon--right"),
+      ).toBeInTheDocument();
+    });
+  });
+
   describe("Button", () => {
     it("should render default slot props when using 'as' prop", () => {
       render(Snippets);

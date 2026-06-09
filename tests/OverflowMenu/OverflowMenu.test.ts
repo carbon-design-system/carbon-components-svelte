@@ -12,6 +12,7 @@ import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
 import OverflowMenuTriggerClose from "./OverflowMenu.triggerClose.test.svelte";
 import OverflowMenuInModal from "./OverflowMenuInModal.test.svelte";
+import OverflowMenuItemIcons from "./OverflowMenuItem.icons.test.svelte";
 
 describe("OverflowMenu", () => {
   // Regression: ?? for aria-label so empty string is used (not fallback)
@@ -309,11 +310,8 @@ describe("OverflowMenu", () => {
     const menuButton = screen.getByRole("button");
     await user.click(menuButton);
 
-    const menuItems = screen.getAllByRole("menuitem");
-    const dangerItem = menuItems.find(
-      (item) => item.textContent === "Delete service",
-    );
-    expect(dangerItem?.parentElement).toHaveClass(
+    const dangerItem = screen.getByRole("menuitem", { name: "Delete service" });
+    expect(dangerItem.parentElement).toHaveClass(
       "bx--overflow-menu-options__option--danger",
     );
   });
@@ -324,11 +322,10 @@ describe("OverflowMenu", () => {
     const menuButton = screen.getByRole("button");
     await user.click(menuButton);
 
-    const menuItems = screen.getAllByRole("menuitem");
-    const buttonItem = menuItems.find(
-      (item) => item.textContent === "Manage credentials",
-    );
-    expect(buttonItem?.tagName).toBe("BUTTON");
+    const buttonItem = screen.getByRole("menuitem", {
+      name: "Manage credentials",
+    });
+    expect(buttonItem.tagName).toBe("BUTTON");
     expect(buttonItem).toHaveAttribute("type", "button");
   });
 
@@ -338,10 +335,9 @@ describe("OverflowMenu", () => {
     const menuButton = screen.getByRole("button");
     await user.click(menuButton);
 
-    const menuItems = screen.getAllByRole("menuitem");
-    const linkItem = menuItems.find(
-      (item) => item.textContent === "API documentation",
-    );
+    const linkItem = screen.getByRole("menuitem", {
+      name: "API documentation",
+    });
     expect(linkItem).toHaveAttribute(
       "href",
       "https://cloud.ibm.com/docs/api-gateway/",
@@ -355,10 +351,9 @@ describe("OverflowMenu", () => {
     const menuButton = screen.getByRole("button");
     await user.click(menuButton);
 
-    const menuItems = screen.getAllByRole("menuitem");
-    const linkItem = menuItems.find(
-      (item) => item.textContent === "API documentation",
-    );
+    const linkItem = screen.getByRole("menuitem", {
+      name: "API documentation",
+    });
     expect(linkItem).toHaveAttribute("target", "_blank");
     expect(linkItem).toHaveAttribute("rel", "noopener noreferrer");
   });
@@ -501,14 +496,13 @@ describe("OverflowMenu", () => {
     await user.click(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
 
-    const menuItems = screen.getAllByRole("menuitem");
-    const disabledLink = menuItems.find(
-      (item) => item.textContent === "API documentation",
-    );
-    expect(disabledLink?.tagName).toBe("A");
+    const disabledLink = screen.getByRole("menuitem", {
+      name: "API documentation",
+    });
+    expect(disabledLink.tagName).toBe("A");
     expect(disabledLink).toHaveAttribute("aria-disabled", "true");
     expect(disabledLink).toHaveAttribute("tabindex", "-1");
-    expect(disabledLink?.parentElement).toHaveClass(
+    expect(disabledLink.parentElement).toHaveClass(
       "bx--overflow-menu-options__option--disabled",
     );
 
@@ -516,7 +510,7 @@ describe("OverflowMenu", () => {
       bubbles: true,
       cancelable: true,
     });
-    disabledLink?.dispatchEvent(clickEvent);
+    disabledLink.dispatchEvent(clickEvent);
 
     expect(clickEvent.defaultPrevented).toBe(true);
     expect(consoleLog).not.toHaveBeenCalledWith("click", "API documentation");
@@ -801,6 +795,42 @@ describe("OverflowMenu", () => {
       } finally {
         Element.prototype.getBoundingClientRect = original;
       }
+    });
+  });
+
+  describe("item icons", () => {
+    it("renders left and right icon wrappers from the icon/iconRight props", () => {
+      render(OverflowMenuItemIcons);
+
+      const bothIcons = screen.getByRole("menuitem", { name: "Both icons" });
+      expect(
+        bothIcons.querySelector(
+          ".bx--overflow-menu-options__option-icon--left",
+        ),
+      ).toBeInTheDocument();
+      expect(
+        bothIcons.querySelector(
+          ".bx--overflow-menu-options__option-icon--right",
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("renders the iconRight slot content", () => {
+      render(OverflowMenuItemIcons);
+
+      const slotIcon = screen.getByTestId("slot-icon-right");
+      expect(
+        slotIcon.closest(".bx--overflow-menu-options__option-icon--right"),
+      ).toBeInTheDocument();
+    });
+
+    it("omits icon wrappers when neither prop nor slot is provided", () => {
+      render(OverflowMenuItemIcons);
+
+      const noIcons = screen.getByRole("menuitem", { name: "No icons" });
+      expect(
+        noIcons.querySelector(".bx--overflow-menu-options__option-icon"),
+      ).toBeNull();
     });
   });
 

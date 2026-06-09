@@ -3,6 +3,8 @@
   import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+  import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
+  import OverflowMenuItem from "carbon-components-svelte/OverflowMenu/OverflowMenuItem.svelte";
   import ProgressIndicator from "carbon-components-svelte/ProgressIndicator/ProgressIndicator.svelte";
   import ProgressStep from "carbon-components-svelte/ProgressIndicator/ProgressStep.svelte";
   import Tab from "carbon-components-svelte/Tabs/Tab.svelte";
@@ -62,6 +64,17 @@
     <span data-testid="combobox-item-{index}">{item.text} - index {index}</span>
   {/snippet}
 </ComboBox>
+
+<OverflowMenu data-testid="overflow-menu-snippet" open>
+  <OverflowMenuItem text="Edit">
+    {#snippet icon()}
+      <span data-testid="overflow-item-icon-left">L</span>
+    {/snippet}
+    {#snippet iconRight()}
+      <span data-testid="overflow-item-icon-right">R</span>
+    {/snippet}
+  </OverflowMenuItem>
+</OverflowMenu>
 
 <Button data-testid="button-snippet" as let:props>
   <div {...props} data-testid="custom-button">Custom Button Element</div>
