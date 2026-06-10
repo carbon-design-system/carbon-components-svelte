@@ -703,12 +703,20 @@
               }
             } else if (event.key === "Tab") {
               open = false;
-            } else if (event.key === "ArrowDown") {
-              if (!open) open = true;
-              change(1);
-            } else if (event.key === "ArrowUp") {
-              if (!open) open = true;
-              change(-1);
+            } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+              const step = event.key === "ArrowDown" ? 1 : -1;
+              if (event.altKey) {
+                // APG combobox pattern: Alt+ArrowDown opens a closed menu
+                // without moving the highlight; Alt+ArrowUp closes an open one.
+                if (event.key === "ArrowDown" && !open) {
+                  open = true;
+                } else if (event.key === "ArrowUp" && open) {
+                  open = false;
+                }
+              } else {
+                if (!open) open = true;
+                change(step);
+              }
             } else if (event.key === "Escape") {
               open = false;
             } else if (event.key === " ") {
@@ -794,12 +802,20 @@
             open = !open;
           } else if (event.key === "Tab") {
             open = false;
-          } else if (event.key === "ArrowDown") {
-            if (!open) open = true;
-            change(1);
-          } else if (event.key === "ArrowUp") {
-            if (!open) open = true;
-            change(-1);
+          } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+            const step = event.key === "ArrowDown" ? 1 : -1;
+            if (event.altKey) {
+              // APG combobox pattern: Alt+ArrowDown opens a closed menu
+              // without moving the highlight; Alt+ArrowUp closes an open one.
+              if (event.key === "ArrowDown" && !open) {
+                open = true;
+              } else if (event.key === "ArrowUp" && open) {
+                open = false;
+              }
+            } else {
+              if (!open) open = true;
+              change(step);
+            }
           } else if (event.key === "Enter") {
             if (highlightedIndex > -1) {
               const item = (filterable ? filteredItems : sortedItems)[

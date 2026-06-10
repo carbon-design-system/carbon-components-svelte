@@ -66,6 +66,32 @@ test.describe("MultiSelect", () => {
     await expect(page.getByTestId("selected-count")).toContainText("1");
   });
 
+  test("opens with Alt+ArrowDown without moving the highlight", async ({
+    page,
+  }) => {
+    const trigger = page.getByTestId("multiselect-fruits");
+    await trigger.focus();
+    await expect(page.getByRole("option", { name: "Apple" })).not.toBeVisible();
+
+    await page.keyboard.press("Alt+ArrowDown");
+
+    await expect(page.getByRole("option", { name: "Apple" })).toBeVisible();
+    expect(await trigger.getAttribute("aria-activedescendant")).toBeNull();
+  });
+
+  test("closes open menu with Alt+ArrowUp and keeps focus", async ({
+    page,
+  }) => {
+    const trigger = page.getByTestId("multiselect-fruits");
+    await trigger.click();
+    await expect(page.getByRole("option", { name: "Apple" })).toBeVisible();
+
+    await page.keyboard.press("Alt+ArrowUp");
+
+    await expect(page.getByRole("option", { name: "Apple" })).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+  });
+
   test.describe("isSelectAll", () => {
     test("renders select-all option first and applies selectall class", async ({
       page,
