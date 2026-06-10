@@ -66,6 +66,62 @@ test.describe("ComboBox", () => {
     await expect(combobox).toHaveValue("Slack");
   });
 
+  test("opens closed menu with ArrowDown and highlights the first option", async ({
+    page,
+  }) => {
+    const combobox = page.getByTestId("combobox-contact");
+    await combobox.focus();
+    await expect(page.locator(".bx--list-box__menu")).not.toBeVisible();
+
+    await page.keyboard.press("ArrowDown");
+
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+    // Slack (id="0") is the first option.
+    await expect(combobox).toHaveAttribute("aria-activedescendant", /-0$/);
+
+    await page.keyboard.press("Enter");
+    await expect(combobox).toHaveValue("Slack");
+  });
+
+  test("opens closed menu with ArrowUp and highlights the last option", async ({
+    page,
+  }) => {
+    const combobox = page.getByTestId("combobox-contact");
+    await combobox.focus();
+
+    await page.keyboard.press("ArrowUp");
+
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+    // Fax (id="2") is the last option.
+    await expect(combobox).toHaveAttribute("aria-activedescendant", /-2$/);
+
+    await page.keyboard.press("Enter");
+    await expect(combobox).toHaveValue("Fax");
+  });
+
+  test("opens closed menu with Alt+ArrowDown without moving the highlight", async ({
+    page,
+  }) => {
+    const combobox = page.getByTestId("combobox-contact");
+    await combobox.focus();
+
+    await page.keyboard.press("Alt+ArrowDown");
+
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+    await expect(combobox).toHaveAttribute("aria-activedescendant", "");
+  });
+
+  test("closes open menu with Alt+ArrowUp", async ({ page }) => {
+    const combobox = page.getByTestId("combobox-contact");
+    await combobox.click();
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+
+    await page.keyboard.press("Alt+ArrowUp");
+
+    await expect(page.locator(".bx--list-box__menu")).not.toBeVisible();
+    await expect(combobox).toBeFocused();
+  });
+
   test("closes menu with Escape", async ({ page }) => {
     const combobox = page.getByTestId("combobox-contact");
     await combobox.click();
