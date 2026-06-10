@@ -13,6 +13,10 @@
   }
 </script>
 
+<!-- Sits above every ComboBox so a downward-opening menu never overlaps it,
+     keeping it clickable as an outside-click target in any state. -->
+<button type="button" data-testid="outside-target">Outside target</button>
+
 <ComboBox
   data-testid="combobox-contact"
   labelText="Contact"
@@ -32,3 +36,16 @@
   selectedId="1"
   value="Email"
 />
+
+<div data-testid="combobox-clear-reopen-wrapper">
+  <ComboBox
+    data-testid="combobox-clear-reopen"
+    labelText="Clear reopen"
+    placeholder="Select"
+    {items}
+    {shouldFilterItem}
+    openOnClear
+    selectedId="1"
+    value="Email"
+  />
+</div>
