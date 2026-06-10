@@ -1,4 +1,10 @@
-import { render, screen, waitFor, within } from "@testing-library/svelte";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/svelte";
 import type MultiSelectComponent from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
@@ -950,6 +956,69 @@ describe("MultiSelect", () => {
       await openMenu();
       const emailOption = screen.getByRole("option", { name: "Email" });
       expect(emailOption).toHaveAttribute("disabled");
+    });
+  });
+
+  describe("focus outline", () => {
+    // Carbon resets the field's own `:focus` outline to transparent and relies
+    // on a `--input-focused` class to render the visible, theme-aware outline.
+    it("toggles the input-focused class on the default field wrapper", async () => {
+      render(MultiSelect, { props: { items, labelText: "Contact methods" } });
+
+      // The outline renders on the field wrapper, not the focusable field
+      // itself, so Carbon's transparent `:focus` reset cannot win by specificity.
+      const field = screen.getByRole("combobox");
+      const wrapper = field.closest(".bx--list-box__field--wrapper");
+      expect(wrapper).not.toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+
+      fireEvent.focus(field);
+      await tick();
+      expect(wrapper).toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+
+      fireEvent.blur(field);
+      await tick();
+      expect(wrapper).not.toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+    });
+
+    it("keeps the input-focused class while the menu is open", () => {
+      // Selecting an item bounces focus to the option and back; tying the
+      // outline to `open` (not just focus) keeps it stable mid-interaction.
+      render(MultiSelect, { props: { items, open: true } });
+
+      const wrapper = screen
+        .getByRole("combobox")
+        .closest(".bx--list-box__field--wrapper");
+      expect(wrapper).toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+    });
+
+    it("toggles the input-focused class on the filterable field", async () => {
+      render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter..." },
+      });
+
+      const input = screen.getByRole("combobox");
+      const field = input.closest(".bx--list-box__field");
+      expect(field).not.toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+
+      fireEvent.focus(input);
+      await tick();
+      expect(field).toHaveClass("bx--list-box__field--wrapper--input-focused");
+
+      fireEvent.blur(input);
+      await tick();
+      expect(field).not.toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
     });
   });
 

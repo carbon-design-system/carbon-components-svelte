@@ -278,6 +278,7 @@
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
 
+  let fieldFocused = false;
   let highlightedIndex = -1;
   let prevHighlightedIndex = -1;
   let prevChecked = [];
@@ -517,6 +518,10 @@
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
   $: inline = type === "inline";
+  // Keep the focus outline on the field while the menu is open, not just while
+  // the field itself is focused: selecting an item bounces focus to the option
+  // and back, which would otherwise drop the outline mid-interaction.
+  $: showFieldFocus = fieldFocused || open;
   // Invalid/warn states are suppressed when the multi-select is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
@@ -652,7 +657,10 @@
       />
     {/if}
     {#if filterable}
-      <div class:bx--list-box__field={true}>
+      <div
+        class:bx--list-box__field={true}
+        class:bx--list-box__field--wrapper--input-focused={showFieldFocus}
+      >
         {#if selectionCount > 0}
           <ListBoxSelection
             {selectionCount}
@@ -738,7 +746,13 @@
           }}
           on:keyup
           on:focus
+          on:focus={() => {
+            fieldFocused = true;
+          }}
           on:blur
+          on:blur={() => {
+            fieldFocused = false;
+          }}
           on:paste
           {disabled}
           {readonly}
@@ -770,18 +784,30 @@
         />
       </div>
     {:else}
-      <ListBoxField
-        role="combobox"
-        tabindex="0"
-        aria-expanded={open}
-        aria-activedescendant={activeDescendantId}
-        aria-controls={open ? menuId : undefined}
-        aria-owns={open ? menuId : undefined}
-        on:click={() => {
+      <!-- The visible focus outline renders on this wrapper, not the field
+           itself: Carbon resets `.bx--list-box__field:focus` to a transparent
+           outline, which outranks the `--input-focused` rule when both target
+           the focused field. Placing `--input-focused` on the (unfocused)
+           wrapper avoids that `:focus` specificity bump. -->
+      <div
+        class:bx--list-box__field--wrapper={true}
+        class:bx--list-box__field--wrapper--input-focused={showFieldFocus}
+      >
+        <ListBoxField
+          role="combobox"
+          tabindex="0"
+          aria-expanded={open}
+          aria-activedescendant={activeDescendantId}
+          aria-controls={open ? menuId : undefined}
+          aria-owns={open ? menuId : undefined}
+          on:focus={() => {
+          fieldFocused = true;
+        }}
+          on:click={() => {
           if (disabled || readonly) return;
           open = !open;
         }}
-        on:keydown={(event) => {
+          on:keydown={(event) => {
           if (
             event.key === " " ||
             event.key === "ArrowUp" ||
@@ -811,37 +837,39 @@
             open = false;
           }
         }}
-        on:blur={(event) => {
+          on:blur={(event) => {
+          fieldFocused = false;
           dispatch("blur", event);
         }}
-        {id}
-        {disabled}
-        {readonly}
-        {translateWithId}
-      >
-        {#if selectionCount > 0}
-          <ListBoxSelection
-            {selectionCount}
-            on:clear
-            on:clear={() => {
+          {id}
+          {disabled}
+          {readonly}
+          {translateWithId}
+        >
+          {#if selectionCount > 0}
+            <ListBoxSelection
+              {selectionCount}
+              on:clear
+              on:clear={() => {
               selectedIds = [];
               sortedItems = sortedItems.map((item) => ({
                 ...item,
                 checked: false,
               }));
             }}
-            translateWithId={translateWithIdSelection}
-            {disabled}
-            {readonly}
+              translateWithId={translateWithIdSelection}
+              {disabled}
+              {readonly}
+            />
+          {/if}
+          <span class:bx--list-box__label={true}>{label}</span>
+          <ListBoxMenuIcon
+            aria-hidden={readonly || undefined}
+            {open}
+            {translateWithId}
           />
-        {/if}
-        <span class:bx--list-box__label={true}>{label}</span>
-        <ListBoxMenuIcon
-          aria-hidden={readonly || undefined}
-          {open}
-          {translateWithId}
-        />
-      </ListBoxField>
+        </ListBoxField>
+      </div>
     {/if}
     <div style:display={open || effectivePortalMenu ? "block" : "none"}>
       <ListBoxMenu
