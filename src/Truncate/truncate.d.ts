@@ -1,11 +1,13 @@
 interface TruncateOptions {
   clamp?: "end" | "front";
+  /** Number of visible lines before truncating. Values above 1 use multiline mode (end clamp only). */
+  lines?: number;
 }
 
 /**
- * Svelte action that applies single-line text truncation to an element.
+ * Svelte action that truncates text on an element.
  * @param node - The element to truncate
- * @param options - Optional clamp direction ("end" or "front")
+ * @param options - Clamp direction and line count
  * @returns Object with update method (options may be undefined when action is updated with no args)
  */
 export function truncate(

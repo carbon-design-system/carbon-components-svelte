@@ -1,0 +1,24 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Multiline text truncation for the Truncate component and `truncate` action.
+/// Clamps text to the number of lines set by the `--ccs-truncate-lines` custom
+/// property and appends an ellipsis. Carbon v10 ships only single-line
+/// `text-truncate` helpers, so this is hand-authored. Only end truncation is
+/// supported for multiline text (a `-webkit-line-clamp` limitation).
+/// @access private
+/// @group components
+@mixin text-truncate-multiline {
+  .#{$prefix}--text-truncate--multiline {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--ccs-truncate-lines, 2);
+    line-clamp: var(--ccs-truncate-lines, 2);
+    text-overflow: ellipsis;
+  }
+}
+
+@include exports("text-truncate-multiline") {
+  @include text-truncate-multiline;
+}
