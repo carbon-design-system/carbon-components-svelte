@@ -98,6 +98,7 @@
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
+  import { dismiss } from "../utils/dismiss.js";
   import { createCalendar, resolveLocale } from "./createCalendar";
   import {
     getTopLayerAncestor,
@@ -155,6 +156,8 @@
   let lastAppliedOptions = {};
   let calendarUsesFixedPositioning = false;
   let onCalendarReposition = null;
+  // Set from onOpen/onClose. Outside-click listener attaches only while open.
+  let calendarOpen = false;
 
   function attachFixedRepositionListeners() {
     if (!calendar || onCalendarReposition) return;
@@ -231,8 +234,8 @@
   function blurInput(relatedTarget) {
     if (!calendar) return;
     // No relatedTarget means focus left the document (e.g. switching browser
-    // tabs); refocusing would replay the open animation. Outside clicks are
-    // handled separately by the window click handler below.
+    // tabs); refocusing would replay the open animation. Outside clicks close
+    // via handleOutsideClick on datePickerRef.
     if (relatedTarget == null) return;
     // In range mode, focus moves between the two inputs while the calendar
     // stays open; closing here would replay the open animation on every switch.
@@ -323,6 +326,8 @@
       base: inputRef,
       input: inputRefTo,
       dispatch: (event) => {
+        if (event === "open") calendarOpen = true;
+        else if (event === "close") calendarOpen = false;
         if (calendarUsesFixedPositioning) {
           if (event === "open") attachFixedRepositionListeners();
           else if (event === "close") detachFixedRepositionListeners();
@@ -419,10 +424,11 @@
     calendar.set("clickOpens", !$readonlyAny);
     if ($readonlyAny && calendar.isOpen) calendar.close();
   }
-</script>
 
-<svelte:window
-  on:click={(event) => {
+  /**
+   * @type {(event: Event) => void}
+   */
+  function handleOutsideClick(event) {
     if (!calendar?.isOpen) return;
     if (
       isEventTargetInsidePortaledCalendar(
@@ -434,8 +440,8 @@
       return;
     }
     calendar.close();
-  }}
-/>
+  }
+</script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -450,6 +456,11 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     bind:this={datePickerRef}
+    use:dismiss={{
+      enabled: calendarOpen,
+      type: "click",
+      handler: handleOutsideClick,
+    }}
     {id}
     class:bx--date-picker={true}
     class:bx--date-picker--short={short}
