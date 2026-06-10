@@ -54,6 +54,27 @@ describe("RadioButtonGroup", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", "3");
   });
 
+  // Regression: programmatic selected changes must dispatch change once
+  it("dispatches change exactly once per programmatic selection", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { component } = render(RadioButtonGroup, {
+      props: { selected: "1" },
+    });
+
+    component.selected = "2";
+    await tick();
+    component.selected = "3";
+    await tick();
+
+    const changeCalls = consoleLog.mock.calls.filter(
+      ([event]) => event === "change",
+    );
+    expect(changeCalls).toEqual([
+      ["change", "2"],
+      ["change", "3"],
+    ]);
+  });
+
   it("should handle disabled state", () => {
     render(RadioButtonGroup, { props: { disabled: true } });
 
