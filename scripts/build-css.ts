@@ -1,13 +1,31 @@
 import { createHash } from "node:crypto";
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import autoprefixer from "autoprefixer";
+import browserslist from "browserslist";
 import { Glob } from "bun";
-import postcss from "postcss";
+import { browserslistToTargets, transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
 
 const PARTIAL_FILE_REGEX = /^_/;
 const CACHE_DIR = ".cache/build-css";
+// Svelte 5 minimum browsers — https://svelte.dev/docs/svelte/browser-support
+const BROWSERSLIST = [
+  "Chrome >= 87",
+  "Firefox >= 83",
+  "Safari >= 14",
+  "Edge >= 87",
+] as const;
+const targets = browserslistToTargets(browserslist([...BROWSERSLIST]));
+
+function postprocessCss(css: string, outFile: string): Uint8Array {
+  const { code } = transform({
+    filename: outFile,
+    code: Buffer.from(css, "utf8"),
+    targets,
+    minify: true,
+  });
+  return code;
+}
 
 const SASS_OPTIONS = {
   style: "compressed" as const,
@@ -37,12 +55,20 @@ async function readPartialContents(): Promise<string> {
 
 async function sharedInputs(): Promise<string> {
   const packageJson = JSON.parse(await readFile("package.json", "utf8")) as {
-    devDependencies?: { "carbon-components"?: string };
+    devDependencies?: {
+      "carbon-components"?: string;
+      lightningcss?: string;
+      browserslist?: string;
+    };
   };
 
   return [
     await readPartialContents(),
     packageJson.devDependencies?.["carbon-components"] ?? "",
+    packageJson.devDependencies?.lightningcss ?? "",
+    packageJson.devDependencies?.browserslist ?? "",
+    BROWSERSLIST.join(","),
+    "lightningcss-single-pass",
   ].join("\0");
 }
 
@@ -98,13 +124,11 @@ try {
 
       const { css } = await compiler.compileAsync(file, SASS_OPTIONS);
 
-      const prefixed = await postcss([
-        autoprefixer({
-          overrideBrowserslist: ["last 1 version", "ie >= 11", "Firefox ESR"],
-        }),
-      ]).process(css, { from: undefined });
+      console.time("[build-css] prefix");
+      const code = postprocessCss(css, outFile);
+      console.timeEnd("[build-css] prefix");
 
-      await Bun.write(outFile, prefixed.css);
+      await Bun.write(outFile, code);
       await writeFile(`${CACHE_DIR}/${name}.hash`, `${hash}\n`);
     }),
   );
