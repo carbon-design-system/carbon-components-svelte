@@ -1376,6 +1376,108 @@ describe("MultiSelect", () => {
       expect(options[0]).toHaveAttribute("aria-selected", "false");
       expect(options[1]).toHaveAttribute("aria-selected", "false");
     });
+
+    it("non-filterable: ArrowDown opens the menu and highlights the first item", async () => {
+      render(MultiSelect, { props: { items } });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+
+      await user.keyboard("{ArrowDown}");
+      await tick();
+
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      // The first rendered (sorted) item is highlighted.
+      expect(combobox).toHaveAttribute(
+        "aria-activedescendant",
+        screen.getAllByRole("option")[0].id,
+      );
+    });
+
+    it("filterable: ArrowDown opens the menu and highlights the first filtered item", async () => {
+      render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter..." },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      input.focus();
+
+      await user.keyboard("{ArrowDown}");
+      await tick();
+
+      expect(input).toHaveAttribute("aria-expanded", "true");
+      expect(input).toHaveAttribute(
+        "aria-activedescendant",
+        screen.getAllByRole("option")[0].id,
+      );
+    });
+
+    it("non-filterable: opens the menu on Alt+ArrowDown without moving the highlight", async () => {
+      render(MultiSelect, { props: { items } });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+
+      await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
+      await tick();
+
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("listbox")).toBeVisible();
+      expect(combobox).not.toHaveAttribute("aria-activedescendant");
+    });
+
+    it("non-filterable: closes the menu on Alt+ArrowUp and keeps focus", async () => {
+      render(MultiSelect, { props: { items } });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(combobox);
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+
+      await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
+
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+      expect(combobox).toHaveFocus();
+    });
+
+    it("treats Alt+ArrowDown on an open menu and Alt+ArrowUp on a closed menu as no-ops", async () => {
+      render(MultiSelect, { props: { items } });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+
+      // Alt+ArrowUp while closed does nothing.
+      await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+
+      // Plain ArrowDown opens and highlights the first item.
+      await user.keyboard("{ArrowDown}");
+      await tick();
+      const firstOptionId = screen.getAllByRole("option")[0].id;
+      expect(combobox).toHaveAttribute("aria-activedescendant", firstOptionId);
+
+      // Alt+ArrowDown while open keeps the menu open without moving the highlight.
+      await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      expect(combobox).toHaveAttribute("aria-activedescendant", firstOptionId);
+    });
+
+    it("filterable: opens on Alt+ArrowDown and closes on Alt+ArrowUp", async () => {
+      render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter..." },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      input.focus();
+
+      await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
+      await tick();
+      expect(input).toHaveAttribute("aria-expanded", "true");
+      expect(input).not.toHaveAttribute("aria-activedescendant");
+
+      await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
+      expect(input).toHaveAttribute("aria-expanded", "false");
+    });
   });
 
   describe("Generics", () => {
