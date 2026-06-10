@@ -16,45 +16,54 @@
     SideNavMenuItem,
     SkipToContent,
   } from "carbon-components-svelte";
-  import Fade from "carbon-icons-svelte/lib/Fade.svelte";
+  import Activity from "carbon-icons-svelte/lib/Activity.svelte";
+  import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
+  import Kubernetes from "carbon-icons-svelte/lib/Kubernetes.svelte";
+  import ListBoxes from "carbon-icons-svelte/lib/ListBoxes.svelte";
+  import Settings from "carbon-icons-svelte/lib/Settings.svelte";
 
   let isSideNavOpen = false;
 </script>
 
-<Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header companyName="IBM" platformName="Cloud" bind:isSideNavOpen>
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderNav>
-    <HeaderNavItem href="/" text="Link 1" />
-    <HeaderNavItem href="/" text="Link 2" />
-    <HeaderNavItem href="/" text="Link 3" />
-    <HeaderNavMenu text="Menu">
-      <HeaderNavItem href="/" text="Link 1" />
-      <HeaderNavItem href="/" text="Link 2" />
-      <HeaderNavItem href="/" text="Link 3" />
+    <HeaderNavItem href="/catalog" text="Catalog" />
+    <HeaderNavItem href="/docs" text="Docs" />
+    <HeaderNavItem href="/support" text="Support" />
+    <HeaderNavMenu text="Manage">
+      <HeaderNavItem href="/account" text="Account" />
+      <HeaderNavItem href="/iam" text="Access (IAM)" />
+      <HeaderNavItem href="/billing" text="Billing and usage" />
     </HeaderNavMenu>
-    <HeaderNavItem href="/" text="Link 4" />
+    <HeaderNavItem href="/status" text="Status" />
   </HeaderNav>
 </Header>
 
 <SideNav bind:isOpen={isSideNavOpen} rail>
   <SideNavItems>
-    <SideNavLink icon={Fade} text="Link 1" href="/" isSelected />
-    <SideNavLink icon={Fade} text="Link 2" href="/" />
-    <SideNavLink icon={Fade} text="Link 3" href="/" />
-    <SideNavMenu expanded icon={Fade} text="Menu">
-      <SideNavMenuItem href="/" text="Link 1" />
-      <SideNavMenuItem href="/" text="Link 2" />
-      <SideNavMenuItem href="/" text="Link 3" />
+    <SideNavLink
+      icon={Dashboard}
+      text="Dashboard"
+      href="/dashboard"
+      isSelected
+    />
+    <SideNavLink icon={ListBoxes} text="Resource list" href="/resources" />
+    <SideNavLink icon={Activity} text="Activity tracker" href="/activity" />
+    <SideNavMenu expanded icon={Kubernetes} text="Kubernetes">
+      <SideNavMenuItem href="/kubernetes/clusters" text="Clusters" />
+      <SideNavMenuItem href="/kubernetes/worker-pools" text="Worker pools" />
+      <SideNavMenuItem href="/kubernetes/registry" text="Container registry" />
     </SideNavMenu>
     <SideNavDivider />
-    <SideNavLink icon={Fade} text="Link 4" href="/" />
+    <SideNavLink icon={Settings} text="Account settings" href="/settings" />
   </SideNavItems>
 </SideNav>
 
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Welcome</h1> </Column>
+      <Column> <h1>Dashboard</h1> </Column>
     </Row>
   </Grid>
 </Content>

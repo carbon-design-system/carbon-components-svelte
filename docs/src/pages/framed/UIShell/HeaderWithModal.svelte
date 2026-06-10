@@ -22,29 +22,29 @@
   let open = false;
 </script>
 
-<Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header companyName="IBM" platformName="Cloud" bind:isSideNavOpen>
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderNav>
-    <HeaderNavItem href="/" text="Link 1" />
-    <HeaderNavItem href="/" text="Link 2" />
+    <HeaderNavItem href="/catalog" text="Catalog" />
+    <HeaderNavItem href="/docs" text="Docs" />
   </HeaderNav>
 </Header>
 
 <SideNav bind:isOpen={isSideNavOpen}>
   <SideNavItems>
-    <SideNavLink text="Link 1" />
-    <SideNavLink text="Link 2" />
-    <SideNavMenu text="Menu">
-      <SideNavMenuItem href="/" text="Link 1" />
-      <SideNavMenuItem href="/" text="Link 2" />
+    <SideNavLink href="/dashboard" text="Dashboard" />
+    <SideNavLink href="/resources" text="Resource list" />
+    <SideNavMenu text="Kubernetes">
+      <SideNavMenuItem href="/kubernetes/clusters" text="Clusters" />
+      <SideNavMenuItem href="/kubernetes/worker-pools" text="Worker pools" />
     </SideNavMenu>
   </SideNavItems>
 </SideNav>
 
 <Modal
   bind:open
-  modalHeading="Confirm action"
-  primaryButtonText="Confirm"
+  modalHeading="Create cluster"
+  primaryButtonText="Create"
   secondaryButtonText="Cancel"
   on:click:button--secondary={() => (open = false)}
   on:submit={() => (open = false)}
@@ -60,8 +60,8 @@
     <Row>
       <Column>
         <Stack gap={6}>
-          <h1>Welcome</h1>
-          <Button on:click={() => (open = true)}>Open modal</Button>
+          <h1>Clusters</h1>
+          <Button on:click={() => (open = true)}>Create cluster</Button>
         </Stack>
       </Column>
     </Row>

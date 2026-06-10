@@ -14,39 +14,39 @@
     SideNavMenuItem,
     SkipToContent,
   } from "carbon-components-svelte";
-  import Logout from "carbon-icons-svelte/lib/Logout.svelte";
-  import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
+  import Help from "carbon-icons-svelte/lib/Help.svelte";
+  import Notification from "carbon-icons-svelte/lib/Notification.svelte";
   import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
 
   let isSideNavOpen = false;
 </script>
 
-<Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header companyName="IBM" platformName="Cloud" bind:isSideNavOpen>
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderUtilities>
     <HeaderGlobalAction
-      iconDescription="Settings"
+      iconDescription="Notifications"
       tooltipAlignment="start"
-      icon={SettingsAdjust}
+      icon={Notification}
     />
-    <HeaderGlobalAction iconDescription="Profile" icon={UserAvatarFilledAlt} />
+    <HeaderGlobalAction iconDescription="Help" icon={Help} />
     <HeaderGlobalAction
-      iconDescription="Log out"
+      iconDescription="Profile"
       tooltipAlignment="end"
-      icon={Logout}
+      icon={UserAvatarFilledAlt}
     />
   </HeaderUtilities>
 </Header>
 
 <SideNav bind:isOpen={isSideNavOpen}>
   <SideNavItems>
-    <SideNavLink text="Link 1" />
-    <SideNavLink text="Link 2" />
-    <SideNavLink text="Link 3" />
-    <SideNavMenu text="Menu">
-      <SideNavMenuItem href="/" text="Link 1" />
-      <SideNavMenuItem href="/" text="Link 2" />
-      <SideNavMenuItem href="/" text="Link 3" />
+    <SideNavLink href="/dashboard" text="Dashboard" />
+    <SideNavLink href="/resources" text="Resource list" />
+    <SideNavLink href="/activity" text="Activity tracker" />
+    <SideNavMenu text="Kubernetes">
+      <SideNavMenuItem href="/kubernetes/clusters" text="Clusters" />
+      <SideNavMenuItem href="/kubernetes/worker-pools" text="Worker pools" />
+      <SideNavMenuItem href="/kubernetes/registry" text="Container registry" />
     </SideNavMenu>
   </SideNavItems>
 </SideNav>
@@ -54,7 +54,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Welcome</h1> </Column>
+      <Column> <h1>Dashboard</h1> </Column>
     </Row>
   </Grid>
 </Content>

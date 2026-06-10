@@ -28,31 +28,31 @@
 
 <Header
   companyName="IBM"
-  platformName="Carbon Svelte"
+  platformName="Cloud"
   theme="classic"
   bind:isSideNavOpen
 >
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderNav>
-    <HeaderNavItem href="/" text="Link 1" />
-    <HeaderNavItem href="/" text="Link 2" />
-    <HeaderNavItem href="/" text="Link 3" />
-    <HeaderNavMenu text="Menu">
-      <HeaderNavItem href="/" text="Link 1" />
-      <HeaderNavItem href="/" text="Link 2" />
-      <HeaderNavItem href="/" text="Link 3" />
+    <HeaderNavItem href="/catalog" text="Catalog" />
+    <HeaderNavItem href="/docs" text="Docs" />
+    <HeaderNavItem href="/support" text="Support" />
+    <HeaderNavMenu text="Manage">
+      <HeaderNavItem href="/account" text="Account" />
+      <HeaderNavItem href="/iam" text="Access (IAM)" />
+      <HeaderNavItem href="/billing" text="Billing and usage" />
     </HeaderNavMenu>
-    <HeaderNavItem href="/" text="Link 4" />
+    <HeaderNavItem href="/status" text="Status" />
   </HeaderNav>
   <HeaderUtilities>
     <HeaderAction bind:isOpen>
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
+        <HeaderPanelDivider>Switch product</HeaderPanelDivider>
+        <HeaderPanelLink href="/cloud">Cloud console</HeaderPanelLink>
+        <HeaderPanelDivider>Resources</HeaderPanelDivider>
+        <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
+        <HeaderPanelLink href="/status">Status page</HeaderPanelLink>
+        <HeaderPanelLink href="/community">Community</HeaderPanelLink>
       </HeaderPanelLinks>
     </HeaderAction>
   </HeaderUtilities>
@@ -60,23 +60,23 @@
 
 <SideNav theme="classic" bind:isOpen={isSideNavOpen}>
   <SideNavItems>
-    <SideNavLink text="Link 1" />
-    <SideNavLink text="Link 2" />
-    <SideNavLink text="Link 3" />
-    <SideNavMenu text="Menu">
-      <SideNavMenuItem href="/" text="Link 1" />
-      <SideNavMenuItem href="/" text="Link 2" />
-      <SideNavMenuItem href="/" text="Link 3" />
+    <SideNavLink href="/dashboard" text="Dashboard" />
+    <SideNavLink href="/resources" text="Resource list" />
+    <SideNavLink href="/activity" text="Activity tracker" />
+    <SideNavMenu text="Kubernetes">
+      <SideNavMenuItem href="/kubernetes/clusters" text="Clusters" />
+      <SideNavMenuItem href="/kubernetes/worker-pools" text="Worker pools" />
+      <SideNavMenuItem href="/kubernetes/registry" text="Container registry" />
     </SideNavMenu>
     <SideNavDivider />
-    <SideNavLink text="Link 4" />
+    <SideNavLink href="/settings" text="Account settings" />
   </SideNavItems>
 </SideNav>
 
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Welcome</h1> </Column>
+      <Column> <h1>Dashboard</h1> </Column>
     </Row>
   </Grid>
 </Content>

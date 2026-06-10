@@ -14,16 +14,16 @@
   let isSideNavOpen = false;
 </script>
 
-<Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header companyName="IBM" platformName="Cloud" bind:isSideNavOpen>
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderNav>
-    <HeaderNavItem href="/" text="Link 1" />
-    <HeaderNavItem href="/" text="Link 2" />
-    <HeaderNavItem href="/" text="Link 3" />
-    <HeaderNavMenu text="Menu">
-      <HeaderNavItem href="/" text="Link 1" />
-      <HeaderNavItem href="/" text="Link 2" />
-      <HeaderNavItem href="/" text="Link 3" />
+    <HeaderNavItem href="/catalog" text="Catalog" />
+    <HeaderNavItem href="/docs" text="Docs" />
+    <HeaderNavItem href="/support" text="Support" />
+    <HeaderNavMenu text="Manage">
+      <HeaderNavItem href="/account" text="Account" />
+      <HeaderNavItem href="/iam" text="Access (IAM)" />
+      <HeaderNavItem href="/billing" text="Billing and usage" />
     </HeaderNavMenu>
   </HeaderNav>
 </Header>
@@ -31,7 +31,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Welcome</h1> </Column>
+      <Column> <h1>Dashboard</h1> </Column>
     </Row>
   </Grid>
 </Content>

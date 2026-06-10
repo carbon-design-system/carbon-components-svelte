@@ -12,61 +12,65 @@
     Row,
     SkipToContent,
   } from "carbon-components-svelte";
-  import SettingsAdjust from "carbon-icons-svelte/lib/SettingsAdjust.svelte";
-  import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
+  import Help from "carbon-icons-svelte/lib/Help.svelte";
+  import Notification from "carbon-icons-svelte/lib/Notification.svelte";
 
   let isOpen1 = false;
   let isOpen2 = false;
   let isOpen3 = false;
 </script>
 
-<Header companyName="IBM" platformName="Carbon Svelte" isSideNavOpen>
+<Header companyName="IBM" platformName="Cloud" isSideNavOpen>
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderUtilities>
     <HeaderAction
       bind:isOpen={isOpen1}
-      iconDescription="Settings"
+      iconDescription="Notifications"
       tooltipAlignment="start"
-      icon={SettingsAdjust}
+      icon={Notification}
       on:open={() => {
         isOpen2 = false;
         isOpen3 = false;
       }}
     >
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+        <HeaderPanelDivider>Today</HeaderPanelDivider>
+        <HeaderPanelLink href="/activity">
+          Cluster "mycluster-prod" was updated
+        </HeaderPanelLink>
+        <HeaderPanelDivider>Earlier</HeaderPanelDivider>
+        <HeaderPanelLink href="/billing">
+          Your monthly invoice is ready
+        </HeaderPanelLink>
       </HeaderPanelLinks>
     </HeaderAction>
     <HeaderAction
       bind:isOpen={isOpen2}
-      iconDescription="Profile"
-      icon={UserAvatarFilledAlt}
+      iconDescription="Help"
+      icon={Help}
       on:open={() => {
         isOpen1 = false;
         isOpen3 = false;
       }}
     >
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+        <HeaderPanelDivider>Support</HeaderPanelDivider>
+        <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
+        <HeaderPanelDivider>Community</HeaderPanelDivider>
+        <HeaderPanelLink href="/support">Open a case</HeaderPanelLink>
       </HeaderPanelLinks>
     </HeaderAction>
     <HeaderAction
       bind:isOpen={isOpen3}
-      text="Switcher text"
+      text="IBM Cloud"
       on:open={() => {
         isOpen1 = false;
         isOpen2 = false;
       }}
     >
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+        <HeaderPanelDivider>Switch product</HeaderPanelDivider>
+        <HeaderPanelLink href="/watson-studio">Watson Studio</HeaderPanelLink>
       </HeaderPanelLinks>
     </HeaderAction>
   </HeaderUtilities>
@@ -75,7 +79,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Welcome</h1> </Column>
+      <Column> <h1>Dashboard</h1> </Column>
     </Row>
   </Grid>
 </Content>
