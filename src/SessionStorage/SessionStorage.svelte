@@ -59,7 +59,7 @@
     storage.clear();
   }
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
   import {
     parseStoredValue,
     safeBrowserStorage,
@@ -148,9 +148,12 @@
 
     if (serialized !== prevSerialized) {
       const prevValue = parseStoredValue(prevSerialized);
+      const nextValue = value;
+      // Write storage and prevSerialized first. Defer update with tick(); a
+      // synchronous dispatch that throws can abort the flush and block later writes.
       setItem(serialized);
-      dispatch("update", { prevValue, value });
       prevSerialized = serialized;
+      tick().then(() => dispatch("update", { prevValue, value: nextValue }));
     }
   }
 </script>
