@@ -242,6 +242,14 @@
    */
   export let nonSelectableRowIds = [];
 
+  /**
+   * Specify the row ids to highlight.
+   * Adds `bx--data-table--highlighted-row`. The highlighted row class is themed by default.
+   * @type {ReadonlyArray<Row["id"]>}
+   * @bindable writable
+   */
+  export let highlightedRowIds = [];
+
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
@@ -515,6 +523,7 @@
 
   // Use Sets for faster row lookups.
   $: selectedRowIdsSet = new Set(selectedRowIds);
+  $: highlightedRowIdsSet = new Set(highlightedRowIds);
   $: nonSelectableRowIdsSet = new Set(nonSelectableRowIds);
   $: nonExpandableRowIdsSet = new Set(nonExpandableRowIds);
 
@@ -887,6 +896,7 @@
             {@const actualIndex = virtualData.startIndex + index}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = !!expandedRows[row.id]}
+            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({ row, rowIndex: actualIndex, selected: isSelected, expanded: isExpanded })
@@ -899,7 +909,7 @@
                 : ''} {isExpanded ? 'bx--expandable-row' : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
               parentRowId === row.id
                 ? 'bx--expandable-row--hover'
-                : ''} {rowClassValue ?? ''}"
+                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {rowClassValue ?? ''}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
@@ -1107,6 +1117,7 @@
             {@const isExpanded = !!expandedRows[row.id]}
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
             {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
+            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({ row, rowIndex: index, selected: isSelected, expanded: isExpanded })
@@ -1126,7 +1137,7 @@
                 ? 'bx--parent-row'
                 : ''} {expandable && parentRowId === row.id
                 ? 'bx--expandable-row--hover'
-                : ''} {rowClassValue ?? ''}"
+                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {rowClassValue ?? ''}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button

@@ -101,6 +101,7 @@ $css--plex: true;
 // Custom component overrides (must come after Carbon styles; same order as white/g10/etc.)
 @import "./data-table-toolbar";
 @import "./data-table-zebra-hidden";
+@import "./data-table-highlighted-row";
 @import "./pagination";
 @import "./multiselect";
 @import "./treeview";
