@@ -458,6 +458,7 @@ function injectImportsIntoSvelteSnippet(code: string): string {
 
     walkLegacySvelteNode(root, (node) => {
       if (node.type === "InlineComponent" && typeof node.name === "string") {
+        if (node.name.startsWith("svelte:")) return;
         if (isIconName(node.name)) icons.add(node.name);
         else inlineComponents.add(node.name);
       } else if (node.type === "MustacheTag") {
