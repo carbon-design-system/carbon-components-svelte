@@ -31,9 +31,7 @@
     right: $carbon--spacing-05;
   }
 
-  .#{$prefix}--list-box__menu-item__option:has(
-      .#{$prefix}--list-box__menu-item__icon--left
-    ) {
+  .#{$prefix}--list-box__menu-item__option--icon-left {
     padding-left: $carbon--spacing-06;
   }
 }

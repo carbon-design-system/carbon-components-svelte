@@ -5,6 +5,7 @@
   export let active: ComponentProps<ListBoxMenuItem>["active"] = false;
   export let highlighted: ComponentProps<ListBoxMenuItem>["highlighted"] = false;
   export let disabled: ComponentProps<ListBoxMenuItem>["disabled"] = false;
+  export let hasLeftIcon: ComponentProps<ListBoxMenuItem>["hasLeftIcon"] = false;
   export let slotContent = "";
   export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
   export let onmouseenter: ((event: MouseEvent) => void) | undefined =
@@ -17,6 +18,7 @@
   {active}
   {highlighted}
   {disabled}
+  {hasLeftIcon}
   on:click={(e) => onclick?.(e)}
   on:mouseenter={(e) => onmouseenter?.(e)}
   on:mouseleave={(e) => onmouseleave?.(e)}

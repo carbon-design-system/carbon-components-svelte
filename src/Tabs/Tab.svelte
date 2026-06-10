@@ -114,6 +114,7 @@
     {id}
     {href}
     class:bx--tabs__nav-link={true}
+    class:bx--tabs__nav-link--icon={Boolean(icon)}
     style:width={$useFullWidth ? "100%" : $useAutoWidth ? "auto" : undefined}
   >
     {#if $hasSecondaryLabel}

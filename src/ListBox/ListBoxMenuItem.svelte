@@ -8,6 +8,9 @@
   /** Set to `true` to disable the menu item */
   export let disabled = false;
 
+  /** Set to `true` to add inline padding for a left-aligned icon */
+  export let hasLeftIcon = false;
+
   let ref = null;
 
   $: isTruncated = ref?.offsetWidth < ref?.scrollWidth;
@@ -32,7 +35,12 @@
   on:mouseenter
   on:mouseleave
 >
-  <div bind:this={ref} {title} class:bx--list-box__menu-item__option={true}>
+  <div
+    bind:this={ref}
+    {title}
+    class:bx--list-box__menu-item__option={true}
+    class:bx--list-box__menu-item__option--icon-left={hasLeftIcon}
+  >
     <slot />
   </div>
 </div>
