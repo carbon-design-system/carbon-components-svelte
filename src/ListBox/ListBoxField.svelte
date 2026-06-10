@@ -52,9 +52,10 @@
   $: menuId = `menu-${id}`;
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-<div
+<button
   bind:this={ref}
+  type="button"
+  {id}
   {role}
   aria-expanded={ariaExpanded}
   aria-owns={(ariaExpanded && menuId) || undefined}
@@ -74,4 +75,4 @@
   on:blur
 >
   <slot />
-</div>
+</button>

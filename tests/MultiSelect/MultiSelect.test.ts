@@ -1001,6 +1001,23 @@ describe("MultiSelect", () => {
       expect(screen.getByRole("listbox")).toHaveAttribute("id", menuId);
     });
 
+    it("clicking the label opens the menu and focuses the field (non-filterable)", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+
+      await user.click(screen.getByText("Contact methods"));
+
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      expect(combobox).toHaveFocus();
+    });
+
     it("filterable variant has correct ARIA attributes", () => {
       render(MultiSelect, {
         props: {

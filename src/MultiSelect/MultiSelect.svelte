@@ -179,7 +179,7 @@
 
   /**
    * Obtain a reference to the field box element.
-   * @type {null | HTMLDivElement}
+   * @type {null | HTMLButtonElement}
    * @bindable readonly
    */
   export let fieldRef = null;
@@ -287,7 +287,7 @@
   let internalSelectedIdsRef = selectedIds;
 
   /**
-   * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement }) => void}
+   * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
    */
   function declareRef({ key, ref }) {
     switch (key) {
@@ -792,9 +792,12 @@
         on:keydown={(event) => {
           if (
             event.key === " " ||
+            event.key === "Enter" ||
             event.key === "ArrowUp" ||
             event.key === "ArrowDown"
           ) {
+            // Prevent the native button from synthesizing a click (which would
+            // toggle the menu) so these keys are handled solely below.
             event.preventDefault();
           }
           if (readonly) return;
