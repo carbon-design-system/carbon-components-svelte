@@ -102,3 +102,47 @@ test.describe("UIShell HeaderSearch", () => {
     await expect(page.getByRole("menu")).toHaveCount(0);
   });
 });
+
+test.describe("UIShell ProfileMenu", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto("/uishell.html");
+  });
+
+  const trigger = (page) => page.getByRole("button", { name: "Profile" });
+  const card = (page) => page.locator(".bx--profile-menu");
+
+  test("opens from the trigger and closes on outside click, then reopens", async ({
+    page,
+  }) => {
+    await expect(card(page)).toHaveCount(0);
+
+    await trigger(page).click();
+    await expect(card(page)).toBeVisible();
+    await expect(page.getByText("Sadek Bazaraa")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Settings" })).toBeVisible();
+
+    await page.getByTestId("main-paragraph").click();
+    await expect(card(page)).toHaveCount(0);
+
+    await trigger(page).click();
+    await expect(card(page)).toBeVisible();
+  });
+
+  test("stays open when clicking inside the card", async ({ page }) => {
+    await trigger(page).click();
+    await page.getByText("Plan").click();
+    await expect(card(page)).toBeVisible();
+  });
+
+  test("closes on Escape and restores focus to the trigger", async ({
+    page,
+  }) => {
+    await trigger(page).click();
+    await expect(card(page)).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(card(page)).toHaveCount(0);
+    await expect(trigger(page)).toBeFocused();
+  });
+});

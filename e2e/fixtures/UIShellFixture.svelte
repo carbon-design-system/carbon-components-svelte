@@ -7,6 +7,11 @@
     HeaderNavMenu,
     HeaderSearch,
     HeaderUtilities,
+    ProfileMenu,
+    ProfileMenuDetail,
+    ProfileMenuDivider,
+    ProfileMenuHeader,
+    ProfileMenuItem,
     SideNav,
     SideNavItems,
     SideNavLink,
@@ -23,7 +28,20 @@
 
 <Header companyName="E2E" platformName="UIShell" bind:isSideNavOpen>
   <div slot="skipToContent"><SkipToContent href="#main-content" /></div>
-  <HeaderUtilities> <HeaderSearch results={searchResults} /> </HeaderUtilities>
+  <HeaderUtilities>
+    <HeaderSearch results={searchResults} />
+    <ProfileMenu iconDescription="Profile">
+      <ProfileMenuHeader name="Sadek Bazaraa" username="sbazaraa" href="#" />
+      <ProfileMenuDivider />
+      <ProfileMenuDetail label="Plan">
+        Lite
+        <a slot="action" href="#">Upgrade</a>
+      </ProfileMenuDetail>
+      <ProfileMenuDivider />
+      <ProfileMenuItem href="#">Settings</ProfileMenuItem>
+      <ProfileMenuItem on:click={() => {}}>Log out</ProfileMenuItem>
+    </ProfileMenu>
+  </HeaderUtilities>
   <HeaderNav aria-label="Top navigation">
     <HeaderNavItem href="#" text="Nav link" />
     <HeaderNavMenu href="#" text="Submenu">
