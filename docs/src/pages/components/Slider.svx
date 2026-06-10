@@ -9,41 +9,41 @@ description: Sliders provide a visual way to select a value from a range, with k
 
 ## Basic
 
-Create a basic slider with a label and default range (0-100).
+Create a basic slider with a label and the default range from 0 to 100.
 
 <Slider labelText="Instances" value={0} />
 
 ## Labels and layout
 
-Control how the slider's label, text input, and width render.
+Control how the slider label, text input, and width render.
 
 ### Full width
 
-Set `fullWidth` for the slider to span the full width of its container.
+Set `fullWidth` to `true` for the slider to span the full width of its container.
 
 <Slider labelText="Instances" fullWidth value={0} />
 
 ### Hidden label
 
-Hide the visible label with `hideLabel`. Screen readers still receive the label text.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <Slider labelText="Instances" hideLabel value={0} />
 
 ### Hidden text input
 
-Hide the text input while keeping the slider functionality.
+Set `hideTextInput` to `true` to hide the numeric input while keeping the slider.
 
 <Slider labelText="Instances" hideTextInput value={0} />
 
 ### Custom range
 
-Set custom `min`, `max`, and label values.
+Set `min`, `max`, `minLabel`, and `maxLabel` to customize the range.
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} />
 
 ### Custom step
 
-Specify the step value for more precise control.
+Set `step` to control increment size.
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
@@ -59,73 +59,73 @@ Communicate validation and interaction states.
 
 ### Invalid
 
-Show validation errors with `invalid`. Invalid takes precedence over the [warning state](#warning) when both are set.
+Set `invalid` to `true` to show a validation error. Invalid takes precedence over the [warning state](#warning) when both are set.
 
 <Slider invalid invalidText="Value must be a multiple of 10" labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={105} step={10} />
 
 ### Warning
 
-Show a warning with `warn`. The warning icon appears next to the input field, with a message below the slider.
+Set `warn` to `true` to show a warning. The warning icon appears next to the input field, with a message below the slider.
 
 <Slider warn warnText="Value must be an increment of 5" labelText="Slider (must be an increment of 5)" min={0} max={100} value={51} step={5} />
 
 ### Disabled
 
-Disable the slider to prevent interaction.
+Set `disabled` to `true` to prevent interaction.
 
 <Slider disabled labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
 ### Read-only
 
-Set the slider to read-only to display a value while preventing changes.
+Set `readonly` to `true` to display a value while preventing changes.
 
 <Slider readonly labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
 ## Range slider
 
-Use `RangeSlider` to select a range with two handles. Bind `value` for the lower bound and `valueUpper` for the upper bound. It supports the same layout and state options as `Slider`.
+Use `RangeSlider` to select a range with two handles. Bind to `value` for the lower bound and `valueUpper` for the upper bound. `RangeSlider` supports the same layout and state options as `Slider`.
 
 <RangeSlider labelText="Range" value={10} valueUpper={90} />
 
 ### Full width
 
-Set `fullWidth` for the range slider to span the full width of its container.
+Set `fullWidth` to `true` for the range slider to span the full width of its container.
 
 <RangeSlider labelText="Range" fullWidth value={10} valueUpper={90} />
 
 ### Hidden text inputs
 
-Hide both text inputs while keeping the slider functional.
+Set `hideTextInput` to `true` to hide both numeric inputs while keeping the slider.
 
 <RangeSlider labelText="Range" hideTextInput value={0} valueUpper={100} />
 
 ### Custom range and step
 
-Set custom `min`, `max`, and `step` values for the range.
+Set `min`, `max`, and `step` to customize the range.
 
 <RangeSlider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" step={10} value={100} valueUpper={500} />
 
 ### Invalid
 
-Show validation errors with `invalid`. Invalid takes precedence over warning when both are set.
+Set `invalid` to `true` to show a validation error. Invalid takes precedence over the [warning state](#warning) when both are set.
 
 <RangeSlider invalid invalidText="Values must be a multiple of 10" labelText="Range" min={0} max={100} step={10} value={15} valueUpper={85} />
 
 ### Warning
 
-Show a warning with `warn`. A warning icon appears next to each input field, with a message below the slider.
+Set `warn` to `true` to show a warning. A warning icon appears next to each input field, with a message below the slider.
 
 <RangeSlider warn warnText="Values must be an increment of 5" labelText="Range" min={0} max={100} step={5} value={11} valueUpper={89} />
 
 ### Disabled
 
-Disable the range slider to prevent interaction.
+Set `disabled` to `true` to prevent interaction.
 
 <RangeSlider disabled labelText="Range" value={10} valueUpper={90} />
 
 ### Read-only
 
-Set the range slider to read-only to display values while preventing changes.
+Set `readonly` to `true` to display values while preventing changes.
 
 <RangeSlider readonly labelText="Range" value={10} valueUpper={90} />
 
@@ -147,7 +147,7 @@ Show a loading state with the range slider skeleton variant.
 
 <RangeSliderSkeleton />
 
-### Range slider (no label)
+#### Without label
 
 Show a loading state without a label.
 

@@ -772,6 +772,12 @@ Set `selectable` to `true` to enable selectable rows. Here, the toolbar is used 
   </Toolbar>
 </DataTable>
 
+## Toolbar search with typeahead
+
+Compose [SearchMenu](/components/SearchMenu) in the toolbar for a search typeahead with suggestions. `SearchMenu` does not read the `DataTable` context, so bind to `value` and filter the rows in the consumer. Selecting a suggestion sets `value`. For built-in row filtering without a menu, use [ToolbarSearch](#filtering).
+
+<FileSource src="/framed/DataTable/DataTableSearchMenu" />
+
 ## Filtering
 
 Filter rows with `shouldFilterRows`.
