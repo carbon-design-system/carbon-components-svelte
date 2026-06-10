@@ -11,6 +11,7 @@ import Checkbox from "./Checkbox.test.svelte";
 import CheckboxGroupEvents from "./CheckboxGroupEvents.test.svelte";
 import CheckboxGroupReactive from "./CheckboxGroupReactive.test.svelte";
 import CheckboxReactiveBind from "./CheckboxReactiveBind.test.svelte";
+import CheckboxTitleTruncation from "./CheckboxTitleTruncation.test.svelte";
 import MultipleCheckboxes from "./MultipleCheckboxes.test.svelte";
 import MultipleCheckboxesObject from "./MultipleCheckboxesObject.test.svelte";
 
@@ -537,6 +538,55 @@ describe("Checkbox", () => {
 
     const input = screen.getByRole("checkbox");
     expect(input).not.toHaveAttribute("aria-describedby");
+  });
+
+  describe("title truncation", () => {
+    let offsetWidthSpy: ReturnType<typeof vi.spyOn>;
+    let scrollWidthSpy: ReturnType<typeof vi.spyOn>;
+
+    function mockTruncated() {
+      offsetWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+        .mockReturnValue(10);
+      scrollWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+        .mockReturnValue(100);
+    }
+
+    afterEach(() => {
+      offsetWidthSpy?.mockRestore();
+      scrollWidthSpy?.mockRestore();
+    });
+
+    function getLabel() {
+      const label = document
+        .querySelector('[data-testid="checkbox-title"]')
+        ?.querySelector("label.bx--checkbox-label");
+      assert(label);
+      return label;
+    }
+
+    it('keeps title="" when the label is truncated', async () => {
+      mockTruncated();
+      render(CheckboxTitleTruncation, {
+        title: "",
+        labelText: "A very long label that should be truncated",
+      });
+      await tick();
+
+      expect(getLabel().getAttribute("title")).toBe("");
+    });
+
+    it("keeps a provided title when truncated", async () => {
+      mockTruncated();
+      render(CheckboxTitleTruncation, {
+        title: "Custom title",
+        labelText: "A very long label that should be truncated",
+      });
+      await tick();
+
+      expect(getLabel().getAttribute("title")).toBe("Custom title");
+    });
   });
 
   describe("Generics", () => {

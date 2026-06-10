@@ -72,6 +72,7 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import { readable } from "svelte/store";
+  import { overflowTitle } from "../utils/overflowTitle.js";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -112,8 +113,6 @@
 
   let refLabel = null;
 
-  $: isTruncated = refLabel?.offsetWidth < refLabel?.scrollWidth;
-  $: title = !title && isTruncated ? refLabel?.innerText : title;
   $: helperId = `helper-${id}`;
 </script>
 
@@ -179,7 +178,11 @@
       on:focus
       on:blur
     >
-    <label for={id} {title} class:bx--checkbox-label={true}>
+    <label
+      for={id}
+      use:overflowTitle={{ title, measure: refLabel }}
+      class:bx--checkbox-label={true}
+    >
       <span
         bind:this={refLabel}
         class:bx--checkbox-label-text={true}
