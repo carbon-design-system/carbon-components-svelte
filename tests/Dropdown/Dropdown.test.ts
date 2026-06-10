@@ -328,6 +328,97 @@ describe("Dropdown", () => {
     expect(button).toHaveTextContent("Email");
   });
 
+  it("should open the menu on ArrowDown and highlight the first enabled item", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+    expect(button).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard("{ArrowDown}");
+    await tick();
+
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("listbox")).toBeVisible();
+    // Slack (id="0") is the first enabled item.
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+  });
+
+  it("should open the menu on ArrowUp and highlight the last enabled item", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+
+    await user.keyboard("{ArrowUp}");
+    await tick();
+
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    // Fax (id="2") is the last enabled item.
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+  });
+
+  it("should open the menu on Alt+ArrowDown without moving the highlight", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+
+    await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
+    await tick();
+
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("listbox")).toBeVisible();
+    expect(button).toHaveAttribute("aria-activedescendant", "");
+  });
+
+  it("should highlight the selected item when opening the menu on Alt+ArrowDown", async () => {
+    render(Dropdown, { props: { items, selectedId: "1" } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+
+    await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
+    await tick();
+
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    // Email (id="1") is the selected item.
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-1$/);
+  });
+
+  it("should close the menu on Alt+ArrowUp", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+    expect(button).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
+
+    expect(button).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(button).toHaveFocus();
+  });
+
+  it("should treat Alt+ArrowUp on a closed menu and Alt+ArrowDown on an open menu as no-ops", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+
+    await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
+    expect(button).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard("{ArrowDown}");
+    await tick();
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+
+    await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    // The highlight does not move.
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+  });
+
   it("should handle disabled items", async () => {
     const itemsWithDisabled = [
       { id: "0", text: "Slack" },

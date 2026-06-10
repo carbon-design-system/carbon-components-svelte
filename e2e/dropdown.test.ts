@@ -61,6 +61,30 @@ test.describe("Dropdown", () => {
     await expect(trigger).toContainText("Email");
   });
 
+  test("opens closed menu with Alt+ArrowDown without moving the highlight", async ({
+    page,
+  }) => {
+    const trigger = page.getByTestId("dropdown-contact").getByRole("combobox");
+    await trigger.focus();
+    await expect(page.locator(".bx--list-box__menu")).not.toBeVisible();
+
+    await page.keyboard.press("Alt+ArrowDown");
+
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+    await expect(trigger).toHaveAttribute("aria-activedescendant", "");
+  });
+
+  test("closes open menu with Alt+ArrowUp", async ({ page }) => {
+    const trigger = page.getByTestId("dropdown-contact").getByRole("combobox");
+    await trigger.click();
+    await expect(page.locator(".bx--list-box__menu")).toBeVisible();
+
+    await page.keyboard.press("Alt+ArrowUp");
+
+    await expect(page.locator(".bx--list-box__menu")).not.toBeVisible();
+    await expect(trigger).toBeFocused();
+  });
+
   test("closes menu with Escape", async ({ page }) => {
     const trigger = page.getByTestId("dropdown-contact").getByRole("combobox");
     await trigger.click();
