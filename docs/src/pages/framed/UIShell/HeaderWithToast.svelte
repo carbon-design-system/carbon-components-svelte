@@ -19,14 +19,14 @@
     queuePosition = position;
     queue.add({
       kind: "success",
-      title: "Success",
-      subtitle: "Your action was completed successfully.",
+      title: "Cluster created",
+      subtitle: "Your Kubernetes cluster is now provisioning.",
       timeout: 5000,
     });
   };
 </script>
 
-<Header companyName="IBM" platformName="Carbon Svelte">
+<Header companyName="IBM" platformName="Cloud">
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
 </Header>
 
@@ -37,7 +37,7 @@
     <Row>
       <Column>
         <Stack gap={6}>
-          <h1>Welcome</h1>
+          <h1>Clusters</h1>
           <p>
             Click the buttons below to trigger toast notifications in different
             positions.

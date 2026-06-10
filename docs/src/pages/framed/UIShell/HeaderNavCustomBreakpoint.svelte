@@ -21,15 +21,15 @@
 
 <Header
   companyName="IBM"
-  platformName="Carbon Svelte"
+  platformName="Cloud"
   bind:isSideNavOpen
   expansionBreakpoint={Number.POSITIVE_INFINITY}
 >
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderNav>
-    <HeaderNavItem href="/" text="Link 1" />
-    <HeaderNavItem href="/" text="Link 2" />
-    <HeaderNavItem href="/" text="Link 3" />
+    <HeaderNavItem href="/catalog" text="Catalog" />
+    <HeaderNavItem href="/docs" text="Docs" />
+    <HeaderNavItem href="/support" text="Support" />
   </HeaderNav>
 </Header>
 
@@ -38,16 +38,16 @@
   expansionBreakpoint={Number.POSITIVE_INFINITY}
 >
   <SideNavItems>
-    <SideNavLink text="Link 1" />
-    <SideNavLink text="Link 2" />
-    <SideNavLink text="Link 3" />
-    <SideNavMenu text="Menu">
-      <SideNavMenuItem href="/" text="Link 1" />
-      <SideNavMenuItem href="/" text="Link 2" />
-      <SideNavMenuItem href="/" text="Link 3" />
+    <SideNavLink href="/dashboard" text="Dashboard" />
+    <SideNavLink href="/resources" text="Resource list" />
+    <SideNavLink href="/activity" text="Activity tracker" />
+    <SideNavMenu text="Kubernetes">
+      <SideNavMenuItem href="/kubernetes/clusters" text="Clusters" />
+      <SideNavMenuItem href="/kubernetes/worker-pools" text="Worker pools" />
+      <SideNavMenuItem href="/kubernetes/registry" text="Container registry" />
     </SideNavMenu>
     <SideNavDivider />
-    <SideNavLink text="Link 4" />
+    <SideNavLink href="/settings" text="Account settings" />
   </SideNavItems>
 </SideNav>
 

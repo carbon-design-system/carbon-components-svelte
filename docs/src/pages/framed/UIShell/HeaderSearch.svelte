@@ -66,7 +66,7 @@
   $: console.log("selectedResultIndex", selectedResultIndex);
 </script>
 
-<Header companyName="IBM" platformName="Carbon Svelte">
+<Header companyName="IBM" platformName="Cloud">
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderUtilities>
     <HeaderSearch

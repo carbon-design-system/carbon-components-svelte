@@ -18,40 +18,40 @@
   } from "carbon-components-svelte";
 </script>
 
-<Header companyName="IBM" platformName="Carbon Svelte">
+<Header companyName="IBM" platformName="Cloud">
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderNav>
-    <HeaderNavItem href="/" text="Link 1" />
-    <HeaderNavItem href="/" text="Link 2" />
-    <HeaderNavItem href="/" text="Link 3" />
-    <HeaderNavMenu text="Menu">
-      <HeaderNavItem href="/" text="Link 1" />
-      <HeaderNavItem href="/" text="Link 2" />
-      <HeaderNavItem href="/" text="Link 3" />
+    <HeaderNavItem href="/catalog" text="Catalog" />
+    <HeaderNavItem href="/docs" text="Docs" />
+    <HeaderNavItem href="/support" text="Support" />
+    <HeaderNavMenu text="Manage">
+      <HeaderNavItem href="/account" text="Account" />
+      <HeaderNavItem href="/iam" text="Access (IAM)" />
+      <HeaderNavItem href="/billing" text="Billing and usage" />
     </HeaderNavMenu>
-    <HeaderNavItem href="/" text="Link 4" />
+    <HeaderNavItem href="/status" text="Status" />
   </HeaderNav>
 </Header>
 
 <SideNav fixed isOpen>
   <SideNavItems>
-    <SideNavLink text="Link 1" />
-    <SideNavLink text="Link 2" />
-    <SideNavLink text="Link 3" />
-    <SideNavMenu text="Menu">
-      <SideNavMenuItem href="/" text="Link 1" />
-      <SideNavMenuItem href="/" text="Link 2" />
-      <SideNavMenuItem href="/" text="Link 3" />
+    <SideNavLink href="/dashboard" text="Dashboard" />
+    <SideNavLink href="/resources" text="Resource list" />
+    <SideNavLink href="/activity" text="Activity tracker" />
+    <SideNavMenu text="Kubernetes">
+      <SideNavMenuItem href="/kubernetes/clusters" text="Clusters" />
+      <SideNavMenuItem href="/kubernetes/worker-pools" text="Worker pools" />
+      <SideNavMenuItem href="/kubernetes/registry" text="Container registry" />
     </SideNavMenu>
     <SideNavDivider />
-    <SideNavLink text="Link 4" />
+    <SideNavLink href="/settings" text="Account settings" />
   </SideNavItems>
 </SideNav>
 
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Welcome</h1> </Column>
+      <Column> <h1>Dashboard</h1> </Column>
     </Row>
   </Grid>
 </Content>

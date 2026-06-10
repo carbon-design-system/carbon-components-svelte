@@ -40,19 +40,21 @@
   };
 </script>
 
-<Header companyName="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+<Header companyName="IBM" platformName="Cloud" bind:isSideNavOpen>
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderUtilities>
     <HeaderAction bind:isOpen transition={transitions[selected].value}>
       <HeaderPanelLinks>
-        <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 4</HeaderPanelLink>
-        <HeaderPanelLink>Switcher item 5</HeaderPanelLink>
+        <HeaderPanelDivider>Switch product</HeaderPanelDivider>
+        <HeaderPanelLink href="/cloud">Cloud console</HeaderPanelLink>
+        <HeaderPanelLink href="/watson-studio">Watson Studio</HeaderPanelLink>
+        <HeaderPanelLink href="/maximo"
+          >Maximo Application Suite</HeaderPanelLink
+        >
+        <HeaderPanelDivider>Resources</HeaderPanelDivider>
+        <HeaderPanelLink href="/docs">Documentation</HeaderPanelLink>
+        <HeaderPanelLink href="/status">Status page</HeaderPanelLink>
+        <HeaderPanelLink href="/community">Community</HeaderPanelLink>
       </HeaderPanelLinks>
     </HeaderAction>
   </HeaderUtilities>
@@ -60,13 +62,13 @@
 
 <SideNav bind:isOpen={isSideNavOpen}>
   <SideNavItems>
-    <SideNavLink text="Link 1" />
-    <SideNavLink text="Link 2" />
-    <SideNavLink text="Link 3" />
-    <SideNavMenu text="Menu">
-      <SideNavMenuItem href="/" text="Link 1" />
-      <SideNavMenuItem href="/" text="Link 2" />
-      <SideNavMenuItem href="/" text="Link 3" />
+    <SideNavLink href="/dashboard" text="Dashboard" />
+    <SideNavLink href="/resources" text="Resource list" />
+    <SideNavLink href="/activity" text="Activity tracker" />
+    <SideNavMenu text="Kubernetes">
+      <SideNavMenuItem href="/kubernetes/clusters" text="Clusters" />
+      <SideNavMenuItem href="/kubernetes/worker-pools" text="Worker pools" />
+      <SideNavMenuItem href="/kubernetes/registry" text="Container registry" />
     </SideNavMenu>
   </SideNavItems>
 </SideNav>
@@ -75,7 +77,7 @@
   <Grid>
     <Row>
       <Column>
-        <h1>HeaderSwitcher</h1>
+        <h1>App switcher</h1>
         <p>
           Select a transition option below and click on the App Switcher icon in
           the top right.
