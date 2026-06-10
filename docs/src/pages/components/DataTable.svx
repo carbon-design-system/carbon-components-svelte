@@ -1395,6 +1395,12 @@ Set `empty: true` in a header object to create an empty column. Use this for ove
 
 <FileSource src="/framed/DataTable/DataTableAppendColumns" />
 
+## Highlight a row
+
+Pass row ids in `highlightedRowIds` to keep a row visually highlighted. Bind each overflow menu's `open` state to track which row is open. Highlighted rows get `bx--data-table--highlighted-row`, styled with the same theme tokens as row hover.
+
+<FileSource src="/framed/DataTable/DataTableHighlightedRow" />
+
 ## Selectable rows (checkbox)
 
 Set `selectable` to `true` for multi-select functionality. Bind to `selectedRowIds` to track selections. Use `inputName` to customize checkbox names.
