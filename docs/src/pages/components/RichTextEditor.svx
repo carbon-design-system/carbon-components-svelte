@@ -1,0 +1,66 @@
+The `RichTextEditor` provides a composable rich text editing surface with an accessible formatting toolbar. The toolbar dispatches structured commands to the editor through context, so the default `contentEditable` surface works with no extra setup and can be swapped for your own editor.
+
+`RichTextEditor` owns the editor value and the command channel. Compose `TextToolbar`, `TextToolbarGroup`, `TextToolbarDivider`, `TextToolbarButton`, and `LinkEditor` inside it, then add `RichTextEditorContent` for the default editing surface.
+
+> [!NOTE]
+> The editor value is an HTML string and is **not** sanitized. Sanitize it before persisting or rendering it elsewhere.
+
+## Default
+
+Bind to `value` to read and write the editor content as an HTML string. Each `TextToolbarButton` dispatches a `command` using the native `document.execCommand` name (for example `"bold"`, `"insertOrderedList"`, `"justifyLeft"`).
+
+<FileSource src="/framed/RichTextEditor/Default" />
+
+## Command reference
+
+Set `command` on a `TextToolbarButton` to one of the v1 commands:
+
+- Inline: `bold`, `italic`, `underline`
+- Lists and indentation: `insertUnorderedList`, `insertOrderedList`, `indent`, `outdent`
+- Alignment: `justifyLeft`, `justifyCenter`, `justifyRight`, `justifyFull`
+- History: `undo`, `redo`
+
+Toggle commands (inline styles, lists, alignment) reflect the current selection with `aria-pressed`. Pass an `iconDescription` to give each icon-only button an accessible name.
+
+## Links
+
+Use `LinkEditor` to insert links. It opens a popover with a URL field and applies `createLink` to the current selection, or `unlink` to remove a link.
+
+## Keyboard navigation
+
+The toolbar uses `role="toolbar"` with roving tabindex: it is a single tab stop, and the arrow keys move between controls. <DocKbd label="Tab" /> moves focus from the toolbar to the editing surface.
+
+## Disabled
+
+Set `disabled` to `true` to make the toolbar and editing surface non-interactive.
+
+<FileSource src="/framed/RichTextEditor/Disabled" />
+
+## Placeholder
+
+Set `placeholder` on `RichTextEditorContent` to show prompt text while the editor is empty.
+
+## Bring your own editor
+
+`RichTextEditorContent` is the default, zero-dependency surface. To use a different editor (for example ProseMirror or Tiptap), omit `RichTextEditorContent` and register an adapter from your own surface through the `"carbon:RichTextEditor"` context. The toolbar markup does not change.
+
+```svelte
+<script>
+  import { getContext, onMount } from "svelte";
+
+  const editor = getContext("carbon:RichTextEditor");
+
+  const adapter = {
+    execute(command) {
+      // Apply command.command (and command.value) to your editor.
+    },
+    queryState() {
+      // Report active/disabled commands for aria-pressed.
+      return { active: new Set(), disabled: new Set() };
+    },
+    focus() {},
+  };
+
+  onMount(() => editor.registerEditor(adapter));
+</script>
+```

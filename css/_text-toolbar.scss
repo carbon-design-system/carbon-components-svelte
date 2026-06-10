@@ -1,0 +1,115 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// Rich text editor and text toolbar (Carbon text toolbar pattern)
+/// @access private
+/// @group components
+@mixin text-toolbar {
+  .#{$prefix}--rich-text-editor {
+    border: 1px solid $ui-03;
+    background: $ui-01;
+  }
+
+  .#{$prefix}--text-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: $carbon--spacing-02;
+    border-bottom: 1px solid $ui-03;
+  }
+
+  .#{$prefix}--text-toolbar__group {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--text-toolbar__divider {
+    width: 1px;
+    height: $carbon--spacing-05;
+    margin: 0 $carbon--spacing-02;
+    background: $ui-03;
+  }
+
+  .#{$prefix}--text-toolbar__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $carbon--spacing-07;
+    height: $carbon--spacing-07;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $icon-01;
+    cursor: pointer;
+  }
+
+  .#{$prefix}--text-toolbar__button:hover:not(:disabled) {
+    background: $hover-ui;
+  }
+
+  .#{$prefix}--text-toolbar__button:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--text-toolbar__button--active {
+    background: $selected-ui;
+  }
+
+  .#{$prefix}--text-toolbar__button:disabled {
+    color: $disabled-02;
+    cursor: not-allowed;
+    background: transparent;
+  }
+
+  .#{$prefix}--rich-text-editor__content {
+    @include type-style('body-long-01');
+
+    min-height: to-rem(96px);
+    padding: $carbon--spacing-05;
+    color: $text-01;
+    outline: none;
+  }
+
+  .#{$prefix}--rich-text-editor__content:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--rich-text-editor__content:empty::before {
+    color: $text-05;
+    content: attr(data-placeholder);
+  }
+
+  // Carbon's type styles normalize font weight/style, so restore the semantics
+  // the editor commands rely on (bold/italic must render and be queryable).
+  .#{$prefix}--rich-text-editor__content b,
+  .#{$prefix}--rich-text-editor__content strong {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--rich-text-editor__content i,
+  .#{$prefix}--rich-text-editor__content em {
+    font-style: italic;
+  }
+
+  .#{$prefix}--text-toolbar__link {
+    display: inline-flex;
+  }
+
+  .#{$prefix}--text-toolbar__link-form {
+    display: flex;
+    align-items: flex-end;
+    padding: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--text-toolbar__link-form .#{$prefix}--text-input {
+    margin-right: $carbon--spacing-03;
+  }
+}
+
+@include exports('text-toolbar') {
+  @include text-toolbar;
+}
