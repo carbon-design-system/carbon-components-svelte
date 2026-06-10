@@ -8,6 +8,10 @@ description: Search provides a flexible search input, with support for expandabl
   import { Search, SearchSkeleton, FluidSearchSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
+`Search` is a standalone search input supporting expandable variants, sizes, and custom icons. It clears on <DocKbd label="Escape" /> or the clear button.
+
+To build a search typeahead with a results menu—suggestions, grouped results, and recent searches—use [SearchMenu](/components/SearchMenu), which composes `Search`.
+
 ## Basic
 
 The search input is extra-large by default. Set `size` to choose another variant — see [large](#large), [small](#small), and [extra-small](#extra-small).

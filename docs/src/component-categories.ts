@@ -44,6 +44,10 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     components: ["Dropdown", "ComboBox", "MultiSelect", "Select"],
   },
   {
+    label: "Search",
+    components: ["Search", "SearchMenu"],
+  },
+  {
     label: "Content",
     components: ["Heading", "Text", "Tag", "CodeSnippet"],
   },
@@ -56,7 +60,6 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "NumberInput",
       "PasswordInput",
       "PinCodeInput",
-      "Search",
       "Slider",
       "TextArea",
       "TextInput",
