@@ -2,74 +2,78 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ListBox from "./ListBox.test.svelte";
 
+const getRoot = (container: HTMLElement) =>
+  container.querySelector(".bx--list-box") as HTMLElement;
+
 describe("ListBox", () => {
   it("should render with default props", () => {
-    render(ListBox);
+    const { container } = render(ListBox);
 
-    const listbox = screen.getByRole("listbox");
+    const listbox = getRoot(container);
     expect(listbox).toBeInTheDocument();
     expect(listbox).toHaveClass("bx--list-box");
   });
 
-  it("should handle open state", () => {
-    render(ListBox, { props: { open: true } });
+  it("should not set a role on the root element", () => {
+    const { container } = render(ListBox);
 
-    const listbox = screen.getByRole("listbox");
-    expect(listbox).toHaveClass("bx--list-box--expanded");
+    expect(getRoot(container)).not.toHaveAttribute("role");
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+  });
+
+  it("should handle open state", () => {
+    const { container } = render(ListBox, { props: { open: true } });
+
+    expect(getRoot(container)).toHaveClass("bx--list-box--expanded");
   });
 
   it("should handle closed state", () => {
-    render(ListBox, { props: { open: false } });
+    const { container } = render(ListBox, { props: { open: false } });
 
-    const listbox = screen.getByRole("listbox");
-    expect(listbox).not.toHaveClass("bx--list-box--expanded");
+    expect(getRoot(container)).not.toHaveClass("bx--list-box--expanded");
   });
 
   it("should handle disabled state", () => {
-    render(ListBox, { props: { disabled: true } });
+    const { container } = render(ListBox, { props: { disabled: true } });
 
-    const listbox = screen.getByRole("listbox");
-    expect(listbox).toHaveClass("bx--list-box--disabled");
+    expect(getRoot(container)).toHaveClass("bx--list-box--disabled");
   });
 
   it("should handle light variant", () => {
-    render(ListBox, { props: { light: true } });
+    const { container } = render(ListBox, { props: { light: true } });
 
-    const listbox = screen.getByRole("listbox");
-    expect(listbox).toHaveClass("bx--list-box--light");
+    expect(getRoot(container)).toHaveClass("bx--list-box--light");
   });
 
   it("should handle inline type", () => {
-    render(ListBox, { props: { type: "inline" } });
+    const { container } = render(ListBox, { props: { type: "inline" } });
 
-    const listbox = screen.getByRole("listbox");
-    expect(listbox).toHaveClass("bx--list-box--inline");
+    expect(getRoot(container)).toHaveClass("bx--list-box--inline");
   });
 
   it("should handle default type", () => {
-    render(ListBox, { props: { type: "default" } });
+    const { container } = render(ListBox, { props: { type: "default" } });
 
-    const listbox = screen.getByRole("listbox");
-    expect(listbox).not.toHaveClass("bx--list-box--inline");
+    expect(getRoot(container)).not.toHaveClass("bx--list-box--inline");
   });
 
   test.each([
     ["sm", "bx--list-box--sm"],
     ["xl", "bx--list-box--xl"],
   ] as const)("should handle size variants", (size, className) => {
-    render(ListBox, { props: { size } });
-    expect(screen.getByRole("listbox")).toHaveClass(className);
+    const { container } = render(ListBox, { props: { size } });
+    expect(getRoot(container)).toHaveClass(className);
   });
 
   it("should handle invalid state", () => {
-    render(ListBox, {
+    const { container } = render(ListBox, {
       props: {
         invalid: true,
         invalidText: "Invalid selection",
       },
     });
 
-    const listbox = screen.getByRole("listbox");
+    const listbox = getRoot(container);
     expect(listbox).toHaveAttribute("data-invalid", "true");
     expect(screen.getByText("Invalid selection")).toBeInTheDocument();
     expect(screen.getByText("Invalid selection")).toHaveClass(
@@ -78,14 +82,14 @@ describe("ListBox", () => {
   });
 
   it("should handle warning state", () => {
-    render(ListBox, {
+    const { container } = render(ListBox, {
       props: {
         warn: true,
         warnText: "Warning message",
       },
     });
 
-    const listbox = screen.getByRole("listbox");
+    const listbox = getRoot(container);
     expect(listbox).toHaveClass("bx--list-box--warning");
     expect(screen.getByText("Warning message")).toBeInTheDocument();
     expect(screen.getByText("Warning message")).toHaveClass(
@@ -94,7 +98,7 @@ describe("ListBox", () => {
   });
 
   it("should prioritize invalid over warning", () => {
-    render(ListBox, {
+    const { container } = render(ListBox, {
       props: {
         invalid: true,
         invalidText: "Invalid",
@@ -103,7 +107,7 @@ describe("ListBox", () => {
       },
     });
 
-    const listbox = screen.getByRole("listbox");
+    const listbox = getRoot(container);
     expect(listbox).toHaveAttribute("data-invalid", "true");
     expect(listbox).not.toHaveClass("bx--list-box--warning");
     expect(screen.getByText("Invalid")).toBeInTheDocument();
@@ -112,10 +116,11 @@ describe("ListBox", () => {
 
   it("should handle keydown events", async () => {
     const keydownHandler = vi.fn();
-    render(ListBox, { props: { onkeydown: keydownHandler } });
+    const { container } = render(ListBox, {
+      props: { onkeydown: keydownHandler },
+    });
 
-    const listbox = screen.getByRole("listbox");
-    await user.click(listbox);
+    await user.click(getRoot(container));
     await user.keyboard("{Escape}");
 
     expect(keydownHandler).toHaveBeenCalled();
@@ -127,8 +132,7 @@ describe("ListBox", () => {
 
     container.addEventListener("keydown", escapeHandler);
 
-    const listbox = screen.getByRole("listbox");
-    await user.click(listbox);
+    await user.click(getRoot(container));
     await user.keyboard("{Escape}");
 
     expect(escapeHandler).not.toHaveBeenCalled();
@@ -146,22 +150,22 @@ describe("ListBox", () => {
 
   it("should handle click events", async () => {
     const clickHandler = vi.fn();
-    render(ListBox, { props: { onclick: clickHandler } });
+    const { container } = render(ListBox, {
+      props: { onclick: clickHandler },
+    });
 
-    const listbox = screen.getByRole("listbox");
-    await user.click(listbox);
+    await user.click(getRoot(container));
 
     expect(clickHandler).toHaveBeenCalled();
   });
 
   it("should apply custom attributes", () => {
-    render(ListBox, {
+    const { container } = render(ListBox, {
       props: {
         "data-testid": "custom-listbox",
       },
     });
 
-    const listbox = screen.getByRole("listbox");
-    expect(listbox).toHaveAttribute("data-testid", "custom-listbox");
+    expect(getRoot(container)).toHaveAttribute("data-testid", "custom-listbox");
   });
 });

@@ -34,7 +34,6 @@
 </script>
 
 <div
-  role="listbox"
   tabindex="-1"
   data-invalid={invalid || undefined}
   class:bx--list-box={true}

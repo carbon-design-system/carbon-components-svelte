@@ -428,7 +428,6 @@
     </label>
   {/if}
   <ListBox
-    role={undefined}
     {type}
     {size}
     {name}
