@@ -83,6 +83,7 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clampIndex.js";
+  import { dismiss } from "../utils/dismiss.js";
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();
@@ -302,10 +303,14 @@
   }
 </script>
 
-<svelte:window on:mousemove|passive={handleGlobalMouseMove} />
-
 <li
   bind:this={ref}
+  use:dismiss={{
+    enabled: !!subOptions && submenuOpen,
+    type: "mousemove",
+    handler: handleGlobalMouseMove,
+    options: { passive: true },
+  }}
   {role}
   tabindex="-1"
   aria-disabled={disabled}
