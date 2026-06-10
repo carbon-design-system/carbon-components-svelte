@@ -17,9 +17,7 @@ test.describe("Modal with Dropdowns", () => {
   });
 
   test("ComboBox opens and selects an item", async ({ page }) => {
-    const combobox = page
-      .getByRole("listbox", { name: "Contact method" })
-      .getByRole("combobox");
+    const combobox = page.getByRole("combobox", { name: "Contact method" });
     await combobox.click();
 
     await expect(combobox).toHaveAttribute("aria-expanded", "true");
