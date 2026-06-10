@@ -526,6 +526,7 @@
   <ListBox
     class={comboBoxListBoxClass}
     id={comboId}
+    role={undefined}
     aria-label={ariaLabel}
     aria-disabled={readonly || undefined}
     {disabled}

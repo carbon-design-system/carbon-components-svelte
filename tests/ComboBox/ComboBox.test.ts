@@ -42,7 +42,7 @@ describe("ComboBox", () => {
 
     await user.click(getInput());
 
-    const dropdown = screen.getAllByRole("listbox")[1];
+    const dropdown = screen.getByRole("listbox");
     expect(dropdown).toBeVisible();
   });
 
@@ -82,7 +82,7 @@ describe("ComboBox", () => {
     await tick();
 
     expect(input).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getAllByRole("listbox")[1]).toBeVisible();
+    expect(screen.getByRole("listbox")).toBeVisible();
     // Slack (id="0") is the first enabled item.
     expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
 
@@ -183,7 +183,7 @@ describe("ComboBox", () => {
     await tick();
 
     expect(input).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getAllByRole("listbox")[1]).toBeVisible();
+    expect(screen.getByRole("listbox")).toBeVisible();
     expect(input).toHaveAttribute("aria-activedescendant", "");
   });
 
@@ -216,7 +216,7 @@ describe("ComboBox", () => {
     await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
 
     expect(input).toHaveAttribute("aria-expanded", "false");
-    expect(screen.getAllByRole("listbox")).toHaveLength(1);
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     expect(input).toHaveFocus();
   });
 
@@ -269,6 +269,24 @@ describe("ComboBox", () => {
 
     await user.keyboard("{ArrowDown}");
     expect(input.getAttribute("aria-activedescendant")).not.toBe("");
+  });
+
+  it("should not set a role on the combobox root element", async () => {
+    const { container } = render(ComboBox);
+
+    // The root wraps the role="combobox" input, which is not a valid child
+    // of a listbox (aria-required-children). The listbox role belongs to
+    // the dropdown menu alone.
+    expect(container.querySelector(".bx--combo-box")).not.toHaveAttribute(
+      "role",
+    );
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
+    await user.click(getInput());
+
+    const listboxes = screen.getAllByRole("listbox");
+    expect(listboxes).toHaveLength(1);
+    expect(listboxes[0]).toHaveClass("bx--list-box__menu");
   });
 
   it("scopes option ids per instance to avoid duplicate ids across ComboBoxes", () => {
@@ -417,14 +435,17 @@ describe("ComboBox", () => {
   });
 
   it("should handle invalid state", () => {
-    render(ComboBox, {
+    const { container } = render(ComboBox, {
       props: {
         invalid: true,
         invalidText: "Invalid selection",
       },
     });
 
-    expect(screen.getByRole("listbox")).toHaveAttribute("data-invalid", "true");
+    expect(container.querySelector(".bx--combo-box")).toHaveAttribute(
+      "data-invalid",
+      "true",
+    );
     expect(screen.getByText("Invalid selection")).toBeInTheDocument();
   });
 
@@ -453,7 +474,9 @@ describe("ComboBox", () => {
       },
     });
 
-    expect(screen.getByRole("listbox")).not.toHaveAttribute("data-invalid");
+    expect(container.querySelector(".bx--combo-box")).not.toHaveAttribute(
+      "data-invalid",
+    );
     expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
     expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
     expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
@@ -475,8 +498,8 @@ describe("ComboBox", () => {
     ["sm", "bx--list-box--sm"],
     ["xl", "bx--list-box--xl"],
   ] as const)("should handle size variants", (size, className) => {
-    render(ComboBox, { props: { size } });
-    expect(screen.getByRole("listbox")).toHaveClass(className);
+    const { container } = render(ComboBox, { props: { size } });
+    expect(container.querySelector(".bx--combo-box")).toHaveClass(className);
   });
 
   it("should handle filtering items", async () => {
@@ -562,7 +585,7 @@ describe("ComboBox", () => {
     const input = getInput();
     await user.click(input);
 
-    const dropdown = screen.getAllByRole("listbox")[1];
+    const dropdown = screen.getByRole("listbox");
     expect(dropdown).toBeVisible();
 
     await user.keyboard("{Escape}");
@@ -582,7 +605,7 @@ describe("ComboBox", () => {
     expect(getInput()).toHaveValue("");
 
     // Dropdown remains open
-    const dropdown = screen.getAllByRole("listbox")[1];
+    const dropdown = screen.getByRole("listbox");
     expect(dropdown).toBeVisible();
   });
 
@@ -598,10 +621,14 @@ describe("ComboBox", () => {
   });
 
   it("should handle top direction", async () => {
-    render(ComboBoxCustom, { props: { direction: "top" } });
+    const { container } = render(ComboBoxCustom, {
+      props: { direction: "top" },
+    });
 
     await user.click(screen.getAllByRole("button")[0]);
-    expect(screen.getByRole("listbox")).toHaveClass("bx--list-box--up");
+    expect(container.querySelector(".bx--combo-box")).toHaveClass(
+      "bx--list-box--up",
+    );
   });
 
   it("should clear filter on selection clear", async () => {
@@ -692,7 +719,7 @@ describe("ComboBox", () => {
     const input = getInput();
     await user.click(input);
 
-    const dropdown = screen.getAllByRole("listbox")[1];
+    const dropdown = screen.getByRole("listbox");
     expect(dropdown).toBeVisible();
 
     await user.keyboard("{Escape}");
@@ -714,7 +741,7 @@ describe("ComboBox", () => {
     const input = getInput();
     await user.click(input);
 
-    const dropdown = screen.getAllByRole("listbox")[1];
+    const dropdown = screen.getByRole("listbox");
     expect(dropdown).toBeVisible();
 
     await user.keyboard("{Escape}");
@@ -787,24 +814,25 @@ describe("ComboBox", () => {
       },
     });
     await user.click(getInput());
-    const listbox = screen.getAllByRole("listbox")[1];
+    const listbox = screen.getByRole("listbox");
     expect(listbox).toHaveAttribute("aria-label", "");
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2715
-  it("should use labelText as aria-label fallback when aria-label is not passed", () => {
+  it("should use labelText as aria-label fallback when aria-label is not passed", async () => {
     render(ComboBox, {
       props: {
         items: [{ id: "1", text: "Email", price: 200 }],
         labelText: "Contact",
       },
     });
+    await user.click(getInput());
     const listbox = screen.getByRole("listbox", { name: "Contact" });
     expect(listbox).toHaveAttribute("aria-label", "Contact");
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2715
-  it("should use explicit aria-label over labelText when both are provided", () => {
+  it("should use explicit aria-label over labelText when both are provided", async () => {
     render(ComboBox, {
       props: {
         items: [{ id: "1", text: "Email", price: 200 }],
@@ -812,6 +840,7 @@ describe("ComboBox", () => {
         ariaLabel: "Custom accessible name",
       },
     });
+    await user.click(getInput());
     const listbox = screen.getByRole("listbox", {
       name: "Custom accessible name",
     });
@@ -819,13 +848,14 @@ describe("ComboBox", () => {
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2715
-  it("should default to 'Choose an item' when neither labelText nor aria-label is provided", () => {
+  it("should default to 'Choose an item' when neither labelText nor aria-label is provided", async () => {
     render(ComboBox, {
       props: {
         items: [{ id: "1", text: "Email", price: 200 }],
         labelText: "",
       },
     });
+    await user.click(getInput());
     const listbox = screen.getByRole("listbox", { name: "Choose an item" });
     expect(listbox).toHaveAttribute("aria-label", "Choose an item");
   });
@@ -846,7 +876,7 @@ describe("ComboBox", () => {
 
   it("should open menu if open prop is true on mount", () => {
     render(ComboBox, { props: { open: true } });
-    const dropdown = screen.getAllByRole("listbox")[1];
+    const dropdown = screen.getByRole("listbox");
     expect(dropdown).toBeVisible();
   });
 
@@ -982,8 +1012,7 @@ describe("ComboBox", () => {
     await user.keyboard("{Tab}");
     expect(getInput()).toHaveFocus();
 
-    const dropdown = screen.queryAllByRole("listbox")[1];
-    expect(dropdown).toBeUndefined();
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 
   it("should preserve custom value when allowCustomValue is true and user clicks away", async () => {
@@ -1761,7 +1790,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -1788,7 +1817,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
       expect(menu).toBeVisible();
       expect(menu.style.maxHeight).toBeTruthy();
@@ -1808,7 +1837,7 @@ describe("ComboBox", () => {
       await tick();
 
       await waitFor(() => {
-        const menuAfterReopen = screen.getAllByRole("listbox")[1];
+        const menuAfterReopen = screen.getByRole("listbox");
         expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
         expect(menuAfterReopen).toBeInTheDocument();
         return menuAfterReopen;
@@ -1862,7 +1891,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -1899,7 +1928,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -1921,7 +1950,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -1944,7 +1973,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
       expect(menu).toBeInTheDocument();
 
@@ -1975,7 +2004,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -1995,7 +2024,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       // 500 items at 32px (sm), spacer height 16000px
       const spacer = menu.querySelector<HTMLElement>(":scope > div");
       expect(spacer?.style.height).toBe("16000px");
@@ -2013,7 +2042,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       const spacer = menu.querySelector<HTMLElement>(":scope > div");
       expect(spacer?.style.height).toBe("25000px");
     });
@@ -2081,7 +2110,7 @@ describe("ComboBox", () => {
       await user.click(input);
 
       await waitFor(() => {
-        const menu = screen.getAllByRole("listbox")[1];
+        const menu = screen.getByRole("listbox");
         expect(menu).toBeVisible();
       });
 
@@ -2109,14 +2138,14 @@ describe("ComboBox", () => {
       await user.click(input);
 
       await waitFor(() => {
-        const menu = screen.getAllByRole("listbox")[1];
+        const menu = screen.getByRole("listbox");
         expect(menu).toBeVisible();
         // Menu should have scrolled to show selected item at top
         // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
         expect(menu.scrollTop).toBe(10000);
       });
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       const initialScrollTop = menu.scrollTop;
 
       // Navigate within visible viewport (ArrowDown a few times)
@@ -2159,7 +2188,7 @@ describe("ComboBox", () => {
       await user.click(getInput());
 
       // The ListBoxMenu itself has the style applied
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
       expect(menu).toBeInTheDocument();
       expect(menu.style.maxHeight).toBe("400px");
@@ -2176,7 +2205,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -2198,7 +2227,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -2234,7 +2263,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -2255,7 +2284,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -2278,7 +2307,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
@@ -2306,7 +2335,7 @@ describe("ComboBox", () => {
         props: { portalMenu: true, open: true },
       });
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeInTheDocument();
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).toBeInTheDocument();
@@ -2318,7 +2347,7 @@ describe("ComboBox", () => {
         props: { modalOpen: true, comboBoxOpen: true },
       });
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeInTheDocument();
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).toBeInTheDocument();
@@ -2334,7 +2363,7 @@ describe("ComboBox", () => {
         },
       });
 
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeInTheDocument();
       const floatingPortal = menu.closest("[data-floating-portal]");
       expect(floatingPortal).not.toBeInTheDocument();
@@ -2346,14 +2375,14 @@ describe("ComboBox", () => {
       });
 
       await user.click(getInput());
-      const menu = screen.getAllByRole("listbox")[1];
+      const menu = screen.getByRole("listbox");
       expect(menu).toBeVisible();
       expect(menu.closest("[data-floating-portal]")?.parentElement).toBe(
         document.body,
       );
 
       await user.click(document.body);
-      expect(screen.getAllByRole("listbox")).toHaveLength(1);
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
   });
 
@@ -2369,7 +2398,7 @@ describe("ComboBox", () => {
     await user.click(input);
 
     // Menu should be open.
-    expect(screen.getAllByRole("listbox")[1]).toBeVisible();
+    expect(screen.getByRole("listbox")).toBeVisible();
 
     // Simulate a blur where focus moves to an element outside the combobox.
     // In a real browser, Tab triggers blur with relatedTarget = next element.
@@ -2622,8 +2651,7 @@ describe("ComboBox", () => {
 
       await user.click(getInput());
 
-      const listboxes = screen.queryAllByRole("listbox");
-      expect(listboxes.length).toBeLessThan(2);
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
     it("should not dispatch select when typing Enter on a highlighted item while readonly", async () => {
