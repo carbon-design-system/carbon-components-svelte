@@ -67,6 +67,22 @@ test.describe("DatePicker inside native dialog", () => {
       expect(Math.min(distanceBelow, distanceAbove)).toBeLessThan(32);
     }
   });
+
+  test("clicking inside the portaled calendar keeps it open", async ({
+    page,
+  }) => {
+    await page.getByTestId("dialog-date-picker-portal-input").click();
+
+    const calendar = page
+      .getByTestId("native-dialog")
+      .locator(".flatpickr-calendar.open");
+    await expect(calendar).toBeVisible();
+
+    // Calendar is portaled outside the input tree. Month nav click should not
+    // close it. Modal dialogs have no outside-click target; Escape closes.
+    await calendar.locator(".flatpickr-months").click();
+    await expect(calendar).toHaveClass(/open/);
+  });
 });
 
 test.describe("DatePicker inside native [popover]", () => {
@@ -130,5 +146,38 @@ test.describe("DatePicker inside native [popover]", () => {
       );
       expect(Math.min(distanceBelow, distanceAbove)).toBeLessThan(32);
     }
+  });
+
+  test("clicking inside the portaled calendar keeps it open", async ({
+    page,
+  }) => {
+    await page.getByTestId("popover-date-picker-portal-input").focus();
+
+    const calendar = page
+      .getByTestId("native-popover")
+      .locator(".flatpickr-calendar.open");
+    await expect(calendar).toBeVisible();
+
+    await calendar.locator(".flatpickr-months").click();
+    await expect(calendar).toHaveClass(/open/);
+  });
+
+  test("clicking the page outside the popover closes the calendar", async ({
+    page,
+  }) => {
+    await page.getByTestId("popover-date-picker-portal-input").focus();
+
+    // No `.open` filter: locator must still resolve after the calendar closes.
+    const calendar = page
+      .getByTestId("native-popover")
+      .locator(".flatpickr-calendar");
+    await expect(calendar).toHaveClass(/open/);
+
+    // Non-modal popover: click a viewport corner, away from the popover and
+    // page triggers.
+    const viewport = page.viewportSize();
+    if (!viewport) throw new Error("expected a viewport size");
+    await page.mouse.click(viewport.width - 5, viewport.height - 5);
+    await expect(calendar).not.toHaveClass(/open/);
   });
 });
