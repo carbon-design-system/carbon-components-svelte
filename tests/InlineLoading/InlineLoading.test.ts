@@ -133,6 +133,28 @@ describe("InlineLoading", () => {
     expect(consoleLog).toHaveBeenCalledWith("success");
   });
 
+  // Regression: re-entering finished must arm a fresh success timer
+  it("re-arms success on each transition back into finished", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { component } = render(InlineLoadingTransition, {
+      props: { status: "active" },
+    });
+
+    component.status = "finished";
+    await tick();
+    vi.advanceTimersByTime(1500);
+    expect(consoleLog).toHaveBeenCalledTimes(1);
+
+    component.status = "active";
+    await tick();
+    component.status = "finished";
+    await tick();
+    vi.advanceTimersByTime(1500);
+
+    expect(consoleLog).toHaveBeenCalledTimes(2);
+    expect(consoleLog).toHaveBeenNthCalledWith(2, "success");
+  });
+
   it("supports custom success delay", () => {
     const consoleLog = vi.spyOn(console, "log");
     render(InlineLoading);
