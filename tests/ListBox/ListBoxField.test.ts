@@ -263,7 +263,7 @@ describe("ListBoxField", () => {
       props: { slotContent: "Ref field" },
     });
 
-    expect(component.ref).toBeInstanceOf(HTMLDivElement);
+    expect(component.ref).toBeInstanceOf(HTMLButtonElement);
   });
 
   it("should set aria-readonly when readonly is true", () => {
