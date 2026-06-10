@@ -10,6 +10,7 @@ export { default as HeaderPanelDivider } from "./HeaderPanelDivider.svelte";
 export { default as HeaderPanelLink } from "./HeaderPanelLink.svelte";
 export { default as HeaderPanelLinks } from "./HeaderPanelLinks.svelte";
 export { default as HeaderSearch } from "./HeaderSearch.svelte";
+export { default as HeaderSideNavItems } from "./HeaderSideNavItems.svelte";
 export { default as HeaderUtilities } from "./HeaderUtilities.svelte";
 export { default as SideNav } from "./SideNav.svelte";
 export { default as SideNavDivider } from "./SideNavDivider.svelte";
