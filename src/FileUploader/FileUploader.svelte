@@ -131,7 +131,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, tick } from "svelte";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
 
@@ -177,15 +177,20 @@
     const removed = prevFiles.filter((f) => !currentSet.has(f));
 
     if (added.length > 0 || removed.length > 0) {
-      if (added.length > 0) dispatch("add", added);
-      if (removed.length > 0) dispatch("remove", removed);
+      const cleared = prevFiles.length > 0 && files.length === 0;
 
-      if (prevFiles.length > 0 && files.length === 0) {
-        dispatch("change", []);
-        dispatch("clear");
-      }
-
+      // Update prevFiles before dispatching. Defer notification events with
+      // tick() so a throwing handler can't abort the file-list render.
       prevFiles = [...files];
+      tick().then(() => {
+        if (added.length > 0) dispatch("add", added);
+        if (removed.length > 0) dispatch("remove", removed);
+
+        if (cleared) {
+          dispatch("change", []);
+          dispatch("clear");
+        }
+      });
     }
   }
 </script>
