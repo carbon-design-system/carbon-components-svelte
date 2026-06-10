@@ -1,4 +1,6 @@
 <script>
+  import { overflowTitle } from "../utils/overflowTitle.js";
+
   /** Set to `true` to enable the active state */
   export let active = false;
 
@@ -13,8 +15,6 @@
 
   let ref = null;
 
-  $: isTruncated = ref?.offsetWidth < ref?.scrollWidth;
-  $: title = isTruncated ? ref?.innerText : undefined;
   $: if (highlighted && ref && !ref.matches(":hover")) {
     // Scroll highlighted item into view if using keyboard navigation
     ref.scrollIntoView({ block: "nearest" });
@@ -37,7 +37,7 @@
 >
   <div
     bind:this={ref}
-    {title}
+    use:overflowTitle
     class:bx--list-box__menu-item__option={true}
     class:bx--list-box__menu-item__option--icon-left={hasLeftIcon}
   >
