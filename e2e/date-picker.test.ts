@@ -128,6 +128,18 @@ test.describe("DatePicker", () => {
     await expect(calendar).not.toHaveClass(/open/);
   });
 
+  test("click inside the calendar keeps it open", async ({ page }) => {
+    const input = page.getByLabel("Meeting date");
+    await input.click();
+    const calendar = page
+      .getByTestId("date-picker-single")
+      .getByLabel("calendar-container");
+    await expect(calendar).toHaveClass(/open/);
+    // Month nav doesn't pick a date; the calendar should stay open.
+    await calendar.locator(".flatpickr-months").click();
+    await expect(calendar).toHaveClass(/open/);
+  });
+
   test("min/max: disabled days not selectable", async ({ page }) => {
     const input = page.getByLabel("Meeting date");
     await input.click();
@@ -281,6 +293,47 @@ test.describe("DatePicker", () => {
     await expect(calendar).toHaveClass(/open/);
     await page.getByTestId("date-picker-range-start").focus();
     await page.keyboard.press("Escape");
+    await expect(calendar).not.toHaveClass(/open/);
+  });
+
+  test("range: click outside closes calendar", async ({ page }) => {
+    await page.getByTestId("date-picker-range-start").click();
+    const calendar = page
+      .getByTestId("date-picker-range")
+      .getByLabel("calendar-container");
+    await expect(calendar).toHaveClass(/open/);
+    await page.getByTestId("outside-date-picker").click();
+    await expect(calendar).not.toHaveClass(/open/);
+  });
+
+  test("range: click inside the calendar keeps it open", async ({ page }) => {
+    await page.getByTestId("date-picker-range-start").click();
+    const calendar = page
+      .getByTestId("date-picker-range")
+      .getByLabel("calendar-container");
+    await expect(calendar).toHaveClass(/open/);
+    // Month nav doesn't pick a date; the calendar should stay open.
+    await calendar.locator(".flatpickr-months").click();
+    await expect(calendar).toHaveClass(/open/);
+  });
+
+  test("range: closing the calendar lets it reopen from either input", async ({
+    page,
+  }) => {
+    const calendar = page
+      .getByTestId("date-picker-range")
+      .getByLabel("calendar-container");
+
+    // Open from start, close with outside click, reopen from end. calendarOpen
+    // should flip correctly for both inputs.
+    await page.getByTestId("date-picker-range-start").click();
+    await expect(calendar).toHaveClass(/open/);
+    await page.getByTestId("outside-date-picker").click();
+    await expect(calendar).not.toHaveClass(/open/);
+
+    await page.getByTestId("date-picker-range-end").click();
+    await expect(calendar).toHaveClass(/open/);
+    await page.getByTestId("outside-date-picker").click();
     await expect(calendar).not.toHaveClass(/open/);
   });
 });
