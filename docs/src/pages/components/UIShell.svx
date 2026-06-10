@@ -6,6 +6,7 @@ components: ["Header",
 "HeaderNav",
 "HeaderNavItem",
 "HeaderNavMenu",
+"HeaderSideNavItems",
 "HeaderPanelDivider",
 "HeaderPanelLink",
 "HeaderPanelLinks",
@@ -35,6 +36,16 @@ Create a basic header with the header component.
 The hamburger menu is automatically rendered if the side nav component is used.
 
 <FileSource src="/framed/UIShell/HeaderNav" />
+
+## Header with responsive navigation
+
+On smaller screens, header links belong in the side nav, above the regular side nav items.
+
+Carbon hides the header nav below the large breakpoint (66rem). Duplicate those links with `HeaderSideNavItems`. Its children only show below that breakpoint. Set `hasDivider` to separate them from the side nav items.
+
+Resize the viewport to see the switch.
+
+<FileSource src="/framed/UIShell/HeaderSideNavItems" />
 
 ## Header with custom expansion breakpoint
 
