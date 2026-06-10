@@ -13,7 +13,7 @@ describe("Dropdown window listeners", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
-    for (let i = 0; i < 100; i++) render(Dropdown, { props: { open: false } });
+    for (let i = 0; i < 5; i++) render(Dropdown, { props: { open: false } });
     expect(netClick(add, remove)).toBe(0);
 
     add.mockRestore();

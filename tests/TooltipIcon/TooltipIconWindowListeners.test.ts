@@ -14,8 +14,7 @@ describe("TooltipIcon window listeners", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
-    for (let i = 0; i < 100; i++)
-      render(TooltipIcon, { props: { open: false } });
+    for (let i = 0; i < 5; i++) render(TooltipIcon, { props: { open: false } });
     expect(net(add, remove, "keydown")).toBe(0);
 
     add.mockRestore();

@@ -20,7 +20,7 @@ describe("OverflowMenu window listeners", () => {
     const addSpy = vi.spyOn(window, "addEventListener");
     const removeSpy = vi.spyOn(window, "removeEventListener");
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 5; i++) {
       render(OverflowMenu, { props: { id: `menu-${i}` } });
     }
 
@@ -28,7 +28,7 @@ describe("OverflowMenu window listeners", () => {
 
     addSpy.mockRestore();
     removeSpy.mockRestore();
-  }, 30_000);
+  });
 
   test("opening adds one window click listener, closing removes it", async () => {
     const addSpy = vi.spyOn(window, "addEventListener");

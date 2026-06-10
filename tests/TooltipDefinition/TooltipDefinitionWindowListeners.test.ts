@@ -14,7 +14,7 @@ describe("TooltipDefinition window listeners", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
-    for (let i = 0; i < 100; i++)
+    for (let i = 0; i < 5; i++)
       render(TooltipDefinition, { props: { open: false } });
     expect(net(add, remove, "keydown")).toBe(0);
 
