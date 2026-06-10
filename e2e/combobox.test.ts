@@ -89,6 +89,41 @@ test.describe("ComboBox", () => {
     await expect(outsideLink).toBeFocused();
   });
 
+  test("closes the menu on an outside mouse click", async ({ page }) => {
+    // Real-browser proof for the `use:dismiss` outside-click listener: jsdom
+    // bubbles synthetic clicks differently, so this guards the actual behavior.
+    const combobox = page.getByTestId("combobox-contact");
+    await combobox.click();
+    const menu = page.locator(".bx--list-box__menu");
+    await expect(menu).toBeVisible();
+
+    await page.getByTestId("outside-target").click();
+    await expect(menu).not.toBeVisible();
+  });
+
+  test("clearing with openOnClear reopens without self-closing", async ({
+    page,
+  }) => {
+    // The click that triggers clear({ open: true }) must not bubble to the
+    // outside-click listener and immediately re-close the menu it just opened.
+    // This is the timing-sensitive path that `skipWindowClick` used to guard;
+    // it now relies on the gated listener being absent while the click bubbles.
+    const wrapper = page.getByTestId("combobox-clear-reopen-wrapper");
+    const combobox = wrapper.getByRole("combobox");
+    const menu = wrapper.locator(".bx--list-box__menu");
+    await expect(combobox).toHaveValue("Email");
+
+    await wrapper.getByRole("button", { name: "Clear selected item" }).click();
+
+    await expect(combobox).toHaveValue("");
+    await expect(menu).toBeVisible();
+    await expect(wrapper.getByRole("option")).toHaveCount(3);
+
+    // A genuine outside click now closes it on the first try.
+    await page.getByTestId("outside-target").click();
+    await expect(menu).not.toBeVisible();
+  });
+
   test("selects all text on focus when selectTextOnFocus is true", async ({
     page,
   }) => {
