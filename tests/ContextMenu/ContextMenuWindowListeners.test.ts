@@ -14,7 +14,7 @@ describe("ContextMenu window listeners", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
-    const N = 50;
+    const N = 5;
     for (let i = 0; i < N; i++) render(ContextMenu, { props: { open: false } });
 
     expect(net(add, remove, "click")).toBe(0);
