@@ -1,0 +1,55 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Highlighted row styling for DataTable `highlightedRowIds`.
+/// Mirrors row hover styling so a row (e.g. overflow menu open)
+/// stays visually highlighted without pointer hover.
+/// @access private
+/// @group components
+@mixin data-table-highlighted-row {
+  .#{$prefix}--data-table tbody tr.#{$prefix}--data-table--highlighted-row {
+    background: $layer-hover;
+  }
+
+  .#{$prefix}--data-table tbody tr.#{$prefix}--data-table--highlighted-row td,
+  .#{$prefix}--data-table tbody tr.#{$prefix}--data-table--highlighted-row th {
+    border-top: 1px solid $layer-hover;
+    border-bottom: 1px solid $layer-hover;
+    background: $layer-hover;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--data-table--zebra
+    tbody
+    tr:not(.#{$prefix}--parent-row).#{$prefix}--data-table--highlighted-row
+    td {
+    border-top: 1px solid $layer-hover;
+    border-bottom: 1px solid $layer-hover;
+    background-color: $layer-hover;
+  }
+
+  .#{$prefix}--data-table--zebra
+    tbody
+    tr:nth-child(even).#{$prefix}--data-table--selected.#{$prefix}--data-table--highlighted-row
+    td {
+    border-bottom: 1px solid $data-table-column-hover;
+  }
+
+  .#{$prefix}--data-table--zebra
+    tbody
+    tr:nth-child(odd).#{$prefix}--data-table--selected.#{$prefix}--data-table--highlighted-row
+    td,
+  .#{$prefix}--data-table
+    tbody
+    tr.#{$prefix}--data-table--selected.#{$prefix}--data-table--highlighted-row
+    td {
+    border-top: 1px solid $data-table-column-hover;
+    border-bottom: 1px solid $data-table-column-hover;
+    background: $data-table-column-hover;
+    color: $text-primary;
+  }
+}
+
+@include exports("data-table-highlighted-row") {
+  @include data-table-highlighted-row;
+}
