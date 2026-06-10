@@ -8,6 +8,7 @@
         "@sveltejs/vite-plugin-svelte": "^7.1.2",
         "@types/prismjs": "^1.26.5",
         "carbon-icons-svelte": "^13.12.0",
+        "carbon-preprocess-svelte": "^0.11.35",
         "clipboard-copy": "^4.0.1",
         "estree-walker": "^3.0.3",
         "github-slugger": "^2.0.0",
@@ -108,6 +109,8 @@
     "cachewrap": ["cachewrap@0.0.1", "", {}, "sha512-MumTMQ26KmLvWKnECZvoX+7tVGNOplDL4ls1z+xLkpZKCjuvv4t6QvrpqcsCAPfHoqerz0FEfWa6KXVHYylbJA=="],
 
     "carbon-icons-svelte": ["carbon-icons-svelte@13.12.0", "", {}, "sha512-VK/gSvzCEe3tNEHS2xAcih/GBuygHuUenV+EY/44A3nyYjk+MCbgpY20uwID8/81gEUxIkl4rA/EMRWb/3qs0A=="],
+
+    "carbon-preprocess-svelte": ["carbon-preprocess-svelte@0.11.35", "", {}, "sha512-h079aj+v2ErU7FX88fDrPTQ9x1NkUxM7Hz/z2flgWudNuEDm0eOSpHUWrYPFkknxmX+ZrldtQpxnOCoavFmPQA=="],
 
     "cheap-watch": ["cheap-watch@1.0.4", "", {}, "sha512-QR/9FrtRL5fjfUJBhAKCdi0lSRQ3rVRRum3GF9wDKp2TJbEIMGhUEr2yU8lORzm9Isdjx7/k9S0DFDx+z5VGtw=="],
 
