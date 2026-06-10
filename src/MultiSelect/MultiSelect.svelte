@@ -634,7 +634,6 @@
     </label>
   {/if}
   <ListBox
-    role={undefined}
     id={comboId}
     aria-label={ariaLabel}
     aria-disabled={readonly || undefined}
