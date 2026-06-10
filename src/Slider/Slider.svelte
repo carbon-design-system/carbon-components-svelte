@@ -94,6 +94,7 @@
   import { createEventDispatcher } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { dismiss } from "../utils/dismiss.js";
 
   const dispatch = createEventDispatcher();
 
@@ -168,18 +169,20 @@
   }
 </script>
 
-<svelte:window
-  on:mousemove|passive={move}
-  on:touchmove|passive={move}
-  on:mouseup={stopHolding}
-  on:touchend={stopHolding}
-  on:touchcancel={stopHolding}
-/>
-
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
+  use:dismiss={{
+    enabled: holding,
+    listeners: [
+      { type: "mousemove", handler: move, options: { passive: true } },
+      { type: "touchmove", handler: move, options: { passive: true } },
+      { type: "mouseup", handler: stopHolding },
+      { type: "touchend", handler: stopHolding },
+      { type: "touchcancel", handler: stopHolding },
+    ],
+  }}
   {...$$restProps}
   on:click
   on:mouseover
