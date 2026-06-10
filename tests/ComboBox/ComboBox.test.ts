@@ -71,6 +71,174 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Slack");
   });
 
+  it("should open the menu on ArrowDown and highlight the first enabled item", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    input.focus();
+    expect(input).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard("{ArrowDown}");
+    await tick();
+
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getAllByRole("listbox")[1]).toBeVisible();
+    // Slack (id="0") is the first enabled item.
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("Slack");
+  });
+
+  it("should open the menu on ArrowUp and highlight the last enabled item", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    input.focus();
+
+    await user.keyboard("{ArrowUp}");
+    await tick();
+
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    // Fax (id="2") is the last enabled item.
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("Fax");
+  });
+
+  it("should skip disabled items when opening the menu on ArrowDown", async () => {
+    render(ComboBox, {
+      props: {
+        items: [
+          { id: "0", text: "Slack", price: 100, disabled: true },
+          { id: "1", text: "Email", price: 200 },
+          { id: "2", text: "Fax", price: 300 },
+        ],
+      },
+    });
+
+    const input = getInput();
+    input.focus();
+
+    await user.keyboard("{ArrowDown}");
+    await tick();
+
+    // Slack (id="0") is disabled, so Email (id="1") is highlighted.
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-1$/);
+  });
+
+  it("should respect an existing typed filter when opening the menu on ArrowDown", async () => {
+    render(ComboBox, {
+      props: {
+        value: "fa",
+        allowCustomValue: true,
+      },
+    });
+
+    const input = getInput();
+    input.focus();
+
+    await user.keyboard("{ArrowDown}");
+    await tick();
+
+    // "fa" filters the items to Fax (id="2") only; the highlight must target
+    // the filtered set, not items[0] ("Slack").
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("Fax");
+  });
+
+  it("should keep the highlight on the selected item when opening the menu on ArrowDown", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        shouldFilterItem: () => true,
+      },
+    });
+
+    const input = getInput();
+    input.focus();
+
+    await user.keyboard("{ArrowDown}");
+    await tick();
+
+    // Opening highlights the selected item (Email, id="1"), not the first item.
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-1$/);
+
+    // Subsequent navigation moves from the selected item.
+    await user.keyboard("{ArrowDown}");
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+  });
+
+  it("should open the menu on Alt+ArrowDown without moving the highlight", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    input.focus();
+
+    await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
+    await tick();
+
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getAllByRole("listbox")[1]).toBeVisible();
+    expect(input).toHaveAttribute("aria-activedescendant", "");
+  });
+
+  it("should highlight the selected item when opening the menu on Alt+ArrowDown", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        shouldFilterItem: () => true,
+      },
+    });
+
+    const input = getInput();
+    input.focus();
+
+    await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
+    await tick();
+
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-1$/);
+  });
+
+  it("should close the menu on Alt+ArrowUp", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+    expect(input).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
+
+    expect(input).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getAllByRole("listbox")).toHaveLength(1);
+    expect(input).toHaveFocus();
+  });
+
+  it("should treat Alt+ArrowDown on an open menu and Alt+ArrowUp on a closed menu as no-ops", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    input.focus();
+
+    await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
+    expect(input).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard("{ArrowDown}");
+    await tick();
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+
+    await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    // The highlight does not move.
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+  });
+
   it("should set aria-activedescendant to the highlighted filtered item", async () => {
     render(ComboBox);
 
