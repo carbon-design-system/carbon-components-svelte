@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import routify from "@roxi/routify/vite-plugin";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
+import { optimizeCss, } from "carbon-preprocess-svelte";
 import { defineConfig } from "vite";
 import pkg from "../package.json" with { type: "json" };
 
@@ -54,6 +55,7 @@ export default defineConfig({
         return { build: { outDir } };
       },
     },
+    optimizeCss({ experimental: { strict: true }})
   ],
   define: {
     __PKG_VERSION: JSON.stringify(pkg.version),

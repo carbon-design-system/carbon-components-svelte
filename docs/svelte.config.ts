@@ -18,6 +18,7 @@ import "prismjs/components/prism-clike.js";
 import "prismjs/components/prism-javascript.js";
 import "prismjs/components/prism-typescript.js";
 import "prism-svelte";
+import { optimizeImports } from "carbon-preprocess-svelte";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -444,6 +445,7 @@ function carbonify() {
 export default {
   extensions: [".svelte", ".svx"],
   preprocess: [
+    optimizeImports({ optimistic: false }),
     mdsvex({
       smartypants: false,
       highlight: { highlighter: mdsvexPrismHighlighter },
