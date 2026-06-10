@@ -221,6 +221,7 @@
     getMenuItemHeight,
     getMenuMaxHeight,
   } from "../ListBox/list-box-utils.js";
+  import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
@@ -236,7 +237,6 @@
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
 
-  let skipWindowClick = false;
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
@@ -298,7 +298,6 @@
     selectedItem = undefined;
     open = false;
     value = "";
-    if (options?.open === true) skipWindowClick = true;
     // Ensure binding updates are complete before focusing.
     await tick();
     if (options?.open === true) open = true;
@@ -502,21 +501,18 @@
   ]
     .filter(Boolean)
     .join(" ");
-</script>
 
-<svelte:window
-  on:click={(event) => {
-    if (skipWindowClick) {
-      skipWindowClick = false;
-      return;
-    }
+  function handleOutsideClick(event) {
     if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {
       open = false;
     }
-  }}
-/>
+  }
+</script>
 
-<div class:bx--list-box__wrapper={true}>
+<div
+  class:bx--list-box__wrapper={true}
+  use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
+>
   {#if labelText || $$slots.labelChildren}
     <label
       for={id}

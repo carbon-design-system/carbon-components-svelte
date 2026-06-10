@@ -468,6 +468,38 @@ describe("ComboBox", () => {
     expect(options.length).toBe(3);
   });
 
+  it("should close on the first outside click after clearing and reopening from a closed box", async () => {
+    // closed -> open via clear({ open: true }): the gated outside-click
+    // listener is absent while the triggering click bubbles, so it cannot
+    // self-close. The next genuine outside click must close on the first try.
+    render(ComboBoxCustom, { props: { selectedId: "1" } });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+    expect(screen.queryByRole("option")).not.toBeInTheDocument();
+
+    await user.click(screen.getByText("Clear (reopen)"));
+    expect(screen.getAllByRole("option").length).toBe(3);
+
+    await user.click(document.body);
+    expect(screen.queryByRole("option")).not.toBeInTheDocument();
+  });
+
+  it("should keep the menu open when clearing and reopening from an already-open box", async () => {
+    // open -> open via clear({ open: true }): the triggering click must not
+    // close the box that clear() just reopened.
+    render(ComboBoxCustom, { props: { selectedId: "1" } });
+
+    const input = getInput();
+    await user.click(input);
+    // Open with the current selection: the filter narrows to the one match.
+    expect(screen.getByRole("option")).toHaveTextContent("Email");
+
+    await user.click(screen.getByText("Clear (reopen)"));
+    expect(input).toHaveValue("");
+    expect(screen.getAllByRole("option").length).toBe(3);
+  });
+
   it("should not re-focus textbox if clearOptions.focus is false", async () => {
     render(ComboBoxCustom, {
       props: {
