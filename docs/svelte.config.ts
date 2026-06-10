@@ -137,6 +137,7 @@ function createImportsUncached(source: string) {
           usesDocKbd = true;
           return;
         }
+        if (n.name.startsWith("svelte:")) return;
         if (isIcon(n.name)) {
           icons.add(n.name);
         } else {
