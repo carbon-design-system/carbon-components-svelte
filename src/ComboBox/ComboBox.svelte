@@ -713,6 +713,7 @@
                   active={selectedId === item.id}
                   {highlighted}
                   disabled={item.disabled}
+                  hasLeftIcon={Boolean($$slots.icon || item.icon)}
                   on:click={(event) => {
                     if (item.disabled) {
                       event.stopPropagation();
@@ -779,6 +780,7 @@
               active={selectedId === item.id}
               {highlighted}
               disabled={item.disabled}
+              hasLeftIcon={Boolean($$slots.icon || item.icon)}
               on:click={(event) => {
                 if (item.disabled) {
                   event.stopPropagation();

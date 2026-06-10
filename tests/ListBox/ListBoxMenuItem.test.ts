@@ -164,6 +164,28 @@ describe("ListBoxMenuItem", () => {
     expect(option).toBeInTheDocument();
   });
 
+  it("does not pad the option when hasLeftIcon is false", () => {
+    render(ListBoxMenuItem, { props: { slotContent: "No icon" } });
+
+    const option = screen
+      .getByText("No icon")
+      .closest(".bx--list-box__menu-item__option");
+    expect(option).not.toHaveClass(
+      "bx--list-box__menu-item__option--icon-left",
+    );
+  });
+
+  it("pads the option for a left icon when hasLeftIcon is set", () => {
+    render(ListBoxMenuItem, {
+      props: { slotContent: "Icon item", hasLeftIcon: true },
+    });
+
+    const option = screen
+      .getByText("Icon item")
+      .closest(".bx--list-box__menu-item__option");
+    expect(option).toHaveClass("bx--list-box__menu-item__option--icon-left");
+  });
+
   it("should apply custom attributes", () => {
     render(ListBoxMenuItem, {
       props: {

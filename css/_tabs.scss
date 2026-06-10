@@ -6,7 +6,7 @@
 /// @access private
 /// @group components
 @mixin tabs-icon {
-  .#{$prefix}--tabs__nav-link:has(.#{$prefix}--tabs__nav-item--icon) {
+  .#{$prefix}--tabs__nav-link--icon {
     display: flex;
     align-items: center;
   }
@@ -28,8 +28,7 @@
     fill: $text-on-color-disabled;
   }
 
-  .#{$prefix}--tabs--container
-    .#{$prefix}--tabs__nav-link:has(.#{$prefix}--tabs__nav-item--icon) {
+  .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link--icon {
     inline-size: 100%;
   }
 

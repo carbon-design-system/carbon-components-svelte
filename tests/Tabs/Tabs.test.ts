@@ -472,6 +472,15 @@ describe("Tab icon", () => {
     expect(iconWrapper).toBeInTheDocument();
   });
 
+  it("marks only the icon-bearing nav link with the icon modifier class", () => {
+    const { container } = render(TabIcon, { props: { icon: Calendar } });
+
+    const navLinks = container.querySelectorAll(".bx--tabs__nav-link");
+    // First tab has an icon, second ("No Icon") does not.
+    expect(navLinks[0]).toHaveClass("bx--tabs__nav-link--icon");
+    expect(navLinks[1]).not.toHaveClass("bx--tabs__nav-link--icon");
+  });
+
   it("should render label and icon together", () => {
     render(TabIcon, { props: { label: "Dashboard", icon: Calendar } });
 
