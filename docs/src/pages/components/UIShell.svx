@@ -11,6 +11,11 @@ components: ["Header",
 "HeaderPanelLink",
 "HeaderPanelLinks",
 "HeaderUtilities",
+"ProfileMenu",
+"ProfileMenuHeader",
+"ProfileMenuItem",
+"ProfileMenuDetail",
+"ProfileMenuDivider",
 "SideNav",
 "SideNavItems",
 "SideNavLink",
@@ -141,6 +146,12 @@ Set `size` to `"sm"` (default), `"lg"`, or `"xl"` to control row density. Result
 Add utilities to the header with header utilities. Compose [BadgeIndicator](/components/BadgeIndicator) in the badge slot on `HeaderGlobalAction`. Set `iconDescription` for screen readers.
 
 <FileSource src="/framed/UIShell/HeaderUtilities" />
+
+## Profile menu
+
+Use `ProfileMenu` for an account menu that hangs off the header's right side. Unlike `HeaderAction`, the menu is an auto-height card sized to its content. Compose it from `ProfileMenuHeader` (the avatar and "View profile" link), `ProfileMenuItem` (links, or buttons when `href` is omitted), `ProfileMenuDetail` (a labelled value with a trailing action), and `ProfileMenuDivider`. The menu closes on outside click and <DocKbd label="Escape" />.
+
+<FileSource src="/framed/UIShell/ProfileMenu" />
 
 ## Integrations
 
