@@ -105,11 +105,8 @@
     mounted = true;
   });
 
-  $: if (mounted && theme !== prevTheme) {
-    prevTheme = theme;
-    dispatch("update", { theme });
-  }
-
+  // Apply theme before dispatching update. Reactive blocks run in source order,
+  // and a throwing on:update handler aborts the rest of the flush.
   $: if (typeof window !== "undefined") {
     for (const [token, value] of Object.entries(tokens)) {
       document.documentElement.style.setProperty(`--cds-${token}`, value);
@@ -128,6 +125,11 @@
         )}`,
       );
     }
+  }
+
+  $: if (mounted && theme !== prevTheme) {
+    prevTheme = theme;
+    dispatch("update", { theme });
   }
 </script>
 
