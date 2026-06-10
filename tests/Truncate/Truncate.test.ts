@@ -35,6 +35,23 @@ describe("Truncate", () => {
       const element = screen.getByText(/This is a long text/);
       expect(element).toHaveClass("bx--text-truncate--end");
     });
+
+    it("should truncate multiple lines when lines > 1", () => {
+      render(Truncate, { props: { lines: 3 } });
+
+      const element = screen.getByText(/This is a long text/);
+      expect(element).toHaveClass("bx--text-truncate--multiline");
+      expect(element).not.toHaveClass("bx--text-truncate--end");
+      expect(element.style.getPropertyValue("--ccs-truncate-lines")).toBe("3");
+    });
+
+    it("should ignore clamp direction when multiline", () => {
+      render(Truncate, { props: { clamp: "front", lines: 2 } });
+
+      const element = screen.getByText(/This is a long text/);
+      expect(element).toHaveClass("bx--text-truncate--multiline");
+      expect(element).not.toHaveClass("bx--text-truncate--front");
+    });
   });
 
   describe("action", () => {
@@ -86,6 +103,27 @@ describe("Truncate", () => {
 
       const element = screen.getByText(/This is a long text/);
       expect(element).toHaveClass("bx--text-truncate--end");
+    });
+
+    it("should truncate multiple lines when lines > 1", () => {
+      render(TruncateAction, { props: { lines: 3 } });
+
+      const element = screen.getByText(/This is a long text/);
+      expect(element).toHaveClass("bx--text-truncate--multiline");
+      expect(element).not.toHaveClass("bx--text-truncate--end");
+      expect(element.style.getPropertyValue("--ccs-truncate-lines")).toBe("3");
+    });
+
+    it("should toggle between single-line and multiline on update", () => {
+      const node = document.createElement("p");
+      const { update } = truncate(node, { lines: 3 });
+      expect(node).toHaveClass("bx--text-truncate--multiline");
+      expect(node.style.getPropertyValue("--ccs-truncate-lines")).toBe("3");
+
+      update({ clamp: "front" });
+      expect(node).toHaveClass("bx--text-truncate--front");
+      expect(node).not.toHaveClass("bx--text-truncate--multiline");
+      expect(node.style.getPropertyValue("--ccs-truncate-lines")).toBe("");
     });
 
     it("update() with no arguments does not throw (options optional guard)", () => {
