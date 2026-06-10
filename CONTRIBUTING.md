@@ -61,13 +61,15 @@ Patterns:
 
 - Use `function` declarations in `<script>`. Declare handlers, defaults, and logic as functions rather than inline in markup. Named functions give stable references for default prop values (see `defaultShouldFilter` in [`ComboBox.svelte`](src/ComboBox/ComboBox.svelte)).
 - Avoid `afterUpdate`. It runs after every DOM update and is easy to loop in Svelte 5. Prefer `$:` reactive statements with guards, event handlers, `onMount`, or `tick()` for DOM reads. Legacy code may still use `afterUpdate` for scroll-sync or measurement; do not add new uses without a strong reason.
+- Reset cached positional state (scroll offset, highlighted index, measured sizes) reactively when its source collection changes, not just on open/close. A value cached against the old list, such as a scroll position into pre-filter results, silently points past the end of the new one. Use a `$:` guard comparing against the previous length or identity.
 - Put the JSDoc block first, then `export let`, then imports. See [`Button.svelte`](src/Button/Button.svelte) and [`ComboBox.svelte`](src/ComboBox/ComboBox.svelte).
 - Forward DOM events with bare `on:click` / `on:focus` (no handler) on the underlying element ([`Button.svelte`](src/Button/Button.svelte)).
 - Interpolate attribute values with Svelte's attribute syntax, not template literals: `id="{treeId}-{id}-subtree"`, not ``id={`${treeId}-${id}-subtree`}``. Keep template literals only when a value needs nested quotes or logic the shorthand can't express (see `aria-label` in [`PinCodeInput.svelte`](src/PinCodeInput/PinCodeInput.svelte)).
 - Compound components use `setContext` / `getContext` with `carbon:` keys ([`CheckboxGroup.svelte`](src/Checkbox/CheckboxGroup.svelte)).
 - Default element IDs use `ccs-${Math.random().toString(36)}`.
 - Key `{#each}` blocks, for example `(item.id ?? index)` (see [`RecursiveList.svelte`](src/RecursiveList/RecursiveList.svelte)).
-- Put shared logic in `src/utils/`, for example [`debounce.js`](src/utils/debounce.js) and [`isOutsideClick.js`](src/utils/isOutsideClick.js).
+- Put shared logic in `src/utils/`, for example [`debounce.js`](src/utils/debounce.js) and [`isOutsideClick.js`](src/utils/isOutsideClick.js). Prefer pure, DOM-free functions for layout, geometry, and state-decision math (see [`virtualize.js`](src/utils/virtualize.js)). They are unit-testable in isolation, so edge cases get covered once in a util test instead of through expensive component renders.
+- ComboBox, Dropdown, and MultiSelect share listbox behavior (virtualization, keyboard navigation, outside-click) through `src/utils/`. When you change shared menu behavior, apply and test the change in all three. The per-component wiring is parallel but not abstracted.
 - Use Carbon v10 markup: `bx--` BEM classes in templates; SCSS patches use `$prefix` and tokens. See [Custom styles](#custom-styles-patching-carbon-v10).
 - Do not add themeable styles in per-component `<style>` blocks (see [Custom styles](#custom-styles-patching-carbon-v10)).
 - Use the legacy Svelte 5 API. Components use `export let`, `$:`, and `createEventDispatcher`. Do not introduce runes (`$state`, `$derived`, `$effect`) unless the project explicitly migrates.
@@ -454,6 +456,7 @@ Prioritize high-value coverage:
 - Default render and primary user interactions (open, select, submit, keyboard)
 - Accessibility roles, labels, and ARIA state changes
 - Regressions for bugs you fix
+- Boundary inputs to pure utils: zero or negative sizes, empty collections, divide-by-zero, and out-of-range indices. Assert the defined fallback (clamp, empty, identity) rather than only that it doesn't throw.
 - Generic/type contracts when adding `@template` props (see below)
 
 Skip or avoid:
