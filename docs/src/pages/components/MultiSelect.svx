@@ -1,5 +1,6 @@
 <script>
-  import { MultiSelect } from "carbon-components-svelte";
+  import { MultiSelect, TooltipIcon } from "carbon-components-svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
 Multi-selects provide a dropdown interface for selecting multiple options using checkboxes. They support filtering, custom formatting, and multiple states.
@@ -155,6 +156,96 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 Use the light variant for dark backgrounds by setting `light` to `true`.
 
 <MultiSelect light labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Fluid variant
+
+Set `fluid` to `true` to use the fluid variant, which embeds the label
+inside the field. Fluid multi-selects can be used standalone or inside
+[FluidForm](/components/FluidForm), where the fluid variant is applied
+automatically.
+
+<MultiSelect fluid labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Fluid variant (filterable)
+
+Filterable multi-selects support the fluid variant. Set both `fluid` and
+`filterable` to `true`.
+
+<MultiSelect fluid filterable labelText="Contact" placeholder="Filter contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Fluid variant with custom label
+
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
+
+<MultiSelect fluid labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}">
+  <svelte:fragment slot="labelChildren">
+    Contact
+    <TooltipIcon tooltipText="Your contact methods are used for account notifications." icon={Information} />
+  </svelte:fragment>
+</MultiSelect>
+
+## Fluid variant (condensed)
+
+By default, the fluid variant renders taller menu items to match the taller
+field. Set `condensed` to `true` to render menu items at their default
+height instead.
+
+<MultiSelect fluid condensed labelText="Contact" label="Select contact methods..." selectedIds="{['0']}"
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Fluid variant (invalid)
+
+Fluid multi-selects display the error message inside the field boundary. Long
+messages wrap to multiple lines.
+
+<MultiSelect fluid invalid invalidText="At least one contact method must be selected. Choose Slack, Email, or Fax to receive account notifications and security alerts." labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Fluid variant (warning)
+
+<MultiSelect fluid warn warnText="One or more contact methods are not associated with your account" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Fluid variant (disabled)
+
+Invalid and warning states are not displayed while the multi-select is disabled.
+
+<MultiSelect fluid disabled invalid invalidText="At least one contact method must be selected" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Fluid variant (read-only)
+
+Invalid and warning states are not displayed while the multi-select is read-only.
+
+<MultiSelect fluid readonly warn warnText="One or more contact methods are not associated with your account" labelText="Contact" label="Select contact methods..." selectedIds="{['0', '1']}"
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
