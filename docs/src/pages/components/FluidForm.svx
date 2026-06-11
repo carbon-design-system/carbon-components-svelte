@@ -5,6 +5,7 @@
     Dropdown,
     FluidForm,
     MultiSelect,
+    NumberInput,
     TextInput,
     PasswordInput,
     TextArea,
@@ -17,7 +18,7 @@
 
 Fluid forms provide a fluid-width form layout that adapts to their
 container. They are designed for full-width form layouts and work with supported
-input components such as text inputs, copy inputs, text areas, selects, dropdowns, combo boxes, multi-selects, and time pickers.
+input components such as text inputs, copy inputs, text areas, number inputs, selects, dropdowns, combo boxes, multi-selects, and time pickers.
 Note that inline input variants cannot be used within a fluid form.
 
 ## Fluid form
@@ -42,6 +43,7 @@ shows an application registration form with required fields.
     <SelectItem value="us-south" text="US South (Dallas)" />
     <SelectItem value="eu-de" text="EU Germany (Frankfurt)" />
   </Select>
+  <NumberInput labelText="Instance count" value={2} min={1} max={10} />
   <Dropdown
     labelText="Notification channel"
     selectedId="email"
@@ -148,6 +150,8 @@ supported component to use the fluid variant standalone.
 />
 
 <CopyInput fluid labelText="API key" value="a1b2c3d4-e5f6-7890-abcd-ef1234567890" />
+
+<NumberInput fluid labelText="Clusters" value={0} />
 
 Fluid time pickers use percentage-based columns (25% / 25% / 50% with two
 selects, 50% / 50% with one). Set a parent width so those ratios resolve as
