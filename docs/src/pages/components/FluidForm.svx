@@ -1,6 +1,7 @@
 <script>
   import {
     CopyInput,
+    Dropdown,
     FluidForm,
     TextInput,
     PasswordInput,
@@ -14,30 +15,49 @@
 
 Fluid forms provide a fluid-width form layout that adapts to their
 container. They are designed for full-width form layouts and work with supported
-input components such as text inputs, copy inputs, text areas, selects, and time pickers.
+input components such as text inputs, copy inputs, text areas, selects, dropdowns, and time pickers.
 Note that inline input variants cannot be used within a fluid form.
 
 ## Fluid form
 
 Create a fluid-width form layout using the fluid form component. This example
-shows a basic login form with required fields.
+shows an application registration form with required fields.
 
 <FluidForm>
-  <TextInput labelText="User name" placeholder="Enter user name..." required />
+  <TextInput
+    labelText="Application name"
+    placeholder="customer-portal"
+    required
+  />
   <PasswordInput
     required
     type="password"
-    labelText="Password"
-    placeholder="Enter password..."
+    labelText="Admin password"
+    placeholder="Enter admin password..."
   />
-  <Select labelText="Region">
-    <SelectItem value="us-east" text="US East" />
-    <SelectItem value="us-south" text="US South" />
-    <SelectItem value="eu-de" text="EU Germany" />
+  <Select labelText="Deployment region">
+    <SelectItem value="us-east" text="US East (Washington DC)" />
+    <SelectItem value="us-south" text="US South (Dallas)" />
+    <SelectItem value="eu-de" text="EU Germany (Frankfurt)" />
   </Select>
-  <TextArea labelText="App description" placeholder="Enter a description..." />
-  <CopyInput labelText="API token" value="sk-1234567890abcdef" />
-  <TimePicker labelText="Time" placeholder="hh:mm">
+  <Dropdown
+    labelText="Notification channel"
+    selectedId="email"
+    items="{[
+      { id: 'email', text: 'Email' },
+      { id: 'slack', text: 'Slack' },
+      { id: 'pagerduty', text: 'PagerDuty' },
+    ]}"
+  />
+  <TextArea
+    labelText="Description"
+    placeholder="Customer-facing web portal for account management and billing."
+  />
+  <CopyInput
+    labelText="API key"
+    value="a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+  />
+  <TimePicker labelText="Maintenance window" placeholder="hh:mm">
     <TimePickerSelect labelText="Clock" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
@@ -54,22 +74,39 @@ shows a basic login form with required fields.
 Fluid inputs do not require a fluid form. Set `fluid` to `true` on a
 supported component to use the fluid variant standalone.
 
-<Select fluid labelText="Region" helperText="Helper text is not displayed in the fluid variant">
-  <SelectItem value="us-east" text="US East" />
-  <SelectItem value="us-south" text="US South" />
-  <SelectItem value="eu-de" text="EU Germany" />
+<Select fluid labelText="Deployment region" helperText="Helper text is not displayed in the fluid variant">
+  <SelectItem value="us-east" text="US East (Washington DC)" />
+  <SelectItem value="us-south" text="US South (Dallas)" />
+  <SelectItem value="eu-de" text="EU Germany (Frankfurt)" />
 </Select>
 
-<TextArea fluid labelText="App description" placeholder="Enter a description..." helperText="Helper text is not displayed in the fluid variant" />
+<Dropdown
+  fluid
+  labelText="Notification channel"
+  selectedId="email"
+  helperText="Helper text is not displayed in the fluid variant"
+  items="{[
+    { id: 'email', text: 'Email' },
+    { id: 'slack', text: 'Slack' },
+    { id: 'pagerduty', text: 'PagerDuty' },
+  ]}"
+/>
 
-<CopyInput fluid labelText="API token" value="sk-1234567890abcdef" />
+<TextArea
+  fluid
+  labelText="Description"
+  placeholder="Customer-facing web portal for account management and billing."
+  helperText="Helper text is not displayed in the fluid variant"
+/>
+
+<CopyInput fluid labelText="API key" value="a1b2c3d4-e5f6-7890-abcd-ef1234567890" />
 
 Fluid time pickers use percentage-based columns (25% / 25% / 50% with two
 selects, 50% / 50% with one). Set a parent width so those ratios resolve as
 intended.
 
 <div style:width="350px">
-  <TimePicker fluid labelText="Time" placeholder="hh:mm">
+  <TimePicker fluid labelText="Maintenance window" placeholder="hh:mm">
     <TimePickerSelect labelText="Clock" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
