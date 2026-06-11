@@ -3,10 +3,11 @@ components: ["Dropdown", "DropdownSkeleton"]
 ---
 
 <script>
-  import { Dropdown, DropdownSkeleton } from "carbon-components-svelte";
+  import { Dropdown, DropdownSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
   import Email from "carbon-icons-svelte/lib/Email.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Star from "carbon-icons-svelte/lib/Star.svelte";
   import StarFilled from "carbon-icons-svelte/lib/StarFilled.svelte";
 </script>
@@ -130,6 +131,72 @@ Use the light variant for dropdowns on dark backgrounds by setting the `light` p
 to `true`.
 
 <Dropdown light labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+## Fluid variant
+
+Set `fluid` to `true` to use the fluid variant, which embeds the label
+inside the field. Fluid dropdowns can be used standalone or inside
+[FluidForm](/components/FluidForm), where the fluid variant is applied
+automatically. The fluid variant cannot be combined with the inline variant.
+
+<Dropdown fluid labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+## Fluid variant with custom label
+
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
+
+<Dropdown fluid labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}">
+  <svelte:fragment slot="labelChildren">
+    Contact
+    <TooltipIcon tooltipText="Your contact method is used for account notifications." icon={Information} />
+  </svelte:fragment>
+</Dropdown>
+
+## Fluid variant (condensed)
+
+By default, the fluid variant renders taller menu items to match the taller
+field. Set `condensed` to `true` to render menu items at their default
+height instead.
+
+<Dropdown fluid condensed labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+## Fluid variant (invalid)
+
+Fluid dropdowns display the error message inside the field boundary. Long
+messages wrap to multiple lines.
+
+<Dropdown fluid invalid invalidText="Secondary contact method must be different from the primary contact. Slack is already configured as your primary contact method; choose Email or Fax instead." labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+## Fluid variant (warning)
+
+<Dropdown fluid warn warnText="This contact method is not associated with your account" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+## Fluid variant (disabled)
+
+Invalid and warning states are not displayed while the dropdown is disabled.
+
+<Dropdown fluid disabled invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+## Fluid variant (read-only)
+
+Invalid and warning states are not displayed while the dropdown is read-only.
+
+<Dropdown fluid readonly warn warnText="This contact method is not associated with your account" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
