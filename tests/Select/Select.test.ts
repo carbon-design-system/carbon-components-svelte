@@ -4,6 +4,8 @@ import type SelectItemComponent from "carbon-components-svelte/Select/SelectItem
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import SelectFalsy from "./Select.falsy.test.svelte";
+import SelectFluidForm from "./Select.fluidForm.test.svelte";
+import SelectFluidSlot from "./Select.fluidSlot.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
 import SelectSkeleton from "./Select.skeleton.test.svelte";
 import SelectSlot from "./Select.slot.test.svelte";
@@ -514,6 +516,106 @@ describe("Select", () => {
   it("should not render label element when labelText is empty string", () => {
     render(Select, { props: { labelText: "" } });
     expect(screen.queryByText("Select label")).not.toBeInTheDocument();
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(Select);
+
+      expect(document.querySelector(".bx--select--fluid")).toBeNull();
+      expect(document.querySelector(".bx--select__divider")).toBeNull();
+    });
+
+    it("renders fluid variant and suppresses helper text", () => {
+      render(Select, { fluid: true, helperText: "Helper text" });
+
+      const selectElement = screen.getByLabelText("Select label");
+      expect(selectElement.closest(".bx--form-item")).toHaveClass(
+        "bx--select--fluid",
+      );
+      expect(
+        document.querySelector(".bx--select__divider"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(selectElement).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("renders the error message inside the input wrapper", () => {
+      render(Select, {
+        fluid: true,
+        invalid: true,
+        invalidText: "Invalid selection",
+      });
+
+      const message = screen.getByText("Invalid selection");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--select-input__wrapper")).not.toBeNull();
+      expect(screen.getByLabelText("Select label")).toHaveAttribute(
+        "aria-describedby",
+        "error-test-select",
+      );
+    });
+
+    it("renders the warning message inside the input wrapper", () => {
+      render(Select, {
+        fluid: true,
+        warn: true,
+        warnText: "Warning message",
+      });
+
+      const message = screen.getByText("Warning message");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--select-input__wrapper")).not.toBeNull();
+    });
+
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      render(Select, {
+        fluid: true,
+        invalid: true,
+        invalidText: "Invalid selection",
+        warn: true,
+        warnText: "Warning message",
+        ...props,
+      });
+
+      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(document.querySelector("[data-invalid]")).toBeNull();
+    });
+
+    it("ignores fluid for the inline variant", () => {
+      render(Select, { fluid: true, inline: true });
+
+      expect(document.querySelector(".bx--select--fluid")).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(SelectFluidForm);
+
+      const selectElement = screen.getByLabelText("Fluid form select");
+      expect(selectElement.closest(".bx--form-item")).toHaveClass(
+        "bx--select--fluid",
+      );
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(SelectFluidSlot);
+
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(SelectFluidSlot, { fluid: false });
+
+      expect(screen.getByText("Custom label content")).not.toHaveClass(
+        "bx--label--slotted",
+      );
+    });
   });
 });
 

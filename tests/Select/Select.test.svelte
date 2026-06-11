@@ -17,6 +17,7 @@
   export let inline = false;
   export let light = false;
   export let readonly = false;
+  export let fluid = false;
 </script>
 
 <Select
@@ -34,6 +35,7 @@
   {inline}
   {light}
   {readonly}
+  {fluid}
   on:change={() => console.log("change")}
   on:input={() => console.log("input")}
   on:update={(e) => console.log("update", e.detail)}
