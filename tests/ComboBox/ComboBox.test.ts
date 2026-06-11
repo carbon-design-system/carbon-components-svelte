@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import ComboBoxReal from "carbon-components-svelte/ComboBox/ComboBox.svelte";
@@ -256,6 +256,19 @@ describe("ComboBox", () => {
     const activeOptions = document.querySelectorAll(`[id="${activeId}"]`);
     expect(activeOptions).toHaveLength(1);
     expect(activeOptions[0]).toHaveAttribute("role", "option");
+  });
+
+  it("should clear the hover highlight when the cursor leaves the menu", async () => {
+    render(ComboBox);
+
+    await user.click(getInput());
+
+    const emailOption = screen.getByRole("option", { name: "Email" });
+    await user.hover(emailOption);
+    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+    await fireEvent.mouseLeave(screen.getByRole("listbox"));
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
   it("should set aria-activedescendant only when an item is highlighted", async () => {
