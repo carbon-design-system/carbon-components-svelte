@@ -14,6 +14,7 @@
   export let locale: ComponentProps<DatePicker>["locale"] = "en";
   export let short = false;
   export let light = false;
+  export let fluid = false;
   export let flatpickrProps: ComponentProps<DatePicker>["flatpickrProps"] = {
     static: true,
   };
@@ -42,6 +43,7 @@
   {locale}
   {short}
   {light}
+  {fluid}
   {flatpickrProps}
   {portalMenu}
   on:change={(e) => onchange?.(e)}
