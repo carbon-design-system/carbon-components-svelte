@@ -23,6 +23,7 @@
   export let id: ComponentProps<TimePicker>["id"] = "ccs-test";
   export let name: ComponentProps<TimePicker>["name"] = "test-time";
   export let ref: ComponentProps<TimePicker>["ref"] = null;
+  export let fluid: ComponentProps<TimePicker>["fluid"] = false;
 </script>
 
 <TimePicker
@@ -44,6 +45,7 @@
   {id}
   {name}
   {ref}
+  {fluid}
   on:change={() => {
     console.log("change");
   }}

@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import TimePickerFluidForm from "./TimePicker.fluidForm.test.svelte";
+import TimePickerFluidSlot from "./TimePicker.fluidSlot.test.svelte";
 import TimePicker from "./TimePicker.test.svelte";
 import TimePickerCustom from "./TimePickerCustom.test.svelte";
 import TimePickerSelectSlot from "./TimePickerSelect.slot.test.svelte";
@@ -325,6 +327,125 @@ describe("TimePicker", () => {
     await user.keyboard("{ArrowDown}");
     expect(select.value).toBe(initialValue);
     container.remove();
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(TimePicker);
+
+      expect(document.querySelector(".bx--time-picker--fluid")).toBeNull();
+      expect(document.querySelector(".bx--time-picker__divider")).toBeNull();
+    });
+
+    it("renders fluid variant and suppresses helper text", () => {
+      render(TimePicker, { fluid: true, helperText: "Helper text" });
+
+      expect(
+        document.querySelector(".bx--time-picker__form-item--fluid"),
+      ).toHaveClass("bx--form-item");
+      expect(
+        document.querySelector(".bx--time-picker--fluid"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(screen.getByRole("textbox")).not.toHaveAttribute(
+        "aria-describedby",
+      );
+    });
+
+    it("renders fluid select cells", () => {
+      render(TimePicker, { fluid: true });
+
+      expect(document.querySelectorAll(".bx--select--fluid")).toHaveLength(2);
+    });
+
+    it("renders the error message inside the fluid container", () => {
+      render(TimePicker, {
+        fluid: true,
+        id: "fluid-time",
+        invalid: true,
+        invalidText: "Invalid time",
+      });
+
+      const message = screen.getByText("Invalid time");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--time-picker--fluid")).not.toBeNull();
+      expect(
+        document.querySelector(".bx--time-picker__divider"),
+      ).toBeInTheDocument();
+      expect(screen.getByRole("textbox")).toHaveAttribute(
+        "aria-describedby",
+        "error-fluid-time",
+      );
+    });
+
+    it("renders the warning message inside the fluid container", () => {
+      render(TimePicker, {
+        fluid: true,
+        warn: true,
+        warnText: "Warning message",
+      });
+
+      const message = screen.getByText("Warning message");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--time-picker--fluid")).not.toBeNull();
+    });
+
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      render(TimePicker, {
+        fluid: true,
+        invalid: true,
+        invalidText: "Invalid time",
+        warn: true,
+        warnText: "Warning message",
+        ...props,
+      });
+
+      expect(screen.queryByText("Invalid time")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--time-picker--fluid--invalid"),
+      ).toBeNull();
+      expect(
+        document.querySelector(".bx--time-picker--fluid--warning"),
+      ).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(TimePickerFluidForm);
+
+      expect(
+        document.querySelector(".bx--time-picker--fluid"),
+      ).toBeInTheDocument();
+      expect(document.querySelector(".bx--select--fluid")).toBeInTheDocument();
+    });
+
+    it("marks labels as slotted when fluid", () => {
+      render(TimePickerFluidSlot);
+
+      expect(screen.getByText("Time")).toHaveClass("bx--label--slotted");
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("applies equal-width layout with one select", () => {
+      render(TimePickerFluidForm);
+
+      expect(
+        document.querySelector(".bx--time-picker--equal-width"),
+      ).toBeInTheDocument();
+    });
+
+    it("does not apply equal-width layout with two selects", () => {
+      render(TimePicker, { fluid: true });
+
+      expect(
+        document.querySelector(".bx--time-picker--equal-width"),
+      ).toBeNull();
+    });
   });
 
   it("forwards select events from TimePickerSelect", async () => {
