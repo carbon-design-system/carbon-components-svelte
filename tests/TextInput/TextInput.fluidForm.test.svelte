@@ -15,7 +15,8 @@
 <FluidForm>
   <TextInput
     bind:value
-    labelText="User name"
+    id="fluid-form-input"
+    labelText="Fluid form user name"
     {invalid}
     {invalidText}
     {warn}

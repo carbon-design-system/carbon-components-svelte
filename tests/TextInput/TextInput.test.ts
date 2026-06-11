@@ -1,9 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
+import TextInputFluidForm from "./TextInput.fluidForm.test.svelte";
+import TextInputFluidSlot from "./TextInput.fluidSlot.test.svelte";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
-import TextInputFluid from "./TextInputFluid.test.svelte";
 import TextInputInlineLabelChildren from "./TextInputInlineLabelChildren.test.svelte";
 
 describe("TextInput", () => {
@@ -257,49 +258,105 @@ describe("TextInput", () => {
     expect(input).toBeInTheDocument();
   });
 
-  it("should render fluid mode with divider", () => {
-    const { container } = render(TextInputFluid);
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(TextInput);
 
-    expect(
-      container.querySelector(".bx--text-input__divider"),
-    ).toBeInTheDocument();
-  });
-
-  it("should render fluid mode with invalid state", () => {
-    render(TextInputFluid, {
-      props: { invalid: true, invalidText: "Invalid input" },
+      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
+      expect(document.querySelector(".bx--text-input__divider")).toBeNull();
     });
 
-    const requirement = screen.getByText("Invalid input");
-    expect(requirement).toBeInTheDocument();
-    expect(requirement).toHaveClass("bx--form-requirement");
-  });
+    it("renders fluid variant and suppresses helper text", () => {
+      render(TextInput, { fluid: true, helperText: "Helper text" });
 
-  it("should render fluid mode with warning state", () => {
-    render(TextInputFluid, {
-      props: { warn: true, warnText: "Warning message" },
+      const input = screen.getByLabelText("User name");
+      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
+        "bx--text-input--fluid",
+      );
+      expect(
+        document.querySelector(".bx--text-input__divider"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(input).not.toHaveAttribute("aria-describedby");
     });
 
-    const requirement = screen.getByText("Warning message");
-    expect(requirement).toBeInTheDocument();
-    expect(requirement).toHaveClass("bx--form-requirement");
-  });
+    it("renders the error message inside the input wrapper", () => {
+      render(TextInput, {
+        fluid: true,
+        id: "test-input",
+        invalid: true,
+        invalidText: "Invalid input",
+      });
 
-  it("should not render helper text in fluid mode when not inline", () => {
-    render(TextInputFluid, {
-      props: { helperText: "Helper text" },
+      const message = screen.getByText("Invalid input");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
+      expect(screen.getByLabelText("User name")).toHaveAttribute(
+        "aria-describedby",
+        "error-test-input",
+      );
     });
 
-    expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
-  });
+    it("renders the warning message inside the input wrapper", () => {
+      render(TextInput, {
+        fluid: true,
+        warn: true,
+        warnText: "Warning message",
+      });
 
-  it("should not render helper text in fluid mode even when inline", () => {
-    render(TextInputFluid, {
-      props: { inline: true, helperText: "Helper text" },
+      const message = screen.getByText("Warning message");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
     });
 
-    // In fluid+inline mode, helper text is not rendered based on the source code logic
-    expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      render(TextInput, {
+        fluid: true,
+        invalid: true,
+        invalidText: "Invalid input",
+        warn: true,
+        warnText: "Warning message",
+        ...props,
+      });
+
+      expect(screen.queryByText("Invalid input")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(document.querySelector("[data-invalid]")).toBeNull();
+    });
+
+    it("ignores fluid for the inline variant", () => {
+      render(TextInput, { fluid: true, inline: true });
+
+      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(TextInputFluidForm);
+
+      const input = screen.getByLabelText("Fluid form user name");
+      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
+        "bx--text-input--fluid",
+      );
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(TextInputFluidSlot);
+
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(TextInputFluidSlot, { fluid: false });
+
+      expect(screen.getByText("Custom label content")).not.toHaveClass(
+        "bx--label--slotted",
+      );
+    });
   });
 
   it("should set aria-describedby to error id when invalid", () => {
@@ -484,7 +541,7 @@ describe("TextInput", () => {
     expect(input).toHaveAttribute("type", "text");
   });
 
-  it("should still show warning text in readonly mode", () => {
+  it("should suppress warning text in readonly mode", () => {
     render(TextInput, {
       props: {
         readonly: true,
@@ -493,11 +550,10 @@ describe("TextInput", () => {
       },
     });
 
-    // Warning text is still displayed even in readonly mode
-    expect(screen.getByText("Warning message")).toBeInTheDocument();
+    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
   });
 
-  it("should show invalid but not set data-invalid on input when readonly", () => {
+  it("should not set data-invalid on input when readonly", () => {
     render(TextInput, {
       props: {
         readonly: true,

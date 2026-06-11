@@ -73,6 +73,14 @@
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
+  /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   * Cannot be combined with the inline variant.
+   */
+  export let fluid = false;
+
   import { createEventDispatcher, getContext } from "svelte";
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -97,8 +105,9 @@
     dispatch("change", parse(event.target.value));
   }
 
-  const isFluid = !!ctx && ctx.isFluid;
-  $: hasError = invalid && !readonly;
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
@@ -113,6 +122,7 @@
   class:bx--text-input-wrapper--inline={inline}
   class:bx--text-input-wrapper--light={light}
   class:bx--text-input-wrapper--readonly={readonly}
+  class:bx--text-input--fluid={isFluid}
   on:click
   on:mouseover
   on:mouseenter
@@ -130,6 +140,7 @@
           class:bx--label--inline--xs={size === "xs"}
           class:bx--label--inline--sm={size === "sm"}
           class:bx--label--inline--xl={size === "xl"}
+          class:bx--label--slotted={isFluid && $$slots.labelChildren}
         >
           <slot name="labelChildren"> {labelText} </slot>
         </label>
@@ -154,6 +165,7 @@
       class:bx--label--inline={inline}
       class:bx--label--inline-sm={inline && size === "sm"}
       class:bx--label--inline-xl={inline && size === "xl"}
+      class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren"> {labelText} </slot>
     </label>
@@ -163,18 +175,18 @@
     class:bx--text-input__field-outer-wrapper--inline={inline}
   >
     <div
-      data-invalid={hasError || undefined}
-      data-warn={warn || undefined}
+      data-invalid={showInvalid || undefined}
+      data-warn={showWarn || undefined}
       class:bx--text-input__field-wrapper={true}
-      class:bx--text-input__field-wrapper--warning={!invalid && warn}
+      class:bx--text-input__field-wrapper--warning={showWarn}
     >
       {#if readonly}
         <EditOff class="bx--text-input__readonly-icon" />
       {:else}
-        {#if invalid}
+        {#if showInvalid}
           <WarningFilled class="bx--text-input__invalid-icon" />
         {/if}
-        {#if !invalid && warn}
+        {#if showWarn}
           <WarningAltFilled
             class="bx--text-input__invalid-icon
             bx--text-input__invalid-icon--warning"
@@ -183,14 +195,14 @@
       {/if}
       <input
         bind:this={ref}
-        data-invalid={hasError || undefined}
-        aria-invalid={hasError || undefined}
-        data-warn={warn || undefined}
-        aria-describedby={hasError
+        data-invalid={showInvalid || undefined}
+        aria-invalid={showInvalid || undefined}
+        data-warn={showWarn || undefined}
+        aria-describedby={showInvalid
           ? errorId
-          : warn
+          : showWarn
             ? warnId
-            : helperText
+            : helperText && !isFluid
               ? helperId
               : undefined}
         {disabled}
@@ -202,8 +214,8 @@
         {readonly}
         class:bx--text-input={true}
         class:bx--text-input--light={light}
-        class:bx--text-input--invalid={hasError}
-        class:bx--text-input--warning={warn}
+        class:bx--text-input--invalid={showInvalid}
+        class:bx--text-input--warning={showWarn}
         class:bx--text-input--xs={size === "xs"}
         class:bx--text-input--sm={size === "sm"}
         class:bx--text-input--xl={size === "xl"}
@@ -219,14 +231,14 @@
       {#if isFluid}
         <hr class:bx--text-input__divider={true}>
       {/if}
-      {#if isFluid && !inline && invalid}
+      {#if isFluid && showInvalid}
         <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
       {/if}
-      {#if isFluid && !inline && warn}
+      {#if isFluid && showWarn}
         <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
       {/if}
     </div>
-    {#if !invalid && !warn && !isFluid && !inline && helperText}
+    {#if !showInvalid && !showWarn && !isFluid && !inline && helperText}
       <div
         id={helperId}
         class:bx--form__helper-text={true}
@@ -236,10 +248,10 @@
         {helperText}
       </div>
     {/if}
-    {#if !isFluid && invalid}
+    {#if !isFluid && showInvalid}
       <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
     {/if}
-    {#if !isFluid && !invalid && warn}
+    {#if !isFluid && showWarn}
       <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
     {/if}
   </div>
