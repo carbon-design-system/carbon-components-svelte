@@ -1,4 +1,5 @@
 import {
+  FLUID_MENU_ITEM_HEIGHT,
   getMenuItemHeight,
   getMenuMaxHeight,
   MENU_ITEM_HEIGHT,
@@ -41,5 +42,25 @@ describe("getMenuItemHeight", () => {
   it("returns default for an unknown size", () => {
     // @ts-expect-error - exercising the runtime fallback
     expect(getMenuItemHeight("xxl")).toBe(MENU_ITEM_HEIGHT.md);
+  });
+
+  it("returns 64px for every size when fluid is true", () => {
+    expect(getMenuItemHeight("sm", { fluid: true })).toBe(
+      FLUID_MENU_ITEM_HEIGHT,
+    );
+    expect(getMenuItemHeight("md", { fluid: true })).toBe(
+      FLUID_MENU_ITEM_HEIGHT,
+    );
+    expect(getMenuItemHeight("lg", { fluid: true })).toBe(
+      FLUID_MENU_ITEM_HEIGHT,
+    );
+    expect(getMenuItemHeight("xl", { fluid: true })).toBe(
+      FLUID_MENU_ITEM_HEIGHT,
+    );
+  });
+
+  it("uses size-based heights when fluid is false", () => {
+    expect(getMenuItemHeight("sm", { fluid: false })).toBe(32);
+    expect(getMenuItemHeight("lg", { fluid: false })).toBe(48);
   });
 });
