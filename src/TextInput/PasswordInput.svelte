@@ -70,6 +70,17 @@
   /** Set to `true` to use inline version */
   export let inline = false;
 
+  /** Set to `true` to use the read-only variant */
+  export let readonly = false;
+
+  /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   * Cannot be combined with the inline variant.
+   */
+  export let fluid = false;
+
   /** Set an id for the input element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -103,7 +114,9 @@
   const ctx = getContext("carbon:Form");
   const insideModal = getContext("carbon:Modal");
 
-  const isFluid = !!ctx && ctx.isFluid;
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
 
@@ -123,9 +136,10 @@
 <div
   class:bx--form-item={true}
   class:bx--text-input-wrapper={true}
-  class:bx--password-input-wrapper={!isFluid}
+  class:bx--password-input-wrapper={true}
   class:bx--text-input-wrapper--light={light}
   class:bx--text-input-wrapper--inline={inline}
+  class:bx--text-input--fluid={isFluid}
   on:click
   on:mouseover
   on:mouseenter
@@ -141,6 +155,7 @@
       class:bx--label--inline--xs={inline && size === "xs"}
       class:bx--label--inline--sm={inline && size === "sm"}
       class:bx--label--inline--xl={inline && size === "xl"}
+      class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren"> {labelText} </slot>
     </label>
@@ -165,6 +180,7 @@
       class:bx--label--inline--xs={inline && size === "xs"}
       class:bx--label--inline--sm={inline && size === "sm"}
       class:bx--label--inline--xl={inline && size === "xl"}
+      class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren"> {labelText} </slot>
     </label>
@@ -175,13 +191,14 @@
   >
     <div
       class:bx--text-input__field-wrapper={true}
-      class:bx--text-input__field-wrapper--warning={warn}
-      data-invalid={invalid || undefined}
+      class:bx--text-input__field-wrapper--warning={showWarn}
+      data-invalid={showInvalid || undefined}
+      data-warn={showWarn || undefined}
     >
-      {#if invalid}
+      {#if showInvalid}
         <WarningFilled class="bx--text-input__invalid-icon" />
       {/if}
-      {#if !invalid && warn}
+      {#if showWarn}
         <WarningAltFilled
           class="bx--text-input__invalid-icon
             bx--text-input__invalid-icon--warning"
@@ -189,13 +206,14 @@
       {/if}
       <input
         bind:this={ref}
-        data-invalid={invalid || undefined}
-        aria-invalid={invalid || undefined}
-        aria-describedby={invalid
+        data-invalid={showInvalid || undefined}
+        aria-invalid={showInvalid || undefined}
+        data-warn={showWarn || undefined}
+        aria-describedby={showInvalid
           ? errorId
-          : warn
+          : showWarn
             ? warnId
-            : helperText
+            : helperText && !isFluid
               ? helperId
               : undefined}
         {id}
@@ -204,11 +222,12 @@
         {type}
         value={value ?? ""}
         {disabled}
+        {readonly}
         class:bx--text-input={true}
         class:bx--password-input={true}
         class:bx--text-input--light={light}
-        class:bx--text-input--invalid={invalid}
-        class:bx--text-input--warning={warn}
+        class:bx--text-input--invalid={showInvalid}
+        class:bx--text-input--warning={showWarn}
         class:bx--text-input--xs={size === "xs"}
         class:bx--text-input--sm={size === "sm"}
         class:bx--text-input--xl={size === "xl"}
@@ -224,61 +243,64 @@
         on:blur
         on:paste
       >
-      {#if isFluid && invalid}
-        <hr class="bx--text-input__divider">
-        <div class="bx--form-requirement" id={errorId}>{invalidText}</div>
+      {#if isFluid}
+        <hr class:bx--text-input__divider={true}>
       {/if}
-      {#if !(isFluid && invalid)}
-        <button
-          bind:this={toggleButtonRef}
-          type="button"
-          {disabled}
-          class:bx--text-input--password__visibility__toggle={true}
-          class:bx--btn={true}
-          class:bx--btn--icon-only={true}
-          class:bx--btn--disabled={disabled}
-          class:bx--tooltip__trigger={true}
-          class:bx--tooltip--a11y={true}
-          class:bx--tooltip--portal-active={effectivePortalTooltip}
-          class:bx--tooltip--top={tooltipPosition === "top"}
-          class:bx--tooltip--right={tooltipPosition === "right"}
-          class:bx--tooltip--bottom={tooltipPosition === "bottom"}
-          class:bx--tooltip--left={tooltipPosition === "left"}
-          class:bx--tooltip--align-start={tooltipAlignment === "start"}
-          class:bx--tooltip--align-center={tooltipAlignment === "center"}
-          class:bx--tooltip--align-end={tooltipAlignment === "end"}
-          aria-label={effectivePortalTooltip ? tooltipLabel : undefined}
-          on:click={() => {
-            type = type === "password" ? "text" : "password";
-          }}
-          on:mouseenter={() => {
-            tooltipOpen = true;
-          }}
-          on:mouseleave={() => {
-            tooltipOpen = false;
-          }}
-          on:focus={() => {
-            tooltipOpen = true;
-          }}
-          on:blur={() => {
-            tooltipOpen = false;
-          }}
-        >
-          {#if !disabled && !effectivePortalTooltip}
-            <span class:bx--assistive-text={true}> {tooltipLabel} </span>
-          {/if}
-          {#if type === "text"}
-            <ViewOff class="bx--icon-visibility-off" />
-          {:else}
-            <View class="bx--icon-visibility-on" />
-          {/if}
-        </button>
+      {#if isFluid && showInvalid}
+        <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
       {/if}
+      {#if isFluid && showWarn}
+        <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
+      {/if}
+      <button
+        bind:this={toggleButtonRef}
+        type="button"
+        {disabled}
+        class:bx--text-input--password__visibility__toggle={true}
+        class:bx--btn={true}
+        class:bx--btn--icon-only={true}
+        class:bx--btn--disabled={disabled}
+        class:bx--tooltip__trigger={true}
+        class:bx--tooltip--a11y={true}
+        class:bx--tooltip--portal-active={effectivePortalTooltip}
+        class:bx--tooltip--top={tooltipPosition === "top"}
+        class:bx--tooltip--right={tooltipPosition === "right"}
+        class:bx--tooltip--bottom={tooltipPosition === "bottom"}
+        class:bx--tooltip--left={tooltipPosition === "left"}
+        class:bx--tooltip--align-start={tooltipAlignment === "start"}
+        class:bx--tooltip--align-center={tooltipAlignment === "center"}
+        class:bx--tooltip--align-end={tooltipAlignment === "end"}
+        aria-label={effectivePortalTooltip ? tooltipLabel : undefined}
+        on:click={() => {
+          type = type === "password" ? "text" : "password";
+        }}
+        on:mouseenter={() => {
+          tooltipOpen = true;
+        }}
+        on:mouseleave={() => {
+          tooltipOpen = false;
+        }}
+        on:focus={() => {
+          tooltipOpen = true;
+        }}
+        on:blur={() => {
+          tooltipOpen = false;
+        }}
+      >
+        {#if !disabled && !effectivePortalTooltip}
+          <span class:bx--assistive-text={true}> {tooltipLabel} </span>
+        {/if}
+        {#if type === "text"}
+          <ViewOff class="bx--icon-visibility-off" />
+        {:else}
+          <View class="bx--icon-visibility-on" />
+        {/if}
+      </button>
     </div>
-    {#if !isFluid && invalid}
+    {#if !isFluid && showInvalid}
       <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
     {/if}
-    {#if !invalid && !warn && !isFluid && !inline && helperText}
+    {#if !showInvalid && !showWarn && !isFluid && !inline && helperText}
       <div
         class:bx--form__helper-text={true}
         class:bx--form__helper-text--disabled={disabled}
@@ -287,7 +309,7 @@
         {helperText}
       </div>
     {/if}
-    {#if !isFluid && !invalid && warn}
+    {#if !isFluid && showWarn}
       <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
     {/if}
   </div>

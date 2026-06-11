@@ -1,0 +1,193 @@
+// Fluid variant styles for `TextInput` and `PasswordInput`, ported from the
+// Carbon v11 `fluid-text-input` module. carbon-components v10 only ships fluid
+// styles keyed off `.bx--form--fluid`; this overlay enables standalone fluid.
+// https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-text-input/_fluid-text-input.scss
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Fluid text input variant (Carbon React `FluidTextInput` parity)
+/// @access private
+/// @group components
+@mixin fluid-text-input {
+  .#{$prefix}--text-input--fluid.#{$prefix}--text-input-wrapper {
+    position: relative;
+    background: $field-01;
+    block-size: 100%;
+    transition:
+      background-color $duration--fast-01 motion(standard, productive),
+      outline $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--text-input--fluid .#{$prefix}--label {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    block-size: to-rem(16px);
+    inset-block-start: to-rem(13px);
+    inline-size: auto;
+    inset-inline-end: auto;
+    inset-inline-start: $spacing-05;
+  }
+
+  .#{$prefix}--text-input--fluid.#{$prefix}--text-input-wrapper--readonly
+    .#{$prefix}--text-input__field-wrapper
+    .#{$prefix}--text-input {
+    color: $text-02;
+  }
+
+  .#{$prefix}--text-input--fluid .#{$prefix}--label::-webkit-scrollbar {
+    display: none;
+  }
+
+  .#{$prefix}--text-input--fluid .#{$prefix}--label {
+    -ms-overflow-style: none;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    white-space: nowrap;
+  }
+
+  // Labels with slotted content (e.g., a tooltip icon) must not clip
+  // overflow, or the tooltip popover would be cut off. The v11 styles
+  // gate the scroll behavior with `:has()`; a modifier class applied
+  // when the `labelChildren` slot is used serves the same purpose.
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--label.#{$prefix}--label--slotted {
+    gap: $spacing-03;
+    overflow: visible;
+  }
+
+  .#{$prefix}--text-input--fluid .#{$prefix}--form__helper-text {
+    display: none;
+  }
+
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input {
+    padding: to-rem(32px) $spacing-05 to-rem(13px);
+    min-block-size: to-rem(64px);
+  }
+
+  .#{$prefix}--text-input__divider,
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__divider {
+    display: none;
+  }
+
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper[data-invalid],
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper--warning {
+    display: block;
+  }
+
+  .#{$prefix}--text-input--fluid input[data-invalid] {
+    outline: none;
+  }
+
+  // The error/warn message is rendered inside the input wrapper in the
+  // fluid variant. The base v10 styles only reveal a message that is a
+  // sibling of the wrapper.
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper[data-invalid]
+    .#{$prefix}--form-requirement,
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper--warning
+    .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-block-size: 100%;
+  }
+
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper[data-invalid]
+    .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
+  .#{$prefix}--text-input--fluid .#{$prefix}--form-requirement {
+    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    margin: 0;
+  }
+
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input--invalid,
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input--warning {
+    border-block-end: none;
+  }
+
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input--invalid
+    ~ .#{$prefix}--text-input__divider,
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input--warning
+    ~ .#{$prefix}--text-input__divider {
+    display: block;
+    border-style: solid;
+    border-color: $ui-03;
+    margin: 0 1rem;
+    border-block-end: none;
+  }
+
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__invalid-icon {
+    inset-block-start: to-rem(80px);
+  }
+
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper[data-invalid]
+    > .#{$prefix}--text-input--invalid,
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper--warning
+    > .#{$prefix}--text-input--warning {
+    outline: none;
+  }
+
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper--warning {
+    border-block-end: 1px solid $ui-04;
+  }
+
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper[data-invalid]:not(:focus-within) {
+    @include focus-outline("invalid");
+  }
+
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper[data-invalid]:focus-within,
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper--warning:focus-within {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper[data-invalid]
+    > .#{$prefix}--text-input--invalid:focus,
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input__field-wrapper--warning
+    > .#{$prefix}--text-input--warning:focus {
+    outline: none;
+  }
+
+  // Password input
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--text-input.#{$prefix}--password-input {
+    padding-inline-end: $spacing-08;
+  }
+
+  .#{$prefix}--text-input--fluid.#{$prefix}--password-input-wrapper
+    .#{$prefix}--text-input__invalid-icon {
+    inset-inline-end: $spacing-05;
+  }
+
+  .#{$prefix}--text-input--fluid
+    .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
+    block-size: to-rem(32px);
+    inline-size: to-rem(32px);
+    inset-block-start: to-rem(26px);
+    inset-inline-end: $spacing-03;
+  }
+}
+
+@include exports("fluid-text-input") {
+  @include fluid-text-input;
+}

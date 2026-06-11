@@ -22,6 +22,8 @@
   export let warn = false;
   export let warnText = "";
   export let inline = false;
+  export let readonly = false;
+  export let fluid = false;
   export let id = "test-password-input";
   export let name = "";
   export let ref: ComponentProps<PasswordInput>["ref"] = null;
@@ -50,6 +52,8 @@
   {warn}
   {warnText}
   {inline}
+  {readonly}
+  {fluid}
   {id}
   {name}
   {portalTooltip}

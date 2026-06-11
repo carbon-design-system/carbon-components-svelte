@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import PasswordInputFluidForm from "./PasswordInput.fluidForm.test.svelte";
+import PasswordInputFluidSlot from "./PasswordInput.fluidSlot.test.svelte";
 import PasswordInputSlot from "./PasswordInput.slot.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
 import PasswordInputInModal from "./PasswordInputInModal.test.svelte";
@@ -329,6 +331,131 @@ describe("PasswordInput", () => {
       expect(
         document.querySelector("[data-floating-portal]"),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(PasswordInput, { labelText: "Password" });
+
+      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
+      expect(document.querySelector(".bx--text-input__divider")).toBeNull();
+    });
+
+    it("renders fluid variant and suppresses helper text", () => {
+      render(PasswordInput, {
+        fluid: true,
+        labelText: "Password",
+        helperText: "Helper text",
+      });
+
+      const input = screen.getByLabelText("Password");
+      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
+        "bx--text-input--fluid",
+      );
+      expect(
+        document.querySelector(".bx--text-input__divider"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(input).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("renders the error message inside the input wrapper", () => {
+      render(PasswordInput, {
+        fluid: true,
+        labelText: "Password",
+        id: "test-password",
+        invalid: true,
+        invalidText: "Invalid password",
+      });
+
+      const message = screen.getByText("Invalid password");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
+      expect(screen.getByLabelText("Password")).toHaveAttribute(
+        "aria-describedby",
+        "error-test-password",
+      );
+    });
+
+    it("renders the warning message inside the input wrapper", () => {
+      render(PasswordInput, {
+        fluid: true,
+        labelText: "Password",
+        warn: true,
+        warnText: "Warning message",
+      });
+
+      const message = screen.getByText("Warning message");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
+    });
+
+    it("keeps the visibility toggle when fluid and invalid", () => {
+      render(PasswordInput, {
+        fluid: true,
+        labelText: "Password",
+        invalid: true,
+        invalidText: "Invalid password",
+      });
+
+      expect(
+        document.querySelector(".bx--text-input--password__visibility__toggle"),
+      ).toBeInTheDocument();
+    });
+
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      render(PasswordInput, {
+        fluid: true,
+        labelText: "Password",
+        invalid: true,
+        invalidText: "Invalid password",
+        warn: true,
+        warnText: "Warning message",
+        ...props,
+      });
+
+      expect(screen.queryByText("Invalid password")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(document.querySelector("[data-invalid]")).toBeNull();
+    });
+
+    it("ignores fluid for the inline variant", () => {
+      render(PasswordInput, {
+        fluid: true,
+        inline: true,
+        labelText: "Password",
+      });
+
+      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(PasswordInputFluidForm);
+
+      const input = screen.getByLabelText("Fluid form password");
+      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
+        "bx--text-input--fluid",
+      );
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(PasswordInputFluidSlot);
+
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(PasswordInputFluidSlot, { fluid: false });
+
+      expect(screen.getByText("Custom label content")).not.toHaveClass(
+        "bx--label--slotted",
+      );
     });
   });
 });
