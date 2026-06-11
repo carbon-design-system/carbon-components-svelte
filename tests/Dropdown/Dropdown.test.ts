@@ -966,6 +966,20 @@ describe("Dropdown", () => {
     expect(button).toHaveTextContent("Banana");
   });
 
+  it("should clear the hover highlight when the cursor leaves the menu", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+
+    const emailOption = screen.getByRole("option", { name: "Email" });
+    await user.hover(emailOption);
+    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+    await fireEvent.mouseLeave(screen.getByRole("listbox"));
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
   it("should support typeahead with multiple characters", async () => {
     render(Dropdown, {
       props: {
