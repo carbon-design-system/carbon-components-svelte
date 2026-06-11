@@ -12,6 +12,8 @@
   export let light: ComponentProps<Dropdown>["light"] = false;
   export let disabled: ComponentProps<Dropdown>["disabled"] = false;
   export let readonly: ComponentProps<Dropdown>["readonly"] = false;
+  export let fluid: ComponentProps<Dropdown>["fluid"] = false;
+  export let condensed: ComponentProps<Dropdown>["condensed"] = false;
   export let labelText: ComponentProps<Dropdown>["labelText"] = "";
   export let invalid: ComponentProps<Dropdown>["invalid"] = false;
   export let invalidText: ComponentProps<Dropdown>["invalidText"] = "";
@@ -41,6 +43,8 @@
   {light}
   {disabled}
   {readonly}
+  {fluid}
+  {condensed}
   {labelText}
   {invalid}
   {invalidText}

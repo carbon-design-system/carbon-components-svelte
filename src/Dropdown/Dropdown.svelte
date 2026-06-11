@@ -89,6 +89,21 @@
   export let readonly = false;
 
   /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   * Cannot be combined with the inline variant.
+   */
+  export let fluid = false;
+
+  /**
+   * Set to `true` to render condensed menu items in the fluid variant.
+   * Menu items use the default height instead of the taller fluid height.
+   * Only applies when the fluid variant is active.
+   */
+  export let condensed = false;
+
+  /**
    * Specify the list box label.
    * @type {string}
    */
@@ -187,6 +202,7 @@
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
+  const formContext = getContext("carbon:Form");
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
@@ -198,6 +214,7 @@
   let typeaheadBuffer = "";
   let listScrollTop = 0;
   let prevOpen = false;
+  let fieldFocused = false;
   let itemsById = new Map();
 
   const TYPEAHEAD_DELAY = 500;
@@ -227,6 +244,8 @@
   // Invalid/warn states are suppressed when the dropdown is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: isFluid = !inline && (fluid || !!formContext?.isFluid);
+  $: showFieldFocus = isFluid && (fieldFocused || open);
   // Scope the option id with the instance `id` so multiple Dropdowns on a
   // page do not produce duplicate DOM ids. `aria-activedescendant` references
   // this same scoped value (see the `ListBoxMenuItem` ids below).
@@ -249,12 +268,16 @@
 
   $: menuMaxHeight = getMenuMaxHeight(size);
 
+  // Fluid (non-condensed) menu items are 64px tall (see css/_fluid-list-box.scss).
+  // Portaled menus render outside the fluid wrapper, so they keep default heights.
+  $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
+
   $: virtualState = virtualListState({
     items,
     scrollTop: listScrollTop,
     shouldVirtualize,
     virtualize,
-    defaults: { itemHeight: getMenuItemHeight(size) },
+    defaults: { itemHeight: hasFluidMenuItems ? 64 : getMenuItemHeight(size) },
   });
   $: virtualConfig = virtualState.config;
   $: virtualData = virtualState.data;
@@ -414,6 +437,9 @@
   class:bx--dropdown__wrapper--inline={inline}
   class:bx--list-box__wrapper--inline={inline}
   class:bx--dropdown__wrapper--inline--invalid={inline && showInvalid}
+  class:bx--list-box__wrapper--fluid={isFluid}
+  class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
+  class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
   {...$$restProps}
 >
@@ -423,6 +449,7 @@
       class:bx--label={true}
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
+      class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren"> {labelText} </slot>
     </label>
@@ -451,26 +478,37 @@
         class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
     {/if}
-    <button
-      bind:this={ref}
-      type="button"
-      role="combobox"
-      class:bx--list-box__field={true}
-      tabindex="0"
-      aria-expanded={open}
-      aria-disabled={readonly || undefined}
-      aria-readonly={readonly || undefined}
-      aria-haspopup="listbox"
-      aria-activedescendant={highlightedId ?? ""}
-      aria-controls={open ? menuId : undefined}
-      aria-describedby={showInvalid && invalidText
-        ? errorId
-        : showWarn && warnText
-          ? warnId
-          : !inline && !showInvalid && !showWarn && helperText
-            ? helperId
-            : undefined}
-      on:keydown={(event) => {
+    <div
+      style={isFluid ? undefined : "display: contents"}
+      class:bx--list-box__field--wrapper={isFluid}
+      class:bx--list-box__field--wrapper--input-focused={showFieldFocus}
+    >
+      <button
+        bind:this={ref}
+        type="button"
+        role="combobox"
+        class:bx--list-box__field={true}
+        tabindex="0"
+        aria-expanded={open}
+        aria-disabled={readonly || undefined}
+        aria-readonly={readonly || undefined}
+        aria-haspopup="listbox"
+        aria-activedescendant={highlightedId ?? ""}
+        aria-controls={open ? menuId : undefined}
+        aria-describedby={showInvalid && invalidText
+          ? errorId
+          : showWarn && warnText
+            ? warnId
+            : !inline && !isFluid && !showInvalid && !showWarn && helperText
+              ? helperId
+              : undefined}
+        on:focus={() => {
+          if (isFluid) fieldFocused = true;
+        }}
+        on:blur={() => {
+          if (isFluid) fieldFocused = false;
+        }}
+        on:keydown={(event) => {
         if (
           event.key === "Enter" ||
           event.key === "ArrowDown" ||
@@ -520,7 +558,7 @@
           typeaheadSearch(event.key);
         }
       }}
-      on:keyup={(event) => {
+        on:keyup={(event) => {
         if (event.key === " ") {
           event.preventDefault();
         } else {
@@ -528,26 +566,27 @@
         }
         selectHighlighted();
       }}
-      {disabled}
-      {id}
-    >
-      <span class:bx--list-box__label={true}>
-        {#if selectedItem}
-          {itemToString(selectedItem)}
-        {:else}
-          {label}
-        {/if}
-      </span>
-      <ListBoxMenuIcon
-        on:click={(event) => {
+        {disabled}
+        {id}
+      >
+        <span class:bx--list-box__label={true}>
+          {#if selectedItem}
+            {itemToString(selectedItem)}
+          {:else}
+            {label}
+          {/if}
+        </span>
+        <ListBoxMenuIcon
+          on:click={(event) => {
           event.stopPropagation();
           if (disabled || readonly) return;
           open = !open;
         }}
-        {translateWithId}
-        {open}
-      />
-    </button>
+          {translateWithId}
+          {open}
+        />
+      </button>
+    </div>
     {#if open}
       <ListBoxMenu
         aria-label={menuAriaLabel}
@@ -701,13 +740,16 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
+  {#if isFluid}
+    <hr class:bx--list-box__divider={true}>
+  {/if}
   {#if showInvalid && invalidText}
     <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
   {#if showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
-  {#if !inline && !showInvalid && !showWarn && helperText}
+  {#if !inline && !isFluid && !showInvalid && !showWarn && helperText}
     <div
       id={helperId}
       class:bx--form__helper-text={true}

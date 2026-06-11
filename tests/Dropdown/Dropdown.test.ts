@@ -11,6 +11,8 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
+import DropdownFluidForm from "./Dropdown.fluidForm.test.svelte";
+import DropdownFluidSlot from "./Dropdown.fluidSlot.test.svelte";
 import DropdownLabelChildren from "./Dropdown.slot.test.svelte";
 import Dropdown from "./Dropdown.test.svelte";
 import DropdownDuplicateIds from "./DropdownDuplicateIds.test.svelte";
@@ -2263,6 +2265,194 @@ describe("Dropdown", () => {
       expect(
         document.querySelector(".bx--list-box__menu-item__selected-icon"),
       ).toBeNull();
+    });
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(Dropdown, { props: { items, labelText: "Contact" } });
+
+      expect(
+        document.querySelector(".bx--list-box__wrapper--fluid"),
+      ).toBeNull();
+      expect(document.querySelector(".bx--list-box__divider")).toBeNull();
+    });
+
+    it("renders fluid variant and suppresses helper text", () => {
+      render(Dropdown, {
+        props: {
+          items,
+          labelText: "Contact",
+          fluid: true,
+          helperText: "Helper text",
+        },
+      });
+
+      const button = screen.getByLabelText("Contact");
+      expect(button.closest(".bx--dropdown__wrapper")).toHaveClass(
+        "bx--list-box__wrapper--fluid",
+      );
+      expect(
+        document.querySelector(".bx--list-box__divider"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(button).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("renders the error message inside the fluid wrapper", () => {
+      render(Dropdown, {
+        props: {
+          items,
+          labelText: "Contact",
+          fluid: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+        },
+      });
+
+      const message = screen.getByText("Invalid selection");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
+      expect(message.closest(".bx--dropdown__wrapper")).toHaveClass(
+        "bx--list-box__wrapper--fluid--invalid",
+      );
+      expect(screen.getByLabelText("Contact")).toHaveAttribute(
+        "aria-describedby",
+        "error-test-dropdown",
+      );
+    });
+
+    it("renders the warning message inside the fluid wrapper", () => {
+      render(Dropdown, {
+        props: {
+          items,
+          labelText: "Contact",
+          fluid: true,
+          warn: true,
+          warnText: "Warning message",
+        },
+      });
+
+      const message = screen.getByText("Warning message");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
+    });
+
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      render(Dropdown, {
+        props: {
+          items,
+          labelText: "Contact",
+          fluid: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        },
+      });
+
+      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(document.querySelector("[data-invalid]")).toBeNull();
+    });
+
+    it("marks the wrapper as condensed when fluid", () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", fluid: true, condensed: true },
+      });
+
+      const button = screen.getByLabelText("Contact");
+      expect(button.closest(".bx--dropdown__wrapper")).toHaveClass(
+        "bx--list-box__wrapper--fluid--condensed",
+      );
+    });
+
+    it("ignores condensed when not fluid", () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", condensed: true },
+      });
+
+      expect(
+        document.querySelector(".bx--list-box__wrapper--fluid--condensed"),
+      ).toBeNull();
+    });
+
+    it("ignores fluid for the inline variant", () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", fluid: true, type: "inline" },
+      });
+
+      expect(
+        document.querySelector(".bx--list-box__wrapper--fluid"),
+      ).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(DropdownFluidForm);
+
+      const button = screen.getByLabelText("Fluid form dropdown");
+      expect(button.closest(".bx--dropdown__wrapper")).toHaveClass(
+        "bx--list-box__wrapper--fluid",
+      );
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(DropdownFluidSlot);
+
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(DropdownFluidSlot, { props: { fluid: false } });
+
+      expect(screen.getByText("Custom label content")).not.toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("toggles the input-focused class on the fluid field wrapper", async () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", fluid: true },
+      });
+
+      const button = screen.getByLabelText("Contact");
+      const wrapper = button.closest(".bx--list-box__field--wrapper");
+
+      expect(wrapper).toHaveClass("bx--list-box__field--wrapper");
+      expect(wrapper).not.toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+
+      fireEvent.focus(button);
+      await tick();
+      expect(wrapper).toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+
+      fireEvent.blur(button);
+      await tick();
+      expect(wrapper).not.toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+    });
+
+    it("keeps the input-focused class while the fluid menu is open", () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", fluid: true, open: true },
+      });
+
+      const wrapper = screen
+        .getByRole("combobox")
+        .closest(".bx--list-box__field--wrapper");
+      expect(wrapper).toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
     });
   });
 });
