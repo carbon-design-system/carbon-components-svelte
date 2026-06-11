@@ -2,6 +2,8 @@ import { render, screen } from "@testing-library/svelte";
 import type SearchComponent from "carbon-components-svelte/Search/Search.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
+import SearchFluidForm from "./Search.fluidForm.test.svelte";
+import SearchFluidSlot from "./Search.fluidSlot.test.svelte";
 import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";
@@ -118,6 +120,53 @@ describe("Search", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  describe("fluid variant", () => {
+    it("does not render the fluid class by default", () => {
+      render(Search);
+
+      expect(document.querySelector(".bx--search--fluid")).toBeNull();
+    });
+
+    it("renders the fluid variant", () => {
+      render(Search, { props: { fluid: true } });
+
+      const search = getSearchInput("Default search");
+      expect(search.closest(".bx--search")).toHaveClass("bx--search--fluid");
+    });
+
+    it("ignores fluid for the expandable variant", () => {
+      render(SearchExpandable, { props: { fluid: true } });
+
+      const search = getSearchInput("Expandable search");
+      const searchWrapper = search.closest(".bx--search");
+      expect(searchWrapper).toHaveClass("bx--search--expandable");
+      expect(searchWrapper).not.toHaveClass("bx--search--fluid");
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(SearchFluidForm);
+
+      const search = getSearchInput("Fluid form search");
+      expect(search.closest(".bx--search")).toHaveClass("bx--search--fluid");
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(SearchFluidSlot);
+
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(SearchFluidSlot, { props: { fluid: false } });
+
+      expect(screen.getByText("Custom label content")).not.toHaveClass(
+        "bx--label--slotted",
+      );
+    });
   });
 
   describe("Generics", () => {

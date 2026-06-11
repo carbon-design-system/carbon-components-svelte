@@ -1,0 +1,124 @@
+// Fluid variant styles for `Search`, ported from the Carbon v11
+// `fluid-search` module. carbon-components v10 does not ship these.
+// https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-search/_fluid-search.scss
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Fluid search variant (Carbon React `FluidSearch` parity)
+/// @access private
+/// @group components
+@mixin fluid-search {
+  .#{$prefix}--search--fluid {
+    block-size: to-rem(64px);
+  }
+
+  // The base v10 styles visually hide the search label (the `hidden`
+  // mixin); the fluid variant embeds it at the top of the field.
+  .#{$prefix}--search--fluid .#{$prefix}--label {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    white-space: nowrap;
+    block-size: to-rem(16px);
+    clip: initial;
+    inline-size: calc(100% - 2rem);
+    inset-block-start: to-rem(13px);
+    inset-inline-start: $spacing-05;
+  }
+
+  .#{$prefix}--search--fluid .#{$prefix}--label::-webkit-scrollbar {
+    display: none;
+  }
+
+  // Labels with slotted content (e.g., a tooltip icon) must not clip
+  // overflow, or the tooltip popover would be cut off. The v11 styles
+  // gate the scroll behavior with `:has()`; a modifier class applied
+  // when the `labelChildren` slot is used serves the same purpose.
+  .#{$prefix}--search--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
+    gap: $spacing-03;
+    overflow: visible;
+  }
+
+  .#{$prefix}--search--fluid .#{$prefix}--search-input {
+    padding: to-rem(32px) to-rem(88px) to-rem(13px) $spacing-05;
+    block-size: 100%;
+  }
+
+  .#{$prefix}--search--fluid .#{$prefix}--search-magnifier-icon {
+    fill: $icon-01;
+    inset: auto 1rem to-rem(13px) auto;
+    transform: none;
+  }
+
+  .#{$prefix}--search--fluid .#{$prefix}--search-close {
+    border: none;
+    block-size: to-rem(40px);
+    inline-size: to-rem(40px);
+    inset: auto to-rem(48px) 0 auto;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--search--fluid
+    .#{$prefix}--search-input:focus
+    ~ .#{$prefix}--search-close:hover {
+    outline: none;
+  }
+
+  // The close button overlaps the field's bottom edge; its `::after`
+  // re-draws the input's border (and focus underline) beneath it.
+  .#{$prefix}--search--fluid .#{$prefix}--search-close::after {
+    position: absolute;
+    display: block;
+    block-size: to-rem(2px);
+    content: "";
+    inline-size: 100%;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+  }
+
+  .#{$prefix}--search--fluid
+    .#{$prefix}--search-input:focus
+    ~ .#{$prefix}--search-close::after {
+    background: $focus;
+  }
+
+  .#{$prefix}--search--fluid
+    .#{$prefix}--search-input:not(:focus)
+    ~ .#{$prefix}--search-close:not([disabled])::after {
+    background: $ui-04;
+    block-size: to-rem(1px);
+  }
+
+  .#{$prefix}--search--fluid .#{$prefix}--search-close svg {
+    margin-block-end: to-rem(2px);
+  }
+
+  // Disabled styles
+  .#{$prefix}--search--fluid
+    .#{$prefix}--search-input:disabled
+    ~ .#{$prefix}--search-close:hover::before {
+    background: $ui-03;
+  }
+
+  .#{$prefix}--search--fluid.#{$prefix}--search--disabled .#{$prefix}--label {
+    color: $disabled-02;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--search--fluid.#{$prefix}--search--disabled
+    .#{$prefix}--search-input[disabled] {
+    border-block-end: 1px solid $ui-03;
+  }
+}
+
+@include exports("fluid-search") {
+  @include fluid-search;
+}

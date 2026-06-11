@@ -41,6 +41,14 @@
    */
   export let expanded = false;
 
+  /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   * Cannot be combined with the expandable variant.
+   */
+  export let fluid = false;
+
   /** Specify the `placeholder` attribute of the search input */
   export let placeholder = "Search...";
 
@@ -74,16 +82,18 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
+  const formContext = getContext("carbon:Form");
 
   let searchRef = null;
   let prevExpanded = expanded;
 
+  $: isFluid = !expandable && (fluid || !!formContext?.isFluid);
   $: if (expanded && ref) ref.focus();
   $: if (expanded !== prevExpanded) {
     dispatch(expanded ? "expand" : "collapse");
@@ -114,6 +124,7 @@
     class:bx--search--xl={size === "xl"}
     class:bx--search--expandable={expandable}
     class:bx--search--expanded={expanded}
+    class:bx--search--fluid={isFluid}
     class={searchClass}
   >
     <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -127,7 +138,12 @@
     >
       <svelte:component this={icon} class="bx--search-magnifier-icon" />
     </div>
-    <label id="{id}-search" for={id} class:bx--label={true}>
+    <label
+      id="{id}-search"
+      for={id}
+      class:bx--label={true}
+      class:bx--label--slotted={isFluid && $$slots.labelChildren}
+    >
       <slot name="labelChildren"> {labelText} </slot>
     </label>
     <!-- svelte-ignore a11y-autofocus -->

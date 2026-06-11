@@ -1,6 +1,8 @@
 <script lang="ts">
   import Search from "carbon-components-svelte/Search/Search.svelte";
 
+  export let fluid = false;
+
   let expanded = false;
   let value = "";
 </script>
@@ -9,6 +11,7 @@
   bind:expanded
   bind:value
   expandable
+  {fluid}
   labelText="Expandable search"
   placeholder="Search expandable..."
   on:expand={() => {
