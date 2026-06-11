@@ -1,6 +1,7 @@
 <script>
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Query from "carbon-icons-svelte/lib/Query.svelte";
-  import { Search, SearchSkeleton } from "carbon-components-svelte";
+  import { Search, SearchSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
 Search provides a flexible search input with support for expandable variants, different sizes, and custom icons. It includes built-in functionality for clearing input and handling keyboard events.
@@ -40,6 +41,32 @@ Enable the expandable variant to show a compact search icon that expands on focu
 Use the light variant for light backgrounds.
 
 <Search light />
+
+## Fluid variant
+
+Set `fluid` to `true` to use the fluid variant, which renders a visible label
+inside the field. Fluid search inputs can be used standalone or inside
+[FluidForm](/components/FluidForm), where the fluid variant is applied
+automatically. The fluid variant has a fixed height and cannot be combined
+with the expandable variant.
+
+<Search fluid labelText="Search catalog" placeholder="Search services..." />
+
+## Fluid variant with custom label
+
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
+
+<Search fluid labelText="Search catalog" placeholder="Search services...">
+  <svelte:fragment slot="labelChildren">
+    Search catalog
+    <TooltipIcon tooltipText="Search applies to services in the selected region only." icon={Information} />
+  </svelte:fragment>
+</Search>
+
+## Fluid variant (disabled)
+
+<Search fluid disabled labelText="Search catalog" placeholder="Search services..." />
 
 ## Large size
 
