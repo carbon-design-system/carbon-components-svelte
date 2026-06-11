@@ -1,0 +1,174 @@
+// Fluid variant styles for `Select`, ported from the Carbon v11
+// `fluid-select` module. carbon-components v10 only ships fluid styles
+// for the text input, so the select must be styled here.
+// https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-select/_fluid-select.scss
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Fluid select variant (Carbon React `FluidSelect` parity)
+/// @access private
+/// @group components
+@mixin fluid-select {
+  .#{$prefix}--select--fluid .#{$prefix}--select {
+    position: relative;
+    background: $field-01;
+    block-size: 100%;
+    transition:
+      background-color $duration--fast-01 motion(standard, productive),
+      outline $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--select--fluid .#{$prefix}--label {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    white-space: nowrap;
+    block-size: to-rem(16px);
+    inline-size: calc(100% - 2rem);
+    inset-block-start: to-rem(13px);
+    inset-inline-start: $spacing-05;
+  }
+
+  .#{$prefix}--select--fluid .#{$prefix}--label::-webkit-scrollbar {
+    display: none;
+  }
+
+  // Labels with slotted content (e.g., a tooltip icon) must not clip
+  // overflow, or the tooltip popover would be cut off. The v11 styles
+  // gate the scroll behavior with `:has()`; a modifier class applied
+  // when the `labelChildren` slot is used serves the same purpose.
+  .#{$prefix}--select--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
+    gap: $spacing-03;
+    overflow: visible;
+  }
+
+  .#{$prefix}--select--fluid .#{$prefix}--select-input {
+    padding: to-rem(32px) to-rem(32px) to-rem(13px) $spacing-05;
+    min-block-size: to-rem(64px);
+    outline: none;
+    text-overflow: ellipsis;
+  }
+
+  .#{$prefix}--select--fluid .#{$prefix}--select__arrow {
+    block-size: 1rem;
+    inset-block-start: to-rem(34px);
+    inset-inline-end: $spacing-04;
+  }
+
+  .#{$prefix}--select--fluid .#{$prefix}--select__divider {
+    display: none;
+    transition: border-color $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--select--fluid .#{$prefix}--select-input__wrapper {
+    display: block;
+  }
+
+  // Invalid + warn states
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select--invalid
+    .#{$prefix}--select-input__wrapper {
+    @include focus-outline("invalid");
+  }
+
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select--invalid
+    .#{$prefix}--select__divider,
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select--warning
+    .#{$prefix}--select__divider {
+    display: block;
+    border: none;
+    margin: 0 1rem;
+    border-block-end: 1px solid $ui-03;
+    inline-size: calc(100% - 2rem);
+  }
+
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select-input__wrapper[data-invalid]
+    .#{$prefix}--select-input,
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select--warning
+    .#{$prefix}--select-input {
+    border-block-end: 1px solid transparent;
+    padding-inline-end: to-rem(32px);
+  }
+
+  .#{$prefix}--select--fluid .#{$prefix}--select--warning {
+    border-block-end: 1px solid $ui-04;
+  }
+
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select-input__wrapper[data-invalid]
+    .#{$prefix}--select-input:not(:focus),
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select--warning
+    .#{$prefix}--select-input:not(:focus) {
+    outline: none;
+  }
+
+  // The error/warn message is rendered inside the input wrapper in the
+  // fluid variant. The base v10 styles only reveal a message that is a
+  // sibling of the wrapper.
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select-input__wrapper[data-invalid]
+    .#{$prefix}--form-requirement,
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select--warning
+    .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-block-size: 100%;
+  }
+
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select-input__wrapper[data-invalid]
+    .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
+  .#{$prefix}--select--fluid .#{$prefix}--form-requirement {
+    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    margin: 0;
+  }
+
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select--invalid
+    .#{$prefix}--select-input__wrapper[data-invalid]
+    .#{$prefix}--select__invalid-icon,
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select--warning
+    .#{$prefix}--select-input__wrapper
+    .#{$prefix}--select__invalid-icon {
+    inset-block-start: to-rem(73px);
+    inset-inline-end: $spacing-05;
+    pointer-events: none;
+  }
+
+  // Focus styles. The v11 implementation toggles a `--fluid--focus`
+  // modifier class via JS; `:focus-within` renders the same outline
+  // without component state. Declared after the invalid styles so the
+  // focus outline wins while the select is focused.
+  .#{$prefix}--select--fluid .#{$prefix}--select-input__wrapper:focus-within {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--select--fluid
+    .#{$prefix}--select-input__wrapper:focus-within
+    .#{$prefix}--select-input,
+  .#{$prefix}--select--fluid .#{$prefix}--select--warning:focus-within {
+    border-block-end: 1px solid transparent;
+  }
+}
+
+@include exports("fluid-select") {
+  @include fluid-select;
+}

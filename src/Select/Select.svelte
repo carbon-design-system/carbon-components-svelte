@@ -71,13 +71,27 @@
   /** Set to `true` for the select to be read-only */
   export let readonly = false;
 
-  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
+  /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   * Cannot be combined with the inline variant.
+   */
+  export let fluid = false;
+
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    getContext,
+    setContext,
+  } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
 
   const dispatch = createEventDispatcher();
+  const formContext = getContext("carbon:Form");
   /**
    * @type {import("svelte/store").Writable<string | number | undefined>}
    */
@@ -160,9 +174,10 @@
   // Invalid/warn states are suppressed when the select is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: isFluid = !inline && (fluid || !!formContext?.isFluid);
 </script>
 
-<div class:bx--form-item={true}>
+<div class:bx--form-item={true} class:bx--select--fluid={isFluid}>
   <div
     class:bx--select={true}
     class:bx--select--inline={inline}
@@ -178,6 +193,7 @@
         class:bx--label={true}
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
+        class:bx--label--slotted={isFluid && $$slots.labelChildren}
       >
         <slot name="labelChildren"> {labelText} </slot>
       </label>
@@ -262,7 +278,7 @@
             ? errorId
             : showWarn
               ? warnId
-              : helperText
+              : helperText && !isFluid
                 ? helperId
                 : undefined}
           disabled={disabled || undefined}
@@ -293,8 +309,21 @@
             class="bx--select__invalid-icon bx--select__invalid-icon--warning"
           />
         {/if}
+        {#if isFluid}
+          <hr class:bx--select__divider={true}>
+          {#if showInvalid}
+            <div id={errorId} class:bx--form-requirement={true}>
+              {invalidText}
+            </div>
+          {/if}
+          {#if showWarn}
+            <div id={warnId} class:bx--form-requirement={true}>
+              {warnText}
+            </div>
+          {/if}
+        {/if}
       </div>
-      {#if helperText && !showInvalid && !showWarn}
+      {#if !isFluid && helperText && !showInvalid && !showWarn}
         <div
           id={helperId}
           class:bx--form__helper-text={true}
@@ -303,10 +332,10 @@
           {helperText}
         </div>
       {/if}
-      {#if showInvalid}
+      {#if !isFluid && showInvalid}
         <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
       {/if}
-      {#if showWarn}
+      {#if !isFluid && showWarn}
         <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
       {/if}
     {/if}
