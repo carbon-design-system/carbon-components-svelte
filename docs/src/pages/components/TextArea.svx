@@ -3,7 +3,8 @@ components: ["TextArea", "TextAreaSkeleton"]
 ---
 
 <script>
-  import { TextArea, TextAreaSkeleton } from "carbon-components-svelte";
+  import { TextArea, TextAreaSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
 Text areas provide a multi-line text input field with support for various states, character counting, and accessibility features. They are ideal for longer text input like descriptions, comments, or messages.
@@ -37,6 +38,50 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 Use the light variant for light-themed backgrounds by setting `light` to `true`.
 
 <TextArea light labelText="App description" placeholder="Enter a description..." />
+
+## Fluid variant
+
+Set `fluid` to `true` to use the fluid variant, which embeds the label
+inside the field. Fluid text areas can be used standalone or inside
+[FluidForm](/components/FluidForm), where the fluid variant is applied
+automatically.
+
+<TextArea fluid labelText="App description" placeholder="Enter a description..." maxCount={100} />
+
+## Fluid variant with custom label
+
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
+
+<TextArea fluid labelText="App description" placeholder="Enter a description...">
+  <svelte:fragment slot="labelChildren">
+    App description
+    <TooltipIcon tooltipText="A rich description helps us better recommend related products and services." icon={Information} />
+  </svelte:fragment>
+</TextArea>
+
+## Fluid variant (invalid)
+
+Fluid text areas display the error message inside the field boundary. Long
+messages wrap to multiple lines.
+
+<TextArea fluid invalid invalidText="Only plain text characters are allowed. HTML tags, markdown formatting, and special characters will be stripped from your submission." labelText="App description" placeholder="Enter a description..." />
+
+## Fluid variant (warning)
+
+<TextArea fluid warn warnText="This description is shorter than recommended for product listings" labelText="App description" placeholder="Enter a description..." />
+
+## Fluid variant (disabled)
+
+Invalid and warning states are not displayed while the text area is disabled.
+
+<TextArea fluid disabled invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
+
+## Fluid variant (read-only)
+
+Invalid and warning states are not displayed while the text area is read-only.
+
+<TextArea fluid readonly warn warnText="This description is shorter than recommended" labelText="App description" value="I'm read-only" />
 
 ## Custom rows
 

@@ -3,6 +3,7 @@
     FluidForm,
     TextInput,
     PasswordInput,
+    TextArea,
     Select,
     SelectItem,
   } from "carbon-components-svelte";
@@ -31,6 +32,7 @@ shows a basic login form with required fields.
     <SelectItem value="us-south" text="US South" />
     <SelectItem value="eu-de" text="EU Germany" />
   </Select>
+  <TextArea labelText="App description" placeholder="Enter a description..." />
 </FluidForm>
 
 ## Standalone fluid inputs
@@ -43,6 +45,8 @@ supported component to use the fluid variant standalone.
   <SelectItem value="us-south" text="US South" />
   <SelectItem value="eu-de" text="EU Germany" />
 </Select>
+
+<TextArea fluid labelText="App description" placeholder="Enter a description..." helperText="Helper text is not displayed in the fluid variant" />
 
 ## Invalid state
 
