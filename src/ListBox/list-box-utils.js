@@ -31,10 +31,19 @@ export const MENU_ITEM_HEIGHT = Object.freeze({
 });
 
 /**
- * Get the menu item height in pixels for a listbox/dropdown size.
+ * Fluid menu item height (px). Matches `$spacing-10` (4rem) on
+ * `.bx--list-box__menu-item` in css/_fluid-list-box.scss. Same height for every
+ * size; condensed fluid uses the size-based heights in MENU_ITEM_HEIGHT.
+ */
+export const FLUID_MENU_ITEM_HEIGHT = 64;
+
+/**
+ * Get the menu item height in pixels for a listbox/dropdown.
  * @param {"sm" | "md" | "lg" | "xl"} [size] - The size variant
+ * @param {{ fluid?: boolean }} [options] - Pass `fluid: true` for FLUID_MENU_ITEM_HEIGHT
  * @returns {number} The item height in pixels
  */
-export function getMenuItemHeight(size = "md") {
+export function getMenuItemHeight(size = "md", { fluid = false } = {}) {
+  if (fluid) return FLUID_MENU_ITEM_HEIGHT;
   return MENU_ITEM_HEIGHT[size] ?? MENU_ITEM_HEIGHT.md;
 }
