@@ -3,7 +3,8 @@ components: ["TextInput", "TextInputSkeleton"]
 ---
 
 <script>
-  import { TextInput, TextInputSkeleton } from "carbon-components-svelte";
+  import { TextInput, TextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
 Text inputs provide a single-line text input field with support for various states, sizes, and accessibility features. They are ideal for short text input like usernames, search terms, or form fields.
@@ -39,6 +40,50 @@ Use the `labelChildren` slot to provide custom label content.
 Use the light variant for light-themed backgrounds by setting `light` to `true`.
 
 <TextInput light labelText="User name" placeholder="Enter user name..." />
+
+## Fluid variant
+
+Set `fluid` to `true` to use the fluid variant, which embeds the label
+inside the field. Fluid text inputs can be used standalone or inside
+[FluidForm](/components/FluidForm), where the fluid variant is applied
+automatically. The fluid variant cannot be combined with the inline variant.
+
+<TextInput fluid labelText="User name" placeholder="Enter user name..." />
+
+## Fluid variant with custom label
+
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
+
+<TextInput fluid labelText="User name" placeholder="Enter user name...">
+  <svelte:fragment slot="labelChildren">
+    User name
+    <TooltipIcon tooltipText="Your user name is associated with your email." icon={Information} />
+  </svelte:fragment>
+</TextInput>
+
+## Fluid variant (invalid)
+
+Fluid text inputs display the error message inside the field boundary. Long
+messages wrap to multiple lines.
+
+<TextInput fluid invalid invalidText="User name is already taken. Please choose a different name that is not in use by another account on this system." labelText="User name" placeholder="Enter user name..." />
+
+## Fluid variant (warning)
+
+<TextInput fluid warn warnText="Your user name is different from your log in ID." labelText="User name" placeholder="Enter user name..." />
+
+## Fluid variant (disabled)
+
+Invalid and warning states are not displayed while the input is disabled.
+
+<TextInput fluid disabled invalid invalidText="User name is already taken." labelText="User name" placeholder="Enter user name..." />
+
+## Fluid variant (read-only)
+
+Invalid and warning states are not displayed while the input is read-only.
+
+<TextInput fluid readonly warn warnText="Your user name is different from your log in ID." labelText="User name" value="IBM" />
 
 ## Inline variant
 
