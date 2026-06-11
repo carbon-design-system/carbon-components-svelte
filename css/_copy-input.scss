@@ -20,22 +20,19 @@
   }
 
   // Fluid form shorthand padding must not collapse right padding below button width.
-  .#{$prefix}--form--fluid
-    .#{$prefix}--copy-input__field-wrapper
-    .#{$prefix}--text-input {
-    padding-right: $carbon--spacing-08;
-  }
+  .#{$prefix}--form--fluid,
+  .#{$prefix}--text-input--fluid {
+    .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input {
+      padding-right: $carbon--spacing-08;
+    }
 
-  .#{$prefix}--form--fluid
-    .#{$prefix}--copy-input__field-wrapper
-    .#{$prefix}--text-input--sm {
-    padding-right: $carbon--spacing-07;
-  }
+    .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--sm {
+      padding-right: $carbon--spacing-07;
+    }
 
-  .#{$prefix}--form--fluid
-    .#{$prefix}--copy-input__field-wrapper
-    .#{$prefix}--text-input--xl {
-    padding-right: $carbon--spacing-09;
+    .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--xl {
+      padding-right: $carbon--spacing-09;
+    }
   }
 
   // Transparent overlay pinned to the right edge of the field.
@@ -97,6 +94,24 @@
     .#{$prefix}--text-input--xl
     ~ .#{$prefix}--copy-btn {
     width: to-rem(48px);
+  }
+
+  // Fluid copy button — parity with the password visibility toggle in
+  // `_fluid-text-input.scss` (32×32px, grounded on the value row).
+  .#{$prefix}--form--fluid,
+  .#{$prefix}--text-input--fluid {
+    .#{$prefix}--copy-input__field-wrapper .#{$prefix}--copy-btn {
+      block-size: to-rem(32px);
+      inline-size: to-rem(32px);
+      width: to-rem(32px);
+      height: to-rem(32px);
+      min-height: to-rem(32px);
+      inset-block-start: to-rem(26px);
+      inset-inline-end: $spacing-03;
+      right: auto;
+      align-items: center;
+      padding: 0;
+    }
   }
 }
 

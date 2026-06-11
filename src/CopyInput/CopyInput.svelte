@@ -51,6 +51,14 @@
   /** Set to `true` to use the inline variant */
   export let inline = false;
 
+  /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   * Cannot be combined with the inline variant.
+   */
+  export let fluid = false;
+
   /** Specify the label text */
   export let labelText = "";
 
@@ -110,7 +118,6 @@
 
   const dispatch = createEventDispatcher();
   const ctx = getContext("carbon:Form");
-  const isFluid = !!ctx && ctx.isFluid;
 
   let focused = false;
   let hovered = false;
@@ -122,6 +129,7 @@
         ? focused
         : false;
   $: inputType = type === "password" && !revealed ? "password" : "text";
+  $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: helperId = `helper-${id}`;
 
   function handleFocus() {
@@ -144,6 +152,7 @@
   class:bx--text-input-wrapper={true}
   class:bx--text-input-wrapper--inline={inline}
   class:bx--text-input-wrapper--light={light}
+  class:bx--text-input--fluid={isFluid}
   on:click
   on:mouseover
   on:mouseenter
@@ -160,6 +169,7 @@
           class:bx--label--inline={inline}
           class:bx--label--inline--sm={size === "sm"}
           class:bx--label--inline--xl={size === "xl"}
+          class:bx--label--slotted={isFluid && $$slots.labelChildren}
         >
           <slot name="labelChildren"> {labelText} </slot>
         </label>
@@ -181,6 +191,7 @@
       class:bx--label={true}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
+      class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren"> {labelText} </slot>
     </label>
@@ -198,7 +209,7 @@
         readonly
         type={inputType}
         {value}
-        aria-describedby={helperText ? helperId : undefined}
+        aria-describedby={helperText && !isFluid ? helperId : undefined}
         {disabled}
         {id}
         {name}

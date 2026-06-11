@@ -1,5 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import CopyInputFluidForm from "./CopyInput.fluidForm.test.svelte";
+import CopyInputFluidSlot from "./CopyInput.fluidSlot.test.svelte";
 import CopyInput from "./CopyInput.test.svelte";
 import CopyInputAsync from "./CopyInputAsync.test.svelte";
 import CopyInputAsyncDoubleClick from "./CopyInputAsyncDoubleClick.test.svelte";
@@ -210,6 +212,72 @@ describe("CopyInput", () => {
     resolveCopy();
     await waitFor(() => {
       expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+    });
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(CopyInput);
+
+      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
+      expect(document.querySelector(".bx--text-input__divider")).toBeNull();
+    });
+
+    it("renders fluid variant and suppresses helper text", () => {
+      render(CopyInput, {
+        props: { fluid: true, helperText: "Helper text" },
+      });
+
+      const input = screen.getByLabelText("API token");
+      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
+        "bx--text-input--fluid",
+      );
+      expect(
+        document.querySelector(".bx--text-input__divider"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(input).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("ignores fluid for the inline variant", () => {
+      render(CopyInput, { props: { fluid: true, inline: true } });
+
+      expect(document.querySelector(".bx--text-input--fluid")).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(CopyInputFluidForm);
+
+      const input = screen.getByLabelText("Fluid form API token");
+      expect(input.closest(".bx--text-input-wrapper")).toHaveClass(
+        "bx--text-input--fluid",
+      );
+    });
+
+    it("adds bx--label--slotted when fluid and labelChildren slot is used", () => {
+      render(CopyInputFluidSlot);
+
+      expect(
+        screen.getByText("Custom label content").closest("label"),
+      ).toHaveClass("bx--label--slotted");
+    });
+
+    it("does not add bx--label--slotted when fluid without a labelChildren slot", () => {
+      render(CopyInput, { props: { fluid: true } });
+
+      expect(screen.getByText("API token").closest("label")).not.toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("renders the copy button inside the fluid field wrapper", () => {
+      render(CopyInput, { props: { fluid: true } });
+
+      const button = screen.getByRole("button", { name: "Copy to clipboard" });
+      const fieldWrapper = button.closest(".bx--copy-input__field-wrapper");
+
+      expect(fieldWrapper).not.toBeNull();
+      expect(fieldWrapper?.closest(".bx--text-input--fluid")).not.toBeNull();
     });
   });
 });

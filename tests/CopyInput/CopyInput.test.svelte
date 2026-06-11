@@ -10,6 +10,8 @@
   export let labelText = "API token";
   export let helperText = "";
   export let disabled = false;
+  export let fluid = false;
+  export let inline = false;
   export let id = "ccs-test";
 </script>
 
@@ -21,6 +23,8 @@
   {labelText}
   {helperText}
   {disabled}
+  {fluid}
+  {inline}
   {id}
   on:copy={() => {
     console.log("copied");
