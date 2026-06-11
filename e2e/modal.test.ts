@@ -54,6 +54,21 @@ test.describe("Modal", () => {
     await expect(modal).toHaveClass(/is-visible/);
   });
 
+  test("fires the secondary event when pressing Enter on the focused secondary button", async ({
+    page,
+  }) => {
+    await page.getByTestId("open-modal").click();
+    await expect(page.locator(".bx--modal")).toHaveClass(/is-visible/);
+
+    // Focus the secondary "Cancel" button and press Enter to cancel.
+    await page.getByRole("button", { name: "Cancel" }).focus();
+    await page.keyboard.press("Enter");
+
+    // Pressing Enter on the secondary button should cancel, not confirm.
+    // The primary (confirm) event must not fire — only the secondary event.
+    await expect(page.getByTestId("events")).toHaveText("secondary");
+  });
+
   test("closes when clicking directly on the backdrop", async ({ page }) => {
     await page.getByTestId("open-modal").click();
     const modal = page.locator(".bx--modal");
