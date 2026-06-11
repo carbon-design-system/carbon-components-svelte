@@ -57,6 +57,7 @@
         style="position: static; {$$restProps.style || ''}"
         {...$$restProps}
         on:scroll
+        on:mouseleave
       >
         <slot />
       </div>
@@ -70,6 +71,7 @@
     class:bx--list-box__menu={true}
     {...$$restProps}
     on:scroll
+    on:mouseleave
   >
     <slot />
   </div>
