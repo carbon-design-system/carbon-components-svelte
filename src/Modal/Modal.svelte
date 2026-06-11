@@ -211,7 +211,14 @@
       ) {
         const target = event.target;
         const tag = target?.tagName;
-        if (tag === "TEXTAREA" || tag === "SELECT" || target?.isContentEditable) {
+        if (
+          tag === "BUTTON" ||
+          tag === "TEXTAREA" ||
+          tag === "SELECT" ||
+          target?.isContentEditable
+        ) {
+          // Let the focused button (e.g. the secondary/cancel button) handle
+          // Enter via its native activation instead of submitting the form.
           return;
         }
         if (formId && primaryButtonRef) {
