@@ -33,9 +33,12 @@
    */
   export let ref = null;
 
-  import { setContext } from "svelte";
+  import { getContext, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+
+  const formContext = getContext("carbon:Form");
+  const timePickerContext = getContext("carbon:TimePicker");
 
   /**
    * @type {import("svelte/store").Writable<number | string>}
@@ -44,65 +47,137 @@
 
   setContext("carbon:TimePickerSelect", { selectedValue });
 
+  onMount(() => timePickerContext?.registerSelect?.() ?? (() => {}));
+
   $: selectedValue.set(value);
   $: value = $selectedValue;
+  $: isFluid = !!timePickerContext?.isFluid || !!formContext?.isFluid;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-  class:bx--select={true}
-  class:bx--time-picker__select={true}
-  class:bx--select--readonly={readonly}
-  {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
->
-  {#if labelText || $$slots.labelChildren}
-    <label for={id} class:bx--label={true} class:bx--visually-hidden={true}>
-      <slot name="labelChildren"> {labelText} </slot>
-    </label>
-  {/if}
-  <!-- svelte-ignore a11y-no-onchange -->
-  <select
-    bind:this={ref}
-    {id}
-    {name}
-    {disabled}
-    {value}
-    aria-readonly={readonly || undefined}
-    class:bx--select-input={true}
-    on:change={(event) => {
-      selectedValue.set(event.target.value);
-    }}
-    on:change
-    on:input
-    on:focus
-    on:blur
-    on:mousedown={(event) => {
-      if (readonly) {
-        event.preventDefault();
-        event.currentTarget.focus();
-      }
-    }}
-    on:keydown={(event) => {
-      if (
-        readonly &&
-        event.key !== "Tab" &&
-        event.key !== "Shift" &&
-        !(event.altKey && event.key === "ArrowDown")
-      ) {
-        event.preventDefault();
-      }
-    }}
+{#if isFluid}
+  <div class:bx--form-item={true} class:bx--select--fluid={true}>
+    <div
+      class:bx--select={true}
+      class:bx--time-picker__select={true}
+      class:bx--select--readonly={readonly}
+      class:bx--select--disabled={disabled}
+      {...$$restProps}
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseleave
+    >
+      {#if labelText || $$slots.labelChildren}
+        <label
+          for={id}
+          class:bx--label={true}
+          class:bx--label--disabled={disabled}
+          class:bx--label--slotted={$$slots.labelChildren}
+        >
+          <slot name="labelChildren"> {labelText} </slot>
+        </label>
+      {/if}
+      <div class:bx--select-input__wrapper={true}>
+        <!-- svelte-ignore a11y-no-onchange -->
+        <select
+          bind:this={ref}
+          {id}
+          {name}
+          {disabled}
+          {value}
+          aria-readonly={readonly || undefined}
+          class:bx--select-input={true}
+          on:change={(event) => {
+            selectedValue.set(event.target.value);
+          }}
+          on:change
+          on:input
+          on:focus
+          on:blur
+          on:mousedown={(event) => {
+            if (readonly) {
+              event.preventDefault();
+              event.currentTarget.focus();
+            }
+          }}
+          on:keydown={(event) => {
+            if (
+              readonly &&
+              event.key !== "Tab" &&
+              event.key !== "Shift" &&
+              !(event.altKey && event.key === "ArrowDown")
+            ) {
+              event.preventDefault();
+            }
+          }}
+        >
+          <slot />
+        </select>
+        <ChevronDown
+          aria-label={iconDescription}
+          title={iconDescription}
+          class="bx--select__arrow"
+        />
+      </div>
+    </div>
+  </div>
+{:else}
+  <div
+    class:bx--select={true}
+    class:bx--time-picker__select={true}
+    class:bx--select--readonly={readonly}
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
   >
-    <slot />
-  </select>
-  <ChevronDown
-    aria-label={iconDescription}
-    title={iconDescription}
-    class="bx--select__arrow"
-  />
-</div>
+    {#if labelText || $$slots.labelChildren}
+      <label for={id} class:bx--label={true} class:bx--visually-hidden={true}>
+        <slot name="labelChildren"> {labelText} </slot>
+      </label>
+    {/if}
+    <!-- svelte-ignore a11y-no-onchange -->
+    <select
+      bind:this={ref}
+      {id}
+      {name}
+      {disabled}
+      {value}
+      aria-readonly={readonly || undefined}
+      class:bx--select-input={true}
+      on:change={(event) => {
+        selectedValue.set(event.target.value);
+      }}
+      on:change
+      on:input
+      on:focus
+      on:blur
+      on:mousedown={(event) => {
+        if (readonly) {
+          event.preventDefault();
+          event.currentTarget.focus();
+        }
+      }}
+      on:keydown={(event) => {
+        if (
+          readonly &&
+          event.key !== "Tab" &&
+          event.key !== "Shift" &&
+          !(event.altKey && event.key === "ArrowDown")
+        ) {
+          event.preventDefault();
+        }
+      }}
+    >
+      <slot />
+    </select>
+    <ChevronDown
+      aria-label={iconDescription}
+      title={iconDescription}
+      class="bx--select__arrow"
+    />
+  </div>
+{/if}

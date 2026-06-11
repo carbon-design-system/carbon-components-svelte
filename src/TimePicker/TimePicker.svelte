@@ -66,13 +66,43 @@
    */
   export let ref = null;
 
+  /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   */
+  export let fluid = false;
+
+  import { getContext, setContext } from "svelte";
+  import { writable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
 
+  const formContext = getContext("carbon:Form");
+  const selectCount = writable(0);
+
+  /** @type {() => () => void} */
+  function registerSelect() {
+    selectCount.update((count) => count + 1);
+    return () => {
+      selectCount.update((count) => count - 1);
+    };
+  }
+
+  const timePickerContext = { isFluid: false, registerSelect };
+
+  setContext("carbon:TimePicker", timePickerContext);
+
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: isFluid = fluid || !!formContext?.isFluid;
+  $: timePickerContext.isFluid = isFluid;
+  $: equalWidth = $selectCount !== 2;
+  $: fluidErrorText = showInvalid ? invalidText : showWarn ? warnText : "";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -80,98 +110,185 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
+  class:bx--time-picker__form-item--fluid={isFluid}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
 >
-  <div
-    class:bx--time-picker={true}
-    class:bx--time-picker--light={light}
-    class:bx--time-picker--invalid={invalid}
-    class:bx--time-picker--warn={warn}
-    class:bx--time-picker--readonly={readonly}
-    class:bx--time-picker--sm={size === "sm"}
-    class:bx--time-picker--xl={size === "xl"}
-    class:bx--select--light={light}
-  >
-    <div class:bx--time-picker__input={true}>
-      {#if labelText || $$slots.labelChildren}
-        <label
-          for={id}
-          class:bx--label={true}
-          class:bx--visually-hidden={hideLabel}
-          class:bx--label--disabled={disabled}
-          class:bx--label--readonly={readonly}
-        >
-          <slot name="labelChildren"> {labelText} </slot>
-        </label>
-      {/if}
-      <Stack orientation="horizontal" gap={0}>
-        <div
-          data-invalid={invalid || undefined}
-          data-warn={!invalid && warn ? true : undefined}
-          class:bx--text-input__field-wrapper={true}
-          class:bx--text-input__field-wrapper--warning={!invalid && warn}
-          style:width="auto"
-        >
-          {#if invalid}
-            <WarningFilled class="bx--text-input__invalid-icon" />
-          {:else if warn}
-            <WarningAltFilled
-              class="bx--text-input__invalid-icon bx--text-input__invalid-icon--warning"
-            />
-          {/if}
-          <input
-            bind:this={ref}
-            bind:value
-            type="text"
-            data-invalid={invalid || undefined}
-            aria-invalid={invalid || undefined}
-            aria-describedby={invalid
-              ? errorId
-              : warn
-                ? warnId
-                : helperText
-                  ? helperId
-                  : undefined}
-            {pattern}
-            {placeholder}
-            {maxlength}
-            {id}
-            {name}
-            {disabled}
-            readonly={readonly || undefined}
-            {...$$restProps}
-            class:bx--time-picker__input-field={true}
-            class:bx--text-input={true}
-            class:bx--text-input--light={light}
-            class:bx--text-input--invalid={invalid}
-            class:bx--text-input--warning={!invalid && warn}
-            on:change
-            on:input
-            on:keydown
-            on:keyup
-            on:focus
-            on:blur
-            on:paste
+  {#if isFluid}
+    <div
+      class:bx--time-picker--fluid={true}
+      class:bx--time-picker--equal-width={equalWidth}
+      class:bx--time-picker--fluid--disabled={disabled}
+      class:bx--time-picker--fluid--invalid={showInvalid}
+      class:bx--time-picker--fluid--warning={showWarn}
+      class:bx--time-picker--readonly={readonly}
+    >
+      <div class:bx--time-picker--fluid__wrapper={true}>
+        <div class:bx--time-picker__input={true}>
+          <div
+            class:bx--form-item={true}
+            class:bx--text-input-wrapper={true}
+            class:bx--text-input--fluid={true}
+            class:bx--text-input-wrapper--readonly={readonly}
           >
+            {#if labelText || $$slots.labelChildren}
+              <label
+                for={id}
+                class:bx--label={true}
+                class:bx--visually-hidden={hideLabel}
+                class:bx--label--disabled={disabled}
+                class:bx--label--readonly={readonly}
+                class:bx--label--slotted={$$slots.labelChildren}
+              >
+                <slot name="labelChildren"> {labelText} </slot>
+              </label>
+            {/if}
+            <div class:bx--text-input__field-outer-wrapper={true}>
+              <div class:bx--text-input__field-wrapper={true}>
+                <input
+                  bind:this={ref}
+                  bind:value
+                  type="text"
+                  aria-invalid={showInvalid || undefined}
+                  aria-describedby={showInvalid
+                    ? errorId
+                    : showWarn
+                      ? warnId
+                      : undefined}
+                  {pattern}
+                  {placeholder}
+                  {maxlength}
+                  {id}
+                  {name}
+                  {disabled}
+                  readonly={readonly || undefined}
+                  {...$$restProps}
+                  class:bx--time-picker__input-field={true}
+                  class:bx--text-input={true}
+                  on:change
+                  on:input
+                  on:keydown
+                  on:keyup
+                  on:focus
+                  on:blur
+                  on:paste
+                >
+              </div>
+            </div>
+          </div>
         </div>
         <slot />
-      </Stack>
+      </div>
+      {#if showInvalid || showWarn}
+        <hr class:bx--time-picker__divider={true}>
+        <div
+          id={showInvalid ? errorId : warnId}
+          class:bx--form-requirement={true}
+        >
+          {fluidErrorText}
+        </div>
+      {/if}
+      {#if showInvalid}
+        <WarningFilled
+          class="bx--time-picker__icon bx--time-picker__icon--invalid"
+        />
+      {:else}
+        <WarningAltFilled
+          class="bx--time-picker__icon bx--time-picker__icon--warn"
+        />
+      {/if}
     </div>
-  </div>
-  {#if invalid}
-    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
-  {:else if warn}
-    <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
-  {:else if helperText}
+  {:else}
     <div
-      id={helperId}
-      class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--time-picker={true}
+      class:bx--time-picker--light={light}
+      class:bx--time-picker--invalid={invalid}
+      class:bx--time-picker--warn={warn}
+      class:bx--time-picker--readonly={readonly}
+      class:bx--time-picker--sm={size === "sm"}
+      class:bx--time-picker--xl={size === "xl"}
+      class:bx--select--light={light}
     >
-      {helperText}
+      <div class:bx--time-picker__input={true}>
+        {#if labelText || $$slots.labelChildren}
+          <label
+            for={id}
+            class:bx--label={true}
+            class:bx--visually-hidden={hideLabel}
+            class:bx--label--disabled={disabled}
+            class:bx--label--readonly={readonly}
+          >
+            <slot name="labelChildren"> {labelText} </slot>
+          </label>
+        {/if}
+        <Stack orientation="horizontal" gap={0}>
+          <div
+            data-invalid={invalid || undefined}
+            data-warn={!invalid && warn ? true : undefined}
+            class:bx--text-input__field-wrapper={true}
+            class:bx--text-input__field-wrapper--warning={!invalid && warn}
+            style:width="auto"
+          >
+            {#if invalid}
+              <WarningFilled class="bx--text-input__invalid-icon" />
+            {:else if warn}
+              <WarningAltFilled
+                class="bx--text-input__invalid-icon bx--text-input__invalid-icon--warning"
+              />
+            {/if}
+            <input
+              bind:this={ref}
+              bind:value
+              type="text"
+              data-invalid={invalid || undefined}
+              aria-invalid={invalid || undefined}
+              aria-describedby={invalid
+                ? errorId
+                : warn
+                  ? warnId
+                  : helperText
+                    ? helperId
+                    : undefined}
+              {pattern}
+              {placeholder}
+              {maxlength}
+              {id}
+              {name}
+              {disabled}
+              readonly={readonly || undefined}
+              {...$$restProps}
+              class:bx--time-picker__input-field={true}
+              class:bx--text-input={true}
+              class:bx--text-input--light={light}
+              class:bx--text-input--invalid={invalid}
+              class:bx--text-input--warning={!invalid && warn}
+              on:change
+              on:input
+              on:keydown
+              on:keyup
+              on:focus
+              on:blur
+              on:paste
+            >
+          </div>
+          <slot />
+        </Stack>
+      </div>
     </div>
+    {#if invalid}
+      <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+    {:else if warn}
+      <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+    {:else if helperText}
+      <div
+        id={helperId}
+        class:bx--form__helper-text={true}
+        class:bx--form__helper-text--disabled={disabled}
+      >
+        {helperText}
+      </div>
+    {/if}
   {/if}
 </div>

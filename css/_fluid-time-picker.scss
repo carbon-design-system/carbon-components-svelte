@@ -1,0 +1,380 @@
+// Fluid variant styles for `TimePicker`, ported from the Carbon v11
+// `fluid-time-picker` module. carbon-components v10 does not ship these.
+// https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-time-picker/_fluid-time-picker.scss
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Fluid time picker variant (Carbon React `FluidTimePicker` parity)
+/// @access private
+/// @group components
+@mixin fluid-time-picker {
+  // Standalone fluid usage sits inside a sized container (e.g. a form column).
+  // React omits the outer `form-item`; stretch to the parent like the skeleton.
+  .#{$prefix}--time-picker__form-item--fluid {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--time-picker--fluid {
+    background: $field-01;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--time-picker--fluid .#{$prefix}--time-picker--fluid__wrapper {
+    display: flex;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--time-picker--fluid__wrapper > * {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    align-self: stretch;
+  }
+
+  .#{$prefix}--time-picker--fluid__wrapper > *:nth-child(1),
+  .#{$prefix}--time-picker--fluid__wrapper > *:nth-child(2) {
+    flex-basis: 25%;
+  }
+
+  .#{$prefix}--time-picker--fluid__wrapper > *:last-child:not(:only-child) {
+    flex-basis: 50%;
+  }
+
+  .#{$prefix}--time-picker--equal-width
+    .#{$prefix}--time-picker--fluid__wrapper
+    > * {
+    flex-basis: 50%;
+  }
+
+  .#{$prefix}--time-picker--fluid__wrapper > .#{$prefix}--form-item,
+  .#{$prefix}--time-picker--fluid__wrapper > .#{$prefix}--time-picker__input {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input-wrapper,
+  .#{$prefix}--time-picker--fluid .#{$prefix}--select--fluid .#{$prefix}--select {
+    inline-size: 100%;
+  }
+
+  // Time input cell — fluid text input layout (v11 `fluid-text-input` parity)
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input-wrapper {
+    position: relative;
+    background: $field-01;
+    block-size: to-rem(64px);
+    transition:
+      background-color $duration--fast-01 motion(standard, productive),
+      outline $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--label {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    white-space: nowrap;
+    block-size: to-rem(16px);
+    inline-size: calc(100% - 2rem);
+    inset-block-start: to-rem(13px);
+    inset-inline-start: $spacing-05;
+  }
+
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--label::-webkit-scrollbar {
+    display: none;
+  }
+
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--label.#{$prefix}--label--slotted {
+    gap: $spacing-03;
+    overflow: visible;
+  }
+
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input__field-outer-wrapper,
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input__field-wrapper {
+    inline-size: 100%;
+  }
+
+  // v10 fixes `.bx--time-picker__input-field` at 4.875rem; stretch for fluid cells.
+  // Use a fixed 64px block-size (not min) so code-02 line-height cannot exceed
+  // the fluid select cell height.
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input,
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker__input-field {
+    display: block;
+    inline-size: 100%;
+    width: 100%;
+    block-size: to-rem(64px);
+    height: to-rem(64px);
+    max-block-size: to-rem(64px);
+    max-height: to-rem(64px);
+    max-inline-size: 100%;
+    padding: to-rem(32px) $spacing-05 to-rem(13px);
+    outline: none;
+  }
+
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--text-input__field-wrapper {
+    display: block;
+  }
+
+  // Simulated borders between cells
+  .#{$prefix}--time-picker--fluid__wrapper
+    > *:nth-child(2):not(:last-child)
+    .#{$prefix}--select-input__wrapper::before,
+  .#{$prefix}--time-picker--fluid__wrapper
+    > *:last-child
+    .#{$prefix}--select-input__wrapper::before {
+    position: absolute;
+    display: block;
+    background-color: $ui-04;
+    block-size: calc(100% - 1px);
+    content: "";
+    inline-size: 1px;
+    opacity: 1;
+    transition: opacity $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--select--readonly .#{$prefix}--select-input__wrapper::before {
+    background-color: $ui-03 !important; /* stylelint-disable-line declaration-no-important */
+    opacity: 1 !important; /* stylelint-disable-line declaration-no-important */
+    transition: none;
+  }
+
+  .#{$prefix}--time-picker--fluid__wrapper
+    .#{$prefix}--select-input__wrapper::after {
+    inset-inline-end: 0;
+  }
+
+  .#{$prefix}--time-picker--fluid__wrapper
+    .#{$prefix}--select-input__wrapper::before {
+    inset-inline-start: 0;
+  }
+
+  .#{$prefix}--time-picker--fluid__wrapper .#{$prefix}--select-input__wrapper {
+    position: relative;
+  }
+
+  .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--disabled)
+    .#{$prefix}--time-picker--fluid__wrapper
+    > *:nth-child(2):not(:last-child):hover
+    .#{$prefix}--select-input__wrapper::before,
+  .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--disabled)
+    .#{$prefix}--time-picker--fluid__wrapper
+    > *:nth-child(2):hover:not(:last-child)
+    ~ *
+    .#{$prefix}--select-input__wrapper::before,
+  .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--disabled)
+    .#{$prefix}--time-picker--fluid__wrapper
+    > *:last-child:hover
+    .#{$prefix}--select-input__wrapper::before {
+    opacity: 0;
+  }
+
+  .#{$prefix}--time-picker--fluid--disabled
+    .#{$prefix}--time-picker--fluid__wrapper
+    .#{$prefix}--select--disabled
+    .#{$prefix}--select-input__wrapper::before {
+    background: $disabled-02;
+  }
+
+  // Invalid + warn states
+  .#{$prefix}--time-picker--fluid .#{$prefix}--form-requirement {
+    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    margin: 0;
+    background: $field-01;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid {
+    @include focus-outline("invalid");
+
+    position: relative;
+  }
+
+  // Segment backgrounds must be transparent so the parent invalid outline
+  // (inset via focus-outline) is visible around the full field, not just the
+  // footer. Specificity must beat the cell + fluid-select background rules.
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input-wrapper,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--time-picker__input-field,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--select--fluid
+    .#{$prefix}--select,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--select--fluid
+    .#{$prefix}--select-input,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--form-requirement,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input-wrapper,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--time-picker__input-field,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--select--fluid
+    .#{$prefix}--select,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--select--fluid
+    .#{$prefix}--select-input,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--form-requirement {
+    background: transparent;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--select-input {
+    border-block-start: 2px solid transparent;
+    padding-block-start: to-rem(30px);
+  }
+
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--select--fluid:last-of-type
+    .#{$prefix}--select-input {
+    border-inline-end: 2px solid transparent;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--select-input:hover:not([disabled]) {
+    background: $hover-ui;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--select-input:hover {
+    border-block-start: 2px solid $support-01;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--select--fluid:last-of-type
+    .#{$prefix}--select-input:hover {
+    border-inline-end: 2px solid $support-01;
+  }
+
+  .#{$prefix}--time-picker--fluid--warning {
+    position: relative;
+  }
+
+  .#{$prefix}--time-picker__icon {
+    display: none;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--time-picker__icon,
+  .#{$prefix}--time-picker--fluid--warning .#{$prefix}--time-picker__icon {
+    position: absolute;
+    display: block;
+    inset-block-start: to-rem(72px);
+    inset-inline-end: $spacing-05;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--time-picker__icon {
+    fill: $support-01;
+  }
+
+  .#{$prefix}--time-picker--fluid--warning .#{$prefix}--time-picker__icon {
+    fill: $support-03;
+  }
+
+  .#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--time-picker__icon
+    path:first-of-type {
+    fill: $icon-01;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--form-requirement,
+  .#{$prefix}--time-picker--fluid--warning .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-block-size: 100%;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--time-picker--fluid__wrapper
+    > *:nth-child(2):not(:last-child)
+    .#{$prefix}--select-input__wrapper::before,
+  .#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--time-picker--fluid__wrapper
+    > *:last-child
+    .#{$prefix}--select-input__wrapper::before,
+  .#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--time-picker--fluid__wrapper
+    > *:nth-child(2):not(:last-child)
+    .#{$prefix}--select-input__wrapper::before,
+  .#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--time-picker--fluid__wrapper
+    > *:last-child
+    .#{$prefix}--select-input__wrapper::before {
+    block-size: calc(100% - 1rem);
+    inset-block-start: 8px;
+  }
+
+  .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--text-input,
+  .#{$prefix}--time-picker--fluid--warning .#{$prefix}--text-input,
+  .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--select-input,
+  .#{$prefix}--time-picker--fluid--warning .#{$prefix}--select-input {
+    border-block-end: 1px solid transparent;
+  }
+
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--time-picker__divider,
+  .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--time-picker__divider {
+    display: block;
+    border-style: solid;
+    border-color: $ui-03;
+    margin: 0 1rem;
+    border-block-end: none;
+    inline-size: calc(100% - 2rem);
+  }
+
+  // Focus styles for the time input cell
+  .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--invalid):not(
+      .#{$prefix}--time-picker--fluid--warning
+    )
+    .#{$prefix}--time-picker__input
+    .#{$prefix}--text-input__field-wrapper:focus-within {
+    @include focus-outline("outline");
+  }
+
+  // Invalid/warn outlines are on the composite field; suppress per-cell
+  // focus rings from fluid-select while the group is in error/warn state.
+  .#{$prefix}--time-picker--fluid--invalid
+    .#{$prefix}--select--fluid
+    .#{$prefix}--select-input__wrapper:focus-within,
+  .#{$prefix}--time-picker--fluid--warning
+    .#{$prefix}--select--fluid
+    .#{$prefix}--select-input__wrapper:focus-within {
+    outline: none;
+  }
+}
+
+@include exports("fluid-time-picker") {
+  @include fluid-time-picker;
+}
