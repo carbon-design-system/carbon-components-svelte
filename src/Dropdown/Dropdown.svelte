@@ -439,6 +439,9 @@
   class:bx--dropdown__wrapper--inline--invalid={inline && showInvalid}
   class:bx--list-box__wrapper--fluid={isFluid}
   class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
+  class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
+  class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}
+  class:bx--list-box__wrapper--fluid--readonly={isFluid && readonly}
   class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
   {...$$restProps}
