@@ -48,6 +48,12 @@ Pass `flatpickrProps={{ allowInput: false }}` when you want calendar-only select
 
 <FileSource src="/framed/DatePicker/DatePickerAllowInput" />
 
+## Disable open animation
+
+By default, the calendar animates when it opens and closes. Pass `flatpickrProps={{ animate: false }}` to disable the [Flatpickr animate option](https://flatpickr.js.org/options/) and show the calendar instantly.
+
+<FileSource src="/framed/DatePicker/DatePickerDisableAnimation" />
+
 ## Custom date format
 
 Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The input `pattern` attribute is automatically derived to match, ensuring native form validation works correctly.
