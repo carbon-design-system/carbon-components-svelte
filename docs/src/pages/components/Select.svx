@@ -3,7 +3,8 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
 ---
 
 <script>
-  import { Select, SelectItem, SelectItemGroup, SelectSkeleton } from "carbon-components-svelte";
+  import { Select, SelectItem, SelectItemGroup, SelectSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
 Selects provide a dropdown menu for selecting a single option from a list. They support various states, sizes, and include built-in validation and helper text.
@@ -144,6 +145,85 @@ Use the inline variant for horizontal layouts.
 Use the light variant for light backgrounds.
 
 <Select light labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+## Fluid variant
+
+Set `fluid` to `true` to use the fluid variant, which embeds the label
+inside the field. Fluid selects can be used standalone or inside
+[FluidForm](/components/FluidForm), where the fluid variant is applied
+automatically. The fluid variant cannot be combined with the inline variant.
+
+<Select fluid labelText="Carbon theme" selected="g10">
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+## Fluid variant with custom label
+
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
+
+<Select fluid labelText="Carbon theme" selected="g10">
+  <svelte:fragment slot="labelChildren">
+    Carbon theme
+    <TooltipIcon tooltipText="Themes determine the color palette of the page." icon={Information} />
+  </svelte:fragment>
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+## Fluid variant (invalid)
+
+Fluid selects display the error message inside the field boundary. Long
+messages wrap to multiple lines.
+
+<Select fluid invalid invalidText="Theme must be a dark variant. Light themes such as White and Gray 10 are not supported on this page; choose Gray 80, Gray 90, or Gray 100 instead." labelText="Carbon theme" selected="g10">
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+## Fluid variant (warning)
+
+<Select fluid warn warnText="The selected theme will not be persisted" labelText="Carbon theme" selected="g10">
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+## Fluid variant (disabled)
+
+Invalid and warning states are not displayed while the select is disabled.
+
+<Select fluid disabled invalid invalidText="Theme must be a dark variant" labelText="Carbon theme" selected="g10">
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+## Fluid variant (read-only)
+
+Invalid and warning states are not displayed while the select is read-only.
+
+<Select fluid readonly warn warnText="The selected theme will not be persisted" labelText="Carbon theme" selected="g10">
   <SelectItem value="white" text="White" />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g80" text="Gray 80" />
