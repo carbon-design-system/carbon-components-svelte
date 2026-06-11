@@ -72,6 +72,19 @@ describe("MultiSelect", () => {
     expect(screen.getByText("0 Slack 2")).toBeInTheDocument();
   });
 
+  it("should clear the hover highlight when the cursor leaves the menu", async () => {
+    render(MultiSelect, { props: { items } });
+
+    await openMenu();
+
+    const emailOption = screen.getByRole("option", { name: "Email" });
+    await user.hover(emailOption);
+    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+    await fireEvent.mouseLeave(screen.getByRole("listbox"));
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+  });
+
   it("should pass selected and highlighted to the default slot", async () => {
     render(MultiSelectItemSlot, { props: { selectedIds: ["1"] } });
 
