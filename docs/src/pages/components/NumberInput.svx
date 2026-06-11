@@ -3,7 +3,8 @@ components: ["NumberInput", "NumberInputSkeleton"]
 ---
 
 <script>
-  import { NumberInput, NumberInputSkeleton } from "carbon-components-svelte";
+  import { NumberInput, NumberInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
 Number inputs provide a controlled input for numerical values. They support validation, step values, and various states to ensure accurate data entry.
@@ -131,6 +132,51 @@ Use the small size for compact layouts by setting `size` to `"sm"`. This is idea
 Use the light variant for dark backgrounds by setting `light` to `true`.
 
 <NumberInput light labelText="Clusters" value={0} />
+
+## Fluid variant
+
+Set `fluid` to `true` to use the fluid variant, which embeds the label inside the field. Fluid number inputs can be used standalone or inside [FluidForm](/components/FluidForm), where the fluid variant is applied automatically.
+
+<NumberInput fluid labelText="Clusters" value={0} />
+
+## Fluid variant with hidden steppers
+
+The fluid variant works with `hideSteppers` to remove the increment and decrement controls.
+
+<NumberInput fluid hideSteppers labelText="Clusters" value={0} />
+
+## Fluid variant with custom label
+
+Use the `labelChildren` slot to render custom label content, such as a tooltip icon.
+
+<NumberInput fluid value={0}>
+  <svelte:fragment slot="labelChildren">
+    Clusters
+    <TooltipIcon tooltipText="The number of clusters provisioned in your region." icon={Information} />
+  </svelte:fragment>
+</NumberInput>
+
+## Fluid variant (invalid)
+
+Fluid number inputs display the error message inside the field boundary. Long messages wrap to multiple lines.
+
+<NumberInput fluid invalid invalidText="The number of clusters must be between 4 and 20 to provision a highly available cluster in this region." labelText="Clusters" value={0} />
+
+## Fluid variant (warning)
+
+<NumberInput fluid warn warnText="Increasing the cluster count will incur additional charges." labelText="Clusters" value={0} />
+
+## Fluid variant (disabled)
+
+Invalid and warning states are not displayed while the input is disabled.
+
+<NumberInput fluid disabled invalid invalidText="The number of clusters is invalid." labelText="Clusters" value={0} />
+
+## Fluid variant (read-only)
+
+Invalid and warning states are not displayed while the input is read-only.
+
+<NumberInput fluid readonly warn warnText="The number of clusters is read-only." labelText="Clusters" value={0} />
 
 ## Invalid state
 
