@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import TextAreaFluidForm from "./TextArea.fluidForm.test.svelte";
+import TextAreaFluidSlot from "./TextArea.fluidSlot.test.svelte";
 import TextArea from "./TextArea.test.svelte";
 import TextAreaCustom from "./TextAreaCustom.test.svelte";
 
@@ -173,5 +175,99 @@ describe("TextArea", () => {
 
     const textarea = screen.getByRole("textbox");
     expect(textarea).not.toHaveAttribute("cols");
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(TextArea);
+
+      expect(document.querySelector(".bx--text-area--fluid")).toBeNull();
+      expect(document.querySelector(".bx--text-area__divider")).toBeNull();
+    });
+
+    it("renders fluid variant and suppresses helper text", () => {
+      render(TextArea, { fluid: true, helperText: "Helper text" });
+
+      const textarea = screen.getByLabelText("App description");
+      expect(textarea.closest(".bx--form-item")).toHaveClass(
+        "bx--text-area--fluid",
+      );
+      expect(
+        document.querySelector(".bx--text-area__divider"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(textarea).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("renders the error message inside the input wrapper", () => {
+      render(TextArea, {
+        fluid: true,
+        invalid: true,
+        invalidText: "Invalid input",
+      });
+
+      const message = screen.getByText("Invalid input");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--text-area__wrapper")).not.toBeNull();
+      expect(screen.getByLabelText("App description")).toHaveAttribute(
+        "aria-describedby",
+        "error-ccs-test",
+      );
+    });
+
+    it("renders the warning message inside the input wrapper", () => {
+      render(TextArea, {
+        fluid: true,
+        warn: true,
+        warnText: "Warning message",
+      });
+
+      const message = screen.getByText("Warning message");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--text-area__wrapper")).not.toBeNull();
+    });
+
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      render(TextArea, {
+        fluid: true,
+        invalid: true,
+        invalidText: "Invalid input",
+        warn: true,
+        warnText: "Warning message",
+        ...props,
+      });
+
+      expect(screen.queryByText("Invalid input")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(document.querySelector("[data-invalid]")).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(TextAreaFluidForm);
+
+      const textarea = screen.getByLabelText("Fluid form description");
+      expect(textarea.closest(".bx--form-item")).toHaveClass(
+        "bx--text-area--fluid",
+      );
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(TextAreaFluidSlot);
+
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(TextAreaFluidSlot, { fluid: false });
+
+      expect(screen.getByText("Custom label content")).not.toHaveClass(
+        "bx--label--slotted",
+      );
+    });
   });
 });

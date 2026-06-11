@@ -56,6 +56,13 @@
   /** Specify the warning state text */
   export let warnText = "";
 
+  /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   */
+  export let fluid = false;
+
   /** Set an id for the textarea element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -71,11 +78,17 @@
    */
   export let ref = null;
 
+  import { getContext } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
 
+  const formContext = getContext("carbon:Form");
+
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: isFluid = fluid || !!formContext?.isFluid;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -87,19 +100,25 @@
   on:mouseenter
   on:mouseleave
   class:bx--form-item={true}
+  class:bx--text-area--fluid={isFluid}
 >
   {#if labelText || $$slots.labelChildren}
     <div class:bx--text-area__label-wrapper={true}>
       <label
         for={id}
         class:bx--label={true}
-        class:bx--visually-hidden={hideLabel}
+        class:bx--visually-hidden={hideLabel && !isFluid}
         class:bx--label--disabled={disabled}
+        class:bx--label--slotted={isFluid && $$slots.labelChildren}
       >
         <slot name="labelChildren"> {labelText} </slot>
       </label>
       {#if maxCount}
-        <div class:bx--label={true} class:bx--label--disabled={disabled}>
+        <div
+          class:bx--label={true}
+          class:bx--label--disabled={disabled}
+          class:bx--text-area__label-counter={true}
+        >
           {(value ?? "").length}/{maxCount}
         </div>
       {/if}
@@ -108,13 +127,14 @@
   <div
     class:bx--text-area__wrapper={true}
     class:bx--text-area__wrapper--readonly={readonly}
-    data-invalid={invalid || undefined}
-    data-warn={warn || undefined}
+    class:bx--text-area__wrapper--warn={showWarn}
+    data-invalid={showInvalid || undefined}
+    data-warn={showWarn || undefined}
   >
-    {#if invalid}
+    {#if showInvalid && !isFluid}
       <WarningFilled class="bx--text-area__invalid-icon" />
     {/if}
-    {#if !invalid && warn}
+    {#if showWarn && !isFluid}
       <WarningAltFilled
         class="bx--text-area__invalid-icon
         bx--text-area__invalid-icon--warning"
@@ -123,9 +143,13 @@
     <textarea
       bind:this={ref}
       bind:value
-      aria-invalid={invalid || undefined}
-      aria-describedby={invalid ? errorId : warn ? warnId : undefined}
-      data-warn={warn || undefined}
+      aria-invalid={showInvalid || undefined}
+      aria-describedby={showInvalid
+        ? errorId
+        : showWarn && !isFluid
+          ? warnId
+          : undefined}
+      data-warn={showWarn || undefined}
       {disabled}
       {id}
       {name}
@@ -135,8 +159,8 @@
       {readonly}
       class:bx--text-area={true}
       class:bx--text-area--light={light}
-      class:bx--text-area--invalid={invalid}
-      class:bx--text-area--warning={warn}
+      class:bx--text-area--invalid={showInvalid}
+      class:bx--text-area--warning={showWarn}
       style:resize={typeof cols === "number" ? "none" : undefined}
       maxlength={maxCount ?? undefined}
       {...$$restProps}
@@ -148,8 +172,26 @@
       on:blur
       on:paste
     ></textarea>
+    {#if isFluid}
+      <hr class:bx--text-area__divider={true}>
+      {#if showInvalid}
+        <div id={errorId} class:bx--form-requirement={true}>
+          {invalidText}
+          <WarningFilled class="bx--text-area__invalid-icon" />
+        </div>
+      {/if}
+      {#if showWarn}
+        <div id={warnId} class:bx--form-requirement={true}>
+          {warnText}
+          <WarningAltFilled
+            class="bx--text-area__invalid-icon
+            bx--text-area__invalid-icon--warning"
+          />
+        </div>
+      {/if}
+    {/if}
   </div>
-  {#if !invalid && !warn && helperText}
+  {#if !isFluid && !showInvalid && !showWarn && helperText}
     <div
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
@@ -157,10 +199,10 @@
       {helperText}
     </div>
   {/if}
-  {#if invalid}
+  {#if !isFluid && showInvalid}
     <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
-  {#if !invalid && warn}
+  {#if !isFluid && showWarn}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
 </div>

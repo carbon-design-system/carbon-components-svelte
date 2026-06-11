@@ -15,6 +15,9 @@
   export let hideLabel = false;
   export let invalid = false;
   export let invalidText = "";
+  export let warn = false;
+  export let warnText = "";
+  export let fluid = false;
   export let id = "ccs-test";
   export let name: ComponentProps<TextArea>["name"] = undefined;
   export let ref: ComponentProps<TextArea>["ref"] = null;
@@ -34,6 +37,9 @@
   {hideLabel}
   {invalid}
   {invalidText}
+  {warn}
+  {warnText}
+  {fluid}
   {id}
   {name}
   {ref}
