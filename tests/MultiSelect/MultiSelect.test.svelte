@@ -36,9 +36,13 @@
   export let open: ComponentProps<MultiSelect>["open"] = undefined;
   export let ariaLabel: ComponentProps<MultiSelect>["aria-label"] = undefined;
   export let sortedItems: ComponentProps<MultiSelect>["sortedItems"] = [];
+  export let fluid = false;
+  export let condensed = false;
+  export let id: ComponentProps<MultiSelect>["id"] = undefined;
 </script>
 
 <MultiSelect
+  {id}
   aria-label={ariaLabel}
   {items}
   {selectedIds}
@@ -65,6 +69,8 @@
   {portalMenu}
   {sortItem}
   {open}
+  {fluid}
+  {condensed}
   bind:sortedItems
   on:select={(e) => {
     console.log("select", e.detail);
