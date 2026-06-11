@@ -3,7 +3,8 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem"]
 ---
 
 <script>
-  import { TimePicker, TimePickerSelect, SelectItem } from "carbon-components-svelte";
+  import { TimePicker, TimePickerSelect, SelectItem, TooltipIcon } from "carbon-components-svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
 Time pickers provide a time input field with optional period (AM/PM) and timezone selectors. They support various sizes, states, and themes to match your application's design system.
@@ -37,6 +38,130 @@ Use the light variant for light-themed backgrounds by setting `light` to `true`.
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
 </TimePicker>
+
+## Fluid variant
+
+Set `fluid` to `true` to use the fluid variant, which embeds labels inside
+each field cell. Fluid time pickers can be used standalone or inside
+[FluidForm](/components/FluidForm), where the fluid variant is applied
+automatically.
+
+Fluid time pickers fill their container using percentage-based columns (25% /
+25% / 50% with two selects, 50% / 50% with one). Set a parent width via a
+sized wrapper, form column, or `FluidForm` so those ratios resolve as intended.
+
+<div style:width="350px">
+  <TimePicker fluid labelText="Time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Clock" value="am">
+      <SelectItem value="am" text="AM" />
+      <SelectItem value="pm" text="PM" />
+    </TimePickerSelect>
+    <TimePickerSelect labelText="Timezone" value="et">
+      <SelectItem value="et" text="Eastern Time (ET)" />
+      <SelectItem value="pt" text="Pacific Time (PT)" />
+    </TimePickerSelect>
+  </TimePicker>
+</div>
+
+With a single period selector, the time input and select share equal width.
+
+<div style:width="350px">
+  <TimePicker fluid labelText="Time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Clock" value="am">
+      <SelectItem value="am" text="AM" />
+      <SelectItem value="pm" text="PM" />
+    </TimePickerSelect>
+  </TimePicker>
+</div>
+
+## Fluid variant with custom label
+
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
+
+<div style:width="350px">
+  <TimePicker fluid labelText="Time" placeholder="hh:mm">
+    <svelte:fragment slot="labelChildren">
+      Time
+      <TooltipIcon tooltipText="Enter time in hh:mm format." icon={Information} />
+    </svelte:fragment>
+    <TimePickerSelect labelText="Clock" value="am">
+      <svelte:fragment slot="labelChildren">
+        Clock
+        <TooltipIcon tooltipText="Select AM or PM." icon={Information} />
+      </svelte:fragment>
+      <SelectItem value="am" text="AM" />
+      <SelectItem value="pm" text="PM" />
+    </TimePickerSelect>
+  </TimePicker>
+</div>
+
+## Fluid variant (invalid)
+
+Fluid time pickers display the error message inside the field boundary. Long
+messages wrap to multiple lines.
+
+<div style:width="350px">
+  <TimePicker fluid invalid invalidText="A valid time is required. Enter the hour and minute in hh:mm format using a 12-hour clock, for example 09:30 or 2:15." labelText="Time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Clock" value="am">
+      <SelectItem value="am" text="AM" />
+      <SelectItem value="pm" text="PM" />
+    </TimePickerSelect>
+    <TimePickerSelect labelText="Timezone" value="et">
+      <SelectItem value="et" text="Eastern Time (ET)" />
+      <SelectItem value="pt" text="Pacific Time (PT)" />
+    </TimePickerSelect>
+  </TimePicker>
+</div>
+
+## Fluid variant (warning)
+
+<div style:width="350px">
+  <TimePicker fluid warn warnText="The selected time is outside business hours" labelText="Time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Clock" value="am">
+      <SelectItem value="am" text="AM" />
+      <SelectItem value="pm" text="PM" />
+    </TimePickerSelect>
+    <TimePickerSelect labelText="Timezone" value="et">
+      <SelectItem value="et" text="Eastern Time (ET)" />
+      <SelectItem value="pt" text="Pacific Time (PT)" />
+    </TimePickerSelect>
+  </TimePicker>
+</div>
+
+## Fluid variant (disabled)
+
+Invalid and warning states are not displayed while the time picker is disabled.
+
+<div style:width="350px">
+  <TimePicker fluid disabled invalid invalidText="A valid time is required" labelText="Time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Clock" value="am" disabled>
+      <SelectItem value="am" text="AM" />
+      <SelectItem value="pm" text="PM" />
+    </TimePickerSelect>
+    <TimePickerSelect labelText="Timezone" value="et" disabled>
+      <SelectItem value="et" text="Eastern Time (ET)" />
+      <SelectItem value="pt" text="Pacific Time (PT)" />
+    </TimePickerSelect>
+  </TimePicker>
+</div>
+
+## Fluid variant (read-only)
+
+Invalid and warning states are not displayed while the time picker is read-only.
+
+<div style:width="350px">
+  <TimePicker fluid readonly warn warnText="The selected time is outside business hours" labelText="Time" placeholder="hh:mm" value="10:30">
+    <TimePickerSelect labelText="Clock" readonly value="am">
+      <SelectItem value="am" text="AM" />
+      <SelectItem value="pm" text="PM" />
+    </TimePickerSelect>
+    <TimePickerSelect labelText="Timezone" readonly value="et">
+      <SelectItem value="et" text="Eastern Time (ET)" />
+      <SelectItem value="pt" text="Pacific Time (PT)" />
+    </TimePickerSelect>
+  </TimePicker>
+</div>
 
 ## Extra-large size
 
