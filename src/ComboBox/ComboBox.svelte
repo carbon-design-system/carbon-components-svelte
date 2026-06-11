@@ -710,6 +710,11 @@
         on:scroll={(event) => {
           listScrollTop = event.target.scrollTop;
         }}
+        on:mouseleave={() => {
+          // Clear the hover highlight when the cursor leaves the menu so the
+          // highlighted state does not linger on the last hovered item.
+          highlightedIndex = -1;
+        }}
         bind:ref={listRef}
         style={effectivePortalMenu
           ? `max-height: ${virtualConfig
