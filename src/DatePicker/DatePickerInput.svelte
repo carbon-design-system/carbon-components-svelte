@@ -75,6 +75,7 @@
     range,
     add,
     setReadonly,
+    setValidation,
     hasCalendar,
     dateFormat,
     declareRef,
@@ -86,6 +87,7 @@
     inputValue,
     inputValueFrom,
     inputValueTo,
+    isFluid,
   } = getContext("carbon:DatePicker");
 
   const dateFormatTokens = {
@@ -124,16 +126,20 @@
   // Invalid/warn states are suppressed when the input is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: setValidation(id, showInvalid, showWarn);
 </script>
 
 <div
   class:bx--date-picker-container={true}
   class:bx--date-picker--nolabel={!labelText}
+  class:bx--date-picker--fluid--invalid={$isFluid && showInvalid}
+  class:bx--date-picker--fluid--warn={$isFluid && showWarn}
 >
   {#if labelText || $$slots.labelChildren}
     <label
       for={id}
       class:bx--label={true}
+      class:bx--label--slotted={$isFluid && $$slots.labelChildren}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
       class:bx--label--readonly={readonly}

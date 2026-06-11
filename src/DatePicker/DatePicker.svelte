@@ -60,6 +60,13 @@
   export let light = false;
 
   /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   */
+  export let fluid = false;
+
+  /**
    * Set to `true` to render the calendar in a portal to prevent clipping.
    * When inside a Modal, defaults to `true` unless explicitly set to `false`.
    *
@@ -108,9 +115,11 @@
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
+  const formContext = getContext("carbon:Form");
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
+  $: isFluid = fluid || !!formContext?.isFluid;
 
   const inputs = writable([]);
   /**
@@ -124,6 +133,10 @@
   const readonlyAny = derived(inputs, (_) =>
     _.some(({ readonly }) => readonly),
   );
+  const invalidAny = derived(inputs, (_) => _.some(({ invalid }) => invalid));
+  const warnAny = derived(inputs, (_) => _.some(({ warn }) => warn));
+  const isFluidStore = writable(false);
+  $: isFluidStore.set(isFluid);
   /**
    * @type {import("svelte/store").Writable<number | string>}
    */
@@ -177,7 +190,10 @@
    * @type {(data: { id: string; labelText: string }) => void}
    */
   function add(data) {
-    inputs.update((_) => [..._, { readonly: false, ...data }]);
+    inputs.update((_) => [
+      ..._,
+      { readonly: false, invalid: false, warn: false, ...data },
+    ]);
   }
 
   /**
@@ -186,6 +202,15 @@
   function setReadonly(id, readonly) {
     inputs.update((_) =>
       _.map((input) => (input.id === id ? { ...input, readonly } : input)),
+    );
+  }
+
+  /**
+   * @type {(id: string, invalid: boolean, warn: boolean) => void}
+   */
+  function setValidation(id, invalid, warn) {
+    inputs.update((_) =>
+      _.map((input) => (input.id === id ? { ...input, invalid, warn } : input)),
     );
   }
 
@@ -274,8 +299,10 @@
     inputIds,
     hasCalendar,
     dateFormat: dateFormatStore,
+    isFluid: isFluidStore,
     add,
     setReadonly,
+    setValidation,
     declareRef,
     updateValue,
     blurInput,
@@ -447,6 +474,10 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
+  class:bx--date-picker--fluid={isFluid}
+  class:bx--date-picker--fluid--invalid={isFluid && $invalidAny}
+  class:bx--date-picker--fluid--warn={isFluid && $warnAny}
+  class:bx--date-picker--fluid--readonly={isFluid && $readonlyAny}
   {...$$restProps}
   on:click
   on:mouseover

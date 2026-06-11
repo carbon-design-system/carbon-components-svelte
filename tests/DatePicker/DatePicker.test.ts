@@ -2,6 +2,9 @@ import { render, screen } from "@testing-library/svelte";
 import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import DatePickerFluidForm from "./DatePicker.fluidForm.test.svelte";
+import DatePickerFluidRange from "./DatePicker.fluidRange.test.svelte";
+import DatePickerFluidSlot from "./DatePicker.fluidSlot.test.svelte";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
@@ -669,6 +672,124 @@ describe("DatePicker", () => {
       const wrapper = container.querySelector(".bx--date-picker");
       expect(wrapper?.contains(calendar)).toBe(true);
       expect(calendar.classList.contains("static")).toBe(true);
+    });
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      const { container } = render(DatePicker);
+
+      expect(container.querySelector(".bx--date-picker--fluid")).toBeNull();
+    });
+
+    it("renders the fluid modifier on the form-item wrapper", () => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+      });
+
+      const formItem = container.querySelector(".bx--date-picker--fluid");
+      expect(formItem).toHaveClass("bx--form-item");
+      // The label stays in the DOM so it can be embedded inside the field.
+      expect(screen.getByText("Date")).toBeInTheDocument();
+    });
+
+    it("renders the error message inside the fluid container", () => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+        invalid: true,
+        invalidText: "Invalid date",
+      });
+
+      const message = screen.getByText("Invalid date");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--date-picker-container")).toHaveClass(
+        "bx--date-picker--fluid--invalid",
+      );
+      expect(
+        container.querySelector(".bx--date-picker--fluid--invalid"),
+      ).not.toBeNull();
+    });
+
+    it("renders the warning message inside the fluid container", () => {
+      render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+        warn: true,
+        warnText: "Warning message",
+      });
+
+      const message = screen.getByText("Warning message");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--date-picker-container")).toHaveClass(
+        "bx--date-picker--fluid--warn",
+      );
+    });
+
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+        invalid: true,
+        invalidText: "Invalid date",
+        warn: true,
+        warnText: "Warning message",
+        ...props,
+      });
+
+      expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--date-picker--fluid--invalid"),
+      ).toBeNull();
+      expect(
+        container.querySelector(".bx--date-picker--fluid--warn"),
+      ).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      const { container } = render(DatePickerFluidForm);
+
+      expect(container.querySelector(".bx--date-picker--fluid")).not.toBeNull();
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(DatePickerFluidSlot);
+
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(DatePickerFluidSlot, { fluid: false });
+
+      expect(screen.getByText("Custom label content")).not.toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("marks only the invalid range cell in fluid mode", () => {
+      render(DatePickerFluidRange, {
+        invalidFrom: true,
+        invalidText: "Invalid start date",
+      });
+
+      const message = screen.getByText("Invalid start date");
+      const invalidContainer = message.closest(".bx--date-picker-container");
+      expect(invalidContainer).toHaveClass("bx--date-picker--fluid--invalid");
+
+      const containers = document.querySelectorAll(
+        ".bx--date-picker-container",
+      );
+      const invalidCells = [...containers].filter((el) =>
+        el.classList.contains("bx--date-picker--fluid--invalid"),
+      );
+      expect(invalidCells).toHaveLength(1);
     });
   });
 });
