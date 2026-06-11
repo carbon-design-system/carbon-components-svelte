@@ -1,6 +1,7 @@
 <script>
-  import { CopyInput, FluidForm } from "carbon-components-svelte";
+  import { CopyInput, TooltipIcon } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
 Copy inputs display read-only values in a text field with a built-in copy button. Use them in forms and settings panels for labeled copyable values such as API tokens, endpoint URLs, and resource IDs.
@@ -104,10 +105,27 @@ When used inside a `Modal`, the copy feedback tooltip is automatically portalled
 
 <FileSource src="/framed/CopyInput/CopyInputInModal" />
 
-## Fluid
+## Fluid variant
 
-Wrap in `FluidForm` for the fluid layout.
+Set `fluid` to `true` to use the fluid variant, which embeds the label
+inside the field. Fluid copy inputs can be used standalone or inside
+[FluidForm](/components/FluidForm), where the fluid variant is applied
+automatically. The fluid variant cannot be combined with the inline variant.
 
-<FluidForm>
-  <CopyInput labelText="API token" value="sk-1234567890abcdef" />
-</FluidForm>
+<CopyInput fluid labelText="API token" value="sk-1234567890abcdef" />
+
+## Fluid variant with custom label
+
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
+
+<CopyInput fluid labelText="API token" value="sk-1234567890abcdef">
+  <svelte:fragment slot="labelChildren">
+    API token
+    <TooltipIcon tooltipText="Use this token to authenticate API requests." icon={Information} />
+  </svelte:fragment>
+</CopyInput>
+
+## Fluid variant (disabled)
+
+<CopyInput fluid disabled labelText="API token" value="sk-1234567890abcdef" />
