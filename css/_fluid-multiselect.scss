@@ -1,0 +1,54 @@
+// Fluid variant styles for `MultiSelect`, ported from the Carbon v11
+// `fluid-multiselect` module. carbon-components v10 does not ship these.
+// https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-multiselect/_fluid-multiselect.scss
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Fluid multi-select variant (Carbon React `FluidMultiSelect` parity)
+/// @access private
+/// @group components
+@mixin fluid-multiselect {
+  // Filterable only — non-filterable fields already position content via
+  // fluid-list-box field padding; an extra block-start margin misaligns the tag.
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--multi-select--filterable
+    .#{$prefix}--tag.#{$prefix}--tag--filter {
+    margin-block-start: 1.25rem;
+  }
+
+  // Filterable — when items are selected, the count tag sits before the input.
+  // fluid-combo-box applies padding-inline on `.bx--text-input`; reset the
+  // inline-start so the typed text follows the tag (Carbon v11 multiselect parity).
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--selected
+    .#{$prefix}--text-input {
+    padding-inline-start: 0;
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--multi-select--filterable
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input {
+    border-block-end: 1px solid transparent;
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--multi-select--filterable.#{$prefix}--combo-box
+    .#{$prefix}--list-box__field {
+    align-items: baseline;
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--multi-select--filterable__wrapper:not(
+      .#{$prefix}--list-box--up
+    )
+    .#{$prefix}--list-box__menu {
+    inset-block-start: calc(100% + to-rem(1px));
+  }
+}
+
+@include exports("fluid-multiselect") {
+  @include fluid-multiselect;
+}
