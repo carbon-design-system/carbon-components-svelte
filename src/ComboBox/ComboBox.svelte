@@ -96,6 +96,20 @@
   export let readonly = false;
 
   /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   */
+  export let fluid = false;
+
+  /**
+   * Set to `true` to render condensed menu items in the fluid variant.
+   * Menu items use the default height instead of the taller fluid height.
+   * Only applies when the fluid variant is active.
+   */
+  export let condensed = false;
+
+  /**
    * Set to `true` to allow custom values that are not in the items list.
    * By default, user-entered text is cleared when the combobox loses focus without selecting an item.
    * When enabled, custom text is preserved.
@@ -233,10 +247,12 @@
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
+  const formContext = getContext("carbon:Form");
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
 
+  let fieldFocused = false;
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
@@ -429,6 +445,11 @@
   // Invalid/warn states are suppressed when the combo box is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: isFluid = fluid || !!formContext?.isFluid;
+  $: showFieldFocus = isFluid && (fieldFocused || open);
+  // Fluid (non-condensed) menu items are 64px tall (see css/_fluid-list-box.scss).
+  // Portaled menus render outside the fluid wrapper, so they keep default heights.
+  $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
   $: highlightedId =
     filteredItems[highlightedIndex] == null
@@ -447,7 +468,9 @@
     scrollTop: listScrollTop,
     shouldVirtualize,
     virtualize,
-    defaults: { itemHeight: getMenuItemHeight(size) },
+    defaults: {
+      itemHeight: hasFluidMenuItems ? 64 : getMenuItemHeight(size),
+    },
   });
   $: virtualConfig = virtualState.config;
   $: virtualData = virtualState.data;
@@ -511,6 +534,12 @@
 
 <div
   class:bx--list-box__wrapper={true}
+  class:bx--list-box__wrapper--fluid={isFluid}
+  class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
+  class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
+  class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}
+  class:bx--list-box__wrapper--fluid--readonly={isFluid && readonly}
+  class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
 >
   {#if labelText || $$slots.labelChildren}
@@ -519,6 +548,7 @@
       class:bx--label={true}
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
+      class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren"> {labelText} </slot>
     </label>
@@ -535,44 +565,49 @@
     {size}
     warn={showWarn}
   >
-    <div bind:this={fieldRef} class:bx--list-box__field={true}>
-      <input
-        bind:this={ref}
-        bind:value
-        type="text"
-        role="combobox"
-        tabindex="0"
-        autocomplete="off"
-        aria-autocomplete="list"
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        aria-activedescendant={highlightedId ?? ""}
-        aria-disabled={disabled || readonly}
-        aria-readonly={readonly || undefined}
-        aria-controls={open ? menuId : undefined}
-        aria-owns={open ? menuId : undefined}
-        aria-describedby={showInvalid && invalidText
+    <div
+      style={isFluid ? undefined : "display: contents"}
+      class:bx--list-box__field--wrapper={isFluid}
+      class:bx--list-box__field--wrapper--input-focused={showFieldFocus}
+    >
+      <div bind:this={fieldRef} class:bx--list-box__field={true}>
+        <input
+          bind:this={ref}
+          bind:value
+          type="text"
+          role="combobox"
+          tabindex="0"
+          autocomplete="off"
+          aria-autocomplete="list"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-activedescendant={highlightedId ?? ""}
+          aria-disabled={disabled || readonly}
+          aria-readonly={readonly || undefined}
+          aria-controls={open ? menuId : undefined}
+          aria-owns={open ? menuId : undefined}
+          aria-describedby={showInvalid && invalidText
           ? errorId
           : showWarn && warnText
             ? warnId
-            : !showInvalid && !showWarn && helperText
+            : !isFluid && !showInvalid && !showWarn && helperText
               ? helperId
               : undefined}
-        {disabled}
-        {readonly}
-        {placeholder}
-        {id}
-        {name}
-        {...$$restProps}
-        class:bx--text-input={true}
-        class:bx--text-input--light={light}
-        class:bx--text-input--empty={value === ""}
-        on:click={() => {
+          {disabled}
+          {readonly}
+          {placeholder}
+          {id}
+          {name}
+          {...$$restProps}
+          class:bx--text-input={true}
+          class:bx--text-input--light={light}
+          class:bx--text-input--empty={value === ""}
+          on:click={() => {
           if (disabled || readonly) return;
           open = true;
         }}
-        on:input
-        on:input={(event) => {
+          on:input
+          on:input={(event) => {
           if (!open && event.target.value.length > 0) {
             open = true;
           }
@@ -582,8 +617,8 @@
             open = true;
           }
         }}
-        on:keydown
-        on:keydown|stopPropagation={(event) => {
+          on:keydown
+          on:keydown|stopPropagation={(event) => {
           if (readonly) return;
           if (
             event.key === "Enter" ||
@@ -650,15 +685,17 @@
             clear();
           }
         }}
-        on:keyup
-        on:focus
-        on:focus={() => {
+          on:keyup
+          on:focus
+          on:focus={() => {
+          if (isFluid) fieldFocused = true;
           if (selectTextOnFocus && ref) {
             tick().then(() => ref.select());
           }
         }}
-        on:blur
-        on:blur={(event) => {
+          on:blur
+          on:blur={(event) => {
+          if (isFluid) fieldFocused = false;
           if (!open || !event.relatedTarget) return;
           if (
             fieldRef?.contains(event.relatedTarget) ||
@@ -667,36 +704,37 @@
             ref.focus();
           }
         }}
-        on:paste
-      >
-      {#if showInvalid}
-        <WarningFilled class="bx--list-box__invalid-icon" />
-      {/if}
-      {#if showWarn}
-        <WarningAltFilled
-          class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
-        />
-      {/if}
-      {#if value}
-        <ListBoxSelection
-          on:clear
-          on:clear={() => clear({ open: openOnClear })}
-          translateWithId={translateWithIdSelection}
-          {disabled}
-          {readonly}
-          {open}
-        />
-      {/if}
-      <ListBoxMenuIcon
-        aria-hidden={readonly || undefined}
-        on:click={(event) => {
+          on:paste
+        >
+        {#if showInvalid}
+          <WarningFilled class="bx--list-box__invalid-icon" />
+        {/if}
+        {#if showWarn}
+          <WarningAltFilled
+            class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+          />
+        {/if}
+        {#if value}
+          <ListBoxSelection
+            on:clear
+            on:clear={() => clear({ open: openOnClear })}
+            translateWithId={translateWithIdSelection}
+            {disabled}
+            {readonly}
+            {open}
+          />
+        {/if}
+        <ListBoxMenuIcon
+          aria-hidden={readonly || undefined}
+          on:click={(event) => {
           if (disabled || readonly) return;
           event.stopPropagation();
           open = !open;
         }}
-        {translateWithId}
-        {open}
-      />
+          {translateWithId}
+          {open}
+        />
+      </div>
     </div>
     {#if open}
       <ListBoxMenu
@@ -857,13 +895,16 @@
       </ListBoxMenu>
     {/if}
   </ListBox>
+  {#if isFluid}
+    <hr class:bx--list-box__divider={true}>
+  {/if}
   {#if showInvalid && invalidText}
     <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
   {/if}
   {#if showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
-  {#if !showInvalid && !showWarn && helperText}
+  {#if !isFluid && !showInvalid && !showWarn && helperText}
     <div
       id={helperId}
       class:bx--form__helper-text={true}

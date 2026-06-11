@@ -39,25 +39,31 @@
 
   // Default fluid (no error/warn footer): hover the full wrapper.
   .#{$prefix}--list-box__wrapper--fluid:not(
-      :has(.#{$prefix}--form-requirement)
-    ):not(:has(.#{$prefix}--list-box--disabled)):not(
-      :has(.#{$prefix}--dropdown--readonly)
-    ):hover {
+      .#{$prefix}--list-box__wrapper--fluid--invalid
+    ):not(.#{$prefix}--list-box__wrapper--fluid--warning):not(
+      .#{$prefix}--list-box__wrapper--fluid--disabled
+    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly):hover {
     background-color: $hover-ui;
   }
 
   // Invalid/warn fluid (matches fluid-select): hover tint only the input cell.
-  .#{$prefix}--list-box__wrapper--fluid:not(:focus-within):has(
-      .#{$prefix}--form-requirement
-    ):not(:has(.#{$prefix}--list-box--disabled)):not(
-      :has(.#{$prefix}--dropdown--readonly)
-    )
+  .#{$prefix}--list-box__wrapper--fluid--invalid:not(:focus-within):not(
+      .#{$prefix}--list-box__wrapper--fluid--disabled
+    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
     .#{$prefix}--list-box:hover:not(.#{$prefix}--combo-box),
-  .#{$prefix}--list-box__wrapper--fluid:not(:focus-within):has(
-      .#{$prefix}--form-requirement
-    ):not(:has(.#{$prefix}--list-box--disabled)):not(
-      :has(.#{$prefix}--dropdown--readonly)
-    )
+  .#{$prefix}--list-box__wrapper--fluid--warning:not(:focus-within):not(
+      .#{$prefix}--list-box__wrapper--fluid--disabled
+    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+    .#{$prefix}--list-box:hover:not(.#{$prefix}--combo-box),
+  .#{$prefix}--list-box__wrapper--fluid--invalid:not(:focus-within):not(
+      .#{$prefix}--list-box__wrapper--fluid--disabled
+    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+    .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
+      .#{$prefix}--combo-box
+    ),
+  .#{$prefix}--list-box__wrapper--fluid--warning:not(:focus-within):not(
+      .#{$prefix}--list-box__wrapper--fluid--disabled
+    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
     .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
       .#{$prefix}--combo-box
     ) {
