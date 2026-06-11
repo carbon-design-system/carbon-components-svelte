@@ -3,6 +3,8 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
+import NumberInputFluidForm from "./NumberInput.fluidForm.test.svelte";
+import NumberInputFluidSlot from "./NumberInput.fluidSlot.test.svelte";
 import NumberInput from "./NumberInput.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
 
@@ -100,6 +102,132 @@ describe("NumberInput", () => {
     render(NumberInput, { props: { hideLabel: true } });
 
     expect(screen.getByText("Clusters")).toHaveClass("bx--visually-hidden");
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(NumberInput);
+
+      expect(document.querySelector(".bx--number-input--fluid")).toBeNull();
+      expect(document.querySelector(".bx--number-input__divider")).toBeNull();
+    });
+
+    it("renders fluid variant and suppresses helper text", () => {
+      render(NumberInput, { fluid: true, helperText: "Helper text" });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input.closest(".bx--form-item")).toHaveClass(
+        "bx--number-input--fluid",
+      );
+      expect(
+        document.querySelector(".bx--number-input__divider"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(input).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("renders the error message inside the input wrapper", () => {
+      render(NumberInput, {
+        fluid: true,
+        id: "test-input",
+        invalid: true,
+        invalidText: "Invalid input",
+      });
+
+      const message = screen.getByText("Invalid input");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--number__input-wrapper")).not.toBeNull();
+      expect(screen.getByLabelText("Clusters")).toHaveAttribute(
+        "aria-describedby",
+        "error-test-input",
+      );
+    });
+
+    it("renders the warning message inside the input wrapper", () => {
+      render(NumberInput, {
+        fluid: true,
+        warn: true,
+        warnText: "Warning message",
+      });
+
+      const message = screen.getByText("Warning message");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--number__input-wrapper")).not.toBeNull();
+    });
+
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      render(NumberInput, {
+        fluid: true,
+        invalid: true,
+        invalidText: "Invalid input",
+        warn: true,
+        warnText: "Warning message",
+        ...props,
+      });
+
+      expect(screen.queryByText("Invalid input")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(document.querySelector("[data-invalid]")).toBeNull();
+    });
+
+    it("renders disabled steppers instead of the readonly icon when readonly", () => {
+      render(NumberInput, { fluid: true, readonly: true });
+
+      const input = screen.getByLabelText("Clusters");
+      const numberWrapper = input.closest(".bx--number");
+
+      expect(
+        numberWrapper?.querySelector(".bx--text-input__readonly-icon"),
+      ).not.toBeInTheDocument();
+      expect(
+        numberWrapper?.querySelectorAll(".bx--number__control-btn"),
+      ).toHaveLength(2);
+      for (const button of numberWrapper?.querySelectorAll(
+        ".bx--number__control-btn",
+      ) ?? []) {
+        expect(button).toBeDisabled();
+      }
+    });
+
+    it("renders the fluid variant with hidden steppers", () => {
+      render(NumberInput, { fluid: true, hideSteppers: true });
+
+      const input = screen.getByLabelText("Clusters");
+      expect(input.closest(".bx--number")).toHaveClass(
+        "bx--number--nosteppers",
+      );
+      expect(input.closest(".bx--form-item")).toHaveClass(
+        "bx--number-input--fluid",
+      );
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(NumberInputFluidForm);
+
+      const input = screen.getByLabelText("Fluid form clusters");
+      expect(input.closest(".bx--form-item")).toHaveClass(
+        "bx--number-input--fluid",
+      );
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(NumberInputFluidSlot);
+
+      expect(
+        screen.getByText("Custom label content").closest("label"),
+      ).toHaveClass("bx--label--slotted");
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(NumberInputFluidSlot, { fluid: false });
+
+      expect(
+        screen.getByText("Custom label content").closest("label"),
+      ).not.toHaveClass("bx--label--slotted");
+    });
   });
 
   it("should handle custom id", () => {

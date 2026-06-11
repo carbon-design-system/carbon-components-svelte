@@ -49,6 +49,13 @@
   /** Set to `true` for the input to be read-only */
   export let readonly = false;
 
+  /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   */
+  export let fluid = false;
+
   /** Set to `true` to allow for an empty value */
   export let allowEmpty = false;
 
@@ -160,7 +167,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   import Add from "../icons/Add.svelte";
   import EditOff from "../icons/EditOff.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -180,6 +187,7 @@
   };
 
   const dispatch = createEventDispatcher();
+  const formContext = getContext("carbon:Form");
 
   function updateValue(isIncrementing) {
     // When the input is empty (null) or zero and stepStartValue is set,
@@ -264,7 +272,12 @@
       if (customValid === true) return false;
       return autoInvalid;
     })() && !readonly;
-  $: hasErrorMessage = effectiveInvalid && !!invalidText;
+  // Invalid/warn states are suppressed when the input is disabled or read-only.
+  // `effectiveInvalid` already excludes read-only.
+  $: showInvalid = effectiveInvalid && !disabled;
+  $: showWarn = warn && !effectiveInvalid && !disabled && !readonly;
+  $: isFluid = fluid || !!formContext?.isFluid;
+  $: hasErrorMessage = showInvalid && !!invalidText;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
   $: helperId = `helper-${id}`;
@@ -383,13 +396,14 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
+  class:bx--number-input--fluid={isFluid}
   on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
 >
   <div
-    data-invalid={effectiveInvalid || undefined}
+    data-invalid={showInvalid || undefined}
     class:bx--number={true}
     class:bx--number--helpertext={true}
     class:bx--number--readonly={readonly}
@@ -405,13 +419,14 @@
         class:bx--label={true}
         class:bx--label--disabled={disabled}
         class:bx--visually-hidden={hideLabel}
+        class:bx--label--slotted={isFluid && $$slots.labelChildren}
       >
         <slot name="labelChildren">{labelText}</slot>
       </label>
     {/if}
     <div
       class:bx--number__input-wrapper={true}
-      class:bx--number__input-wrapper--warning={!effectiveInvalid && warn}
+      class:bx--number__input-wrapper--warning={showWarn}
     >
       {#if useTextMode}
         <input
@@ -422,13 +437,13 @@
           pattern="[0-9]*"
           aria-describedby={hasErrorMessage
             ? errorId
-            : warn
+            : showWarn
               ? warnId
-              : helperText
+              : helperText && !isFluid
                 ? helperId
                 : undefined}
-          data-invalid={effectiveInvalid || undefined}
-          aria-invalid={effectiveInvalid || undefined}
+          data-invalid={showInvalid || undefined}
+          aria-invalid={showInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
           aria-readonly={readonly || undefined}
           {disabled}
@@ -457,13 +472,13 @@
           type="number"
           aria-describedby={hasErrorMessage
             ? errorId
-            : warn
+            : showWarn
               ? warnId
-              : helperText
+              : helperText && !isFluid
                 ? helperId
                 : undefined}
-          data-invalid={effectiveInvalid || undefined}
-          aria-invalid={effectiveInvalid || undefined}
+          data-invalid={showInvalid || undefined}
+          aria-invalid={showInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
           aria-readonly={readonly || undefined}
           {disabled}
@@ -488,13 +503,13 @@
           }}
         >
       {/if}
-      {#if readonly}
+      {#if readonly && !isFluid}
         <EditOff class="bx--text-input__readonly-icon" />
-      {:else}
-        {#if effectiveInvalid}
+      {:else if !readonly}
+        {#if showInvalid}
           <WarningFilled class="bx--number__invalid" />
         {/if}
-        {#if !effectiveInvalid && warn}
+        {#if showWarn}
           <WarningAltFilled
             class="bx--number__invalid bx--number__invalid--warning"
           />
@@ -514,7 +529,7 @@
               dispatch("click:stepper", { value, direction: "down" });
             }}
             on:blur={(event) => handleStepperBlur(event, "down")}
-            {disabled}
+            disabled={disabled || readonly}
           >
             <Subtract class="down-icon" />
           </button>
@@ -531,15 +546,26 @@
               dispatch("click:stepper", { value, direction: "up" });
             }}
             on:blur={(event) => handleStepperBlur(event, "up")}
-            {disabled}
+            disabled={disabled || readonly}
           >
             <Add class="up-icon" />
           </button>
           <div class:bx--number__rule-divider={true}></div>
         </div>
       {/if}
+      {#if isFluid}
+        <hr class:bx--number-input__divider={true}>
+        {#if hasErrorMessage}
+          <div id={errorId} class:bx--form-requirement={true}>
+            {invalidText}
+          </div>
+        {/if}
+        {#if showWarn}
+          <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+        {/if}
+      {/if}
     </div>
-    {#if !effectiveInvalid && !warn && helperText}
+    {#if !isFluid && !showInvalid && !showWarn && helperText}
       <div
         id={helperId}
         class:bx--form__helper-text={true}
@@ -548,10 +574,10 @@
         {helperText}
       </div>
     {/if}
-    {#if hasErrorMessage}
+    {#if !isFluid && hasErrorMessage}
       <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
     {/if}
-    {#if !effectiveInvalid && warn}
+    {#if !isFluid && showWarn}
       <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
     {/if}
   </div>
