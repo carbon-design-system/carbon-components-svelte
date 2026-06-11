@@ -1,0 +1,200 @@
+// Fluid variant styles for `TextArea`, ported from the Carbon v11
+// `fluid-text-area` module. carbon-components v10 does not ship these.
+// https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-text-area/_fluid-text-area.scss
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Fluid textarea variant (Carbon React `FluidTextArea` parity)
+/// @access private
+/// @group components
+@mixin fluid-text-area {
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area__wrapper {
+    position: relative;
+    flex-direction: column;
+    background: $field-01;
+    block-size: 100%;
+  }
+
+  .#{$prefix}--modal
+    .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper {
+    background: $field-02;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area__label-wrapper {
+    position: relative;
+    block-size: 100%;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--label {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    block-size: to-rem(16px);
+    inset-block-start: to-rem(13px);
+
+    &:not(.#{$prefix}--text-area__label-counter) {
+      inline-size: auto;
+      inset-inline-end: auto;
+      inset-inline-start: $spacing-05;
+    }
+
+    &.#{$prefix}--text-area__label-counter {
+      inline-size: auto;
+      inset-inline-end: $spacing-05;
+      inset-inline-start: auto;
+    }
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--label::-webkit-scrollbar {
+    display: none;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--label {
+    -ms-overflow-style: none;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    white-space: nowrap;
+  }
+
+  // Labels with slotted content (e.g., a tooltip icon) must not clip
+  // overflow, or the tooltip popover would be cut off. The v11 styles
+  // gate the scroll behavior with `:has()`; a modifier class applied
+  // when the `labelChildren` slot is used serves the same purpose.
+  .#{$prefix}--text-area--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
+    gap: $spacing-03;
+    overflow: visible;
+  }
+
+  .#{$prefix}--text-area--fluid div.#{$prefix}--label {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area {
+    padding: 0 $spacing-05 to-rem(13px);
+    margin-block-start: 2rem;
+    min-block-size: to-rem(64px);
+    outline: none;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--form__helper-text {
+    display: none;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area--invalid,
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area:focus {
+    border-block-end: 1px solid transparent;
+  }
+
+  .#{$prefix}--text-area__divider,
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area__divider {
+    display: none;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area--invalid,
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area--warning {
+    resize: none;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area--invalid {
+    padding: 0 to-rem(14px) to-rem(13px);
+    margin-block-start: to-rem(30px);
+  }
+
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper[data-invalid]
+    .#{$prefix}--text-area__divider,
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper--warn
+    .#{$prefix}--text-area__divider {
+    display: block;
+    border-style: solid;
+    border-color: $ui-03;
+    margin: 0 1rem;
+    border-block-end: none;
+  }
+
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper[data-invalid]
+    .#{$prefix}--form-requirement.#{$prefix}--form-requirement,
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper--warn
+    .#{$prefix}--form-requirement.#{$prefix}--form-requirement {
+    position: relative;
+    display: block;
+    overflow: visible;
+    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    margin: 0;
+    background: $field-01;
+    max-block-size: to-rem(200px);
+  }
+
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper--warn
+    .#{$prefix}--form-requirement.#{$prefix}--form-requirement {
+    border-block-end: 1px solid $ui-04;
+    color: $text-01;
+  }
+
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper[data-invalid]
+    .#{$prefix}--form-requirement.#{$prefix}--form-requirement {
+    border-block-end: none;
+    color: $text-error;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area--warning {
+    border-block-end: none;
+  }
+
+  .#{$prefix}--modal
+    .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper[data-invalid]
+    .#{$prefix}--text-area__divider
+    + .#{$prefix}--form-requirement {
+    background: $field-02;
+  }
+
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area__invalid-icon {
+    inset-block-start: 0.5rem;
+  }
+
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper[data-invalid]:not(:focus-within) {
+    border: 2px solid $support-error;
+  }
+
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper[data-invalid]
+    > .#{$prefix}--text-area--invalid:focus,
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper
+    > .#{$prefix}--text-area:focus,
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper
+    > .#{$prefix}--text-area:active,
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper[data-invalid]
+    > .#{$prefix}--text-area--invalid {
+    outline: none;
+    transition: none;
+  }
+
+  // Focus styles. Declared after invalid styles so the focus outline
+  // wins while the textarea is focused.
+  .#{$prefix}--text-area--fluid
+    .#{$prefix}--text-area__wrapper[data-invalid]:focus-within,
+  .#{$prefix}--text-area--fluid .#{$prefix}--text-area__wrapper:focus-within {
+    @include focus-outline("outline");
+  }
+}
+
+@include exports("fluid-text-area") {
+  @include fluid-text-area;
+}
