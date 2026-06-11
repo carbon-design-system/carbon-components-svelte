@@ -62,7 +62,7 @@
   });
 
   const deprecated: string[] = [];
-  const new_components: string[] = [];
+  const new_components: string[] = ["PinCodeInput", "CopyInput"];
 
   let value = "";
   let active = false;
@@ -214,24 +214,30 @@
           href={$url(child.path)}
           isSelected={$isActive($url(child.path))}
         >
-          {child.name}
-          {#if deprecated.includes(child.name)}
-            <Tag
-              size="sm"
-              type="red"
-              style="margin-top: 0; margin-bottom: 0; cursor: inherit"
-            >
-              Deprecated
-            </Tag>
-          {/if}
-          {#if new_components.includes(child.name)}
-            <Tag
-              size="sm"
-              type="green"
-              style="margin-top: 0; margin-bottom: 0; cursor: inherit"
-            >
-              New
-            </Tag>
+          {#if deprecated.includes(child.name) || new_components.includes(child.name)}
+            <Stack gap={2} orientation="horizontal" align="center">
+              {child.name}
+              {#if deprecated.includes(child.name)}
+                <Tag
+                  size="sm"
+                  type="red"
+                  style="margin-top: 0; margin-bottom: 0; cursor: inherit"
+                >
+                  Deprecated
+                </Tag>
+              {/if}
+              {#if new_components.includes(child.name)}
+                <Tag
+                  size="sm"
+                  type="blue"
+                  style="margin-top: 0; margin-bottom: 0; cursor: inherit"
+                >
+                  New
+                </Tag>
+              {/if}
+            </Stack>
+          {:else}
+            {child.name}
           {/if}
         </SideNavMenuItem>
       {/each}
