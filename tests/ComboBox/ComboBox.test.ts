@@ -5,6 +5,8 @@ import ComboBoxReal from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import ComboBoxFluidForm from "./ComboBox.fluidForm.test.svelte";
+import ComboBoxFluidSlot from "./ComboBox.fluidSlot.test.svelte";
 import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
@@ -2743,6 +2745,183 @@ describe("ComboBox", () => {
       expect(
         document.querySelector(".bx--list-box__menu-item__selected-icon"),
       ).toBeNull();
+    });
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(ComboBox);
+
+      expect(
+        document.querySelector(".bx--list-box__wrapper--fluid"),
+      ).toBeNull();
+      expect(document.querySelector(".bx--list-box__divider")).toBeNull();
+    });
+
+    it("renders fluid variant and suppresses helper text", () => {
+      render(ComboBox, {
+        props: {
+          fluid: true,
+          helperText: "Helper text",
+        },
+      });
+
+      const input = getInput();
+      expect(input.closest(".bx--list-box__wrapper")).toHaveClass(
+        "bx--list-box__wrapper--fluid",
+      );
+      expect(
+        document.querySelector(".bx--list-box__divider"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(input).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("renders the error message inside the fluid wrapper", () => {
+      render(ComboBox, {
+        props: {
+          id: "test-combobox",
+          fluid: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+        },
+      });
+
+      const message = screen.getByText("Invalid selection");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
+      expect(message.closest(".bx--list-box__wrapper")).toHaveClass(
+        "bx--list-box__wrapper--fluid--invalid",
+      );
+      expect(getInput()).toHaveAttribute(
+        "aria-describedby",
+        "error-test-combobox",
+      );
+    });
+
+    it("renders the warning message inside the fluid wrapper", () => {
+      render(ComboBox, {
+        props: {
+          fluid: true,
+          warn: true,
+          warnText: "Warning message",
+        },
+      });
+
+      const message = screen.getByText("Warning message");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
+    });
+
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      render(ComboBox, {
+        props: {
+          fluid: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        },
+      });
+
+      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(document.querySelector("[data-invalid]")).toBeNull();
+    });
+
+    it("marks the wrapper as condensed when fluid", () => {
+      render(ComboBox, {
+        props: {
+          fluid: true,
+          condensed: true,
+        },
+      });
+
+      expect(getInput().closest(".bx--list-box__wrapper")).toHaveClass(
+        "bx--list-box__wrapper--fluid--condensed",
+      );
+    });
+
+    it("ignores condensed when not fluid", () => {
+      render(ComboBox, {
+        props: {
+          condensed: true,
+        },
+      });
+
+      expect(
+        document.querySelector(".bx--list-box__wrapper--fluid--condensed"),
+      ).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(ComboBoxFluidForm);
+
+      expect(getInput().closest(".bx--list-box__wrapper")).toHaveClass(
+        "bx--list-box__wrapper--fluid",
+      );
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(ComboBoxFluidSlot);
+
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(ComboBoxFluidSlot, { props: { fluid: false } });
+
+      expect(screen.getByText("Custom label content")).not.toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("toggles the input-focused class on the fluid field wrapper", async () => {
+      render(ComboBox, {
+        props: {
+          fluid: true,
+        },
+      });
+
+      const input = getInput();
+      const wrapper = input.closest(".bx--list-box__field--wrapper");
+
+      expect(wrapper).toHaveClass("bx--list-box__field--wrapper");
+      expect(wrapper).not.toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+
+      fireEvent.focus(input);
+      await tick();
+      expect(wrapper).toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+
+      fireEvent.blur(input);
+      await tick();
+      expect(wrapper).not.toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
+    });
+
+    it("keeps the input-focused class while the fluid menu is open", () => {
+      render(ComboBox, {
+        props: {
+          fluid: true,
+          open: true,
+        },
+      });
+
+      const wrapper = getInput().closest(".bx--list-box__field--wrapper");
+      expect(wrapper).toHaveClass(
+        "bx--list-box__field--wrapper--input-focused",
+      );
     });
   });
 });

@@ -1,0 +1,68 @@
+// Fluid variant styles for `ComboBox`, ported from the Carbon v11
+// `fluid-combo-box` module. carbon-components v10 does not ship these.
+// https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-combo-box/_fluid-combo-box.scss
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Fluid combo box variant (Carbon React `FluidComboBox` parity)
+/// @access private
+/// @group components
+@mixin fluid-combo-box {
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--combo-box
+    .#{$prefix}--list-box__field {
+    overflow: visible;
+    padding: 0;
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--combo-box
+    .#{$prefix}--text-input {
+    overflow: hidden;
+    padding-block: to-rem(33px) to-rem(13px);
+    padding-inline: $spacing-05 $spacing-10;
+    text-overflow: ellipsis;
+    transition: none;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--combo-box
+    .#{$prefix}--list-box__selection {
+    inset-block: auto to-rem(10px);
+    transform: none;
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--combo-box
+    .#{$prefix}--list-box__menu-icon {
+    inset-block-end: to-rem(14px);
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--list-box[data-invalid]
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input
+    + .#{$prefix}--list-box__invalid-icon,
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--list-box--warning
+    .#{$prefix}--list-box__field
+    .#{$prefix}--text-input
+    + .#{$prefix}--list-box__invalid-icon {
+    inset-inline-end: 1rem;
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid
+    :not(.#{$prefix}--list-box--up)
+    .#{$prefix}--combo-box
+    .#{$prefix}--list-box__menu {
+    inset-block-start: calc(100% + to-rem(1px));
+  }
+}
+
+@include exports("fluid-combo-box") {
+  @include fluid-combo-box;
+}
