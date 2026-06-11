@@ -1,5 +1,6 @@
 <script>
   import {
+    CopyInput,
     FluidForm,
     TextInput,
     PasswordInput,
@@ -13,7 +14,7 @@
 
 Fluid forms provide a fluid-width form layout that adapts to their
 container. They are designed for full-width form layouts and work with supported
-input components such as text inputs, text areas, selects, and time pickers.
+input components such as text inputs, copy inputs, text areas, selects, and time pickers.
 Note that inline input variants cannot be used within a fluid form.
 
 ## Fluid form
@@ -35,6 +36,7 @@ shows a basic login form with required fields.
     <SelectItem value="eu-de" text="EU Germany" />
   </Select>
   <TextArea labelText="App description" placeholder="Enter a description..." />
+  <CopyInput labelText="API token" value="sk-1234567890abcdef" />
   <TimePicker labelText="Time" placeholder="hh:mm">
     <TimePickerSelect labelText="Clock" value="am">
       <SelectItem value="am" text="AM" />
@@ -59,6 +61,8 @@ supported component to use the fluid variant standalone.
 </Select>
 
 <TextArea fluid labelText="App description" placeholder="Enter a description..." helperText="Helper text is not displayed in the fluid variant" />
+
+<CopyInput fluid labelText="API token" value="sk-1234567890abcdef" />
 
 Fluid time pickers use percentage-based columns (25% / 25% / 50% with two
 selects, 50% / 50% with one). Set a parent width so those ratios resolve as
