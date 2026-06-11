@@ -9,6 +9,7 @@
   export let size: ComponentProps<NumberInput>["size"] = undefined;
   export let light = false;
   export let readonly = false;
+  export let fluid = false;
   export let allowEmpty = false;
   export let allowDecimal = false;
   export let locale: ComponentProps<NumberInput>["locale"] = undefined;
@@ -55,6 +56,7 @@
   {size}
   {light}
   {readonly}
+  {fluid}
   {allowEmpty}
   {allowDecimal}
   {locale}
