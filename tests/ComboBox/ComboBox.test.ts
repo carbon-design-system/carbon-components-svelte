@@ -6,6 +6,7 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import ComboBoxFluidForm from "./ComboBox.fluidForm.test.svelte";
+import ComboBoxFluidSkeleton from "./ComboBox.fluidSkeleton.test.svelte";
 import ComboBoxFluidSlot from "./ComboBox.fluidSlot.test.svelte";
 import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
@@ -2923,5 +2924,20 @@ describe("ComboBox", () => {
         "bx--list-box__field--wrapper--input-focused",
       );
     });
+  });
+
+  it("renders fluid skeleton state", () => {
+    render(ComboBoxFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-combo-box-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass("bx--list-box__wrapper--fluid");
+    expect(skeleton.children).toHaveLength(1);
+
+    const listBox = skeleton.children[0];
+    expect(listBox).toHaveClass("bx--skeleton", "bx--list-box");
+    expect(listBox.children).toHaveLength(2);
+    expect(listBox.children[0]).toHaveClass("bx--list-box__label");
+    expect(listBox.children[1]).toHaveClass("bx--list-box__field");
   });
 });
