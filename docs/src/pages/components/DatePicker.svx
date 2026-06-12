@@ -1,9 +1,9 @@
 ---
-components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton"]
+components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton", "FluidDatePickerSkeleton"]
 ---
 
 <script>
-  import { DatePicker, DatePickerSkeleton, DatePickerInput, TooltipIcon } from "carbon-components-svelte";
+  import { DatePicker, DatePickerSkeleton, FluidDatePickerSkeleton, DatePickerInput, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -214,6 +214,16 @@ Invalid and warning states are not displayed while the input is read-only.
 <DatePicker fluid datePickerType="single" value="01/15/1990">
   <DatePickerInput readonly warn warnText="This date will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid date picker variant. Set `range` to `true` to mimic the range variant.
+
+<FluidDatePickerSkeleton />
+
+## Fluid skeleton (range)
+
+<FluidDatePickerSkeleton range />
 
 ## Extra-large size
 
