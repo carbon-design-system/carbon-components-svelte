@@ -4,6 +4,7 @@ import { tick } from "svelte";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import NumberInputFluidForm from "./NumberInput.fluidForm.test.svelte";
+import NumberInputFluidSkeleton from "./NumberInput.fluidSkeleton.test.svelte";
 import NumberInputFluidSlot from "./NumberInput.fluidSlot.test.svelte";
 import NumberInput from "./NumberInput.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
@@ -1910,5 +1911,19 @@ describe("NumberInput", () => {
       const input = screen.getByLabelText("Clusters");
       expect(input).toHaveAttribute("pattern", "[0-9]*");
     });
+  });
+
+  it("renders fluid skeleton state", () => {
+    render(NumberInputFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-number-input-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass(
+      "bx--form-item",
+      "bx--text-input--fluid__skeleton",
+    );
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 });
