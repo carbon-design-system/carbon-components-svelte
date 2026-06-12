@@ -25,6 +25,7 @@
   export let onopen: ((event: CustomEvent) => void) | undefined = undefined;
   export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
   export let includeInput = true;
+  export let closeOnSubmit = false;
 </script>
 
 <ComposedModal
@@ -36,7 +37,10 @@
   {selectorPrimaryFocus}
   on:open={(e) => onopen?.(e)}
   on:close={(e) => onclose?.(e)}
-  on:submit={() => console.log("submit")}
+  on:submit={() => {
+    console.log("submit");
+    if (closeOnSubmit) open = false;
+  }}
   on:click:button--primary={() => console.log("click:button--primary")}
   on:transitionend={(e) => console.log("transitionend", e.detail)}
   {...$$restProps}
