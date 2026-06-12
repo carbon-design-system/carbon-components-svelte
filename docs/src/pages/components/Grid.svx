@@ -100,7 +100,7 @@ of content. This is useful for creating vertical rhythm without manually adding 
 
 <FileSource src="/framed/Grid/PaddedGrid" />
 
-## Breakpoints Reference
+## Breakpoints reference
 
 Understanding [breakpoints](/components/Breakpoint) is critical for creating responsive layouts. Each breakpoint
 has specific pixel ranges and column counts:
