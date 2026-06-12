@@ -80,6 +80,11 @@ Patterns:
 - Do not clobber external props. Never write internal or measured values back into an exported prop. A consumer may `bind:` to a prop to control behavior, and overwriting it silently breaks that control. Measure into an internal fallback and fall back to it only when the public prop is unset. See `measuredMaxHeight` / `measuredPadding` in [`ExpandableTile.svelte`](src/Tile/ExpandableTile.svelte) and the `showMoreLess` handling in [`CodeSnippet.svelte`](src/CodeSnippet/CodeSnippet.svelte). This is the prop-facing counterpart to the `afterUpdate` guidance above.
 - Name booleans and predicates with an `is` prefix. Use `is<Verb>` / `is<Adjective>` for boolean state and predicate functions. See the [`isOutsideClick`](src/utils/isOutsideClick.js) util, `isSelected` / `isExpanded` in [`DataTable.svelte`](src/DataTable/DataTable.svelte), and `isFluid` in [`TextInput.svelte`](src/TextInput/TextInput.svelte).
 - Prefer enums over booleans for props. When a prop selects among mutually exclusive variants, or the set of variants may grow, use a string-union prop instead of several boolean flags. It keeps states exclusive and extensible. See `kind` and `size` in [`Button.svelte`](src/Button/Button.svelte). Keep booleans for genuinely binary, independent toggles such as `disabled` and `open`.
+- Apply classes with the `class:` directive, not string concatenation or template literals. Use `class:bx--name={true}` for classes that are always present and `class:bx--name--modifier={condition}` for conditional ones. This keeps each class on its own line and the toggling logic readable. See [`TextInput.svelte`](src/TextInput/TextInput.svelte): `class:bx--form-item={true}` (always) alongside `class:bx--text-input-wrapper--inline={inline}` (conditional).
+- Forward `$$restProps` to the most important element. When a component has a clear primary element with the most customizable props, such as the `<input>` or `<button>`, spread `{...$$restProps}` onto it so consumers can set attributes like `name`, `placeholder`, or `data-*` on the element they care about. See the `<input>` in [`TextInput.svelte`](src/TextInput/TextInput.svelte). Only when there is no such element does it go to the wrapper (top-level element), as in [`Tile.svelte`](src/Tile/Tile.svelte).
+- Name slots in camelCase. No dashes: a hyphenated slot name will not map to a Svelte 5 Snippet. Use `labelChildren`, not `label-children`.
+- Mirror the shadowed prop in the slot name. When a slot overrides the content a prop renders, name it after that prop. Svelte forbids a slot from matching an exported prop name exactly, so suffix it with `Children`: the `labelChildren` slot shadows the `labelText` prop. See `<slot name="labelChildren">` in [`TextInput.svelte`](src/TextInput/TextInput.svelte).
+- Set dynamic styles with the `style:` directive, not inline `style` strings or template literals: `style:left="{x}px"`. See [`ContextMenu.svelte`](src/ContextMenu/ContextMenu.svelte) and the thumb position in [`Slider.svelte`](src/Slider/Slider.svelte).
 
 The `{#if skeleton}` early-return pattern is being phased out. Follow it only when maintaining existing skeleton code.
 
@@ -235,12 +240,20 @@ Inline vs framed:
 - Inline: simple, static demos directly in the `.svx` file
 - `<FileSource src="/framed/Component/Example" />`: reactive state, `bind:this`, events, async behavior, or demos too large for inline. Add the Svelte file under `docs/src/pages/framed/{Component}/` (PascalCase name, for example `ReactiveComboBox.svelte`)
 
+Use a framed example whenever the demo contains script logic (state, handlers, async work). The full source shows in the docs, so keep it readable:
+
+- Do not add JSDoc to framed examples. They are usage demos, not the public API. Save typed JSDoc for the components under `src/`.
+- Add short, concise, high-value code comments only where they earn their place, such as flagging that demo code is not production guidance: `// For demo purposes only: NEVER hardcode secrets in production.` Skip comments that restate the code.
+- Simulate API or async behavior with `await new Promise((resolve) => setTimeout(resolve, 300))` rather than wiring up a real network call. See [`CopyInputAsync.svelte`](docs/src/pages/framed/CopyInput/CopyInputAsync.svelte).
+
 Other patterns:
 
 - `[!NOTE]` admonitions for accessibility and non-obvious caveats
 - Keyboard keys in prose: use `<DocKbd label="Enter" />` for named keys (`Enter`, `Escape`, `Shift`, `Ctrl`, `Space`, etc.). mdsvex auto-imports `DocKbd`; do not add a manual import. Do not use backticks (`Escape`), raw `<kbd>`, or bold (`**Enter**`). For combinations, use one component per key: `<DocKbd label="⌘" />+<DocKbd label="C" />`. Keep collective phrases as plain text ("arrow keys", "modifier keys", "keyboard navigation"). Prop values and UI copy inside component examples are out of scope (e.g. `placeholder="Enter user name..."`, `shortcutText="⌘C"`).
 - Cross-links to related components: `[Modal](/components/Modal#modal-with-dropdowns)`
 - Reuse the same sample data shapes as neighboring examples on that page
+- For layout and spacing (flex, `gap`, stacked elements), use the [`Stack`](docs/src/pages/framed/Dropdown/MultipleDropdown.svelte) component rather than raw HTML with ad-hoc inline styles. Reserve hand-written layout markup for cases `Stack` cannot express.
+- Add `data-outline` to an element when an outline makes the demo clearer, for example marking a right-click target in a context menu. The framed module provides the global style; see `<p data-outline …>` in [`ContextMenuTarget.svelte`](docs/src/pages/framed/ContextMenu/ContextMenuTarget.svelte).
 
 #### Writing style
 
