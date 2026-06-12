@@ -110,7 +110,7 @@
    */
   export let ref = null;
 
-  import { afterUpdate, createEventDispatcher, setContext } from "svelte";
+  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import Close from "../icons/Close.svelte";
@@ -167,7 +167,9 @@
       if (!open) {
         opened = false;
         if (!closeDispatched) {
-          dispatch("close", { trigger: "programmatic" });
+          tick().then(() => {
+            dispatch("close", { trigger: "programmatic" });
+          });
         }
         closeDispatched = false;
       }
@@ -217,8 +219,6 @@
           tag === "SELECT" ||
           target?.isContentEditable
         ) {
-          // Let the focused button (e.g. the secondary/cancel button) handle
-          // Enter via its native activation instead of submitting the form.
           return;
         }
         if (formId && primaryButtonRef) {
