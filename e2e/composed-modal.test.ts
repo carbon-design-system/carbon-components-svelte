@@ -25,6 +25,21 @@ test.describe("ComposedModal", () => {
     await expect(page.locator(".bx--modal")).not.toHaveClass(/is-visible/);
   });
 
+  test("closes with a programmatic trigger when open is set false", async ({
+    page,
+  }) => {
+    await page.getByTestId("open-modal").click();
+    await expect(page.locator(".bx--modal")).toHaveClass(/is-visible/);
+
+    // The footer "Close" sets `open = false` from app code (not a built-in
+    // close affordance).
+    await page.getByTestId("close-modal").click();
+
+    await expect(page.locator(".bx--modal")).not.toHaveClass(/is-visible/);
+    // The deferred `close` dispatch reports the "programmatic" trigger.
+    await expect(page.getByTestId("close-events")).toHaveText("programmatic");
+  });
+
   test("closes when Escape is pressed", async ({ page }) => {
     await page.getByTestId("open-modal").click();
     await expect(page.locator(".bx--modal")).toHaveClass(/is-visible/);

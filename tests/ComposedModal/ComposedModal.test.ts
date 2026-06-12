@@ -1,11 +1,12 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { absorbUnhandledRejection } from "../utils/absorb-unhandled-rejection";
 import { user } from "../utils/user";
 import ComposedModalTest from "./ComposedModal.test.svelte";
 import ComposedModalFocusReturnTest from "./ComposedModalFocusReturn.test.svelte";
 import ComposedModalFocusTrapTest from "./ComposedModalFocusTrap.test.svelte";
+import ComposedModalUnmountOnCloseTest from "./ComposedModalUnmountOnClose.test.svelte";
 
-/** ComposedModal defers programmatic `close` via `tick().then(...)`. */
 async function flushProgrammaticClose() {
   await tick();
   await tick();
@@ -578,51 +579,92 @@ describe("ComposedModal", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  // A consumer exception in `on:close` must not abort the component update and
-  // leave the modal stuck open. The synthetic programmatic dispatch is deferred
-  // off the reactive flush, so the throw lands in a detached microtask after the
-  // DOM has already committed — it surfaces as an unhandled rejection (captured
-  // here) instead of blocking the close.
+  it("dispatches close with programmatic trigger when closed via bind:open", async () => {
+    const closeHandler = vi.fn();
+    const { rerender } = render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Programmatic Close Test",
+        onclose: closeHandler,
+      },
+    });
+
+    rerender({ open: false });
+    await flushProgrammaticClose();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      trigger: "programmatic",
+    });
+  });
+
+  it("dispatches close with programmatic trigger when closed via submit handler", async () => {
+    const closeHandler = vi.fn();
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Submit Close Test",
+        footerPrimaryButtonText: "Save",
+        closeOnSubmit: true,
+        onclose: closeHandler,
+      },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Save" }));
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      trigger: "programmatic",
+    });
+  });
+
   it("does not leave the modal open when a programmatic on:close handler throws", async () => {
     const error = new Error("consumer error");
-    const rejections: unknown[] = [];
-    const onUnhandled = (reason: unknown) => rejections.push(reason);
+    const trap = absorbUnhandledRejection((reason) => reason === error);
 
-    // Take over unhandled-rejection handling for the duration of this test so
-    // the deferred throw doesn't fail the vitest run.
-    const priorListeners = process.listeners("unhandledRejection");
-    process.removeAllListeners("unhandledRejection");
-    process.on("unhandledRejection", onUnhandled);
-
-    try {
-      const { rerender } = render(ComposedModalTest, {
-        props: {
-          open: true,
-          headerTitle: "Throwing Close Test",
-          onclose: () => {
-            throw error;
-          },
+    const { rerender } = render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Throwing Close Test",
+        onclose: () => {
+          throw error;
         },
-      });
+      },
+    });
 
-      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-      rerender({ open: false });
-      await tick();
-      // Let the deferred dispatch reject and the host report it (a macrotask
-      // later than the microtask that rejects the promise).
-      await new Promise((resolve) => setTimeout(resolve));
+    rerender({ open: false });
+    await flushProgrammaticClose();
+    await trap.wait;
+    trap.dispose();
 
-      const modalWrapper = document.querySelector(".bx--modal");
-      expect(modalWrapper).not.toHaveClass("is-visible");
-      expect(modalWrapper).toHaveAttribute("inert");
-      expect(rejections).toEqual([error]);
-    } finally {
-      process.off("unhandledRejection", onUnhandled);
-      for (const listener of priorListeners) {
-        process.on("unhandledRejection", listener);
-      }
-    }
+    const modalWrapper = document.querySelector(".bx--modal");
+    expect(modalWrapper).not.toHaveClass("is-visible");
+    expect(modalWrapper).toHaveAttribute("inert");
+  });
+
+  // When the same boolean both gates an {#if} and binds `open`, flipping it
+  // false closes *and* unmounts the modal in one flush. Svelte does not run the
+  // component's reactive close block while it is being torn down, so the
+  // programmatic `close` is never delivered — in every supported Svelte version,
+  // and whether the dispatch is synchronous or deferred via `tick()`. This
+  // documents that deferring the dispatch did not regress teardown behavior (it
+  // is a pre-existing Svelte limitation, not introduced by the defer).
+  it("does not dispatch programmatic close when the same flip unmounts the modal", async () => {
+    const closeHandler = vi.fn();
+    const { rerender } = render(ComposedModalUnmountOnCloseTest, {
+      props: { open: true, onclose: closeHandler },
+    });
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    rerender({ open: false });
+    await flushProgrammaticClose();
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(closeHandler).not.toHaveBeenCalled();
   });
 
   it("is inert when closed", async () => {
