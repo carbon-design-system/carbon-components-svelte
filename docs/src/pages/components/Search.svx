@@ -1,7 +1,7 @@
 <script>
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Query from "carbon-icons-svelte/lib/Query.svelte";
-  import { Search, SearchSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Search, SearchSkeleton, FluidSearchSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
 Search provides a flexible search input with support for expandable variants, different sizes, and custom icons. It includes built-in functionality for clearing input and handling keyboard events.
@@ -67,6 +67,12 @@ tooltip icon.
 ## Fluid variant (disabled)
 
 <Search fluid disabled labelText="Search catalog" placeholder="Search services..." />
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid search variant.
+
+<FluidSearchSkeleton />
 
 ## Large size
 
