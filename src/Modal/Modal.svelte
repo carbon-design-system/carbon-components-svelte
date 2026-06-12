@@ -313,7 +313,7 @@
         class:bx--modal-footer--three-button={secondaryButtons.length === 2}
       >
         {#if secondaryButtons.length > 0}
-          {#each secondaryButtons as button}
+          {#each secondaryButtons as button (button.text)}
             <Button
               kind="secondary"
               on:click={() => {
