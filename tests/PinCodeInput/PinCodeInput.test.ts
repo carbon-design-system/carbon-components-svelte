@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import PinCodeInputFluidForm from "./PinCodeInput.fluidForm.test.svelte";
+import PinCodeInputFluidSlot from "./PinCodeInput.fluidSlot.test.svelte";
 import PinCodeInput from "./PinCodeInput.test.svelte";
 
 const getInputs = () => screen.getAllByRole("textbox") as HTMLInputElement[];
@@ -18,6 +20,9 @@ describe("PinCodeInput", () => {
   it("renders `count` segments by default", () => {
     render(PinCodeInput);
     expect(getInputs()).toHaveLength(4);
+    for (const input of getInputs()) {
+      expect(input).not.toHaveAttribute("placeholder");
+    }
   });
 
   it("renders a custom number of segments", () => {
@@ -455,6 +460,146 @@ describe("PinCodeInput", () => {
       }
 
       expect(getFieldset(container)).not.toHaveAttribute("aria-describedby");
+    });
+  });
+
+  describe("fluid variant", () => {
+    it("does not render fluid classes by default", () => {
+      render(PinCodeInput);
+
+      expect(document.querySelector(".bx--pin-code-input--fluid")).toBeNull();
+      expect(document.querySelector(".bx--pin-code-input__divider")).toBeNull();
+    });
+
+    it("renders fluid variant and suppresses helper text", () => {
+      render(PinCodeInput, {
+        props: { fluid: true, helperText: "Helper text" },
+      });
+
+      expect(document.querySelector(".bx--form-item")).toHaveClass(
+        "bx--pin-code-input--fluid",
+      );
+      expect(
+        document.querySelector(".bx--pin-code-input__divider"),
+      ).toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--pin-code-input__segments"),
+      ).toBeInTheDocument();
+      expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
+      expect(getFieldset(document.body)).not.toHaveAttribute(
+        "aria-describedby",
+      );
+    });
+
+    it("uses the fluid default placeholder", () => {
+      render(PinCodeInput, { props: { fluid: true } });
+
+      for (const input of getInputs()) {
+        expect(input).toHaveAttribute("placeholder", "–");
+      }
+    });
+
+    it("allows placeholder override in the fluid variant", () => {
+      render(PinCodeInput, { props: { fluid: true, placeholder: "•" } });
+
+      for (const input of getInputs()) {
+        expect(input).toHaveAttribute("placeholder", "•");
+      }
+    });
+
+    it("allows placeholder override in the non-fluid variant", () => {
+      render(PinCodeInput, { props: { placeholder: "0" } });
+
+      for (const input of getInputs()) {
+        expect(input).toHaveAttribute("placeholder", "0");
+      }
+    });
+
+    it("renders the error message inside the fields wrapper", () => {
+      render(PinCodeInput, {
+        props: {
+          fluid: true,
+          invalid: true,
+          invalidText: "Incorrect code",
+          id: "pin-fluid-invalid",
+        },
+      });
+
+      const message = screen.getByText("Incorrect code");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message).toHaveAttribute("id", "error-pin-fluid-invalid");
+      expect(message.closest(".bx--pin-code-input__fields")).not.toBeNull();
+      expect(message.closest(".bx--pin-code-input__message")).not.toBeNull();
+      expect(
+        message
+          .closest(".bx--pin-code-input__message")
+          ?.querySelector(".bx--pin-code-input__icon"),
+      ).toBeInTheDocument();
+      expect(getFieldset(document.body)).toHaveAttribute(
+        "aria-describedby",
+        "error-pin-fluid-invalid",
+      );
+    });
+
+    it("renders the warning message inside the fields wrapper", () => {
+      render(PinCodeInput, {
+        props: {
+          fluid: true,
+          warn: true,
+          warnText: "Code expiring soon",
+          id: "pin-fluid-warn",
+        },
+      });
+
+      const message = screen.getByText("Code expiring soon");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(message).toHaveAttribute("id", "warn-pin-fluid-warn");
+      expect(message.closest(".bx--pin-code-input__fields")).not.toBeNull();
+    });
+
+    it.each([
+      { disabled: true },
+      { readonly: true },
+    ])("suppresses invalid and warn states when %o", (props) => {
+      const { container } = render(PinCodeInput, {
+        props: {
+          fluid: true,
+          invalid: true,
+          invalidText: "Incorrect code",
+          warn: true,
+          warnText: "Code expiring soon",
+          ...props,
+        },
+      });
+
+      expect(screen.queryByText("Incorrect code")).not.toBeInTheDocument();
+      expect(screen.queryByText("Code expiring soon")).not.toBeInTheDocument();
+      expect(container.querySelector("[data-invalid]")).toBeNull();
+      expect(container.querySelector(".bx--pin-code-input__icon")).toBeNull();
+    });
+
+    it("inherits fluid from the FluidForm context", () => {
+      render(PinCodeInputFluidForm);
+
+      expect(document.querySelector(".bx--form-item")).toHaveClass(
+        "bx--pin-code-input--fluid",
+      );
+    });
+
+    it("marks the label as slotted when fluid", () => {
+      render(PinCodeInputFluidSlot);
+
+      expect(screen.getByText("Custom label content")).toHaveClass(
+        "bx--label--slotted",
+      );
+    });
+
+    it("does not mark the label as slotted when not fluid", () => {
+      render(PinCodeInputFluidSlot, { props: { fluid: false } });
+
+      expect(screen.getByText("Custom label content")).not.toHaveClass(
+        "bx--label--slotted",
+      );
     });
   });
 
