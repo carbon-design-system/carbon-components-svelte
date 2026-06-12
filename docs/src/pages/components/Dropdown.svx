@@ -1,9 +1,9 @@
 ---
-components: ["Dropdown", "DropdownSkeleton"]
+components: ["Dropdown", "DropdownSkeleton", "FluidDropdownSkeleton"]
 ---
 
 <script>
-  import { Dropdown, DropdownSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Dropdown, DropdownSkeleton, FluidDropdownSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
   import Email from "carbon-icons-svelte/lib/Email.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
@@ -199,6 +199,12 @@ Invalid and warning states are not displayed while the dropdown is read-only.
 <Dropdown fluid readonly warn warnText="This contact method is not associated with your account" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid dropdown variant.
+
+<FluidDropdownSkeleton />
 
 ## Portal menu
 
