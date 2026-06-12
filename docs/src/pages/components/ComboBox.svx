@@ -1,5 +1,5 @@
 <script>
-  import { ComboBox, TooltipIcon } from "carbon-components-svelte";
+  import { ComboBox, FluidComboBoxSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Email from "carbon-icons-svelte/lib/Email.svelte";
@@ -364,6 +364,12 @@ items={[
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}
   ]}  />
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid combo box variant.
+
+<FluidComboBoxSkeleton />
 
 ## Portal menu
 
