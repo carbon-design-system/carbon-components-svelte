@@ -5,6 +5,7 @@ import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import SelectFalsy from "./Select.falsy.test.svelte";
 import SelectFluidForm from "./Select.fluidForm.test.svelte";
+import SelectFluidSkeleton from "./Select.fluidSkeleton.test.svelte";
 import SelectFluidSlot from "./Select.fluidSlot.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
 import SelectSkeleton from "./Select.skeleton.test.svelte";
@@ -496,6 +497,20 @@ describe("Select", () => {
     const skeleton = screen.getByTestId("select-skeleton");
     expect(skeleton).toBeInTheDocument();
     expect(skeleton.children[0]).toHaveClass("bx--skeleton");
+  });
+
+  it("renders fluid skeleton state", () => {
+    render(SelectFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-select-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass(
+      "bx--form-item",
+      "bx--select--fluid__skeleton",
+    );
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--select");
   });
 
   it("renders `text` instead of `value` if `text` is an empty string", () => {
