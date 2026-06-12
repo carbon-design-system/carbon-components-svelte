@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import TextInputFluidForm from "./TextInput.fluidForm.test.svelte";
+import TextInputFluidSkeleton from "./TextInput.fluidSkeleton.test.svelte";
 import TextInputFluidSlot from "./TextInput.fluidSlot.test.svelte";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
@@ -643,5 +644,19 @@ describe("TextInput", () => {
 
     expect(mockHandler).toHaveBeenCalled();
     expect(mockHandler.mock.calls[0][0].detail).toBe(5);
+  });
+
+  it("renders fluid skeleton state", () => {
+    render(TextInputFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-text-input-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass(
+      "bx--form-item",
+      "bx--text-input--fluid__skeleton",
+    );
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 });

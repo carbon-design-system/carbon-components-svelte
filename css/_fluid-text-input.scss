@@ -186,6 +186,32 @@
     inset-block-start: to-rem(26px);
     inset-inline-end: $spacing-03;
   }
+
+  // Skeleton (ported from v11 fluid-text-input). NumberInput and Search skeletons
+  // render this same `--text-input--fluid__skeleton` markup and reuse these rules.
+  .#{$prefix}--text-input--fluid__skeleton {
+    position: relative;
+    background: $skeleton-01;
+    block-size: to-rem(64px);
+    border-block-end: 1px solid $skeleton-02;
+  }
+
+  .#{$prefix}--text-input--fluid__skeleton .#{$prefix}--skeleton {
+    position: absolute;
+    block-size: to-rem(8px);
+    inline-size: 25%;
+    inset-block-start: $spacing-05;
+    inset-inline-start: $spacing-05;
+  }
+
+  .#{$prefix}--text-input--fluid__skeleton .#{$prefix}--label {
+    position: absolute;
+    padding: 0;
+    block-size: to-rem(8px);
+    inline-size: 50%;
+    inset-block-start: to-rem(36px);
+    inset-inline-start: $spacing-05;
+  }
 }
 
 @include exports("fluid-text-input") {

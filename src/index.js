@@ -140,6 +140,7 @@ export { default as Tag } from "./Tag/Tag.svelte";
 export { default as TagSkeleton } from "./Tag/TagSkeleton.svelte";
 export { default as TextArea } from "./TextArea/TextArea.svelte";
 export { default as TextAreaSkeleton } from "./TextArea/TextAreaSkeleton.svelte";
+export { default as FluidTextInputSkeleton } from "./TextInput/FluidTextInputSkeleton.svelte";
 export { default as PasswordInput } from "./TextInput/PasswordInput.svelte";
 export { default as TextInput } from "./TextInput/TextInput.svelte";
 export { default as TextInputSkeleton } from "./TextInput/TextInputSkeleton.svelte";
