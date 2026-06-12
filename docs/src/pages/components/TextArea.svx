@@ -1,9 +1,9 @@
 ---
-components: ["TextArea", "TextAreaSkeleton"]
+components: ["TextArea", "TextAreaSkeleton", "FluidTextAreaSkeleton"]
 ---
 
 <script>
-  import { TextArea, TextAreaSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { TextArea, TextAreaSkeleton, FluidTextAreaSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -82,6 +82,12 @@ Invalid and warning states are not displayed while the text area is disabled.
 Invalid and warning states are not displayed while the text area is read-only.
 
 <TextArea fluid readonly warn warnText="This description is shorter than recommended" labelText="App description" value="I'm read-only" />
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid text area variant.
+
+<FluidTextAreaSkeleton />
 
 ## Custom rows
 
