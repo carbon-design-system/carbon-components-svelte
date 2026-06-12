@@ -3,6 +3,7 @@ import type SearchComponent from "carbon-components-svelte/Search/Search.svelte"
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import SearchFluidForm from "./Search.fluidForm.test.svelte";
+import SearchFluidSkeleton from "./Search.fluidSkeleton.test.svelte";
 import SearchFluidSlot from "./Search.fluidSlot.test.svelte";
 import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
@@ -229,5 +230,19 @@ describe("Search", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
+  });
+
+  it("renders fluid skeleton state", () => {
+    render(SearchFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-search-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass(
+      "bx--form-item",
+      "bx--text-input--fluid__skeleton",
+    );
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 });
