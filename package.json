@@ -48,7 +48,8 @@
     "build:css": "bun scripts/build-css",
     "build:docs": "bun scripts/build-docs",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
-    "release": "bun scripts/release-changelog"
+    "release": "bun scripts/release-changelog",
+    "release:docs": "bun scripts/release-changelog --docs-only"
   },
   "dependencies": {
     "@ibm/telemetry-js": "^1.5.0",

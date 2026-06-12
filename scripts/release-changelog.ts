@@ -69,6 +69,20 @@ function isReleasable(c: ParsedCommit): boolean {
   return c.type === "feat" || c.type === "fix" || c.type === "perf";
 }
 
+const DOCS_EXCLUDED_SCOPES = new Set(["contributing"]);
+
+function mentionsContributingMd(c: ParsedCommit): boolean {
+  return `${c.subject}\n${c.body}`.includes("CONTRIBUTING.md");
+}
+
+function isDocsCommit(c: ParsedCommit): boolean {
+  return (
+    c.type === "docs" &&
+    !DOCS_EXCLUDED_SCOPES.has(c.scope ?? "") &&
+    !mentionsContributingMd(c)
+  );
+}
+
 function closesFromBody(body: string): string[] {
   const ids = new Set<string>();
   for (const m of body.matchAll(CLOSES_FIXES_RE)) {
@@ -151,6 +165,8 @@ function splitLog(
   return commits;
 }
 
+const docsOnly = process.argv.includes("--docs-only");
+
 const pkgPath = path.join(root, "package.json");
 const changelogPath = path.join(root, "CHANGELOG.md");
 
@@ -175,26 +191,35 @@ const parsed = rawCommits
   .map(({ hash, subject, body }) => parseConventional(hash, subject, body))
   .filter((c): c is ParsedCommit => c !== null);
 
-const releasable = parsed.filter(isReleasable);
-if (releasable.length === 0) {
+const releaseCommits = parsed.filter(docsOnly ? isDocsCommit : isReleasable);
+if (releaseCommits.length === 0) {
   console.error(
-    "release-changelog: No releasable commits since",
-    lastTag,
-    "(need feat, fix, perf, or breaking changes).",
+    docsOnly
+      ? `release-changelog: No docs commits since ${lastTag} (need docs: or docs(<component>):).`
+      : `release-changelog: No releasable commits since ${lastTag} (need feat, fix, perf, or breaking changes).`,
   );
   process.exit(1);
 }
 
-const hasMinorBump = releasable.some((c) => c.type === "feat" || c.breaking);
+const versionBumpCommits = parsed.filter(isReleasable);
+const hasMinorBump = versionBumpCommits.some(
+  (c) => c.type === "feat" || c.breaking,
+);
 const nextVersion = bumpVersion(currentVersion, hasMinorBump);
 
 const breakingLines: string[] = [];
 const featureLines: string[] = [];
 const fixLines: string[] = [];
 const perfLines: string[] = [];
+const documentationLines: string[] = [];
 
-for (const c of releasable) {
+for (const c of releaseCommits) {
   const issueIds = closesFromBody(`${c.body}\n${c.subject}`);
+
+  if (docsOnly) {
+    documentationLines.push(formatBullet(baseUrl, c, c.description, issueIds));
+    continue;
+  }
 
   if (c.breaking) {
     breakingLines.push(formatBullet(baseUrl, c, c.breakingText, issueIds));
@@ -221,57 +246,71 @@ breakingLines.sort(compareBulletLines);
 featureLines.sort(compareBulletLines);
 fixLines.sort(compareBulletLines);
 perfLines.sort(compareBulletLines);
+documentationLines.sort(compareBulletLines);
 
 function printReleaseSummaryTable(
   fromVersion: string,
   toVersion: string,
 ): void {
-  const rows = [
-    { Category: "Breaking changes", Count: breakingLines.length },
-    { Category: "Features", Count: featureLines.length },
-    { Category: "Bug fixes", Count: fixLines.length },
-    { Category: "Performance", Count: perfLines.length },
-  ];
+  const rows = docsOnly
+    ? [{ Category: "Documentation", Count: documentationLines.length }]
+    : [
+        { Category: "Breaking changes", Count: breakingLines.length },
+        { Category: "Features", Count: featureLines.length },
+        { Category: "Bug fixes", Count: fixLines.length },
+        { Category: "Performance", Count: perfLines.length },
+      ];
   const total = rows.reduce((sum, r) => sum + r.Count, 0);
   console.log(`${fromVersion} --> ${toVersion} (${total} total)`);
   console.table(rows);
 }
 
 const sections: string[] = [];
-if (breakingLines.length) {
-  sections.push("### ⚠ BREAKING CHANGES", "", ...breakingLines, "");
-}
-if (featureLines.length) {
-  sections.push("### Features", "", ...featureLines, "");
-}
-if (fixLines.length) {
-  sections.push("### Bug Fixes", "", ...fixLines, "");
-}
-if (perfLines.length) {
-  sections.push("### Performance", "", ...perfLines, "");
+if (docsOnly) {
+  sections.push("### Documentation", "", ...documentationLines, "");
+} else {
+  if (breakingLines.length) {
+    sections.push("### ⚠ BREAKING CHANGES", "", ...breakingLines, "");
+  }
+  if (featureLines.length) {
+    sections.push("### Features", "", ...featureLines, "");
+  }
+  if (fixLines.length) {
+    sections.push("### Bug Fixes", "", ...fixLines, "");
+  }
+  if (perfLines.length) {
+    sections.push("### Performance", "", ...perfLines, "");
+  }
 }
 
 const compareUrl = `${baseUrl}/compare/v${currentVersion}...v${nextVersion}`;
 const header = `### [${nextVersion}](${compareUrl}) (${todayIso()})`;
 const newBlock = [header, "", sections.join("\n").trimEnd()].join("\n");
 
-if (!PKG_VERSION_RE.test(pkgRaw)) {
-  throw new Error("Could not find version field in package.json");
+if (docsOnly) {
+  const outPath = path.join(root, `.docs-release-${nextVersion}.md`);
+  fs.writeFileSync(outPath, `${newBlock}\n`, "utf8");
+  printReleaseSummaryTable(currentVersion, nextVersion);
+  console.log(`Wrote docs release notes to ${outPath}`);
+} else {
+  if (!PKG_VERSION_RE.test(pkgRaw)) {
+    throw new Error("Could not find version field in package.json");
+  }
+  fs.writeFileSync(
+    pkgPath,
+    pkgRaw.replace(PKG_VERSION_RE, `$1"${nextVersion}"`),
+    "utf8",
+  );
+
+  const changelog = fs.readFileSync(changelogPath, "utf8");
+  const marker = "\n\n### [";
+  const idx = changelog.indexOf(marker);
+  if (idx === -1) {
+    throw new Error("CHANGELOG.md: could not find insertion point after intro");
+  }
+  const updated = `${changelog.slice(0, idx)}\n\n${newBlock}\n\n${changelog.slice(idx + 2)}`;
+
+  fs.writeFileSync(changelogPath, updated, "utf8");
+
+  printReleaseSummaryTable(currentVersion, nextVersion);
 }
-fs.writeFileSync(
-  pkgPath,
-  pkgRaw.replace(PKG_VERSION_RE, `$1"${nextVersion}"`),
-  "utf8",
-);
-
-const changelog = fs.readFileSync(changelogPath, "utf8");
-const marker = "\n\n### [";
-const idx = changelog.indexOf(marker);
-if (idx === -1) {
-  throw new Error("CHANGELOG.md: could not find insertion point after intro");
-}
-const updated = `${changelog.slice(0, idx)}\n\n${newBlock}\n\n${changelog.slice(idx + 2)}`;
-
-fs.writeFileSync(changelogPath, updated, "utf8");
-
-printReleaseSummaryTable(currentVersion, nextVersion);
