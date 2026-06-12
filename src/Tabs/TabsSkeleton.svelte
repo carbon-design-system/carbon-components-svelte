@@ -23,7 +23,7 @@
   on:mouseleave
 >
   <ul class:bx--tabs--scrollable__nav={true}>
-    {#each Array.from({ length: count }, (_, i) => i) as item}
+    {#each Array.from({ length: count }, (_, i) => i) as item (item)}
       <li class:bx--tabs--scrollable__nav-item={true}>
         <div class:bx--tabs__nav-link={true}><span></span></div>
       </li>
