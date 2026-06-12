@@ -1,0 +1,80 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/classes";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-family";
+
+/// Carbon type utility classes plus text-color helpers.
+///
+/// `carbon--type-classes` emits `.#{$prefix}--type-<token>` for every type style
+/// in `$tokens`, the font families (`mono`/`sans`/`serif`/...), the font weights
+/// (`light`/`regular`/`semibold`), and `italic`.
+///
+/// Type tokens set `font-weight`, `font-family`, and other properties, so the weight,
+/// family, and italic utilities are re-emitted after the token rules to win when
+/// combined on one element (e.g. `.bx--type-body-long-01.bx--type-semibold`).
+///
+/// The color helpers reference Carbon text-token globals, so each rule resolves to
+/// `var(--cds-text-*)` in the dynamic build (`all.scss`) and to a baked hex in the
+/// static single-theme builds (`g10.scss`, ...). Token names never collide with the
+/// type styles above, which are `body-*`, `heading-*`, `display-*`, etc.
+/// @access private
+/// @group components
+@mixin type {
+  @include carbon--type-classes;
+
+  $text-color-tokens: (
+    text-primary: $text-primary,
+    text-secondary: $text-secondary,
+    text-placeholder: $text-placeholder,
+    text-helper: $text-helper,
+    text-on-color: $text-on-color,
+    text-inverse: $text-inverse,
+    text-error: $text-error,
+    text-disabled: $text-disabled,
+  );
+
+  @each $name, $value in $text-color-tokens {
+    .#{$prefix}--type-#{$name} {
+      color: $value;
+    }
+  }
+
+  // Override type-token font properties when modifier utilities are combined.
+  @each $name, $value in $carbon--font-families {
+    .#{$prefix}--type-#{$name} {
+      font-family: $value;
+    }
+  }
+
+  @each $name, $value in $carbon--font-weights {
+    .#{$prefix}--type-#{$name} {
+      font-weight: $value;
+    }
+  }
+
+  .#{$prefix}--type-italic {
+    font-style: italic;
+  }
+
+  .#{$prefix}--type-break-word {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  .#{$prefix}--type-nowrap {
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--type-balance {
+    text-wrap: balance;
+  }
+
+  .#{$prefix}--type-full-width {
+    width: 100%;
+  }
+}
+
+@include exports("type") {
+  @include type;
+}
