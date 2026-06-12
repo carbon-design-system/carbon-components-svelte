@@ -1,5 +1,5 @@
 <script>
-  import { MultiSelect, TooltipIcon } from "carbon-components-svelte";
+  import { MultiSelect, FluidMultiSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -250,6 +250,12 @@ Invalid and warning states are not displayed while the multi-select is read-only
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
   />
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid multi-select variant.
+
+<FluidMultiSelectSkeleton />
 
 ## Portal menu
 
