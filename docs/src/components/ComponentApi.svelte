@@ -64,13 +64,10 @@
   import { onMount } from "svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
 
-  let AsyncPreviewTypeScript:
-    | typeof import("./PreviewTypeScript.svelte").default
-    | undefined;
+  let AsyncCodeBlock: typeof import("./CodeBlock.svelte").default | undefined;
 
   onMount(async () => {
-    AsyncPreviewTypeScript = (await import("./PreviewTypeScript.svelte"))
-      .default;
+    AsyncCodeBlock = (await import("./CodeBlock.svelte")).default;
   });
 
   const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
@@ -185,7 +182,8 @@
                       style="display: inline-flex; max-width: 220px; white-space: nowrap;"
                     >
                       <svelte:component
-                        this={AsyncPreviewTypeScript}
+                        this={AsyncCodeBlock}
+                        language="typescript"
                         type="inline"
                         code={typeMap[type] ?? type}
                         portalTooltip
@@ -196,7 +194,8 @@
                       style="display: inline-flex; max-width: 220px; word-break: break-word;"
                     >
                       <svelte:component
-                        this={AsyncPreviewTypeScript}
+                        this={AsyncCodeBlock}
+                        language="typescript"
                         type="inline"
                         code={type}
                         portalTooltip
@@ -234,7 +233,8 @@
                     style:max-width="85%"
                   >
                     <svelte:component
-                      this={AsyncPreviewTypeScript}
+                      this={AsyncCodeBlock}
+                      language="typescript"
                       type="multi"
                       code={parsed.exampleCode}
                       portalTooltip
@@ -256,7 +256,8 @@
                   <em>undefined</em>
                 {:else}
                   <svelte:component
-                    this={AsyncPreviewTypeScript}
+                    this={AsyncCodeBlock}
+                    language="typescript"
                     type={/\n/.test(prop.value ?? "") ? "multi" : "inline"}
                     code={prop.value ?? ""}
                     portalTooltip
@@ -278,7 +279,8 @@
 {#if component.typedefs.length > 0}
   <div class="my-layout-01-03">
     <svelte:component
-      this={AsyncPreviewTypeScript}
+      this={AsyncCodeBlock}
+      language="typescript"
       code={component.typedefs.map((t) => t.ts ?? "").join("\n")}
     />
   </div>
@@ -303,7 +305,8 @@
           </StructuredListCell>
           <StructuredListCell>
             <svelte:component
-              this={AsyncPreviewTypeScript}
+              this={AsyncCodeBlock}
+              language="typescript"
               type={/\n/.test(slot.slot_props ?? "") ? "multi" : "inline"}
               code={slot.slot_props ?? ""}
               portalTooltip
@@ -350,7 +353,8 @@
           </StructuredListCell>
           <StructuredListCell>
             <svelte:component
-              this={AsyncPreviewTypeScript}
+              this={AsyncCodeBlock}
+              language="typescript"
               type={/\n/.test(dispatched_event.detail ?? "") ? "multi" : "inline"}
               code={dispatched_event.detail ?? ""}
               portalTooltip

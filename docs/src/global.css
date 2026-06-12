@@ -245,24 +245,79 @@ html {
   margin-bottom: var(--cds-layout-01);
 }
 
-.table {
-  position: sticky;
-  max-height: calc(100vh - 3rem);
-  top: 3rem;
-  margin-top: -3rem;
-  padding-top: var(--cds-spacing-05);
-  padding-bottom: var(--cds-spacing-05);
-  padding-left: var(--cds-spacing-08);
-  overflow-y: auto;
+/* Auto-generated TOC (aside slot): a compact stack of anchor links,
+   no list markup. bx--link already applies body-short-01 and link color. */
+.toc-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-[data-components] {
+.toc-nav .bx--link {
+  padding: var(--cds-spacing-01) 0;
+  color: var(--cds-text-02);
+}
+
+.toc-nav .bx--link:visited,
+.toc-nav .bx--link:visited:hover {
+  color: var(--cds-text-02);
+}
+
+.toc-nav .bx--link.is-active {
+  text-decoration: underline;
+  color: var(--cds-text-01);
+}
+
+.toc-nav .bx--link.is-active:visited,
+.toc-nav .bx--link.is-active:visited:hover {
+  color: var(--cds-text-01);
+}
+
+.table {
+  position: sticky;
+  top: 3rem;
+  align-self: flex-start;
+  padding-left: var(--cds-spacing-03);
+  padding-right: 0;
+  padding-bottom: var(--cds-spacing-05);
+}
+
+.table__scroll {
+  overflow-y: auto;
+  padding-top: var(--cds-spacing-07);
+  padding-bottom: var(--cds-spacing-07);
+  padding-left: var(--cds-spacing-02);
+  padding-right: 1rem;
+  margin-right: -2rem;
+  margin-left: 2rem;
+}
+
+.toc .toc-section-label {
+  margin-bottom: var(--cds-spacing-03);
+}
+
+.toc-nav .toc-section-label {
+  padding-top: var(--cds-spacing-07);
+  margin-bottom: var(--cds-spacing-03);
+}
+
+[data-components],
+.component-body {
   position: relative;
   display: flex;
 }
 
-[data-components] .bx--grid {
+[data-components] .bx--grid,
+.component-body .bx--grid {
   width: 100%;
+}
+
+.component-body .table {
+  margin-top: -2.5rem;
+}
+
+.hero .bx--link {
+  font-size: inherit;
 }
 
 @media (max-width: 1056px) {
@@ -310,23 +365,10 @@ html {
   line-height: var(--cds-body-short-01-line-height);
 }
 
+/* Font styling comes from the Text component's type class
+   (bx--type-expressive-heading-06); this rule only owns layout. */
 .bx--col > h1 {
-  font-size: var(--cds-expressive-heading-05-font-size);
-  font-weight: var(--cds-expressive-heading-05-font-weight);
-  letter-spacing: var(--cds-expressive-heading-05-letter-spacing);
-  line-height: var(--cds-expressive-heading-05-line-height);
   margin-bottom: var(--cds-layout-01);
-}
-
-.bx--col > h1.component-title-with-badge {
-  display: flex;
-  align-items: center;
-  gap: var(--cds-spacing-04);
-}
-
-.bx--tag .bx--tooltip__trigger--definition {
-  color: inherit;
-  border-bottom-color: currentColor;
 }
 
 .big-paragraph {
@@ -381,6 +423,7 @@ html {
   font-size: var(--cds-code-01-font-size, 0.75rem);
   font-weight: 500;
   letter-spacing: var(--cds-code-01-letter-spacing, 0.32px);
+  line-height: var(--cds-code-01-line-height);
   color: var(--cds-text-01, #161616);
   background-color: var(--cds-field-01, #f4f4f4);
   border: 1px solid var(--cds-ui-03);
@@ -465,4 +508,163 @@ html {
 .cell .bx--snippet--single pre,
 .bx--snippet--inline code {
   white-space: pre-wrap !important;
+}
+
+/* Doc page layout */
+
+/* Full-bleed fill band: background spans the full content width while the
+   inner Grid stays flush-aligned with the sections below. */
+.band {
+  margin-inline: calc(-1 * var(--cds-spacing-07));
+  padding-inline: var(--cds-spacing-07);
+}
+
+.hero {
+  margin-top: calc(-1 * var(--cds-spacing-07));
+  margin-bottom: var(--cds-spacing-08);
+  border-bottom: 1px solid var(--cds-border-subtle, var(--cds-ui-03));
+}
+
+.hero--component {
+  padding-top: var(--cds-spacing-08);
+  padding-bottom: var(--cds-spacing-08);
+  min-height: calc(var(--cds-spacing-13) + var(--cds-spacing-08));
+}
+
+.hero--component .hero__layout > .bx--grid > .bx--row {
+  margin-top: 2rem;
+}
+
+/* Breakout: an example escapes the content grid to use the full content
+   width (cancels Content's inline padding). Unlike `.band`, the padding is
+   not re-added, so the example itself, not just a background, spans wider. */
+.breakout {
+  margin-inline: calc(-1 * var(--cds-spacing-07));
+}
+
+/* Full-width example band: a `.band` (full-bleed fill) with vertical padding,
+   used to wrap a grid-constrained example so the fill reads edge to edge. */
+.example-band {
+  padding-block: var(--cds-spacing-07);
+}
+
+.section {
+  margin-top: var(--cds-spacing-12);
+}
+
+.hero + .section {
+  margin-top: var(--cds-spacing-08);
+}
+
+.section .bx--row:first-child.step-row,
+.section .bx--row:first-child.example-row,
+.section .bx--row:first-child.principle-row {
+  margin-top: 0;
+}
+
+@media (max-width: 672px) {
+  .section {
+    margin-top: var(--cds-spacing-09);
+  }
+
+  .hero + .section {
+    margin-top: var(--cds-spacing-07);
+  }
+}
+
+@media (max-width: 1055px) {
+  .step-row .code-col,
+  .example-row .code-col {
+    margin-top: var(--cds-spacing-06);
+  }
+}
+
+.section--foundation {
+  margin-top: var(--cds-spacing-13);
+}
+
+.section--foundation .principle-row {
+  margin-top: var(--cds-spacing-09);
+}
+
+.section--metrics {
+  margin-top: var(--cds-spacing-09);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--cds-spacing-07) var(--cds-spacing-09);
+}
+
+@media (max-width: 1055px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 672px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section--ecosystem .ecosystem-row {
+  margin-top: var(--cds-spacing-05);
+}
+
+.example-row {
+  margin-top: var(--cds-spacing-07);
+}
+
+.doc-section-header {
+  margin-bottom: var(--cds-spacing-09);
+}
+
+.doc-section-header + .example-row {
+  margin-top: 0;
+}
+
+.doc-section-header + .principle-row {
+  margin-top: 0;
+}
+
+.step-row {
+  margin-top: var(--cds-spacing-09);
+}
+
+.principle-row {
+  margin-top: var(--cds-spacing-09);
+}
+
+.code-col {
+  min-width: 0;
+}
+
+.benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--cds-spacing-07) var(--cds-spacing-09);
+}
+
+@media (max-width: 672px) {
+  .benefit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.benefit-icon,
+.principle-icon {
+  fill: var(--cds-interactive-04, var(--cds-icon-primary, #0f62fe));
+}
+
+.footer-cta {
+  margin-top: var(--cds-spacing-12);
+  padding-top: var(--cds-spacing-09);
+  padding-bottom: var(--cds-spacing-07);
+  border-top: 1px solid var(--cds-border-subtle, var(--cds-ui-03));
+}
+
+.overview-page {
+  overflow-x: clip;
 }
