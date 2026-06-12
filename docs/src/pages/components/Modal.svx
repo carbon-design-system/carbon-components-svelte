@@ -23,7 +23,7 @@ Create a basic modal dialog with primary and secondary actions. This variant is 
 
 <FileSource src="/framed/Modal/Modal" />
 
-## With Portal
+## With portal
 
 Wrap the modal in a portal to escape parent containers with `overflow: hidden` or z-index stacking contexts. This ensures the modal appears above all content and isn't clipped by parent boundaries.
 

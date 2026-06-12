@@ -6,25 +6,25 @@ Portals render their content directly into `document.body` to escape parent over
 
 For anchored, positioned content (for example, dropdowns, popovers, overflow menus), use [FloatingPortal](/components/FloatingPortal) instead.
 
-## Default Portal
+## Default portal
 
 Render content in a portal. This is useful for modals, tooltips, and menus that need to escape parent containers.
 
 <FileSource src="/framed/Portal/BasicPortal" />
 
-## Multiple Portals
+## Multiple portals
 
 Each portal instance is independent and creates its own element in `document.body`. Each portal is automatically cleaned up when it is removed.
 
 <FileSource src="/framed/Portal/MultiplePortals" />
 
-## Custom Tag
+## Custom tag
 
 Use the `tag` prop to specify a custom HTML element. By default, the portal uses a `div` element.
 
 <FileSource src="/framed/Portal/CustomTagPortal" />
 
-## Modal with Portal
+## Modal with portal
 
 Wrap the modal in a portal to escape parent containers with `overflow: hidden` or z-index stacking contexts. This ensures the modal appears above all content and isn't clipped by parent boundaries.
 
