@@ -14,7 +14,11 @@
   /**
    * The concatenated code value.
    *
-   * Derived from `code`; bind to read the assembled value.
+   * Derived from `code` (i.e. `code.join("")`); bind to read the assembled
+   * value. When `complete` is `true`, its length equals `count`. Each
+   * character matches the active `type`: `0-9` for `"numeric"`, `a-zA-Z0-9`
+   * for `"alphanumeric"`. Original casing is preserved regardless of
+   * `uppercase`, which only affects the visual rendering.
    * @bindable readonly
    */
   export let value = "";
@@ -22,7 +26,10 @@
   /**
    * The individual segment characters.
    *
-   * `code` is the source of truth; its length tracks `count`.
+   * `code` is the source of truth; its length tracks `count`. Each element is
+   * either an empty string (unfilled segment) or a single character matching
+   * the active `type`: `0-9` for `"numeric"`, `a-zA-Z0-9` for
+   * `"alphanumeric"`.
    * @type {string[]}
    * @bindable writable
    */
@@ -393,6 +400,7 @@
   class:bx--pin-code-input--light={light}
   class:bx--pin-code-input--readonly={readonly}
   class:bx--pin-code-input--fluid={isFluid}
+  class:bx--pin-code-input--xs={size === "xs"}
   {...$$restProps}
 >
   <fieldset

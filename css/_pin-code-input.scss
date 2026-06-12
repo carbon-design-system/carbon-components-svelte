@@ -27,6 +27,10 @@
     gap: $carbon--spacing-03;
   }
 
+  .#{$prefix}--pin-code-input--xs .#{$prefix}--pin-code-input__segments {
+    gap: $carbon--spacing-02;
+  }
+
   .#{$prefix}--pin-code-input__field.#{$prefix}--text-input {
     @include type-style('body-short-01');
 
