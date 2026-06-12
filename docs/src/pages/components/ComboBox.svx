@@ -221,7 +221,7 @@ Set `itemToString` to customize how items display in the filterable combobox.
 
 ## Clear filter on open
 
-When using a filterable combobox, reopening the dropdown after making a selection will normally show only the filtered results matching the selected item. Set `clearFilterOnOpen` to `true` to temporarily clear the filter when opening, showing all available items so you can browse and change selections.
+After selecting an item in a filterable combobox, reopening the dropdown normally shows only the results matching that selection. Set `clearFilterOnOpen` to `true` to clear the filter on open, showing all items so you can browse and change the selection.
 
 The original value is automatically restored if you close the dropdown without making a new selection.
 

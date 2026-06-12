@@ -9,7 +9,7 @@ Buttons trigger actions in the interface. Use them to submit forms, navigate bet
 
 ## Primary button
 
-The default button style is primary. This should be used for primary actions.
+The default button style is primary. Use it for the main action on a page.
 
 <Button>Primary button</Button>
 
