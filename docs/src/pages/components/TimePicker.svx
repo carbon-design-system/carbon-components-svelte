@@ -1,9 +1,9 @@
 ---
-components: ["TimePicker", "TimePickerSelect", "SelectItem"]
+components: ["TimePicker", "TimePickerSelect", "SelectItem", "FluidTimePickerSkeleton"]
 ---
 
 <script>
-  import { TimePicker, TimePickerSelect, SelectItem, TooltipIcon } from "carbon-components-svelte";
+  import { TimePicker, TimePickerSelect, SelectItem, FluidTimePickerSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -162,6 +162,16 @@ Invalid and warning states are not displayed while the time picker is read-only.
     </TimePickerSelect>
   </TimePicker>
 </div>
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid time picker variant.
+
+<FluidTimePickerSkeleton />
+
+Set `isOnlyTwo` to `true` to render only two elements.
+
+<FluidTimePickerSkeleton isOnlyTwo />
 
 ## Extra-large size
 
