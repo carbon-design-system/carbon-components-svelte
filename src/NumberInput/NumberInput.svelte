@@ -260,6 +260,7 @@
   let inputValue = value?.toString() ?? "";
   let prevValue;
   let userInputActive = false;
+  let inputFocused = false;
 
   $: customValid =
     typeof validate === "function"
@@ -382,7 +383,12 @@
     }
   }
 
+  function handleInputFocus() {
+    if (isFluid) inputFocused = true;
+  }
+
   function handleBlur(event) {
+    if (isFluid) inputFocused = false;
     dispatch("blur", { event, value });
   }
 
@@ -397,6 +403,7 @@
 <div
   class:bx--form-item={true}
   class:bx--number-input--fluid={isFluid}
+  class:bx--number-input--fluid--focus={isFluid && inputFocused}
   on:click
   on:mouseover
   on:mouseenter
@@ -459,6 +466,7 @@
           on:keydown={onKeyDown}
           on:keydown
           on:keyup
+          on:focus={handleInputFocus}
           on:focus
           on:blur={handleBlur}
           on:paste
@@ -495,6 +503,7 @@
           on:keydown={onKeyDown}
           on:keydown
           on:keyup
+          on:focus={handleInputFocus}
           on:focus
           on:blur={handleBlur}
           on:paste

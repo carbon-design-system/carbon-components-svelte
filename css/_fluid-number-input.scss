@@ -41,10 +41,6 @@
     display: none;
   }
 
-  // Labels with slotted content (e.g., a tooltip icon) must not clip
-  // overflow, or the tooltip popover would be cut off. The v11 styles
-  // gate the scroll behavior with `:has()`; a modifier class applied
-  // when the `labelChildren` slot is used serves the same purpose.
   .#{$prefix}--number-input--fluid
     .#{$prefix}--label.#{$prefix}--label--slotted {
     gap: $spacing-03;
@@ -372,19 +368,13 @@
     margin: 0;
   }
 
-  // Invalid outline on the field when neither the input nor a stepper is
-  // focused. The v11 implementation toggles a `--fluid--focus` modifier via
-  // JS; `:has(input:focus)` matches the same intent without component state.
   .#{$prefix}--number-input--fluid
-    .#{$prefix}--number[data-invalid]:not(:has(input:focus)):not(
-      :has(.#{$prefix}--number__control-btn:focus)
-    ) {
+    .#{$prefix}--number[data-invalid]:not(:focus-within) {
     @include focus-outline("invalid");
   }
 
-  // Focus outline on the field only while the input itself is focused. When a
-  // stepper is focused, only the stepper receives the focus ring.
-  .#{$prefix}--number-input--fluid .#{$prefix}--number:has(input:focus) {
+  .#{$prefix}--number-input--fluid.#{$prefix}--number-input--fluid--focus
+    .#{$prefix}--number {
     @include focus-outline("outline");
   }
 

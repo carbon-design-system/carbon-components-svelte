@@ -229,6 +229,21 @@ describe("NumberInput", () => {
         screen.getByText("Custom label content").closest("label"),
       ).not.toHaveClass("bx--label--slotted");
     });
+
+    it("toggles the fluid focus modifier on input focus and blur", async () => {
+      render(NumberInput, { fluid: true, invalid: true, invalidText: "Error" });
+
+      const input = screen.getByLabelText("Clusters");
+      const formItem = input.closest(".bx--form-item");
+
+      expect(formItem).not.toHaveClass("bx--number-input--fluid--focus");
+
+      await user.click(input);
+      expect(formItem).toHaveClass("bx--number-input--fluid--focus");
+
+      await user.tab();
+      expect(formItem).not.toHaveClass("bx--number-input--fluid--focus");
+    });
   });
 
   it("should handle custom id", () => {
