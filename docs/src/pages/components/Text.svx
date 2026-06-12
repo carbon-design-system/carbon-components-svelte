@@ -1,0 +1,262 @@
+<script>
+  import { Stack, Text, Truncate } from "carbon-components-svelte";
+</script>
+
+Text applies Carbon typography to any element: type scale, semantic color, and layout modifiers. It covers productive styles for application UI and expressive styles for editorial layouts.
+
+## Default
+
+The default component renders a `<p>` with the `body-long-01` type style.
+
+<Text>Carbon Components Svelte implements the Carbon Design System.</Text>
+
+## Text color
+
+Set `color` to a Carbon semantic text token. Each token describes intent and resolves to the active theme, so colors update when the theme changes.
+
+| Token         | Description                                                   |
+| ------------- | ------------------------------------------------------------- |
+| `primary`     | Primary text for headings and body copy                       |
+| `secondary`   | Secondary text for supplementary copy                         |
+| `placeholder` | Placeholder text in form inputs                               |
+| `helper`      | Helper and caption text                                       |
+| `on-color`    | Text on a colored background, such as a button or tag         |
+| `inverse`     | Text on an inverse surface, such as a tooltip or notification |
+| `error`       | Error and validation text                                     |
+| `disabled`    | Disabled text                                                 |
+
+<Text color="primary">Primary text</Text>
+<Text color="secondary">Secondary text</Text>
+<Text color="placeholder">Placeholder text</Text>
+<Text color="helper">Helper text</Text>
+<Text color="error">Error text</Text>
+<Text color="disabled">Disabled text</Text>
+
+`on-color` and `inverse` are meant for colored or inverse surfaces, where the default text tokens would be unreadable. Both read light in the white theme but track different surfaces, so they diverge in other themes. Each example places the token on the surface it is designed for.
+
+Use `on-color` for text on a colored background, such as a button or tag fill:
+
+<div style="background-color: var(--cds-interactive-01); padding: 1rem;">
+  <Text color="on-color">Text on a colored background</Text>
+</div>
+
+Use `inverse` for text on an inverse surface, such as a tooltip or notification:
+
+<div style="background-color: var(--cds-background-inverse); padding: 1rem;">
+  <Text color="inverse">Text on an inverse surface</Text>
+</div>
+
+## Type styles
+
+Set `type` to a Carbon type token. The scale covers supporting text, body copy, and the productive and expressive heading sets. Productive styles use fixed sizes for dense product UI; expressive styles scale fluidly with the viewport for editorial layouts.
+
+| Token                     | Description                                              |
+| ------------------------- | -------------------------------------------------------- |
+| `caption-01`              | Smallest supporting text for captions and footnotes      |
+| `caption-02`              | Caption text, one step larger                            |
+| `label-01`                | Form field and UI labels                                 |
+| `label-02`                | Label text, one step larger                              |
+| `helper-text-01`          | Helper text beneath form inputs                          |
+| `helper-text-02`          | Helper text, one step larger                             |
+| `body-short-01`           | Dense, single-line body text                             |
+| `body-short-02`           | Dense body text, one step larger                         |
+| `body-long-01`            | Paragraph body text for multiple lines                   |
+| `body-long-02`            | Paragraph body text, one step larger                     |
+| `code-01`                 | Inline code set in IBM Plex Mono                         |
+| `code-02`                 | Code text, one step larger                               |
+| `heading-01`              | Bold heading for dense UI                                |
+| `heading-02`              | Bold heading, one step larger                            |
+| `productive-heading-01`   | Productive heading scale, step 1 (smallest)              |
+| `productive-heading-02`   | Productive heading scale, step 2                         |
+| `productive-heading-03`   | Productive heading scale, step 3                         |
+| `productive-heading-04`   | Productive heading scale, step 4                         |
+| `productive-heading-05`   | Productive heading scale, step 5                         |
+| `productive-heading-06`   | Productive heading scale, step 6 (light weight)          |
+| `productive-heading-07`   | Productive heading scale, step 7 (largest, light weight) |
+| `expressive-paragraph-01` | Fluid paragraph for editorial layouts                    |
+| `expressive-heading-01`   | Expressive heading, step 1                               |
+| `expressive-heading-02`   | Expressive heading, step 2                               |
+| `expressive-heading-03`   | Expressive heading, fluid above step 2                   |
+| `expressive-heading-04`   | Expressive heading, fluid                                |
+| `expressive-heading-05`   | Expressive heading, fluid                                |
+| `expressive-heading-06`   | Expressive heading, fluid (largest)                      |
+| `quotation-01`            | Fluid quotation set in IBM Plex Serif                    |
+| `quotation-02`            | Quotation, one step larger                               |
+| `display-01`              | Largest fluid display text                               |
+| `display-02`              | Display text, fluid                                      |
+| `display-03`              | Display text, fluid                                      |
+| `display-04`              | Display text, fluid (largest)                            |
+
+<Text type="caption-01">Caption 01</Text>
+<Text type="caption-02">Caption 02</Text>
+<Text type="label-01">Label 01</Text>
+<Text type="label-02">Label 02</Text>
+<Text type="helper-text-01">Helper text 01</Text>
+<Text type="helper-text-02">Helper text 02</Text>
+<Text type="body-short-01">Body short 01</Text>
+<Text type="body-short-02">Body short 02</Text>
+<Text type="body-long-01">Body long 01</Text>
+<Text type="body-long-02">Body long 02</Text>
+<Text tag="code" type="code-01">const carbon = "components-svelte";</Text>
+<Text tag="pre" type="code-02">const carbon = "components-svelte";</Text>
+<Text tag="h6" type="heading-01">Heading 01</Text>
+<Text tag="h5" type="heading-02">Heading 02</Text>
+<Text tag="h6" type="productive-heading-01">Productive heading 01</Text>
+<Text tag="h5" type="productive-heading-02">Productive heading 02</Text>
+<Text tag="h4" type="productive-heading-03">Productive heading 03</Text>
+<Text tag="h3" type="productive-heading-04">Productive heading 04</Text>
+<Text tag="h2" type="productive-heading-05">Productive heading 05</Text>
+<Text tag="h2" type="productive-heading-06">Productive heading 06</Text>
+<Text tag="h1" type="productive-heading-07">Productive heading 07</Text>
+<Text type="expressive-paragraph-01">Expressive paragraph 01</Text>
+<Text tag="h4" type="expressive-heading-01">Expressive heading 01</Text>
+<Text tag="h3" type="expressive-heading-02">Expressive heading 02</Text>
+<Text tag="h3" type="expressive-heading-03">Expressive heading 03</Text>
+<Text tag="h2" type="expressive-heading-04">Expressive heading 04</Text>
+<Text tag="h2" type="expressive-heading-05">Expressive heading 05</Text>
+<Text tag="h1" type="expressive-heading-06">Expressive heading 06</Text>
+<Text tag="blockquote" type="quotation-01">Quotation 01</Text>
+<Text tag="blockquote" type="quotation-02">Quotation 02</Text>
+<Text tag="h1" type="display-01">Display 01</Text>
+<Text tag="h1" type="display-02">Display 02</Text>
+<Text tag="h1" type="display-03">Display 03</Text>
+<Text tag="h1" type="display-04">Display 04</Text>
+
+## Custom element
+
+Set `tag` to render a different element. Type and color apply to whichever tag you choose.
+
+<Text tag="em" type="body-short-01">Inline emphasis</Text>
+<Text tag="blockquote" type="quotation-01">A quotation rendered as a blockquote.</Text>
+
+## Modifiers
+
+Set modifier props alongside a type style.
+
+<Stack gap={5}>
+  <Text type="body-long-01" weight="light">Light weight (300)</Text>
+  <Text type="body-long-01" weight="regular">Regular weight (400)</Text>
+  <Text type="body-long-01" weight="semibold">Semibold weight (600)</Text>
+  <Text type="body-long-01" italic>Italic body text</Text>
+  <Text type="body-long-01" family="mono">IBM Plex Mono</Text>
+  <Text type="body-long-01" family="serif">IBM Plex Serif</Text>
+  <Text tag="h2" type="productive-heading-04" balance maxWidth="20rem">Balanced heading across multiple lines</Text>
+</Stack>
+
+Set `wrap` to `break-word` to break long words, or `nowrap` to keep text on one line.
+
+<div style="max-width: 12rem; border: 1px solid var(--cds-border-subtle); padding: 0.5rem;">
+  <Text type="body-short-01" wrap="break-word">supercalifragilisticexpialidocious@example.com</Text>
+</div>
+
+<div style="max-width: 12rem; border: 1px solid var(--cds-border-subtle); padding: 0.5rem;">
+  <Text type="body-short-01" wrap="nowrap">This line will not wrap to the next row.</Text>
+</div>
+
+### Max width and full width
+
+Set `maxWidth` to any CSS length. Numbers are treated as pixels; strings accept units such as `ch`, `rem`, `%`, or `px`. Text fills its container by default. Neither `maxWidth` nor `fullWidth` is applied unless you set them.
+
+<Stack gap={5}>
+  <Text type="body-long-01" maxWidth="38ch">
+    Character measure (`38ch`) scales with the font size and is useful for readable line length.
+  </Text>
+  <Text type="body-long-01" maxWidth="20rem">
+    Rem-based width (`20rem`) tracks the root font size.
+  </Text>
+  <Text type="body-long-01" maxWidth={480}>
+    Pixel width (`480`) when you need a fixed cap.
+  </Text>
+</Stack>
+
+`fullWidth` sets `width: 100%`. A block element already spans its parent; use `fullWidth` in flex or grid layouts where width must be explicit. Pair it with `maxWidth` when the row is full width but the copy should stay capped:
+
+<div style="border: 1px solid var(--cds-border-subtle); padding: 1rem; width: 100%;">
+  <Text type="body-long-01" fullWidth maxWidth="38ch">
+    This paragraph fills the container row but stops at 38ch.
+  </Text>
+</div>
+
+<div style="border: 1px solid var(--cds-border-subtle); padding: 1rem; width: 100%;">
+  <Text type="body-long-01" fullWidth>
+    Without `maxWidth`, `fullWidth` stretches across the entire container.
+  </Text>
+</div>
+
+## Truncate (multiline)
+
+Set `lines` to truncate overflow while keeping a Carbon type style applied. Values above `1` use multiline mode (end clamp only). See also [Truncate](/components/Truncate) and the `truncate` action for use on native elements.
+
+<Text type="body-long-01" maxWidth="20rem" lines={3}>
+  Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
+</Text>
+
+Alternatively, wrap an inline `Text` element with the `Truncate` component:
+
+<Truncate lines={3} style="max-width: 20rem">
+  <Text tag="span" type="body-long-02">
+    Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
+  </Text>
+</Truncate>
+
+## Typography inspiration
+
+Combine `type`, `color`, and `tag` as you would on an IBM product page: expressive type for editorial moments, productive type for application UI.
+
+<Stack gap={8}>
+  <Text type="caption-02" color="secondary">IBM Cloud · Observability</Text>
+  <Text tag="h1" type="display-03" color="primary">See what your systems are telling you</Text>
+  <Text type="expressive-paragraph-01" color="primary" maxWidth="44ch">Before an incident reaches your customers, traces and logs already carry the signal. IBM Cloud Observability brings metrics, logs, and traces into one workspace so your team can investigate faster and ship with confidence.</Text>
+  <Stack gap={5}>
+    <Text tag="h2" type="productive-heading-05" color="primary">Unified telemetry across hybrid cloud</Text>
+    <Text type="body-long-02" color="primary" maxWidth="52ch">Connect Kubernetes clusters on Red Hat OpenShift, virtual servers, and managed services without reconfiguring your instrumentation. Retention policies and access controls follow the governance model your organization already uses in IBM Cloud.</Text>
+  </Stack>
+  <Stack gap={5}>
+    <Text tag="h3" type="productive-heading-03" color="primary">Create an ingestion endpoint</Text>
+    <Text type="body-long-01" color="secondary" maxWidth="42ch">API keys authenticate programmatic access to your observability workspace. Store secrets in IBM Cloud Secrets Manager and rotate them on a schedule your security team defines.</Text>
+    <Stack gap={1}>
+      <Text type="label-01" color="primary">Service name</Text>
+      <Text type="helper-text-01" color="helper">Use lowercase letters, numbers, and hyphens.</Text>
+    </Stack>
+    <Text tag="pre" type="code-02" color="primary">ibmcloud observability instance create --name prod-traces --plan standard</Text>
+  </Stack>
+  <Text tag="blockquote" type="quotation-01" color="primary" maxWidth="24ch">Good typography earns trust by staying out of the way while you make decisions that matter.</Text>
+  <Stack gap={2}>
+    <Text tag="h4" type="heading-02" color="primary">Active incidents</Text>
+    <Text type="body-short-01" color="secondary">3 open · Last updated 2 minutes ago</Text>
+    <Text type="caption-01" color="placeholder">Metrics retained for 30 days on the Standard plan.</Text>
+  </Stack>
+</Stack>
+
+## Utility classes
+
+Apply Carbon type utilities directly when you do not need the component. Classes use the `bx--` prefix.
+
+| Class | Description |
+| ----- | ----------- |
+| `bx--type-{token}` | Carbon type style. See [Type styles](#type-styles) for tokens |
+| `bx--type-text-primary` | Primary text color |
+| `bx--type-text-secondary` | Secondary text color |
+| `bx--type-text-placeholder` | Placeholder text color |
+| `bx--type-text-helper` | Helper text color |
+| `bx--type-text-on-color` | Text on a colored background |
+| `bx--type-text-inverse` | Text on an inverse surface |
+| `bx--type-text-error` | Error text color |
+| `bx--type-text-disabled` | Disabled text color |
+| `bx--type-mono` | IBM Plex Mono |
+| `bx--type-sans` | IBM Plex Sans |
+| `bx--type-sans-condensed` | IBM Plex Sans Condensed |
+| `bx--type-sans-hebrew` | IBM Plex Sans Hebrew |
+| `bx--type-serif` | IBM Plex Serif |
+| `bx--type-light` | Font weight 300 |
+| `bx--type-regular` | Font weight 400 |
+| `bx--type-semibold` | Font weight 600 |
+| `bx--type-italic` | Italic |
+| `bx--type-break-word` | Break long words |
+| `bx--type-nowrap` | Keep text on one line |
+| `bx--type-balance` | Balance line lengths |
+| `bx--type-full-width` | Span the full container width (`width: 100%`) |
+
+<p class="bx--type-heading-02">Styled with bx--type-heading-02</p>
+<p class="bx--type-body-long-01 bx--type-semibold">Semibold body text</p>
+<p class="bx--type-body-long-01" style="max-width: 38ch">Constrained with inline max-width</p>
