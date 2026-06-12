@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import TimePickerFluidForm from "./TimePicker.fluidForm.test.svelte";
+import TimePickerFluidSkeleton from "./TimePicker.fluidSkeleton.test.svelte";
 import TimePickerFluidSlot from "./TimePicker.fluidSlot.test.svelte";
 import TimePicker from "./TimePicker.test.svelte";
 import TimePickerCustom from "./TimePickerCustom.test.svelte";
@@ -474,5 +475,31 @@ describe("TimePicker", () => {
 
     select.blur();
     expect(selectBlur).toHaveBeenCalled();
+  });
+
+  it("renders fluid skeleton state", () => {
+    render(TimePickerFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-time-picker-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass("bx--time-picker--fluid--skeleton");
+    expect(skeleton).not.toHaveClass("bx--time-picker--equal-width");
+    expect(skeleton.children).toHaveLength(3);
+    expect(skeleton.children[0]).toHaveClass("bx--text-input--fluid__skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--select--fluid__skeleton");
+    expect(skeleton.children[2]).toHaveClass("bx--select--fluid__skeleton");
+  });
+
+  it("renders only two elements when isOnlyTwo", () => {
+    render(TimePickerFluidSkeleton, { props: { isOnlyTwo: true } });
+
+    const skeleton = screen.getByTestId("fluid-time-picker-skeleton");
+    expect(skeleton).toHaveClass(
+      "bx--time-picker--fluid--skeleton",
+      "bx--time-picker--equal-width",
+    );
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--text-input--fluid__skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--select--fluid__skeleton");
   });
 });
