@@ -570,7 +570,7 @@ Set `size` on the `Toolbar` to override the size inherited from the `DataTable`.
 
 ## With toolbar (compact size)
 
-Use `size="compact"` for the table. The `Toolbar` inherits the extra small (`xs`) size to match the compact 24px row height.
+Use `size="compact"` for the table. The `Toolbar` inherits the extra small (`xs`) size to match the compact row height.
 
 <DataTable size="compact" title="Load balancers" description="Your organization's active load balancers."
   headers="{[
