@@ -1,0 +1,397 @@
+{
+  "Button": {
+    "props": 17,
+    "events": 6,
+    "slots": 3
+  },
+  "Toggle": {
+    "props": 11,
+    "events": 9,
+    "slots": 3
+  },
+  "NumberInput": {
+    "props": 29,
+    "events": 13,
+    "slots": 1
+  },
+  "Text": {
+    "props": 12,
+    "events": 0,
+    "slots": 1
+  },
+  "ProgressIndicator": {
+    "props": 4,
+    "events": 5,
+    "slots": 1
+  },
+  "Modal": {
+    "props": 22,
+    "events": 11,
+    "slots": 3
+  },
+  "Loading": {
+    "props": 4,
+    "events": 0,
+    "slots": 0
+  },
+  "Box": {
+    "props": 13,
+    "events": 0,
+    "slots": 1
+  },
+  "ButtonSet": {
+    "props": 1,
+    "events": 0,
+    "slots": 1
+  },
+  "AspectRatio": {
+    "props": 1,
+    "events": 0,
+    "slots": 1
+  },
+  "UnorderedList": {
+    "props": 2,
+    "events": 4,
+    "slots": 1
+  },
+  "Truncate": {
+    "props": 2,
+    "events": 0,
+    "slots": 1
+  },
+  "Form": {
+    "props": 1,
+    "events": 6,
+    "slots": 1
+  },
+  "MultiSelect": {
+    "props": 42,
+    "events": 9,
+    "slots": 2
+  },
+  "Checkbox": {
+    "props": 15,
+    "events": 8,
+    "slots": 1
+  },
+  "StructuredList": {
+    "props": 5,
+    "events": 5,
+    "slots": 1
+  },
+  "BadgeIndicator": {
+    "props": 2,
+    "events": 0,
+    "slots": 0
+  },
+  "TextArea": {
+    "props": 19,
+    "events": 11,
+    "slots": 1
+  },
+  "PinCodeInput": {
+    "props": 29,
+    "events": 4,
+    "slots": 1
+  },
+  "ImageLoader": {
+    "props": 8,
+    "events": 2,
+    "slots": 2
+  },
+  "OrderedList": {
+    "props": 3,
+    "events": 4,
+    "slots": 1
+  },
+  "Select": {
+    "props": 19,
+    "events": 5,
+    "slots": 2
+  },
+  "ContextMenu": {
+    "props": 6,
+    "events": 4,
+    "slots": 1
+  },
+  "Breakpoint": {
+    "props": 2,
+    "events": 1,
+    "slots": 1
+  },
+  "InlineNotification": {
+    "props": 9,
+    "events": 5,
+    "slots": 4
+  },
+  "TooltipDefinition": {
+    "props": 10,
+    "events": 7,
+    "slots": 2
+  },
+  "FloatingPortal": {
+    "props": 14,
+    "events": 0,
+    "slots": 1
+  },
+  "ContainedList": {
+    "props": 5,
+    "events": 0,
+    "slots": 3
+  },
+  "Dropdown": {
+    "props": 27,
+    "events": 2,
+    "slots": 4
+  },
+  "RadioButton": {
+    "props": 10,
+    "events": 3,
+    "slots": 1
+  },
+  "Stack": {
+    "props": 7,
+    "events": 0,
+    "slots": 1
+  },
+  "TreeView": {
+    "props": 15,
+    "events": 4,
+    "slots": 2
+  },
+  "PaginationNav": {
+    "props": 7,
+    "events": 3,
+    "slots": 0
+  },
+  "ClickableTile": {
+    "props": 5,
+    "events": 8,
+    "slots": 1
+  },
+  "PasswordInput": {
+    "props": 24,
+    "events": 11,
+    "slots": 1
+  },
+  "Breadcrumb": {
+    "props": 4,
+    "events": 4,
+    "slots": 1
+  },
+  "SkeletonText": {
+    "props": 4,
+    "events": 4,
+    "slots": 0
+  },
+  "FileUploader": {
+    "props": 17,
+    "events": 10,
+    "slots": 2
+  },
+  "UIShell": {
+    "props": 0,
+    "events": 0,
+    "slots": 0
+  },
+  "CopyButton": {
+    "props": 8,
+    "events": 8,
+    "slots": 0
+  },
+  "ComposedModal": {
+    "props": 7,
+    "events": 10,
+    "slots": 1
+  },
+  "FluidForm": {
+    "props": 1,
+    "events": 6,
+    "slots": 1
+  },
+  "RecursiveList": {
+    "props": 3,
+    "events": 0,
+    "slots": 0
+  },
+  "CodeSnippet": {
+    "props": 22,
+    "events": 11,
+    "slots": 1
+  },
+  "NotificationQueue": {
+    "props": 10,
+    "events": 0,
+    "slots": 0
+  },
+  "Portal": {
+    "props": 3,
+    "events": 0,
+    "slots": 1
+  },
+  "LocalStorage": {
+    "props": 5,
+    "events": 3,
+    "slots": 0
+  },
+  "ContentSwitcher": {
+    "props": 4,
+    "events": 7,
+    "slots": 1
+  },
+  "DataTable": {
+    "props": 31,
+    "events": 11,
+    "slots": 7
+  },
+  "ToastNotification": {
+    "props": 11,
+    "events": 5,
+    "slots": 4
+  },
+  "Grid": {
+    "props": 8,
+    "events": 0,
+    "slots": 1
+  },
+  "Search": {
+    "props": 17,
+    "events": 14,
+    "slots": 1
+  },
+  "Toolbar": {
+    "props": 2,
+    "events": 0,
+    "slots": 1
+  },
+  "SelectableTile": {
+    "props": 10,
+    "events": 7,
+    "slots": 1
+  },
+  "Tooltip": {
+    "props": 17,
+    "events": 4,
+    "slots": 3
+  },
+  "SkeletonPlaceholder": {
+    "props": 3,
+    "events": 4,
+    "slots": 0
+  },
+  "ProgressBar": {
+    "props": 9,
+    "events": 0,
+    "slots": 1
+  },
+  "Theme": {
+    "props": 8,
+    "events": 1,
+    "slots": 1
+  },
+  "Heading": {
+    "props": 0,
+    "events": 0,
+    "slots": 1
+  },
+  "ComboBox": {
+    "props": 36,
+    "events": 9,
+    "slots": 4
+  },
+  "TimePicker": {
+    "props": 19,
+    "events": 11,
+    "slots": 2
+  },
+  "Tag": {
+    "props": 9,
+    "events": 5,
+    "slots": 2
+  },
+  "CopyInput": {
+    "props": 21,
+    "events": 10,
+    "slots": 1
+  },
+  "Accordion": {
+    "props": 4,
+    "events": 4,
+    "slots": 1
+  },
+  "RadioTile": {
+    "props": 9,
+    "events": 6,
+    "slots": 1
+  },
+  "SkeletonIcon": {
+    "props": 1,
+    "events": 4,
+    "slots": 0
+  },
+  "Pagination": {
+    "props": 21,
+    "events": 4,
+    "slots": 0
+  },
+  "SessionStorage": {
+    "props": 5,
+    "events": 3,
+    "slots": 0
+  },
+  "Link": {
+    "props": 7,
+    "events": 8,
+    "slots": 2
+  },
+  "ExpandableTile": {
+    "props": 12,
+    "events": 7,
+    "slots": 2
+  },
+  "OverflowMenu": {
+    "props": 14,
+    "events": 6,
+    "slots": 2
+  },
+  "Tile": {
+    "props": 1,
+    "events": 4,
+    "slots": 1
+  },
+  "TextInput": {
+    "props": 19,
+    "events": 11,
+    "slots": 1
+  },
+  "InlineLoading": {
+    "props": 4,
+    "events": 5,
+    "slots": 0
+  },
+  "Tabs": {
+    "props": 6,
+    "events": 3,
+    "slots": 2
+  },
+  "TooltipIcon": {
+    "props": 12,
+    "events": 8,
+    "slots": 2
+  },
+  "DatePicker": {
+    "props": 15,
+    "events": 5,
+    "slots": 1
+  },
+  "Popover": {
+    "props": 7,
+    "events": 1,
+    "slots": 1
+  },
+  "Slider": {
+    "props": 23,
+    "events": 6,
+    "slots": 1
+  }
+}

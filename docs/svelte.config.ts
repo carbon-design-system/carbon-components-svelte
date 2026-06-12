@@ -334,6 +334,81 @@ function serializeInlineNodes(nodes: PhrasingContent[]): string {
     .join("");
 }
 
+function paragraphToPlainText(nodes: PhrasingContent[]): string {
+  return nodes
+    .map((node: PhrasingContent): string => {
+      switch (node.type) {
+        case "text":
+          return node.value;
+        case "inlineCode":
+          return node.value;
+        case "strong":
+          return paragraphToPlainText(node.children);
+        case "emphasis":
+          return paragraphToPlainText(node.children);
+        case "link":
+          return paragraphToPlainText(node.children);
+        case "break":
+          return "\n";
+        default:
+          return "";
+      }
+    })
+    .join("");
+}
+
+function paragraphToHtml(node: Paragraph): string {
+  return serializeInlineNodes(node.children);
+}
+
+function heroIntro() {
+  return (
+    tree: Parameters<typeof visit>[0],
+    file: { path?: string; data?: { fm?: Record<string, string> } },
+  ) => {
+    if (
+      !file.path?.includes(`${path.sep}pages${path.sep}components${path.sep}`)
+    ) {
+      return;
+    }
+
+    const children = (tree as { children?: unknown[] }).children;
+    if (!children?.length) return;
+
+    const introIndices: number[] = [];
+
+    for (let i = 0; i < children.length; i++) {
+      const node = children[i] as { type?: string };
+      if (node.type === "paragraph") {
+        introIndices.push(i);
+      } else {
+        break;
+      }
+    }
+
+    if (introIndices.length === 0) return;
+
+    const paragraphs = introIndices.map((i) => children[i] as Paragraph);
+
+    const description = paragraphs
+      .map((p) => paragraphToPlainText(p.children))
+      .join("\n\n")
+      .trim();
+    const descriptionHtml = paragraphs
+      .map((p) => paragraphToHtml(p))
+      .join("<br/><br/>");
+
+    file.data = file.data ?? {};
+    file.data.fm = file.data.fm ?? {};
+    file.data.fm.description = description;
+    file.data.fm.descriptionHtml = descriptionHtml;
+
+    for (let i = introIndices.length - 1; i >= 0; i--) {
+      children.splice(introIndices[i], 1);
+    }
+  };
+}
+
 function carbonify() {
   return (tree: Parameters<typeof visit>[0]) => {
     visit(tree, (node, index, parent) => {
@@ -447,7 +522,7 @@ export default {
     mdsvex({
       smartypants: false,
       highlight: { highlighter: mdsvexPrismHighlighter },
-      remarkPlugins: [plugin, carbonify],
+      remarkPlugins: [heroIntro, plugin, carbonify],
       rehypePlugins: [rehypeSlug],
       layout: {
         _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
@@ -466,35 +541,21 @@ export default {
 
         let code = content.replace(
           "</Layout_MDSVEX_DEFAULT>",
-          `<div slot="aside">
-                <ul class="bx--list--unordered">
-                    ${toc
-                      .map(
-                        (item) =>
-                          `<li class="bx--list__item"><a class="bx--link" href="#${item.id}">${item.text}</a></li>`,
-                      )
-                      .join("")}
-                  <h5>Component API</h5>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#props">Props</a>
-                  </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#typedefs">Typedefs</a>
-                  </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#slots">Slots</a>
-                  </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#forwarded-events">Forwarded events</a>
-                  </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#dispatched-events">Dispatched events</a>
-                  </li>
-                  <li class="bx--list__item">
-                    <a class="bx--link" href="#rest-props">restProps</a>
-                  </li>
-                </ul>
-              </div>
+          `<nav slot="aside" class="toc-nav">
+                ${toc
+                  .map(
+                    (item) =>
+                      `<a class="bx--link" href="#${item.id}">${item.text}</a>`,
+                  )
+                  .join("")}
+                <div class="toc-section-label bx--type-label-01 bx--type-text-primary">Component API</div>
+                <a class="bx--link" href="#props">Props</a>
+                <a class="bx--link" href="#typedefs">Typedefs</a>
+                <a class="bx--link" href="#slots">Slots</a>
+                <a class="bx--link" href="#forwarded-events">Forwarded events</a>
+                <a class="bx--link" href="#dispatched-events">Dispatched events</a>
+                <a class="bx--link" href="#rest-props">restProps</a>
+              </nav>
             </Layout_MDSVEX_DEFAULT>`,
         );
 

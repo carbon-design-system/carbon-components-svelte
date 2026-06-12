@@ -5,11 +5,13 @@
 <script lang="ts">
   import { activeRoute } from "@roxi/routify";
   import {
+    Box,
+    Breadcrumb,
+    BreadcrumbItem,
     Button,
     Column,
     Content,
     Dropdown,
-    Grid,
     Link,
     OverflowMenu,
     OverflowMenuItem,
@@ -18,8 +20,7 @@
     Tab,
     TabContent,
     Tabs,
-    Tag,
-    TooltipDefinition,
+    Text,
   } from "carbon-components-svelte";
   import type { CarbonTheme } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import { themes as themeLabels } from "carbon-components-svelte/src/Theme/Theme.svelte";
@@ -27,13 +28,18 @@
   import Code from "carbon-icons-svelte/lib/Code.svelte";
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
+  import OpenPanelFilledRight from "carbon-icons-svelte/lib/OpenPanelFilledRight.svelte";
+  import OpenPanelRight from "carbon-icons-svelte/lib/OpenPanelRight.svelte";
   import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import COMPONENT_API from "../COMPONENT_API.json";
   import COMPONENT_MD_SIZES_JSON from "../COMPONENT_MD_SIZES.json";
+  import { CATEGORY_BY_COMPONENT } from "../component-categories";
+  import { categoryFilterHref } from "../component-index";
   import ComponentApi from "../components/ComponentApi.svelte";
-  import { NEW_COMPONENTS } from "../new-components";
-  import { theme } from "../store";
+  import ComponentDocLayout from "../components/ComponentDocLayout.svelte";
+  import { componentTocOpen, theme } from "../store";
+  import { setupTocScrollSpy } from "../toc-scroll-spy";
 
   type DocComponent = (typeof COMPONENT_API.components)[number];
 
@@ -80,6 +86,8 @@
 
   export let component = $activeRoute?.leaf?.node?.name ?? "";
   export let components = [component];
+  export let description = "";
+  export let descriptionHtml = "";
 
   const componentMap = new Map(
     COMPONENT_API.components.map((c) => [c.moduleName, c]),
@@ -89,9 +97,16 @@
     .map((i) => componentMap.get(i))
     .filter((c): c is DocComponent => c != null);
   $: multiple = api_components.length > 1;
-  $: newVersion = NEW_COMPONENTS[component];
+  $: category = CATEGORY_BY_COMPONENT[component] ?? "";
+  $: categoryHref = category
+    ? categoryFilterHref([category])
+    : "/component-index";
+
+  let destroyTocSpy: (() => void) | undefined;
+  let mounted = false;
 
   onMount(() => {
+    mounted = true;
     const searchParams = new URLSearchParams(window.location.search);
     const current_theme = searchParams.get("theme");
 
@@ -100,11 +115,28 @@
     }
 
     return () => {
+      mounted = false;
+      destroyTocSpy?.();
       if (copyTimeout) {
         clearTimeout(copyTimeout);
       }
     };
   });
+
+  $: if (mounted) {
+    void initTocSpy(component);
+  }
+
+  async function initTocSpy(name: string) {
+    destroyTocSpy?.();
+    destroyTocSpy = undefined;
+    await tick();
+
+    const page = document.querySelector(`[data-component="${name}"]`);
+    if (page) {
+      destroyTocSpy = setupTocScrollSpy(page);
+    }
+  }
 
   function formatSourceURL(multiple: boolean) {
     const filePath = api_components[0]?.filePath ?? "";
@@ -130,10 +162,13 @@
 
   let copying = false;
   let copied = false;
-  let copyButtonRef: HTMLElement | null = null;
+  let copyButtonRef: HTMLButtonElement | null = null;
+  let tocToggleButtonRef: HTMLButtonElement | null = null;
 
   $: copyIcon = copied ? Checkmark : Copy;
   $: copyIconDescription = formatCopyIconDescription(copied, markdownBytes);
+  $: tocToggleIcon = $componentTocOpen ? OpenPanelFilledRight : OpenPanelRight;
+  $: tocToggleDescription = $componentTocOpen ? "Hide sidebar" : "Show sidebar";
 
   let copyTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -178,110 +213,153 @@
   >
 </svelte:head>
 
-<Content data-components data-component={component}>
-  <Grid class="fix-overflow">
-    <Row>
-      <Column>
-        <h1 class:component-title-with-badge={!!newVersion}>
-          {#if newVersion}
-            {component}
-            <Tag size="sm" type="blue" style="margin: 0">
-              <TooltipDefinition tooltipText="Available in v{newVersion}">
-                New
-              </TooltipDefinition>
-            </Tag>
-          {:else}
-            {component}
-          {/if}
-        </h1>
-        <div class="bar">
-          <Dropdown
-            class="theme-dropdown"
-            type="inline"
-            labelText="Theme"
-            items={themeItems}
-            selectedId={$theme}
-            on:select={({ detail }) => {
-              theme.set(detail.selectedId);
-            }}
-          />
-          <Stack orientation="horizontal" align="center" gap={2}>
-            <Button
-              bind:ref={copyButtonRef}
-              class="copy-markdown-btn"
-              kind="ghost"
-              size="field"
-              icon={copyIcon}
-              iconDescription={copyIconDescription}
-              tooltipPosition="bottom"
-              on:click={copyMarkdown}
-            />
-            <OverflowMenu flipped icon={OverflowMenuVertical}>
-              <OverflowMenuItem
-                icon={Code}
-                text="Source code"
-                href={sourceCode}
-                target="_blank"
-              />
-              <OverflowMenuItem
-                icon={Document}
-                text="View Markdown"
-                href={markdownUrl}
-                target="_blank"
-              />
-            </OverflowMenu>
-          </Stack>
-        </div>
-      </Column>
-    </Row>
-
-    <Row>
-      <Column class="prose">
-        <div class="toc mobile">
-          <h5>Examples</h5>
-          <slot name="aside" />
-        </div>
-        <slot />
-        <h2 id="component-api">Component API</h2>
-        <p>
-          API documentation is
-          <Link
-            inline
-            href="https://github.com/carbon-design-system/sveld"
-            target="_blank"
-          >
-            auto-generated by sveld.
-          </Link>
-        </p>
-      </Column>
-    </Row>
-
-    <Row>
-      <Column class="prose" noGutter={multiple}>
-        {#if multiple}
-          <Tabs class="override-tabs">
-            {#each api_components as component (component.moduleName)}
-              <Tab label={component.moduleName} />
-            {/each}
-            <div slot="content" class="tab-content-spacing">
-              {#each api_components as component (component.moduleName)}
-                <TabContent><ComponentApi {component} /></TabContent>
-              {/each}
-            </div>
-          </Tabs>
-        {:else}
-          <ComponentApi component={api_components[0]} />
+<Content data-component={component}>
+  <Box tag="section" class="hero band hero--component">
+    <ComponentDocLayout class="hero__layout" aside={false}>
+      <Stack gap={3}>
+        {#if category}
+          <Breadcrumb noTrailingSlash size="sm">
+            <BreadcrumbItem href="/component-index">
+              Categories
+            </BreadcrumbItem>
+            <BreadcrumbItem href={categoryHref}>{category}</BreadcrumbItem>
+            <BreadcrumbItem isCurrentPage>{component}</BreadcrumbItem>
+          </Breadcrumb>
         {/if}
-      </Column>
-    </Row>
-  </Grid>
+        <Stack gap={7}>
+          <Text tag="h1" type="productive-heading-05" color="primary">
+            {component}
+          </Text>
+          {#if descriptionHtml}
+            <Text type="body-long-02" color="secondary" maxWidth="60ch">
+              {@html descriptionHtml}
+            </Text>
+          {:else if description}
+            <Text type="body-long-02" color="secondary" maxWidth="60ch">
+              {description}
+            </Text>
+          {/if}
+        </Stack>
+      </Stack>
+    </ComponentDocLayout>
+  </Box>
 
-  <Column class="table" xlg={4} lg={5}>
-    <div class="toc">
-      <h5>Examples</h5>
+  <ComponentDocLayout
+    data-components
+    data-toc-collapsed={!$componentTocOpen}
+    aside={$componentTocOpen}
+  >
+    <div class="bar bar--component">
+      <Dropdown
+        class="theme-dropdown"
+        type="inline"
+        labelText="Theme"
+        items={themeItems}
+        selectedId={$theme}
+        on:select={({ detail }) => {
+          theme.set(detail.selectedId);
+        }}
+      />
+      <Stack orientation="horizontal" align="center" gap={2}>
+        <Button
+          bind:ref={copyButtonRef}
+          class="copy-markdown-btn"
+          kind="ghost"
+          size="field"
+          icon={copyIcon}
+          iconDescription={copyIconDescription}
+          tooltipPosition="bottom"
+          on:click={copyMarkdown}
+        />
+        <OverflowMenu flipped icon={OverflowMenuVertical}>
+          <OverflowMenuItem
+            icon={Code}
+            text="Source code"
+            href={sourceCode}
+            target="_blank"
+          />
+          <OverflowMenuItem
+            icon={Document}
+            text="View Markdown"
+            href={markdownUrl}
+            target="_blank"
+          />
+        </OverflowMenu>
+        <Button
+          bind:ref={tocToggleButtonRef}
+          class="toc-toggle-btn"
+          kind="ghost"
+          size="field"
+          icon={tocToggleIcon}
+          iconDescription={tocToggleDescription}
+          tooltipPosition="bottom"
+          on:click={() => {
+            componentTocOpen.update((open) => !open);
+          }}
+        />
+      </Stack>
+    </div>
+    <div class="toc mobile">
+      <Text tag="h5" type="label-01" color="primary" class="toc-section-label">
+        Examples
+      </Text>
       <slot name="aside" />
     </div>
-  </Column>
+    <slot />
+    <Text
+      tag="h2"
+      id="component-api"
+      type="productive-heading-05"
+      color="primary"
+    >
+      Component API
+    </Text>
+    <Text type="body-long-01" color="secondary">
+      API documentation is
+      <Link
+        inline
+        href="https://github.com/carbon-design-system/sveld"
+        target="_blank"
+      >
+        auto-generated by sveld.
+      </Link>
+    </Text>
+
+    <svelte:fragment slot="rows">
+      <Row>
+        <Column class="prose" noGutter={multiple}>
+          {#if multiple}
+            <Tabs class="override-tabs">
+              {#each api_components as component (component.moduleName)}
+                <Tab label={component.moduleName} />
+              {/each}
+              <div slot="content" class="tab-content-spacing">
+                {#each api_components as component (component.moduleName)}
+                  <TabContent><ComponentApi {component} /></TabContent>
+                {/each}
+              </div>
+            </Tabs>
+          {:else}
+            <ComponentApi component={api_components[0]} />
+          {/if}
+        </Column>
+      </Row>
+    </svelte:fragment>
+
+    <svelte:fragment slot="aside">
+      <div class="toc">
+        <Text
+          tag="h5"
+          type="label-01"
+          color="primary"
+          class="toc-section-label"
+        >
+          Examples
+        </Text>
+        <slot name="aside" />
+      </div>
+    </svelte:fragment>
+  </ComponentDocLayout>
 </Content>
 
 <style>
@@ -292,8 +370,7 @@
   .bar {
     display: flex;
     justify-content: space-between;
-    margin-bottom: var(--cds-layout-02);
-    border-bottom: 1px solid var(--cds-ui-03);
+    width: 100%;
   }
 
   .bar :global(.theme-dropdown .bx--list-box__menu) {
@@ -305,9 +382,11 @@
     text-align: center;
   }
 
-  :global(.toc h5) {
-    margin-top: var(--cds-spacing-06);
-    margin-bottom: var(--cds-spacing-03);
+  .bar--component {
+    margin-top: calc(-1 * var(--cds-spacing-08) - var(--cds-spacing-08));
+    margin-bottom: var(--cds-spacing-07);
+    position: relative;
+    z-index: 1;
   }
 
   .toc.mobile {
@@ -318,6 +397,10 @@
     .toc.mobile {
       display: block;
       margin-bottom: var(--cds-spacing-09);
+    }
+
+    .bar :global(.toc-toggle-btn) {
+      display: none;
     }
   }
 </style>

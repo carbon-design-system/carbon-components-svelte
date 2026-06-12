@@ -207,7 +207,7 @@ Combine `type`, `color`, and `tag` as you would on an IBM product page: expressi
 
 <Stack gap={8}>
   <Text type="caption-02" color="secondary">IBM Cloud · Observability</Text>
-  <Text tag="h1" type="display-03" color="primary">See what your systems are telling you</Text>
+  <Text tag="h1" type="display-03" color="primary" balance>See what your systems are telling you</Text>
   <Text type="expressive-paragraph-01" color="primary" maxWidth="44ch">Before an incident reaches your customers, traces and logs already carry the signal. IBM Cloud Observability brings metrics, logs, and traces into one workspace so your team can investigate faster and ship with confidence.</Text>
   <Stack gap={5}>
     <Text tag="h2" type="productive-heading-05" color="primary">Unified telemetry across hybrid cloud</Text>

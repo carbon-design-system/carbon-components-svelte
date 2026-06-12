@@ -23,3 +23,49 @@ function readStoredTheme(): CarbonTheme {
 }
 
 export const theme = writable<CarbonTheme>(readStoredTheme());
+
+export const PACKAGE_MANAGERS = ["npm", "pnpm", "yarn", "bun"] as const;
+export type PackageManager = (typeof PACKAGE_MANAGERS)[number];
+
+const DEFAULT_PACKAGE_MANAGER_INDEX = 0;
+
+function readStoredPackageManagerIndex(): number {
+  if (typeof window === "undefined") return DEFAULT_PACKAGE_MANAGER_INDEX;
+  try {
+    const stored = localStorage.getItem("packageManager");
+    if (stored !== null) {
+      const index = PACKAGE_MANAGERS.indexOf(stored as PackageManager);
+      if (index >= 0) return index;
+    }
+  } catch {}
+  return DEFAULT_PACKAGE_MANAGER_INDEX;
+}
+
+function readStoredComponentTocOpen(): boolean {
+  if (typeof window === "undefined") return true;
+  try {
+    const stored = localStorage.getItem("componentTocOpen");
+    if (stored === "false") return false;
+    if (stored === "true") return true;
+  } catch {}
+  return true;
+}
+
+export const packageManagerIndex = writable<number>(
+  readStoredPackageManagerIndex(),
+);
+
+export const componentTocOpen = writable<boolean>(readStoredComponentTocOpen());
+
+if (typeof window !== "undefined") {
+  packageManagerIndex.subscribe((index) => {
+    const manager = PACKAGE_MANAGERS[index];
+    if (manager) localStorage.setItem("packageManager", manager);
+  });
+
+  componentTocOpen.subscribe((open) => {
+    try {
+      localStorage.setItem("componentTocOpen", String(open));
+    } catch {}
+  });
+}

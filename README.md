@@ -10,7 +10,7 @@ Carbon Components Svelte is a [Svelte](https://github.com/sveltejs/svelte) compo
 
 Design systems facilitate design and development through reuse, consistency, and extensibility.
 
-The Carbon Svelte portfolio also includes:
+The Carbon Svelte ecosystem also includes:
 
 - **[Carbon Icons Svelte](https://github.com/carbon-design-system/carbon-icons-svelte)**: 2,600+ Carbon icons as Svelte components
 - **[Carbon Pictograms Svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte)**: 1,500+ Carbon pictograms as Svelte components
