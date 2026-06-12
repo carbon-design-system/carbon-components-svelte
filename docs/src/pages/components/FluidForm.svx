@@ -5,7 +5,10 @@
     DatePicker,
     DatePickerInput,
     Dropdown,
+    FluidDatePickerSkeleton,
     FluidForm,
+    FluidSelectSkeleton,
+    FluidTextInputSkeleton,
     MultiSelect,
     NumberInput,
     TextInput,
@@ -174,6 +177,19 @@ intended.
     </TimePickerSelect>
   </TimePicker>
 </div>
+
+## Loading skeletons
+
+Each fluid input ships a dedicated skeleton component for loading states:
+`FluidTextInputSkeleton`, `FluidNumberInputSkeleton`, `FluidSearchSkeleton`,
+`FluidTextAreaSkeleton`, `FluidSelectSkeleton`, `FluidDropdownSkeleton`,
+`FluidComboBoxSkeleton`, `FluidMultiSelectSkeleton`, `FluidDatePickerSkeleton`,
+and `FluidTimePickerSkeleton`. Compose them to mirror a fluid form while data
+loads.
+
+<FluidTextInputSkeleton />
+<FluidSelectSkeleton />
+<FluidDatePickerSkeleton />
 
 ## Invalid state
 
