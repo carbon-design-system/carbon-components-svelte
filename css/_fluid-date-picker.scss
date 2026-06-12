@@ -290,6 +290,69 @@
     .#{$prefix}--date-picker__input {
     border-inline-start-color: $ui-03;
   }
+
+  // Skeleton (ported from v11 fluid-date-picker).
+  .#{$prefix}--date-picker--fluid__skeleton {
+    background: $skeleton-01;
+    block-size: to-rem(64px);
+    border-block-end: 1px solid $skeleton-02;
+  }
+
+  .#{$prefix}--date-picker--fluid__skeleton--container {
+    position: relative;
+    block-size: 100%;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--skeleton {
+    position: absolute;
+    block-size: to-rem(8px);
+    inline-size: 25%;
+    inset-block-start: $spacing-05;
+    inset-inline-start: $spacing-05;
+  }
+
+  .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--label {
+    margin-block-end: to-rem(4px);
+  }
+
+  .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--text-input {
+    position: absolute;
+    padding: 0;
+    block-size: to-rem(8px);
+    inline-size: 50%;
+    inset-block-start: to-rem(36px);
+    inset-inline-start: $spacing-05;
+  }
+
+  .#{$prefix}--date-picker--fluid__skeleton--container
+    .#{$prefix}--date-picker__icon {
+    inset-block: auto $spacing-03;
+  }
+
+  // Range skeleton
+  .#{$prefix}--date-picker--fluid__skeleton--range {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .#{$prefix}--date-picker--fluid__skeleton--range
+    .#{$prefix}--date-picker--fluid__skeleton--container {
+    display: flex;
+    flex-direction: column;
+    inline-size: 50%;
+  }
+
+  .#{$prefix}--date-picker--fluid__skeleton--range
+    .#{$prefix}--date-picker--fluid__skeleton--container:first-of-type {
+    border-inline-end: 1px solid $skeleton-02;
+  }
+
+  .#{$prefix}--date-picker--fluid__skeleton--range
+    .#{$prefix}--date-picker--fluid__skeleton--container
+    .#{$prefix}--date-picker__icon {
+    inset-block-end: $spacing-03;
+  }
 }
 
 @include exports("fluid-date-picker") {

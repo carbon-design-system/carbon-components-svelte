@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import FluidDatePickerSkeleton from "./DatePicker.fluidSkeleton.test.svelte";
 import DatePickerSkeleton from "./DatePickerSkeleton.test.svelte";
 
 describe("DatePickerSkeleton", () => {
@@ -86,5 +87,40 @@ describe("DatePickerSkeleton", () => {
     const element = screen.getByTestId("custom-skeleton");
     expect(element).toHaveClass("bx--form-item");
     expect(element).toHaveAttribute("aria-label", "Loading");
+  });
+});
+
+describe("FluidDatePickerSkeleton", () => {
+  it("renders fluid skeleton state", () => {
+    render(FluidDatePickerSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-date-picker-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass(
+      "bx--form-item",
+      "bx--date-picker--fluid__skeleton",
+    );
+    expect(skeleton).not.toHaveClass("bx--date-picker--fluid__skeleton--range");
+
+    const containers = skeleton.querySelectorAll(
+      ".bx--date-picker--fluid__skeleton--container",
+    );
+    expect(containers).toHaveLength(1);
+    expect(
+      containers[0].querySelector("span.bx--label.bx--skeleton"),
+    ).toBeInTheDocument();
+    expect(
+      containers[0].querySelector("div.bx--skeleton.bx--text-input"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the range variant with two containers", () => {
+    render(FluidDatePickerSkeleton, { props: { range: true } });
+
+    const skeleton = screen.getByTestId("fluid-date-picker-skeleton");
+    expect(skeleton).toHaveClass("bx--date-picker--fluid__skeleton--range");
+    expect(
+      skeleton.querySelectorAll(".bx--date-picker--fluid__skeleton--container"),
+    ).toHaveLength(2);
   });
 });
