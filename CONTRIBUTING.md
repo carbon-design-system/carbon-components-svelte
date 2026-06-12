@@ -63,7 +63,8 @@ Patterns:
 - Avoid `afterUpdate`. It runs after every DOM update and is easy to loop in Svelte 5. Prefer `$:` reactive statements with guards, event handlers, `onMount`, or `tick()` for DOM reads. Legacy code may still use `afterUpdate` for scroll-sync or measurement; do not add new uses without a strong reason.
 - When moving a `dispatch(...)` from `afterUpdate` to `$:`, timing changes. `afterUpdate` ran after the DOM commit; `$:` runs during the flush. A throwing handler can abort the rest of that flush. Update internal `prev` state first, then `tick().then(() => dispatch(...))`, and snapshot values for the callback (`const next = value`). See [`FileUploader.svelte`](src/FileUploader/FileUploader.svelte), the storage components, and [`Theme.svelte`](src/Theme/Theme.svelte). Keep cancelable, user-driven dispatches synchronous.
 - Reset cached positional state (scroll offset, highlighted index, measured sizes) reactively when its source collection changes, not just on open/close. A value cached against the old list, such as a scroll position into pre-filter results, silently points past the end of the new one. Use a `$:` guard comparing against the previous length or identity.
-- Put the JSDoc block first, then `export let`, then imports. See [`Button.svelte`](src/Button/Button.svelte) and [`ComboBox.svelte`](src/ComboBox/ComboBox.svelte).
+- Put component-level JSDoc first (`@restProps`, `@slot`, `@template`), then **all `export let` props** (each with its own JSDoc), then **imports**, then local logic. See [`Button.svelte`](src/Button/Button.svelte) and [`Box.svelte`](src/Box/Box.svelte).
+- Keep small, component-specific helpers inline in the `<script>` block. Extract to `src/utils/` only when the logic is shared across components or complex enough to unit-test in isolation. See [`debounce.js`](src/utils/debounce.js) and [`isOutsideClick.js`](src/utils/isOutsideClick.js). Token primitives such as [`Text.svelte`](src/Text/Text.svelte) and [`Box.svelte`](src/Box/Box.svelte) map props to utility classes and inline styles directly; their themeable rules live in `css/_type.scss`, `css/_box.scss`, and related partials.
 - Forward DOM events with bare `on:click` / `on:focus` (no handler) on the underlying element ([`Button.svelte`](src/Button/Button.svelte)).
 - Interpolate attribute values with Svelte's attribute syntax, not template literals: `id="{treeId}-{id}-subtree"`, not ``id={`${treeId}-${id}-subtree`}``. Keep template literals only when a value needs nested quotes or logic the shorthand can't express (see `aria-label` in [`PinCodeInput.svelte`](src/PinCodeInput/PinCodeInput.svelte)).
 - Compound components use `setContext` / `getContext` with `carbon:` keys ([`CheckboxGroup.svelte`](src/Checkbox/CheckboxGroup.svelte)).
@@ -355,6 +356,8 @@ Do not use `:has()`. It exceeds the Svelte 5 browserslist baseline (Firefox 83/S
 Wrap output in `@include exports("name")` so a partial imported by multiple theme entry files emits its rules only once.
 
 Document the mixin with SassDoc (`/// @access private`, `/// @group components`).
+
+Token utility partials (`css/_type.scss`, `css/_box.scss`, …) emit `bx--type-*` and `bx--box-*` classes. Map v11 token names in docs and props to v10 theme variables in SCSS where needed (for example `layer-01` → `$ui-01`). Share spacing scale values through [`css/_spacing-scale.scss`](css/_spacing-scale.scss) when multiple partials use the same rem steps.
 
 #### Registering a partial
 
