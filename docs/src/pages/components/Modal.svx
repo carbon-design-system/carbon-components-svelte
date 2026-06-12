@@ -31,7 +31,7 @@ Wrap the modal in a portal to escape parent containers with `overflow: hidden` o
 
 ## Modal with dropdowns
 
-When components with menus are used inside a modal, such as a combo box, dropdown, multi-select, date picker, or overflow menu, these components automatically render their menus in a floating portal when inside a modal, so menus are positioned relative to their trigger and are not clipped by the modal's overflow or z-index stacking.
+Components with menus — such as a combo box, dropdown, multi-select, date picker, or overflow menu — automatically render their menus in a floating portal when used inside a modal. The menus are positioned relative to their trigger and are not clipped by the modal's overflow or z-index stacking.
 
 Set `portalMenu={false}` on these components to opt out. In this example, the modal itself is wrapped in a portal.
 
