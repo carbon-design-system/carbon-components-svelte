@@ -10,25 +10,25 @@ Pagination provides navigation controls for large data sets. It shows the curren
 
 ## Default
 
-Create a basic pagination component with default page size options. The default size is `"md"` (40px).
+Create a basic pagination component with default page size options. The default size is `"md"`.
 
 <Pagination totalItems={102} pageSizes={[10, 15, 20]} />
 
-## Extra small size
+## Extra-small size
 
-Set `size` to `"xs"` (24px) to pair pagination with a compact (`size="compact"`) data table.
+Set `size` to `"xs"` to pair pagination with a compact (`size="compact"`) data table.
 
 <Pagination size="xs" totalItems={102} pageSizes={[10, 15, 20]} />
 
 ## Small size
 
-Set `size` to `"sm"` (32px) for a small pagination.
+Set `size` to `"sm"` for a small pagination.
 
 <Pagination size="sm" totalItems={102} pageSizes={[10, 15, 20]} />
 
 ## Large size
 
-Set `size` to `"lg"` (48px) for a large pagination.
+Set `size` to `"lg"` for a large pagination.
 
 <Pagination size="lg" totalItems={102} pageSizes={[10, 15, 20]} />
 

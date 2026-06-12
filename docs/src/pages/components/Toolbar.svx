@@ -28,7 +28,7 @@ Set `size="sm"` for a compact toolbar.
   </ToolbarContent>
 </Toolbar>
 
-## Extra small size
+## Extra-small size
 
 Set `size="xs"` for an extra small toolbar, intended to pair with a compact `DataTable`.
 
