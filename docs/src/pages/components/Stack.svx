@@ -477,6 +477,32 @@ Distributes items evenly with equal space between each item.
   <div>Item 3</div>
 </Stack>
 
+## Horizontal wrap
+
+By default, horizontal stacks do not wrap (`wrap="nowrap"`). Set `wrap` to `"wrap"` to allow items to flow onto multiple lines when they overflow the container width. The `gap` applies between both columns and rows.
+
+<Stack orientation="horizontal" wrap="wrap" gap={3} style="max-width: 240px">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+  <div>Item 4</div>
+  <div>Item 5</div>
+  <div>Item 6</div>
+</Stack>
+
+## Horizontal wrap-reverse
+
+Set `wrap` to `"wrap-reverse"` to wrap items onto multiple lines in the reverse cross-axis direction.
+
+<Stack orientation="horizontal" wrap="wrap-reverse" gap={3} style="max-width: 240px">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+  <div>Item 4</div>
+  <div>Item 5</div>
+  <div>Item 6</div>
+</Stack>
+
 ## Combined align and justify
 
 Use both `align` and `justify` to center content on both axes.
