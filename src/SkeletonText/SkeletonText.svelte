@@ -27,7 +27,7 @@
       const rand = `${Math.floor(RANDOM[i % 3] * (max - min + 1)) + min}px`;
 
       return widthPx ? rand : `calc(${width} - ${rand})`;
-    }) as width}
+    }) as width, i (i)}
       <p
         class:bx--skeleton__text={true}
         class:bx--skeleton__heading={heading}
