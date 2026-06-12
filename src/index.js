@@ -152,6 +152,7 @@ export { default as TextArea } from "./TextArea/TextArea.svelte";
 export { default as TextAreaSkeleton } from "./TextArea/TextAreaSkeleton.svelte";
 export { default as FluidTextInputSkeleton } from "./TextInput/FluidTextInputSkeleton.svelte";
 export { default as PasswordInput } from "./TextInput/PasswordInput.svelte";
+export { default as PasswordInputSkeleton } from "./TextInput/PasswordInputSkeleton.svelte";
 export { default as TextInput } from "./TextInput/TextInput.svelte";
 export { default as TextInputSkeleton } from "./TextInput/TextInputSkeleton.svelte";
 export { default as Theme } from "./Theme/Theme.svelte";

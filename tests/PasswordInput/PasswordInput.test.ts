@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import PasswordInputFluidForm from "./PasswordInput.fluidForm.test.svelte";
 import PasswordInputFluidSlot from "./PasswordInput.fluidSlot.test.svelte";
+import PasswordInputSkeleton from "./PasswordInput.skeleton.test.svelte";
 import PasswordInputSlot from "./PasswordInput.slot.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
 import PasswordInputInModal from "./PasswordInputInModal.test.svelte";
@@ -455,6 +456,33 @@ describe("PasswordInput", () => {
 
       expect(screen.getByText("Custom label content")).not.toHaveClass(
         "bx--label--slotted",
+      );
+    });
+  });
+
+  describe("skeleton", () => {
+    it("renders skeleton state", () => {
+      render(PasswordInputSkeleton);
+
+      const skeleton = screen.getByTestId("password-input-skeleton");
+      expect(skeleton).toBeInTheDocument();
+      expect(skeleton).toHaveClass("bx--form-item");
+      expect(skeleton.children).toHaveLength(2);
+      expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+      expect(skeleton.children[1]).toHaveClass(
+        "bx--skeleton",
+        "bx--text-input",
+      );
+    });
+
+    it("hides the skeleton label when hideLabel is true", () => {
+      render(PasswordInputSkeleton, { props: { hideLabel: true } });
+
+      const skeleton = screen.getByTestId("password-input-skeleton");
+      expect(skeleton.children).toHaveLength(1);
+      expect(skeleton.children[0]).toHaveClass(
+        "bx--skeleton",
+        "bx--text-input",
       );
     });
   });
