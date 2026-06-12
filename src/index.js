@@ -104,6 +104,7 @@ export { default as PaginationSkeleton } from "./Pagination/PaginationSkeleton.s
 export { default as PaginationNav } from "./PaginationNav/PaginationNav.svelte";
 export { default as FluidPinCodeInputSkeleton } from "./PinCodeInput/FluidPinCodeInputSkeleton.svelte";
 export { default as PinCodeInput } from "./PinCodeInput/PinCodeInput.svelte";
+export { default as PinCodeInputSkeleton } from "./PinCodeInput/PinCodeInputSkeleton.svelte";
 export { default as Popover } from "./Popover/Popover.svelte";
 export { default as FloatingPortal } from "./Portal/FloatingPortal.svelte";
 export { default as Portal } from "./Portal/Portal.svelte";

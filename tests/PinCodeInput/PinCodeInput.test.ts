@@ -4,6 +4,7 @@ import { user } from "../utils/user";
 import PinCodeInputFluidForm from "./PinCodeInput.fluidForm.test.svelte";
 import PinCodeInputFluidSkeleton from "./PinCodeInput.fluidSkeleton.test.svelte";
 import PinCodeInputFluidSlot from "./PinCodeInput.fluidSlot.test.svelte";
+import PinCodeInputSkeleton from "./PinCodeInput.skeleton.test.svelte";
 import PinCodeInput from "./PinCodeInput.test.svelte";
 
 const getInputs = () => screen.getAllByRole("textbox") as HTMLInputElement[];
@@ -639,5 +640,24 @@ describe("PinCodeInput", () => {
     expect(skeleton.children).toHaveLength(2);
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
+  });
+
+  it("renders skeleton state", () => {
+    render(PinCodeInputSkeleton);
+
+    const skeleton = screen.getByTestId("pin-code-input-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass("bx--form-item");
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
+  });
+
+  it("hides the skeleton label when hideLabel is true", () => {
+    render(PinCodeInputSkeleton, { props: { hideLabel: true } });
+
+    const skeleton = screen.getByTestId("pin-code-input-skeleton");
+    expect(skeleton.children).toHaveLength(1);
+    expect(skeleton.children[0]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 });
