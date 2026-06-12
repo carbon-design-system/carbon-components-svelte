@@ -1,0 +1,141 @@
+<script>
+  import { Box, Stack, Text } from "carbon-components-svelte";
+</script>
+
+Box applies Carbon fill, inset, and border tokens to any container. Use it for panels, callouts, and padded sections without reaching for inline styles.
+
+## Default
+
+The default component renders a `<div>` with no modifiers.
+
+<Box>Content inside a box.</Box>
+
+## Fill
+
+Set `fill` to a Carbon background token. Tokens use v11 names and resolve through the active theme.
+
+| Token        | Description                          |
+| ------------ | ------------------------------------ |
+| `background` | Default page background              |
+| `layer-01`   | First layer surface                  |
+| `layer-02`   | Second layer surface                 |
+| `layer-03`   | Third layer surface                  |
+| `field`      | Form field background                |
+| `inverse`    | Inverse surface background           |
+
+<Stack gap={3}>
+  <Box fill="background" padding={5}>background</Box>
+  <Box fill="layer-01" padding={5}>layer-01</Box>
+  <Box fill="layer-02" padding={5}>layer-02</Box>
+  <Box fill="layer-03" padding={5}>layer-03</Box>
+</Stack>
+
+Nested fills stack Carbon layer surfaces. Contrast depends on the active theme: on white, `layer-02` matches the page background, so pair a darker outer fill with `border` to show depth.
+
+<Box fill="layer-01" padding={6} border="subtle">
+  <Box fill="layer-03" padding={5} border="subtle">
+    <Text type="body-long-01">layer-03 inside layer-01.</Text>
+  </Box>
+</Box>
+
+## Inset
+
+Set `padding`, `paddingX`, `paddingY`, `margin`, `marginX`, or `marginY` using the shared layout scale `1`–`13` (same values as [`Stack`](/components/Stack) `gap`). Pass a string for any CSS length.
+
+| Scale | Size   |
+| ----- | ------ |
+| 1     | 0.125rem (2px)  |
+| 2     | 0.25rem (4px)   |
+| 3     | 0.5rem (8px)    |
+| 4     | 0.75rem (12px)  |
+| 5     | 1rem (16px)     |
+| 6     | 1.5rem (24px)   |
+| 7     | 2rem (32px)     |
+| 8     | 2.5rem (40px)   |
+| 9     | 3rem (48px)     |
+| 10    | 4rem (64px)     |
+| 11    | 5rem (80px)     |
+| 12    | 6rem (96px)     |
+| 13    | 10rem (160px)   |
+
+<Stack gap={5}>
+  <Box fill="layer-01" padding={5}>Scale padding (5)</Box>
+  <Box fill="layer-01" padding="2rem">Custom padding (`2rem`)</Box>
+  <Box fill="layer-01" paddingX={6} paddingY={3}>Axis padding</Box>
+  <Box fill="layer-01" padding={5} marginY={5}>Vertical margin</Box>
+</Stack>
+
+## Border
+
+Set `border` to a Carbon border token. Each utility applies `1px solid`.
+
+| Token         | Description                |
+| ------------- | -------------------------- |
+| `subtle`      | Subtle divider border      |
+| `strong`      | Strong divider border      |
+| `interactive` | Interactive element border |
+| `disabled`    | Disabled element border    |
+
+<Stack gap={3}>
+  <Box fill="layer-01" padding={5} border="subtle">subtle</Box>
+  <Box fill="layer-01" padding={5} border="strong">strong</Box>
+  <Box fill="layer-01" padding={5} border="interactive">interactive</Box>
+</Stack>
+
+## Width
+
+Set `width`, `maxWidth`, or `minWidth` to any CSS length. Numbers are treated as pixels. `fullWidth` sets `width: 100%`.
+
+<Stack gap={5}>
+  <Box fill="layer-01" padding={5} maxWidth="20rem">
+    Max width in rem (`20rem`).
+  </Box>
+  <Box fill="layer-01" padding={5} maxWidth={480}>
+    Max width in pixels (`480`).
+  </Box>
+</Stack>
+
+<div style="width: 100%;">
+  <Box fill="layer-01" padding={5} fullWidth maxWidth="24rem">
+    Full width up to a custom max width.
+  </Box>
+</div>
+
+## Composition with Text and Stack
+
+<Box fill="layer-01" padding={6} border="subtle" maxWidth="42rem">
+  <Stack gap={3}>
+    <Text tag="h2" type="productive-heading-04">API keys</Text>
+    <Text type="body-long-01" color="secondary">
+      API keys authenticate programmatic access to your workspace. Store secrets in IBM Cloud Secrets Manager and rotate them on a schedule your security team defines.
+    </Text>
+  </Stack>
+</Box>
+
+## Utility classes
+
+Apply Box utilities directly when you do not need the component. Classes use the `bx--` prefix.
+
+| Class | Description |
+| ----- | ----------- |
+| `bx--box-fill-background` | Default page background |
+| `bx--box-fill-layer-01` | First layer surface |
+| `bx--box-fill-layer-02` | Second layer surface |
+| `bx--box-fill-layer-03` | Third layer surface |
+| `bx--box-fill-field` | Form field background |
+| `bx--box-fill-inverse` | Inverse surface background |
+| `bx--box-border-subtle` | Subtle 1px border |
+| `bx--box-border-strong` | Strong 1px border |
+| `bx--box-border-interactive` | Interactive 1px border |
+| `bx--box-border-disabled` | Disabled 1px border |
+| `bx--box-p-{1-13}` | Padding on all sides |
+| `bx--box-px-{1-13}` | Horizontal padding |
+| `bx--box-py-{1-13}` | Vertical padding |
+| `bx--box-m-{1-13}` | Margin on all sides |
+| `bx--box-mx-{1-13}` | Horizontal margin |
+| `bx--box-my-{1-13}` | Vertical margin |
+| `bx--box-full-width` | Span the full container width |
+
+<div class="bx--box-fill-layer-01 bx--box-p-5 bx--box-border-subtle">
+  Styled with utility classes
+</div>
