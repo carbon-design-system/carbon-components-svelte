@@ -1,9 +1,9 @@
 ---
-components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton"]
+components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton", "FluidSelectSkeleton"]
 ---
 
 <script>
-  import { Select, SelectItem, SelectItemGroup, SelectSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Select, SelectItem, SelectItemGroup, SelectSkeleton, FluidSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -230,6 +230,12 @@ Invalid and warning states are not displayed while the select is read-only.
   <SelectItem value="g90" text="Gray 90" />
   <SelectItem value="g100" text="Gray 100" />
 </Select>
+
+## Fluid skeleton
+
+Display a loading state for the fluid select variant.
+
+<FluidSelectSkeleton />
 
 ## Invalid state
 
