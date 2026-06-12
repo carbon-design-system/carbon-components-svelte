@@ -337,6 +337,8 @@ Style only through Carbon tokens and mixins: spacing (`$carbon--spacing-*`), typ
 
 Reference classes through `$prefix` (`.#{$prefix}--breadcrumb`), never a literal `.bx--…`.
 
+Do not use `:has()`. It exceeds the Svelte 5 browserslist baseline (Firefox 83/Safari 14) the CSS targets, and Lightning CSS cannot prefix or polyfill it. Mark parents explicitly instead (for example a `hasLeftIcon` prop emitting a marker class). Same rule for any selector newer than that baseline.
+
 Wrap output in `@include exports("name")` so a partial imported by multiple theme entry files emits its rules only once.
 
 Document the mixin with SassDoc (`/// @access private`, `/// @group components`).
@@ -360,7 +362,9 @@ The compiled `css/*.css` files are committed to the repo. After any edit under `
 bun build:css
 ```
 
-This compiles every non-partial `*.scss` (sass, compressed) through Lightning CSS (Svelte 5 browser targets) and rewrites `css/*.css` and `css/css.d.ts`. Commit the regenerated CSS with your SCSS changes.
+This compiles every non-partial `*.scss` (sass, compressed) through Lightning CSS and rewrites `css/*.css` and `css/css.d.ts`. Commit the regenerated CSS with your SCSS changes.
+
+The prebundled CSS targets the [Svelte 5 browser support](https://svelte.dev/docs/svelte/browser-support) baseline (Firefox 83/Safari 14), not older browsers. Matching that baseline lets Lightning CSS drop legacy fallbacks. Author SCSS to that baseline; see the `:has()` note in [Conventions](#conventions).
 
 ### Checks
 
