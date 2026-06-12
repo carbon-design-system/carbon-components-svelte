@@ -31,6 +31,15 @@
     .join(" ");
 </script>
 
-<Button bind:ref {...$$restProps} class={buttonClass} on:click>
-  <svelte:component this={icon} slot="icon" size={20} />
-</Button>
+{#if $$slots.badge}
+  <div class="bx--btn__badge-wrapper">
+    <Button bind:ref {...$$restProps} class={buttonClass} size="lg" on:click>
+      <svelte:component this={icon} slot="icon" size={20} />
+    </Button>
+    <slot name="badge" />
+  </div>
+{:else}
+  <Button bind:ref {...$$restProps} class={buttonClass} on:click>
+    <svelte:component this={icon} slot="icon" size={20} />
+  </Button>
+{/if}
