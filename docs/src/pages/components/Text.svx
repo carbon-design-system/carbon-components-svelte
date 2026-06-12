@@ -1,5 +1,5 @@
 <script>
-  import { Stack, Text, Truncate } from "carbon-components-svelte";
+  import { Box, Stack, Text, Truncate } from "carbon-components-svelte";
 </script>
 
 Text applies Carbon typography to any element: type scale, semantic color, and layout modifiers. It covers productive styles for application UI and expressive styles for editorial layouts.
@@ -34,17 +34,17 @@ Set `color` to a Carbon semantic text token. Each token describes intent and res
 
 `on-color` and `inverse` are meant for colored or inverse surfaces, where the default text tokens would be unreadable. Both read light in the white theme but track different surfaces, so they diverge in other themes. Each example places the token on the surface it is designed for.
 
-Use `on-color` for text on a colored background, such as a button or tag fill:
+Use `on-color` for text on a colored background, such as a button or tag fill. [Box](/components/Box) has no fill token for interactive surfaces, so set the background on the container:
 
-<div style="background-color: var(--cds-interactive-01); padding: 1rem;">
+<Box padding={5} style="background-color: var(--cds-interactive-01)">
   <Text color="on-color">Text on a colored background</Text>
-</div>
+</Box>
 
 Use `inverse` for text on an inverse surface, such as a tooltip or notification:
 
-<div style="background-color: var(--cds-background-inverse); padding: 1rem;">
+<Box fill="inverse" padding={5}>
   <Text color="inverse">Text on an inverse surface</Text>
-</div>
+</Box>
 
 ## Type styles
 
@@ -145,13 +145,13 @@ Set modifier props alongside a type style.
 
 Set `wrap` to `break-word` to break long words, or `nowrap` to keep text on one line.
 
-<div style="max-width: 12rem; border: 1px solid var(--cds-border-subtle); padding: 0.5rem;">
+<Box maxWidth="12rem" border="subtle" padding={3}>
   <Text type="body-short-01" wrap="break-word">supercalifragilisticexpialidocious@example.com</Text>
-</div>
+</Box>
 
-<div style="max-width: 12rem; border: 1px solid var(--cds-border-subtle); padding: 0.5rem;">
+<Box maxWidth="12rem" border="subtle" padding={3}>
   <Text type="body-short-01" wrap="nowrap">This line will not wrap to the next row.</Text>
-</div>
+</Box>
 
 ### Max width and full width
 
@@ -169,19 +169,19 @@ Set `maxWidth` to any CSS length. Numbers are treated as pixels; strings accept 
   </Text>
 </Stack>
 
-`fullWidth` sets `width: 100%`. A block element already spans its parent; use `fullWidth` in flex or grid layouts where width must be explicit. Pair it with `maxWidth` when the row is full width but the copy should stay capped:
+`fullWidth` sets `width: 100%`. A block element already spans its parent; use `fullWidth` in flex or grid layouts where width must be explicit. Pair it with `maxWidth` when the row is full width but the copy should stay capped. Use [Box](/components/Box) for the bordered container:
 
-<div style="border: 1px solid var(--cds-border-subtle); padding: 1rem; width: 100%;">
+<Box border="subtle" padding={5} fullWidth>
   <Text type="body-long-01" fullWidth maxWidth="38ch">
     This paragraph fills the container row but stops at 38ch.
   </Text>
-</div>
+</Box>
 
-<div style="border: 1px solid var(--cds-border-subtle); padding: 1rem; width: 100%;">
+<Box border="subtle" padding={5} fullWidth>
   <Text type="body-long-01" fullWidth>
     Without `maxWidth`, `fullWidth` stretches across the entire container.
   </Text>
-</div>
+</Box>
 
 ## Truncate (multiline)
 
@@ -193,10 +193,12 @@ Set `lines` to truncate overflow while keeping a Carbon type style applied. Valu
 
 Alternatively, wrap an inline `Text` element with the `Truncate` component:
 
-<Truncate lines={3} style="max-width: 20rem">
-  <Text tag="span" type="body-long-02">
-    Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
-  </Text>
+<Truncate lines={3}>
+  <Box maxWidth="20rem">
+    <Text tag="span" type="body-long-02">
+      Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
+    </Text>
+  </Box>
 </Truncate>
 
 ## Typography inspiration
@@ -211,21 +213,22 @@ Combine `type`, `color`, and `tag` as you would on an IBM product page: expressi
     <Text tag="h2" type="productive-heading-05" color="primary">Unified telemetry across hybrid cloud</Text>
     <Text type="body-long-02" color="primary" maxWidth="52ch">Connect Kubernetes clusters on Red Hat OpenShift, virtual servers, and managed services without reconfiguring your instrumentation. Retention policies and access controls follow the governance model your organization already uses in IBM Cloud.</Text>
   </Stack>
-  <Stack gap={5}>
-    <Text tag="h3" type="productive-heading-03" color="primary">Create an ingestion endpoint</Text>
-    <Text type="body-long-01" color="secondary" maxWidth="42ch">API keys authenticate programmatic access to your observability workspace. Store secrets in IBM Cloud Secrets Manager and rotate them on a schedule your security team defines.</Text>
-    <Stack gap={1}>
-      <Text type="label-01" color="primary">Service name</Text>
-      <Text type="helper-text-01" color="helper">Use lowercase letters, numbers, and hyphens.</Text>
-    </Stack>
-    <Text tag="pre" type="code-02" color="primary">ibmcloud observability instance create --name prod-traces --plan standard</Text>
-  </Stack>
   <Text tag="blockquote" type="quotation-01" color="primary" maxWidth="24ch">Good typography earns trust by staying out of the way while you make decisions that matter.</Text>
   <Stack gap={2}>
     <Text tag="h4" type="heading-02" color="primary">Active incidents</Text>
     <Text type="body-short-01" color="secondary">3 open · Last updated 2 minutes ago</Text>
     <Text type="caption-01" color="placeholder">Metrics retained for 30 days on the Standard plan.</Text>
   </Stack>
+  <Box fill="layer-01" padding={6} border="subtle" maxWidth="42rem">
+    <Stack gap={6}>
+      <Text tag="h3" type="productive-heading-03" color="primary">Create an ingestion endpoint</Text>
+      <Text type="body-long-01" color="secondary" maxWidth="42ch">API keys authenticate programmatic access to your observability workspace. Store secrets in IBM Cloud Secrets Manager and rotate them on a schedule your security team defines.</Text>
+      <Stack gap={1}>
+        <Text type="label-01" color="primary">Service name</Text>
+        <Text type="helper-text-01" color="helper">Use lowercase letters, numbers, and hyphens.</Text>
+      </Stack>
+    </Stack>
+  </Box>
 </Stack>
 
 ## Utility classes
