@@ -66,6 +66,7 @@
     class:bx--tag--filter={true}
     class:bx--tag--high-contrast={true}
     class:bx--tag--disabled={disabled}
+    aria-hidden={readonly || undefined}
   >
     <span
       class:bx--tag__label={true}
