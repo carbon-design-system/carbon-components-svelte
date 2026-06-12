@@ -1,0 +1,71 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./spacing-scale";
+
+/// Box utility classes for fill, inset, and border tokens.
+/// @access private
+/// @group components
+@mixin box {
+  // Token names follow Carbon v11; values resolve through v10 theme variables.
+  $fill-tokens: (
+    background: $background,
+    layer-01: $ui-01,
+    layer-02: $ui-02,
+    layer-03: $ui-03,
+    field: $field-01,
+    inverse: $background-inverse,
+  );
+
+  @each $name, $value in $fill-tokens {
+    .#{$prefix}--box-fill-#{$name} {
+      background-color: $value;
+    }
+  }
+
+  $border-tokens: (
+    subtle: $border-subtle,
+    strong: $border-strong,
+    interactive: $border-interactive,
+    disabled: $border-disabled,
+  );
+
+  @each $name, $value in $border-tokens {
+    .#{$prefix}--box-border-#{$name} {
+      border: 1px solid $value;
+    }
+  }
+
+  @each $step, $size in $ccs-spacing-scale {
+    .#{$prefix}--box-p-#{$step} {
+      padding: $size;
+    }
+
+    .#{$prefix}--box-px-#{$step} {
+      padding-inline: $size;
+    }
+
+    .#{$prefix}--box-py-#{$step} {
+      padding-block: $size;
+    }
+
+    .#{$prefix}--box-m-#{$step} {
+      margin: $size;
+    }
+
+    .#{$prefix}--box-mx-#{$step} {
+      margin-inline: $size;
+    }
+
+    .#{$prefix}--box-my-#{$step} {
+      margin-block: $size;
+    }
+  }
+
+  .#{$prefix}--box-full-width {
+    width: 100%;
+  }
+}
+
+@include exports("box") {
+  @include box;
+}
