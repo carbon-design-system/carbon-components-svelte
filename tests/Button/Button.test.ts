@@ -320,6 +320,62 @@ describe("Button", () => {
     });
   });
 
+  it("does not render a badge when count is omitted", () => {
+    render(Button);
+    const container = screen.getByTestId("badge-none");
+
+    expect(
+      container.querySelector(".bx--btn__badge-wrapper"),
+    ).not.toBeInTheDocument();
+    expect(
+      container.querySelector(".bx--badge-indicator"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("renders a dot badge when count is 0", () => {
+    render(Button);
+    const container = screen.getByTestId("badge-dot");
+    const badge = container.querySelector(".bx--badge-indicator");
+    const button = container.querySelector("button");
+
+    expect(
+      container.querySelector(".bx--btn__badge-wrapper"),
+    ).toBeInTheDocument();
+    expect(button).toHaveClass("bx--btn--lg");
+    expect(badge).not.toHaveClass("bx--badge-indicator--count");
+    expect(badge?.textContent?.trim()).toBe("");
+  });
+
+  it("renders a numbered badge when count is positive", () => {
+    render(Button);
+    const container = screen.getByTestId("badge-count");
+    const badge = container.querySelector(".bx--badge-indicator");
+
+    expect(
+      container.querySelector(".bx--btn__badge-wrapper"),
+    ).toBeInTheDocument();
+    expect(badge).toHaveClass("bx--badge-indicator--count");
+    expect(badge).toHaveTextContent("4");
+  });
+
+  it("renders a string count as a custom label", () => {
+    render(Button);
+    const container = screen.getByTestId("badge-label");
+    const badge = container.querySelector(".bx--badge-indicator");
+
+    expect(badge).toHaveClass("bx--badge-indicator--count");
+    expect(badge).toHaveTextContent("1.2K");
+  });
+
+  it("uses lg size when the badge slot is used", () => {
+    render(Button);
+    const container = screen.getByTestId("badge-size-override");
+    const button = container.querySelector("button");
+
+    expect(button).toHaveClass("bx--btn--lg");
+    expect(button).not.toHaveClass("bx--btn--sm");
+  });
+
   describe("Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import BadgeIndicator from "carbon-components-svelte/BadgeIndicator/BadgeIndicator.svelte";
   import Button from "carbon-components-svelte/Button/Button.svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
@@ -82,3 +83,31 @@
   icon={Add}
   iconDescription="Save"
 />
+
+<div data-testid="badge-none">
+  <Button kind="ghost" icon={Add} iconDescription="Notifications" />
+</div>
+
+<div data-testid="badge-dot">
+  <Button kind="ghost" icon={Add} iconDescription="Notifications">
+    <BadgeIndicator slot="badge" count={0} />
+  </Button>
+</div>
+
+<div data-testid="badge-count">
+  <Button kind="ghost" icon={Add} iconDescription="Notifications">
+    <BadgeIndicator slot="badge" count={4} />
+  </Button>
+</div>
+
+<div data-testid="badge-label">
+  <Button kind="ghost" icon={Add} iconDescription="Notifications">
+    <BadgeIndicator slot="badge" count="1.2K" />
+  </Button>
+</div>
+
+<div data-testid="badge-size-override">
+  <Button kind="ghost" size="small" icon={Add} iconDescription="Notifications">
+    <BadgeIndicator slot="badge" count={4} />
+  </Button>
+</div>

@@ -8,6 +8,7 @@
    * @restProps {button | a | div}
    * @slot {{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }}
    * @slot {{ style: undefined | string; }} icon
+   * @slot {{}} badge - Compose a `BadgeIndicator` overlaid on an icon-only button. Size is set to `lg` automatically.
    */
 
   /**
@@ -18,6 +19,7 @@
 
   /**
    * Specify the size of button.
+   * When the `badge` slot is used, size is set to `lg` per Carbon design guidelines.
    * @type {"default" | "field" | "small" | "lg" | "xl"}
    */
   export let size = "default";
@@ -282,6 +284,7 @@
   });
 
   $: isDisabled = Boolean(disabled);
+  $: effectiveSize = $$slots.badge ? "lg" : size;
   $: iconProps = {
     "aria-hidden": "true",
     class: "bx--btn__icon",
@@ -301,10 +304,10 @@
     class: [
       "bx--btn",
       expressive && "bx--btn--expressive",
-      size === "small" && "bx--btn--sm",
-      size === "field" && "bx--btn--field",
-      size === "lg" && "bx--btn--lg",
-      size === "xl" && "bx--btn--xl",
+      effectiveSize === "small" && "bx--btn--sm",
+      effectiveSize === "field" && "bx--btn--field",
+      effectiveSize === "lg" && "bx--btn--lg",
+      effectiveSize === "xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,
       isDisabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
@@ -350,44 +353,129 @@
 {:else if as}
   <slot props={buttonProps} />
 {:else if href && !isDisabled}
-  <!-- svelte-ignore a11y-missing-attribute -->
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <a
-    bind:this={ref}
-    {...buttonProps}
-    on:click
-    on:focus
-    on:focus={handlePortalFocus}
-    on:blur
-    on:blur={handlePortalBlur}
-    on:mouseover
-    on:mouseenter
-    on:mouseenter={handleMouseEnter}
-    on:mouseenter={handlePortalMouseEnter}
-    on:mouseleave
-    on:mouseleave={handleMouseLeave}
-    on:mouseleave={handlePortalMouseLeave}
-  >
-    {#if hasIconOnly}
-      <span class:bx--assistive-text={true} style:pointer-events="none">
-        {iconDescription}
-      </span>
-    {/if}
-    <slot />
-    {#if $$slots.icon}
-      <slot
-        name="icon"
-        style={hasIconOnly ? "margin-left: 0" : undefined}
-        {...iconProps}
-      />
-    {:else if icon}
-      <svelte:component
-        this={icon}
-        style={hasIconOnly ? "margin-left: 0" : undefined}
-        {...iconProps}
-      />
-    {/if}
-  </a>
+  {#if $$slots.badge}
+    <div class="bx--btn__badge-wrapper">
+      <!-- svelte-ignore a11y-missing-attribute -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <a
+        bind:this={ref}
+        {...buttonProps}
+        on:click
+        on:focus
+        on:focus={handlePortalFocus}
+        on:blur
+        on:blur={handlePortalBlur}
+        on:mouseover
+        on:mouseenter
+        on:mouseenter={handleMouseEnter}
+        on:mouseenter={handlePortalMouseEnter}
+        on:mouseleave
+        on:mouseleave={handleMouseLeave}
+        on:mouseleave={handlePortalMouseLeave}
+      >
+        {#if hasIconOnly}
+          <span class:bx--assistive-text={true} style:pointer-events="none">
+            {iconDescription}
+          </span>
+        {/if}
+        <slot />
+        {#if $$slots.icon}
+          <slot
+            name="icon"
+            style={hasIconOnly ? "margin-left: 0" : undefined}
+            {...iconProps}
+          />
+        {:else if icon}
+          <svelte:component
+            this={icon}
+            style={hasIconOnly ? "margin-left: 0" : undefined}
+            {...iconProps}
+          />
+        {/if}
+      </a>
+      <slot name="badge" />
+    </div>
+  {:else}
+    <!-- svelte-ignore a11y-missing-attribute -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <a
+      bind:this={ref}
+      {...buttonProps}
+      on:click
+      on:focus
+      on:focus={handlePortalFocus}
+      on:blur
+      on:blur={handlePortalBlur}
+      on:mouseover
+      on:mouseenter
+      on:mouseenter={handleMouseEnter}
+      on:mouseenter={handlePortalMouseEnter}
+      on:mouseleave
+      on:mouseleave={handleMouseLeave}
+      on:mouseleave={handlePortalMouseLeave}
+    >
+      {#if hasIconOnly}
+        <span class:bx--assistive-text={true} style:pointer-events="none">
+          {iconDescription}
+        </span>
+      {/if}
+      <slot />
+      {#if $$slots.icon}
+        <slot
+          name="icon"
+          style={hasIconOnly ? "margin-left: 0" : undefined}
+          {...iconProps}
+        />
+      {:else if icon}
+        <svelte:component
+          this={icon}
+          style={hasIconOnly ? "margin-left: 0" : undefined}
+          {...iconProps}
+        />
+      {/if}
+    </a>
+  {/if}
+{:else if $$slots.badge}
+  <div class="bx--btn__badge-wrapper">
+    <button
+      type="button"
+      bind:this={ref}
+      {...buttonProps}
+      on:click
+      on:focus
+      on:focus={handlePortalFocus}
+      on:blur
+      on:blur={handlePortalBlur}
+      on:mouseover
+      on:mouseenter
+      on:mouseenter={handleMouseEnter}
+      on:mouseenter={handlePortalMouseEnter}
+      on:mouseleave
+      on:mouseleave={handleMouseLeave}
+      on:mouseleave={handlePortalMouseLeave}
+    >
+      {#if hasIconOnly}
+        <span class:bx--assistive-text={true} style:pointer-events="none">
+          {iconDescription}
+        </span>
+      {/if}
+      <slot />
+      {#if $$slots.icon}
+        <slot
+          name="icon"
+          style={hasIconOnly ? "margin-left: 0" : undefined}
+          {...iconProps}
+        />
+      {:else if icon}
+        <svelte:component
+          this={icon}
+          style={hasIconOnly ? "margin-left: 0" : undefined}
+          {...iconProps}
+        />
+      {/if}
+    </button>
+    <slot name="badge" />
+  </div>
 {:else}
   <button
     type="button"
