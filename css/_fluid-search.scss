@@ -38,10 +38,6 @@
     display: none;
   }
 
-  // Labels with slotted content (e.g., a tooltip icon) must not clip
-  // overflow, or the tooltip popover would be cut off. The v11 styles
-  // gate the scroll behavior with `:has()`; a modifier class applied
-  // when the `labelChildren` slot is used serves the same purpose.
   .#{$prefix}--search--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
     gap: $spacing-03;
     overflow: visible;
@@ -101,7 +97,6 @@
     margin-block-end: to-rem(2px);
   }
 
-  // Disabled styles
   .#{$prefix}--search--fluid
     .#{$prefix}--search-input:disabled
     ~ .#{$prefix}--search-close:hover::before {

@@ -9,9 +9,6 @@
 /// @access private
 /// @group dropdown
 @mixin dropdown-readonly {
-  //----------------------------------------------
-  // Read-only
-  // ---------------------------------------------
   .#{$prefix}--dropdown__wrapper .#{$prefix}--dropdown--readonly,
   .#{$prefix}--dropdown__wrapper .#{$prefix}--dropdown--readonly:hover {
     background-color: transparent;

@@ -10,9 +10,6 @@
 /// @access private
 /// @group text-area
 @mixin text-area-warn {
-  //----------------------------------------------
-  // Warning state
-  // ---------------------------------------------
   .#{$prefix}--text-area--warning {
     padding-right: $carbon--spacing-08;
   }

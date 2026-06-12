@@ -30,9 +30,6 @@
       background-color 0.3s cubic-bezier(0.5, 0, 0.1, 1);
   }
 
-  //--------------------------------------------------------------------------
-  // Header - Base styles (overriding Carbon v10 hardcoded colors)
-  //--------------------------------------------------------------------------
   // These styles override Carbon v10's hardcoded UI Shell colors with theme tokens
   // to ensure proper theming across all themes. Use increased specificity to override
   // Carbon v10's hardcoded values.
@@ -233,9 +230,6 @@
     color: $text-primary;
   }
 
-  //--------------------------------------------------------------------------
-  // Header Action - Text variant
-  //--------------------------------------------------------------------------
   .#{$prefix}--header__action--text.#{$prefix}--header__action--text {
     display: inline-flex;
     width: auto;
@@ -253,9 +247,6 @@
     color: inherit;
   }
 
-  //--------------------------------------------------------------------------
-  // Header Search
-  //--------------------------------------------------------------------------
   .#{$prefix}--header__search-label {
     position: absolute;
     width: 1px;
@@ -419,9 +410,6 @@
     outline-offset: -2px;
   }
 
-  //--------------------------------------------------------------------------
-  // Side Nav - Base styles (overriding Carbon v10 hardcoded colors)
-  //--------------------------------------------------------------------------
   // These styles override Carbon v10's hardcoded UI Shell colors with
   // theme tokens to ensure proper theming across all themes.
   // Using doubled class selectors to increase specificity.
@@ -454,9 +442,6 @@
     height: calc(100% - 48px);
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation > Item(s)
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__items.#{$prefix}--side-nav__items {
     overflow: hidden;
     flex: 1 1 0%;
@@ -474,9 +459,6 @@
     overflow-y: auto;
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation > Divider
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__divider.#{$prefix}--side-nav__divider {
     margin: 0.5rem 1rem; // $spacing-03 $spacing-05
     background-color: $border-subtle;
@@ -488,9 +470,6 @@
     border: none;
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation > {Menu,Submenu}
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__submenu.#{$prefix}--side-nav__submenu {
     display: flex;
     align-items: center;
@@ -619,9 +598,6 @@
     font-weight: 600;
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Link
-  //----------------------------------------------------------------------------
   a.#{$prefix}--side-nav__link.#{$prefix}--side-nav__link,
   .#{$prefix}--side-nav.#{$prefix}--side-nav
     a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item,
@@ -690,9 +666,6 @@
     left: 0;
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Icons
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__icon.#{$prefix}--side-nav__icon {
     display: flex;
     flex: 0 0 1rem; // mini-units(2) = 1rem
@@ -727,9 +700,6 @@
     display: block;
   }
 
-  //----------------------------------------------------------------------------
-  // Variants - Fixed
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav--fixed.#{$prefix}--side-nav--fixed
     a.#{$prefix}--side-nav__link.#{$prefix}--side-nav__link,
   .#{$prefix}--side-nav--fixed.#{$prefix}--side-nav--fixed
@@ -744,9 +714,6 @@
     padding-left: 2rem; // mini-units(4) = 2rem
   }
 
-  //----------------------------------------------------------------------------
-  // Variants - Header Nav Links in Side Nav
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav.#{$prefix}--side-nav
     .#{$prefix}--header__nav.#{$prefix}--header__nav {
     @media (max-width: 65.98rem) {

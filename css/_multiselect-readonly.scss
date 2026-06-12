@@ -9,9 +9,6 @@
 /// @access private
 /// @group multiselect
 @mixin multiselect-readonly {
-  //----------------------------------------------
-  // Read-only
-  // ---------------------------------------------
   .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly,
   .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly:hover {
     background-color: transparent;
