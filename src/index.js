@@ -2,6 +2,7 @@ export { default as Accordion } from "./Accordion/Accordion.svelte";
 export { default as AccordionItem } from "./Accordion/AccordionItem.svelte";
 export { default as AccordionSkeleton } from "./Accordion/AccordionSkeleton.svelte";
 export { default as AspectRatio } from "./AspectRatio/AspectRatio.svelte";
+export { default as BadgeIndicator } from "./BadgeIndicator/BadgeIndicator.svelte";
 export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb.svelte";
 export { default as BreadcrumbItem } from "./Breadcrumb/BreadcrumbItem.svelte";
 export { default as BreadcrumbSkeleton } from "./Breadcrumb/BreadcrumbSkeleton.svelte";
