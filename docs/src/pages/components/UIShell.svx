@@ -101,7 +101,7 @@ Override the default slot to customize how each result displays. Use `let:result
 
 ## Header with utilities
 
-Include utility components in the header using header utilities.
+Include utility components in the header using header utilities. Compose [BadgeIndicator](/components/BadgeIndicator) in the `badge` slot on `HeaderGlobalAction`. Use `iconDescription` for screen readers.
 
 <FileSource src="/framed/UIShell/HeaderUtilities" />
 

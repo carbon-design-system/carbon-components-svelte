@@ -1,5 +1,6 @@
 <script>
   import {
+    BadgeIndicator,
     Column,
     Content,
     Grid,
@@ -28,8 +29,12 @@
       iconDescription="Notifications"
       tooltipAlignment="start"
       icon={Notification}
-    />
-    <HeaderGlobalAction iconDescription="Help" icon={Help} />
+    >
+      <BadgeIndicator slot="badge" count={4} />
+    </HeaderGlobalAction>
+    <HeaderGlobalAction iconDescription="Help" icon={Help}>
+      <BadgeIndicator slot="badge" count={0} />
+    </HeaderGlobalAction>
     <HeaderGlobalAction
       iconDescription="Profile"
       tooltipAlignment="end"
