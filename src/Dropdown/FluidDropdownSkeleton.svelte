@@ -2,6 +2,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--list-box__wrapper--fluid={true}
+  class:bx--list-box__wrapper--fluid--skeleton={true}
   {...$$restProps}
   on:click
   on:mouseover

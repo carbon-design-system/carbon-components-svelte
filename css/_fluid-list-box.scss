@@ -47,7 +47,7 @@
     ):not(.#{$prefix}--list-box__wrapper--fluid--warning):not(
       .#{$prefix}--list-box__wrapper--fluid--disabled
     ):not(.#{$prefix}--list-box__wrapper--fluid--readonly):not(
-      :has(.#{$prefix}--skeleton)
+      .#{$prefix}--list-box__wrapper--fluid--skeleton
     ):hover {
     background-color: $hover-ui;
   }
@@ -96,10 +96,6 @@
     display: none;
   }
 
-  // Labels with slotted content (e.g., a tooltip icon) must not clip
-  // overflow, or the tooltip popover would be cut off. The v11 styles
-  // gate the scroll behavior with `:has()`; a modifier class applied
-  // when the `labelChildren` slot is used serves the same purpose.
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--label.#{$prefix}--label--slotted {
     gap: $spacing-03;
@@ -125,8 +121,6 @@
     inline-size: 1rem;
   }
 
-  // The v11 module positions the menu icon per component with `:has()`;
-  // descendant selectors on the component class work the same here.
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--dropdown
     .#{$prefix}--list-box__menu-icon {
@@ -261,7 +255,6 @@
     padding-inline-end: $spacing-10;
   }
 
-  // Error + warning divider
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__divider {
     display: none;
     transition: border-color $duration--fast-01 motion(standard, productive);
@@ -293,7 +286,6 @@
     inset-inline-end: to-rem(41px);
   }
 
-  // direction - top
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--list-box--up
     .#{$prefix}--list-box__menu {
@@ -318,9 +310,6 @@
     outline-offset: 0;
   }
 
-  // Skeleton (ported from v11 fluid-list-box). Shared by the FluidDropdownSkeleton,
-  // FluidComboBoxSkeleton, and FluidMultiSelectSkeleton components, which render
-  // identical list-box wrapper markup.
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--skeleton {
     background: $skeleton-01;
     border-block-end: 1px solid $skeleton-02;
