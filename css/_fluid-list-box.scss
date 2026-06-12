@@ -30,19 +30,25 @@
     background-color: transparent;
   }
 
-  // Suppress Carbon's per-list-box hover; fluid hover is scoped below.
-  .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box:hover,
+  // Suppress Carbon's per-list-box hover; fluid hover is scoped below. The
+  // skeleton's inner element carries `.bx--skeleton`; exclude it so its
+  // background isn't forced transparent on hover.
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--list-box:not(.#{$prefix}--skeleton):hover,
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover {
     background-color: transparent;
   }
 
-  // Default fluid (no error/warn footer): hover the full wrapper.
+  // Default fluid (no error/warn footer): hover the full wrapper. The skeleton
+  // variant is non-interactive, so exclude wrappers that contain a skeleton.
   .#{$prefix}--list-box__wrapper--fluid:not(
       .#{$prefix}--list-box__wrapper--fluid--invalid
     ):not(.#{$prefix}--list-box__wrapper--fluid--warning):not(
       .#{$prefix}--list-box__wrapper--fluid--disabled
-    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly):hover {
+    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly):not(
+      :has(.#{$prefix}--skeleton)
+    ):hover {
     background-color: $hover-ui;
   }
 
@@ -310,6 +316,39 @@
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__field:focus {
     outline: none;
     outline-offset: 0;
+  }
+
+  // Skeleton (ported from v11 fluid-list-box). Shared by the FluidDropdownSkeleton,
+  // FluidComboBoxSkeleton, and FluidMultiSelectSkeleton components, which render
+  // identical list-box wrapper markup.
+  .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--skeleton {
+    background: $skeleton-01;
+    border-block-end: 1px solid $skeleton-02;
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--skeleton
+    .#{$prefix}--list-box__field {
+    @include skeleton;
+
+    position: absolute;
+    padding: 0;
+    block-size: to-rem(8px);
+    inline-size: 50%;
+    inset-block-start: to-rem(36px);
+    inset-inline-start: $spacing-05;
+  }
+
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--skeleton
+    .#{$prefix}--list-box__label {
+    @include skeleton;
+
+    position: absolute;
+    block-size: to-rem(8px);
+    inline-size: 25%;
+    inset-block-start: $spacing-05;
+    inset-inline-start: $spacing-05;
   }
 }
 
