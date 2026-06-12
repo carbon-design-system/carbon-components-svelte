@@ -504,6 +504,25 @@ describe("Modal", () => {
     });
   });
 
+  it("dispatches close event with programmatic trigger", async () => {
+    const closeHandler = vi.fn();
+    const { rerender } = render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Programmatic Close Test",
+        onclose: closeHandler,
+      },
+    });
+
+    rerender({ open: false });
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      trigger: "programmatic",
+    });
+  });
+
   it("prevents closing when preventDefault is called on close event", async () => {
     const closeHandler = vi.fn((e) => {
       e.preventDefault();
