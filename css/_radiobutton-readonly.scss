@@ -9,9 +9,6 @@
 /// @access private
 /// @group radiobutton
 @mixin radiobutton-readonly {
-  //----------------------------------------------
-  // Read-only
-  // ---------------------------------------------
   .#{$prefix}--radio-button-group--readonly
     .#{$prefix}--radio-button
     + .#{$prefix}--radio-button__label

@@ -44,7 +44,6 @@
       outline $duration--fast-01 motion(standard, productive);
   }
 
-  // Label embedded inside the field.
   .#{$prefix}--date-picker--fluid .#{$prefix}--label {
     position: absolute;
     z-index: 1;
@@ -65,9 +64,6 @@
     display: none;
   }
 
-  // Slotted label (markup replacement for v11's `:has(.toggletip-label)`):
-  // allow custom label content such as a tooltip to overflow the field
-  // instead of being scroll-clipped.
   .#{$prefix}--date-picker--fluid .#{$prefix}--label--slotted {
     gap: $spacing-03;
     overflow: visible;
@@ -148,7 +144,6 @@
     border-block-end: 1px solid $ui-04;
   }
 
-  // Single / range icon position.
   .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker__icon {
     inset-block-start: to-rem(43px);
   }
@@ -161,7 +156,6 @@
     border-block-end: 1px solid $ui-04;
   }
 
-  // Range.
   .#{$prefix}--date-picker--fluid:not(
       .#{$prefix}--date-picker--fluid--invalid
     ):not(.#{$prefix}--date-picker--fluid--warn)
@@ -197,7 +191,6 @@
     border-inline-start: 1px solid $ui-04;
   }
 
-  // Invalid: outline the whole field or a single range cell.
   .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--invalid,
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid {
     @include focus-outline("invalid");
@@ -268,7 +261,6 @@
     @include focus-outline("outline");
   }
 
-  // Read-only.
   .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly:not(
       .#{$prefix}--date-picker--fluid--invalid
     ):not(.#{$prefix}--date-picker--fluid--warn)
@@ -291,7 +283,6 @@
     border-inline-start-color: $ui-03;
   }
 
-  // Skeleton (ported from v11 fluid-date-picker).
   .#{$prefix}--date-picker--fluid__skeleton {
     background: $skeleton-01;
     block-size: to-rem(64px);
@@ -330,7 +321,6 @@
     inset-block: auto $spacing-03;
   }
 
-  // Range skeleton
   .#{$prefix}--date-picker--fluid__skeleton--range {
     display: flex;
     flex-direction: row;

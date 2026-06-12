@@ -51,10 +51,6 @@
     white-space: nowrap;
   }
 
-  // Labels with slotted content (e.g., a tooltip icon) must not clip
-  // overflow, or the tooltip popover would be cut off. The v11 styles
-  // gate the scroll behavior with `:has()`; a modifier class applied
-  // when the `labelChildren` slot is used serves the same purpose.
   .#{$prefix}--text-input--fluid
     .#{$prefix}--label.#{$prefix}--label--slotted {
     gap: $spacing-03;
@@ -168,7 +164,6 @@
     outline: none;
   }
 
-  // Password input
   .#{$prefix}--text-input--fluid
     .#{$prefix}--text-input.#{$prefix}--password-input {
     padding-inline-end: $spacing-08;
@@ -187,8 +182,6 @@
     inset-inline-end: $spacing-03;
   }
 
-  // Skeleton (ported from v11 fluid-text-input). NumberInput and Search skeletons
-  // render this same `--text-input--fluid__skeleton` markup and reuse these rules.
   .#{$prefix}--text-input--fluid__skeleton {
     position: relative;
     background: $skeleton-01;

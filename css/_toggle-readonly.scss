@@ -9,9 +9,6 @@
 /// @access private
 /// @group toggle
 @mixin toggle-readonly {
-  //----------------------------------------------
-  // Read-only
-  // ---------------------------------------------
   .#{$prefix}--toggle--readonly .#{$prefix}--toggle-input__label,
   .#{$prefix}--toggle--readonly
     .#{$prefix}--toggle-input__label

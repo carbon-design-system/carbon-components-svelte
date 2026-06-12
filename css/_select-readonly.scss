@@ -9,9 +9,6 @@
 /// @access private
 /// @group select
 @mixin select-readonly {
-  //----------------------------------------------
-  // Read-only
-  // ---------------------------------------------
   .#{$prefix}--select--readonly .#{$prefix}--select-input {
     background-color: transparent;
     border-block-end-color: $border-subtle;

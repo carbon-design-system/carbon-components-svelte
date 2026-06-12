@@ -87,9 +87,6 @@
   // box-shadow. The layer with the box-shadow is rendered behind the popover
   // content, while the other is rendered above of the popover content.
 
-  //-----------------------------------------------------------------------------
-  // Bottom
-  //-----------------------------------------------------------------------------
   .#{$prefix}--popover--bottom {
     bottom: 0;
     left: 50%;
@@ -102,7 +99,6 @@
     transform: translate(-50%, -50%) rotate(45deg);
   }
 
-  // Bottom left
   .#{$prefix}--popover--bottom-left {
     bottom: 0;
     left: 0;
@@ -115,7 +111,6 @@
     transform: translate(var(--cds-popover-caret-offset), -50%) rotate(45deg);
   }
 
-  // Bottom right
   .#{$prefix}--popover--bottom-right {
     right: 0;
     bottom: 0;
@@ -129,7 +124,6 @@
       rotate(45deg);
   }
 
-  // Hover area
   .#{$prefix}--popover--bottom.#{$prefix}--popover::before,
   .#{$prefix}--popover--bottom-left.#{$prefix}--popover::before,
   .#{$prefix}--popover--bottom-right.#{$prefix}--popover::before {
@@ -140,9 +134,6 @@
     transform: translateY(-100%);
   }
 
-  //-----------------------------------------------------------------------------
-  // TOP
-  //-----------------------------------------------------------------------------
   .#{$prefix}--popover--top {
     bottom: 100%;
     left: 50%;
@@ -155,7 +146,6 @@
     transform: translate(-50%, 50%) rotate(45deg);
   }
 
-  // Top left
   .#{$prefix}--popover--top-left {
     bottom: 100%;
     left: 0;
@@ -168,7 +158,6 @@
     transform: translate(var(--cds-popover-caret-offset), 50%) rotate(45deg);
   }
 
-  // Top right
   .#{$prefix}--popover--top-right {
     right: 0;
     bottom: 100%;
@@ -182,7 +171,6 @@
       rotate(45deg);
   }
 
-  // Hover area
   .#{$prefix}--popover--top.#{$prefix}--popover::before,
   .#{$prefix}--popover--top-left.#{$prefix}--popover::before,
   .#{$prefix}--popover--top-right.#{$prefix}--popover::before {
@@ -193,9 +181,6 @@
     transform: translateY(100%);
   }
 
-  //-----------------------------------------------------------------------------
-  // Right
-  //-----------------------------------------------------------------------------
   .#{$prefix}--popover--right {
     top: 50%;
     left: 100%;
@@ -208,7 +193,6 @@
     transform: translate(-50%, -50%) rotate(45deg);
   }
 
-  // Right top
   .#{$prefix}--popover--right-top {
     top: 0;
     left: 100%;
@@ -221,7 +205,6 @@
     transform: translate(-50%, var(--cds-popover-caret-offset)) rotate(45deg);
   }
 
-  // Right bottom
   .#{$prefix}--popover--right-bottom {
     bottom: 0;
     left: 100%;
@@ -235,7 +218,6 @@
       rotate(45deg);
   }
 
-  // Hover area
   .#{$prefix}--popover--right.#{$prefix}--popover::before,
   .#{$prefix}--popover--right-top.#{$prefix}--popover::before,
   .#{$prefix}--popover--right-bottom.#{$prefix}--popover::before {
@@ -246,9 +228,6 @@
     transform: translateX(-100%);
   }
 
-  //-----------------------------------------------------------------------------
-  // Left
-  //-----------------------------------------------------------------------------
   .#{$prefix}--popover--left {
     top: 50%;
     right: 100%;
@@ -261,7 +240,6 @@
     transform: translate(50%, -50%) rotate(45deg);
   }
 
-  // Left top
   .#{$prefix}--popover--left-top {
     top: 0;
     right: 100%;
@@ -274,7 +252,6 @@
     transform: translate(50%, var(--cds-popover-caret-offset)) rotate(45deg);
   }
 
-  // Left bottom
   .#{$prefix}--popover--left-bottom {
     right: 100%;
     bottom: 0;
@@ -288,7 +265,6 @@
       rotate(45deg);
   }
 
-  // Hover area
   .#{$prefix}--popover--left.#{$prefix}--popover::before,
   .#{$prefix}--popover--left-top.#{$prefix}--popover::before,
   .#{$prefix}--popover--left-bottom.#{$prefix}--popover::before {

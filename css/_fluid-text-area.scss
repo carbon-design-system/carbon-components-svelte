@@ -62,10 +62,6 @@
     white-space: nowrap;
   }
 
-  // Labels with slotted content (e.g., a tooltip icon) must not clip
-  // overflow, or the tooltip popover would be cut off. The v11 styles
-  // gate the scroll behavior with `:has()`; a modifier class applied
-  // when the `labelChildren` slot is used serves the same purpose.
   .#{$prefix}--text-area--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
     gap: $spacing-03;
     overflow: visible;
@@ -194,7 +190,6 @@
     @include focus-outline("outline");
   }
 
-  // Skeleton (ported from v11 fluid-text-area).
   .#{$prefix}--text-area--fluid__skeleton {
     padding: $spacing-05;
     background: $skeleton-01;

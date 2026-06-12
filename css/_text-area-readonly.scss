@@ -9,9 +9,6 @@
 /// @access private
 /// @group text-area
 @mixin text-area-readonly {
-  //----------------------------------------------
-  // Read-only
-  // ---------------------------------------------
   .#{$prefix}--text-area__wrapper--readonly .#{$prefix}--text-area {
     background: transparent;
     border-block-end-color: $border-subtle;

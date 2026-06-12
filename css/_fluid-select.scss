@@ -41,10 +41,6 @@
     display: none;
   }
 
-  // Labels with slotted content (e.g., a tooltip icon) must not clip
-  // overflow, or the tooltip popover would be cut off. The v11 styles
-  // gate the scroll behavior with `:has()`; a modifier class applied
-  // when the `labelChildren` slot is used serves the same purpose.
   .#{$prefix}--select--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
     gap: $spacing-03;
     overflow: visible;
@@ -72,7 +68,6 @@
     display: block;
   }
 
-  // Invalid + warn states
   .#{$prefix}--select--fluid
     .#{$prefix}--select--invalid
     .#{$prefix}--select-input__wrapper {
@@ -153,10 +148,7 @@
     pointer-events: none;
   }
 
-  // Focus styles. The v11 implementation toggles a `--fluid--focus`
-  // modifier class via JS; `:focus-within` renders the same outline
-  // without component state. Declared after the invalid styles so the
-  // focus outline wins while the select is focused.
+  // Declared after invalid styles so the focus outline wins while focused.
   .#{$prefix}--select--fluid .#{$prefix}--select-input__wrapper:focus-within {
     @include focus-outline("outline");
   }
@@ -168,9 +160,6 @@
     border-block-end: 1px solid transparent;
   }
 
-  // Skeleton (ported from v11 fluid-select). React's FluidSelect.Skeleton uses
-  // list-box markup, but these select-scoped rules keep our skeleton variant
-  // self-contained and consistent with the non-fluid `SelectSkeleton`.
   .#{$prefix}--select--fluid__skeleton {
     position: relative;
     background: $skeleton-01;

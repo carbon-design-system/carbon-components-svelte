@@ -137,7 +137,6 @@
     display: block;
   }
 
-  // Simulated borders between cells
   .#{$prefix}--time-picker--fluid__wrapper
     > *:nth-child(2):not(:last-child)
     .#{$prefix}--select-input__wrapper::before,
@@ -197,7 +196,6 @@
     background: $disabled-02;
   }
 
-  // Invalid + warn states
   .#{$prefix}--time-picker--fluid .#{$prefix}--form-requirement {
     padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
     margin: 0;
@@ -354,7 +352,6 @@
     inline-size: calc(100% - 2rem);
   }
 
-  // Focus styles for the time input cell
   .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--invalid):not(
       .#{$prefix}--time-picker--fluid--warning
     )
@@ -374,8 +371,6 @@
     outline: none;
   }
 
-  // Skeleton (ported from v11 fluid-time-picker). Composes FluidTextInputSkeleton
-  // + one or two FluidSelectSkeleton; this wrapper sizes the composed children.
   .#{$prefix}--time-picker--fluid--skeleton {
     display: flex;
     block-size: to-rem(64px);

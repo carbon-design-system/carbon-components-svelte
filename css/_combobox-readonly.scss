@@ -9,9 +9,6 @@
 /// @access private
 /// @group combobox
 @mixin combobox-readonly {
-  //----------------------------------------------
-  // Read-only
-  // ---------------------------------------------
   .#{$prefix}--list-box.#{$prefix}--combo-box--readonly,
   .#{$prefix}--list-box.#{$prefix}--combo-box--readonly:hover {
     background-color: transparent;

@@ -10,9 +10,6 @@
 /// @access private
 /// @group slider
 @mixin slider-validation {
-  //----------------------------------------------
-  // Input wrapper and icons
-  // ---------------------------------------------
   .#{$prefix}--slider-text-input-wrapper {
     position: relative;
     display: inline-block;
@@ -45,9 +42,6 @@
     opacity: 1;
   }
 
-  //----------------------------------------------
-  // Validation message
-  // ---------------------------------------------
   .#{$prefix}--slider__validation-msg.#{$prefix}--form-requirement {
     display: block;
     overflow: visible;
@@ -58,9 +52,6 @@
     color: $text-error;
   }
 
-  //----------------------------------------------
-  // Readonly state
-  // ---------------------------------------------
   .#{$prefix}--slider--readonly.#{$prefix}--slider {
     cursor: default;
   }
@@ -216,7 +207,6 @@
     background-color: $interactive-04;
   }
 
-  // Disabled state for the two-handle thumb icons.
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--lower,
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb.#{$prefix}--slider__thumb--upper {
     background: transparent;
