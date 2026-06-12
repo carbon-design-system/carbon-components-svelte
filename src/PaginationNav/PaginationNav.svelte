@@ -127,7 +127,7 @@
         dispatch("change", { page });
       }}
     />
-    {#each items as item}
+    {#each items as item (item)}
       <PaginationItem
         page={item + 1}
         active={page === item + 1}
