@@ -1,3 +1,4 @@
+export { default as FluidSelectSkeleton } from "./FluidSelectSkeleton.svelte";
 export { default as Select } from "./Select.svelte";
 export { default as SelectItem } from "./SelectItem.svelte";
 export { default as SelectItemGroup } from "./SelectItemGroup.svelte";

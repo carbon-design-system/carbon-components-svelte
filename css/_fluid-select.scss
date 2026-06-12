@@ -167,6 +167,33 @@
   .#{$prefix}--select--fluid .#{$prefix}--select--warning:focus-within {
     border-block-end: 1px solid transparent;
   }
+
+  // Skeleton (ported from v11 fluid-select). React's FluidSelect.Skeleton uses
+  // list-box markup, but these select-scoped rules keep our skeleton variant
+  // self-contained and consistent with the non-fluid `SelectSkeleton`.
+  .#{$prefix}--select--fluid__skeleton {
+    position: relative;
+    background: $skeleton-01;
+    block-size: to-rem(64px);
+    border-block-end: 1px solid $skeleton-02;
+  }
+
+  .#{$prefix}--select--fluid__skeleton .#{$prefix}--skeleton {
+    position: absolute;
+    block-size: to-rem(8px);
+    inline-size: 25%;
+    inset-block-start: $spacing-05;
+    inset-inline-start: $spacing-05;
+  }
+
+  .#{$prefix}--select--fluid__skeleton .#{$prefix}--label {
+    position: absolute;
+    padding: 0;
+    block-size: to-rem(8px);
+    inline-size: 50%;
+    inset-block-start: to-rem(36px);
+    inset-inline-start: $spacing-05;
+  }
 }
 
 @include exports("fluid-select") {

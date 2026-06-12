@@ -110,6 +110,7 @@ export { default as RadioButtonGroup } from "./RadioButtonGroup/RadioButtonGroup
 export { default as RecursiveList } from "./RecursiveList/RecursiveList.svelte";
 export { default as Search } from "./Search/Search.svelte";
 export { default as SearchSkeleton } from "./Search/SearchSkeleton.svelte";
+export { default as FluidSelectSkeleton } from "./Select/FluidSelectSkeleton.svelte";
 export { default as Select } from "./Select/Select.svelte";
 export { default as SelectItem } from "./Select/SelectItem.svelte";
 export { default as SelectItemGroup } from "./Select/SelectItemGroup.svelte";
