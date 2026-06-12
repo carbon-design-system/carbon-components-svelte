@@ -1,0 +1,62 @@
+---
+components: ["BadgeIndicator", "Button", "HeaderGlobalAction"]
+---
+
+<script>
+  import { BadgeIndicator, Button, Stack } from "carbon-components-svelte";
+  import Notification from "carbon-icons-svelte/lib/Notification.svelte";
+</script>
+
+Badge indicators draw attention to unread counts and new activity on icon-only buttons.
+
+## Default
+
+Omit `count` to render an empty dot that signals presence without a number.
+
+<Button
+  kind="ghost"
+  icon={Notification}
+  iconDescription="Notifications"
+>
+  <BadgeIndicator slot="badge" />
+</Button>
+
+## Count
+
+Set `count` to a number. Values greater than `999` display as `999+`.
+
+<Stack orientation="horizontal" gap={7}>
+  <Button
+    kind="ghost"
+    icon={Notification}
+    iconDescription="Notifications"
+  >
+    <BadgeIndicator slot="badge" count={4} />
+  </Button>
+  <Button
+    kind="ghost"
+    icon={Notification}
+    iconDescription="Notifications"
+  >
+    <BadgeIndicator slot="badge" count={25} />
+  </Button>
+  <Button
+    kind="ghost"
+    icon={Notification}
+    iconDescription="Notifications"
+  >
+    <BadgeIndicator slot="badge" count={1000} />
+  </Button>
+</Stack>
+
+## Formatted count
+
+Pass a string to `count` to override the built-in numeric display. String values bypass the `999+` cap.
+
+<FileSource src="/framed/BadgeIndicator/FormattedCount" />
+
+## In UI Shell
+
+Use the [UI Shell](/components/UIShell) for header notifications and other utility indicators.
+
+<FileSource src="/framed/UIShell/HeaderUtilities" />
