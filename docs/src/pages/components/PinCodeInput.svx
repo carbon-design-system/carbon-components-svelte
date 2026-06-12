@@ -1,10 +1,10 @@
 ---
-components: ["PinCodeInput", "FluidPinCodeInputSkeleton"]
+components: ["PinCodeInput", "PinCodeInputSkeleton", "FluidPinCodeInputSkeleton"]
 ---
 
 <script>
   import Information from "carbon-icons-svelte/lib/Information.svelte";
-  import { FluidPinCodeInputSkeleton, Link, PinCodeInput, TooltipIcon } from "carbon-components-svelte";
+  import { FluidPinCodeInputSkeleton, Link, PinCodeInput, PinCodeInputSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
 Pin code inputs collect a short verification code (such as a one-time passcode) across a row of single-character segments. Each segment is an independent text field with shared labeling, validation, and keyboard navigation (typing advances focus, <DocKbd label="Backspace" /> moves to the previous segment, <DocKbd label="Delete" /> clears the focused segment, <DocKbd label="←" /> and <DocKbd label="→" /> move between segments), plus paste support and optional masking.
@@ -145,6 +145,18 @@ Use the light variant for light-themed backgrounds by setting `light` to `true`.
   on:clear
   on:paste
 />
+
+## Skeleton
+
+Show a loading state with the default skeleton variant.
+
+<PinCodeInputSkeleton />
+
+## Skeleton without label
+
+Show a loading state without a label by setting `hideLabel` to `true`.
+
+<PinCodeInputSkeleton hideLabel />
 
 ## Fluid variant
 
