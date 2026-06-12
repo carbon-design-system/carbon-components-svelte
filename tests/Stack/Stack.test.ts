@@ -131,6 +131,34 @@ describe("Stack", () => {
     expect(stackElement).not.toHaveClass("bx--stack-inline");
   });
 
+  it("should apply wrap class when wrap is 'wrap'", () => {
+    render(Stack);
+
+    const element = screen.getByText("wrap-wrap");
+    const stackElement = element.parentElement;
+    expect(stackElement).toHaveClass("bx--stack-horizontal");
+    expect(stackElement).toHaveClass("bx--stack-wrap");
+    expect(stackElement).not.toHaveClass("bx--stack-wrap-reverse");
+  });
+
+  it("should apply wrap-reverse class when wrap is 'wrap-reverse'", () => {
+    render(Stack);
+
+    const element = screen.getByText("wrap-reverse");
+    const stackElement = element.parentElement;
+    expect(stackElement).toHaveClass("bx--stack-wrap-reverse");
+    expect(stackElement).not.toHaveClass("bx--stack-wrap");
+  });
+
+  it("should not apply any wrap class by default", () => {
+    render(Stack);
+
+    const element = screen.getByText("gap-1");
+    const stackElement = element.parentElement;
+    expect(stackElement).not.toHaveClass("bx--stack-wrap");
+    expect(stackElement).not.toHaveClass("bx--stack-wrap-reverse");
+  });
+
   it("should omit gap class when gap is 0", () => {
     render(Stack);
 

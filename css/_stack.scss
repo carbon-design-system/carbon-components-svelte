@@ -130,6 +130,14 @@
   .#{$prefix}--stack-justify-space-evenly {
     justify-content: space-evenly;
   }
+
+  .#{$prefix}--stack-wrap {
+    flex-wrap: wrap;
+  }
+
+  .#{$prefix}--stack-wrap-reverse {
+    flex-wrap: wrap-reverse;
+  }
 }
 
 @include exports('stack') {
