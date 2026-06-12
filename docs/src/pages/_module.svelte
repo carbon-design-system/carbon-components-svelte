@@ -22,6 +22,7 @@
   import MiniSearch from "minisearch";
   import { onMount, tick } from "svelte";
   import SEARCH_INDEX from "../SEARCH_INDEX.json";
+  import { NEW_COMPONENTS } from "../new-components";
   import { theme } from "../store";
 
   type ModuleSearchResult = HeaderSearchResult & { isComponent: boolean };
@@ -62,7 +63,6 @@
   });
 
   const deprecated: string[] = [];
-  const new_components: string[] = ["PinCodeInput", "CopyInput"];
 
   let value = "";
   let active = false;
@@ -214,7 +214,7 @@
           href={$url(child.path)}
           isSelected={$isActive($url(child.path))}
         >
-          {#if deprecated.includes(child.name) || new_components.includes(child.name)}
+          {#if deprecated.includes(child.name) || child.name in NEW_COMPONENTS}
             <Stack gap={2} orientation="horizontal" align="center">
               {child.name}
               {#if deprecated.includes(child.name)}
@@ -226,7 +226,7 @@
                   Deprecated
                 </Tag>
               {/if}
-              {#if new_components.includes(child.name)}
+              {#if child.name in NEW_COMPONENTS}
                 <Tag
                   size="sm"
                   type="blue"

@@ -18,6 +18,8 @@
     Tab,
     TabContent,
     Tabs,
+    Tag,
+    TooltipDefinition,
   } from "carbon-components-svelte";
   import type { CarbonTheme } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import { themes as themeLabels } from "carbon-components-svelte/src/Theme/Theme.svelte";
@@ -30,6 +32,7 @@
   import COMPONENT_API from "../COMPONENT_API.json";
   import COMPONENT_MD_SIZES_JSON from "../COMPONENT_MD_SIZES.json";
   import ComponentApi from "../components/ComponentApi.svelte";
+  import { NEW_COMPONENTS } from "../new-components";
   import { theme } from "../store";
 
   type DocComponent = (typeof COMPONENT_API.components)[number];
@@ -86,6 +89,7 @@
     .map((i) => componentMap.get(i))
     .filter((c): c is DocComponent => c != null);
   $: multiple = api_components.length > 1;
+  $: newVersion = NEW_COMPONENTS[component];
 
   onMount(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -178,7 +182,18 @@
   <Grid class="fix-overflow">
     <Row>
       <Column>
-        <h1>{component}</h1>
+        <h1 class:component-title-with-badge={!!newVersion}>
+          {#if newVersion}
+            {component}
+            <Tag size="sm" type="blue" style="margin: 0">
+              <TooltipDefinition tooltipText="Available in v{newVersion}">
+                New
+              </TooltipDefinition>
+            </Tag>
+          {:else}
+            {component}
+          {/if}
+        </h1>
         <div class="bar">
           <Dropdown
             class="theme-dropdown"
