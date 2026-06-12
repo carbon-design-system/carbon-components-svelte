@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import TextAreaFluidForm from "./TextArea.fluidForm.test.svelte";
+import TextAreaFluidSkeleton from "./TextArea.fluidSkeleton.test.svelte";
 import TextAreaFluidSlot from "./TextArea.fluidSlot.test.svelte";
 import TextArea from "./TextArea.test.svelte";
 import TextAreaCustom from "./TextAreaCustom.test.svelte";
@@ -269,5 +270,19 @@ describe("TextArea", () => {
         "bx--label--slotted",
       );
     });
+  });
+
+  it("renders fluid skeleton state", () => {
+    render(TextAreaFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-text-area-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass(
+      "bx--form-item",
+      "bx--text-area--fluid__skeleton",
+    );
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-area");
   });
 });

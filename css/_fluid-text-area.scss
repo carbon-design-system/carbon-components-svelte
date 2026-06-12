@@ -193,6 +193,29 @@
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area__wrapper:focus-within {
     @include focus-outline("outline");
   }
+
+  // Skeleton (ported from v11 fluid-text-area).
+  .#{$prefix}--text-area--fluid__skeleton {
+    padding: $spacing-05;
+    background: $skeleton-01;
+    border-block-end: 1px solid $skeleton-02;
+  }
+
+  .#{$prefix}--text-area--fluid__skeleton .#{$prefix}--skeleton,
+  .#{$prefix}--text-area--fluid__skeleton
+    .#{$prefix}--text-area.#{$prefix}--skeleton::before {
+    block-size: 0.5rem;
+  }
+
+  .#{$prefix}--text-area--fluid__skeleton .#{$prefix}--label {
+    margin-block-end: $spacing-04;
+  }
+
+  .#{$prefix}--text-area--fluid__skeleton
+    .#{$prefix}--text-area.#{$prefix}--skeleton {
+    block-size: 4rem;
+    inline-size: 80%;
+  }
 }
 
 @include exports("fluid-text-area") {
