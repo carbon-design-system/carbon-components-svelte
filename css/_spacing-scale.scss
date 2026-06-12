@@ -1,0 +1,17 @@
+/// Shared spacing scale for Stack gap and Box inset utilities.
+/// Scale 1–13 maps to @carbon/layout values used across carbon-components-svelte.
+$ccs-spacing-scale: (
+  1: 0.125rem,
+  2: 0.25rem,
+  3: 0.5rem,
+  4: 0.75rem,
+  5: 1rem,
+  6: 1.5rem,
+  7: 2rem,
+  8: 2.5rem,
+  9: 3rem,
+  10: 4rem,
+  11: 5rem,
+  12: 6rem,
+  13: 10rem,
+);
