@@ -318,6 +318,17 @@ html {
   margin-bottom: var(--cds-layout-01);
 }
 
+.bx--col > h1.component-title-with-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--cds-spacing-04);
+}
+
+.bx--tag .bx--tooltip__trigger--definition {
+  color: inherit;
+  border-bottom-color: currentColor;
+}
+
 .big-paragraph {
   font-size: var(--cds-expressive-heading-03-font-size);
   font-weight: var(--cds-expressive-heading-03-font-weight);
