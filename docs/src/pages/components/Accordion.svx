@@ -183,45 +183,40 @@ item component for finer control over which items are interactive.
 
 ## Skeleton
 
-The skeleton state provides a loading placeholder for the accordion. It displays a
-simplified version of the component while content is being loaded.
+Set the `skeleton` prop to show a loading placeholder while content loads.
 
 <Accordion skeleton />
 
 ## Skeleton (left-aligned chevron)
 
-The skeleton state can be combined with the left-aligned chevron style by setting
-both the `skeleton` and `align="start"` props.
+Combine the skeleton state with the left-aligned chevron style by setting both the
+`skeleton` and `align="start"` props.
 
 <Accordion skeleton align="start" />
 
 ## Skeleton (custom count)
 
-By default, the skeleton state displays 4 items.
-
-Specify the number of skeleton items to display using the `count` prop. This is
-useful when you know the exact number of items that will be loaded.
+By default, the skeleton state displays 4 items. Set the `count` prop to specify
+the number of skeleton items to display.
 
 <Accordion skeleton count={3} />
 
 ## Skeleton (closed)
 
-By default, the first skeleton item is open. The skeleton state can be displayed
-in a collapsed state by setting `open={false}`.
+By default, the first skeleton item is open. Set `open={false}` to render the
+skeleton collapsed.
 
 <Accordion skeleton open={false} />
 
 ## Skeleton (extra-large)
 
-The skeleton state supports the extra-large size variant, maintaining visual
-consistency with the active component states.
+Set `size` to `"xl"` for an extra-large skeleton.
 
 <Accordion skeleton size="xl" />
 
 ## Skeleton (small)
 
-The skeleton state also supports the small size variant, providing a compact
-loading placeholder for space-constrained layouts.
+Set `size` to `"sm"` for a small skeleton.
 
 <Accordion skeleton size="sm" />
 
