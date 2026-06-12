@@ -11,6 +11,7 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import MultiSelectFluidForm from "./MultiSelect.fluidForm.test.svelte";
+import MultiSelectFluidSkeleton from "./MultiSelect.fluidSkeleton.test.svelte";
 import MultiSelectFluidSlot from "./MultiSelect.fluidSlot.test.svelte";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
@@ -3181,5 +3182,20 @@ describe("MultiSelect", () => {
         "bx--list-box__field--wrapper--input-focused",
       );
     });
+  });
+
+  it("renders fluid skeleton state", () => {
+    render(MultiSelectFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-multi-select-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass("bx--list-box__wrapper--fluid");
+    expect(skeleton.children).toHaveLength(1);
+
+    const listBox = skeleton.children[0];
+    expect(listBox).toHaveClass("bx--skeleton", "bx--list-box");
+    expect(listBox.children).toHaveLength(2);
+    expect(listBox.children[0]).toHaveClass("bx--list-box__label");
+    expect(listBox.children[1]).toHaveClass("bx--list-box__field");
   });
 });
