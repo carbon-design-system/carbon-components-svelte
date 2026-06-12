@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -18,12 +18,17 @@
     }
   },
   "files": {
-    "includes": ["**", "!!**/.*/**/*", "!!**/docs/src/pages/index.svelte"]
+    "includes": [
+      "**",
+      "!!**/.*/**/*",
+      "!!**/docs/src/pages/index.svelte",
+      "!**/*.svg"
+    ]
   },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "performance": {
         "noAccumulatingSpread": "error",
         "noAwaitInLoops": "error",
@@ -54,12 +59,14 @@
         "noUselessUndefinedInitialization": "error",
         "useArrowFunction": "error",
         "useLiteralKeys": "error",
-        "noImportantStyles": "off"
+        "noImportantStyles": "off",
+        "useArrayFind": "error"
       },
       "suspicious": {
         "noExplicitAny": "error",
         "noImportCycles": "error",
-        "useAwait": "error"
+        "useAwait": "error",
+        "noForIn": "error"
       },
       "style": {
         "noImplicitBoolean": "error",
@@ -89,8 +96,6 @@
         "noDescendingSpecificity": "off"
       },
       "nursery": {
-        "useFind": "error",
-        "noForIn": "error",
         "noFloatingPromises": "error"
       }
     }
@@ -111,7 +116,8 @@
       "linter": {
         "rules": {
           "correctness": {
-            "noSelfAssign": "off"
+            "noSelfAssign": "off",
+            "noDuplicateAttributes": "off"
           },
           "complexity": {
             "noUselessUndefinedInitialization": "off"
@@ -125,7 +131,16 @@
             "useAltText": "off",
             "useAnchorContent": "off",
             "useAriaPropsForRole": "off",
-            "useValidAriaRole": "off"
+            "useValidAriaRole": "off",
+            "useValidAriaValues": "off",
+            "noLabelWithoutControl": "off",
+            "useSemanticElements": "off",
+            "useValidAnchor": "off",
+            "noNoninteractiveElementToInteractiveRole": "off",
+            "useAriaPropsSupportedByRole": "off",
+            "useFocusableInteractive": "off",
+            "noNoninteractiveTabindex": "off",
+            "noAmbiguousAnchorText": "off"
           }
         }
       }
