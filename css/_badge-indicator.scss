@@ -36,6 +36,10 @@
   .#{$prefix}--btn__badge-wrapper {
     position: relative;
     display: inline-flex;
+
+    .#{$prefix}--badge-indicator {
+      pointer-events: none;
+    }
   }
 }
 
