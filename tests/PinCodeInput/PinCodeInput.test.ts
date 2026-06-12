@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import PinCodeInputFluidForm from "./PinCodeInput.fluidForm.test.svelte";
+import PinCodeInputFluidSkeleton from "./PinCodeInput.fluidSkeleton.test.svelte";
 import PinCodeInputFluidSlot from "./PinCodeInput.fluidSlot.test.svelte";
 import PinCodeInput from "./PinCodeInput.test.svelte";
 
@@ -624,5 +625,19 @@ describe("PinCodeInput", () => {
     await user.keyboard("9");
     await tick();
     expect(component.value).toBe("0182");
+  });
+
+  it("renders fluid skeleton state", () => {
+    render(PinCodeInputFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-pin-code-input-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass(
+      "bx--form-item",
+      "bx--text-input--fluid__skeleton",
+    );
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 });
