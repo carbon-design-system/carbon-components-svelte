@@ -146,6 +146,16 @@
       }
     },
     {
+      "includes": ["src/**/*.svelte"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "useSvelteRequireEachKey": "error"
+          }
+        }
+      }
+    },
+    {
       "includes": ["**/*.test.ts"],
       "linter": {
         "rules": {
