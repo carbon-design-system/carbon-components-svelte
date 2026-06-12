@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.108.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.108.0...v0.108.1) (2026-06-07)
+
+### Bug Fixes
+
+- **accordion-item:** remove chevron aria-label ([16acde3](https://github.com/carbon-design-system/carbon-components-svelte/commit/16acde3459c6287547d140ae84d7c8b03e029124))
+- **code-snippet:** avoid overwriting consumer-controlled `showMoreLess` prop (#3191) ([1e32d62](https://github.com/carbon-design-system/carbon-components-svelte/commit/1e32d62e0fb2561c794694cdb8b299012c342101))
+- **code-snippet:** close portalled tooltip after feedback timeout ([41d5ca2](https://github.com/carbon-design-system/carbon-components-svelte/commit/41d5ca243b4de3c13d06221ff07bb24457a161ed))
+- **code-snippet:** suppress native copy feedback caret for portalled tooltips for inline type ([bb0c534](https://github.com/carbon-design-system/carbon-components-svelte/commit/bb0c534df460ff06a98bdbf5bf3a53a257de79f7))
+- **combo-box:** scope option ids per instance (#3176) ([6f8cf7c](https://github.com/carbon-design-system/carbon-components-svelte/commit/6f8cf7c5fcca66041b11e9f0ad9d29a42050c6cd))
+- **copy-button:** close portalled tooltip after feedback timeout ([8d5ab9d](https://github.com/carbon-design-system/carbon-components-svelte/commit/8d5ab9d390cbad3563e0e0cfc06c314232252f33))
+- **data-table:** associate cells with column headers (#3162) ([152c6bb](https://github.com/carbon-design-system/carbon-components-svelte/commit/152c6bb87412ebc6a91e252f4d690c984d0cc74f))
+- **data-table:** scope expandable row ids per instance (#3178) ([9317243](https://github.com/carbon-design-system/carbon-components-svelte/commit/9317243b0fd504a76c3af2ee20d4127014ce503c))
+- **dropdown:** scope option ids per instance (#3177) ([9d8e1e9](https://github.com/carbon-design-system/carbon-components-svelte/commit/9d8e1e93753e78e960502acf41229fef2e57b91d))
+- **expandable-tile:** resize if bound element changes (#3180) ([121bb13](https://github.com/carbon-design-system/carbon-components-svelte/commit/121bb13c13ab1b06804001c32b257a829a773c2b))
+- **expandable-tile:** stop measurements clobbering bound props (#3197) ([d972e03](https://github.com/carbon-design-system/carbon-components-svelte/commit/d972e03dd1fd25ac1e26ad184cc6f8e04dc7cdcf))
+- **file-uploader-button:** join `accept` explicitly if array ([75cc63a](https://github.com/carbon-design-system/carbon-components-svelte/commit/75cc63a3528e4804e25691eecbd7c2a4ef77c212))
+- **file-uploader-drop-container:** join `accept` explicitly if array ([b298c87](https://github.com/carbon-design-system/carbon-components-svelte/commit/b298c8798f695a4a1f427d6815eeb7df3ab75ed2))
+- **file-uploader:** expose `aria-disabled` on drop container (#3194) ([249d604](https://github.com/carbon-design-system/carbon-components-svelte/commit/249d604d2966a7f0246a727ea91e58895cf7cc9a))
+- **multi-select:** fix selection if `portalMenu` is `true` (#3185) ([bdb4c0e](https://github.com/carbon-design-system/carbon-components-svelte/commit/bdb4c0ec0914d35f7776918a8533766c5ac76d8c)), closes [#3170](https://github.com/carbon-design-system/carbon-components-svelte/issues/3170)
+- **multi-select:** scope checkbox ids per instance (#3175) ([d96e65b](https://github.com/carbon-design-system/carbon-components-svelte/commit/d96e65bab0d26d28ba2797b215dfb66517679fde))
+- **multi-select:** scope option ids per instance (#3179) ([19042d8](https://github.com/carbon-design-system/carbon-components-svelte/commit/19042d86b28300e7ac7bface5f515d84906a3e09))
+- **overflow-menu:** dispatch cancelable `close` before flipping `open` ([5b3410c](https://github.com/carbon-design-system/carbon-components-svelte/commit/5b3410c5ee0e1a2829d68e9c65eb24db181ce313))
+- **overflow-menu:** non-portalled `ul` is a sibling of the menu button (#3189) ([3fb0cda](https://github.com/carbon-design-system/carbon-components-svelte/commit/3fb0cdaa520a5e53c73742c5baa56bef14615973))
+- **tree-view:** prevent arrow keys from scrolling the page (#3165) ([b78fd2b](https://github.com/carbon-design-system/carbon-components-svelte/commit/b78fd2bae6d33fa39140a3bf1ff72e58ade69c55))
+
 ### [0.108.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.107.1...v0.108.0) (2026-06-05)
 
 ### ⚠ BREAKING CHANGES
