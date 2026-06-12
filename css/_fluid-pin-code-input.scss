@@ -1,0 +1,224 @@
+// Fluid variant styles for `PinCodeInput`. No upstream Carbon React component
+// exists; these rules target visual parity with fluid TextInput while
+// preserving the multi-segment fieldset layout.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Fluid pin code input variant
+/// @access private
+/// @group components
+@mixin fluid-pin-code-input {
+  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__fieldset {
+    position: relative;
+  }
+
+  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__fieldset > legend.#{$prefix}--label {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    block-size: to-rem(16px);
+    inline-size: calc(100% - 2rem);
+    inset-block-start: to-rem(13px);
+    inset-inline-start: $spacing-05;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fieldset
+    > legend.#{$prefix}--label::-webkit-scrollbar {
+    display: none;
+  }
+
+  // Labels with slotted content (e.g., a tooltip icon) must not clip
+  // overflow, or the tooltip popover would be cut off.
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fieldset
+    > legend.#{$prefix}--label.#{$prefix}--label--slotted {
+    gap: $spacing-03;
+    overflow: visible;
+  }
+
+  // The fields wrapper is the fluid container: it holds the segment row,
+  // divider, status icon, and message — matching TextInput/NumberInput.
+  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__fields {
+    display: block;
+    position: relative;
+    background: $field-01;
+    transition:
+      background-color $duration--fast-01 motion(standard, productive),
+      outline $duration--fast-01 motion(standard, productive);
+  }
+
+  // Minimum 64px field row. Segments cluster left; the row underline sits on
+  // __segments in the default state and on the full-width divider when invalid.
+  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__segments {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    box-sizing: border-box;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    min-block-size: to-rem(64px);
+    padding-block-start: to-rem(32px);
+    padding-inline: $spacing-05;
+    padding-block-end: to-rem(13px);
+    border-block-end: 1px solid $ui-04;
+  }
+
+  // Fluid segments do not use per-input underlines; a single row border (or the
+  // full-width divider in invalid/warn states) provides the affordance instead.
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__field.#{$prefix}--text-input {
+    block-size: to-rem(40px);
+    inline-size: to-rem(40px);
+    min-inline-size: to-rem(40px);
+    padding: 0;
+    border: none;
+    border-block-end: none;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__field
+    + .#{$prefix}--pin-code-input__field {
+    margin-inline-start: 0;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--xs {
+    block-size: to-rem(24px);
+    inline-size: to-rem(24px);
+    min-inline-size: to-rem(24px);
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--sm {
+    block-size: to-rem(32px);
+    inline-size: to-rem(32px);
+    min-inline-size: to-rem(32px);
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__field.#{$prefix}--text-input--xl {
+    block-size: to-rem(48px);
+    inline-size: to-rem(48px);
+    min-inline-size: to-rem(48px);
+  }
+
+  // v10 applies invalid outlines on unfocused inputs. Suppress those in the
+  // fluid variant; the fields wrapper carries the invalid ring when unfocused.
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields[data-invalid]
+    .#{$prefix}--pin-code-input__field:not(:focus),
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields--warning
+    .#{$prefix}--pin-code-input__field:not(:focus) {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__field:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__divider {
+    display: none;
+    border: none;
+    margin: 0 $spacing-05;
+    block-size: to-rem(1px);
+    border-block-end: 1px solid $ui-03;
+    transition: border-color $duration--fast-01 motion(standard, productive);
+  }
+
+  // Hide the segment-row border for invalid/warn; the in-flow divider below
+  // the segment row spans the full field width instead.
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields[data-invalid]
+    .#{$prefix}--pin-code-input__segments,
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields--warning
+    .#{$prefix}--pin-code-input__segments {
+    border-block-end-color: transparent;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields[data-invalid]
+    .#{$prefix}--pin-code-input__divider,
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields--warning
+    .#{$prefix}--pin-code-input__divider {
+    display: block;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields--warning {
+    border-block-end: 1px solid $ui-04;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields--warning:focus-within {
+    border-block-end: 1px solid transparent;
+  }
+
+  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__message {
+    position: relative;
+  }
+
+  // The error/warn message is rendered inside the fields wrapper in the
+  // fluid variant. The base pin-code-input styles only reveal a message
+  // that is a sibling of the wrapper.
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields[data-invalid]
+    .#{$prefix}--form-requirement,
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields--warning
+    .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-block-size: 100%;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields[data-invalid]
+    .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields
+    .#{$prefix}--form-requirement {
+    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    margin: 0;
+  }
+
+  // Anchor the status icon to the message row so it stays aligned with the
+  // first line of text regardless of field height above.
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__message
+    .#{$prefix}--pin-code-input__icon {
+    position: absolute;
+    margin: 0;
+    inset-block-start: $spacing-03;
+    inset-inline-end: $spacing-05;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__fields[data-invalid]:not(:focus-within) {
+    @include focus-outline("invalid");
+  }
+}
+
+@include exports("fluid-pin-code-input") {
+  @include fluid-pin-code-input;
+}

@@ -79,6 +79,15 @@
   /** Specify the helper text */
   export let helperText = "";
 
+  /**
+   * Placeholder shown in empty segments.
+   *
+   * Defaults to a placeholder in the fluid variant; non-fluid segments have no
+   * placeholder unless this prop is set.
+   * @type {string | undefined}
+   */
+  export let placeholder = undefined;
+
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
@@ -98,6 +107,13 @@
   export let readonly = false;
 
   /**
+   * Set to `true` to use the fluid variant.
+   * Inherited from the parent `FluidForm` context,
+   * so it does not need to be set when used inside `FluidForm`.
+   */
+  export let fluid = false;
+
+  /**
    * Set to `true` to select a segment's value when it receives focus,
    * including on click. Without this prop, browsers typically select the
    * value only on keyboard focus (for example, via Tab).
@@ -114,11 +130,12 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
 
   const dispatch = createEventDispatcher();
+  const formContext = getContext("carbon:Form");
 
   /** @type {HTMLInputElement[]} */
   let inputs = [];
@@ -150,6 +167,9 @@
   // matching the other Carbon inputs.
   $: hasError = invalid && !readonly && !disabled;
   $: hasWarn = warn && !hasError && !readonly && !disabled;
+  $: isFluid = fluid || !!formContext?.isFluid;
+  $: segmentPlaceholder =
+    placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
 
   $: legendId = `legend-${id}`;
   $: helperId = `helper-${id}`;
@@ -159,7 +179,7 @@
     ? errorId
     : hasWarn
       ? warnId
-      : helperText
+      : helperText && !isFluid
         ? helperId
         : undefined;
 
@@ -372,6 +392,7 @@
   class:bx--pin-code-input={true}
   class:bx--pin-code-input--light={light}
   class:bx--pin-code-input--readonly={readonly}
+  class:bx--pin-code-input--fluid={isFluid}
   {...$$restProps}
 >
   <fieldset
@@ -386,6 +407,7 @@
         class:bx--label={true}
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
+        class:bx--label--slotted={isFluid && $$slots.labelChildren}
         tabindex="0"
         on:click={handleLegendClick}
         on:keydown={handleLegendKeydown}
@@ -400,51 +422,75 @@
       class:bx--pin-code-input__fields--invalid={hasError}
       class:bx--pin-code-input__fields--warning={hasWarn}
     >
-      {#each code as char, index (index)}
-        <input
-          bind:this={inputs[index]}
-          type="text"
-          inputmode={type === "numeric" ? "numeric" : "text"}
-          autocomplete={index === 0 ? "one-time-code" : "off"}
-          autocorrect="off"
-          autocapitalize="off"
-          spellcheck="false"
-          maxlength="1"
-          value={char}
-          id={index === 0 ? id : `${id}-${index}`}
-          {disabled}
-          {readonly}
-          {required}
-          aria-readonly={readonly || undefined}
-          aria-label={`${labelText || "Pin code"} digit ${index + 1} of ${count}`}
-          aria-invalid={hasError || undefined}
-          data-invalid={hasError || undefined}
-          data-warn={hasWarn || undefined}
-          class:bx--text-input={true}
-          class:bx--pin-code-input__field={true}
-          class:bx--pin-code-input__field--masked={mask}
-          class:bx--pin-code-input__field--uppercase={uppercase}
-          class:bx--text-input--light={light}
-          class:bx--text-input--invalid={hasError}
-          class:bx--text-input--warning={hasWarn}
-          class:bx--text-input--xs={size === "xs"}
-          class:bx--text-input--sm={size === "sm"}
-          class:bx--text-input--xl={size === "xl"}
-          on:input={(event) => handleInput(index, event)}
-          on:keydown={(event) => handleKeydown(index, event)}
-          on:paste={(event) => handlePaste(index, event)}
-          on:focus={handleFocus}
-        >
-      {/each}
-      {#if hasError}
-        <WarningFilled class="bx--pin-code-input__icon" />
-      {:else if hasWarn}
-        <WarningAltFilled
-          class="bx--pin-code-input__icon bx--pin-code-input__icon--warning"
-        />
+      <div class:bx--pin-code-input__segments={true}>
+        {#each code as char, index (index)}
+          <input
+            bind:this={inputs[index]}
+            type="text"
+            inputmode={type === "numeric" ? "numeric" : "text"}
+            autocomplete={index === 0 ? "one-time-code" : "off"}
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            maxlength="1"
+            value={char}
+            placeholder={segmentPlaceholder || undefined}
+            id={index === 0 ? id : `${id}-${index}`}
+            {disabled}
+            {readonly}
+            {required}
+            aria-readonly={readonly || undefined}
+            aria-label={`${labelText || "Pin code"} digit ${index + 1} of ${count}`}
+            aria-invalid={hasError || undefined}
+            data-invalid={hasError || undefined}
+            data-warn={hasWarn || undefined}
+            class:bx--text-input={true}
+            class:bx--pin-code-input__field={true}
+            class:bx--pin-code-input__field--masked={mask}
+            class:bx--pin-code-input__field--uppercase={uppercase}
+            class:bx--text-input--light={light}
+            class:bx--text-input--invalid={hasError}
+            class:bx--text-input--warning={hasWarn}
+            class:bx--text-input--xs={size === "xs"}
+            class:bx--text-input--sm={size === "sm"}
+            class:bx--text-input--xl={size === "xl"}
+            on:input={(event) => handleInput(index, event)}
+            on:keydown={(event) => handleKeydown(index, event)}
+            on:paste={(event) => handlePaste(index, event)}
+            on:focus={handleFocus}
+          >
+        {/each}
+        {#if !isFluid}
+          {#if hasError}
+            <WarningFilled class="bx--pin-code-input__icon" />
+          {:else if hasWarn}
+            <WarningAltFilled
+              class="bx--pin-code-input__icon bx--pin-code-input__icon--warning"
+            />
+          {/if}
+        {/if}
+      </div>
+      {#if isFluid}
+        <hr class:bx--pin-code-input__divider={true}>
+        {#if hasError}
+          <div class:bx--pin-code-input__message={true}>
+            <WarningFilled class="bx--pin-code-input__icon" />
+            <div class:bx--form-requirement={true} id={errorId}>
+              {invalidText}
+            </div>
+          </div>
+        {/if}
+        {#if hasWarn}
+          <div class:bx--pin-code-input__message={true}>
+            <WarningAltFilled
+              class="bx--pin-code-input__icon bx--pin-code-input__icon--warning"
+            />
+            <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
+          </div>
+        {/if}
       {/if}
     </div>
-    {#if !hasError && !hasWarn && helperText}
+    {#if !isFluid && !hasError && !hasWarn && helperText}
       <div
         id={helperId}
         class:bx--form__helper-text={true}
@@ -453,10 +499,10 @@
         {helperText}
       </div>
     {/if}
-    {#if hasError}
+    {#if !isFluid && hasError}
       <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
     {/if}
-    {#if hasWarn}
+    {#if !isFluid && hasWarn}
       <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
     {/if}
   </fieldset>

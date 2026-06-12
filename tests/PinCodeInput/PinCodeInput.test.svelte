@@ -20,9 +20,12 @@
   export let labelText: ComponentProps<PinCodeInput>["labelText"] =
     "Verification code";
   export let helperText: ComponentProps<PinCodeInput>["helperText"] = "";
+  export let placeholder: ComponentProps<PinCodeInput>["placeholder"] =
+    undefined;
   export let id: ComponentProps<PinCodeInput>["id"] = undefined;
   export let selectTextOnFocus: ComponentProps<PinCodeInput>["selectTextOnFocus"] = false;
   export let size: ComponentProps<PinCodeInput>["size"] = "default";
+  export let fluid: ComponentProps<PinCodeInput>["fluid"] = false;
 </script>
 
 <PinCodeInput
@@ -42,8 +45,10 @@
   {warnText}
   {labelText}
   {helperText}
+  {placeholder}
   {id}
   {selectTextOnFocus}
+  {fluid}
   on:change={(e) => console.log("change", e.detail)}
   on:complete={(e) => console.log("complete", e.detail)}
   on:clear={() => console.log("clear")}
