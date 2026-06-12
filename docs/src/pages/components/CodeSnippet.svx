@@ -125,7 +125,7 @@ Re-render the component to fix this issue.
 
 ## Portal tooltip
 
-Set `portalTooltip` to `true` to render the feedback tooltip in a floating portal. This prevents the tooltip from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. The example below demonstrates `portalTooltip` for each variant (`inline`, `single`, `multi`) inside a container with hidden overflow; with `portalTooltip`, the tooltip breaks out of the container.
+Set `portalTooltip` to `true` to render the feedback tooltip in a floating portal. This prevents the tooltip from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. The example renders each variant (`inline`, `single`, `multi`) inside a container with hidden overflow.
 
 When inside a [Modal](/components/Modal), `portalTooltip` defaults to `true` unless explicitly set to `false`.
 
