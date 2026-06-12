@@ -138,7 +138,9 @@
       if (!open) {
         opened = false;
         if (!closeDispatched) {
-          dispatch("close");
+          tick().then(() => {
+            dispatch("close");
+          });
         }
         closeDispatched = false;
       }
