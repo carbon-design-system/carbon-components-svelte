@@ -373,6 +373,30 @@
     .#{$prefix}--select-input__wrapper:focus-within {
     outline: none;
   }
+
+  // Skeleton (ported from v11 fluid-time-picker). Composes FluidTextInputSkeleton
+  // + one or two FluidSelectSkeleton; this wrapper sizes the composed children.
+  .#{$prefix}--time-picker--fluid--skeleton {
+    display: flex;
+    block-size: to-rem(64px);
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--time-picker--fluid--skeleton > * {
+    block-size: 100%;
+    inline-size: auto;
+  }
+
+  .#{$prefix}--time-picker--fluid--skeleton > *:nth-child(1),
+  .#{$prefix}--time-picker--fluid--skeleton > *:nth-child(2) {
+    inline-size: 25%;
+  }
+
+  .#{$prefix}--time-picker--fluid--skeleton > *:last-child,
+  .#{$prefix}--time-picker--fluid--skeleton.#{$prefix}--time-picker--equal-width
+    > *:first-child {
+    inline-size: 50%;
+  }
 }
 
 @include exports("fluid-time-picker") {
