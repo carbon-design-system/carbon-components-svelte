@@ -1,9 +1,9 @@
 ---
-components: ["NumberInput", "NumberInputSkeleton"]
+components: ["NumberInput", "NumberInputSkeleton", "FluidNumberInputSkeleton"]
 ---
 
 <script>
-  import { NumberInput, NumberInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { NumberInput, NumberInputSkeleton, FluidNumberInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -177,6 +177,12 @@ Invalid and warning states are not displayed while the input is disabled.
 Invalid and warning states are not displayed while the input is read-only.
 
 <NumberInput fluid readonly warn warnText="The number of clusters is read-only." labelText="Clusters" value={0} />
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid number input variant.
+
+<FluidNumberInputSkeleton />
 
 ## Invalid state
 
