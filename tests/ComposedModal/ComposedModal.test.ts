@@ -5,6 +5,12 @@ import ComposedModalTest from "./ComposedModal.test.svelte";
 import ComposedModalFocusReturnTest from "./ComposedModalFocusReturn.test.svelte";
 import ComposedModalFocusTrapTest from "./ComposedModalFocusTrap.test.svelte";
 
+/** ComposedModal defers programmatic `close` via `tick().then(...)`. */
+async function flushProgrammaticClose() {
+  await tick();
+  await tick();
+}
+
 describe("ComposedModal", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -67,7 +73,7 @@ describe("ComposedModal", () => {
     expect(openHandler).toHaveBeenCalledTimes(1);
 
     rerender({ open: false });
-    await tick();
+    await flushProgrammaticClose();
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
 
@@ -570,6 +576,53 @@ describe("ComposedModal", () => {
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(2);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  // A consumer exception in `on:close` must not abort the component update and
+  // leave the modal stuck open. The synthetic programmatic dispatch is deferred
+  // off the reactive flush, so the throw lands in a detached microtask after the
+  // DOM has already committed — it surfaces as an unhandled rejection (captured
+  // here) instead of blocking the close.
+  it("does not leave the modal open when a programmatic on:close handler throws", async () => {
+    const error = new Error("consumer error");
+    const rejections: unknown[] = [];
+    const onUnhandled = (reason: unknown) => rejections.push(reason);
+
+    // Take over unhandled-rejection handling for the duration of this test so
+    // the deferred throw doesn't fail the vitest run.
+    const priorListeners = process.listeners("unhandledRejection");
+    process.removeAllListeners("unhandledRejection");
+    process.on("unhandledRejection", onUnhandled);
+
+    try {
+      const { rerender } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          headerTitle: "Throwing Close Test",
+          onclose: () => {
+            throw error;
+          },
+        },
+      });
+
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+      rerender({ open: false });
+      await tick();
+      // Let the deferred dispatch reject and the host report it (a macrotask
+      // later than the microtask that rejects the promise).
+      await new Promise((resolve) => setTimeout(resolve));
+
+      const modalWrapper = document.querySelector(".bx--modal");
+      expect(modalWrapper).not.toHaveClass("is-visible");
+      expect(modalWrapper).toHaveAttribute("inert");
+      expect(rejections).toEqual([error]);
+    } finally {
+      process.off("unhandledRejection", onUnhandled);
+      for (const listener of priorListeners) {
+        process.on("unhandledRejection", listener);
+      }
+    }
   });
 
   it("is inert when closed", async () => {
