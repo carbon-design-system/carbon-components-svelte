@@ -1,9 +1,9 @@
 ---
-components: ["TextInput", "TextInputSkeleton"]
+components: ["TextInput", "TextInputSkeleton", "FluidTextInputSkeleton"]
 ---
 
 <script>
-  import { TextInput, TextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { TextInput, TextInputSkeleton, FluidTextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -84,6 +84,12 @@ Invalid and warning states are not displayed while the input is disabled.
 Invalid and warning states are not displayed while the input is read-only.
 
 <TextInput fluid readonly warn warnText="Your user name is different from your log in ID." labelText="User name" value="IBM" />
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid text input variant.
+
+<FluidTextInputSkeleton />
 
 ## Inline variant
 
