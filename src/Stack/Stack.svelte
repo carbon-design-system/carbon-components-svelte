@@ -47,6 +47,13 @@
   export let justify = "start";
 
   /**
+   * Specify how items wrap onto multiple lines.
+   * Only applies to horizontal stacks that overflow their container.
+   * @type {"nowrap" | "wrap" | "wrap-reverse"}
+   */
+  export let wrap = "nowrap";
+
+  /**
    * Set to `true` to use `display: inline-flex` instead of `display: flex`.
    */
   export let inline = false;
@@ -87,6 +94,8 @@
   class:bx--stack-justify-space-between={justify === "space-between"}
   class:bx--stack-justify-space-around={justify === "space-around"}
   class:bx--stack-justify-space-evenly={justify === "space-evenly"}
+  class:bx--stack-wrap={wrap === "wrap"}
+  class:bx--stack-wrap-reverse={wrap === "wrap-reverse"}
   style:gap={typeof gap === "string" ? gap : undefined}
   {...$$restProps}
 >
