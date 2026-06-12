@@ -50,6 +50,7 @@ export { default as ToolbarSearch } from "./DataTable/ToolbarSearch.svelte";
 export { default as DatePicker } from "./DatePicker/DatePicker.svelte";
 export { default as DatePickerInput } from "./DatePicker/DatePickerInput.svelte";
 export { default as DatePickerSkeleton } from "./DatePicker/DatePickerSkeleton.svelte";
+export { default as FluidDatePickerSkeleton } from "./DatePicker/FluidDatePickerSkeleton.svelte";
 export { default as Dropdown } from "./Dropdown/Dropdown.svelte";
 export { default as DropdownSkeleton } from "./Dropdown/DropdownSkeleton.svelte";
 export { default as FluidDropdownSkeleton } from "./Dropdown/FluidDropdownSkeleton.svelte";
