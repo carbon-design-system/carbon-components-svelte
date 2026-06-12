@@ -21,8 +21,8 @@
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import MiniSearch from "minisearch";
   import { onMount, tick } from "svelte";
-  import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import { NEW_COMPONENTS } from "../new-components";
+  import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import { theme } from "../store";
 
   type ModuleSearchResult = HeaderSearchResult & { isComponent: boolean };
