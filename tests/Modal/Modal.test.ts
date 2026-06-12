@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type ModalComponent from "carbon-components-svelte/Modal/Modal.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { absorbUnhandledRejection } from "../utils/absorb-unhandled-rejection";
 import { user } from "../utils/user";
 import ModalTest from "./Modal.test.svelte";
 import ModalFocusReturnTest from "./ModalFocusReturn.test.svelte";
@@ -10,6 +11,12 @@ import ModalFormIdTest from "./ModalFormId.test.svelte";
 import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
 import ModalSideNavBodyLockTest from "./ModalSideNavBodyLock.test.svelte";
 import ModalTextareaEnterTest from "./ModalTextareaEnter.test.svelte";
+import ModalUnmountOnCloseTest from "./ModalUnmountOnClose.test.svelte";
+
+async function flushProgrammaticClose() {
+  await tick();
+  await tick();
+}
 
 describe("Modal", () => {
   beforeEach(() => {
@@ -99,7 +106,7 @@ describe("Modal", () => {
 
     // Close the modal
     rerender({ open: false });
-    await tick();
+    await flushProgrammaticClose();
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
 
@@ -504,6 +511,54 @@ describe("Modal", () => {
     });
   });
 
+  it("does not leave the modal open when a programmatic on:close handler throws", async () => {
+    const error = new Error("consumer error");
+    const trap = absorbUnhandledRejection((reason) => reason === error);
+
+    const { rerender } = render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Throwing Close Test",
+        onclose: () => {
+          throw error;
+        },
+      },
+    });
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    rerender({ open: false });
+    await flushProgrammaticClose();
+    await trap.wait;
+    trap.dispose();
+
+    const modalWrapper = document.querySelector(".bx--modal");
+    expect(modalWrapper).not.toHaveClass("is-visible");
+    expect(modalWrapper).toHaveAttribute("inert");
+  });
+
+  // When the same boolean both gates an {#if} and binds `open`, flipping it
+  // false closes *and* unmounts the modal in one flush. Svelte does not run a
+  // component's `afterUpdate` while it is being torn down, so the programmatic
+  // `close` is never delivered — in every supported Svelte version, and whether
+  // the dispatch is synchronous or deferred via `tick()`. This documents that
+  // deferring the dispatch did not regress teardown behavior (it is a
+  // pre-existing Svelte limitation, not introduced by the defer).
+  it("does not dispatch programmatic close when the same flip unmounts the modal", async () => {
+    const closeHandler = vi.fn();
+    const { rerender } = render(ModalUnmountOnCloseTest, {
+      props: { open: true, onclose: closeHandler },
+    });
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    rerender({ open: false });
+    await flushProgrammaticClose();
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(closeHandler).not.toHaveBeenCalled();
+  });
+
   it("dispatches close event with programmatic trigger", async () => {
     const closeHandler = vi.fn();
     const { rerender } = render(ModalTest, {
@@ -515,7 +570,7 @@ describe("Modal", () => {
     });
 
     rerender({ open: false });
-    await tick();
+    await flushProgrammaticClose();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
     expect(closeHandler.mock.calls[0][0].detail).toEqual({
