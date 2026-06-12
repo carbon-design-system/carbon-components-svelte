@@ -59,7 +59,6 @@
     margin-bottom: var(--cds-layout-04);
     margin-left: -1rem;
     margin-right: -1rem;
-    max-width: 80rem;
   }
 
   .preview-viewer {

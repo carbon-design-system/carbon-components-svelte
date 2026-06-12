@@ -4,24 +4,33 @@
     Header,
     HeaderAction,
     HeaderActionLink,
+    HeaderNav,
+    HeaderNavItem,
     HeaderPanelDivider,
     HeaderPanelLink,
     HeaderPanelLinks,
     HeaderSearch,
     HeaderUtilities,
     SideNav,
+    SideNavDivider,
     SideNavItems,
-    SideNavMenuItem,
+    SideNavLink,
     SkipToContent,
     Stack,
     Tag,
+    Text,
     Theme,
   } from "carbon-components-svelte";
   import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import MiniSearch from "minisearch";
   import { onMount, tick } from "svelte";
-  import { NEW_COMPONENTS } from "../new-components";
+  import {
+    assertCategoriesCover,
+    COMPONENT_CATEGORIES,
+  } from "../component-categories";
+  import { subscribeRoutifyGoto } from "../routify-nav";
   import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import { theme } from "../store";
 
@@ -42,12 +51,7 @@
   miniSearch.addAll(SEARCH_INDEX as SearchIndexDocument[]);
 
   /** Routify + Svelte 5: `$goto` in event handlers runs outside fragment context; keep a root-level subscription. */
-  let navigateTo:
-    | ((path: string, options?: { "#": string }) => void)
-    | undefined;
-  const unsubGoto = goto.subscribe((fn) => {
-    navigateTo = fn;
-  });
+  const routifyNav = subscribeRoutifyGoto(goto);
 
   onMount(() => {
     tick().then(() => {
@@ -58,7 +62,7 @@
     });
 
     return () => {
-      unsubGoto();
+      routifyNav.unsubscribe();
     };
   });
 
@@ -87,10 +91,47 @@
   $: isMobile = innerWidth < 1056;
   $: components = $node.children.find((child) => child.name === "components");
 
+  $: componentChildren = (components?.children ?? []).filter(
+    (child) => !deprecated.includes(child.name),
+  );
+
+  $: if (import.meta.env.DEV && componentChildren.length) {
+    assertCategoriesCover(componentChildren.map((child) => child.name));
+  }
+
+  $: nodeByName = new Map(
+    componentChildren.map((child) => [child.name, child]),
+  );
+  $: groupedNav = (() => {
+    const groups = COMPONENT_CATEGORIES.map((category) => ({
+      label: category.label,
+      children: category.components
+        .map((name) => nodeByName.get(name))
+        .filter((child) => child != null),
+    })).filter((group) => group.children.length > 0);
+
+    const categorized = new Set(
+      COMPONENT_CATEGORIES.flatMap((category) => category.components),
+    );
+    const uncategorized = componentChildren.filter(
+      (child) => !categorized.has(child.name),
+    );
+    if (uncategorized.length) {
+      groups.push({ label: "Other", children: uncategorized });
+    }
+    return groups;
+  })();
+
   $beforeUrlChange(() => {
     if (isMobile) isSideNavOpen = false;
     return true;
   });
+
+  function subheadingClass(index: number) {
+    return index === 0
+      ? "sidenav-subheading sidenav-subheading-first"
+      : "sidenav-subheading";
+  }
 </script>
 
 <svelte:window bind:innerWidth />
@@ -128,8 +169,28 @@
 
     <span slot="platform" class="platform-name" class:hidden={active}>
       Carbon<span class="platform-name-full">&nbsp;Components</span>&nbsp;Svelte
-      &nbsp;<code class="code-01">v{__PKG_VERSION}</code>
+      &nbsp;<code class="code-01 platform-name-version">v{__PKG_VERSION}</code>
     </span>
+    <HeaderNav aria-label="Carbon Svelte sections">
+      <HeaderNavItem href={$url("/")} text="Components" isSelected />
+      <HeaderNavItem
+        href="https://github.com/carbon-design-system/carbon-icons-svelte"
+        target="_blank"
+        text="Icons"
+      >
+        <Stack orientation="horizontal" gap={2} align="center">
+          Icons <Launch />
+        </Stack>
+      </HeaderNavItem>
+      <HeaderNavItem
+        href="https://github.com/carbon-design-system/carbon-pictograms-svelte"
+        target="_blank"
+      >
+        <Stack orientation="horizontal" gap={2} align="center">
+          Pictograms <Launch />
+        </Stack>
+      </HeaderNavItem>
+    </HeaderNav>
     <HeaderUtilities>
       <HeaderSearch
         bind:value
@@ -145,7 +206,7 @@
           const u = new URL(href, window.location.origin);
           const path = u.pathname;
           const hash = u.hash.slice(1);
-          navigateTo?.(path, hash ? { "#": hash } : undefined);
+          routifyNav.getNavigate()?.(path, hash ? { "#": hash } : undefined);
         }}
       >
         {@const hit = result as ModuleSearchResult}
@@ -173,7 +234,7 @@
       />
       <HeaderAction transition={false} bind:isOpen>
         <HeaderPanelLinks>
-          <HeaderPanelDivider>Carbon Svelte portfolio</HeaderPanelDivider>
+          <HeaderPanelDivider>GitHub repositories</HeaderPanelDivider>
           <HeaderPanelLink
             href="https://github.com/carbon-design-system/carbon-icons-svelte"
           >
@@ -208,39 +269,40 @@
 
   <SideNav bind:isOpen={isSideNavOpen}>
     <SideNavItems>
-      {#each (components?.children ?? []).filter((child) => !deprecated.includes(child.name)) as child (child.path)}
-        <SideNavMenuItem
-          text={child.name}
-          href={$url(child.path)}
-          isSelected={$isActive($url(child.path))}
+      <SideNavLink
+        text="Introduction"
+        href={$url("/")}
+        isSelected={$isActive($url("/"), {}, { recursive: false })}
+      />
+      <SideNavLink
+        text="Quick start"
+        href={$url("/quick-start")}
+        isSelected={$isActive($url("/quick-start"))}
+      />
+      <SideNavLink
+        text="Component index"
+        href={$url("/component-index")}
+        isSelected={$isActive($url("/component-index"))}
+      />
+      <SideNavDivider />
+      {#each groupedNav as group, groupIndex (group.label)}
+        <Text
+          tag="li"
+          type="label-01"
+          color="secondary"
+          class={subheadingClass(groupIndex)}
         >
-          {#if deprecated.includes(child.name) || child.name in NEW_COMPONENTS}
-            <Stack gap={2} orientation="horizontal" align="center">
-              {child.name}
-              {#if deprecated.includes(child.name)}
-                <Tag
-                  size="sm"
-                  type="red"
-                  style="margin-top: 0; margin-bottom: 0; cursor: inherit"
-                >
-                  Deprecated
-                </Tag>
-              {/if}
-              {#if child.name in NEW_COMPONENTS}
-                <Tag
-                  size="sm"
-                  type="blue"
-                  style="margin-top: 0; margin-bottom: 0; cursor: inherit"
-                >
-                  New
-                </Tag>
-              {/if}
-            </Stack>
-          {:else}
-            {child.name}
-          {/if}
-        </SideNavMenuItem>
+          {group.label}
+        </Text>
+        {#each group.children as child (child.path)}
+          <SideNavLink
+            text={child.name}
+            href={$url(child.path)}
+            isSelected={$isActive($url(child.path))}
+          />
+        {/each}
       {/each}
+      <li class="sidenav-bottom-spacer" aria-hidden="true"></li>
     </SideNavItems>
   </SideNav>
   <slot />
@@ -296,21 +358,43 @@
   .platform-name {
     display: flex;
     align-items: baseline;
+    white-space: nowrap;
   }
 
-  @media (min-width: 1056px) {
-    footer {
-      margin-left: 256px;
-    }
+  .platform-name-version {
+    color: var(--cds-text-secondary);
+    font-family: var(--cds-code-01-font-family);
   }
 
-  @media (max-width: 580px) {
-    .platform-name code {
+  @media (max-width: 1056px) {
+    .platform-name-version {
       display: none;
     }
 
     .platform-name-full {
       display: none;
+    }
+  }
+
+  :global(.bx--side-nav__items .bx--side-nav__divider) {
+    margin: 1rem 1rem 0;
+  }
+
+  :global(.sidenav-subheading) {
+    padding: 1.25rem 1rem 0.25rem;
+  }
+
+  :global(.sidenav-subheading-first) {
+    padding-top: 0.75rem;
+  }
+
+  :global(.sidenav-bottom-spacer) {
+    height: 2rem;
+  }
+
+  @media (min-width: 1056px) {
+    footer {
+      margin-left: 256px;
     }
   }
 </style>

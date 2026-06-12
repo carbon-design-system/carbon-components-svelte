@@ -17,6 +17,7 @@
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@types/prismjs": "^1.26.5",
     "carbon-icons-svelte": "^13.12.0",
+    "carbon-pictograms-svelte": "^13.18.0",
     "clipboard-copy": "^4.0.1",
     "estree-walker": "^3.0.3",
     "github-slugger": "^2.0.0",
