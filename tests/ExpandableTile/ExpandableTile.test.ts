@@ -159,6 +159,19 @@ describe("ExpandableTile", () => {
       expect(tile.tagName).not.toBe("BUTTON");
     });
 
+    it("should give the chevron button an accessible name when no labels are provided", () => {
+      render(ExpandableTileVariants);
+
+      const tile = screen.getByTestId("interactive");
+      const chevronButton = tile.querySelector("button.bx--tile__chevron");
+      expect.assert(chevronButton);
+
+      expect(chevronButton).toHaveAttribute(
+        "aria-label",
+        "Interact to expand Tile",
+      );
+    });
+
     it("should not toggle when clicking interactive button or link", async () => {
       render(ExpandableTileCustom);
 

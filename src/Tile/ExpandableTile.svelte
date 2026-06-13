@@ -137,6 +137,7 @@
       type={hasInteractiveContent ? "button" : undefined}
       class:bx--tile__chevron={true}
       aria-expanded={hasInteractiveContent ? expanded : undefined}
+      aria-label={hasInteractiveContent ? (expanded ? tileExpandedIconText : tileCollapsedIconText) : undefined}
       title={hasInteractiveContent ? (expanded ? tileExpandedIconText : tileCollapsedIconText) : undefined}
       on:click={() => {
         if (hasInteractiveContent) expanded = !expanded;
