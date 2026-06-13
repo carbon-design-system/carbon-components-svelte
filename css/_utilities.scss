@@ -1,0 +1,137 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./spacing-scale";
+
+/// Tailwind-flavored, Carbon-scale utility classes.
+///
+/// Unlike the component-scoped `box` utilities (`bx--box-p-*`), these are global,
+/// terse helpers meant to be applied to any element:
+///
+/// - Spacing: `bx--mt-8`, `bx--px-3`, `bx--p-0` -- margin/padding on the shared
+///   layout scale (`0`-`13`). Directions follow Tailwind: `t`/`r`/`b`/`l` (sides),
+///   `x`/`y` (axes), or none (all sides).
+/// - Borders: compose a side class with a color class, e.g. `bx--border-b bx--border-subtle`.
+///   Side classes (`bx--border`, `bx--border-{t,r,b,l,x,y}`) set a `1px solid` line;
+///   color classes (`bx--border-{subtle,strong,interactive,disabled}`) set the color.
+/// - Backgrounds: `bx--bg-layer-01`, `bx--bg-inverse` -- a Carbon surface token color.
+/// - Fill: `bx--fill-icon-primary` -- sets `fill` so Carbon icon `<svg>`s pick up a
+///   semantic icon token color.
+///
+/// Token names follow Carbon v11; values resolve through the active theme (a
+/// `var(--cds-*)` reference in the dynamic build, a baked hex in static builds).
+/// @access private
+/// @group components
+@mixin utilities {
+  // Scale 0 (reset) plus the shared 1-13 layout scale.
+  $ccs-utility-spacing: map-merge((0: 0), $ccs-spacing-scale);
+
+  // Direction suffix -> the physical edges it sets. Matches Tailwind's t/r/b/l/x/y.
+  $ccs-spacing-sides: (
+    "": (top, right, bottom, left),
+    "t": (top),
+    "r": (right),
+    "b": (bottom),
+    "l": (left),
+    "x": (left, right),
+    "y": (top, bottom),
+  );
+
+  $ccs-spacing-props: (
+    "m": margin,
+    "p": padding,
+  );
+
+  @each $prop-abbr, $prop in $ccs-spacing-props {
+    @each $side-abbr, $edges in $ccs-spacing-sides {
+      @each $step, $size in $ccs-utility-spacing {
+        .#{$prefix}--#{$prop-abbr}#{$side-abbr}-#{$step} {
+          @each $edge in $edges {
+            #{$prop}-#{$edge}: $size;
+          }
+        }
+      }
+    }
+  }
+
+  // Borders use a composable (Tailwind-style) model: a side class sets the width and
+  // `solid` style; a color class sets the color. Pair them, e.g.
+  // `bx--border-b bx--border-subtle`. Decoupling the two axes keeps the class count
+  // linear (7 sides + N colors) instead of multiplicative, and a color on a zero-width
+  // side is simply invisible -- so the side class alone decides what's painted.
+  $ccs-border-sides: (
+    "": (top, right, bottom, left),
+    "t": (top),
+    "r": (right),
+    "b": (bottom),
+    "l": (left),
+    "x": (left, right),
+    "y": (top, bottom),
+  );
+
+  @each $side-abbr, $edges in $ccs-border-sides {
+    $selector: if(
+      $side-abbr == "",
+      ".#{$prefix}--border",
+      ".#{$prefix}--border-#{$side-abbr}"
+    );
+
+    #{$selector} {
+      @each $edge in $edges {
+        // Width + style only; color defaults to currentColor until a color class wins.
+        border-#{$edge}: 1px solid;
+      }
+    }
+  }
+
+  // Color classes set `border-color`; emitted after the side rules so they win.
+  // Box exposes the same four tokens via its `border` prop.
+  $ccs-border-tokens: (
+    subtle: $border-subtle,
+    strong: $border-strong,
+    interactive: $border-interactive,
+    disabled: $border-disabled,
+  );
+
+  @each $name, $value in $ccs-border-tokens {
+    .#{$prefix}--border-#{$name} {
+      border-color: $value;
+    }
+  }
+
+  // Background surface tokens. Token names follow Carbon v11 (layer-*); values
+  // resolve through the active theme's v10 surfaces, matching Box's `fill` prop.
+  $ccs-bg-tokens: (
+    background: $background,
+    layer-01: $ui-01,
+    layer-02: $ui-02,
+    layer-03: $ui-03,
+    field-01: $field-01,
+    field-02: $field-02,
+    inverse: $background-inverse,
+  );
+
+  @each $name, $value in $ccs-bg-tokens {
+    .#{$prefix}--bg-#{$name} {
+      background-color: $value;
+    }
+  }
+
+  // Icon fill tokens. Apply to a Carbon icon <svg> (or any element) to color it.
+  $ccs-icon-tokens: (
+    icon-primary: $icon-primary,
+    icon-secondary: $icon-secondary,
+    icon-on-color: $icon-on-color,
+    icon-inverse: $icon-inverse,
+    icon-disabled: $icon-disabled,
+  );
+
+  @each $name, $value in $ccs-icon-tokens {
+    .#{$prefix}--fill-#{$name} {
+      fill: $value;
+    }
+  }
+}
+
+@include exports("utilities") {
+  @include utilities;
+}
