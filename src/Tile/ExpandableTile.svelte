@@ -138,6 +138,7 @@
       class:bx--tile__chevron={true}
       aria-expanded={hasInteractiveContent ? expanded : undefined}
       aria-label={hasInteractiveContent ? (expanded ? tileExpandedIconText : tileCollapsedIconText) : undefined}
+      aria-controls={hasInteractiveContent ? `${id}-content` : undefined}
       title={hasInteractiveContent ? (expanded ? tileExpandedIconText : tileCollapsedIconText) : undefined}
       on:click={() => {
         if (hasInteractiveContent) expanded = !expanded;
@@ -147,7 +148,7 @@
       <ChevronDown />
     </svelte:element>
     <div class:bx--tile-content={true}>
-      <span class:bx--tile-content__below-the-fold={true}>
+      <span id="{id}-content" class:bx--tile-content__below-the-fold={true}>
         <slot name="below" />
       </span>
     </div>

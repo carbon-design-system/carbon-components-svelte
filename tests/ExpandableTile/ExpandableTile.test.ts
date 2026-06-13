@@ -152,6 +152,21 @@ describe("ExpandableTile", () => {
       expect(chevronButton).toHaveAttribute("aria-expanded", "false");
     });
 
+    it("should link the chevron button to the below-the-fold region via aria-controls", () => {
+      render(ExpandableTileVariants);
+
+      const tile = screen.getByTestId("interactive");
+      const chevronButton = tile.querySelector("button.bx--tile__chevron");
+      expect.assert(chevronButton);
+      expect(chevronButton).toHaveAttribute(
+        "aria-controls",
+        "interactive-tile-content",
+      );
+
+      const belowFold = tile.querySelector(".bx--tile-content__below-the-fold");
+      expect(belowFold).toHaveAttribute("id", "interactive-tile-content");
+    });
+
     it("should render as a div (not button) when it contains interactive content", () => {
       render(ExpandableTileVariants);
 
