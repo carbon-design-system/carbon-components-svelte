@@ -31,7 +31,7 @@
   {id}
   {portalMenu}
   on:close={(e) => {
-    console.log("close", e.detail); // { index: number; text: string; }
+    console.log("close", e.detail); // { trigger: string; index?: number; text?: string; }
   }}
 >
   <OverflowMenuItem

@@ -71,6 +71,7 @@ describe("OverflowMenu", () => {
 
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
     expect(spy).toHaveBeenCalledWith("close", {
+      trigger: "item-select",
       index: 0,
       text: "Manage credentials",
     });
@@ -114,7 +115,7 @@ describe("OverflowMenu", () => {
 
     await user.keyboard("{Escape}");
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
-    expect(spy).toHaveBeenCalledWith("close", null);
+    expect(spy).toHaveBeenCalledWith("close", { trigger: "escape-key" });
   });
 
   it("does not infinite-loop when all items are disabled", async () => {
@@ -456,6 +457,7 @@ describe("OverflowMenu", () => {
     await user.click(menuItems[0]);
 
     expect(spy).toHaveBeenCalledWith("close", {
+      trigger: "item-select",
       index: 0,
       text: "Manage credentials",
     });
@@ -470,7 +472,7 @@ describe("OverflowMenu", () => {
 
     await user.keyboard("{Escape}");
 
-    expect(spy).toHaveBeenCalledWith("close", null);
+    expect(spy).toHaveBeenCalledWith("close", { trigger: "escape-key" });
   });
 
   it("handles close event with outside click", async () => {
@@ -482,7 +484,7 @@ describe("OverflowMenu", () => {
 
     await user.click(document.body);
 
-    expect(spy).toHaveBeenCalledWith("close", null);
+    expect(spy).toHaveBeenCalledWith("close", { trigger: "outside-click" });
   });
 
   it("supports preventDefault on item to prevent menu from closing", async () => {
@@ -498,6 +500,7 @@ describe("OverflowMenu", () => {
 
     expect(consoleLog).toHaveBeenCalledWith("click", "Manage credentials");
     expect(consoleLog).not.toHaveBeenCalledWith("close", {
+      trigger: "item-select",
       index: 0,
       text: "Manage credentials",
     });
@@ -533,6 +536,7 @@ describe("OverflowMenu", () => {
     expect(clickEvent.defaultPrevented).toBe(true);
     expect(consoleLog).not.toHaveBeenCalledWith("click", "API documentation");
     expect(consoleLog).not.toHaveBeenCalledWith("close", {
+      trigger: "item-select",
       index: 0,
       text: "API documentation",
     });
