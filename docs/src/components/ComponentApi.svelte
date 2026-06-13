@@ -116,7 +116,7 @@
   );
 </script>
 
-<p style="margin-bottom: var(--cds-layout-02)">
+<p class="bx--mb-6">
   Source code:
   <OutboundLink size="lg" inline href={source}>
     {component.filePath}

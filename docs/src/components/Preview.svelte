@@ -18,9 +18,9 @@
   {#if framed}
     <div class="framed-header">
       <div
-        class="iframe-label"
+        class="iframe-label bx--ml-5 bx--type-text-secondary"
         aria-hidden="true"
-        style="margin-left: var(--cds-spacing-05); color: var(--cds-text-02); user-select: none"
+        style="user-select: none"
       >
         Content loaded in iframe
       </div>
