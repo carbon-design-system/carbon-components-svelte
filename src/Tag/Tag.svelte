@@ -25,6 +25,9 @@
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
+  /** Set to `true` to omit the default outer margin */
+  export let inline = false;
+
   /** Set the title for the close button in a filterable tag */
   export let title = "Clear filter";
 
@@ -60,6 +63,7 @@
     aria-label={title}
     {id}
     class:bx--tag={true}
+    class:bx--tag--inline={inline}
     class:bx--tag--disabled={disabled}
     class:bx--tag--filter={filter}
     class:bx--tag--sm={size === "sm"}
@@ -106,6 +110,7 @@
     aria-disabled={disabled}
     tabindex={disabled ? "-1" : undefined}
     class:bx--tag={true}
+    class:bx--tag--inline={inline}
     class:bx--tag--interactive={true}
     class:bx--tag--disabled={disabled}
     class:bx--tag--sm={size === "sm"}
@@ -140,6 +145,7 @@
   <div
     {id}
     class:bx--tag={true}
+    class:bx--tag--inline={inline}
     class:bx--tag--disabled={disabled}
     class:bx--tag--sm={size === "sm"}
     class:bx--tag--lg={size === "lg"}

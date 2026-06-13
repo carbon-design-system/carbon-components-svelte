@@ -168,6 +168,13 @@ describe("Tag", () => {
     expect(disabledTag).toHaveAttribute("tabindex", "-1");
   });
 
+  it("omits the default margin via the inline prop", () => {
+    render(Tag);
+
+    const inlineTag = screen.getByText("Inline tag").parentElement;
+    expect(inlineTag).toHaveClass("bx--tag--inline");
+  });
+
   it("applies custom id", () => {
     render(Tag);
 
