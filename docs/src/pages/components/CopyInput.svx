@@ -1,5 +1,9 @@
+---
+components: ["CopyInput", "CopyInputSkeleton", "FluidCopyInputSkeleton"]
+---
+
 <script>
-  import { CopyInput, TooltipIcon } from "carbon-components-svelte";
+  import { CopyInput, CopyInputSkeleton, FluidCopyInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
@@ -129,3 +133,21 @@ tooltip icon.
 ## Fluid variant (disabled)
 
 <CopyInput fluid disabled labelText="API token" value="sk-1234567890abcdef" />
+
+## Fluid skeleton
+
+Display a loading skeleton for the fluid copy input variant.
+
+<FluidCopyInputSkeleton />
+
+## Skeleton
+
+Show a loading state with the default skeleton variant.
+
+<CopyInputSkeleton />
+
+## Skeleton without label
+
+Set `hideLabel` to `true` to hide the skeleton label.
+
+<CopyInputSkeleton hideLabel />
