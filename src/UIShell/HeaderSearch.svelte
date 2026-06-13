@@ -4,6 +4,12 @@
    */
 
   /**
+   * @event close
+   * @type {object}
+   * @property {"escape-key" | "outside-click" | "select"} trigger
+   */
+
+  /**
    * @typedef {object} HeaderSearchResult
    * @property {string | number} [id] - Unique result identifier; used as the each-block key when provided
    * @property {string} href
@@ -77,6 +83,7 @@
   function selectResult() {
     dispatch("select", { value, selectedResultIndex, selectedResult });
     reset();
+    dispatch("close", { trigger: "select" });
   }
 
   $: if (active && ref) ref.focus();
@@ -93,7 +100,10 @@
     : undefined;
 
   function handleOutsideMouseup(event) {
-    if (active && isOutsideClick(event, refSearch)) active = false;
+    if (active && isOutsideClick(event, refSearch)) {
+      active = false;
+      dispatch("close", { trigger: "outside-click" });
+    }
   }
 </script>
 
@@ -170,6 +180,7 @@
             if (value === "") {
               // If the search bar is empty, deactivate the input.
               active = false;
+              dispatch("close", { trigger: "escape-key" });
             }
 
             // Reset the search query but keep the search bar active.
