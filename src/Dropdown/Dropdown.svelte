@@ -19,6 +19,12 @@
    */
 
   /**
+   * @event close
+   * @type {object}
+   * @property {"escape-key" | "outside-click" | "select"} trigger
+   */
+
+  /**
    * Set the dropdown items.
    * @type {ReadonlyArray<Item>}
    */
@@ -401,11 +407,31 @@
     });
   }
 
+  /**
+   * Close the menu and notify consumers of the dismissal cause.
+   * Only dispatches when transitioning from open to closed so redundant
+   * `open = false` assignments do not double-fire.
+   * @param {"escape-key" | "outside-click" | "select"} trigger
+   */
+  function close(trigger) {
+    if (open) {
+      open = false;
+      dispatch("close", { trigger });
+    }
+  }
+
   function selectHighlighted() {
-    open = !open;
+    if (!open) {
+      open = true;
+      return;
+    }
     if (highlightedIndex > -1 && items[highlightedIndex].id !== selectedId) {
       selectedId = items[highlightedIndex].id;
       dispatchSelect();
+      close("select");
+    } else {
+      // Toggling closed via Enter/Space without picking a (new) item is not a
+      // meaningful dismissal trigger, so close silently.
       open = false;
     }
   }
@@ -428,7 +454,7 @@
 
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {
-      open = false;
+      close("outside-click");
     }
   }
 </script>
@@ -536,7 +562,9 @@
             if (event.key === "ArrowDown" && !open) {
               open = true;
             } else if (event.key === "ArrowUp" && open) {
-              open = false;
+              // APG combobox: Alt+ArrowUp dismisses an open menu without
+              // selecting, so it shares the keyboard-dismissal trigger.
+              close("escape-key");
             }
           } else if (open) {
             change(step);
@@ -550,7 +578,7 @@
             });
           }
         } else if (event.key === "Escape") {
-          open = false;
+          close("escape-key");
         } else if (
           open &&
           event.key.length === 1 &&
@@ -638,7 +666,7 @@
                     }
                     selectedId = item.id;
                     dispatchSelect();
-                    open = false;
+                    close("select");
                     ref.focus();
                   }}
                   on:mouseenter={() => {
@@ -702,7 +730,7 @@
                 }
                 selectedId = item.id;
                 dispatchSelect();
-                open = false;
+                close("select");
                 ref.focus();
               }}
               on:mouseenter={() => {
