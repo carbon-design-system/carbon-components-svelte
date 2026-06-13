@@ -19,7 +19,11 @@
 </ExpandableTile>
 
 <!-- Expandable tile with interactive content (link) in "above" slot -->
-<ExpandableTile data-testid="interactive" hasInteractiveContent>
+<ExpandableTile
+  data-testid="interactive"
+  id="interactive-tile"
+  hasInteractiveContent
+>
   <div slot="above">
     <a href="https://example.com" data-testid="inner-link">Learn more</a>
   </div>
