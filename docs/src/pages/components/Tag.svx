@@ -3,7 +3,7 @@ components: ["Tag", "SelectableTag", "TagSkeleton"]
 ---
 
 <script>
-  import { Tag, SelectableTag, TooltipDefinition } from "carbon-components-svelte";
+  import { Stack, Tag, SelectableTag, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
@@ -43,6 +43,15 @@ Choose from a variety of color types to match your design system.
 <Tag type="warm-gray">warm-gray</Tag>
 <Tag type="high-contrast">high-contrast</Tag>
 <Tag type="outline">outline</Tag>
+
+## Inline
+
+By default, a tag renders with an outer margin to space it from adjacent tags. Set `inline` to `true` to omit the margin when controlling spacing yourself (for example, within a flex layout).
+
+<Stack orientation="horizontal" gap={1}>
+  <Tag inline>IBM Cloud</Tag>
+  <Tag inline type="blue">Machine learning</Tag>
+</Stack>
 
 ## Filterable
 
