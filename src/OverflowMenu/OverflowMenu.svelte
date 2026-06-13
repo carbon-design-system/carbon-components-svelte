@@ -1,9 +1,14 @@
 <script>
   /**
    * @template [Icon=any]
+   */
+
+  /**
    * @event close
-   * @property {number} [index]
-   * @property {string} [text]
+   * @type {object}
+   * @property {"escape-key" | "outside-click" | "toggle" | "item-select"} trigger
+   * @property {number} [index] only present when an item is selected
+   * @property {string} [text] only present when an item is selected
    */
 
   /**
@@ -148,7 +153,7 @@
 
     const shouldContinue = dispatch(
       "close",
-      { index: item.index, text: item.text },
+      { trigger: "item-select", index: item.index, text: item.text },
       { cancelable: true },
     );
     if (shouldContinue) {
@@ -249,7 +254,11 @@
 
   function handleOutsideClick(event) {
     if (menuRef && isOutsideClick(event, [buttonRef, menuRef])) {
-      const shouldContinue = dispatch("close", null, { cancelable: true });
+      const shouldContinue = dispatch(
+        "close",
+        { trigger: "outside-click" },
+        { cancelable: true },
+      );
       if (shouldContinue) {
         open = false;
       }
@@ -279,7 +288,11 @@
   on:click={({ target }) => {
     if (!menuRef?.contains(target)) {
       if (open) {
-        const shouldContinue = dispatch("close", null, { cancelable: true });
+        const shouldContinue = dispatch(
+          "close",
+          { trigger: "toggle" },
+          { cancelable: true },
+        );
         if (shouldContinue) {
           open = false;
         }
@@ -304,7 +317,11 @@
         last();
       } else if (event.key === "Escape") {
         event.stopPropagation();
-        const shouldContinue = dispatch("close", null, { cancelable: true });
+        const shouldContinue = dispatch(
+          "close",
+          { trigger: "escape-key" },
+          { cancelable: true },
+        );
         if (shouldContinue) {
           open = false;
           buttonRef.focus();
@@ -348,7 +365,11 @@
         e.preventDefault();
       } else if (e.key === "Escape") {
         e.stopPropagation();
-        const shouldContinue = dispatch("close", null, { cancelable: true });
+        const shouldContinue = dispatch(
+          "close",
+          { trigger: "escape-key" },
+          { cancelable: true },
+        );
         if (shouldContinue) {
           open = false;
           buttonRef.focus();
@@ -391,7 +412,11 @@
           event.preventDefault();
         } else if (event.key === "Escape") {
           event.stopPropagation();
-          const shouldContinue = dispatch("close", null, { cancelable: true });
+          const shouldContinue = dispatch(
+            "close",
+            { trigger: "escape-key" },
+            { cancelable: true },
+          );
           if (shouldContinue) {
             open = false;
             buttonRef.focus();
