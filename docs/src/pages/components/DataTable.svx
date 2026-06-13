@@ -147,6 +147,14 @@ The `"cell"` slot provides `rowSelected` and `rowExpanded` props to conditionall
 
 <FileSource src="/framed/DataTable/DataTableCustomCellRowState" />
 
+## Editable cells
+
+Use the `"cell"` slot to render form inputs that edit row values inline. Bind the input to the row field, for example `bind:value={row.qty}`, to update `rows`.
+
+The table rebuilds cells only when the `rows` array reference changes. After an in-place edit, call `refreshRow(id)` to update columns whose `display` reads other fields on the same row. Use `bind:this` to obtain a reference to the component instance. Call `refreshCells()` to refresh every row after batch edits.
+
+<FileSource src="/framed/DataTable/DataTableEditableCells" />
+
 ## With title, description
 
 Add a title and description to provide context for the table data.
