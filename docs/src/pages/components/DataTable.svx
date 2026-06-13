@@ -159,6 +159,16 @@ When you edit multiple rows in place, call `refreshCells()` once to update deriv
 
 <FileSource src="/framed/DataTable/DataTableEditableCellsRefreshCells" />
 
+## Editable cells with `EditableCell`
+
+The `EditableCell` component wraps a form input in the `"cell"` slot and wires the editing concerns for you. It re-derives the row after each edit (no manual `refreshRow`), reports dirty state, and rolls up validation.
+
+Pass `validate` a function that returns an error message for an invalid value or `undefined` when valid. The message is exposed through `let:invalidText` (and `let:invalid`) so your chosen input renders the error.
+
+Bind `dirty` to know when any cell differs from its initial value, and `valid` to know when every cell passes validation. After persisting edits, call the `resetDirty` method (via `bind:this`) to treat the current values as pristine.
+
+<FileSource src="/framed/DataTable/DataTableEditableCellComponent" />
+
 ## With title, description
 
 Add a title and description to provide context for the table data.

@@ -106,6 +106,21 @@
   export let rows = [];
 
   /**
+   * `true` when at least one `EditableCell` holds a value
+   * that differs from its value when first rendered.
+   * Resets are the consumer's responsibility (e.g. after a save).
+   * @bindable readonly
+   */
+  export let dirty = false;
+
+  /**
+   * `true` when every `EditableCell` passes its `validate` function.
+   * `true` when there are no editable cells.
+   * @bindable readonly
+   */
+  export let valid = true;
+
+  /**
    * Set the size of the data table.
    * @type {"compact" | "short" | "medium" | "tall"}
    */
@@ -351,6 +366,63 @@
   const tableSize = writable(size);
   $: $tableSize = size;
 
+  /**
+   * Registry of editable cells keyed by `${rowId}:${cellKey}`. Each
+   * `EditableCell` registers on mount and reports its dirty/validity
+   * state here; `dirty` and `valid` are rolled up from it. The store
+   * stays empty (and the rollups stay at their defaults) for tables
+   * with no editable cells, so non-editing tables pay nothing.
+   * @type {import("svelte/store").Writable<Record<string, { dirty: boolean; invalidText: string | undefined }>>}
+   */
+  const editableCells = writable({});
+
+  /**
+   * Monotonic counter bumped by `resetDirty`. Each `EditableCell` watches
+   * it and re-snapshots its baseline value when it changes, so the dirty
+   * rollup can return to `false` after the consumer persists edits.
+   * @type {import("svelte/store").Writable<number>}
+   */
+  const editableBaseline = writable(0);
+
+  /**
+   * Treat the current editable cell values as pristine, clearing `dirty`.
+   * Call this after persisting edits (for example in an `on:save` handler).
+   * @type {() => void}
+   */
+  export function resetDirty() {
+    editableBaseline.update((n) => n + 1);
+  }
+
+  /** @type {(id: string) => void} */
+  function editableRegister(id) {
+    editableCells.update((cells) =>
+      id in cells
+        ? cells
+        : { ...cells, [id]: { dirty: false, invalidText: undefined } },
+    );
+  }
+
+  /** @type {(id: string, state: { dirty: boolean; invalidText: string | undefined }) => void} */
+  function editableUpdate(id, state) {
+    editableCells.update((cells) => ({
+      ...cells,
+      [id]: { ...cells[id], ...state },
+    }));
+  }
+
+  /** @type {(id: string) => void} */
+  function editableUnregister(id) {
+    editableCells.update((cells) => {
+      if (!(id in cells)) return cells;
+      const next = { ...cells };
+      delete next[id];
+      return next;
+    });
+  }
+
+  $: dirty = Object.values($editableCells).some((cell) => cell.dirty);
+  $: valid = Object.values($editableCells).every((cell) => !cell.invalidText);
+
   /** Default row heights based on size variant */
   const DEFAULT_ROW_HEIGHTS = {
     compact: 24,
@@ -506,6 +578,11 @@
     filterRows,
     refreshRow,
     refreshCells,
+    editableRegister,
+    editableUpdate,
+    editableUnregister,
+    editableBaseline,
+    resetDirty,
   });
 
   let expanded = false;
