@@ -816,7 +816,17 @@
           {/if}
           {#each headers as header (header.key)}
             {#if header.empty}
-              <th scope="col" style={formatHeaderWidth(header)}></th>
+              {#if header.columnMenu}
+                <th
+                  scope="col"
+                  class:bx--table-column-menu={true}
+                  style={formatHeaderWidth(header)}
+                ></th>
+              {:else}
+                <th scope="col" style={formatHeaderWidth(header)}>
+                  <div class:bx--table-header-label={true}></div>
+                </th>
+              {/if}
             {:else}
               <TableHeader
                 id="{id}-{header.key}"

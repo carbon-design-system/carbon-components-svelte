@@ -3,7 +3,7 @@ components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSear
 ---
 
 <script>
-  import { DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link } from "carbon-components-svelte";
+  import { DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 </script>
 
@@ -353,6 +353,40 @@ Set `stickyHeader` to `true` to fix the header in place. This adds a maximum hei
     rule: i % 3 ? "Round robin" : "DNS delegation",
   }))}
 />
+
+## Sticky header with an empty column
+
+An `empty: true` header has no label, but its body cells can still render content. For an overflow menu of row actions, also set `columnMenu: true` so the column stays narrow and the trigger is vertically centered. With `stickyHeader`, the empty column stays aligned with its body cells.
+
+<DataTable
+  stickyHeader
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" },
+    { key: "overflow", empty: true, columnMenu: true },
+  ]}
+  rows={Array.from({ length: 20 }).map((_, i) => ({
+    id: i,
+    name: "Load Balancer " + (i + 1),
+    protocol: "HTTP",
+    port: i % 3 ? (i % 2 ? 3000 : 80) : 443,
+    rule: i % 3 ? "Round robin" : "DNS delegation",
+  }))}
+>
+  <svelte:fragment slot="cell" let:cell>
+    {#if cell.key === "overflow"}
+      <OverflowMenu flipped>
+        <OverflowMenuItem text="Restart" />
+        <OverflowMenuItem text="API documentation" />
+        <OverflowMenuItem danger text="Stop" />
+      </OverflowMenu>
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
 
 ## Virtualized rows (large datasets)
 
