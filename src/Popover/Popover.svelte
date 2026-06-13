@@ -5,6 +5,12 @@
    */
 
   /**
+   * @event close
+   * @type {object}
+   * @property {"outside-click"} trigger
+   */
+
+  /**
    * Set to `true` to display the popover.
    * @bindable writable
    */
@@ -42,7 +48,10 @@
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, ref)) {
       dispatch("click:outside", { target: event.target });
-      if (closeOnOutsideClick) open = false;
+      if (closeOnOutsideClick) {
+        open = false;
+        dispatch("close", { trigger: "outside-click" });
+      }
     }
   }
 </script>
