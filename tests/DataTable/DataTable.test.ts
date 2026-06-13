@@ -1289,6 +1289,54 @@ describe("DataTable", () => {
     }
   });
 
+  describe("empty column alignment in sticky header", () => {
+    const stickyHeaders = [
+      { key: "name", value: "Name" },
+      { key: "actions", value: "", empty: true },
+    ] as const;
+
+    // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/440
+    it("renders a non-empty label wrapper for a plain empty header so it flexes like its body cells", () => {
+      render(DataTable, {
+        props: { headers: stickyHeaders, rows, stickyHeader: true },
+      });
+
+      const emptyHeader = screen.getAllByRole("columnheader")[1];
+      // A label wrapper keeps the <th> from matching `:empty`, so it escapes
+      // Carbon's `th:empty { max-width: 2.25rem }` cap and flexes full width.
+      expect(emptyHeader).not.toBeEmptyDOMElement();
+      expect(
+        emptyHeader.querySelector(".bx--table-header-label"),
+      ).toBeInTheDocument();
+      expect(emptyHeader).not.toHaveClass("bx--table-column-menu");
+    });
+
+    // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1492
+    it("pairs a columnMenu empty header and its body cells via the table-column-menu class", () => {
+      const columnMenuHeaders = [
+        { key: "name", value: "Name" },
+        { key: "actions", value: "", empty: true, columnMenu: true },
+      ] as const;
+
+      const { container } = render(DataTable, {
+        props: { headers: columnMenuHeaders, rows, stickyHeader: true },
+      });
+
+      // The header stays truly empty (narrow) and carries the class so the
+      // sticky-header rule can match it...
+      const emptyHeader = screen.getAllByRole("columnheader")[1];
+      expect(emptyHeader).toBeEmptyDOMElement();
+      expect(emptyHeader).toHaveClass("bx--table-column-menu");
+
+      // ...and every body cell in that column carries the same class, so head
+      // and body widths are paired and stay aligned.
+      const bodyCells = container.querySelectorAll(
+        "tbody td.bx--table-column-menu",
+      );
+      expect(bodyCells.length).toBe(rows.length);
+    });
+  });
+
   // Pagination tests
   it("handles pagination", async () => {
     const paginatedRows = Array.from({ length: 15 }).map((_, i) => ({

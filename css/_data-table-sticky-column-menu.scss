@@ -1,0 +1,28 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Overflow-menu column alignment for a DataTable `stickyHeader`.
+/// In sticky mode `thead` and `tbody` are separate flex rows, so columns only
+/// align when each column's width matches between them. Carbon pairs the
+/// checkbox and expand columns but leaves the overflow-menu column unpaired:
+/// the header is capped at 2.25rem by `th:empty`, while the body cell is
+/// content-width. The mismatch cascades and misaligns every column. Pair the
+/// column to a single fixed width and vertically center the trigger.
+/// See https://github.com/carbon-design-system/carbon-components-svelte/issues/440
+/// See https://github.com/carbon-design-system/carbon-components-svelte/issues/1492
+/// @access private
+/// @group components
+@mixin data-table-sticky-column-menu {
+  .#{$prefix}--data-table--sticky-header thead th.#{$prefix}--table-column-menu,
+  .#{$prefix}--data-table--sticky-header tbody td.#{$prefix}--table-column-menu {
+    width: $spacing-09;
+    min-width: $spacing-09;
+    max-width: $spacing-09;
+    align-items: center;
+    padding: 0;
+  }
+}
+
+@include exports("data-table-sticky-column-menu") {
+  @include data-table-sticky-column-menu;
+}
