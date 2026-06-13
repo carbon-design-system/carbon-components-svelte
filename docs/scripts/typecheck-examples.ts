@@ -56,6 +56,10 @@ const KNOWN: Array<[file: string, message: RegExp]> = [
     "src/pages/framed/DataTable/DataTableEditableCellsRefreshCells.svelte",
     /DataTableEmptyHeader/,
   ],
+  [
+    "src/pages/framed/DataTable/DataTableEditableCellComponent.svelte",
+    /DataTableEmptyHeader/,
+  ],
   // ToolbarSearch's `shouldFilterRows` types the query `number | string`.
   [
     "src/pages/framed/DataTable/DataTableFilterCustom.svelte",
