@@ -66,6 +66,8 @@
 
 <Tag interactive disabled>Disabled interactive</Tag>
 
+<Tag inline>Inline tag</Tag>
+
 <Tag id="custom-tag-id">Custom ID tag</Tag>
 
 <Tag

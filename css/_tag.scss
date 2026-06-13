@@ -11,6 +11,19 @@
   }
 }
 
+/// Inline tag variant that omits the default outer margin
+/// @access private
+/// @group components
+@mixin tag-inline {
+  .#{$prefix}--tag--inline {
+    margin: 0;
+  }
+}
+
 @include exports("tag-lg") {
   @include tag-lg;
+}
+
+@include exports("tag-inline") {
+  @include tag-inline;
 }
