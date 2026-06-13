@@ -93,7 +93,7 @@
         menuItems[menuItems.length - 1]?.focus();
       } else if (event.key === "Escape") {
         event.preventDefault();
-        ctx.closeMenu();
+        ctx.closeMenu("escape-key");
       }
     }}
     on:focus
@@ -105,7 +105,7 @@
         selectedItemIds.indexOf(id) === selectedItemIds.length - 1 &&
         (!event.relatedTarget || !menuItems.includes(event.relatedTarget))
       ) {
-        ctx?.closeMenu();
+        ctx?.closeMenu("blur");
       }
     }}
   >

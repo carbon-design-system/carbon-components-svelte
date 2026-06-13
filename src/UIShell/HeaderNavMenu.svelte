@@ -1,5 +1,11 @@
 <script>
   /**
+   * @event close
+   * @type {object}
+   * @property {"escape-key" | "outside-click" | "blur"} trigger
+   */
+
+  /**
    * Set to `true` to toggle the expanded state.
    * @bindable writable
    */
@@ -21,11 +27,13 @@
    */
   export let ref = null;
 
-  import { setContext, tick } from "svelte";
+  import { createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+
+  const dispatch = createEventDispatcher();
 
   /**
    * @type {import("svelte/store").Writable<Record<string, boolean>>}
@@ -63,12 +71,15 @@
   }
 
   /**
-   * @type {() => Promise<void>}
+   * @type {(trigger?: "escape-key" | "blur") => Promise<void>}
    */
-  async function closeMenu() {
-    expanded = false;
-    await tick();
-    ref?.focus();
+  async function closeMenu(trigger) {
+    if (expanded) {
+      expanded = false;
+      if (trigger) dispatch("close", { trigger });
+      await tick();
+      ref?.focus();
+    }
   }
 
   setContext("carbon:HeaderNavMenu", {
@@ -84,7 +95,10 @@
     Object.values($selectedItems).filter(Boolean).length > 0;
 
   function handleOutsideClick(event) {
-    if (isOutsideClick(event, ref)) expanded = false;
+    if (expanded && isOutsideClick(event, ref)) {
+      expanded = false;
+      dispatch("close", { trigger: "outside-click" });
+    }
   }
 </script>
 
@@ -156,9 +170,7 @@
         $menuItems[$menuItems.length - 1]?.focus();
       } else if (event.key === "Escape") {
         event.preventDefault();
-        expanded = false;
-        await tick();
-        ref?.focus();
+        await closeMenu("escape-key");
       }
     }}
     on:click|preventDefault
