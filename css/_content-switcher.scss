@@ -1,0 +1,59 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// Icon-only content switcher variant (Carbon React `IconSwitch` parity).
+/// Carbon v10 ships no icon-only variant, so the square sizing and icon fills
+/// are patched here. The hover/focus label tooltip is rendered through a portal
+/// in `Switch.svelte` (reusing `PortalTooltip`) so it cannot be clipped.
+/// @access private
+/// @group components
+@mixin content-switcher-icon-only {
+  // Double class to outrank the equal-specificity base `.#{$prefix}--content-switcher`
+  // rule, since these overrides are emitted before Carbon's base styles.
+  .#{$prefix}--content-switcher.#{$prefix}--content-switcher--icon-only {
+    width: fit-content;
+    justify-content: flex-start;
+  }
+
+  .#{$prefix}--content-switcher--icon-only .#{$prefix}--content-switcher-btn {
+    width: to-rem(40px);
+    justify-content: center;
+    padding: 0;
+  }
+
+  .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--sm
+    .#{$prefix}--content-switcher-btn {
+    width: to-rem(32px);
+  }
+
+  .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--xl
+    .#{$prefix}--content-switcher-btn {
+    width: to-rem(48px);
+  }
+
+  .#{$prefix}--content-switcher--icon-only .#{$prefix}--content-switcher-btn svg {
+    // The svg is a flex item, so z-index lifts it above the button's
+    // `::after` selected-state fill overlay without needing `position`.
+    z-index: 1;
+    fill: $icon-primary;
+    transition: fill $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--content-switcher--icon-only
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected
+    svg {
+    fill: $icon-inverse;
+  }
+
+  .#{$prefix}--content-switcher--icon-only
+    .#{$prefix}--content-switcher-btn:disabled
+    svg {
+    fill: $icon-disabled;
+  }
+}
+
+@include exports('content-switcher-icon-only') {
+  @include content-switcher-icon-only;
+}

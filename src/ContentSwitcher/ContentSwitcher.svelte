@@ -40,11 +40,18 @@
    */
   const currentId = writable(null);
 
+  // Tracks which switch's tooltip is open so only one shows at a time.
+  // Scoped per content switcher instance.
+  const activeTooltip = writable(null);
+
   let prevIndex = -1;
 
   let currentIndex = -1;
   let focusedIndex = -1;
   let switches = [];
+
+  // Inferred when every registered switch provides an `icon`.
+  $: iconOnly = switches.length > 0 && switches.every((s) => s.icon);
 
   // Flag to trigger DOM reordering only when switches change.
   // This is necessary to avoid infinite loops in Svelte 5.
@@ -58,9 +65,9 @@
   }
 
   /**
-   * @type {(data: { id: string; text: string; selected: boolean }) => void}
+   * @type {(data: { id: string; text: string; selected: boolean; icon: boolean }) => void}
    */
-  function add({ id, text, selected }) {
+  function add({ id, text, selected, icon }) {
     if (switches.some((s) => s.id === id)) {
       return;
     }
@@ -70,7 +77,7 @@
     }
 
     needsDomSync = true;
-    switches = [...switches, { id, text, selected }];
+    switches = [...switches, { id, text, selected, icon }];
   }
 
   /**
@@ -121,6 +128,7 @@
 
   setContext("carbon:ContentSwitcher", {
     currentId,
+    activeTooltip,
     add,
     remove,
     update,
@@ -176,6 +184,7 @@
   class:bx--content-switcher={true}
   class:bx--content-switcher--sm={size === "sm"}
   class:bx--content-switcher--xl={size === "xl"}
+  class:bx--content-switcher--icon-only={iconOnly}
   {...$$restProps}
   on:click
   on:mouseover
