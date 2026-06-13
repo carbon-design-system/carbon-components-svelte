@@ -17,6 +17,7 @@
    * @property {Item[]} unselected
    * @event {null} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
+   * @event {{ trigger: "escape-key" | "outside-click" }} close
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    */
 
@@ -626,12 +627,24 @@
     .filter(Boolean)
     .join(" ");
 
+  /**
+   * Dismiss the menu and notify consumers of the cause. Guarded on `open` so a
+   * dismissal gesture fired while already closed does not emit a phantom event.
+   * @type {(trigger: "escape-key" | "outside-click") => void}
+   */
+  function close(trigger) {
+    if (open) {
+      open = false;
+      dispatch("close", { trigger });
+    }
+  }
+
   function handleOutsideInteraction(event) {
     if (
       open &&
       isOutsideClick(event, [multiSelectRef, effectivePortalMenu && listRef])
     ) {
-      open = false;
+      close("outside-click");
     }
   }
 </script>
@@ -765,14 +778,14 @@
                 if (event.key === "ArrowDown" && !open) {
                   open = true;
                 } else if (event.key === "ArrowUp" && open) {
-                  open = false;
+                  close("escape-key");
                 }
               } else {
                 if (!open) open = true;
                 change(step);
               }
             } else if (event.key === "Escape") {
-              open = false;
+              close("escape-key");
             } else if (event.key === " ") {
               if (!open) open = true;
             } else if (event.key === "Backspace" && value === "") {
@@ -895,7 +908,7 @@
               if (event.key === "ArrowDown" && !open) {
                 open = true;
               } else if (event.key === "ArrowUp" && open) {
-                open = false;
+                close("escape-key");
               }
             } else {
               if (!open) open = true;
@@ -909,7 +922,7 @@
               if (item) selectItem(item);
             }
           } else if (event.key === "Escape") {
-            open = false;
+            close("escape-key");
           }
         }}
           on:blur={(event) => {
