@@ -91,6 +91,46 @@
   }
 
   /**
+   * Flatten visible (expanded-only) nodes into rows annotated with the
+   * metadata needed to render a flat ARIA tree: depth, parentId, position
+   * in the parent's child list, parent's child count, and a `hasChildren`
+   * flag distinguishing parents from leaves.
+   * @template {{ id: string | number; nodes?: TNode[]; disabled?: boolean }} TNode
+   * @param {ReadonlyArray<TNode>} nodes
+   * @param {Set<string | number>} expandedIdsSet
+   * @param {number} [depth=0]
+   * @param {string | number | null} [parentId=null]
+   * @returns {Array<{ node: TNode; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>}
+   */
+  function flattenVisibleRows(
+    nodes,
+    expandedIdsSet,
+    depth = 0,
+    parentId = null,
+  ) {
+    const out = [];
+    const setSize = nodes.length;
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      const hasChildren = Array.isArray(node.nodes) && node.nodes.length > 0;
+      out.push({
+        node,
+        depth,
+        parentId,
+        posInSet: i + 1,
+        setSize,
+        hasChildren,
+      });
+      if (hasChildren && expandedIdsSet.has(node.id)) {
+        out.push(
+          ...flattenVisibleRows(node.nodes, expandedIdsSet, depth + 1, node.id),
+        );
+      }
+    }
+    return out;
+  }
+
+  /**
    * Finds sibling node IDs for a given node ID within a tree structure.
    * @template {{ id: string | number; nodes?: TNode[] }} TNode
    * @returns {Array<string | number>} Array of sibling IDs (excluding the node itself)
@@ -263,6 +303,31 @@
   export let multiselectMode = "node";
 
   /**
+   * Enable opt-in virtualization. Once set, the tree always windows the
+   * visible (expanded) rows — there is no auto-threshold. Leave `undefined`
+   * to keep the default recursive rendering.
+   *
+   * Row height is derived from `size` (32px default, 24px compact).
+   *
+   * Pass `true` for defaults, or an object to customize.
+   *
+   * @type {undefined | boolean | {
+   *   maxVisibleRows?: number,
+   *   containerHeight?: number | string,
+   *   overscan?: number,
+   * }}
+   */
+  export let virtualize = undefined;
+
+  /**
+   * Reference to the scrollable container when `virtualize` is enabled.
+   * `null` otherwise.
+   * @type {null | HTMLElement}
+   * @bindable readonly
+   */
+  export let scrollContainerRef = null;
+
+  /**
    * Programmatically expand all nodes
    * @type {() => void}
    * @example
@@ -390,6 +455,10 @@
 
         if (focus) {
           tick().then(() => {
+            if (virtualConfig && scrollContainerRef) {
+              focusVirtualRowById(lastId);
+              return;
+            }
             ref?.querySelector(`[id="${CSS.escape(lastId)}"]`)?.focus();
           });
         }
@@ -407,7 +476,9 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { virtualize as virtualizeRows } from "../utils/virtualize.js";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
+  import TreeViewNodeVirtual from "./TreeViewNodeVirtual.svelte";
 
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
@@ -782,6 +853,7 @@
 
     return () => {
       setMultiselectKeyListeners(false);
+      resizeObserver?.disconnect();
     };
   });
 
@@ -794,6 +866,278 @@
   $: multiselectStore.set(multiselect);
   $: flattenedNodes = cachedFlattenedNodes ?? [];
   $: nodeIds = cachedNodeIds ?? [];
+
+  let scrollTop = 0;
+
+  /** Pixel height of the scroll container, measured from the DOM when
+   * `containerHeight` is set to a non-numeric value (e.g. `"80%"`).
+   * Falls back to a derived px value otherwise. */
+  let measuredContainerHeight = 0;
+
+  $: virtualConfig = virtualize
+    ? {
+        maxVisibleRows: 10,
+        containerHeight: undefined,
+        overscan: 3,
+        ...(typeof virtualize === "object" ? virtualize : {}),
+        itemHeight: size === "compact" ? 24 : 32,
+      }
+    : null;
+
+  // Derive from `expandedIds` (reassigned synchronously at every mutation
+  // site) rather than `$expandedIdsSetStore`. The store is only `.set()` from
+  // inside a reactive block, which Svelte 3/4 doesn't track as an assignment
+  // for reactive ordering — so subscribers re-run a flush late and the
+  // rendered window lags one `tick()` behind expand/collapse. Reading
+  // `expandedIds` keeps `visibleFlat` in the same flush as the change.
+  $: visibleFlat = virtualConfig
+    ? flattenVisibleRows(nodes, new Set(expandedIds))
+    : [];
+
+  /** CSS height value applied to the scroll container. Strings pass through;
+   * numbers/undefined become px. */
+  $: containerHeightStyle = virtualConfig
+    ? typeof virtualConfig.containerHeight === "string"
+      ? virtualConfig.containerHeight
+      : `${virtualConfig.containerHeight ?? virtualConfig.maxVisibleRows * virtualConfig.itemHeight}px`
+    : undefined;
+
+  /** Pixel height used for windowing math. */
+  function getVirtualContainerHeight() {
+    if (!virtualConfig) return 0;
+    if (typeof virtualConfig.containerHeight === "number") {
+      return virtualConfig.containerHeight;
+    }
+    if (typeof virtualConfig.containerHeight === "string") {
+      return (
+        measuredContainerHeight ||
+        virtualConfig.maxVisibleRows * virtualConfig.itemHeight
+      );
+    }
+    return virtualConfig.maxVisibleRows * virtualConfig.itemHeight;
+  }
+
+  // If the visible list shrinks (e.g. filter removed rows the user had
+  // scrolled past, or many parents collapsed), the previous scrollTop can
+  // exceed the new max — leaving the windowing math with `startIndex` past
+  // the end of the list and the tree appearing blank. Clamp back to the
+  // last valid scroll position.
+  $: if (virtualConfig && scrollContainerRef) {
+    const containerHeight = getVirtualContainerHeight();
+    const maxTop = Math.max(
+      0,
+      visibleFlat.length * virtualConfig.itemHeight - containerHeight,
+    );
+    if (scrollTop > maxTop) {
+      scrollTop = maxTop;
+      scrollContainerRef.scrollTop = maxTop;
+    }
+  }
+
+  $: virtualData = virtualConfig
+    ? virtualizeRows({
+        items: visibleFlat,
+        itemHeight: virtualConfig.itemHeight,
+        containerHeight: getVirtualContainerHeight(),
+        scrollTop,
+        overscan: virtualConfig.overscan,
+        // Once `virtualize` is set, the caller has opted in — always window
+        // (no auto-disable based on item count).
+        threshold: 0,
+      })
+    : null;
+
+  /** Observe the scroll container so percentage / relative heights
+   * (`containerHeight: "80%"`) translate into a usable pixel value for
+   * windowing math. */
+  let resizeObserver = null;
+  $: if (
+    virtualConfig &&
+    typeof virtualConfig.containerHeight === "string" &&
+    scrollContainerRef
+  ) {
+    if (typeof ResizeObserver === "undefined") {
+      measuredContainerHeight = scrollContainerRef.clientHeight;
+    } else {
+      resizeObserver?.disconnect();
+      resizeObserver = new ResizeObserver((entries) => {
+        const entry = entries[0];
+        if (entry) measuredContainerHeight = entry.contentRect.height;
+      });
+      resizeObserver.observe(scrollContainerRef);
+    }
+  }
+
+  /** First non-disabled visible row id, used as the tabindex anchor when no active id (or the active id is not visible). */
+  $: virtualTabAnchorId = (() => {
+    if (!virtualConfig) return undefined;
+    if (activeId !== "" && activeId != null) {
+      for (const row of visibleFlat) {
+        if (row.node.id === activeId && !row.node.disabled) return activeId;
+      }
+    }
+    for (const row of visibleFlat) {
+      if (!row.node.disabled) return row.node.id;
+    }
+    return undefined;
+  })();
+
+  /**
+   * Set both the DOM scrollTop and the reactive mirror so the windowed
+   * slice updates synchronously (the browser's scroll event is async, and
+   * jsdom doesn't fire one at all on programmatic assignment).
+   * @param {number} top
+   */
+  function virtualSetScrollTop(top) {
+    if (!scrollContainerRef) return;
+    scrollContainerRef.scrollTop = top;
+    scrollTop = top;
+  }
+
+  /**
+   * Scroll a virtual row into view and focus it. The caller mutates
+   * `expandedIds` before scheduling this on a `tick`, so by now `visibleFlat`
+   * already reflects the expanded ancestors.
+   * @param {string | number} targetId
+   */
+  function focusVirtualRowById(targetId) {
+    if (!virtualConfig || !scrollContainerRef) return;
+    const idx = visibleFlat.findIndex((row) => row.node.id === targetId);
+    if (idx < 0) return;
+    const top = idx * virtualConfig.itemHeight;
+    if (top < scrollTop) {
+      virtualSetScrollTop(top);
+    } else if (
+      top + virtualConfig.itemHeight >
+      scrollTop + getVirtualContainerHeight()
+    ) {
+      virtualSetScrollTop(
+        top + virtualConfig.itemHeight - getVirtualContainerHeight(),
+      );
+    }
+    tick().then(() => {
+      scrollContainerRef
+        ?.querySelector(`[data-tree-row-id="${CSS.escape(String(targetId))}"]`)
+        ?.focus();
+    });
+  }
+
+  /** @param {number} idx */
+  async function virtualMoveTo(idx) {
+    if (!virtualConfig || idx < 0 || idx >= visibleFlat.length) return;
+    const target = visibleFlat[idx];
+    activeId = target.node.id;
+    const top = idx * virtualConfig.itemHeight;
+    if (top < scrollTop) {
+      virtualSetScrollTop(top);
+    } else if (
+      top + virtualConfig.itemHeight >
+      scrollTop + getVirtualContainerHeight()
+    ) {
+      virtualSetScrollTop(
+        top + virtualConfig.itemHeight - getVirtualContainerHeight(),
+      );
+    }
+    await tick();
+    scrollContainerRef
+      ?.querySelector(
+        `[data-tree-row-id="${CSS.escape(String(target.node.id))}"]`,
+      )
+      ?.focus();
+  }
+
+  /** @param {KeyboardEvent} e */
+  function handleVirtualKeyDown(e) {
+    if (!virtualConfig) return;
+    const target = /** @type {HTMLElement} */ (e.target);
+    const rowEl = target.closest("[data-tree-row-id]");
+    if (!rowEl) return;
+    const id = rowEl.getAttribute("data-tree-row-id");
+    const activeIdx = visibleFlat.findIndex((it) => String(it.node.id) === id);
+    if (activeIdx < 0) return;
+    const item = visibleFlat[activeIdx];
+
+    /** @param {number} from @param {1 | -1} dir */
+    const nextEnabled = (from, dir) => {
+      let i = from;
+      while (i >= 0 && i < visibleFlat.length) {
+        if (!visibleFlat[i].node.disabled) return i;
+        i += dir;
+      }
+      return -1;
+    };
+
+    switch (e.key) {
+      case "ArrowDown": {
+        e.preventDefault();
+        e.stopPropagation();
+        const next = nextEnabled(activeIdx + 1, 1);
+        if (next >= 0) virtualMoveTo(next);
+        break;
+      }
+      case "ArrowUp": {
+        e.preventDefault();
+        e.stopPropagation();
+        const prev = nextEnabled(activeIdx - 1, -1);
+        if (prev >= 0) virtualMoveTo(prev);
+        break;
+      }
+      case "Home": {
+        e.preventDefault();
+        e.stopPropagation();
+        const first = nextEnabled(0, 1);
+        if (first >= 0) virtualMoveTo(first);
+        break;
+      }
+      case "End": {
+        e.preventDefault();
+        e.stopPropagation();
+        const last = nextEnabled(visibleFlat.length - 1, -1);
+        if (last >= 0) virtualMoveTo(last);
+        break;
+      }
+      case "ArrowRight": {
+        if (!item.hasChildren) break;
+        e.preventDefault();
+        e.stopPropagation();
+        if ($expandedIdsSetStore.has(item.node.id)) {
+          // Already expanded: focus first child (next row).
+          const next = nextEnabled(activeIdx + 1, 1);
+          if (next >= 0) virtualMoveTo(next);
+        } else {
+          expandNode(item.node, true);
+          toggleNode(item.node);
+        }
+        break;
+      }
+      case "ArrowLeft": {
+        e.preventDefault();
+        e.stopPropagation();
+        if (item.hasChildren && $expandedIdsSetStore.has(item.node.id)) {
+          expandNode(item.node, false);
+          toggleNode(item.node);
+        } else if (item.parentId != null) {
+          const parentIdx = visibleFlat.findIndex(
+            (it) => it.node.id === item.parentId,
+          );
+          if (parentIdx >= 0) virtualMoveTo(parentIdx);
+        }
+        break;
+      }
+      case "Enter":
+      case " ": {
+        if (item.node.disabled) break;
+        e.preventDefault();
+        e.stopPropagation();
+        clickNode(item.node, e);
+        if (item.hasChildren) {
+          expandNode(item.node, !$expandedIdsSetStore.has(item.node.id));
+          toggleNode(item.node);
+        }
+        break;
+      }
+    }
+  }
 
   let prevActiveIdForAutoCollapse = activeId;
 
@@ -852,25 +1196,71 @@
   </label>
 {/if}
 
-<!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-<ul
-  {...$$restProps}
-  role="tree"
-  bind:this={ref}
-  class:bx--tree={true}
-  class:bx--tree--default={size === "default"}
-  class:bx--tree--compact={size === "compact"}
-  class:bx--tree--multiselect={multiselect}
-  class:bx--tree--multiselect-modifier={multiselect && multiselectModifierActive}
-  aria-label={hideLabel ? labelText : undefined}
-  aria-labelledby={hideLabel ? undefined : labelId}
-  aria-multiselectable={multiselect || undefined}
-  on:mousedown|capture={syncModifierFromTreeMouseDown}
-  on:selectstart|capture={handleMultiselectSelectStart}
-  on:keydown
-  on:keydown|stopPropagation={handleKeyDown}
->
-  <TreeViewNodeList root {nodes} let:node>
-    <slot {node}> {node.text} </slot>
-  </TreeViewNodeList>
-</ul>
+{#if virtualConfig}
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+  <ul
+    {...$$restProps}
+    role="tree"
+    bind:this={scrollContainerRef}
+    class:bx--tree={true}
+    class:bx--tree--default={size === "default"}
+    class:bx--tree--compact={size === "compact"}
+    class:bx--tree--multiselect={multiselect}
+    class:bx--tree--multiselect-modifier={multiselect &&
+      multiselectModifierActive}
+    style="height: {containerHeightStyle}; overflow-y: auto;"
+    aria-label={hideLabel ? labelText : undefined}
+    aria-labelledby={hideLabel ? undefined : labelId}
+    aria-multiselectable={multiselect || undefined}
+    on:mousedown|capture={syncModifierFromTreeMouseDown}
+    on:selectstart|capture={handleMultiselectSelectStart}
+    on:scroll={(e) => (scrollTop = e.currentTarget.scrollTop)}
+    on:keydown
+    on:keydown|stopPropagation={handleVirtualKeyDown}
+  >
+    {#if virtualData.offsetY > 0}
+      <li aria-hidden="true" style:height="{virtualData.offsetY}px"></li>
+    {/if}
+    {#each virtualData.visibleItems as row (row.node.id)}
+      <TreeViewNodeVirtual
+        item={row}
+        itemHeight={virtualConfig.itemHeight}
+        isTabAnchor={row.node.id === virtualTabAnchorId}
+        let:node
+      >
+        <slot {node}>{node.text}</slot>
+      </TreeViewNodeVirtual>
+    {/each}
+    {#if virtualData.endIndex < visibleFlat.length}
+      <li
+        aria-hidden="true"
+        style:height="{virtualData.totalHeight -
+          virtualData.endIndex * virtualConfig.itemHeight}px"
+      ></li>
+    {/if}
+  </ul>
+{:else}
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+  <ul
+    {...$$restProps}
+    role="tree"
+    bind:this={ref}
+    class:bx--tree={true}
+    class:bx--tree--default={size === "default"}
+    class:bx--tree--compact={size === "compact"}
+    class:bx--tree--multiselect={multiselect}
+    class:bx--tree--multiselect-modifier={multiselect &&
+      multiselectModifierActive}
+    aria-label={hideLabel ? labelText : undefined}
+    aria-labelledby={hideLabel ? undefined : labelId}
+    aria-multiselectable={multiselect || undefined}
+    on:mousedown|capture={syncModifierFromTreeMouseDown}
+    on:selectstart|capture={handleMultiselectSelectStart}
+    on:keydown
+    on:keydown|stopPropagation={handleKeyDown}
+  >
+    <TreeViewNodeList root {nodes} let:node>
+      <slot {node}> {node.text} </slot>
+    </TreeViewNodeList>
+  </ul>
+{/if}

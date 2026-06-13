@@ -148,6 +148,29 @@ The tree view is optimized to handle large datasets efficiently, as shown here w
 
 <FileSource src="/framed/TreeView/TreeViewPerformance" />
 
+## Virtualization
+
+For trees with thousands of rows (file trees, log explorers), set the `virtualize` prop to render only the rows in the scroll window. The tree continues to manage the full `nodes` dataset; only the on-screen slice is mounted in the DOM.
+
+Virtualization is **strictly opt-in**. The component cannot tell from a `nodes` prop alone whether the tree will stay small or grow large through expansion, so it does not auto-enable based on row count. Once you pass `virtualize`, windowing is always active and `<TreeView>` switches to a flat ARIA structure (`aria-level` / `aria-posinset` / `aria-setsize`) so that windowing is possible.
+
+Leave `virtualize` unset for the default recursive rendering — behavior is unchanged from prior versions.
+
+Row height is fixed and derived from `size` (32px default, 24px compact). Pass `true` for defaults, or an object to customize:
+
+| Field             | Default                       | Description                                                            |
+| ----------------- | ----------------------------- | ---------------------------------------------------------------------- |
+| `containerHeight` | `maxVisibleRows * itemHeight` | Height of the scroll viewport. Accepts a number (px) or a CSS string (`"80%"`, `"100%"`, `"calc(...)"`, …) when the parent constrains height. |
+| `maxVisibleRows`  | `10`                          | Number of rows visible at once when `containerHeight` is not provided. |
+| `overscan`        | `3`                           | Extra rows rendered above/below the viewport to smooth scrolling.      |
+
+Bind `scrollContainerRef` if you need direct access to the scroll element.
+
+> [!NOTE]
+> Keyboard navigation, `showNode`, expand/collapse, and all other APIs continue to work in virtualized mode; deep rows are scrolled into view automatically when focused.
+
+<FileSource src="/framed/TreeView/TreeViewVirtualize" />
+
 ## Flat data structure
 
 Convert flat data to a hierarchical structure using the `toHierarchy` utility.
