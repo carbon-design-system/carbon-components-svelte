@@ -85,21 +85,18 @@ describe("FileUploaderDropContainer", () => {
       props: { disabled: true },
     });
 
-    const dropContainer = container.querySelector(".bx--file__drop-container");
-    assert(dropContainer instanceof HTMLElement);
-    expect(dropContainer).toHaveAttribute("aria-disabled", "true");
-
     const label = container.querySelector("label");
     assert(label instanceof HTMLElement);
+    expect(label).toHaveAttribute("aria-disabled", "true");
     expect(label).toHaveAttribute("tabindex", "-1");
   });
 
   it("should not expose aria-disabled when not disabled", () => {
     const { container } = render(FileUploaderDropContainer);
 
-    const dropContainer = container.querySelector(".bx--file__drop-container");
-    assert(dropContainer instanceof HTMLElement);
-    expect(dropContainer).not.toHaveAttribute("aria-disabled");
+    const label = container.querySelector("label");
+    assert(label instanceof HTMLElement);
+    expect(label).not.toHaveAttribute("aria-disabled");
   });
 
   it("should respect accept prop", () => {
@@ -424,24 +421,41 @@ describe("FileUploaderDropContainer", () => {
     expect(clickSpy).toHaveBeenCalled();
   });
 
+  it("should place focusable role on a single element (no duplicated button semantics)", () => {
+    const { container } = render(FileUploaderDropContainer);
+
+    const label = container.querySelector("label");
+    assert(label instanceof HTMLElement);
+    // The label is the single focusable role="button" element (matches
+    // Carbon's reference markup and carries its custom focus outline).
+    expect(label).toHaveAttribute("tabindex", "0");
+    expect(label).toHaveAttribute("role", "button");
+
+    const dropContainer = container.querySelector(".bx--file__drop-container");
+    assert(dropContainer instanceof HTMLElement);
+    // The inner container is a plain layout div with no interactive role.
+    expect(dropContainer).not.toHaveAttribute("tabindex");
+    expect(dropContainer).not.toHaveAttribute("role");
+  });
+
   it("should handle role prop", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { role: "button" },
     });
 
-    const dropContainer = container.querySelector(".bx--file__drop-container");
-    assert(dropContainer instanceof HTMLElement);
-    expect(dropContainer).toHaveAttribute("role", "button");
+    const label = container.querySelector("label");
+    assert(label instanceof HTMLElement);
+    expect(label).toHaveAttribute("role", "button");
   });
 
   it("should handle tabindex prop", () => {
     const { container } = render(FileUploaderDropContainer, {
-      props: { tabindex: "0" },
+      props: { tabindex: "-1" },
     });
 
     const label = container.querySelector("label");
     assert(label instanceof HTMLElement);
-    expect(label).toHaveAttribute("tabindex", "0");
+    expect(label).toHaveAttribute("tabindex", "-1");
   });
 
   it("should handle name attribute", () => {
