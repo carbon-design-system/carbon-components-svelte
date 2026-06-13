@@ -388,6 +388,12 @@ An `empty: true` header has no label, but its body cells can still render conten
   </svelte:fragment>
 </DataTable>
 
+## Sticky header max height
+
+By default, `stickyHeader` caps the table height at `300px`. Override the cap with `stickyHeaderMaxHeight`. Pass a number (interpreted as `px`) or a CSS length string (e.g. `"24rem"`).
+
+<FileSource src="/framed/DataTable/StickyHeaderMaxHeight" />
+
 ## Virtualized rows (large datasets)
 
 Virtualization renders only the rows currently visible in the viewport, improving performance for large datasets. Set `virtualize={true}` to enable. The header stays visible while scrolling (sticky positioning is applied automatically). Use `stickyHeader={true}` for the intended layout, if necessary. Container height defaults to 10 rows (`itemHeight * maxVisibleRows`).
