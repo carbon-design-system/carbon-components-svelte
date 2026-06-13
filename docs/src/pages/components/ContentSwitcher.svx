@@ -6,6 +6,9 @@ components: ["ContentSwitcher", "Switch"]
   import { ContentSwitcher, Switch, Stack } from "carbon-components-svelte";
   import Bullhorn from "carbon-icons-svelte/lib/Bullhorn.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
+  import TableOfContents from "carbon-icons-svelte/lib/TableOfContents.svelte";
+  import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
+  import List from "carbon-icons-svelte/lib/List.svelte";
 </script>
 
 Content switchers let users switch between different views or sections of content. Use them to organize related content into distinct categories or states.
@@ -70,6 +73,26 @@ Override the default slot in the switch to customize how each option displays.
       <Analytics /> Trending
     </Stack>
   </Switch>
+</ContentSwitcher>
+
+## Icon-only
+
+Set `icon` on each `Switch` to render compact, square switches that display only an icon. The content switcher becomes icon-only when every switch sets `icon`. Set `text` to label the switch; the text is the accessible label and the tooltip shown on hover and focus.
+
+<ContentSwitcher>
+  <Switch icon={TableOfContents} text="Table of contents" />
+  <Switch icon={Dashboard} text="Dashboard" />
+  <Switch icon={List} text="List" />
+</ContentSwitcher>
+
+## Icon-only (custom tooltip alignment)
+
+Pass `tooltipAlignment` to individual icon-only switches to adjust how the tooltip aligns to the switch.
+
+<ContentSwitcher>
+  <Switch icon={TableOfContents} text="Table of contents" tooltipAlignment="start" />
+  <Switch icon={Dashboard} text="Dashboard" />
+  <Switch icon={List} text="List" tooltipAlignment="end" />
 </ContentSwitcher>
 
 ## Extra-large size
