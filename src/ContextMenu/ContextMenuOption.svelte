@@ -204,7 +204,7 @@
         selected = !selected;
       }
 
-      ctx.close();
+      ctx.close("select");
     }
   }
 
