@@ -496,6 +496,8 @@
     tableSize,
     resetSelectedRowIds,
     filterRows,
+    refreshRow,
+    refreshCells,
   });
 
   let expanded = false;
@@ -545,18 +547,56 @@
   let prevRows;
   let prevHeaders;
 
+  /** Build cell objects for one row. Always new objects so `display` columns re-run. */
+  function computeRowCells(row) {
+    return headers.map((header, index) => ({
+      key: header.key ?? `key-${index}`,
+      value: header.key ? resolvePath(row, header.key) : undefined,
+      display: header.display,
+      empty: header.empty,
+      columnMenu: header.columnMenu,
+    }));
+  }
+
+  /**
+   * Rebuild cells for a single row after an in-place edit to `rows`.
+   * @type {(id: Row["id"]) => void}
+   * @example
+   * ```svelte
+   * <DataTable bind:this={dataTable} {headers} {rows} />
+   * <NumberInput min={0} bind:value={row.qty} on:input={() => dataTable.refreshRow(row.id)} />
+   * ```
+   */
+  export function refreshRow(id) {
+    const row = rows.find((row) => row.id === id);
+    if (!row) return;
+    tableCellsByRowId = {
+      ...tableCellsByRowId,
+      [id]: computeRowCells(row),
+    };
+  }
+
+  /**
+   * Rebuild cells for every row after batch in-place edits to `rows`.
+   * @type {() => void}
+   * @example
+   * ```svelte
+   * <DataTable bind:this={dataTable} {headers} {rows} />
+   * <button on:click={() => dataTable.refreshCells()}>Refresh table</button>
+   * ```
+   */
+  export function refreshCells() {
+    const next = {};
+    for (const row of rows) next[row.id] = computeRowCells(row);
+    tableCellsByRowId = next;
+  }
+
   $: if (rows !== prevRows || headers !== prevHeaders) {
     const next = {};
 
     for (const row of rows) {
       const prevCells = tableCellsByRowId[row.id];
-      const newCells = headers.map((header, index) => ({
-        key: header.key ?? `key-${index}`,
-        value: header.key ? resolvePath(row, header.key) : undefined,
-        display: header.display,
-        empty: header.empty,
-        columnMenu: header.columnMenu,
-      }));
+      const newCells = computeRowCells(row);
 
       if (prevCells && prevCells.length === newCells.length) {
         let allEqual = true;
