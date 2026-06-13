@@ -54,4 +54,29 @@ test.describe("Tabs", () => {
     );
     await expect(page.getByTestId("tab-content-1")).toBeVisible();
   });
+
+  // Regression: the icon must sit horizontally beside the label, not stacked
+  // below it. The icon-modifier rule must out-specify Carbon's base
+  // `a.bx--tabs__nav-link { display: inline-block }`, which is emitted after
+  // the override partial. See css/_tabs.scss.
+  test("renders the tab icon beside the label, not below it", async ({
+    page,
+  }) => {
+    const navLink = page.getByRole("tab", { name: "Tab 1" });
+    await expect(navLink).toHaveCSS("display", "flex");
+
+    const label = navLink.locator(".bx--tabs__nav-item-label");
+    const icon = navLink.locator(".bx--tabs__nav-item--icon");
+
+    const labelBox = await label.boundingBox();
+    const iconBox = await icon.boundingBox();
+    if (!labelBox || !iconBox) throw new Error("Missing label/icon box");
+
+    // Icon is to the right of the label.
+    expect(iconBox.x).toBeGreaterThanOrEqual(labelBox.x + labelBox.width - 1);
+    // Their vertical ranges overlap (same row), rather than the icon dropping
+    // onto its own line below the label.
+    expect(iconBox.y).toBeLessThan(labelBox.y + labelBox.height);
+    expect(labelBox.y).toBeLessThan(iconBox.y + iconBox.height);
+  });
 });
