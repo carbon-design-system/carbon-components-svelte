@@ -1,8 +1,12 @@
 <script>
   /**
    * @template [Icon=any]
-   * @event {null} open
-   * @event {null} close
+   * @event open
+   * @type {object}
+   * @property {"toggle"} trigger
+   * @event close
+   * @type {object}
+   * @property {"outside-click" | "toggle"} trigger
    */
 
   /**
@@ -95,7 +99,7 @@
       isOutsideClick(event, [ref, refPanel])
     ) {
       isOpen = false;
-      dispatch("close");
+      dispatch("close", { trigger: "outside-click" });
     }
   }
 </script>
@@ -112,7 +116,7 @@
   on:click
   on:click|stopPropagation={() => {
     isOpen = !isOpen;
-    dispatch(isOpen ? "open" : "close");
+    dispatch(isOpen ? "open" : "close", { trigger: "toggle" });
   }}
 >
   {#if hasIconOnly}
