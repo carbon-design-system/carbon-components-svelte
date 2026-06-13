@@ -4,6 +4,12 @@
    */
 
   /**
+   * @event close
+   * @type {object}
+   * @property {"escape-key" | "outside-click" | "select"} trigger
+   */
+
+  /**
    * Specify an element or list of elements to trigger the context menu.
    * If no element is specified, the context menu applies to the entire window.
    * @type {null | ReadonlyArray<null | HTMLElement>}
@@ -80,15 +86,17 @@
   let openDetail = null;
 
   /**
-   * @type {() => void}
+   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
    */
-  function close() {
+  function close(trigger) {
+    if (!open) return;
     open = false;
     x = 0;
     y = 0;
     prevX = 0;
     prevY = 0;
     focusIndex = -1;
+    dispatch("close", { trigger });
   }
 
   /** @type {(e: MouseEvent) => void} */
@@ -166,8 +174,6 @@
       }
 
       if (!prevOpen) dispatch("open", openDetail);
-    } else if (prevOpen) {
-      dispatch("close");
     }
     prevOpen = open;
 
@@ -179,10 +185,10 @@
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
 
   function handleOutsideClick(event) {
-    if (open && isOutsideClick(event, ref)) close();
+    if (open && isOutsideClick(event, ref)) close("outside-click");
   }
   function handleEscape(event) {
-    if (open && event.key === "Escape") close();
+    if (open && event.key === "Escape") close("escape-key");
   }
 </script>
 
@@ -232,7 +238,7 @@
     const closestOption = event.target.closest("[tabindex]");
 
     if (closestOption && closestOption.getAttribute("role") !== "menuitem") {
-      close();
+      close("select");
     }
   }}
   on:keydown
