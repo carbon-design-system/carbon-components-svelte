@@ -151,9 +151,13 @@ The `"cell"` slot provides `rowSelected` and `rowExpanded` props to conditionall
 
 Use the `"cell"` slot to render form inputs that edit row values inline. Bind the input to the row field, for example `bind:value={row.qty}`, to update `rows`.
 
-The table rebuilds cells only when the `rows` array reference changes. After an in-place edit, call `refreshRow(id)` to update columns whose `display` reads other fields on the same row. Use `bind:this` to obtain a reference to the component instance. Call `refreshCells()` to refresh every row after batch edits.
+The table rebuilds cells only when the `rows` array reference changes. After an in-place edit, call `refreshRow(id)` to update columns whose `display` reads other fields on the same row. Use `bind:this` to obtain a reference to the component instance.
 
 <FileSource src="/framed/DataTable/DataTableEditableCells" />
+
+When you edit multiple rows in place, call `refreshCells()` once to update derived columns for every row.
+
+<FileSource src="/framed/DataTable/DataTableEditableCellsRefreshCells" />
 
 ## With title, description
 
