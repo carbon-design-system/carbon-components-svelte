@@ -20,6 +20,12 @@
    */
 
   /**
+   * @event close
+   * @type {object}
+   * @property {"escape-key" | "outside-click" | "select"} trigger
+   */
+
+  /**
    * Set the combobox items.
    * @type {ReadonlyArray<Item>}
    */
@@ -525,9 +531,21 @@
     .filter(Boolean)
     .join(" ");
 
+  /**
+   * Close the dropdown and surface the dismissal cause.
+   * Guarded on `open` so redundant assignments don't double-fire the event.
+   * @param {"escape-key" | "outside-click" | "select"} trigger
+   */
+  function close(trigger) {
+    if (open) {
+      open = false;
+      dispatch("close", { trigger });
+    }
+  }
+
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {
-      open = false;
+      close("outside-click");
     }
   }
 </script>
@@ -628,6 +646,7 @@
             event.preventDefault();
           }
           if (event.key === "Enter") {
+            const wasOpen = open;
             open = !open;
             if (
               highlightedIndex > -1 &&
@@ -639,6 +658,7 @@
                 value = itemToString(filteredItems[highlightedIndex]);
                 selectedItem = filteredItems[highlightedIndex];
                 selectedId = filteredItems[highlightedIndex].id;
+                if (wasOpen) dispatch("close", { trigger: "select" });
               }
             } else {
               // Match typed value case-insensitively against item text
@@ -654,11 +674,12 @@
                 selectedItem = matchedItem;
                 value = itemToString(selectedItem);
                 selectedId = selectedItem.id;
+                if (wasOpen) dispatch("close", { trigger: "select" });
               }
             }
             highlightedIndex = -1;
           } else if (event.key === "Tab") {
-            open = false;
+            close("escape-key");
           } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             const step = event.key === "ArrowDown" ? 1 : -1;
             if (event.altKey) {
@@ -667,7 +688,7 @@
               if (event.key === "ArrowDown" && !open) {
                 open = true;
               } else if (event.key === "ArrowUp" && open) {
-                open = false;
+                close("escape-key");
               }
             } else if (open) {
               change(step);
@@ -682,6 +703,8 @@
               });
             }
           } else if (event.key === "Escape") {
+            // Dispatch before `clear()` flips `open`, so the guard still sees it open.
+            close("escape-key");
             clear();
           }
         }}
@@ -781,7 +804,7 @@
                       return;
                     }
                     selectedId = item.id;
-                    open = false;
+                    close("select");
                     valueBeforeOpen = "";
 
                     if (filteredItems[actualIndex]) {
@@ -848,7 +871,7 @@
                   return;
                 }
                 selectedId = item.id;
-                open = false;
+                close("select");
                 valueBeforeOpen = "";
 
                 if (filteredItems[index]) {
