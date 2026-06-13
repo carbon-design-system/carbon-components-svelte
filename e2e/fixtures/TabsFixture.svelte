@@ -1,11 +1,12 @@
 <script>
   import { Tab, TabContent, Tabs } from "carbon-components-svelte";
+  import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
 
   let selected = 0;
 </script>
 
 <Tabs data-testid="tabs" bind:selected>
-  <Tab label="Tab 1" />
+  <Tab label="Tab 1" icon={Calendar} />
   <Tab label="Tab 2" />
   <Tab label="Tab 3" />
 
