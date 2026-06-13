@@ -253,6 +253,14 @@
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
+  /**
+   * Override the maximum height of the sticky header table, replacing the
+   * default `300px`. Only applies when `stickyHeader` is `true`. Pass a number
+   * (interpreted as `px`) or a CSS length string (e.g. `"100%"`, `"24rem"`).
+   * @type {number | string}
+   */
+  export let stickyHeaderMaxHeight = undefined;
+
   /** Set to `true` to use static width */
   export let useStaticWidth = false;
 
@@ -738,7 +746,14 @@
       {stickyHeader}
       {sortable}
       {useStaticWidth}
-      tableStyle={hasCustomHeaderWidth && "table-layout: fixed"}
+      tableStyle={[
+        hasCustomHeaderWidth && "table-layout: fixed",
+        stickyHeader &&
+          stickyHeaderMaxHeight != null &&
+          `max-height: ${typeof stickyHeaderMaxHeight === "number" ? `${stickyHeaderMaxHeight}px` : stickyHeaderMaxHeight}`,
+      ]
+        .filter(Boolean)
+        .join("; ") || undefined}
     >
       <TableHead
         style={virtualScrollContainer

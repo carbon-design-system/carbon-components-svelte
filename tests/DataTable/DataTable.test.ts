@@ -1213,6 +1213,50 @@ describe("DataTable", () => {
     expect(table).toHaveClass("bx--data-table--sticky-header");
   });
 
+  describe("stickyHeaderMaxHeight", () => {
+    it("applies a pixel max-height when stickyHeader is enabled", () => {
+      render(DataTable, {
+        props: {
+          headers,
+          rows,
+          stickyHeader: true,
+          stickyHeaderMaxHeight: 500,
+        },
+      });
+
+      const table = screen.getByRole("table");
+      expect(table).toHaveStyle({ "max-height": "500px" });
+    });
+
+    it("applies a CSS length string when stickyHeader is enabled", () => {
+      render(DataTable, {
+        props: {
+          headers,
+          rows,
+          stickyHeader: true,
+          stickyHeaderMaxHeight: "24rem",
+        },
+      });
+
+      const table = screen.getByRole("table");
+      expect(table).toHaveStyle({ "max-height": "24rem" });
+    });
+
+    it("ignores stickyHeaderMaxHeight when stickyHeader is disabled", () => {
+      render(DataTable, {
+        props: {
+          headers,
+          rows,
+          stickyHeader: false,
+          stickyHeaderMaxHeight: 500,
+        },
+      });
+
+      const table = screen.getByRole("table");
+      expect(table).not.toHaveStyle({ "max-height": "500px" });
+    });
+  });
+
   it("handles static width", () => {
     const { container } = render(DataTable, {
       props: {

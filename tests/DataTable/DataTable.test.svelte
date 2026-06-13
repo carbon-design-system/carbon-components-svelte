@@ -63,6 +63,8 @@
   export let sortAlways = false;
   export let sort: ComponentProps<DataTable>["sort"] = undefined;
   export let stickyHeader = false;
+  export let stickyHeaderMaxHeight: ComponentProps<DataTable>["stickyHeaderMaxHeight"] =
+    undefined;
   export let useStaticWidth = false;
   export let expandable = false;
   export let batchExpansion = false;
@@ -101,6 +103,7 @@
   {sortAlways}
   {sort}
   {stickyHeader}
+  {stickyHeaderMaxHeight}
   {useStaticWidth}
   {expandable}
   {batchExpansion}
