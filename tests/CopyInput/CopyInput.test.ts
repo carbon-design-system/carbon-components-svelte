@@ -1,7 +1,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import CopyInputFluidForm from "./CopyInput.fluidForm.test.svelte";
+import CopyInputFluidSkeleton from "./CopyInput.fluidSkeleton.test.svelte";
 import CopyInputFluidSlot from "./CopyInput.fluidSlot.test.svelte";
+import CopyInputSkeleton from "./CopyInput.skeleton.test.svelte";
 import CopyInput from "./CopyInput.test.svelte";
 import CopyInputAsync from "./CopyInputAsync.test.svelte";
 import CopyInputAsyncDoubleClick from "./CopyInputAsyncDoubleClick.test.svelte";
@@ -278,6 +280,50 @@ describe("CopyInput", () => {
 
       expect(fieldWrapper).not.toBeNull();
       expect(fieldWrapper?.closest(".bx--text-input--fluid")).not.toBeNull();
+    });
+  });
+
+  describe("skeleton", () => {
+    it("renders skeleton state", () => {
+      render(CopyInputSkeleton);
+
+      const skeleton = screen.getByTestId("copy-input-skeleton");
+      expect(skeleton).toBeInTheDocument();
+      expect(skeleton).toHaveClass("bx--form-item");
+      expect(skeleton.children).toHaveLength(2);
+      expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+      expect(skeleton.children[1]).toHaveClass(
+        "bx--skeleton",
+        "bx--text-input",
+      );
+    });
+
+    it("hides the skeleton label when hideLabel is true", () => {
+      render(CopyInputSkeleton, { props: { hideLabel: true } });
+
+      const skeleton = screen.getByTestId("copy-input-skeleton");
+      expect(skeleton.children).toHaveLength(1);
+      expect(skeleton.children[0]).toHaveClass(
+        "bx--skeleton",
+        "bx--text-input",
+      );
+    });
+
+    it("renders fluid skeleton state", () => {
+      render(CopyInputFluidSkeleton);
+
+      const skeleton = screen.getByTestId("fluid-copy-input-skeleton");
+      expect(skeleton).toBeInTheDocument();
+      expect(skeleton).toHaveClass(
+        "bx--form-item",
+        "bx--text-input--fluid__skeleton",
+      );
+      expect(skeleton.children).toHaveLength(2);
+      expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+      expect(skeleton.children[1]).toHaveClass(
+        "bx--skeleton",
+        "bx--text-input",
+      );
     });
   });
 });
