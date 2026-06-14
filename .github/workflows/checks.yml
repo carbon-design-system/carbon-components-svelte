@@ -130,6 +130,9 @@ jobs:
       # are baked into the image at PLAYWRIGHT_BROWSERS_PATH).
       - run: bun ci --ignore-scripts
 
+      - name: Build CSS
+        run: bun run build:css
+
       - name: E2E tests
         run: bunx playwright test --project=chromium
 

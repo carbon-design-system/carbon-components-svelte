@@ -26,6 +26,9 @@ jobs:
       - name: Build docs
         run: bun run build:docs
 
+      - name: Build CSS
+        run: bun run build:css
+
       - name: Prune package.json
         run: bunx culls --preserve=svelte
 
