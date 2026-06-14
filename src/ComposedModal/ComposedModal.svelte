@@ -21,6 +21,9 @@
   /** Set to `true` to use the danger variant */
   export let danger = false;
 
+  /** Set to `true` to remove the modal body padding so content spans edge to edge */
+  export let fullWidth = false;
+
   /** Set to `true` to prevent the modal from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
@@ -200,6 +203,7 @@
     class:bx--modal-container--xs={size === "xs"}
     class:bx--modal-container--sm={size === "sm"}
     class:bx--modal-container--lg={size === "lg"}
+    class:bx--modal-container--full-width={fullWidth}
     class={containerClass}
     on:mousedown={outsideDismiss.pressInside}
   >
