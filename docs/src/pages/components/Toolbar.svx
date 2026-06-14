@@ -1,14 +1,13 @@
 ---
 components: ["Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions"]
+description: Toolbars provide a flexible container for actions, search, and menu items, standalone or as part of a data table.
 ---
 
 <script>
   import { Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, ToolbarBatchActions, Button } from "carbon-components-svelte";
 </script>
 
-Toolbars provide a flexible container for organizing actions, search, and menu items. They can be used standalone or as part of a data table for batch operations and filtering.
-
-## Default
+## Basic
 
 Create a basic toolbar with content inside toolbar content.
 
@@ -18,7 +17,11 @@ Create a basic toolbar with content inside toolbar content.
   </ToolbarContent>
 </Toolbar>
 
-## Small size
+## Sizes
+
+The default toolbar height is medium. Set `size` to choose another variant.
+
+### Small
 
 Set `size="sm"` for a compact toolbar.
 
@@ -28,9 +31,9 @@ Set `size="sm"` for a compact toolbar.
   </ToolbarContent>
 </Toolbar>
 
-## Extra-small size
+### Extra-small
 
-Set `size="xs"` for an extra small toolbar, intended to pair with a compact `DataTable`.
+Set `size="xs"` for an extra-small toolbar, intended to pair with a compact data table.
 
 <Toolbar size="xs">
   <ToolbarContent>
@@ -38,7 +41,7 @@ Set `size="xs"` for an extra small toolbar, intended to pair with a compact `Dat
   </ToolbarContent>
 </Toolbar>
 
-## With search
+## Search
 
 Add search functionality using toolbar search.
 
@@ -49,7 +52,7 @@ Add search functionality using toolbar search.
   </ToolbarContent>
 </Toolbar>
 
-## With persistent search
+### Persistent
 
 Set `persistent` on toolbar search to keep it always expanded.
 
@@ -60,19 +63,19 @@ Set `persistent` on toolbar search to keep it always expanded.
   </ToolbarContent>
 </Toolbar>
 
-## Reactive search
+### Reactive
 
-Bind to the `value` prop for reactive updates.
+Bind to `value` for reactive updates.
 
 <FileSource src="/framed/Toolbar/ToolbarSearchReactive" />
 
-## Programmatically clear the search
+### Clear programmatically
 
-Use `bind:this` to obtain a reference to `ToolbarSearch` and call `clear()` to reset the value.
+Use `bind:this` to obtain a ToolbarSearch reference and call `clear()` to reset the value.
 
 <FileSource src="/framed/Toolbar/ToolbarSearchClear" />
 
-## With menu
+## Menu
 
 Add an overflow menu using toolbar menu and toolbar menu item.
 
@@ -87,7 +90,7 @@ Add an overflow menu using toolbar menu and toolbar menu item.
   </ToolbarContent>
 </Toolbar>
 
-## Menu with divider and danger item
+### Divider and danger item
 
 Use `hasDivider` to add a separator and `danger` for destructive actions.
 
@@ -101,7 +104,7 @@ Use `hasDivider` to add a separator and `danger` for destructive actions.
   </ToolbarContent>
 </Toolbar>
 
-## Menu with primary focus
+### Primary focus
 
 Set `primaryFocus` on a menu item to focus it when opening the dropdown.
 
@@ -147,10 +150,7 @@ Stack multiple action buttons in the toolbar.
 
 ## Standalone usage
 
-> [!NOTE]
-> **Toolbar** can be used independently of DataTable. It provides its own context for child components like **ToolbarMenu** and **ToolbarSearch**.
-
-The toolbar components work standalone for general-purpose layouts:
+**Toolbar** can be used independently of DataTable. It provides its own context for child components like **ToolbarMenu** and **ToolbarSearch**. The toolbar components work standalone for general-purpose layouts:
 
 <Toolbar>
   <ToolbarContent>
@@ -167,6 +167,6 @@ The toolbar components work standalone for general-purpose layouts:
 
 Toolbar batch actions display batch actions when items are selected. 
 
-Although intended for use with [DataTable](/components/datatable), this component can be used standalone if `selectedIds` is provided. This prop does not need to be provided if using with a data table.
+Although intended for use with [DataTable](/components/datatable), batch actions can be used standalone when selectedIds is provided. That prop is not required when used with a data table.
 
 <FileSource src="/framed/Toolbar/ToolbarBatchActionsStandalone" />

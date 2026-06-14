@@ -1,5 +1,6 @@
 ---
 components: ["ContentSwitcher", "Switch"]
+description: Content switchers let users switch between views or sections of content, organizing related content into distinct categories.
 ---
 
 <script>
@@ -11,11 +12,9 @@ components: ["ContentSwitcher", "Switch"]
   import List from "carbon-icons-svelte/lib/List.svelte";
 </script>
 
-Content switchers let users switch between different views or sections of content. Use them to organize related content into distinct categories or states.
+## Basic
 
-## Default
-
-Create a content switcher with switch components. Each switch needs a `text` prop.
+Create a content switcher with switch components. Each switch needs a text label via `text`.
 
 <ContentSwitcher>
   <Switch text="Latest news" />
@@ -77,7 +76,7 @@ Override the default slot in the switch to customize how each option displays.
 
 ## Icon-only
 
-Set `icon` on each `Switch` to render compact, square switches that display only an icon. The content switcher becomes icon-only when every switch sets `icon`. Set `text` to label the switch; the text is the accessible label and the tooltip shown on hover and focus.
+Set `icon` on every switch for compact, icon-only controls. The switcher becomes icon-only when all switches include an icon. Use `text` for the accessible label and tooltip.
 
 <ContentSwitcher>
   <Switch icon={TableOfContents} text="Table of contents" />
@@ -85,9 +84,9 @@ Set `icon` on each `Switch` to render compact, square switches that display only
   <Switch icon={List} text="List" />
 </ContentSwitcher>
 
-## Icon-only (custom tooltip alignment)
+### Custom tooltip alignment
 
-Pass `tooltipAlignment` to individual icon-only switches to adjust how the tooltip aligns to the switch.
+Pass `tooltipAlignment` to individual icon-only switches to adjust tooltip alignment.
 
 <ContentSwitcher>
   <Switch icon={TableOfContents} text="Table of contents" tooltipAlignment="start" />
@@ -97,7 +96,7 @@ Pass `tooltipAlignment` to individual icon-only switches to adjust how the toolt
 
 ## Low contrast
 
-Set `lowContrast` to `true` for the low contrast variant. The selected switch uses a light surface instead of the default inverse (dark) background, reducing the contrast between the switcher and surrounding content.
+Set `lowContrast` for the low contrast variant. The selected switch uses a light surface instead of the default inverse (dark) background, reducing the contrast between the switcher and surrounding content.
 
 <ContentSwitcher lowContrast>
   <Switch text="Latest news" />
@@ -105,9 +104,9 @@ Set `lowContrast` to `true` for the low contrast variant. The selected switch us
   <Switch text="Recommended" />
 </ContentSwitcher>
 
-## Low contrast with disabled switches
+### Disabled switches
 
-Combine `lowContrast` with `disabled` on individual switches.
+Combine low contrast with disabled switches.
 
 <ContentSwitcher lowContrast>
   <Switch text="Latest news" />
@@ -115,7 +114,7 @@ Combine `lowContrast` with `disabled` on individual switches.
   <Switch disabled text="Recommended" />
 </ContentSwitcher>
 
-## Low contrast (sizes)
+### Sizes
 
 The low contrast variant supports all sizes. Set `size` to `"sm"`, `"xl"`, or leave it unset for the default size.
 
@@ -137,9 +136,9 @@ The low contrast variant supports all sizes. Set `size` to `"sm"`, `"xl"`, or le
   </ContentSwitcher>
 </Stack>
 
-## Low contrast (icon-only)
+### Icon-only
 
-Combine `lowContrast` with icon-only switches.
+Combine low contrast with icon-only switches.
 
 <ContentSwitcher lowContrast>
   <Switch icon={TableOfContents} text="Table of contents" />
@@ -147,9 +146,9 @@ Combine `lowContrast` with icon-only switches.
   <Switch icon={List} text="List" />
 </ContentSwitcher>
 
-## Low contrast (icon-only, custom tooltip alignment)
+### Icon-only (custom tooltip alignment)
 
-Pass `tooltipAlignment` to individual icon-only switches to adjust how the tooltip aligns to the switch.
+Pass `tooltipAlignment` to individual icon-only switches to adjust tooltip alignment.
 
 <ContentSwitcher lowContrast>
   <Switch icon={TableOfContents} text="Table of contents" tooltipAlignment="start" />
@@ -157,7 +156,7 @@ Pass `tooltipAlignment` to individual icon-only switches to adjust how the toolt
   <Switch icon={List} text="List" tooltipAlignment="end" />
 </ContentSwitcher>
 
-## Low contrast (icon-only, sizes)
+### Icon-only (sizes)
 
 The low contrast, icon-only variant supports all sizes. Set `size` to `"sm"`, `"xl"`, or leave it unset for the default size.
 
@@ -179,7 +178,11 @@ The low contrast, icon-only variant supports all sizes. Set `size` to `"sm"`, `"
   </ContentSwitcher>
 </Stack>
 
-## Extra-large size
+## Sizes
+
+Set `size` to control height. The default is `md`.
+
+### Extra-large
 
 Set `size` to `"xl"` for an extra-large content switcher.
 
@@ -188,7 +191,7 @@ Set `size` to `"xl"` for an extra-large content switcher.
   <Switch text="Archived" />
 </ContentSwitcher>
 
-## Small size
+### Small
 
 Set `size` to `"sm"` for a small content switcher.
 
@@ -197,9 +200,9 @@ Set `size` to `"sm"` for a small content switcher.
   <Switch text="Archived" />
 </ContentSwitcher>
 
-## Disabled state
+## Disabled
 
-Set `disabled` to `true` on individual switches to prevent interaction.
+Disable individual switches with `disabled`.
 
 <ContentSwitcher>
   <Switch disabled text="All" />

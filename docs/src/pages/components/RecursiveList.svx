@@ -1,44 +1,43 @@
+---
+description: Recursive lists render hierarchical data as nested ordered or unordered lists, with support for links and HTML content.
+---
+
 <script>
   import { RecursiveList, Link } from "carbon-components-svelte";
 </script>
 
-Recursive lists provide a flexible way to render hierarchical data structures using either unordered or ordered lists. They support nested nodes, links, and HTML content, making them ideal for displaying complex data hierarchies.
+## Basic
 
-> [!WARNING]
-> HTML content provided via the `html` prop is not sanitized.
-
-## Default
-
-Create a hierarchical list using the `nodes` prop. Each node can contain text, links, HTML content, and nested nodes.
+Create a hierarchical list using the `nodes` prop. Each node can contain text, links, nested children, and HTML content via the html prop (which is not sanitized).
 
 <FileSource src="/framed/RecursiveList/RecursiveList" />
 
 ## Ordered
 
-Set `type` to `"ordered"` to use numbered lists with proper indentation.
+Set `type` to `"ordered"` for numbered lists with proper indentation.
 
 <FileSource src="/framed/RecursiveList/RecursiveListOrdered" />
 
-## Ordered (native styles)
+### Native styles
 
-Set `type` to `"ordered-native"` to use browser-native numbering styles.
+Set `type` to `"ordered-native"` for browser-native numbering styles.
 
 <FileSource src="/framed/RecursiveList/RecursiveListOrderedNative" />
 
 ## Expressive styles
 
-Use Carbon's expressive typesetting by setting the `expressive` prop to `true`.
+Use Carbon's expressive typesetting with `expressive`.
 
 <FileSource src="/framed/RecursiveList/RecursiveListExpressive" />
 
-## Flat data structure
+## Flat data
 
-Convert flat data structures to hierarchical arrays using the `toHierarchy` utility function.
+Convert flat data to hierarchical arrays with the `toHierarchy` utility.
 
 <FileSource src="/framed/RecursiveList/RecursiveListFlatArray" />
 
 ## Stable keys
 
-Each node accepts an optional `id` (string or number) which is used as the each-block key. Supply an `id` when node `text` or `href` values can repeat, so reordering or filtering preserves DOM identity.
+Each node accepts an optional id (string or number) used as the each-block key. Supply an id when text or href values can repeat, so reordering or filtering preserves DOM identity.
 
 <FileSource src="/framed/RecursiveList/RecursiveListStableKeys" />

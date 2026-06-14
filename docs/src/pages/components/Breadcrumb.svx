@@ -1,5 +1,6 @@
 ---
 components: ["Breadcrumb", "BreadcrumbItem"]
+description: Breadcrumbs display a hierarchical navigation trail showing the user's location, with current-page indication and overflow handling.
 ---
 
 <script>
@@ -11,9 +12,7 @@ components: ["Breadcrumb", "BreadcrumbItem"]
   } from "carbon-components-svelte";
 </script>
 
-Breadcrumbs display a hierarchical navigation trail that shows users their current location within an application. They support current page indication, trailing slash customization, and overflow handling for long navigation paths.
-
-## Default
+## Basic
 
 Display a hierarchical navigation trail with slashes between items. Mark the current page with `isCurrentPage`.
 
@@ -25,7 +24,7 @@ Display a hierarchical navigation trail with slashes between items. Mark the cur
 
 ## No trailing slash
 
-Remove the trailing slash from the last breadcrumb item using `noTrailingSlash`.
+Remove the trailing slash from the last item with `noTrailingSlash`.
 
 <Breadcrumb noTrailingSlash>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
@@ -50,7 +49,7 @@ Add an overflow menu to handle long breadcrumb trails. Use overflow menu item co
   </BreadcrumbItem>
 </Breadcrumb>
 
-## Small size
+## Small
 
 Use `size="sm"` for a compact breadcrumb. This pairs with an overflow menu when space is tight.
 
@@ -76,7 +75,7 @@ Build a full breadcrumb trail with multiple items and a current page indicator.
 
 ## Custom link element
 
-Omit `href` and use `let:props` to render a custom link element (for example, a router link). Spread `props` onto the element to apply the Carbon link class and forward `aria-current` when `isCurrentPage` is set.
+Omit href and use `let:props` to render a custom link element (for example, a router link). Spread props onto the element to apply the Carbon link class and forward aria-current when isCurrentPage is set.
 
 <Breadcrumb>
   <BreadcrumbItem let:props>
@@ -92,11 +91,11 @@ Omit `href` and use `let:props` to render a custom link element (for example, a 
 
 ## Skeleton
 
-Display a loading state with `skeleton` prop. Use `count` to specify the number of items.
+Display a loading state with `skeleton`. Use `count` to specify the number of items.
 
 <Breadcrumb noTrailingSlash skeleton count={3} />
 
-## Skeleton (small)
+### Small
 
 Use `skeleton` with `size="sm"` for a compact loading state.
 

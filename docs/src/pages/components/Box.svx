@@ -1,16 +1,22 @@
+---
+description: Box applies Carbon fill, inset, and border tokens to any container, for panels, callouts, and padded sections.
+---
+
 <script>
   import { Box, Stack, Text } from "carbon-components-svelte";
 </script>
 
-Box applies Carbon fill, inset, and border tokens to any container. Use it for panels, callouts, and padded sections without reaching for inline styles.
-
-## Default
+## Basic
 
 The default component renders a `<div>` with no modifiers.
 
 <Box>Content inside a box.</Box>
 
-## Fill
+## Tokens
+
+Apply Carbon fill, inset, and border tokens.
+
+### Fill
 
 Set `fill` to a Carbon background token. Tokens use v11 names and resolve through the active theme.
 
@@ -30,7 +36,7 @@ Set `fill` to a Carbon background token. Tokens use v11 names and resolve throug
   <Box fill="layer-03" padding={5}>layer-03</Box>
 </Stack>
 
-Nested fills stack Carbon layer surfaces. Contrast depends on the active theme: on white, `layer-02` matches the page background, so pair a darker outer fill with `border` to show depth.
+Nested fills stack Carbon layer surfaces. Contrast depends on the active theme: on white, layer-02 matches the page background, so pair a darker outer fill with border to show depth.
 
 <Box fill="layer-01" padding={6} border="subtle">
   <Box fill="layer-03" padding={5} border="subtle">
@@ -38,9 +44,9 @@ Nested fills stack Carbon layer surfaces. Contrast depends on the active theme: 
   </Box>
 </Box>
 
-## Inset
+### Inset
 
-Set `padding`, `paddingX`, `paddingY`, `margin`, `marginX`, or `marginY` using the shared layout scale `1`–`13` (same values as [`Stack`](/components/Stack) `gap`). Pass a string for any CSS length.
+Set inset and margin props using the shared layout scale 1–13 (same values as [Stack](/components/Stack) gap). Pass a string for any CSS length.
 
 | Scale | Size   |
 | ----- | ------ |
@@ -65,7 +71,7 @@ Set `padding`, `paddingX`, `paddingY`, `margin`, `marginX`, or `marginY` using t
   <Box fill="layer-01" padding={5} marginY={5}>Vertical margin</Box>
 </Stack>
 
-## Border
+### Border
 
 Set `border` to a Carbon border token. Each utility applies `1px solid`.
 
@@ -84,7 +90,7 @@ Set `border` to a Carbon border token. Each utility applies `1px solid`.
 
 ## Width
 
-Set `width`, `maxWidth`, or `minWidth` to any CSS length. Numbers are treated as pixels. `fullWidth` sets `width: 100%`.
+Set width, maxWidth, or minWidth to any CSS length. Numbers are treated as pixels. Use `fullWidth` to span the container (`width: 100%`).
 
 <Stack gap={5}>
   <Box fill="layer-01" padding={5} maxWidth="20rem">
@@ -101,7 +107,7 @@ Set `width`, `maxWidth`, or `minWidth` to any CSS length. Numbers are treated as
   </Box>
 </div>
 
-## Composition with Text and Stack
+## Composition
 
 <Box fill="layer-01" padding={6} border="subtle" maxWidth="42rem">
   <Stack gap={3}>

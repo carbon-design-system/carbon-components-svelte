@@ -1,14 +1,13 @@
 ---
 components: ["Loading"]
+description: Loading indicators display a full-screen or inline spinner, ideal for showing progress during page loads or data fetching.
 ---
 
 <script>
   import { Loading } from "carbon-components-svelte";
 </script>
 
-Loading indicators provide a full-screen or inline loading indicator. They are ideal for showing progress during page loads or data fetching operations.
-
-## Default
+## Basic
 
 Display a loading indicator with a semi-transparent overlay that covers the entire viewport.
 
@@ -20,7 +19,7 @@ Show a loading indicator without the overlay, allowing interaction with the unde
 
 <Loading withOverlay={false} />
 
-## Small size
+## Small
 
 Display a more compact loading indicator.
 

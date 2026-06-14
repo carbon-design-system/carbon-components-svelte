@@ -1,12 +1,11 @@
 ---
 components: ["Grid", "Row", "Column"]
+description: The Carbon grid system provides a responsive layout structure using row and column components.
 ---
 
-The [Carbon grid system](https://carbondesignsystem.com/elements/2x-grid/overview/) provides a responsive layout structure that adapts to different
-screen sizes. Use row and column components to create flexible layouts. The
-grid supports various spacing options and column configurations.
+## Columns
 
-The system uses a responsive column structure where the total number of columns changes based on screen size:
+The [Carbon grid system](https://carbondesignsystem.com/elements/2x-grid/overview/) uses a responsive column structure where the total number of columns changes based on screen size. Column spans are relative to the total columns at each breakpoint — to create a full-width column, use `sm={4} md={8} lg={16}` instead of the same value across all breakpoints.
 
 | Breakpoint        | Viewport width   | Columns |
 | ----------------- | ---------------- | ------- |
@@ -16,32 +15,31 @@ The system uses a responsive column structure where the total number of columns 
 | **X-Large (`xlg`)** | 1312–1583px    | 16      |
 | **Max (`max`)**   | 1584px and above | 16      |
 
-> [!NOTE]
-> Column spans are relative to the total columns at each breakpoint.
-For example, to create a full-width column, use `sm={4} md={8} lg={16}` instead of the
-same value across all breakpoints.
-
-## Default
+## Basic
 
 Create a basic grid layout with equal-width columns.
 
 <FileSource src="/framed/Grid/Grid" />
 
-## Full width
+## Variants
+
+Adjust grid width and column spacing.
+
+### Full width
 
 Use the full-width grid variant for layouts that span the entire viewport width.
 This removes the default max-width constraint.
 
 <FileSource src="/framed/Grid/FullWidthGrid" />
 
-## Narrow
+### Narrow
 
 Create a more compact grid layout using the narrow variant. This reduces the
 spacing between columns.
 
 <FileSource src="/framed/Grid/NarrowGrid" />
 
-## Condensed
+### Condensed
 
 Use the condensed variant for even tighter spacing between columns. This is ideal
 for dense data displays.
@@ -94,8 +92,7 @@ content alignment across different column widths.
 
 ## Padding
 
-Add vertical padding (top/bottom) to grid elements using the `padding` prop. You can
-apply padding at the grid, row, or column level to control spacing between rows
+Add vertical padding (top/bottom) with `padding`. Apply it at the grid, row, or column level to control spacing between rows
 of content. This is useful for creating vertical rhythm without manually adding margins.
 
 <FileSource src="/framed/Grid/PaddedGrid" />

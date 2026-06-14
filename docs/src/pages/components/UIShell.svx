@@ -19,105 +19,116 @@ components: ["Header",
 "Content",
 "SkipToContent",
 "HeaderGlobalAction"]
+description: The UI shell provides components for building application shells and navigation — header, side navigation, and content areas.
 ---
-
-The UI shell provides a collection of components for building application shells and navigation structures. It includes header, side navigation, and content components that work together to create a cohesive user interface.
-
-Open the following examples in a new tab to experience them in full.
 
 ## Header
 
-Create a basic header with the header component.
+Create a basic header with the header component. Open these examples in a new tab to experience them in full.
 
 <FileSource src="/framed/UIShell/Header" />
 
-## Header with side navigation
+## Side navigation
 
-The hamburger menu is automatically rendered if the side nav component is used.
+Pair the header with a `SideNav`. It collapses behind a hamburger menu by default and also supports responsive, fixed, and rail layouts.
+
+### Collapsible
+
+The hamburger menu is automatically rendered when the side nav component is used.
 
 <FileSource src="/framed/UIShell/HeaderNav" />
 
-## Header with responsive navigation
+### Responsive
 
 On smaller screens, header links belong in the side nav, above the regular side nav items.
 
-Carbon hides the header nav below the large breakpoint (66rem). Duplicate those links with `HeaderSideNavItems`. Its children only show below that breakpoint. Set `hasDivider` to separate them from the side nav items.
+Carbon hides the header nav below the large breakpoint (66rem). Duplicate those links with `HeaderSideNavItems`; its children only appear below that breakpoint. Use a divider to separate them from the regular side nav items.
 
 Resize the viewport to see the switch.
 
 <FileSource src="/framed/UIShell/HeaderSideNavItems" />
 
-## Header with custom expansion breakpoint
+### Custom expansion breakpoint
 
-By default, `expansionBreakpoint` is `1056` (Carbon's [large breakpoint](/components/Breakpoint)).
+By default, the expansion breakpoint is 1056px (Carbon's [large breakpoint](/components/Breakpoint)).
 
 Below that width the side nav is collapsed and the hamburger is shown; opening it shows the overlay. At 1056px and above the side nav is expanded and the hamburger is hidden.
 
-Set `expansionBreakpoint` on both `Header` and `SideNav` to change that threshold. For example, use `Infinity` to keep the side nav collapsed with overlay at all viewport sizes.
+Set `expansionBreakpoint` on both the header and side nav to change that threshold. For example, set it to `Infinity` to keep the overlay collapsed at every viewport size.
 
 <FileSource src="/framed/UIShell/HeaderNavCustomBreakpoint" />
 
-## Header with fixed side navigation
+### Fixed
 
-Set `fixed` to `true` on the side nav to keep it always visible, regardless of viewport width. The hamburger menu is not rendered because the side nav is not collapsible.
+Set `fixed` on the side nav to keep it always visible, regardless of viewport width. The hamburger menu is not rendered because the side nav is not collapsible.
 
 <FileSource src="/framed/UIShell/HeaderNavFixed" />
 
-## Header with side navigation (rail)
+### Rail
 
-Set `rail` to `true` on the side nav to use the rail variant. Expanded side nav menu items automatically collapse when the rail is in its narrow state.
+Set `rail` on the side nav to use the rail variant. Expanded side nav menu items automatically collapse when the rail is in its narrow state.
 
 <FileSource src="/framed/UIShell/HeaderNavRail" />
 
-## Header with app switcher
-
-The header action component uses the [transition:slide API](https://svelte.dev/docs#slide); you can customize the transition duration, delay, and easing with the `transition` prop.
-
-You can disable the `transition` by setting it to `false`.
-
-<FileSource src="/framed/UIShell/HeaderSwitcher" />
-
-## Header with multiple switchers
-
-Multiple switchers can be used, and the switcher button can be customized. For example, display a tooltip using `iconDescription`.
-
-Control the tooltip alignment using `tooltipAlignment`.
-
-Note that providing `text` overrides the tooltip.
-
-<FileSource src="/framed/UIShell/HeaderMultipleSwitcher" />
-
-## Header with global search
-
-Add a global search component to the header.
-
-<FileSource src="/framed/UIShell/HeaderSearch" />
-
-## Header with custom search results
-
-Override the default slot to customize how each result displays. Use `let:result`, `let:index`, and `let:selected` to style the highlighted result.
-
-<FileSource src="/framed/UIShell/HeaderSearchSlot" />
-
-## Header with utilities
-
-Include utility components in the header using header utilities. Compose [BadgeIndicator](/components/BadgeIndicator) in the `badge` slot on `HeaderGlobalAction`. Use `iconDescription` for screen readers.
-
-<FileSource src="/framed/UIShell/HeaderUtilities" />
-
-## Header with persisted hamburger menu
+### Persisted hamburger
 
 Create a header with a persistent hamburger menu state.
 
 <FileSource src="/framed/UIShell/PersistedHamburgerMenu" />
 
-## Header with modal
+## Switcher
 
-Opening a `Modal` while the mobile `SideNav` overlay is also open keeps the body scroll locked until both close. The body lock class is ref-counted across components.
+A `HeaderAction` reveals a panel from the right edge using a slide transition.
+
+### App switcher
+
+The header action uses the [transition:slide API](https://svelte.dev/docs#slide). Customize duration, delay, and easing with `transition`.
+
+Disable the slide transition by setting `transition` to `false`.
+
+<FileSource src="/framed/UIShell/HeaderSwitcher" />
+
+### Multiple switchers
+
+You can mount multiple switchers and customize each button. For example, add a tooltip with `iconDescription`.
+
+Control tooltip alignment with `tooltipAlignment`. Providing button text overrides the tooltip.
+
+<FileSource src="/framed/UIShell/HeaderMultipleSwitcher" />
+
+## Search
+
+A `HeaderSearch` adds global search to the header, with customizable result rendering.
+
+### Global search
+
+Add a global search component to the header.
+
+<FileSource src="/framed/UIShell/HeaderSearch" />
+
+### Custom results
+
+Override the default slot to customize each result. The slot exposes `let:result`, `let:index`, and `let:selected` for the highlighted row.
+
+<FileSource src="/framed/UIShell/HeaderSearchSlot" />
+
+## Utilities
+
+Add utilities to the header with header utilities. Compose [BadgeIndicator](/components/BadgeIndicator) in the badge slot on `HeaderGlobalAction`. Set `iconDescription` for screen readers.
+
+<FileSource src="/framed/UIShell/HeaderUtilities" />
+
+## Integrations
+
+The UI Shell coordinates body scroll locking and notifications with other components.
+
+### Modal
+
+Opening a modal while the mobile side nav overlay is also open keeps body scroll locked until both close. The lock is ref-counted across components.
 
 <FileSource src="/framed/UIShell/HeaderWithModal" />
 
-## Header with toast notification
+### Toast notification
 
 Integrate toasts with the UI Shell. This example triggers a toast, which appears in the top right corner, below the header.
 
@@ -125,12 +136,9 @@ Integrate toasts with the UI Shell. This example triggers a toast, which appears
 
 ## Classic theme
 
-Before version 0.105.0, the UI Shell defaulted to a mixed theme: **Gray 100** header and **White** side navigation. Now, the UI Shell respects the current theme (for example, `white`, `g10`, `g80`, `g90`, `g100`).
+Before version 0.105.0, the UI Shell defaulted to a mixed theme: **Gray 100** header and **White** side navigation. Now it follows the active theme (`white`, `g10`, `g80`, `g90`, `g100`).
 
-Set `theme="classic"` on both `Header` and `SideNav` for the classic look: **Gray 100** header and **White** side navigation, independent of the global theme.
-
-> [!NOTE]
-> The classic theme requires **carbon-components-svelte/css/all.css** because it uses CSS custom properties.
+Set `theme="classic"` on both the header and side nav for the classic look: **Gray 100** header and **White** side navigation, independent of the global theme. The classic theme requires **carbon-components-svelte/css/all.css** because it relies on CSS custom properties.
 
 ```css
 import "carbon-components-svelte/css/all.css";

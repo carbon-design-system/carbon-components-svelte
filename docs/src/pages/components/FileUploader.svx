@@ -1,5 +1,6 @@
 ---
 components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", "FileUploaderItem", "FileUploaderSkeleton"]
+description: File uploaders handle file uploads with a button trigger, drag-and-drop container, and file list, with validation and various states.
 ---
 
 <script>
@@ -8,69 +9,61 @@ components: ["FileUploaderButton", "FileUploader", "FileUploaderDropContainer", 
   import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
 </script>
 
-File uploaders provide a complete solution for file uploads, including
-a button trigger, drag-and-drop container, and file list display. They
-support various states, file validation, and customization options.
-
-## File uploader (button-only)
+## Button
 
 Create a simple file upload button using the file uploader button. By default, it
 accepts a single file. Set `multiple` to `true` to allow multiple file selection.
 
 <FileUploaderButton labelText="Add file" />
 
-## Multiple files
+### Multiple files
 
-Enable multiple file selection by setting the `multiple` prop to `true`.
+Enable multiple file selection by setting `multiple` to `true`.
 
 <FileUploaderButton multiple labelText="Add files" />
 
-## Prevent duplicate files
+### Prevent duplicate
 
 Set `preventDuplicate` to `true` to skip re-selected files that match an
-already-selected file (by name, size, and lastModified). Only applies when
-`multiple` is `true`. For richer behavior with rejection events, use
-[FileUploader](#duplicate-detection) instead.
+already-selected file by name, size, and last modified. Only applies when
+`multiple` is `true`. For richer behavior with rejection events, see
+[Duplicate detection](#duplicate-detection).
 
 <FileUploaderButton multiple preventDuplicate labelText="Add files" />
 
-## Custom button kind, size
+### Custom kind and size
 
-Customize the button appearance using the `kind` and `size` props. The default is
-a small primary button.
+Customize button appearance with `kind` and `size`. The default is a small
+primary button.
 
 <FileUploaderButton kind="secondary" size="field" />
 <FileUploaderButton kind="tertiary" size="default" />
 <FileUploaderButton kind="danger" size="lg" />
 <FileUploaderButton kind="danger-tertiary" size="xl" />
 
-## Button with icon
+### With icon
 
-Add an icon to the file uploader button using the `icon` prop.
+Add an icon to the file uploader button with `icon`.
 
 <FileUploaderButton icon={Add} labelText="Add file" />
 <FileUploaderButton icon={DocumentAdd} labelText="Upload document" kind="secondary" />
 
-## Icon-only button
+## Icon-only
 
-> [!NOTE]
-> Provide an **iconDescription** for accessibility. This text will be used as the button's tooltip and screen reader label. Set **labelText=""** to render an icon-only button.
+Set **labelText=""** to render an icon-only button. Provide an **iconDescription** for accessibility — it is used as the button's tooltip and screen reader label.
 
 <FileUploaderButton labelText="" iconDescription="Add file" icon={Add} />
 <FileUploaderButton labelText="" iconDescription="Upload document" icon={DocumentAdd} kind="secondary" />
 
-## Icon-only button (custom tooltip position)
+### Custom tooltip position
 
 Control the tooltip position and alignment with `tooltipPosition` and `tooltipAlignment`.
 
 <FileUploaderButton labelText="" tooltipPosition="right" tooltipAlignment="end" iconDescription="Add file" icon={Add} />
 
-## Icon-only button (hidden tooltip)
+### Hidden tooltip
 
-Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers.
-
-> [!NOTE]
-> Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed (e.g., toolbars). The **iconDescription** remains accessible to screen readers.
+Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers. Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed (e.g., toolbars). The **iconDescription** remains accessible to screen readers.
 
 <Stack orientation="horizontal" gap={2}>
   <FileUploaderButton labelText="" hideTooltip iconDescription="Add file" icon={Add} />
@@ -89,7 +82,10 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 ## Per-file status icon labels
 
-Set `iconDescription` to a function for accessible labels that depend on each row. The callback receives `{ file, fileName, status, invalid }`. On `FileUploader`, `file` is that row’s `File` object; on `FileUploaderItem`, `file` is always `undefined` and `fileName` matches the `name` prop.
+Set `iconDescription` to a function for accessible labels that depend on each row. The callback receives `{ file, fileName, status, invalid }`.
+
+On FileUploader, file is that row’s File object. On FileUploaderItem, file is
+always undefined and fileName matches name.
 
 <FileUploaderItem
   invalid
@@ -107,8 +103,8 @@ Set `iconDescription` to a function for accessible labels that depend on each ro
 
 Remove uploaded files from the file uploader in two ways:
 
-- programmatically using the `clearFiles` accessor
-- two-way binding by setting `files` to `[]`
+- programmatically with the `clearFiles` accessor
+- two-way binding by setting files to `[]`
 
 Calling `clearFiles` or setting `files` to `[]` dispatches `change` (with an empty array) and `clear` so event listeners stay in sync.
 
@@ -123,18 +119,24 @@ programmatically.
 
 ## Maximum file size
 
-Limit the size of uploaded files using the `maxFileSize` prop. Files exceeding the
-limit (in bytes) are automatically filtered out.
+Limit uploaded file size with `maxFileSize`. Files exceeding the limit (in bytes)
+are automatically filtered out.
 
-The `maxFileSize` prop accepts values in bytes. File sizes use binary (base 2)
-units, where 1024 bytes = 1 KiB (kibibyte), not 1000 bytes. This matches how
-operating systems and file systems measure file sizes.
+Values are in bytes using binary (base 2) units, where 1024 bytes = 1 KiB
+(kibibyte), not 1000 bytes. This matches how operating systems measure file
+sizes.
 
-This example accepts files up to 1 MB (1,048,576 bytes). Files over the limit are not added and a `rejected` event is fired with `{ file, reason: "size" }` for each rejected file.
+This example accepts files up to 1 MB (1,048,576 bytes). Files over the limit
+are not added, and a `rejected` event fires with `{ file, reason: "size" }` for
+each rejected file.
 
 <FileSource src="/framed/FileUploader/FileUploaderMaxFileSize" />
 
-## File ordering (prepend)
+## File ordering
+
+Control the order of files in the list.
+
+### Prepend
 
 By default, new files are appended to the end of the list.
 
@@ -142,7 +144,7 @@ Set `orderFiles` to `"prepend"` to show the newest uploads first instead of appe
 
 <FileSource src="/framed/FileUploader/FileUploaderOrderFilesPrepend" />
 
-## File ordering (custom)
+### Custom
 
 Pass a custom function to `orderFiles` for full control over the file list order. The function receives `(existingFiles, addedFiles)` and returns the merged array.
 
@@ -152,31 +154,37 @@ This example sorts all files by `lastModified`, newest first.
 
 ## Duplicate detection
 
-Set `preventDuplicate` to `true` to reject files that match an already-selected file (detected using the file's name, size, and lastModified). Rejected duplicates are reported via the `rejected` event with `reason: "duplicate"`.
+Set `preventDuplicate` to `true` to reject files that match an already-selected
+file by name, size, and last modified. Rejected duplicates are reported via
+`rejected` with `{ file, reason: "duplicate" }`.
 
 <FileSource src="/framed/FileUploader/FileUploaderPreventDuplicate" />
 
-## File uploader (disabled state)
+## Disabled
 
-Disable the file uploader by setting the `disabled` prop to `true`.
+Disable the file uploader by setting `disabled` to `true`.
 
 <FileUploader disabled multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
-## Item (uploading)
+## Item
 
-Display a file upload in progress using the `uploading` status. This shows a
-loading indicator and the file name.
+Render individual file rows with `FileUploaderItem`.
+
+### Uploading
+
+Display a file upload in progress with `status="uploading"`. This shows a loading
+indicator and the file name.
 
 <FileUploaderItem name="README.md" status="uploading" />
 
-## Item (complete)
+### Complete
 
-Show a successfully uploaded file using the `complete` status. This displays a
+Show a successfully uploaded file with `status="complete"`. This displays a
 checkmark icon next to the file name.
 
 <FileUploaderItem name="README.md" status="complete" />
 
-## Item (edit)
+### Edit
 
 Enable file deletion by setting the status to `"edit"`. Clicking the close icon
 dispatches a `delete` event with the item's ID.
@@ -185,17 +193,17 @@ dispatches a `delete` event with the item's ID.
   console.log(e.detail); // "readme"
 }} />
 
-## Item (edit status, invalid state)
+### Edit (invalid)
 
 Mark a file as invalid while keeping it editable. This shows an error icon and
 allows the user to remove the file.
 
 <FileUploaderItem invalid id="readme" name="README.md" status="edit" on:delete />
 
-## Item (edit status, invalid state with subject, body)
+### Edit (invalid, with subject and body)
 
-Provide detailed error messages for invalid files using the `errorSubject` and
-`errorBody` props. This helps users understand and resolve upload issues.
+Provide detailed error messages for invalid files with `errorSubject` and
+`errorBody`. This helps users understand and resolve upload issues.
 
 <FileUploaderItem
   invalid
@@ -207,10 +215,9 @@ Provide detailed error messages for invalid files using the `errorSubject` and
   on:delete
 />
 
-## Item sizes
+### Sizes
 
-Customize the size of file uploader items using the `size` prop. The default size
-is "default".
+Customize file uploader item size with `size`. The default is `"default"`.
 
 <FileUploaderItem size="default" name="README.md" status="uploading" />
 <FileUploaderItem size="field" name="README.md" status="uploading" />
@@ -241,7 +248,7 @@ Display a loading state using the file uploader skeleton.
 
 <FileUploaderSkeleton />
 
-## Skeleton without labels
+### Without labels
 
 Set `hideLabelTitle` or `hideLabelDescription` to hide the corresponding
 skeleton line. This is useful when the live component is configured without

@@ -1,10 +1,12 @@
+---
+description: Popovers display floating content relative to a trigger element, with support for alignments, a caret, and visual variants.
+---
+
 <script>
   import { Popover, Stack } from "carbon-components-svelte";
 </script>
 
-Popovers provide a floating container that displays content relative to a trigger element. They support various alignments, caret indicators, and visual variants.
-
-## Default
+## Basic
 
 Create a basic popover with absolute positioning.
 
@@ -17,7 +19,7 @@ Create a basic popover with absolute positioning.
 
 ## Relative position
 
-Set `relative` to `true` to position the popover relative to its parent element.
+Position the popover relative to its parent with `relative`.
 
 <div>
     Parent
@@ -28,7 +30,7 @@ Set `relative` to `true` to position the popover relative to its parent element.
 
 ## Close on outside click
 
-Enable automatic closing when clicking outside the popover using `closeOnOutsideClick`.
+Close the popover when clicking outside with `closeOnOutsideClick`.
 
 <div>
     Parent
@@ -37,11 +39,11 @@ Enable automatic closing when clicking outside the popover using `closeOnOutside
     </Popover>
 </div>
 
-## Popover alignment
+## Alignment
 
-Customize the popover alignment using the `align` prop. Valid values include: `"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"`.
+Customize popover alignment with `align`. Valid values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"`, and `"right-top"`.
 
-The default `align` value is `"top"`.
+The default is top.
 
 <Stack gap={10}>
 <div>
@@ -112,9 +114,9 @@ The default `align` value is `"top"`.
 </div>
 </Stack>
 
-## With caret
+## Caret
 
-Add a caret indicator to the popover using the `caret` prop.
+Add a caret indicator with `caret`.
 
 <div>
     Parent
@@ -123,9 +125,9 @@ Add a caret indicator to the popover using the `caret` prop.
     </Popover>
 </div>
 
-## Custom caret alignment
+### Custom alignment
 
-By default, the caret is aligned "top". Possible `align` values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"` or `"right-top"`.
+By default, the caret aligns to top. See the alignment section above for all valid values.
 
 <div>
     Parent
@@ -134,7 +136,11 @@ By default, the caret is aligned "top". Possible `align` values include `"top"`,
     </Popover>
 </div>
 
-## Light variant
+## Variants
+
+Appearance variants for different backgrounds.
+
+### Light
 
 Enable the light variant for use on dark backgrounds.
 
@@ -145,7 +151,7 @@ Enable the light variant for use on dark backgrounds.
     </Popover>
 </div>
 
-## High contrast variant
+### High contrast
 
 Enable the high contrast variant for improved visibility.
 
@@ -158,6 +164,6 @@ Enable the high contrast variant for improved visibility.
 
 ## External element
 
-Use the `open` prop to manage state with an external element, like a button.
+Manage open state with an external element, like a button, using `open`.
 
 <FileSource src="/framed/Popover/WithButton" />

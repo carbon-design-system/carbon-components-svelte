@@ -1,13 +1,15 @@
+---
+description: Code snippets display and copy code examples, with single-line, multi-line, and inline formats and customizable copy and expand controls.
+---
+
 <script>
   import { CodeSnippet } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
 </script>
 
-Code snippets display and copy code examples. They support single-line, multi-line, and inline formats with customizable copy and expand functionality.
+## Basic
 
-## Default
-
-Display a single-line code snippet by default. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text. Pass a function to `copy` to replace it. See [Overriding copy functionality](#overriding-copy-functionality).
+Display a single-line code snippet by default. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text. Pass a function to `copy` to replace it. See [Override](#override).
 
 <CodeSnippet code="npm i carbon-components-svelte" />
 
@@ -21,17 +23,21 @@ Prefetch on hover with `on:mouseenter:copy-button` on the copy control. The exam
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetAsync" />
 
-## Overriding copy functionality
+## Copy behavior
 
-Pass a custom function to the `copy` prop to override the default copy behavior.
+Replace or disable the default clipboard behavior.
+
+### Override
+
+Pass a custom function to `copy` to override the default copy behavior.
 
 This example uses [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
 
-## Preventing copy functionality
+### Prevent
 
-Pass a no-op function to the `copy` prop to disable copying.
+Pass a no-op function to `copy` to disable copying.
 
 <CodeSnippet code="npm i carbon-components-svelte" copy={() => {}} />
 
@@ -59,31 +65,40 @@ The multi-line code snippet dispatches "expand" and "collapse" events.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetReactive" />
 
-## Custom copy feedback text
+## Custom feedback
+
+Customize the message and icon shown after copying.
+
+### Text
 
 Set `feedback` to customize the copy button feedback text.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetFeedback" />
 
-## Custom feedback icon
+### Icon
 
-Set `feedbackIcon` to swap the copy button icon for a different icon during the feedback window. This applies to the `"single"` and `"multi"` types; it has no effect on the `"inline"` variant.
+Set `feedbackIcon` to swap the copy button icon during the feedback window. Applies
+to `"single"` and `"multi"` types; has no effect on `"inline"`.
 
 <CodeSnippet code="npm i carbon-components-svelte" feedbackIcon={Checkmark} />
 
-## Hidden copy button
+## Hidden buttons
+
+Hide the copy or show-more controls.
+
+### Copy
 
 Set `hideCopyButton` to `true` to hide the copy button.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetHideCopyButton" />
 
-## Hidden show more button
+### Show more
 
 Set `showMoreLess` to `false` to hide the expand/collapse button on multi-line snippets.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetHideShowMore" />
 
-## Hidden copy, show more buttons
+### Copy and show more
 
 Hide both the copy and expand/collapse buttons.
 
@@ -111,7 +126,7 @@ Set `wrapText` to `true` to wrap long lines in multi-line snippets.
 
 ## Dynamic multi-line code
 
-Use the `code` prop instead of the default slot for dynamically updated code.
+Use `code` instead of the default slot for dynamically updated code.
 
 <FileSource src="/framed/CodeSnippet/DynamicCodeSnippet" />
 
@@ -125,15 +140,21 @@ Re-render the component to fix this issue.
 
 ## Portal tooltip
 
-Set `portalTooltip` to `true` to render the feedback tooltip in a floating portal. This prevents the tooltip from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. The example renders each variant (`inline`, `single`, `multi`) inside a container with hidden overflow.
+Set `portalTooltip` to `true` to render the feedback tooltip in a floating portal.
+This prevents clipping by parent containers with overflow hidden or z-index
+stacking contexts. The example renders each variant inside a container with hidden
+overflow.
 
-When inside a [Modal](/components/Modal), `portalTooltip` defaults to `true` unless explicitly set to `false`.
+When inside a [Modal](/components/Modal), portalTooltip defaults to `true`
+unless explicitly set to `false`.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetPortalTooltip" />
 
 ## Inside a modal
 
-When used inside a `Modal`, the feedback tooltip is automatically portalled to prevent it from being clipped by `overflow: hidden`. Set `portalTooltip` to explicitly control this behavior.
+When used inside a Modal, the feedback tooltip is automatically portalled to
+prevent clipping by overflow hidden. Set `portalTooltip` to control this
+behavior explicitly.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetInModal" />
 
@@ -143,7 +164,7 @@ Set `skeleton` to `true` to show a loading state. Defaults to `"single"` type.
 
 <CodeSnippet skeleton />
 
-## Skeleton (multi-line)
+### Multi-line
 
 Set `type="multi"` with `skeleton` to show a multi-line loading state.
 

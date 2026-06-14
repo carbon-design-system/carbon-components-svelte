@@ -1,58 +1,59 @@
+---
+description: Search provides a flexible search input, with support for expandable and fluid variants, multiple sizes, and custom icons.
+---
+
 <script>
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Query from "carbon-icons-svelte/lib/Query.svelte";
   import { Search, SearchSkeleton, FluidSearchSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
-Search provides a flexible search input with support for expandable variants, different sizes, and custom icons. It includes built-in functionality for clearing input and handling keyboard events.
+## Basic
 
-## Default
-
-The search input is extra-large by default. Use the `size` prop to choose between [large](#large-size), [small](#small-size), and [extra-small](#extra-small-size) variants.
+The search input is extra-large by default. Set `size` to choose another variant — see [large](#large), [small](#small), and [extra-small](#extra-small).
 
 <Search />
 
 ## Default value
 
-Set an initial value using the `value` prop.
+Set an initial value with `value`.
 
 <Search placeholder="Search catalog..." value="Cloud functions" />
 
 ## Reactive example
 
-Bind to the `value` prop for reactive updates.
+Bind to `value` for reactive updates.
 
 <FileSource src="/framed/Search/SearchReactive" />
 
 ## Clear event
 
-The `clear` event is dispatched when clicking the clear button or pressing <DocKbd label="Escape" />.
+The `clear` event fires when clicking the clear button or pressing <DocKbd label="Escape" />.
 
 <Search value="Cloud functions" on:clear={() => console.log('clear')}/>
 
-## Expandable variant
+## Expandable
 
 Enable the expandable variant to show a compact search icon that expands on focus.
 
 <FileSource src="/framed/Search/SearchExpandableReactive" />
 
-## Light variant
+## Light
 
 Use the light variant for light backgrounds.
 
 <Search light />
 
-## Fluid variant
+## Fluid
 
-Set `fluid` to `true` to use the fluid variant, which renders a visible label
-inside the field. Fluid search inputs can be used standalone or inside
-[FluidForm](/components/FluidForm), where the fluid variant is applied
-automatically. The fluid variant has a fixed height and cannot be combined
+Set `fluid` to embed a visible label inside the field. Fluid search inputs work
+standalone or inside [FluidForm](/components/FluidForm), which applies the
+variant automatically. The fluid variant has a fixed height and cannot be combined
 with the expandable variant.
 
 <Search fluid labelText="Search catalog" placeholder="Search services..." />
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
@@ -64,37 +65,41 @@ tooltip icon.
   </svelte:fragment>
 </Search>
 
-## Fluid variant (disabled)
+### Disabled
 
 <Search fluid disabled labelText="Search catalog" placeholder="Search services..." />
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading skeleton for the fluid search variant.
 
 <FluidSearchSkeleton />
 
-## Large size
+## Sizes
+
+The default input height is extra-large. Set `size` to choose another variant.
+
+### Large
 
 Set `size` to `"lg"` for a large search input.
 
 <Search size="lg" />
 
-## Small size
+### Small
 
 Set `size` to `"sm"` for a small search input.
 
 <Search size="sm" />
 
-## Extra-small size
+### Extra-small
 
 Set `size` to `"xs"` for an extra-small search input.
 
 <Search size="xs" />
 
-## Disabled state
+## Disabled
 
-Disable the search input using the `disabled` prop.
+Disable the search input with `disabled`.
 
 <Search disabled />
 
@@ -110,26 +115,26 @@ Display a loading state using the skeleton variant.
 
 <Search skeleton />
 
-## Skeleton (large)
+### Large
 
 Display a loading state for the large search variant.
 
 <Search size="lg" skeleton />
 
-## Skeleton (small)
+### Small
 
 Display a loading state for the small search variant.
 
 <Search size="sm" skeleton />
 
-## Skeleton (extra-small)
+### Extra-small
 
 Display a loading state for the extra-small search variant.
 
 <Search size="xs" skeleton />
 
-## Skeleton without label
+### Without label
 
-Show a loading state without a label by setting `hideLabel` to `true`.
+Show a loading state without a label using `hideLabel`.
 
 <SearchSkeleton hideLabel />

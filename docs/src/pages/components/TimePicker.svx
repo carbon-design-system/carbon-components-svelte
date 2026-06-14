@@ -1,5 +1,6 @@
 ---
 components: ["TimePicker", "TimePickerSelect", "SelectItem", "FluidTimePickerSkeleton"]
+description: Time pickers provide a time input field with optional period (AM/PM) and timezone selectors, with various sizes and states.
 ---
 
 <script>
@@ -7,9 +8,7 @@ components: ["TimePicker", "TimePickerSelect", "SelectItem", "FluidTimePickerSke
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
-Time pickers provide a time input field with optional period (AM/PM) and timezone selectors. They support various sizes, states, and themes to match your application's design system.
-
-## Default
+## Basic
 
 Create a time picker with period (AM/PM) and timezone selectors.
 
@@ -24,9 +23,9 @@ Create a time picker with period (AM/PM) and timezone selectors.
   </TimePickerSelect>
 </TimePicker>
 
-## Light variant
+## Light
 
-Use the light variant for light-themed backgrounds by setting `light` to `true`.
+Enable the light variant with `light`.
 
 <TimePicker light labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -39,16 +38,15 @@ Use the light variant for light-themed backgrounds by setting `light` to `true`.
   </TimePickerSelect>
 </TimePicker>
 
-## Fluid variant
+## Fluid
 
-Set `fluid` to `true` to use the fluid variant, which embeds labels inside
-each field cell. Fluid time pickers can be used standalone or inside
-[FluidForm](/components/FluidForm), where the fluid variant is applied
-automatically.
+Set `fluid` to embed labels inside each field cell. Fluid time pickers work
+standalone or inside [FluidForm](/components/FluidForm), which applies the
+variant automatically.
 
 Fluid time pickers fill their container using percentage-based columns (25% /
-25% / 50% with two selects, 50% / 50% with one). Set a parent width via a
-sized wrapper, form column, or `FluidForm` so those ratios resolve as intended.
+25% / 50% with two selects, 50% / 50% with one). Give the parent a defined
+width so those ratios resolve as intended.
 
 <div style:width="350px">
   <TimePicker fluid labelText="Time" placeholder="hh:mm">
@@ -74,7 +72,7 @@ With a single period selector, the time input and select share equal width.
   </TimePicker>
 </div>
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
@@ -96,7 +94,7 @@ tooltip icon.
   </TimePicker>
 </div>
 
-## Fluid variant (invalid)
+### Invalid
 
 Fluid time pickers display the error message inside the field boundary. Long
 messages wrap to multiple lines.
@@ -114,7 +112,7 @@ messages wrap to multiple lines.
   </TimePicker>
 </div>
 
-## Fluid variant (warning)
+### Warning
 
 <div style:width="350px">
   <TimePicker fluid warn warnText="The selected time is outside business hours" labelText="Time" placeholder="hh:mm">
@@ -129,7 +127,7 @@ messages wrap to multiple lines.
   </TimePicker>
 </div>
 
-## Fluid variant (disabled)
+### Disabled
 
 Invalid and warning states are not displayed while the time picker is disabled.
 
@@ -146,7 +144,7 @@ Invalid and warning states are not displayed while the time picker is disabled.
   </TimePicker>
 </div>
 
-## Fluid variant (read-only)
+### Read-only
 
 Invalid and warning states are not displayed while the time picker is read-only.
 
@@ -163,17 +161,21 @@ Invalid and warning states are not displayed while the time picker is read-only.
   </TimePicker>
 </div>
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading skeleton for the fluid time picker variant.
 
 <FluidTimePickerSkeleton />
 
-Set `isOnlyTwo` to `true` to render only two elements.
+Set `isOnlyTwo` to render only two elements.
 
 <FluidTimePickerSkeleton isOnlyTwo />
 
-## Extra-large size
+## Sizes
+
+The default input height is medium. Set `size` to choose another variant.
+
+### Extra-large
 
 Use the extra-large size for more prominent time pickers by setting `size` to `"xl"`.
 
@@ -188,7 +190,7 @@ Use the extra-large size for more prominent time pickers by setting `size` to `"
   </TimePickerSelect>
 </TimePicker>
 
-## Small size
+### Small
 
 Use the small size for more compact time pickers by setting `size` to `"sm"`.
 
@@ -220,7 +222,7 @@ Add helper text to provide additional context or formatting instructions.
 
 ## Hidden label
 
-Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+Hide the visible label with `hideLabel`. Screen readers still receive the label text.
 
 <TimePicker hideLabel labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -229,9 +231,13 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
   </TimePickerSelect>
 </TimePicker>
 
-## Invalid state
+## States
 
-Indicate an invalid state with an error message by setting `invalid` to `true` and providing `invalidText`.
+Reflect validation and interaction states.
+
+### Invalid
+
+Show validation errors with `invalid` and a message in `invalidText`.
 
 <TimePicker invalid invalidText="A valid value is required" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -244,9 +250,9 @@ Indicate an invalid state with an error message by setting `invalid` to `true` a
   </TimePickerSelect>
 </TimePicker>
 
-## Warning state
+### Warning
 
-Indicate a warning state with a warning message by setting `warn` to `true` and providing `warnText`.
+Show a warning with `warn` and a message in `warnText`.
 
 <TimePicker warn warnText="Time is outside business hours" labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">
@@ -259,9 +265,9 @@ Indicate a warning state with a warning message by setting `warn` to `true` and 
   </TimePickerSelect>
 </TimePicker>
 
-## Disabled state
+### Disabled
 
-Disable the time picker to prevent user interaction by setting `disabled` to `true`.
+Disable the time picker with `disabled`.
 
 <TimePicker labelText="Cron job" placeholder="hh:mm" disabled>
   <TimePickerSelect value="pm" disabled>
@@ -274,9 +280,9 @@ Disable the time picker to prevent user interaction by setting `disabled` to `tr
   </TimePickerSelect>
 </TimePicker>
 
-## Read-only state
+### Read-only
 
-Set `readonly` to `true` to display a value while preventing edits. Unlike `disabled`, the input remains focusable and its value is submitted with the form. `TimePickerSelect` also accepts a `readonly` prop so the period and timezone selectors match.
+Set `readonly` to display a value while preventing edits. Unlike disabled, the input stays focusable and its value is submitted with the form. Period and timezone selectors accept the same flag so all fields match.
 
 <TimePicker readonly labelText="Cron job" placeholder="hh:mm" value="10:30">
   <TimePickerSelect readonly value="pm">

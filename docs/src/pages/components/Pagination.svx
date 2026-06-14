@@ -1,32 +1,35 @@
 ---
 components: ["Pagination", "PaginationSkeleton"]
+description: Pagination provides navigation controls for large data sets, showing the current page and total items, with configurable page sizes.
 ---
 
 <script>
   import { Pagination, PaginationSkeleton } from "carbon-components-svelte";
 </script>
 
-Pagination provides navigation controls for large data sets. It shows the current page and total items, and supports changing page size and navigating between pages.
+## Basic
 
-## Default
-
-Create a basic pagination component with default page size options. The default size is `"md"`.
+Create a basic pagination component with default page size options. The default size is medium.
 
 <Pagination totalItems={102} pageSizes={[10, 15, 20]} />
 
-## Extra-small size
+## Sizes
 
-Set `size` to `"xs"` to pair pagination with a compact (`size="compact"`) data table.
+The default control height is medium. Set `size` to choose another variant.
+
+### Extra-small
+
+Set `size` to `"xs"` to pair pagination with a compact data table.
 
 <Pagination size="xs" totalItems={102} pageSizes={[10, 15, 20]} />
 
-## Small size
+### Small
 
 Set `size` to `"sm"` for a small pagination.
 
 <Pagination size="sm" totalItems={102} pageSizes={[10, 15, 20]} />
 
-## Large size
+### Large
 
 Set `size` to `"lg"` for a large pagination.
 
@@ -34,47 +37,55 @@ Set `size` to `"lg"` for a large pagination.
 
 ## Current page
 
-Set the current page using the `page` prop.
+Set the current page with `page`.
 
 <Pagination totalItems={102} page={4} />
 
-## Custom page sizes
+## Page sizes
+
+Configure the selectable page-size options.
+
+### Custom
 
 Specify custom page sizes and set a default page size.
 
 <Pagination totalItems={102} pageSizes={[16, 36, 99]} pageSize={36} />
 
-## Dynamic page sizes
+### Dynamic
 
-Set `dynamicPageSizes` to `true` to automatically filter out redundant page sizes based on `totalItems`. Page sizes larger than needed to display all items on a single page are hidden.
+Set `dynamicPageSizes` to hide page sizes larger than needed to display all items on one page.
 
-For example, with a total of 9 items and page sizes of `[5, 10, 15]`, the page sizes will be `[5, 10]`. This is because 10 is already larger than the total number of items.
+For example, with 9 total items and page sizes of `[5, 10, 15]`, only 5 and 10 appear because 10 already exceeds the total.
 
 <Pagination totalItems={9} pageSizes={[5, 10, 15]} dynamicPageSizes />
 
 ## Unknown pages
 
-Set `pagesUnknown` to `true` when the total number of pages is unknown (for example, paging through a cursor-based API). The item range text is rendered without a total, and the forward button is not constrained by `totalItems`.
+Set `pagesUnknown` when the total page count is unknown, such as with cursor-based APIs. The item range renders without a total, and the forward button is not constrained by totalItems.
 
-Because the component cannot know when the last page is reached, the consumer is responsible for the page bounds. Bind to `page` and toggle `forwardButtonDisabled` when there is no more data to load.
+Because the component cannot detect the last page, bind to `page` and toggle `forwardButtonDisabled` when there is no more data to load.
 
 <FileSource src="/framed/Pagination/PaginationUnknown" />
 
 ## Page window
 
-The number of native select items rendered is derived from `totalItems`. For large datasets, this can impact performance. Use `pageWindow` to control the number of rendered items.
+The number of native select items is derived from totalItems. For large datasets, this can impact performance. Use `pageWindow` to limit rendered items.
 
 <FileSource src="/framed/Pagination/PageWindow" />
 
-## Hidden page input
+## Hidden controls
 
-Disable the page input by setting `pageInputDisabled` to `true`.
+Hide individual pagination controls.
+
+### Page input
+
+Disable the page input with `pageInputDisabled`.
 
 <Pagination totalItems={102} pageInputDisabled />
 
-## Hidden page size
+### Page size
 
-Disable the page size selector by setting `pageSizeInputDisabled` to `true`.
+Disable the page size selector with `pageSizeInputDisabled`.
 
 <Pagination totalItems={102} pageSizeInputDisabled />
 
@@ -84,19 +95,19 @@ Use the pagination skeleton to show a loading state.
 
 <PaginationSkeleton />
 
-## Skeleton (extra-small)
+### Extra-small
 
 Display a loading state for the extra small pagination variant.
 
 <PaginationSkeleton size="xs" />
 
-## Skeleton (small)
+### Small
 
 Display a loading state for the small pagination variant.
 
 <PaginationSkeleton size="sm" />
 
-## Skeleton (large)
+### Large
 
 Display a loading state for the large pagination variant.
 

@@ -1,52 +1,50 @@
 ---
 components: ["ToastNotification"]
+description: Toast notifications are non-modal, time-based messages that appear briefly and dismiss automatically. They support multiple types and custom content.
 ---
 
 <script>
   import { ToastNotification } from "carbon-components-svelte";
 </script>
 
-Toast notifications display non-modal, time-based messages that appear at the top of the screen and automatically disappear. They support various notification types, custom content, and accessibility features.
+## Basic
 
-For an imperative API to manage multiple toast notifications with automatic queue management, see [NotificationQueue](NotificationQueue).
-
-See [detailed usage](https://carbondesignsystem.com/components/notification/usage).  
-See also: [InlineNotification](InlineNotification)
-
-## Default
-
-Display a basic error notification with title, subtitle, and timestamp by default.
+Display a basic error notification with title, subtitle, and timestamp by default. See [detailed usage](https://carbondesignsystem.com/components/notification/usage) and the related [InlineNotification](InlineNotification). For an imperative API to manage multiple toasts with automatic queue management, see [NotificationQueue](NotificationQueue).
 
 <ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 
-## Autoclose
+## Reusable
 
-Specify the `timeout` prop to automatically close the notification after a specified duration (in milliseconds).
-
-<FileSource src="/framed/ToastNotification/ToastNotificationTimeout" />
-
-## Prevent default close behavior
-
-Prevent the default close behavior using `e.preventDefault()` in the `on:close` event handler.
-
-<ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" on:close={(e) => {
-  e.preventDefault();
-  // custom close logic (e.g., transitions)
-}} />
-
-## Reusable notification
-
-Control the notification visibility by binding to the `open` prop to show, hide, and reuse the same notification component with different messages. The `open` prop defaults to `true`.
+Control notification visibility by binding to `open` to show, hide, and reuse the same component with different messages. Open defaults to true.
 
 <FileSource src="/framed/ToastNotification/ToastNotificationReusable" />
 
+## Autoclose
+
+Automatically close the notification after a specified duration (in milliseconds) with `timeout`.
+
+<FileSource src="/framed/ToastNotification/ToastNotificationTimeout" />
+
 ## Full width
 
-Set `fullWidth` to `true` for the notification to span the full width of its container.
+Span the full container width with `fullWidth`.
 
 <ToastNotification fullWidth title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 
-## Slottable title, subtitle, caption
+## Title, subtitle, caption
+
+The subtitle and caption are optional, and all three can be customized with slots.
+
+### Optional
+
+Subtitle and caption only render when provided.
+
+<ToastNotification subtitle="An internal server error occurred." />
+<ToastNotification title="Error" subtitle="An internal server error occurred." />
+<ToastNotification subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
+<ToastNotification title="Success" caption="{new Date().toLocaleString()}" />
+
+### Custom (slots)
 
 Customize the notification content using slots for more flexibility.
 
@@ -56,18 +54,19 @@ Customize the notification content using slots for more flexibility.
   <strong slot="captionChildren">{new Date().toLocaleString()}</strong>
 </ToastNotification>
 
-## Optional subtitle and caption
+## Close button
 
-Subtitle and caption are optional and only render when provided.
+Hide the close button or customize its behavior and label.
 
-<ToastNotification subtitle="An internal server error occurred." />
-<ToastNotification title="Error" subtitle="An internal server error occurred." />
-<ToastNotification subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
-<ToastNotification title="Success" caption="{new Date().toLocaleString()}" />
+### Hidden
 
-## Translating the close button label
+Create a persistent notification by hiding the close button.
 
-The status icon is decorative and hidden from assistive technology. Translate the close button label via `closeButtonDescription`.
+<ToastNotification hideCloseButton kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
+
+### Translated label
+
+Translate the close button label via `closeButtonDescription`.
 
 <ToastNotification
   title="错误"
@@ -75,15 +74,20 @@ The status icon is decorative and hidden from assistive technology. Translate th
   closeButtonDescription="关闭通知"
 />
 
-## Hidden close button
+### Prevent default
 
-Create a persistent notification by hiding the close button.
+Prevent the default close behavior using `e.preventDefault()` in the `on:close` event handler.
 
-<ToastNotification hideCloseButton kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
+<ToastNotification title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" on:close={(e) => {
+  e.preventDefault();
+  // custom close logic (e.g., transitions)
+}} />
 
-## Notification variants
+## Variants
 
-The component supports different notification types:
+The component supports different notification types.
+
+### High contrast
 
 <ToastNotification kind="error" title="Error" subtitle="An internal server error occurred." caption="{new Date().toLocaleString()}" />
 <ToastNotification kind="info" title="New updates" subtitle="Restart to get the latest updates." caption="{new Date().toLocaleString()}"  />
@@ -92,7 +96,7 @@ The component supports different notification types:
 <ToastNotification kind="warning" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
 <ToastNotification kind="warning-alt" title="Scheduled maintenance" subtitle="Maintenance will last 2-4 hours." caption="{new Date().toLocaleString()}" />
 
-## Low contrast
+### Low contrast
 
 Use low contrast variants for less prominent notifications.
 

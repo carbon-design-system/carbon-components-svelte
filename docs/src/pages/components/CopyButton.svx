@@ -1,15 +1,15 @@
+---
+description: Copy buttons copy text to the clipboard as a standalone control, for links, table cells, and other one-off copy actions.
+---
+
 <script>
   import { CopyButton } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
 </script>
 
-Copy buttons copy text to the clipboard as a standalone control. Use them for links, table cells, and other one-off copy actions. For code examples, use [CodeSnippet](/components/CodeSnippet), which composes the copy button for single- and multi-line variants.
+## Basic
 
-Copy buttons support [async copy](#async-copy) when clipboard text is not ready at render time, for example content fetched on click.
-
-## Default
-
-Set `text` to the string to copy. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText). Pass a function to `copy` to replace it. See [Overriding copy functionality](#overriding-copy-functionality).
+Set `text` to the string to copy. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText); pass a function to `copy` to replace it (see [Override](#override)). For code examples, use [CodeSnippet](/components/CodeSnippet); for content not ready at render time, see [Async copy](#async-copy).
 
 <CopyButton text="Carbon svelte" />
 
@@ -17,25 +17,33 @@ Set `text` to the string to copy. By default, the copy button uses the native [C
 
 Pass an async `copy` function when the text is not available at render time, for example markdown fetched on click. Feedback appears after `copy()` resolves.
 
-While `copy()` is pending, the button sets `aria-busy="true"` and ignores clicks. On failure, skip feedback and listen for `copy:error`.
+While copy() is pending, the button sets aria-busy and ignores clicks. On failure, skip feedback and listen for `copy:error`.
 
 Prefetch on hover with `on:mouseenter`.
 
 <FileSource src="/framed/CopyButton/CopyButtonAsync" />
 
-## Custom feedback text
+## Custom feedback
+
+Customize the message and icon shown after copying.
+
+### Text
 
 Set `feedback` to customize the message shown after copying.
 
 <CopyButton text="Carbon svelte" feedback="Copied to clipboard" />
 
-## Custom feedback icon
+### Icon
 
 Set `feedbackIcon` to show a different icon while feedback is visible. The copy icon returns when feedback closes.
 
 <CopyButton text="Carbon svelte" feedbackIcon={Checkmark} />
 
-## Overriding copy functionality
+## Copy behavior
+
+Replace or disable the default clipboard behavior.
+
+### Override
 
 Pass a function to `copy` to replace the default Clipboard API behavior.
 
@@ -43,7 +51,7 @@ This example uses the [clipboard-copy](https://github.com/feross/clipboard-copy)
 
 <FileSource src="/framed/CopyButton/CopyButtonOverride" />
 
-## Preventing copy functionality
+### Prevent
 
 Set `copy` to a no-op function to disable copying.
 
@@ -51,12 +59,12 @@ Set `copy` to a no-op function to disable copying.
 
 ## Portal tooltip
 
-Set `portalTooltip` to render the feedback tooltip in a portal so it is not clipped by `overflow: hidden` containers. Inside a [Modal](/components/Modal), portalling is enabled by default unless you set `portalTooltip` to `false`.
+Set `portalTooltip` to render the feedback tooltip in a portal so it is not clipped by overflow containers. Inside a [Modal](/components/Modal), portalling is enabled by default unless you set `portalTooltip` to false.
 
 <FileSource src="/framed/CopyButton/CopyButtonPortalTooltip" />
 
 ## Inside a modal
 
-When used inside a `Modal`, the feedback tooltip is automatically portalled so it is not clipped by `overflow: hidden`. Set `portalTooltip` to explicitly control this behavior.
+When used inside a Modal, the feedback tooltip is automatically portalled so it is not clipped by overflow. Set `portalTooltip` to override this behavior.
 
 <FileSource src="/framed/CopyButton/CopyButtonInModal" />

@@ -1,5 +1,6 @@
 ---
 components: ["Dropdown", "DropdownSkeleton", "FluidDropdownSkeleton"]
+description: Dropdowns provide a select input with a dropdown menu, with multiple states, sizes, and customization options.
 ---
 
 <script>
@@ -12,40 +13,41 @@ components: ["Dropdown", "DropdownSkeleton", "FluidDropdownSkeleton"]
   import StarFilled from "carbon-icons-svelte/lib/StarFilled.svelte";
 </script>
 
-Dropdowns provide a select input with a dropdown menu. They support
-multiple states, sizes, and customization options.
+## Basic
 
-> [!NOTE]
-> Every `items` object must have a unique "id" property.
-
-## Default
-
-Use the dropdown to create a select input with a dropdown menu. Each item
-must have a unique `id` property.
+Use the dropdown to create a select input with a dropdown menu. Each item needs a unique id.
 
 <Dropdown labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## No initial selection
+## Selection
 
-Omit `selectedId` to render the dropdown with no item selected. The `label` prop is displayed as placeholder text until the user makes a selection.
+Control which item is selected through `selectedId`.
+
+### No selection
+
+Omit `selectedId` to render the dropdown with no item selected. The label appears as placeholder text until the user makes a selection.
 
 <Dropdown labelText="Contact" label="Choose a contact method" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## With initial selection
+### Initial selection
 
-Set `selectedId` to the `id` of the item that should appear chosen when the dropdown first renders. The trigger shows that item's label in the closed state.
+Set `selectedId` to pre-select an item when the dropdown first renders. The trigger shows that item's label in the closed state.
 
-When the user opens the menu, if the option list is taller than the menu's maximum height, the menu scrolls so the selected option stays visible. That applies to lists rendered in full and to [virtualized lists](#virtualized-items-large-lists).
+When the user opens the menu, if the option list is taller than the menu's maximum height, the menu scrolls so the selected option stays visible. That applies to lists rendered in full and to [virtualized lists](#large-lists).
 
 <FileSource src="/framed/Dropdown/ScrollToSelected" />
 
-## Custom label
+## Content
 
-Use the `labelChildren` slot to provide custom label content instead of using the `labelText` prop.
+Customize the label, item display, and supporting text.
+
+### Custom label
+
+Use the `labelChildren` slot for custom label content instead of `labelText`.
 
 <Dropdown selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -53,22 +55,22 @@ Use the `labelChildren` slot to provide custom label content instead of using th
   <strong slot="labelChildren">Custom label</strong>
 </Dropdown>
 
-## Custom slot
+### Custom slot
 
 Override the default slot to customize the display of each item. Use `let:item`, `let:index`, `let:selected`, and `let:highlighted` to style highlighted and selected rows.
 
 <FileSource src="/framed/Dropdown/DropdownSlot" />
 
-## Item icons
+### Item icons
 
-Set `icon` on an item for a left icon. The label sits between the icon and the checkmark. Use the `icon` slot for custom markup.
+Set icon on an item for a left icon. The label sits between the icon and the checkmark. Use the icon slot for custom markup.
 
 <Dropdown labelText="Contact" selectedId="0" items={[
   {id: "0", text: "Slack", icon: Chat},
   {id: "1", text: "Email", icon: Email},
   {id: "2", text: "Fax", icon: Document}]} />
 
-Use `iconRight` to replace the checkmark. Both slots receive `item`, `index`, `selected`, and `highlighted`.
+Use the `iconRight` slot to replace the checkmark.
 
 <Dropdown labelText="Contact" selectedId="0" items={[
   {id: "0", text: "Slack", icon: Chat},
@@ -82,15 +84,25 @@ Use `iconRight` to replace the checkmark. Both slots receive `item`, `index`, `s
   </svelte:fragment>
 </Dropdown>
 
-## Helper text
+### Format display text
 
-Add descriptive text below the dropdown using the `helperText` prop.
+Format item display text with `itemToString`. The function receives each item and returns the formatted string.
+
+<Dropdown itemToString={item => {
+  return item.text + ' (' + item.id +')'
+}} labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Helper text
+
+Add descriptive text below the dropdown with `helperText`.
 
 <Dropdown helperText="Choose your preferred contact method" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## Hidden label
+### Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains
 available to screen readers.
@@ -99,16 +111,43 @@ available to screen readers.
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## Format item display text
+## Virtualization
 
-Format the display text of items using the `itemToString` prop. This function
-receives the item object and returns the formatted string.
+Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
 
-<Dropdown itemToString={item => {
-  return item.text + ' (' + item.id +')'
-}} labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
+### Large lists
+
+By default, the dropdown virtualizes lists with more than 100 items.
+
+In the example below, 10,000 items are provided to the dropdown but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
+
+Set `virtualize={false}` to explicitly disable virtualization, even for large lists. Or customize the threshold at which virtualization activates. See [Custom threshold](#custom-threshold).
+
+<FileSource src="/framed/Dropdown/VirtualizedDropdown" />
+
+### Custom overscan
+
+Overscanning is the process of rendering extra items above and below the viewport to ensure smooth scrolling. The default overscan value is 3.
+
+Specify a custom value for `overscan` to control how many extra items render above and below the viewport for smoother scrolling.
+
+During very fast scrolling, higher overscan values may cause more flickering due to increased DOM updates. For fast-scrolling scenarios, use a lower overscan value.
+
+<FileSource src="/framed/Dropdown/VirtualizeOverscan" />
+
+### Custom threshold
+
+The threshold is the minimum number of items required before virtualization activates. The default threshold value is 100, meaning lists with fewer than 100 items will not be virtualized and all items will be rendered normally.
+
+Specify a custom value for `threshold` to control when virtualization activates. Below the threshold, all items render normally without virtualization.
+
+<FileSource src="/framed/Dropdown/VirtualizeThreshold" />
+
+### Custom item height
+
+By default, item height matches the menu row for each size: 32px (`sm`), 40px (`md`), 48px (`lg`, `xl`). Set `itemHeight` when custom slots change row height.
+
+<FileSource src="/framed/Dropdown/VirtualizeItemHeight" />
 
 ## Multiple dropdowns
 
@@ -118,158 +157,63 @@ Create multiple dropdowns that work together.
 
 ## Top direction
 
-Display the dropdown menu above the input by setting the `direction` prop to
-`"top"`. This is useful when there's limited space below the input.
+Set `direction` to `"top"` to open the menu above the input. Useful when space below is limited.
 
 <Dropdown direction="top" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## Light variant
+## Sizes
 
-Use the light variant for dropdowns on dark backgrounds by setting the `light` prop
-to `true`.
+Set `size` to adjust the height of the dropdown. The default is medium.
 
-<Dropdown light labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
+### Extra-large
 
-## Fluid variant
-
-Set `fluid` to `true` to use the fluid variant, which embeds the label
-inside the field. Fluid dropdowns can be used standalone or inside
-[FluidForm](/components/FluidForm), where the fluid variant is applied
-automatically. The fluid variant cannot be combined with the inline variant.
-
-<Dropdown fluid labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
-
-## Fluid variant with custom label
-
-Use the `labelChildren` slot to render custom label content, such as a
-tooltip icon.
-
-<Dropdown fluid labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}">
-  <svelte:fragment slot="labelChildren">
-    Contact
-    <TooltipIcon tooltipText="Your contact method is used for account notifications." icon={Information} />
-  </svelte:fragment>
-</Dropdown>
-
-## Fluid variant (condensed)
-
-By default, the fluid variant renders taller menu items to match the taller
-field. Set `condensed` to `true` to render menu items at their default
-height instead.
-
-<Dropdown fluid condensed labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
-
-## Fluid variant (invalid)
-
-Fluid dropdowns display the error message inside the field boundary. Long
-messages wrap to multiple lines.
-
-<Dropdown fluid invalid invalidText="Secondary contact method must be different from the primary contact. Slack is already configured as your primary contact method; choose Email or Fax instead." labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
-
-## Fluid variant (warning)
-
-<Dropdown fluid warn warnText="This contact method is not associated with your account" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
-
-## Fluid variant (disabled)
-
-Invalid and warning states are not displayed while the dropdown is disabled.
-
-<Dropdown fluid disabled invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
-
-## Fluid variant (read-only)
-
-Invalid and warning states are not displayed while the dropdown is read-only.
-
-<Dropdown fluid readonly warn warnText="This contact method is not associated with your account" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
-
-## Fluid skeleton
-
-Display a loading skeleton for the fluid dropdown variant.
-
-<FluidDropdownSkeleton />
-
-## Portal menu
-
-Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Without `portalMenu`, the dropdown in the example below would be clipped by its container's hidden overflow.
-
-When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
-
-<FileSource src="/framed/Dropdown/DropdownPortalMenu" />
-
-## Inline variant
-
-Display the dropdown inline with other content by setting the `type` prop to
-`"inline"`. This variant removes the background and border.
-
-<Dropdown type="inline" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
-
-## Extra-large size
-
-Increase the size of the dropdown by setting the `size` prop to `"xl"`.
+Set `size` to `"xl"` for an extra-large dropdown.
 
 <Dropdown size="xl" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## Small size
+### Small
 
-Decrease the size of the dropdown by setting the `size` prop to `"sm"`. This is
-useful for compact layouts or secondary selections.
+Set `size` to `"sm"` for a small dropdown. Useful for compact layouts or secondary selections.
 
 <Dropdown size="sm" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## Invalid state
+## States
 
-Indicate an invalid selection by setting the `invalid` prop to `true`. Provide
-feedback to users with the `invalidText` prop.
+Communicate validation and availability through the dropdown state.
+
+### Invalid
+
+Set `invalid` to `true` and provide `invalidText` to show an error message.
 
 <Dropdown invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## Warning state
+### Warning
 
-Indicate a warning state by setting the `warn` prop to `true`. Provide additional
-context with the `warnText` prop.
+Set `warn` to `true` and provide `warnText` to show a warning message.
 
 <Dropdown warn warnText="This contact method is not associated with your account" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## Disabled state
+### Disabled
 
-Disable the entire dropdown by setting the `disabled` prop to `true`.
+Set `disabled` to `true` to prevent interaction with the dropdown.
 
 <Dropdown disabled labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
-## Disabled items
+### Disabled items
 
-Disable specific items in the dropdown by setting the `disabled` property to
-`true` in the item object for finer control over available selections.
+Mark individual items with `disabled: true` for finer control over available selections.
 
 <Dropdown
   selectedId="0"
@@ -281,7 +225,7 @@ Disable specific items in the dropdown by setting the `disabled` property to
   ]}
 />
 
-## Read-only state
+### Read-only
 
 Set `readonly` to `true` to display a non-editable value.
 
@@ -296,42 +240,101 @@ Set `readonly` to `true` to display a non-editable value.
   ]}
 />
 
-## Virtualized items (large lists)
+## Light
 
-Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
+Set `light` to `true` for dropdowns on dark backgrounds.
 
-By default, the dropdown virtualizes lists with more than 100 items.
+<Dropdown light labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
 
-In the example below, 10,000 items are provided to the dropdown but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
+## Inline
 
-Set `virtualize={false}` to explicitly disable virtualization, even for large lists. Or, customize the threshold at which virtualization activates. See [Virtualized items (custom threshold)](#virtualized-items-custom-threshold).
+Set `type` to `"inline"` to display the dropdown inline with other content. This variant removes the background and border.
 
-<FileSource src="/framed/Dropdown/VirtualizedDropdown" />
+<Dropdown type="inline" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
 
-## Virtualized items (custom overscan)
+## Fluid
 
-Overscanning is the process of rendering extra items above and below the viewport to ensure smooth scrolling. The default overscan value is 3.
+Set `fluid` to `true` to use the fluid variant, which embeds the label
+inside the field. Fluid dropdowns can be used standalone or inside
+[FluidForm](/components/FluidForm), where the fluid variant is applied
+automatically. The fluid variant cannot be combined with the inline variant.
 
-Specify a custom value for `overscan` to control how many extra items are rendered above/below the viewport for smoother scrolling.
+<Dropdown fluid labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
 
-> [!NOTE]
-> During very fast scrolling, higher overscan values may cause more flickering due to increased DOM updates. For fast scrolling scenarios, use a lower overscan value.
+### Custom label
 
-<FileSource src="/framed/Dropdown/VirtualizeOverscan" />
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
 
-## Virtualized items (custom threshold)
+<Dropdown fluid labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}">
+  <svelte:fragment slot="labelChildren">
+    Contact
+    <TooltipIcon tooltipText="Your contact method is used for account notifications." icon={Information} />
+  </svelte:fragment>
+</Dropdown>
 
-The threshold is the minimum number of items required before virtualization activates. The default threshold value is 100, meaning lists with fewer than 100 items will not be virtualized and all items will be rendered normally.
+### Condensed
 
-Specify a custom value for `threshold` to control when virtualization activates. Below the threshold, all items are rendered normally without virtualization.
+By default, the fluid variant renders taller menu items to match the taller
+field. Set `condensed` to `true` to render menu items at their default
+height instead.
 
-<FileSource src="/framed/Dropdown/VirtualizeThreshold" />
+<Dropdown fluid condensed labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
 
-## Virtualized items (custom item height)
+### Invalid
 
-By default, item height matches the menu row for each size: 32px (`sm`), 40px (`md`), 48px (`lg`, `xl`). Set `itemHeight` when custom slots change row height.
+Fluid dropdowns display the error message inside the field boundary. Long
+messages wrap to multiple lines.
 
-<FileSource src="/framed/Dropdown/VirtualizeItemHeight" />
+<Dropdown fluid invalid invalidText="Secondary contact method must be different from the primary contact. Slack is already configured as your primary contact method; choose Email or Fax instead." labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Warning
+
+<Dropdown fluid warn warnText="This contact method is not associated with your account" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Disabled
+
+Invalid and warning states are not displayed while the dropdown is disabled.
+
+<Dropdown fluid disabled invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Read-only
+
+Invalid and warning states are not displayed while the dropdown is read-only.
+
+<Dropdown fluid readonly warn warnText="This contact method is not associated with your account" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Skeleton
+
+Display a loading skeleton for the fluid dropdown variant.
+
+<FluidDropdownSkeleton />
+
+## Portal menu
+
+Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Without `portalMenu`, the dropdown in the example below would be clipped by its container's hidden overflow.
+
+When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
+
+<FileSource src="/framed/Dropdown/DropdownPortalMenu" />
 
 ## Skeleton
 

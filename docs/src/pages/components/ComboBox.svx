@@ -1,3 +1,7 @@
+---
+description: Combo boxes combine a text input with a dropdown menu to select from predefined options or enter custom values, with filtering and custom rendering.
+---
+
 <script>
   import { ComboBox, FluidComboBoxSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
@@ -8,16 +12,9 @@
   import StarFilled from "carbon-icons-svelte/lib/StarFilled.svelte";
 </script>
 
-Combo boxes combine a text input with a dropdown menu to let users select from predefined options or enter custom values. They support filtering, custom item rendering, and various states.
+## Basic
 
-Combo boxes are keyed for performance.
-
-> [!NOTE]
-> Every `items` object must have a unique "id" property.
-
-## Default
-
-Create a combobox with a title and placeholder text. Each item requires a unique `id` and `text`.
+Create a combobox with a title and placeholder text. Each item needs a unique id and display text. Combo boxes key items by id for performance.
 
 <ComboBox labelText="Contact" placeholder="Select contact method"
 items={[
@@ -26,22 +23,32 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Custom slot
+## Reactive
+
+See how the combobox responds to user input and selection changes.
+
+<FileSource src="/framed/ComboBox/ReactiveComboBox" />
+
+## Content
+
+Customize how items render and how the label and helper text appear.
+
+### Custom slot
 
 Override the default slot to customize how each item displays. Use `let:item`, `let:index`, `let:selected`, and `let:highlighted` to style highlighted and selected rows.
 
 <FileSource src="/framed/ComboBox/ComboBoxSlot" />
 
-## Item icons
+### Item icons
 
-Set `icon` on an item for a left icon. The label sits between the icon and the checkmark. Use the `icon` slot for custom markup.
+Set icon on an item for a left icon. The label sits between the icon and the checkmark. Use the icon slot for custom markup.
 
 <ComboBox labelText="Contact" placeholder="Select contact method" selectedId="0" items={[
   {id: "0", text: "Slack", icon: Chat},
   {id: "1", text: "Email", icon: Email},
   {id: "2", text: "Fax", icon: Document}]} />
 
-Use `iconRight` to replace the checkmark. Both slots receive `item`, `index`, `selected`, and `highlighted`.
+Use the `iconRight` slot to replace the checkmark.
 
 <ComboBox labelText="Contact" placeholder="Select contact method" selectedId="0" items={[
   {id: "0", text: "Slack", icon: Chat},
@@ -55,7 +62,7 @@ Use `iconRight` to replace the checkmark. Both slots receive `item`, `index`, `s
   </svelte:fragment>
 </ComboBox>
 
-## Hidden label
+### Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
@@ -66,7 +73,22 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Initial selected id
+### Helper text
+
+Add descriptive text below the combobox with `helperText`.
+
+<ComboBox helperText="Choose your preferred contact method" labelText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+## Selection
+
+Pre-select items, clear the current selection, and coordinate multiple combo boxes.
+
+### Initial selection
 
 Set `selectedId` to pre-select an item when the combobox loads.
 
@@ -78,26 +100,38 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Helper text
+### Clear selection
 
-Add descriptive text below the combobox using the `helperText` prop.
+Use `bind:this` to access the component instance and call `ComboBox.clear()` to clear the selection. Pass `focus: false` in the options to prevent re-focusing the input.
 
-<ComboBox helperText="Choose your preferred contact method" labelText="Contact" placeholder="Select contact method"
+<FileSource src="/framed/ComboBox/ComboBoxClear" />
+
+### Open on clear
+
+By default, the dropdown menu is closed after clearing the selection.
+
+Set `openOnClear` to `true` to reopen the dropdown menu after clearing the selection. This lets users immediately browse all available items without needing to click the input again.
+
+<ComboBox openOnClear labelText="Contact" placeholder="Select contact method"
+selectedId="1"
+value="Email"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}
   ]}  />
 
-## Reactive example
+### Multiple combo boxes
 
-See how the combobox responds to user input and selection changes.
+See how to manage multiple comboboxes in a form.
 
-<FileSource src="/framed/ComboBox/ReactiveComboBox" />
+<FileSource src="/framed/ComboBox/MultipleComboBox" />
 
-## Auto-highlight first match
+## Auto-highlight
 
-By default, no item is automatically highlighted when typing.
+By default, no item is automatically highlighted when typing. Set `autoHighlight` to `"first-match"` to highlight the first matching item as you type.
+
+### First match
 
 Set `autoHighlight` to `"first-match"` to automatically highlight the first matching item as you type. Select it by pressing <DocKbd label="Enter" /> without using arrow keys.
 
@@ -119,7 +153,7 @@ items={[
   {id: "9", text: "Pineapple"},
   ]}  />
 
-## Auto-highlight with custom filter
+### Case-sensitive filter
 
 Use `autoHighlight="first-match"` with a custom `shouldFilterItem` to control which items appear. The auto-highlight respects the custom filter; only items that pass the filter are considered for highlighting.
 
@@ -142,25 +176,7 @@ items={[
   {id: "9", text: "Pineapple"},
   ]}  />
 
-## Typeahead
-
-Set `typeahead` to `true` to enable autocomplete with typeahead functionality. As users type, the input automatically suggests and completes matching items.
-
-By default, the typeahead feature uses prefix matching (case-insensitive) to filter items that start with the entered text. When a match is found, the suggestion is displayed with the untyped portion highlighted, allowing users to accept it or continue typing.
-
-Pressing <DocKbd label="Enter" /> selects the matching item and closes the dropdown.
-
-You can provide a custom `shouldFilterItem` to change the filtering logic. See [Typeahead with custom filter](#typeahead-with-custom-filter).
-
-<FileSource src="/framed/ComboBox/TypeaheadComboBox" />
-
-## Typeahead with custom filter
-
-Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. In this example, a simple fuzzy filter is used where each typed character must appear in order within the item text (for example, "ba" matches "Banana" and "Blackberry").
-
-<FileSource src="/framed/ComboBox/TypeaheadCustomFilter" />
-
-## Typeahead with auto-highlight
+### With typeahead
 
 Combine `typeahead` and `autoHighlight="first-match"` for the full autocomplete experience: the input text is completed and the matching item is visually highlighted.
 
@@ -178,48 +194,41 @@ items={[
   {id: "9", text: "Pineapple"},
   ]}  />
 
-## Open on clear
+## Typeahead
 
-By default, the dropdown menu is closed after clearing the selection.
+Set `typeahead` to `true` to enable autocomplete. As users type, the input suggests and completes matching items.
 
-Set `openOnClear` to `true` to reopen the dropdown menu after clearing the selection. This lets users immediately browse all available items without needing to click the input again.
+By default, typeahead uses case-insensitive prefix matching. When a match is found, the suggestion shows the untyped portion highlighted so users can accept it or keep typing.
 
-<ComboBox openOnClear labelText="Contact" placeholder="Select contact method"
-selectedId="1"
-value="Email"
-items={[
-  {id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
-  ]}  />
+Pressing <DocKbd label="Enter" /> selects the matching item and closes the dropdown.
 
-## Clear selection
+You can provide a custom `shouldFilterItem` to change the filtering logic. See the [fuzzy filter](#fuzzy-filter) example below.
 
-Use `bind:this` to access the component instance and call `ComboBox.clear()` to programmatically clear the selection.
+<FileSource src="/framed/ComboBox/TypeaheadComboBox" />
 
-Set `focus: false` in the method options to prevent re-focusing the input.
+### Fuzzy filter
 
-<FileSource src="/framed/ComboBox/ComboBoxClear" />
+Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. In this example, a simple fuzzy filter is used where each typed character must appear in order within the item text (for example, "ba" matches "Banana" and "Blackberry").
 
-## Multiple combo boxes
+<FileSource src="/framed/ComboBox/TypeaheadCustomFilter" />
 
-See how to manage multiple comboboxes in a form.
+## Filtering
 
-<FileSource src="/framed/ComboBox/MultipleComboBox" />
+By default, combobox filtering is synchronous and client-side. Customize the filter logic, label rendering, and when results reset.
 
-## Filterable
+### Filterable
 
 Enable filtering to let users search through the options.
 
 <FileSource src="/framed/ComboBox/FilterableComboBox" />
 
-## Filterable with custom label
+### Custom label
 
 Set `itemToString` to customize how items display in the filterable combobox.
 
 <FileSource src="/framed/ComboBox/FilterableComboBoxCustomLabel" />
 
-## Clear filter on open
+### Clear filter on open
 
 After selecting an item in a filterable combobox, reopening the dropdown normally shows only the results matching that selection. Set `clearFilterOnOpen` to `true` to clear the filter on open, showing all items so you can browse and change the selection.
 
@@ -227,21 +236,19 @@ The original value is automatically restored if you close the dropdown without m
 
 <FileSource src="/framed/ComboBox/ClearFilterOnOpen" />
 
-## Filtering (async)
+### Async
 
-By default, combobox filtering is synchronous and client-side.
-
-For async (for example, server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async/await behavior with a debounced input value change.
+For async (for example, server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async behavior with a debounced input value change.
 
 <FileSource src="/framed/ComboBox/AsyncComboBox" />
 
-## Allow custom value
+### Allow custom value
 
-Set `allowCustomValue` to `true` to let users enter custom text that isn't in the predefined list. By default, user-entered text is cleared when the combobox loses focus without selecting an item. When `allowCustomValue` is enabled, custom text is preserved.
+Set `allowCustomValue` to `true` to let users enter custom text that is not in the predefined list. By default, user-entered text is cleared when the combobox loses focus without selecting an item. With allowCustomValue enabled, custom text is preserved.
 
 <FileSource src="/framed/ComboBox/AllowCustomValue" />
 
-## Select text on focus
+### Select text on focus
 
 Set `selectTextOnFocus` to `true` to select all text in the input when it receives focus (for example, on tab or click). Users can replace the value by typing without manually selecting first.
 
@@ -256,6 +263,42 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+## Virtualization
+
+Virtualization renders only the items currently visible in the viewport, improving performance for large lists. By default, the combo box virtualizes lists with more than 100 items.
+
+### Large lists
+
+In the example below, 10,000 items are provided to the combobox but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
+
+Set `virtualize={false}` to explicitly disable virtualization, even for large lists. Or customize the threshold at which virtualization activates. See the [custom threshold](#custom-threshold) example below.
+
+<FileSource src="/framed/ComboBox/VirtualizedComboBox" />
+
+### Custom overscan
+
+Overscanning is the process of rendering extra items above and below the viewport to ensure smooth scrolling. The default overscan value is 3.
+
+Specify a custom value for `overscan` to control how many extra items render above and below the viewport for smoother scrolling.
+
+During very fast scrolling, higher overscan values may cause more flickering due to increased DOM updates. For fast-scrolling scenarios, use a lower overscan value.
+
+<FileSource src="/framed/ComboBox/VirtualizeOverscan" />
+
+### Custom threshold
+
+The threshold is the minimum number of items required before virtualization activates. The default threshold value is 100, meaning lists with fewer than 100 items will not be virtualized and all items will be rendered normally.
+
+Specify a custom value for `threshold` to control when virtualization activates. Below the threshold, all items render normally without virtualization.
+
+<FileSource src="/framed/ComboBox/VirtualizeThreshold" />
+
+### Custom item height
+
+By default, item height matches the menu row for each size: 32px (`sm`), 40px (`md`), 48px (`lg`, `xl`). Set `itemHeight` when custom slots change row height.
+
+<FileSource src="/framed/ComboBox/VirtualizeItemHeight" />
+
 ## Top direction
 
 Set `direction` to `"top"` to make the dropdown menu appear above the input.
@@ -267,7 +310,15 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Light variant
+## Portal menu
+
+Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Without `portalMenu`, the dropdown in the example below would be clipped by its container's hidden overflow.
+
+When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
+
+<FileSource src="/framed/ComboBox/ComboBoxPortalMenu" />
+
+## Light
 
 Set `light` to `true` to use the light color scheme.
 
@@ -278,7 +329,102 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Fluid variant
+## Sizes
+
+The `size` prop sets the height. The default is `medium`.
+
+### Small
+
+Set `size` to `"sm"` for a small combobox.
+
+<ComboBox labelText="Contact" placeholder="Select contact method"
+size="sm"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Extra-large
+
+Set `size` to `"xl"` for an extra-large combobox.
+
+<ComboBox labelText="Contact" placeholder="Select contact method"
+size="xl"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+## States
+
+Surface validation, warning, disabled, and read-only states.
+
+### Invalid
+
+Set `invalid` to `true` and provide `invalidText` to show an error message.
+
+<ComboBox invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Warning
+
+Set `warn` to `true` and provide `warnText` to show a warning message.
+
+<ComboBox warn warnText="This contact method is not associated with your account" labelText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Disabled
+
+Set `disabled` to `true` to prevent interaction with the combobox.
+
+<ComboBox disabled labelText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Disabled items
+
+Mark individual items with `disabled: true` to disable specific options.
+
+<ComboBox
+  labelText="Contact"
+  placeholder="Select contact method"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email", disabled: true },
+    { id: "2", text: "Fax" },
+  ]}
+/>
+
+### Read-only
+
+Set `readonly` to `true` to display a non-editable value.
+
+<ComboBox
+  readonly
+  selectedId="1"
+  labelText="Contact"
+  placeholder="Select contact method"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+/>
+
+## Fluid
 
 Set `fluid` to `true` to use the fluid variant, which embeds the label
 inside the field. Fluid combo boxes can be used standalone or inside
@@ -292,7 +438,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
@@ -309,7 +455,7 @@ items={[
   </svelte:fragment>
 </ComboBox>
 
-## Fluid variant (condensed)
+### Condensed
 
 By default, the fluid variant renders taller menu items to match the taller
 field. Set `condensed` to `true` to render menu items at their default
@@ -322,7 +468,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Fluid variant (invalid)
+### Invalid
 
 Fluid combo boxes display the error message inside the field boundary. Long
 messages wrap to multiple lines.
@@ -334,7 +480,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Fluid variant (warning)
+### Warning
 
 <ComboBox fluid warn warnText="This contact method is not associated with your account" labelText="Contact" placeholder="Select contact method"
 items={[
@@ -343,7 +489,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Fluid variant (disabled)
+### Disabled
 
 Invalid and warning states are not displayed while the combo box is disabled.
 
@@ -354,7 +500,7 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Fluid variant (read-only)
+### Read-only
 
 Invalid and warning states are not displayed while the combo box is read-only.
 
@@ -365,140 +511,8 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading skeleton for the fluid combo box variant.
 
 <FluidComboBoxSkeleton />
-
-## Portal menu
-
-Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Without `portalMenu`, the dropdown in the example below would be clipped by its container's hidden overflow.
-
-When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
-
-<FileSource src="/framed/ComboBox/ComboBoxPortalMenu" />
-
-## Extra-large size
-
-Set `size` to `"xl"` for an extra-large combobox.
-
-<ComboBox labelText="Contact" placeholder="Select contact method"
-size="xl"
-items={[
-  {id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
-  ]}  />
-
-## Small size
-
-Set `size` to `"sm"` for a small combobox.
-
-<ComboBox labelText="Contact" placeholder="Select contact method"
-size="sm"
-items={[
-  {id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
-  ]}  />
-
-## Invalid state
-
-Set `invalid` to `true` and provide `invalidText` to show an error message.
-
-<ComboBox invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" placeholder="Select contact method"
-items={[
-  {id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
-  ]}  />
-
-## Warning state
-
-Set `warn` to `true` and provide `warnText` to show a warning message.
-
-<ComboBox warn warnText="This contact method is not associated with your account" labelText="Contact" placeholder="Select contact method"
-items={[
-  {id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
-  ]}  />
-
-## Disabled state
-
-Set `disabled` to `true` to prevent interaction with the combobox.
-
-<ComboBox disabled labelText="Contact" placeholder="Select contact method"
-items={[
-  {id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
-  ]}  />
-
-## Disabled items
-
-Set `disabled: true` in an item object to disable specific options.
-
-<ComboBox
-  labelText="Contact"
-  placeholder="Select contact method"
-  items={[
-    { id: "0", text: "Slack" },
-    { id: "1", text: "Email", disabled: true },
-    { id: "2", text: "Fax" },
-  ]}
-/>
-
-## Read-only state
-
-Set `readonly` to `true` to display a non-editable value.
-
-<ComboBox
-  readonly
-  selectedId="1"
-  labelText="Contact"
-  placeholder="Select contact method"
-  items={[
-    { id: "0", text: "Slack" },
-    { id: "1", text: "Email" },
-    { id: "2", text: "Fax" },
-  ]}
-/>
-
-## Virtualized items (large lists)
-
-Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
-
-By default, the combo box will virtualize lists with more than 100 items.
-
-In the example below, 10,000 items are provided to the combobox but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
-
-Set `virtualize={false}` to explicitly disable virtualization, even for large lists. Or, customize the threshold at which virtualization activates. See [Virtualized items (custom threshold)](#virtualized-items-custom-threshold).
-
-<FileSource src="/framed/ComboBox/VirtualizedComboBox" />
-
-## Virtualized items (custom overscan)
-
-Overscanning is the process of rendering extra items above and below the viewport to ensure smooth scrolling. The default overscan value is 3.
-
-Specify a custom value for `overscan` to control how many extra items are rendered above/below the viewport for smoother scrolling.
-
-> [!NOTE]
-> During very fast scrolling, higher overscan values may cause more flickering due to increased DOM updates. For fast scrolling scenarios, use a lower overscan value.
-
-<FileSource src="/framed/ComboBox/VirtualizeOverscan" />
-
-## Virtualized items (custom threshold)
-
-The threshold is the minimum number of items required before virtualization activates. The default threshold value is 100, meaning lists with fewer than 100 items will not be virtualized and all items will be rendered normally.
-
-Specify a custom value for `threshold` to control when virtualization activates. Below the threshold, all items are rendered normally without virtualization.
-
-<FileSource src="/framed/ComboBox/VirtualizeThreshold" />
-
-## Virtualized items (custom item height)
-
-By default, item height matches the menu row for each size: 32px (`sm`), 40px (`md`), 48px (`lg`, `xl`). Set `itemHeight` when custom slots change row height.
-
-<FileSource src="/framed/ComboBox/VirtualizeItemHeight" />

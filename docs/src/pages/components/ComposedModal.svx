@@ -1,17 +1,16 @@
 ---
 components: ["ComposedModal", "ModalHeader", "ModalBody", "ModalFooter"]
+description: Composed modals let you build custom modals from modal header, body, and footer components, for focused interactions.
 ---
 
 <script>
 </script>
 
-Composed modals let you build custom modals by combining modal header, modal body, and modal footer components. Use them to create focused interactions that require user attention or input.
-
-**ComposedModal vs Modal**
+## ComposedModal vs Modal
 
 The composed modal provides a composition-based approach with modal header, modal body, and modal footer sub-components for maximum flexibility. For simpler use cases, use [Modal](/components/Modal) instead. Both components share the same events, accessibility features, and [focus behavior](/components/Modal#focus-behavior).
 
-## Composed modal
+## Basic
 
 Create a modal with a header, body, and footer. Each section can be customized independently.
 
@@ -19,7 +18,7 @@ Create a modal with a header, body, and footer. Each section can be customized i
 
 ## Full width
 
-Set `fullWidth` to `true` to remove the modal body padding so content spans edge to edge. Use it for content that supplies its own layout, such as a table or fluid form.
+Remove modal body padding so content spans edge to edge with `fullWidth`. Use it for content that supplies its own layout, such as a table or fluid form.
 
 <FileSource src="/framed/Modal/FullWidthComposedModal" />
 
@@ -31,19 +30,19 @@ Wrap the composed modal in a portal to ensure it renders above all z-index stack
 
 ## Prevent default close behavior
 
-The modal dispatches a cancelable `close` event. Call `e.preventDefault()` to keep the modal open. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, or `"close-button"`.
+The modal dispatches a cancelable `close` event. Call e.preventDefault() to keep the modal open. The event includes a trigger property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, or `"close-button"`.
 
 <FileSource src="/framed/Modal/ComposedModalPreventClose" />
 
-## Danger modal
+## Danger
 
-Display critical actions or destructive operations with the danger variant. Set `danger` on both `ComposedModal` and `ModalFooter` for the red danger styling.
+Display critical or destructive actions with the danger variant. Set `danger` on both ComposedModal and ModalFooter for the red danger styling.
 
 By default, the cancel button receives focus instead of the critical button to prevent accidental destructive actions.
 
 <FileSource src="/framed/Modal/DangerComposedModal" />
 
-## Progress modal
+## Progress
 
 Combine the composed modal with a progress indicator to create a multi-step flow within a modal. Use the modal footer's default slot to render Cancel (ghost), Previous (secondary), and Next (primary) buttons. Track the current step to control which content is displayed and update the button label on the final step.
 
@@ -51,6 +50,6 @@ Combine the composed modal with a progress indicator to create a multi-step flow
 
 ## Multiple secondary buttons
 
-Set `secondaryButtons` in the modal footer to create a 3-button modal. This prop replaces `secondaryButtonText` and takes a tuple of two button configurations.
+Set `secondaryButtons` in the modal footer to create a 3-button modal. This replaces secondaryButtonText and takes a tuple of two button configurations.
 
 <FileSource src="/framed/Modal/3ButtonComposedModal" />

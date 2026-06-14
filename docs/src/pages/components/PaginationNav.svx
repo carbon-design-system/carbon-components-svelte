@@ -1,50 +1,56 @@
+---
+description: Pagination nav provides a compact navigation interface for paginated content, with page numbers, navigation buttons, and overflow menus.
+---
+
 <script>
   import { PaginationNav } from "carbon-components-svelte";
 </script>
 
-Pagination nav provides a compact navigation interface for paginated content. It displays page numbers and navigation buttons, with support for overflow menus when there are many pages.
-
-## Default
+## Basic
 
 Create a basic pagination navigation with default settings.
 
 <PaginationNav />
 
-## Reactive example
+## Reactive
 
-Use the `page` prop to bind to the current page number.
+Bind to `page` for the current page number.
 
 <FileSource src="/framed/PaginationNav/PaginationNavReactive" />
 
 ## Total pages
 
-Specify the total number of pages using the `total` prop.
+Specify the total number of pages with `total`.
 
 <PaginationNav total={3} />
 
-## Loop navigation
-
-Set `loop` to `true` to enable circular navigation between pages.
-
-<PaginationNav total={3} loop />
-
 ## Visible pages
 
-Control the number of visible page numbers with the `shown` prop.
+Control the number of visible page numbers with `shown`.
 
 <PaginationNav total={100} shown={5} />
 
-## Custom button text
+## Navigation buttons
 
-Customize the navigation button text using `forwardText` and `backwardText`.
+The forward and backward navigation buttons can be customized independently of the page numbers.
+
+### Loop
+
+Enable circular navigation between pages with `loop`.
+
+<PaginationNav total={3} loop />
+
+### Custom text
+
+Customize navigation button text with `forwardText` and `backwardText`.
 
 <PaginationNav
   forwardText="Next"
   backwardText="Previous"
 />
 
-## Tooltip position
+### Tooltip position
 
-Set the tooltip position relative to the navigation buttons using `tooltipPosition`.
+Set tooltip position relative to the navigation buttons with `tooltipPosition`.
 
 <PaginationNav tooltipPosition="outside" total={3} loop />

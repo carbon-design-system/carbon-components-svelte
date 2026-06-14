@@ -1,50 +1,53 @@
 ---
 components: ["NotificationQueue"]
+description: Notification queues provide an imperative API for managing toast notifications — handling positioning, deduplication, and overflow from anywhere in your app.
 ---
 
 <script>
   import { NotificationQueue } from "carbon-components-svelte";
 </script>
 
-Notification queues provide an imperative API for managing toast notifications. They handle positioning, deduplication, and overflow management, so you can display notifications from anywhere in your application.
+## Basic
 
-The queue uses the underlying [ToastNotification](ToastNotification) to display notifications.
-
-## Basic usage
-
-Use `bind:this` to get a reference to the queue instance, then call `add()` to show notifications. The queue automatically manages positioning and removes notifications when they timeout or are closed.
+Use `bind:this` to get a queue reference, then call `add()` to show notifications. The queue uses underlying [ToastNotification](ToastNotification) components, manages positioning, and removes notifications when they time out or are closed.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueBasic" />
 
 ## Positioning
 
-Configure the queue position using the position prop. Notifications can appear at the top-right (default) or bottom-right of the screen.
+Configure queue position with the position prop. Notifications can appear at the top-right (default) or bottom-right of the screen.
 
-The `top-right` position assumes usage of the [UIShell](/components/UIShell) component. Customize the position using [offset props](#custom-offsets).
+The top-right position assumes usage of the [UIShell](/components/UIShell) component. Customize placement with [offset props](#custom-offsets).
 
 <FileSource src="/framed/NotificationQueue/NotificationQueuePosition" />
 
+### Custom offsets
+
+Customize queue placement with `offsetTop`, `offsetBottom`, and `offsetRight`. Useful for positioning notifications below headers or adjusting spacing.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueOffsets" />
+
 ## Deduplication
 
-By default, the `id` prop is optional; a unique id will be generated for the notification. The queue [keys](https://svelte.dev/docs/svelte/each#Keyed-each-blocks) notifications by `id` for performance.
+By default, id is optional; a unique id is generated for each notification. The queue [keys](https://svelte.dev/docs/svelte/each#Keyed-each-blocks) notifications by id for performance.
 
-Notifications are deduplicated by `id`. If you add a notification with an `id` that already exists in the queue, the call is ignored. This prevents duplicate notifications from appearing. To change an existing notification in place, use [update](#update).
+Notifications are deduplicated by id. Adding a notification with an id that already exists in the queue is ignored. To change an existing notification in place, use [update](#update).
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueDeduplication" />
 
 ## Update
 
-Use `update(id, patch)` to change an existing notification in place. The `patch` is merged into the matching notification, which is useful for reflecting progress (for example, transitioning a "loading" toast to "success" without removing and re-adding it).
+Use `update(id, patch)` to change an existing notification in place. The patch merges into the matching notification, useful for reflecting progress (for example, transitioning a loading toast to success without removing and re-adding it).
 
-`update` returns `true` if a notification with the given `id` was found, `false` otherwise.
+`update` returns true if a notification with the given id was found, false otherwise.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueUpdate" />
 
 ## Max notifications
 
-By default, the queue displays a maximum of 3 notifications. When the limit is exceeded, the oldest notification is automatically removed.
+By default, the queue displays a maximum of 3 notifications. When the limit is exceeded, the oldest notification is removed automatically.
 
-This limit can be customized using the `maxNotifications` prop.
+Customize the limit with `maxNotifications`.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueMax" />
 
@@ -54,16 +57,10 @@ Use `remove(id)` to programmatically remove a specific notification, or `clear()
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueRemove" />
 
-## Custom offsets
+## Persistent
 
-Customize the queue position using `offsetTop`, `offsetBottom`, and `offsetRight` props. This is useful for positioning notifications below headers or adjusting spacing.
+Create persistent notifications that do not auto-dismiss by omitting timeout and hiding the close button with `hideCloseButton`.
 
-<FileSource src="/framed/NotificationQueue/NotificationQueueOffsets" />
-
-## Persistent notifications
-
-Create persistent notifications that do not auto-dismiss by omitting the `timeout` prop and hiding the close button using `hideCloseButton`.
-
-These notifications remain visible until they are programmatically removed.
+These notifications remain visible until programmatically removed.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueuePersistent" />

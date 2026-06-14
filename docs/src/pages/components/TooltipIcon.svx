@@ -1,12 +1,14 @@
+---
+description: Tooltip icons show contextual information on hover or focus of an icon button.
+---
+
 <script>
   import { TooltipIcon } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
   import Filter from "carbon-icons-svelte/lib/Filter.svelte";
 </script>
 
-Tooltip icons display contextual information when users hover over or focus on an icon. They are ideal for providing additional context about icons or actions in your interface.
-
-## Default
+## Basic
 
 Display a tooltip with the default bottom-center alignment.
 
@@ -14,13 +16,13 @@ Display a tooltip with the default bottom-center alignment.
 
 ## Reactive example
 
-Control the tooltip state programmatically using `bind:open`.
+Control tooltip state programmatically with `bind:open`.
 
 <FileSource src="/framed/TooltipIcon/TooltipIconReactive" />
 
 ## Sizes
 
-Specify the icon size with the `size` prop. Carbon icons use a 16/20/24/32 scale, but any number (pixels) can be used.
+Set icon size with `size`. Carbon icons use a 16/20/24/32 scale, but any pixel value works.
 
 <TooltipIcon tooltipText="16px" icon={Carbon} size={16} />
 <TooltipIcon tooltipText="20px" icon={Carbon} size={20} />
@@ -29,7 +31,7 @@ Specify the icon size with the `size` prop. Carbon icons use a 16/20/24/32 scale
 
 ## Directions
 
-Position the tooltip in different directions and alignments using the `direction` and `align` props.
+Position the tooltip with `direction` and `align`.
 
 <TooltipIcon tooltipText="Top start" direction="top" align="start" icon={Filter} />
 <TooltipIcon tooltipText="Right end" direction="right" align="end" icon={Filter} />
@@ -46,34 +48,34 @@ Use the `tooltipText` slot to customize the tooltip content with additional styl
 
 ## Custom delay
 
-Use `enterDelayMs` and `leaveDelayMs` to customize the delay before showing and hiding the tooltip on hover. The defaults are 100ms and 300ms, respectively.
+Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100ms and 300ms.
 
 <TooltipIcon tooltipText="Slow to appear" icon={Carbon} enterDelayMs={500} leaveDelayMs={500} />
 
-## Disabled state
+## Disabled
 
-Set `disabled` to `true` to prevent user interaction with the tooltip.
+Prevent interaction with `disabled`.
 
 <TooltipIcon disabled tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
 
-## Portal tooltip
+## Portal
 
-Use `portalTooltip` to render the tooltip in a portal, preventing it from being clipped by `overflow: hidden` containers. This is automatically enabled when the tooltip is inside a `Modal`. The `direction` and `align` props are respected when portalled, matching non-portal positioning.
+Set `portalTooltip` to render the tooltip in a portal so it is not clipped by overflow containers. This is enabled automatically inside a Modal. Direction and alignment match the non-portal path.
 
 <TooltipIcon portalTooltip tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
 
-## Portal (direction)
+### Direction
 
-Icon tooltips support `top`, `right`, `bottom`, and `left`. With `portalTooltip`, `direction` behaves the same as the default CSS path.
+Icon tooltips support top, right, bottom, and left. With portalling, direction behaves the same as the default CSS path.
 
 <TooltipIcon portalTooltip direction="top" tooltipText="Top" icon={Carbon} />
 <TooltipIcon portalTooltip direction="right" tooltipText="Right" icon={Carbon} />
 <TooltipIcon portalTooltip direction="bottom" tooltipText="Bottom" icon={Carbon} />
 <TooltipIcon portalTooltip direction="left" tooltipText="Left" icon={Carbon} />
 
-## Portal (alignment)
+### Alignment
 
-Portalled tooltips use the same `align` prop as the non-portal path: horizontal placement along the anchor for `top` and `bottom`, and vertical placement for `left` and `right`.
+Portalled tooltips use the same alignment options as the default path: horizontal placement for top and bottom, vertical placement for left and right.
 
 <TooltipIcon portalTooltip direction="bottom" align="start" tooltipText="Start" icon={Carbon} />
 <TooltipIcon portalTooltip direction="bottom" align="center" tooltipText="Center" icon={Carbon} />
@@ -81,6 +83,6 @@ Portalled tooltips use the same `align` prop as the non-portal path: horizontal 
 
 ## Inside a modal
 
-When a tooltip icon is used inside a [Modal](/components/Modal), it is automatically rendered in a portal so it is not clipped by the modal's overflow or z-index stacking. Set `portalTooltip` to explicitly control this behavior.
+When a tooltip icon is used inside a [Modal](/components/Modal), it is automatically portalled so it is not clipped by the modal overflow or z-index stacking. Set `portalTooltip` to override this behavior.
 
 <FileSource src="/framed/TooltipIcon/TooltipIconModal" />

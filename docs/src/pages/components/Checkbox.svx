@@ -1,10 +1,12 @@
+---
+description: Checkboxes let users select one or more options from a list, for multiple-choice questions, settings, or confirmations.
+---
+
 <script>
   import { Checkbox, CheckboxGroup, Stack, Tooltip } from "carbon-components-svelte";
 </script>
 
-Checkboxes let users select one or more options from a list. Use them for multiple-choice questions, settings, or to confirm actions.
-
-## Default
+## Basic
 
 Create a checkbox with a label using `labelText`.
 
@@ -36,30 +38,38 @@ Use `helperText` to provide additional context or instructions below the checkbo
 
 <Checkbox labelText="Subscribe to newsletter" helperText="You can unsubscribe at any time" />
 
-## Disabled state
+## States
+
+Reflect interaction states.
+
+### Disabled
 
 Set `disabled` to `true` to prevent user interaction.
 
 <Checkbox labelText="Label text" disabled />
 
-## Read-only state
+### Read-only
 
-Set `readonly` to `true` to make the checkbox non-interactive while keeping the label text readable. Unlike `disabled`, the readonly state is intended for displaying checkbox values that can only be changed programmatically.
+Set `readonly` to `true` to make the checkbox non-interactive while keeping the label text readable. Unlike disabled, the readonly state is intended for displaying checkbox values that can only be changed programmatically.
 
 <Checkbox labelText="Label text (unchecked)" readonly />
 <Checkbox labelText="Label text (checked)" checked readonly />
 
-## Reactive example (bind:checked)
+## Reactive
+
+Bind to track and update the checkbox state.
+
+### bind:checked
 
 Use two-way binding with `bind:checked` to track the checkbox state.
 
 <FileSource src="/framed/Checkbox/CheckboxReactive" />
 
-## Reactive example (bind:group)
+### bind:group
 
-Bind an array to `group` so each checkbox adds or removes its `value` when toggled. This API is inspired by Svelte [group inputs](https://svelte.dev/tutorial/svelte/group-inputs).
+Bind an array to `group` so each checkbox adds or removes its value when toggled. This API is inspired by Svelte [group inputs](https://svelte.dev/tutorial/svelte/group-inputs).
 
-When using `bind:group`, the checked state is derived from the group array: use `bind:group` (not `bind:checked`) to control selection, since updating `checked` directly will be overwritten.
+When using `bind:group`, the checked state is derived from the group array: use `bind:group` (not `bind:checked`) to control selection, since updating checked directly will be overwritten.
 
 <FileSource src="/framed/Checkbox/MultipleCheckboxes" />
 
@@ -79,13 +89,13 @@ Use a checkbox group to wrap multiple checkbox components with a shared legend, 
 <Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
-## CheckboxGroup (reactive example)
+### Reactive
 
 Use two-way binding with `bind:selected` to track and update the selected values.
 
 <FileSource src="/framed/Checkbox/CheckboxGroupReactive" />
 
-## CheckboxGroup (hidden legend)
+### Hidden legend
 
 Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
 
@@ -95,9 +105,9 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
 <Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
-## CheckboxGroup (custom label content)
+### Custom label
 
-Use the `legendChildren` slot to provide custom label content instead of using the `legendText` prop.
+Use the `legendChildren` slot to provide custom label content instead of `legendText`.
 
 <CheckboxGroup name="prefs-legend-slot" selected={["email"]}>
   <Stack slot="legendChildren" orientation="horizontal">
@@ -113,7 +123,7 @@ Use the `legendChildren` slot to provide custom label content instead of using t
   <Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
-## CheckboxGroup (helper text)
+### Helper text
 
 Use `helperText` to provide additional context below the checkbox group.
 
@@ -123,7 +133,7 @@ Use `helperText` to provide additional context below the checkbox group.
 <Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
-## CheckboxGroup (disabled)
+### Disabled
 
 Disable all checkboxes in the group.
 
@@ -133,9 +143,9 @@ Disable all checkboxes in the group.
 <Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
 
-## CheckboxGroup (read-only)
+### Read-only
 
-Set `readonly` to `true` on `CheckboxGroup` to display non-editable values. Unlike `disabled`, the readonly state keeps labels readable. You can also set `readonly` on individual checkboxes when needed.
+Set `readonly` to `true` on CheckboxGroup to display non-editable values. Unlike disabled, the readonly state keeps labels readable. You can also set readonly on individual checkboxes when needed.
 
 <CheckboxGroup readonly legendText="Notification preferences" name="prefs-readonly" selected={["email", "push"]}>
 <Checkbox value="email" labelText="Email" />

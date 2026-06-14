@@ -1,14 +1,13 @@
 ---
 components: ["SelectableTileGroup", "SelectableTile"]
+description: Selectable tiles provide a tile-based interface for choosing multiple options, with built-in keyboard navigation and accessibility.
 ---
 
 <script>
   import { SelectableTileGroup, SelectableTile } from "carbon-components-svelte";
 </script>
 
-Selectable tiles provide a tile-based selection interface for choosing multiple options. They support multiple states and include built-in keyboard navigation and accessibility features.
-
-## Multi-selectable tiles
+## Basic
 
 Group multiple selectable tiles together for multi-selection scenarios.
 
@@ -24,21 +23,23 @@ Group multiple selectable tiles together for multi-selection scenarios.
   </SelectableTile>
 </SelectableTileGroup>
 
-## Reactive (one-way binding)
+## Reactive
 
-Update the selected values using the `select` and `deselect` events.
+### One-way binding
+
+Update selected values using the `select` and `deselect` events.
 
 <FileSource src="/framed/SelectableTile/SelectableTileReactiveOneWay" />
 
-## Reactive (two-way binding)
+### Two-way binding
 
-Bind to the `selected` prop for simpler state management.
+Bind to `selected` for simpler state management.
 
 <FileSource src="/framed/SelectableTile/SelectableTileReactive" />
 
 ## Hidden legend
 
-Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
+Hide the visible legend with `hideLegend`. Screen readers still receive the legend text.
 
 <SelectableTileGroup hideLegend legendText="Select options" name="options-hidden-legend" selected={["option1"]}>
   <SelectableTile value="option1">
@@ -52,7 +53,7 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
   </SelectableTile>
 </SelectableTileGroup>
 
-## Light variant
+## Light
 
 Use the light variant for light backgrounds.
 
@@ -68,7 +69,7 @@ Use the light variant for light backgrounds.
   </SelectableTile>
 </SelectableTileGroup>
 
-## Disabled state
+## Disabled
 
 Disable specific tiles to prevent interaction.
 

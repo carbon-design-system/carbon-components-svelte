@@ -1,4 +1,10 @@
-The Carbon Design System [grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints:
+---
+description: Breakpoint declaratively reports the current Carbon responsive breakpoint size.
+---
+
+## Breakpoints
+
+The Carbon Design System [grid implementation](https://carbondesignsystem.com/guidelines/2x-grid/implementation#responsive-options) defines five responsive breakpoints. This utility component uses the [Window.matchMedia API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) to declaratively determine the current Carbon breakpoint size.
 
 | Breakpoint   | Width range           |
 | ------------ | --------------------- |
@@ -8,20 +14,18 @@ The Carbon Design System [grid implementation](https://carbondesignsystem.com/gu
 | **X-Large**  | 1312px – 1584px       |
 | **Max**      | Greater than 1584px   |
 
-This utility component uses the [Window.matchMedia API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) to declaratively determine the current Carbon breakpoint size.
+## Basic
 
-## Default
+Bind to `size` to determine the current breakpoint. Possible values include `"sm"`, `"md"`, `"lg"`, `"xlg"`, and `"max"`.
 
-Bind to the `size` prop to determine the current breakpoint size. Possible values include: `"sm" | "md" | "lg" | "xlg" | "max"`.
-
-The `"on:change"` event fires when the size is initially determined and when a breakpoint change occurs (for example, when the browser is resized).
+The on:change event fires when the size is initially determined and when a breakpoint change occurs (for example, when the browser is resized).
 
 <FileSource src="/framed/Breakpoint/Breakpoint" />
 
 ## Store and breakpoint values
 
-Use `breakpointObserver` as an alternative to the component to get the current size as a Svelte store. The store provides two additional functions that create derived stores returning a `boolean` indicating whether the size is smaller/larger than a certain breakpoint.
+Use `breakpointObserver` as an alternative to the component to get the current size as a Svelte store. The store provides two additional functions that create derived stores returning a boolean indicating whether the size is smaller or larger than a certain breakpoint.
 
-Access the `breakpoints` dictionary to map from `BreakpointSize` to `BreakpointValue`.
+Access the breakpoints dictionary to map from BreakpointSize to BreakpointValue.
 
 <FileSource src="/framed/Breakpoint/BreakpointObserver" />

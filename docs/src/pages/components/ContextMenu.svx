@@ -1,19 +1,16 @@
 ---
 components: ["ContextMenu", "ContextMenuGroup", "ContextMenuRadioGroup", "ContextMenuOption", "ContextMenuDivider"]
+description: Context menus display a menu on right-click, for quick access to contextual actions.
 ---
 
 <script>
 </script>
 
-Context menus display a menu when users right-click. Use them to provide quick access to contextual actions or options.
-
-In the examples, right click anywhere within the iframe.
-  
 ## Basic
 
-The context menu appears when right-clicking anywhere in the window. Use context menu option for menu items and context menu divider for visual separation.
+In the examples, right click anywhere within the iframe. The context menu appears when right-clicking anywhere in the window. Use ContextMenuOption for menu items and ContextMenuDivider for visual separation.
 
-The root element has `role="menu"`. Set `labelText` or `aria-label` on `ContextMenu` so assistive technologies get a meaningful name. This matters most for the default window-wide behavior (`target` unset), where there is no visible trigger to label the menu with `aria-labelledby`.
+The root element has `role="menu"`. Set `labelText` or `aria-label` on ContextMenu so assistive technologies get a meaningful name. This matters most for the default window-wide behavior (target unset), where there is no visible trigger to label the menu with `aria-labelledby`.
   
 <FileSource src="/framed/ContextMenu/ContextMenu" />
 
@@ -50,41 +47,49 @@ Toggling a checkbox or radio item in a nested submenu leaves that flyout open so
 
 <FileSource src="/framed/ContextMenu/ContextMenuNested" />
 
-## Custom target
+## Targets
 
-By default, the context menu triggers when you right-click anywhere in the `window`.
+Control which element triggers the menu.
+
+### Custom target
+
+By default, the context menu triggers when you right-click anywhere in the window.
 
 Set `target` to specify which element triggers the context menu.
 
 <FileSource src="/framed/ContextMenu/ContextMenuTarget" />
 
-## Multiple targets
+### Multiple targets
 
 Set `target` to an array of elements to trigger the context menu from multiple sources.
 
 <FileSource src="/framed/ContextMenu/ContextMenuTargets" />
 
-## Selectable
+## Selection
 
-Use `selectable` for a single toggle item, or wrap options in `ContextMenuGroup` with `bind:selectedIds` for a checkbox-style group. Provide an `id` on each option in the group. The standalone toggle and the group items are independent, and the group tracks every chosen option in `selectedIds`.
+Let options act as checkboxes or radios, standalone or grouped.
+
+### Selectable
+
+Use selectable for a single toggle item, or wrap options in ContextMenuGroup with `bind:selectedIds` for a checkbox-style group. Provide an id on each option in the group. The standalone toggle and the group items are independent, and the group tracks every chosen option in selectedIds.
 
 <FileSource src="/framed/ContextMenu/ContextMenuSelectable" />
 
-## Selectable (nested)
+### Selectable (nested)
 
-Put `ContextMenuGroup` inside a parent `ContextMenuOption` to show the checkbox-style group in a flyout submenu. Use `bind:selectedIds` for the chosen values. See also [Nested menu](#nested-menu) for a full submenu example that includes both plain options and grouped selection.
+Put ContextMenuGroup inside a parent ContextMenuOption to show the checkbox-style group in a flyout submenu. Use `bind:selectedIds` for the chosen values. See also [Nested menu](#nested-menu) for a full submenu example that includes both plain options and grouped selection.
 
 <FileSource src="/framed/ContextMenu/ContextMenuSelectableNested" />
 
-## Radio group
+### Radio group
 
-Use `ContextMenuRadioGroup` to organize related options as a radio set: only one option can be selected at a time, and `bind:selectedId` reflects the active choice.
+Use ContextMenuRadioGroup to organize related options as a radio set: only one option can be selected at a time, and `bind:selectedId` reflects the active choice.
 
 <FileSource src="/framed/ContextMenu/ContextMenuGroups" />
 
-## Radio group (nested)
+### Radio group (nested)
 
-Put `ContextMenuRadioGroup` inside a parent `ContextMenuOption` to show the radio set in a flyout submenu, similar to the nested checkbox group in [Nested menu](#nested-menu). Use `bind:selectedId` for the active choice.
+Put ContextMenuRadioGroup inside a parent ContextMenuOption to show the radio set in a flyout submenu, similar to the nested checkbox group in [Nested menu](#nested-menu). Use `bind:selectedId` for the active choice.
 
 <FileSource src="/framed/ContextMenu/ContextMenuRadioGroupNested" />
 

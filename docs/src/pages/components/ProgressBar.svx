@@ -1,38 +1,22 @@
+---
+description: Progress bars visually indicate the progress of operations like file uploads or data processing. They support determinate and indeterminate states, sizes, and status indicators.
+---
+
 <script>
   import { ProgressBar } from "carbon-components-svelte";
 </script>
 
-Progress bars provide a visual indicator of progress for operations such as file uploads or data processing. They support determinate and indeterminate states, various sizes, and status indicators.
-
-## Default
+## Basic
 
 Create an indeterminate progress bar that continuously animates.
 
 <ProgressBar helperText="Loading..." />
 
-## Small size
-
-Use the small size variant for compact layouts.
-
-<ProgressBar size="sm" helperText="Loading..." />
-
 ## Percentage
 
-Display progress as a percentage using the `value` prop.
+Display progress as a percentage with `value`.
 
 <ProgressBar value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
-
-## Finished status
-
-Show completion status with a checkmark icon.
-
-<ProgressBar value={100} status="finished" labelText="Upload file" helperText="Upload complete" />
-
-## Error status
-
-Indicate errors with an error icon and red styling.
-
-<ProgressBar value={0} status="error" labelText="Upload file" helperText="Invalid file format" />
 
 ## Custom max value
 
@@ -40,25 +24,51 @@ Set a custom maximum value for the progress bar.
 
 <ProgressBar value={40} max={200} labelText="Upload status" helperText="40 MB of 200 MB" />
 
+## Small
+
+Use the small size variant for compact layouts.
+
+<ProgressBar size="sm" helperText="Loading..." />
+
 ## Hidden label
 
-Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+Hide the visible label with `hideLabel`. Screen readers still receive the label text.
 
 <ProgressBar hideLabel value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
-## Inline variant
+## Status
+
+Reflect operation outcome with `status`.
+
+### Finished
+
+Show completion status with a checkmark icon.
+
+<ProgressBar value={100} status="finished" labelText="Upload file" helperText="Upload complete" />
+
+### Error
+
+Indicate errors with an error icon and red styling.
+
+<ProgressBar value={0} status="error" labelText="Upload file" helperText="Invalid file format" />
+
+## Variants
+
+Change layout with `kind`.
+
+### Inline
 
 Use the inline variant to display progress without helper text.
 
 <ProgressBar kind="inline" value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
-## Indented variant
+### Indented
 
 Use the indented variant for a more compact layout.
 
 <ProgressBar kind="indented" value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
-## Indented status variant
+### Indented (status)
 
 Combine the indented variant with status indicators.
 

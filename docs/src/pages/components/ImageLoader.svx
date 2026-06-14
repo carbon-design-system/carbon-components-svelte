@@ -1,15 +1,14 @@
+---
+description: Image loaders load images with built-in loading and error states, aspect ratios, and fade-in animations.
+---
+
 <script>
     import { ImageLoader, Button, InlineLoading } from "carbon-components-svelte";
 
     let key = 0;
 </script>
 
-Image loaders provide a robust way to load images with built-in
-loading and error states. They use the [Image API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image)
-to handle image loading programmatically. They support aspect ratios,
-fade-in animations, and custom loading/error states.
-
-## Default
+## Basic
 
 Load an image with the default configuration. The component handles the loading
 process automatically.

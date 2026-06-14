@@ -1,14 +1,13 @@
 ---
 components: ["Toggle", "ToggleSkeleton"]
+description: Toggles are a switch-like control for turning options on or off, with support for custom labels, sizes, and states.
 ---
 
 <script>
   import { Toggle, ToggleSkeleton } from "carbon-components-svelte";
 </script>
 
-Toggles are a switch-like control for turning options on or off. They support custom labels, different sizes, and multiple states to match your application's needs.
-
-## Default
+## Basic
 
 Display a basic toggle in its untoggled state by default.
 
@@ -16,7 +15,7 @@ Display a basic toggle in its untoggled state by default.
 
 ## Toggled
 
-Set `toggled` to `true` to display the toggle in its on state.
+Display the toggle in its on state with `toggled`.
 
 <Toggle labelText="Push notifications" toggled />
 
@@ -28,23 +27,27 @@ Use two-way binding to control the toggle state programmatically.
 
 ## on:toggle event
 
-Listen for toggle state changes using the `on:toggle` event.
+Listen for state changes with `on:toggle`.
 
 <Toggle labelText="Push notifications" on:toggle={e => console.log(e.detail)} />
 
-## Hidden label text
+## Labels
 
-Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+Customize or hide the toggle labels.
+
+### Hidden
+
+Hide the visible label with `hideLabel`. Screen readers still receive the label text.
 
 <Toggle labelText="Push notifications" hideLabel />
 
-## Custom labels
+### Custom
 
-Customize the toggle labels using `labelA` and `labelB` props.
+Customize toggle labels with `labelA` and `labelB`.
 
 <Toggle labelText="Push notifications" labelA="No" labelB="Yes" />
 
-## Slottable labels
+### Slottable
 
 Use slots to customize the toggle labels with additional styling or content.
 
@@ -53,19 +56,23 @@ Use slots to customize the toggle labels with additional styling or content.
   <span slot="labelB" style="color: green">Yes</span>
 </Toggle>
 
-## Disabled state
+## States
 
-Set `disabled` to `true` to prevent user interaction.
+Reflect interaction states.
+
+### Disabled
+
+Disable interaction with `disabled`.
 
 <Toggle labelText="Push notifications" disabled />
 
-## Read-only state
+### Read-only
 
-Set `readonly` to `true` to display a non-editable value.
+Display a non-editable value with `readonly`.
 
 <Toggle readonly toggled labelText="Push notifications (on)" />
 
-## Small size
+## Small
 
 Use the small size variant by setting `size` to `"sm"`.
 
@@ -77,7 +84,7 @@ Display a loading state using the skeleton component.
 
 <ToggleSkeleton />
 
-## Skeleton (small)
+### Small
 
 Use the small size variant for the skeleton component.
 

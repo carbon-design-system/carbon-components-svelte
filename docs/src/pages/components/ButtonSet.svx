@@ -1,11 +1,13 @@
+---
+description: Group related buttons together with consistent spacing and alignment.
+---
+
 <script>
   import { Button, ButtonSet } from "carbon-components-svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
 </script>
 
-Group related buttons together in a set. Use this component to create consistent spacing and alignment between multiple buttons.
-
-## Default
+## Basic
 
 Place buttons side by side in a horizontal layout.
 
@@ -16,7 +18,7 @@ Place buttons side by side in a horizontal layout.
 
 ## Stacked
 
-Set `stacked` to `true` to arrange buttons vertically.
+Stack buttons vertically with `stacked`.
 
 <ButtonSet stacked>
   <Button icon={Login}>Log in</Button>

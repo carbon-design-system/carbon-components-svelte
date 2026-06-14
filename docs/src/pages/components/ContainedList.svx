@@ -1,5 +1,6 @@
 ---
 components: ["ContainedList", "ContainedListItem"]
+description: Contained lists display items within a labeled container, with support for multiple sizes, icons, actions, interactive items, and search.
 ---
 
 <script>
@@ -8,11 +9,9 @@ components: ["ContainedList", "ContainedListItem"]
   import Close from "carbon-icons-svelte/lib/Close.svelte";
 </script>
 
-Contained lists display a list of items within a container. They support multiple sizes, interactive items, icons, actions, and search — useful for hierarchical or grouped content with consistent spacing and styling.
+## Basic
 
-## Default
-
-Display a basic contained list with a header label and list items. The default size is `md`.
+Display a basic contained list with a header label and list items. The default size is medium.
 
 <ContainedList labelText="List title">
   <ContainedListItem>Item 1</ContainedListItem>
@@ -22,7 +21,7 @@ Display a basic contained list with a header label and list items. The default s
 
 ## Custom label
 
-Use the `labelChildren` slot to provide custom label content instead of using the `labelText` prop.
+Use the `labelChildren` slot for custom label content instead of plain label text.
 
 <ContainedList>
   <span slot="labelChildren" style:font-weight="normal">Custom label</span>
@@ -31,9 +30,13 @@ Use the `labelChildren` slot to provide custom label content instead of using th
   <ContainedListItem>Item 3</ContainedListItem>
 </ContainedList>
 
-## Small size
+## Sizes
 
-Use the `sm` size variant for more compact list items with reduced padding and height.
+The default size is medium. See variants below for compact and larger layouts.
+
+### Small
+
+Use the small size variant for more compact list items with reduced padding and height.
 
 <ContainedList labelText="List title" size="sm">
   <ContainedListItem>Item 1</ContainedListItem>
@@ -41,9 +44,9 @@ Use the `sm` size variant for more compact list items with reduced padding and h
   <ContainedListItem>Item 3</ContainedListItem>
 </ContainedList>
 
-## Large size
+### Large
 
-Use the `lg` size variant for larger list items with increased padding and height.
+Use the large size variant for larger list items with increased padding and height.
 
 <ContainedList labelText="List title" size="lg">
   <ContainedListItem>Item 1</ContainedListItem>
@@ -51,9 +54,9 @@ Use the `lg` size variant for larger list items with increased padding and heigh
   <ContainedListItem>Item 3</ContainedListItem>
 </ContainedList>
 
-## Extra-large size
+### Extra-large
 
-Use the `xl` size variant for the largest list items with maximum padding and height.
+Use the extra-large size variant for the largest list items with maximum padding and height.
 
 <ContainedList labelText="List title" size="xl">
   <ContainedListItem>Item 1</ContainedListItem>
@@ -63,7 +66,7 @@ Use the `xl` size variant for the largest list items with maximum padding and he
 
 ## Inset rulers
 
-Set the `inset` prop to `true` to make the divider lines between list items inset from the edges, creating a more refined visual appearance.
+Set `inset` to inset divider lines from the edges for a more refined appearance.
 
 <ContainedList labelText="List title" inset>
   <ContainedListItem>Item 1</ContainedListItem>
@@ -71,9 +74,9 @@ Set the `inset` prop to `true` to make the divider lines between list items inse
   <ContainedListItem>Item 3</ContainedListItem>
 </ContainedList>
 
-## Disclosed variant
+## Disclosed
 
-Set `kind="disclosed"` to use a more compact header style with sticky positioning. When scrolling, the list header sticks to the top of the container, keeping context visible in long lists. The header in the disclosed variant has a fixed height.
+Set `kind` to `"disclosed"` for a compact header that sticks while scrolling. In long lists, the header stays visible at the top of the container.
 
 <div style:height="200px" style:overflow-y="auto">
   <ContainedList labelText="List title 1" kind="disclosed">
@@ -88,9 +91,9 @@ Set `kind="disclosed"` to use a more compact header style with sticky positionin
   </ContainedList>
 </div>
 
-## With icons
+## Icons
 
-Add icons to list items by passing an icon component to the `icon` prop. Icons are displayed to the left of the item content.
+Add icons using the `icon` prop. Icons appear to the left of each item.
 
 <ContainedList labelText="List title">
   <ContainedListItem icon={Add}>Item 1</ContainedListItem>
@@ -98,9 +101,13 @@ Add icons to list items by passing an icon component to the `icon` prop. Icons a
   <ContainedListItem icon={Add}>Item 3</ContainedListItem>
 </ContainedList>
 
-## With expandable search
+## Search
 
-Use the `action` slot on the contained list to add interactive elements like an expandable search component. The search will be positioned in the header and can be used to filter list items.
+Add a search input to filter list items.
+
+### Expandable
+
+Use the `action` slot on the list to add an expandable search control in the header.
 
 <ContainedList labelText="List title">
   <Search slot="action" expandable />
@@ -109,15 +116,15 @@ Use the `action` slot on the contained list to add interactive elements like an 
   <ContainedListItem>Item 3</ContainedListItem>
 </ContainedList>
 
-## With persistent search
+### Persistent
 
-Pass the search component as a direct child (not in the `action` slot) to create a persistent search that appears below the title. The search input is styled specifically for use within the list and is adapted to work with the sticky list headers.
+Place the search as a direct child (not in the action slot) for a persistent filter below the title. The input is styled for list headers and works with sticky headers.
 
 <FileSource src="/framed/ContainedList/PersistentSearch" />
 
 ## Interactive items
 
-Set the `interactive` prop to `true` on a contained list item to render the item as a clickable button element. This enables keyboard navigation and click event handling. You can also set `disabled` to prevent interaction.
+Set `interactive` on a list item to render it as a clickable button with keyboard support. Combine with `disabled` to prevent interaction.
 
 <ContainedList labelText="List title">
   <ContainedListItem interactive on:click={() => console.log('click')}>
@@ -127,9 +134,9 @@ Set the `interactive` prop to `true` on a contained list item to render the item
   <ContainedListItem interactive>Item 3</ContainedListItem>
 </ContainedList>
 
-## Interactive items with actions
+### With actions
 
-Add interactive elements to individual list items using the `action` slot on a contained list item, such as buttons, icons, or other controls that appear on the trailing side of each item. Actions are positioned absolutely and don't interfere with the item's clickable area.
+Use the `action` slot on an item for trailing controls such as buttons or icons. Actions sit on the trailing edge and do not block the item click target.
 
 <ContainedList labelText="List title">
   <ContainedListItem interactive on:click={() => console.log('click')}>

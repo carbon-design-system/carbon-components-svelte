@@ -1,5 +1,6 @@
 ---
 components: ["TextArea", "TextAreaSkeleton", "FluidTextAreaSkeleton"]
+description: Text areas provide a multi-line field for longer text like descriptions, comments, or messages, with support for character counting and various states.
 ---
 
 <script>
@@ -7,9 +8,7 @@ components: ["TextArea", "TextAreaSkeleton", "FluidTextAreaSkeleton"]
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
-Text areas provide a multi-line text input field with support for various states, character counting, and accessibility features. They are ideal for longer text input like descriptions, comments, or messages.
-
-## Default
+## Basic
 
 Create a basic textarea with a label and placeholder text.
 
@@ -17,9 +16,15 @@ Create a basic textarea with a label and placeholder text.
 
 ## Maximum character count
 
-Specify the max character count using the `maxCount` prop. A character counter will be displayed to the right of the label. You can also use the native `maxlength` attribute if you prefer not to show a counter.
+Specify the max character count with `maxCount`. A character counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
 
 <TextArea labelText="App description" placeholder="Enter a description..." maxCount={100} />
+
+## Custom rows
+
+Adjust visible rows with `rows`. The default is 4.
+
+<TextArea rows={10} labelText="App description" placeholder="Enter a description..." />
 
 ## Helper text
 
@@ -29,26 +34,25 @@ Add helper text below the textarea to provide additional context or instructions
 
 ## Hidden label
 
-Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+Hide the visible label with `hideLabel`. Screen readers still receive the label text.
 
 <TextArea hideLabel labelText="App description" placeholder="Enter a description..." />
 
-## Light variant
+## Light
 
-Use the light variant for light-themed backgrounds by setting `light` to `true`.
+Enable the light variant with `light`.
 
 <TextArea light labelText="App description" placeholder="Enter a description..." />
 
-## Fluid variant
+## Fluid
 
-Set `fluid` to `true` to use the fluid variant, which embeds the label
-inside the field. Fluid text areas can be used standalone or inside
-[FluidForm](/components/FluidForm), where the fluid variant is applied
-automatically.
+Set `fluid` to embed the label inside the field. Fluid text areas work
+standalone or inside [FluidForm](/components/FluidForm), which applies the
+variant automatically.
 
 <TextArea fluid labelText="App description" placeholder="Enter a description..." maxCount={100} />
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
@@ -60,62 +64,60 @@ tooltip icon.
   </svelte:fragment>
 </TextArea>
 
-## Fluid variant (invalid)
+### Invalid
 
 Fluid text areas display the error message inside the field boundary. Long
 messages wrap to multiple lines.
 
 <TextArea fluid invalid invalidText="Only plain text characters are allowed. HTML tags, markdown formatting, and special characters will be stripped from your submission." labelText="App description" placeholder="Enter a description..." />
 
-## Fluid variant (warning)
+### Warning
 
 <TextArea fluid warn warnText="This description is shorter than recommended for product listings" labelText="App description" placeholder="Enter a description..." />
 
-## Fluid variant (disabled)
+### Disabled
 
 Invalid and warning states are not displayed while the text area is disabled.
 
 <TextArea fluid disabled invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
 
-## Fluid variant (read-only)
+### Read-only
 
 Invalid and warning states are not displayed while the text area is read-only.
 
 <TextArea fluid readonly warn warnText="This description is shorter than recommended" labelText="App description" value="I'm read-only" />
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading skeleton for the fluid text area variant.
 
 <FluidTextAreaSkeleton />
 
-## Custom rows
+## States
 
-Adjust the number of visible rows using the `rows` prop. The default is 4 rows.
+Reflect validation and interaction states.
 
-<TextArea rows={10} labelText="App description" placeholder="Enter a description..." />
+### Invalid
 
-## Invalid state
-
-Indicate an invalid state with an error message by setting `invalid` to `true` and providing `invalidText`.
+Show validation errors with `invalid` and a message in `invalidText`.
 
 <TextArea invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
 
-## Warning state
+### Warning
 
-Indicate a warning state with a message by setting `warn` to `true` and providing `warnText`.
+Show a warning with `warn` and a message in `warnText`.
 
 <TextArea warn warnText="This description is shorter than recommended" labelText="App description" placeholder="Enter a description..." />
 
-## Disabled state
+### Disabled
 
-Disable the textarea to prevent user interaction by setting `disabled` to `true`.
+Disable the textarea with `disabled`.
 
 <TextArea disabled labelText="App description" placeholder="Enter a description..." />
 
-## Read-only state
+### Read-only
 
-Display a non-editable value by setting `readonly` to `true`.
+Display a non-editable value with `readonly`.
 
 <TextArea readonly labelText="App description" value="I'm read-only" />
 
@@ -125,8 +127,8 @@ Show a loading state with the default skeleton variant.
 
 <TextAreaSkeleton />
 
-## Skeleton without label
+### Without label
 
-Show a loading state without a label by setting `hideLabel` to `true`.
+Show a loading state without a label using `hideLabel`.
 
 <TextAreaSkeleton hideLabel />

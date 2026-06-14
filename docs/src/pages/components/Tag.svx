@@ -1,5 +1,6 @@
 ---
 components: ["Tag", "SelectableTag", "TagSkeleton"]
+description: Tags categorize content with a keyword or label, with various styles, sizes, and interactive states like filterable and selectable.
 ---
 
 <script>
@@ -7,21 +8,23 @@ components: ["Tag", "SelectableTag", "TagSkeleton"]
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
-Tags provide a way to categorize content with a keyword or label. They support various styles, sizes, and interactive states, including filterable and interactive variants.
-
-## Default
+## Basic
 
 Create a basic tag with text content.
 
 <Tag>IBM Cloud</Tag>
 
-## Small size
+## Sizes
+
+The default tag height is medium. Set `size` to choose another variant.
+
+### Small
 
 Use the small size variant for more compact layouts.
 
 <Tag size="sm">IBM Cloud</Tag>
 
-## Large size
+### Large
 
 Use the large size variant for more prominent layouts.
 
@@ -46,7 +49,7 @@ Choose from a variety of color types to match your design system.
 
 ## Inline
 
-By default, a tag renders with an outer margin to space it from adjacent tags. Set `inline` to `true` to omit the margin when controlling spacing yourself (for example, within a flex layout).
+By default, a tag renders with outer margin to space it from adjacent tags. Set `inline` to omit the margin when controlling spacing yourself (for example, within a flex layout).
 
 <Stack orientation="horizontal" gap={1}>
   <Tag inline>IBM Cloud</Tag>
@@ -55,29 +58,29 @@ By default, a tag renders with an outer margin to space it from adjacent tags. S
 
 ## Filterable
 
-Create a filterable tag with a close button that dispatches a `close` event when clicked.
+Create a filterable tag with a close button that dispatches `close` when clicked.
 
 <Tag filter on:close>carbon-components</Tag>
 
-## Filterable (disabled)
+### Disabled
 
 Disable a filterable tag to prevent interaction.
 
 <Tag filter disabled on:close>carbon-components</Tag>
 
-## Filterable (small)
+### Small
 
 Combine the filterable variant with the small size.
 
 <Tag size="sm" filter on:close>carbon-components</Tag>
 
-## Filterable (large)
+### Large
 
 Combine the filterable variant with the large size.
 
 <Tag size="lg" filter on:close>carbon-components</Tag>
 
-## Filterable with click and close
+### Click and close
 
 Filterable tags forward `on:click` from the tag body and `on:close` from the close button. Click the tag body to select; click the close icon to remove.
 
@@ -95,20 +98,20 @@ Add a custom icon to the tag. Note: custom icons cannot be used with the filtera
 
 <Tag icon={IbmCloud}>IBM Cloud</Tag>
 
-## Interactive variant
+## Interactive
 
-Set `interactive` to `true` to render a `button` element instead of a `div` for clickable tags.
+Set `interactive` to render a button element instead of a div for clickable tags.
 
 <Tag interactive>Machine learning</Tag>
 
-## Disabled state
+## Disabled
 
 Both filterable and interactive tag variants support a disabled state.
 
 <Tag filter disabled>Machine learning</Tag>
 <Tag interactive disabled>Machine learning</Tag>
 
-## Tooltip in a tag
+## Tooltip
 
 Embed a tooltip within a tag to provide additional context.
 
@@ -124,19 +127,19 @@ Use `SelectableTag` to create a tag that toggles between selected and unselected
 
 <FileSource src="/framed/Tag/SelectableTagReactive" />
 
-## Selectable with icon
+### With icon
 
 Combine `SelectableTag` with a custom icon.
 
 <FileSource src="/framed/Tag/SelectableTagIconReactive" />
 
-## Selectable (disabled)
+### Disabled
 
 Disable a selectable tag to prevent interaction.
 
 <SelectableTag disabled>Machine learning</SelectableTag>
 
-## Selectable (small)
+### Small
 
 Use the small size variant for selectable tags.
 
@@ -148,13 +151,13 @@ Show a loading state with the default skeleton variant.
 
 <Tag skeleton />
 
-## Skeleton (small)
+### Small
 
 Show a loading state with the small skeleton variant.
 
 <Tag size="sm" skeleton />
 
-## Skeleton (large)
+### Large
 
 Show a loading state with the large skeleton variant.
 

@@ -1,21 +1,20 @@
 ---
 components: ["Theme"]
+description: Theme provides dynamic client-side theming using CSS variables, with five built-in themes and custom token overrides.
 ---
 
 <script>
 </script>
 
-Theme provides dynamic client-side theming using CSS variables. It supports five themes: `white`, `g10`, `g80`, `g90`, and `g100`, and supports custom theme token overrides.
+## Setup
 
-The component can persist theme preferences using [window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and provides built-in toggle and select controls for theme switching.
-
-You must use the `all.css` StyleSheet for dynamic theming, which uses [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties).
+Theme supports five built-in themes and custom token overrides. Import `all.css` for dynamic theming, which uses [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties).
 
 ```css
 import "carbon-components-svelte/css/all.css";
 ```
 
-## Default
+## Basic
 
 Create a basic theme component that can be controlled programmatically.
 
@@ -23,9 +22,9 @@ Create a basic theme component that can be controlled programmatically.
 
 ## Persist locally
 
-Set `persist` to `true` to save the theme preference in [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). Use `persistKey` to specify a custom storage key.
+Set `persist` to `true` to save the theme in [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). Use `persistKey` for a custom storage key.
 
-When `persist` is enabled, theme changes are automatically synchronized across browser tabs. When the theme is changed in one tab, all other tabs with the same `persistKey` update immediately.
+When persistence is enabled, theme changes sync across browser tabs that share the same `persistKey`.
 
 <FileSource src="/framed/Theme/ThemePersist" />
 
@@ -33,53 +32,53 @@ When `persist` is enabled, theme changes are automatically synchronized across b
 
 Override default Carbon theme tokens using the `tokens` prop.
 
-**Understanding token usage:** The Theme component sets CSS custom properties via `--cds-{token}`. However, not all token names directly map to component styles. Components often use **semantic tokens** (like `interactive-01`) rather than component-specific tokens (like `button-primary`).
+**Understanding token usage:** The Theme component sets CSS custom properties as `--cds-{token}`. Not every token name maps directly to component styles. Components often use semantic tokens (like `interactive-01`) rather than component-specific ones.
 
-For example, primary buttons use `interactive-01` for background color, `hover-primary` for hover state, and `active-primary` for active state. Both token types exist in the system but serve different purposes. Refer to the component CSS or Carbon Design System documentation to understand which tokens affect specific components.
+For example, primary buttons use `interactive-01` for background, with separate hover and active tokens. Check component CSS or Carbon docs to see which tokens affect a given component.
 
 <FileSource src="/framed/Theme/ThemeTokens" />
 
-## Theme toggle
+## Toggle
 
 Set `render` to `"toggle"` to display a toggle switch for switching between two themes. By default, it toggles between "white" and "g100" themes.
 
 <FileSource src="/framed/Theme/ThemeToggle" />
 
-## Theme toggle (custom)
+### Custom
 
-Customize the toggle appearance and behavior using the `toggle` prop. You can specify custom themes, labels, and other toggle properties.
+Customize themes, labels, and other toggle options with `toggle`.
 
 <FileSource src="/framed/Theme/ThemeToggleCustom" />
 
-## Theme select
+## Select
 
 Set `render` to `"select"` to display a dropdown menu for selecting from all available themes.
 
 <FileSource src="/framed/Theme/ThemeSelect" />
 
-## Theme select (custom)
+### Custom
 
-Customize the select dropdown using the `select` prop. You can specify which themes to include, customize labels, and adjust other select properties.
+Choose which themes to include, customize labels, and adjust other select options with `select`.
 
 <FileSource src="/framed/Theme/ThemeSelectCustom" />
 
-## Theme dropdown
+## Dropdown
 
 Set `render` to `"dropdown"` to display a Dropdown component for selecting from all available themes.
 
 <FileSource src="/framed/Theme/ThemeDropdown" />
 
-## Theme dropdown (custom)
+### Custom
 
-Customize the dropdown using the `dropdown` prop. You can specify which themes to include, customize labels, and adjust other dropdown properties.
+Choose which themes to include, customize labels, and adjust other dropdown options with `dropdown`.
 
 <FileSource src="/framed/Theme/ThemeDropdownCustom" />
 
 ## Exported themes constant
 
-The `themes` constant is exported from the Theme component, providing programmatic access to all available theme keys and their human-readable labels.
+The `themes` constant exports all theme keys and labels for programmatic use.
 
-`themes` must be imported directly from the Theme component file and used in a `script context="module"` block in Svelte components.
+Import `themes` from the Theme component file in a `script context="module"` block.
 
 ```html
 <script context="module">

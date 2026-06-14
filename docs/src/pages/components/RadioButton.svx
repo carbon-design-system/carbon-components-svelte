@@ -1,14 +1,13 @@
 ---
 components: ["RadioButtonGroup", "RadioButton", "RadioButtonSkeleton"]
+description: Radio buttons are a selection control for choosing a single option from a set, with support for individual and grouped usage.
 ---
 
 <script>
   import { RadioButton, RadioButtonSkeleton, RadioButtonGroup, Tooltip, Stack } from "carbon-components-svelte";
 </script>
 
-Radio buttons are a selection control for choosing a single option from a set. They support both individual and grouped usage, with options for horizontal and vertical layouts.
-
-## Default
+## Basic
 
 Create a group of radio buttons with a shared name and legend.
 
@@ -22,19 +21,19 @@ See [Standalone usage](#standalone-usage) for individual usage or [Implicit grou
 
 ## Standalone usage
 
-Use a radio button individually with a bindable `checked` prop for simple use cases.
+Use a radio button individually with bindable checked state for simple use cases.
 
 <FileSource src="/framed/RadioButton/RadioButtonStandalone" />
 
 ## Implicit grouping
 
-Multiple standalone radio button components sharing the same `name` attribute automatically form a group and synchronize their checked state — no radio button group component required.
+Multiple standalone radio buttons sharing the same name automatically form a group and synchronize their checked state — no radio button group component required.
 
 <FileSource src="/framed/RadioButton/RadioButtonImplicitGroup" />
 
 ## Hidden legend
 
-Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
+Hide the visible legend with `hideLegend`. Screen readers still receive the legend text.
 
 <RadioButtonGroup hideLegend legendText="Storage tier (disk)" name="plan-legend" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -42,9 +41,9 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-## Custom label content
+## Custom label
 
-Use the `labelChildren` slot to provide custom label content instead of using the `labelText` prop.
+Use the `labelChildren` slot for custom label content instead of plain label text.
 
 <RadioButtonGroup name="plan-legend-slot" selected="standard">
   <Stack slot="legendChildren" orientation="horizontal">
@@ -66,7 +65,7 @@ Bind and update the selected value programmatically.
 
 <FileSource src="/framed/RadioButton/RadioButtonReactive" />
 
-## Left-aligned label text
+## Left-aligned label
 
 Position labels to the left of the radio buttons.
 
@@ -76,7 +75,11 @@ Position labels to the left of the radio buttons.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-## Disabled buttons
+## States
+
+Reflect disabled and read-only states.
+
+### Disabled buttons
 
 Disable specific radio buttons to prevent selection.
 
@@ -86,9 +89,9 @@ Disable specific radio buttons to prevent selection.
   <RadioButton disabled labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-## Disabled group
+### Disabled group
 
-Set `disabled` to `true` on `RadioButtonGroup` to disable all radio buttons in the group. Their labels are also visually muted.
+Disable all radio buttons in the group with `disabled` on RadioButtonGroup. Their labels are also visually muted.
 
 <RadioButtonGroup disabled legendText="Storage tier (disk)" name="plan-disabled-group" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -96,9 +99,9 @@ Set `disabled` to `true` on `RadioButtonGroup` to disable all radio buttons in t
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-## Read-only state
+### Read-only
 
-Set `readonly` to `true` on `RadioButtonGroup` to display non-editable values.
+Display non-editable values with `readonly` on RadioButtonGroup.
 
 <RadioButtonGroup readonly labelPosition="left" legendText="Storage tier (disk)" name="plan-readonly" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
@@ -108,7 +111,7 @@ Set `readonly` to `true` on `RadioButtonGroup` to display non-editable values.
 
 ## Helper text
 
-Use `helperText` to provide additional context or instructions below the radio button group.
+Use `helperText` to provide additional context below the radio button group.
 
 <RadioButtonGroup legendText="Notification preferences" name="plan-helper" selected="email" helperText="You can change this setting at any time">
   <RadioButton labelText="Email" value="email" />
@@ -116,7 +119,7 @@ Use `helperText` to provide additional context or instructions below the radio b
   <RadioButton labelText="Push notifications" value="push" />
 </RadioButtonGroup>
 
-## Vertical orientation
+## Vertical
 
 Display radio buttons in a vertical layout.
 
@@ -136,7 +139,7 @@ Show a loading state for horizontal radio buttons.
   <RadioButtonSkeleton />
 </RadioButtonGroup>
 
-## Skeleton (vertical)
+### Vertical
 
 Show a loading state for vertical radio buttons.
 

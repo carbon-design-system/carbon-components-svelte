@@ -1,5 +1,6 @@
 ---
 components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
+description: Accordions stack expandable sections vertically to show or hide content, with custom titles, multiple sizes, and disabled and skeleton states.
 ---
 
 <script>
@@ -9,9 +10,7 @@ components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
   } from "carbon-components-svelte";
 </script>
 
-Accordions stack expandable sections vertically to show or hide content. They support custom titles, multiple sizes, and states like disabled and skeleton loading.
-
-## Default
+## Basic
 
 Use the accordion and accordion item components to compose a collapsible list of
 items.
@@ -33,8 +32,7 @@ By default, the chevron icon is on the right side of the accordion item.
 
 ## Left-aligned chevron
 
-Align the chevron icon to the left side of the accordion item by setting the
-`align` prop to "start".
+Align the chevron icon to the left side of the accordion item by setting `align` to `"start"`.
 
 <Accordion align="start">
   <AccordionItem title="Natural Language Classifier">
@@ -51,7 +49,7 @@ Align the chevron icon to the left side of the accordion item by setting the
 
 ## Custom title slot
 
-Customize the title content with the `title` slot instead of the `title` prop for
+Customize the title content with the title slot instead of the title prop for
 more complex layouts with multiple elements.
 
 <Accordion>
@@ -81,7 +79,7 @@ more complex layouts with multiple elements.
 
 ## First item open
 
-Set the `open` prop on an accordion item to have it expanded by default when the
+Set `open` on an item to have it expanded by default when the
 accordion is first rendered.
 
 <Accordion>
@@ -104,9 +102,13 @@ expanding and collapsing items based on user interactions or application state.
 
 <FileSource src="/framed/Accordion/ExpandableAccordion" />
 
-## Extra-large size
+## Sizes
 
-Display the accordion in an extra-large size by setting the `size` prop to "xl".
+Set `size` to control row height. The default is `md`.
+
+### Extra-large
+
+Display the accordion in an extra-large size by setting `size` to `"xl"`.
 
 <Accordion size="xl">
   <AccordionItem title="Natural Language Classifier">
@@ -121,9 +123,9 @@ Display the accordion in an extra-large size by setting the `size` prop to "xl".
   </AccordionItem>
 </Accordion>
 
-## Small size
+### Small
 
-Set the `size` prop to "sm" for a smaller accordion. Use it in compact layouts or
+Set `size` to `"sm"` for a smaller accordion in compact layouts or
 when space is limited.
 
 <Accordion size="sm">
@@ -139,9 +141,13 @@ when space is limited.
   </AccordionItem>
 </Accordion>
 
-## Disabled state
+## Disabled
 
-Set the `disabled` prop on the accordion to disable all items at once. Users can no
+Disable the whole accordion or individual items.
+
+### All
+
+Set `disabled` on the accordion to disable all items at once. Users can no
 longer expand or collapse any item.
 
 <Accordion disabled>
@@ -157,16 +163,16 @@ longer expand or collapse any item.
   </AccordionItem>
 </Accordion>
 
-## Batch disable
+### Batch
 
-Programmatically toggle the disabled state of all accordion items using the `disabled` prop. In this example, disabling all items also collapses them.
+Programmatically toggle the disabled state of all accordion items. In this example, disabling all items also collapses them.
 
 <FileSource src="/framed/Accordion/BatchDisableAccordion" />
 
-## Disabled (item)
+### Item
 
-Disable an individual item by setting the `disabled` prop on a specific accordion
-item component for finer control over which items are interactive.
+Disable an individual item by setting `disabled` on a specific accordion
+item for finer control over which items are interactive.
 
 <Accordion>
   <AccordionItem disabled title="Natural Language Classifier">
@@ -183,38 +189,37 @@ item component for finer control over which items are interactive.
 
 ## Skeleton
 
-Set the `skeleton` prop to show a loading placeholder while content loads.
+Set `skeleton` to show a loading placeholder while content loads.
 
 <Accordion skeleton />
 
-## Skeleton (left-aligned chevron)
+### Left-aligned chevron
 
-Combine the skeleton state with the left-aligned chevron style by setting both the
-`skeleton` and `align="start"` props.
+Combine skeleton state with left-aligned chevron by enabling `skeleton` and setting `align` to `"start"`.
 
 <Accordion skeleton align="start" />
 
-## Skeleton (custom count)
+### Custom count
 
-By default, the skeleton state displays 4 items. Set the `count` prop to specify
+By default, the skeleton state displays 4 items. Set `count` to specify
 the number of skeleton items to display.
 
 <Accordion skeleton count={3} />
 
-## Skeleton (closed)
+### Closed
 
 By default, the first skeleton item is open. Set `open={false}` to render the
 skeleton collapsed.
 
 <Accordion skeleton open={false} />
 
-## Skeleton (extra-large)
+### Extra-large
 
 Set `size` to `"xl"` for an extra-large skeleton.
 
 <Accordion skeleton size="xl" />
 
-## Skeleton (small)
+### Small
 
 Set `size` to `"sm"` for a small skeleton.
 

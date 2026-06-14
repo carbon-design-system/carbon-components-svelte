@@ -1,12 +1,12 @@
+---
+description: Aspect ratios maintain consistent proportions for content like images, videos, and media across screen sizes.
+---
+
 <script>
   import { AspectRatio, Tile } from "carbon-components-svelte";
 </script>
 
-Aspect ratios maintain consistent proportions for content across different screen sizes. They are particularly useful for images, videos, and other media that need to preserve their aspect ratio when resizing.
-
-Supported aspect ratios include `"2x1"`, `"2x3"`, `"16x9"`, `"4x3"`, `"1x1"`, `"3x4"`, `"3x2"`, `"9x16"` and `"1x2"`.
-
-## Default
+## Basic
 
 Display a 2:1 aspect ratio container by default.
 
@@ -14,7 +14,11 @@ Display a 2:1 aspect ratio container by default.
   2x1
 </AspectRatio>
 
-## Ratio 2x3
+## Ratios
+
+Supported aspect ratios include `2x1`, `2x3`, `16x9`, `4x3`, `1x1`, `3x4`, `3x2`, `9x16`, and `1x2`.
+
+### 2x3
 
 Display content with a 2:3 aspect ratio.
 
@@ -22,7 +26,7 @@ Display content with a 2:3 aspect ratio.
   2x3
 </AspectRatio>
 
-## Ratio 16x9
+### 16x9
 
 Display content with a 16:9 aspect ratio.
 
@@ -30,7 +34,7 @@ Display content with a 16:9 aspect ratio.
   16x9
 </AspectRatio>
 
-## Ratio 4x3
+### 4x3
 
 Display content with a 4:3 aspect ratio.
 
@@ -38,7 +42,7 @@ Display content with a 4:3 aspect ratio.
   4x3
 </AspectRatio>
 
-## Ratio 1x1
+### 1x1
 
 Display content with a 1:1 (square) aspect ratio.
 
@@ -46,7 +50,7 @@ Display content with a 1:1 (square) aspect ratio.
   1x1
 </AspectRatio>
 
-## Ratio 3x4
+### 3x4
 
 Display content with a 3:4 aspect ratio.
 
@@ -54,7 +58,7 @@ Display content with a 3:4 aspect ratio.
   3x4
 </AspectRatio>
 
-## Ratio 3x2
+### 3x2
 
 Display content with a 3:2 aspect ratio.
 
@@ -62,7 +66,7 @@ Display content with a 3:2 aspect ratio.
   3x2
 </AspectRatio>
 
-## Ratio 9x16
+### 9x16
 
 Display content with a 9:16 aspect ratio.
 
@@ -70,7 +74,7 @@ Display content with a 9:16 aspect ratio.
   9x16
 </AspectRatio>
 
-## Ratio 1x2
+### 1x2
 
 Display content with a 1:2 aspect ratio.
 
