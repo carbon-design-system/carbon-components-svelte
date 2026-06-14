@@ -36,9 +36,9 @@
           <svelte:component
             this={LogoGithub}
             size={32}
-            style="fill: var(--cds-icon-01)"
+            class="bx--fill-icon-primary"
           />
-          <Launch size={20} style="fill: var(--cds-icon-01)" />
+          <Launch size={20} class="bx--fill-icon-primary" />
         </div>
       </div>
     </svelte:component>

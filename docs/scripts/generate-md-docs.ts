@@ -52,6 +52,7 @@ type ComponentApiFile = {
 
 const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---\s*\n/;
 const COMPONENTS_KEY_RE = /^components\s*:/m;
+const SHOW_COMPONENT_API_RE = /showComponentApi:\s*false/;
 const QUOTED_COMPONENT_RE = /"([^"]+)"|'([^']+)'/g;
 const TAG_LINE_RE = /^\s*</;
 const WHITESPACE_RE = /\s+/;
@@ -152,6 +153,11 @@ function extractComponents(frontmatter: string | null) {
   }
 
   return out;
+}
+
+function extractShowComponentApi(frontmatter: string | null) {
+  if (!frontmatter) return true;
+  return !SHOW_COMPONENT_API_RE.test(frontmatter);
 }
 
 function escapeTableCell(text: unknown) {
@@ -753,6 +759,7 @@ for (const componentName of getComponentNames()) {
   const fileContent = fs.readFileSync(filePath, "utf8");
   const { frontmatter, body } = splitFrontmatter(fileContent);
   const components = extractComponents(frontmatter);
+  const showComponentApi = extractShowComponentApi(frontmatter);
 
   const componentsForUsage =
     components.length > 0 ? components : [componentName];
@@ -765,9 +772,9 @@ for (const componentName of getComponentNames()) {
   const bodyWithInlinedFileSources = inlineFileSources(bodyWithKbd);
   const fencedBody = fenceInlineSvelte(bodyWithInlinedFileSources);
 
-  const apiSections = componentsForUsage
-    .map(renderComponentApiMarkdown)
-    .filter(Boolean);
+  const apiSections = showComponentApi
+    ? componentsForUsage.map(renderComponentApiMarkdown).filter(Boolean)
+    : [];
   const apiMarkdown =
     apiSections.length > 0
       ? `\n\n---\n\n## Component API\n\n${apiSections.join("\n\n")}`

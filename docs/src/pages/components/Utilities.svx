@@ -1,0 +1,215 @@
+---
+showComponentApi: false
+---
+
+<script>
+  import { Stack, Text } from "carbon-components-svelte";
+  import Bee from "carbon-icons-svelte/lib/Bee.svelte";
+</script>
+
+Utility classes apply Carbon tokens and the shared layout scale to any element. Class names use a `bx--` prefix to avoid clashing with other utility class libraries, like Tailwind.
+
+[Box](/components/Box) has component-scoped helpers (`bx--box-p-*`) for container styling. Use `Box` when you need a styled container with props.
+
+[Text](/components/Text) applies the `bx--type-*` and `bx--type-text-*` classes through its `type` and `color` props. Use `Text` for semantic typography; use the classes directly on any element.
+
+Use utility classes for one-off spacing, background, border, or icon color.
+
+## Spacing
+
+Margin (`m`) and padding (`p`) utilities use the shared layout scale `0`–`13` (same values as [Stack](/components/Stack) `gap` and `Box` inset). Direction suffixes follow Tailwind:
+
+| Suffix | Edges |
+| ------ | ----- |
+| _(none)_ | All sides |
+| `t` | Top |
+| `r` | Right |
+| `b` | Bottom |
+| `l` | Left |
+| `x` | Left + right |
+| `y` | Top + bottom |
+
+Combine `{m,p}` + suffix + scale, e.g. `bx--mt-8`, `bx--px-3`, `bx--p-0`.
+
+| Scale | Size | Scale | Size |
+| ----- | ---- | ----- | ---- |
+| 0 | 0 | 7 | 2rem (32px) |
+| 1 | 0.125rem (2px) | 8 | 2.5rem (40px) |
+| 2 | 0.25rem (4px) | 9 | 3rem (48px) |
+| 3 | 0.5rem (8px) | 10 | 4rem (64px) |
+| 4 | 0.75rem (12px) | 11 | 5rem (80px) |
+| 5 | 1rem (16px) | 12 | 6rem (96px) |
+| 6 | 1.5rem (24px) | 13 | 10rem (160px) |
+
+<div class="bx--bg-inverse bx--p-5">
+  <div class="bx--bg-layer-01 bx--p-3">
+    <code>bx--p-5</code> wrapping <code>bx--p-3</code>
+  </div>
+</div>
+
+<Stack gap={3}>
+  <div class="bx--mt-8 bx--border-l bx--border-interactive bx--pl-5 bx--py-3 bx--bg-layer-01">
+    <code>bx--mt-8</code> (2.5rem top margin)
+  </div>
+  <div class="bx--px-7 bx--py-3 bx--bg-layer-01">
+    <code>bx--px-7</code> (2rem horizontal padding)
+  </div>
+</Stack>
+
+## Background
+
+Set a Carbon surface token with `bx--bg-{token}`. Names match [Box](/components/Box) `fill` props and respect the active theme.
+
+| Class | Surface |
+| ----- | ------- |
+| `bx--bg-background` | Page background |
+| `bx--bg-layer-01` | First layer |
+| `bx--bg-layer-02` | Second layer |
+| `bx--bg-layer-03` | Third layer |
+| `bx--bg-field-01` | Field |
+| `bx--bg-field-02` | Field on a layer |
+| `bx--bg-inverse` | Inverse (dark) surface |
+
+<Stack gap={3}>
+  <div class="bx--bg-layer-01 bx--p-5 bx--border bx--border-subtle">layer-01</div>
+  <div class="bx--bg-layer-02 bx--p-5 bx--border bx--border-subtle">layer-02</div>
+  <div class="bx--bg-layer-03 bx--p-5 bx--border bx--border-subtle">layer-03</div>
+  <div class="bx--bg-inverse bx--p-5">
+    <Text color="inverse">inverse</Text>
+  </div>
+</Stack>
+
+## Borders
+
+Borders work like Tailwind. A side class (`bx--border-t`, `bx--border`, etc.) sets a `1px solid` line. A color class sets the line color. Use both, e.g. `bx--border-b bx--border-subtle`. Without a side class, a color class has nothing to paint.
+
+A side class alone uses `currentColor`. A color class alone does nothing until a side class gives it width.
+
+**Side.** `border` plus a direction, or bare `border` for all sides:
+
+| Class | Edge |
+| ----- | ---- |
+| `bx--border` | All sides |
+| `bx--border-t` | Top |
+| `bx--border-r` | Right |
+| `bx--border-b` | Bottom |
+| `bx--border-l` | Left |
+| `bx--border-x` | Left + right |
+| `bx--border-y` | Top + bottom |
+
+**Color.** `border` plus a token:
+
+| Class | Description |
+| ----- | ----------- |
+| `bx--border-subtle` | Subtle divider |
+| `bx--border-strong` | Strong divider |
+| `bx--border-interactive` | Interactive element |
+| `bx--border-disabled` | Disabled element |
+
+<Stack gap={5}>
+  <div class="bx--border-b bx--border-subtle bx--pb-3">
+    <Text type="heading-01">Section heading</Text>
+  </div>
+  <div>
+    <Stack gap={3}>
+      <div class="bx--border-b bx--border-subtle bx--pb-3">Row one</div>
+      <div class="bx--border-b bx--border-subtle bx--pb-3">Row two</div>
+      <div>Row three</div>
+    </Stack>
+  </div>
+  <div class="bx--border-l bx--border-interactive bx--pl-5">
+    <Text type="body-long-01">Left accent border (<code>bx--border-l bx--border-interactive</code>).</Text>
+  </div>
+</Stack>
+
+## Typography
+
+`bx--type-{style}` applies a Carbon type style (font size, line height, weight, letter spacing). The full set matches Text's `type` values.
+
+| Group | Styles |
+| ----- | ------ |
+| Body | `body-short-01`, `body-short-02`, `body-long-01`, `body-long-02` |
+| Headings | `heading-01`, `heading-02`, `productive-heading-01`…`07` |
+| Expressive | `expressive-heading-01`…`06`, `expressive-paragraph-01` |
+| Display | `display-01`…`04` |
+| Supporting | `caption-01`, `caption-02`, `label-01`, `label-02`, `helper-text-01`, `helper-text-02` |
+| Code | `code-01`, `code-02` |
+| Quotation | `quotation-01`, `quotation-02` |
+
+<Stack gap={3}>
+  <p class="bx--type-productive-heading-04">productive-heading-04</p>
+  <p class="bx--type-heading-01">heading-01</p>
+  <p class="bx--type-body-long-01">body-long-01</p>
+  <p class="bx--type-label-01">label-01</p>
+  <p class="bx--type-code-01">code-01</p>
+</Stack>
+
+## Text color
+
+`bx--type-text-{token}` sets a semantic text color.
+
+| Class | Token |
+| ----- | ----- |
+| `bx--type-text-primary` | Primary |
+| `bx--type-text-secondary` | Secondary |
+| `bx--type-text-placeholder` | Placeholder |
+| `bx--type-text-helper` | Helper |
+| `bx--type-text-error` | Error |
+| `bx--type-text-disabled` | Disabled |
+| `bx--type-text-on-color` | On color |
+| `bx--type-text-inverse` | Inverse |
+
+<Stack gap={2}>
+  <p class="bx--type-body-long-01 bx--type-text-primary">primary</p>
+  <p class="bx--type-body-long-01 bx--type-text-secondary">secondary</p>
+  <p class="bx--type-body-long-01 bx--type-text-helper">helper</p>
+  <p class="bx--type-body-long-01 bx--type-text-error">error</p>
+  <p class="bx--type-body-long-01 bx--type-text-disabled">disabled</p>
+</Stack>
+
+<div class="bx--bg-inverse bx--p-5">
+  <p class="bx--type-body-long-01 bx--type-text-on-color">on-color</p>
+</div>
+
+## Weight, family, and wrapping
+
+These modifiers stack on top of any type style.
+
+| Class | Effect |
+| ----- | ------ |
+| `bx--type-light` / `bx--type-regular` / `bx--type-semibold` | Font weight |
+| `bx--type-mono` / `bx--type-sans` / `bx--type-serif` / `bx--type-sans-condensed` / `bx--type-sans-hebrew` | Font family |
+| `bx--type-italic` | Italic |
+| `bx--type-break-word` | Wrap long words |
+| `bx--type-nowrap` | Prevent wrapping |
+| `bx--type-balance` | Balance line lengths |
+| `bx--type-full-width` | `width: 100%` |
+
+<Stack gap={2}>
+  <p class="bx--type-body-long-01 bx--type-light">light weight</p>
+  <p class="bx--type-body-long-01 bx--type-regular">regular weight</p>
+  <p class="bx--type-body-long-01 bx--type-semibold">semibold weight</p>
+  <p class="bx--type-body-long-01 bx--type-mono">monospace family</p>
+  <p class="bx--type-body-long-01 bx--type-italic">italic</p>
+</Stack>
+
+## Icon fill
+
+Fill utilities set `fill` on a Carbon icon `<svg>` from a semantic icon token. Apply the class to the icon element.
+
+| Class | Token |
+| ----- | ----- |
+| `bx--fill-icon-primary` | Primary icon |
+| `bx--fill-icon-secondary` | Secondary icon |
+| `bx--fill-icon-on-color` | On-color icon |
+| `bx--fill-icon-inverse` | Inverse icon |
+| `bx--fill-icon-disabled` | Disabled icon |
+
+<Stack orientation="horizontal" gap={5} align="center">
+  <Bee size={32} class="bx--fill-icon-primary" />
+  <Bee size={32} class="bx--fill-icon-secondary" />
+  <Bee size={32} class="bx--fill-icon-disabled" />
+  <div class="bx--bg-inverse bx--p-3">
+    <Bee size={32} class="bx--fill-icon-on-color" />
+  </div>
+</Stack>

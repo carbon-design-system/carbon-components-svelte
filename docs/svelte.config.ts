@@ -283,6 +283,15 @@ function plugin() {
 }
 
 const H2_REGEX = /<h2[^>]+id="([^"]+)"[^>]*>([^<]+)<\/h2>/g;
+const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---/;
+const SHOW_COMPONENT_API_RE = /showComponentApi:\s*false/;
+
+function readShowComponentApi(filename: string): boolean {
+  const source = fs.readFileSync(filename, "utf8");
+  const frontmatterMatch = source.match(FRONTMATTER_RE);
+  if (!frontmatterMatch) return true;
+  return !SHOW_COMPONENT_API_RE.test(frontmatterMatch[1]);
+}
 const ADMONITION_RE = /^\[!(NOTE|WARNING|TIP|CAUTION)\]\s*/i;
 const ADMONITION_LINK_REF_RE = /^!(NOTE|WARNING|TIP|CAUTION)$/;
 const LEADING_WHITESPACE_RE = /^\n\s*/;
@@ -464,17 +473,10 @@ export default {
           toc.push({ id: match[1], text: match[2] });
         }
 
-        let code = content.replace(
-          "</Layout_MDSVEX_DEFAULT>",
-          `<div slot="aside">
-                <ul class="bx--list--unordered">
-                    ${toc
-                      .map(
-                        (item) =>
-                          `<li class="bx--list__item"><a class="bx--link" href="#${item.id}">${item.text}</a></li>`,
-                      )
-                      .join("")}
-                  <h5>Component API</h5>
+        const showComponentApi = readShowComponentApi(filename);
+
+        const componentApiToc = showComponentApi
+          ? `<h5>Component API</h5>
                   <li class="bx--list__item">
                     <a class="bx--link" href="#props">Props</a>
                   </li>
@@ -492,7 +494,20 @@ export default {
                   </li>
                   <li class="bx--list__item">
                     <a class="bx--link" href="#rest-props">restProps</a>
-                  </li>
+                  </li>`
+          : "";
+
+        let code = content.replace(
+          "</Layout_MDSVEX_DEFAULT>",
+          `<div slot="aside">
+                <ul class="bx--list--unordered">
+                    ${toc
+                      .map(
+                        (item) =>
+                          `<li class="bx--list__item"><a class="bx--link" href="#${item.id}">${item.text}</a></li>`,
+                      )
+                      .join("")}
+                  ${componentApiToc}
                 </ul>
               </div>
             </Layout_MDSVEX_DEFAULT>`,
