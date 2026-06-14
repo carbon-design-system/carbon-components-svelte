@@ -152,3 +152,212 @@
 @include exports('tabs-container-nav-link-width') {
   @include tabs-container-nav-link-width;
 }
+
+/// Dismissible tab styles: a close button per tab, left-aligned icons, and the
+/// selection indicator re-homed from the nav link to the nav item so it spans
+/// both the link and the close button. In Carbon v10 the underline (default)
+/// and inset top border (container) sit on the link, which is narrower than the
+/// item once a close button is added.
+/// @access private
+/// @group components
+@mixin tabs-dismissible {
+  .#{$prefix}--tabs--dismissible .#{$prefix}--tabs__nav-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--tabs--dismissible .#{$prefix}--tabs__nav-link {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  // Default: size the link to its content so the close button sits next to the
+  // label with a fixed gap, instead of growing to the full tab width.
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    .#{$prefix}--tabs__nav-link {
+    flex: 0 1 auto;
+    padding-inline-end: $carbon--spacing-03;
+  }
+
+  // Container: fill the cell so the close button aligns to the trailing edge.
+  .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-link {
+    flex: 1 1 auto;
+    padding-inline-end: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--tabs--dismissible .#{$prefix}--tabs__nav-item-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--tabs--dismissible .#{$prefix}--tabs__nav-item--icon-left {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    padding-inline-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--tabs--dismissible .#{$prefix}--tabs__nav-item--close {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  // Default: at md the link's asymmetric vertical padding ($spacing-04 top /
+  // $spacing-03 bottom) drops the label below the nav-item center, so nudge the
+  // close button down to share the text's optical baseline. Below md the link
+  // padding is symmetric (dropdown rows), so the nudge must not apply there.
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      .#{$prefix}--tabs__nav-item--close {
+      position: relative;
+      inset-block-start: $carbon--spacing-01;
+    }
+  }
+
+  // Container: nudge the close button off the label.
+  .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--close {
+    margin-inline-start: $carbon--spacing-02;
+  }
+
+  // Trailing padding so the close button is not flush with the tab edge.
+  .#{$prefix}--tabs--dismissible .#{$prefix}--tabs__nav-item {
+    padding-inline-end: $carbon--spacing-03;
+  }
+
+  // Move the focus outline from the link to the whole nav item so it wraps the
+  // label and the close button as a single target.
+  .#{$prefix}--tabs--dismissible .#{$prefix}--tabs__nav-item:focus-within {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--tabs--dismissible a.#{$prefix}--tabs__nav-link:focus,
+  .#{$prefix}--tabs--dismissible a.#{$prefix}--tabs__nav-link:active {
+    outline: none;
+  }
+
+  @include carbon--breakpoint(md) {
+    // Default variant: drop Carbon's fixed 10rem link width (including the
+    // focus/active width reset) so the tab sizes to its content.
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      a.#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      a.#{$prefix}--tabs__nav-link:focus,
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      a.#{$prefix}--tabs__nav-link:active {
+      inline-size: auto;
+    }
+
+    // Default variant: move the bottom underline from the link to the item.
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      .#{$prefix}--tabs__nav-item {
+      border-block-end: 2px solid $ui-03;
+    }
+
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
+      border-block-end-color: $ui-04;
+    }
+
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+      border-block-end-color: $interactive-04;
+    }
+
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      .#{$prefix}--tabs__nav-item--disabled {
+      border-block-end-color: $disabled-01;
+    }
+
+    // Remove the link border in every state so only the item border shows.
+    // Carbon's hover/selected link rules outrank a plain link selector, so each
+    // state is matched explicitly to win on specificity.
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      a.#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+      .#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+      .#{$prefix}--tabs__nav-link {
+      border-block-end: none;
+    }
+
+    // Container variant: move the inset top indicator from the link to the item.
+    .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+      box-shadow: inset 0 2px 0 0 $interactive-04;
+    }
+
+    .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+      .#{$prefix}--tabs__nav-link {
+      box-shadow: none;
+    }
+  }
+
+  // The close button is not in the tab order (keyboard dismissal uses Delete on
+  // the tab), so suppress its own focus ring. The nav item's :focus-within
+  // outline wraps the whole tab, avoiding a doubled outline when it is clicked.
+  .#{$prefix}--tabs__nav-item--close-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: $carbon--spacing-06;
+    block-size: $carbon--spacing-06;
+    padding: $carbon--spacing-02;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+  }
+
+  // Guard hover styling against the disabled marker so a disabled close button
+  // keeps its disabled treatment on hover instead of lighting up.
+  .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover {
+    background-color: $hover-ui;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon svg {
+    fill: $text-02;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover
+    svg,
+  .#{$prefix}--tabs__nav-item--close-icon:focus svg {
+    fill: $text-01;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon--disabled {
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon--disabled svg,
+  .#{$prefix}--tabs__nav-item--disabled
+    .#{$prefix}--tabs__nav-item--icon-left
+    svg {
+    fill: $disabled-02;
+  }
+
+  // Container disabled tabs sit on a $disabled-02 background, so the close icon
+  // and left icon need a contrasting disabled token to stay visible.
+  .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--close-icon--disabled
+    svg,
+  .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--disabled
+    .#{$prefix}--tabs__nav-item--icon-left
+    svg {
+    fill: $text-on-color-disabled;
+  }
+}
+
+@include exports('tabs-dismissible') {
+  @include tabs-dismissible;
+}

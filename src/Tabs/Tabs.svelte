@@ -1,6 +1,7 @@
 <script>
   /**
    * @event {number} change
+   * @event {{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }} dismiss
    */
 
   /**
@@ -18,6 +19,9 @@
   /** Set to `true` for tabs to have an auto-width */
   export let autoWidth = false;
 
+  /** Set to `true` to render a dismiss button for each tab */
+  export let dismissible = false;
+
   /** Set to `true` for tabs to span the full width of the container */
   export let fullWidth = false;
 
@@ -31,7 +35,7 @@
   export let triggerHref = "#";
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
-  import { derived, writable } from "svelte/store";
+  import { derived, get, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { keyBy } from "../utils/keyBy.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
@@ -52,6 +56,10 @@
    * @type {import("svelte/store").Writable<boolean>}
    */
   const useFullWidth = writable(fullWidth);
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const useDismissible = writable(dismissible);
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
    */
@@ -121,6 +129,17 @@
   }
 
   /**
+   * @type {(id: string) => void}
+   */
+  function dismiss(id) {
+    const tab = get(tabsById)[id];
+
+    if (tab) {
+      dispatch("dismiss", tab);
+    }
+  }
+
+  /**
    * Move selection/focus to a tab at an absolute index. Roving focus resolves
    * the index (skipping disabled, wrapping); selection follows focus.
    * @type {(index: number) => Promise<void>}
@@ -142,12 +161,14 @@
     selectedContent,
     useAutoWidth,
     useFullWidth,
+    useDismissible,
     hasSecondaryLabel,
     add,
     remove,
     addContent,
     removeContent,
     update,
+    dismiss,
   });
 
   afterUpdate(() => {
@@ -207,6 +228,7 @@
   }
   $: useAutoWidth.set(autoWidth);
   $: useFullWidth.set(fullWidth);
+  $: useDismissible.set(dismissible);
 </script>
 
 <div
@@ -216,6 +238,7 @@
   class:bx--tabs--container={type === "container"}
   class:bx--tabs--tall={$hasSecondaryLabel}
   class:bx--tabs--full-width={fullWidth}
+  class:bx--tabs--dismissible={dismissible}
   {...$$restProps}
 >
   <div
