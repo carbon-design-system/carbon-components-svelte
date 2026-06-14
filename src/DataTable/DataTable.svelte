@@ -43,7 +43,9 @@
    * @slot {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
    * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
-   * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
+   * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; editing: boolean; edit: () => void; save: () => void; cancel: () => void; }} cell
+   * @event {{ row: Row }} save
+   * @event {{ row: Row }} discard
    * @event click
    * @type {object}
    * @property {DataTableHeader<Row>} [header]
@@ -104,6 +106,31 @@
    * @type {ReadonlyArray<Row>}
    */
   export let rows = [];
+
+  /**
+   * `true` when at least one `EditableCell` holds a value
+   * that differs from its value when first rendered.
+   * Resets are the consumer's responsibility (e.g. after a save).
+   * @bindable readonly
+   */
+  export let dirty = false;
+
+  /**
+   * `true` when every `EditableCell` passes its `validate` function.
+   * `true` when there are no editable cells.
+   * @bindable readonly
+   */
+  export let valid = true;
+
+  /**
+   * Id of the row currently in row edit mode, or `null`.
+   * The `cell` slot exposes `let:editing` / `let:edit` / `let:save` / `let:cancel`
+   * to drive row editing; set this directly to enter edit mode programmatically.
+   * Entering edit snapshots the row so `cancel` can restore it.
+   * @type {Row["id"] | null}
+   * @bindable writable
+   */
+  export let editingRowId = null;
 
   /**
    * Set the size of the data table.
@@ -351,6 +378,149 @@
   const tableSize = writable(size);
   $: $tableSize = size;
 
+  /**
+   * Registry of editable cells keyed by `${rowId}:${cellKey}`. Each
+   * `EditableCell` registers on mount and reports its dirty/validity
+   * state here; `dirty` and `valid` are rolled up from it. The store
+   * stays empty (and the rollups stay at their defaults) for tables
+   * with no editable cells, so non-editing tables pay nothing.
+   * @type {import("svelte/store").Writable<Record<string, { dirty: boolean; invalidText: string | undefined }>>}
+   */
+  const editableCells = writable({});
+
+  /**
+   * Monotonic counter bumped by `resetDirty`. Each `EditableCell` watches
+   * it and re-snapshots its baseline value when it changes, so the dirty
+   * rollup can return to `false` after the consumer persists edits.
+   * @type {import("svelte/store").Writable<number>}
+   */
+  const editableBaseline = writable(0);
+
+  /**
+   * Treat the current editable cell values as pristine, clearing `dirty`.
+   * Call this after persisting edits (for example in an `on:save` handler).
+   * @type {() => void}
+   */
+  export function resetDirty() {
+    editableBaseline.update((n) => n + 1);
+  }
+
+  /** @type {(id: string) => void} */
+  function editableRegister(id) {
+    editableCells.update((cells) =>
+      id in cells
+        ? cells
+        : { ...cells, [id]: { dirty: false, invalidText: undefined } },
+    );
+  }
+
+  /** @type {(id: string, state: { dirty: boolean; invalidText: string | undefined }) => void} */
+  function editableUpdate(id, state) {
+    editableCells.update((cells) => ({
+      ...cells,
+      [id]: { ...cells[id], ...state },
+    }));
+  }
+
+  /** @type {(id: string) => void} */
+  function editableUnregister(id) {
+    editableCells.update((cells) => {
+      if (!(id in cells)) return cells;
+      const next = { ...cells };
+      delete next[id];
+      return next;
+    });
+  }
+
+  $: dirty = Object.values($editableCells).some((cell) => cell.dirty);
+  $: valid = Object.values($editableCells).every((cell) => !cell.invalidText);
+
+  // Row edit mode. The table owns a shallow snapshot of the row being edited so
+  // `cancel` can restore it without the consumer reassigning `rows`. Entering
+  // edit (including programmatically via `editingRowId`) takes the snapshot and
+  // focuses the row's first field.
+  let prevEditingRowId = null;
+  /** @type {Record<string, any> | null} */
+  let editSnapshot = null;
+  $: if (editingRowId !== prevEditingRowId) {
+    prevEditingRowId = editingRowId;
+    if (editingRowId == null) {
+      editSnapshot = null;
+    } else {
+      const row = rows.find((row) => row.id === editingRowId);
+      editSnapshot = row ? { ...row } : null;
+      focusFirstField(editingRowId);
+    }
+  }
+
+  /**
+   * Enter row edit mode for the given row id.
+   * @type {(id: Row["id"]) => void}
+   */
+  export function editRow(id) {
+    editingRowId = id;
+  }
+
+  /**
+   * Commit the row currently in edit mode: re-derive its cells, dispatch
+   * `save`, clear dirty, and exit edit mode.
+   * @type {() => void}
+   */
+  export function saveRow() {
+    const id = editingRowId;
+    if (id == null) return;
+    const row = rows.find((row) => row.id === id);
+    refreshRow(id);
+    if (row) dispatch("save", { row });
+    resetDirty();
+    editingRowId = null;
+  }
+
+  /**
+   * Cancel the row currently in edit mode: restore the snapshot taken when
+   * editing began, dispatch `discard`, clear dirty, and exit edit mode.
+   * @type {() => void}
+   */
+  export function cancelRow() {
+    const id = editingRowId;
+    if (id == null) return;
+    const row = rows.find((row) => row.id === id);
+    if (row && editSnapshot) {
+      Object.assign(row, editSnapshot);
+      refreshRow(id);
+      dispatch("discard", { row });
+    }
+    resetDirty();
+    editingRowId = null;
+  }
+
+  function focusFirstField(id) {
+    tick().then(() => {
+      const root = tableRef ?? scrollContainerRef;
+      if (!root) return;
+      let rowEl = null;
+      try {
+        rowEl = root.querySelector(`[data-row="${String(id)}"]`);
+      } catch {
+        return;
+      }
+      rowEl?.querySelector("input, select, textarea")?.focus();
+    });
+  }
+
+  function handleRowKeydown(event, row) {
+    if (editingRowId !== row.id) return;
+    if (event.key === "Enter") {
+      // Allow newlines in a textarea; commit on Enter elsewhere.
+      if (event.target instanceof HTMLTextAreaElement) return;
+      event.preventDefault();
+      saveRow();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      cancelRow();
+    }
+  }
+
   /** Default row heights based on size variant */
   const DEFAULT_ROW_HEIGHTS = {
     compact: 24,
@@ -506,6 +676,11 @@
     filterRows,
     refreshRow,
     refreshCells,
+    editableRegister,
+    editableUpdate,
+    editableUnregister,
+    editableBaseline,
+    resetDirty,
   });
 
   let expanded = false;
@@ -962,6 +1137,8 @@
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = !!expandedRows[row.id]}
             {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
+            {@const isEditing = editingRowId === row.id}
+            {@const editThisRow = () => editRow(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({ row, rowIndex: actualIndex, selected: isSelected, expanded: isExpanded })
@@ -994,6 +1171,7 @@
               on:mouseleave={() => {
                 dispatch("mouseleave:row", row);
               }}
+              on:keydown={(event) => handleRowKeydown(event, row)}
             >
               {#if expandable}
                 <TableCell
@@ -1097,6 +1275,10 @@
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
+                      editing={isEditing}
+                      edit={editThisRow}
+                      save={saveRow}
+                      cancel={cancelRow}
                     >
                       {cell.display
                         ? cell.display(cell.value, row)
@@ -1123,6 +1305,10 @@
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
+                      editing={isEditing}
+                      edit={editThisRow}
+                      save={saveRow}
+                      cancel={cancelRow}
                     >
                       {cell.display
                         ? cell.display(cell.value, row)
@@ -1182,6 +1368,8 @@
             {@const isExpanded = !!expandedRows[row.id]}
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
             {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
+            {@const isEditing = editingRowId === row.id}
+            {@const editThisRow = () => editRow(row.id)}
             {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
@@ -1222,6 +1410,7 @@
               on:mouseleave={() => {
                 dispatch("mouseleave:row", row);
               }}
+              on:keydown={(event) => handleRowKeydown(event, row)}
             >
               {#if expandable}
                 <TableCell
@@ -1315,6 +1504,10 @@
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
+                      editing={isEditing}
+                      edit={editThisRow}
+                      save={saveRow}
+                      cancel={cancelRow}
                     >
                       {cell.display ? cell.display(cell.value, row) : cell.value}
                     </slot>
@@ -1339,6 +1532,10 @@
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
+                      editing={isEditing}
+                      edit={editThisRow}
+                      save={saveRow}
+                      cancel={cancelRow}
                     >
                       {cell.display ? cell.display(cell.value, row) : cell.value}
                     </slot>
