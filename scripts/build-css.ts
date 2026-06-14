@@ -43,6 +43,7 @@ const SASS_OPTIONS = {
 const glob = new Glob("*.scss");
 const scss = Array.from(glob.scanSync({ cwd: "css" }))
   .filter((file) => !PARTIAL_FILE_REGEX.test(file))
+  .sort()
   .map((file) => path.parse(file));
 
 async function readPartialContents(): Promise<string> {
