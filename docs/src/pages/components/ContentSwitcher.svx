@@ -115,6 +115,28 @@ Combine `lowContrast` with `disabled` on individual switches.
   <Switch disabled text="Recommended" />
 </ContentSwitcher>
 
+## Low contrast (sizes)
+
+The low contrast variant supports all sizes. Set `size` to `"sm"`, `"xl"`, or leave it unset for the default size.
+
+<Stack gap={6}>
+  <ContentSwitcher size="sm" lowContrast>
+    <Switch text="Latest news" />
+    <Switch text="Trending" />
+    <Switch text="Recommended" />
+  </ContentSwitcher>
+  <ContentSwitcher lowContrast>
+    <Switch text="Latest news" />
+    <Switch text="Trending" />
+    <Switch text="Recommended" />
+  </ContentSwitcher>
+  <ContentSwitcher size="xl" lowContrast>
+    <Switch text="Latest news" />
+    <Switch text="Trending" />
+    <Switch text="Recommended" />
+  </ContentSwitcher>
+</Stack>
+
 ## Low contrast (icon-only)
 
 Combine `lowContrast` with icon-only switches.
