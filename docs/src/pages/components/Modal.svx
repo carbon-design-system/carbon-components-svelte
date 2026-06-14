@@ -99,6 +99,12 @@ Use the large size for complex content by setting `size` to `"lg"`.
 
 <FileSource src="/framed/Modal/ModalLarge" />
 
+## Full width
+
+Set `fullWidth` to `true` to remove the modal body padding so content spans edge to edge. Use it for content that supplies its own layout, such as a table or fluid form.
+
+<FileSource src="/framed/Modal/FullWidthModal" />
+
 ## Prevent default close behavior
 
 The modal dispatches a cancelable `close` event. Call `e.preventDefault()` to keep the modal open. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, or `"close-button"`.
