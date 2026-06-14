@@ -8,7 +8,7 @@
 </script>
 
 <Stack gap={4}>
-  <Text tag="span" type="productive-heading-03" color="primary">
+  <Text tag="span" type="productive-heading-05" color="primary">
     {value}
     {#if tooltipText}
       <TooltipDefinition align="start" direction="bottom" {tooltipText}>

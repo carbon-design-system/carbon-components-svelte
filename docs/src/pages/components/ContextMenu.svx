@@ -1,6 +1,6 @@
 ---
 components: ["ContextMenu", "ContextMenuGroup", "ContextMenuRadioGroup", "ContextMenuOption", "ContextMenuDivider"]
-description: Context menus display a menu on right-click, for quick access to contextual actions.
+description: Context menus display contextual actions on right-click, with nested submenus and checkbox or radio selection patterns.
 ---
 
 <script>
