@@ -117,8 +117,12 @@
 </svelte:head>
 
 <Content data-component={component}>
-  <Box tag="section" class="hero band hero--component">
-    <ComponentDocLayout class="hero__layout" aside={false}>
+  <ComponentDocLayout
+    data-components
+    data-toc-collapsed={!$componentTocOpen}
+    aside={$componentTocOpen}
+  >
+    <Box tag="section" class="hero band hero--component">
       <Stack gap={3}>
         {#if category}
           <Breadcrumb noTrailingSlash size="sm">
@@ -130,32 +134,34 @@
           </Breadcrumb>
         {/if}
         <Stack gap={7}>
-          <Text tag="h1" type="expressive-heading-04" color="primary">
+          <Text tag="h1" type="expressive-heading-06" color="primary">
             {component}
           </Text>
           {#if descriptionHtml}
             <div class="hero__description">
-              <Text type="productive-heading-03" color="primary">
+              <Text
+                type="productive-heading-04"
+                color="secondary"
+                maxWidth="52ch"
+              >
                 {@html descriptionHtml}
               </Text>
             </div>
           {:else if description}
             <div class="hero__description">
-              <Text type="productive-heading-03" color="primary">
+              <Text
+                type="productive-heading-04"
+                color="secondary"
+                maxWidth="52ch"
+              >
                 {description}
               </Text>
             </div>
           {/if}
         </Stack>
       </Stack>
-    </ComponentDocLayout>
-  </Box>
+    </Box>
 
-  <ComponentDocLayout
-    data-components
-    data-toc-collapsed={!$componentTocOpen}
-    aside={$componentTocOpen}
-  >
     <div class="bar bar--component">
       <Dropdown
         id="theme-dropdown"
@@ -250,10 +256,10 @@
   }
 
   /* Lead description below the component title: larger editorial type with
-               extra breathing room so it reads as a standout subtitle. */
+                   extra breathing room so it reads as a standout subtitle. */
   .hero__description {
-    margin-top: var(--cds-spacing-03);
-    max-width: 72ch;
+    margin-top: var(--cds-spacing-06);
+    margin-bottom: var(--cds-spacing-04);
   }
 
   .hero__description :global(p) {
@@ -264,6 +270,10 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+  }
+
+  :global([data-floating-portal]:has(#menu-theme-dropdown)) {
+    z-index: 10001 !important;
   }
 
   :global(#menu-theme-dropdown) {

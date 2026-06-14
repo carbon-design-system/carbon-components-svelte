@@ -3,9 +3,13 @@ components: ["Grid", "Row", "Column"]
 description: The Carbon grid system provides a responsive layout structure using row and column components.
 ---
 
-## Columns
+## Basic
 
 The [Carbon grid system](https://carbondesignsystem.com/elements/2x-grid/overview/) uses a responsive column structure where the total number of columns changes based on screen size. Column spans are relative to the total columns at each breakpoint — to create a full-width column, use `sm={4} md={8} lg={16}` instead of the same value across all breakpoints.
+
+Create a basic grid layout with equal-width columns.
+
+<FileSource src="/framed/Grid/Grid" />
 
 | Breakpoint        | Viewport width   | Columns |
 | ----------------- | ---------------- | ------- |
@@ -14,12 +18,6 @@ The [Carbon grid system](https://carbondesignsystem.com/elements/2x-grid/overvie
 | **Large (`lg`)**  | 1056–1311px      | 16      |
 | **X-Large (`xlg`)** | 1312–1583px    | 16      |
 | **Max (`max`)**   | 1584px and above | 16      |
-
-## Basic
-
-Create a basic grid layout with equal-width columns.
-
-<FileSource src="/framed/Grid/Grid" />
 
 ## Variants
 

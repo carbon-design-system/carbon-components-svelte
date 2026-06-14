@@ -191,12 +191,7 @@
   class="component-index-page"
   style="min-height: calc(100vh - 6rem - 1px);"
 >
-  <DocHero
-    eyebrow="Reference"
-    icon={Catalog}
-    title="Component index"
-    description="Every component in one flat, searchable list. The sidebar groups components by purpose; this index lets you sort by name, category, or release."
-  />
+  <DocHero eyebrow="Reference" icon={Catalog} title="Component index" />
 
   <Grid>
     <Row>

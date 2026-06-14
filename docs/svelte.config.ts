@@ -472,8 +472,8 @@ function carbonify() {
           return;
         case "paragraph": {
           const className = isH2SectionIntro(parent, index)
-            ? "bx--type-body-long-02 prose-section-intro"
-            : "bx--type-body-long-01";
+            ? "bx--type-productive-heading-03 prose-section-intro"
+            : "bx--type-body-long-02";
           node.data = { hProperties: { class: className } };
           return;
         }

@@ -44,7 +44,7 @@
     <slot name="rows" />
   </Grid>
   {#if aside}
-    <Column class="table" xlg={4} lg={5} noGutterRight>
+    <Column class="table" xlg={3} lg={4} noGutterRight>
       <div class="table__scroll scrollbar-hover" use:syncTableScrollHeight>
         <slot name="aside" />
       </div>

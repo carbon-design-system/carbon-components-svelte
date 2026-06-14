@@ -117,7 +117,7 @@
     <svelte:fragment slot="title">
       <Text
         tag="h1"
-        type="expressive-heading-04"
+        type="expressive-heading-06"
         color="primary"
         balance
         maxWidth="32ch"

@@ -457,23 +457,37 @@ html {
   line-height: var(--cds-expressive-heading-03-line-height);
 }
 
-.prose > p.bx--type-body-long-01 {
-  max-width: 64ch;
+.prose > p:not(.prose-section-intro) {
+  font-size: var(--cds-body-long-02-font-size);
+  font-weight: var(--cds-body-long-02-font-weight);
+  letter-spacing: var(--cds-body-long-02-letter-spacing);
+  line-height: var(--cds-body-long-02-line-height);
+  color: var(--cds-text-primary, var(--cds-text-01));
+  max-width: 54ch;
 }
 
 .prose > p.prose-section-intro {
-  max-width: 64ch;
+  font-size: var(--cds-productive-heading-03-font-size);
+  font-weight: var(--cds-productive-heading-03-font-weight);
+  letter-spacing: var(--cds-productive-heading-03-letter-spacing);
+  line-height: var(--cds-productive-heading-03-line-height);
+  color: var(--cds-text-primary, var(--cds-text-01));
+  max-width: 54ch;
   margin-bottom: var(--cds-layout-02);
 }
 
 .prose > ul,
 .prose > ol {
-  max-width: 48rem;
+  max-width: 54ch;
 }
 
-.prose > p.bx--type-body-long-01:has(+ ul),
-.prose > p.bx--type-body-long-01:has(+ ol) {
+.prose > p:not(.prose-section-intro):has(+ ul),
+.prose > p:not(.prose-section-intro):has(+ ol) {
   margin-bottom: var(--cds-layout-01);
+}
+
+.prose > p:has(+ .preview) {
+  margin-bottom: var(--cds-layout-04);
 }
 
 .bx--col > p > code.bx--type-code-01,
@@ -508,9 +522,13 @@ html {
 
 .prose > table {
   width: 100%;
-  max-width: 48rem;
+  max-width: 96ch;
   border-collapse: collapse;
   margin-bottom: var(--cds-layout-02);
+}
+
+.prose > table:has(+ .preview) {
+  margin-bottom: var(--cds-layout-04);
 }
 
 .prose > table th,
@@ -605,13 +623,16 @@ html {
 }
 
 .hero--component {
+  margin-top: 2rem;
   padding-top: var(--cds-spacing-08);
   padding-bottom: var(--cds-spacing-08);
   min-height: calc(var(--cds-spacing-13) + var(--cds-spacing-08));
 }
 
-.hero--component .hero__layout > .bx--grid > .bx--row {
-  margin-top: 2rem;
+/* Hero lives in the prose column; skip band bleed offsets used on standalone pages. */
+[data-components] .hero.band {
+  margin-inline: 0;
+  padding-inline: 0;
 }
 
 /* Breakout: an example escapes the content grid to use the full content

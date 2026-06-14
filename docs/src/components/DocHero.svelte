@@ -13,8 +13,8 @@
   export let eyebrow = "";
   export let icon: ComponentType | undefined = undefined;
   export let title = "";
-  export let titleType: "expressive-heading-04" | "productive-heading-05" =
-    "productive-heading-05";
+  export let titleType: "expressive-heading-04" | "productive-heading-06" =
+    "productive-heading-06";
   export let description = "";
   export let balance = false;
 </script>
@@ -44,7 +44,11 @@
             {#if $$slots.description}
               <slot name="description" />
             {:else if description}
-              <Text type="body-long-02" color="secondary" maxWidth="60ch">
+              <Text
+                type="productive-heading-04"
+                color="secondary"
+                maxWidth="60ch"
+              >
                 {description}
               </Text>
             {/if}

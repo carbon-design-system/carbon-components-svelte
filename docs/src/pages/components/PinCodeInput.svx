@@ -10,14 +10,9 @@ description: Pin code inputs collect a short verification code across a row of s
 
 ## Basic
 
-By default, four numeric segments are rendered. Typing a digit advances focus to the next segment; <DocKbd label="Backspace" /> moves to the previous segment, <DocKbd label="Delete" /> clears the focused segment, and <DocKbd label="←" /> / <DocKbd label="→" /> move between segments. The component emits the following events:
+By default, four numeric segments are rendered. Typing a digit advances focus to the next segment; <DocKbd label="Backspace" /> moves to the previous segment, <DocKbd label="Delete" /> clears the focused segment, and <DocKbd label="←" /> / <DocKbd label="→" /> move between segments.
 
-| Event | When | Detail |
-| --- | --- | --- |
-| `on:change` | Any edit (type, paste, delete). | `{ value: string, code: string[] }` |
-| `on:complete` | All segments become filled. This does not fire on mount with a prefilled value, but fires after user interaction fills every segment. | `{ value: string, code: string[] }` |
-| `on:clear` | All segments are emptied. | `null` |
-| `on:paste` | A paste inserts one or more characters. Whitespace is stripped. | `{ value: string }` |
+
 
 <PinCodeInput
   labelText="Verification code"
@@ -26,6 +21,15 @@ By default, four numeric segments are rendered. Typing a digit advances focus to
   on:clear={() => console.log("clear")}
   on:paste={(e) => console.log("paste", e.detail)}
 />
+
+The component emits the following events:
+
+| Event | When |
+| --- | --- |
+| `on:change` | Any edit (type, paste, delete). |
+| `on:complete` | All segments become filled. This does not fire on mount with a prefilled value, but fires after user interaction fills every segment. |
+| `on:clear` | All segments are emptied. |
+| `on:paste` | A paste inserts one or more characters. Whitespace is stripped. |
 
 ## Custom length
 

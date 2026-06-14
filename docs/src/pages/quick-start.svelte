@@ -84,11 +84,7 @@
 </svelte:head>
 
 <Content class="quick-start-page">
-  <DocHero
-    eyebrow="Get started"
-    title="Quick start"
-    description="Install the library, pick a theme, and render your first component. Three steps to a running app, plus customization options."
-  />
+  <DocHero eyebrow="Get started" title="Quick start" />
 
   <DocSection>
     <Grid>
@@ -152,7 +148,7 @@
         <svelte:fragment slot="right">
           <Column sm={4} md={8} lg={8} class="code-col">
             <Stack gap={7}>
-              <Stack gap={5}>
+              <Stack gap={3}>
                 <Text type="caption-01" color="secondary" maxWidth="60ch">
                   Import the stylesheet once, at the top-level entry point of
                   your app.
