@@ -1,0 +1,17 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Full-width modal variant (Carbon React `isFullWidth` parity). Removes the
+/// modal body padding so content such as a data table spans edge to edge.
+/// @access private
+/// @group components
+@mixin modal-full-width {
+  .#{$prefix}--modal-container--full-width .#{$prefix}--modal-content {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+@include exports("modal-full-width") {
+  @include modal-full-width;
+}
