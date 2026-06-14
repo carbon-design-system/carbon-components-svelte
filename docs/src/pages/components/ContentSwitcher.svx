@@ -95,6 +95,26 @@ Pass `tooltipAlignment` to individual icon-only switches to adjust how the toolt
   <Switch icon={List} text="List" tooltipAlignment="end" />
 </ContentSwitcher>
 
+## Low contrast
+
+Set `lowContrast` to `true` for the low contrast variant. The selected switch uses a light surface instead of the default inverse (dark) background, reducing the contrast between the switcher and surrounding content.
+
+<ContentSwitcher lowContrast>
+  <Switch text="Latest news" />
+  <Switch text="Trending" />
+  <Switch text="Recommended" />
+</ContentSwitcher>
+
+## Low contrast with disabled switches
+
+Combine `lowContrast` with `disabled` on individual switches.
+
+<ContentSwitcher lowContrast>
+  <Switch text="Latest news" />
+  <Switch text="Trending" />
+  <Switch disabled text="Recommended" />
+</ContentSwitcher>
+
 ## Extra-large size
 
 Set `size` to `"xl"` for an extra-large content switcher.
