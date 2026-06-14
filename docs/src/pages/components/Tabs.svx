@@ -7,6 +7,10 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
+  import Search from "carbon-icons-svelte/lib/Search.svelte";
+  import Activity from "carbon-icons-svelte/lib/Activity.svelte";
+  import Notification from "carbon-icons-svelte/lib/Notification.svelte";
+  import Chat from "carbon-icons-svelte/lib/Chat.svelte";
 </script>
 
 Tabs provide a way to organize content into separate views that can be switched between. They support keyboard navigation, disabled states, and various layout options.
@@ -99,6 +103,74 @@ Use the `icon` prop to render an icon next to the tab label. The icon is rendere
     <TabContent>Calendar content</TabContent>
     <TabContent>Information content</TabContent>
     <TabContent>Settings content</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Icon-only
+
+Set `iconOnly` to `true` on `Tabs` to render compact, square tabs that display only an icon. Set `icon` and `label` on each `Tab`; the label is the accessible name and the tooltip shown on hover and focus.
+
+<Tabs iconOnly>
+  <Tab label="Search" icon={Search} />
+  <Tab label="Activity" icon={Activity} disabled />
+  <Tab label="Notifications" icon={Notification} />
+  <Tab label="Chat" icon={Chat} />
+  <svelte:fragment slot="content">
+    <TabContent>Tab Panel 1</TabContent>
+    <TabContent>Tab Panel 2</TabContent>
+    <TabContent>Tab Panel 3</TabContent>
+    <TabContent>Tab Panel 4</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Icon-only (large size)
+
+Set `iconSize` to `"lg"` for large icon-only tabs. The tabs and their icons are enlarged to the large scale.
+
+<Tabs iconOnly iconSize="lg">
+  <Tab label="Search" icon={Search} />
+  <Tab label="Activity" icon={Activity} disabled />
+  <Tab label="Notifications" icon={Notification} />
+  <Tab label="Chat" icon={Chat} />
+  <svelte:fragment slot="content">
+    <TabContent>Tab Panel 1</TabContent>
+    <TabContent>Tab Panel 2</TabContent>
+    <TabContent>Tab Panel 3</TabContent>
+    <TabContent>Tab Panel 4</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Icon-only (tooltip direction and alignment)
+
+The tooltip is rendered below the tab by default. Use `tooltipDirection` (`"top"` or `"bottom"`) and `tooltipAlignment` (`"start"`, `"center"`, or `"end"`) to control its placement. The tooltip automatically flips to the opposite side if there is not enough space.
+
+<Tabs iconOnly>
+  <Tab label="Search" icon={Search} tooltipDirection="top" tooltipAlignment="start" />
+  <Tab label="Activity" icon={Activity} tooltipDirection="top" />
+  <Tab label="Notifications" icon={Notification} tooltipDirection="top" />
+  <Tab label="Chat" icon={Chat} tooltipDirection="top" tooltipAlignment="end" />
+  <svelte:fragment slot="content">
+    <TabContent>Tab Panel 1</TabContent>
+    <TabContent>Tab Panel 2</TabContent>
+    <TabContent>Tab Panel 3</TabContent>
+    <TabContent>Tab Panel 4</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Icon-only (container type)
+
+Icon-only tabs also work with the container type.
+
+<Tabs type="container" iconOnly>
+  <Tab label="Search" icon={Search} />
+  <Tab label="Activity" icon={Activity} disabled />
+  <Tab label="Notifications" icon={Notification} />
+  <Tab label="Chat" icon={Chat} />
+  <svelte:fragment slot="content">
+    <TabContent>Tab Panel 1</TabContent>
+    <TabContent>Tab Panel 2</TabContent>
+    <TabContent>Tab Panel 3</TabContent>
+    <TabContent>Tab Panel 4</TabContent>
   </svelte:fragment>
 </Tabs>
 
