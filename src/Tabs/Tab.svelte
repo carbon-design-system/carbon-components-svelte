@@ -84,6 +84,9 @@
   });
 
   $: selected = $selectedTab === id;
+  // Default href is the "#" placeholder, so tabs behave as selection controls.
+  // Any other href is user-provided and should navigate like a link.
+  $: isLink = !!href && href !== "#";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -94,11 +97,14 @@
   class:bx--tabs__nav-item--disabled={disabled}
   class:bx--tabs__nav-item--selected={selected}
   {...$$restProps}
-  on:click|preventDefault
-  on:click|preventDefault={() => {
-    if (!disabled) {
-      update(id);
+  on:click
+  on:click={(event) => {
+    if (disabled) {
+      event.preventDefault();
+      return;
     }
+    if (!isLink) event.preventDefault();
+    update(id);
   }}
   on:mouseover
   on:mouseenter
@@ -108,7 +114,11 @@
 
     if ($useDismissible && event.key === "Delete") {
       dismiss(id);
-    } else if (event.key === " " || event.key === "Enter") {
+    } else if (event.key === " ") {
+      event.preventDefault();
+      update(id);
+    } else if (event.key === "Enter") {
+      if (!isLink) event.preventDefault();
       update(id);
     }
   }}
