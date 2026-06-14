@@ -370,15 +370,17 @@ A partial ships only after a theme entry file imports it. Add `@import "./name";
 - `css/g90.scss`
 - `css/g100.scss`
 
-#### Rebuild and commit
+#### Rebuild
 
-The compiled `css/*.css` files are committed to the repo. After any edit under `css/`, rebuild:
+**After editing any `.scss` under `css/`, you must run `bun build:css` locally:**
 
 ```sh
 bun build:css
 ```
 
-This compiles every non-partial `*.scss` (sass, compressed) through Lightning CSS and rewrites `css/*.css` and `css/css.d.ts`. Commit the regenerated CSS with your SCSS changes.
+The compiled `css/*.css` are **not** committed (they are gitignored) — but they are still required at runtime, so without this step your local docs site and e2e tests will use stale (or missing) styles. `bun setup` runs `build:css` once on a fresh clone, and CI/release run it on demand; neither helps an in-progress local edit.
+
+This compiles every non-partial `*.scss` (sass, compressed) through Lightning CSS and writes `css/*.css` plus `css/css.d.ts`. Commit only the `.scss` source — never the generated `*.css`. The small `css/css.d.ts` (module declarations) **is** committed, so type-checks resolve the CSS imports without a build; commit it too if adding or removing a theme entry changes it.
 
 The prebundled CSS targets the [Svelte 5 browser support](https://svelte.dev/docs/svelte/browser-support) baseline (Firefox 83/Safari 14), not older browsers. Matching that baseline lets Lightning CSS drop legacy fallbacks. Author SCSS to that baseline; see the `:has()` note in [Conventions](#conventions).
 
