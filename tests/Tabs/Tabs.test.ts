@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type TabComponent from "carbon-components-svelte/Tabs/Tab.svelte";
 import type { ComponentProps } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
@@ -363,6 +363,30 @@ describe("Tab", () => {
 
     const tab = screen.getByRole("tab");
     expect(tab).toHaveAttribute("href", "/custom");
+  });
+
+  // A user-provided href should navigate like a link: activation must not be
+  // preventDefault-ed (regression for #2165). fireEvent returns false when a
+  // handler canceled the event.
+  it("should not prevent default activation when a real href is provided", async () => {
+    render(Tab, { props: { href: "#custom" } });
+
+    const tab = screen.getByRole("tab");
+    expect(await fireEvent.click(tab)).toBe(true);
+    expect(await fireEvent.keyDown(tab, { key: "Enter" })).toBe(true);
+    // selection still happens alongside navigation
+    expect(tab).toHaveAttribute("aria-selected", "true");
+  });
+
+  // The default "#" href is a placeholder: tabs act as selection controls, so
+  // navigation must be suppressed (including Enter, the original concern).
+  it("should prevent default activation for the placeholder href", async () => {
+    render(Tab, { props: { href: "#" } });
+
+    const tab = screen.getByRole("tab");
+    expect(await fireEvent.click(tab)).toBe(false);
+    expect(await fireEvent.keyDown(tab, { key: "Enter" })).toBe(false);
+    expect(tab).toHaveAttribute("aria-selected", "true");
   });
 
   it("should handle disabled state", () => {
