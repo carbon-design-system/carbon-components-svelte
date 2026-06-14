@@ -8,6 +8,7 @@
     Text,
   } from "carbon-components-svelte";
   import type { ComponentType } from "svelte";
+  import DocEyebrow from "./DocEyebrow.svelte";
 
   export let eyebrow = "";
   export let icon: ComponentType | undefined = undefined;
@@ -24,17 +25,7 @@
       <Column xlg={10} lg={12} md={8} sm={4}>
         <Stack gap={3}>
           {#if eyebrow}
-            <Stack orientation="horizontal" gap={3} align="center">
-              {#if icon}
-                <svelte:component
-                  this={icon}
-                  size={16}
-                  class="eyebrow-icon"
-                  aria-hidden="true"
-                />
-              {/if}
-              <Text type="caption-02" color="secondary">{eyebrow}</Text>
-            </Stack>
+            <DocEyebrow {eyebrow} {icon} />
           {/if}
           <Stack gap={7}>
             {#if $$slots.title}
@@ -66,10 +57,3 @@
     </Row>
   </Grid>
 </Box>
-
-<style>
-  :global(.eyebrow-icon) {
-    fill: var(--cds-text-secondary, var(--cds-text-02));
-    flex-shrink: 0;
-  }
-</style>

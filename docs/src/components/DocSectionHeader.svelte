@@ -1,7 +1,10 @@
 <script lang="ts">
   import { Column, Row, Stack, Text } from "carbon-components-svelte";
+  import type { ComponentType } from "svelte";
+  import DocEyebrow from "./DocEyebrow.svelte";
 
   export let eyebrow = "";
+  export let icon: ComponentType | undefined = undefined;
   export let title = "";
   export let description = "";
   export let titleType: "productive-heading-05" | "productive-heading-06" =
@@ -16,7 +19,7 @@
   <Column lg={wide ? 10 : 8} xlg={wide ? 8 : undefined}>
     <Stack {gap}>
       {#if eyebrow}
-        <Text type="caption-02" color="secondary">{eyebrow}</Text>
+        <DocEyebrow {eyebrow} {icon} />
       {/if}
       <Text tag="h2" type={titleType} color="primary" {balance}>
         {title}

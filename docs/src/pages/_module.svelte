@@ -267,7 +267,7 @@
     </HeaderUtilities>
   </Header>
 
-  <SideNav bind:isOpen={isSideNavOpen}>
+  <SideNav class="docs-sidenav" bind:isOpen={isSideNavOpen}>
     <SideNavItems>
       <SideNavLink
         text="Introduction"
