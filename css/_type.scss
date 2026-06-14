@@ -4,20 +4,11 @@
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/classes";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-family";
 
-/// Carbon type utility classes plus text-color helpers.
+/// Type utility classes and text-color helpers.
 ///
-/// `carbon--type-classes` emits `.#{$prefix}--type-<token>` for every type style
-/// in `$tokens`, the font families (`mono`/`sans`/`serif`/...), the font weights
-/// (`light`/`regular`/`semibold`), and `italic`.
-///
-/// Type tokens set `font-weight`, `font-family`, and other properties, so the weight,
-/// family, and italic utilities are re-emitted after the token rules to win when
-/// combined on one element (e.g. `.bx--type-body-long-01.bx--type-semibold`).
-///
-/// The color helpers reference Carbon text-token globals, so each rule resolves to
-/// `var(--cds-text-*)` in the dynamic build (`all.scss`) and to a baked hex in the
-/// static single-theme builds (`g10.scss`, ...). Token names never collide with the
-/// type styles above, which are `body-*`, `heading-*`, `display-*`, etc.
+/// Modifier utilities (weight, family, italic) are re-emitted after token
+/// rules so they win when combined (e.g. `.bx--type-body-long-01.bx--type-semibold`).
+/// Color helpers use v11 token names backed by v10 theme variables.
 /// @access private
 /// @group components
 @mixin type {
@@ -40,7 +31,7 @@
     }
   }
 
-  // Override type-token font properties when modifier utilities are combined.
+  // Re-emitted after token rules so modifiers win when combined.
   @each $name, $value in $carbon--font-families {
     .#{$prefix}--type-#{$name} {
       font-family: $value;

@@ -1,5 +1,4 @@
-// Fluid variant styles for `MultiSelect`, ported from the Carbon v11
-// `fluid-multiselect` module. carbon-components v10 does not ship these.
+// Fluid MultiSelect (v11 port). v10 has no fluid variant.
 // https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-multiselect/_fluid-multiselect.scss
 
 @import "carbon-components/scss/globals/scss/vars";
@@ -7,7 +6,7 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Fluid multi-select variant (Carbon React `FluidMultiSelect` parity)
+/// Fluid multi-select (Carbon React FluidMultiSelect)
 /// @access private
 /// @group components
 @mixin fluid-multiselect {
@@ -19,9 +18,7 @@
     margin-block-start: 1.25rem;
   }
 
-  // Filterable — when items are selected, the count tag sits before the input.
-  // fluid-combo-box applies padding-inline on `.bx--text-input`; reset the
-  // inline-start so the typed text follows the tag (Carbon v11 multiselect parity).
+  // Filterable + selected: reset padding-inline-start so text follows the tag.
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--multi-select--filterable.#{$prefix}--multi-select--selected
     .#{$prefix}--text-input {

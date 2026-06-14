@@ -6,7 +6,7 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Extra-small text input variant (Carbon React `size="xs"` parity)
+/// Extra-small text input (Carbon React size="xs")
 /// @access private
 /// @group components
 @mixin text-input-xs {

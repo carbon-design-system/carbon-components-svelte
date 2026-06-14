@@ -1,7 +1,3 @@
-// This file adds contained list styles from carbon-components v11+
-// to ensure compatibility with carbon-components v10.58.12.
-// The ContainedList component provides a structured list with header and items.
-
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
@@ -10,19 +6,15 @@
 /// @access private
 /// @group contained-list
 @mixin contained-list {
-  // Tag within contained list
   .#{$prefix}--contained-list .#{$prefix}--tag {
-    // Tag size adjustments for contained list context
     height: 1.5rem; // 24px equivalent to md size
   }
 
-  // List container
   .#{$prefix}--contained-list > ul {
     padding: 0;
     margin: 0;
   }
 
-  // Header
   .#{$prefix}--contained-list__header {
     position: sticky;
     z-index: 1;
@@ -37,7 +29,6 @@
     width: 100%;
   }
 
-  // Search within contained list
   .#{$prefix}--contained-list .#{$prefix}--search {
     position: sticky;
     z-index: 1;
@@ -47,12 +38,10 @@
     }
   }
 
-  // Search top offset for disclosed variant (fixed height)
   .#{$prefix}--contained-list--disclosed .#{$prefix}--search {
     top: 2rem; // Fixed header height for disclosed variant
   }
 
-  // Search top offset for on-page variant (size-dependent)
   .#{$prefix}--contained-list--on-page .#{$prefix}--search {
     top: 3rem; // Default md size header height
   }
@@ -72,7 +61,6 @@
     top: 4.5rem; // xl size header height
   }
 
-  // Omit search input background when used inside contained list
   .#{$prefix}--contained-list .#{$prefix}--search .#{$prefix}--search-input {
     background-color: $ui-background;
     border-bottom: 1px solid $ui-03;
@@ -109,7 +97,6 @@
     outline: none;
   }
 
-  // "On Page" variant
   .#{$prefix}--contained-list--on-page + .#{$prefix}--contained-list--on-page {
     margin-top: $spacing-05;
   }
@@ -123,7 +110,6 @@
     color: $text-01;
   }
 
-  // Size variants for on-page header
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--sm
     .#{$prefix}--contained-list__header {
     height: 2rem;
@@ -139,7 +125,7 @@
     height: 4.5rem;
   }
 
-  // "Disclosed" variant
+  // Disclosed variant
   .#{$prefix}--contained-list--disclosed .#{$prefix}--contained-list__header {
     @include type-style('label-01');
 
@@ -148,7 +134,6 @@
     color: $text-02;
   }
 
-  // List item
   .#{$prefix}--contained-list-item {
     position: relative;
     display: list-item;
@@ -176,15 +161,12 @@
     .#{$prefix}--contained-list-item__content {
     @include type-style('body-short-01');
 
-    // Calculate padding based on line-height
-    // body-short-01 line-height is typically 1.25rem (20px)
-    // Height is 3rem (48px) for md size, so padding = (48px - 20px) / 2 = 14px
-    padding: 0.875rem $spacing-05; // 14px vertical, 16px horizontal
+    // Vertical padding centers body-short-01 in the row height
+    padding: 0.875rem $spacing-05;
     color: $text-01;
     min-height: 3rem; // md size default
   }
 
-  // Size variants for list items
   .#{$prefix}--contained-list--sm
     .#{$prefix}--contained-list-item__content,
   .#{$prefix}--contained-list--sm

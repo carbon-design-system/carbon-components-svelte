@@ -3,7 +3,7 @@
 
 /// Zebra striping for DataTable `filterMode="hide"`.
 /// Hidden rows keep their `:nth-child` index, so Carbon's `:nth-child` zebra
-/// rules are disabled (the `--zebra` class is dropped) and parity is recomputed
+/// rules are disabled (the `--zebra` class is dropped) and striping is recomputed
 /// in JS over visible rows, written to `[data-zebra-even]`.
 /// @access private
 /// @group components

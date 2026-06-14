@@ -151,8 +151,7 @@
         }
       }
 
-      // The large scale enlarges the icon to 20px (Carbon React `lg` parity);
-      // the default scale keeps the icon's intrinsic 16px.
+      // 20px icon at lg scale (Carbon React); default scale stays 16px.
       .#{$prefix}--tabs__nav-link--icon-only .#{$prefix}--tabs__nav-item--icon svg {
         block-size: to-rem(20px);
         inline-size: to-rem(20px);

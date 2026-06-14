@@ -1,6 +1,5 @@
-// Fluid variant styles for `PinCodeInput`. No upstream Carbon React component
-// exists; these rules target visual parity with fluid TextInput while
-// preserving the multi-segment fieldset layout.
+// Fluid PinCodeInput. No upstream Carbon component; matches fluid TextInput
+// layout while keeping the multi-segment fieldset.
 
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
@@ -73,8 +72,7 @@
     border-block-end: 1px solid $ui-04;
   }
 
-  // Fluid segments do not use per-input underlines; a single row border (or the
-  // full-width divider in invalid/warn states) provides the affordance instead.
+  // One row border (or full-width divider when invalid/warn), not per-segment underlines.
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__field.#{$prefix}--text-input {
     block-size: to-rem(40px);

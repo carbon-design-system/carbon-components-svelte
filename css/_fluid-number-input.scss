@@ -1,6 +1,4 @@
-// Fluid variant styles for `NumberInput`, ported from the Carbon v11
-// `fluid-number-input` module. carbon-components v10 only ships fluid styles
-// for the text input, so the number input must be styled here.
+// Fluid NumberInput (v11 port). v10 fluid styles cover text input only.
 // https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-number-input/_fluid-number-input.scss
 
 @import "carbon-components/scss/globals/scss/vars";
@@ -8,7 +6,7 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Fluid number input variant (Carbon React `FluidNumberInput` parity)
+/// Fluid number input (Carbon React FluidNumberInput)
 /// @access private
 /// @group components
 @mixin fluid-number-input {
@@ -316,8 +314,7 @@
     pointer-events: none;
   }
 
-  // Divider. Rendered whenever fluid (React parity) but only revealed for
-  // the invalid/warn states.
+  // Divider: always in DOM for fluid, shown only in invalid/warn states.
   .#{$prefix}--number-input--fluid .#{$prefix}--number-input__divider {
     display: none;
   }
@@ -338,8 +335,7 @@
     inset-block-start: to-rem(63px);
   }
 
-  // Hide the field's own bottom border for the invalid/warn states; the
-  // divider provides the line and the outline provides the color.
+  // Invalid/warn: hide field bottom border; divider draws the line, outline the color.
   .#{$prefix}--number-input--fluid
     .#{$prefix}--number[data-invalid]
     input[type="number"],

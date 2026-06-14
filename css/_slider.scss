@@ -1,7 +1,3 @@
-// This file adds slider validation message styles from carbon-components v11+
-// to ensure compatibility with carbon-components v10.58.12.
-// The validation message feature provides consistency with other input components.
-
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
@@ -71,7 +67,7 @@
   }
 }
 
-/// Two-handle (range) slider styles (Carbon v11 port for v10 compatibility)
+/// Two-handle range slider (Carbon v11 port for v10)
 /// @access private
 /// @group slider
 @mixin slider-two-handle {

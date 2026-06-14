@@ -1,4 +1,4 @@
-// Use the "white" (White) Carbon theme
+// White theme
 @import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
 
 $carbon--theme: $carbon--theme--white;
@@ -48,10 +48,9 @@ $css--plex: true;
 @import "carbon-components/scss/globals/scss/_css--body";
 @import "carbon-components/scss/globals/grid/grid";
 
-// Import all component styles
 @import "carbon-components/scss/globals/scss/styles";
 
-// Custom component overrides (must come after Carbon styles)
+// Overrides (after Carbon base styles)
 @import "./data-table-toolbar";
 @import "./data-table-zebra-hidden";
 @import "./data-table-highlighted-row";
