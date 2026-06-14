@@ -178,6 +178,12 @@ intended.
   </TimePicker>
 </div>
 
+## Inside a modal
+
+Place a fluid form inside a [modal](/components/Modal#full-width) to keep the inputs flush with the modal edges. Set `fullWidth` to `true` on the modal to remove the body padding so the form spans edge to edge.
+
+<FileSource src="/framed/FluidForm/FluidFormModal" />
+
 ## Loading skeletons
 
 Each fluid input ships a dedicated skeleton component for loading states:
