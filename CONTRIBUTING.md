@@ -205,6 +205,8 @@ Skip doc updates for internal refactors with no API or behavior change.
 
 Routify picks up new `.svx` files automatically. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. No separate nav registration is required.
 
+Prose conventions (backticks, plain language, SVX gotchas): see [docs/COMPONENT_DOCS_STYLE.md](docs/COMPONENT_DOCS_STYLE.md).
+
 Preview locally with `cd docs && bun dev`.
 
 #### Example conventions
@@ -213,9 +215,40 @@ Before adding an example, read the component's `.svx` and follow its order, grou
 
 Page structure:
 
-1. Optional `<script>` imports at top (components + icons used inline)
-2. One-paragraph intro describing what the component does
-3. `## Section title` per variant/feature, each with a short description then the demo
+1. Frontmatter block at the very top: a `description:` field, plus `components:` when the page renders an API table or imports components in a `<script>`.
+2. Optional `<script>` imports (components + icons used inline).
+3. `## Basic` first, then one `## Section title` per variant/feature, each with a short description then the demo.
+
+Frontmatter description:
+
+The lead sentence lives in the frontmatter `description:` field, not in body prose. It renders in the page hero.
+
+- 1–2 plain sentences, ~180 characters max.
+- Describe what the component is _for_, not _how it works_. No implementation details ("resize observer", "forwards mouse events", "keyed for performance").
+- Renders as plain text: no inline `code` or `[links]`.
+- The body must start with a `##` heading. A leading body paragraph is re-extracted by the `heroIntro` remark plugin in [`svelte.config.ts`](docs/svelte.config.ts) and silently overrides the frontmatter `description`. When lifting an old intro, fold any trailing sentences or links into the `## Basic` prose.
+
+```svelte
+---
+components: ["Dropdown", "DropdownSkeleton", "FluidDropdownSkeleton"]
+description: Dropdowns provide a select input with a dropdown menu, with multiple states, sizes, and customization options.
+---
+```
+
+Headings and grouping:
+
+- The first, plainest example is `## Basic` — never `## Default`.
+- Keep headings concise. The page title already names the component, so drop the repeated component-noun prefix (`Header with app switcher` → `App switcher`) and trailing `state` / `variant` / `size` (`Invalid state` → `Invalid`, `Light variant` → `Light`, `Small size` → `Small`).
+- Group related examples under a `## Group` heading with `###` children when several share an axis: `Sizes`, `States` (invalid / warning / disabled / read-only), `Fluid`, `Variants`, `Skeleton`, `Selectable`, `Filterable`, `Low contrast`, and the like. Prefer this over a long flat list of `##` headings. Lead each group with its simplest member using a descriptive label (never `Default`); the group's base example can sit directly under the `## Group` heading. See [`TextInput.svx`](docs/src/pages/components/TextInput.svx) (Sizes / States / Fluid), [`Tag.svx`](docs/src/pages/components/Tag.svx) (Filterable / Selectable), and [`TreeView.svx`](docs/src/pages/components/TreeView.svx).
+- Name variant families with a `Base (qualifier)` form: `Fluid (invalid)`, `Icon-only (large)`.
+
+Renaming headings (anchors):
+
+Heading slugs are GitHub-style ([rehype-slug](https://github.com/rehypejs/rehype-slug)): lowercase, spaces to `-`, parentheses and punctuation stripped (`Fluid variant (invalid)` → `fluid-invalid`). When you rename a heading that is a link target:
+
+- Fix in-page links: `grep -nE '\(#' <file>.svx`
+- Fix cross-page links: `grep -rn '<Component>#<old-anchor>' docs/src/pages`
+- To keep an anchor while grouping, demote the heading to `###` with its text unchanged — the slug is preserved. See `#selectable` / `#radio-group` in [`ContextMenu.svx`](docs/src/pages/components/ContextMenu.svx) and `Portal#custom-target`.
 
 Description language: imperative, prop-focused. See [Writing style](#writing-style) for Carbon content rules.
 
@@ -224,7 +257,7 @@ Description language: imperative, prop-focused. See [Writing style](#writing-sty
 
 Typical section order (follow sibling sections on that page):
 
-1. Default / basic usage
+1. `## Basic`
 2. Core variants grouped (kinds, sizes)
 3. Feature sections (slots, filtering, typeahead, portal, etc.)
 4. Layout options (direction, light)
@@ -234,7 +267,7 @@ Typical section order (follow sibling sections on that page):
 8. Advanced / performance (virtualization, async)
 9. Programmatic or reactive behavior last
 
-Insert new sections in the logical group. Do not append every example to the end if it belongs with related variants.
+Insert new sections in the logical group, and nest the variants above under `## Group` + `###` children (see Headings and grouping). Do not append every example to the end if it belongs with related variants. Reactive / `bind:`-driven examples belong high up near the basics; loading / skeleton examples go last.
 
 Inline vs framed:
 
@@ -249,7 +282,7 @@ Use a framed example whenever the demo contains script logic (state, handlers, a
 
 Other patterns:
 
-- `[!NOTE]` admonitions for accessibility and non-obvious caveats
+- No admonitions. Fold accessibility notes and non-obvious caveats into the relevant example's prose. Do not use `> [!NOTE]` / `> [!WARNING]` / `> [!TIP]` / `> [!CAUTION]` blocks.
 - Keyboard keys in prose: use `<DocKbd label="Enter" />` for named keys (`Enter`, `Escape`, `Shift`, `Ctrl`, `Space`, etc.). mdsvex auto-imports `DocKbd`; do not add a manual import. Do not use backticks (`Escape`), raw `<kbd>`, or bold (`**Enter**`). For combinations, use one component per key: `<DocKbd label="⌘" />+<DocKbd label="C" />`. Keep collective phrases as plain text ("arrow keys", "modifier keys", "keyboard navigation"). Prop values and UI copy inside component examples are out of scope (e.g. `placeholder="Enter user name..."`, `shortcutText="⌘C"`).
 - Cross-links to related components: `[Modal](/components/Modal#modal-with-dropdowns)`
 - Reuse the same sample data shapes as neighboring examples on that page
@@ -260,6 +293,43 @@ Other patterns:
 
 Follow [Carbon's writing style](https://carbondesignsystem.com/guidelines/content/writing-style/): direct, concise, present tense. Section descriptions explain what a prop does and when to use it, not what the component "allows."
 
+#### Prose and inline code
+
+Inline code in `.svx` prose is styled as Carbon code tokens. Keep backticks sparse so section intros stay readable.
+
+**Split of responsibilities:**
+
+- JSDoc + auto-generated API tables = exhaustive identifier reference
+- `.svx` prose = readable explanation; examples = copy-paste usage
+
+**Backtick when essential** (one primary target per paragraph):
+
+- The prop/API being configured in that section
+- Literal values the reader copies (`true`, `"compact"`)
+- Methods/utilities (`TreeView.expandAll()`)
+- Svelte/HTML tokens (`let:node`, `bind:checked`, `role="treeitem"`)
+
+**Use plain language instead:**
+
+- Data shape in words ("unique id and display text") rather than listing `id`, `text`, `disabled` in one sentence
+- Drop filler: "the prop", "the method" (prefer "Set `activeId`" not "Set the `activeId` prop")
+- Cross-link sibling sections by name instead of inline prop lists
+
+**Do not edit in prose-only passes:**
+
+- Live Svelte examples, `<FileSource />`, fenced code blocks, reference tables (events/gestures/slot vars)
+
+#### SVX gotchas
+
+In `.svx` files, markdown prose is compiled as Svelte. **Bare `{ ... }` in prose is parsed as JavaScript**, not displayed text.
+
+| Bad (runtime error) | Good |
+| --- | --- |
+| `` `event.detail` as { key, direction } `` | `` `event.detail` shaped like `{ key, direction }` `` |
+| `receives (a, b, { key, ascending })` | `` receives `(a, b, { key, ascending })` `` |
+
+Always wrap object literals and expressions in backticks, or rephrase without braces. See [`DataTable.svx`](docs/src/pages/components/DataTable.svx) sort section for a real incident.
+
 | Avoid | Prefer |
 | --- | --- |
 | Trivializers: "easy", "easily", "makes it easier to", "for performance reasons" | State the behavior directly |
@@ -268,6 +338,9 @@ Follow [Carbon's writing style](https://carbondesignsystem.com/guidelines/conten
 | Filler tails that restate the obvious: "This provides more visual emphasis.", "This prevents user interaction." | Cut unless it adds when-to-use guidance |
 | Passive or future tense in intros | Present tense, active voice |
 | Varied `hideLabel` / `hideLegend` wording | Standard boilerplate (below) |
+| Listing every prop in backticks in one intro sentence | Plain-language data shape; one configuring prop backtick per paragraph |
+| `` `selectedIds` tracks a single id` `` (implementation narration) | "Only one node is selected at a time" |
+| Prop laundry lists in intros | Links to sibling sections ([TreeView Basic](docs/src/pages/components/TreeView.svx) pattern) |
 
 Standard boilerplate for hidden labels (copy verbatim):
 
@@ -276,6 +349,22 @@ Standard boilerplate for hidden labels (copy verbatim):
 Use `hideLegend` analogously for legend-hiding props.
 
 Before / after examples:
+
+```
+# Before
+Create a basic tree view using the `nodes` prop. Each node requires a unique `id` and `text`, with optional properties for `disabled`, `icon`, and child `nodes`.
+
+# After
+Create a basic tree view using the `nodes` prop. Each node needs a unique id and display text; icons, disabled state, and nested children are optional.
+```
+
+```
+# Before
+Set the initial active node using the `activeId` prop.
+
+# After
+Set the initial active node using `activeId`.
+```
 
 ```
 # Before
@@ -314,7 +403,7 @@ The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click
 
 1. Export from `src/index.js`
 2. JSDoc all public API → `bun build:docs`
-3. Create `docs/src/pages/components/{Component}.svx` modeled on a similar existing component
+3. Create `docs/src/pages/components/{Component}.svx` modeled on a similar existing component: a frontmatter `description:`, then `## Basic` first (see [Example conventions](#example-conventions) for structure and grouping). Follow prose conventions in [`COMPONENT_DOCS_STYLE.md`](docs/COMPONENT_DOCS_STYLE.md).
 4. Add framed examples only where interactivity requires them
 5. Preview with `cd docs && bun dev`
 
