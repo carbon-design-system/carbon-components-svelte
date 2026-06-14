@@ -169,6 +169,8 @@
   let lastAppliedOptions = {};
   let calendarUsesFixedPositioning = false;
   let onCalendarReposition = null;
+  /** @type {HTMLElement | null} */
+  let topLayerAncestor = null;
   // Set from onOpen/onClose. Outside-click listener attaches only while open.
   let calendarOpen = false;
 
@@ -332,7 +334,7 @@
     // Auto-detect a top-layer ancestor (native dialog or open popover) so the
     // calendar can participate in its top layer instead of being clipped behind
     // the backdrop. Computed at creation time — appendTo cannot change after.
-    const topLayerAncestor = getTopLayerAncestor(datePickerRef);
+    topLayerAncestor = getTopLayerAncestor(datePickerRef);
     calendarUsesFixedPositioning = effectivePortalMenu && !!topLayerAncestor;
 
     calendar = await createCalendar({
@@ -462,6 +464,7 @@
         datePickerRef,
         calendar.calendarContainer,
         event.target,
+        topLayerAncestor,
       )
     ) {
       return;

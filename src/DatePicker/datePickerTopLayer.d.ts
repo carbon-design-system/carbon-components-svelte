@@ -22,4 +22,5 @@ export function isEventTargetInsidePortaledCalendar(
   datePickerRef: HTMLElement | null | undefined,
   calendarContainer: HTMLElement,
   target: EventTarget | null,
+  cachedTopLayer?: HTMLElement | null,
 ): boolean;
