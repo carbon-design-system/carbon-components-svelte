@@ -120,7 +120,7 @@
   </OutboundLink>
 </p>
 
-<h2 id="props">Props</h2>
+<h2 id="component-api-props" class="bx--type-productive-heading-04">Props</h2>
 
 {#if component.props.length > 0}
   <div class="overflow">
@@ -274,7 +274,9 @@
   <p class="my-layout-01-03">No props.</p>
 {/if}
 
-<h2 id="typedefs">Typedefs</h2>
+<h2 id="component-api-typedefs" class="bx--type-productive-heading-04">
+  Typedefs
+</h2>
 
 {#if component.typedefs.length > 0}
   <div class="my-layout-01-03">
@@ -288,7 +290,7 @@
   <p class="my-layout-01-03">No typedefs.</p>
 {/if}
 
-<h2 id="slots">Slots</h2>
+<h2 id="component-api-slots" class="bx--type-productive-heading-04">Slots</h2>
 {#if component.slots.length > 0}
   <StructuredList flush condensed class="my-layout-01-03">
     <StructuredListHead>
@@ -320,7 +322,9 @@
   <p class="my-layout-01-03">No slots.</p>
 {/if}
 
-<h2 id="forwarded-events">Forwarded events</h2>
+<h2 id="component-api-forwarded-events" class="bx--type-productive-heading-04">
+  Forwarded events
+</h2>
 {#if forwarded_events.length > 0}
   <UnorderedList class="my-layout-01-03">
     {#each forwarded_events as forwarded_event (forwarded_event.name)}
@@ -331,7 +335,9 @@
   <p class="my-layout-01-03">No forwarded events.</p>
 {/if}
 
-<h2 id="dispatched-events">Dispatched events</h2>
+<h2 id="component-api-dispatched-events" class="bx--type-productive-heading-04">
+  Dispatched events
+</h2>
 
 {#if dispatched_events.length > 0}
   {@const hasDescription = dispatched_events.find((el) => el.description)}
@@ -371,7 +377,9 @@
   <p class="my-layout-01-03">No dispatched events.</p>
 {/if}
 
-<h2 id="rest-props">$$restProps</h2>
+<h2 id="component-api-rest-props" class="bx--type-productive-heading-04">
+  $$restProps
+</h2>
 
 <div class="my-layout-01-03">
   {#if component.rest_props}
