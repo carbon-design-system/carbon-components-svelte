@@ -24,7 +24,7 @@
   .#{$prefix}--pin-code-input__segments {
     display: flex;
     align-items: center;
-    gap: 1px;
+    gap: $carbon--spacing-01;
   }
 
   .#{$prefix}--pin-code-input__field.#{$prefix}--text-input {
