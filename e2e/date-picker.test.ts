@@ -336,4 +336,141 @@ test.describe("DatePicker", () => {
     await page.getByTestId("outside-date-picker").click();
     await expect(calendar).not.toHaveClass(/open/);
   });
+
+  test.describe("close event trigger", () => {
+    test("single: outside-click when dismissing without changing value", async ({
+      page,
+    }) => {
+      const input = page.getByLabel("Meeting date");
+      await input.click();
+      const calendar = page
+        .getByTestId("date-picker-single")
+        .getByLabel("calendar-container");
+      await expect(calendar).toHaveClass(/open/);
+
+      await page.getByTestId("outside-date-picker").click();
+
+      await expect(calendar).not.toHaveClass(/open/);
+      await expect(
+        page.getByTestId("date-picker-single-close-triggers"),
+      ).toHaveText("outside-click");
+    });
+
+    test("single: outside-click on viewport mousedown before click handler", async ({
+      page,
+    }) => {
+      const input = page.getByLabel("Meeting date");
+      await input.click();
+      const calendar = page
+        .getByTestId("date-picker-single")
+        .getByLabel("calendar-container");
+      await expect(calendar).toHaveClass(/open/);
+
+      const viewport = page.viewportSize();
+      if (!viewport) throw new Error("expected viewport size");
+      await page.mouse.click(viewport.width - 5, viewport.height - 5);
+
+      await expect(calendar).not.toHaveClass(/open/);
+      await expect(
+        page.getByTestId("date-picker-single-close-triggers"),
+      ).toHaveText("outside-click");
+    });
+
+    test("single: outside-click when opened via calendar icon", async ({
+      page,
+    }) => {
+      const calendarIcon = page
+        .getByTestId("date-picker-single")
+        .locator(".bx--date-picker__icon");
+      await calendarIcon.click({ force: true });
+      const calendar = page
+        .getByTestId("date-picker-single")
+        .getByLabel("calendar-container");
+      await expect(calendar).toHaveClass(/open/);
+
+      await page.getByTestId("outside-date-picker").click();
+
+      await expect(calendar).not.toHaveClass(/open/);
+      await expect(
+        page.getByTestId("date-picker-single-close-triggers"),
+      ).toHaveText("outside-click");
+    });
+
+    test("single: select when choosing a day", async ({ page }) => {
+      const input = page.getByLabel("Meeting date");
+      await input.click();
+      const calendar = page
+        .getByTestId("date-picker-single")
+        .getByLabel("calendar-container");
+      await expect(calendar).toHaveClass(/open/);
+
+      const day20 = calendar
+        .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+        .filter({ hasText: /^20$/ });
+      await day20.click();
+
+      await expect(calendar).not.toHaveClass(/open/);
+      await expect(
+        page.getByTestId("date-picker-single-close-triggers"),
+      ).toHaveText("select");
+    });
+
+    test("single: escape-key on Escape", async ({ page }) => {
+      const input = page.getByLabel("Meeting date");
+      await input.click();
+      const calendar = page
+        .getByTestId("date-picker-single")
+        .getByLabel("calendar-container");
+      await expect(calendar).toHaveClass(/open/);
+
+      await input.focus();
+      await page.keyboard.press("Escape");
+
+      await expect(calendar).not.toHaveClass(/open/);
+      await expect(
+        page.getByTestId("date-picker-single-close-triggers"),
+      ).toHaveText("escape-key");
+    });
+
+    test("range: outside-click after partial selection", async ({ page }) => {
+      await page.getByTestId("date-picker-range-start").click();
+      const calendar = page
+        .getByTestId("date-picker-range")
+        .getByLabel("calendar-container");
+      await expect(calendar).toHaveClass(/open/);
+
+      const day10 = calendar
+        .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+        .filter({ hasText: /^10$/ });
+      await day10.click();
+      await page.getByTestId("outside-date-picker").click();
+
+      await expect(calendar).not.toHaveClass(/open/);
+      await expect(
+        page.getByTestId("date-picker-range-close-triggers"),
+      ).toHaveText("outside-click");
+    });
+
+    test("range: select when both dates are chosen", async ({ page }) => {
+      await page.getByTestId("date-picker-range-start").click();
+      const calendar = page
+        .getByTestId("date-picker-range")
+        .getByLabel("calendar-container");
+      await expect(calendar).toHaveClass(/open/);
+
+      const day10 = calendar
+        .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+        .filter({ hasText: /^10$/ });
+      const day20 = calendar
+        .locator(".flatpickr-day:not(.prev-month):not(.next-month)")
+        .filter({ hasText: /^20$/ });
+      await day10.click();
+      await day20.click();
+
+      await expect(calendar).not.toHaveClass(/open/);
+      await expect(
+        page.getByTestId("date-picker-range-close-triggers"),
+      ).toHaveText("select");
+    });
+  });
 });

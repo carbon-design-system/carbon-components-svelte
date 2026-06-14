@@ -1,5 +1,10 @@
 <script>
   import { DatePicker, DatePickerInput } from "carbon-components-svelte";
+
+  /** @type {string[]} */
+  let singleCloseTriggers = [];
+  /** @type {string[]} */
+  let rangeCloseTriggers = [];
 </script>
 
 <div data-testid="date-picker-single">
@@ -12,6 +17,11 @@
       maxDate: "03/31/2024",
     }}
     on:change
+    on:close={(e) =>
+      (singleCloseTriggers = [
+        ...singleCloseTriggers,
+        e.detail?.trigger ?? "null",
+      ])}
   >
     <DatePickerInput
       data-testid="date-picker-meeting"
@@ -19,6 +29,9 @@
       placeholder="mm/dd/yyyy"
     />
   </DatePicker>
+  <p data-testid="date-picker-single-close-triggers">
+    {singleCloseTriggers.join(",")}
+  </p>
 </div>
 
 <div data-testid="outside-date-picker" style="margin-top: 1rem; padding: 1rem;">
@@ -34,6 +47,11 @@
       maxDate: "03/31/2024",
     }}
     on:change
+    on:close={(e) =>
+      (rangeCloseTriggers = [
+        ...rangeCloseTriggers,
+        e.detail?.trigger ?? "null",
+      ])}
   >
     <DatePickerInput
       data-testid="date-picker-range-start"
@@ -46,4 +64,7 @@
       placeholder="mm/dd/yyyy"
     />
   </DatePicker>
+  <p data-testid="date-picker-range-close-triggers">
+    {rangeCloseTriggers.join(",")}
+  </p>
 </div>
