@@ -4,6 +4,7 @@ import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
 import ContentSwitcherDisabledNav from "./ContentSwitcher.disabledNav.test.svelte";
 import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
+import ContentSwitcherLowContrast from "./ContentSwitcher.lowContrast.test.svelte";
 import ContentSwitcherNested from "./ContentSwitcher.nested.test.svelte";
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
 import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.svelte";
@@ -60,6 +61,16 @@ describe("ContentSwitcher", () => {
     expect(xlTabs).toHaveLength(2);
     expect(xlTabs[0]).toHaveTextContent("XL 1");
     expect(xlTabs[1]).toHaveTextContent("XL 2");
+  });
+
+  it("applies the low contrast modifier only when lowContrast is set", () => {
+    render(ContentSwitcherLowContrast);
+
+    const tablists = screen.getAllByRole("tablist");
+    expect(tablists).toHaveLength(2);
+
+    expect(tablists[0]).toHaveClass("bx--content-switcher--low-contrast");
+    expect(tablists[1]).not.toHaveClass("bx--content-switcher--low-contrast");
   });
 
   it("renders with selectedIndex prop", () => {
