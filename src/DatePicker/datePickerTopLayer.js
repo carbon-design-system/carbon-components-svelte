@@ -74,15 +74,20 @@ export function positionFlatpickrCalendarFixed(
  * @param {HTMLElement | null | undefined} datePickerRef
  * @param {HTMLElement} calendarContainer
  * @param {EventTarget | null} target
+ * @param {HTMLElement | null} [cachedTopLayer] Pre-computed ancestor; avoids a `.closest()` query per event.
  */
 export function isEventTargetInsidePortaledCalendar(
   datePickerRef,
   calendarContainer,
   target,
+  cachedTopLayer,
 ) {
   if (!(target instanceof Node)) return false;
   if (datePickerRef?.contains(target)) return true;
   if (calendarContainer.contains(target)) return true;
-  const topLayer = getTopLayerAncestor(datePickerRef);
+  const topLayer =
+    cachedTopLayer === undefined
+      ? getTopLayerAncestor(datePickerRef)
+      : cachedTopLayer;
   return !!topLayer?.contains(target);
 }
