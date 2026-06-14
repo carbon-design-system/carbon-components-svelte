@@ -22,6 +22,9 @@
    */
   export let selectionMode = "automatic";
 
+  /** Set to `true` to use the low contrast variant */
+  export let lowContrast = false;
+
   /**
    * Obtain a reference to the tablist HTML element.
    * @type {HTMLDivElement | null}
@@ -185,6 +188,7 @@
   class:bx--content-switcher--sm={size === "sm"}
   class:bx--content-switcher--xl={size === "xl"}
   class:bx--content-switcher--icon-only={iconOnly}
+  class:bx--content-switcher--low-contrast={lowContrast}
   {...$$restProps}
   on:click
   on:mouseover
