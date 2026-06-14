@@ -43,7 +43,8 @@
 
   /**
    * Specify the icon to render.
-   * Icon is rendered to the right of the label.
+   * Icon is rendered to the right of the label by default.
+   * When the parent `Tabs` is `dismissible`, the icon is rendered to the left.
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);
@@ -55,15 +56,18 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
+  import Close from "../icons/Close.svelte";
 
   const {
     selectedTab,
     useAutoWidth,
     useFullWidth,
+    useDismissible,
     hasSecondaryLabel,
     add,
     remove,
     update,
+    dismiss,
   } = getContext("carbon:Tabs");
 
   add({
@@ -100,7 +104,11 @@
   on:mouseenter
   on:mouseleave
   on:keydown={(event) => {
-    if (!disabled && (event.key === " " || event.key === "Enter")) {
+    if (disabled) return;
+
+    if ($useDismissible && event.key === "Delete") {
+      dismiss(id);
+    } else if (event.key === " " || event.key === "Enter") {
       update(id);
     }
   }}
@@ -142,14 +150,38 @@
         ></div>
       {/if}
     {:else}
+      {#if $useDismissible && icon}
+        <div class:bx--tabs__nav-item--icon-left={true}>
+          <svelte:component this={icon} />
+        </div>
+      {/if}
       <span class:bx--tabs__nav-item-label={true}>
         <slot {selected}>{label}</slot>
       </span>
-      {#if icon}
+      {#if icon && !$useDismissible}
         <div class:bx--tabs__nav-item--icon={true}>
           <svelte:component this={icon} />
         </div>
       {/if}
     {/if}
   </a>
+  {#if $useDismissible}
+    <div class:bx--tabs__nav-item--close={true}>
+      <button
+        type="button"
+        tabindex="-1"
+        aria-label={label ? `Dismiss ${label}` : "Dismiss tab"}
+        class:bx--tabs__nav-item--close-icon={true}
+        class:bx--tabs__nav-item--close-icon--disabled={disabled}
+        {disabled}
+        on:click|preventDefault|stopPropagation={() => {
+          if (!disabled) {
+            dismiss(id);
+          }
+        }}
+      >
+        <Close aria-hidden="true" />
+      </button>
+    </div>
+  {/if}
 </li>
