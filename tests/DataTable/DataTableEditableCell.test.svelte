@@ -35,7 +35,13 @@
 <DataTable bind:this={table} {headers} {rows} bind:dirty bind:valid>
   <svelte:fragment slot="cell" let:row let:cell>
     {#if cell.key === "name"}
-      <EditableCell {row} {cell} validate={required} let:invalid let:invalidText>
+      <EditableCell
+        {row}
+        {cell}
+        validate={required}
+        let:invalid
+        let:invalidText
+      >
         <TextInput
           bind:value={row.name}
           {invalid}

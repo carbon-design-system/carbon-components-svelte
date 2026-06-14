@@ -169,6 +169,14 @@ Bind `dirty` to know when any cell differs from its initial value, and `valid` t
 
 <FileSource src="/framed/DataTable/DataTableEditableCellComponent" />
 
+## Row edit mode
+
+Edit one row at a time with explicit save and cancel. The `"cell"` slot exposes `let:editing`, `let:edit`, `let:save`, and `let:cancel`. Render inputs only when `editing` is `true`; use the callbacks to drive the row.
+
+When a row enters edit mode the table snapshots it, so `cancel` restores the original values without reassigning `rows`. `save` re-derives the row, and both dispatch a `save` / `discard` event with the affected `row`. Bind `editingRowId` to read or set which row is editing; pressing `Enter` commits and `Escape` cancels.
+
+<FileSource src="/framed/DataTable/DataTableEditableRow" />
+
 ## With title, description
 
 Add a title and description to provide context for the table data.

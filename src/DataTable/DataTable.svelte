@@ -43,7 +43,9 @@
    * @slot {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
    * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
-   * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
+   * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; editing: boolean; edit: () => void; save: () => void; cancel: () => void; }} cell
+   * @event {{ row: Row }} save
+   * @event {{ row: Row }} discard
    * @event click
    * @type {object}
    * @property {DataTableHeader<Row>} [header]
@@ -119,6 +121,16 @@
    * @bindable readonly
    */
   export let valid = true;
+
+  /**
+   * Id of the row currently in row edit mode, or `null`.
+   * The `cell` slot exposes `let:editing` / `let:edit` / `let:save` / `let:cancel`
+   * to drive row editing; set this directly to enter edit mode programmatically.
+   * Entering edit snapshots the row so `cancel` can restore it.
+   * @type {Row["id"] | null}
+   * @bindable writable
+   */
+  export let editingRowId = null;
 
   /**
    * Set the size of the data table.
@@ -422,6 +434,92 @@
 
   $: dirty = Object.values($editableCells).some((cell) => cell.dirty);
   $: valid = Object.values($editableCells).every((cell) => !cell.invalidText);
+
+  // Row edit mode. The table owns a shallow snapshot of the row being edited so
+  // `cancel` can restore it without the consumer reassigning `rows`. Entering
+  // edit (including programmatically via `editingRowId`) takes the snapshot and
+  // focuses the row's first field.
+  let prevEditingRowId = null;
+  /** @type {Record<string, any> | null} */
+  let editSnapshot = null;
+  $: if (editingRowId !== prevEditingRowId) {
+    prevEditingRowId = editingRowId;
+    if (editingRowId == null) {
+      editSnapshot = null;
+    } else {
+      const row = rows.find((row) => row.id === editingRowId);
+      editSnapshot = row ? { ...row } : null;
+      focusFirstField(editingRowId);
+    }
+  }
+
+  /**
+   * Enter row edit mode for the given row id.
+   * @type {(id: Row["id"]) => void}
+   */
+  export function editRow(id) {
+    editingRowId = id;
+  }
+
+  /**
+   * Commit the row currently in edit mode: re-derive its cells, dispatch
+   * `save`, clear dirty, and exit edit mode.
+   * @type {() => void}
+   */
+  export function saveRow() {
+    const id = editingRowId;
+    if (id == null) return;
+    const row = rows.find((row) => row.id === id);
+    refreshRow(id);
+    if (row) dispatch("save", { row });
+    resetDirty();
+    editingRowId = null;
+  }
+
+  /**
+   * Cancel the row currently in edit mode: restore the snapshot taken when
+   * editing began, dispatch `discard`, clear dirty, and exit edit mode.
+   * @type {() => void}
+   */
+  export function cancelRow() {
+    const id = editingRowId;
+    if (id == null) return;
+    const row = rows.find((row) => row.id === id);
+    if (row && editSnapshot) {
+      Object.assign(row, editSnapshot);
+      refreshRow(id);
+      dispatch("discard", { row });
+    }
+    resetDirty();
+    editingRowId = null;
+  }
+
+  function focusFirstField(id) {
+    tick().then(() => {
+      const root = tableRef ?? scrollContainerRef;
+      if (!root) return;
+      let rowEl = null;
+      try {
+        rowEl = root.querySelector(`[data-row="${String(id)}"]`);
+      } catch {
+        return;
+      }
+      rowEl?.querySelector("input, select, textarea")?.focus();
+    });
+  }
+
+  function handleRowKeydown(event, row) {
+    if (editingRowId !== row.id) return;
+    if (event.key === "Enter") {
+      // Allow newlines in a textarea; commit on Enter elsewhere.
+      if (event.target instanceof HTMLTextAreaElement) return;
+      event.preventDefault();
+      saveRow();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      cancelRow();
+    }
+  }
 
   /** Default row heights based on size variant */
   const DEFAULT_ROW_HEIGHTS = {
@@ -1039,6 +1137,8 @@
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = !!expandedRows[row.id]}
             {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
+            {@const isEditing = editingRowId === row.id}
+            {@const editThisRow = () => editRow(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({ row, rowIndex: actualIndex, selected: isSelected, expanded: isExpanded })
@@ -1071,6 +1171,7 @@
               on:mouseleave={() => {
                 dispatch("mouseleave:row", row);
               }}
+              on:keydown={(event) => handleRowKeydown(event, row)}
             >
               {#if expandable}
                 <TableCell
@@ -1174,6 +1275,10 @@
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
+                      editing={isEditing}
+                      edit={editThisRow}
+                      save={saveRow}
+                      cancel={cancelRow}
                     >
                       {cell.display
                         ? cell.display(cell.value, row)
@@ -1200,6 +1305,10 @@
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
+                      editing={isEditing}
+                      edit={editThisRow}
+                      save={saveRow}
+                      cancel={cancelRow}
                     >
                       {cell.display
                         ? cell.display(cell.value, row)
@@ -1259,6 +1368,8 @@
             {@const isExpanded = !!expandedRows[row.id]}
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
             {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
+            {@const isEditing = editingRowId === row.id}
+            {@const editThisRow = () => editRow(row.id)}
             {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
@@ -1299,6 +1410,7 @@
               on:mouseleave={() => {
                 dispatch("mouseleave:row", row);
               }}
+              on:keydown={(event) => handleRowKeydown(event, row)}
             >
               {#if expandable}
                 <TableCell
@@ -1392,6 +1504,10 @@
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
+                      editing={isEditing}
+                      edit={editThisRow}
+                      save={saveRow}
+                      cancel={cancelRow}
                     >
                       {cell.display ? cell.display(cell.value, row) : cell.value}
                     </slot>
@@ -1416,6 +1532,10 @@
                       cellIndex={j}
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
+                      editing={isEditing}
+                      edit={editThisRow}
+                      save={saveRow}
+                      cancel={cancelRow}
                     >
                       {cell.display ? cell.display(cell.value, row) : cell.value}
                     </slot>

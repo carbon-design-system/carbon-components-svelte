@@ -104,7 +104,7 @@
   }
 
   /* Compact in-cell inputs: drop the form-item top margin so the row
-     height stays tight when an input is always rendered in the cell. */
+         height stays tight when an input is always rendered in the cell. */
   .bx--editable-cell :global(.bx--form-item) {
     margin: 0;
   }
