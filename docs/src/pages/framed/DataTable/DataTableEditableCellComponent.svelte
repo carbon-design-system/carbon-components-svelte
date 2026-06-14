@@ -1,11 +1,11 @@
 <script>
   import {
+    Box,
+    Button,
     DataTable,
     EditableCell,
-    TextInput,
     NumberInput,
-    Button,
-    Box,
+    TextInput,
   } from "carbon-components-svelte";
 
   let dataTable;
@@ -19,7 +19,8 @@
 
   const required = (value) =>
     value && `${value}`.trim() ? undefined : "Required";
-  const positive = (value) => (value > 0 ? undefined : "Must be greater than 0");
+  const positive = (value) =>
+    value > 0 ? undefined : "Must be greater than 0";
 </script>
 
 <DataTable
@@ -39,7 +40,13 @@
 >
   <svelte:fragment slot="cell" let:row let:cell>
     {#if cell.key === "item"}
-      <EditableCell {row} {cell} validate={required} let:invalid let:invalidText>
+      <EditableCell
+        {row}
+        {cell}
+        validate={required}
+        let:invalid
+        let:invalidText
+      >
         <TextInput
           size="sm"
           hideLabel
@@ -50,7 +57,13 @@
         />
       </EditableCell>
     {:else if cell.key === "qty"}
-      <EditableCell {row} {cell} validate={positive} let:invalid let:invalidText>
+      <EditableCell
+        {row}
+        {cell}
+        validate={positive}
+        let:invalid
+        let:invalidText
+      >
         <NumberInput
           size="sm"
           hideLabel
