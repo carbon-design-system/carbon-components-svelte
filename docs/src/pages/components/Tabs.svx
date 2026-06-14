@@ -89,7 +89,7 @@ Set `disabled` to `true` on a tab component to prevent interaction. Keyboard nav
 
 ## With icons
 
-Use the `icon` prop to render an icon next to the tab label. The icon is rendered to the right of the label.
+Use the `icon` prop to render an icon next to the tab label. The icon is rendered to the right of the label by default and shifts to the left when `dismissible` is enabled.
 
 <Tabs>
   <Tab label="Calendar" icon={Calendar} />
@@ -101,6 +101,24 @@ Use the `icon` prop to render an icon next to the tab label. The icon is rendere
     <TabContent>Settings content</TabContent>
   </svelte:fragment>
 </Tabs>
+
+## Dismissible
+
+Set `dismissible` to `true` on `Tabs` to render a close button on each tab. Handle the `dismiss` event to remove the tab from your data and update `selected` if needed. The event detail includes `id`, `label`, `disabled`, and `index`. Set an `id` on each `Tab` to match the event to your list. Press <DocKbd label="Delete" /> on the focused tab to dismiss it.
+
+<FileSource src="/framed/Tabs/TabsDismissible" />
+
+## Dismissible with icons
+
+Set `dismissible` to `true` on `Tabs` and pass an `icon` to each `Tab`. Icons render on the left of the label; the close button stays on the right.
+
+<FileSource src="/framed/Tabs/TabsDismissibleIcons" />
+
+## Dismissible (container type)
+
+Set `type="container"` and `dismissible` to `true` for dismissible container tabs.
+
+<FileSource src="/framed/Tabs/TabsDismissibleContainer" />
 
 ## Container type
 
