@@ -115,6 +115,48 @@ Combine `lowContrast` with `disabled` on individual switches.
   <Switch disabled text="Recommended" />
 </ContentSwitcher>
 
+## Low contrast (icon-only)
+
+Combine `lowContrast` with icon-only switches.
+
+<ContentSwitcher lowContrast>
+  <Switch icon={TableOfContents} text="Table of contents" />
+  <Switch icon={Dashboard} text="Dashboard" />
+  <Switch icon={List} text="List" />
+</ContentSwitcher>
+
+## Low contrast (icon-only, custom tooltip alignment)
+
+Pass `tooltipAlignment` to individual icon-only switches to adjust how the tooltip aligns to the switch.
+
+<ContentSwitcher lowContrast>
+  <Switch icon={TableOfContents} text="Table of contents" tooltipAlignment="start" />
+  <Switch icon={Dashboard} text="Dashboard" />
+  <Switch icon={List} text="List" tooltipAlignment="end" />
+</ContentSwitcher>
+
+## Low contrast (icon-only, sizes)
+
+The low contrast, icon-only variant supports all sizes. Set `size` to `"sm"`, `"xl"`, or leave it unset for the default size.
+
+<Stack gap={6}>
+  <ContentSwitcher size="sm" lowContrast>
+    <Switch icon={TableOfContents} text="Table of contents" />
+    <Switch icon={Dashboard} text="Dashboard" />
+    <Switch icon={List} text="List" />
+  </ContentSwitcher>
+  <ContentSwitcher lowContrast>
+    <Switch icon={TableOfContents} text="Table of contents" />
+    <Switch icon={Dashboard} text="Dashboard" />
+    <Switch icon={List} text="List" />
+  </ContentSwitcher>
+  <ContentSwitcher size="xl" lowContrast>
+    <Switch icon={TableOfContents} text="Table of contents" />
+    <Switch icon={Dashboard} text="Dashboard" />
+    <Switch icon={List} text="List" />
+  </ContentSwitcher>
+</Stack>
+
 ## Extra-large size
 
 Set `size` to `"xl"` for an extra-large content switcher.
