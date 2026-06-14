@@ -70,6 +70,29 @@ If the current selected tab is removed, the next tab is selected.
 
 <FileSource src="/framed/Tabs/TabsConditional" />
 
+## Navigation
+
+By default, a `Tab` uses `"#"` as a placeholder `href` and behaves purely as an in-page selection control. Provide a real `href` to make the tab act like a link: activating it by mouse or keyboard navigates to the URL (in addition to selecting the tab). This is useful for routing each tab to a separate page.
+
+The tabs below link to other component pages, so selecting one navigates there.
+
+<Tabs>
+  <Tab label="Accordion" href="/components/Accordion" />
+  <Tab label="Breadcrumb" href="/components/Breadcrumb" />
+  <Tab label="Button" href="/components/Button" />
+  <svelte:fragment slot="content">
+    <TabContent>Accordion content</TabContent>
+    <TabContent>Breadcrumb content</TabContent>
+    <TabContent>Button content</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Navigation (intercept default)
+
+In a single-page app, you typically intercept the navigation to route on the client instead of triggering a full page load. Listen to the forwarded `click` event, call `event.preventDefault()`, and hand the URL to your router. The example below logs the route to the console instead of navigating.
+
+<FileSource src="/framed/Tabs/TabsNavigation" />
+
 ## Disabled tabs
 
 Set `disabled` to `true` on a tab component to prevent interaction. Keyboard navigation will skip disabled tabs.
