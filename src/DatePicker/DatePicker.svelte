@@ -4,6 +4,12 @@
    */
 
   /**
+   * @event close
+   * @type {object}
+   * @property {"escape-key" | "outside-click" | "select"} trigger
+   */
+
+  /**
    * Specify the date picker type.
    * @type {"simple" | "single" | "range"}
    */
@@ -173,6 +179,97 @@
   let topLayerAncestor = null;
   // Set from onOpen/onClose. Outside-click listener attaches only while open.
   let calendarOpen = false;
+  // flatpickr onClose has no reason; explicit handlers set closeTrigger, else
+  // infer from session baseline. Close dispatch is deferred for range sync.
+  /** @type {"escape-key" | "outside-click" | undefined} */
+  let closeTrigger;
+  /** @type {string | { from: string; to: string }} */
+  let dateStrAtOpen;
+  /** @type {number[]} */
+  let selectedDatesAtOpen = [];
+
+  /**
+   * @param {string | { from: string; to: string }} atOpen
+   * @param {string | { from: string; to: string }} atClose
+   */
+  function dateStrChanged(atOpen, atClose) {
+    if (typeof atClose === "object") {
+      return atOpen.from !== atClose.from || atOpen.to !== atClose.to;
+    }
+    return atOpen !== atClose;
+  }
+
+  /**
+   * @param {number[]} atOpen
+   * @param {Date[]} selectedDates
+   */
+  function selectedDatesChanged(atOpen, selectedDates) {
+    const atClose = (selectedDates || []).map((date) => date.getTime());
+    return (
+      atClose.length !== atOpen.length ||
+      atClose.some((time, index) => time !== atOpen[index])
+    );
+  }
+
+  function snapshotCloseBaseline() {
+    dateStrAtOpen = $range
+      ? { from: inputRef.value, to: inputRefTo.value }
+      : inputRef.value;
+    selectedDatesAtOpen = (calendar?.selectedDates || []).map((date) =>
+      date.getTime(),
+    );
+  }
+
+  function refreshCloseBaselineOnOpen() {
+    if (
+      selectedDatesChanged(selectedDatesAtOpen, calendar?.selectedDates || [])
+    ) {
+      dateStrAtOpen = $range
+        ? { from: inputRef.value, to: inputRefTo.value }
+        : inputRef.value;
+    } else {
+      snapshotCloseBaseline();
+    }
+  }
+
+  /**
+   * @param {{ copySelectedDates?: boolean }} [options]
+   */
+  function buildCalendarDetail({ copySelectedDates = false } = {}) {
+    const dates = calendar?.selectedDates || [];
+    const detail = {
+      selectedDates: copySelectedDates ? [...dates] : dates,
+    };
+
+    if ($range) {
+      const from = inputRef.value;
+      const to = inputRefTo.value;
+      detail.dateStr = { from, to };
+    } else {
+      detail.dateStr = inputRef.value;
+    }
+
+    return detail;
+  }
+
+  function dispatchDeferredClose() {
+    if (!calendar) return;
+
+    const detail = buildCalendarDetail({ copySelectedDates: true });
+
+    if ($range) {
+      valueFrom = inputRef.value;
+      valueTo = inputRefTo.value;
+    }
+
+    const selectionChanged =
+      selectedDatesChanged(selectedDatesAtOpen, detail.selectedDates) ||
+      dateStrChanged(dateStrAtOpen, detail.dateStr);
+    const trigger =
+      closeTrigger ?? (selectionChanged ? "select" : "outside-click");
+    closeTrigger = undefined;
+    dispatch("close", { ...detail, trigger });
+  }
 
   function attachFixedRepositionListeners() {
     if (!calendar || onCalendarReposition) return;
@@ -237,22 +334,17 @@
 
     if (type === "change") {
       if (calendar) {
-        const detail = { selectedDates: calendar.selectedDates || [] };
-
-        if ($range) {
-          detail.dateStr = {
-            from: inputRef?.value || "",
-            to: inputRefTo?.value || "",
-          };
-        } else {
-          detail.dateStr = inputRef?.value || "";
-        }
-
-        dispatch("change", detail);
+        dispatch("change", buildCalendarDetail());
       } else {
         dispatch("change", value);
       }
     }
+  }
+
+  function dismissCalendar(trigger) {
+    if (!calendarOpen) return;
+    closeTrigger = trigger;
+    if (calendar?.isOpen) calendar.close();
   }
 
   /**
@@ -261,8 +353,7 @@
   function blurInput(relatedTarget) {
     if (!calendar) return;
     // No relatedTarget means focus left the document (e.g. switching browser
-    // tabs); refocusing would replay the open animation. Outside clicks close
-    // via handleOutsideClick on datePickerRef.
+    // tabs); refocusing would replay the open animation.
     if (relatedTarget == null) return;
     // In range mode, focus moves between the two inputs while the calendar
     // stays open; closing here would replay the open animation on every switch.
@@ -271,7 +362,7 @@
       calendar.calendarContainer.contains(/** @type {Node} */ (relatedTarget))
     )
       return;
-    calendar.close();
+    dismissCalendar("outside-click");
   }
 
   /**
@@ -355,32 +446,31 @@
       base: inputRef,
       input: inputRefTo,
       dispatch: (event) => {
-        if (event === "open") calendarOpen = true;
-        else if (event === "close") calendarOpen = false;
-        if (calendarUsesFixedPositioning) {
-          if (event === "open") attachFixedRepositionListeners();
-          else if (event === "close") detachFixedRepositionListeners();
+        if (event === "open") {
+          calendarOpen = true;
+          closeTrigger = undefined;
+          refreshCloseBaselineOnOpen();
+        } else if (event === "close") {
+          calendarOpen = false;
+          if (calendarUsesFixedPositioning) {
+            detachFixedRepositionListeners();
+          }
+          queueMicrotask(dispatchDeferredClose);
+          return;
         }
-        const detail = { selectedDates: calendar?.selectedDates || [] };
+        if (calendarUsesFixedPositioning && event === "open")
+          attachFixedRepositionListeners();
+        const detail = buildCalendarDetail();
 
         if ($range) {
-          const from = inputRef.value;
-          const to = inputRefTo.value;
-
-          detail.dateStr = {
-            from: inputRef.value,
-            to: inputRefTo.value,
-          };
-
-          valueFrom = from;
-          valueTo = to;
-        } else {
-          detail.dateStr = inputRef.value;
+          valueFrom = inputRef.value;
+          valueTo = inputRefTo.value;
         }
 
         return dispatch(event, detail);
       },
     });
+    snapshotCloseBaseline();
     calendar?.calendarContainer?.setAttribute("role", "application");
     calendar?.calendarContainer?.setAttribute(
       "aria-label",
@@ -455,21 +545,37 @@
   }
 
   /**
+   * Returns true when `event.target` is outside both the date-picker element
+   * and the (possibly portalled) calendar container.
+   *
+   * @param {Event} event
+   */
+  function isOutsideCalendarTarget(event) {
+    if (!calendarOpen || !calendar) return false;
+    return !isEventTargetInsidePortaledCalendar(
+      datePickerRef,
+      calendar.calendarContainer,
+      event.target,
+      topLayerAncestor,
+    );
+  }
+
+  /**
+   * flatpickr closes on document `mousedown` before our `click` handler runs.
+   * Set `closeTrigger` in capture phase so single-mode outside dismiss is not
+   * inferred as select when selectedDates differ from the session baseline.
+   *
+   * @type {(event: Event) => void}
+   */
+  function handleOutsidePointerDown(event) {
+    if (isOutsideCalendarTarget(event)) closeTrigger = "outside-click";
+  }
+
+  /**
    * @type {(event: Event) => void}
    */
   function handleOutsideClick(event) {
-    if (!calendar?.isOpen) return;
-    if (
-      isEventTargetInsidePortaledCalendar(
-        datePickerRef,
-        calendar.calendarContainer,
-        event.target,
-        topLayerAncestor,
-      )
-    ) {
-      return;
-    }
-    calendar.close();
+    if (isOutsideCalendarTarget(event)) dismissCalendar("outside-click");
   }
 </script>
 
@@ -492,8 +598,14 @@
     bind:this={datePickerRef}
     use:dismiss={{
       enabled: calendarOpen,
-      type: "click",
-      handler: handleOutsideClick,
+      listeners: [
+        {
+          type: "pointerdown",
+          handler: handleOutsidePointerDown,
+          options: { capture: true },
+        },
+        { type: "click", handler: handleOutsideClick },
+      ],
     }}
     {id}
     class:bx--date-picker={true}
@@ -507,7 +619,7 @@
     on:keydown={(event) => {
       if (calendar?.isOpen && event.key === "Escape") {
         event.stopPropagation();
-        calendar.close();
+        dismissCalendar("escape-key");
       }
     }}
   >
