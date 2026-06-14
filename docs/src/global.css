@@ -28,17 +28,21 @@ html {
 }
 
 /* Dark theme code block styles (default for g80, g90, g100) */
-.prose > pre,
+.prose > pre {
+  background-color: var(--cds-ui-background);
+  color: #f4f4f4;
+}
+
 .code-override .bx--copy-btn,
 .code-override .bx--snippet,
 .code-override button.bx--btn.bx--snippet-btn--expand {
-  background-color: var(--cds-ui-background);
+  background-color: var(--cds-layer-01, var(--cds-ui-01));
   color: #f4f4f4;
 }
 
 .code-override .bx--copy-btn:hover,
 .code-override button.bx--btn.bx--snippet-btn--expand:hover {
-  background-color: #393939;
+  background-color: var(--cds-layer-hover-01, #393939);
 }
 
 .code-override .bx--snippet__icon {
@@ -47,14 +51,18 @@ html {
 
 /* Light theme code block styles (white, g10) */
 [theme="white"] .prose > pre,
-[theme="g10"] .prose > pre,
+[theme="g10"] .prose > pre {
+  background-color: var(--cds-ui-background);
+  color: var(--cds-text-01, #161616);
+}
+
 [theme="white"] .code-override .bx--copy-btn,
 [theme="g10"] .code-override .bx--copy-btn,
 [theme="white"] .code-override .bx--snippet,
 [theme="g10"] .code-override .bx--snippet,
 [theme="white"] .code-override button.bx--btn.bx--snippet-btn--expand,
 [theme="g10"] .code-override button.bx--btn.bx--snippet-btn--expand {
-  background-color: var(--cds-ui-background);
+  background-color: var(--cds-layer-01, var(--cds-ui-01));
   color: var(--cds-text-01, #161616);
 }
 
@@ -62,7 +70,10 @@ html {
 [theme="g10"] .code-override .bx--copy-btn:hover,
 [theme="white"] .code-override button.bx--btn.bx--snippet-btn--expand:hover,
 [theme="g10"] .code-override button.bx--btn.bx--snippet-btn--expand:hover {
-  background-color: var(--cds-field-hover-01, #e8e8e8);
+  background-color: var(
+    --cds-layer-hover-01,
+    var(--cds-field-hover-01, #e8e8e8)
+  );
 }
 
 [theme="white"] .code-override .bx--snippet__icon,
@@ -101,7 +112,7 @@ html {
 /** Gray 80 is the "lighted" dark theme. Ensure the background is dark. */
 [theme="g80"] .code-override,
 [theme="g80"] .code-override-inline {
-  background-color: var(--cds-ui-background);
+  background-color: var(--cds-layer-01, var(--cds-ui-01));
 }
 
 .token.builtin,
@@ -258,6 +269,15 @@ html {
   color: var(--cds-text-02);
 }
 
+.toc-nav .bx--link.toc-nav__sub {
+  padding-left: var(--cds-spacing-05);
+}
+
+/* Last sub-item in a group: add separation before the next section. */
+.toc-nav .bx--link.toc-nav__sub:not(:has(+ .toc-nav__sub)) {
+  margin-bottom: var(--cds-spacing-03);
+}
+
 .toc-nav .bx--link:visited,
 .toc-nav .bx--link:visited:hover {
   color: var(--cds-text-02);
@@ -282,9 +302,58 @@ html {
   padding-bottom: var(--cds-spacing-05);
 }
 
+.scrollbar-hover,
+.docs-sidenav .bx--side-nav__items,
+.code-override .bx--snippet--multi .bx--snippet-container {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.docs-sidenav .bx--side-nav__items {
+  border-right: 1px solid var(--cds-border-subtle);
+}
+
+.scrollbar-hover:hover,
+.docs-sidenav .bx--side-nav__items:hover,
+.code-override .bx--snippet--multi .bx--snippet-container:hover {
+  scrollbar-color: var(--cds-border-subtle) transparent;
+}
+
+.scrollbar-hover::-webkit-scrollbar,
+.docs-sidenav .bx--side-nav__items::-webkit-scrollbar,
+.code-override .bx--snippet--multi .bx--snippet-container::-webkit-scrollbar {
+  width: 0.375rem;
+  height: 0.375rem;
+}
+
+.scrollbar-hover::-webkit-scrollbar-track,
+.docs-sidenav .bx--side-nav__items::-webkit-scrollbar-track,
+.code-override
+  .bx--snippet--multi
+  .bx--snippet-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-hover::-webkit-scrollbar-thumb,
+.docs-sidenav .bx--side-nav__items::-webkit-scrollbar-thumb,
+.code-override
+  .bx--snippet--multi
+  .bx--snippet-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 999px;
+}
+
+.scrollbar-hover:hover::-webkit-scrollbar-thumb,
+.docs-sidenav .bx--side-nav__items:hover::-webkit-scrollbar-thumb,
+.code-override
+  .bx--snippet--multi
+  .bx--snippet-container:hover::-webkit-scrollbar-thumb {
+  background-color: var(--cds-border-subtle);
+}
+
 .table__scroll {
   overflow-y: auto;
-  padding-top: var(--cds-spacing-07);
+  padding-top: var(--cds-spacing-06);
   padding-bottom: var(--cds-spacing-07);
   padding-left: var(--cds-spacing-02);
   padding-right: 1rem;
@@ -388,8 +457,13 @@ html {
   line-height: var(--cds-expressive-heading-03-line-height);
 }
 
-.bx--col > p {
-  max-width: 44rem;
+.prose > p.bx--type-body-long-01 {
+  max-width: 64ch;
+}
+
+.prose > p.prose-section-intro {
+  max-width: 64ch;
+  margin-bottom: var(--cds-layout-02);
 }
 
 .prose > ul,
@@ -397,38 +471,39 @@ html {
   max-width: 48rem;
 }
 
-.bx--col > p:has(+ ul),
-.bx--col > p:has(+ ol) {
+.prose > p.bx--type-body-long-01:has(+ ul),
+.prose > p.bx--type-body-long-01:has(+ ol) {
   margin-bottom: var(--cds-layout-01);
 }
 
-.bx--col > p > code,
-.bx--col > ul > li > code,
-.bx--col > ol > li > code {
-  font-family: var(--cds-code-01-font-family);
-  font-size: var(--cds-code-01-font-size, 0.75rem);
-  font-weight: 500;
-  letter-spacing: var(--cds-code-01-letter-spacing, 0.32px);
+.bx--col > p > code.bx--type-code-01,
+.bx--col > ul > li > code.bx--type-code-01,
+.bx--col > ol > li > code.bx--type-code-01 {
   padding: 0 var(--cds-spacing-02);
-  color: var(--cds-text-01, #161616);
-  border: 2px solid rgba(0, 0, 0, 0);
   background-color: var(--cds-field-01, #f4f4f4);
   border-radius: 4px;
 }
 
-.prose kbd {
+.prose kbd.bx--type-code-01 {
   display: inline-block;
   padding: var(--cds-spacing-01) var(--cds-spacing-02);
-  font-family: var(--cds-code-01-font-family);
-  font-size: var(--cds-code-01-font-size, 0.75rem);
-  font-weight: 500;
-  letter-spacing: var(--cds-code-01-letter-spacing, 0.32px);
-  line-height: var(--cds-code-01-line-height);
-  color: var(--cds-text-01, #161616);
   background-color: var(--cds-field-01, #f4f4f4);
   border: 1px solid var(--cds-ui-03);
   border-radius: 4px;
   box-shadow: inset 0 -1px 0 var(--cds-ui-03);
+}
+
+/* Match table cell line metrics; prose kbd padding is taller than caption-01. */
+.prose > table kbd.bx--type-code-01 {
+  display: inline;
+  padding: 0 var(--cds-spacing-02);
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  font-family: var(--cds-code-01-font-family);
+  vertical-align: baseline;
+  border-radius: 2px;
+  box-shadow: none;
 }
 
 .prose > table {
@@ -436,8 +511,6 @@ html {
   max-width: 48rem;
   border-collapse: collapse;
   margin-bottom: var(--cds-layout-02);
-  font-size: var(--cds-body-short-01-font-size, 0.875rem);
-  line-height: var(--cds-body-short-01-line-height, 1.125rem);
 }
 
 .prose > table th,
@@ -448,37 +521,42 @@ html {
   border: 1px solid var(--cds-ui-03);
 }
 
-.prose > table th {
-  font-weight: 600;
+.prose > table th.bx--type-label-01 {
   background-color: var(--cds-field-01, #f4f4f4);
-  color: var(--cds-text-01, #161616);
 }
 
-.prose > table tbody tr:nth-child(even) td {
+.prose > table tbody tr:nth-child(even) td.bx--type-caption-01 {
   background-color: var(--cds-ui-background);
 }
 
-.prose > table td code,
-.prose > table th code {
-  font-family: var(--cds-code-01-font-family);
-  font-size: var(--cds-code-01-font-size, 0.75rem);
-  font-weight: 500;
-  letter-spacing: var(--cds-code-01-letter-spacing, 0.32px);
+.prose > table td code.bx--type-code-01,
+.prose > table th code.bx--type-code-01 {
   padding: 0 var(--cds-spacing-02);
-  color: var(--cds-text-01, #161616);
-  border: 2px solid rgba(0, 0, 0, 0);
   background-color: var(--cds-field-01, #f4f4f4);
   border-radius: 4px;
 }
 
-[class*="bx--col"] > h2,
-.bx--tab-content > h2 {
-  font-size: var(--cds-expressive-heading-04-font-size);
-  font-weight: var(--cds-expressive-heading-04-font-weight);
-  letter-spacing: var(--cds-expressive-heading-04-letter-spacing);
-  line-height: var(--cds-expressive-heading-04-line-height);
+/* bx--link uses body-short-01; inherit caption-01 / label-01 metrics from the cell. */
+.prose > table td .bx--link,
+.prose > table th .bx--link {
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  font-weight: inherit;
+  text-decoration: underline;
+}
+
+[class*="bx--col"] > h2.bx--type-productive-heading-04,
+.bx--tab-content > h2.bx--type-productive-heading-04 {
   padding-top: var(--cds-layout-03);
   margin-bottom: var(--cds-layout-01);
+}
+
+/* Sub-section headings (### within a ## group): layout only; type from bx--type-*. */
+[class*="bx--col"] > h3.bx--type-productive-heading-03,
+.bx--tab-content > h3.bx--type-productive-heading-03 {
+  padding-top: var(--cds-layout-02);
+  margin-bottom: var(--cds-spacing-05);
 }
 
 .bx--col > h4 {
@@ -490,9 +568,10 @@ html {
   margin-bottom: var(--cds-layout-01);
 }
 
-.bx--col > h2,
-.bx--tab-content > h2,
-.bx--col > h3,
+.bx--col > h2.bx--type-productive-heading-04,
+.bx--tab-content > h2.bx--type-productive-heading-04,
+.bx--col > h3.bx--type-productive-heading-03,
+.bx--tab-content > h3.bx--type-productive-heading-03,
 .bx--col > h4 {
   scroll-margin-top: 3rem;
 }
