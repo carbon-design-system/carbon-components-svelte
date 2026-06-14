@@ -11,8 +11,7 @@
   @include date-picker-input-wrapper;
 }
 
-// Backports readonly date picker styles from carbon-components v11+ to
-// carbon-components v10.58.12.
+// Readonly date picker (v11 backport).
 
 @mixin date-picker-readonly {
   .#{$prefix}--date-picker__input[readonly] {

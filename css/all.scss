@@ -1,8 +1,7 @@
-// This is a recipe for dynamic, client-side theming
-// All Carbon themes are included (White, Gray 10, Gray 90, Gray 100)
+// Client-side theme switching (white, g10, g80, g90, g100).
 
 $feature-flags: (
-  // Custom CSS properties must be enabled to dynamically switch themes
+  // Required for runtime theme switch
   enable-css-custom-properties: true,
   ui-shell: true,
   grid-columns-16: true
@@ -16,7 +15,6 @@ $css--reset: true;
 $css--default-type: true;
 $css--plex: true;
 
-// Use all Carbon themes
 @import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
 @import "carbon-components/scss/globals/scss/component-tokens";
 @import "carbon-components/src/components/tag/tag";
@@ -44,7 +42,7 @@ $css--plex: true;
 @import "./content-switcher";
 @import "./tooltip";
 
-// The default theme is "white" (White)
+// Default: white
 :root {
   @include carbon--theme($carbon--theme--white, true) {
     @include emit-component-tokens($tag-colors);
@@ -52,7 +50,6 @@ $css--plex: true;
   }
 }
 
-// Set the <html> theme attribute to "g10" to use the Gray 10 theme
 // <html theme="g10">
 :root[theme="g10"] {
   @include carbon--theme($carbon--theme--g10, true) {
@@ -61,7 +58,6 @@ $css--plex: true;
   }
 }
 
-// Set the <html> theme attribute to "g80" to use the Gray 80 theme
 // <html theme="g80">
 :root[theme="g80"] {
   @include carbon--theme($carbon--theme--g80, true) {
@@ -70,7 +66,6 @@ $css--plex: true;
   }
 }
 
-// Set the <html> theme attribute to "g90" to use the Gray 90 theme
 // <html theme="g90">
 :root[theme="g90"] {
   @include carbon--theme($carbon--theme--g90, true) {
@@ -79,7 +74,6 @@ $css--plex: true;
   }
 }
 
-// Set the <html> theme attribute to "g100" to use the Gray 100 theme
 // <html theme="g100">
 :root[theme="g100"] {
   @include carbon--theme($carbon--theme--g100, true) {
@@ -88,19 +82,15 @@ $css--plex: true;
   }
 }
 
-// Programmatically update the theme in JavaScript:
-// document.documentElement.setAttribute("theme", "g90");
-
 @import "carbon-components/scss/globals/scss/_css--reset";
 @import "carbon-components/scss/globals/scss/_css--font-face";
 @import "carbon-components/scss/globals/scss/_css--helpers";
 @import "carbon-components/scss/globals/scss/_css--body";
 @import "carbon-components/scss/globals/grid/grid";
 
-// Import all component styles
 @import "carbon-components/scss/globals/scss/styles";
 
-// Custom component overrides (must come after Carbon styles; same order as white/g10/etc.)
+// Overrides (after Carbon base styles; same order as white/g10/etc.)
 @import "./data-table-toolbar";
 @import "./data-table-zebra-hidden";
 @import "./data-table-highlighted-row";

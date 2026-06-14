@@ -1,6 +1,4 @@
-// Fluid variant styles for `Select`, ported from the Carbon v11
-// `fluid-select` module. carbon-components v10 only ships fluid styles
-// for the text input, so the select must be styled here.
+// Fluid Select (v11 port). v10 fluid styles cover text input only.
 // https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-select/_fluid-select.scss
 
 @import "carbon-components/scss/globals/scss/vars";
@@ -8,7 +6,7 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Fluid select variant (Carbon React `FluidSelect` parity)
+/// Fluid select (Carbon React FluidSelect)
 /// @access private
 /// @group components
 @mixin fluid-select {

@@ -3,10 +3,8 @@
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 @import "carbon-components/scss/globals/scss/typography";
 
-/// Icon-only content switcher variant (Carbon React `IconSwitch` parity).
-/// Carbon v10 ships no icon-only variant, so the square sizing and icon fills
-/// are patched here. The hover/focus label tooltip is rendered through a portal
-/// in `Switch.svelte` (reusing `PortalTooltip`) so it cannot be clipped.
+/// Icon-only content switcher (Carbon React IconSwitch).
+/// v10 has no icon-only variant. Tooltip label renders in a portal (`Switch.svelte`).
 /// @access private
 /// @group components
 @mixin content-switcher-icon-only {
@@ -41,8 +39,7 @@
     transition: fill $duration--fast-01 motion(standard, productive);
   }
 
-  // The `xl` size enlarges the icon to 20px (Carbon React `lg` parity); the
-  // `sm` and default sizes keep the icon's intrinsic 16px.
+  // xl: 20px icon (Carbon React lg); sm/default stay 16px.
   .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--xl
     .#{$prefix}--content-switcher-btn
     svg {

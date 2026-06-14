@@ -1,29 +1,20 @@
-// Fluid variant styles for `DatePicker`, ported from the Carbon v11
-// `fluid-date-picker` module. carbon-components v10 does not ship these.
+// Fluid DatePicker (v11 port). v10 has no fluid variant.
 // https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-date-picker/_fluid-date-picker.scss
 //
-// Adaptations for this library's DOM (which has no inner `<span>` around the
-// input and renders the validation message after the input wrapper):
-// - The v11 `... > span { inline-size: 100% }` rule is applied to the input
-//   wrapper instead.
-// - Simple-mode width overrides match the (0,3,0) specificity of the base v10
-//   `.bx--date-picker--simple` width rules so the field stretches fluidly.
-// - AI label / slug / decorator / toggletip / skeleton rules (and their
-//   `:has()` selectors) are dropped — this library does not render them.
+// DOM differences: no inner span (width on input wrapper); validation message
+// after wrapper; AI label/slug/decorator/toggletip/skeleton rules omitted.
 
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Fluid date picker variant (Carbon React `FluidDatePicker` parity)
+/// Fluid date picker (Carbon React FluidDatePicker)
 /// @access private
 /// @group components
 @mixin fluid-date-picker {
-  // The `--fluid` modifier sits on the outer `bx--form-item` wrapper.
-  // Default to the single-date picker width so the field aligns with the
-  // 288px flatpickr calendar. Consumers can override via `style`/`class`;
-  // inside `.bx--form--fluid` the field stretches to the form column.
+  // `--fluid` on the outer form-item wrapper. Default width matches the 288px
+  // flatpickr calendar; stretches to 100% inside `.bx--form--fluid`.
   .#{$prefix}--date-picker--fluid {
     display: inline-flex;
     background: $field-01;
@@ -70,9 +61,7 @@
     white-space: normal;
   }
 
-  // Field sizing — stretch every layer so the underline and warn divider
-  // span the full fluid field (overrides fit-content, fixed simple widths,
-  // and flatpickr's inline-block wrapper).
+  // Stretch every layer so underline and warn divider span the full field.
   .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker-container {
     inline-size: 100%;
     width: 100%;
@@ -103,7 +92,7 @@
     min-inline-size: to-rem(144px);
   }
 
-  // Match the (0,4,1) specificity of the base simple warn/invalid width rules.
+  // Match base simple warn/invalid width rules at (0,4,1) specificity.
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker--simple
     .#{$prefix}--date-picker-input__wrapper--invalid,
@@ -117,15 +106,14 @@
     }
   }
 
-  // Simple: hide the (decorative) calendar icon and draw a bottom border.
+  // Simple: hide decorative calendar icon, draw bottom border.
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker--simple
     .#{$prefix}--date-picker__icon {
     display: none;
   }
 
-  // Match the (0,3,0) specificity of the base simple width rules so the field
-  // and label stretch to fill the fluid container.
+  // Match base simple width rules at (0,3,0) specificity.
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker--simple
     .#{$prefix}--date-picker__input,
@@ -212,7 +200,7 @@
     border-inline-start: none;
   }
 
-  // Validation message rendered after the input wrapper, inside the container.
+  // Validation message sits after the input wrapper, inside the container.
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
     .#{$prefix}--form-requirement,
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--warn
@@ -224,8 +212,7 @@
     max-block-size: 100%;
   }
 
-  // Drop the inner bottom border when the whole field is invalid/warn — the
-  // outline supplies the boundary.
+  // Invalid/warn: drop inner bottom border; outline supplies the boundary.
   .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--invalid
     .#{$prefix}--date-picker,
   .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--warn
@@ -234,7 +221,7 @@
     border-block-end: 1px solid transparent;
   }
 
-  // Status icon aligns with the first line of the validation message.
+  // Status icon aligned with first line of validation message.
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
     .#{$prefix}--date-picker__icon--invalid,
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--warn
@@ -242,7 +229,7 @@
     inset-block-start: to-rem(80px);
   }
 
-  // Reveal the status icon for the simple variant (its base icon is hidden).
+  // Simple variant hides the base icon; show it again for invalid/warn.
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker--simple
     .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
@@ -254,8 +241,7 @@
     display: block;
   }
 
-  // Focus ring for a focused invalid single/range cell (declared after the
-  // invalid rules so it wins on source order while focused).
+  // Focus ring on invalid single/range cell (after invalid rules in source order).
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
     .#{$prefix}--date-picker__input:focus {
     @include focus-outline("outline");

@@ -1,11 +1,6 @@
-// Side nav overlay styles are defined here (and imported at bundle root) so they
-// are compiled outside carbon-components’ ui-shell media query. In Carbon, the
-// overlay is only styled inside a breakpoint-down block, so it does not appear
-// above the large viewport (e.g. 1056px). This override ensures the overlay is
-// visible and correctly stacked when the rail is expanded at all viewport sizes.
-//
-// This file also adds UI Shell component styles so HeaderAction, HeaderSearch,
-// HeaderPanelDivider, header, and side nav use theme tokens instead of hardcoded colors.
+// Side nav overlay compiled outside Carbon's ui-shell media query so it works
+// at large viewports when the rail expands. Replaces hardcoded UI Shell colors
+// with theme tokens (HeaderAction, HeaderSearch, header, side nav, etc.).
 
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
@@ -15,7 +10,6 @@
 /// @access private
 /// @group ui-shell
 @mixin ui-shell {
-  // Side nav overlay — applied at all viewport sizes (breaks out of Carbon media query).
   .#{$prefix}--side-nav__overlay.#{$prefix}--side-nav__overlay--mobile.#{$prefix}--side-nav__overlay-active {
     position: fixed;
     inset: 0;
@@ -30,9 +24,7 @@
       background-color 0.3s cubic-bezier(0.5, 0, 0.1, 1);
   }
 
-  // These styles override Carbon v10's hardcoded UI Shell colors with theme tokens
-  // to ensure proper theming across all themes. Use increased specificity to override
-  // Carbon v10's hardcoded values.
+  // Doubled selectors beat Carbon v10 hardcoded UI Shell colors.
   .#{$prefix}--header.#{$prefix}--header {
     background-color: $background;
     border-bottom-color: $border-subtle;
@@ -410,9 +402,6 @@
     outline-offset: -2px;
   }
 
-  // These styles override Carbon v10's hardcoded UI Shell colors with
-  // theme tokens to ensure proper theming across all themes.
-  // Using doubled class selectors to increase specificity.
   // Note: mini-units conversion: 1 mini-unit = 0.5rem (8px)
   // - mini-units(6) = 3rem (48px)
   // - mini-units(32) = 16rem (256px)
@@ -741,7 +730,6 @@
     left: 1rem; // convert.to-rem(16px)
   }
 
-  // Header menu items overrides
   .#{$prefix}--side-nav.#{$prefix}--side-nav
     a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item {
     justify-content: space-between;
@@ -812,7 +800,6 @@
     fill: $icon-secondary;
   }
 
-  // Hover states for side nav items
   .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active):hover
     .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active)
     > .#{$prefix}--side-nav__submenu.#{$prefix}--side-nav__submenu:hover,

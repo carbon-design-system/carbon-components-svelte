@@ -1,7 +1,3 @@
-// This file backports readonly checkbox styles from carbon-components v11+
-// to ensure compatibility with carbon-components v10.58.12.
-// The readonly checkbox feature was added to Carbon Design System in Nov 2022.
-
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";

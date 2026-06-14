@@ -1,6 +1,4 @@
-// Classic (mixed) UI Shell: Gray 100 header + White side navigation.
-// To minimize the generated CSS bundle size, custom CSS variables are used.
-// Only the all.css supports this since enable-css-custom-properties is true.
+// Classic UI Shell: g100 header + white side nav. Requires all.css (CSS custom properties).
 
 @import "carbon-components/scss/globals/scss/vars";
 

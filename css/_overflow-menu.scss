@@ -60,8 +60,8 @@
   @include overflow-menu-option-icons;
 }
 
-/// Extra-small overflow menu trigger + options (Carbon React `size="xs"`
-/// parity, 24px). v10 only ships sm/md/lg. Mirrors the v10 `--sm` rules.
+/// Extra-small overflow menu (Carbon React size="xs", 24px).
+/// v10 only ships sm/md/lg. Mirrors the v10 `--sm` rules.
 /// @access private
 /// @group components
 @mixin overflow-menu-xs {

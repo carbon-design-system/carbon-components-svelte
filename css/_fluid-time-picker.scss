@@ -1,5 +1,4 @@
-// Fluid variant styles for `TimePicker`, ported from the Carbon v11
-// `fluid-time-picker` module. carbon-components v10 does not ship these.
+// Fluid TimePicker (v11 port). v10 has no fluid variant.
 // https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-time-picker/_fluid-time-picker.scss
 
 @import "carbon-components/scss/globals/scss/vars";
@@ -7,7 +6,7 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Fluid time picker variant (Carbon React `FluidTimePicker` parity)
+/// Fluid time picker (Carbon React FluidTimePicker)
 /// @access private
 /// @group components
 @mixin fluid-time-picker {
@@ -60,7 +59,7 @@
     inline-size: 100%;
   }
 
-  // Time input cell — fluid text input layout (v11 `fluid-text-input` parity)
+  // Time input cell uses fluid text input layout.
   .#{$prefix}--time-picker--fluid
     .#{$prefix}--time-picker__input
     .#{$prefix}--text-input-wrapper {

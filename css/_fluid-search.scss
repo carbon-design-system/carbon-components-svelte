@@ -1,5 +1,4 @@
-// Fluid variant styles for `Search`, ported from the Carbon v11
-// `fluid-search` module. carbon-components v10 does not ship these.
+// Fluid Search (v11 port). v10 has no fluid variant.
 // https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-search/_fluid-search.scss
 
 @import "carbon-components/scss/globals/scss/vars";
@@ -7,7 +6,7 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Fluid search variant (Carbon React `FluidSearch` parity)
+/// Fluid search (Carbon React FluidSearch)
 /// @access private
 /// @group components
 @mixin fluid-search {

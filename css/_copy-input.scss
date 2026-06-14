@@ -96,8 +96,8 @@
     width: to-rem(48px);
   }
 
-  // Fluid copy button — parity with the password visibility toggle in
-  // `_fluid-text-input.scss` (32×32px, grounded on the value row).
+  // Fluid copy button matches the password visibility toggle in
+  // `_fluid-text-input.scss` (32×32px on the value row).
   .#{$prefix}--form--fluid,
   .#{$prefix}--text-input--fluid {
     .#{$prefix}--copy-input__field-wrapper .#{$prefix}--copy-btn {

@@ -3,24 +3,14 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Low contrast content switcher variant (Carbon React `lowContrast` parity).
-/// v10 has no low-contrast tokens, so the high-contrast (dark selected) model
-/// is recolored: the selected segment becomes an outlined card (the `::after`
-/// reveal: rounded + inset border) while the button stays transparent so the
-/// surface behind shows through the rounded corners. The `$border-inverse`
-/// outline already flips per theme (dark on light, light on dark).
+/// Low contrast content switcher (Carbon React lowContrast).
+/// v10 has no low-contrast tokens. Selected segment becomes an outlined card;
+/// unselected buttons stay transparent. Light themes use a gray container;
+/// dark themes use a transparent container with a raised selected card ($ui-02).
 ///
-/// Light and dark themes diverge the same way they do in Carbon v11. On light
-/// themes the container sits on a subtle gray surface. On dark themes it is
-/// transparent so the inactive switches blend with the page, and the selected
-/// card (`$ui-02`, which equals a raised gray on dark themes) stands out.
-///
-/// Theme detection differs by stylesheet. Single-theme stylesheets bake literal
-/// token colors, so the page theme is read from the background lightness. The
-/// `all.css` recipe enables `enable-css-custom-properties`, where every token is
-/// a `var(--cds-*)` reference that `lightness()` cannot evaluate; there the base
-/// rule defaults to the light treatment and the `[theme="…"]` overrides re-apply
-/// the dark treatment at runtime (the `<Theme>` component tags `<html>`).
+/// Single-theme builds detect light/dark from background lightness. `all.css`
+/// uses CSS custom properties, so lightness() fails; default to light and
+/// override via `[theme="g80"|"g90"|"g100"]`.
 /// @access private
 /// @group components
 @mixin content-switcher-low-contrast {
@@ -108,20 +98,15 @@
       background-color: transparent;
     }
 
-    // Icon-only switches fill their resting icon with `$icon-primary`; low
-    // contrast softens the unselected icons to `$icon-secondary` (Carbon React
-    // `lowContrast` parity). The extra `--low-contrast` class outranks the base
-    // icon-only rule regardless of emit order.
+    // Unselected icon-only switches use $icon-secondary (Carbon React lowContrast).
     &.#{$prefix}--content-switcher--icon-only
       .#{$prefix}--content-switcher-btn
       svg {
       fill: $icon-secondary;
     }
 
-    // Icon-only switches fill their selected icon with `$icon-inverse` (white)
-    // to read on the high-contrast dark card. The low-contrast selected card is
-    // light, so recolor it to `$icon-primary` (overriding the secondary fill
-    // above via the extra `--selected` class).
+    // Selected icon-only switches use $icon-primary on the light card
+    // (overrides the $icon-secondary fill above).
     &.#{$prefix}--content-switcher--icon-only
       .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected
       svg {

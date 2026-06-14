@@ -1,6 +1,5 @@
-// Fluid variant styles for `TextInput` and `PasswordInput`, ported from the
-// Carbon v11 `fluid-text-input` module. carbon-components v10 only ships fluid
-// styles keyed off `.bx--form--fluid`; this overlay enables standalone fluid.
+// Fluid TextInput/PasswordInput (v11 port). Standalone `--fluid` overlay;
+// v10 only styles fluid fields inside `.bx--form--fluid`.
 // https://github.com/carbon-design-system/carbon/blob/main/packages/styles/scss/components/fluid-text-input/_fluid-text-input.scss
 
 @import "carbon-components/scss/globals/scss/vars";
@@ -8,7 +7,7 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Fluid text input variant (Carbon React `FluidTextInput` parity)
+/// Fluid text input (Carbon React FluidTextInput)
 /// @access private
 /// @group components
 @mixin fluid-text-input {
