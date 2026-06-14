@@ -2,4 +2,4 @@
   export let label = "";
 </script>
 
-<kbd>{label}</kbd>
+<kbd class="bx--type-code-01">{label}</kbd>

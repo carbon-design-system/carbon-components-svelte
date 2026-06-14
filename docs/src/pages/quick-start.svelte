@@ -19,10 +19,10 @@
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import ArrowUpRight from "carbon-icons-svelte/lib/ArrowUpRight.svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
+  import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import Notification from "carbon-icons-svelte/lib/Notification.svelte";
-  import Play from "carbon-icons-svelte/lib/Play.svelte";
   import Search from "carbon-icons-svelte/lib/Search.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
@@ -86,7 +86,6 @@
 <Content class="quick-start-page">
   <DocHero
     eyebrow="Get started"
-    icon={Play}
     title="Quick start"
     description="Install the library, pick a theme, and render your first component. Three steps to a running app, plus customization options."
   />
@@ -511,6 +510,7 @@
     <Grid>
       <DocSectionHeader
         eyebrow="Reference"
+        icon={Catalog}
         title="Documentation for LLMs"
         description="Documentation is available in LLM-friendly plain text for use with coding assistants, plus a standalone Markdown document for every component. Append .md to any component's URL to read it."
       />

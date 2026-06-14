@@ -227,7 +227,7 @@
       <Column class="table-col">
         <div class="table-wrap">
           <div class="table-scroll">
-            <StructuredList condensed flush class="component-list">
+            <StructuredList condensed class="component-list">
               <StructuredListHead>
                 <StructuredListRow head>
                   {#each columns as column (column.key)}
