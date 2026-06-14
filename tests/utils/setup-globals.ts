@@ -2,6 +2,23 @@
 
 Element.prototype.scrollIntoView = vi.fn();
 
+// jsdom does not implement matchMedia. Default to "no match" so components that
+// observe breakpoints (e.g. Tabs via breakpointObserver) render as desktop.
+// Individual tests can `vi.stubGlobal("matchMedia", ...)` to simulate a size.
+if (typeof window !== "undefined" && !window.matchMedia) {
+  window.matchMedia = (query: string) =>
+    ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }) as unknown as MediaQueryList;
+}
+
 class ResizeObserverMock {
   callback: ResizeObserverCallback;
   elements: Element[];

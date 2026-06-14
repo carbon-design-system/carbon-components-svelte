@@ -45,6 +45,8 @@
    * Specify the icon to render.
    * Icon is rendered to the right of the label by default.
    * When the parent `Tabs` is `dismissible`, the icon is rendered to the left.
+   * When the parent `Tabs` is `iconOnly`, only the icon is rendered and the
+   * `label` is used as the accessible name and the tooltip shown on hover/focus.
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);
@@ -55,11 +57,30 @@
    */
   export let ref = null;
 
+  /**
+   * Set the direction of the tooltip relative to the tab.
+   * Only used when the tab is rendered icon-only.
+   * @type {"top" | "bottom"}
+   */
+  export let tooltipDirection = "bottom";
+
+  /**
+   * Set the alignment of the tooltip relative to the tab.
+   * Only used when the tab is rendered icon-only.
+   * @type {"start" | "center" | "end"}
+   */
+  export let tooltipAlignment = "center";
+
   import { getContext, onMount } from "svelte";
+  import { get } from "svelte/store";
   import Close from "../icons/Close.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
 
   const {
     selectedTab,
+    activeTooltip,
+    iconOnly,
+    belowMd,
     useAutoWidth,
     useFullWidth,
     useDismissible,
@@ -70,6 +91,57 @@
     dismiss,
   } = getContext("carbon:Tabs");
 
+  // Icon-only tabs show `label` as a portalled tooltip on hover/focus.
+  // The portal keeps the tooltip from being clipped by the tab nav's overflow.
+  const ENTER_DELAY_MS = 100;
+  const LEAVE_DELAY_MS = 300;
+
+  let hovered = false;
+  let focused = false;
+  let openTimeout;
+
+  // Gate on `activeTooltip` so only one tab tooltip shows at a time. When a
+  // neighbor claims the active slot, this one closes even while still hovered.
+  $: tooltipOpen =
+    $iconOnly &&
+    !$belowMd &&
+    !disabled &&
+    (hovered || focused) &&
+    $activeTooltip === id;
+
+  function claim() {
+    activeTooltip.set(id);
+  }
+
+  function release() {
+    if (!hovered && !focused && get(activeTooltip) === id) {
+      activeTooltip.set(undefined);
+    }
+  }
+
+  function reveal() {
+    hovered = true;
+    claim();
+  }
+
+  function showTooltip() {
+    clearTimeout(openTimeout);
+    // Skip the enter delay when another tooltip is already open (warm handoff).
+    if (get(activeTooltip) !== undefined && get(activeTooltip) !== id) {
+      reveal();
+    } else {
+      openTimeout = setTimeout(reveal, ENTER_DELAY_MS);
+    }
+  }
+
+  function hideTooltip() {
+    clearTimeout(openTimeout);
+    openTimeout = setTimeout(() => {
+      hovered = false;
+      release();
+    }, LEAVE_DELAY_MS);
+  }
+
   add({
     id,
     label,
@@ -79,6 +151,8 @@
 
   onMount(() => {
     return () => {
+      clearTimeout(openTimeout);
+      if (get(activeTooltip) === id) activeTooltip.set(undefined);
       remove(id);
     };
   });
@@ -119,13 +193,41 @@
     tabindex={disabled ? "-1" : tabindex}
     aria-selected={selected}
     aria-disabled={disabled}
+    aria-label={$iconOnly ? label : undefined}
     {id}
     {href}
     class:bx--tabs__nav-link={true}
-    class:bx--tabs__nav-link--icon={Boolean(icon)}
-    style:width={$useFullWidth ? "100%" : $useAutoWidth ? "auto" : undefined}
+    class:bx--tabs__nav-link--icon={Boolean(icon) && !$iconOnly}
+    class:bx--tabs__nav-link--icon-only={$iconOnly}
+    style:width={$iconOnly
+      ? undefined
+      : $useFullWidth
+        ? "100%"
+        : $useAutoWidth
+          ? "auto"
+          : undefined}
+    on:mouseenter={$iconOnly ? showTooltip : undefined}
+    on:mouseleave={$iconOnly ? hideTooltip : undefined}
+    on:focus={$iconOnly
+      ? () => {
+          focused = true;
+          claim();
+        }
+      : undefined}
+    on:blur={$iconOnly
+      ? () => {
+          focused = false;
+          release();
+        }
+      : undefined}
   >
-    {#if $hasSecondaryLabel}
+    {#if $iconOnly}
+      <div class:bx--tabs__nav-item--icon={true}>
+        <slot {selected}><svelte:component this={icon} /></slot>
+      </div>
+      <!-- Visible only in the mobile dropdown; hidden in the desktop icon-only row. -->
+      <span class:bx--tabs__nav-item-label={true}>{label}</span>
+    {:else if $hasSecondaryLabel}
       <div class:bx--tabs__nav-item-label-wrapper={true}>
         <span class:bx--tabs__nav-item-label={true}>
           <slot {selected}>{label}</slot>
@@ -183,5 +285,18 @@
         <Close aria-hidden="true" />
       </button>
     </div>
+  {/if}
+
+  {#if $iconOnly}
+    <PortalTooltip
+      anchor={ref}
+      direction={tooltipDirection}
+      open={tooltipOpen}
+      text={label}
+      tooltipType="icon"
+      intrinsicAlign={tooltipAlignment}
+      gapTop={tooltipDirection === "top" ? 1 : 0}
+      gapBottom={tooltipDirection === "bottom" ? 1 : 0}
+    />
   {/if}
 </li>

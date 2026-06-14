@@ -34,8 +34,25 @@
   /** Specify the tab trigger href attribute */
   export let triggerHref = "#";
 
+  /**
+   * Set to `true` to render icon-only tabs.
+   * Each `Tab` displays only its `icon`; the `label` is used as the accessible
+   * name and the tooltip shown on hover and focus.
+   */
+  export let iconOnly = false;
+
+  /**
+   * Specify the icon size for icon-only tabs.
+   * `"lg"` uses the large scale (48px tabs with a 20px icon);
+   * the default scale is 40px tabs with a 16px icon.
+   * Only applies when `iconOnly` is `true`.
+   * @type {"default" | "lg"}
+   */
+  export let iconSize = "default";
+
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { derived, get, writable } from "svelte/store";
+  import { breakpointObserver } from "../Breakpoint/breakpointObserver.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { keyBy } from "../utils/keyBy.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
@@ -76,6 +93,15 @@
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const selectedContent = writable(undefined);
+  /**
+   * Tracks which icon-only tab's tooltip is open so only one shows at a time.
+   * Scoped per `Tabs` instance.
+   * @type {import("svelte/store").Writable<string | undefined>}
+   */
+  const activeTooltip = writable(undefined);
+  // Below `md` the tabs collapse into the dropdown menu, where the label is
+  // visible inline; the icon-only tooltip is redundant there, so it is suppressed.
+  const belowMd = breakpointObserver().smallerThan("md");
 
   let refTabList = null;
   let refRoot = null;
@@ -88,6 +114,12 @@
     tabs,
     (_) => type === "container" && _.some((tab) => tab.hasSecondaryLabel),
   );
+
+  /**
+   * Mirror the `iconOnly` prop into the context so each `Tab` reacts to it.
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const useIconOnly = writable(iconOnly);
 
   /**
    * @type {(data: { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean }) => void}
@@ -159,6 +191,9 @@
     contentById,
     selectedTab,
     selectedContent,
+    activeTooltip,
+    iconOnly: useIconOnly,
+    belowMd,
     useAutoWidth,
     useFullWidth,
     useDismissible,
@@ -229,6 +264,7 @@
   $: useAutoWidth.set(autoWidth);
   $: useFullWidth.set(fullWidth);
   $: useDismissible.set(dismissible);
+  $: useIconOnly.set(iconOnly);
 </script>
 
 <div
@@ -239,6 +275,8 @@
   class:bx--tabs--tall={$hasSecondaryLabel}
   class:bx--tabs--full-width={fullWidth}
   class:bx--tabs--dismissible={dismissible}
+  class:bx--tabs--icon-only={iconOnly}
+  class:bx--tabs__icon--lg={iconOnly && iconSize === "lg"}
   {...$$restProps}
 >
   <div

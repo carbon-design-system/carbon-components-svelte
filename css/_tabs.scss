@@ -43,6 +43,128 @@
   @include tabs-icon;
 }
 
+/// Icon-only tab styles
+/// At `md` and up, the nav link is a square icon trigger and the label is
+/// surfaced as a portalled tooltip (rendered by `Tab.svelte`). Below `md` the
+/// tabs collapse into the legacy dropdown, where each item keeps its full-width
+/// footprint and shows the icon next to its text label.
+/// @access private
+/// @group components
+@mixin tabs-icon-only {
+  $icon-tab-size: $carbon--spacing-08; // 40px
+  $icon-tab-size-lg: $carbon--spacing-09; // 48px
+  // Container tabs are 48px tall, so icon-only container tabs are square at 48px.
+  $icon-tab-size-container: $carbon--spacing-09; // 48px
+
+  // Below md (dropdown menu): show the icon beside the label and keep the
+  // full-width item border. The label span is hidden in the desktop row below.
+  // Double class so `display: flex` out-specifies the base `a.bx--tabs__nav-link`
+  // (`display: block`) rule that is imported after this file.
+  a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  // Lift the icon out of its default beside-label spacing so it sits flush.
+  .#{$prefix}--tabs__nav-link--icon-only .#{$prefix}--tabs__nav-item--icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  // Container type adds an auto inline-start margin to push the icon to the end;
+  // neutralize it so the icon stays beside the label (mobile) / centered (md).
+  .#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-link--icon-only
+    .#{$prefix}--tabs__nav-item--icon {
+    margin-inline-start: 0;
+    padding-inline-start: 0;
+  }
+
+  // Mobile dropdown: Carbon's disabled underline (`2px solid $disabled-01`) is
+  // near-invisible, so disabled items look like they are missing a separator.
+  // Restore the same separator the enabled items use.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--tabs__nav-item--disabled
+      a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
+      border-bottom: 1px solid $ui-03;
+    }
+  }
+
+  @include carbon--breakpoint(md) {
+    // The icon-only nav is absolutely positioned and overlays the panel; the
+    // `.bx--tabs` container reserves only 40px by default, so the 48px lg row
+    // would cover the panel by 8px. Reserve the full 48px instead.
+    .#{$prefix}--tabs.#{$prefix}--tabs__icon--lg {
+      min-height: $icon-tab-size-lg;
+    }
+
+    // Square icon trigger; double class to out-specify the base
+    // `a.bx--tabs__nav-link` rules, which are imported after this file.
+    a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
+      justify-content: center;
+      gap: 0;
+      width: $icon-tab-size;
+      min-width: $icon-tab-size;
+      height: $icon-tab-size;
+      padding: 0;
+
+      &:focus,
+      &:active {
+        width: $icon-tab-size;
+        min-width: $icon-tab-size;
+        padding: 0;
+      }
+    }
+
+    // Hide the text label in the desktop icon-only row (kept for the dropdown).
+    .#{$prefix}--tabs__nav-link--icon-only .#{$prefix}--tabs__nav-item-label {
+      display: none;
+    }
+
+    // Container type: contained tabs are 48px tall, so make the icon-only link a
+    // 48px square (instead of the 40px default) so it does not look stretched.
+    .#{$prefix}--tabs--container
+      a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
+      width: $icon-tab-size-container;
+      min-width: $icon-tab-size-container;
+      height: $icon-tab-size-container;
+      padding: 0;
+    }
+
+    // Large icon scale: 48px square trigger. The `.bx--tabs__icon--lg` ancestor
+    // raises specificity above the default-scale rules above.
+    .#{$prefix}--tabs__icon--lg {
+      a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only,
+      &.#{$prefix}--tabs--container
+        a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
+        width: $icon-tab-size-lg;
+        min-width: $icon-tab-size-lg;
+        height: $icon-tab-size-lg;
+
+        &:focus,
+        &:active {
+          width: $icon-tab-size-lg;
+          min-width: $icon-tab-size-lg;
+        }
+      }
+
+      // The large scale enlarges the icon to 20px (Carbon React `lg` parity);
+      // the default scale keeps the icon's intrinsic 16px.
+      .#{$prefix}--tabs__nav-link--icon-only .#{$prefix}--tabs__nav-item--icon svg {
+        block-size: to-rem(20px);
+        inline-size: to-rem(20px);
+      }
+    }
+  }
+}
+
+@include exports('tabs-icon-only') {
+  @include tabs-icon-only;
+}
+
 /// Tab full-width styles
 /// @access private
 /// @group components
