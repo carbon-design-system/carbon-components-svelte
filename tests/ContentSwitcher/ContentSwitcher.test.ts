@@ -5,6 +5,7 @@ import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
 import ContentSwitcherDisabledNav from "./ContentSwitcher.disabledNav.test.svelte";
 import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
 import ContentSwitcherLowContrast from "./ContentSwitcher.lowContrast.test.svelte";
+import ContentSwitcherLowContrastIconOnly from "./ContentSwitcher.lowContrastIconOnly.test.svelte";
 import ContentSwitcherNested from "./ContentSwitcher.nested.test.svelte";
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
 import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.svelte";
@@ -71,6 +72,17 @@ describe("ContentSwitcher", () => {
 
     expect(tablists[0]).toHaveClass("bx--content-switcher--low-contrast");
     expect(tablists[1]).not.toHaveClass("bx--content-switcher--low-contrast");
+  });
+
+  it("combines the low contrast and icon-only modifiers", () => {
+    render(ContentSwitcherLowContrastIconOnly);
+
+    // Both modifiers must coexist on the tablist; this is the precondition for
+    // the low-contrast rule that recolors the selected icon to `$icon-primary`
+    // (the icon-only default of `$icon-inverse` is invisible on the light card).
+    const tablist = screen.getByRole("tablist");
+    expect(tablist).toHaveClass("bx--content-switcher--low-contrast");
+    expect(tablist).toHaveClass("bx--content-switcher--icon-only");
   });
 
   it("renders with selectedIndex prop", () => {
