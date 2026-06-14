@@ -33,7 +33,7 @@
     "css/*.css"
   ],
   "scripts": {
-    "setup": "bun ci && bun build:docs && cd docs && bun ci",
+    "setup": "bun ci && bun build:docs && bun build:css && cd docs && bun ci",
     "test": "vitest",
     "test:src-types": "tsgo --project tsconfig.types.json",
     "test:package-exports": "tsgo --project tsconfig.package-exports.json",
