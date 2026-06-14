@@ -158,6 +158,8 @@
   >
     <div class="bar bar--component">
       <Dropdown
+        id="theme-dropdown"
+        portalMenu
         class="theme-dropdown"
         type="inline"
         size="sm"
@@ -264,15 +266,14 @@
     width: 100%;
   }
 
-  .bar :global(.theme-dropdown .bx--list-box__menu) {
+  :global(#menu-theme-dropdown) {
     min-width: 8rem;
+    max-height: none !important;
   }
 
   .bar--component {
     margin-top: calc(-1 * var(--cds-spacing-06));
     margin-bottom: var(--cds-spacing-06);
-    position: relative;
-    z-index: 10000;
   }
 
   .toc.mobile {
