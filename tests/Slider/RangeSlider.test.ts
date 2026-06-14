@@ -110,6 +110,47 @@ describe("RangeSlider", () => {
     });
   });
 
+  it("should clamp keyboard arrow values to min and max", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(RangeSlider, { props: { value: 0, valueUpper: 100 } });
+
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+
+    upperThumb.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(consoleLog).toHaveBeenCalledWith("input", {
+      value: 0,
+      valueUpper: 100,
+    });
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: 0,
+      valueUpper: 100,
+    });
+
+    vi.clearAllMocks();
+    lowerThumb.focus();
+    await user.keyboard("{Shift>}{ArrowLeft}{/Shift}");
+    expect(consoleLog).toHaveBeenCalledWith("input", {
+      value: 0,
+      valueUpper: 100,
+    });
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: 0,
+      valueUpper: 100,
+    });
+  });
+
+  it("should not dispatch change on programmatic value updates", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { rerender } = render(RangeSlider, {
+      props: { value: 10, valueUpper: 90 },
+    });
+
+    await rerender({ value: 20, valueUpper: 80 });
+
+    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+  });
+
   it("should apply name attributes to lower and upper inputs", () => {
     render(RangeSlider, {
       props: { name: "lower", nameUpper: "upper" },
