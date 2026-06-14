@@ -87,6 +87,7 @@ describe("DatePicker close event", () => {
       },
     });
 
+    await screen.findByLabelText("calendar-container");
     await user.click(screen.getByLabelText("Start date"));
     const calendar = await waitFor(() => {
       const openCalendar = document.querySelector<HTMLElement>(
@@ -114,6 +115,7 @@ describe("DatePicker close event", () => {
       },
     });
 
+    await screen.findByLabelText("calendar-container");
     await user.click(screen.getByLabelText("Start date"));
     const calendar = await waitFor(() => {
       const openCalendar = document.querySelector<HTMLElement>(
@@ -147,6 +149,7 @@ describe("DatePicker close event", () => {
       },
     });
 
+    await screen.findByLabelText("calendar-container");
     await user.click(screen.getByLabelText("Start date"));
     const calendar = await waitFor(() => {
       const openCalendar = document.querySelector<HTMLElement>(
