@@ -3,7 +3,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { walk } from "estree-walker";
-import type { Blockquote, List, Paragraph, PhrasingContent } from "mdast";
+import type {
+  Blockquote,
+  List,
+  Paragraph,
+  PhrasingContent,
+  Table,
+} from "mdast";
 import { escapeSvelte, mdsvex } from "mdsvex";
 import { format } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
@@ -282,7 +288,7 @@ function plugin() {
   };
 }
 
-const H2_REGEX = /<h2[^>]+id="([^"]+)"[^>]*>([^<]+)<\/h2>/g;
+const HEADING_REGEX = /<h([23])[^>]+id="([^"]+)"[^>]*>([^<]+)<\/h\1>/g;
 const ADMONITION_RE = /^\[!(NOTE|WARNING|TIP|CAUTION)\]\s*/i;
 const ADMONITION_LINK_REF_RE = /^!(NOTE|WARNING|TIP|CAUTION)$/;
 const LEADING_WHITESPACE_RE = /^\n\s*/;
@@ -409,6 +415,42 @@ function heroIntro() {
   };
 }
 
+/** h2 intro that leads to subsections or a table—not a multi-paragraph demo block. */
+function isStandaloneSectionIntro(next: unknown): boolean {
+  if (!next || typeof next !== "object" || !("type" in next)) return false;
+  const node = next as { type?: string; depth?: number };
+  if (node.type === "table") return true;
+  return (
+    node.type === "heading" && typeof node.depth === "number" && node.depth >= 3
+  );
+}
+
+function isH2Heading(node: unknown): node is { type: "heading"; depth: 2 } {
+  return (
+    node != null &&
+    typeof node === "object" &&
+    "type" in node &&
+    node.type === "heading" &&
+    "depth" in node &&
+    node.depth === 2
+  );
+}
+
+function isH2SectionIntro(
+  parent: { children: unknown[] } | null | undefined,
+  index: number | null | undefined,
+): boolean {
+  if (!parent || index == null || index === 0) return false;
+  return (
+    isH2Heading(parent.children[index - 1]) &&
+    isStandaloneSectionIntro(parent.children[index + 1])
+  );
+}
+
+function tocLinkClasses(level: number): string {
+  return level === 3 ? "bx--link toc-nav__sub bx--type-label-01" : "bx--link";
+}
+
 function carbonify() {
   return (tree: Parameters<typeof visit>[0]) => {
     visit(tree, (node, index, parent) => {
@@ -428,6 +470,45 @@ function carbonify() {
         case "listItem":
           node.data = { hProperties: { class: "bx--list__item" } };
           return;
+        case "paragraph": {
+          const className = isH2SectionIntro(parent, index)
+            ? "bx--type-body-long-02 prose-section-intro"
+            : "bx--type-body-long-01";
+          node.data = { hProperties: { class: className } };
+          return;
+        }
+        case "heading": {
+          const heading = node as { depth?: number };
+          if (heading.depth === 2) {
+            node.data = {
+              hProperties: { class: "bx--type-productive-heading-04" },
+            };
+          } else if (heading.depth === 3) {
+            node.data = {
+              hProperties: { class: "bx--type-productive-heading-03" },
+            };
+          }
+          return;
+        }
+        case "inlineCode":
+          node.data = { hProperties: { class: "bx--type-code-01" } };
+          return;
+        case "table": {
+          const table = node as Table;
+          const headerClass = "bx--type-label-01";
+          const bodyClass = "bx--type-caption-01 bx--type-text-secondary";
+          for (let rowIndex = 0; rowIndex < table.children.length; rowIndex++) {
+            const row = table.children[rowIndex];
+            if (row.type !== "tableRow") continue;
+            const cellClass = rowIndex === 0 ? headerClass : bodyClass;
+            for (const cell of row.children) {
+              if (cell.type === "tableCell") {
+                cell.data = { hProperties: { class: cellClass } };
+              }
+            }
+          }
+          return;
+        }
         case "blockquote":
           break;
         default:
@@ -533,10 +614,10 @@ export default {
         if (NODE_MODULES_REGEX.test(filename)) return null;
         if (!filename.match(PAGES_COMPONENTS_REGEX)) return null;
 
-        const toc: { id: string; text: string }[] = [];
+        const toc: { id: string; text: string; level: number }[] = [];
 
-        for (const match of content.matchAll(H2_REGEX)) {
-          toc.push({ id: match[1], text: match[2] });
+        for (const match of content.matchAll(HEADING_REGEX)) {
+          toc.push({ level: Number(match[1]), id: match[2], text: match[3] });
         }
 
         let code = content.replace(
@@ -545,16 +626,16 @@ export default {
                 ${toc
                   .map(
                     (item) =>
-                      `<a class="bx--link" href="#${item.id}">${item.text}</a>`,
+                      `<a class="${tocLinkClasses(item.level)}" href="#${item.id}">${item.text}</a>`,
                   )
                   .join("")}
                 <div class="toc-section-label bx--type-label-01 bx--type-text-primary">Component API</div>
-                <a class="bx--link" href="#props">Props</a>
-                <a class="bx--link" href="#typedefs">Typedefs</a>
-                <a class="bx--link" href="#slots">Slots</a>
-                <a class="bx--link" href="#forwarded-events">Forwarded events</a>
-                <a class="bx--link" href="#dispatched-events">Dispatched events</a>
-                <a class="bx--link" href="#rest-props">restProps</a>
+                <a class="bx--link" href="#component-api-props">Props</a>
+                <a class="bx--link" href="#component-api-typedefs">Typedefs</a>
+                <a class="bx--link" href="#component-api-slots">Slots</a>
+                <a class="bx--link" href="#component-api-forwarded-events">Forwarded events</a>
+                <a class="bx--link" href="#component-api-dispatched-events">Dispatched events</a>
+                <a class="bx--link" href="#component-api-rest-props">restProps</a>
               </nav>
             </Layout_MDSVEX_DEFAULT>`,
         );
