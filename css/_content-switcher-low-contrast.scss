@@ -107,8 +107,23 @@
       background-color: transparent;
     }
 
-    .#{$prefix}--content-switcher--selected
-      .#{$prefix}--content-switcher__icon {
+    // Icon-only switches fill their resting icon with `$icon-primary`; low
+    // contrast softens the unselected icons to `$icon-secondary` (Carbon React
+    // `lowContrast` parity). The extra `--low-contrast` class outranks the base
+    // icon-only rule regardless of emit order.
+    &.#{$prefix}--content-switcher--icon-only
+      .#{$prefix}--content-switcher-btn
+      svg {
+      fill: $icon-secondary;
+    }
+
+    // Icon-only switches fill their selected icon with `$icon-inverse` (white)
+    // to read on the high-contrast dark card. The low-contrast selected card is
+    // light, so recolor it to `$icon-primary` (overriding the secondary fill
+    // above via the extra `--selected` class).
+    &.#{$prefix}--content-switcher--icon-only
+      .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected
+      svg {
       fill: $icon-primary;
     }
   }

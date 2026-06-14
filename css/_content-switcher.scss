@@ -41,6 +41,15 @@
     transition: fill $duration--fast-01 motion(standard, productive);
   }
 
+  // The `xl` size enlarges the icon to 20px (Carbon React `lg` parity); the
+  // `sm` and default sizes keep the icon's intrinsic 16px.
+  .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--xl
+    .#{$prefix}--content-switcher-btn
+    svg {
+    block-size: to-rem(20px);
+    inline-size: to-rem(20px);
+  }
+
   .#{$prefix}--content-switcher--icon-only
     .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected
     svg {
