@@ -17,6 +17,12 @@ Create a modal with a header, body, and footer. Each section can be customized i
 
 <FileSource src="/framed/Modal/ComposedModal" />
 
+## Full width
+
+Set `fullWidth` to `true` to remove the modal body padding so content spans edge to edge. Use it for content that supplies its own layout, such as a table or fluid form.
+
+<FileSource src="/framed/Modal/FullWidthComposedModal" />
+
 ## With portal
 
 Wrap the composed modal in a portal to ensure it renders above all z-index stacking contexts and parent overflow constraints, preventing visual clipping and layering issues.
