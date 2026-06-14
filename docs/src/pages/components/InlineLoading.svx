@@ -1,14 +1,13 @@
 ---
 components: ["InlineLoading"]
+description: Inline loading indicators are compact, embeddable indicators ideal for showing progress during inline operations like form submissions or data updates.
 ---
 
 <script>
   import { InlineLoading } from "carbon-components-svelte";
 </script>
 
-Inline loading indicators provide a compact loading indicator that can be embedded within content. They are ideal for showing progress during inline operations like form submissions or data updates.
-
-## Default
+## Basic
 
 Display a basic loading indicator with the default configuration.
 
@@ -20,7 +19,7 @@ Add a descriptive text to provide context about the loading operation.
 
 <InlineLoading description="Loading metrics..." />
 
-## Status states
+## Statuses
 
 The component supports different status states to indicate progress:
 

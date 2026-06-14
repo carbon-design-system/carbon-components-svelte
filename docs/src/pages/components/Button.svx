@@ -1,3 +1,7 @@
+---
+description: Buttons trigger actions like submitting a form or navigating, with multiple kinds and sizes to match each action's importance.
+---
+
 <script>
   import { Button, Stack } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
@@ -5,95 +9,97 @@
   import Login from "carbon-icons-svelte/lib/Login.svelte";
 </script>
 
-Buttons trigger actions in the interface. Use them to submit forms, navigate between pages, or perform specific tasks. Choose from different styles and sizes to match the importance and context of each action.
+## Kinds
 
-## Primary button
+Set the `kind` prop to match the importance of the action.
+
+### Primary
 
 The default button style is primary. Use it for the main action on a page.
 
 <Button>Primary button</Button>
 
-## Secondary button
+### Secondary
 
 Set `kind="secondary"` for secondary actions.
 
 <Button kind="secondary">Secondary button</Button>
 
-## Tertiary button
+### Tertiary
 
 Set `kind="tertiary"` for tertiary actions.
 
 <Button kind="tertiary">Tertiary button</Button>
 
-## Ghost button
+### Ghost
 
 Set `kind="ghost"` for ghost-style buttons.
 
 <Button kind="ghost">Ghost button</Button>
 
-## Danger button
+### Danger
 
 Set `kind="danger"` for destructive actions.
 
 <Button kind="danger">Danger button</Button>
 
-## Danger tertiary button
+### Danger tertiary
 
 Set `kind="danger-tertiary"` for less prominent destructive actions.
 
 <Button kind="danger-tertiary">Danger tertiary button</Button>
 
-## Danger tertiary, icon-only button
+### Danger tertiary (icon-only)
 
 Create an icon-only danger tertiary button by omitting the label text and providing an icon description for accessibility.
 
 <Button kind="danger-tertiary" iconDescription="Delete" icon={TrashCan} />
 
-## Danger ghost button
+### Danger ghost
 
 Set `kind="danger-ghost"` for ghost-style destructive actions.
 
 <Button kind="danger-ghost">Danger ghost button</Button>
 
-## Button with icon
+## Icons
+
+Add an icon, or render an icon-only button with a tooltip.
+
+### With icon
 
 Add an icon to the button using the `icon` prop.
 
 <Button icon={Add}>With icon</Button>
 
-## Icon-only button
+### Icon-only
 
-> [!NOTE]
-> Provide an **iconDescription** for accessibility. This text will be used as the button's tooltip and screen reader label.
+Omit the label and provide an **iconDescription** for accessibility. This text is used as the button's tooltip and screen reader label.
 
 <Button iconDescription="Tooltip text" icon={Add} />
 
-## Icon-only, link button
+### Icon-only link
 
 Set `href` to create an icon-only link button.
 
 <Button iconDescription="Login" icon={Login} href="#" />
 
-## Icon-only button (custom tooltip position)
+### Custom tooltip position
 
 Control the tooltip position and alignment with `tooltipPosition` and `tooltipAlignment`.
 
 <Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add} />
 
-## Icon-only button (portalled tooltip)
+### Portalled tooltip
 
 Set `portalTooltip` to `true` to render the icon-only tooltip in a portal. This prevents the tooltip from being clipped by `overflow: hidden` containers and auto-flips when the preferred direction lacks viewport space.
 
-By default (`portalTooltip` unset), the tooltip is portalled only when the button is inside a `Modal`. Set `portalTooltip={false}` to always use the inline (non-portalled) tooltip.
+By default, the tooltip is portalled only when the button is inside a Modal. Set `portalTooltip={false}` to always use the inline (non-portalled) tooltip.
 
 <Button portalTooltip iconDescription="Tooltip text" icon={Add} />
 
-## Icon-only button (hidden tooltip)
+### Hidden tooltip
 
-Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers.
-
-> [!NOTE]
-> Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed (e.g., toolbars). The **iconDescription** remains accessible to screen readers.
+Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers. Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed (e.g., toolbars). The **iconDescription** remains accessible to screen readers.
 
 <Stack orientation="horizontal" gap={2}>
   <Button hideTooltip iconDescription="Add item" icon={Add} />
@@ -101,25 +107,25 @@ Set `hideTooltip` to `true` to visually hide the tooltip while maintaining acces
   <Button hideTooltip iconDescription="Login" icon={Login} kind="ghost" />
 </Stack>
 
-## Selected icon-only, ghost button
+### Selected (ghost)
 
 Set `isSelected` to `true` to enable the selected state for an icon-only, ghost button.
 
 <FileSource src="/framed/Button/SelectedIconOnlyButton" />
 
-## Adjacent icon-only buttons
+### Adjacent
 
 When multiple icon-only buttons are placed next to each other, only one tooltip will be visible at a time. Hovering a new button automatically hides the previous tooltip, ensuring the correct button is always clicked.
 
 <FileSource src="/framed/Button/AdjacentIconOnlyButtons" />
 
-## Link button
+## Link
 
-Set `href` to render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) instead of a `button` element.
+Set `href` to render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) instead of a button element.
 
 <Button href="#">Link button</Button>
 
-## Link button with icon
+### With icon
 
 Similarly, link buttons can have icons.
 
@@ -127,7 +133,7 @@ Similarly, link buttons can have icons.
 
 ## Custom element
 
-By default, the button will render either a `button` or `a` element.
+By default, the button renders either a button or anchor element.
 
 To render a different element, set `as` to `true` and spread `let:props` to the element.
 
@@ -135,7 +141,11 @@ To render a different element, set `as` to `true` and spread `let:props` to the 
   <p {...props}>Custom element</p>
 </Button>
 
-## Field size
+## Sizes
+
+Set the `size` prop. The default is medium.
+
+### Field
 
 Set `size="field"` for field-sized buttons that align with form input heights.
 
@@ -145,7 +155,7 @@ Set `size="field"` for field-sized buttons that align with form input heights.
 <Button size="field" kind="ghost">Ghost</Button>
 <Button size="field" kind="danger">Danger</Button>
 
-## Small size
+### Small
 
 Set `size="small"` for small buttons.
 
@@ -155,7 +165,7 @@ Set `size="small"` for small buttons.
 <Button size="small" kind="ghost">Ghost</Button>
 <Button size="small" kind="danger">Danger</Button>
 
-## Large size
+### Large
 
 Set `size="lg"` for large buttons.
 
@@ -165,7 +175,7 @@ Set `size="lg"` for large buttons.
 <Button size="lg" kind="ghost">Ghost</Button>
 <Button size="lg" kind="danger">Danger</Button>
 
-## Extra-large size
+### Extra-large
 
 Set `size="xl"` for extra-large buttons.
 
@@ -175,7 +185,7 @@ Set `size="xl"` for extra-large buttons.
 <Button size="xl" kind="ghost">Ghost</Button>
 <Button size="xl" kind="danger">Danger</Button>
 
-## Disabled state
+## Disabled
 
 Set `disabled` to disable the button.
 
@@ -184,10 +194,7 @@ Set `disabled` to disable the button.
 
 ## Expressive styles
 
-Set `expressive` to `true` to use Carbon's expressive typesetting.
-
-> [!NOTE]
-> Use expressive styles with default, "lg", or "xl" button sizes.
+Set `expressive` to `true` to use Carbon's expressive typesetting. Use expressive styles with the default, "lg", or "xl" button sizes.
 
 <Button expressive size="xl">Primary</Button>
 <Button expressive size="xl" kind="secondary">Secondary</Button>

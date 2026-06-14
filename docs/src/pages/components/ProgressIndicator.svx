@@ -1,5 +1,6 @@
 ---
 components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
+description: Progress indicators show progress through a sequence of steps, with horizontal and vertical layouts and step states.
 ---
 
 <script>
@@ -9,9 +10,7 @@ components: ["ProgressIndicator", "ProgressStep", "ProgressIndicatorSkeleton"]
   import Circle from "carbon-icons-svelte/lib/CircleDash.svelte";
 </script>
 
-Progress indicators provide a visual representation of progress through a sequence of steps. They support horizontal and vertical layouts, step completion states, and interactive navigation.
-
-## Default
+## Basic
 
 Create a horizontal progress indicator with four steps.
 
@@ -103,7 +102,7 @@ Disable specific steps to prevent user interaction.
 
 ## Custom step icon (slot)
 
-Override the default step icon using the `icon` named slot. The slot exposes `complete`, `current`, `invalid`, and `description` so the override can mirror the step state.
+Override the default step icon using the icon named slot. The slot exposes complete, current, invalid, and description so the override can mirror the step state.
 
 <ProgressIndicator currentIndex={1}>
   <ProgressStep complete label="Step 1" description="Completed step">
@@ -117,7 +116,11 @@ Override the default step icon using the `icon` named slot. The slot exposes `co
   </ProgressStep>
 </ProgressIndicator>
 
-## Spaced-equally
+## Layout
+
+Adjust the orientation and step spacing.
+
+### Spaced-equally
 
 Distribute steps evenly across the available space.
 
@@ -136,7 +139,7 @@ Distribute steps evenly across the available space.
   />
 </ProgressIndicator>
 
-## Vertical
+### Vertical
 
 Display steps in a vertical layout.
 
@@ -161,13 +164,13 @@ Show a loading state with the specified number of steps.
 
 <ProgressIndicatorSkeleton />
 
-## Skeleton (vertical)
+### Vertical
 
 Show a vertical loading state with the specified number of steps.
 
 <ProgressIndicatorSkeleton vertical />
 
-## Skeleton (spaced-equally)
+### Spaced-equally
 
 Show a loading state with steps distributed evenly across the available space.
 

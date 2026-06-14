@@ -1,3 +1,7 @@
+---
+description: Fluid forms provide a full-width form layout that adapts to their container, with supported input components rendered in the fluid variant.
+---
+
 <script>
   import {
     ComboBox,
@@ -21,15 +25,10 @@
   } from "carbon-components-svelte";
 </script>
 
-Fluid forms provide a fluid-width form layout that adapts to their
-container. They are designed for full-width form layouts and work with supported
-input components such as text inputs, copy inputs, text areas, number inputs, selects, dropdowns, combo boxes, multi-selects, date pickers, and time pickers.
-Note that inline input variants cannot be used within a fluid form.
-
-## Fluid form
+## Basic
 
 Create a fluid-width form layout using the fluid form component. This example
-shows an application registration form with required fields.
+shows an application registration form with required fields. Supported inputs include text inputs, copy inputs, text areas, number inputs, selects, dropdowns, combo boxes, multi-selects, date pickers, and time pickers. Note that inline input variants cannot be used within a fluid form.
 
 <FluidForm>
   <TextInput
@@ -103,8 +102,7 @@ shows an application registration form with required fields.
 
 ## Standalone fluid inputs
 
-Fluid inputs do not require a fluid form. Set `fluid` to `true` on a
-supported component to use the fluid variant standalone.
+Fluid inputs do not require a fluid form. Set `fluid` on a supported component to use the fluid variant standalone.
 
 <Select fluid labelText="Deployment region" helperText="Helper text is not displayed in the fluid variant">
   <SelectItem value="us-east" text="US East (Washington DC)" />
@@ -178,9 +176,15 @@ intended.
   </TimePicker>
 </div>
 
+## Invalid
+
+Handle form validation and display error states with `invalid` and `invalidText` on form inputs.
+
+<FileSource src="/framed/FluidForm/FluidFormInvalid" />
+
 ## Inside a modal
 
-Place a fluid form inside a [modal](/components/Modal#full-width) to keep the inputs flush with the modal edges. Set `fullWidth` to `true` on the modal to remove the body padding so the form spans edge to edge.
+Place a fluid form inside a [modal](/components/Modal#full-width) to keep inputs flush with the modal edges. Set `fullWidth` on the modal to remove body padding so the form spans edge to edge.
 
 <FileSource src="/framed/FluidForm/FluidFormModal" />
 
@@ -196,10 +200,3 @@ loads.
 <FluidTextInputSkeleton />
 <FluidSelectSkeleton />
 <FluidDatePickerSkeleton />
-
-## Invalid state
-
-Handle form validation and display error states using the `invalid` and
-`invalidText` props on form inputs.
-
-<FileSource src="/framed/FluidForm/FluidFormInvalid" />

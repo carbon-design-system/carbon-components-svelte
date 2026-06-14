@@ -1,5 +1,6 @@
 ---
 components: ["NumberInput", "NumberInputSkeleton", "FluidNumberInputSkeleton"]
+description: Number inputs provide a controlled field for numeric values, with support for stepping, validation, and various states.
 ---
 
 <script>
@@ -7,9 +8,7 @@ components: ["NumberInput", "NumberInputSkeleton", "FluidNumberInputSkeleton"]
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
-Number inputs provide a controlled input for numerical values. They support validation, step values, and various states to ensure accurate data entry.
-
-## Default
+## Basic
 
 Create a basic number input with increment and decrement controls. The input accepts numerical values and provides visual feedback.
 
@@ -17,63 +16,98 @@ Create a basic number input with increment and decrement controls. The input acc
 
 ## No value
 
-Allow empty values by setting both `allowEmpty` to `true` and `value` to `null`. The `allowEmpty` prop enables the empty state, while `value={null}` represents no value.
+Allow empty values by setting `allowEmpty` to `true` and `value` to `null`. Both
+are required: allowEmpty enables the empty state, and null represents no value.
 
 <FileSource src="/framed/NumberInput/NumberInputEmpty" />
 
 ## Helper text
 
-Add descriptive text below the input using the `helperText` prop. This helps users understand the expected input.
+Add descriptive text below the input with `helperText`.
 
 <NumberInput labelText="Clusters" value={0} helperText="Clusters provisioned in your region" />
 
-## Minimum and maximum values
+## Hidden label
 
-Constrain input values using `min` and `max` props. The stepper buttons will not increment or decrement beyond the specified range. If a user types an out-of-range value directly, the input shows an invalid visual state rather than silently clamping. Provide `invalidText` to display an error message.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+
+<NumberInput hideLabel labelText="Clusters" value={0} />
+
+## Range and steps
+
+Control the allowed values and increment.
+
+### Min and max
+
+Constrain input values with `min` and `max`. Stepper buttons stop at the range
+limits. Typed values outside the range show an invalid state rather than
+silently clamping. Add `invalidText` for an error message.
 
 <NumberInput min="{4}" max="{20}" value="{4}" invalidText="Number must be between 4 and 20." helperText="Clusters provisioned in your region" labelText="Clusters (4 min, 20 max)" />
 
-## Step value
+### Step
 
-Control the increment/decrement step size using the `step` prop. This example uses a step of 0.1.
+Control increment and decrement step size with `step`. This example uses a step
+of 0.1.
 
 <NumberInput value="{1}" helperText="Step of 0.1" step={0.1} labelText="Clusters" />
 
-## Step start value
+### Step start
 
-Configure a starting point for stepping when the input is empty or zero using `stepStartValue`. When the user clicks increment or decrement, the value jumps directly to `stepStartValue` instead of stepping from zero.
+Configure a starting point for stepping when the input is empty or zero with
+`stepStartValue`. When the user clicks increment or decrement, the value jumps
+to stepStartValue instead of stepping from zero.
 
-This is useful when zero is not within the `min`/`max` range, or when there is a more sensible default (for example, the current year when asking for a year). Combined with `allowEmpty`, it ensures the user must interact with the input before submitting a value.
+This is useful when zero is outside the min/max range, or when a more sensible
+default exists (for example, the current year). Combined with allowEmpty, it
+ensures the user interacts with the input before submitting a value.
 
 <NumberInput stepStartValue={2026} allowEmpty min={2026} max={2100} labelText="Year" />
 
-## Preserve decimal input
+## Formatting
 
-Preserve decimal input formatting like "1.0", "2.00", or "3." by setting `allowDecimal` to `true`. This uses `type="text"` with `inputmode="decimal"` instead of `type="number"`, allowing trailing zeros and decimal points to be preserved while typing. This is useful for financial data or precise decimal entry.
+Control how the value is parsed and displayed.
+
+### Preserve decimals
+
+Preserve decimal input formatting like `"1.0"`, `"2.00"`, or `"3."` by setting
+`allowDecimal` to `true`. The input uses text mode with decimal input instead of
+a native number field, so trailing zeros and decimal points stay intact while
+typing. Useful for financial data or precise decimal entry.
 
 <FileSource src="/framed/NumberInput/NumberInputDecimal" />
 
-## Locale formatting
+### Locale
 
-Format numbers according to a locale using the `locale` prop with a BCP 47 language tag. The display value is formatted on blur using `Intl.NumberFormat`. When `locale` is set, the input uses `type="text"` with `inputmode="decimal"`.
+Format numbers according to a locale with `locale` and a BCP 47 language tag. The
+display value is formatted on blur using Intl.NumberFormat. When locale is set,
+the input uses text mode with decimal input.
 
 <NumberInput locale="de-DE" value={1234.5} labelText="Amount (German)" />
 
-## Locale with format options
+### Locale options
 
-Combine `locale` with `formatOptions` for additional formatting control like decimal precision.
+Combine `locale` with `formatOptions` for additional formatting control such as
+decimal precision.
 
 <NumberInput locale="en-US" formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} value={1234.5} labelText="Price" />
 
 ## Custom validation
 
-Use the `validate` prop to provide custom validation logic. The function receives the raw input string and optional locale. Return `false` to mark invalid, `true` to force valid (overriding auto bounds checks), or `undefined` to use built-in validation.
+Use `validate` for custom validation logic. The function receives the raw input
+string and optional locale. Return `false` to mark invalid, `true` to force valid
+(overriding auto bounds checks), or `undefined` to use built-in validation.
 
 <NumberInput validate={(raw) => { const num = Number(raw); return Number.isNaN(num) ? undefined : num % 2 === 0; }} invalidText="Must be an even number" labelText="Even number" value={0} />
 
-## Blur event
+## Events
 
-Use `on:blur` to listen for when the input loses focus. The event detail includes the current parsed `value` and the original `FocusEvent`.
+Respond to value changes and stepper interactions.
+
+### Blur
+
+Use `on:blur` to listen for when the input loses focus. The event detail
+includes the current parsed value and the original FocusEvent.
 
 <NumberInput
   on:blur={(e) => {
@@ -82,9 +116,11 @@ Use `on:blur` to listen for when the input loses focus. The event detail include
   }}
 />
 
-## Stepper click event
+### Stepper click
 
-Use `on:click:stepper` to listen for stepper button clicks. The event detail includes the updated `value` and the `direction` (`"up"` or `"down"`). This event only fires on button clicks, not arrow key presses.
+Use `on:click:stepper` to listen for stepper button clicks. The event detail
+includes the updated value and direction (`"up"` or `"down"`). This event only
+fires on button clicks, not arrow key presses.
 
 <NumberInput
   on:click:stepper={(e) => {
@@ -93,9 +129,10 @@ Use `on:click:stepper` to listen for stepper button clicks. The event detail inc
   }}
 />
 
-## Stepper blur event
+### Stepper blur
 
-Use `on:blur:stepper` to listen for when a stepper button loses focus. The event detail includes the current `value`, the `direction`, and the original `FocusEvent`.
+Use `on:blur:stepper` to listen for when a stepper button loses focus. The event
+detail includes the current value, direction, and original FocusEvent.
 
 <NumberInput
   on:blur:stepper={(e) => {
@@ -105,47 +142,45 @@ Use `on:blur:stepper` to listen for when a stepper button loses focus. The event
   }}
 />
 
-## Stepper events
+### Stepper
 
 <FileSource src="/framed/NumberInput/NumberInputStepperEvents" />
 
-## Hidden label
+## Sizes
 
-Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+`size` sets the input height. The default is `"md"`.
 
-<NumberInput hideLabel labelText="Clusters" value={0} />
-
-## Extra-large size
+### Extra-large
 
 Use the extra-large size for prominent inputs by setting `size` to `"xl"`.
 
 <NumberInput size="xl" labelText="Clusters" value={0} />
 
-## Small size
+### Small
 
 Use the small size for compact layouts by setting `size` to `"sm"`. This is ideal for secondary inputs.
 
 <NumberInput size="sm" labelText="Clusters" value={0} />
 
-## Light variant
+## Light
 
 Use the light variant for dark backgrounds by setting `light` to `true`.
 
 <NumberInput light labelText="Clusters" value={0} />
 
-## Fluid variant
+## Fluid
 
 Set `fluid` to `true` to use the fluid variant, which embeds the label inside the field. Fluid number inputs can be used standalone or inside [FluidForm](/components/FluidForm), where the fluid variant is applied automatically.
 
 <NumberInput fluid labelText="Clusters" value={0} />
 
-## Fluid variant with hidden steppers
+### Hidden steppers
 
 The fluid variant works with `hideSteppers` to remove the increment and decrement controls.
 
 <NumberInput fluid hideSteppers labelText="Clusters" value={0} />
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a tooltip icon.
 
@@ -156,53 +191,57 @@ Use the `labelChildren` slot to render custom label content, such as a tooltip i
   </svelte:fragment>
 </NumberInput>
 
-## Fluid variant (invalid)
+### Invalid
 
 Fluid number inputs display the error message inside the field boundary. Long messages wrap to multiple lines.
 
 <NumberInput fluid invalid invalidText="The number of clusters must be between 4 and 20 to provision a highly available cluster in this region." labelText="Clusters" value={0} />
 
-## Fluid variant (warning)
+### Warning
 
 <NumberInput fluid warn warnText="Increasing the cluster count will incur additional charges." labelText="Clusters" value={0} />
 
-## Fluid variant (disabled)
+### Disabled
 
 Invalid and warning states are not displayed while the input is disabled.
 
 <NumberInput fluid disabled invalid invalidText="The number of clusters is invalid." labelText="Clusters" value={0} />
 
-## Fluid variant (read-only)
+### Read-only
 
 Invalid and warning states are not displayed while the input is read-only.
 
 <NumberInput fluid readonly warn warnText="The number of clusters is read-only." labelText="Clusters" value={0} />
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading skeleton for the fluid number input variant.
 
 <FluidNumberInputSkeleton />
 
-## Invalid state
+## States
+
+Reflect validation and interaction states.
+
+### Invalid
 
 Indicate an invalid value by setting `invalid` to `true`. This example shows a validation error.
 
 <NumberInput invalid invalidText="Invalid value" labelText="Clusters" value={0} />
 
-## Warning state
+### Warning
 
 Indicate a warning state by setting `warn` to `true`. This example shows a warning about the input value.
 
 <NumberInput warn warnText="A high number may impact initial rollout" labelText="Clusters" value={25} />
 
-## Disabled state
+### Disabled
 
 Disable the input by setting `disabled` to `true`.
 
 <NumberInput disabled labelText="Clusters" value={0} />
 
-## Read-only state
+### Read-only
 
 Make the input read-only by setting `readonly` to `true`. This allows viewing but prevents editing.
 
@@ -210,7 +249,7 @@ Make the input read-only by setting `readonly` to `true`. This allows viewing bu
 
 ## Hidden steppers
 
-Hide the increment/decrement controls by setting `hideSteppers` to `true`.
+Hide the increment and decrement controls by setting `hideSteppers` to `true`.
 
 <NumberInput hideSteppers labelText="Clusters" value={0} />
 
@@ -226,7 +265,7 @@ Show a loading state using the number input skeleton. This is useful while data 
 
 <NumberInputSkeleton />
 
-## Skeleton without label
+### Without label
 
 Show a loading state without a label by setting `hideLabel` to `true`.
 

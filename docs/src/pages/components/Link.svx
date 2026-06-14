@@ -1,15 +1,14 @@
 ---
 components: ["Link", "OutboundLink"]
+description: Links provide styled hyperlinks with multiple sizes, states, and icons, including an outbound variant for external links.
 ---
 
 <script>
   import { Link, OutboundLink } from "carbon-components-svelte";
-  import Carbon from "carbon-icons-svelte/lib/Carbon.svelte"
+  import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
 </script>
 
-Links provide styled hyperlinks with various customization options. They support different sizes, states, and can include icons. The outbound link variant automatically handles external links with proper security attributes.
-
-## Default
+## Basic
 
 Create a basic link with the default styling.
 
@@ -17,34 +16,7 @@ Create a basic link with the default styling.
   Carbon Design System
 </Link>
 
-## Opens in new tab
-
-For external links that open in a new tab, the component automatically adds security attributes (`rel="noopener noreferrer"`). You can override the `rel` attribute if needed.
-
-<Link href="https://www.carbondesignsystem.com/" target="_blank">
-  Carbon Design System
-</Link>
-
-## Outbound link
-
-Use the outbound link as a convenient alternative for external links. Because it opens in a new tab (`target="_blank"`), it adds visually-hidden text ("(opens in a new tab)") so screen readers announce the behavior.
-
-<OutboundLink href="https://www.carbondesignsystem.com/">
-  Carbon Design System
-</OutboundLink>
-
-## Customize the new tab announcement
-
-External links open in a new tab and append `assistiveText` automatically for screen readers. You can override the `assistiveText` prop if needed, and set it to an empty string to opt out.
-
-<OutboundLink
-  href="https://www.carbondesignsystem.com/"
-  assistiveText="(opens in a new window)"
->
-  Carbon Design System
-</OutboundLink>
-
-## Inline variant
+## Inline
 
 Create links that flow naturally with surrounding text.
 
@@ -55,9 +27,42 @@ Create links that flow naturally with surrounding text.
   </Link>.
 </div>
 
-## Link with icon
+## External links
 
-Add icons to links for better visual context. Note that `inline` must be `false` when using icons.
+Use these patterns when linking to resources outside your app.
+
+### Opens in new tab
+
+For external links that open in a new tab, the component automatically adds security attributes (rel="noopener noreferrer"). Override rel if needed.
+
+<Link href="https://www.carbondesignsystem.com/" target="_blank">
+  Carbon Design System
+</Link>
+
+### Outbound link
+
+Use `OutboundLink` as a convenient alternative for external links. Because it opens in a new tab (`target="_blank"`), it adds visually hidden text ("(opens in a new tab)") so screen readers announce the behavior.
+
+<OutboundLink href="https://www.carbondesignsystem.com/">
+  Carbon Design System
+</OutboundLink>
+
+### Custom assistive text
+
+External links open in a new tab and append assistive text automatically for screen readers. Override `assistiveText` if needed, or set it to an empty string to opt out.
+
+<OutboundLink
+  href="https://www.carbondesignsystem.com/"
+  assistiveText="(opens in a new window)"
+>
+  Carbon Design System
+</OutboundLink>
+
+## Icons
+
+Add an icon with the `icon` prop. Inline must be false when using icons.
+
+### With icon
 
 <div>
   Visit the
@@ -66,23 +71,43 @@ Add icons to links for better visual context. Note that `inline` must be `false`
   </Link>.
 </div>
 
-## Size variants
+## Sizes
 
-The component supports different sizes to match your design needs:
+Set `size` to control link size. The default is medium.
+
+### Large
 
 <Link size="lg" href="https://www.carbondesignsystem.com/">
   Large link
 </Link>
-<br />
-<Link href="https://www.carbondesignsystem.com/">
-  Default link
-</Link>
-<br />
+
+### Small
+
 <Link size="sm" href="https://www.carbondesignsystem.com/">
   Small link
 </Link>
 
-## Disabled state
+## Size with icon
+
+Combine size and icon. Inline must be false.
+
+### Large
+
+<Link size="lg" href="https://www.carbondesignsystem.com/" icon={Carbon}>
+  Large link
+</Link>
+
+### Small
+
+<Link size="sm" href="https://www.carbondesignsystem.com/" icon={Carbon}>
+  Small link
+</Link>
+
+## States
+
+Reflect interaction and navigation history.
+
+### Disabled
 
 Disabled links render as plain text while remaining accessible.
 
@@ -90,9 +115,9 @@ Disabled links render as plain text while remaining accessible.
   Disabled link
 </Link>
 
-## Visited styles
+### Visited
 
-Show visited state styling for links.
+Show visited state styling with `visited`.
 
 <Link visited href="https://www.carbondesignsystem.com/">
   Visited link

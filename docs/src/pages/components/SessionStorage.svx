@@ -1,23 +1,22 @@
 ---
 components: ["SessionStorage"]
+description: Session storage provides a reactive wrapper around the sessionStorage API; data is isolated per tab and cleared when the tab closes.
 ---
 
-Session storage provides a reactive wrapper around the [Window.sessionStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage). Unlike [LocalStorage](/components/LocalStorage), data is cleared when the browser tab is closed and is isolated per tab—each tab has its own storage. Use session storage for temporary state that should not persist across sessions (for example, form drafts or wizard progress).
+## Basic
 
-The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so that updates from another same-origin document in the same tab (e.g., an iframe) stay in sync. Note that `sessionStorage` is isolated per tab, so this event does not propagate across tabs or windows. Received storage updates dispatch `on:update` with `{ prevValue, value }`. When the key is removed from a context sharing the session (for example, via `sessionStorage.removeItem()` or `sessionStorage.clear()`), the bound `value` resets to `undefined` so the next local mutation does not re-persist stale data.
+See how the component maintains state within a session. Toggle the switch and refresh the page to see the persisted state. State is cleared when the tab is closed. Unlike [LocalStorage](/components/LocalStorage), data is isolated per tab.
 
-## Basic example
-
-See how the component maintains state within a session. Toggle the switch and refresh the page to see the persisted state. Note that state is cleared when the tab is closed.
+The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so updates from another same-origin document in the same tab (for example, an iframe) stay in sync. Session storage is isolated per tab, so this event does not propagate across tabs or windows. Cross-document updates dispatch `on:update` with a payload shaped like `{ prevValue, value }`. When the key is removed from a shared session context, the bound value resets to undefined so the next local write does not re-persist stale data.
 
 <FileSource src="/framed/SessionStorage/SessionStorage" />
 
 ## Persisting objects and arrays
 
-`value` can be any JSON-serializable value; objects and arrays are serialized with `JSON.stringify`. The component compares the serialized form to decide when to write, which has two consequences:
+The bound value can be any JSON-serializable data; objects and arrays are serialized with JSON.stringify. The component compares the serialized form to decide when to write, which has two consequences:
 
-- Reassigning `value` to a new object/array with **identical contents** does not trigger a redundant write.
-- **In-place mutations** (for example, `value.theme = "light"`) are persisted only when you signal the change to Svelte. Reassign the value (`value = { ...value, theme: "light" }`) or use the self-assignment idiom (`value = value`); a bare mutation alone will not re-render the component and therefore will not persist.
+- Reassigning to a new object or array with **identical contents** does not trigger a redundant write.
+- **In-place mutations** (for example, changing a nested theme property) persist only when you signal the change to Svelte. Reassign the value (`value = { ...value, theme: "light" }`) or use the self-assignment idiom (`value = value`); a bare mutation alone will not re-render and therefore will not persist.
 
 In this example, the text inputs bind directly to nested properties and the button mutates the object in place. Edit a field and refresh the page to confirm the change is persisted within the session.
 
@@ -25,19 +24,19 @@ In this example, the text inputs bind directly to nested properties and the butt
 
 ## Reactive key
 
-The `key` prop is also reactive, so you can dynamically switch between storage keys — useful for per-user settings or multiple contexts.
+The storage key is also reactive — set `key` to switch between contexts, useful for per-user settings.
 
 In this example, each user has their own theme preference stored under a separate key. When you switch users, the component automatically loads that user's saved preference.
 
-Switching the `key` only hydrates `value` from storage; it does not dispatch an `on:update` event. The event log below should remain empty when you change users and only record entries when you change the theme.
+Switching keys only hydrates the bound value from storage; it does not dispatch `on:update`. The event log below should stay empty when you change users and only record entries when you change the theme.
 
 <FileSource src="/framed/SessionStorage/SessionStorageReactiveKey" />
 
 ## Disabling sync
 
-With `sync="on"` (the default), the component listens for the `storage` event and updates `value` when another same-origin document in this tab writes the same key, such as an iframe. Set `sync="off"` to ignore those writes. The component still loads storage on mount and saves your own changes.
+With sync enabled by default, the component listens for storage events and updates the bound value when another same-origin document in this tab writes the same key, such as an iframe. Set `sync="off"` to ignore those writes. The component still loads storage on mount and saves your own changes.
 
-`sessionStorage` is already per tab, so this matters mainly when an iframe shares the session. Turn sync off when the host page should not follow iframe writes, or when the app handles conflicts itself. `sync` is reactive, so you can change it at runtime.
+Session storage is already per tab, so this matters mainly when an iframe shares the session. Turn sync off when the host page should not follow iframe writes, or when the app handles conflicts itself. Sync is reactive, so you can change it at runtime.
 
 ```svelte
 <SessionStorage key="draft" bind:value sync="off" />
@@ -52,7 +51,7 @@ The component provides methods to manage stored data:
 | `clearItem`  | Remove a specific key-value pair.   |
 | `clearAll`   | Remove all stored data.             |
 
-Use `bind:this` to access these methods. These methods only clear browser storage in the current tab; they do not reset the bound `value`. If you want to clear both storage and the bound value, reset `value` yourself after calling `clearItem` or `clearAll`.
+Use `bind:this` to access these methods. They only clear browser storage in the current tab; they do not reset the bound value. To clear both storage and the bound value, reset the value yourself after calling clearItem or clearAll.
 
 In this example, try toggling the switch, refreshing the page, then clearing the storage.
 

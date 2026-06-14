@@ -1,10 +1,12 @@
+---
+description: Tooltip definitions show an inline tooltip for a defined term on hover or focus, for adding context without clutter.
+---
+
 <script>
   import { TooltipDefinition } from "carbon-components-svelte";
 </script>
 
-Tooltip definitions provide inline definitions for terms or concepts. They display a tooltip when users hover over or focus on the defined term, making them ideal for providing additional context without cluttering the interface.
-
-## Default
+## Basic
 
 Display a basic definition tooltip with the default bottom-center alignment.
 
@@ -12,11 +14,15 @@ Display a basic definition tooltip with the default bottom-center alignment.
   Armonk
 </TooltipDefinition>
 
-## Direction
+## Placement
+
+Position the tooltip with direction and alignment.
+
+### Direction
 
 By default, the tooltip is positioned to the bottom.
 
-Position the tooltip in different directions using the `direction` prop.
+Position the tooltip with `direction`.
 
 <TooltipDefinition direction="top" tooltipText="Top">
 Top
@@ -25,11 +31,11 @@ Top
 Bottom
 </TooltipDefinition>
 
-## Alignment
+### Alignment
 
 By default, the tooltip is aligned to the center.
 
-Align the tooltip content using the `align` prop.
+Align the tooltip content with `align`.
 
 <TooltipDefinition align="start" tooltipText="Start">
 Start
@@ -43,7 +49,7 @@ End
 
 ## Click to open
 
-Set `clickToOpen` to open the tooltip on click instead of on hover.
+Open the tooltip on click instead of hover with `clickToOpen`.
 
 <TooltipDefinition clickToOpen tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk
@@ -51,7 +57,7 @@ Set `clickToOpen` to open the tooltip on click instead of on hover.
 
 ## Open by default
 
-Use the `open` prop to open the tooltip by default.
+Open the tooltip by default with `open`.
 
 <TooltipDefinition open tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk
@@ -59,7 +65,7 @@ Use the `open` prop to open the tooltip by default.
 
 ## Programmatic usage
 
-Control the tooltip state programmatically using `bind:open`.
+Control tooltip state programmatically with `bind:open`.
 
 <FileSource src="/framed/TooltipDefinition/TooltipDefinitionReactive" />
 
@@ -71,7 +77,7 @@ The component dispatches `open` and `close` events.
 
 ## Custom delay
 
-Use `enterDelayMs` and `leaveDelayMs` to customize the delay before showing and hiding the tooltip on hover. The defaults are 100ms and 300ms, respectively.
+Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100ms and 300ms.
 
 <TooltipDefinition tooltipText="Slow to appear" enterDelayMs={500} leaveDelayMs={500}>
   Armonk
@@ -79,7 +85,7 @@ Use `enterDelayMs` and `leaveDelayMs` to customize the delay before showing and 
 
 ## Custom tooltip slot
 
-Use the `tooltip` slot to customize the tooltip content with additional styling or structure.
+Use the `tooltip` slot to customize tooltip content with additional styling or structure.
 
 <TooltipDefinition>
   Armonk
@@ -88,17 +94,17 @@ Use the `tooltip` slot to customize the tooltip content with additional styling 
   </span>
 </TooltipDefinition>
 
-## Portal tooltip
+## Portal
 
-Use `portalTooltip` to render the tooltip in a portal, preventing it from being clipped by `overflow: hidden` containers. This is automatically enabled when the tooltip is inside a `Modal`. The `align` prop is respected when portalled, matching non-portal positioning.
+Set `portalTooltip` to render the tooltip in a portal so it is not clipped by overflow containers. This is enabled automatically inside a Modal. Alignment matches the non-portal path.
 
 <TooltipDefinition portalTooltip tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
   Armonk
 </TooltipDefinition>
 
-## Portal (direction)
+### Direction
 
-Definition tooltips support `top` and `bottom` only. With `portalTooltip`, `direction` behaves the same as the default CSS path.
+Definition tooltips support top and bottom directions only. With portalling, direction behaves the same as the default CSS path.
 
 <TooltipDefinition portalTooltip direction="top" tooltipText="Top">
   Top
@@ -107,9 +113,9 @@ Definition tooltips support `top` and `bottom` only. With `portalTooltip`, `dire
   Bottom
 </TooltipDefinition>
 
-## Portal (alignment)
+### Alignment
 
-Portalled tooltips use the same `align` prop as the non-portal path: horizontal placement along the anchor for `top` and `bottom`.
+Portalled tooltips use the same alignment options as the default path: horizontal placement along the anchor for top and bottom directions.
 
 <TooltipDefinition portalTooltip align="start" tooltipText="Start">
   Start
@@ -123,6 +129,6 @@ Portalled tooltips use the same `align` prop as the non-portal path: horizontal 
 
 ## Inside a modal
 
-When a tooltip definition is used inside a [Modal](/components/Modal), it is automatically rendered in a portal so it is not clipped by the modal's overflow or z-index stacking. Set `portalTooltip` to explicitly control this behavior.
+When a tooltip definition is used inside a [Modal](/components/Modal), it is automatically portalled so it is not clipped by the modal overflow or z-index stacking. Set `portalTooltip` to override this behavior.
 
 <FileSource src="/framed/TooltipDefinition/TooltipDefinitionModal" />

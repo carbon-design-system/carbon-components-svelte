@@ -1,5 +1,6 @@
 ---
 components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton", "FluidSelectSkeleton"]
+description: Selects provide a dropdown menu for selecting a single option, with various states, sizes, validation, and helper text.
 ---
 
 <script>
@@ -7,11 +8,9 @@ components: ["Select", "SelectItem", "SelectItemGroup", "SelectSkeleton", "Fluid
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
-Selects provide a dropdown menu for selecting a single option from a list. They support various states, sizes, and include built-in validation and helper text.
+## Basic
 
-## Default
-
-Create a basic select menu with select item components. The first item's value is used as the default if `selected` is not set.
+Create a basic select menu with select item components. The first item's value is used as the default if selected is not set.
 
 <Select labelText="Carbon theme" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" />
@@ -21,9 +20,19 @@ Create a basic select menu with select item components. The first item's value i
   <SelectItem value="g100" />
 </Select>
 
-## Custom item text
+## Reactive
 
-Use the `text` prop to customize the display text of each option.
+Bind to `selected` for reactive updates.
+
+<FileSource src="/framed/Select/SelectReactive" />
+
+## Content
+
+Customize the option text, the initial selection, the label, and how options are grouped.
+
+### Custom item text
+
+Customize each option's display text with the `text` prop on SelectItem.
 
 <Select labelText="Carbon theme" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" text="White" />
@@ -33,9 +42,9 @@ Use the `text` prop to customize the display text of each option.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Initial selected value
+### Initial selection
 
-Set the initial selection using the `selected` prop.
+Set the initial selection with `selected`.
 
 <Select labelText="Carbon theme" selected="g10" on:change={e => console.log("value", e.target.value)}>
   <SelectItem value="white" text="White" />
@@ -45,13 +54,7 @@ Set the initial selection using the `selected` prop.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Reactive example
-
-The `selected` prop supports two-way binding for reactive updates.
-
-<FileSource src="/framed/Select/SelectReactive" />
-
-## Helper text
+### Helper text
 
 Add descriptive text below the select menu.
 
@@ -63,9 +66,9 @@ Add descriptive text below the select menu.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Hidden label
+### Hidden label
 
-Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+Hide the visible label with `hideLabel`. Screen readers still receive the label text.
 
 <Select hideLabel labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -75,7 +78,7 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Item groups
+### Item groups
 
 Group related options using select item group components.
 
@@ -92,7 +95,11 @@ Group related options using select item group components.
   </SelectItemGroup>
 </Select>
 
-## Extra-small size
+## Sizes
+
+The `size` prop sets the height. The default is medium.
+
+### Extra-small
 
 Use the extra-small size variant for the most compact layouts.
 
@@ -104,7 +111,7 @@ Use the extra-small size variant for the most compact layouts.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Small size
+### Small
 
 Use the small size variant for compact layouts.
 
@@ -116,7 +123,7 @@ Use the small size variant for compact layouts.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Extra-large size
+### Extra-large
 
 Use the extra-large size variant for prominent selections.
 
@@ -128,7 +135,11 @@ Use the extra-large size variant for prominent selections.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Inline variant
+## Variants
+
+Adapt the field to horizontal layouts or light backgrounds.
+
+### Inline
 
 Use the inline variant for horizontal layouts.
 
@@ -140,7 +151,7 @@ Use the inline variant for horizontal layouts.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Light variant
+### Light
 
 Use the light variant for light backgrounds.
 
@@ -152,12 +163,11 @@ Use the light variant for light backgrounds.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Fluid variant
+## Fluid
 
-Set `fluid` to `true` to use the fluid variant, which embeds the label
-inside the field. Fluid selects can be used standalone or inside
-[FluidForm](/components/FluidForm), where the fluid variant is applied
-automatically. The fluid variant cannot be combined with the inline variant.
+Set `fluid` to embed the label inside the field. Fluid selects work
+standalone or inside [FluidForm](/components/FluidForm), which applies the
+variant automatically. The fluid variant cannot be combined with the inline variant.
 
 <Select fluid labelText="Carbon theme" selected="g10">
   <SelectItem value="white" text="White" />
@@ -167,7 +177,7 @@ automatically. The fluid variant cannot be combined with the inline variant.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
@@ -184,7 +194,7 @@ tooltip icon.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Fluid variant (invalid)
+### Invalid
 
 Fluid selects display the error message inside the field boundary. Long
 messages wrap to multiple lines.
@@ -197,7 +207,7 @@ messages wrap to multiple lines.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Fluid variant (warning)
+### Warning
 
 <Select fluid warn warnText="The selected theme will not be persisted" labelText="Carbon theme" selected="g10">
   <SelectItem value="white" text="White" />
@@ -207,7 +217,7 @@ messages wrap to multiple lines.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Fluid variant (disabled)
+### Disabled
 
 Invalid and warning states are not displayed while the select is disabled.
 
@@ -219,7 +229,7 @@ Invalid and warning states are not displayed while the select is disabled.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Fluid variant (read-only)
+### Read-only
 
 Invalid and warning states are not displayed while the select is read-only.
 
@@ -231,13 +241,17 @@ Invalid and warning states are not displayed while the select is read-only.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading state for the fluid select variant.
 
 <FluidSelectSkeleton />
 
-## Invalid state
+## States
+
+Communicate validation and interactivity using the invalid, warning, disabled, and read-only states.
+
+### Invalid
 
 Show validation errors using the invalid state.
 
@@ -249,7 +263,7 @@ Show validation errors using the invalid state.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Warning state
+### Warning
 
 Show warnings using the warning state.
 
@@ -261,7 +275,7 @@ Show warnings using the warning state.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Disabled state
+### Disabled
 
 Disable the select menu to prevent interaction.
 
@@ -273,7 +287,7 @@ Disable the select menu to prevent interaction.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
-## Read-only state
+### Read-only
 
 Use the read-only state to display the selected value while preventing changes.
 
@@ -289,10 +303,12 @@ Use the read-only state to display the selected value while preventing changes.
 
 Display a loading state using the skeleton variant.
 
+### With label
+
 <SelectSkeleton />
 
-## Skeleton without label
+### No label
 
-Display a loading state for the select without a visible label.
+Show a loading state without a visible label using `hideLabel`.
 
 <SelectSkeleton hideLabel />

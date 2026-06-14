@@ -1,10 +1,12 @@
-Modals provide a focused dialog for user interactions, confirmations, or data entry. They support various sizes, states, and customization options to create accessible and user-friendly modal experiences.
+---
+description: Modals provide a focused dialog for user interactions, confirmations, or data entry, with various sizes and states.
+---
 
-**Modal vs ComposedModal**
+## Modal vs ComposedModal
 
 The modal is an all-in-one component configured through props, making it ideal for standard modal dialogs. For more complex layouts or fine-grained control, use [ComposedModal](/components/ComposedModal) instead.
 
-**Focus behavior**
+## Focus behavior
 
 When the modal opens, focus is set using the following priority:
 
@@ -15,11 +17,9 @@ When the modal opens, focus is set using the following priority:
 
 After closing the modal, focus is returned to the element that triggered the modal.
 
-## Default
+## Basic
 
-Display a modal dialog with a header, content area, and footer by default.
-
-Create a basic modal dialog with primary and secondary actions. This variant is ideal for confirming user actions or gathering input.
+Display a modal dialog with a header, content area, and footer. Use primary and secondary actions for confirmations or input.
 
 <FileSource src="/framed/Modal/Modal" />
 
@@ -43,7 +43,7 @@ Use `selectorPrimaryFocus` to override the default and target a specific element
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
-## Danger modal
+## Danger
 
 Display critical actions or destructive operations with the danger variant. This style emphasizes the severity of the action.
 
@@ -51,7 +51,7 @@ By default, the cancel button receives focus instead of the critical button to p
 
 <FileSource src="/framed/Modal/DangerModal" />
 
-## Passive modal
+## Passive
 
 Create a non-interactive modal for displaying information. This variant lacks action buttons and focuses on content presentation. Since there is no primary button, the close button will receive focus when the modal opens.
 
@@ -59,7 +59,7 @@ Create a non-interactive modal for displaying information. This variant lacks ac
 
 ## With form submission
 
-Connect the modal's primary button to a form using the `formId` prop. This enables native form submission even though the button is outside the form element. Clicking the primary button or pressing <DocKbd label="Enter" /> will trigger the form's submit event.
+Connect the modal's primary button to a form with `formId`. This enables native form submission even though the button is outside the form element. Clicking the primary button or pressing <DocKbd label="Enter" /> will trigger the form's submit event.
 
 <FileSource src="/framed/Modal/ModalWithForm" />
 
@@ -77,23 +77,27 @@ Stack multiple modals for complex workflows. Each modal maintains its own state 
 
 ## Multiple secondary buttons
 
-Add up to two secondary actions using the `secondaryButtons` prop, which replaces the single `secondaryButtonText` option.
+Add up to two secondary actions with `secondaryButtons`, which replaces the single secondary button text option.
 
 <FileSource src="/framed/Modal/3ButtonModal" />
 
-## Extra-small size
+## Sizes
+
+Set `size` to control modal width. The default is `md`.
+
+### Extra-small
 
 Use the extra-small size for compact notifications by setting `size` to `"xs"`. This is ideal for simple confirmations.
 
 <FileSource src="/framed/Modal/ModalExtraSmall" />
 
-## Small size
+### Small
 
 Use the small size for simple confirmations by setting `size` to `"sm"`.
 
 <FileSource src="/framed/Modal/ModalSmall" />
 
-## Large size
+### Large
 
 Use the large size for complex content by setting `size` to `"lg"`.
 
@@ -101,19 +105,23 @@ Use the large size for complex content by setting `size` to `"lg"`.
 
 ## Full width
 
-Set `fullWidth` to `true` to remove the modal body padding so content spans edge to edge. Use it for content that supplies its own layout, such as a table or fluid form.
+Set `fullWidth` to remove the modal body padding so content spans edge to edge. Use it for content that supplies its own layout, such as a table or fluid form.
 
 <FileSource src="/framed/Modal/FullWidthModal" />
 
-## Prevent default close behavior
+## Closing
+
+Control how the modal can be dismissed.
+
+### Prevent default
 
 The modal dispatches a cancelable `close` event. Call `e.preventDefault()` to keep the modal open. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, or `"close-button"`.
 
 <FileSource src="/framed/Modal/ModalPreventClose" />
 
-## Prevent close on outside click
+### Prevent on outside click
 
-Disable closing the modal when clicking outside by setting `preventCloseOnClickOutside` to `true`. This is useful for transactional modals where explicit user action is required.
+Disable closing the modal when clicking outside with `preventCloseOnClickOutside`. This is useful for transactional modals where explicit user action is required.
 
 <FileSource src="/framed/Modal/ModalPreventOutsideClick" />
 

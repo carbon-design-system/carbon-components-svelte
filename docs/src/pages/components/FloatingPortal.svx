@@ -1,47 +1,63 @@
+---
+description: Floating portals render content positioned relative to an anchor element, for dropdowns, popovers, and menus.
+---
+
 <script>
   import { FloatingPortal } from "carbon-components-svelte";
 </script>
 
-Floating portals build on [Portal](/components/Portal) by rendering content into `document.body` and positioning it relative to an anchor element. The `anchor` prop is required and specifies the element to position the floating content relative to. They automatically flip direction when there is not enough space and reposition on scroll and resize.
+## Basic
 
-Use a portal when you only need to escape overflow and z-index stacking contexts. Use floating portals when you need anchored, positioned content such as dropdowns, popovers, or overflow menus.
-
-In the examples below, click the button to toggle the floating content and drag the tile to move the anchor. The floating content will track the anchor position.
-
-## Default
-
-Position floating content below an anchor element.
+Position floating content below an anchor element. Floating portals build on
+[Portal](/components/Portal): the required `anchor` specifies the element to
+position relative to, and content flips and repositions automatically. Use a
+plain portal when you only need to escape overflow; use a floating portal when you
+need anchored, positioned content. In the examples below, click the button to
+toggle the floating content and drag the tile to move the anchor.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalBasic" />
 
-## Direction
+## Placement
 
-Set the `direction` prop to `"top"`, `"bottom"`, `"left"`, or `"right"` to control the preferred direction. The component flips to the opposite direction if there is not enough space (for example, `"top"` flips to `"bottom"`, `"right"` flips to `"left"`).
+Control how floating content is positioned.
+
+### Direction
+
+Set `direction` to `"top"`, `"bottom"`, `"left"`, or `"right"` for the preferred
+direction. The component flips to the opposite direction if there is not enough
+space (for example, top flips to bottom, right flips to left).
 
 The default direction is `"bottom"`.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalDirection" />
 
-## Intrinsic width
+### Intrinsic width
 
-By default, the floating content matches the anchor's width. Set `intrinsicWidth` to `true` to use the content's intrinsic width instead of stretching to the anchor width. This is useful for tooltips, small popovers, or any floating content that should size to its content rather than the trigger.
+By default, the floating content matches the anchor's width. Set `intrinsicWidth`
+to `true` to use the content's intrinsic width instead of stretching to the
+anchor width. Useful for tooltips, small popovers, or any floating content that
+should size to its content rather than the trigger.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalIntrinsicWidth" />
 
-## Intrinsic alignment
+### Intrinsic alignment
 
-When `intrinsicWidth` is `true`, set `intrinsicAlign` to `"start"`, `"center"`, or `"end"` (default `"center"`) to position the floating box along the anchor:
+When intrinsicWidth is `true`, set `intrinsicAlign` to `"start"`, `"center"`, or
+`"end"` (default `"center"`) to position the floating box along the anchor:
 
 | `direction`        | Effect of `intrinsicAlign` (`start` / `center` / `end`)      |
 | ------------------ | ------------------------------------------------------------ |
 | **`top` / `bottom`** | Horizontal alignment to the anchor's left edge, horizontal center, or right edge (LTR). |
 | **`left` / `right`** | Vertical alignment to the anchor's top, vertical center, or bottom. |
 
-Portalled [TooltipIcon](/components/TooltipIcon) and [TooltipDefinition](/components/TooltipDefinition) tooltips pass their `align` prop through as `intrinsicAlign`, so portal positioning matches non-portal Carbon alignment.
+Portalled [TooltipIcon](/components/TooltipIcon) and
+[TooltipDefinition](/components/TooltipDefinition) tooltips pass their align
+setting through as intrinsicAlign, so portal positioning matches non-portal Carbon
+alignment.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalIntrinsicAlign" />
 
-## Gaps and offsets
+### Gaps and offsets
 
 Use these props to fine-tune spacing and nudge side-positioned content:
 
@@ -54,36 +70,63 @@ Use these props to fine-tune spacing and nudge side-positioned content:
 | `verticalAlignOffsetLeft` | number (`0`)     | Vertical offset in pixels when direction is `"left"` (for example, negative to nudge content up).                                                                        |
 | `verticalAlignOffsetRight` | number (`0`)     | Vertical offset when direction is `"right"`.                                                                                                                  |
 
-These are optional; omit them to use defaults. [Tooltip](/components/Tooltip) uses them when `portalTooltip` is true; [TooltipIcon](/components/TooltipIcon) and [TooltipDefinition](/components/TooltipDefinition) apply small built-in gaps when portalled so spacing matches the non-portal Carbon tooltips.
+These are optional; omit them to use defaults. [Tooltip](/components/Tooltip)
+uses them when portalTooltip is true;
+[TooltipIcon](/components/TooltipIcon) and
+[TooltipDefinition](/components/TooltipDefinition) apply small built-in gaps when
+portalled so spacing matches the non-portal Carbon tooltips.
 
 ## Escaping overflow
 
-Because the floating content is rendered into `document.body`, it escapes parent containers with `overflow: hidden`.
+Because the floating content is rendered into document.body, it escapes parent
+containers with overflow hidden.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalOverflow" />
 
 ## Slot direction
 
-By default, the floating content is rendered below the anchor element. However, if there is not enough space below the anchor element, the component automatically flips to the opposite direction.
+By default, the floating content is rendered below the anchor element. However,
+if there is not enough space below the anchor element, the component automatically
+flips to the opposite direction.
 
-Use the `direction` slot prop to read the actual rendered direction after auto-flipping for conditional logic, like styles.
+Use the direction slot prop to read the actual rendered direction after
+auto-flipping for conditional logic, like styles.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalSlotDirection" />
 
 ## Custom target
 
-Use the `target` prop to mount the floating content into a specific DOM element instead of `document.body`. Positioning is always driven by the `anchor`, so `target` only changes which DOM subtree the floating content lives in. See the [Portal custom target example](/components/Portal#custom-target) for typical use cases.
+Use `target` to mount the floating content into a specific DOM element instead of
+document.body. Positioning is always driven by anchor, so target only changes
+which DOM subtree the floating content lives in. See the
+[Portal custom target example](/components/Portal#custom-target) for typical use
+cases.
 
-## Inside a native dialog
+## Inside
 
-When the anchor is inside a [native dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog), floating content is automatically mounted into that dialog (default `target` is `anchor.closest("dialog,[popover]")`, which resolves to the dialog when the anchor is nested under it). This keeps the content in the dialog top layer so it stays visible and interactive.
+Use floating portals inside native top-layer elements.
 
-Components inside the `dialog` must still enable `portalMenu` for its menu or content to be portalled. Pass an explicit `target` to override this behavior.
+### Native dialog
+
+When the anchor is inside a
+[native dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog),
+floating content is automatically mounted into that dialog. The default target is
+`anchor.closest("dialog,[popover]")`, which resolves to the dialog when the
+anchor is nested under it. This keeps the content in the dialog top layer so it
+stays visible and interactive.
+
+Components inside the dialog must still enable portalMenu for its menu or content
+to be portalled. Pass an explicit target to override this behavior.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalDialog" />
 
-## Inside a native popover
+### Native popover
 
-When the anchor is inside an element with a [popover](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover) attribute (see the [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), the same default `target` applies: floating content mounts into that popover element so it participates in the popover top layer.
+When the anchor is inside an element with a
+[popover](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover)
+attribute (see the
+[Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), the
+same default target applies: floating content mounts into that popover element so
+it participates in the popover top layer.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalPopover" />

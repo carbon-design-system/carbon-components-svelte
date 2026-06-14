@@ -1,5 +1,6 @@
 ---
 components: ["CopyInput", "CopyInputSkeleton", "FluidCopyInputSkeleton"]
+description: Copy inputs display a read-only value in a text field with a built-in copy button, for labeled copyable values like API tokens or endpoint URLs.
 ---
 
 <script>
@@ -8,19 +9,15 @@ components: ["CopyInput", "CopyInputSkeleton", "FluidCopyInputSkeleton"]
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
-Copy inputs display read-only values in a text field with a built-in copy button. Use them in forms and settings panels for labeled copyable values such as API tokens, endpoint URLs, and resource IDs.
+## Basic
 
-Use [CodeSnippet](/components/CodeSnippet) for install commands and code samples in content. Use [TextInput](/components/TextInput#readonly) with `readonly` when the value is display-only and copying is not the primary action.
-
-## Default
-
-Set `value` to the string to show and copy.
+Set `value` to the string to show and copy. For install commands, see [CodeSnippet](/components/CodeSnippet); for display-only values, use [TextInput](/components/TextInput#readonly).
 
 <CopyInput labelText="API endpoint" value="https://api.example.com/v1" />
 
 ## Select on focus
 
-Set `selectOnFocus` to `true` to select the full value when the field receives focus.
+Set `selectOnFocus` to select the full value when the field receives focus.
 
 <CopyInput selectOnFocus labelText="API endpoint" value="https://api.example.com/v1" />
 
@@ -28,7 +25,7 @@ Set `selectOnFocus` to `true` to select the full value when the field receives f
 
 Pass an async `copy` function when the text is not available at render time, for example a token fetched on click. Feedback appears after `copy()` resolves.
 
-While `copy()` is pending, the copy button sets `aria-busy="true"` and ignores clicks. On failure, skip feedback and listen for `copy:error`.
+While `copy()` is pending, the copy button shows a busy state and ignores clicks. On failure, skip feedback and listen for `copy:error`.
 
 Prefetch on hover with `on:mouseenter:copy-button`.
 
@@ -50,7 +47,7 @@ Use `"hover-focus"` to reveal while the input is hovered or focused.
 
 ## Truncation
 
-Long values truncate with an ellipsis when the field is narrower than the text. Focus or select the field to see the full value. Copy always uses the complete `value`.
+Long values truncate with an ellipsis when the field is narrower than the text. Focus or select the field to see the full value. Copy always uses the complete value.
 
 <div style="max-width: 20rem;">
   <CopyInput
@@ -81,19 +78,23 @@ Set `size` to `"sm"` or `"xl"`.
 
 <CopyInput inline labelText="Token" value="sk-1234567890abcdef" />
 
-## Custom feedback text
+## Custom feedback
+
+Customize the message and icon shown after copying.
+
+### Text
 
 Set `feedback` to customize the message shown after copying.
 
 <CopyInput labelText="Repository" value="git@github.com:carbon-design-system/carbon-components-svelte.git" feedback="Copied to clipboard" />
 
-## Custom feedback icon
+### Icon
 
 Set `feedbackIcon` to show a different icon while feedback is visible. The copy icon returns when feedback closes.
 
 <CopyInput labelText="API endpoint" value="https://api.example.com/v1" feedbackIcon={Checkmark} />
 
-## Light variant
+## Light
 
 <CopyInput light labelText="API endpoint" value="https://api.example.com/v1" />
 
@@ -105,20 +106,20 @@ Set `portalTooltip` to render the copy feedback tooltip in a portal so it is not
 
 ## Inside a modal
 
-When used inside a `Modal`, the copy feedback tooltip is automatically portalled so it is not clipped by `overflow: hidden`. Set `portalTooltip` to explicitly control this behavior.
+Inside a modal, the copy feedback tooltip is portalled automatically so it is not clipped. Set `portalTooltip` to control this explicitly.
 
 <FileSource src="/framed/CopyInput/CopyInputInModal" />
 
-## Fluid variant
+## Fluid
 
-Set `fluid` to `true` to use the fluid variant, which embeds the label
+Use the fluid variant with `fluid`, which embeds the label
 inside the field. Fluid copy inputs can be used standalone or inside
 [FluidForm](/components/FluidForm), where the fluid variant is applied
 automatically. The fluid variant cannot be combined with the inline variant.
 
 <CopyInput fluid labelText="API token" value="sk-1234567890abcdef" />
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
@@ -130,11 +131,11 @@ tooltip icon.
   </svelte:fragment>
 </CopyInput>
 
-## Fluid variant (disabled)
+### Disabled
 
 <CopyInput fluid disabled labelText="API token" value="sk-1234567890abcdef" />
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading skeleton for the fluid copy input variant.
 
@@ -146,8 +147,8 @@ Show a loading state with the default skeleton variant.
 
 <CopyInputSkeleton />
 
-## Skeleton without label
+### Without label
 
-Set `hideLabel` to `true` to hide the skeleton label.
+Set `hideLabel` to hide the skeleton label.
 
 <CopyInputSkeleton hideLabel />

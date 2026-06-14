@@ -1,38 +1,36 @@
 ---
 components: ["InlineNotification", "NotificationActionButton"]
+description: Inline notifications display contextual messages inline with content. They support multiple types (error, warning, success, info) and can include actions.
 ---
 
 <script>
   import { InlineNotification, NotificationActionButton } from "carbon-components-svelte";
 </script>
 
-Inline notifications display contextual messages inline with content. They support various types of notifications (error, warning, success, info) and can include actions. Use them to provide feedback or important information to users.
+## Basic
 
-See [detailed usage](https://carbondesignsystem.com/components/notification/usage).  
-See also: [ToastNotification](ToastNotification)
-
-## Default
-
-Display a basic error notification with title and subtitle by default.
+Display a basic error notification with title and subtitle by default. See [detailed usage](https://carbondesignsystem.com/components/notification/usage) and the related [ToastNotification](ToastNotification).
 
 <InlineNotification title="Error:" subtitle="An internal server error occurred." />
 
-## Prevent default close behavior
+## Reusable
 
-The component is controlled, so you can prevent the default close behavior with `e.preventDefault()`.
-
-<InlineNotification title="Error" subtitle="An internal server error occurred." on:close={(e) => {
-  e.preventDefault();
-  // custom close logic (e.g., transitions)
-}} />
-
-## Reusable notification
-
-Control the notification visibility by binding to the `open` prop to show, hide, and reuse the same notification component with different messages. The `open` prop defaults to `true`.
+Control notification visibility by binding to `open` to show, hide, and reuse the same component with different messages. Open defaults to true.
 
 <FileSource src="/framed/InlineNotification/InlineNotificationReusable" />
 
-## Slottable title and subtitle
+## Title and subtitle
+
+Both the title and subtitle are optional and can be customized with slots.
+
+### Optional
+
+Title and subtitle only render when provided.
+
+<InlineNotification subtitle="An internal server error occurred." />
+<InlineNotification title="An error occurred." />
+
+### Custom (slots)
 
 Customize the notification content using slots for more flexibility.
 
@@ -41,32 +39,11 @@ Customize the notification content using slots for more flexibility.
   <strong slot="subtitleChildren">An internal server error occurred.</strong>
 </InlineNotification>
 
-## Optional title and subtitle
-
-Title and subtitle are optional and only render when provided.
-
-<InlineNotification subtitle="An internal server error occurred." />
-<InlineNotification title="An error occurred." />
-
-## Translating the close button label
-
-The status icon is decorative and hidden from assistive technology. Translate the close button label via `closeButtonDescription`.
-
-<InlineNotification
-  title="错误"
-  subtitle="发生内部服务器错误"
-  closeButtonDescription="关闭通知"
-/>
-
-## Hidden close button
-
-Create a persistent notification by hiding the close button.
-
-<InlineNotification hideCloseButton kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
-
-## With actions
+## Actions
 
 Add interactive elements to notifications using the actions slot.
+
+### Action button
 
 <InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours.">
   <svelte:fragment slot="actions">
@@ -74,9 +51,9 @@ Add interactive elements to notifications using the actions slot.
   </svelte:fragment>
 </InlineNotification>
 
-## Action button as link
+### Link
 
-The notification action button accepts an `href` prop to render as a link instead of a button.
+The notification action button accepts an href prop to render as a link instead of a button.
 
 <InlineNotification kind="info" title="New features available:" subtitle="Check out what's new in this release.">
   <svelte:fragment slot="actions">
@@ -84,9 +61,40 @@ The notification action button accepts an `href` prop to render as a link instea
   </svelte:fragment>
 </InlineNotification>
 
-## Notification variants
+## Close button
 
-The component supports different notification types:
+Hide the close button or customize its behavior and label.
+
+### Hidden
+
+Create a persistent notification by hiding the close button.
+
+<InlineNotification hideCloseButton kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+
+### Translated label
+
+Translate the close button label via `closeButtonDescription`.
+
+<InlineNotification
+  title="错误"
+  subtitle="发生内部服务器错误"
+  closeButtonDescription="关闭通知"
+/>
+
+### Prevent default
+
+The component is controlled, so you can prevent the default close behavior with `e.preventDefault()`.
+
+<InlineNotification title="Error" subtitle="An internal server error occurred." on:close={(e) => {
+  e.preventDefault();
+  // custom close logic (e.g., transitions)
+}} />
+
+## Variants
+
+The component supports different notification types.
+
+### High contrast
 
 <InlineNotification kind="error" title="Error:" subtitle="An internal server error occurred." />
 <InlineNotification kind="info" title="New updates:" subtitle="Restart to get the latest updates." />
@@ -95,7 +103,7 @@ The component supports different notification types:
 <InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 <InlineNotification kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 
-## Low contrast
+### Low contrast
 
 Use low contrast variants for less prominent notifications.
 

@@ -1,5 +1,6 @@
 ---
 components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton", "FluidDatePickerSkeleton"]
+description: Date pickers collect dates through simple typed fields, single calendars, or range calendars, with formatting, constraints, validation states, and fluid layouts.
 ---
 
 <script>
@@ -7,103 +8,109 @@ components: ["DatePicker", "DatePickerInput", "DatePickerSkeleton", "FluidDatePi
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
-Date pickers let users select a date or date range using a calendar interface. They use the [flatpickr](https://github.com/flatpickr/flatpickr) library for their calendar implementation.
+## Single calendar
 
-## Single
-
-Set `datePickerType` to `"single"` for single date selection.
+Set `datePickerType` to `"single"` for one date with a dropdown calendar. Use a single DatePickerInput; clicking the field or calendar icon opens the calendar to pick one day. Bind `value` to read or set the formatted date string.
 
 <FileSource src="/framed/DatePicker/DatePickerSingle" />
 
-## Range
+## Range calendar
 
-Set `datePickerType` to `"range"` to enable date range selection.
+Set `datePickerType` to `"range"` for a start and end date. Provide two DatePickerInput components in order—start, then end—and bind `valueFrom` and `valueTo`. Both fields share one calendar: the user selects a span, and the start and end inputs update together.
 
 <FileSource src="/framed/DatePicker/DatePickerRange" />
 
-## Programmatic range update
+### Programmatic
 
-Use `bind:valueFrom` and `bind:valueTo` to programmatically update the date range from outside the component.
+Use `bind:valueFrom` and `bind:valueTo` to update the range from outside the component, such as preset buttons or filters.
 
 <FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
 
-## Minimum and maximum dates
+## Calendar options
 
-Use `minDate` and `maxDate` to constrain selectable dates. Values may be a `Date`, or a string in the same format as `dateFormat`.
+Configure constraints and behavior shared by single and range calendars.
+
+### Min and max dates
+
+Use `minDate` and `maxDate` to constrain selectable dates. Values may be a Date, or a string in the same format as `dateFormat`.
 
 <FileSource src="/framed/DatePicker/DatePickerMinMax" />
 
-## Flatpickr options
+### Flatpickr options
 
-Use `flatpickrProps` to pass additional [Flatpickr options](https://flatpickr.js.org/options/). These merge with the options Carbon sets internally (for example `static`, `clickOpens`, and top-layer `appendTo` when using `portalMenu`). Override props such as `static` only when you understand how they interact with portalling and modals.
+Use `flatpickrProps` to pass additional [Flatpickr options](https://flatpickr.js.org/options/). These merge with the options Carbon sets internally (for example static positioning, clickOpens, and top-layer appendTo when using `portalMenu`). Override props such as static only when you understand how they interact with portalling and modals.
 
 The example below sets `showMonths` so two months appear side by side in the calendar.
 
 <FileSource src="/framed/DatePicker/DatePickerFlatpickrProps" />
 
-## Calendar-only selection
+### Calendar-only selection
 
-By default, Carbon enables Flatpickr `allowInput` so typed dates work like an editable field.
+By default, Carbon enables Flatpickr allowInput so typed dates work like an editable field.
 
 Pass `flatpickrProps={{ allowInput: false }}` when you want calendar-only selection: the field still receives the chosen date and remains focusable for accessibility, but users cannot free-type into the input—they must pick a date from the calendar. That reduces invalid or ambiguous typed values when you need strict control.
 
 <FileSource src="/framed/DatePicker/DatePickerAllowInput" />
 
-## Disable open animation
+### Disable open animation
 
 By default, the calendar animates when it opens and closes. Pass `flatpickrProps={{ animate: false }}` to disable the [Flatpickr animate option](https://flatpickr.js.org/options/) and show the calendar instantly.
 
 <FileSource src="/framed/DatePicker/DatePickerDisableAnimation" />
 
-## Custom date format
-
-Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The input `pattern` attribute is automatically derived to match, ensuring native form validation works correctly.
-
-<FileSource src="/framed/DatePicker/DatePickerCustomFormat" />
-
-## Custom locale
-
-The `locale` prop accepts either a [flatpickr locale key](https://github.com/flatpickr/flatpickr/tree/master/src/l10n) or a [CustomLocale](https://github.com/flatpickr/flatpickr/blob/master/src/types/locale.ts) object. It defaults to `"en"`, which renders Carbon-spec single-letter weekday abbreviations (`S, M, T, W, Th, F, S`).
-
-To customize the weekday labels (for example, to restore flatpickr's default English `Sun, Mon, Tue, ...` shorthands), pass a `CustomLocale` object.
-
-<FileSource src="/framed/DatePicker/DatePickerLocale" />
-
-## Non-English locale
-
-Import the corresponding locale module from `flatpickr/dist/l10n/<key>` and pass it to the `locale` prop. The example below uses German (`de`).
-
-<FileSource src="/framed/DatePicker/DatePickerNonEnglishLocale" />
-
-## Portal menu
-
-Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. When inside a Modal, `portalMenu` defaults to `true` unless explicitly set to `false`.
-
-<FileSource src="/framed/DatePicker/DatePickerModal" />
-
-## Inside a native dialog
-
-When the date picker is inside a native `<dialog>` opened with `showModal()`, `portalMenu` mounts the calendar into that dialog so it appears above the modal backdrop. The calendar uses `position: fixed` with viewport coordinates.
-
-<FileSource src="/framed/DatePicker/DatePickerDialog" />
-
-## Inside a native popover
-
-When the date picker is inside an open element with a [popover](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover) attribute (see the [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), `portalMenu` mounts the calendar into that ancestor so it stays in the popover top layer.
-
-<FileSource src="/framed/DatePicker/DatePickerPopover" />
-
-## Prevent calendar from closing on select
+### Keep open on select
 
 By default, the calendar closes when a date is selected. Pass `closeOnSelect: false` via `flatpickrProps` to keep it open.
 
 <FileSource src="/framed/DatePicker/DatePickerCloseOnSelect" />
 
-## Programmatic calendar access
+### Programmatic access
 
 Use `bind:calendar` to access the underlying [Flatpickr instance](https://flatpickr.js.org/instance-methods-properties-elements/) for programmatic control, such as opening the calendar from an external trigger or updating options at runtime via `set`.
 
 <FileSource src="/framed/DatePicker/DatePickerCalendarInstance" />
+
+## Formatting
+
+Customize the date format and locale.
+
+### Date format
+
+Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The input pattern attribute is automatically derived to match, ensuring native form validation works correctly.
+
+<FileSource src="/framed/DatePicker/DatePickerCustomFormat" />
+
+### Locale
+
+The `locale` prop accepts either a [flatpickr locale key](https://github.com/flatpickr/flatpickr/tree/master/src/l10n) or a [CustomLocale](https://github.com/flatpickr/flatpickr/blob/master/src/types/locale.ts) object. It defaults to `"en"`, which renders Carbon-spec single-letter weekday abbreviations (S, M, T, W, Th, F, S).
+
+To customize the weekday labels (for example, to restore flatpickr's default English `Sun, Mon, Tue, ...` shorthands), pass a `CustomLocale` object.
+
+<FileSource src="/framed/DatePicker/DatePickerLocale" />
+
+### Non-English locale
+
+Import the corresponding locale module from `flatpickr/dist/l10n/<key>` and pass it to the `locale` prop. The example below uses German (`de`).
+
+<FileSource src="/framed/DatePicker/DatePickerNonEnglishLocale" />
+
+## Portal
+
+Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with overflow hidden or z-index stacking contexts. When inside a Modal, portalMenu defaults to true unless explicitly set to false.
+
+<FileSource src="/framed/DatePicker/DatePickerModal" />
+
+### Native dialog
+
+When the date picker is inside a native `<dialog>` opened with `showModal()`, portalMenu mounts the calendar into that dialog so it appears above the modal backdrop. The calendar uses `position: fixed` with viewport coordinates.
+
+<FileSource src="/framed/DatePicker/DatePickerDialog" />
+
+### Native popover
+
+When the date picker is inside an open element with a [popover](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover) attribute (see the [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)), portalMenu mounts the calendar into that ancestor so it stays in the popover top layer.
+
+<FileSource src="/framed/DatePicker/DatePickerPopover" />
 
 ## Simple
 
@@ -129,7 +136,7 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
   <DatePickerInput hideLabel labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Light variant
+## Light
 
 Use the light variant for light backgrounds.
 
@@ -137,9 +144,9 @@ Use the light variant for light backgrounds.
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Fluid variant
+## Fluid
 
-Set `fluid` to `true` on `DatePicker` to use the fluid variant, which embeds the
+Set `fluid` to `true` on DatePicker to use the fluid variant, which embeds the
 label inside the field. Fluid date pickers can be used standalone or inside
 [FluidForm](/components/FluidForm), where the fluid variant is applied
 automatically.
@@ -153,7 +160,7 @@ the width with `style` or `class` when you need a different size (for example
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Fluid variant (simple)
+### Simple
 
 The fluid variant also supports the default `"simple"` date picker type.
 
@@ -161,7 +168,7 @@ The fluid variant also supports the default `"simple"` date picker type.
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Fluid variant (range)
+### Range
 
 The range date picker renders both inputs inside a single fluid field.
 
@@ -170,7 +177,7 @@ The range date picker renders both inputs inside a single fluid field.
   <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a tooltip
 icon.
@@ -184,7 +191,7 @@ icon.
   </DatePickerInput>
 </DatePicker>
 
-## Fluid variant (invalid)
+### Invalid
 
 Fluid date pickers display the error message inside the field boundary. Long
 messages wrap to multiple lines.
@@ -193,13 +200,13 @@ messages wrap to multiple lines.
   <DatePickerInput invalid invalidText="The provided date is not valid. Enter a date in the mm/dd/yyyy format that falls within the allowed range." labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Fluid variant (warning)
+### Warning
 
 <DatePicker fluid datePickerType="single">
   <DatePickerInput warn warnText="This date will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Fluid variant (disabled)
+### Disabled
 
 Invalid and warning states are not displayed while the input is disabled.
 
@@ -207,7 +214,7 @@ Invalid and warning states are not displayed while the input is disabled.
   <DatePickerInput disabled invalid invalidText="The provided date is not valid" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Fluid variant (read-only)
+### Read-only
 
 Invalid and warning states are not displayed while the input is read-only.
 
@@ -215,47 +222,55 @@ Invalid and warning states are not displayed while the input is read-only.
   <DatePickerInput readonly warn warnText="This date will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading skeleton for the fluid date picker variant. Set `range` to `true` to mimic the range variant.
 
 <FluidDatePickerSkeleton />
 
-## Fluid skeleton (range)
+### Skeleton (range)
 
 <FluidDatePickerSkeleton range />
 
-## Extra-large size
+## Sizes
 
-Set `size` to `"xl"` on `DatePickerInput` for a more prominent input.
+Set `size` on DatePickerInput. The default is `md`.
+
+### Extra-large
+
+Set `size` to `"xl"` on DatePickerInput for a more prominent input.
 
 <DatePicker datePickerType="single">
   <DatePickerInput size="xl" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Extra-large size (range)
+### Extra-large (range)
 
 <DatePicker datePickerType="range">
   <DatePickerInput size="xl" labelText="Start date" placeholder="mm/dd/yyyy" />
   <DatePickerInput size="xl" labelText="End date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Small size
+### Small
 
-Set `size` to `"sm"` on `DatePickerInput` for a compact input.
+Set `size` to `"sm"` on DatePickerInput for a compact input.
 
 <DatePicker datePickerType="single">
   <DatePickerInput size="sm" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Small size (range)
+### Small (range)
 
 <DatePicker datePickerType="range">
   <DatePickerInput size="sm" labelText="Start date" placeholder="mm/dd/yyyy" />
   <DatePickerInput size="sm" labelText="End date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Invalid state
+## States
+
+Reflect validation and interaction states.
+
+### Invalid
 
 Show an invalid state when the input value is not valid.
 
@@ -263,7 +278,7 @@ Show an invalid state when the input value is not valid.
   <DatePickerInput invalid invalidText="Invalid date" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Warning state
+### Warning
 
 Show a warning state to indicate potential issues with the input.
 
@@ -271,15 +286,15 @@ Show a warning state to indicate potential issues with the input.
   <DatePickerInput warn warnText="This info will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Disabled state (simple)
+### Disabled (simple)
 
-With the default `datePickerType` (`"simple"`), `disabled` prevents interaction and styles the field as unavailable.
+With the default datePickerType (`"simple"`), disabled prevents interaction and styles the field as unavailable.
 
 <DatePicker value="01/15/1990">
   <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Disabled state (single)
+### Disabled (single)
 
 Set `disabled` to `true` to block interaction with the single-date picker and calendar.
 
@@ -287,34 +302,34 @@ Set `disabled` to `true` to block interaction with the single-date picker and ca
   <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Disabled state (range)
+### Disabled (range)
 
-Apply `disabled` to each `DatePickerInput` in a range picker when both fields should be unavailable.
+Apply disabled to each DatePickerInput in a range picker when both fields should be unavailable.
 
 <DatePicker datePickerType="range" valueFrom="01/01/2025" valueTo="01/31/2025">
   <DatePickerInput disabled labelText="Start date" placeholder="mm/dd/yyyy" />
   <DatePickerInput disabled labelText="End date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Read-only state (simple)
+### Read-only (simple)
 
-With the default `datePickerType` (`"simple"`), `readonly` shows a fixed value in the text field without a calendar.
+With the default datePickerType (`"simple"`), readonly shows a fixed value in the text field without a calendar.
 
 <DatePicker value="01/15/1990">
   <DatePickerInput readonly labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Read-only state (single)
+### Read-only (single)
 
-Set `readonly` to `true` to display a value while preventing edits. Unlike `disabled`, the input remains focusable and its value is submitted with the form.
+Set `readonly` to `true` to display a value while preventing edits. Unlike disabled, the input remains focusable and its value is submitted with the form.
 
 <DatePicker datePickerType="single" value="01/15/1990">
   <DatePickerInput readonly labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
-## Read-only state (range)
+### Read-only (range)
 
-The `readonly` state also works with range pickers.
+The readonly state also works with range pickers.
 
 <DatePicker datePickerType="range" valueFrom="01/01/2025" valueTo="01/31/2025">
   <DatePickerInput readonly labelText="Start date" placeholder="mm/dd/yyyy" />
@@ -327,13 +342,13 @@ Show a loading state with the skeleton component.
 
 <DatePickerSkeleton />
 
-## Skeleton (range)
+### Range
 
 Set `range` to `true` to render a skeleton for the range variant.
 
 <DatePickerSkeleton range />
 
-## Skeleton (short)
+### Short
 
 Set `short` to `true` to render a skeleton for the short variant.
 

@@ -1,19 +1,15 @@
 ---
 components: ["OrderedList", "ListItem"]
+description: Ordered lists display a numbered list of items, with support for nesting, links, and expressive typography.
 ---
 
 <script>
   import { OrderedList, ListItem, Link } from "carbon-components-svelte";
 </script>
 
-Ordered lists provide a structured way to display numbered lists of items. They support nested lists, native browser styles, and expressive typography for enhanced visual hierarchy.
+## Basic
 
-> [!TIP]
-> Consider using the [RecursiveList](/components/RecursiveList#ordered) component for rendering tree structured data.
-
-## Default
-
-Create a basic ordered list by wrapping list item components within the ordered list.
+Create a basic ordered list by wrapping list item components within the ordered list. For tree-structured data, consider [RecursiveList](/components/RecursiveList#ordered).
 
 <OrderedList>
   <ListItem>Ordered list item</ListItem>
@@ -39,7 +35,7 @@ Add interactive elements like link components within list items.
 
 ## Nested
 
-Set the `nested` prop to `true` to create hierarchical lists with proper indentation and numbering.
+Create nested lists with `nested` for proper indentation and numbering.
 
 <OrderedList>
   <ListItem>
@@ -59,9 +55,13 @@ Set the `nested` prop to `true` to create hierarchical lists with proper indenta
   <ListItem>Ordered list level 1</ListItem>
 </OrderedList>
 
-## Native list styles
+## Styles
 
-Enable native browser list styles by setting the `native` prop to `true`. This is useful for large lists where the list number may overlap with the list item text.
+Alternate rendering styles for the list.
+
+### Native
+
+Enable native browser list styles with `native`. Useful for large lists where the list number may overlap with the list item text.
 
 <OrderedList native>
   <ListItem>
@@ -81,9 +81,9 @@ Enable native browser list styles by setting the `native` prop to `true`. This i
   <ListItem>Ordered list level 1</ListItem>
 </OrderedList>
 
-## Expressive styles
+### Expressive
 
-Use Carbon's expressive typesetting by setting the `expressive` prop to `true`.
+Use Carbon's expressive typesetting with `expressive`.
 
 <OrderedList expressive>
   <ListItem><Link size="lg" href="#">Ordered list item</Link></ListItem>

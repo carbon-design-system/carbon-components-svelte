@@ -1,12 +1,14 @@
+---
+description: Text applies Carbon typography to any element — type scale, semantic color, and layout modifiers, for productive and expressive styles.
+---
+
 <script>
   import { Box, Stack, Text, Truncate } from "carbon-components-svelte";
 </script>
 
-Text applies Carbon typography to any element: type scale, semantic color, and layout modifiers. It covers productive styles for application UI and expressive styles for editorial layouts.
+## Basic
 
-## Default
-
-The default component renders a `<p>` with the `body-long-01` type style.
+The default component renders a `<p>` with the body-long-01 type style.
 
 <Text>Carbon Components Svelte implements the Carbon Design System.</Text>
 
@@ -32,7 +34,7 @@ Set `color` to a Carbon semantic text token. Each token describes intent and res
 <Text color="error">Error text</Text>
 <Text color="disabled">Disabled text</Text>
 
-`on-color` and `inverse` are meant for colored or inverse surfaces, where the default text tokens would be unreadable. Both read light in the white theme but track different surfaces, so they diverge in other themes. Each example places the token on the surface it is designed for.
+On-color and inverse tokens are meant for colored or inverse surfaces, where the default text tokens would be unreadable. Both read light in the white theme but track different surfaces, so they diverge in other themes. Each example places the token on the surface it is designed for.
 
 Use `on-color` for text on a colored background, such as a button or tag fill. [Box](/components/Box) has no fill token for interactive surfaces, so set the background on the container:
 
@@ -155,7 +157,7 @@ Set `wrap` to `break-word` to break long words, or `nowrap` to keep text on one 
 
 ### Max width and full width
 
-Set `maxWidth` to any CSS length. Numbers are treated as pixels; strings accept units such as `ch`, `rem`, `%`, or `px`. Text fills its container by default. Neither `maxWidth` nor `fullWidth` is applied unless you set them.
+Set `maxWidth` to any CSS length. Numbers are treated as pixels; strings accept units such as ch, rem, %, or px. Text fills its container by default. Width caps are opt-in — neither maxWidth nor fullWidth applies unless you set one.
 
 <Stack gap={5}>
   <Text type="body-long-01" maxWidth="38ch">
@@ -169,7 +171,7 @@ Set `maxWidth` to any CSS length. Numbers are treated as pixels; strings accept 
   </Text>
 </Stack>
 
-`fullWidth` sets `width: 100%`. A block element already spans its parent; use `fullWidth` in flex or grid layouts where width must be explicit. Pair it with `maxWidth` when the row is full width but the copy should stay capped. Use [Box](/components/Box) for the bordered container:
+Set `fullWidth` when the row should span its container (`width: 100%`). A block element already spans its parent; use it in flex or grid layouts where width must be explicit. Pair with maxWidth when the row is full width but the copy should stay capped. Use [Box](/components/Box) for the bordered container:
 
 <Box border="subtle" padding={5} fullWidth>
   <Text type="body-long-01" fullWidth maxWidth="38ch">
@@ -185,13 +187,13 @@ Set `maxWidth` to any CSS length. Numbers are treated as pixels; strings accept 
 
 ## Truncate (multiline)
 
-Set `lines` to truncate overflow while keeping a Carbon type style applied. Values above `1` use multiline mode (end clamp only). See also [Truncate](/components/Truncate) and the `truncate` action for use on native elements.
+Set `lines` to truncate overflow while keeping the Carbon type style. Values above 1 use multiline mode (end clamp only). See also [Truncate](/components/Truncate) for wrapping inline text, or the truncate action on native elements.
 
 <Text type="body-long-01" maxWidth="20rem" lines={3}>
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
 </Text>
 
-Alternatively, wrap an inline `Text` element with the `Truncate` component:
+Alternatively, wrap inline Text with the Truncate component:
 
 <Truncate lines={3}>
   <Box maxWidth="20rem">
@@ -203,7 +205,7 @@ Alternatively, wrap an inline `Text` element with the `Truncate` component:
 
 ## Typography inspiration
 
-Combine `type`, `color`, and `tag` as you would on an IBM product page: expressive type for editorial moments, productive type for application UI.
+Combine type, color, and element choice as you would on an IBM product page: expressive type for editorial moments, productive type for application UI.
 
 <Stack gap={8}>
   <Text type="caption-02" color="secondary">IBM Cloud · Observability</Text>

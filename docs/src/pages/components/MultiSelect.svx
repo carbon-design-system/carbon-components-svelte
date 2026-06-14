@@ -1,16 +1,15 @@
+---
+description: Multi-selects provide a dropdown for selecting multiple options with checkboxes, with filtering, custom formatting, and multiple states.
+---
+
 <script>
   import { MultiSelect, FluidMultiSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
-Multi-selects provide a dropdown interface for selecting multiple options using checkboxes. They support filtering, custom formatting, and multiple states.
+## Basic
 
-> [!NOTE]
-> Every `items` object must have a unique "id" property.
-
-## Default
-
-Create a basic multi-select dropdown with three contact methods. By default, items are ordered alphabetically.
+Create a basic multi-select dropdown with three contact methods. Every item must have a unique id. By default, items are ordered alphabetically.
 
 <MultiSelect labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -18,7 +17,17 @@ Create a basic multi-select dropdown with three contact methods. By default, ite
     {id: "2", text: "Fax"}]}"
   />
 
-## Format item display text
+## Content
+
+Customize how items render and what supporting text appears around the field.
+
+### Custom slot
+
+Override the default slot to customize item rendering. Use `let:item`, `let:index`, `let:selected`, and `let:highlighted` to access each item's data and its derived selected and highlighted state.
+
+<FileSource src="/framed/MultiSelect/MultiSelectSlot" />
+
+### Display text
 
 Format the display text of items using the `itemToString` prop. This example appends the item ID in parentheses.
 
@@ -31,20 +40,103 @@ Format the display text of items using the `itemToString` prop. This example app
     sortItem="{() => {}}"
   />
 
-## Custom slot
+### Helper text
 
-Override the default slot to customize item rendering. Use `let:item`, `let:index`, `let:selected`, and `let:highlighted` to access each item's data and its derived selected and highlighted state.
+Add descriptive text below the multi-select using the `helperText` prop.
 
-<FileSource src="/framed/MultiSelect/MultiSelectSlot" />
+<MultiSelect helperText="Select one or more contact methods" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
 
-## No alphabetical ordering
+### Hidden label
+
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+
+<MultiSelect labelText="Contact" label="Select contact methods..." hideLabel
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+### Checkbox values
+
+Customize checkbox attributes using the `itemToInput` prop. This example sets a consistent name for all checkboxes.
+
+Use itemToInput to customize the user-selectable checkbox values.
+This will also override the underlying hidden inputs used for form submission.
+
+```js
+itemToInput={(item) => {
+  return {
+    name: `Contact_${item.id}`,
+    value: item.id
+  }
+}}
+```
+
+The above function sets the name attribute to
+Contact_0 (respective to each item's id) for every hidden input that
+renders, along with each respective item's id set to the value attribute.
+
+<MultiSelect
+  itemToInput={(item) => ({name: 'contact', value: item.id})}
+  labelText="Contact"
+  label="Select contact methods..."
+  items="{[
+    {id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}
+  ]}"
+/>
+
+## Selection
+
+Control which items start selected, how selections reorder the list, and how to read the resolved order.
+
+### Initial selection
+
+Pre-select items by passing an array of item IDs to `selectedIds`. This example pre-selects Slack and Email.
+
+<MultiSelect selectedIds="{["0", "1"]}" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+### Selection feedback
+
+Move selected items to the top of the list immediately after selection by setting `selectionFeedback` to `"top"`. The default behavior (top-after-reopen) only reorders items when the dropdown is reopened.
+
+<MultiSelect selectionFeedback="top" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+### Select all
+
+Add a "select all" item by setting isSelectAll to true on an item. Clicking this item selects or deselects all non-disabled items. Disabled items are not affected by "select all".
+
+The select-all option is styled differently from regular options (with a separator border) so it is visually distinct as a group toggle. Its checkbox supports an **indeterminate** state when only a subset of non-disabled items are selected; it shows checked when all are selected and unchecked when none are selected.
+
+<FileSource src="/framed/MultiSelect/MultiSelectSelectAll" />
+
+### Sorted items
+
+Bind to `sortedItems` to read the resolved list after sorting and selection feedback is applied. This avoids recomputing the order from items, selectedIds, and sortItem in consumer code.
+
+<FileSource src="/framed/MultiSelect/MultiSelectSortedItems" />
+
+### No alphabetical ordering
 
 Prevent automatic alphabetical ordering by passing a no-op function to `sortItem`. This maintains the original order of items.
 
 <MultiSelect labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}" 
+    {id: "2", text: "Fax"}]}"
     sortItem="{() => {}}"
   />
 
@@ -58,68 +150,95 @@ Enable filtering by setting `filterable` to `true`. This example includes a plac
     {id: "2", text: "Fax"}]}"
   />
 
-## Initial selected items
-
-Pre-select items by passing an array of item IDs to `selectedIds`. This example pre-selects Slack and Email.
-
-<MultiSelect selectedIds="{["0", "1"]}" labelText="Contact" label="Select contact methods..."
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}" 
-  />
-
-## Selection feedback "top"
-
-Move selected items to the top of the list immediately after selection by setting `selectionFeedback` to `"top"`. The default behavior (`"top-after-reopen"`) only reorders items when the dropdown is reopened.
-
-<MultiSelect selectionFeedback="top" labelText="Contact" label="Select contact methods..."
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}"
-  />
-
-## Bind to sorted items
-
-Bind to `sortedItems` to read the resolved list after sorting and selection feedback is applied. This avoids recomputing the order from `items`, `selectedIds`, and `sortItem` in consumer code.
-
-<FileSource src="/framed/MultiSelect/MultiSelectSortedItems" />
-
-## Multiple multi-select dropdowns
+## Multiple multi-selects
 
 Manage multiple dropdowns in a form with coordinated state.
 
 <FileSource src="/framed/MultiSelect/MultipleMultiSelect" />
 
-## Format checkbox values
+## Virtualization
 
-Customize checkbox attributes using the `itemToInput` prop. This example sets a consistent name for all checkboxes.
+Virtualization renders only the items currently visible in the viewport, improving performance for large lists. By default, the multi-select virtualizes lists with more than 100 items.
 
-Use the `itemToInput` prop to customize the user-selectable checkbox values.
-This will also override the underlying hidden inputs used for form submission.
+### Large lists
 
-```js
-itemToInput={(item) => {
-  return {
-    name: `Contact_${item.id}`,
-    value: item.id
-  }
-}}
-```
+In the example below, 10,000 items are provided to the multi-select but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
 
-The above function sets the `name` attribute to
-`Contact_0` (respective to each item's `id`) for every hidden input that
-renders, along with each respective item's `id` set to the `value` attribute.
+Set `virtualize={false}` to explicitly disable virtualization, even for large lists. Or, customize the threshold at which virtualization activates. See [Custom threshold](#custom-threshold).
 
-<MultiSelect
-  itemToInput={(item) => ({name: 'contact', value: item.id})}
-  labelText="Contact"
-  label="Select contact methods..."
-  items="{[
-    {id: "0", text: "Slack"},
+<FileSource src="/framed/MultiSelect/VirtualizedMultiSelect" />
+
+### Custom overscan
+
+Overscanning is the process of rendering extra items above and below the viewport to ensure smooth scrolling. The default overscan value is 3.
+
+Specify a custom value for `overscan` to control how many extra items are rendered above/below the viewport for smoother scrolling.
+
+During very fast scrolling, higher overscan values may cause more flickering due to increased DOM updates. For fast-scrolling scenarios, use a lower overscan value.
+
+<FileSource src="/framed/MultiSelect/VirtualizeOverscan" />
+
+### Custom threshold
+
+The threshold is the minimum number of items required before virtualization activates. The default threshold value is 100, meaning lists with fewer than 100 items will not be virtualized and all items will be rendered normally.
+
+Specify a custom value for `threshold` to control when virtualization activates. Below the threshold, all items are rendered normally without virtualization.
+
+<FileSource src="/framed/MultiSelect/VirtualizeThreshold" />
+
+### Custom item height
+
+By default, item height matches the menu row for each size: 32px (sm), 40px (md), 48px (lg, xl). Set `itemHeight` when custom slots change row height.
+
+<FileSource src="/framed/MultiSelect/VirtualizeItemHeight" />
+
+## Sizes
+
+The `size` prop sets the field height. The default is medium.
+
+### Small
+
+Use the small size for compact layouts by setting `size` to `"sm"`. This is ideal for secondary selections.
+
+<MultiSelect size="sm" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}
-  ]}"
-/>
+    {id: "2", text: "Fax"}]}"
+  />
+
+### Extra-large
+
+Use the extra-large size for prominent selections by setting `size` to `"xl"`.
+
+<MultiSelect size="xl" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+## Variants
+
+Alternate presentations for different surfaces and layouts.
+
+### Light
+
+Use the light variant for dark backgrounds by setting `light` to `true`.
+
+<MultiSelect light labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
+### Inline
+
+Display the dropdown inline with other content by setting `type` to `"inline"`. This removes the background and border.
+
+<MultiSelect type="inline" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
 
 ## Top direction
 
@@ -131,37 +250,7 @@ Display the dropdown menu above the input by setting `direction` to `"top"`. Thi
     {id: "2", text: "Fax"}]}"
   />
 
-## Helper text
-
-Add descriptive text below the multi-select using the `helperText` prop.
-
-<MultiSelect helperText="Select one or more contact methods" labelText="Contact" label="Select contact methods..."
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}"
-  />
-
-## Hidden label
-
-Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
-
-<MultiSelect labelText="Contact" label="Select contact methods..." hideLabel
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}"
-  />
-
-## Light variant
-
-Use the light variant for dark backgrounds by setting `light` to `true`.
-
-<MultiSelect light labelText="Contact" label="Select contact methods..."
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}"
-  />
-
-## Fluid variant
+## Fluid
 
 Set `fluid` to `true` to use the fluid variant, which embeds the label
 inside the field. Fluid multi-selects can be used standalone or inside
@@ -174,7 +263,7 @@ automatically.
     {id: "2", text: "Fax"}]}"
   />
 
-## Fluid variant (filterable)
+### Filterable
 
 Filterable multi-selects support the fluid variant. Set both `fluid` and
 `filterable` to `true`.
@@ -185,7 +274,7 @@ Filterable multi-selects support the fluid variant. Set both `fluid` and
     {id: "2", text: "Fax"}]}"
   />
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
@@ -200,7 +289,7 @@ tooltip icon.
   </svelte:fragment>
 </MultiSelect>
 
-## Fluid variant (condensed)
+### Condensed
 
 By default, the fluid variant renders taller menu items to match the taller
 field. Set `condensed` to `true` to render menu items at their default
@@ -212,7 +301,7 @@ height instead.
     {id: "2", text: "Fax"}]}"
   />
 
-## Fluid variant (invalid)
+### Invalid
 
 Fluid multi-selects display the error message inside the field boundary. Long
 messages wrap to multiple lines.
@@ -223,7 +312,7 @@ messages wrap to multiple lines.
     {id: "2", text: "Fax"}]}"
   />
 
-## Fluid variant (warning)
+### Warning
 
 <MultiSelect fluid warn warnText="One or more contact methods are not associated with your account" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -231,7 +320,7 @@ messages wrap to multiple lines.
     {id: "2", text: "Fax"}]}"
   />
 
-## Fluid variant (disabled)
+### Disabled
 
 Invalid and warning states are not displayed while the multi-select is disabled.
 
@@ -241,7 +330,7 @@ Invalid and warning states are not displayed while the multi-select is disabled.
     {id: "2", text: "Fax"}]}"
   />
 
-## Fluid variant (read-only)
+### Read-only
 
 Invalid and warning states are not displayed while the multi-select is read-only.
 
@@ -251,7 +340,7 @@ Invalid and warning states are not displayed while the multi-select is read-only
     {id: "2", text: "Fax"}]}"
   />
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading skeleton for the fluid multi-select variant.
 
@@ -259,43 +348,17 @@ Display a loading skeleton for the fluid multi-select variant.
 
 ## Portal menu
 
-Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Without `portalMenu`, the dropdown in the example below would be clipped by its container's hidden overflow.
+Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with overflow hidden or z-index stacking contexts. Without portalMenu, the dropdown in the example below would be clipped by its container's hidden overflow.
 
-When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
+When inside a [Modal](/components/Modal#modal-with-dropdowns), portalMenu defaults to true unless explicitly set to false.
 
 <FileSource src="/framed/MultiSelect/MultiSelectPortalMenu" />
 
-## Inline variant
+## States
 
-Display the dropdown inline with other content by setting `type` to `"inline"`. This removes the background and border.
+Surface validation and interaction states. Invalid and warning states each have a filterable counterpart.
 
-<MultiSelect type="inline" labelText="Contact" label="Select contact methods..."
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}"
-  />
-
-## Extra-large size
-
-Use the extra-large size for prominent selections by setting `size` to `"xl"`.
-
-<MultiSelect size="xl" labelText="Contact" label="Select contact methods..."
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}"
-  />
-
-## Small size
-
-Use the small size for compact layouts by setting `size` to `"sm"`. This is ideal for secondary selections.
-
-<MultiSelect size="sm" labelText="Contact" label="Select contact methods..."
-    items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}"
-  />
-
-## Invalid state
+### Invalid
 
 Indicate an invalid selection by setting `invalid` to `true`. This example shows a required field error.
 
@@ -305,7 +368,7 @@ Indicate an invalid selection by setting `invalid` to `true`. This example shows
     {id: "2", text: "Fax"}]}"
   />
 
-## Invalid state (filterable)
+### Invalid (filterable)
 
 Combine `filterable` and `invalid` to show validation errors on a filterable multi-select.
 
@@ -315,7 +378,7 @@ Combine `filterable` and `invalid` to show validation errors on a filterable mul
     {id: "2", text: "Fax"}]}"
   />
 
-## Warning state
+### Warning
 
 Indicate a warning state by setting `warn` to `true`. This example shows a warning about unassociated accounts.
 
@@ -325,7 +388,7 @@ Indicate a warning state by setting `warn` to `true`. This example shows a warni
     {id: "2", text: "Fax"}]}"
   />
 
-## Warning state (filterable)
+### Warning (filterable)
 
 Combine `filterable` and `warn` to show warnings on a filterable multi-select.
 
@@ -335,7 +398,7 @@ Combine `filterable` and `warn` to show warnings on a filterable multi-select.
     {id: "2", text: "Fax"}]}"
   />
 
-## Disabled state
+### Disabled
 
 Disable the entire dropdown by setting `disabled` to `true`. This prevents all user interaction.
 
@@ -345,9 +408,9 @@ Disable the entire dropdown by setting `disabled` to `true`. This prevents all u
     {id: "2", text: "Fax"}]}"
   />
 
-## Disabled items
+### Disabled items
 
-Disable specific items using the `disabled` property in the `items` prop. This example disables the Email option.
+Disable specific items using the disabled property in the items array. This example disables the Email option.
 
 <MultiSelect
   labelText="Contact"
@@ -359,7 +422,7 @@ Disable specific items using the `disabled` property in the `items` prop. This e
   ]}
 />
 
-## Read-only state
+### Read-only
 
 Set `readonly` to `true` to display non-editable values. Selected items remain visible but cannot be cleared.
 
@@ -374,48 +437,3 @@ Set `readonly` to `true` to display non-editable values. Selected items remain v
     { id: "2", text: "Fax" },
   ]}
 />
-
-## Select all
-
-Add a "select all" item by setting `isSelectAll: true` on an item. Clicking this item selects or deselects all non-disabled items. Disabled items are not affected by "select all".
-
-The select-all option is styled differently from regular options (with a separator border) so it is visually distinct as a group toggle. Its checkbox supports an **indeterminate** state when only a subset of non-disabled items are selected; it shows checked when all are selected and unchecked when none are selected.
-
-<FileSource src="/framed/MultiSelect/MultiSelectSelectAll" />
-
-## Virtualized items (large lists)
-
-Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
-
-By default, the multi-select virtualizes lists with more than 100 items.
-
-In the example below, 10,000 items are provided to the multi-select but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
-
-Set `virtualize={false}` to explicitly disable virtualization, even for large lists. Or, customize the threshold at which virtualization activates. See [Virtualized items (custom threshold)](#virtualized-items-custom-threshold).
-
-<FileSource src="/framed/MultiSelect/VirtualizedMultiSelect" />
-
-## Virtualized items (custom overscan)
-
-Overscanning is the process of rendering extra items above and below the viewport to ensure smooth scrolling. The default overscan value is 3.
-
-Specify a custom value for `overscan` to control how many extra items are rendered above/below the viewport for smoother scrolling.
-
-> [!NOTE]
-> During very fast scrolling, higher overscan values may cause more flickering due to increased DOM updates. For fast scrolling scenarios, use a lower overscan value.
-
-<FileSource src="/framed/MultiSelect/VirtualizeOverscan" />
-
-## Virtualized items (custom threshold)
-
-The threshold is the minimum number of items required before virtualization activates. The default threshold value is 100, meaning lists with fewer than 100 items will not be virtualized and all items will be rendered normally.
-
-Specify a custom value for `threshold` to control when virtualization activates. Below the threshold, all items are rendered normally without virtualization.
-
-<FileSource src="/framed/MultiSelect/VirtualizeThreshold" />
-
-## Virtualized items (custom item height)
-
-By default, item height matches the menu row for each size: 32px (`sm`), 40px (`md`), 48px (`lg`, `xl`). Set `itemHeight` when custom slots change row height.
-
-<FileSource src="/framed/MultiSelect/VirtualizeItemHeight" />

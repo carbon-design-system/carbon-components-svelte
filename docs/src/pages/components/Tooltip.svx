@@ -1,5 +1,6 @@
 ---
 components: ["Tooltip", "TooltipFooter"]
+description: Tooltips display contextual information on hover or focus, with support for directions, alignments, and interactive content.
 ---
 
 <script>
@@ -7,9 +8,7 @@ components: ["Tooltip", "TooltipFooter"]
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
 </script>
 
-Tooltips display contextual information when users hover over or focus on an element. They support various directions, alignments, and interactive content to provide additional context or guidance.
-
-## Default
+## Basic
 
 Display a tooltip triggered by the default information icon.
 
@@ -35,18 +34,22 @@ Control the tooltip state programmatically.
 
 <FileSource src="/framed/Tooltip/TooltipReactive" />
 
-## Directions
+## Placement
 
-Position the tooltip in different directions using the `direction` prop.
+Position the tooltip with direction and alignment.
+
+### Directions
+
+Position the tooltip with `direction`.
 
 <Tooltip triggerText="Top" direction="top"><p>Top</p></Tooltip>
 <Tooltip triggerText="Right" direction="right"><p>Right</p></Tooltip>
 <Tooltip triggerText="Bottom" direction="bottom"><p>Bottom</p></Tooltip>
 <Tooltip triggerText="Left" direction="left"><p>Left</p></Tooltip>
 
-## Alignment
+### Alignment
 
-Align the tooltip content using the `align` prop.
+Align the tooltip content with `align`.
 
 <Tooltip triggerText="Start" align="start"><p>Start</p></Tooltip>
 <Tooltip triggerText="End" align="end"><p>End</p></Tooltip>
@@ -66,9 +69,13 @@ Add interactive elements like links and buttons using the tooltip footer.
   </TooltipFooter>
 </Tooltip>
 
-## Custom icon (component)
+## Custom icon
 
-Use a custom icon component with the `icon` prop.
+Replace the default icon via prop or slot.
+
+### Component
+
+Use a custom icon component with `icon`.
 
 <Tooltip triggerText="Resource list" icon={Catalog}>
   <p>
@@ -76,7 +83,7 @@ Use a custom icon component with the `icon` prop.
   </p>
 </Tooltip>
 
-## Custom icon (slot)
+### Slot
 
 Customize the icon using the `icon` slot for more flexibility.
 
@@ -89,9 +96,7 @@ Customize the icon using the `icon` slot for more flexibility.
 
 ## Custom delay
 
-The tooltip has a hover delay to avoid accidental opening. The default enter delay is 100ms and default leave delay is 300ms.
-
-Customize the enter and leave delay using `enterDelayMs` and `leaveDelayMs`.
+Customize the enter and leave delay with `enterDelayMs` and `leaveDelayMs`. Defaults are 100ms and 300ms.
 
 <Tooltip triggerText="Slow open" enterDelayMs={500} leaveDelayMs={200}>
   <p>
@@ -101,7 +106,7 @@ Customize the enter and leave delay using `enterDelayMs` and `leaveDelayMs`.
 
 ## Hidden icon
 
-Hide the icon while keeping the tooltip functionality using `hideIcon`.
+Hide the trigger icon while keeping tooltip behavior with `hideIcon`.
 
 <Tooltip hideIcon triggerText="Resource list">
   <p>
@@ -109,9 +114,9 @@ Hide the icon while keeping the tooltip functionality using `hideIcon`.
   </p>
 </Tooltip>
 
-## Portal tooltip
+## Portal
 
-Use `portalTooltip` to render the tooltip in a portal, preventing it from being clipped by `overflow: hidden` containers. This is automatically enabled when the tooltip is inside a `Modal`.
+Set `portalTooltip` to render the tooltip in a portal so it is not clipped by overflow containers. This is enabled automatically inside a Modal.
 
 <Tooltip portalTooltip triggerText="Portalled">
   <p>
@@ -119,9 +124,9 @@ Use `portalTooltip` to render the tooltip in a portal, preventing it from being 
   </p>
 </Tooltip>
 
-## Portal tooltip (hidden icon)
+### Hidden icon
 
-Portal tooltips also work with `hideIcon`.
+Portal tooltips also work with a hidden trigger icon.
 
 <Tooltip portalTooltip hideIcon triggerText="Portalled (hidden icon)">
   <p>
@@ -129,7 +134,7 @@ Portal tooltips also work with `hideIcon`.
   </p>
 </Tooltip>
 
-## Portal tooltip directions
+### Directions
 
 Position portalled tooltips in different directions.
 
@@ -140,6 +145,6 @@ Position portalled tooltips in different directions.
 
 ## Inside a modal
 
-When a tooltip is used inside a [Modal](/components/Modal), it is automatically rendered in a portal so it is not clipped by the modal's overflow or z-index stacking. No need to set `portalTooltip` in this case.
+When a tooltip is used inside a [Modal](/components/Modal), it is automatically portalled so it is not clipped by the modal overflow or z-index stacking. No need to set `portalTooltip` in this case.
 
 <FileSource src="/framed/Tooltip/TooltipModal" />

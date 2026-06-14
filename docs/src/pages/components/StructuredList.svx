@@ -1,5 +1,6 @@
 ---
 components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "StructuredListHead", "StructuredListCell", "StructuredListRow", "StructuredListInput"]
+description: Structured lists display tabular data with support for row selection and various layout options.
 ---
 
 <script>
@@ -7,9 +8,7 @@ components: ["StructuredList", "StructuredListSkeleton", "StructuredListBody", "
   import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
 </script>
 
-Structured lists provide a semantic way to display tabular data with support for selection, keyboard navigation, and various layout options.
-
-## Default
+## Basic
 
 Display a basic structured list with headers and rows by default.
 
@@ -40,7 +39,11 @@ Display a basic structured list with headers and rows by default.
   </StructuredListBody>
 </StructuredList>
 
-## Condensed variant
+## Layout
+
+Adjust row spacing with layout variants.
+
+### Condensed
 
 Use the condensed variant for more compact rows.
 
@@ -71,7 +74,7 @@ Use the condensed variant for more compact rows.
   </StructuredListBody>
 </StructuredList>
 
-## Flush variant
+### Flush
 
 Use the flush variant to remove padding from the list.
 
@@ -111,9 +114,13 @@ Use the flush variant to remove padding from the list.
   </StructuredListBody>
 </StructuredList>
 
-## Selectable rows
+## Selection
 
-Enable row selection with the `selection` prop and structured list input components.
+Let users select one or more rows.
+
+### Single
+
+Enable row selection with `selection` and structured list input components.
 
 <StructuredList selection selected="postgresql-value">
   <StructuredListHead>
@@ -152,9 +159,9 @@ Enable row selection with the `selection` prop and structured list input compone
   </StructuredListBody>
 </StructuredList>
 
-## Multi-select rows
+### Multiple
 
-Set `multiple` to allow selecting more than one row. `selected` becomes an array of values.
+Allow selecting more than one row with `multiple`. Selected becomes an array of values.
 
 <FileSource src="/framed/StructuredList/StructuredListMultiSelect" />
 
@@ -166,8 +173,8 @@ By default, the skeleton renders 3 columns and 5 rows.
 
 <StructuredListSkeleton />
 
-## Skeleton with custom columns and rows
+### Custom columns and rows
 
-Use `columns` and `rows` to customize the values.
+Customize skeleton dimensions with `columns` and `rows`.
 
 <StructuredListSkeleton columns={5} rows={3} />

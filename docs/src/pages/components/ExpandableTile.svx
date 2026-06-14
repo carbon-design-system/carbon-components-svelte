@@ -1,19 +1,18 @@
+---
+description: Expandable tiles show and hide content with a smooth animation, ideal for progressive disclosure.
+---
+
 <script>
   import { ExpandableTile, Button, Stack, OutboundLink } from "carbon-components-svelte";
 </script>
 
-Expandable tiles show and hide content with a smooth animation. They suit content
-overflow and progressive disclosure, and automatically measure content height with
-a resize observer.
-
-## Default
+## Basic
 
 Create an expandable tile that shows and hides content. The component uses a
 [resize observer](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)
 to determine the height of the above-the-fold content.
 
-By default, the tile is collapsed. Use the `above` and `below` slots to define the
-content that appears before and after expansion.
+By default, the tile is collapsed. Use the above and below slots to define content that appears before and after expansion.
 
 <ExpandableTile>
   <div slot="above">
@@ -31,13 +30,33 @@ content that appears before and after expansion.
 
 ## Reactive (two-way binding)
 
-Bind to the `expanded` prop to control and read the tile state outside the component.
+Bind to `expanded` to control and read the tile state outside the component.
 Grow the above-the-fold content while collapsed to see the resize observer remeasure
 and update the tile height.
 
 <FileSource src="/framed/ExpandableTile/ExpandableTileReactive" />
 
-## Custom tile heights
+## Expanded
+
+Display the tile expanded by default with `expanded`.
+
+<ExpandableTile expanded>
+  <div slot="above">Above the fold content here</div>
+  <div slot="below">Below the fold content here</div>
+</ExpandableTile>
+
+## Light
+
+Use the light variant on dark backgrounds with `light`.
+
+<ExpandableTile light>
+  <div slot="above">Above the fold content here</div>
+  <div slot="below">Below the fold content here</div>
+</ExpandableTile>
+
+## Customization
+
+### Heights
 
 Set custom heights for the tile content using CSS to control the exact dimensions
 of the visible and hidden content.
@@ -47,43 +66,22 @@ of the visible and hidden content.
   <div slot="below" style="height: 10rem">Below the fold content here</div>
 </ExpandableTile>
 
-## Expanded
+### Labels
 
-Display the tile in its expanded state by default by setting the `expanded` prop to
-`true`.
-
-<ExpandableTile expanded>
-  <div slot="above">Above the fold content here</div>
-  <div slot="below">Below the fold content here</div>
-</ExpandableTile>
-
-## Light variant
-
-Use the light variant for expandable tiles on dark backgrounds by setting the
-`light` prop to `true`.
-
-<ExpandableTile light>
-  <div slot="above">Above the fold content here</div>
-  <div slot="below">Below the fold content here</div>
-</ExpandableTile>
-
-## With icon labels
-
-Customize the expand/collapse button labels using the `tileExpandedLabel` and
-`tileCollapsedLabel` props.
+Customize expand/collapse button labels with `tileExpandedLabel` and `tileCollapsedLabel`.
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <div slot="above">Above the fold content here</div>
   <div slot="below">Below the fold content here</div>
 </ExpandableTile>
 
-## With interactive content
+## Interactive content
 
-By default, the tile uses a `<button>` element to toggle the expand/collapse state.
+By default, the tile uses a button element to toggle expand/collapse.
 
-If you need to use interactive content inside the tile, set the `hasInteractiveContent` prop to `true`. This renders the tile as a `<div>` element to avoid invalid HTML nesting.
+If you need interactive content inside the tile, set `hasInteractiveContent` to render a div instead and avoid invalid HTML nesting.
 
-Only the expand/collapse toggle affects the tile's expand/collapse state.
+Only the expand/collapse toggle affects the tile state.
 
 <ExpandableTile hasInteractiveContent tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <Stack slot="above" gap={4} inline>

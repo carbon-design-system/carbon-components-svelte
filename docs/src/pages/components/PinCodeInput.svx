@@ -1,5 +1,6 @@
 ---
 components: ["PinCodeInput", "PinCodeInputSkeleton", "FluidPinCodeInputSkeleton"]
+description: Pin code inputs collect a short verification code across a row of single-character segments, with shared validation, keyboard navigation, and paste support.
 ---
 
 <script>
@@ -7,11 +8,9 @@ components: ["PinCodeInput", "PinCodeInputSkeleton", "FluidPinCodeInputSkeleton"
   import { FluidPinCodeInputSkeleton, Link, PinCodeInput, PinCodeInputSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
-Pin code inputs collect a short verification code (such as a one-time passcode) across a row of single-character segments. Each segment is an independent text field with shared labeling, validation, and keyboard navigation (typing advances focus, <DocKbd label="Backspace" /> moves to the previous segment, <DocKbd label="Delete" /> clears the focused segment, <DocKbd label="←" /> and <DocKbd label="→" /> move between segments), plus paste support and optional masking.
+## Basic
 
-## Default
-
-By default, four numeric segments are rendered. Typing a digit advances focus to the next segment; pressing <DocKbd label="Backspace" /> on an empty segment moves focus back. The component emits the following events:
+By default, four numeric segments are rendered. Typing a digit advances focus to the next segment; <DocKbd label="Backspace" /> moves to the previous segment, <DocKbd label="Delete" /> clears the focused segment, and <DocKbd label="←" /> / <DocKbd label="→" /> move between segments. The component emits the following events:
 
 | Event | When | Detail |
 | --- | --- | --- |
@@ -56,7 +55,7 @@ The default input mode is `"numeric"`. Set `type` to `"alphanumeric"` to allow l
 
 ## Uppercase display
 
-Set `uppercase` to `true` to display characters in uppercase. The bound `value` and `code` retain the original casing.
+Set `uppercase` to `true` to display characters in uppercase. The bound value and code retain the original casing.
 
 <PinCodeInput
   type="alphanumeric"
@@ -94,7 +93,11 @@ Non-fluid pin code inputs do not show a placeholder by default. Set `placeholder
   on:paste
 />
 
-## Extra-small size
+## Sizes
+
+The `size` prop sets the segment height. The default is `md`.
+
+### Extra-small
 
 Set `size` to `"xs"` to render extra-small segments.
 
@@ -107,7 +110,7 @@ Set `size` to `"xs"` to render extra-small segments.
   on:paste
 />
 
-## Small size
+### Small
 
 Set `size` to `"sm"` to render small segments.
 
@@ -120,7 +123,7 @@ Set `size` to `"sm"` to render small segments.
   on:paste
 />
 
-## Extra-large size
+### Extra-large
 
 Set `size` to `"xl"` to render extra-large segments.
 
@@ -133,7 +136,7 @@ Set `size` to `"xl"` to render extra-large segments.
   on:paste
 />
 
-## Light variant
+## Light
 
 Use the light variant for light-themed backgrounds by setting `light` to `true`.
 
@@ -152,13 +155,13 @@ Show a loading state with the default skeleton variant.
 
 <PinCodeInputSkeleton />
 
-## Skeleton without label
+### Without label
 
 Show a loading state without a label by setting `hideLabel` to `true`.
 
 <PinCodeInputSkeleton hideLabel />
 
-## Fluid variant
+## Fluid
 
 Set `fluid` to `true` to use the fluid variant, which embeds the label
 inside the field. Fluid pin code inputs can be used standalone or inside
@@ -177,7 +180,7 @@ string to override the default in either variant.
   on:paste
 />
 
-## Fluid variant with custom label
+### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
@@ -189,33 +192,33 @@ tooltip icon.
   </svelte:fragment>
 </PinCodeInput>
 
-## Fluid variant (invalid)
+### Invalid
 
 Fluid pin code inputs display the error message inside the field boundary. Long
 messages wrap to multiple lines.
 
 <PinCodeInput fluid invalid value="018" invalidText="The code you entered is incorrect. Please check the message we sent to your device and try again, or request a new code if it has expired." labelText="Verification code" />
 
-## Fluid variant (warning)
+### Warning
 
 Fluid pin code inputs display the warning message inside the field boundary. Long
 messages wrap to multiple lines.
 
 <PinCodeInput fluid warn value="018" warnText="This code is about to expire. Request a new code from your account settings if you need more time to complete verification." labelText="Verification code" />
 
-## Fluid variant (disabled)
+### Disabled
 
 Invalid and warning states are not displayed while the pin code input is disabled.
 
 <PinCodeInput fluid disabled invalid invalidText="The code you entered is incorrect" value="0182" labelText="Verification code" />
 
-## Fluid variant (read-only)
+### Read-only
 
 Invalid and warning states are not displayed while the pin code input is read-only.
 
 <PinCodeInput fluid readonly warn warnText="This code is about to expire" value="0182" labelText="Verification code" />
 
-## Fluid skeleton
+### Skeleton
 
 Display a loading skeleton for the fluid pin code input variant.
 
@@ -265,7 +268,7 @@ Use the `labelChildren` slot to render custom label content.
 
 ## Paste support
 
-Paste a full code into any segment to fill all segments at once. A partial paste fills from the focused segment forward. Non-matching characters are ignored. `on:paste` fires with the clipboard value (whitespace stripped) before segments are updated.
+Paste a full code into any segment to fill all segments at once. A partial paste fills from the focused segment forward. Non-matching characters are ignored. The paste event fires with the clipboard value (whitespace stripped) before segments are updated.
 
 <PinCodeInput
   labelText="Verification code"
@@ -285,25 +288,29 @@ Set `selectTextOnFocus` to `true` to select a segment's value when it receives f
   on:paste
 />
 
-## Invalid state
+## States
+
+Reflect validation and interaction states.
+
+### Invalid
 
 Set `invalid` to `true` and provide `invalidText` to describe the error.
 
 <PinCodeInput invalid value="018" invalidText="The code you entered is incorrect" labelText="Verification code" />
 
-## Warning state
+### Warning
 
 Set `warn` to `true` and provide `warnText` to surface a non-blocking warning.
 
 <PinCodeInput warn value="018" warnText="This code is about to expire" labelText="Verification code" />
 
-## Disabled state
+### Disabled
 
 Set `disabled` to `true` to disable every segment.
 
 <PinCodeInput disabled value="0182" labelText="Verification code" />
 
-## Read-only state
+### Read-only
 
 Set `readonly` to `true` to display a code that cannot be edited.
 
@@ -311,7 +318,7 @@ Set `readonly` to `true` to display a code that cannot be edited.
 
 ## Bindable value
 
-Bind to `value` for the concatenated code, to `complete` when every segment is filled, or to `code` for per-segment characters. Useful for controlled UI state; for OTP submission, prefer the dispatched `on:change` / `on:complete` payloads instead of branching on bound values locally.
+Bind to `value` for the concatenated code, to `complete` when every segment is filled, or to `code` for per-segment characters. Useful for controlled UI state; for OTP submission, prefer the dispatched change and complete payloads instead of branching on bound values locally.
 
 <FileSource src="/framed/PinCodeInput/PinCodeInputBindable" />
 
@@ -331,8 +338,8 @@ Use `bind:this` to obtain a reference to the component instance and call its acc
 
 ## UX example
 
-End-to-end flow using `on:complete`: normalize the payload, simulate an async verification request, then set `invalid` / `invalidText` or show success from the response.
+End-to-end flow using the complete event: normalize the payload, simulate an async verification request, then set invalid / invalidText or show success from the response.
 
-The hardcoded expected code is for demo purposes only. In production, POST `event.detail.value` to your verification API and derive UI state from the server response.
+The hardcoded expected code is for demo purposes only. In production, POST the submitted value to your verification API and derive UI state from the server response.
 
 <FileSource src="/framed/PinCodeInput/PinCodeInputUx" />

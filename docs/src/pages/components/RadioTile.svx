@@ -1,14 +1,13 @@
 ---
 components: ["TileGroup", "RadioTile"]
+description: Radio tiles provide a tile-based interface for choosing a single option from a set, with light and disabled states.
 ---
 
 <script>
   import { TileGroup, RadioTile } from "carbon-components-svelte";
 </script>
 
-Radio tiles provide a selectable tile interface for choosing a single option from a set. They support both individual and grouped usage, with options for light and disabled states.
-
-## Default
+## Basic
 
 Create a group of radio tiles with a shared name and legend.
 
@@ -24,19 +23,21 @@ Create a group of radio tiles with a shared name and legend.
   </RadioTile>
 </TileGroup>
 
-## Reactive (one-way binding)
+## Reactive
+
+### One-way binding
 
 Update the selected value using the `select` event.
 
 <FileSource src="/framed/RadioTile/RadioTileReactiveOneWay" />
 
-## Reactive (two-way binding)
+### Two-way binding
 
-Bind to the `selected` prop for simpler state management.
+Bind to `selected` for simpler state management.
 
 <FileSource src="/framed/RadioTile/RadioTileReactive" />
 
-## Light variant
+## Light
 
 Use the light variant for light backgrounds.
 
@@ -52,7 +53,7 @@ Use the light variant for light backgrounds.
   </RadioTile>
 </TileGroup>
 
-## Disabled state
+## Disabled
 
 Disable specific tiles to prevent selection.
 

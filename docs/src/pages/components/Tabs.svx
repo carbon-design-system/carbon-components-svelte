@@ -1,5 +1,6 @@
 ---
 components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
+description: Tabs organize content into separate views that can be switched between, with keyboard navigation, disabled states, and layout options.
 ---
 
 <script>
@@ -13,9 +14,7 @@ components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
 </script>
 
-Tabs provide a way to organize content into separate views that can be switched between. They support keyboard navigation, disabled states, and various layout options.
-
-## Default
+## Basic
 
 Create a basic tab interface with labels and content.
 
@@ -30,76 +29,16 @@ Create a basic tab interface with labels and content.
   </svelte:fragment>
 </Tabs>
 
-## Auto width
-
-By default, each tab has a fixed width of `10rem`. Set `autoWidth` to `true` for tabs to automatically adjust their width based on content.
-
-<Tabs autoWidth>
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
-  <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
-  </svelte:fragment>
-</Tabs>
-
-## Full-width
-
-Set `fullWidth` to `true` for tabs to evenly span the full width of the container.
-
-<Tabs fullWidth>
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
-  <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
-  </svelte:fragment>
-</Tabs>
-
-## Reactive example
+## Reactive
 
 Use `bind:selected` for a two-way binding with the selected tab index, so you can programmatically control the selected tab and react to tab changes.
 
 <FileSource src="/framed/Tabs/TabsReactive" />
 
-## Conditional tabs
-
-Tabs can be conditionally rendered using Svelte's `{#if}` blocks. The component automatically maintains correct indices even when tabs are dynamically added or removed.
-
-If the current selected tab is removed, the next tab is selected.
-
-<FileSource src="/framed/Tabs/TabsConditional" />
-
-## Navigation
-
-By default, a `Tab` uses `"#"` as a placeholder `href` and behaves purely as an in-page selection control. Provide a real `href` to make the tab act like a link: activating it by mouse or keyboard navigates to the URL (in addition to selecting the tab). This is useful for routing each tab to a separate page.
-
-The tabs below link to other component pages, so selecting one navigates there.
-
-<Tabs>
-  <Tab label="Accordion" href="/components/Accordion" />
-  <Tab label="Breadcrumb" href="/components/Breadcrumb" />
-  <Tab label="Button" href="/components/Button" />
-  <svelte:fragment slot="content">
-    <TabContent>Accordion content</TabContent>
-    <TabContent>Breadcrumb content</TabContent>
-    <TabContent>Button content</TabContent>
-  </svelte:fragment>
-</Tabs>
-
-## Navigation (intercept default)
-
-In a single-page app, you typically intercept the navigation to route on the client instead of triggering a full page load. Listen to the forwarded `click` event, call `event.preventDefault()`, and hand the URL to your router. The example below logs the route to the console instead of navigating.
-
-<FileSource src="/framed/Tabs/TabsNavigation" />
-
 ## Disabled tabs
 
-Set `disabled` to `true` on a tab component to prevent interaction. Keyboard navigation will skip disabled tabs.
+Set `disabled` on a tab to prevent interaction. Keyboard navigation skips disabled
+tabs.
 
 <Tabs>
   <Tab label="Tab label 1" />
@@ -114,9 +53,84 @@ Set `disabled` to `true` on a tab component to prevent interaction. Keyboard nav
   </svelte:fragment>
 </Tabs>
 
-## With icons
+## Conditional tabs
 
-Use the `icon` prop to render an icon next to the tab label. The icon is rendered to the right of the label by default and shifts to the left when `dismissible` is enabled.
+Tabs can be conditionally rendered using Svelte's `{#if}` blocks. The component automatically maintains correct indices even when tabs are dynamically added or removed.
+
+If the current selected tab is removed, the next tab is selected.
+
+<FileSource src="/framed/Tabs/TabsConditional" />
+
+## Width
+
+By default, each tab has a fixed width of `10rem`. Adjust how tabs size themselves with `autoWidth` and `fullWidth`.
+
+### Auto width
+
+Set `autoWidth` to `true` for tabs to automatically adjust their width based on content.
+
+<Tabs autoWidth>
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+### Full width
+
+Set `fullWidth` to `true` for tabs to evenly span the full width of the container.
+
+<Tabs fullWidth>
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Navigation
+
+By default, a tab uses `"#"` as a placeholder href and behaves as an in-page
+selection control. Provide a real href to make a tab act like a link, useful for
+routing each tab to a separate page.
+
+### Links
+
+Provide a real href so that activating a tab by mouse or keyboard navigates to the
+URL in addition to selecting the tab. The tabs below link to other component pages,
+so selecting one navigates there.
+
+<Tabs>
+  <Tab label="Accordion" href="/components/Accordion" />
+  <Tab label="Breadcrumb" href="/components/Breadcrumb" />
+  <Tab label="Button" href="/components/Button" />
+  <svelte:fragment slot="content">
+    <TabContent>Accordion content</TabContent>
+    <TabContent>Breadcrumb content</TabContent>
+    <TabContent>Button content</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+### Intercept default
+
+In a single-page app, intercept navigation to route on the client instead of
+triggering a full page load. Listen to the forwarded click event, call
+`event.preventDefault()`, and hand the URL to your router. The example below logs
+the route to the console instead of navigating.
+
+<FileSource src="/framed/Tabs/TabsNavigation" />
+
+## Icons
+
+Add an icon next to the tab label with `icon`. The icon renders to the right of
+the label by default and shifts left when dismissible is enabled.
 
 <Tabs>
   <Tab label="Calendar" icon={Calendar} />
@@ -131,7 +145,11 @@ Use the `icon` prop to render an icon next to the tab label. The icon is rendere
 
 ## Icon-only
 
-Set `iconOnly` to `true` on `Tabs` to render compact, square tabs that display only an icon. Set `icon` and `label` on each `Tab`; the label is the accessible name and the tooltip shown on hover and focus.
+Set `iconOnly` on Tabs to render compact, square tabs that display only an icon.
+Set icon and label on each Tab; the label is the accessible name and the tooltip
+shown on hover and focus.
+
+### Basic
 
 <Tabs iconOnly>
   <Tab label="Search" icon={Search} />
@@ -146,7 +164,7 @@ Set `iconOnly` to `true` on `Tabs` to render compact, square tabs that display o
   </svelte:fragment>
 </Tabs>
 
-## Icon-only (large size)
+### Large
 
 Set `iconSize` to `"lg"` for large icon-only tabs. The tabs and their icons are enlarged to the large scale.
 
@@ -163,9 +181,11 @@ Set `iconSize` to `"lg"` for large icon-only tabs. The tabs and their icons are 
   </svelte:fragment>
 </Tabs>
 
-## Icon-only (tooltip direction and alignment)
+### Tooltip placement
 
-The tooltip is rendered below the tab by default. Use `tooltipDirection` (`"top"` or `"bottom"`) and `tooltipAlignment` (`"start"`, `"center"`, or `"end"`) to control its placement. The tooltip automatically flips to the opposite side if there is not enough space.
+The tooltip renders below the tab by default. Use `tooltipDirection` and
+`tooltipAlignment` to control placement. The tooltip automatically flips to the
+opposite side if there is not enough space.
 
 <Tabs iconOnly>
   <Tab label="Search" icon={Search} tooltipDirection="top" tooltipAlignment="start" />
@@ -180,7 +200,7 @@ The tooltip is rendered below the tab by default. Use `tooltipDirection` (`"top"
   </svelte:fragment>
 </Tabs>
 
-## Icon-only (container type)
+### Container
 
 Icon-only tabs also work with the container type.
 
@@ -199,25 +219,34 @@ Icon-only tabs also work with the container type.
 
 ## Dismissible
 
-Set `dismissible` to `true` on `Tabs` to render a close button on each tab. Handle the `dismiss` event to remove the tab from your data and update `selected` if needed. The event detail includes `id`, `label`, `disabled`, and `index`. Set an `id` on each `Tab` to match the event to your list. Press <DocKbd label="Delete" /> on the focused tab to dismiss it.
+Set `dismissible` on Tabs to render a close button on each tab. Handle the
+dismiss event to remove the tab from your data and update selected if needed. The
+event detail includes `{ id, label, disabled, index }`. Set an id on each Tab to
+match the event to your list. Press <DocKbd label="Delete" /> on the focused tab
+to dismiss it.
+
+### Basic
 
 <FileSource src="/framed/Tabs/TabsDismissible" />
 
-## Dismissible with icons
+### Icons
 
-Set `dismissible` to `true` on `Tabs` and pass an `icon` to each `Tab`. Icons render on the left of the label; the close button stays on the right.
+Set dismissible on Tabs and pass an icon to each Tab. Icons render on the left of
+the label; the close button stays on the right.
 
 <FileSource src="/framed/Tabs/TabsDismissibleIcons" />
 
-## Dismissible (container type)
+### Container
 
 Set `type="container"` and `dismissible` to `true` for dismissible container tabs.
 
 <FileSource src="/framed/Tabs/TabsDismissibleContainer" />
 
-## Container type
+## Container
 
 Use the container type for a more prominent tab interface. By default, container types have an auto-width.
+
+### Basic
 
 <Tabs type="container">
   <Tab label="Tab label 1" />
@@ -230,7 +259,7 @@ Use the container type for a more prominent tab interface. By default, container
   </svelte:fragment>
 </Tabs>
 
-## Container type (full width)
+### Full width
 
 Combine `type="container"` with `fullWidth` for container tabs that evenly span the full width of the container.
 
@@ -245,9 +274,10 @@ Combine `type="container"` with `fullWidth` for container tabs that evenly span 
   </svelte:fragment>
 </Tabs>
 
-## Container type (disabled)
+### Disabled
 
-Container type tabs with disabled states. Set `disabled` to `true` on individual tabs to prevent interaction.
+Container type tabs with disabled states. Set `disabled` on individual tabs to
+prevent interaction.
 
 <Tabs type="container">
   <Tab label="Tab label 1" />
@@ -262,9 +292,9 @@ Container type tabs with disabled states. Set `disabled` to `true` on individual
   </svelte:fragment>
 </Tabs>
 
-## Container type with icons
+### Icons
 
-Container type tabs also support the `icon` prop.
+Container type tabs also support icons via `icon`.
 
 <Tabs type="container">
   <Tab label="Calendar" icon={Calendar} />
@@ -277,9 +307,10 @@ Container type tabs also support the `icon` prop.
   </svelte:fragment>
 </Tabs>
 
-## Container type (secondary label)
+### Secondary label
 
-Use `secondaryLabel` with container type tabs to display additional context below the primary label.
+Use `secondaryLabel` with container type tabs to display additional context below
+the primary label.
 
 <Tabs type="container">
   <Tab label="Engage" secondaryLabel="(21/25)" />
@@ -296,9 +327,11 @@ Use `secondaryLabel` with container type tabs to display additional context belo
   </svelte:fragment>
 </Tabs>
 
-## Container type (one secondary label)
+### Partial secondary label
 
-When only some tabs use `secondaryLabel`, the container still applies the taller min-height so all tab items align. Only tabs with a secondary label show the two-line layout.
+When only some tabs use secondaryLabel, the container still applies the taller
+min-height so all tab items align. Only tabs with a secondary label show the
+two-line layout.
 
 <Tabs type="container">
   <Tab label="Overview" />
@@ -311,7 +344,7 @@ When only some tabs use `secondaryLabel`, the container still applies the taller
   </svelte:fragment>
 </Tabs>
 
-## Container type (secondaryChildren slot)
+### Secondary children slot
 
 Use the `secondaryChildren` slot to customize the secondary label with custom markup (for example, `<strong>` for emphasis).
 
@@ -332,9 +365,26 @@ Use the `secondaryChildren` slot to customize the secondary label with custom ma
   </svelte:fragment>
 </Tabs>
 
+### Icons with secondary label
+
+Container type tabs can combine icon and secondaryLabel for a primary label, icon,
+and optional secondary line (for example, counts or status).
+
+<Tabs type="container">
+  <Tab label="Calendar" icon={Calendar} secondaryLabel="(12 events)" />
+  <Tab label="Information" icon={Information} secondaryLabel="(3 new)" />
+  <Tab label="Settings" icon={Settings} secondaryLabel="(2 pending)" disabled />
+  <svelte:fragment slot="content">
+    <TabContent>Calendar content</TabContent>
+    <TabContent>Information content</TabContent>
+    <TabContent>Settings content</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ## Custom label slot
 
-Override the default slot to customize the tab label. Use `let:selected` to render custom content based on whether the tab is selected.
+Override the default slot to customize the tab label. Use `let:selected` to render
+custom content based on whether the tab is selected.
 
 <Tabs>
   <Tab label="Tab label 1" let:selected>
@@ -353,29 +403,18 @@ Override the default slot to customize the tab label. Use `let:selected` to rend
   </svelte:fragment>
 </Tabs>
 
-## Container type with icons and secondary label
+## Skeleton
 
-Container type tabs can use both `icon` and `secondaryLabel` for a primary label, icon, and optional secondary line (for example, counts or status).
+Show a loading state while tabs are being prepared.
 
-<Tabs type="container">
-  <Tab label="Calendar" icon={Calendar} secondaryLabel="(12 events)" />
-  <Tab label="Information" icon={Information} secondaryLabel="(3 new)" />
-  <Tab label="Settings" icon={Settings} secondaryLabel="(2 pending)" disabled />
-  <svelte:fragment slot="content">
-    <TabContent>Calendar content</TabContent>
-    <TabContent>Information content</TabContent>
-    <TabContent>Settings content</TabContent>
-  </svelte:fragment>
-</Tabs>
+### Basic
 
-## Skeleton (default)
-
-Show a loading state with the default skeleton variant.
+Render the default skeleton variant.
 
 <TabsSkeleton count={3} />
 
-## Skeleton (container)
+### Container
 
-Show a loading state with the container skeleton variant.
+Render the container skeleton variant.
 
 <TabsSkeleton type="container" count={3} />

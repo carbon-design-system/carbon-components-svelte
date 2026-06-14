@@ -1,5 +1,6 @@
 ---
 components: ["BadgeIndicator", "Button", "HeaderGlobalAction"]
+description: Badge indicators draw attention to unread counts and new activity on icon-only buttons.
 ---
 
 <script>
@@ -7,11 +8,9 @@ components: ["BadgeIndicator", "Button", "HeaderGlobalAction"]
   import Notification from "carbon-icons-svelte/lib/Notification.svelte";
 </script>
 
-Badge indicators draw attention to unread counts and new activity on icon-only buttons.
+## Basic
 
-## Default
-
-Omit `count` to render an empty dot that signals presence without a number.
+Omit count to render an empty dot that signals presence without a number.
 
 <Button
   kind="ghost"
@@ -23,7 +22,7 @@ Omit `count` to render an empty dot that signals presence without a number.
 
 ## Count
 
-Set `count` to a number. Values greater than `999` display as `999+`.
+Set count to a number. Values greater than 999 display as 999+.
 
 <Stack orientation="horizontal" gap={7}>
   <Button
@@ -51,7 +50,7 @@ Set `count` to a number. Values greater than `999` display as `999+`.
 
 ## Formatted count
 
-Pass a string to `count` to override the built-in numeric display. String values bypass the `999+` cap.
+Pass a string to count to override the built-in numeric display. String values bypass the 999+ cap.
 
 <FileSource src="/framed/BadgeIndicator/FormattedCount" />
 

@@ -1,5 +1,6 @@
 ---
 components: ["OverflowMenu", "OverflowMenuItem"]
+description: Overflow menus present a list of actions in a compact dropdown, ideal for secondary or overflow actions.
 ---
 
 <script>
@@ -11,9 +12,7 @@ components: ["OverflowMenu", "OverflowMenuItem"]
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 </script>
 
-Overflow menus provide a compact way to display a list of actions or options. They render as a button that opens a dropdown menu when clicked, making them ideal for secondary actions or overflow content.
-
-## Default
+## Basic
 
 Create a basic overflow menu by wrapping overflow menu item components within the overflow menu.
 
@@ -23,15 +22,19 @@ Create a basic overflow menu by wrapping overflow menu item components within th
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Portal menu
+## Positioning
 
-Set `portalMenu` to `true` to render the menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Without `portalMenu`, the menu in the example below would be clipped by its container's hidden overflow.
+Control where and how the menu opens.
 
- When inside a [Modal](/components/Modal), `portalMenu` defaults to `true` unless explicitly set to `false`. 
+### Portal
+
+Set `portalMenu` to `true` to render the menu in a floating portal, so it is not clipped by `overflow: hidden` parents or z-index stacking. Without portalling, the menu below would be clipped.
+
+Inside a [Modal](/components/Modal), portalling is on by default unless you set `portalMenu` to `false`.
 
 <FileSource src="/framed/OverflowMenu/OverflowMenuPortalMenu" />
 
-## Flipped
+### Flipped
 
 Set `flipped` to `true` to position the menu to the left of the button.
 
@@ -41,7 +44,7 @@ Set `flipped` to `true` to position the menu to the left of the button.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Menu direction
+### Direction
 
 Set `direction` to `"top"` to position the menu above the button.
 
@@ -51,7 +54,7 @@ Set `direction` to `"top"` to position the menu above the button.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Light variant
+## Light
 
 Enable the light variant by setting `light` to `true`.
 
@@ -61,7 +64,11 @@ Enable the light variant by setting `light` to `true`.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Extra-large size
+## Sizes
+
+Set `size` to control trigger and item height. The default is `md`.
+
+### Extra-large
 
 Set `size` to `"xl"` for an extra-large overflow menu.
 
@@ -71,7 +78,7 @@ Set `size` to `"xl"` for an extra-large overflow menu.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Small size
+### Small
 
 Set `size` to `"sm"` for a small overflow menu.
 
@@ -81,7 +88,7 @@ Set `size` to `"sm"` for a small overflow menu.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Extra-small size
+### Extra-small
 
 Set `size` to `"xs"` for an extra-small overflow menu.
 
@@ -103,7 +110,7 @@ Set `primaryFocus` to `true` on a menu item to focus it when opening the dropdow
 
 ## Item icons
 
-Set `icon` for a left icon or `iconRight` for a right icon. The label fills the space between them. Use the `icon` and `iconRight` slots for custom markup. Note that item icons are not intended for use with small (`sm`) or extra-small (`xs`) menu sizes.
+Set `icon` for a left icon or `iconRight` for a right icon; the label fills the space between them. Use the matching slots for custom markup. Item icons are not intended for `sm` or `xs` sizes.
 
 <OverflowMenu>
   <OverflowMenuItem icon={Edit} text="Rename" />
@@ -117,7 +124,11 @@ Set `icon` for a left icon or `iconRight` for a right icon. The label fills the 
   <OverflowMenuItem hasDivider danger icon={TrashCan} text="Delete" />
 </OverflowMenu>
 
-## Custom trigger icon
+## Trigger
+
+Customize the menu trigger button.
+
+### Icon
 
 Replace the default vertical overflow menu icon with a custom icon.
 
@@ -127,7 +138,7 @@ Replace the default vertical overflow menu icon with a custom icon.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Custom trigger slot
+### Slot
 
 Use the `menu` slot to customize the trigger button content.
 
@@ -138,7 +149,11 @@ Use the `menu` slot to customize the trigger button content.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Disabled button
+## Disabled
+
+Disable the whole menu or individual items.
+
+### Button
 
 Set `disabled` to `true` to disable the trigger button.
 
@@ -148,9 +163,9 @@ Set `disabled` to `true` to disable the trigger button.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
-## Disabled items
+### Items
 
-Set `disabled` to `true` to disable menu items. Use `hasDivider` to add visual separation between items.
+Disable individual menu items with `disabled`. Use a divider to add visual separation between items.
 
 <OverflowMenu>
   <OverflowMenuItem text="Create key" />
@@ -166,13 +181,17 @@ Set `disabled` to `true` to disable menu items. Use `hasDivider` to add visual s
   <OverflowMenuItem hasDivider danger text="Delete service" />
 </OverflowMenu>
 
-## Prevent an item from closing the menu
+## Closing
+
+Control whether selecting an item closes the menu.
+
+### Prevent item close
 
 Use `e.preventDefault()` on an individual overflow menu item click event to prevent the menu from closing when that item is clicked. Use this to keep the menu open after performing an action.
 
 <FileSource src="/framed/OverflowMenu/OverflowMenuPreventDefault" />
 
-## Cancel the close event
+### Cancel close event
 
 The `close` event is cancelable. Call `e.preventDefault()` on it to keep the menu open when it would otherwise close from the trigger, <DocKbd label="Escape" />, or an outside click. The example below guards against accidentally dismissing unsaved changes: toggle a setting, then try to close the menu without saving.
 
