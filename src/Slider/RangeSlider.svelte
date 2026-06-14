@@ -170,9 +170,13 @@
 
   /** @type {() => void} */
   function stopHolding() {
+    const wasHolding = holding;
     holding = false;
     dragging = false;
     currentEvent = null;
+    if (wasHolding && !disabled && !readonly) {
+      dispatch("change", { value, valueUpper });
+    }
   }
 
   /** @type {(e: PointerLikeEvent) => void} */
@@ -237,6 +241,7 @@
       valueUpper = next;
     }
     dispatch("input", { value, valueUpper });
+    dispatch("change", { value, valueUpper });
   }
 
   $: labelId = `label-${id}`;
@@ -257,10 +262,6 @@
     if (dragging && currentEvent) {
       calcValue(currentEvent);
       dragging = false;
-    }
-
-    if (!holding && !disabled && !readonly) {
-      dispatch("change", { value, valueUpper });
     }
   }
 </script>
@@ -332,6 +333,7 @@
           if (next < min) next = min;
           if (next > valueUpper) next = valueUpper;
           value = next;
+          dispatch("change", { value, valueUpper });
         }}
         data-invalid={invalid || null}
         data-warn={(warn && !invalid) || null}
@@ -486,6 +488,7 @@
           if (next > max) next = max;
           if (next < value) next = value;
           valueUpper = next;
+          dispatch("change", { value, valueUpper });
         }}
         data-invalid={invalid || null}
         data-warn={(warn && !invalid) || null}
