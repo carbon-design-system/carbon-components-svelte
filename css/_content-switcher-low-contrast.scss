@@ -76,6 +76,7 @@
     .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected {
       background-color: transparent;
       color: $text-primary;
+      font-weight: 600;
 
       &:focus {
         box-shadow: none;
