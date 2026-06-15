@@ -28,6 +28,14 @@ Create a basic header with the header component. Open these examples in a new ta
 
 <FileSource src="/framed/UIShell/Header" />
 
+### External links
+
+Set the `icon` prop on `HeaderNavItem` to add a trailing icon after the text. For external links that open in a new tab, set `target="_blank"` and an external `href`. Use `Launch` from [carbon-icons-svelte](https://github.com/carbon-design-system/carbon-icons-svelte). The icon is decorative and inherits the link color on hover, focus, and active.
+
+Duplicate those items in `HeaderSideNavItems` so the links stay in the side nav below the large breakpoint.
+
+<FileSource src="/framed/UIShell/HeaderNavExternalLinks" />
+
 ## Side navigation
 
 Pair the header with a `SideNav`. It collapses behind a hamburger menu by default and also supports responsive, fixed, and rail layouts.
