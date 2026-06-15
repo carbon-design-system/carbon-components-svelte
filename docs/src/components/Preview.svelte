@@ -72,7 +72,8 @@
     border: 1px solid var(--cds-ui-03);
     border-bottom: 0;
     position: relative;
-    z-index: 9999;
+    /* Above side nav for breakout content but below portal content */
+    z-index: 9100;
   }
 
   .preview-viewer:not(.framed) {
