@@ -206,7 +206,7 @@
       buttonWidth = width;
 
       if (!onMountAfterUpdate && $currentIndex < 0) {
-        menuRef?.focus();
+        menuRef?.focus({ preventScroll: true });
       }
 
       if (!effectivePortalMenu) {
@@ -324,7 +324,7 @@
         );
         if (shouldContinue) {
           open = false;
-          buttonRef.focus();
+          buttonRef.focus({ preventScroll: true });
         }
       }
     }
@@ -372,7 +372,7 @@
         );
         if (shouldContinue) {
           open = false;
-          buttonRef.focus();
+          buttonRef.focus({ preventScroll: true });
         }
       }
     }}
@@ -419,7 +419,7 @@
           );
           if (shouldContinue) {
             open = false;
-            buttonRef.focus();
+            buttonRef.focus({ preventScroll: true });
           }
         }
       }}
