@@ -1,5 +1,9 @@
 <script>
   /**
+   * @template [Icon=any]
+   */
+
+  /**
    * Specify the `href` attribute.
    * @type {string}
    */
@@ -10,6 +14,13 @@
    * @type {string}
    */
   export let text = undefined;
+
+  /**
+   * Specify an icon to render after the text.
+   * Alternatively, use the "icon" slot.
+   * @type {Icon}
+   */
+  export let icon = /** @type {Icon} */ (undefined);
 
   /** Set to `true` to select the item */
   export let isSelected = false;
@@ -61,6 +72,7 @@
     {href}
     rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
     class:bx--header__menu-item={true}
+    class:bx--header__menu-item--icon={icon || $$slots.icon}
     aria-current={isSelected ? "page" : undefined}
     {...$$restProps}
     on:click
@@ -110,5 +122,10 @@
     }}
   >
     <span class:bx--text-truncate--end={true}><slot>{text}</slot></span>
+    {#if icon || $$slots.icon}
+      <slot name="icon">
+        <svelte:component this={icon} size={16} />
+      </slot>
+    {/if}
   </a>
 </li>

@@ -200,6 +200,24 @@
     fill: $icon-secondary;
   }
 
+  // First-class icon support: render an icon after the nav item text.
+  // Gap matches Carbon's label-to-trailing-icon convention ($spacing-03 / 8px),
+  // as used by .bx--header__menu-arrow (mini-units(1)) and .bx--link__icon.
+  a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--icon {
+    display: flex;
+    align-items: center;
+    gap: $spacing-03;
+  }
+
+  a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--icon > svg,
+  a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--icon:hover > svg,
+  a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--icon:active > svg,
+  a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--icon:focus > svg {
+    flex-shrink: 0;
+    // Track the text color across default/hover/active/focus states.
+    fill: currentColor;
+  }
+
   /** Vertical rule between product name and header nav (Carbon v10 used fixed #393939) */
   .#{$prefix}--header__nav.#{$prefix}--header__nav::before {
     background-color: $border-subtle;
@@ -730,6 +748,8 @@
     left: 1rem; // convert.to-rem(16px)
   }
 
+  // In the side nav, the icon is right-justified to the row's trailing edge by
+  // the space-between rule below, mirroring the HeaderNavMenu expand chevron.
   .#{$prefix}--side-nav.#{$prefix}--side-nav
     a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item {
     justify-content: space-between;
