@@ -110,7 +110,7 @@
 
   afterUpdate(() => {
     if (ref && focused) {
-      ref.focus();
+      ref.focus({ preventScroll: true });
     }
   });
 

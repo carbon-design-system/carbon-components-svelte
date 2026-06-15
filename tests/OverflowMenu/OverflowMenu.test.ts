@@ -754,6 +754,30 @@ describe("OverflowMenu", () => {
       expect(menuButton).toHaveFocus();
     });
 
+    it("focuses items and trigger with preventScroll so the page does not jump", async () => {
+      // Regression: a portalled menu briefly sits at (0,0) before
+      // FloatingPortal positions it. Focusing without `preventScroll`
+      // scrolls that initial position into view, jumping the page to top.
+      const focusSpy = vi.spyOn(HTMLElement.prototype, "focus");
+      render(OverflowMenu, { props: { portalMenu: true } });
+
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+
+      // First item is focused programmatically on open.
+      const menuItems = screen.getAllByRole("menuitem");
+      expect(menuItems[0]).toHaveFocus();
+      expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+
+      // Escape returns focus to the trigger, also without scrolling.
+      focusSpy.mockClear();
+      await user.keyboard("{Escape}");
+      expect(menuButton).toHaveFocus();
+      expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+
+      focusSpy.mockRestore();
+    });
+
     it("should reflect auto-flipped direction in data-floating-menu-direction", async () => {
       // Mock getBoundingClientRect to simulate anchor near top of viewport
       // so that direction="top" will auto-flip to "bottom".
