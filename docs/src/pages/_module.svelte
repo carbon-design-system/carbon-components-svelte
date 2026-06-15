@@ -177,19 +177,14 @@
         href="https://github.com/carbon-design-system/carbon-icons-svelte"
         target="_blank"
         text="Icons"
-      >
-        <Stack orientation="horizontal" gap={2} align="center">
-          Icons <Launch />
-        </Stack>
-      </HeaderNavItem>
+        icon={Launch}
+      />
       <HeaderNavItem
         href="https://github.com/carbon-design-system/carbon-pictograms-svelte"
         target="_blank"
-      >
-        <Stack orientation="horizontal" gap={2} align="center">
-          Pictograms <Launch />
-        </Stack>
-      </HeaderNavItem>
+        text="Pictograms"
+        icon={Launch}
+      />
     </HeaderNav>
     <HeaderUtilities>
       <HeaderSearch
