@@ -75,6 +75,12 @@ Use a `contenteditable` element in each tree view node to enable inline editing 
 
 <FileSource src="/framed/TreeView/TreeViewInlineEditing" />
 
+## Events
+
+Listen for node selection, expansion, and focus with `on:select`, `on:toggle`, and `on:focus`. Each `event.detail` is the affected node after the interaction, with the same expanded, selected, and leaf fields as the slot node (see [Custom (slot)](#custom-slot)). A select reports the node as selected; a toggle that expands a branch reports it as expanded.
+
+<FileSource src="/framed/TreeView/TreeViewEvents" />
+
 ## Multi-select
 
 Set `multiselect` to allow more than one selected row; `multiselectMode` controls the unit each gesture applies to.
