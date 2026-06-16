@@ -1,10 +1,10 @@
 ---
-components: ["Tabs", "Tab", "TabContent", "TabsSkeleton"]
+components: ["Tabs", "Tab", "TabContent", "TabsVertical", "TabsSkeleton", "TabsVerticalSkeleton"]
 description: Tabs organize content into separate views that can be switched between, with keyboard navigation, disabled states, and layout options.
 ---
 
 <script>
-  import { Tabs, Tab, TabContent, TabsSkeleton } from "carbon-components-svelte";
+  import { Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton } from "carbon-components-svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
@@ -12,6 +12,8 @@ description: Tabs organize content into separate views that can be switched betw
   import Activity from "carbon-icons-svelte/lib/Activity.svelte";
   import Notification from "carbon-icons-svelte/lib/Notification.svelte";
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
+  import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
+  import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 </script>
 
 ## Basic
@@ -380,6 +382,93 @@ and optional secondary line (for example, counts or status).
     <TabContent>Settings content</TabContent>
   </svelte:fragment>
 </Tabs>
+
+## Vertical
+
+`TabsVertical` stacks the tabs in a column to the left of the panel on `md` and wider screens, then switches to a horizontal, scrollable row below `md`. Compose it with the same `Tab` and `TabContent` building blocks.
+
+<TabsVertical>
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
+  <Tab label="Settings" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+    <TabContent>Content 4</TabContent>
+  </svelte:fragment>
+</TabsVertical>
+
+### Selected
+
+Set `selected` to control the selected tab index. Bind to `selected` for a two-way binding that updates as the user switches tabs.
+
+<TabsVertical selected={1}>
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</TabsVertical>
+
+### Disabled
+
+Set `disabled` on a tab to prevent interaction. Keyboard navigation skips disabled tabs.
+
+<TabsVertical>
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" disabled />
+  <Tab label="Activity" />
+  <Tab label="Settings" disabled />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+    <TabContent>Content 4</TabContent>
+  </svelte:fragment>
+</TabsVertical>
+
+### Truncated labels
+
+Long labels wrap to two lines before truncating with an ellipsis.
+
+<TabsVertical>
+  <Tab label="Dashboard" />
+  <Tab label="Extra long label that will go two lines then truncate when it gets too long" />
+  <Tab label="Activity" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</TabsVertical>
+
+### Icons
+
+Set `icon` on a tab to render an icon before the label. The icon stays aligned to the first line when the label truncates to two lines.
+
+<TabsVertical>
+  <Tab label="Dashboard" icon={Dashboard} />
+  <Tab label="Activity" icon={Activity} />
+  <Tab label="Analyze trends across every region and team" icon={Analytics} />
+  <Tab label="Settings" icon={Settings} />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+    <TabContent>Content 4</TabContent>
+  </svelte:fragment>
+</TabsVertical>
+
+### Skeleton
+
+Render `TabsVerticalSkeleton` as a loading state. Set `count` for the number of skeleton tabs.
+
+<TabsVerticalSkeleton count={4} />
 
 ## Custom label slot
 
