@@ -1,0 +1,211 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Search typeahead menu: a results popover composed with Search.
+/// Result text is flush-left with the search input text (the magnifier gutter),
+/// matching the input padding per size.
+/// @access private
+/// @group components
+@mixin search-menu {
+  // [text inset, magnifier gutter, row min-height] per Search size, mirroring
+  // the Carbon v10 search input horizontal padding, magnifier offset, and
+  // input height (xs 24px / sm 32px / lg 40px / xl 48px) so each menu row
+  // tracks the height of the input it sits under.
+  $search-menu-insets: (
+    "xs": ($carbon--spacing-06, $carbon--spacing-02, $carbon--spacing-06),
+    "sm": ($carbon--spacing-07, $carbon--spacing-03, $carbon--spacing-07),
+    "lg": ($carbon--spacing-08, $carbon--spacing-04, $carbon--spacing-08),
+    "xl": ($carbon--spacing-09, $carbon--spacing-05, $carbon--spacing-09),
+  );
+
+  .#{$prefix}--search-menu {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  .#{$prefix}--search-menu--bar {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .#{$prefix}--search-menu--bar .#{$prefix}--search-menu__before {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: stretch;
+  }
+
+  .#{$prefix}--search-menu__search {
+    display: block;
+    width: 100%;
+  }
+
+  .#{$prefix}--search-menu--bar .#{$prefix}--search-menu__search {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .#{$prefix}--search-menu__menu {
+    width: 100%;
+    background-color: $ui-01;
+    box-shadow: 0 2px 6px rgba($carbon--black-100, 0.2);
+    overflow-y: auto;
+    max-height: to-rem(360px);
+    padding: $carbon--spacing-03 0;
+  }
+
+  .#{$prefix}--search-menu__menu--inline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: z("dropdown");
+  }
+
+  .#{$prefix}--search-menu__menu--hidden {
+    display: none;
+  }
+
+  .#{$prefix}--search-menu-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: $carbon--spacing-08;
+    padding-right: $carbon--spacing-05;
+    color: $text-02;
+    cursor: pointer;
+    text-decoration: none;
+    @include type-style("body-short-01");
+
+    &:hover {
+      background-color: $hover-ui;
+    }
+  }
+
+  .#{$prefix}--search-menu-item--highlighted {
+    background-color: $hover-ui;
+  }
+
+  .#{$prefix}--search-menu-item--disabled {
+    color: $disabled-02;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    // The matched-text highlight otherwise forces text-01; keep it disabled.
+    .#{$prefix}--search-menu-item__highlight {
+      color: $disabled-02;
+    }
+  }
+
+  .#{$prefix}--search-menu-item--skeleton {
+    cursor: default;
+    pointer-events: none;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    .#{$prefix}--skeleton__text {
+      margin: 0;
+    }
+  }
+
+  .#{$prefix}--search-menu-item__label {
+    flex: 1 1 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .#{$prefix}--search-menu-item__highlight {
+    color: $text-01;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--search-menu-item__icon {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    transform: translateY(-50%);
+
+    svg {
+      fill: currentColor;
+    }
+  }
+
+  .#{$prefix}--search-menu-item__icon--right {
+    right: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--search-menu-group--hidden {
+    display: none;
+  }
+
+  .#{$prefix}--search-menu-group--divider {
+    border-top: 1px solid $ui-03;
+    margin-top: $carbon--spacing-03;
+    padding-top: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--search-menu-group__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: $carbon--spacing-07;
+    padding-right: $carbon--spacing-05;
+    color: $text-02;
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--search-menu-group__action {
+    flex: 0 0 auto;
+    margin-left: $carbon--spacing-05;
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--search-menu__no-results {
+    padding-top: $carbon--spacing-05;
+    padding-bottom: $carbon--spacing-05;
+    color: $text-02;
+    @include type-style("body-short-01");
+  }
+
+  // Flush-left alignment: result text and group headers share the search input
+  // text inset; leading icons sit in the magnifier gutter, centered per size.
+  @each $size, $inset in $search-menu-insets {
+    $text-inset: nth($inset, 1);
+    $icon-left: nth($inset, 2);
+    $row-height: nth($inset, 3);
+
+    .#{$prefix}--search-menu__menu--#{$size} {
+      .#{$prefix}--search-menu-item,
+      .#{$prefix}--search-menu-item--skeleton,
+      .#{$prefix}--search-menu-group__header,
+      .#{$prefix}--search-menu__no-results {
+        padding-left: $text-inset;
+      }
+
+      .#{$prefix}--search-menu-item {
+        min-height: $row-height;
+      }
+
+      .#{$prefix}--search-menu-item__icon {
+        left: $icon-left;
+      }
+
+      .#{$prefix}--search-menu-item__icon--right {
+        left: auto;
+      }
+    }
+  }
+}
+
+@include exports("search-menu") {
+  @include search-menu;
+}
