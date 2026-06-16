@@ -331,6 +331,31 @@ describe("Dropdown", () => {
     expect(button).toHaveTextContent("Email");
   });
 
+  // Regression: the Space keydown must cancel its default action so the
+  // browser does not scroll the page (and does not synthesize a click)
+  // before the keyup handler opens the menu.
+  it("should prevent the default page scroll when opening with Space", async () => {
+    render(Dropdown, { props: { items, selectedId: "0" } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+    expect(button).toHaveAttribute("aria-expanded", "false");
+
+    const keydown = new KeyboardEvent("keydown", {
+      key: " ",
+      bubbles: true,
+      cancelable: true,
+    });
+    button.dispatchEvent(keydown);
+    expect(keydown.defaultPrevented).toBe(true);
+
+    // Space opens on keyup.
+    await fireEvent.keyUp(button, { key: " " });
+    await tick();
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("listbox")).toBeVisible();
+  });
+
   it("should open the menu on ArrowDown and highlight the first enabled item", async () => {
     render(Dropdown, { props: { items } });
 
