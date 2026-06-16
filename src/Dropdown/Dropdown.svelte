@@ -541,6 +541,7 @@
         }}
         on:keydown={(event) => {
         if (
+          event.key === " " ||
           event.key === "Enter" ||
           event.key === "ArrowDown" ||
           event.key === "ArrowUp"
