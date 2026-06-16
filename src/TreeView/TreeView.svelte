@@ -196,6 +196,10 @@
    * @property {ReadonlyArray<Id>} expandedIds - The full set of expanded node ids after the change
    * @property {Array<Id>} added - Node ids expanded since the previous change
    * @property {Array<Id>} removed - Node ids collapsed since the previous change
+   * @typedef {object} TreeViewSelectionChange<Id=(string|number)>
+   * @property {ReadonlyArray<Id>} selectedIds - The full set of selected node ids after the change
+   * @property {Array<Id>} added - Node ids selected since the previous change
+   * @property {Array<Id>} removed - Node ids deselected since the previous change
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }}
    * @event select
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
@@ -205,6 +209,8 @@
    * @type {TreeViewExpandedChange<Node["id"]>}
    * @event focus
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
+   * @event select:change
+   * @type {TreeViewSelectionChange<Node["id"]>}
    */
 
   /**
@@ -854,9 +860,23 @@
       activeNodeId.set(activeId);
     }
     if (!arrayIdsEqual(selectedIds, lastSelectedIdsPushed)) {
+      const prevSelectedIds = lastSelectedIdsPushed;
       lastSelectedIdsPushed = selectedIds;
       selectedIdsSetStore.set(new Set(selectedIds));
       selectedNodeIds.set(selectedIds);
+
+      const nextSelectedIds = selectedIds.slice();
+      const prevSet = new Set(prevSelectedIds);
+      const nextSet = new Set(nextSelectedIds);
+      const added = nextSelectedIds.filter((id) => !prevSet.has(id));
+      const removed = prevSelectedIds.filter((id) => !nextSet.has(id));
+      tick().then(() => {
+        dispatch("select:change", {
+          selectedIds: nextSelectedIds,
+          added,
+          removed,
+        });
+      });
     }
     if (!arrayIdsEqual(expandedIds, lastExpandedIdsPushed)) {
       const prevExpandedIds = lastExpandedIdsPushed;

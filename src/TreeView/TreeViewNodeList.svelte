@@ -78,7 +78,10 @@
     selected,
   };
   $: {
+    // The root list is a non-selectable wrapper; its default empty `id` would
+    // otherwise match the default empty `activeId` and select a phantom node.
     if (
+      !root &&
       id === $activeNodeId &&
       prevActiveId !== $activeNodeId &&
       !$selectedIdsSetStore.has(id)
