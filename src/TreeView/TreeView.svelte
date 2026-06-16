@@ -524,6 +524,21 @@
     return true;
   }
 
+  /**
+   * Re-derive the `expanded`/`selected` flags from the source-of-truth state
+   * at dispatch time. The `node` object passed by the child components is
+   * computed reactively, so its flags still reflect the pre-action state when a
+   * handler mutates `selectedIds`/`expandedIds` and then dispatches synchronously.
+   * @type {(node: Node) => Node & { expanded: boolean; selected: boolean }}
+   */
+  function withLiveState(node) {
+    return {
+      ...node,
+      expanded: expandedIdsSet.has(node.id),
+      selected: selectedIds.includes(node.id),
+    };
+  }
+
   /** @type {(node: Node, event?: Event) => void} */
   function clickNode(node, event) {
     activeId = node.id;
@@ -588,7 +603,7 @@
       selectedIds = [node.id];
     }
 
-    dispatch("select", node);
+    dispatch("select", withLiveState(node));
   }
 
   /** @type {(node: Node) => void} */
@@ -623,12 +638,12 @@
 
   /** @type {(node: Node) => void} */
   function focusNode(node) {
-    dispatch("focus", node);
+    dispatch("focus", withLiveState(node));
   }
 
   /** @type {(node: Node) => void} */
   function toggleNode(node) {
-    dispatch("toggle", node);
+    dispatch("toggle", withLiveState(node));
   }
 
   setContext("carbon:TreeView", {
