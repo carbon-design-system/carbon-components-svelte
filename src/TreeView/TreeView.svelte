@@ -192,11 +192,17 @@
    * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
    * @property {boolean} [select] - Whether to select the node (default: true)
    * @property {boolean} [focus] - Whether to focus the node (default: true)
+   * @typedef {object} TreeViewExpandedChange<Id=(string|number)>
+   * @property {ReadonlyArray<Id>} expandedIds - The full set of expanded node ids after the change
+   * @property {Array<Id>} added - Node ids expanded since the previous change
+   * @property {Array<Id>} removed - Node ids collapsed since the previous change
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }}
    * @event select
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    * @event toggle
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
+   * @event toggle:change
+   * @type {TreeViewExpandedChange<Node["id"]>}
    * @event focus
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    */
@@ -853,9 +859,23 @@
       selectedNodeIds.set(selectedIds);
     }
     if (!arrayIdsEqual(expandedIds, lastExpandedIdsPushed)) {
+      const prevExpandedIds = lastExpandedIdsPushed;
       lastExpandedIdsPushed = expandedIds;
       expandedIdsSetStore.set(expandedIdsSet);
       expandedNodeIds.set(expandedIds);
+
+      const nextExpandedIds = expandedIds.slice();
+      const prevSet = new Set(prevExpandedIds);
+      const nextSet = new Set(nextExpandedIds);
+      const added = nextExpandedIds.filter((id) => !prevSet.has(id));
+      const removed = prevExpandedIds.filter((id) => !nextSet.has(id));
+      tick().then(() => {
+        dispatch("toggle:change", {
+          expandedIds: nextExpandedIds,
+          added,
+          removed,
+        });
+      });
     }
   }
 </script>
