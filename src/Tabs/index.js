@@ -3,3 +3,4 @@ export { default as TabContent } from "./TabContent.svelte";
 export { default as Tabs } from "./Tabs.svelte";
 export { default as TabsSkeleton } from "./TabsSkeleton.svelte";
 export { default as TabsVertical } from "./TabsVertical.svelte";
+export { default as TabsVerticalSkeleton } from "./TabsVerticalSkeleton.svelte";

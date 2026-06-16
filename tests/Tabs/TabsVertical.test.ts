@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import { user } from "../utils/user";
 import TabsVertical from "./TabsVertical.test.svelte";
+import TabsVerticalSkeleton from "./TabsVerticalSkeleton.test.svelte";
 
 describe("TabsVertical", () => {
   let consoleLog: Console["log"];
@@ -100,5 +101,28 @@ describe("TabsVertical", () => {
     expect(
       navLink?.querySelector(".bx--tabs__nav-item--icon svg"),
     ).toBeInTheDocument();
+  });
+});
+
+describe("TabsVerticalSkeleton", () => {
+  it("should render the vertical skeleton with the default count", () => {
+    const { container } = render(TabsVerticalSkeleton);
+
+    const skeleton = container.querySelector(".bx--tabs--vertical");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass("bx--skeleton");
+    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(4);
+  });
+
+  it("should render a custom count", () => {
+    const { container } = render(TabsVerticalSkeleton, { props: { count: 6 } });
+
+    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(6);
+  });
+
+  it("should handle a zero count", () => {
+    const { container } = render(TabsVerticalSkeleton, { props: { count: 0 } });
+
+    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(0);
   });
 });
