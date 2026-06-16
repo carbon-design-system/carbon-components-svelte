@@ -1,0 +1,36 @@
+@import "carbon-components/scss/globals/scss/vars";
+
+/// Edge fade for code snippets (Carbon React v11 parity). v10 uses
+/// `--overflow-indicator` gradient elements that this library's markup does not
+/// render. v11 masks the scroll container instead, which is background-agnostic
+/// and works across themes, the light variant, and skeleton state.
+/// @access private
+/// @group components
+@mixin code-snippet-fade {
+  .#{$prefix}--snippet--single .#{$prefix}--snippet-container {
+    mask-image: linear-gradient(
+      90deg,
+      $black-100 calc(100% - #{$carbon--spacing-07}),
+      transparent 100%
+    );
+  }
+
+  // Expanded multi-line adds padding-bottom: $spacing-05, so the bottom fade
+  // offset matches that padding when content no longer scrolls.
+  .#{$prefix}--snippet--multi .#{$prefix}--snippet-container {
+    mask-image: linear-gradient(
+        90deg,
+        $black-100 calc(100% - #{$carbon--spacing-07}),
+        transparent 100%
+      ),
+      linear-gradient(
+        $black-100 calc(100% - #{$spacing-05}),
+        transparent 100%
+      );
+    mask-composite: intersect;
+  }
+}
+
+@include exports("code-snippet-fade") {
+  @include code-snippet-fade;
+}
