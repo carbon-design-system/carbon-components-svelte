@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.0",
-    "@playwright/test": "^1.59.0",
+    "@playwright/test": "^1.61.0",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
