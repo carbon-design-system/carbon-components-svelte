@@ -77,7 +77,9 @@ Use a `contenteditable` element in each tree view node to enable inline editing 
 
 ## Events
 
-Listen for node selection, expansion, and focus with `on:select`, `on:toggle`, and `on:focus`. Each `event.detail` is the affected node after the interaction, with the same expanded, selected, and leaf fields as the slot node (see [Custom (slot)](#custom-slot)). A select reports the node as selected; a toggle that expands a branch reports it as expanded.
+Listen for node selection, expansion, and focus with `on:select`, `on:toggle`, and `on:focus`. Each `event.detail` is the affected node after the interaction, with the same expanded, selected, and leaf fields as the slot node (see [Custom (slot)](#custom-slot)). A select reports the node as selected; a toggle that expands a branch reports it as expanded. These per-node events fire only for direct user gestures.
+
+To track expansion from any source, listen for `on:toggle:change`. It fires once for every expansion change, whether it comes from a user gesture, a programmatic method (`expandAll`, `collapseAll`, `expandNodes`, `collapseNodes`, `showNode`, `autoCollapse`), or an external `bind:expandedIds` update. The event detail carries the full new `expandedIds` set plus the delta since the previous event: `added` lists ids newly expanded and `removed` lists ids newly collapsed. Bulk operations like `expandAll` emit a single event.
 
 <FileSource src="/framed/TreeView/TreeViewEvents" />
 

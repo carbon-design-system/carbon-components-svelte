@@ -1,7 +1,9 @@
 <script>
-  import { Stack, TreeView } from "carbon-components-svelte";
+  import { Button, Stack, TreeView } from "carbon-components-svelte";
 
+  let treeview = null;
   let lastEvent = null;
+  let lastToggleChange = null;
   let nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
@@ -40,20 +42,36 @@
 
 <Stack gap={6}>
   <div>
+    <Button on:click={() => treeview?.expandAll()}>Expand all</Button>
+    <Button kind="secondary" on:click={() => treeview?.collapseAll()}>
+      Collapse all
+    </Button>
+  </div>
+  <div>
     <TreeView
+      bind:this={treeview}
       labelText="Cloud Products"
       {nodes}
       on:select={({ detail }) => logEvent("select", detail)}
       on:toggle={({ detail }) => logEvent("toggle", detail)}
       on:focus={({ detail }) => logEvent("focus", detail)}
+      on:toggle:change={({ detail }) => (lastToggleChange = detail)}
     />
   </div>
   {#if lastEvent}
     <Stack gap={4}>
-      <div>Last event: {lastEvent.type}</div>
+      <div>Last node event: {lastEvent.type}</div>
       <div>Node: {lastEvent.text} (id: {lastEvent.id})</div>
       <div>detail.expanded: {lastEvent.expanded}</div>
       <div>detail.selected: {lastEvent.selected}</div>
+    </Stack>
+  {/if}
+  {#if lastToggleChange}
+    <Stack gap={4}>
+      <div>Last toggle:change</div>
+      <div>expandedIds: {JSON.stringify(lastToggleChange.expandedIds)}</div>
+      <div>added: {JSON.stringify(lastToggleChange.added)}</div>
+      <div>removed: {JSON.stringify(lastToggleChange.removed)}</div>
     </Stack>
   {/if}
 </Stack>
