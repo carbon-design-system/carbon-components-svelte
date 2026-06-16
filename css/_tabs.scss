@@ -482,3 +482,260 @@
 @include exports('tabs-dismissible') {
   @include tabs-dismissible;
 }
+
+/// Vertical tabs (Carbon v11 `TabsVertical` parity), authored from the v11 token
+/// map since Carbon v10 ships no vertical variant. At `md` and up the tab list
+/// is a fixed left column with a per-item left indicator; below `md` it is a
+/// horizontal, scrollable row of contained tabs. The component drops
+/// `bx--tabs--container`, so these rules override the default-tab rules and split
+/// by `breakpoint-down(md)` / `breakpoint(md)` so the orientations stay separate.
+/// @access private
+/// @group components
+@mixin tabs-vertical {
+  .#{$prefix}--tabs--vertical-container {
+    display: flex;
+    flex-direction: column;
+
+    @include carbon--breakpoint(md) {
+      flex-direction: row;
+      align-items: stretch;
+    }
+  }
+
+  // `Tab` renders the icon after the label; move it before the label.
+  .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--icon {
+    order: -1;
+    padding-inline: 0 $carbon--spacing-03;
+  }
+
+  @include carbon--breakpoint-down(md) {
+    // The nav is an absolutely-positioned dropdown overlay by default.
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav {
+      position: static;
+      z-index: auto;
+      max-height: none;
+      box-shadow: none;
+      flex-direction: row;
+      overflow-x: auto;
+      background-color: $ui-01;
+    }
+
+    // The selected item is hidden by default below `md` (legacy dropdown).
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item,
+    .#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+      display: flex;
+      flex: none;
+      block-size: $carbon--spacing-09;
+      inline-size: auto;
+      margin: 0;
+      background-color: $ui-03;
+    }
+
+    .#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item
+      + .#{$prefix}--tabs__nav-item {
+      box-shadow: inset 1px 0 0 0 $ui-04;
+    }
+
+    .#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+      background-color: $ui-01;
+      box-shadow: inset 0 2px 0 0 $interactive-04;
+    }
+
+    .#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
+      background-color: $hover-selected-ui;
+    }
+
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--disabled,
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--disabled:hover {
+      background-color: $disabled-02;
+    }
+
+    // The base disabled text token equals the disabled background here.
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item--disabled
+      a.#{$prefix}--tabs__nav-link {
+      color: $disabled-03;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical a.#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical a.#{$prefix}--tabs__nav-link:focus,
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical a.#{$prefix}--tabs__nav-link:active {
+      display: flex;
+      align-items: center;
+      inline-size: auto;
+      block-size: 100%;
+      padding: $carbon--spacing-03 $carbon--spacing-05;
+      border: none;
+      margin: 0;
+      line-height: inherit;
+    }
+
+    // Remove the base hover-link bottom border, which would shift the label.
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
+      a.#{$prefix}--tabs__nav-link {
+      border: none;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+      a.#{$prefix}--tabs__nav-link {
+      @include carbon--type-style("productive-heading-01");
+
+      border: none;
+      color: $text-01;
+    }
+
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item-label {
+      overflow: hidden;
+      max-inline-size: to-rem(160px);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .#{$prefix}--tabs--vertical ~ .#{$prefix}--tab-content {
+      background-color: $ui-01;
+    }
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical {
+      flex: 0 0 auto;
+      inline-size: to-rem(160px);
+      min-height: 0;
+      background-color: $ui-01;
+    }
+
+    // The nav is an absolutely-positioned dropdown overlay by default.
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav {
+      position: static;
+      z-index: auto;
+      max-height: none;
+      box-shadow: none;
+      flex-direction: column;
+      inline-size: 100%;
+      max-width: none;
+      overflow: visible;
+    }
+
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item {
+      flex: none;
+      block-size: $carbon--spacing-10;
+      inline-size: 100%;
+      margin: 0;
+      background-color: $ui-01;
+      border-block-end: 1px solid $ui-03;
+      border-inline-end: 1px solid $ui-03;
+    }
+
+    .#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item
+      + .#{$prefix}--tabs__nav-item {
+      margin: 0;
+    }
+
+    // Specificity (0,5,0) keeps the base hover rule
+    // (`item:hover + item { box-shadow: none }`) from stripping the indicator.
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
+      box-shadow: inset 3px 0 0 0 $ui-03;
+    }
+
+    // Re-assert the bottom separator that the base `--selected { border: none }`
+    // strips. The right divider is transparent so the tab merges into the panel.
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+      border-block-end: 1px solid $ui-03;
+      border-inline-end: 1px solid transparent;
+      box-shadow: inset 3px 0 0 0 $interactive-04;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
+      background-color: $hover-ui;
+      box-shadow: inset 3px 0 0 0 $ui-04;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item--disabled,
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item--disabled:hover {
+      background-color: $ui-01;
+      box-shadow: inset 3px 0 0 0 $ui-03;
+    }
+
+    // The last tab closes against the panel edge. The second selector
+    // out-specifies the selected rule above (0,6,0 > 0,5,0).
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item:last-child,
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled):last-child {
+      border-block-end: none;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical a.#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical a.#{$prefix}--tabs__nav-link:focus,
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical a.#{$prefix}--tabs__nav-link:active {
+      display: flex;
+      align-items: center;
+      inline-size: 100%;
+      block-size: 100%;
+      padding: $carbon--spacing-04 $carbon--spacing-05;
+      border: none;
+      margin: 0;
+      line-height: inherit;
+    }
+
+    // Top-align so the icon tracks the first line when the label wraps.
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon {
+      align-items: flex-start;
+    }
+
+    // One line tall so the centered icon lands on the label's first line.
+    .#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-link--icon
+      .#{$prefix}--tabs__nav-item--icon {
+      block-size: to-rem(18px);
+    }
+
+    // Remove the base hover-link bottom border, which would shift the label.
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
+      a.#{$prefix}--tabs__nav-link {
+      border: none;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+      a.#{$prefix}--tabs__nav-link {
+      @include carbon--type-style("productive-heading-01");
+
+      border: none;
+      color: $text-01;
+    }
+
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item-label {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      text-overflow: ellipsis;
+      white-space: normal;
+    }
+
+    .#{$prefix}--tabs--vertical ~ .#{$prefix}--tab-content {
+      flex: 1 1 auto;
+      background-color: $ui-01;
+      overflow-y: auto;
+    }
+  }
+}
+
+@include exports('tabs-vertical') {
+  @include tabs-vertical;
+}
