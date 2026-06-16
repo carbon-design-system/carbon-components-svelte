@@ -91,7 +91,8 @@ describe.each(testCases)("$name", ({ component }) => {
       icon: expect.anything(),
       id: 0,
       leaf: true,
-      selected: false,
+      // The `select` payload reflects the post-click state: the node is now selected.
+      selected: true,
       text: "AI / Machine learning",
     });
   });
@@ -194,16 +195,34 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(toggleButton).toBeInTheDocument();
 
     expect.assert(toggleButton instanceof HTMLElement);
+
+    const lastToggleDetail = () =>
+      consoleLog.mock.calls.filter((call) => call[0] === "toggle").at(-1)?.[1];
+
     await user.click(toggleButton);
 
-    expect(consoleLog).toHaveBeenCalledWith(
-      "toggle",
+    // Expanding reports the post-toggle state: `expanded: true`.
+    expect(lastToggleDetail()).toEqual(
       expect.objectContaining({
         id: 1,
         text: "Analytics",
         leaf: false,
+        expanded: true,
       }),
     );
+    expect(analyticsNode).toHaveAttribute("aria-expanded", "true");
+
+    // Collapsing reports `expanded: false`.
+    await user.click(toggleButton);
+    expect(lastToggleDetail()).toEqual(
+      expect.objectContaining({
+        id: 1,
+        text: "Analytics",
+        leaf: false,
+        expanded: false,
+      }),
+    );
+    expect(analyticsNode).toHaveAttribute("aria-expanded", "false");
   });
 
   it("dispatches focus event when node receives focus", () => {
@@ -610,6 +629,35 @@ describe("TreeView Props", () => {
 
     expect(aiItem).toHaveAttribute("aria-selected", "true");
     expect(blockchainItem).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("select payload reports the post-click selected state when toggling in multiselect", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    const blockchainItem = treeItemById(7);
+
+    // Ctrl+click to select: payload reports `selected: true`.
+    await user.keyboard("{Control>}");
+    await user.click(blockchainItem);
+    await user.keyboard("{/Control}");
+    expect(consoleLog).toHaveBeenLastCalledWith(
+      "select",
+      expect.objectContaining({ id: 7, selected: true }),
+    );
+
+    // Ctrl+click again to deselect: payload reports `selected: false`.
+    await user.keyboard("{Control>}");
+    await user.click(blockchainItem);
+    await user.keyboard("{/Control}");
+    expect(consoleLog).toHaveBeenLastCalledWith(
+      "select",
+      expect.objectContaining({ id: 7, selected: false }),
+    );
   });
 
   it("plain click replaces selection in multiselect mode", async () => {
