@@ -4,6 +4,7 @@
   let treeview = null;
   let lastEvent = null;
   let lastToggleChange = null;
+  let lastSelectChange = null;
   let nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
@@ -50,12 +51,14 @@
   <div>
     <TreeView
       bind:this={treeview}
+      multiselect
       labelText="Cloud Products"
       {nodes}
       on:select={({ detail }) => logEvent("select", detail)}
       on:toggle={({ detail }) => logEvent("toggle", detail)}
       on:focus={({ detail }) => logEvent("focus", detail)}
       on:toggle:change={({ detail }) => (lastToggleChange = detail)}
+      on:select:change={({ detail }) => (lastSelectChange = detail)}
     />
   </div>
   {#if lastEvent}
@@ -72,6 +75,14 @@
       <div>expandedIds: {JSON.stringify(lastToggleChange.expandedIds)}</div>
       <div>added: {JSON.stringify(lastToggleChange.added)}</div>
       <div>removed: {JSON.stringify(lastToggleChange.removed)}</div>
+    </Stack>
+  {/if}
+  {#if lastSelectChange}
+    <Stack gap={4}>
+      <div>Last select:change</div>
+      <div>selectedIds: {JSON.stringify(lastSelectChange.selectedIds)}</div>
+      <div>added: {JSON.stringify(lastSelectChange.added)}</div>
+      <div>removed: {JSON.stringify(lastSelectChange.removed)}</div>
     </Stack>
   {/if}
 </Stack>
