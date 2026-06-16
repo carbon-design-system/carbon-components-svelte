@@ -244,6 +244,34 @@ Set `type="container"` and `dismissible` to `true` for dismissible container tab
 
 <FileSource src="/framed/Tabs/TabsDismissibleContainer" />
 
+## Custom label
+
+Use the default slot with `let:selected` to customize the tab label based on
+whether the tab is selected.
+
+<Tabs>
+  <Tab label="Tab label 1" let:selected>
+    Tab label 1 {#if selected}(selected){/if}
+  </Tab>
+  <Tab label="Tab label 2" let:selected>
+    Tab label 2 {#if selected}(selected){/if}
+  </Tab>
+  <Tab label="Tab label 3" let:selected>
+    Tab label 3 {#if selected}(selected){/if}
+  </Tab>
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Skeleton
+
+Show a loading state while tabs load.
+
+<TabsSkeleton count={3} />
+
 ## Container
 
 Use the container type for a more prominent tab interface. By default, container types have an auto-width.
@@ -383,9 +411,17 @@ and optional secondary line (for example, counts or status).
   </svelte:fragment>
 </Tabs>
 
+### Skeleton
+
+Show a loading state for the container tab variant.
+
+<TabsSkeleton type="container" count={3} />
+
 ## Vertical
 
-`TabsVertical` stacks the tabs in a column to the left of the panel on `md` and wider screens, then switches to a horizontal, scrollable row below `md`. Compose it with the same `Tab` and `TabContent` building blocks.
+Use TabsVertical to stack tabs in a column beside the panel on medium breakpoints
+and wider. On smaller viewports the tab list becomes a horizontal, scrollable row.
+Compose it with the same Tab and TabContent components.
 
 <TabsVertical>
   <Tab label="Dashboard" />
@@ -402,7 +438,8 @@ and optional secondary line (for example, counts or status).
 
 ### Selected
 
-Set `selected` to control the selected tab index. Bind to `selected` for a two-way binding that updates as the user switches tabs.
+Set selected to control the active tab index. Bind to selected to update the
+index as users switch tabs.
 
 <TabsVertical selected={1}>
   <Tab label="Dashboard" />
@@ -417,7 +454,8 @@ Set `selected` to control the selected tab index. Bind to `selected` for a two-w
 
 ### Disabled
 
-Set `disabled` on a tab to prevent interaction. Keyboard navigation skips disabled tabs.
+Set disabled on a tab to prevent interaction. Keyboard navigation skips disabled
+tabs.
 
 <TabsVertical>
   <Tab label="Dashboard" />
@@ -434,7 +472,7 @@ Set `disabled` on a tab to prevent interaction. Keyboard navigation skips disabl
 
 ### Truncated labels
 
-Long labels wrap to two lines before truncating with an ellipsis.
+Long labels wrap to two lines, then truncate with an ellipsis.
 
 <TabsVertical>
   <Tab label="Dashboard" />
@@ -449,7 +487,8 @@ Long labels wrap to two lines before truncating with an ellipsis.
 
 ### Icons
 
-Set `icon` on a tab to render an icon before the label. The icon stays aligned to the first line when the label truncates to two lines.
+Set icon on a tab to show an icon before the label. The icon stays aligned to
+the first line when the label wraps or truncates.
 
 <TabsVertical>
   <Tab label="Dashboard" icon={Dashboard} />
@@ -466,44 +505,7 @@ Set `icon` on a tab to render an icon before the label. The icon stays aligned t
 
 ### Skeleton
 
-Render `TabsVerticalSkeleton` as a loading state. Set `count` for the number of skeleton tabs.
+Show a loading state with TabsVerticalSkeleton. Set count to control how many
+placeholder tabs render.
 
 <TabsVerticalSkeleton count={4} />
-
-## Custom label slot
-
-Override the default slot to customize the tab label. Use `let:selected` to render
-custom content based on whether the tab is selected.
-
-<Tabs>
-  <Tab label="Tab label 1" let:selected>
-    Tab label 1 {#if selected}(selected){/if}
-  </Tab>
-  <Tab label="Tab label 2" let:selected>
-    Tab label 2 {#if selected}(selected){/if}
-  </Tab>
-  <Tab label="Tab label 3" let:selected>
-    Tab label 3 {#if selected}(selected){/if}
-  </Tab>
-  <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
-  </svelte:fragment>
-</Tabs>
-
-## Skeleton
-
-Show a loading state while tabs are being prepared.
-
-### Basic
-
-Render the default skeleton variant.
-
-<TabsSkeleton count={3} />
-
-### Container
-
-Render the container skeleton variant.
-
-<TabsSkeleton type="container" count={3} />
