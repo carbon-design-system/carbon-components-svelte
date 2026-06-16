@@ -101,3 +101,37 @@ Import `themes` from the Theme component file in a `script context="module"` blo
   });
 </script>
 ```
+
+## Color scheme store
+
+Use `colorScheme` for a headless, SSR-safe alternative to the Theme component's controls when you only need a light/dark/system preference. It persists the choice with [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) (the backend and key are configurable) and resolves `"system"` through the user's [prefers-color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme).
+
+The store value is `{ preference, resolved }`, where `preference` is `"system" | "light" | "dark"` and `resolved` is the concrete `"light" | "dark"`. Call `set` to change and persist the preference.
+
+```html
+<script>
+  import { colorScheme } from "carbon-components-svelte";
+
+  const scheme = colorScheme();
+</script>
+
+<button on:click={() => scheme.set("light")}>Light</button>
+<button on:click={() => scheme.set("dark")}>Dark</button>
+<button on:click={() => scheme.set("system")}>System</button>
+
+<p>Resolved scheme: {$scheme.resolved}</p>
+```
+
+## User preference stores
+
+`prefersDarkMode`, `prefersReducedMotion`, and `prefersContrast` are SSR-safe readable boolean stores for the matching media features. They update live as the user's system preferences change.
+
+```html
+<script>
+  import { prefersReducedMotion } from "carbon-components-svelte";
+</script>
+
+{#if !$prefersReducedMotion}
+  <!-- safe to play non-essential animation -->
+{/if}
+```

@@ -29,3 +29,50 @@ Use `breakpointObserver` as an alternative to the component to get the current s
 Access the breakpoints dictionary to map from BreakpointSize to BreakpointValue.
 
 <FileSource src="/framed/Breakpoint/BreakpointObserver" />
+
+## Breakpoint store
+
+Use `breakpoint` for a lightweight, SSR-safe Svelte store of the current breakpoint size. It is the store-only counterpart to `breakpointObserver`, without the `smallerThan`/`largerThan` derived helpers. Its value is `BreakpointSize | undefined` (`undefined` until evaluated in the browser).
+
+```html
+<script>
+  import { breakpoint } from "carbon-components-svelte";
+</script>
+
+{#if $breakpoint === "sm"}
+  <p>Small viewport</p>
+{/if}
+```
+
+## Media query store
+
+`mediaQuery` is the SSR-safe primitive behind the breakpoint and user-preference stores. It returns a readable boolean store for any media query string and removes its listener when the last subscriber unsubscribes.
+
+```html
+<script>
+  import { mediaQuery } from "carbon-components-svelte";
+
+  const isWide = mediaQuery("(min-width: 1056px)");
+</script>
+
+{#if $isWide}Wide layout{/if}
+```
+
+## Container query store
+
+Use `containerQuery` for element-level responsive logic. Pass an element and a map of named minimum widths (in px); it returns a readable store of which ranges currently match, backed by a [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver). A range matches when the element's content-box width is greater than or equal to its threshold.
+
+```html
+<script>
+  import { containerQuery } from "carbon-components-svelte";
+
+  let card;
+  $: ranges = card
+    ? containerQuery(card, { compact: 0, full: 480 })
+    : undefined;
+</script>
+
+<div bind:this={card}>
+  {#if $ranges?.full}Full layout{:else}Compact layout{/if}
+</div>
+```
