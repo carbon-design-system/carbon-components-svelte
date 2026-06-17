@@ -146,7 +146,7 @@
           </Column>
         </svelte:fragment>
         <svelte:fragment slot="right">
-          <Column sm={4} md={8} lg={8} class="code-col">
+          <Column sm={4} md={8} lg={12} xlg={8} class="code-col">
             <Stack gap={7}>
               <Stack gap={3}>
                 <Text type="caption-01" color="secondary" maxWidth="60ch">
@@ -308,7 +308,7 @@
       />
 
       <Row class="example-row">
-        <Column sm={4} md={4} lg={8} class="code-col">
+        <Column sm={4} md={8} lg={8} class="code-col">
           <Stack gap={5}>
             <Text tag="h3" type="productive-heading-03" color="primary">
               Icons
@@ -413,7 +413,7 @@
           </Stack>
         </Column>
 
-        <Column sm={4} md={4} lg={8} class="code-col">
+        <Column sm={4} md={8} lg={8} class="code-col">
           <Stack gap={5}>
             <Text tag="h3" type="productive-heading-03" color="primary">
               Pictograms
@@ -511,7 +511,7 @@
         description="Documentation is available in LLM-friendly plain text for use with coding assistants, plus a standalone Markdown document for every component. Append .md to any component's URL to read it."
       />
       <Row class="example-row">
-        <Column sm={4} md={4} lg={5}>
+        <Column sm={4} md={8} lg={8} xlg={5}>
           <Stack gap={2}>
             <Text tag="h3" type="heading-02" color="primary">
               <Link
@@ -529,7 +529,7 @@
             </Text>
           </Stack>
         </Column>
-        <Column sm={4} md={4} lg={5}>
+        <Column sm={4} md={8} lg={8} xlg={5}>
           <Stack gap={2}>
             <Text tag="h3" type="heading-02" color="primary">
               <Link
@@ -590,8 +590,15 @@
 
   .glyph-grid--icons,
   .glyph-grid--pictograms {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     min-height: 8.75rem;
+  }
+
+  @media (max-width: 672px) {
+    .glyph-grid--icons,
+    .glyph-grid--pictograms {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   .glyph-cell {

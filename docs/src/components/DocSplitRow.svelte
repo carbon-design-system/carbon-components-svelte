@@ -82,7 +82,13 @@
     {:else if $$slots.left}
       <slot name="right" />
     {:else if variant !== "principle"}
-      <Column sm={4} md={8} lg={8} class={rightColumnClass}>
+      <Column
+        sm={4}
+        md={8}
+        lg={variant === "step" ? 12 : 8}
+        xlg={8}
+        class={rightColumnClass}
+      >
         <slot name="right" />
       </Column>
     {/if}
