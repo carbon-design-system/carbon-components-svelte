@@ -292,32 +292,34 @@
 
 <h2 id="component-api-slots" class="bx--type-productive-heading-04">Slots</h2>
 {#if component.slots.length > 0}
-  <StructuredList flush condensed class="my-layout-01-03">
-    <StructuredListHead>
-      <StructuredListRow head>
-        <StructuredListCell head>Slot name</StructuredListCell>
-        <StructuredListCell head>Slot detail</StructuredListCell>
-      </StructuredListRow>
-    </StructuredListHead>
-    <StructuredListBody>
-      {#each component.slots as slot (slot.name ?? "default")}
-        <StructuredListRow>
-          <StructuredListCell>
-            <strong>{slot.default ? "default" : slot.name}</strong>
-          </StructuredListCell>
-          <StructuredListCell>
-            <svelte:component
-              this={AsyncCodeBlock}
-              language="typescript"
-              type={/\n/.test(slot.slot_props ?? "") ? "multi" : "inline"}
-              code={slot.slot_props ?? ""}
-              portalTooltip
-            />
-          </StructuredListCell>
+  <div class="overflow">
+    <StructuredList flush condensed>
+      <StructuredListHead>
+        <StructuredListRow head>
+          <StructuredListCell head>Slot name</StructuredListCell>
+          <StructuredListCell head>Slot detail</StructuredListCell>
         </StructuredListRow>
-      {/each}
-    </StructuredListBody>
-  </StructuredList>
+      </StructuredListHead>
+      <StructuredListBody>
+        {#each component.slots as slot (slot.name ?? "default")}
+          <StructuredListRow>
+            <StructuredListCell>
+              <strong>{slot.default ? "default" : slot.name}</strong>
+            </StructuredListCell>
+            <StructuredListCell>
+              <svelte:component
+                this={AsyncCodeBlock}
+                language="typescript"
+                type={/\n/.test(slot.slot_props ?? "") ? "multi" : "inline"}
+                code={slot.slot_props ?? ""}
+                portalTooltip
+              />
+            </StructuredListCell>
+          </StructuredListRow>
+        {/each}
+      </StructuredListBody>
+    </StructuredList>
+  </div>
 {:else}
   <p class="my-layout-01-03">No slots.</p>
 {/if}
@@ -341,38 +343,42 @@
 
 {#if dispatched_events.length > 0}
   {@const hasDescription = dispatched_events.find((el) => el.description)}
-  <StructuredList flush condensed>
-    <StructuredListHead>
-      <StructuredListRow head>
-        <StructuredListCell head>Event name</StructuredListCell>
-        <StructuredListCell head>Event detail</StructuredListCell>
-        {#if hasDescription}
-          <StructuredListCell head>Description</StructuredListCell>
-        {/if}
-      </StructuredListRow>
-    </StructuredListHead>
-    <StructuredListBody>
-      {#each dispatched_events as dispatched_event (dispatched_event.name)}
-        <StructuredListRow>
-          <StructuredListCell>
-            <strong>on:{dispatched_event.name}</strong>
-          </StructuredListCell>
-          <StructuredListCell>
-            <svelte:component
-              this={AsyncCodeBlock}
-              language="typescript"
-              type={/\n/.test(dispatched_event.detail ?? "") ? "multi" : "inline"}
-              code={dispatched_event.detail ?? ""}
-              portalTooltip
-            />
-          </StructuredListCell>
-          <StructuredListCell>
-            {dispatched_event.description ?? ""}
-          </StructuredListCell>
+  <div class="overflow">
+    <StructuredList flush condensed>
+      <StructuredListHead>
+        <StructuredListRow head>
+          <StructuredListCell head>Event name</StructuredListCell>
+          <StructuredListCell head>Event detail</StructuredListCell>
+          {#if hasDescription}
+            <StructuredListCell head>Description</StructuredListCell>
+          {/if}
         </StructuredListRow>
-      {/each}
-    </StructuredListBody>
-  </StructuredList>
+      </StructuredListHead>
+      <StructuredListBody>
+        {#each dispatched_events as dispatched_event (dispatched_event.name)}
+          <StructuredListRow>
+            <StructuredListCell>
+              <strong>on:{dispatched_event.name}</strong>
+            </StructuredListCell>
+            <StructuredListCell>
+              <svelte:component
+                this={AsyncCodeBlock}
+                language="typescript"
+                type={/\n/.test(dispatched_event.detail ?? "")
+                  ? "multi"
+                  : "inline"}
+                code={dispatched_event.detail ?? ""}
+                portalTooltip
+              />
+            </StructuredListCell>
+            <StructuredListCell>
+              {dispatched_event.description ?? ""}
+            </StructuredListCell>
+          </StructuredListRow>
+        {/each}
+      </StructuredListBody>
+    </StructuredList>
+  </div>
 {:else}
   <p class="my-layout-01-03">No dispatched events.</p>
 {/if}
@@ -414,6 +420,7 @@
 
   .overflow {
     overflow-x: auto;
+    max-width: 100%;
   }
 
   :global(.my-layout-01-03) {
