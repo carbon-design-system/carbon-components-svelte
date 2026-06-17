@@ -216,7 +216,7 @@ The icon and pictogram sets ship as separate packages of individual Svelte compo
 
 ### Icons
 
-2,500+ icons designed for product UI, in four sizes (16, 20, 24, and 32 pixels), set with a single prop.
+2,600+ icons designed for product UI, in four sizes (16, 20, 24, and 32 pixels), set with a single prop.
 
 ```sh
 # npm
@@ -278,7 +278,7 @@ Documentation is available in LLM-friendly plain text for use with coding assist
 The Carbon Svelte collection includes packages for icons, pictograms, and data visualization:
 
 - **Carbon Components Svelte** — 70+ components — [GitHub](https://github.com/carbon-design-system/carbon-components-svelte)
-- **Carbon Icons Svelte** — 2,500+ icons — [GitHub](https://github.com/carbon-design-system/carbon-icons-svelte)
+- **Carbon Icons Svelte** — 2,600+ icons — [GitHub](https://github.com/carbon-design-system/carbon-icons-svelte)
 - **Carbon Pictograms Svelte** — 1,500+ pictograms — [GitHub](https://github.com/carbon-design-system/carbon-pictograms-svelte)
 - **Carbon Charts Svelte** — 25+ charts, powered by d3 — [GitHub](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)
 - **Carbon Preprocess Svelte** — Collection of Carbon Svelte preprocessors — [GitHub](https://github.com/carbon-design-system/carbon-preprocess-svelte)
