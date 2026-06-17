@@ -32,7 +32,6 @@
   import Code from "carbon-pictograms-svelte/lib/Code.svelte";
   import DataStorage from "carbon-pictograms-svelte/lib/DataStorage.svelte";
   import CodeBlock from "../components/CodeBlock.svelte";
-  import DocBenefitGrid from "../components/DocBenefitGrid.svelte";
   import DocCodeBox from "../components/DocCodeBox.svelte";
   import DocFooterCta from "../components/DocFooterCta.svelte";
   import DocHero from "../components/DocHero.svelte";
@@ -213,89 +212,78 @@
       </DocSectionHeader>
 
       <Row class="example-row">
-        <Column lg={10} xlg={8} class="code-col">
-          <Stack gap={9}>
-            <Stack gap={5}>
-              <Text tag="h3" type="productive-heading-03" color="primary">
-                Install
+        {#each preprocessors as preprocessor (preprocessor.title)}
+          <Column sm={4} md={8} lg={8} xlg={5}>
+            <Stack gap={2}>
+              <Text tag="h3" type="heading-02" color="primary">
+                {preprocessor.title}
               </Text>
-              <Text type="body-long-01" color="secondary" maxWidth="58ch">
-                Add carbon-preprocess-svelte as a dev dependency.
+              <Text type="body-long-01" color="secondary" maxWidth="40ch">
+                {preprocessor.body}
               </Text>
-              <div class="install-tabs">
-                <DocPackageManagerTabs cmds={preprocessInstallCmds} />
-              </div>
             </Stack>
-
-            <DocBenefitGrid
-              items={preprocessors}
-              titleTag="h3"
-              titleType="productive-heading-03"
-            />
-
-            <Stack gap={5}>
-              <Text tag="h3" type="productive-heading-03" color="primary">
-                Configure your bundler
-              </Text>
-              <Stack gap={3}>
-                <div class="glyph-desc">
-                  <Text type="body-long-01" color="secondary" maxWidth="58ch">
-                    Add optimizeImports to your Svelte preprocessor and
-                    optimizeCss to your bundler plugins.
-                  </Text>
-                </div>
-                <div class="install-tabs">
-                  <Tabs autoWidth>
-                    <Tab label="Vite" />
-                    <Tab label="SvelteKit" />
-                    <Tab label="Rollup" />
-                    <Tab label="Webpack" />
-                    <svelte:fragment slot="content">
-                      <TabContent style="padding-left: 0; padding-right: 0;">
-                        <DocCodeBox>
-                          <CodeBlock language="javascript" code={viteConfig} />
-                        </DocCodeBox>
-                      </TabContent>
-                      <TabContent style="padding-left: 0; padding-right: 0;">
-                        <Stack gap={3}>
-                          <DocCodeBox>
-                            <CodeBlock
-                              language="javascript"
-                              code={sveltekitConfig}
-                            />
-                          </DocCodeBox>
-                          <DocCodeBox>
-                            <CodeBlock
-                              language="javascript"
-                              code={sveltekitViteConfig}
-                            />
-                          </DocCodeBox>
-                        </Stack>
-                      </TabContent>
-                      <TabContent style="padding-left: 0; padding-right: 0;">
-                        <DocCodeBox>
-                          <CodeBlock
-                            language="javascript"
-                            code={rollupConfig}
-                          />
-                        </DocCodeBox>
-                      </TabContent>
-                      <TabContent style="padding-left: 0; padding-right: 0;">
-                        <DocCodeBox>
-                          <CodeBlock
-                            language="javascript"
-                            code={webpackConfig}
-                          />
-                        </DocCodeBox>
-                      </TabContent>
-                    </svelte:fragment>
-                  </Tabs>
-                </div>
-              </Stack>
-            </Stack>
-          </Stack>
-        </Column>
+          </Column>
+        {/each}
       </Row>
+
+      <DocSplitRow
+        variant="step"
+        step="01"
+        title="Install"
+        description="Add carbon-preprocess-svelte as a dev dependency."
+      >
+        <svelte:fragment slot="right">
+          <DocPackageManagerTabs cmds={preprocessInstallCmds} />
+        </svelte:fragment>
+      </DocSplitRow>
+
+      <DocSplitRow
+        variant="step"
+        step="02"
+        title="Configure your bundler"
+        description="Add optimizeImports to your Svelte preprocessor and optimizeCss to your bundler plugins."
+      >
+        <svelte:fragment slot="right">
+          <div class="install-tabs">
+            <Tabs autoWidth>
+              <Tab label="Vite" />
+              <Tab label="SvelteKit" />
+              <Tab label="Rollup" />
+              <Tab label="Webpack" />
+              <svelte:fragment slot="content">
+                <TabContent style="padding-left: 0; padding-right: 0;">
+                  <DocCodeBox>
+                    <CodeBlock language="javascript" code={viteConfig} />
+                  </DocCodeBox>
+                </TabContent>
+                <TabContent style="padding-left: 0; padding-right: 0;">
+                  <Stack gap={3}>
+                    <DocCodeBox>
+                      <CodeBlock language="javascript" code={sveltekitConfig} />
+                    </DocCodeBox>
+                    <DocCodeBox>
+                      <CodeBlock
+                        language="javascript"
+                        code={sveltekitViteConfig}
+                      />
+                    </DocCodeBox>
+                  </Stack>
+                </TabContent>
+                <TabContent style="padding-left: 0; padding-right: 0;">
+                  <DocCodeBox>
+                    <CodeBlock language="javascript" code={rollupConfig} />
+                  </DocCodeBox>
+                </TabContent>
+                <TabContent style="padding-left: 0; padding-right: 0;">
+                  <DocCodeBox>
+                    <CodeBlock language="javascript" code={webpackConfig} />
+                  </DocCodeBox>
+                </TabContent>
+              </svelte:fragment>
+            </Tabs>
+          </div>
+        </svelte:fragment>
+      </DocSplitRow>
     </Grid>
   </DocSection>
 
