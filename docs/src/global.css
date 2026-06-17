@@ -648,6 +648,46 @@ html {
   padding-block: var(--cds-spacing-07);
 }
 
+/* Mobile: tighten horizontal padding.
+   On small viewports the default content padding (2rem) plus the grid's net
+   column gutter (grid +1rem, row -1rem, col +1rem = 1rem) inset doc content
+   3rem from each edge, wasting space. Drop the content padding to 1rem and
+   collapse the grid/row/column gutters so content sits 1rem from the edges.
+   Grid resets are scoped to the doc page shells so framed grid examples keep
+   their gutters. The bleed helpers below are re-aligned to the 1rem padding. */
+@media (max-width: 672px) {
+  .bx--content {
+    padding-inline: var(--cds-spacing-05);
+  }
+
+  .overview-page .bx--grid,
+  .quick-start-page .bx--grid,
+  .component-body .bx--grid {
+    padding-inline: 0;
+  }
+
+  .overview-page .bx--row,
+  .quick-start-page .bx--row,
+  .component-body .bx--row {
+    margin-inline: 0;
+  }
+
+  .overview-page [class*="bx--col"],
+  .quick-start-page [class*="bx--col"],
+  .component-body [class*="bx--col"] {
+    padding-inline: 0;
+  }
+
+  .band {
+    margin-inline: calc(-1 * var(--cds-spacing-05));
+    padding-inline: var(--cds-spacing-05);
+  }
+
+  .breakout {
+    margin-inline: calc(-1 * var(--cds-spacing-05));
+  }
+}
+
 .section {
   margin-top: var(--cds-spacing-12);
 }
