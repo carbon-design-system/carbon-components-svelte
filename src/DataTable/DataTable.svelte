@@ -511,10 +511,7 @@
   let expanded = false;
   let parentRowId = null;
 
-  $: expandedRows = expandedRowIds.reduce((a, id) => {
-    a[id] = true;
-    return a;
-  }, {});
+  $: expandedRowIdsSet = new Set(expandedRowIds);
 
   let prevBatchSelected = [];
   $: if (
@@ -960,7 +957,7 @@
           {#each rowsToRender as row, index (row.id)}
             {@const actualIndex = virtualData.startIndex + index}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
-            {@const isExpanded = !!expandedRows[row.id]}
+            {@const isExpanded = expandedRowIdsSet.has(row.id)}
             {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
@@ -1000,7 +997,7 @@
                   class="bx--table-expand"
                   headers="expand"
                   data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
-                  expandedRows[row.id]
+                  expandedRowIdsSet.has(row.id)
                     ? "collapsed"
                     : undefined}
                 >
@@ -1009,11 +1006,11 @@
                       type="button"
                       class:bx--table-expand__button={true}
                       aria-controls="{id}-expandable-row-{row.id}"
-                      aria-label={expandedRows[row.id]
+                      aria-label={expandedRowIdsSet.has(row.id)
                         ? "Collapse current row"
                         : "Expand current row"}
                       on:click|stopPropagation={() => {
-                        const rowExpanded = !!expandedRows[row.id];
+                        const rowExpanded = expandedRowIdsSet.has(row.id);
 
                         expandedRowIds = rowExpanded
                           ? expandedRowIds.filter((id) => id !== row.id)
@@ -1027,7 +1024,7 @@
                     >
                       <slot
                         name="expandIcon"
-                        expanded={!!expandedRows[row.id]}
+                        expanded={expandedRowIdsSet.has(row.id)}
                         {row}
                         props={expandIconProps}
                       >
@@ -1147,7 +1144,8 @@
                   parentRowId = null;
                 }}
               >
-                {#if expandedRows[row.id] && !nonExpandableRowIdsSet.has(row.id)}
+                {#if expandedRowIdsSet.has(row.id) &&
+                !nonExpandableRowIdsSet.has(row.id)}
                   <TableCell
                     colspan={selectable
                       ? headers.length + 2
@@ -1179,7 +1177,7 @@
           <!-- Non-virtualized: render all rows normally -->
           {#each rowsToRender as row, index (row.id)}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
-            {@const isExpanded = !!expandedRows[row.id]}
+            {@const isExpanded = expandedRowIdsSet.has(row.id)}
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
             {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
             {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
