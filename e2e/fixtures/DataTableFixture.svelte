@@ -28,7 +28,11 @@
   const expandRows = [
     { id: "e1", name: "First" },
     { id: "e2", name: "Second" },
+    { id: "e3", name: "Third" },
+    { id: "e4", name: "Fourth" },
   ];
+
+  const prototypeIdRows = [{ id: "toString", name: "Prototype ID" }];
 
   const batchHeaders = [{ key: "name", value: "Product" }];
 
@@ -50,6 +54,14 @@
   <DataTable expandable headers={expandHeaders} rows={expandRows}>
     <svelte:fragment slot="expandedRow" let:row>
       <p data-testid="expanded-detail">Extra row: {row.name}</p>
+    </svelte:fragment>
+  </DataTable>
+</div>
+
+<div data-testid="data-table-prototype-id">
+  <DataTable expandable headers={expandHeaders} rows={prototypeIdRows}>
+    <svelte:fragment slot="expandedRow" let:row>
+      <p data-testid="prototype-id-detail">Extra row: {row.name}</p>
     </svelte:fragment>
   </DataTable>
 </div>

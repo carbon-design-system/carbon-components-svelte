@@ -54,6 +54,22 @@ test.describe("DataTable", () => {
     );
   });
 
+  test("expandable: supports row ids matching object prototype properties", async ({
+    page,
+  }) => {
+    const table = page.getByTestId("data-table-prototype-id");
+    const detail = table.getByTestId("prototype-id-detail");
+
+    await expect(table).toBeVisible();
+    await expect(detail).toBeHidden();
+
+    await table.getByRole("button", { name: "Expand current row" }).click();
+    await expect(detail).toHaveText("Extra row: Prototype ID");
+
+    await table.getByRole("button", { name: "Collapse current row" }).click();
+    await expect(detail).toBeHidden();
+  });
+
   test("batch selection: select all checks every row", async ({ page }) => {
     const batch = page.getByTestId("data-table-batch");
     await batch
