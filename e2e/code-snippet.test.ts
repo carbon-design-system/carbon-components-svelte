@@ -56,6 +56,54 @@ test.describe("CodeSnippet", () => {
     expect(expandedHeight).toBeGreaterThanOrEqual(collapsedHeight);
   });
 
+  test("multi snippet hides expand button when content is below the threshold", async ({
+    page,
+  }) => {
+    const snippet = page.getByTestId("snippet-multi-short");
+    await expect(snippet).toBeVisible();
+    await expect(
+      snippet.getByRole("button", { name: /show more/i }),
+    ).toBeHidden();
+  });
+
+  test("expand button appears when content grows past the threshold", async ({
+    page,
+  }) => {
+    const snippet = page.getByTestId("snippet-multi-dynamic");
+    const showMore = snippet.getByRole("button", { name: /show more/i });
+
+    // Starts short: no overflow, no button.
+    await expect(showMore).toBeHidden();
+
+    await page.getByTestId("toggle-content-size").click();
+
+    // Grows past the threshold: button appears.
+    await expect(showMore).toBeVisible();
+  });
+
+  test("resets height when content shrinks below the threshold after expanding", async ({
+    page,
+  }) => {
+    const snippet = page.getByTestId("snippet-multi-dynamic");
+
+    // Grow content, then expand.
+    await page.getByTestId("toggle-content-size").click();
+    await snippet.getByRole("button", { name: /show more/i }).click();
+    await expect(snippet).toHaveClass(/bx--snippet--expand/);
+    const expandedHeight = (await snippet.boundingBox())?.height ?? 0;
+
+    // Shrink content back below the threshold.
+    await page.getByTestId("toggle-content-size").click();
+
+    // Button disappears, expanded state resets, and height collapses back down.
+    await expect(
+      snippet.getByRole("button", { name: /show (more|less)/i }),
+    ).toBeHidden();
+    await expect(snippet).not.toHaveClass(/bx--snippet--expand/);
+    const shrunkHeight = (await snippet.boundingBox())?.height ?? 0;
+    expect(shrunkHeight).toBeLessThan(expandedHeight);
+  });
+
   test("copy button swaps to feedback icon during feedback window and reverts", async ({
     page,
   }) => {
