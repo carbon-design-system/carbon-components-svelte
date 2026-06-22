@@ -9,6 +9,13 @@
    */
   export let selected = 0;
 
+  /**
+   * Specify the size of the vertical tabs.
+   * `"xl"` matches the default height.
+   * @type {"sm" | "md" | "lg" | "xl"}
+   */
+  export let size = "xl";
+
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
   import { breakpointObserver } from "../Breakpoint/breakpointObserver.js";
@@ -204,6 +211,10 @@
     class:bx--tabs={true}
     class:bx--tabs--vertical={true}
     class:bx--tabs--tall={$hasSecondaryLabel}
+    class:bx--layout--size-sm={size === "sm"}
+    class:bx--layout--size-md={size === "md"}
+    class:bx--layout--size-lg={size === "lg"}
+    class:bx--layout--size-xl={size === "xl"}
     {...$$restProps}
   >
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
