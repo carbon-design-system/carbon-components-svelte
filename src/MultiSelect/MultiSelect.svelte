@@ -54,7 +54,7 @@
 
   /**
    * Set the size of the multiselect.
-   * @type {"sm" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "lg" | "xl"}
    */
   export let size = undefined;
 
