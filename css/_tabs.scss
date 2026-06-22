@@ -1,5 +1,6 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/layout/scss/generated/size";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// Tab icon styles
@@ -738,4 +739,66 @@
 
 @include exports('tabs-vertical') {
   @include tabs-vertical;
+}
+
+/// Vertical tabs size variants (Carbon v11 `size` on `TabListVertical`). Maps
+/// the layout size token to each nav item's height. At `md` and up (the column
+/// layout) `xl` equals the default vertical-tab height ($size-xl / spacing-10),
+/// so the unsized default and `size="xl"` match, and `sm` clamps labels to one
+/// line since it is too short for two. Below `md` the column collapses to a
+/// horizontal contained row capped at `lg` height (Carbon React maps `xl` to
+/// `lg` there), where the default row height ($spacing-09) already equals `lg`.
+/// @access private
+/// @group components
+@mixin tabs-vertical-size {
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-sm
+      .#{$prefix}--tabs__nav-item {
+      block-size: $size-sm;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-md
+      .#{$prefix}--tabs__nav-item {
+      block-size: $size-md;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-lg
+      .#{$prefix}--tabs__nav-item {
+      block-size: $size-lg;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-xl
+      .#{$prefix}--tabs__nav-item {
+      block-size: $size-xl;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-sm
+      .#{$prefix}--tabs__nav-item-label {
+      -webkit-line-clamp: 1;
+    }
+  }
+
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-sm
+      .#{$prefix}--tabs__nav-item {
+      block-size: $size-sm;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-md
+      .#{$prefix}--tabs__nav-item {
+      block-size: $size-md;
+    }
+
+    // `xl` caps at `lg` below `md`; both match the default row height.
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-lg
+      .#{$prefix}--tabs__nav-item,
+    .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-xl
+      .#{$prefix}--tabs__nav-item {
+      block-size: $size-lg;
+    }
+  }
+}
+
+@include exports('tabs-vertical-size') {
+  @include tabs-vertical-size;
 }

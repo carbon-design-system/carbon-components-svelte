@@ -6,10 +6,12 @@
 
   export let selected = 0;
   export let icon: ComponentProps<Tab>["icon"] = undefined;
+  export let size: ComponentProps<TabsVertical>["size"] = undefined;
 </script>
 
 <TabsVertical
   {selected}
+  {size}
   on:change={({ detail }) => {
     console.log("change event", detail);
   }}

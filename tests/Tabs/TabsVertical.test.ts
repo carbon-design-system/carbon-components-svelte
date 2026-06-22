@@ -28,6 +28,20 @@ describe("TabsVertical", () => {
     expect(screen.getByText("Content 2")).not.toBeVisible();
   });
 
+  it("should default to the xl layout size", () => {
+    render(TabsVertical);
+
+    expect(screen.getByRole("navigation")).toHaveClass("bx--layout--size-xl");
+  });
+
+  it("should apply the layout size class for the size prop", () => {
+    render(TabsVertical, { props: { size: "sm" } });
+
+    const nav = screen.getByRole("navigation");
+    expect(nav).toHaveClass("bx--layout--size-sm");
+    expect(nav).not.toHaveClass("bx--layout--size-xl");
+  });
+
   it("should render a vertically-oriented tablist", () => {
     render(TabsVertical);
 
