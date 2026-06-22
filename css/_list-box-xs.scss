@@ -1,0 +1,45 @@
+// xs (24px) list-box heights for Dropdown, ComboBox, and MultiSelect.
+// carbon-components v10 stops at sm; backported from
+// https://github.com/carbon-design-system/carbon/pull/22439
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// 24px list-box size for Dropdown, ComboBox, and MultiSelect.
+/// Follows the same sm/lg override pattern in carbon-components v10.
+/// @access private
+/// @group components
+@mixin list-box-xs {
+  .#{$prefix}--list-box--xs {
+    block-size: to-rem(24px);
+    max-block-size: to-rem(24px);
+  }
+
+  .#{$prefix}--list-box--expanded.#{$prefix}--list-box--xs
+    .#{$prefix}--list-box__menu {
+    // 24px item height * 5.5 items shown
+    max-block-size: to-rem(132px);
+  }
+
+  .#{$prefix}--list-box--xs .#{$prefix}--list-box__menu-item,
+  .#{$prefix}--list-box--xs .#{$prefix}--list-box__menu-item__option {
+    block-size: to-rem(24px);
+  }
+
+  // 3px padding centers the 1rem line in 24px (same math as sm/lg).
+  .#{$prefix}--list-box--xs .#{$prefix}--list-box__menu-item__option {
+    padding-block: to-rem(3px);
+  }
+
+  .#{$prefix}--list-box--up.#{$prefix}--list-box--xs
+    .#{$prefix}--list-box__menu,
+  .#{$prefix}--list-box--up.#{$prefix}--dropdown--xs
+    .#{$prefix}--list-box__menu {
+    inset-block-end: to-rem(24px);
+  }
+}
+
+@include exports("list-box-xs") {
+  @include list-box-xs;
+}
