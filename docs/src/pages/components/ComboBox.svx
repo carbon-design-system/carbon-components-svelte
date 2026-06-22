@@ -295,7 +295,7 @@ Specify a custom value for `threshold` to control when virtualization activates.
 
 ### Custom item height
 
-By default, item height matches the menu row for each size: 32px (`sm`), 40px (`md`), 48px (`lg`, `xl`). Set `itemHeight` when custom slots change row height.
+By default, item height matches the menu row for each size: 24px (`xs`), 32px (`sm`), 40px (`md`), 48px (`lg`, `xl`). Set `itemHeight` when custom slots change row height.
 
 <FileSource src="/framed/ComboBox/VirtualizeItemHeight" />
 
@@ -332,6 +332,18 @@ items={[
 ## Sizes
 
 The `size` prop sets the height. The default is `medium`.
+
+### Extra-small
+
+Set `size` to `"xs"` for an extra-small combobox.
+
+<ComboBox labelText="Contact" placeholder="Select contact method"
+size="xs"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
 
 ### Small
 
