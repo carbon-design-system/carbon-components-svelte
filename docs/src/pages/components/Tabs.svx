@@ -419,9 +419,9 @@ Show a loading state for the container tab variant.
 
 ## Vertical
 
-Use TabsVertical to stack tabs in a column beside the panel on medium breakpoints
-and wider. On smaller viewports the tab list becomes a horizontal, scrollable row.
-Compose it with the same Tab and TabContent components.
+Use TabsVertical for a tab list beside the panel. Compose it with the same Tab and
+TabContent components. From the medium breakpoint up, tabs stack in a vertical column.
+On narrower screens, the list becomes a horizontal row with overflow scrolling.
 
 <TabsVertical>
   <Tab label="Dashboard" />
@@ -433,6 +433,52 @@ Compose it with the same Tab and TabContent components.
     <TabContent>Content 2</TabContent>
     <TabContent>Content 3</TabContent>
     <TabContent>Content 4</TabContent>
+  </svelte:fragment>
+</TabsVertical>
+
+### Sizes
+
+Size defaults to `"xl"`. Set `size` to change tab height in the vertical column
+layout. At `"sm"`, labels stay on one line. Size classes apply from the medium
+breakpoint up; in the horizontal overflow row below that, `"xl"` uses the large
+height.
+
+#### Small
+
+<TabsVertical size="sm">
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</TabsVertical>
+
+#### Medium
+
+<TabsVertical size="md">
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</TabsVertical>
+
+#### Large
+
+<TabsVertical size="lg">
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
   </svelte:fragment>
 </TabsVertical>
 
