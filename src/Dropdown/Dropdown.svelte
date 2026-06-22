@@ -57,7 +57,7 @@
 
   /**
    * Specify the size of the dropdown field.
-   * @type {"sm" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -442,6 +442,7 @@
     showInvalid && "bx--dropdown--invalid",
     showWarn && "bx--dropdown--warning",
     open && "bx--dropdown--open",
+    size === "xs" && "bx--dropdown--xs",
     size === "sm" && "bx--dropdown--sm",
     size === "xl" && "bx--dropdown--xl",
     inline && "bx--dropdown--inline",
