@@ -53,6 +53,14 @@ Set `type="multi"` to display multiple lines of code with expand/collapse functi
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetMultiLine" />
 
+### Overflow detection
+
+The "Show more"/"Show less" button only appears when the multi-line snippet content exceeds the collapsed height. Because the visibility is based on the snippet's measured height, it adapts to the consumer's font size and line height, and updates automatically if the content or layout changes.
+
+Toggle the example below to grow the content past the threshold and reveal the expand button.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetOverflow" />
+
 ## Expanded by default
 
 Set `expanded` to `true` to show the full multi-line code snippet.
