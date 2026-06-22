@@ -148,7 +148,7 @@
    */
   export let portalTooltip = undefined;
 
-  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
@@ -170,7 +170,14 @@
   let feedbackOpen = false;
   let copyPending = false;
   let prevExpanded = expanded;
-  let exceedsThreshold = true;
+  let exceedsThreshold = false;
+  let resizeObserver;
+
+  /**
+   * The collapsed (non-expanded) max-height of the snippet, in px.
+   * The expand button is only relevant when the content exceeds this.
+   */
+  const collapsedHeight = 16 * 15;
 
   function syncCopyFeedback() {
     animation = copyFeedback.animation;
@@ -183,18 +190,32 @@
   }
 
   function measureHeight() {
+    if (!ref) return;
+    // Measure the snippet's full (unclipped) content height. The <pre> is never
+    // the element with a max-height, so its rendered height always reflects the
+    // true content height regardless of expanded state. Comparing the measured
+    // height keeps this correct across any consumer font size or line height.
     const { height } = ref.getBoundingClientRect();
-    if (height > 0) exceedsThreshold = height > 255;
+    if (height === 0) return;
+    exceedsThreshold = height > collapsedHeight;
+    // If the content no longer overflows, collapse so the expanded min-height
+    // doesn't leave the snippet taller than its (now shorter) content.
+    if (!exceedsThreshold && expanded) expanded = false;
   }
 
   $: expandText = expanded ? showLessText : showMoreText;
-  $: minHeight = expanded ? 16 * 15 : 48;
-  $: maxHeight = expanded ? "none" : `${16 * 15}px`;
+  $: minHeight = expanded ? collapsedHeight : 48;
+  $: maxHeight = expanded ? "none" : `${collapsedHeight}px`;
 
-  $: if (type === "multi" && ref && showMoreLess) {
-    // Only measure when the consumer has not opted out
-    if (code === undefined) measureHeight();
-    if (code) tick().then(measureHeight);
+  // Re-measure whenever the snippet resizes (font load, content change, width
+  // change causing reflow), so the expand button only shows on real overflow.
+  $: if (resizeObserver) {
+    resizeObserver.disconnect();
+    if (type === "multi" && showMoreLess && ref) {
+      resizeObserver.observe(ref);
+    } else {
+      exceedsThreshold = false;
+    }
   }
 
   $: showExpandButton = showMoreLess && type === "multi" && exceedsThreshold;
@@ -216,7 +237,10 @@
   }
 
   onMount(() => {
+    resizeObserver = new ResizeObserver(() => measureHeight());
+
     return () => {
+      resizeObserver.disconnect();
       copyFeedback.cleanup();
       disconnectModalObserver();
     };

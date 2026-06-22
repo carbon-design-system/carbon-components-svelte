@@ -1,5 +1,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
+import {
+  mockSnippetOverflowHeight,
+  waitForSnippetMeasurement,
+} from "../utils/mockSnippetOverflowHeight";
 import { user } from "../utils/user";
 import CodeSnippetAsync from "./CodeSnippetAsync.test.svelte";
 import CodeSnippetAsyncDoubleClick from "./CodeSnippetAsyncDoubleClick.test.svelte";
@@ -249,13 +253,15 @@ yarn -v`,
   });
 
   test("should expand and collapse expandable snippet", async () => {
+    mockSnippetOverflowHeight();
     const { container } = render(CodeSnippetExpandable);
+    await waitForSnippetMeasurement();
 
     expect(
       container.querySelector(".bx--snippet--expand"),
     ).not.toBeInTheDocument();
 
-    const showMoreButton = screen.getByText("Show more");
+    const showMoreButton = await screen.findByText("Show more");
     await user.click(showMoreButton);
 
     expect(container.querySelector(".bx--snippet--expand")).toBeInTheDocument();
@@ -271,8 +277,10 @@ yarn -v`,
   });
 
   // Regression: chevron should not duplicate the button's accessible name
-  test("should not set aria-label on the expand chevron", () => {
+  test("should not set aria-label on the expand chevron", async () => {
+    mockSnippetOverflowHeight();
     const { container } = render(CodeSnippetExpandable);
+    await waitForSnippetMeasurement();
 
     const chevron = container.querySelector(".bx--icon-chevron--down");
     assert(chevron);
@@ -281,10 +289,12 @@ yarn -v`,
   });
 
   test("should render expanded by default", async () => {
+    mockSnippetOverflowHeight();
     const { container } = render(CodeSnippetExpandedByDefault);
+    await waitForSnippetMeasurement();
 
     expect(container.querySelector(".bx--snippet--expand")).toBeInTheDocument();
-    expect(screen.getByText("Show less")).toBeInTheDocument();
+    expect(await screen.findByText("Show less")).toBeInTheDocument();
 
     await user.click(screen.getByText("Show less"));
 

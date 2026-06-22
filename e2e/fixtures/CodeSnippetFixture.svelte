@@ -6,6 +6,13 @@
   const longCode = Array(20)
     .fill("function example() { return 'line'; }")
     .join("\n");
+
+  let dynamicExpanded = false;
+  $: dynamicLines = dynamicExpanded ? 24 : 3;
+  $: dynamicCode = Array.from(
+    { length: dynamicLines },
+    (_, i) => `const line${i + 1} = ${i + 1};`,
+  ).join("\n");
 </script>
 
 <div data-testid="single-snippet">
@@ -19,6 +26,29 @@
     data-testid="snippet-multi"
     showMoreText="Show more"
     showLessText="Show less"
+  />
+</div>
+
+<div data-testid="short-multi-snippet">
+  <CodeSnippet
+    type="multi"
+    code={shortCode}
+    data-testid="snippet-multi-short"
+  />
+</div>
+
+<div data-testid="dynamic-multi-snippet">
+  <button
+    type="button"
+    data-testid="toggle-content-size"
+    on:click={() => (dynamicExpanded = !dynamicExpanded)}
+  >
+    Toggle content size
+  </button>
+  <CodeSnippet
+    type="multi"
+    code={dynamicCode}
+    data-testid="snippet-multi-dynamic"
   />
 </div>
 
