@@ -16,6 +16,7 @@ describe("getMenuMaxHeight", () => {
   });
 
   it("returns correct value for each size", () => {
+    expect(getMenuMaxHeight("xs")).toBe("8.25rem");
     expect(getMenuMaxHeight("sm")).toBe("11rem");
     expect(getMenuMaxHeight("md")).toBe("13.75rem");
     expect(getMenuMaxHeight("lg")).toBe("16.5rem");
@@ -33,6 +34,7 @@ describe("getMenuItemHeight", () => {
   });
 
   it("returns correct value for each size", () => {
+    expect(getMenuItemHeight("xs")).toBe(24);
     expect(getMenuItemHeight("sm")).toBe(32);
     expect(getMenuItemHeight("md")).toBe(40);
     expect(getMenuItemHeight("lg")).toBe(48);

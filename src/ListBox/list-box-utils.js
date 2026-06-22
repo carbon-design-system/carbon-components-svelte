@@ -1,8 +1,9 @@
 /**
  * Max height values for listbox/dropdown menus by size.
- * @type {Readonly<{ sm: string; md: string; lg: string; xl: string }>}
+ * @type {Readonly<{ xs: string; sm: string; md: string; lg: string; xl: string }>}
  */
 export const MENU_MAX_HEIGHT = Object.freeze({
+  xs: "8.25rem",
   sm: "11rem",
   md: "13.75rem",
   lg: "16.5rem",
@@ -11,7 +12,7 @@ export const MENU_MAX_HEIGHT = Object.freeze({
 
 /**
  * Get the max height for a listbox/dropdown menu based on size.
- * @param {"sm" | "md" | "lg" | "xl"} [size] - The size variant
+ * @param {"xs" | "sm" | "md" | "lg" | "xl"} [size] - The size variant
  * @returns {string} The max height in rem units
  */
 export function getMenuMaxHeight(size = "md") {
@@ -20,10 +21,11 @@ export function getMenuMaxHeight(size = "md") {
 
 /**
  * Menu item heights (px) by size. Matches `.bx--list-box__menu-item` in
- * carbon-components (sm 2rem, md 2.5rem, lg/xl 3rem).
- * @type {Readonly<{ sm: number; md: number; lg: number; xl: number }>}
+ * carbon-components (xs 1.5rem, sm 2rem, md 2.5rem, lg/xl 3rem).
+ * @type {Readonly<{ xs: number; sm: number; md: number; lg: number; xl: number }>}
  */
 export const MENU_ITEM_HEIGHT = Object.freeze({
+  xs: 24,
   sm: 32,
   md: 40,
   lg: 48,
@@ -39,7 +41,7 @@ export const FLUID_MENU_ITEM_HEIGHT = 64;
 
 /**
  * Get the menu item height in pixels for a listbox/dropdown.
- * @param {"sm" | "md" | "lg" | "xl"} [size] - The size variant
+ * @param {"xs" | "sm" | "md" | "lg" | "xl"} [size] - The size variant
  * @param {{ fluid?: boolean }} [options] - Pass `fluid: true` for FLUID_MENU_ITEM_HEIGHT
  * @returns {number} The item height in pixels
  */

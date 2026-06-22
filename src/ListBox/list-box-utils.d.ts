@@ -1,5 +1,6 @@
 /** Max height values for listbox/dropdown menus by size */
 export declare const MENU_MAX_HEIGHT: Readonly<{
+  xs: string;
   sm: string;
   md: string;
   lg: string;
@@ -12,11 +13,12 @@ export declare const MENU_MAX_HEIGHT: Readonly<{
  * @returns The max height in rem units
  */
 export declare function getMenuMaxHeight(
-  size?: "sm" | "md" | "lg" | "xl",
+  size?: "xs" | "sm" | "md" | "lg" | "xl",
 ): string;
 
 /** Menu item heights (px) by size */
 export declare const MENU_ITEM_HEIGHT: Readonly<{
+  xs: number;
   sm: number;
   md: number;
   lg: number;
@@ -33,6 +35,6 @@ export declare const FLUID_MENU_ITEM_HEIGHT: number;
  * @returns The item height in pixels
  */
 export declare function getMenuItemHeight(
-  size?: "sm" | "md" | "lg" | "xl",
+  size?: "xs" | "sm" | "md" | "lg" | "xl",
   options?: { fluid?: boolean },
 ): number;
