@@ -164,7 +164,6 @@
   <DocSection variant="foundation">
     <Grid>
       <DocSectionHeader
-        eyebrow="Proven at scale"
         title="The full design system"
         titleType="productive-heading-06"
         gap={6}
@@ -187,7 +186,6 @@
   <DocSection variant="foundation">
     <Grid>
       <DocSectionHeader
-        eyebrow="Not just a port"
         title="Engineered for Svelte"
         titleType="productive-heading-06"
         gap={6}
