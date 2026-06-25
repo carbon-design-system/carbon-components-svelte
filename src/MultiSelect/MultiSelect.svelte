@@ -976,10 +976,7 @@
             />
           {/if}
           <span class:bx--list-box__label={true}>{label}</span>
-          <ListBoxMenuIcon
-            {open}
-            {translateWithId}
-          />
+          <ListBoxMenuIcon {open} {translateWithId} />
         </ListBoxField>
       </div>
     {/if}

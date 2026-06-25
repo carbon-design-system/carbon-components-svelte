@@ -2870,9 +2870,9 @@ describe("MultiSelect", () => {
         'input[type="checkbox"]',
       );
       expect(checkboxes.length).toBe(items.length);
-      checkboxes.forEach((checkbox) => {
+      for (const checkbox of checkboxes) {
         expect(checkbox).toHaveAttribute("aria-readonly", "true");
-      });
+      }
     });
 
     it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
