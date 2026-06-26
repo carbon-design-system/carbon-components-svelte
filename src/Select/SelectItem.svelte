@@ -42,7 +42,10 @@
   const ctx =
     getContext("carbon:Select") || getContext("carbon:TimePickerSelect");
 
-  $: ctx?.setDefaultValue?.(id, value);
+  $: {
+    ctx?.setDefaultValue?.(id, value);
+    ctx?.syncNativeSelectValue?.();
+  }
 
   let selected = false;
 

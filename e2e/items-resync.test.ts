@@ -24,6 +24,25 @@ test.describe("Items resync — display derived from value + items", () => {
     await expect(page.getByTestId("cb-swap")).toHaveValue("George Orwell");
   });
 
+  test("Select shows selection after async fill", async ({ page }) => {
+    await page.getByTestId("load").click();
+    await expect(page.getByTestId("sel-fill-selected")).toHaveText("orwell");
+    await expect(page.getByTestId("sel-fill")).toHaveValue("orwell");
+  });
+
+  test("Select shows selection after clear + second async fill", async ({
+    page,
+  }) => {
+    // Second load does not change selected; afterUpdate never re-synced the native value.
+    await page.getByTestId("load").click();
+    await expect(page.getByTestId("sel-fill")).toHaveValue("orwell");
+    await page.getByTestId("clear-fill").click();
+    await expect(page.getByTestId("sel-fill")).toHaveValue("");
+    await page.getByTestId("load").click();
+    await expect(page.getByTestId("sel-fill-selected")).toHaveText("orwell");
+    await expect(page.getByTestId("sel-fill")).toHaveValue("orwell");
+  });
+
   test("ComboBox shows selection after clear + second async fill", async ({
     page,
   }) => {
@@ -33,5 +52,12 @@ test.describe("Items resync — display derived from value + items", () => {
     await expect(page.getByTestId("cb-fill-id")).toHaveText("orwell");
     await page.getByTestId("load").click();
     await expect(page.getByTestId("cb-fill")).toHaveValue("George Orwell");
+  });
+
+  test("Select keeps selection after items ref swap", async ({ page }) => {
+    await expect(page.getByTestId("sel-swap")).toHaveValue("orwell");
+    await page.getByTestId("reload").click();
+    await expect(page.getByTestId("sel-swap-selected")).toHaveText("orwell");
+    await expect(page.getByTestId("sel-swap")).toHaveValue("orwell");
   });
 });
