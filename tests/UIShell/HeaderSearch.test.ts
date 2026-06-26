@@ -4,6 +4,7 @@ import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/Header
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
+import HeaderSearchIconTest from "./HeaderSearchIcon.test.svelte";
 
 describe("HeaderSearch", () => {
   beforeEach(() => {
@@ -80,6 +81,25 @@ describe("HeaderSearch", () => {
       expect(
         screen.queryByRole("button", { name: "Clear search" }),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Icon", () => {
+    it("should render IconSearch in the trigger by default", () => {
+      render(HeaderSearchTest);
+
+      const searchButton = screen.getByRole("button", { name: "Search" });
+      expect(searchButton.querySelector("svg")).toBeInTheDocument();
+      expect(screen.queryByTestId("custom-icon")).not.toBeInTheDocument();
+    });
+
+    it("should render a custom icon in the trigger", () => {
+      render(HeaderSearchIconTest);
+
+      const searchButton = screen.getByRole("button", { name: "Search" });
+      expect(
+        searchButton.querySelector("[data-testid='custom-icon']"),
+      ).toBeInTheDocument();
     });
   });
 

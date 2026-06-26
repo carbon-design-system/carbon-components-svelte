@@ -1,6 +1,7 @@
 <script>
   /**
    * @template {HeaderSearchResult} [Result=HeaderSearchResult]
+   * @template [Icon=any]
    */
 
   /**
@@ -56,6 +57,12 @@
    * @bindable readonly
    */
   export let selectedResultIndex = 0;
+
+  /**
+   * Specify the icon to render for the search trigger.
+   * @type {Icon}
+   */
+  export let icon = /** @type {Icon} */ (IconSearch);
 
   import { createEventDispatcher, tick } from "svelte";
   import Close from "../icons/Close.svelte";
@@ -134,7 +141,7 @@
         active = true;
       }}
     >
-      <IconSearch size={20} title="Search" />
+      <svelte:component this={icon} size={20} title="Search" />
     </button>
     <input
       bind:this={ref}
