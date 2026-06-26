@@ -211,8 +211,8 @@
                 {#if parsed.mainDescription}
                   <div class="description">
                     {@html parsed.mainDescription
-                      .replace(/\</g, "&lt;")
-                      .replace(/\>/g, "&gt;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
                       .replace(/`(.*?)`/g, "<code>$1</code>")
                       .replace(/https?:\/\/[^\s<]+/g, (url) => {
                         const trailing = url.match(/[.,;:!?)\]]+$/)?.[0] ?? "";
