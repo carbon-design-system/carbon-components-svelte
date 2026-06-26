@@ -64,6 +64,9 @@
    */
   export let icon = /** @type {Icon} */ (IconSearch);
 
+  /** Specify the `placeholder` attribute of the search input. */
+  export let placeholder = "Search...";
+
   import { createEventDispatcher, tick } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
@@ -147,7 +150,7 @@
       bind:this={ref}
       type="text"
       autocomplete="off"
-      placeholder="Search..."
+      {placeholder}
       tabindex={active ? "0" : "-1"}
       class:bx--header__search-input={true}
       class:bx--header__search--active={active}

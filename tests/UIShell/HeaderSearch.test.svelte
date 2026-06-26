@@ -39,6 +39,7 @@
   bind:value
   bind:selectedResultIndex
   {results}
+  {...$$restProps}
   on:active={handleActive}
   on:inactive={handleInactive}
   on:clear={handleClear}

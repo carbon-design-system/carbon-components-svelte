@@ -45,6 +45,15 @@ describe("HeaderSearch", () => {
       expect(searchInput.id).toMatch(/^ccs-[a-z0-9.]+-input$/);
     });
 
+    it("should support a custom placeholder", () => {
+      render(HeaderSearchTest, { props: { placeholder: "Find anything..." } });
+
+      expect(screen.getByRole("textbox")).toHaveAttribute(
+        "placeholder",
+        "Find anything...",
+      );
+    });
+
     it("should generate unique ids per instance to avoid collisions", () => {
       const { container: a } = render(HeaderSearchTest);
       const { container: b } = render(HeaderSearchTest);
