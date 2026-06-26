@@ -176,6 +176,12 @@
   export let readonly = false;
 
   /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
+  /**
    * Specify a name attribute for the select.
    * @type {string}
    */
@@ -333,7 +339,10 @@
 
   /** Handle selection of an item, including isSelectAll logic. */
   function selectItem(item) {
-    if (item.disabled) return;
+    // Read-only allows opening and navigating the menu to review values, but
+    // never changing them. Guarding here covers every path (click, Enter,
+    // label click, select-all) so callers don't each need a readonly check.
+    if (readonly || item.disabled) return;
 
     if (item.isSelectAll) {
       const target = !allSelected;
@@ -537,6 +546,30 @@
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
+  $: readonlyId = `readonly-${id}`;
+  // `aria-readonly` on a combobox/listbox does not reliably surface read-only state,
+  // so the read-only state is also exposed as a visually-hidden description. The
+  // single status/help id is combined with the read-only id (a describedby
+  // may reference multiple ids) so it works in every state.
+  $: statusDescribedById =
+    showInvalid && invalidText
+      ? errorId
+      : showWarn && warnText
+        ? warnId
+        : !isFluid && !showInvalid && !showWarn && helperText
+          ? helperId
+          : undefined;
+  $: fieldDescribedById =
+    [readonly ? readonlyId : null, statusDescribedById]
+      .filter(Boolean)
+      .join(" ") || undefined;
+  // The selection count badge is hidden from assistive tech in read-only.
+  // Fold the count into the read-only description so the
+  // collapsed field still announces how much there is to review.
+  $: readonlyDescription =
+    selectionCount > 0
+      ? `${readonlyText}, ${selectionCount} selected`
+      : readonlyText;
   $: inline = type === "inline";
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
   // Keep the focus outline on the field while the menu is open, not just while
@@ -683,7 +716,6 @@
   <ListBox
     id={comboId}
     aria-label={ariaLabel}
-    aria-disabled={readonly || undefined}
     {disabled}
     invalid={showInvalid}
     invalidText={isFluid ? "" : invalidText}
@@ -740,27 +772,26 @@
             aria-haspopup="listbox"
             aria-expanded={open}
             aria-activedescendant={activeDescendantId}
-            aria-disabled={disabled || readonly}
+            aria-disabled={disabled || undefined}
             aria-readonly={readonly || undefined}
             aria-controls={open ? menuId : undefined}
             aria-owns={open ? menuId : undefined}
-            aria-describedby={showInvalid && invalidText
-            ? errorId
-            : showWarn && warnText
-              ? warnId
-              : !isFluid && !showInvalid && !showWarn && helperText
-                ? helperId
-                : undefined}
+            aria-describedby={fieldDescribedById}
             class:bx--text-input={true}
             class:bx--text-input--empty={value === ""}
             class:bx--text-input--light={light}
             on:click={() => {
-            if (disabled || readonly) return;
+            if (disabled) return;
             open = true;
           }}
             on:keydown
             on:keydown|stopPropagation={(event) => {
-            if (readonly) return;
+            // Read-only opens and navigates the menu to review values, but the
+            // keys that clear the selection are blocked; selectItem guards the
+            // rest (Enter/option toggle).
+            if (readonly && (event.key === "Backspace" || event.key === "Delete")) {
+              return;
+            }
             if (event.key === "Enter") {
               if (highlightedId) {
                 const highlightedItem = sortedItems.find(
@@ -840,9 +871,8 @@
             />
           {/if}
           <ListBoxMenuIcon
-            aria-hidden={readonly || undefined}
             on:click={(event) => {
-            if (disabled || readonly) return;
+            if (disabled) return;
             event.stopPropagation();
             open = !open;
           }}
@@ -870,18 +900,12 @@
           aria-activedescendant={activeDescendantId}
           aria-controls={open ? menuId : undefined}
           aria-owns={open ? menuId : undefined}
-          aria-describedby={showInvalid && invalidText
-            ? errorId
-            : showWarn && warnText
-              ? warnId
-              : !isFluid && !showInvalid && !showWarn && helperText
-                ? helperId
-                : undefined}
+          aria-describedby={fieldDescribedById}
           on:focus={() => {
           fieldFocused = true;
         }}
           on:click={() => {
-          if (disabled || readonly) return;
+          if (disabled) return;
           open = !open;
         }}
           on:keydown={(event) => {
@@ -895,7 +919,8 @@
             // toggle the menu) so these keys are handled solely below.
             event.preventDefault();
           }
-          if (readonly) return;
+          // Read-only still opens and navigates the menu; selectItem is the
+          // single guard that blocks the actual selection change.
           if (event.key === " ") {
             open = !open;
           } else if (event.key === "Tab") {
@@ -951,11 +976,7 @@
             />
           {/if}
           <span class:bx--list-box__label={true}>{label}</span>
-          <ListBoxMenuIcon
-            aria-hidden={readonly || undefined}
-            {open}
-            {translateWithId}
-          />
+          <ListBoxMenuIcon {open} {translateWithId} />
         </ListBoxField>
       </div>
     {/if}
@@ -969,6 +990,7 @@
         anchor={fieldRef}
         {direction}
         aria-multiselectable="true"
+        aria-readonly={readonly || undefined}
         on:scroll
         on:scroll={(event) => {
           listScrollTop = event.target.scrollTop;
@@ -1036,6 +1058,7 @@
                       ? selectAllIndeterminate
                       : false}
                     disabled={item.disabled}
+                    {readonly}
                   >
                     <slot
                       slot="labelChildren"
@@ -1097,6 +1120,7 @@
                   ? selectAllIndeterminate
                   : false}
                 disabled={item.disabled}
+                {readonly}
               >
                 <slot
                   slot="labelChildren"
@@ -1131,5 +1155,10 @@
     >
       {helperText}
     </div>
+  {/if}
+  {#if readonly}
+    <span id={readonlyId} class:bx--visually-hidden={true}
+      >{readonlyDescription}</span
+    >
   {/if}
 </div>

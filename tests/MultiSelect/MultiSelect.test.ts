@@ -2775,18 +2775,27 @@ describe("MultiSelect", () => {
       ).toBeTruthy();
     });
 
-    it("should not open menu on click when readonly (default)", async () => {
-      render(MultiSelect, {
+    it("opens the menu for review on click when readonly (default)", async () => {
+      const { container } = render(MultiSelect, {
         props: { items, labelText: "Contact", readonly: true },
       });
 
       const trigger = await screen.findByRole("combobox");
+      // Read-only conveys read-only semantics, not disabled/unavailable.
+      expect(trigger).toHaveAttribute("aria-readonly", "true");
+      expect(trigger).not.toHaveAttribute("aria-disabled", "true");
+      expect(container.querySelector(".bx--list-box")).not.toHaveAttribute(
+        "aria-disabled",
+      );
+
       await user.click(trigger);
 
-      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      // The menu opens so the selected values can be reviewed/navigated.
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+      expect(screen.getAllByRole("option")).toHaveLength(items.length);
     });
 
-    it("should not open menu on click when readonly + filterable", async () => {
+    it("opens the menu for review on click when readonly + filterable", async () => {
       render(MultiSelect, {
         props: {
           items,
@@ -2799,11 +2808,146 @@ describe("MultiSelect", () => {
 
       const input = screen.getByRole("combobox");
       assert(input instanceof HTMLInputElement);
-      await user.click(input);
 
+      // Read-only, not disabled: the input stays non-editable but reviewable.
       expect(input).toHaveAttribute("readonly");
       expect(input).toHaveAttribute("aria-readonly", "true");
-      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(input).not.toHaveAttribute("aria-disabled", "true");
+
+      await user.click(input);
+
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("does not toggle a selection when an option is clicked while readonly", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact",
+          readonly: true,
+          selectedIds: ["0"],
+        },
+      });
+
+      const trigger = await screen.findByRole("combobox");
+      await user.click(trigger);
+
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+      expect(options[1]).toHaveAttribute("aria-selected", "false");
+
+      // Clicking an option must not change the selection in read-only.
+      await user.click(options[1]);
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+      expect(options[1]).toHaveAttribute("aria-selected", "false");
+
+      // Nor may clicking a selected option clear it.
+      await user.click(options[0]);
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("marks the open menu and its checkboxes as read-only", async () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact",
+          readonly: true,
+          selectedIds: ["0"],
+        },
+      });
+
+      const trigger = await screen.findByRole("combobox");
+      await user.click(trigger);
+
+      // The listbox itself advertises that it cannot be modified.
+      expect(screen.getByRole("listbox")).toHaveAttribute(
+        "aria-readonly",
+        "true",
+      );
+
+      // Each option's checkbox is read-only so a browse-mode toggle is blocked.
+      const checkboxes = container.querySelectorAll<HTMLInputElement>(
+        'input[type="checkbox"]',
+      );
+      expect(checkboxes.length).toBe(items.length);
+      for (const checkbox of checkboxes) {
+        expect(checkbox).toHaveAttribute("aria-readonly", "true");
+      }
+    });
+
+    it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          id: "test-multiselect",
+          items,
+          labelText: "Contact",
+          readonly: true,
+        },
+      });
+
+      // VoiceOver does not surface aria-readonly, so the state is also exposed
+      // as a visually-hidden description referenced by the combobox.
+      const combobox = screen.getByRole("combobox");
+      expect(combobox).toHaveAttribute(
+        "aria-describedby",
+        "readonly-test-multiselect",
+      );
+
+      const description = container.querySelector("#readonly-test-multiselect");
+      expect(description).toHaveTextContent("Read-only");
+      expect(description).toHaveClass("bx--visually-hidden");
+    });
+
+    it("supports overriding the read-only assistive text", () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          id: "test-multiselect",
+          items,
+          labelText: "Contact",
+          readonly: true,
+          readonlyText: "Schreibgeschützt",
+        },
+      });
+
+      expect(
+        container.querySelector("#readonly-test-multiselect"),
+      ).toHaveTextContent("Schreibgeschützt");
+    });
+
+    it("includes the selected count in the read-only description", () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          id: "test-multiselect",
+          items,
+          labelText: "Contact",
+          readonly: true,
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      // The count badge is hidden from AT in read-only, so the count is folded
+      // into the description to keep the collapsed field reviewable.
+      expect(
+        container.querySelector("#readonly-test-multiselect"),
+      ).toHaveTextContent("Read-only, 2 selected");
+    });
+
+    it("appends the read-only description to existing helper text", () => {
+      render(MultiSelect, {
+        props: {
+          id: "test-multiselect",
+          items,
+          labelText: "Contact",
+          helperText: "Helper text",
+          readonly: true,
+        },
+      });
+
+      // Both ids are referenced so the help text is not lost in read-only.
+      expect(screen.getByRole("combobox")).toHaveAttribute(
+        "aria-describedby",
+        "readonly-test-multiselect helper-test-multiselect",
+      );
     });
 
     it("should not clear selection when readonly", async () => {
