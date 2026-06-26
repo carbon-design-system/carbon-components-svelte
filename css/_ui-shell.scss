@@ -394,6 +394,58 @@
     color: $text-secondary;
   }
 
+  // Rich results menu hosted by HeaderSearch's `menu` slot. Positioned like the
+  // legacy header menu, but the inner rows render via the SearchMenu
+  // presentation layer (`_search-menu.scss`) for fuzzy highlighting, groups,
+  // and footer actions.
+  .#{$prefix}--header__search-menu-rich {
+    position: absolute;
+    z-index: 10000;
+    left: 0;
+    right: 0;
+    top: 3rem;
+    padding: $carbon--spacing-03 0;
+    max-height: to-rem(360px);
+    overflow-y: auto;
+    background-color: $layer;
+    border: 1px solid $border-subtle;
+    border-top: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+
+    // Result text, group headers, and the empty state are flush-left with the
+    // header input text (after the 3rem magnifier button), independent of size.
+    .#{$prefix}--search-menu-item,
+    .#{$prefix}--search-menu-group__header,
+    .#{$prefix}--search-menu__no-results {
+      padding-left: 3rem;
+    }
+
+    // Leading icon centered under the header magnifier (centered in the 3rem
+    // button at 1.5rem); a 16px icon at left: 1rem centers at 1.5rem.
+    .#{$prefix}--search-menu-item__icon {
+      left: 1rem;
+    }
+
+    .#{$prefix}--search-menu-item__icon--right {
+      left: auto;
+      right: 1rem;
+    }
+  }
+
+  // Row density per size. Text alignment is fixed (above); only the row height
+  // changes so smaller sizes fit more results.
+  .#{$prefix}--header__search-menu-rich--sm .#{$prefix}--search-menu-item {
+    min-height: 2rem;
+  }
+
+  .#{$prefix}--header__search-menu-rich--lg .#{$prefix}--search-menu-item {
+    min-height: 2.5rem;
+  }
+
+  .#{$prefix}--header__search-menu-rich--xl .#{$prefix}--search-menu-item {
+    min-height: 3rem;
+  }
+
   .#{$prefix}--header-panel-divider {
     margin: 2rem 1rem 0;
     font-size: 0.75rem;
