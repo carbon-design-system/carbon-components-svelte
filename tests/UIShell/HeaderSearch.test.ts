@@ -97,7 +97,9 @@ describe("HeaderSearch", () => {
     it("should render clear button when active", () => {
       render(HeaderSearchTest, { props: { active: true } });
 
-      const clearButton = screen.getByRole("button", { name: "Clear search" });
+      const clearButton = screen.getByRole("button", {
+        name: "Clear search input",
+      });
       expect(clearButton).toBeInTheDocument();
     });
 
@@ -105,8 +107,18 @@ describe("HeaderSearch", () => {
       render(HeaderSearchTest, { props: { active: false } });
 
       expect(
-        screen.queryByRole("button", { name: "Clear search" }),
+        screen.queryByRole("button", { name: "Clear search input" }),
       ).not.toBeInTheDocument();
+    });
+
+    it("should support a custom closeButtonLabelText", () => {
+      render(HeaderSearchTest, {
+        props: { active: true, closeButtonLabelText: "Reset search" },
+      });
+
+      expect(
+        screen.getByRole("button", { name: "Reset search" }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -268,7 +280,9 @@ describe("HeaderSearch", () => {
     it("should dispatch clear event when clear button is clicked", async () => {
       render(HeaderSearchTest, { props: { active: true, value: "test" } });
 
-      const clearButton = screen.getByRole("button", { name: "Clear search" });
+      const clearButton = screen.getByRole("button", {
+        name: "Clear search input",
+      });
       await user.click(clearButton);
 
       expect(screen.getByTestId("clear-event")).toHaveTextContent("true");
@@ -495,7 +509,9 @@ describe("HeaderSearch", () => {
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).toHaveAttribute("tabindex", "0");
 
-      const clearButton = screen.getByRole("button", { name: "Clear search" });
+      const clearButton = screen.getByRole("button", {
+        name: "Clear search input",
+      });
       expect(clearButton).toHaveAttribute("tabindex", "0");
     });
 

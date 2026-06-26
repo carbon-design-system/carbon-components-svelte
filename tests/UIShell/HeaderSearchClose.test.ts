@@ -55,7 +55,9 @@ describe("HeaderSearch close event", () => {
       props: { active: true, value: "query", onClose },
     });
 
-    await user.click(screen.getByRole("button", { name: "Clear search" }));
+    await user.click(
+      screen.getByRole("button", { name: "Clear search input" }),
+    );
 
     expect(onClose).not.toHaveBeenCalled();
   });
