@@ -416,12 +416,12 @@
           // Only set value programmatically if the input is not focused
           value = itemToString(selectedItem);
         }
-      } else {
-        selectedId = undefined;
-        // Only reset value if the input is not focused and allowCustomValue is false
-        if (!ref.contains(document.activeElement) && !allowCustomValue) {
-          value = "";
-        }
+      } else if (
+        selectedId === undefined &&
+        !ref.contains(document.activeElement) &&
+        !allowCustomValue
+      ) {
+        value = "";
       }
     }
   });
@@ -430,14 +430,18 @@
     prevSelectedId = selectedId;
     selectedItem = undefined;
   } else {
+    // Re-resolve selectedItem when items changes but selectedId does not.
+    const resolvedItem = itemsById.get(selectedId);
     if (prevSelectedId !== selectedId) {
       // Only dispatch select event if not initial render (prevSelectedId was not null)
       const isInitialRender = prevSelectedId === null;
       prevSelectedId = selectedId;
-      selectedItem = itemsById.get(selectedId);
+      selectedItem = resolvedItem;
       if (!isInitialRender) {
         dispatch("select", { selectedId, selectedItem });
       }
+    } else if (resolvedItem !== undefined && resolvedItem !== selectedItem) {
+      selectedItem = resolvedItem;
     }
   }
 
