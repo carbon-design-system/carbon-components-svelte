@@ -208,7 +208,7 @@ You can provide a custom `shouldFilterItem` to change the filtering logic. See t
 
 ### Fuzzy filter
 
-Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. In this example, a simple fuzzy filter is used where each typed character must appear in order within the item text (for example, "ba" matches "Banana" and "Blackberry").
+Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. This example reuses the built-in `fuzzyMatch` util, exported from `carbon-components-svelte`, as the predicate. It matches items whose text contains the typed characters in order (for example, "bl" matches "Blueberry" and "Blackberry"). Only the `matched` boolean is used here; the `score` and `indices` it also returns are intended for ranked, highlighted search surfaces such as [SearchMenu](/components/SearchMenu).
 
 <FileSource src="/framed/ComboBox/TypeaheadCustomFilter" />
 
