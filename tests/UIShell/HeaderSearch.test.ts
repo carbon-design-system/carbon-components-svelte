@@ -54,6 +54,23 @@ describe("HeaderSearch", () => {
       );
     });
 
+    it("should label the input with labelText by default", () => {
+      render(HeaderSearchTest);
+
+      const label = screen.getByText("Search", { selector: "label" });
+      const input = screen.getByRole("textbox");
+      expect(label.getAttribute("for")).toBe(input.id);
+    });
+
+    it("should support a custom labelText", () => {
+      render(HeaderSearchTest, { props: { labelText: "Search the catalog" } });
+
+      const label = screen.getByText("Search the catalog", {
+        selector: "label",
+      });
+      expect(label.getAttribute("for")).toBe(screen.getByRole("textbox").id);
+    });
+
     it("should generate unique ids per instance to avoid collisions", () => {
       const { container: a } = render(HeaderSearchTest);
       const { container: b } = render(HeaderSearchTest);
