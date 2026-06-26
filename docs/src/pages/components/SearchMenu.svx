@@ -88,7 +88,7 @@ Fuzzy matching prefers a contiguous substring, ranking a prefix above a word bou
 
 ### Custom fuzzy options
 
-Import `fuzzyMatch` from `carbon-components-svelte/src/utils/fuzzyMatch` to reuse the built-in matcher with custom options. Pass an options object as the third argument to tune sensitivity: set `threshold` to a value between `0` and `1` to require a minimum match quality (`0`, the default, accepts any match; `0.5` requires a contiguous substring; `0.7` a word-boundary substring; and `0.9` a prefix). Set `caseSensitive` to `true` to match the exact case. Pass it to the `match` prop.
+Import `fuzzyMatch` from `carbon-components-svelte` to reuse the built-in matcher with custom options. Pass an options object as the third argument to tune sensitivity: set `threshold` to a value between `0` and `1` to require a minimum match quality (`0`, the default, accepts any match; `0.5` requires a contiguous substring; `0.7` a word-boundary substring; and `0.9` a prefix). Set `caseSensitive` to `true` to match the exact case. Pass it to the `match` prop.
 
 <FileSource src="/framed/SearchMenu/CustomFuzzyOptions" />
 
