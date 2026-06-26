@@ -120,6 +120,12 @@ Override the default slot to customize each result. The slot exposes `let:result
 
 <FileSource src="/framed/UIShell/HeaderSearchSlot" />
 
+### Customization
+
+Set `icon` to render a different trigger icon. Use `placeholder`, `labelText`, and `closeButtonLabelText` to localize the input placeholder, the assistive field label, and the clear button label.
+
+<FileSource src="/framed/UIShell/HeaderSearchCustom" />
+
 ## Utilities
 
 Add utilities to the header with header utilities. Compose [BadgeIndicator](/components/BadgeIndicator) in the badge slot on `HeaderGlobalAction`. Set `iconDescription` for screen readers.
