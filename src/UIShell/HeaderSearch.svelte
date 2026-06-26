@@ -24,7 +24,11 @@
    * @property {string} value
    * @property {number} selectedResultIndex
    * @property {Result} selectedResult
+   * @event {{ value: string }} submit
    * @slot {{ result: Result; index: number; selected: boolean; }}
+   * @slot {{}} menu
+   * @slot {{}} noResults
+   * @slot {{}} loading
    */
 
   /**
@@ -73,10 +77,45 @@
   /** Specify the label for the clear button. */
   export let closeButtonLabelText = "Clear search input";
 
-  import { createEventDispatcher, tick } from "svelte";
+  /**
+   * Set to `true` to filter `menu`-slot items by the search value using fuzzy
+   * matching. Requires the `menu` slot; ignored when using the `results` prop.
+   */
+  export let shouldFilter = true;
+
+  /**
+   * Override how the search value is matched against each `menu`-slot item's
+   * `text`. Receives the item `text` and the current search value, and returns
+   * whether the item `matched` along with the `indices` of characters to
+   * highlight. Defaults to fuzzy matching. Requires the `menu` slot.
+   * @type {(text: string, query: string) => { matched: boolean; indices?: number[] }}
+   */
+  export let match = fuzzyMatch;
+
+  /**
+   * Set to `true` to render a skeleton menu while results are loading.
+   * Override the placeholder rows with the `loading` slot. Requires the
+   * `menu` slot.
+   */
+  export let loading = false;
+
+  /** Number of skeleton rows while `loading`. Requires the `menu` slot. */
+  export let skeletonCount = 4;
+
+  /**
+   * Row density for the `menu` slot. Result text stays flush with the header
+   * input; smaller sizes shorten rows to fit more results.
+   * @type {"sm" | "lg" | "xl"}
+   */
+  export let size = "sm";
+
+  import { createEventDispatcher, setContext, tick } from "svelte";
+  import { writable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
+  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { fuzzyMatch } from "../utils/fuzzyMatch.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
@@ -88,12 +127,168 @@
 
   /** @type {null | HTMLDivElement} */
   let refSearch = null;
+  /** @type {null | HTMLElement} */
+  let menuRef = null;
   let prevActive;
+  // Escape closes the menu but leaves the search bar open.
+  let menuDismissed = false;
+
+  // `menu` slot shares SearchMenu context with SearchMenuItem/SearchMenuGroup.
+  $: richMenu = Boolean($$slots.menu);
+
+  const queryStore = writable("");
+  const shouldFilterStore = writable(shouldFilter);
+  const matchStore = writable(match);
+  const activeId = writable(/** @type {string | null} */ (null));
+  const hasPrimaryItemsStore = writable(false);
+
+  let itemIds = new Set();
+  let filterableIds = new Set();
+  let primaryItemIds = new Set();
+
+  $: queryStore.set(String(value ?? ""));
+  $: shouldFilterStore.set(shouldFilter);
+  $: matchStore.set(match);
+  $: hasPrimaryItemsStore.set(primaryItemIds.size > 0);
+
+  const SKELETON_WIDTHS = ["75%", "90%", "65%", "80%"];
+  $: skeletonWidths = Array.from(
+    { length: Math.max(0, skeletonCount) },
+    (_, i) => SKELETON_WIDTHS[i % SKELETON_WIDTHS.length],
+  );
+
+  $: itemCount = itemIds.size;
+  $: hasQuery = String(value ?? "").length > 0;
+  $: showNoResults =
+    richMenu &&
+    !loading &&
+    hasQuery &&
+    filterableIds.size === 0 &&
+    itemCount === 0 &&
+    $$slots.noResults;
+  $: richMenuVisible =
+    richMenu &&
+    active &&
+    !menuDismissed &&
+    (loading || itemCount > 0 || showNoResults);
+
+  setContext("carbon:SearchMenu", {
+    query: queryStore,
+    shouldFilter: shouldFilterStore,
+    match: matchStore,
+    activeId,
+    setActiveId(next) {
+      activeId.set(next);
+    },
+    selectItem(detail) {
+      value = detail.value ?? value;
+      dispatch("select", detail);
+      reset();
+      dispatch("close", { trigger: "select" });
+    },
+    hasPrimaryItems: hasPrimaryItemsStore,
+    registerItem(itemId, filterable, inDividerGroup = false) {
+      itemIds.add(itemId);
+      if (filterable) filterableIds.add(itemId);
+      else filterableIds.delete(itemId);
+      if (inDividerGroup) primaryItemIds.delete(itemId);
+      else primaryItemIds.add(itemId);
+      itemIds = itemIds;
+      filterableIds = filterableIds;
+      primaryItemIds = primaryItemIds;
+    },
+    unregisterItem(itemId) {
+      itemIds.delete(itemId);
+      filterableIds.delete(itemId);
+      primaryItemIds.delete(itemId);
+      itemIds = itemIds;
+      filterableIds = filterableIds;
+      primaryItemIds = primaryItemIds;
+    },
+  });
+
+  function getOptionElements() {
+    if (!menuRef) return [];
+    return Array.from(menuRef.querySelectorAll('[role="option"]')).filter(
+      (el) => el.getAttribute("aria-disabled") !== "true",
+    );
+  }
+
+  function moveActive(step) {
+    const els = getOptionElements();
+    if (els.length === 0) {
+      activeId.set(null);
+      return;
+    }
+    const current = els.findIndex((el) => el.id === $activeId);
+    let next = current + step;
+    if (next < 0) next = els.length - 1;
+    else if (next >= els.length) next = 0;
+    activeId.set(els[next].id);
+  }
+
+  function setActiveEdge(edge) {
+    const els = getOptionElements();
+    if (els.length === 0) return;
+    activeId.set(els[edge === "first" ? 0 : els.length - 1].id);
+  }
+
+  /** Keyboard navigation for the `menu` slot (`role="option"`). */
+  function handleRichKeydown(event) {
+    switch (event.key) {
+      case "ArrowDown":
+        event.preventDefault();
+        menuDismissed = false;
+        if (richMenuVisible) moveActive(1);
+        break;
+      case "ArrowUp":
+        if (!richMenuVisible) return;
+        event.preventDefault();
+        moveActive(-1);
+        break;
+      case "Home":
+        if (!richMenuVisible) return;
+        event.preventDefault();
+        setActiveEdge("first");
+        break;
+      case "End":
+        if (!richMenuVisible) return;
+        event.preventDefault();
+        setActiveEdge("last");
+        break;
+      case "Enter": {
+        const active = $activeId
+          ? getOptionElements().find((el) => el.id === $activeId)
+          : null;
+        if (richMenuVisible && active) {
+          event.preventDefault();
+          active.click();
+        } else {
+          dispatch("submit", { value });
+        }
+        break;
+      }
+      case "Escape":
+        if (richMenuVisible) {
+          // Close the menu but keep the bar active and the value intact.
+          menuDismissed = true;
+          activeId.set(null);
+        } else if (value === "") {
+          active = false;
+          dispatch("close", { trigger: "escape-key" });
+        } else {
+          value = "";
+        }
+        break;
+    }
+  }
 
   function reset() {
     active = false;
     value = "";
     selectedResultIndex = 0;
+    menuDismissed = false;
+    activeId.set(null);
   }
 
   function selectResult() {
@@ -118,8 +313,16 @@
   function handleOutsideMouseup(event) {
     if (active && isOutsideClick(event, refSearch)) {
       active = false;
+      activeId.set(null);
+      menuDismissed = false;
       dispatch("close", { trigger: "outside-click" });
     }
+  }
+
+  // Clicks on group headers or padding blur the input; refocus so only item
+  // selection closes the menu.
+  function handleMenuPointerDown() {
+    ref?.focus();
   }
 </script>
 
@@ -162,16 +365,25 @@
       class:bx--header__search--active={active}
       {...$$restProps}
       id={inputId}
+      role={richMenu ? "combobox" : undefined}
       aria-autocomplete="list"
       aria-controls={menuId}
-      aria-activedescendant={selectedId}
+      aria-expanded={richMenu ? richMenuVisible : undefined}
+      aria-activedescendant={richMenu ? ($activeId ?? undefined) : selectedId}
       bind:value
       on:change
       on:input
+      on:input={() => {
+        if (richMenu) menuDismissed = false;
+      }}
       on:focus
       on:blur
       on:keydown
       on:keydown={(event) => {
+        if (richMenu) {
+          handleRichKeydown(event);
+          return;
+        }
         switch (event.key) {
           case "Enter":
             selectResult();
@@ -225,7 +437,37 @@
     {/if}
   </div>
 
-  {#if active && results.length > 0}
+  {#if richMenu && active}
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div
+      bind:this={menuRef}
+      id={menuId}
+      role="listbox"
+      tabindex="-1"
+      aria-label="Search"
+      aria-busy={loading || undefined}
+      hidden={!richMenuVisible}
+      class="bx--header__search-menu-rich bx--header__search-menu-rich--{size}"
+      on:mousedown={handleMenuPointerDown}
+    >
+      {#if loading}
+        <slot name="loading">
+          {#each skeletonWidths as width, i (i)}
+            <div class="bx--search-menu-item bx--search-menu-item--skeleton">
+              <SkeletonText {width} />
+            </div>
+          {/each}
+        </slot>
+      {:else}
+        <slot name="menu" />
+        {#if showNoResults}
+          <div class="bx--search-menu__no-results">
+            <slot name="noResults" />
+          </div>
+        {/if}
+      {/if}
+    </div>
+  {:else if active && results.length > 0}
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       aria-labelledby={labelId}
