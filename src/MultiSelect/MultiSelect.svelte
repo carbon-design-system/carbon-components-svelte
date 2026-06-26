@@ -587,6 +587,7 @@
   $: if (items !== prevItemsRef) {
     prevItemsRef = items;
     sortedItems = sort();
+    prevChecked = sortedItems.filter((item) => item.checked);
   }
   $: if (
     selectedIds &&
