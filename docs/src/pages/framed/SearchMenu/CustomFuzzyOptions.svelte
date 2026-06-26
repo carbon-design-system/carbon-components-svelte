@@ -1,6 +1,9 @@
 <script>
-  import { SearchMenu, SearchMenuItem } from "carbon-components-svelte";
-  import { fuzzyMatch } from "carbon-components-svelte/src/utils/fuzzyMatch";
+  import {
+    fuzzyMatch,
+    SearchMenu,
+    SearchMenuItem,
+  } from "carbon-components-svelte";
 
   let value = "Data";
 
