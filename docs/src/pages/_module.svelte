@@ -11,17 +11,23 @@
     HeaderPanelLinks,
     HeaderSearch,
     HeaderUtilities,
+    SearchMenuGroup,
+    SearchMenuItem,
     SideNav,
     SideNavDivider,
     SideNavItems,
     SideNavLink,
     SkipToContent,
-    Stack,
-    Tag,
     Text,
     Theme,
   } from "carbon-components-svelte";
   import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
+  import {
+    fuzzyMatch,
+    highlightSegments,
+  } from "carbon-components-svelte/src/utils/fuzzyMatch.js";
+  import Code from "carbon-icons-svelte/lib/Code.svelte";
+  import Document from "carbon-icons-svelte/lib/Document.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import MiniSearch from "minisearch";
@@ -83,6 +89,33 @@
         isComponent: Boolean(r.isComponent),
       }),
     );
+
+  // Split MiniSearch hits into two groups. MiniSearch already ranks and filters,
+  // so pass shouldFilter={false} and let the default matcher highlight labels.
+  $: componentHits = results.filter((r) => r.isComponent);
+  $: sectionHits = results.filter((r) => !r.isComponent);
+
+  /** Build highlighted label HTML from `segments`. */
+  function toHtml(segments: { text: string; match: boolean }[]) {
+    return segments
+      .map((s) => {
+        const escaped = s.text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+        return s.match
+          ? `<strong class="bx--search-menu-item__highlight">${escaped}</strong>`
+          : escaped;
+      })
+      .join("");
+  }
+
+  /** Highlight the current query in arbitrary text (e.g. a description). */
+  function highlightHtml(text: string | undefined) {
+    if (!text) return "";
+    const { matched, indices } = fuzzyMatch(text, value);
+    return toHtml(highlightSegments(text, matched ? (indices ?? []) : []));
+  }
 
   let isOpen = false;
   let isSideNavOpen = true;
@@ -192,10 +225,12 @@
         bind:active
         placeholder="Search"
         spellcheck="false"
-        {results}
-        let:result
+        shouldFilter={false}
         on:select={(e) => {
-          const href = e.detail.selectedResult.href;
+          // Selecting a link item would navigate natively; intercept it and
+          // route through Routify for SPA navigation instead.
+          e.detail.event?.preventDefault();
+          const href = e.detail.item.href;
           // Hash must not be part of the path: getChainTo treats "/" segments literally,
           // so "Toolbar#slug" would not match the Toolbar route node.
           const u = new URL(href, window.location.origin);
@@ -204,22 +239,39 @@
           routifyNav.getNavigate()?.(path, hash ? { "#": hash } : undefined);
         }}
       >
-        {@const hit = result as ModuleSearchResult}
-        <Stack
-          gap={3}
-          orientation="horizontal"
-          style="display: flex; align-items: center;"
-        >
-          {hit.text}
-          {#if hit.description && !hit.isComponent}
-            <span class="bx--header-search-menu-description">
-              {hit.description}
-            </span>
+        <svelte:fragment slot="menu">
+          {#if componentHits.length}
+            <SearchMenuGroup label="Components">
+              {#each componentHits as hit (hit.id)}
+                <SearchMenuItem text={hit.text} href={hit.href} icon={Code} />
+              {/each}
+            </SearchMenuGroup>
           {/if}
-          {#if hit.isComponent}
-            <Tag size="sm" type="blue" style="margin: 0">Component</Tag>
+
+          {#if sectionHits.length}
+            <SearchMenuGroup label="Sections">
+              {#each sectionHits as hit (hit.id)}
+                <SearchMenuItem
+                  text={hit.text}
+                  href={hit.href}
+                  icon={Document}
+                  let:segments
+                >
+                  <span class="docs-search-hit"
+                    ><span>{@html toHtml(segments)}</span>
+                    {#if hit.description}
+                      <span class="bx--header-search-menu-description"
+                        >{@html highlightHtml(hit.description)}</span
+                      >
+                    {/if}</span
+                  >
+                </SearchMenuItem>
+              {/each}
+            </SearchMenuGroup>
           {/if}
-        </Stack>
+        </svelte:fragment>
+
+        <svelte:fragment slot="noResults">No results</svelte:fragment>
       </HeaderSearch>
       <HeaderActionLink
         icon={LogoGithub}
@@ -369,6 +421,19 @@
     .platform-name-full {
       display: none;
     }
+  }
+
+  :global(.docs-search-hit) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  :global(.docs-search-hit > span) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   :global(.bx--side-nav__items .bx--side-nav__divider) {
