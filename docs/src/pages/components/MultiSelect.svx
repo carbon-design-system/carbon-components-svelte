@@ -150,6 +150,12 @@ Enable filtering by setting `filterable` to `true`. This example includes a plac
     {id: "2", text: "Fax"}]}"
   />
 
+### Fuzzy filter
+
+Provide a custom `filterItem` to override the default substring matching. This example reuses the built-in `fuzzyMatch` util, exported from `carbon-components-svelte`, as the predicate. It matches items whose text contains the typed characters in order (for example, "bl" matches "Blueberry" and "Blackberry"). Only the `matched` boolean is used here; the `score` and `indices` it also returns are intended for ranked, highlighted search surfaces such as [SearchMenu](/components/SearchMenu).
+
+<FileSource src="/framed/MultiSelect/MultiSelectFuzzyFilter" />
+
 ## Multiple multi-selects
 
 Manage multiple dropdowns in a form with coordinated state.

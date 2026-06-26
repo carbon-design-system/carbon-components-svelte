@@ -7,6 +7,7 @@ import {
 } from "@testing-library/svelte";
 import type MultiSelectComponent from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzyMatch";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
@@ -596,6 +597,26 @@ describe("MultiSelect", () => {
           { id: "0", text: "Slack", checked: false },
         ],
       });
+    });
+
+    it("supports fuzzyMatch as filterItem", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          filterItem: (item: MultiSelectItem, value: string) =>
+            fuzzyMatch(item.text, value).matched,
+        },
+      });
+
+      const input = screen.getByRole("combobox");
+      await user.click(input);
+      // Subsequence match: "sk" matches "Slack" but no substring would.
+      await user.type(input, "sk");
+
+      expect(screen.getByText("Slack")).toBeInTheDocument();
+      expect(screen.queryByText("Email")).not.toBeInTheDocument();
+      expect(screen.queryByText("Fax")).not.toBeInTheDocument();
     });
 
     it("does not clear bound `value` on initial render when not filterable", async () => {
