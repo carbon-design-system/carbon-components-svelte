@@ -67,6 +67,9 @@
   /** Specify the `placeholder` attribute of the search input. */
   export let placeholder = "Search...";
 
+  /** Specify the text for the assistive label associated with the search input. */
+  export let labelText = "Search";
+
   import { createEventDispatcher, tick } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
@@ -125,7 +128,7 @@
   class:bx--header__search--active={active}
 >
   <label class:bx--header__search-label={true} for={inputId} id={labelId}
-    >Search</label
+    >{labelText}</label
   >
   <div
     class:bx--header__search-menu={true}
