@@ -3,6 +3,7 @@ import type {
   DataTable as BarrelDataTable,
   breakpointObserver,
   breakpoints,
+  fuzzyMatch,
 } from "carbon-components-svelte";
 import type breakpointObserverDefault from "carbon-components-svelte/src/Breakpoint/breakpointObserver.js";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
@@ -33,6 +34,7 @@ type _Button = Button;
 type _CarbonTheme = CarbonTheme;
 type _DataTable = DataTable;
 type _DataTableRow = DataTableRow<{ id: string; name: string }>;
+type _FuzzyMatch = ReturnType<typeof fuzzyMatch>;
 type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
 type _Themes = typeof themes;
