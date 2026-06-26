@@ -1,5 +1,11 @@
 <script>
-  import { ComboBox, Select, SelectItem } from "carbon-components-svelte";
+  import {
+    ComboBox,
+    Dropdown,
+    MultiSelect,
+    Select,
+    SelectItem,
+  } from "carbon-components-svelte";
 
   // orwell is not the first option; native <select> would otherwise mask a reset.
   // make() returns a new array reference, like an async refetch.
@@ -28,20 +34,33 @@
   let selSwapItems = make();
   let selSwapSelected = "orwell";
 
+  let msSwapItems = make();
+  let msSwapSelectedIds = ["orwell"];
+
+  let msFillItems = [];
+  let msFillSelectedIds = ["orwell"];
+
+  let dropFillItems = [];
+  let dropFillSelectedId = "orwell";
+
   function load() {
     cbFillItems = make();
     selFillItems = make();
+    msFillItems = make();
+    dropFillItems = make();
   }
 
   function reload() {
     cbSwapItems = make();
     selSwapItems = make();
+    msSwapItems = make();
   }
 
   function clearFill() {
     cbFillItems = [];
     cbFillValue = "";
     selFillItems = [];
+    msFillItems = [];
   }
 </script>
 
@@ -101,3 +120,33 @@
   {/each}
 </Select>
 <p data-testid="sel-swap-selected">{selSwapSelected}</p>
+
+<!-- Wrapper carries data-testid; MultiSelect does not spread $$restProps. -->
+<div data-testid="ms-swap">
+  <MultiSelect
+    labelText="MultiSelect swap"
+    label="Choose authors"
+    items={msSwapItems}
+    bind:selectedIds={msSwapSelectedIds}
+  />
+</div>
+<p data-testid="ms-swap-ids">{msSwapSelectedIds.join(",")}</p>
+
+<div data-testid="ms-fill">
+  <MultiSelect
+    labelText="MultiSelect fill"
+    label="Choose authors"
+    items={msFillItems}
+    bind:selectedIds={msFillSelectedIds}
+  />
+</div>
+<p data-testid="ms-fill-ids">{msFillSelectedIds.join(",")}</p>
+
+<div data-testid="drop-fill">
+  <Dropdown
+    titleText="Dropdown fill"
+    items={dropFillItems}
+    bind:selectedId={dropFillSelectedId}
+  />
+</div>
+<p data-testid="drop-fill-id">{dropFillSelectedId}</p>

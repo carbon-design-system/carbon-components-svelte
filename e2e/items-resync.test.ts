@@ -60,4 +60,42 @@ test.describe("Items resync — display derived from value + items", () => {
     await expect(page.getByTestId("sel-swap-selected")).toHaveText("orwell");
     await expect(page.getByTestId("sel-swap")).toHaveValue("orwell");
   });
+
+  test("MultiSelect keeps selection after items ref swap (control)", async ({
+    page,
+  }) => {
+    await expect(page.getByTestId("ms-swap")).toContainText("1");
+    await page.getByTestId("reload").click();
+    await expect(page.getByTestId("ms-swap-ids")).toHaveText("orwell");
+    await expect(page.getByTestId("ms-swap")).toContainText("1");
+  });
+
+  test("MultiSelect keeps selection through clear + reload cycle", async ({
+    page,
+  }) => {
+    // Items clear dropped checked to 0; afterUpdate wrote selectedIds = [] every other cycle.
+    await page.getByTestId("load").click();
+    await expect(page.getByTestId("ms-fill-ids")).toHaveText("orwell");
+    await expect(page.getByTestId("ms-fill")).toContainText("1");
+
+    await page.getByTestId("clear-fill").click();
+    await expect(page.getByTestId("ms-fill-ids")).toHaveText("orwell");
+
+    await page.getByTestId("load").click();
+    await expect(page.getByTestId("ms-fill-ids")).toHaveText("orwell");
+    await expect(page.getByTestId("ms-fill")).toContainText("1");
+
+    await page.getByTestId("clear-fill").click();
+    await page.getByTestId("load").click();
+    await expect(page.getByTestId("ms-fill-ids")).toHaveText("orwell");
+    await expect(page.getByTestId("ms-fill")).toContainText("1");
+  });
+
+  test("Dropdown shows selection after async fill (reference)", async ({
+    page,
+  }) => {
+    await page.getByTestId("load").click();
+    await expect(page.getByTestId("drop-fill-id")).toHaveText("orwell");
+    await expect(page.getByTestId("drop-fill")).toContainText("George Orwell");
+  });
 });
