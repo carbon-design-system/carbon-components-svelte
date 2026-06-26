@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import ComboBoxReal from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzyMatch";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
@@ -784,6 +785,27 @@ describe("ComboBox", () => {
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(1);
     expect(options[0]).toHaveTextContent("Banana");
+  });
+
+  it("should support fuzzyMatch as shouldFilterItem", async () => {
+    render(ComboBoxCustom, {
+      props: {
+        items: [
+          { id: "1", text: "Apple" },
+          { id: "2", text: "Blueberry" },
+          { id: "3", text: "Blackberry" },
+        ],
+        shouldFilterItem: (item: { text: string }, value: string) =>
+          fuzzyMatch(item.text, value).matched,
+      },
+    });
+    const input = getInput();
+    await user.click(input);
+    await user.type(input, "b");
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(2);
+    expect(options[0]).toHaveTextContent("Blueberry");
+    expect(options[1]).toHaveTextContent("Blackberry");
   });
 
   it("should use custom itemToString function", async () => {

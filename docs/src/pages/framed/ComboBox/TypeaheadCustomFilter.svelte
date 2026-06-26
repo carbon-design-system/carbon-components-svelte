@@ -1,24 +1,13 @@
 <script>
-  import { ComboBox } from "carbon-components-svelte";
+  import { ComboBox, fuzzyMatch } from "carbon-components-svelte";
 
   let selectedId = undefined;
 
-  /**
-   * Simple fuzzy filter: each character in the query
-   * must appear in order within the item text.
-   * e.g., "bl" matches "Blueberry" and "Blackberry".
-   */
-  function shouldFilterItem(item, value) {
-    if (!value) return true;
-    const text = item.text.toLowerCase();
-    let j = 0;
-    for (const char of value.toLowerCase()) {
-      j = text.indexOf(char, j);
-      if (j === -1) return false;
-      j++;
-    }
-    return true;
-  }
+  // Reuse the built-in fuzzy matcher as the filter predicate. Each typed
+  // character must appear in order within the item text, so "bl" matches
+  // "Blueberry" and "Blackberry". Only the `matched` boolean is used here.
+  const shouldFilterItem = (item, value) =>
+    fuzzyMatch(item.text, value).matched;
 </script>
 
 <ComboBox
