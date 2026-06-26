@@ -126,6 +126,16 @@ Set `icon` to render a different trigger icon. Use `placeholder`, `labelText`, a
 
 <FileSource src="/framed/UIShell/HeaderSearchCustom" />
 
+### Menu slot
+
+Use the `menu` slot to render [SearchMenu](/components/SearchMenu) items in the header. Compose `SearchMenuGroup` and `SearchMenuItem` for grouped, fuzzy-highlighted results with icons, persistent footer actions, and a `loading` skeleton state.
+
+When the `menu` slot is present, it replaces the `results` prop. Keyboard navigation uses `role="option"`. Press Enter with no selection to dispatch `submit`. Use the `noResults` slot when nothing matches. The `results` prop still works if you do not use `menu`.
+
+Set `size` to `"sm"` (default), `"lg"`, or `"xl"` to control row density. Result text stays flush with the header input at every size. Pass `icon` or `iconRight` to each `SearchMenuItem`, or use the default slot with `let:segments` to highlight the query in secondary text like a description.
+
+<FileSource src="/framed/UIShell/HeaderSearchMenu" />
+
 ## Utilities
 
 Add utilities to the header with header utilities. Compose [BadgeIndicator](/components/BadgeIndicator) in the badge slot on `HeaderGlobalAction`. Set `iconDescription` for screen readers.
