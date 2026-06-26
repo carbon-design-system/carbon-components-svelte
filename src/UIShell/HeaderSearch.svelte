@@ -70,6 +70,9 @@
   /** Specify the text for the assistive label associated with the search input. */
   export let labelText = "Search";
 
+  /** Specify the label for the clear button. */
+  export let closeButtonLabelText = "Clear search input";
+
   import { createEventDispatcher, tick } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
@@ -208,7 +211,7 @@
     {#if active}
       <button
         type="button"
-        aria-label="Clear search"
+        aria-label={closeButtonLabelText}
         tabindex="0"
         class:bx--header__action={true}
         class:bx--header-search-button={true}
@@ -217,7 +220,7 @@
           dispatch("clear");
         }}
       >
-        <Close size={20} title="Close" />
+        <Close size={20} title={closeButtonLabelText} />
       </button>
     {/if}
   </div>
