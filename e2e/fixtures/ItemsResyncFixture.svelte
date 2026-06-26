@@ -1,5 +1,5 @@
 <script>
-  import { ComboBox } from "carbon-components-svelte";
+  import { ComboBox, Select, SelectItem } from "carbon-components-svelte";
 
   // orwell is not the first option; native <select> would otherwise mask a reset.
   // make() returns a new array reference, like an async refetch.
@@ -22,17 +22,26 @@
   let cbSwapSelectedId = "orwell";
   let cbSwapValue = "George Orwell";
 
+  let selFillItems = [];
+  let selFillSelected = "orwell";
+
+  let selSwapItems = make();
+  let selSwapSelected = "orwell";
+
   function load() {
     cbFillItems = make();
+    selFillItems = make();
   }
 
   function reload() {
     cbSwapItems = make();
+    selSwapItems = make();
   }
 
   function clearFill() {
     cbFillItems = [];
     cbFillValue = "";
+    selFillItems = [];
   }
 </script>
 
@@ -70,3 +79,25 @@
   bind:value={cbSwapValue}
 />
 <p data-testid="cb-swap-id">{cbSwapSelectedId}</p>
+
+<Select
+  data-testid="sel-fill"
+  labelText="Select fill"
+  bind:selected={selFillSelected}
+>
+  {#each selFillItems as item (item.id)}
+    <SelectItem value={item.id} text={item.text} />
+  {/each}
+</Select>
+<p data-testid="sel-fill-selected">{selFillSelected}</p>
+
+<Select
+  data-testid="sel-swap"
+  labelText="Select swap"
+  bind:selected={selSwapSelected}
+>
+  {#each selSwapItems as item (item.id)}
+    <SelectItem value={item.id} text={item.text} />
+  {/each}
+</Select>
+<p data-testid="sel-swap-selected">{selSwapSelected}</p>

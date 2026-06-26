@@ -84,6 +84,7 @@
     createEventDispatcher,
     getContext,
     setContext,
+    tick,
   } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
@@ -124,6 +125,7 @@
   setContext("carbon:Select", {
     selectedValue,
     setDefaultValue,
+    syncNativeSelectValue,
   });
 
   function handleChange(event) {
@@ -167,10 +169,22 @@
     prevSelected = selected;
   });
 
+  // Options mounted after selected is set do not update the native value.
+  function syncNativeSelectValue() {
+    tick().then(() => {
+      if (!ref) return;
+      const nextValue = $selectedValue == null ? "" : String($selectedValue);
+      if (ref.value !== nextValue) ref.value = nextValue;
+    });
+  }
+
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
   $: helperId = `helper-${id}`;
-  $: selectedValue.set(selected ?? $defaultValue);
+  $: {
+    selectedValue.set(selected ?? $defaultValue);
+    syncNativeSelectValue();
+  }
   // Invalid/warn states are suppressed when the select is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
