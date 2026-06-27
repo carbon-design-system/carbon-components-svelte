@@ -727,6 +727,24 @@
             // control. Tab is not prevented, so focus still advances normally.
             const accepted = acceptTypeaheadSuggestion();
             close(accepted ? "select" : "escape-key");
+          } else if (
+            typeahead &&
+            (event.key === "ArrowRight" || event.key === "End") &&
+            ref &&
+            ref.selectionStart !== ref.selectionEnd &&
+            ref.selectionEnd === ref.value.length
+          ) {
+            // APG inline-both "accept in place": when the ghost completion is
+            // shown (a trailing selection extends to the end of the input),
+            // ArrowRight/End commits the displayed text into the editable value
+            // and collapses the cursor to the end, keeping focus and the open
+            // menu. Unlike Enter/Tab it does not select an item or close, and it
+            // preserves the user's casing so continued typing still filters.
+            event.preventDefault();
+            value = ref.value;
+            tick().then(() => {
+              ref.setSelectionRange(value.length, value.length);
+            });
           } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             const step = event.key === "ArrowDown" ? 1 : -1;
             if (event.altKey) {
