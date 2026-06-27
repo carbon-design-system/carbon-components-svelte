@@ -5,9 +5,9 @@
 
   /**
    * Specify the size of the link.
-   * @type {"sm" | "lg"}
+   * @type {"sm" | "md" | "lg"}
    */
-  export let size = undefined;
+  export let size = "md";
 
   /**
    * Specify the href value.
