@@ -12,15 +12,6 @@
   let locked = false;
   let message = "";
 
-  function onSelect(event) {
-    if (event.detail.value === "coming-soon") {
-      event.preventDefault();
-      message = "That command isn't available yet.";
-    } else {
-      message = `Ran: ${event.detail.item.text}`;
-    }
-  }
-
   function onClose(event) {
     if (locked) {
       event.preventDefault();
@@ -36,17 +27,21 @@
   <p style="margin-top: var(--cds-spacing-05)">{message}</p>
 {/if}
 
-<CommandPalette
-  bind:open
-  triggerKeys={[]}
-  on:select={onSelect}
-  on:close={onClose}
->
-  <CommandPaletteItem id="new-doc" text="Create new document" icon={Add} />
+<CommandPalette bind:open triggerKeys={[]} on:close={onClose}>
+  <CommandPaletteItem
+    id="new-doc"
+    text="Create new document"
+    icon={Add}
+    on:select={() => (message = "Ran: Create new document")}
+  />
   <CommandPaletteItem
     id="coming-soon"
     text="Export workspace"
     description="Coming soon"
     icon={Locked}
+    on:select={(e) => {
+      e.preventDefault();
+      message = "That command isn't available yet.";
+    }}
   />
 </CommandPalette>

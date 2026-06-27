@@ -1,5 +1,6 @@
 <script>
   /**
+   * @event {Event} select The "select" event is cancelable. Call `event.preventDefault()` to keep the palette open and skip default behavior (including `href` navigation).
    * @slot {{ query: string; matched: boolean; indices: number[]; segments: Array<{ text: string; match: boolean }>; active: boolean }}
    */
 
@@ -66,10 +67,11 @@
   /** Set an id for the item element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
-  import { getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import { highlightSegments } from "../utils/fuzzyMatch.js";
 
+  const dispatch = createEventDispatcher();
   const menu = getContext("carbon:CommandPalette");
   const group = getContext("carbon:CommandPaletteGroup");
 
@@ -172,22 +174,9 @@
       event?.stopPropagation?.();
       return;
     }
-    const detail = {
-      value: value ?? text ?? "",
-      item: {
-        text,
-        value: value ?? text,
-        href,
-        description,
-        keywords,
-        shortcut,
-        shortcutKeys,
-        selectionMode,
-        selected,
-      },
-      event,
-    };
-    menu.selectItem(detail, closeTrigger);
+    const shouldContinue = dispatch("select", event, { cancelable: true });
+    if (!shouldContinue) return;
+    menu.completeSelection({ href, closeTrigger });
   }
 
   $: if (highlighted && ref && !ref.matches(":hover")) {

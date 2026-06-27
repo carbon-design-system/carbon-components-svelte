@@ -1,6 +1,5 @@
 <script>
   /**
-   * @event {{ value: string; item: { text?: string; value?: string; href?: string; description?: string; keywords?: string[]; shortcut?: string[]; shortcutKeys?: string | string[]; selectionMode?: string; selected?: boolean }; event: Event }} select The "select" event is cancelable. Call `event.preventDefault()` to keep the palette open and skip default behavior (including `href` navigation). Handle custom command logic in `on:select`.
    * @event {null} open
    * @event {{ trigger: "escape-key" | "outside-click" | "select" | "trigger-key" | "shortcut-key" }} close The "close" event is cancelable. Call `event.preventDefault()` to prevent the palette from closing.
    * @slot {{ value: string; }} empty
@@ -201,11 +200,8 @@
       activeId = next;
       activeIdStore.set(next);
     },
-    selectItem(detail, closeTrigger) {
-      if (closeTrigger === undefined) closeTrigger = "select";
-      const shouldContinue = dispatch("select", detail, { cancelable: true });
-      if (!shouldContinue) return;
-      if (detail.item.href) navigate(detail.item.href);
+    completeSelection({ href, closeTrigger = "select" }) {
+      if (href) navigate(href);
       if (!preventCloseOnSelect) close(closeTrigger);
     },
     registerItem(itemId, meta) {

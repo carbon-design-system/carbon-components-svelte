@@ -27,11 +27,15 @@
   {loading}
   {size}
   triggerKeys={[]}
-  on:select={(e) => (selected = e.detail.item.text ?? "")}
   on:close={(e) => (closeTrigger = e.detail.trigger)}
 >
   {#each items as item (item.id)}
-    <CommandPaletteItem id={item.id} text={item.text} value={item.id} />
+    <CommandPaletteItem
+      id={item.id}
+      text={item.text}
+      value={item.id}
+      on:select={() => (selected = item.text)}
+    />
   {/each}
 </CommandPalette>
 

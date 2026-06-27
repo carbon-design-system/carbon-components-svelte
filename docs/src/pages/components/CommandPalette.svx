@@ -182,13 +182,13 @@ While the palette is open, command shortcuts run matching **filtered, non-disabl
 
 `shortcut` renders hint badges and is parsed into combos when `shortcutKeys` is not set. Symbols like <DocKbd label="⌘" /> map to `meta` (and `ctrl` on Windows, same as `triggerKeys`). Use `shortcutKeys` for explicit bindings when display text cannot parse, e.g. `shortcutKeys="meta+,"`.
 
-A shortcut press highlights the row, fires `select`, then navigates when `href` is set (unless `preventCloseOnSelect` or `event.preventDefault()` on `select`). Handle custom actions in `on:select`. The `close` event trigger is `"shortcut-key"`.
+A shortcut press highlights the row, fires `select` on the matching `CommandPaletteItem`, then navigates when `href` is set (unless `preventCloseOnSelect` or `event.preventDefault()` on the item's `select`). Handle custom actions with `on:select` on each item. The palette `close` event trigger is `"shortcut-key"`.
 
 <FileSource src="/framed/CommandPalette/CommandShortcuts" />
 
 ## Preventing default
 
-`select` and `close` are cancelable. Call `event.preventDefault()` in `on:select` to block the action and keep the palette open (say, when a command is unavailable). Call it in `on:close` to stop the palette from closing while async work is still running.
+`CommandPaletteItem` `select` and palette `close` are cancelable. Call `event.preventDefault()` in an item's `on:select` to block the action and keep the palette open (say, when a command is unavailable). Call it in `on:close` to stop the palette from closing while async work is still running.
 
 <FileSource src="/framed/CommandPalette/PreventDefault" />
 

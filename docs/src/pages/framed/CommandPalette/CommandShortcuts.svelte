@@ -24,20 +24,13 @@
   </p>
 {/if}
 
-<CommandPalette
-  bind:open
-  triggerKeys={[]}
-  on:select={(e) => {
-    const text = e.detail.item.text;
-    if (text === "Create document") lastAction = "Created document";
-    else if (text === "Open settings") lastAction = "Opened settings";
-  }}
->
+<CommandPalette bind:open triggerKeys={[]}>
   <CommandPaletteItem
     id="new-doc"
     text="Create document"
     icon={Add}
     shortcut={["⌘", "N"]}
+    on:select={() => (lastAction = "Created document")}
   />
   <CommandPaletteItem
     id="settings"
@@ -45,5 +38,6 @@
     icon={Settings}
     shortcut={["⌘", ","]}
     shortcutKeys="meta+,"
+    on:select={() => (lastAction = "Opened settings")}
   />
 </CommandPalette>
