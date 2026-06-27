@@ -1588,6 +1588,28 @@ describe("ComboBox", () => {
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
+    it("should not inline-complete when the top match is not a prefix", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          // The default fixture uses a contains filter, so "ri" matches
+          // "Apricot" even though it is not a prefix of the typed text.
+          items: [
+            { id: "1", text: "Apricot", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "ri");
+
+      // No nonsense completion ("riricot"); the dropdown still filters.
+      expect(input).toHaveValue("ri");
+      expect(screen.getByRole("option")).toHaveTextContent("Apricot");
+    });
+
     it('should set aria-autocomplete to "list" without typeahead', () => {
       render(ComboBox, { props: { typeahead: false } });
       expect(getInput()).toHaveAttribute("aria-autocomplete", "list");
