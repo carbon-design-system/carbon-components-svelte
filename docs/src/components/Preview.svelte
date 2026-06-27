@@ -5,7 +5,7 @@
   export let framed = false;
 
   import { url } from "@roxi/routify";
-  import { Button, CodeSnippet, Stack } from "carbon-components-svelte";
+  import { Button, CodeSnippet } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import copy from "clipboard-copy";
   import { theme } from "../store";
@@ -17,30 +17,17 @@
 <div class="preview">
   {#if framed}
     <div class="framed-header">
-      <Stack
-        orientation="horizontal"
-        gap={2}
-        align="center"
+      <Button
+        kind="ghost"
+        target="_blank"
+        size="small"
+        href={resolvedSrc}
+        icon={Launch}
+        iconDescription="Isolated preview"
+        tooltipPosition="top"
+        tooltipAlignment="end"
         style="margin-left: auto;"
-      >
-        <div
-          class="iframe-label bx--type-label-01 bx--type-text-secondary"
-          aria-hidden="true"
-          style="user-select: none"
-        >
-          Isolated preview
-        </div>
-        <Button
-          kind="ghost"
-          target="_blank"
-          size="small"
-          href={resolvedSrc}
-          icon={Launch}
-          iconDescription="New tab"
-          tooltipPosition="top"
-          tooltipAlignment="end"
-        > </Button>
-      </Stack>
+      > </Button>
     </div>
   {/if}
   <div class="preview-viewer" class:framed>
@@ -112,12 +99,6 @@
   .framed-header {
     display: flex;
     align-items: center;
-  }
-
-  @media (max-width: 580px) {
-    .iframe-label {
-      display: none;
-    }
   }
 
   iframe {
