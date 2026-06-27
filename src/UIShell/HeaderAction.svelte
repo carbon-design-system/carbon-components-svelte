@@ -61,11 +61,12 @@
   export let ref = null;
 
   /**
-   * Customize the panel transition (i.event., `transition:slide`).
-   * Set to `false` to disable the transition.
+   * Customize the panel transition (e.g., `transition:slide`).
+   * The panel does not animate by default; provide slide
+   * params (e.g., `{ duration: 200 }`) to enable the transition.
    * @type {false | import("svelte/transition").SlideParams}
    */
-  export let transition = { duration: 200 };
+  export let transition = false;
 
   /** Set to `true` to prevent the panel from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
