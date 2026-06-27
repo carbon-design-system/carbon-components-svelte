@@ -91,6 +91,13 @@
   </Link>
 </div>
 
+<!-- Muted link -->
+<div data-testid="link-muted">
+  <Link muted inline href="https://www.carbondesignsystem.com/">
+    Carbon Design System
+  </Link>
+</div>
+
 <!-- Visited link -->
 <div data-testid="link-visited">
   <Link visited href="https://www.carbondesignsystem.com/">

@@ -124,6 +124,15 @@ describe("Link", () => {
     expect(link).toHaveAttribute("role", "link");
   });
 
+  it("supports muted variant", () => {
+    render(Link);
+    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
+    const link = links.find((l) => l.classList.contains("bx--link--muted"));
+    assert(link);
+
+    expect(link).toHaveClass("bx--link--muted");
+  });
+
   it("supports visited state", () => {
     render(Link);
     const links = screen.getAllByRole("link", { name: "Carbon Design System" });

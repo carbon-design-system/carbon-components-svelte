@@ -40,4 +40,17 @@ test.describe("Link icon scaling", () => {
     expect(await iconGap(page, "link-md")).toBeCloseTo(4, 0);
     expect(await iconGap(page, "link-lg")).toBeCloseTo(8, 0);
   });
+
+  function color(page: Page, testId: string) {
+    return page
+      .getByTestId(testId)
+      .evaluate((el) => getComputedStyle(el).color);
+  }
+
+  test("muted link inherits the parent text color", async ({ page }) => {
+    // Parent paragraph sets color: rgb(10, 20, 30).
+    expect(await color(page, "link-muted")).toBe("rgb(10, 20, 30)");
+    // A non-muted link keeps Carbon's link color.
+    expect(await color(page, "link-default")).not.toBe("rgb(10, 20, 30)");
+  });
 });
