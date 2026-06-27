@@ -487,13 +487,23 @@
   $: itemsToRender = virtualState.itemsToRender;
 
   $: if (typeahead) {
+    const topItemText = filteredItems[0] ? itemToString(filteredItems[0]) : "";
+    // Inline completion only makes sense when the top match starts with the
+    // typed text. A custom (fuzzy/contains) filter can surface items that do
+    // not, where appending the untyped tail would produce a nonsense value
+    // (typing "api" against "Apricot" yields "apiicot"). Skip it in that case.
+    const isPrefixMatch = topItemText
+      .toLowerCase()
+      .startsWith(value.toLowerCase());
     const showNewSuggestion =
-      value.length > prevInputLength && filteredItems.length > 0;
+      value.length > prevInputLength &&
+      filteredItems.length > 0 &&
+      isPrefixMatch;
 
     prevInputLength = value.length;
 
     if (ref && showNewSuggestion) {
-      const suggestion = itemToString(filteredItems[0]).slice(value.length);
+      const suggestion = topItemText.slice(value.length);
       const selectionStart = value.length;
       const selectionEnd = selectionStart + suggestion.length;
 
