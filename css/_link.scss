@@ -32,3 +32,26 @@
 @include exports("link-icon") {
   @include link-icon;
 }
+
+/// Muted Link variant: inherit the surrounding text color instead of the
+/// link color, for inline links inside body text. Carbon has no equivalent.
+/// Guard against `disabled` so a disabled link keeps its disabled color. The
+/// `:not()` guard also lifts specificity above Carbon's `:hover`/`:visited`
+/// link rules.
+/// @access private
+/// @group components
+@mixin link-muted {
+  .#{$prefix}--link--muted:not(.#{$prefix}--link--disabled) {
+    &,
+    &:hover,
+    &:active,
+    &:visited,
+    &:visited:hover {
+      color: inherit;
+    }
+  }
+}
+
+@include exports("link-muted") {
+  @include link-muted;
+}

@@ -32,6 +32,12 @@
   export let visited = false;
 
   /**
+   * Set to `true` to inherit the surrounding text color instead of the
+   * link color. Use for inline links within body text.
+   */
+  export let muted = false;
+
+  /**
    * Obtain a reference to the top-level HTML element.
    * @bindable readonly
    */
@@ -52,6 +58,7 @@
     class:bx--link--disabled={disabled}
     class:bx--link--inline={inline}
     class:bx--link--visited={visited}
+    class:bx--link--muted={muted}
     {...$$restProps}
     on:click
     on:mouseover
@@ -76,6 +83,7 @@
     class:bx--link--disabled={disabled}
     class:bx--link--inline={inline}
     class:bx--link--visited={visited}
+    class:bx--link--muted={muted}
     class:bx--link--sm={size === "sm"}
     class:bx--link--lg={size === "lg"}
     rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
