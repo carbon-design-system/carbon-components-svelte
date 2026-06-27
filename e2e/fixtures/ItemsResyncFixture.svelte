@@ -16,6 +16,12 @@
     { id: "woolf", text: "Virginia Woolf" },
   ];
 
+  const makeWithoutOrwell = () => [
+    { id: "austen", text: "Jane Austen" },
+    { id: "dickens", text: "Charles Dickens" },
+    { id: "woolf", text: "Virginia Woolf" },
+  ];
+
   const cbPreloadItems = make();
   let cbPreloadSelectedId = "orwell";
   let cbPreloadValue = "";
@@ -27,6 +33,10 @@
   let cbSwapItems = make();
   let cbSwapSelectedId = "orwell";
   let cbSwapValue = "George Orwell";
+
+  let cbRemoveItems = make();
+  let cbRemoveSelectedId = "orwell";
+  let cbRemoveValue = "";
 
   let selFillItems = [];
   let selFillSelected = "orwell";
@@ -56,9 +66,12 @@
     msSwapItems = make();
   }
 
+  function reloadWithoutOrwell() {
+    cbRemoveItems = makeWithoutOrwell();
+  }
+
   function clearFill() {
     cbFillItems = [];
-    cbFillValue = "";
     selFillItems = [];
     msFillItems = [];
   }
@@ -70,6 +83,13 @@
 </button>
 <button type="button" data-testid="clear-fill" on:click={clearFill}>
   Clear fill
+</button>
+<button
+  type="button"
+  data-testid="reload-without-orwell"
+  on:click={reloadWithoutOrwell}
+>
+  Reload without orwell
 </button>
 
 <ComboBox
@@ -98,6 +118,15 @@
   bind:value={cbSwapValue}
 />
 <p data-testid="cb-swap-id">{cbSwapSelectedId}</p>
+
+<ComboBox
+  data-testid="cb-remove"
+  labelText="ComboBox remove"
+  items={cbRemoveItems}
+  bind:selectedId={cbRemoveSelectedId}
+  bind:value={cbRemoveValue}
+/>
+<p data-testid="cb-remove-id">{cbRemoveSelectedId}</p>
 
 <Select
   data-testid="sel-fill"

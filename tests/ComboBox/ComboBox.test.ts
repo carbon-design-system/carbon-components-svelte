@@ -1214,6 +1214,28 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("");
   });
 
+  it("should clear input display when items clear but selectedId is preserved", async () => {
+    const items = [
+      { id: "0", text: "Slack", price: 100 },
+      { id: "1", text: "Email", price: 200 },
+    ];
+    const { rerender } = render(ComboBox, {
+      props: {
+        items,
+        selectedId: "1",
+        value: "Email",
+      },
+    });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
+    rerender({ items: [], selectedId: "1" });
+    await tick();
+
+    expect(input).toHaveValue("");
+  });
+
   it("should select all text on focus when selectTextOnFocus is true", async () => {
     render(ComboBox, {
       props: {

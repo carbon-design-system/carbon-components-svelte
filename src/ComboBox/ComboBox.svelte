@@ -417,7 +417,7 @@
           value = itemToString(selectedItem);
         }
       } else if (
-        selectedId === undefined &&
+        !selectedItem &&
         !ref.contains(document.activeElement) &&
         !allowCustomValue
       ) {
@@ -440,7 +440,7 @@
       if (!isInitialRender) {
         dispatch("select", { selectedId, selectedItem });
       }
-    } else if (resolvedItem !== undefined && resolvedItem !== selectedItem) {
+    } else if (resolvedItem !== selectedItem) {
       selectedItem = resolvedItem;
     }
   }

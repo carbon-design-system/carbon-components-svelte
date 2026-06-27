@@ -54,6 +54,25 @@ test.describe("Items resync — display derived from value + items", () => {
     await expect(page.getByTestId("cb-fill")).toHaveValue("George Orwell");
   });
 
+  test("ComboBox clears input when fill items clear but selectedId is preserved", async ({
+    page,
+  }) => {
+    await page.getByTestId("load").click();
+    await expect(page.getByTestId("cb-fill")).toHaveValue("George Orwell");
+    await page.getByTestId("clear-fill").click();
+    await expect(page.getByTestId("cb-fill-id")).toHaveText("orwell");
+    await expect(page.getByTestId("cb-fill")).toHaveValue("");
+  });
+
+  test("ComboBox clears input when selected id is removed from items", async ({
+    page,
+  }) => {
+    await expect(page.getByTestId("cb-remove")).toHaveValue("George Orwell");
+    await page.getByTestId("reload-without-orwell").click();
+    await expect(page.getByTestId("cb-remove-id")).toHaveText("orwell");
+    await expect(page.getByTestId("cb-remove")).toHaveValue("");
+  });
+
   test("Select keeps selection after items ref swap", async ({ page }) => {
     await expect(page.getByTestId("sel-swap")).toHaveValue("orwell");
     await page.getByTestId("reload").click();
