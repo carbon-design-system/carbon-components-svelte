@@ -1588,6 +1588,115 @@ describe("ComboBox", () => {
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
+    it("should accept the inline suggestion in place on ArrowRight", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "ap");
+      // Inline ghost: typed casing plus the completed tail, selected.
+      expect(input).toHaveValue("apple");
+      expect(input.selectionStart).toBe(2);
+      expect(input.selectionEnd).toBe(5);
+
+      await user.keyboard("{ArrowRight}");
+
+      // Accept in place: the displayed text is committed (cursor collapsed to
+      // the end), focus stays, the menu stays open, and no item is selected.
+      expect(input).toHaveValue("apple");
+      expect(input.selectionStart).toBe(5);
+      expect(input.selectionEnd).toBe(5);
+      expect(input).toHaveFocus();
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    });
+
+    it("should accept the inline suggestion in place on End", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "ap");
+      expect(input).toHaveValue("apple");
+
+      await user.keyboard("{End}");
+
+      expect(input).toHaveValue("apple");
+      expect(input.selectionStart).toBe(5);
+      expect(input.selectionEnd).toBe(5);
+      expect(input).toHaveFocus();
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    });
+
+    it("should still commit and normalize after accepting in place", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "ap");
+      await user.keyboard("{ArrowRight}");
+      expect(input).toHaveValue("apple");
+
+      // Enter still selects the item and normalizes to the item's casing.
+      await user.keyboard("{Enter}");
+      expect(input).toHaveValue("Apple");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "1",
+        selectedItem: { id: "1", text: "Apple", price: 100 },
+      });
+    });
+
+    it("should not intercept ArrowRight when there is no ghost", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "ap");
+      // Collapse the selection to the end so no ghost remains.
+      await user.keyboard("{ArrowRight}");
+      expect(input.selectionStart).toBe(input.selectionEnd);
+
+      // A second ArrowRight has no ghost to accept; value is unchanged.
+      await user.keyboard("{ArrowRight}");
+      expect(input).toHaveValue("apple");
+    });
+
     it("should not inline-complete when the top match is not a prefix", async () => {
       render(ComboBox, {
         props: {
