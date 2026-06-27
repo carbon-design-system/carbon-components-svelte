@@ -195,8 +195,15 @@
     // the element with a max-height, so its rendered height always reflects the
     // true content height regardless of expanded state. Comparing the measured
     // height keeps this correct across any consumer font size or line height.
-    const { height } = ref.getBoundingClientRect();
-    if (height === 0) return;
+    // Subtract the <pre>'s own vertical padding so only the text counts toward
+    // the threshold; otherwise the decorative bottom padding inflates the height
+    // and the expand button appears when only padding, not content, is clipped.
+    const style = getComputedStyle(ref);
+    const padding =
+      Number.parseFloat(style.paddingTop) +
+      Number.parseFloat(style.paddingBottom);
+    const height = ref.getBoundingClientRect().height - padding;
+    if (height <= 0) return;
     exceedsThreshold = height > collapsedHeight;
     // If the content no longer overflows, collapse so the expanded min-height
     // doesn't leave the snippet taller than its (now shorter) content.

@@ -66,6 +66,16 @@ test.describe("CodeSnippet", () => {
     ).toBeHidden();
   });
 
+  test("multi snippet hides expand button when content fits but padding exceeds the threshold", async ({
+    page,
+  }) => {
+    const snippet = page.getByTestId("snippet-multi-boundary");
+    await expect(snippet).toBeVisible();
+    await expect(
+      snippet.getByRole("button", { name: /show more/i }),
+    ).toBeHidden();
+  });
+
   test("expand button appears when content grows past the threshold", async ({
     page,
   }) => {
