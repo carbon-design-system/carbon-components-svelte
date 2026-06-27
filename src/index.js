@@ -212,5 +212,5 @@ export {
   filterTreeByText,
   filterTreeNodes,
 } from "./utils/filterTreeNodes";
-export { fuzzyMatch } from "./utils/fuzzyMatch";
+export { fuzzyMatch, highlightSegments } from "./utils/fuzzyMatch";
 export { toHierarchy } from "./utils/toHierarchy";
