@@ -37,6 +37,36 @@ Use `bind:selected` for a two-way binding with the selected tab index, so you ca
 
 <FileSource src="/framed/Tabs/TabsReactive" />
 
+## Overflow
+
+When the tabs exceed the available width, the list scrolls horizontally and backward/forward buttons appear at each end. Scroll by dragging, using the buttons, or moving focus with the arrow keys. Resize the viewport to see the buttons appear and hide.
+
+### Line
+
+<FileSource src="/framed/Tabs/TabsOverflow" />
+
+### Container
+
+<FileSource src="/framed/Tabs/TabsOverflowContainer" />
+
+### Tall
+
+<FileSource src="/framed/Tabs/TabsOverflowTall" />
+
+### Dismissible
+
+<FileSource src="/framed/Tabs/TabsOverflowDismissible" />
+
+### Icon-only
+
+<FileSource src="/framed/Tabs/TabsOverflowIconOnly" />
+
+### Vertical
+
+Below the medium breakpoint, vertical tabs collapse into the same horizontal, scrollable row with overflow buttons. Resize the viewport to see them.
+
+<FileSource src="/framed/Tabs/TabsVerticalOverflow" />
+
 ## Disabled tabs
 
 Set `disabled` on a tab to prevent interaction. Keyboard navigation skips disabled
