@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type TabComponent from "carbon-components-svelte/Tabs/Tab.svelte";
 import type { ComponentProps } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
@@ -144,11 +144,10 @@ describe("Tabs", () => {
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
-  // Regression: ?? for aria-label so empty string is used (not fallback)
-  it("uses empty aria-label when passed (nullish coalescing)", () => {
+  it("uses an empty aria-label when passed an empty string", () => {
     render(Tabs, { props: { ariaLabel: "" } });
-    const listbox = screen.getByRole("listbox");
-    expect(listbox).toHaveAttribute("aria-label", "");
+    const nav = screen.getByRole("navigation");
+    expect(nav).toHaveAttribute("aria-label", "");
   });
 
   it("should render container type tabs", () => {
@@ -181,42 +180,62 @@ describe("Tabs", () => {
     expect(tabsContainer).toHaveClass("bx--tabs--full-width");
   });
 
-  it("should show dropdown on trigger click", async () => {
+  // The v11 redesign drops the legacy mobile dropdown: there is no longer a
+  // listbox trigger, and the tab list is always inline (never `--hidden`).
+  it("does not render a dropdown trigger and keeps the tab list inline", () => {
     render(Tabs);
 
-    const trigger = screen.getByRole("listbox");
-    await user.click(trigger);
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
     const tablist = screen.getByRole("tablist");
     expect(tablist).not.toHaveClass("bx--tabs__nav--hidden");
+    expect(tablist).toBeVisible();
   });
 
-  it("should update trigger text when tab changes", async () => {
-    render(Tabs);
+  // jsdom does no layout, so the overflow geometry is mocked on the nav element
+  // to drive `updateOverflow`. The buttons only render while the list overflows,
+  // and each hides once that edge is reached.
+  it("renders overflow scroll buttons that toggle at the start and end", async () => {
+    const { container } = render(Tabs);
 
-    const tab3 = screen.getByText("Tab 3");
-    await user.click(tab3);
+    expect(
+      container.querySelector(".bx--tab--overflow-nav-button"),
+    ).not.toBeInTheDocument();
 
-    const trigger = screen.getByRole("listbox");
-    const triggerText = within(trigger).getByRole("link");
-    expect(triggerText).toHaveTextContent("Tab 3");
-  });
-
-  it("should support custom trigger href", () => {
-    render(Tabs, {
-      props: { triggerHref: "#custom" },
+    const nav = screen.getByRole("tablist");
+    Object.defineProperty(nav, "scrollWidth", {
+      configurable: true,
+      value: 600,
     });
-
-    const trigger = screen.getByRole("listbox");
-    const triggerLink = within(trigger).getByRole("link");
-    expect(triggerLink).toHaveAttribute("href", "#custom");
-  });
-
-  it("should support custom icon description", () => {
-    render(Tabs, {
-      props: { iconDescription: "Custom description" },
+    Object.defineProperty(nav, "clientWidth", {
+      configurable: true,
+      value: 200,
     });
+    Object.defineProperty(nav, "scrollLeft", {
+      configurable: true,
+      writable: true,
+      value: 0,
+    });
+    await fireEvent.scroll(nav);
 
-    expect(screen.getByTitle("Custom description")).toBeInTheDocument();
+    const prev = container.querySelector(
+      ".bx--tab--overflow-nav-button--previous",
+    );
+    const next = container.querySelector(".bx--tab--overflow-nav-button--next");
+
+    // Decorative: out of the tab order and hidden from assistive tech.
+    expect(next).toHaveAttribute("aria-hidden", "true");
+    expect(next).toHaveAttribute("tabindex", "-1");
+
+    // At the start: forward shown, backward hidden.
+    expect(prev).toHaveClass("bx--tab--overflow-nav-button--hidden");
+    expect(next).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
+
+    // Scrolled to the end: backward shown, forward hidden.
+    (nav as HTMLElement).scrollLeft = 400;
+    await fireEvent.scroll(nav);
+    expect(prev).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
+    expect(next).toHaveClass("bx--tab--overflow-nav-button--hidden");
   });
 
   it("should apply custom class", () => {
@@ -233,18 +252,8 @@ describe("Tabs", () => {
       props: { ariaLabel: "Custom label" },
     });
 
-    const trigger = screen.getByRole("listbox", { name: "Custom label" });
-    expect(trigger).toHaveAttribute("aria-label", "Custom label");
-  });
-
-  it("should handle keypress on dropdown trigger", async () => {
-    render(Tabs);
-
-    const trigger = screen.getByRole("listbox");
-    trigger.focus();
-    await user.keyboard("{Enter}");
-    const tablist = screen.getByRole("tablist");
-    expect(tablist).not.toHaveClass("bx--tabs__nav--hidden");
+    const nav = screen.getByRole("navigation", { name: "Custom label" });
+    expect(nav).toHaveAttribute("aria-label", "Custom label");
   });
 
   it("should maintain correct indices when tabs are dynamically removed and re-added", async () => {
