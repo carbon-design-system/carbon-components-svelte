@@ -333,6 +333,7 @@
         class:bx--tooltip__content={true}
         tabindex="-1"
         role="dialog"
+        aria-labelledby={triggerId}
       >
         <slot />
       </div>

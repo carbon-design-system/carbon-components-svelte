@@ -279,6 +279,16 @@ describe("Tooltip", () => {
     expect(screen.getByRole("link", { name: "Learn more" })).not.toHaveFocus();
   });
 
+  test("should label the interactive dialog with its trigger", () => {
+    render(TooltipOpen);
+
+    const labelledby = screen
+      .getByRole("dialog")
+      .getAttribute("aria-labelledby");
+    expect(labelledby).toBeTruthy();
+    expect(document.getElementById(labelledby ?? "")).toBeInTheDocument();
+  });
+
   describe("Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;
