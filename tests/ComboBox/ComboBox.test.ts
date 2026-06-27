@@ -1532,6 +1532,78 @@ describe("ComboBox", () => {
 
       expect(input).toHaveValue("Apricot");
     });
+
+    it("should accept the suggestion on Tab and normalize casing", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "ap");
+      // Inline suggestion shows the lowercased typed text plus the completion.
+      expect(input).toHaveValue("apple");
+
+      await user.keyboard("{Tab}");
+
+      // Tab commits the suggestion with the item's casing and closes the menu.
+      expect(input).toHaveValue("Apple");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "1",
+        selectedItem: { id: "1", text: "Apple", price: 100 },
+      });
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("should accept the suggestion when clicking away", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "ap");
+
+      await user.click(document.body);
+
+      expect(input).toHaveValue("Apple");
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "1",
+        selectedItem: { id: "1", text: "Apple", price: 100 },
+      });
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("should keep a custom value on Tab when no suggestion matches", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          allowCustomValue: true,
+          items: [{ id: "1", text: "Apple", price: 100 }],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "xyz");
+      await user.keyboard("{Tab}");
+
+      expect(input).toHaveValue("xyz");
+    });
   });
 
   describe("Generics", () => {

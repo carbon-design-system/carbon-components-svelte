@@ -536,6 +536,33 @@
     .join(" ");
 
   /**
+   * Commit the active typeahead suggestion when focus leaves the field.
+   * Mirrors the inline completion shown in the input: the highlighted item, or
+   * an exact case-insensitive match of the autocompleted value. Selecting
+   * normalizes the value to the item's casing and fires `select` reactively.
+   * Returns `true` when an item was committed.
+   * @returns {boolean}
+   */
+  function acceptTypeaheadSuggestion() {
+    if (!typeahead) return false;
+    let item =
+      highlightedIndex > -1 ? filteredItems[highlightedIndex] : undefined;
+    if (!item) {
+      const inputValue = ref?.value ?? value;
+      item = filteredItems.find(
+        (candidate) =>
+          candidate.text.toLowerCase() === inputValue?.toLowerCase() &&
+          !candidate.disabled,
+      );
+    }
+    if (!item || item.disabled) return false;
+    valueBeforeOpen = "";
+    value = itemToString(item);
+    selectedId = item.id;
+    return true;
+  }
+
+  /**
    * Close the dropdown and surface the dismissal cause.
    * Guarded on `open` so redundant assignments don't double-fire the event.
    * @param {"escape-key" | "outside-click" | "select"} trigger
@@ -549,6 +576,9 @@
 
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {
+      // Commit the inline suggestion on click-away so it matches Tab. The
+      // dismissal cause is still the outside click; `select` fires reactively.
+      acceptTypeaheadSuggestion();
       close("outside-click");
     }
   }
@@ -683,7 +713,10 @@
             }
             highlightedIndex = -1;
           } else if (event.key === "Tab") {
-            close("escape-key");
+            // Accept the inline suggestion before focus moves to the next
+            // control. Tab is not prevented, so focus still advances normally.
+            const accepted = acceptTypeaheadSuggestion();
+            close(accepted ? "select" : "escape-key");
           } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             const step = event.key === "ArrowDown" ? 1 : -1;
             if (event.altKey) {
