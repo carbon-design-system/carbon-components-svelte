@@ -405,7 +405,10 @@
     right: 0;
     top: 3rem;
     padding: $carbon--spacing-03 0;
-    max-height: to-rem(360px);
+    // Cap at 360px, but never taller than the space below the header (which
+    // sits at `top: 3rem`) so short viewports scroll the menu internally
+    // instead of overflowing off-screen with no way to reach the lower rows.
+    max-height: min(to-rem(360px), calc(100vh - 3rem));
     overflow-y: auto;
     background-color: $layer;
     border: 1px solid $border-subtle;
