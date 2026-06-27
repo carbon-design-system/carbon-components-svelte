@@ -89,7 +89,7 @@ Set `size` to control link size. The default is medium.
 
 ## Size with icon
 
-Combine size and icon. Inline must be false.
+Combine `size` and `icon`. The icon scales to match the link size. Inline must be false.
 
 ### Large
 
