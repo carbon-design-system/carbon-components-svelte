@@ -80,7 +80,6 @@
     selectedTab,
     activeTooltip,
     iconOnly,
-    belowMd,
     useAutoWidth,
     useFullWidth,
     useDismissible,
@@ -103,11 +102,7 @@
   // Gate on `activeTooltip` so only one tab tooltip shows at a time. When a
   // neighbor claims the active slot, this one closes even while still hovered.
   $: tooltipOpen =
-    $iconOnly &&
-    !$belowMd &&
-    !disabled &&
-    (hovered || focused) &&
-    $activeTooltip === id;
+    $iconOnly && !disabled && (hovered || focused) && $activeTooltip === id;
 
   function claim() {
     activeTooltip.set(id);

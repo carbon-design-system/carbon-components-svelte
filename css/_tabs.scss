@@ -45,10 +45,10 @@
 }
 
 /// Icon-only tab styles
-/// At `md` and up, the nav link is a square icon trigger and the label is
-/// surfaced as a portalled tooltip (rendered by `Tab.svelte`). Below `md` the
-/// tabs collapse into the legacy dropdown, where each item keeps its full-width
-/// footprint and shows the icon next to its text label.
+/// The nav link is a square icon trigger at every breakpoint and the label is
+/// surfaced as a portalled tooltip (rendered by `Tab.svelte`). Carbon React v11
+/// keeps icon-only tabs square on narrow viewports rather than collapsing them
+/// into a labeled dropdown, so the trigger size is breakpoint-agnostic.
 /// @access private
 /// @group components
 @mixin tabs-icon-only {
@@ -57,14 +57,19 @@
   // Container tabs are 48px tall, so icon-only container tabs are square at 48px.
   $icon-tab-size-container: $carbon--spacing-09; // 48px
 
-  // Below md (dropdown menu): show the icon beside the label and keep the
-  // full-width item border. The label span is hidden in the desktop row below.
-  // Double class so `display: flex` out-specifies the base `a.bx--tabs__nav-link`
-  // (`display: block`) rule that is imported after this file.
-  a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
+  // Square icon trigger. Double class (and explicit :focus/:active) so these win
+  // over the base `a.bx--tabs__nav-link` rules imported after this file.
+  a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only,
+  a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only:focus,
+  a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only:active {
     display: flex;
     align-items: center;
-    gap: $carbon--spacing-03;
+    justify-content: center;
+    gap: 0;
+    inline-size: $icon-tab-size;
+    min-inline-size: $icon-tab-size;
+    block-size: $icon-tab-size;
+    padding: 0;
   }
 
   // Lift the icon out of its default beside-label spacing so it sits flush.
@@ -76,7 +81,7 @@
   }
 
   // Container type adds an auto inline-start margin to push the icon to the end;
-  // neutralize it so the icon stays beside the label (mobile) / centered (md).
+  // neutralize it so the icon stays centered.
   .#{$prefix}--tabs--container
     .#{$prefix}--tabs__nav-link--icon-only
     .#{$prefix}--tabs__nav-item--icon {
@@ -84,85 +89,277 @@
     padding-inline-start: 0;
   }
 
-  // Mobile dropdown: Carbon's disabled underline (`2px solid $disabled-01`) is
-  // near-invisible, so disabled items look like they are missing a separator.
-  // Restore the same separator the enabled items use.
-  @include carbon--breakpoint-down(md) {
-    .#{$prefix}--tabs__nav-item--disabled
-      a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
-      border-bottom: 1px solid $ui-03;
-    }
+  // The label is the accessible name and tooltip text only; never shown inline.
+  .#{$prefix}--tabs__nav-link--icon-only .#{$prefix}--tabs__nav-item-label {
+    display: none;
   }
 
-  @include carbon--breakpoint(md) {
-    // The icon-only nav is absolutely positioned and overlays the panel; the
-    // `.bx--tabs` container reserves only 40px by default, so the 48px lg row
-    // would cover the panel by 8px. Reserve the full 48px instead.
-    .#{$prefix}--tabs.#{$prefix}--tabs__icon--lg {
-      min-height: $icon-tab-size-lg;
-    }
+  // Container type: contained tabs are 48px tall, so make the icon-only link a
+  // 48px square (instead of the 40px default) so it does not look stretched.
+  .#{$prefix}--tabs--container
+    a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only,
+  .#{$prefix}--tabs--container
+    a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only:focus,
+  .#{$prefix}--tabs--container
+    a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only:active {
+    inline-size: $icon-tab-size-container;
+    min-inline-size: $icon-tab-size-container;
+    block-size: $icon-tab-size-container;
+    padding: 0;
+  }
 
-    // Square icon trigger; double class to out-specify the base
-    // `a.bx--tabs__nav-link` rules, which are imported after this file.
-    a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
-      justify-content: center;
-      gap: 0;
-      width: $icon-tab-size;
-      min-width: $icon-tab-size;
-      height: $icon-tab-size;
-      padding: 0;
+  // Large icon scale: 48px square trigger. The `.bx--tabs__icon--lg` ancestor
+  // raises specificity above the default-scale rules above.
+  .#{$prefix}--tabs__icon--lg {
+    a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only,
+    &.#{$prefix}--tabs--container
+      a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
+      inline-size: $icon-tab-size-lg;
+      min-inline-size: $icon-tab-size-lg;
+      block-size: $icon-tab-size-lg;
 
       &:focus,
       &:active {
-        width: $icon-tab-size;
-        min-width: $icon-tab-size;
-        padding: 0;
+        inline-size: $icon-tab-size-lg;
+        min-inline-size: $icon-tab-size-lg;
       }
     }
 
-    // Hide the text label in the desktop icon-only row (kept for the dropdown).
-    .#{$prefix}--tabs__nav-link--icon-only .#{$prefix}--tabs__nav-item-label {
-      display: none;
-    }
-
-    // Container type: contained tabs are 48px tall, so make the icon-only link a
-    // 48px square (instead of the 40px default) so it does not look stretched.
-    .#{$prefix}--tabs--container
-      a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
-      width: $icon-tab-size-container;
-      min-width: $icon-tab-size-container;
-      height: $icon-tab-size-container;
-      padding: 0;
-    }
-
-    // Large icon scale: 48px square trigger. The `.bx--tabs__icon--lg` ancestor
-    // raises specificity above the default-scale rules above.
-    .#{$prefix}--tabs__icon--lg {
-      a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only,
-      &.#{$prefix}--tabs--container
-        a.#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--icon-only {
-        width: $icon-tab-size-lg;
-        min-width: $icon-tab-size-lg;
-        height: $icon-tab-size-lg;
-
-        &:focus,
-        &:active {
-          width: $icon-tab-size-lg;
-          min-width: $icon-tab-size-lg;
-        }
-      }
-
-      // 20px icon at lg scale (Carbon React); default scale stays 16px.
-      .#{$prefix}--tabs__nav-link--icon-only .#{$prefix}--tabs__nav-item--icon svg {
-        block-size: to-rem(20px);
-        inline-size: to-rem(20px);
-      }
+    // 20px icon at lg scale (Carbon React); default scale stays 16px.
+    .#{$prefix}--tabs__nav-link--icon-only .#{$prefix}--tabs__nav-item--icon svg {
+      block-size: to-rem(20px);
+      inline-size: to-rem(20px);
     }
   }
 }
 
 @include exports('tabs-icon-only') {
   @include tabs-icon-only;
+}
+
+/// Overflow / scrollable tab list (Carbon React v11 parity).
+/// Carbon v10 collapses tabs into a dropdown menu on narrow viewports, which is
+/// unexpected and not fully accessible. Instead, keep the tab list inline at
+/// every breakpoint and make it horizontally scrollable, surfacing scroll
+/// buttons + edge fades only when the list overflows its container.
+///
+/// Carbon v10.58 already ships the scrollable-tabs CSS (`bx--tabs--scrollable`,
+/// `bx--tab--overflow-nav-button`, `bx--tabs__overflow-indicator--*`), so the
+/// component reuses those classes and this partial only fills two gaps the
+/// shipped CSS leaves for the legacy `bx--tabs__nav*` structure:
+///   1. take the nav out of the mobile dropdown overlay (static + scrollable);
+///   2. render the desktop tab appearance below `md`, since Carbon is
+///      mobile-first and its default tab styling lives under `min-width: 42rem`.
+/// @access private
+/// @group components
+@mixin tabs-overflow {
+  // (1) The legacy nav is an absolutely-positioned dropdown overlay by default;
+  // keep it in flow and horizontally scrollable at every breakpoint.
+  .#{$prefix}--tabs .#{$prefix}--tabs__nav {
+    position: static;
+    z-index: auto;
+    display: flex;
+    flex-direction: row;
+    max-block-size: none;
+    overflow-x: auto;
+    // The mobile dropdown overlay paints the nav `$ui-01`; drop it so line tabs
+    // are transparent and container cells provide their own background.
+    background: transparent;
+    box-shadow: none;
+    transition: none;
+    // Keyboard navigation scrolls the focused tab into view by adjusting
+    // scrollLeft; keep that instant so reads stay consistent (the overflow
+    // buttons request smooth scrolling explicitly via `scrollBy`).
+    scroll-behavior: auto;
+    // Hide the native scrollbar; scrolling is driven by the overflow buttons,
+    // touch drag, and trackpad gestures.
+    scrollbar-width: none;
+  }
+
+  .#{$prefix}--tabs .#{$prefix}--tabs__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  // Size every tab to its content instead of the legacy `width: 100%` dropdown
+  // row, so tabs sit close together and the list scrolls (Carbon's
+  // `bx--tabs--scrollable .bx--tabs__nav-item { flex: none }` pins the width).
+  .#{$prefix}--tabs .#{$prefix}--tabs__nav-item {
+    inline-size: auto;
+  }
+
+  // Line (non-container) tabs are content-width at every breakpoint (Carbon
+  // React v11), replacing the legacy fixed 10rem tab width that left them spread
+  // out. Container, dismissible, and icon-only tabs carry their own widths.
+  .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical):not(.#{$prefix}--tabs--dismissible):not(.#{$prefix}--tabs--icon-only)
+    a.#{$prefix}--tabs__nav-link,
+  .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical):not(.#{$prefix}--tabs--dismissible):not(.#{$prefix}--tabs--icon-only)
+    a.#{$prefix}--tabs__nav-link:focus,
+  .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical):not(.#{$prefix}--tabs--dismissible):not(.#{$prefix}--tabs--icon-only)
+    a.#{$prefix}--tabs__nav-link:active {
+    inline-size: auto;
+  }
+
+  // (2) Below `md`, render the inline desktop tab appearance instead of Carbon's
+  // mobile-first dropdown rows. Values mirror Carbon's own `min-width: 42rem`
+  // tab rules so the tabs look identical above and below the breakpoint.
+  // Override partials emit before Carbon base, so every rule here carries a
+  // leading `.bx--tabs` (and `.bx--tabs--container`) ancestor to out-specify the
+  // equal-specificity mobile-first defaults that load afterward.
+  @include carbon--breakpoint-down(md) {
+    // Drop the mobile dropdown-row side margin (`0 16px`) on every variant so
+    // tabs sit flush instead of spaced apart (line, container, icon-only,
+    // dismissible all inherit this legacy margin below `md`).
+    .#{$prefix}--tabs a.#{$prefix}--tabs__nav-link {
+      margin: 0;
+    }
+
+    // Reveal the selected tab (the dropdown hides it to show it in the trigger).
+    .#{$prefix}--tabs
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+      display: flex;
+    }
+
+    .#{$prefix}--tabs .#{$prefix}--tabs__nav-item {
+      background: transparent;
+      block-size: auto;
+    }
+
+    .#{$prefix}--tabs
+      .#{$prefix}--tabs__nav-item
+      + .#{$prefix}--tabs__nav-item {
+      margin-inline-start: to-rem(1px);
+    }
+
+    .#{$prefix}--tabs
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    .#{$prefix}--tabs
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
+      + .#{$prefix}--tabs__nav-item {
+      box-shadow: none;
+    }
+
+    // Line (non-container) link: content-width inline tab with the bottom
+    // selection border. Width comes from the unconditional rule above; here we
+    // restore the desktop padding/border the mobile dropdown rows override.
+    // Scoped away from container / dismissible / icon-only.
+    .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical):not(.#{$prefix}--tabs--dismissible):not(.#{$prefix}--tabs--icon-only)
+      a.#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical):not(.#{$prefix}--tabs--dismissible):not(.#{$prefix}--tabs--icon-only)
+      a.#{$prefix}--tabs__nav-link:focus,
+    .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical):not(.#{$prefix}--tabs--dismissible):not(.#{$prefix}--tabs--icon-only)
+      a.#{$prefix}--tabs__nav-link:active {
+      block-size: auto;
+      padding: $carbon--spacing-04 $carbon--spacing-05 $carbon--spacing-03;
+      border-block-end: 2px solid $ui-03;
+      line-height: inherit;
+    }
+
+    // Selected emphasis (bold + color) applies to every non-container tab,
+    // including dismissible.
+    .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical)
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+      a.#{$prefix}--tabs__nav-link {
+      @include carbon--type-style("productive-heading-01");
+
+      color: $text-01;
+    }
+
+    // The link bottom border (selected / hover / disabled indicator) is excluded
+    // from dismissible, whose underline is moved to the nav item by the
+    // dismissible mixin — a link border here would double it up.
+    .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical):not(.#{$prefix}--tabs--dismissible)
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+      a.#{$prefix}--tabs__nav-link {
+      border-block-end: 2px solid $interactive-04;
+    }
+
+    .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical):not(.#{$prefix}--tabs--dismissible)
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+      a.#{$prefix}--tabs__nav-link {
+      border-block-end: 2px solid $ui-04;
+      color: $text-01;
+    }
+
+    .#{$prefix}--tabs:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical):not(.#{$prefix}--tabs--dismissible)
+      .#{$prefix}--tabs__nav-item--disabled
+      a.#{$prefix}--tabs__nav-link {
+      border-block-end: 2px solid $disabled-01;
+      color: $disabled-02;
+    }
+
+    // Container type below `md`: gray cells, vertical dividers, and a top inset
+    // selection indicator on the active tab.
+    .#{$prefix}--tabs.#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item {
+      background-color: $ui-03;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item
+      + .#{$prefix}--tabs__nav-item {
+      box-shadow: to-rem(-1px) 0 0 0 $ui-04;
+      margin-inline-start: 0;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
+      background-color: $hover-selected-ui;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--disabled,
+    .#{$prefix}--tabs.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--disabled:hover {
+      background-color: $disabled-02;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--container a.#{$prefix}--tabs__nav-link {
+      block-size: $carbon--spacing-09;
+      inline-size: auto;
+      padding: $carbon--spacing-03 $carbon--spacing-05;
+      border-block-end: none;
+      line-height: calc(#{$carbon--spacing-09} - #{$carbon--spacing-03} * 2);
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled),
+    .#{$prefix}--tabs.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--selected:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
+      background-color: $ui-01;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+      a.#{$prefix}--tabs__nav-link {
+      @include carbon--type-style("productive-heading-01");
+
+      // Re-assert the cell line-height the heading type style overwrites, so the
+      // bold selected label stays vertically aligned with the other tabs.
+      box-shadow: inset 0 2px 0 0 $interactive-04;
+      border-block-end: none;
+      line-height: calc(#{$carbon--spacing-09} - #{$carbon--spacing-03} * 2);
+      color: $text-01;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--disabled
+      a.#{$prefix}--tabs__nav-link {
+      border-block-end: none;
+      color: $disabled-03;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+      a.#{$prefix}--tabs__nav-link {
+      border-block-end: none;
+    }
+  }
+}
+
+@include exports('tabs-overflow') {
+  @include tabs-overflow;
 }
 
 /// Tab full-width styles
@@ -295,11 +492,14 @@
   }
 
   // Default: size the link to its content so the close button sits next to the
-  // label with a fixed gap, instead of growing to the full tab width.
+  // label with a fixed gap, instead of growing to the full tab width. The
+  // asymmetric vertical padding mirrors Carbon's desktop tab link at every
+  // breakpoint so the close-button nudge below lands consistently.
   .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
     .#{$prefix}--tabs__nav-link {
     flex: 0 1 auto;
-    padding-inline-end: $carbon--spacing-03;
+    padding: $carbon--spacing-04 $carbon--spacing-03 $carbon--spacing-03
+      $carbon--spacing-05;
   }
 
   // Container: fill the cell so the close button aligns to the trailing edge.
@@ -328,16 +528,13 @@
     align-items: center;
   }
 
-  // Default: at md the link's asymmetric vertical padding ($spacing-04 top /
+  // Default: the link's asymmetric vertical padding ($spacing-04 top /
   // $spacing-03 bottom) drops the label below the nav-item center, so nudge the
-  // close button down to share the text's optical baseline. Below md the link
-  // padding is symmetric (dropdown rows), so the nudge must not apply there.
-  @include carbon--breakpoint(md) {
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      .#{$prefix}--tabs__nav-item--close {
-      position: relative;
-      inset-block-start: $carbon--spacing-01;
-    }
+  // close button down to share the text's optical baseline.
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    .#{$prefix}--tabs__nav-item--close {
+    position: relative;
+    inset-block-start: $carbon--spacing-01;
   }
 
   // Container: nudge the close button off the label.
@@ -363,64 +560,62 @@
     outline: none;
   }
 
-  @include carbon--breakpoint(md) {
-    // Default variant: drop Carbon's fixed 10rem link width (including the
-    // focus/active width reset) so the tab sizes to its content.
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      a.#{$prefix}--tabs__nav-link,
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      a.#{$prefix}--tabs__nav-link:focus,
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      a.#{$prefix}--tabs__nav-link:active {
-      inline-size: auto;
-    }
+  // Default variant: drop Carbon's fixed 10rem link width (including the
+  // focus/active width reset) so the tab sizes to its content.
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    a.#{$prefix}--tabs__nav-link,
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    a.#{$prefix}--tabs__nav-link:focus,
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    a.#{$prefix}--tabs__nav-link:active {
+    inline-size: auto;
+  }
 
-    // Default variant: move the bottom underline from the link to the item.
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      .#{$prefix}--tabs__nav-item {
-      border-block-end: 2px solid $ui-03;
-    }
+  // Default variant: move the bottom underline from the link to the item.
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    .#{$prefix}--tabs__nav-item {
+    border-block-end: 2px solid $ui-03;
+  }
 
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
-      border-block-end-color: $ui-04;
-    }
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
+    border-block-end-color: $ui-04;
+  }
 
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
-      border-block-end-color: $interactive-04;
-    }
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+    border-block-end-color: $interactive-04;
+  }
 
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      .#{$prefix}--tabs__nav-item--disabled {
-      border-block-end-color: $disabled-01;
-    }
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    .#{$prefix}--tabs__nav-item--disabled {
+    border-block-end-color: $disabled-01;
+  }
 
-    // Remove the link border in every state so only the item border shows.
-    // Carbon's hover/selected link rules outrank a plain link selector, so each
-    // state is matched explicitly to win on specificity.
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      a.#{$prefix}--tabs__nav-link,
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
-      .#{$prefix}--tabs__nav-link,
-    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
-      .#{$prefix}--tabs__nav-link {
-      border-block-end: none;
-    }
+  // Remove the link border in every state so only the item border shows.
+  // Carbon's hover/selected link rules outrank a plain link selector, so each
+  // state is matched explicitly to win on specificity.
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    a.#{$prefix}--tabs__nav-link,
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+    .#{$prefix}--tabs__nav-link,
+  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+    .#{$prefix}--tabs__nav-link {
+    border-block-end: none;
+  }
 
-    // Container variant: move the inset top indicator from the link to the item.
-    .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
-      box-shadow: inset 0 2px 0 0 $interactive-04;
-    }
+  // Container variant: move the inset top indicator from the link to the item.
+  .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+    box-shadow: inset 0 2px 0 0 $interactive-04;
+  }
 
-    .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
-      .#{$prefix}--tabs__nav-link {
-      box-shadow: none;
-    }
+  .#{$prefix}--tabs--dismissible.#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+    .#{$prefix}--tabs__nav-link {
+    box-shadow: none;
   }
 
   // The close button is not in the tab order (keyboard dismissal uses Delete on

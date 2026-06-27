@@ -26,15 +26,6 @@
   export let fullWidth = false;
 
   /**
-   * Specify the ARIA label for the chevron icon.
-   * @type {string}
-   */
-  export let iconDescription = "Show menu options";
-
-  /** Specify the tab trigger href attribute */
-  export let triggerHref = "#";
-
-  /**
    * Set to `true` to render icon-only tabs.
    * Each `Tab` displays only its `icon`; the `label` is used as the accessible
    * name and the tooltip shown on hover and focus.
@@ -50,10 +41,16 @@
    */
   export let iconSize = "default";
 
-  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
   import { derived, get, writable } from "svelte/store";
-  import { breakpointObserver } from "../Breakpoint/breakpointObserver.js";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import ChevronLeft from "../icons/ChevronLeft.svelte";
+  import ChevronRight from "../icons/ChevronRight.svelte";
   import { keyBy } from "../utils/keyBy.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
@@ -99,12 +96,37 @@
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const activeTooltip = writable(undefined);
-  // Below `md` the tabs collapse into the dropdown menu, where the label is
-  // visible inline; the icon-only tooltip is redundant there, so it is suppressed.
-  const belowMd = breakpointObserver().smallerThan("md");
 
   let refTabList = null;
   let refRoot = null;
+
+  // Carbon React v11 replaces the legacy mobile dropdown with a horizontally
+  // scrollable tab list plus overflow navigation buttons. The buttons appear
+  // only when the list overflows, and each one hides once that edge is reached.
+  let canScrollBackward = false;
+  let canScrollForward = false;
+  $: isOverflow = canScrollBackward || canScrollForward;
+
+  function updateOverflow() {
+    if (!refTabList) return;
+    const { scrollLeft, scrollWidth, clientWidth } = refTabList;
+    canScrollBackward = scrollLeft > 0;
+    // Round up to absorb sub-pixel widths so the forward button hides cleanly
+    // when the list is scrolled to the end.
+    canScrollForward = Math.ceil(scrollLeft + clientWidth) < scrollWidth;
+  }
+
+  /**
+   * Scroll the tab list by roughly a viewport width in the given direction.
+   * @type {(direction: 1 | -1) => void}
+   */
+  function scrollTabs(direction) {
+    if (!refTabList) return;
+    refTabList.scrollBy({
+      left: direction * refTabList.clientWidth * 0.75,
+      behavior: "smooth",
+    });
+  }
 
   // Flag to trigger DOM reordering only when tabs change.
   // This is necessary to avoid infinite loops in Svelte 5.
@@ -172,6 +194,36 @@
   }
 
   /**
+   * Keep a focused tab clear of the overflow chevrons / edge fades.
+   * @type {number}
+   */
+  const SCROLL_INTO_VIEW_MARGIN = 48;
+
+  /**
+   * Scroll the tab list so `tab` is fully visible, inset from each edge so it is
+   * not tucked under an overflow button. The browser's native focus scroll moves
+   * a fixed step that lags variable-width tabs, eventually pushing the focused
+   * tab off-screen, so selection is scrolled explicitly instead.
+   * @type {(tab: HTMLElement | undefined) => void}
+   */
+  function scrollTabIntoView(tab) {
+    if (!tab || !refTabList) return;
+
+    const navRect = refTabList.getBoundingClientRect();
+    const tabRect = tab.getBoundingClientRect();
+    const leftOverflow =
+      tabRect.left - (navRect.left + SCROLL_INTO_VIEW_MARGIN);
+    const rightOverflow =
+      tabRect.right - (navRect.right - SCROLL_INTO_VIEW_MARGIN);
+
+    if (leftOverflow < 0) {
+      refTabList.scrollLeft += leftOverflow;
+    } else if (rightOverflow > 0) {
+      refTabList.scrollLeft += rightOverflow;
+    }
+  }
+
+  /**
    * Move selection/focus to a tab at an absolute index. Roving focus resolves
    * the index (skipping disabled, wrapping); selection follows focus.
    * @type {(index: number) => Promise<void>}
@@ -182,8 +234,11 @@
     currentIndex = index;
 
     await tick();
-    const activeTab = refTabList?.querySelectorAll("[role='tab']")[index];
-    activeTab?.focus();
+    const activeTab = /** @type {HTMLElement | undefined} */ (
+      refTabList?.querySelectorAll("[role='tab']")[index]
+    );
+    activeTab?.focus({ preventScroll: true });
+    scrollTabIntoView(activeTab);
   }
 
   setContext("carbon:Tabs", {
@@ -193,7 +248,6 @@
     selectedContent,
     activeTooltip,
     iconOnly: useIconOnly,
-    belowMd,
     useAutoWidth,
     useFullWidth,
     useDismissible,
@@ -242,7 +296,13 @@
     prevIndex = currentIndex;
   });
 
-  let dropdownHidden = true;
+  onMount(() => {
+    updateOverflow();
+    const observer = new ResizeObserver(updateOverflow);
+    if (refTabList) observer.observe(refTabList);
+    return () => observer.disconnect();
+  });
+
   let currentIndex = selected;
   let prevIndex = -1;
 
@@ -258,8 +318,9 @@
       selectedContent.set(currentContent.id);
     }
   }
-  $: if ($selectedTab) {
-    dropdownHidden = true;
+  // Recompute overflow when the set of tabs changes (added/removed/relabeled).
+  $: if ($tabs) {
+    tick().then(updateOverflow);
   }
   $: useAutoWidth.set(autoWidth);
   $: useFullWidth.set(fullWidth);
@@ -277,36 +338,27 @@
   class:bx--tabs--dismissible={dismissible}
   class:bx--tabs--icon-only={iconOnly}
   class:bx--tabs__icon--lg={iconOnly && iconSize === "lg"}
+  class:bx--tabs--scrollable={isOverflow}
+  class:bx--tabs--scrollable--container={isOverflow && type === "container"}
   {...$$restProps}
 >
-  <div
-    role="listbox"
-    tabindex="0"
-    class:bx--tabs-trigger={true}
-    aria-label={$$props["aria-label"] ?? "listbox"}
-    on:click={() => {
-      dropdownHidden = !dropdownHidden;
-    }}
-    on:keypress
-    on:keypress={() => {
-      dropdownHidden = !dropdownHidden;
-    }}
-  >
-    <a
+  {#if isOverflow}
+    <button
+      type="button"
       tabindex="-1"
-      class:bx--tabs-trigger-text={true}
-      href={triggerHref}
-      on:click|preventDefault
-      on:click|preventDefault|stopPropagation={() => {
-        dropdownHidden = !dropdownHidden;
-      }}
+      aria-hidden="true"
+      class:bx--tab--overflow-nav-button={true}
+      class:bx--tab--overflow-nav-button--previous={true}
+      class:bx--tab--overflow-nav-button--hidden={!canScrollBackward}
+      on:click={() => scrollTabs(-1)}
     >
-      {#if currentTab}
-        {currentTab.label}
-      {/if}
-    </a>
-    <ChevronDown aria-hidden="true" title={iconDescription} />
-  </div>
+      <ChevronLeft />
+    </button>
+    <div
+      class:bx--tabs__overflow-indicator--left={true}
+      class:bx--tab--overflow-nav-button--hidden={!canScrollBackward}
+    ></div>
+  {/if}
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     bind:this={refTabList}
@@ -319,9 +371,26 @@
       onMove: (index) => selectTab(index),
     }}
     class:bx--tabs__nav={true}
-    class:bx--tabs__nav--hidden={dropdownHidden}
+    on:scroll={updateOverflow}
   >
     <slot />
   </ul>
+  {#if isOverflow}
+    <div
+      class:bx--tabs__overflow-indicator--right={true}
+      class:bx--tab--overflow-nav-button--hidden={!canScrollForward}
+    ></div>
+    <button
+      type="button"
+      tabindex="-1"
+      aria-hidden="true"
+      class:bx--tab--overflow-nav-button={true}
+      class:bx--tab--overflow-nav-button--next={true}
+      class:bx--tab--overflow-nav-button--hidden={!canScrollForward}
+      on:click={() => scrollTabs(1)}
+    >
+      <ChevronRight />
+    </button>
+  {/if}
 </div>
 <slot name="content" />
