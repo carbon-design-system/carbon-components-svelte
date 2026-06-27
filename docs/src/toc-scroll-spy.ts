@@ -41,7 +41,14 @@ export function setupTocScrollSpy(page: ParentNode): () => void {
     }
   }
 
-  const OFFSET = 48;
+  // Height of the fixed UI shell header. Sections snap to this offset on click
+  // via `scroll-margin-top: 3rem`, so the active threshold must match it.
+  const HEADER_HEIGHT = 48;
+  // Sub-pixel rounding from getBoundingClientRect() can land a clicked section a
+  // fraction below HEADER_HEIGHT (e.g. 48.3), which would fail a strict `<=`
+  // check and let the previous section steal the active state. A 1px tolerance
+  // absorbs that rounding.
+  const OFFSET = HEADER_HEIGHT + 1;
   let raf = 0;
 
   function update() {
