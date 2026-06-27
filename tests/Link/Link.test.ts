@@ -92,6 +92,27 @@ describe("Link", () => {
     expect(link).toHaveClass("bx--link--sm");
   });
 
+  it("renders the icon at every non-inline size", () => {
+    render(Link);
+    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
+
+    const smIconLink = links.find(
+      (l) =>
+        l.classList.contains("bx--link--sm") &&
+        l.querySelector(".bx--link__icon"),
+    );
+    assert(smIconLink);
+    expect(smIconLink.querySelector(".bx--link__icon svg")).toBeInTheDocument();
+
+    const lgIconLink = links.find(
+      (l) =>
+        l.classList.contains("bx--link--lg") &&
+        l.querySelector(".bx--link__icon"),
+    );
+    assert(lgIconLink);
+    expect(lgIconLink.querySelector(".bx--link__icon svg")).toBeInTheDocument();
+  });
+
   it("supports disabled state", () => {
     render(Link);
     const links = screen.getAllByRole("link", { name: "Carbon Design System" });
