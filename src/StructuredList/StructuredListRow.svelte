@@ -11,12 +11,16 @@
    */
   export let tabindex = "0";
 
+  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
+  import StructuredListCell from "./StructuredListCell.svelte";
 
   const ctx = getContext("carbon:StructuredListWrapper");
   const selectedValue = ctx?.selectedValue ?? writable(undefined);
   const multiple = ctx?.multiple ?? false;
+  const selection = ctx?.selection ?? false;
+  const icon = ctx?.icon ?? CheckmarkFilled;
 
   let labelRef;
   let inputValue;
@@ -66,6 +70,11 @@
     on:keydown={handleKeydown}
   >
     <slot />
+    {#if selection}
+      <StructuredListCell style="width: 1px; white-space: nowrap;">
+        <svelte:component this={icon} class="bx--structured-list-svg" />
+      </StructuredListCell>
+    {/if}
   </label>
 {:else}
   <!-- svelte-ignore a11y-interactive-supports-focus -->
@@ -80,5 +89,8 @@
     on:mouseleave
   >
     <slot />
+    {#if selection && head}
+      <StructuredListCell head style="width: 1px;">{""}</StructuredListCell>
+    {/if}
   </div>
 {/if}
