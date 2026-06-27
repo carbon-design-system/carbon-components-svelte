@@ -1588,6 +1588,16 @@ describe("ComboBox", () => {
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     });
 
+    it('should set aria-autocomplete to "list" without typeahead', () => {
+      render(ComboBox, { props: { typeahead: false } });
+      expect(getInput()).toHaveAttribute("aria-autocomplete", "list");
+    });
+
+    it('should set aria-autocomplete to "both" when typeahead is enabled', () => {
+      render(ComboBox, { props: { typeahead: true } });
+      expect(getInput()).toHaveAttribute("aria-autocomplete", "both");
+    });
+
     it("should keep a custom value on Tab when no suggestion matches", async () => {
       render(ComboBox, {
         props: {

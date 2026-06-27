@@ -630,7 +630,7 @@
           role="combobox"
           tabindex="0"
           autocomplete="off"
-          aria-autocomplete="list"
+          aria-autocomplete={typeahead ? "both" : "list"}
           aria-haspopup="listbox"
           aria-expanded={open}
           aria-activedescendant={highlightedId ?? ""}
