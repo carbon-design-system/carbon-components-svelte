@@ -200,7 +200,7 @@ Set `typeahead` to `true` to enable autocomplete. As users type, the input sugge
 
 By default, typeahead uses case-insensitive prefix matching. When a match is found, the suggestion shows the untyped portion highlighted so users can accept it or keep typing.
 
-Pressing <DocKbd label="Enter" /> selects the matching item and closes the dropdown.
+Pressing <DocKbd label="Enter" /> or <DocKbd label="Tab" /> accepts the suggestion: it selects the matching item, normalizes the value to the item's casing, and closes the dropdown. <DocKbd label="Tab" /> still moves focus to the next control. Clicking away accepts the suggestion the same way. When the typed text matches no item, the suggestion is not committed.
 
 You can provide a custom `shouldFilterItem` to change the filtering logic. See the [fuzzy filter](#fuzzy-filter) example below.
 
