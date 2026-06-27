@@ -28,3 +28,28 @@
 >
   Large
 </Link>
+
+<p style="color: rgb(10, 20, 30);">
+  Read the
+  <Link
+    data-testid="link-muted"
+    muted
+    inline
+    href="https://www.carbondesignsystem.com/"
+  >
+    Carbon Design System
+  </Link>
+  documentation.
+</p>
+
+<p style="color: rgb(10, 20, 30);">
+  Read the
+  <Link
+    data-testid="link-default"
+    inline
+    href="https://www.carbondesignsystem.com/"
+  >
+    Carbon Design System
+  </Link>
+  documentation.
+</p>
