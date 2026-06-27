@@ -192,5 +192,13 @@ describe("Link", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
+
+    it("should expose all three size values", () => {
+      type Props = ComponentProps<LinkComponent>;
+
+      expectTypeOf<Props["size"]>().toEqualTypeOf<
+        "sm" | "md" | "lg" | undefined
+      >();
+    });
   });
 });
