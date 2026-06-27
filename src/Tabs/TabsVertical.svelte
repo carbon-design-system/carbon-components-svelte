@@ -16,9 +16,17 @@
    */
   export let size = "xl";
 
-  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
   import { derived, writable } from "svelte/store";
   import { breakpointObserver } from "../Breakpoint/breakpointObserver.js";
+  import ChevronLeft from "../icons/ChevronLeft.svelte";
+  import ChevronRight from "../icons/ChevronRight.svelte";
   import { keyBy } from "../utils/keyBy.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
@@ -67,6 +75,60 @@
 
   let refTabList = null;
   let refRoot = null;
+
+  // Below `md` the tab column collapses into a horizontal, scrollable row that
+  // reuses the same overflow scroll buttons as the horizontal `Tabs`. The
+  // buttons only apply there (a `md`+ column has no horizontal overflow).
+  let canScrollBackward = false;
+  let canScrollForward = false;
+  $: isOverflow = $belowMd && (canScrollBackward || canScrollForward);
+
+  function updateOverflow() {
+    if (!refTabList) return;
+    const { scrollLeft, scrollWidth, clientWidth } = refTabList;
+    canScrollBackward = scrollLeft > 0;
+    canScrollForward = Math.ceil(scrollLeft + clientWidth) < scrollWidth;
+  }
+
+  /**
+   * Scroll the tab list by roughly a viewport width in the given direction.
+   * @type {(direction: 1 | -1) => void}
+   */
+  function scrollTabs(direction) {
+    if (!refTabList) return;
+    refTabList.scrollBy({
+      left: direction * refTabList.clientWidth * 0.75,
+      behavior: "smooth",
+    });
+  }
+
+  /**
+   * Keep a focused tab clear of the overflow chevrons / edge fades.
+   * @type {number}
+   */
+  const SCROLL_INTO_VIEW_MARGIN = 48;
+
+  /**
+   * Scroll the horizontal tab row so `tab` is fully visible, inset from each
+   * edge so it is not tucked under an overflow button.
+   * @type {(tab: HTMLElement | undefined) => void}
+   */
+  function scrollTabIntoView(tab) {
+    if (!tab || !refTabList) return;
+
+    const navRect = refTabList.getBoundingClientRect();
+    const tabRect = tab.getBoundingClientRect();
+    const leftOverflow =
+      tabRect.left - (navRect.left + SCROLL_INTO_VIEW_MARGIN);
+    const rightOverflow =
+      tabRect.right - (navRect.right - SCROLL_INTO_VIEW_MARGIN);
+
+    if (leftOverflow < 0) {
+      refTabList.scrollLeft += leftOverflow;
+    } else if (rightOverflow > 0) {
+      refTabList.scrollLeft += rightOverflow;
+    }
+  }
 
   // Flag to trigger DOM reordering only when tabs change.
   // This is necessary to avoid infinite loops in Svelte 5.
@@ -125,8 +187,14 @@
     currentIndex = index;
 
     await tick();
-    const activeTab = refTabList?.querySelectorAll("[role='tab']")[index];
-    activeTab?.focus();
+    const activeTab = /** @type {HTMLElement | undefined} */ (
+      refTabList?.querySelectorAll("[role='tab']")[index]
+    );
+    // Below `md` the row scrolls horizontally; disable the native focus scroll
+    // (a fixed step that lags variable-width tabs) and scroll explicitly. At
+    // `md`+ the column relies on the browser scrolling the page to the tab.
+    activeTab?.focus({ preventScroll: $belowMd });
+    if ($belowMd) scrollTabIntoView(activeTab);
   }
 
   setContext("carbon:Tabs", {
@@ -136,7 +204,6 @@
     selectedContent,
     activeTooltip,
     iconOnly: useIconOnly,
-    belowMd,
     useAutoWidth,
     useFullWidth,
     useDismissible,
@@ -185,6 +252,13 @@
     prevIndex = currentIndex;
   });
 
+  onMount(() => {
+    updateOverflow();
+    const observer = new ResizeObserver(updateOverflow);
+    if (refTabList) observer.observe(refTabList);
+    return () => observer.disconnect();
+  });
+
   let currentIndex = selected;
   let prevIndex = -1;
 
@@ -203,6 +277,10 @@
   // Roving focus follows the visual orientation: arrow Up/Down in the vertical
   // column, arrow Left/Right in the horizontal row below `md`.
   $: orientation = $belowMd ? "horizontal" : "vertical";
+  // Recompute overflow when the tabs change or the layout flips at `md`.
+  $: if ($tabs || $belowMd) {
+    tick().then(updateOverflow);
+  }
 </script>
 
 <div bind:this={refRoot} class:bx--tabs--vertical-container={true}>
@@ -211,12 +289,31 @@
     class:bx--tabs={true}
     class:bx--tabs--vertical={true}
     class:bx--tabs--tall={$hasSecondaryLabel}
+    class:bx--tabs--scrollable={isOverflow}
+    class:bx--tabs--scrollable--container={isOverflow}
     class:bx--layout--size-sm={size === "sm"}
     class:bx--layout--size-md={size === "md"}
     class:bx--layout--size-lg={size === "lg"}
     class:bx--layout--size-xl={size === "xl"}
     {...$$restProps}
   >
+    {#if isOverflow}
+      <button
+        type="button"
+        tabindex="-1"
+        aria-hidden="true"
+        class:bx--tab--overflow-nav-button={true}
+        class:bx--tab--overflow-nav-button--previous={true}
+        class:bx--tab--overflow-nav-button--hidden={!canScrollBackward}
+        on:click={() => scrollTabs(-1)}
+      >
+        <ChevronLeft />
+      </button>
+      <div
+        class:bx--tabs__overflow-indicator--left={true}
+        class:bx--tab--overflow-nav-button--hidden={!canScrollBackward}
+      ></div>
+    {/if}
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       bind:this={refTabList}
@@ -234,9 +331,27 @@
         },
       }}
       class:bx--tabs__nav={true}
+      on:scroll={updateOverflow}
     >
       <slot />
     </ul>
+    {#if isOverflow}
+      <div
+        class:bx--tabs__overflow-indicator--right={true}
+        class:bx--tab--overflow-nav-button--hidden={!canScrollForward}
+      ></div>
+      <button
+        type="button"
+        tabindex="-1"
+        aria-hidden="true"
+        class:bx--tab--overflow-nav-button={true}
+        class:bx--tab--overflow-nav-button--next={true}
+        class:bx--tab--overflow-nav-button--hidden={!canScrollForward}
+        on:click={() => scrollTabs(1)}
+      >
+        <ChevronRight />
+      </button>
+    {/if}
   </div>
   <slot name="content" />
 </div>
