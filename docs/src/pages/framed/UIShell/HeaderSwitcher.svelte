@@ -26,16 +26,16 @@
   let selected = "0";
   let transitions = {
     0: {
-      text: "Default (duration: 200ms)",
-      value: { duration: 200 },
+      text: "None (default)",
+      value: false,
     },
     1: {
-      text: "Custom (duration: 600ms, delay: 50ms, easing: expoIn)",
-      value: { duration: 600, delay: 50, easing: expoIn },
+      text: "Slide (duration: 200ms)",
+      value: { duration: 200 },
     },
     2: {
-      text: "Disabled",
-      value: false,
+      text: "Custom (duration: 600ms, delay: 50ms, easing: expoIn)",
+      value: { duration: 600, delay: 50, easing: expoIn },
     },
   };
 </script>

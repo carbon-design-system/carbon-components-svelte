@@ -86,13 +86,11 @@ Create a header with a persistent hamburger menu state.
 
 ## Switcher
 
-A `HeaderAction` reveals a panel from the right edge using a slide transition.
+A `HeaderAction` reveals a panel from the right edge.
 
 ### App switcher
 
-The header action uses the [transition:slide API](https://svelte.dev/docs#slide). Customize duration, delay, and easing with `transition`.
-
-Disable the slide transition by setting `transition` to `false`.
+The panel does not animate by default. Enable a slide transition by passing [transition:slide params](https://svelte.dev/docs#slide) to `transition` (e.g., `{ duration: 200 }`) to customize duration, delay, and easing.
 
 <FileSource src="/framed/UIShell/HeaderSwitcher" />
 
