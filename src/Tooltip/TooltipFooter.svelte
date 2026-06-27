@@ -6,19 +6,27 @@
 
   let ref = null;
   let open = false;
+  let openedByHover = false;
 
   const ctx = getContext("carbon:Tooltip") ?? null;
-  const unsubscribe = ctx?.tooltipOpen.subscribe((tooltipOpen) => {
-    open = tooltipOpen;
+  const unsubscribeOpen = ctx?.tooltipOpen.subscribe((value) => {
+    open = value;
+  });
+  const unsubscribeOpenedByHover = ctx?.openedByHover?.subscribe((value) => {
+    openedByHover = value;
   });
 
   onMount(() => {
     return () => {
-      unsubscribe?.();
+      unsubscribeOpen?.();
+      unsubscribeOpenedByHover?.();
     };
   });
 
-  $: if (open && ref) {
+  // Move focus into the footer only when the tooltip was opened via keyboard or
+  // programmatically. Focusing on mouse hover would yank focus away from a user
+  // who is only pointing at the trigger.
+  $: if (open && !openedByHover && ref) {
     const node = ref.querySelector(selectorPrimaryFocus);
     if (node) node.focus();
   }

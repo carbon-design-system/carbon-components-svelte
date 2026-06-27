@@ -120,6 +120,13 @@
    * @type {import("svelte/store").Writable<boolean>}
    */
   const tooltipOpen = writable(open);
+  /**
+   * Tracks whether the latest open was triggered by mouse hover. TooltipFooter
+   * reads this to avoid stealing focus on hover; focus only moves into the
+   * footer when the tooltip is opened via keyboard or programmatically.
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const openedByHover = writable(false);
 
   let prevOpen = undefined;
   let openTimeout;
@@ -128,7 +135,7 @@
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
 
-  setContext("carbon:Tooltip", { tooltipOpen });
+  setContext("carbon:Tooltip", { tooltipOpen, openedByHover });
 
   function setOpenDelayed(value, delay = 0) {
     clearTimeout(openTimeout);
@@ -142,6 +149,7 @@
   }
 
   function onMouseEnter() {
+    openedByHover.set(true);
     setOpenDelayed(true, enterDelayMs);
   }
 
@@ -166,6 +174,7 @@
 
   function onFocus() {
     if (!focusByMouse) {
+      openedByHover.set(false);
       open = true;
     }
   }
@@ -235,6 +244,7 @@
   });
 
   $: tooltipOpen.set(open);
+  $: if (!open) openedByHover.set(false);
   $: {
     if (prevOpen !== undefined) {
       dispatch(open ? "open" : "close");

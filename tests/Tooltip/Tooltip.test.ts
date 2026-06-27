@@ -7,6 +7,7 @@ import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
 import TooltipDefault from "./TooltipDefault.test.svelte";
 import TooltipDirections from "./TooltipDirections.test.svelte";
 import TooltipEvents from "./TooltipEvents.test.svelte";
+import TooltipFooterFocus from "./TooltipFooterFocus.test.svelte";
 import TooltipFooterStandalone from "./TooltipFooterStandalone.test.svelte";
 import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
 import TooltipOpen from "./TooltipOpen.test.svelte";
@@ -256,6 +257,26 @@ describe("Tooltip", () => {
 
   test("TooltipFooter should not throw when rendered outside a Tooltip", () => {
     expect(() => render(TooltipFooterStandalone)).not.toThrow();
+  });
+
+  test("should move focus into the footer when opened via keyboard", async () => {
+    render(TooltipFooterFocus);
+
+    const trigger = screen.getByRole("button", { name: "Resource list" });
+    await fireEvent.focus(trigger);
+
+    expect(screen.getByRole("link", { name: "Learn more" })).toHaveFocus();
+  });
+
+  test("should not move focus into the footer when opened via mouse hover", async () => {
+    render(TooltipFooterFocus);
+
+    const trigger = screen.getByRole("button", { name: "Resource list" });
+    await fireEvent.mouseEnter(trigger);
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Learn more" })).not.toHaveFocus();
   });
 
   describe("Generics", () => {
