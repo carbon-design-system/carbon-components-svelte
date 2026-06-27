@@ -121,7 +121,7 @@ Reflect interaction and navigation history.
 
 ### Disabled
 
-Disabled links render as plain text while remaining accessible.
+Disabled links render as plain text while remaining accessible. They are inert: removed from the tab order and they do not navigate or dispatch click events.
 
 <Link disabled href="https://www.carbondesignsystem.com/">
   Disabled link
