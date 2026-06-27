@@ -4,7 +4,7 @@ description: Links provide styled hyperlinks with multiple sizes, states, and ic
 ---
 
 <script>
-  import { Link, OutboundLink } from "carbon-components-svelte";
+  import { Link, OutboundLink, Text } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
 </script>
 
@@ -26,6 +26,18 @@ Create links that flow naturally with surrounding text.
     Carbon Design System
   </Link>.
 </div>
+
+## Muted
+
+Set `muted` to `true` so the link inherits the surrounding text color instead of the link color. Pair it with `inline` for links that sit within body text.
+
+<Text>
+  Read the
+  <Link inline muted href="https://www.carbondesignsystem.com/">
+    Carbon Design System
+  </Link>
+  documentation for usage guidelines and component examples.
+</Text>
 
 ## External links
 
