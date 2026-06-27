@@ -6,6 +6,14 @@
   const longCode = Array(20)
     .fill("function example() { return 'line'; }")
     .join("\n");
+  // 14 lines: at the 16px code-01 line-height this is 224px of text, under the
+  // 240px collapsed viewport, so no content is hidden and the expand button
+  // must stay hidden even though the <pre>'s bottom padding pushes its raw
+  // bounding-box height past the threshold.
+  const boundaryCode = Array.from(
+    { length: 14 },
+    (_, i) => `const line${i + 1} = ${i + 1};`,
+  ).join("\n");
 
   let dynamicExpanded = false;
   $: dynamicLines = dynamicExpanded ? 24 : 3;
@@ -34,6 +42,14 @@
     type="multi"
     code={shortCode}
     data-testid="snippet-multi-short"
+  />
+</div>
+
+<div data-testid="boundary-multi-snippet">
+  <CodeSnippet
+    type="multi"
+    code={boundaryCode}
+    data-testid="snippet-multi-boundary"
   />
 </div>
 
