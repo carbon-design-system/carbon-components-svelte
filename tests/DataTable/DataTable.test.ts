@@ -3,6 +3,7 @@ import type DataTableComponent from "carbon-components-svelte/DataTable/DataTabl
 import type {
   DataTableKey,
   DataTableRow,
+  DataTableRowClassArgs,
   DataTableValue,
 } from "carbon-components-svelte/DataTable/DataTable.svelte";
 import type {
@@ -2505,7 +2506,7 @@ describe("DataTable", () => {
           props: {
             headers,
             rows,
-            rowClass: ({ row, rowIndex }) => {
+            rowClass: ({ row, rowIndex }: DataTableRowClassArgs) => {
               if (rowIndex === 0) return "first-row";
               if (row.port === 443) return "secure-row";
               return "standard-row";
@@ -2529,7 +2530,7 @@ describe("DataTable", () => {
             rows,
             selectedRowIds: ["a"],
             expandedRowIds: ["b"],
-            rowClass: ({ selected, expanded }) => {
+            rowClass: ({ selected, expanded }: DataTableRowClassArgs) => {
               const classes = [];
               if (selected) classes.push("is-selected");
               if (expanded) classes.push("is-expanded");

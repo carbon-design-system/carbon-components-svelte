@@ -828,24 +828,30 @@ describe("MultiSelect", () => {
       });
 
       await tick();
-      expect(component.sortedItems?.map((item) => item.id)).toEqual([
-        "1",
-        "2",
-        "3",
-      ]);
-      expect(component.sortedItems?.every((item) => !item.checked)).toBe(true);
+      expect(
+        component.sortedItems?.map(
+          (item: MultiSelectItem & { checked: boolean }) => item.id,
+        ),
+      ).toEqual(["1", "2", "3"]);
+      expect(
+        component.sortedItems?.every(
+          (item: MultiSelectItem & { checked: boolean }) => !item.checked,
+        ),
+      ).toBe(true);
 
       await openMenu();
       await toggleOption("C");
       await tick();
 
-      expect(component.sortedItems?.map((item) => item.id)).toEqual([
-        "3",
-        "1",
-        "2",
-      ]);
       expect(
-        component.sortedItems?.find((item) => item.id === "3")?.checked,
+        component.sortedItems?.map(
+          (item: MultiSelectItem & { checked: boolean }) => item.id,
+        ),
+      ).toEqual(["3", "1", "2"]);
+      expect(
+        component.sortedItems?.find(
+          (item: MultiSelectItem & { checked: boolean }) => item.id === "3",
+        )?.checked,
       ).toBe(true);
     });
   });

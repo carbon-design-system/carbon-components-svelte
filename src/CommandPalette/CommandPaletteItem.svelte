@@ -1,6 +1,5 @@
 <script>
   /**
-   * @event {{ value: string; item: { text?: string; value?: string; href?: string; description?: string; keywords?: string[]; shortcut?: string[]; shortcutKeys?: string | string[]; selectionMode?: string; selected?: boolean }; event: Event }} select
    * @slot {{ query: string; matched: boolean; indices: number[]; segments: Array<{ text: string; match: boolean }>; active: boolean }}
    */
 
@@ -43,9 +42,6 @@
    */
   export let shortcutKeys = undefined;
 
-  /** Called after select unless prevented */
-  export let run = undefined;
-
   /** Set to `true` to disable the item */
   export let disabled = false;
 
@@ -70,11 +66,10 @@
   /** Set an id for the item element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import { highlightSegments } from "../utils/fuzzyMatch.js";
 
-  const dispatch = createEventDispatcher();
   const menu = getContext("carbon:CommandPalette");
   const group = getContext("carbon:CommandPaletteGroup");
 
@@ -134,7 +129,6 @@
         shortcut,
         shortcutKeys,
         selectionMode,
-        run,
         select: (event) => handleSelect(event, "select"),
         selectShortcut: (event) => handleSelect(event, "shortcut-key"),
       });
@@ -193,8 +187,7 @@
       },
       event,
     };
-    dispatch("select", detail);
-    menu.selectItem(detail, closeTrigger, run);
+    menu.selectItem(detail, closeTrigger);
   }
 
   $: if (highlighted && ref && !ref.matches(":hover")) {

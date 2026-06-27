@@ -182,7 +182,7 @@ While the palette is open, command shortcuts run matching **filtered, non-disabl
 
 `shortcut` renders hint badges and is parsed into combos when `shortcutKeys` is not set. Symbols like <DocKbd label="⌘" /> map to `meta` (and `ctrl` on Windows, same as `triggerKeys`). Use `shortcutKeys` for explicit bindings when display text cannot parse, e.g. `shortcutKeys="meta+,"`.
 
-A shortcut press highlights the row, fires `select`, runs `href` navigation and `run`, then closes (unless `preventCloseOnSelect` or `event.preventDefault()` on `select`). The `close` event trigger is `"shortcut-key"`.
+A shortcut press highlights the row, fires `select`, then navigates when `href` is set (unless `preventCloseOnSelect` or `event.preventDefault()` on `select`). Handle custom actions in `on:select`. The `close` event trigger is `"shortcut-key"`.
 
 <FileSource src="/framed/CommandPalette/CommandShortcuts" />
 
