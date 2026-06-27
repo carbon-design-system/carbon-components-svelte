@@ -42,6 +42,12 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  /** @param {Event} event */
+  function preventDisabledActivation(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -54,19 +60,20 @@
     bind:this={ref}
     role="link"
     aria-disabled="true"
+    tabindex="-1"
     class:bx--link={true}
     class:bx--link--disabled={disabled}
     class:bx--link--inline={inline}
     class:bx--link--visited={visited}
     class:bx--link--muted={muted}
     {...$$restProps}
-    on:click
+    on:click={preventDisabledActivation}
+    on:keydown={preventDisabledActivation}
     on:mouseover
     on:mouseenter
     on:mouseleave
     on:focus
     on:blur
-    on:keydown
     on:keyup
   >
     <slot />
