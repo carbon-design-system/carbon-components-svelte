@@ -210,6 +210,8 @@ You can provide a custom `shouldFilterItem` to change the filtering logic. See t
 
 Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. This example reuses the built-in `fuzzyMatch` util, exported from `carbon-components-svelte`, as the predicate. It matches items whose text contains the typed characters in order (for example, "bl" matches "Blueberry" and "Blackberry"). Only the `matched` boolean is used here; the `score` and `indices` it also returns are intended for ranked, highlighted search surfaces such as [SearchMenu](/components/SearchMenu).
 
+Inline completion only fills in the input when the top match starts with the typed text, so a fuzzy match like "api" against "Apricot" filters the list without completing the input. Pair the custom filter with `autoHighlight="first-match"` so the matched item is highlighted and <DocKbd label="Enter" /> or <DocKbd label="Tab" /> selects it.
+
 <FileSource src="/framed/ComboBox/TypeaheadCustomFilter" />
 
 ## Filtering

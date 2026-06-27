@@ -15,6 +15,7 @@
   placeholder="Select an item"
   bind:selectedId
   typeahead
+  autoHighlight="first-match"
   {shouldFilterItem}
   items={[
     { id: "0", text: "Apple" },
