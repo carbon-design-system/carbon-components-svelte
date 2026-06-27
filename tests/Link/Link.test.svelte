@@ -70,6 +70,20 @@
   </Link>
 </div>
 
+<!-- Small link with icon -->
+<div data-testid="link-small-icon">
+  <Link size="sm" href="https://www.carbondesignsystem.com/" icon={Carbon}>
+    Carbon Design System
+  </Link>
+</div>
+
+<!-- Large link with icon -->
+<div data-testid="link-large-icon">
+  <Link size="lg" href="https://www.carbondesignsystem.com/" icon={Carbon}>
+    Carbon Design System
+  </Link>
+</div>
+
 <!-- Disabled link -->
 <div data-testid="link-disabled">
   <Link disabled href="https://www.carbondesignsystem.com/">
