@@ -7,7 +7,6 @@
     StructuredListInput,
     StructuredListRow,
   } from "carbon-components-svelte";
-  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
 
   const databases = [
     {
@@ -42,7 +41,6 @@
       <StructuredListCell head>Name</StructuredListCell>
       <StructuredListCell head>Type</StructuredListCell>
       <StructuredListCell head>Description</StructuredListCell>
-      <StructuredListCell head>{""}</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
@@ -56,13 +54,6 @@
           value="{db.id}-value"
           title="{db.name} option"
         />
-        <StructuredListCell>
-          <CheckmarkFilled
-            class="bx--structured-list-svg"
-            aria-label="select an option"
-            title="select an option"
-          />
-        </StructuredListCell>
       </StructuredListRow>
     {/each}
   </StructuredListBody>

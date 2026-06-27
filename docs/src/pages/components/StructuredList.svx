@@ -5,7 +5,7 @@ description: Structured lists display tabular data with support for row selectio
 
 <script>
   import { StructuredList, StructuredListSkeleton, StructuredListBody, StructuredListHead, StructuredListCell, StructuredListRow, StructuredListInput } from "carbon-components-svelte";
-  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
+  import CheckmarkOutline from "carbon-icons-svelte/lib/CheckmarkOutline.svelte";
 </script>
 
 ## Basic
@@ -120,7 +120,7 @@ Let users select one or more rows.
 
 ### Single
 
-Enable row selection with `selection` and structured list input components.
+Enable row selection with `selection` and structured list input components. The selection icon column is rendered automatically for each selectable row.
 
 <StructuredList selection selected="postgresql-value">
   <StructuredListHead>
@@ -128,7 +128,6 @@ Enable row selection with `selection` and structured list input components.
       <StructuredListCell head>Name</StructuredListCell>
       <StructuredListCell head>Type</StructuredListCell>
       <StructuredListCell head>Description</StructuredListCell>
-      <StructuredListCell head>{''}</StructuredListCell>
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
@@ -147,13 +146,37 @@ Enable row selection with `selection` and structured list input components.
           title="{db.name} option"
           name="database"
         />
-        <StructuredListCell>
-          <CheckmarkFilled
-            class="bx--structured-list-svg"
-            aria-label="select an option"
-            title="select an option"
-          />
-        </StructuredListCell>
+      </StructuredListRow>
+    {/each}
+  </StructuredListBody>
+</StructuredList>
+
+### Custom selection icon
+
+Customize the selection icon with the `icon` prop on `StructuredList`.
+
+<StructuredList selection selected="postgresql-value" icon={CheckmarkOutline}>
+  <StructuredListHead>
+    <StructuredListRow head>
+      <StructuredListCell head>Name</StructuredListCell>
+      <StructuredListCell head>Type</StructuredListCell>
+    </StructuredListRow>
+  </StructuredListHead>
+  <StructuredListBody>
+    {#each [
+      { id: "postgresql", name: "PostgreSQL", type: "Relational" },
+      { id: "mongodb", name: "MongoDB", type: "Document" },
+      { id: "redis", name: "Redis", type: "Key-value" },
+    ] as db}
+      <StructuredListRow label for="icon-{db.id}">
+        <StructuredListCell>{db.name}</StructuredListCell>
+        <StructuredListCell>{db.type}</StructuredListCell>
+        <StructuredListInput
+          id="icon-{db.id}"
+          value="{db.id}-value"
+          title="{db.name} option"
+          name="database-icon"
+        />
       </StructuredListRow>
     {/each}
   </StructuredListBody>
