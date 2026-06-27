@@ -1,0 +1,34 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Scale the Link icon to match the link size.
+/// carbon-components v10 ships no icon scaling — `.bx--link__icon` only sets a
+/// fixed `$spacing-03` gap, so the icon stays 16px at every size and looks
+/// oversized on `sm` links. Size the icon optically to the link text: smaller
+/// for `sm`, larger for `lg`. The default (medium) link keeps the 16px icon.
+/// Also tighten the icon-to-text gap on the smaller sizes, where Carbon's
+/// `$spacing-03` is too wide. Targets the rendered `svg` so the scaling applies
+/// to both the `icon` prop and the `icon` slot.
+/// @access private
+/// @group components
+@mixin link-icon {
+  // Default (md) and sm: narrower than Carbon's fixed $spacing-03. lg keeps it.
+  .#{$prefix}--link:not(.#{$prefix}--link--lg) .#{$prefix}--link__icon {
+    margin-left: $spacing-02;
+  }
+
+  .#{$prefix}--link--sm .#{$prefix}--link__icon svg {
+    width: to-rem(14px);
+    height: to-rem(14px);
+  }
+
+  .#{$prefix}--link--lg .#{$prefix}--link__icon svg {
+    width: to-rem(20px);
+    height: to-rem(20px);
+  }
+}
+
+@include exports("link-icon") {
+  @include link-icon;
+}
