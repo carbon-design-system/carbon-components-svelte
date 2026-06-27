@@ -202,6 +202,8 @@ By default, typeahead uses case-insensitive prefix matching. When a match is fou
 
 Pressing <DocKbd label="Enter" /> or <DocKbd label="Tab" /> accepts the suggestion: it selects the matching item, normalizes the value to the item's casing, and closes the dropdown. <DocKbd label="Tab" /> still moves focus to the next control. Clicking away accepts the suggestion the same way. When the typed text matches no item, the suggestion is not committed.
 
+Pressing <DocKbd label="→" /> or <DocKbd label="End" /> accepts the inline suggestion in place: it commits the completed text into the value (keeping your casing) and collapses the cursor to the end, but keeps focus in the input and leaves the dropdown open so you can continue editing. Unlike <DocKbd label="Enter" /> and <DocKbd label="Tab" />, it does not select an item or close the menu.
+
 You can provide a custom `shouldFilterItem` to change the filtering logic. See the [fuzzy filter](#fuzzy-filter) example below.
 
 <FileSource src="/framed/ComboBox/TypeaheadComboBox" />
