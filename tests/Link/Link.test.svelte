@@ -86,7 +86,13 @@
 
 <!-- Disabled link -->
 <div data-testid="link-disabled">
-  <Link disabled href="https://www.carbondesignsystem.com/">
+  <Link
+    disabled
+    href="https://www.carbondesignsystem.com/"
+    on:click={() => {
+      console.log("disabled-click");
+    }}
+  >
     Carbon Design System
   </Link>
 </div>

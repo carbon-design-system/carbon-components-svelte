@@ -124,6 +124,26 @@ describe("Link", () => {
     expect(link).toHaveAttribute("role", "link");
   });
 
+  it("removes a disabled link from the tab order", () => {
+    render(Link);
+    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
+    const link = links.find((l) => l.getAttribute("aria-disabled") === "true");
+    assert(link);
+
+    expect(link).toHaveAttribute("tabindex", "-1");
+  });
+
+  it("does not dispatch click to consumers when disabled", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Link);
+    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
+    const link = links.find((l) => l.getAttribute("aria-disabled") === "true");
+    assert(link);
+
+    await user.click(link);
+    expect(consoleLog).not.toHaveBeenCalledWith("disabled-click");
+  });
+
   it("supports muted variant", () => {
     render(Link);
     const links = screen.getAllByRole("link", { name: "Carbon Design System" });
