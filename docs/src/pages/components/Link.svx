@@ -85,7 +85,13 @@ Add an icon with the `icon` prop. Inline must be false when using icons.
 
 ## Sizes
 
-Set `size` to control link size. The default is medium.
+Set `size` to control link size. The default is medium (`"md"`).
+
+### Medium
+
+<Link size="md" href="https://www.carbondesignsystem.com/">
+  Medium link
+</Link>
 
 ### Large
 
