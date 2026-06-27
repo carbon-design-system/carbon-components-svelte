@@ -208,9 +208,15 @@ You can provide a custom `shouldFilterItem` to change the filtering logic. See t
 
 ### Fuzzy filter
 
-Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. This example reuses the built-in `fuzzyMatch` util, exported from `carbon-components-svelte`, as the predicate. It matches items whose text contains the typed characters in order (for example, "bl" matches "Blueberry" and "Blackberry"). Only the `matched` boolean is used here; the `score` and `indices` it also returns are intended for ranked, highlighted search surfaces such as [SearchMenu](/components/SearchMenu).
+Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. This example reuses the built-in `fuzzyMatch` utility, exported from `carbon-components-svelte`, as the predicate. It matches items whose text contains the typed characters in order (for example, "bl" matches "Blueberry" and "Blackberry"). Only the `matched` boolean is used here; the `score` and `indices` it also returns rank and highlight matches, as shown in [Highlight matches](#highlight-matches) below.
 
 <FileSource src="/framed/ComboBox/TypeaheadCustomFilter" />
+
+### Highlight matches
+
+Besides `matched`, `fuzzyMatch` returns the `indices` of the characters that matched. Pass them to the `highlightSegments` utility (also exported from `carbon-components-svelte`) to split the item text into matched and unmatched runs, then bold the matched runs in the default slot. Bind `value` to read the typed query inside the slot.
+
+<FileSource src="/framed/ComboBox/ComboBoxHighlightMatch" />
 
 ## Filtering
 
