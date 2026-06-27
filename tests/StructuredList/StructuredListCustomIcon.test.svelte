@@ -5,19 +5,10 @@
   import StructuredListHead from "carbon-components-svelte/StructuredList/StructuredListHead.svelte";
   import StructuredListInput from "carbon-components-svelte/StructuredList/StructuredListInput.svelte";
   import StructuredListRow from "carbon-components-svelte/StructuredList/StructuredListRow.svelte";
-  import type { ComponentProps } from "svelte";
-
-  export let selected: ComponentProps<StructuredList>["selected"] = undefined;
+  import CheckmarkOutline from "carbon-icons-svelte/lib/CheckmarkOutline.svelte";
 </script>
 
-<StructuredList
-  selection
-  multiple
-  bind:selected
-  on:change={(e) => {
-    console.log("change", e.detail);
-  }}
->
+<StructuredList selection icon={CheckmarkOutline}>
   <StructuredListHead>
     <StructuredListRow head>
       <StructuredListCell head>Column A</StructuredListCell>
@@ -27,14 +18,8 @@
     {#each ["1", "2", "3"] as item}
       <StructuredListRow label for="row-{item}">
         <StructuredListCell>Row {item}</StructuredListCell>
-        <StructuredListInput
-          id="row-{item}"
-          value="row-{item}-value"
-          title="row-{item}-title"
-        />
+        <StructuredListInput id="row-{item}" value="row-{item}-value" />
       </StructuredListRow>
     {/each}
   </StructuredListBody>
 </StructuredList>
-
-<div data-testid="value">{JSON.stringify(selected)}</div>

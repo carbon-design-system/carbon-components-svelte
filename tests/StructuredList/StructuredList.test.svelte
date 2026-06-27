@@ -5,7 +5,6 @@
   import StructuredListHead from "carbon-components-svelte/StructuredList/StructuredListHead.svelte";
   import StructuredListInput from "carbon-components-svelte/StructuredList/StructuredListInput.svelte";
   import StructuredListRow from "carbon-components-svelte/StructuredList/StructuredListRow.svelte";
-  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import type { ComponentProps } from "svelte";
 
   export let selected: ComponentProps<StructuredList>["selected"] = undefined;
@@ -40,9 +39,6 @@
       <StructuredListCell head>Column A</StructuredListCell>
       <StructuredListCell head>Column B</StructuredListCell>
       <StructuredListCell head>Column C</StructuredListCell>
-      {#if selection}
-        <StructuredListCell head>{""}</StructuredListCell>
-      {/if}
     </StructuredListRow>
   </StructuredListHead>
   <StructuredListBody>
@@ -61,13 +57,6 @@
             title="row-{item}-title"
             name="row-{item}-name"
           />
-          <StructuredListCell>
-            <CheckmarkFilled
-              class="bx--structured-list-svg"
-              aria-label="select an option"
-              title="select an option"
-            />
-          </StructuredListCell>
         {/if}
       </StructuredListRow>
     {/each}

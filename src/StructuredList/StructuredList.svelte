@@ -1,6 +1,7 @@
 <script>
   /**
    * @template {string} [Value=string]
+   * @template [Icon=any]
    * @event {Value | Value[]} change
    */
 
@@ -24,6 +25,15 @@
   /** Set to `true` to allow selecting multiple rows */
   export let multiple = false;
 
+  /**
+   * Specify the icon rendered in the selection column of selectable rows.
+   * Only used when `selection` is `true`.
+   * The icon is decorative; selection state is conveyed by each row's `aria-checked`.
+   * @type {Icon}
+   */
+  export let icon = CheckmarkFilled;
+
+  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
 
@@ -58,6 +68,8 @@
     selectedValue,
     update,
     multiple,
+    selection,
+    icon,
   });
 
   onMount(() => {

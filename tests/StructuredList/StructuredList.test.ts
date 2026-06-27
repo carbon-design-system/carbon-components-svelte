@@ -5,6 +5,7 @@ import { user } from "../utils/user";
 import StructuredList from "./StructuredList.test.svelte";
 import StructuredListChecked from "./StructuredListChecked.test.svelte";
 import StructuredListCustom from "./StructuredListCustom.test.svelte";
+import StructuredListCustomIcon from "./StructuredListCustomIcon.test.svelte";
 import StructuredListInputStandalone from "./StructuredListInputStandalone.test.svelte";
 import StructuredListMultiple from "./StructuredListMultiple.test.svelte";
 
@@ -46,7 +47,9 @@ describe("StructuredList", () => {
   });
 
   it("should handle selection variant", () => {
-    render(StructuredList, { props: { selection: true } });
+    const { container } = render(StructuredList, {
+      props: { selection: true },
+    });
 
     const list = screen.getByRole("table");
     expect(list).toHaveClass("bx--structured-list--selection");
@@ -54,8 +57,30 @@ describe("StructuredList", () => {
     const inputs = screen.getAllByRole("radio");
     expect(inputs).toHaveLength(3);
 
-    const checkmarks = screen.getAllByTitle("select an option");
+    const checkmarks = container.querySelectorAll(
+      "svg.bx--structured-list-svg",
+    );
     expect(checkmarks).toHaveLength(3);
+
+    for (const checkmark of checkmarks) {
+      // The checkmark is decorative; selection state is conveyed by the row.
+      expect(checkmark).toHaveAttribute("aria-hidden", "true");
+      // The selection icon column shrinks to the icon so it sits flush right.
+      expect(checkmark.closest(".bx--structured-list-td")).toHaveStyle({
+        width: "1px",
+      });
+    }
+  });
+
+  it("should render a custom selection icon via the `icon` prop", () => {
+    const { container } = render(StructuredListCustomIcon);
+
+    // One auto-rendered, decorative icon per selectable row.
+    const icons = container.querySelectorAll("svg.bx--structured-list-svg");
+    expect(icons).toHaveLength(3);
+    for (const icon of icons) {
+      expect(icon).toHaveAttribute("aria-hidden", "true");
+    }
   });
 
   it("should handle selected state", async () => {
