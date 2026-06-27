@@ -68,8 +68,10 @@ describe("Tabs (icon-only)", () => {
     expect(openTooltips()).toHaveLength(0);
   });
 
-  it("suppresses the tooltip below the `md` breakpoint (dropdown menu)", async () => {
-    // Simulate the small (dropdown) breakpoint.
+  // The v11 redesign keeps icon-only tabs square at every breakpoint (no more
+  // mobile dropdown that surfaced the label inline), so the tooltip is shown
+  // below `md` as well rather than suppressed.
+  it("still opens the tooltip below the `md` breakpoint", async () => {
     vi.stubGlobal("matchMedia", (query: string) => ({
       matches: query === "(max-width: 672px)",
       media: query,
@@ -85,7 +87,7 @@ describe("Tabs (icon-only)", () => {
       const settings = screen.getByRole("tab", { name: "Settings" });
       await fireEvent.focus(settings);
       await tick();
-      expect(openTooltips()).toHaveLength(0);
+      expect(openTooltips()).toHaveLength(1);
     } finally {
       vi.unstubAllGlobals();
     }
