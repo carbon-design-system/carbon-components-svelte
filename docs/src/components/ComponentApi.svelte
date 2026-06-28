@@ -1,4 +1,13 @@
 <script lang="ts">
+  // Structured JSDoc tag (e.g. `@since`, `@example`) surfaced by sveld.
+  type ComponentApiTag = {
+    name: string;
+    body: string;
+  };
+
+  // From `@deprecated` JSDoc: a message string, or `true` when no message.
+  type ComponentApiDeprecated = string | true;
+
   type ComponentApiProp = {
     name: string;
     description?: string;
@@ -6,6 +15,8 @@
     value?: string;
     isRequired?: boolean;
     reactive?: boolean;
+    deprecated?: ComponentApiDeprecated;
+    tags?: ComponentApiTag[];
   };
 
   type ComponentApiTypedef = {
@@ -16,6 +27,8 @@
     default?: boolean;
     name?: string | null;
     slot_props?: string;
+    deprecated?: ComponentApiDeprecated;
+    tags?: ComponentApiTag[];
   };
 
   type ComponentApiEvent = {
@@ -23,6 +36,8 @@
     name?: string;
     detail?: string;
     description?: string;
+    deprecated?: ComponentApiDeprecated;
+    tags?: ComponentApiTag[];
   };
 
   type ComponentApiRestProps = {
@@ -79,29 +94,42 @@
     Date: "JavaScript Date",
   };
 
-  // Regex to extract code blocks from @example annotations
+  // Regex to extract code blocks from @example tags.
+  // As of sveld 0.33, `@example`/`@since`/`@deprecated` are surfaced as
+  // structured tags rather than embedded in the description text.
   // Pattern: ```svelte\n...code...\n``` or ```svelte\n...code...```
   // The regex uses [\s\S]*? to match any character including newlines (non-greedy)
   const EXAMPLE_CODE_BLOCK_REGEX = /```svelte\s*\n([\s\S]*?)```/;
 
-  function parseDescription(description: string) {
-    if (!description) {
-      return { mainDescription: "", exampleCode: null };
-    }
+  function findTag(tags: ComponentApiTag[] | undefined, name: string) {
+    return tags?.find((tag) => tag.name === name);
+  }
 
-    const exampleIndex = description.indexOf("@example");
-    if (exampleIndex === -1) {
-      return { mainDescription: description, exampleCode: null };
-    }
+  // Pull the svelte code block out of an `@example` tag, if present.
+  function exampleCodeFromTags(tags?: ComponentApiTag[]): string | null {
+    const example = findTag(tags, "example");
+    if (!example) return null;
 
-    const mainDescription = description.slice(0, exampleIndex).trim();
-    const exampleSection = description.slice(exampleIndex);
+    const codeBlockMatch = example.body.match(EXAMPLE_CODE_BLOCK_REGEX);
+    return codeBlockMatch ? codeBlockMatch[1].trim() : example.body.trim();
+  }
 
-    // Extract code block from example section
-    const codeBlockMatch = exampleSection.match(EXAMPLE_CODE_BLOCK_REGEX);
-    const exampleCode = codeBlockMatch ? codeBlockMatch[1].trim() : null;
+  function sinceFromTags(tags?: ComponentApiTag[]): string | null {
+    return findTag(tags, "since")?.body.trim() || null;
+  }
 
-    return { mainDescription, exampleCode };
+  // Render a JSDoc description as light HTML: escape angle brackets, turn
+  // `code` spans into <code>, and linkify bare URLs.
+  function renderDescription(description: string): string {
+    return description
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/`(.*?)`/g, "<code>$1</code>")
+      .replace(/https?:\/\/[^\s<]+/g, (url) => {
+        const trailing = url.match(/[.,;:!?)\]]+$/)?.[0] ?? "";
+        const href = url.slice(0, url.length - trailing.length);
+        return `<a class="bx--link" href="${href}" target="_blank" rel="noopener noreferrer">${href}</a>${trailing}`;
+      });
   }
 
   $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
@@ -163,6 +191,9 @@
               {#if prop.isRequired}
                 <Tag size="sm" type="magenta">Required</Tag>
               {/if}
+              {#if prop.deprecated}
+                <Tag size="sm" type="red">Deprecated</Tag>
+              {/if}
             </StructuredListCell>
             <StructuredListCell>
               {#each (prop.type || "").split(" | ") as type, i (type)}
@@ -206,41 +237,43 @@
               {/each}
             </StructuredListCell>
             <StructuredListCell>
+              {#if prop.deprecated}
+                <div class="deprecated">
+                  <strong>Deprecated.</strong>
+                  {#if typeof prop.deprecated === "string"}
+                    {@html renderDescription(prop.deprecated)}
+                  {/if}
+                </div>
+              {/if}
               {#if prop.description}
-                {@const parsed = parseDescription(prop.description)}
-                {#if parsed.mainDescription}
-                  <div class="description">
-                    {@html parsed.mainDescription
-                      .replace(/</g, "&lt;")
-                      .replace(/>/g, "&gt;")
-                      .replace(/`(.*?)`/g, "<code>$1</code>")
-                      .replace(/https?:\/\/[^\s<]+/g, (url) => {
-                        const trailing = url.match(/[.,;:!?)\]]+$/)?.[0] ?? "";
-                        const href = url.slice(0, url.length - trailing.length);
-                        return `<a class="bx--link" href="${href}" target="_blank" rel="noopener noreferrer">${href}</a>${trailing}`;
-                      })}
-                  </div>
-                {/if}
-                {#if parsed.exampleCode}
-                  <div
-                    style:margin-top="var(--cds-layout-02)"
-                    style:margin-bottom="var(--cds-spacing-03)"
-                  >
-                    <strong>Example</strong>
-                  </div>
-                  <div
-                    style:margin-bottom="var(--cds-layout-02)"
-                    style:max-width="85%"
-                  >
-                    <svelte:component
-                      this={AsyncCodeBlock}
-                      language="typescript"
-                      type="multi"
-                      code={parsed.exampleCode}
-                      portalTooltip
-                    />
-                  </div>
-                {/if}
+                <div class="description">
+                  {@html renderDescription(prop.description)}
+                </div>
+              {/if}
+              {#if sinceFromTags(prop.tags)}
+                {@const since = sinceFromTags(prop.tags)}
+                <div class="since">Available since {since}</div>
+              {/if}
+              {#if exampleCodeFromTags(prop.tags)}
+                {@const exampleCode = exampleCodeFromTags(prop.tags)}
+                <div
+                  style:margin-top="var(--cds-layout-02)"
+                  style:margin-bottom="var(--cds-spacing-03)"
+                >
+                  <strong>Example</strong>
+                </div>
+                <div
+                  style:margin-bottom="var(--cds-layout-02)"
+                  style:max-width="85%"
+                >
+                  <svelte:component
+                    this={AsyncCodeBlock}
+                    language="typescript"
+                    type="multi"
+                    code={exampleCode ?? ""}
+                    portalTooltip
+                  />
+                </div>
               {/if}
               <div
                 style:margin-top="var(--cds-layout-02)"
@@ -409,6 +442,18 @@
   .description {
     margin-bottom: var(--cds-spacing-04);
     width: 80%;
+  }
+
+  .deprecated {
+    margin-bottom: var(--cds-spacing-04);
+    width: 80%;
+    color: var(--cds-text-error, #da1e28);
+  }
+
+  .since {
+    margin-bottom: var(--cds-spacing-04);
+    color: var(--cds-text-02, #525252);
+    font-size: var(--cds-label-01-font-size, 0.75rem);
   }
 
   .cell {

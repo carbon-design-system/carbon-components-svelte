@@ -8,6 +8,7 @@ const CACHE_FILE = `${CACHE_DIR}/input.hash`;
 
 const SVELD_OPTIONS = {
   glob: true,
+  documentExports: true,
   json: true,
   jsonOptions: {
     outFile: "docs/src/COMPONENT_API.json",
