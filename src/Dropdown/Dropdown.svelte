@@ -216,6 +216,7 @@
   $: menuAriaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
 
   let highlightedIndex = -1;
+  let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
   let prevHighlightedIndex = -1;
   let typeaheadBuffer = "";
   let listScrollTop = 0;
@@ -262,6 +263,7 @@
   $: selectedItem = itemsById.get(selectedId);
   $: if (!open) {
     highlightedIndex = -1;
+    highlightOrigin = null;
     prevHighlightedIndex = -1;
     typeaheadBuffer = "";
     resetTypeaheadBuffer.cancel();
@@ -331,6 +333,7 @@
     if (wasJustOpened && selectedIndex >= 0) {
       // Set highlighted index to selected item so keyboard nav starts there
       highlightedIndex = selectedIndex;
+      highlightOrigin = "keyboard";
       prevHighlightedIndex = selectedIndex;
     }
 
@@ -384,6 +387,7 @@
       index: highlightedIndex,
       step,
     });
+    highlightOrigin = "keyboard";
   }
 
   function typeaheadSearch(character) {
@@ -398,6 +402,7 @@
       itemToString,
       index: highlightedIndex,
     });
+    highlightOrigin = "keyboard";
   }
 
   function dispatchSelect() {
@@ -425,7 +430,11 @@
       open = true;
       return;
     }
-    if (highlightedIndex > -1 && items[highlightedIndex].id !== selectedId) {
+    if (
+      highlightOrigin === "keyboard" &&
+      highlightedIndex > -1 &&
+      items[highlightedIndex].id !== selectedId
+    ) {
       selectedId = items[highlightedIndex].id;
       dispatchSelect();
       close("select");
@@ -638,6 +647,7 @@
           // Clear the hover highlight when the cursor leaves the menu so the
           // highlighted state does not linger on the last hovered item.
           highlightedIndex = -1;
+          highlightOrigin = null;
         }}
         bind:ref={listRef}
         style={effectivePortalMenu
@@ -674,6 +684,7 @@
                   on:mouseenter={() => {
                     if (item.disabled) return;
                     highlightedIndex = actualIndex;
+                    highlightOrigin = "pointer";
                   }}
                 >
                   {#if $$slots.icon || item.icon}
@@ -738,6 +749,7 @@
               on:mouseenter={() => {
                 if (item.disabled) return;
                 highlightedIndex = index;
+                highlightOrigin = "pointer";
               }}
             >
               {#if $$slots.icon || item.icon}
