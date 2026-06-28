@@ -1,0 +1,93 @@
+// Toggletip from @carbon/styles. The floating content reuses the popover
+// styles; this partial adds the toggletip-specific button, label, content,
+// and actions.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Toggletip component
+/// @access private
+/// @group components
+@mixin toggletip {
+  .#{$prefix}--toggletip-container {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--toggletip {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .#{$prefix}--toggletip-label {
+    @include type-style("label-01");
+
+    margin-right: $spacing-03;
+    color: $text-02;
+  }
+
+  .#{$prefix}--toggletip-button {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .#{$prefix}--toggletip-button svg {
+    fill: $icon-02;
+  }
+
+  .#{$prefix}--toggletip-button:hover svg,
+  .#{$prefix}--toggletip--open .#{$prefix}--toggletip-button svg {
+    fill: $icon-01;
+  }
+
+  .#{$prefix}--toggletip-button:focus {
+    outline: 1px solid $focus;
+  }
+
+  .#{$prefix}--toggletip-content {
+    @include type-style("body-short-01");
+
+    display: grid;
+    max-width: rem(288px);
+    padding: $spacing-05;
+    row-gap: $spacing-05;
+  }
+
+  // The content sits on the inverse (dark) popover surface, so links must use
+  // the inverse link color across every state to remain legible. Mirrors the
+  // link treatment Carbon applies inside `.bx--tooltip`.
+  .#{$prefix}--toggletip-content .#{$prefix}--link,
+  .#{$prefix}--toggletip-content .#{$prefix}--link:hover,
+  .#{$prefix}--toggletip-content .#{$prefix}--link:visited,
+  .#{$prefix}--toggletip-content .#{$prefix}--link:visited:hover {
+    color: $inverse-link;
+  }
+
+  .#{$prefix}--toggletip-content .#{$prefix}--link:active,
+  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited,
+  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited:hover {
+    color: $inverse-01;
+  }
+
+  .#{$prefix}--toggletip-content .#{$prefix}--link:focus {
+    outline: 1px solid $inverse-focus-ui;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--toggletip-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: $spacing-05;
+  }
+}
+
+@include exports("toggletip") {
+  @include toggletip;
+}
