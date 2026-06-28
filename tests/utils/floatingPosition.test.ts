@@ -170,14 +170,14 @@ describe("floatingPosition", () => {
       });
 
       expect(result.left).toBe(100);
-      // anchorCx (175) - measured floating left (100)
+      // Half the anchor width (150 / 2), applied from the box's left edge.
       expect(result.caretNudgePx).toBe(75);
     });
 
-    test("end intrinsic align uses anchor right; caret uses width not measured left", () => {
+    test("end intrinsic align uses anchor right; caret offset is anchor half-width", () => {
       const result = floatingPosition({
         anchorRect, // right = 250
-        floatingRect: rect(999, 0, 80, 30), // stale left ignored; width=80 used
+        floatingRect: rect(999, 0, 80, 30), // left and width are ignored for the caret
         viewport,
         direction: "bottom",
         intrinsicWidth: true,
@@ -185,8 +185,10 @@ describe("floatingPosition", () => {
       });
 
       expect(result.left).toBe(250); // anchor.right
-      // anchorCx (175) - (anchor.right (250) - width (80)) = 175 - 170
-      expect(result.caretNudgePx).toBe(5);
+      // Half the anchor width (150 / 2), applied from the box's right edge by
+      // the CSS, so the caret stays centered on the trigger regardless of the
+      // floating width.
+      expect(result.caretNudgePx).toBe(75);
     });
   });
 
