@@ -1,0 +1,68 @@
+// CopyButton variants: a `ghost` kind and a set of square sizes that mirror
+// `Button`. Carbon ships a single, fixed-size `bx--copy-btn` (a 2.5rem square
+// with a `$layer` fill), so these modifiers extend it to match the `Button`
+// API. The ghost kind reuses Button's ghost theme (transparent fill, subtle
+// hover) so a CopyButton can sit beside a ghost Button without a seam; the
+// sizes scale the square to Button's small/lg/xl heights.
+//
+// Loaded after Carbon's base styles (see all.scss), so each modifier is
+// double-classed to win at equal specificity against the base `bx--copy-btn`
+// declarations it overrides.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// CopyButton ghost kind and square sizes.
+/// @access private
+/// @group copy-button
+@mixin copy-button {
+  //--------------------------------------------------------------------------
+  // Ghost kind (mirrors Button's ghost theme)
+  //--------------------------------------------------------------------------
+  .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost {
+    background-color: transparent;
+  }
+
+  .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost:hover {
+    background-color: $hover-ui;
+  }
+
+  .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost:active {
+    background-color: $active-ui;
+  }
+
+  .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost .#{$prefix}--snippet__icon {
+    fill: $icon-01;
+  }
+
+  //--------------------------------------------------------------------------
+  // Sizes (square dimensions matching Button's small/lg/xl heights;
+  // `default` keeps Carbon's native 2.5rem)
+  //--------------------------------------------------------------------------
+  .#{$prefix}--copy-btn.#{$prefix}--copy-btn--sm {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .#{$prefix}--copy-btn.#{$prefix}--copy-btn--lg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .#{$prefix}--copy-btn.#{$prefix}--copy-btn--xl {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  // Grow the icon on the larger squares so it stays visually centered rather
+  // than marooned in whitespace.
+  .#{$prefix}--copy-btn.#{$prefix}--copy-btn--lg .#{$prefix}--snippet__icon,
+  .#{$prefix}--copy-btn.#{$prefix}--copy-btn--xl .#{$prefix}--snippet__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+@include exports("copy-button-variants") {
+  @include copy-button;
+}

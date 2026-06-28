@@ -149,9 +149,9 @@ Reference [`ComboBox.svelte`](src/ComboBox/ComboBox.svelte) for `@template`, `@t
 ```js
 /**
  * Specify the size of the component
- * @type {"sm" | "default" | "lg"}
+ * @type {"sm" | "md" | "lg"}
  */
-export let size = "default";
+export let size = "md";
 ```
 
 #### After changing a component's API
