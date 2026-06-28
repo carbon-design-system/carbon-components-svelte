@@ -125,6 +125,7 @@
     return () => {
       mounted = false;
       unobserveAnchor();
+      unobserveFloating();
       removeScrollListeners();
       scheduleUpdate.cancel();
     };
@@ -157,6 +158,30 @@
     if (anchorObserver && anchor) {
       anchorObserver.disconnect();
       anchorObserver = null;
+    }
+  }
+
+  /** @type {ResizeObserver | null} */
+  let floatingObserver = null;
+
+  // Reposition when the floating content itself resizes (e.g. a tooltip whose
+  // text swaps). Caret nudge for intrinsic `start`/`end` alignment depends on
+  // the floating width, so a stale width leaves the caret off the anchor.
+  function observeFloating() {
+    if (!ref || floatingObserver || typeof ResizeObserver === "undefined") {
+      return;
+    }
+    // Reposition synchronously (not rAF-throttled). ResizeObserver fires after
+    // layout but before paint, so updating here applies the corrected position
+    // in the same frame the content resized — no one-frame caret drift.
+    floatingObserver = new ResizeObserver(() => updatePosition());
+    floatingObserver.observe(ref);
+  }
+
+  function unobserveFloating() {
+    if (floatingObserver) {
+      floatingObserver.disconnect();
+      floatingObserver = null;
     }
   }
 
@@ -229,6 +254,7 @@
 
   $: if (!open) {
     unobserveAnchor();
+    unobserveFloating();
     removeScrollListeners();
     scrollableAncestors = [];
     scheduleUpdate.cancel();
@@ -236,10 +262,12 @@
 
   $: if (open && anchor && ref) {
     unobserveAnchor();
+    unobserveFloating();
     removeScrollListeners();
     scrollableAncestors = getScrollableAncestors(anchor);
     addScrollListeners();
     observeAnchor();
+    observeFloating();
     tick().then(() => {
       updatePosition();
       // Second pass after layout: side placements need width; intrinsic caret needs stable rect.

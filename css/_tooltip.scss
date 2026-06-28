@@ -40,15 +40,23 @@
     align-self: flex-end;
   }
 
+  // `start`: offset the caret from the box's left edge.
   [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='start']
     .#{$prefix}--tooltip-portal__caret,
   [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='start']
-    .#{$prefix}--tooltip-portal__caret,
+    .#{$prefix}--tooltip-portal__caret {
+    margin-left: calc(var(--ccs-tooltip-caret-nudge) - 0.3125rem);
+  }
+
+  // `end`: offset the caret from the box's right edge. The nudge is the anchor
+  // half-width, so the caret stays centered on the trigger regardless of the
+  // tooltip width (no movement when the text swaps to the copy feedback).
   [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='end']
     .#{$prefix}--tooltip-portal__caret,
   [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='end']
     .#{$prefix}--tooltip-portal__caret {
-    margin-left: calc(var(--ccs-tooltip-caret-nudge) - 0.3125rem);
+    align-self: flex-end;
+    margin-right: calc(var(--ccs-tooltip-caret-nudge) - 0.3125rem);
   }
 
   [data-floating-portal][data-floating-direction='right'] .#{$prefix}--tooltip-portal {

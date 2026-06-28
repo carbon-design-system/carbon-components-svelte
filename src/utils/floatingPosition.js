@@ -178,13 +178,13 @@ export function floatingPosition({
     (actualDirection === "top" || actualDirection === "bottom") &&
     (intrinsicAlign === "start" || intrinsicAlign === "end")
   ) {
-    const anchorCx = rect.left + rect.width / 2;
-    // end + translateX(-100%): use anchor.right - width; floatingRect.left can lag styles
-    const portalLeftViewport =
-      intrinsicAlign === "end" && floatingRect.width > 0
-        ? rect.right - floatingRect.width
-        : floatingRect.left;
-    caretNudgePx = anchorCx - portalLeftViewport;
+    // Distance from the box edge that sits on the anchor (left edge for
+    // `start`, right edge for `end`) to the anchor center. This is half the
+    // anchor width and does NOT depend on the floating width, so the caret
+    // stays centered on the trigger when the tooltip text (and thus width)
+    // changes — no recompute, no bounce. The CSS applies it from the matching
+    // edge per alignment.
+    caretNudgePx = rect.width / 2;
   }
 
   return {
