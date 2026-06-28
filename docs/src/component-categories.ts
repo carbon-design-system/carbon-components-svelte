@@ -127,6 +127,10 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Truncate",
     ],
   },
+  {
+    label: "Misc",
+    components: ["UserAvatar", "UserAvatarGroup"],
+  },
 ];
 
 export const CATEGORY_BY_COMPONENT: Record<string, string> =
