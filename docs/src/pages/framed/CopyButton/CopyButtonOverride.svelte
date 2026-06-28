@@ -3,4 +3,8 @@
   import copy from "clipboard-copy";
 </script>
 
-<CopyButton text="Carbon svelte" copy={(text) => copy(text)} />
+<CopyButton
+  text="Carbon svelte"
+  copy={(text) => copy(text)}
+  tooltipAlignment="start"
+/>

@@ -20,6 +20,20 @@
   export let iconDescription = "Copy to clipboard";
 
   /**
+   * Specify the kind of copy button.
+   * Use `"ghost"` to match a `Button` with `kind="ghost"`.
+   * @type {"primary" | "ghost"}
+   */
+  export let kind = "primary";
+
+  /**
+   * Specify the size of the copy button.
+   * `"md"` keeps Carbon's native 2.5rem square; the other sizes match `Button`.
+   * @type {"sm" | "md" | "lg" | "xl"}
+   */
+  export let size = "md";
+
+  /**
    * Specify the text to copy.
    * @type {string}
    */
@@ -38,15 +52,30 @@
   /**
    * Set to `true` to render the feedback tooltip in a portal,
    * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * By default, the tooltip is portalled when inside a `Modal` or when a
+   * non-default `tooltipPosition`/`tooltipAlignment` is set.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
+
+  /**
+   * Set the position of the tooltip relative to the button.
+   * @type {"top" | "right" | "bottom" | "left"}
+   */
+  export let tooltipPosition = "bottom";
+
+  /**
+   * Set the alignment of the tooltip relative to the button.
+   * @type {"start" | "center" | "end"}
+   */
+  export let tooltipAlignment = "center";
 
   /** Obtain a reference to the underlying button element. */
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { get } from "svelte/store";
+  import { activeButtonTooltip } from "../Button/button-tooltip-store.js";
   import Copy from "../icons/Copy.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
@@ -71,24 +100,132 @@
     copyPending = copyFeedback.copyPending;
   }
 
+  // Proactive hover/focus tooltip. Reuses the floating-portal `PortalTooltip`
+  // and the shared `activeButtonTooltip` store, so a CopyButton coordinates
+  // with adjacent icon-only Buttons (warm handoff, no overlapping tooltips).
+  // Mirrors Button's portal-tooltip timing.
+  const tooltipId = {};
+  const ENTER_DELAY_MS = 100;
+  const LEAVE_DELAY_MS = 300;
+  let hovered = false;
+  let focused = false;
+  let tooltipTimeout;
+
+  // Feedback shares the proactive tooltip's portal surface whenever the tooltip
+  // is portalled OR a non-default position/alignment is set, so the "Copied!"
+  // state appears in the same place as the hover description (text swaps in
+  // place, no flash). Only the plain default (bottom/center, non-portalled)
+  // keeps Carbon's inline feedback caret.
+  $: tooltipCustomized =
+    tooltipPosition !== "bottom" || tooltipAlignment !== "center";
+  $: feedbackPortalled = effectivePortalTooltip || tooltipCustomized;
+
+  $: showingInlineFeedback =
+    !feedbackPortalled && (feedbackOpen || copyPending);
+  $: tooltipHoverActive =
+    !showingInlineFeedback &&
+    (hovered || focused) &&
+    $activeButtonTooltip === tooltipId;
+  $: feedbackInPortal = feedbackPortalled && feedbackOpen;
+  $: tooltipOpen = tooltipHoverActive || feedbackInPortal;
+  $: tooltipText = feedbackOpen ? feedback : iconDescription;
+
+  function claimTooltip() {
+    activeButtonTooltip.set(tooltipId);
+  }
+
+  function releaseTooltip() {
+    if (get(activeButtonTooltip) === tooltipId) {
+      activeButtonTooltip.set(null);
+    }
+  }
+
+  function handleTooltipMouseEnter() {
+    clearTimeout(tooltipTimeout);
+    // Skip the enter delay when another icon tooltip is already open so moving
+    // between adjacent buttons feels instant.
+    const warmHandoff =
+      get(activeButtonTooltip) !== null &&
+      get(activeButtonTooltip) !== tooltipId;
+    tooltipTimeout = setTimeout(
+      () => {
+        hovered = true;
+        claimTooltip();
+      },
+      warmHandoff ? 0 : ENTER_DELAY_MS,
+    );
+  }
+
+  function handleTooltipMouseLeave() {
+    clearTimeout(tooltipTimeout);
+    tooltipTimeout = setTimeout(() => {
+      hovered = false;
+      if (!focused) releaseTooltip();
+    }, LEAVE_DELAY_MS);
+  }
+
+  function handleTooltipFocus() {
+    focused = true;
+    claimTooltip();
+  }
+
+  function handleTooltipBlur() {
+    focused = false;
+    if (!hovered) releaseTooltip();
+  }
+
+  function dismissTooltip() {
+    clearTimeout(tooltipTimeout);
+    hovered = false;
+    focused = false;
+    releaseTooltip();
+  }
+
+  // Caret spacing + alignment nudges, mirroring Button's icon tooltip.
+  const PORTAL_HORIZONTAL_GAP_PX = 2;
+  const PORTAL_VERTICAL_GAP_PX = 1;
+  const PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX = -3;
+  const PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX = 1;
+
+  $: tooltipHorizontal =
+    tooltipPosition === "left" || tooltipPosition === "right";
+  $: tooltipVertical =
+    tooltipPosition === "top" || tooltipPosition === "bottom";
+  $: portalHorizontalGapLeft = tooltipHorizontal ? PORTAL_HORIZONTAL_GAP_PX : 0;
+  $: portalHorizontalGapRight = tooltipHorizontal
+    ? PORTAL_HORIZONTAL_GAP_PX
+    : 0;
+  $: portalGapTop = tooltipVertical ? PORTAL_VERTICAL_GAP_PX : 0;
+  $: portalGapBottom = tooltipVertical ? PORTAL_VERTICAL_GAP_PX : 0;
+  $: portalVerticalAlignOffsetLeft =
+    tooltipPosition === "left" && tooltipAlignment === "start"
+      ? PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX
+      : 0;
+  $: portalVerticalAlignOffsetRight =
+    tooltipPosition === "right" && tooltipAlignment === "end"
+      ? PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX
+      : 0;
+
   function dismissFeedback() {
     copyFeedback.dismiss();
+    dismissTooltip();
   }
 
   let disconnectModalObserver = () => {};
 
   $: {
     disconnectModalObserver();
-    disconnectModalObserver =
-      effectivePortalTooltip && ref
-        ? observeModalClose(ref, dismissFeedback)
-        : () => {};
+    disconnectModalObserver = ref
+      ? observeModalClose(ref, dismissFeedback)
+      : () => {};
   }
 
   onMount(() => {
     return () => {
       copyFeedback.cleanup();
       disconnectModalObserver();
+      clearTimeout(tooltipTimeout);
+      releaseTooltip();
     };
   });
 </script>
@@ -103,9 +240,12 @@
   class:bx--copy-btn--animating={animation}
   class:bx--copy-btn--fade-in={animation === "fade-in"}
   class:bx--copy-btn--fade-out={animation === "fade-out"}
-  class:bx--copy-btn--portal-active={effectivePortalTooltip}
+  class:bx--copy-btn--portal-active={feedbackPortalled}
+  class:bx--copy-btn--ghost={kind === "ghost"}
+  class:bx--copy-btn--sm={size === "sm"}
+  class:bx--copy-btn--lg={size === "lg"}
+  class:bx--copy-btn--xl={size === "xl"}
   aria-label={iconDescription}
-  title={iconDescription}
   {...$$restProps}
   on:click
   on:click={async () => {
@@ -115,7 +255,7 @@
           await copy(text ?? "");
           dispatch("copy");
         }
-      }, feedbackTimeout, effectivePortalTooltip);
+      }, feedbackTimeout, feedbackPortalled);
     } catch (error) {
       dispatch("copy:error", { error });
     }
@@ -125,16 +265,20 @@
     copyFeedback.onAnimationEnd(event);
   }}
   on:mouseenter
+  on:mouseenter={handleTooltipMouseEnter}
   on:mouseleave
+  on:mouseleave={handleTooltipMouseLeave}
   on:focus
+  on:focus={handleTooltipFocus}
   on:blur
+  on:blur={handleTooltipBlur}
 >
   {#if feedbackIcon && feedbackOpen}
     <svelte:component this={feedbackIcon} class="bx--snippet__icon" />
   {:else}
     <Copy class="bx--snippet__icon" />
   {/if}
-  {#if !effectivePortalTooltip}
+  {#if !feedbackPortalled}
     <span
       aria-hidden="true"
       class:bx--assistive-text={true}
@@ -145,6 +289,19 @@
   {/if}
 </button>
 
-{#if effectivePortalTooltip}
-  <PortalTooltip anchor={ref} open={feedbackOpen} text={feedback} />
+{#if ref}
+  <PortalTooltip
+    anchor={ref}
+    open={tooltipOpen}
+    text={tooltipText}
+    tooltipType="icon"
+    direction={tooltipPosition}
+    intrinsicAlign={tooltipAlignment}
+    horizontalGapLeft={portalHorizontalGapLeft}
+    horizontalGapRight={portalHorizontalGapRight}
+    gapTop={portalGapTop}
+    gapBottom={portalGapBottom}
+    verticalAlignOffsetLeft={portalVerticalAlignOffsetLeft}
+    verticalAlignOffsetRight={portalVerticalAlignOffsetRight}
+  />
 {/if}

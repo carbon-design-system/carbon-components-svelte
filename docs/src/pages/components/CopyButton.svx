@@ -23,6 +23,34 @@ Prefetch on hover with `on:mouseenter`.
 
 <FileSource src="/framed/CopyButton/CopyButtonAsync" />
 
+## Ghost kind
+
+Set `kind` to `"ghost"` to render a transparent button that matches a [Button](/components/Button) with `kind="ghost"`. The default `kind` (`"primary"`) keeps Carbon's filled square.
+
+<CopyButton text="Carbon svelte" kind="ghost" />
+
+## Sizes
+
+Set `size` to scale the square. Sizes align with the heights used by [Button](/components/Button).
+
+### Small
+
+<CopyButton text="Carbon svelte" size="sm" />
+
+### Medium
+
+The default size (`md`) matches Carbon's native copy button.
+
+<CopyButton text="Carbon svelte" />
+
+### Large
+
+<CopyButton text="Carbon svelte" size="lg" />
+
+### Extra large
+
+<CopyButton text="Carbon svelte" size="xl" />
+
 ## Custom feedback
 
 Customize the message and icon shown after copying.
@@ -57,14 +85,35 @@ Set `copy` to a no-op function to disable copying.
 
 <CopyButton text="This text should not be copied" copy={() => {}} />
 
+## Hover tooltip
+
+On hover or focus, the button shows a proactive tooltip with the `iconDescription`. It renders in a floating portal so it is never clipped and flips when space is tight.
+
+### Directions
+
+Set `tooltipPosition` to place the tooltip relative to the button.
+
+<CopyButton text="Carbon svelte" iconDescription="Top" tooltipPosition="top" />
+<CopyButton text="Carbon svelte" iconDescription="Right" tooltipPosition="right" />
+<CopyButton text="Carbon svelte" iconDescription="Bottom" tooltipPosition="bottom" />
+<CopyButton text="Carbon svelte" iconDescription="Left" tooltipPosition="left" />
+
+### Alignment
+
+Set `tooltipAlignment` to align the tooltip relative to the button.
+
+<CopyButton text="Carbon svelte" iconDescription="Start" tooltipAlignment="start" />
+<CopyButton text="Carbon svelte" iconDescription="Center" tooltipAlignment="center" />
+<CopyButton text="Carbon svelte" iconDescription="End" tooltipAlignment="end" />
+
 ## Portal tooltip
 
-Set `portalTooltip` to render the feedback tooltip in a portal so it is not clipped by overflow containers. Inside a [Modal](/components/Modal), portalling is enabled by default unless you set `portalTooltip` to false.
+Set `portalTooltip` to render the feedback tooltip in a portal so it is not clipped by `overflow: hidden` containers. It is also portalled automatically inside a [Modal](/components/Modal) or when a non-default `tooltipPosition` or `tooltipAlignment` is set.
 
 <FileSource src="/framed/CopyButton/CopyButtonPortalTooltip" />
 
 ## Inside a modal
 
-When used inside a Modal, the feedback tooltip is automatically portalled so it is not clipped by overflow. Set `portalTooltip` to override this behavior.
+When used inside a [Modal](/components/Modal), the feedback tooltip is automatically portalled so it is not clipped. Set `portalTooltip` to override this behavior.
 
 <FileSource src="/framed/CopyButton/CopyButtonInModal" />
