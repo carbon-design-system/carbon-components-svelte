@@ -330,7 +330,7 @@ function serializeInlineNodes(nodes: PhrasingContent[]): string {
         case "emphasis":
           return `<em>${serializeInlineNodes(node.children)}</em>`;
         case "link":
-          return `<a class="bx--link" href="${node.url}">${serializeInlineNodes(node.children)}</a>`;
+          return `<a class="bx--link bx--link--muted" href="${node.url}">${serializeInlineNodes(node.children)}</a>`;
         case "break":
           return "<br/>";
         default:
@@ -456,7 +456,7 @@ function carbonify() {
     visit(tree, (node, index, parent) => {
       switch (node.type) {
         case "link":
-          node.data = { hProperties: { class: "bx--link" } };
+          node.data = { hProperties: { class: "bx--link bx--link--muted" } };
           return;
         case "list": {
           const list = node as List;
