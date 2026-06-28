@@ -94,6 +94,7 @@
   {verticalAlignOffsetRight}
   {intrinsicAlign}
   intrinsicWidth={true}
+  lockDirection={true}
   let:direction={actualDirection}
 >
   <div
