@@ -275,6 +275,23 @@ describe("ComboBox", () => {
     expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
+  it("does not select a hover-highlighted item on Enter; closes without selecting", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+
+    const emailOption = screen.getByRole("option", { name: "Email" });
+    await user.hover(emailOption);
+    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+    await user.keyboard("{Enter}");
+    expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(input).toHaveValue("");
+  });
+
   it("should set aria-activedescendant only when an item is highlighted", async () => {
     render(ComboBox, { props: { shouldFilterItem: () => true } });
 
