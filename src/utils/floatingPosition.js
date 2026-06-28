@@ -13,6 +13,7 @@
  * @param {RectLike} options.floatingRect - The floating element's `getBoundingClientRect()`.
  * @param {{ innerWidth: number, innerHeight: number, scrollX: number, scrollY: number }} options.viewport
  * @param {"bottom" | "top" | "left" | "right"} options.direction - Preferred direction.
+ * @param {"bottom" | "top" | "left" | "right"} [options.lockedDirection] - When set, skip flip detection and place on this side. Used to keep a side stable across content (width/height) changes while the floating element stays open.
  * @param {boolean} [options.useFixedPosition=false] - When true, scroll offsets are zeroed (the caller positions with `position: fixed`).
  * @param {boolean} [options.intrinsicWidth=false] - Use the floating element's own width instead of matching the anchor.
  * @param {"start" | "center" | "end"} [options.intrinsicAlign="center"] - Alignment along the anchor edge when `intrinsicWidth` is true.
@@ -29,6 +30,7 @@ export function floatingPosition({
   floatingRect,
   viewport,
   direction,
+  lockedDirection,
   useFixedPosition = false,
   intrinsicWidth = false,
   intrinsicAlign = "center",
@@ -45,7 +47,12 @@ export function floatingPosition({
   const isVertical = direction === "top" || direction === "bottom";
   let actualDirection = direction;
 
-  if (isVertical) {
+  if (lockedDirection) {
+    // Caller is keeping a previously-chosen side stable (e.g. a tooltip whose
+    // text — and thus width/height — swaps while open). Skip flip detection so
+    // the floating element does not jump to the opposite side mid-session.
+    actualDirection = lockedDirection;
+  } else if (isVertical) {
     const spaceBelow = viewport.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
 

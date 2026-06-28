@@ -141,6 +141,35 @@ describe("floatingPosition", () => {
     });
   });
 
+  describe("lockedDirection", () => {
+    test("keeps the locked side even when the preferred side would overflow", () => {
+      // Narrow content fits on the right (no flip), but it stays on the locked
+      // left side — e.g. a wide tooltip flipped left, then its text shrank.
+      const result = floatingPosition({
+        anchorRect: rect(880, 200, 100, 40),
+        floatingRect: rect(0, 0, 60, 40),
+        viewport,
+        direction: "right",
+        lockedDirection: "left",
+      });
+
+      expect(result.actualDirection).toBe("left");
+      expect(result.left).toBe(820); // anchor.left (880) - floating width (60)
+    });
+
+    test("ignores the preferred direction when locked to the opposite side", () => {
+      const result = floatingPosition({
+        anchorRect: rect(100, 200, 150, 40),
+        floatingRect: rect(0, 0, 150, 60),
+        viewport,
+        direction: "bottom",
+        lockedDirection: "top",
+      });
+
+      expect(result.actualDirection).toBe("top");
+    });
+  });
+
   describe("intrinsic width (vertical)", () => {
     const anchorRect = rect(100, 200, 150, 40); // center x = 175
 

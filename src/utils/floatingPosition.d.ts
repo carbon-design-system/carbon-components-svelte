@@ -22,6 +22,8 @@ export interface FloatingPositionOptions {
   };
   /** Preferred direction. */
   direction: FloatingDirection;
+  /** When set, skip flip detection and place on this side. Keeps a side stable across content changes while the floating element stays open. */
+  lockedDirection?: FloatingDirection;
   /** When true, scroll offsets are zeroed (caller uses `position: fixed`). */
   useFixedPosition?: boolean;
   /** Use the floating element's own width instead of matching the anchor. */

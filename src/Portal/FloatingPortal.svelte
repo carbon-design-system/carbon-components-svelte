@@ -85,6 +85,16 @@
   export let intrinsicAlign = "center";
 
   /**
+   * Set to `true` to keep a flipped side stable for the duration of an open
+   * session. Once the content flips away from `direction` (because the preferred
+   * side does not fit), that side is reused even if the content later resizes,
+   * so a floating element whose content swaps (e.g. a tooltip whose text changes
+   * to something narrower) does not snap back to the preferred side mid-session.
+   * @type {boolean}
+   */
+  export let lockDirection = false;
+
+  /**
    * Obtain a reference to the floating portal element.
    * @type {null | HTMLElement}
    * @bindable readonly
@@ -195,6 +205,11 @@
     typeof document !== "undefined" &&
     effectiveTarget !== document.body;
 
+  // The side chosen on open; reused on subsequent updates when `lockDirection`
+  // is set so content resizes do not re-trigger a flip. Reset each open session.
+  /** @type {"bottom" | "top" | "left" | "right" | null} */
+  let lockedDirection = null;
+
   function updatePosition() {
     if (!mounted || !anchor || !ref) return;
 
@@ -208,6 +223,9 @@
         scrollY: window.scrollY,
       },
       direction,
+      lockedDirection: lockDirection
+        ? (lockedDirection ?? undefined)
+        : undefined,
       useFixedPosition,
       intrinsicWidth,
       intrinsicAlign,
@@ -218,6 +236,20 @@
       verticalAlignOffsetLeft,
       verticalAlignOffsetRight,
     });
+
+    // Latch the side only once it actually flips away from the preferred
+    // direction. Until then keep recomputing, so the initial layout passes
+    // (which run before the content's final width is known for side placements)
+    // can still flip. Once flipped, stay flipped for the session so a content
+    // resize — e.g. a tooltip whose text swaps to something narrower — does not
+    // snap the box back to the preferred side.
+    if (
+      lockDirection &&
+      lockedDirection === null &&
+      pos.actualDirection !== direction
+    ) {
+      lockedDirection = pos.actualDirection;
+    }
   }
 
   const scheduleUpdate = rafThrottle(updatePosition);
@@ -258,6 +290,8 @@
     removeScrollListeners();
     scrollableAncestors = [];
     scheduleUpdate.cancel();
+    // Recompute the side fresh on the next open.
+    lockedDirection = null;
   }
 
   $: if (open && anchor && ref) {
