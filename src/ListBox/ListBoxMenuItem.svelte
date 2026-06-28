@@ -1,5 +1,6 @@
 <script>
   import { overflowTitle } from "../utils/overflowTitle.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
 
   /** Set to `true` to enable the active state */
   export let active = false;
@@ -16,8 +17,10 @@
   let ref = null;
 
   $: if (highlighted && ref && !ref.matches(":hover")) {
-    // Scroll highlighted item into view if using keyboard navigation
-    ref.scrollIntoView({ block: "nearest" });
+    // Scroll highlighted item into view if using keyboard navigation.
+    // Scoped to the menu's own scroll container so a portaled menu (whose
+    // nearest scrollable ancestor is the document) does not scroll the page.
+    scrollIntoViewWithinMenu(ref);
   }
 </script>
 
