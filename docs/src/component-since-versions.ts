@@ -81,4 +81,5 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Truncate: "0.29.0",
   UIShell: "0.3.0",
   UnorderedList: "0.2.0",
+  UserAvatar: "0.110.0",
 };
