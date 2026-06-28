@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type UserAvatarComponent from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import type { ComponentProps } from "svelte";
+import { getAvatarBackgroundColor } from "../../src/utils/avatarColor.js";
 import { user } from "../utils/user";
 import UserAvatar from "./UserAvatar.test.svelte";
 
@@ -73,6 +74,15 @@ describe("UserAvatar", () => {
     expect(screen.getByTestId("color-cool-gray")).toHaveClass(
       "bx--user-avatar--cool-gray",
     );
+  });
+
+  it('picks a stable background color when backgroundColor is "auto"', () => {
+    render(UserAvatar);
+
+    const expected = `bx--user-avatar--${getAvatarBackgroundColor("John Doe")}`;
+    expect(screen.getByTestId("color-auto")).toHaveClass(expected);
+    // Same name resolves to the same color.
+    expect(screen.getByTestId("color-auto-2")).toHaveClass(expected);
   });
 
   it("wraps the avatar in a floating-portal tooltip by default", () => {

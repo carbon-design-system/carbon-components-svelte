@@ -14,7 +14,8 @@
 
   /**
    * Specify the background color rendered behind the initials or icon.
-   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray"}
+   * Set to `"auto"` to pick a stable color from `name` (or `initials`).
+   * @type {"auto" | "red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray"}
    */
   export let backgroundColor = "gray";
 
@@ -84,6 +85,7 @@
 
   import User from "../icons/User.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import { getAvatarBackgroundColor } from "../utils/avatarColor.js";
 
   const glyphSize = { sm: 16, md: 20, lg: 24, xl: 32 };
   const WHITESPACE = /\s+/;
@@ -101,10 +103,14 @@
   }
 
   $: avatarInitials = initials ?? formatInitials(name);
+  $: resolvedBackgroundColor =
+    backgroundColor === "auto"
+      ? getAvatarBackgroundColor(name ?? initials ?? "")
+      : backgroundColor;
   $: avatarClass = [
     "bx--user-avatar",
     `bx--user-avatar--${size}`,
-    `bx--user-avatar--${backgroundColor}`,
+    `bx--user-avatar--${resolvedBackgroundColor}`,
     $$restProps.class,
   ]
     .filter(Boolean)
