@@ -1,9 +1,6 @@
 <script lang="ts">
-  import { Button } from "carbon-components-svelte";
-  import { createCopyFeedbackState } from "carbon-components-svelte/src/utils/copyFeedback.js";
+  import { CopyButton } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
-  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
-  import { onMount } from "svelte";
   import {
     copyComponentMarkdown,
     formatCopyIconDescription,
@@ -15,57 +12,27 @@
   export let href: string;
   /** Markdown size in bytes; shown as size/token estimate in the tooltip. */
   export let bytes = 0;
-  export let size: "default" | "field" | "small" | "lg" | "xl" = "field";
+  export let size: "sm" | "md" | "lg" | "xl" = "md";
   export let tooltipPosition: "top" | "right" | "bottom" | "left" = "bottom";
-  /** Portalled tooltips avoid clipping and support multi-line copy labels. */
-  export let portalTooltip = true;
-
-  let copied = false;
-  let copying = false;
-  let buttonRef: HTMLButtonElement | null = null;
-
-  const copyFeedback = createCopyFeedbackState(() => {
-    const wasCopied = copied;
-    copied = copyFeedback.feedbackOpen;
-    copying = copyFeedback.copyPending;
-    if (wasCopied && !copied) buttonRef?.blur();
-  });
 
   async function copyMarkdown() {
-    await copyFeedback.onClick(
-      async () => {
-        const ok = await copyComponentMarkdown(name, href);
-        if (!ok) throw new Error("Failed to copy markdown");
-      },
-      2000,
-      portalTooltip,
-    );
+    const ok = await copyComponentMarkdown(name, href);
+    if (!ok) throw new Error("Failed to copy markdown");
   }
-
-  onMount(() => copyFeedback.cleanup);
 </script>
 
-<Button
-  bind:ref={buttonRef}
-  class="copy-markdown-btn"
+<CopyButton
   kind="ghost"
   {size}
-  {portalTooltip}
   {tooltipPosition}
-  icon={copied ? Checkmark : Copy}
-  iconDescription={formatCopyIconDescription(copied, bytes)}
-  disabled={copying}
-  on:click={copyMarkdown}
+  copy={copyMarkdown}
+  feedbackIcon={Checkmark}
+  iconDescription={formatCopyIconDescription(false, bytes)}
 />
 
 <style>
-  /* iconDescription embeds a newline (size/token estimate on its own line). */
-  :global(.copy-markdown-btn.bx--tooltip__trigger .bx--assistive-text) {
-    display: block;
-    white-space: pre-line;
-    text-align: center;
-  }
-
+  /* iconDescription embeds a newline (size/token estimate on its own line);
+       applies to the proactive hover tooltip rendered in the floating portal. */
   :global(
     [data-floating-portal]
       .bx--tooltip-portal[data-tooltip-type="icon"]

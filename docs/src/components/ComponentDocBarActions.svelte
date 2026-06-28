@@ -56,12 +56,12 @@
     <Link icon={ArrowUpRight} href={markdownUrl} target="_blank">
       Markdown
     </Link>
-    <div>
+    <div class="bar-actions__group">
       <CopyMarkdownButton
         name={component}
         href={markdownUrl}
         bytes={markdownBytes}
-        size="small"
+        size="sm"
         tooltipPosition="bottom"
       />
       <Button
@@ -101,6 +101,11 @@
 </div>
 
 <style>
+  .bar-actions__group {
+    display: flex;
+    align-items: center;
+  }
+
   .bar-actions--mobile {
     display: none;
   }
