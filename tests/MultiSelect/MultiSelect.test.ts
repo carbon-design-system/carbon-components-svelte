@@ -89,6 +89,21 @@ describe("MultiSelect", () => {
     expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
+  it("does not toggle a hover-highlighted item on Enter", async () => {
+    render(MultiSelect, { props: { items } });
+
+    await openMenu();
+
+    const emailOption = screen.getByRole("option", { name: "Email" });
+    await user.hover(emailOption);
+    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(emailOption).toHaveAttribute("aria-checked", "false");
+
+    await user.keyboard("{Enter}");
+    expect(emailOption).toHaveAttribute("aria-checked", "false");
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+  });
+
   it("should pass selected and highlighted to the default slot", async () => {
     render(MultiSelectItemSlot, { props: { selectedIds: ["1"] } });
 

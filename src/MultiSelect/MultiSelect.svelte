@@ -303,6 +303,7 @@
 
   let fieldFocused = false;
   let highlightedIndex = -1;
+  let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
   let prevHighlightedIndex = -1;
   let prevChecked = [];
   let isInitialRender = true;
@@ -335,6 +336,7 @@
       index: highlightedIndex,
       step,
     });
+    highlightOrigin = "keyboard";
   }
 
   /** Handle selection of an item, including isSelectAll logic. */
@@ -417,6 +419,7 @@
 
     if (!open) {
       highlightedIndex = -1;
+      highlightOrigin = null;
       prevHighlightedIndex = -1;
       if (prevOpen && filterable) {
         value = "";
@@ -794,7 +797,7 @@
               return;
             }
             if (event.key === "Enter") {
-              if (highlightedId) {
+              if (highlightOrigin === "keyboard" && highlightedId) {
                 const highlightedItem = sortedItems.find(
                   (item) => item.id === highlightedId,
                 );
@@ -941,7 +944,7 @@
               change(step);
             }
           } else if (event.key === "Enter") {
-            if (highlightedIndex > -1) {
+            if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
               const item = (filterable ? filteredItems : sortedItems)[
                 highlightedIndex
               ];
@@ -1000,6 +1003,7 @@
           // Clear the hover highlight when the cursor leaves the menu so the
           // highlighted state does not linger on the last hovered item.
           highlightedIndex = -1;
+          highlightOrigin = null;
         }}
         bind:ref={listRef}
         style={effectivePortalMenu
@@ -1046,6 +1050,7 @@
                   on:mouseenter={() => {
                     if (item.disabled) return;
                     highlightedIndex = actualIndex;
+                    highlightOrigin = "pointer";
                   }}
                 >
                   <Checkbox
@@ -1108,6 +1113,7 @@
               on:mouseenter={() => {
                 if (item.disabled) return;
                 highlightedIndex = index;
+                highlightOrigin = "pointer";
               }}
             >
               <Checkbox
