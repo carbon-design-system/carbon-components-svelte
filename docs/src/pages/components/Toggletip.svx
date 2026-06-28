@@ -1,0 +1,141 @@
+---
+components: ["Toggletip", "ToggletipFooter"]
+description: Toggletips display contextual content in a popover that is toggled open and closed by clicking the trigger button.
+---
+
+<script>
+  import { Toggletip, ToggletipFooter, Box, Button, Link, Stack } from "carbon-components-svelte";
+  import { Add } from "carbon-icons-svelte";
+</script>
+
+## Basic
+
+Unlike a tooltip, a toggletip opens and closes on click. Click the button to toggle the content. Press `Escape` or click outside to close it.
+
+<Toggletip>
+  Custom toggletip content with a longer description that wraps onto multiple lines.
+</Toggletip>
+
+## Reactive example
+
+Control the toggletip state programmatically by binding to `open`.
+
+<FileSource src="/framed/Toggletip/ToggletipReactive" />
+
+## Label
+
+Render an inline label beside the button.
+
+### Prop
+
+Use the `labelText` prop.
+
+<Toggletip labelText="Setting">
+  This setting controls how items are displayed.
+</Toggletip>
+
+### Slot
+
+Alternatively, use the `"labelText"` slot for custom markup.
+
+<Toggletip>
+  <span slot="labelText"><strong>Setting</strong></span>
+  This setting controls how items are displayed.
+</Toggletip>
+
+## Actions
+
+Use `ToggletipFooter` to render one or two actions at the base of the content.
+
+<Toggletip>
+  Custom toggletip content with actions.
+  <ToggletipFooter>
+    <Link href="#">Link action</Link>
+    <Button size="small">Button</Button>
+  </ToggletipFooter>
+</Toggletip>
+
+## Custom icon
+
+### Component
+
+Pass an icon component to the `icon` prop.
+
+<Toggletip icon={Add} iconDescription="Add">
+  The button renders a custom icon.
+</Toggletip>
+
+### Slot
+
+Alternatively, use the `"icon"` slot.
+
+<Toggletip iconDescription="Add">
+  <Add slot="icon" />
+  The button renders a custom icon.
+</Toggletip>
+
+## Accessible label
+
+Set the button's ARIA label with `iconDescription`. It defaults to `"Show information"`.
+
+<Toggletip iconDescription="Additional information">
+  The button has a custom ARIA label.
+</Toggletip>
+
+## Placement
+
+Position the content with `direction` (`"top"`, `"right"`, `"bottom"`, `"left"`) and `align` (`"start"`, `"center"`, `"end"`). The defaults are `direction="bottom"` and `align="center"`.
+
+### Directions
+
+<Stack orientation="horizontal" gap={10}>
+  <Toggletip direction="top">top</Toggletip>
+  <Toggletip direction="right">right</Toggletip>
+  <Toggletip direction="bottom">bottom</Toggletip>
+  <Toggletip direction="left">left</Toggletip>
+</Stack>
+
+### Alignment
+
+<Stack orientation="horizontal" gap={10}>
+  <Toggletip direction="bottom" align="start">start</Toggletip>
+  <Toggletip direction="bottom" align="center">center</Toggletip>
+  <Toggletip direction="bottom" align="end">end</Toggletip>
+</Stack>
+
+## Portal
+
+Set `portalTooltip` to render the content in a portal so it is not clipped by `overflow: hidden` containers.
+
+<Box padding={5} border="subtle" maxWidth="8rem" style="overflow: hidden;">
+  <Toggletip portalTooltip>
+    This content escapes the clipping container via a portal.
+  </Toggletip>
+</Box>
+
+### Directions
+
+Portalled content supports every `direction`. The portal flips to the opposite side when there is not enough space.
+
+<Stack orientation="horizontal" gap={10}>
+  <Toggletip portalTooltip direction="top">top</Toggletip>
+  <Toggletip portalTooltip direction="right">right</Toggletip>
+  <Toggletip portalTooltip direction="bottom">bottom</Toggletip>
+  <Toggletip portalTooltip direction="left">left</Toggletip>
+</Stack>
+
+### Alignment
+
+Portalled content supports every `align` value.
+
+<Stack orientation="horizontal" gap={10}>
+  <Toggletip portalTooltip direction="bottom" align="start">start</Toggletip>
+  <Toggletip portalTooltip direction="bottom" align="center">center</Toggletip>
+  <Toggletip portalTooltip direction="bottom" align="end">end</Toggletip>
+</Stack>
+
+## Inside a modal
+
+When a toggletip is used inside a [Modal](/components/Modal), the content is portalled by default so it is not clipped by the modal overflow or z-index stacking. There is no need to set `portalTooltip`.
+
+<FileSource src="/framed/Toggletip/ToggletipModal" />
