@@ -72,6 +72,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   TimePicker: "0.2.0",
   ToastNotification: "0.2.0",
   Toggle: "0.2.0",
+  Toggletip: "0.110.0",
   Toolbar: "0.2.0",
   Tooltip: "0.2.0",
   TooltipDefinition: "0.2.0",
