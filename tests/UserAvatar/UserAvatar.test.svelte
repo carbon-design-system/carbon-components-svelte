@@ -30,6 +30,10 @@
   name="John Doe"
 />
 
+<UserAvatar data-testid="color-auto" backgroundColor="auto" name="John Doe" />
+
+<UserAvatar data-testid="color-auto-2" backgroundColor="auto" name="John Doe" />
+
 <UserAvatar data-testid="tooltip" name="Jane Roe" tooltipText="Jane Roe" />
 
 <UserAvatar
