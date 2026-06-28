@@ -72,6 +72,16 @@ Set `backgroundColor` to choose the color rendered behind the initials or icon. 
 <UserAvatar backgroundColor="cool-gray" name="Richard Hendricks" />
 <UserAvatar backgroundColor="warm-gray" name="Richard Hendricks" />
 
+### Automatic background color
+
+Set `backgroundColor` to `"auto"` to pick a color from `name` (or `initials`). The name is hashed into one of the palette swatches. The same name always gets the same color.
+
+<UserAvatar backgroundColor="auto" name="Monica" />
+<UserAvatar backgroundColor="auto" name="Richard Hendricks" />
+<UserAvatar backgroundColor="auto" name="Dinesh Chugtai" />
+<UserAvatar backgroundColor="auto" name="Bertram Gilfoyle" />
+<UserAvatar backgroundColor="auto" name="Jared Dunn" />
+
 ## Tooltip
 
 Set `tooltipText` to show the display name on hover or focus. Use `align` and `direction` to position the tooltip. The tooltip closes on <DocKbd label="Escape" />.
