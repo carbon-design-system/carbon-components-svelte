@@ -113,6 +113,18 @@
    */
   export let portalTooltip = undefined;
 
+  /**
+   * Set the position of the copy button's tooltip.
+   * @type {"top" | "right" | "bottom" | "left"}
+   */
+  export let tooltipPosition = "bottom";
+
+  /**
+   * Set the alignment of the copy button's tooltip.
+   * @type {"start" | "center" | "end"}
+   */
+  export let tooltipAlignment = "center";
+
   import { createEventDispatcher, getContext } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
 
@@ -235,6 +247,8 @@
         {feedbackTimeout}
         {iconDescription}
         {portalTooltip}
+        {tooltipPosition}
+        {tooltipAlignment}
         {disabled}
         {copy}
         on:copy

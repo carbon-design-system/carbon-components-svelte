@@ -98,6 +98,22 @@ Set `feedbackIcon` to show a different icon while feedback is visible. The copy 
 
 <CopyInput light labelText="API endpoint" value="https://api.example.com/v1" />
 
+## Tooltip
+
+On hover or focus, the copy button shows a tooltip with `iconDescription`. It renders in a floating portal so it is not clipped and flips when space is tight.
+
+### Direction
+
+Set `tooltipPosition` to place the tooltip relative to the copy button. Accepts `"top"`, `"right"`, `"bottom"` (default), and `"left"`.
+
+<CopyInput labelText="API endpoint" value="https://api.example.com/v1" tooltipPosition="left" />
+
+### Alignment
+
+Set `tooltipAlignment` to align the tooltip relative to the copy button. Accepts `"start"`, `"center"` (default), and `"end"`.
+
+<CopyInput labelText="API endpoint" value="https://api.example.com/v1" tooltipAlignment="end" />
+
 ## Portal tooltip
 
 Set `portalTooltip` to render the copy feedback tooltip in a portal so it is not clipped by `overflow: hidden` containers. Inside a [Modal](/components/Modal), portalling is enabled by default unless you set `portalTooltip` to `false`.
