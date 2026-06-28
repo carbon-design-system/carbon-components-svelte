@@ -1,0 +1,99 @@
+---
+components: ["UserAvatar"]
+---
+
+<script>
+  import { UserAvatar } from "carbon-components-svelte";
+  import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
+</script>
+
+The `UserAvatar` renders a circular avatar for a user. It displays a photo, a custom icon, or initials derived from a name, falling back to a default user icon.
+
+It is designed to be used with the UI Shell [profile menu](/components/UIShell#profile-menu).
+
+## Content
+
+The avatar renders the first available of an image, a custom icon, initials, or the default user icon.
+
+### Default
+
+Render the avatar without any content to show the default user icon.
+
+<UserAvatar />
+
+### Initials
+
+Set `name` to derive the user's initials. The first character of each word is used, capped at two.
+
+<UserAvatar name="Monica" />
+<UserAvatar name="Richard Hendricks" />
+
+Set `initials` to override the derived initials while keeping `name` for display purposes such as tooltips.
+
+<UserAvatar name="Richard J. Hendricks" initials="RH" tooltipText="Richard J. Hendricks" />
+
+### Custom icon
+
+Set `icon` to render a custom icon instead of the default user icon.
+
+<UserAvatar icon={UserAvatarFilledAlt} />
+
+## Image
+
+Set `image` to render a photo. Provide `imageDescription` for the alternative text. The image fills the circle (`object-fit: cover`) and takes priority over the icon and initials.
+
+<UserAvatar
+  size="xl"
+  image="https://i.pravatar.cc/300?img=12"
+  imageDescription="Richard Hendricks"
+/>
+
+### Sizes
+
+Set `size` to one of `"sm"`, `"md"` (default), `"lg"`, or `"xl"`. The size applies to any content; the image fills the frame at every size.
+
+<UserAvatar size="sm" image="https://i.pravatar.cc/300?img=12" imageDescription="Richard Hendricks" />
+<UserAvatar size="md" image="https://i.pravatar.cc/300?img=12" imageDescription="Richard Hendricks" />
+<UserAvatar size="lg" image="https://i.pravatar.cc/300?img=12" imageDescription="Richard Hendricks" />
+<UserAvatar size="xl" image="https://i.pravatar.cc/300?img=12" imageDescription="Richard Hendricks" />
+
+## Background colors
+
+Set `backgroundColor` to choose the color rendered behind the initials or icon. The default is `"gray"`.
+
+<UserAvatar backgroundColor="red" name="Richard Hendricks" />
+<UserAvatar backgroundColor="magenta" name="Richard Hendricks" />
+<UserAvatar backgroundColor="purple" name="Richard Hendricks" />
+<UserAvatar backgroundColor="blue" name="Richard Hendricks" />
+<UserAvatar backgroundColor="cyan" name="Richard Hendricks" />
+<UserAvatar backgroundColor="teal" name="Richard Hendricks" />
+<UserAvatar backgroundColor="green" name="Richard Hendricks" />
+<UserAvatar backgroundColor="gray" name="Richard Hendricks" />
+<UserAvatar backgroundColor="cool-gray" name="Richard Hendricks" />
+<UserAvatar backgroundColor="warm-gray" name="Richard Hendricks" />
+
+## Tooltip
+
+Set `tooltipText` to show the display name on hover or focus. Use `align` and `direction` to position the tooltip. The tooltip closes on <DocKbd label="Escape" />.
+
+Setting `tooltipText` wraps the avatar in a focusable button. Do not set it when slotting the avatar into the `ProfileMenu` trigger, which is already a labelled button.
+
+<UserAvatar name="Richard Hendricks" tooltipText="Richard Hendricks" />
+
+### Inline tooltip
+
+By default, the tooltip renders in a floating portal so it is not clipped by the avatar's circular frame or an `overflow: hidden` container. Set `portalTooltip` to `false` to render the tooltip inline.
+
+<UserAvatar name="Richard Hendricks" tooltipText="Richard Hendricks" portalTooltip={false} />
+
+### Inside a modal
+
+The floating portal keeps the tooltip from being clipped by the modal's overflow and z-index stacking.
+
+<FileSource src="/framed/UserAvatar/UserAvatarModal" />
+
+## Use within ProfileMenu
+
+Slot the avatar into [ProfileMenu](/components/UIShell#profilemenu) for the header trigger and the profile header. Use `size="md"` for the trigger and `size="lg"` for the header to match the menu frame.
+
+<UserAvatar size="md" name="Richard Hendricks" />
