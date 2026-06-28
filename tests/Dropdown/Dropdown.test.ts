@@ -331,6 +331,27 @@ describe("Dropdown", () => {
     expect(button).toHaveTextContent("Email");
   });
 
+  it("does not select a hover-highlighted item on Enter; closes without selecting", async () => {
+    const selectHandler = vi.fn();
+    render(Dropdown, {
+      props: { items, selectedId: "0", onselect: selectHandler },
+    });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+    expect(screen.getByRole("listbox")).toBeVisible();
+
+    const fax = screen.getByText("Fax").closest(".bx--list-box__menu-item");
+    assert(fax);
+    await user.hover(fax);
+    expect(fax).toHaveClass("bx--list-box__menu-item--highlighted");
+
+    await user.keyboard("{Enter}");
+    expect(selectHandler).not.toHaveBeenCalled();
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(button).toHaveTextContent("Slack");
+  });
+
   // Regression: the Space keydown must cancel its default action so the
   // browser does not scroll the page (and does not synthesize a click)
   // before the keyup handler opens the menu.
