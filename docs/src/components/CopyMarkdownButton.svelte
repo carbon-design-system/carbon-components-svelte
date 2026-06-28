@@ -25,6 +25,7 @@
   kind="ghost"
   {size}
   {tooltipPosition}
+  portalTooltip
   copy={copyMarkdown}
   feedbackIcon={Checkmark}
   iconDescription={formatCopyIconDescription(false, bytes)}
