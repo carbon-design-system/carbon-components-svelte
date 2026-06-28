@@ -1,0 +1,46 @@
+@import "carbon-components/scss/globals/scss/vars";
+
+/// UserAvatarGroup styles: an overlapping (stacked) or spaced row of avatars
+/// with a "+N" overflow avatar.
+/// @access private
+/// @group components
+@mixin user-avatar-group {
+  .#{$prefix}--user-avatar-group {
+    align-items: center;
+  }
+
+  // Avatars past `max` stay in the DOM but hide; the overflow chip stands in.
+  .#{$prefix}--user-avatar-group [data-overflow="true"] {
+    display: none;
+  }
+
+  //--------------------------------------------------------------------------
+  // Overlapping (stacked) layout
+  //--------------------------------------------------------------------------
+  .#{$prefix}--user-avatar-group--overlap > * {
+    // Stacking context so a hovered avatar can lift above its neighbors.
+    position: relative;
+  }
+
+  // The overlap amount defaults to a spacing token. A negative `gap` overrides
+  // it through the custom property.
+  .#{$prefix}--user-avatar-group--overlap > * + * {
+    margin-left: var(--user-avatar-group-overlap, -#{$carbon--spacing-03});
+  }
+
+  // A ring in the surrounding background color separates overlapping circles.
+  // `box-shadow` is not clipped by the avatar's `overflow: hidden` frame.
+  .#{$prefix}--user-avatar-group--overlap .#{$prefix}--user-avatar {
+    box-shadow: 0 0 0 $carbon--spacing-01 var(--cds-ui-background, #{$ui-background});
+  }
+
+  // Lift the hovered or focused avatar to the front of the stack.
+  .#{$prefix}--user-avatar-group--overlap > *:hover,
+  .#{$prefix}--user-avatar-group--overlap > *:focus-within {
+    z-index: 1;
+  }
+}
+
+@include exports("user-avatar-group") {
+  @include user-avatar-group;
+}
