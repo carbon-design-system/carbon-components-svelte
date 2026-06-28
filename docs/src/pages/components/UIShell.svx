@@ -11,6 +11,12 @@ components: ["Header",
 "HeaderPanelLink",
 "HeaderPanelLinks",
 "HeaderUtilities",
+"ProfileMenu",
+"ProfileMenuHeader",
+"ProfileMenuList",
+"ProfileMenuItem",
+"ProfileMenuDetail",
+"ProfileMenuDivider",
 "SideNav",
 "SideNavItems",
 "SideNavLink",
@@ -139,6 +145,24 @@ Set `size` to `"sm"` (default), `"lg"`, or `"xl"` to control row density. Result
 Add utilities to the header with header utilities. Compose [BadgeIndicator](/components/BadgeIndicator) in the badge slot on `HeaderGlobalAction`. Set `iconDescription` for screen readers.
 
 <FileSource src="/framed/UIShell/HeaderUtilities" />
+
+### Default avatar
+
+Use `ProfileMenu` for an account menu in the header. When the `avatar` slot is empty, a default [UserAvatar](/components/UserAvatar) renders. The menu closes on outside click and <DocKbd label="Escape" />.
+
+<FileSource src="/framed/UIShell/ProfileMenuDefaultAvatar" />
+
+### Profile menu
+
+Render the avatar with [UserAvatar](/components/UserAvatar) in the `avatar` slot, and compose the card from `ProfileMenuHeader`, `ProfileMenuList`, `ProfileMenuItem`, and `ProfileMenuDivider`.
+
+<FileSource src="/framed/UIShell/ProfileMenuSimple" />
+
+### Profile menu with details
+
+Add `ProfileMenuDetail` for labelled values with a trailing action, and pass an image to the avatar.
+
+<FileSource src="/framed/UIShell/ProfileMenu" />
 
 ## Integrations
 
