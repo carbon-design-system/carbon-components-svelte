@@ -262,6 +262,7 @@
   let selectedItem = undefined;
   let prevSelectedId = null;
   let highlightedIndex = -1;
+  let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
   let prevHighlightedIndex = -1;
   let valueBeforeOpen = "";
   let prevInputLength = 0;
@@ -298,6 +299,7 @@
       index: highlightedIndex,
       step,
     });
+    highlightOrigin = "keyboard";
   }
 
   /**
@@ -316,6 +318,7 @@
     if (readonly) return;
     prevSelectedId = null;
     highlightedIndex = -1;
+    highlightOrigin = null;
     selectedId = undefined;
     selectedItem = undefined;
     open = false;
@@ -366,6 +369,7 @@
       if (selectedIndex >= 0) {
         // Set highlighted index to selected item so keyboard nav starts there
         highlightedIndex = selectedIndex;
+        highlightOrigin = "keyboard";
         prevHighlightedIndex = selectedIndex;
       }
     }
@@ -405,6 +409,7 @@
         listScrollTop = resetVirtualScrollOnClose();
       }
       highlightedIndex = -1;
+      highlightOrigin = null;
       prevHighlightedIndex = -1;
       if (selectedItem) {
         // Restore the value if clearFilterOnOpen was used and no new selection was made.
@@ -528,12 +533,14 @@
           itemToString(item).toLowerCase().includes(lowerValue)),
     );
     highlightedIndex = firstEnabledIndex >= 0 ? firstEnabledIndex : -1;
+    highlightOrigin = firstEnabledIndex >= 0 ? "keyboard" : null;
   } else if (
     autoHighlight === "first-match" &&
     open &&
     (value.length === 0 || filteredItems.length === 0)
   ) {
     highlightedIndex = -1;
+    highlightOrigin = null;
   }
 
   $: comboBoxListBoxClass = [
@@ -693,6 +700,7 @@
             const wasOpen = open;
             open = !open;
             if (
+              highlightOrigin === "keyboard" &&
               highlightedIndex > -1 &&
               filteredItems[highlightedIndex]?.id !== selectedId
             ) {
@@ -722,6 +730,7 @@
               }
             }
             highlightedIndex = -1;
+            highlightOrigin = null;
           } else if (event.key === "Tab") {
             // Accept the inline suggestion before focus moves to the next
             // control. Tab is not prevented, so focus still advances normally.
@@ -840,6 +849,7 @@
           // Clear the hover highlight when the cursor leaves the menu so the
           // highlighted state does not linger on the last hovered item.
           highlightedIndex = -1;
+          highlightOrigin = null;
         }}
         bind:ref={listRef}
         style={effectivePortalMenu
@@ -879,6 +889,7 @@
                   on:mouseenter={() => {
                     if (item.disabled) return;
                     highlightedIndex = actualIndex;
+                    highlightOrigin = "pointer";
                   }}
                 >
                   {#if $$slots.icon || item.icon}
@@ -946,6 +957,7 @@
               on:mouseenter={() => {
                 if (item.disabled) return;
                 highlightedIndex = index;
+                highlightOrigin = "pointer";
               }}
             >
               {#if $$slots.icon || item.icon}
