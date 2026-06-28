@@ -313,9 +313,8 @@
                             name={entry.name}
                             href={entry.markdownHref}
                             bytes={markdownBytesFor(entry.name)}
-                            size="small"
+                            size="sm"
                             tooltipPosition="right"
-                            portalTooltip
                           />
                         </Stack>
                       </Stack>
