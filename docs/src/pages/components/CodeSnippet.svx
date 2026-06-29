@@ -148,21 +148,17 @@ Re-render the component to fix this issue.
 
 ## Portal tooltip
 
-Set `portalTooltip` to `true` to render the feedback tooltip in a floating portal.
-This prevents clipping by parent containers with overflow hidden or z-index
-stacking contexts. The example renders each variant inside a container with hidden
-overflow.
-
-When inside a [Modal](/components/Modal), portalTooltip defaults to `true`
-unless explicitly set to `false`.
+The "Copied!" feedback tooltip is rendered in a floating portal by default, so it
+is never clipped by a parent container with hidden overflow or a z-index stacking
+context. Set `portalTooltip` to `false` to use Carbon's inline feedback caret
+instead. The example renders each variant inside a container with hidden overflow.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetPortalTooltip" />
 
 ## Inside a modal
 
-When used inside a Modal, the feedback tooltip is automatically portalled to
-prevent clipping by overflow hidden. Set `portalTooltip` to control this
-behavior explicitly.
+Because the feedback tooltip is portalled by default, it is not clipped inside a
+[Modal](/components/Modal). Set `portalTooltip` to `false` to use the inline caret.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetInModal" />
 
