@@ -146,6 +146,19 @@ Re-render the component to fix this issue.
 
 <FileSource src="/framed/CodeSnippet/HiddenCodeSnippet" />
 
+## Tooltip position
+
+Set `tooltipPosition` to place the feedback tooltip relative to the copy button.
+It applies to every variant, including the inline snippet.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetTooltipPosition" />
+
+## Tooltip alignment
+
+Set `tooltipAlignment` to align the feedback tooltip relative to the copy button.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetTooltipAlignment" />
+
 ## Portal tooltip
 
 The "Copied!" feedback tooltip is rendered in a floating portal by default, so it
