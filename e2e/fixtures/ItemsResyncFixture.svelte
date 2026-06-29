@@ -22,6 +22,13 @@
     { id: "woolf", text: "Virginia Woolf" },
   ];
 
+  // Drops a non-selected option (austen) while keeping the selected one (orwell).
+  const makeWithoutAusten = () => [
+    { id: "dickens", text: "Charles Dickens" },
+    { id: "orwell", text: "George Orwell" },
+    { id: "woolf", text: "Virginia Woolf" },
+  ];
+
   const cbPreloadItems = make();
   let cbPreloadSelectedId = "orwell";
   let cbPreloadValue = "";
@@ -38,14 +45,24 @@
   let cbRemoveSelectedId = "orwell";
   let cbRemoveValue = "";
 
+  let cbKeepItems = make();
+  let cbKeepSelectedId = "orwell";
+  let cbKeepValue = "George Orwell";
+
   let selFillItems = [];
   let selFillSelected = "orwell";
 
   let selSwapItems = make();
   let selSwapSelected = "orwell";
 
+  let selRemoveItems = make();
+  let selRemoveSelected = "orwell";
+
   let msSwapItems = make();
   let msSwapSelectedIds = ["orwell"];
+
+  let msRemoveItems = make();
+  let msRemoveSelectedIds = ["orwell"];
 
   let msFillItems = [];
   let msFillSelectedIds = ["orwell"];
@@ -70,6 +87,13 @@
     cbRemoveItems = makeWithoutOrwell();
   }
 
+  // Remove a non-selected option from each component while the selection stays present.
+  function removeNonSelected() {
+    selRemoveItems = makeWithoutAusten();
+    cbKeepItems = makeWithoutAusten();
+    msRemoveItems = makeWithoutAusten();
+  }
+
   function clearFill() {
     cbFillItems = [];
     selFillItems = [];
@@ -90,6 +114,13 @@
   on:click={reloadWithoutOrwell}
 >
   Reload without orwell
+</button>
+<button
+  type="button"
+  data-testid="remove-non-selected"
+  on:click={removeNonSelected}
+>
+  Remove non-selected
 </button>
 
 <ComboBox
@@ -128,6 +159,15 @@
 />
 <p data-testid="cb-remove-id">{cbRemoveSelectedId}</p>
 
+<ComboBox
+  data-testid="cb-keep"
+  labelText="ComboBox keep"
+  items={cbKeepItems}
+  bind:selectedId={cbKeepSelectedId}
+  bind:value={cbKeepValue}
+/>
+<p data-testid="cb-keep-id">{cbKeepSelectedId}</p>
+
 <Select
   data-testid="sel-fill"
   labelText="Select fill"
@@ -150,6 +190,17 @@
 </Select>
 <p data-testid="sel-swap-selected">{selSwapSelected}</p>
 
+<Select
+  data-testid="sel-remove"
+  labelText="Select remove non-selected"
+  bind:selected={selRemoveSelected}
+>
+  {#each selRemoveItems as item (item.id)}
+    <SelectItem value={item.id} text={item.text} />
+  {/each}
+</Select>
+<p data-testid="sel-remove-selected">{selRemoveSelected}</p>
+
 <!-- Wrapper carries data-testid; MultiSelect does not spread $$restProps. -->
 <div data-testid="ms-swap">
   <MultiSelect
@@ -160,6 +211,16 @@
   />
 </div>
 <p data-testid="ms-swap-ids">{msSwapSelectedIds.join(",")}</p>
+
+<div data-testid="ms-remove">
+  <MultiSelect
+    labelText="MultiSelect remove non-selected"
+    label="Choose authors"
+    items={msRemoveItems}
+    bind:selectedIds={msRemoveSelectedIds}
+  />
+</div>
+<p data-testid="ms-remove-ids">{msRemoveSelectedIds.join(",")}</p>
 
 <div data-testid="ms-fill">
   <MultiSelect
