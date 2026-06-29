@@ -148,6 +148,25 @@ yarn -v`,
 
   it.each(
     snippetVariants,
+  )("forwards tooltipPosition to the portalled feedback tooltip ($type)", async ({
+    type,
+    label,
+  }) => {
+    render(CodeSnippetAsync, {
+      props: { type, copy: () => Promise.resolve(), tooltipPosition: "right" },
+    });
+
+    const button = screen.getByLabelText(label);
+    await user.click(button);
+
+    await waitFor(() => {
+      const portal = document.querySelector("[data-floating-portal]");
+      expect(portal).toHaveAttribute("data-floating-direction", "right");
+    });
+  });
+
+  it.each(
+    snippetVariants,
   )("async copy failure does not show feedback ($type)", async ({
     type,
     label,
