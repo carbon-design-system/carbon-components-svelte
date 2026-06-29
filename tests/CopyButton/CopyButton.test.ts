@@ -19,6 +19,12 @@ describe("CopyButton", () => {
     });
   });
 
+  afterEach(() => {
+    for (const portal of document.querySelectorAll("[data-floating-portal]")) {
+      portal.remove();
+    }
+  });
+
   it("renders and functions correctly", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(CopyButton);
@@ -29,12 +35,17 @@ describe("CopyButton", () => {
     await user.click(button);
     expect(consoleLog).toHaveBeenCalledWith("copied");
 
-    const feedback = button.querySelector(".bx--copy-btn__feedback");
-    expect(feedback).toHaveTextContent("Copied!");
+    // Feedback is portalled by default; it shares the hover tooltip surface.
+    const portal = document.querySelector("[data-floating-portal]");
+    expect(
+      portal?.querySelector(".bx--tooltip-portal__content"),
+    ).toHaveTextContent("Copied!");
   });
 
-  it("supports custom feedback text and timeout", async () => {
-    render(CopyButton);
+  it("supports custom feedback text and timeout (inline caret)", async () => {
+    // The fade-out animation is specific to the inline caret; portalled
+    // feedback closes the tooltip directly on timeout.
+    render(CopyButton, { props: { portalTooltip: false } });
 
     const button = getCopyButton("Custom feedback");
     await user.click(button);
@@ -72,9 +83,10 @@ describe("CopyButton", () => {
     await user.click(button);
     expect(onCopyError).toHaveBeenCalledWith({ error: "Clipboard error" });
     expect(button).not.toHaveClass("bx--copy-btn--fade-in");
-    expect(button.querySelector(".bx--copy-btn__feedback")).not.toHaveClass(
-      "bx--copy-btn--fade-in",
-    );
+    // No "Copied!" feedback on error. (A hover/focus description tooltip may
+    // still portal because clicking focuses the button — that is not feedback.)
+    expect(button.querySelector(".bx--copy-btn__feedback")).toBeNull();
+    expect(screen.queryByText("Copied!")).toBeNull();
   });
 
   it("async copy delays feedback until resolved", async () => {
@@ -102,9 +114,10 @@ describe("CopyButton", () => {
     });
 
     expect(button).not.toHaveAttribute("aria-busy");
-    expect(button.querySelector(".bx--copy-btn__feedback")).toHaveTextContent(
-      "Copied!",
-    );
+    const portal = document.querySelector("[data-floating-portal]");
+    expect(
+      portal?.querySelector(".bx--tooltip-portal__content"),
+    ).toHaveTextContent("Copied!");
   });
 
   it("async copy failure does not show feedback and dispatches copy:error", async () => {
@@ -207,15 +220,6 @@ describe("CopyButton", () => {
   });
 
   describe("Portal tooltip", () => {
-    afterEach(() => {
-      const existingPortals = document.querySelectorAll(
-        "[data-floating-portal]",
-      );
-      for (const portal of existingPortals) {
-        portal.remove();
-      }
-    });
-
     it("should add portal-active class when portalTooltip is true", () => {
       render(CopyButton, {
         props: { portalTooltip: true },
