@@ -110,6 +110,38 @@ test.describe("Items resync — display derived from value + items", () => {
     await expect(page.getByTestId("ms-fill")).toContainText("1");
   });
 
+  test("Select keeps selection after a non-selected option is removed", async ({
+    page,
+  }) => {
+    // Removing an <option> mutates the native <select> subtree, which can reset
+    // selectedIndex to -1. The unmount cleanup re-asserts ref.value from the store.
+    await expect(page.getByTestId("sel-remove")).toHaveValue("orwell");
+    await page.getByTestId("remove-non-selected").click();
+    await expect(page.getByTestId("sel-remove-selected")).toHaveText("orwell");
+    await expect(page.getByTestId("sel-remove")).toHaveValue("orwell");
+  });
+
+  test("ComboBox keeps selection after a non-selected option is removed", async ({
+    page,
+  }) => {
+    // Display derives from selectedId in JS, so an items change re-resolves it; no
+    // per-option unmount handling is needed.
+    await expect(page.getByTestId("cb-keep")).toHaveValue("George Orwell");
+    await page.getByTestId("remove-non-selected").click();
+    await expect(page.getByTestId("cb-keep-id")).toHaveText("orwell");
+    await expect(page.getByTestId("cb-keep")).toHaveValue("George Orwell");
+  });
+
+  test("MultiSelect keeps selection after a non-selected option is removed", async ({
+    page,
+  }) => {
+    // Selection lives in selectedIds; an items change re-baselines checked counts.
+    await expect(page.getByTestId("ms-remove")).toContainText("1");
+    await page.getByTestId("remove-non-selected").click();
+    await expect(page.getByTestId("ms-remove-ids")).toHaveText("orwell");
+    await expect(page.getByTestId("ms-remove")).toContainText("1");
+  });
+
   test("Dropdown shows selection after async fill (reference)", async ({
     page,
   }) => {

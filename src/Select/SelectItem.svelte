@@ -54,7 +54,10 @@
   });
 
   onMount(() => {
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      ctx?.syncNativeSelectValue?.();
+    };
   });
 </script>
 
