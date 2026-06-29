@@ -79,6 +79,7 @@
   import { get } from "svelte/store";
   import { activeButtonTooltip } from "../Button/button-tooltip-store.js";
   import Copy from "../icons/Copy.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/iconTooltipPortalGaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { createCopyFeedbackState } from "../utils/copyFeedback.js";
@@ -185,29 +186,7 @@
   }
 
   // Caret spacing + alignment nudges, mirroring Button's icon tooltip.
-  const PORTAL_HORIZONTAL_GAP_PX = 2;
-  const PORTAL_VERTICAL_GAP_PX = 1;
-  const PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX = -3;
-  const PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX = 1;
-
-  $: tooltipHorizontal =
-    tooltipPosition === "left" || tooltipPosition === "right";
-  $: tooltipVertical =
-    tooltipPosition === "top" || tooltipPosition === "bottom";
-  $: portalHorizontalGapLeft = tooltipHorizontal ? PORTAL_HORIZONTAL_GAP_PX : 0;
-  $: portalHorizontalGapRight = tooltipHorizontal
-    ? PORTAL_HORIZONTAL_GAP_PX
-    : 0;
-  $: portalGapTop = tooltipVertical ? PORTAL_VERTICAL_GAP_PX : 0;
-  $: portalGapBottom = tooltipVertical ? PORTAL_VERTICAL_GAP_PX : 0;
-  $: portalVerticalAlignOffsetLeft =
-    tooltipPosition === "left" && tooltipAlignment === "start"
-      ? PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX
-      : 0;
-  $: portalVerticalAlignOffsetRight =
-    tooltipPosition === "right" && tooltipAlignment === "end"
-      ? PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX
-      : 0;
+  $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
 
   function dismissFeedback() {
     copyFeedback.dismiss();
@@ -300,11 +279,11 @@
     tooltipType="icon"
     direction={tooltipPosition}
     intrinsicAlign={tooltipAlignment}
-    horizontalGapLeft={portalHorizontalGapLeft}
-    horizontalGapRight={portalHorizontalGapRight}
-    gapTop={portalGapTop}
-    gapBottom={portalGapBottom}
-    verticalAlignOffsetLeft={portalVerticalAlignOffsetLeft}
-    verticalAlignOffsetRight={portalVerticalAlignOffsetRight}
+    horizontalGapLeft={portalGaps.horizontalGapLeft}
+    horizontalGapRight={portalGaps.horizontalGapRight}
+    gapTop={portalGaps.gapTop}
+    gapBottom={portalGaps.gapBottom}
+    verticalAlignOffsetLeft={portalGaps.verticalAlignOffsetLeft}
+    verticalAlignOffsetRight={portalGaps.verticalAlignOffsetRight}
   />
 {/if}
