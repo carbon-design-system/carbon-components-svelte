@@ -449,6 +449,13 @@
     min-height: 3rem;
   }
 
+  // sm rich menu rows are shorter; tighten the between-group gap to match.
+  .#{$prefix}--header__search-menu-rich--sm
+    .#{$prefix}--search-menu-group:not(:first-child)
+    .#{$prefix}--search-menu-group__header {
+    margin-top: $carbon--spacing-04;
+  }
+
   .#{$prefix}--header-panel-divider {
     margin: 2rem 1rem 0;
     font-size: 0.75rem;
