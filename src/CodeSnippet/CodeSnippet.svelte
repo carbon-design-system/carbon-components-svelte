@@ -141,14 +141,15 @@
   export let copyRef = null;
 
   /**
-   * Set to `true` to render the feedback tooltip in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * Set how the "Copied!" feedback tooltip is rendered.
+   * By default, it is rendered in a portal so it is never clipped by an
+   * `overflow: hidden` container. Set to `false` to use Carbon's inline
+   * feedback caret instead.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
@@ -158,10 +159,11 @@
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
-  const insideModal = getContext("carbon:Modal");
 
+  // Feedback is portalled by default; only an explicit `portalTooltip={false}`
+  // opts back into Carbon's inline caret.
   $: effectivePortalTooltip =
-    portalTooltip === undefined ? !!insideModal : portalTooltip;
+    portalTooltip === undefined ? true : portalTooltip;
 
   const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
 
