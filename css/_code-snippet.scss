@@ -13,6 +13,12 @@
       $black-100 calc(100% - #{$carbon--spacing-07}),
       transparent 100%
     );
+
+    // The focus outline is drawn on this same element, so the edge fade would
+    // clip the ring. Drop the mask while focused so the outline is unbroken.
+    &:focus {
+      mask-image: none;
+    }
   }
 
   // Expanded multi-line adds padding-bottom: $spacing-05, so the bottom fade
@@ -28,6 +34,10 @@
         transparent 100%
       );
     mask-composite: intersect;
+
+    &:focus {
+      mask-image: none;
+    }
   }
 }
 
