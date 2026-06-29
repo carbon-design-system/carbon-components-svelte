@@ -20,6 +20,16 @@
     "xl": ($carbon--spacing-09, $carbon--spacing-05, $carbon--spacing-09),
   );
 
+  // Top margin on group headers after the first. lg/xl use the unscoped default;
+  // xs/sm shrink the gap so it doesn't swamp the shorter rows. Also used in
+  // _ui-shell.scss for HeaderSearch.
+  $search-menu-group-separation: (
+    "xs": $carbon--spacing-03,
+    "sm": $carbon--spacing-04,
+    "lg": $carbon--spacing-05,
+    "xl": $carbon--spacing-05,
+  );
+
   .#{$prefix}--search-menu {
     position: relative;
     display: block;
@@ -153,14 +163,28 @@
     padding-top: $carbon--spacing-03;
   }
 
+  // More padding above the label than below, so it reads with the items under it.
+  // Unscoped so SearchMenu and HeaderSearch rich menu share the same header rhythm.
   .#{$prefix}--search-menu-group__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    // label-01 line box rounds to 15.98px; min-height pins the header at 2rem to
+    // match sm result rows.
     min-height: $carbon--spacing-07;
+    padding-top: $carbon--spacing-03;
+    padding-bottom: $carbon--spacing-03;
     padding-right: $carbon--spacing-05;
     color: $text-02;
     @include type-style("label-01");
+  }
+
+  // Margin between groups. Skips the first group (menu top padding handles that).
+  // Default is $spacing-05; xs/sm override in the size loop. HeaderSearch sm
+  // overrides in _ui-shell.scss.
+  .#{$prefix}--search-menu-group:not(:first-child)
+    .#{$prefix}--search-menu-group__header {
+    margin-top: $carbon--spacing-05;
   }
 
   .#{$prefix}--search-menu-group__action {
@@ -193,6 +217,11 @@
 
       .#{$prefix}--search-menu-item {
         min-height: $row-height;
+      }
+
+      .#{$prefix}--search-menu-group:not(:first-child)
+        .#{$prefix}--search-menu-group__header {
+        margin-top: map-get($search-menu-group-separation, $size);
       }
 
       .#{$prefix}--search-menu-item__icon {
