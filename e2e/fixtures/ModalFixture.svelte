@@ -1,5 +1,5 @@
 <script>
-  import { Button, Modal } from "carbon-components-svelte";
+  import { Modal } from "carbon-components-svelte";
 
   let open = false;
   let events = [];

@@ -1,11 +1,5 @@
 <script>
-  import {
-    Button,
-    Modal,
-    Portal,
-    Stack,
-    Tooltip,
-  } from "carbon-components-svelte";
+  import { Button, Modal, Portal, Tooltip } from "carbon-components-svelte";
 
   let open = false;
 </script>

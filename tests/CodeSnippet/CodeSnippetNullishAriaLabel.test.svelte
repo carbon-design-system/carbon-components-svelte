@@ -8,5 +8,5 @@
 <CodeSnippet
   type="single"
   code="test"
-  {...(ariaLabel !== undefined ? { "aria-label": ariaLabel } : {})}
+  {...(ariaLabel === undefined ? {} : { "aria-label": ariaLabel })}
 />

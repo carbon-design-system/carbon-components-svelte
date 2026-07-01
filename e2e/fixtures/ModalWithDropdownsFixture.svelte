@@ -1,6 +1,5 @@
 <script>
   import {
-    Button,
     ComboBox,
     Dropdown,
     Modal,
