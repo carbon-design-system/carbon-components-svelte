@@ -32,6 +32,12 @@ import CodeSnippetWithWrapText from "./CodeSnippetWithWrapText.test.svelte";
 import CodeSnippetWrapperMouseEnter from "./CodeSnippetWrapperMouseEnter.test.svelte";
 
 describe("CodeSnippet", () => {
+  afterEach(() => {
+    for (const portal of document.querySelectorAll("[data-floating-portal]")) {
+      portal.remove();
+    }
+  });
+
   // Regression test for initial event dispatch in Svelte 5
   // https://github.com/carbon-design-system/carbon-components-svelte/issues/2527
   test("does not fire expand/collapse event on initial render", () => {
@@ -133,9 +139,30 @@ yarn -v`,
     });
 
     expect(button).not.toHaveAttribute("aria-busy");
-    expect(button.querySelector(".bx--copy-btn__feedback")).toHaveTextContent(
-      "Copied!",
-    );
+    // Feedback is portalled by default.
+    const portal = document.querySelector("[data-floating-portal]");
+    expect(
+      portal?.querySelector(".bx--tooltip-portal__content"),
+    ).toHaveTextContent("Copied!");
+  });
+
+  it.each(
+    snippetVariants,
+  )("forwards tooltipPosition to the portalled feedback tooltip ($type)", async ({
+    type,
+    label,
+  }) => {
+    render(CodeSnippetAsync, {
+      props: { type, copy: () => Promise.resolve(), tooltipPosition: "right" },
+    });
+
+    const button = screen.getByLabelText(label);
+    await user.click(button);
+
+    await waitFor(() => {
+      const portal = document.querySelector("[data-floating-portal]");
+      expect(portal).toHaveAttribute("data-floating-direction", "right");
+    });
   });
 
   it.each(

@@ -141,27 +141,47 @@
   export let copyRef = null;
 
   /**
-   * Set to `true` to render the feedback tooltip in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * Set how the "Copied!" feedback tooltip is rendered.
+   * By default, it is rendered in a portal so it is never clipped by an
+   * `overflow: hidden` container. Set to `false` to use Carbon's inline
+   * feedback caret instead.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  /**
+   * Set the position of the feedback tooltip relative to the copy button.
+   * @type {"top" | "right" | "bottom" | "left"}
+   */
+  export let tooltipPosition = "bottom";
+
+  /**
+   * Set the alignment of the feedback tooltip relative to the copy button.
+   * @type {"start" | "center" | "end"}
+   */
+  export let tooltipAlignment = "center";
+
+  import { createEventDispatcher, onMount } from "svelte";
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/iconTooltipPortalGaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { createCopyFeedbackState } from "../utils/copyFeedback.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
-  const insideModal = getContext("carbon:Modal");
 
+  // Feedback is portalled by default; only an explicit `portalTooltip={false}`
+  // opts back into Carbon's inline caret.
   $: effectivePortalTooltip =
-    portalTooltip === undefined ? !!insideModal : portalTooltip;
+    portalTooltip === undefined ? true : portalTooltip;
+
+  // Caret spacing + alignment nudges for the inline variant's portalled
+  // feedback. Single/multi variants delegate to CopyButton, which computes
+  // its own from the same util.
+  $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
 
   const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
 
@@ -335,7 +355,19 @@
     </button>
 
     {#if effectivePortalTooltip}
-      <PortalTooltip anchor={copyRef} open={feedbackOpen} text={feedback} />
+      <PortalTooltip
+        anchor={copyRef}
+        open={feedbackOpen}
+        text={feedback}
+        direction={tooltipPosition}
+        intrinsicAlign={tooltipAlignment}
+        horizontalGapLeft={portalGaps.horizontalGapLeft}
+        horizontalGapRight={portalGaps.horizontalGapRight}
+        gapTop={portalGaps.gapTop}
+        gapBottom={portalGaps.gapBottom}
+        verticalAlignOffsetLeft={portalGaps.verticalAlignOffsetLeft}
+        verticalAlignOffsetRight={portalGaps.verticalAlignOffsetRight}
+      />
     {/if}
   {/if}
 {:else}
@@ -380,6 +412,8 @@
         {feedbackIcon}
         iconDescription={copyButtonDescription}
         portalTooltip={effectivePortalTooltip}
+        {tooltipPosition}
+        {tooltipAlignment}
         on:click
         on:copy
         on:copy:error

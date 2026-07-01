@@ -50,10 +50,12 @@
   export let copy = defaultCopy;
 
   /**
-   * Set to `true` to render the feedback tooltip in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the tooltip is portalled when inside a `Modal` or when a
-   * non-default `tooltipPosition`/`tooltipAlignment` is set.
+   * Set how the "Copied!" feedback tooltip is rendered.
+   * By default, it is rendered in a portal so it shares the same surface as the
+   * hover tooltip (the text swaps in place) and is never clipped by an
+   * `overflow: hidden` container. Set to `false` to use Carbon's inline feedback
+   * caret instead; a non-default `tooltipPosition`/`tooltipAlignment` still
+   * portals because the inline caret only supports the default placement.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
@@ -73,19 +75,21 @@
   /** Obtain a reference to the underlying button element. */
   export let ref = null;
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { get } from "svelte/store";
   import { activeButtonTooltip } from "../Button/button-tooltip-store.js";
   import Copy from "../icons/Copy.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/iconTooltipPortalGaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { createCopyFeedbackState } from "../utils/copyFeedback.js";
 
   const dispatch = createEventDispatcher();
-  const insideModal = getContext("carbon:Modal");
 
+  // Feedback is portalled by default; only an explicit `portalTooltip={false}`
+  // opts back into Carbon's inline caret.
   $: effectivePortalTooltip =
-    portalTooltip === undefined ? !!insideModal : portalTooltip;
+    portalTooltip === undefined ? true : portalTooltip;
 
   const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
 
@@ -182,29 +186,7 @@
   }
 
   // Caret spacing + alignment nudges, mirroring Button's icon tooltip.
-  const PORTAL_HORIZONTAL_GAP_PX = 2;
-  const PORTAL_VERTICAL_GAP_PX = 1;
-  const PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX = -3;
-  const PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX = 1;
-
-  $: tooltipHorizontal =
-    tooltipPosition === "left" || tooltipPosition === "right";
-  $: tooltipVertical =
-    tooltipPosition === "top" || tooltipPosition === "bottom";
-  $: portalHorizontalGapLeft = tooltipHorizontal ? PORTAL_HORIZONTAL_GAP_PX : 0;
-  $: portalHorizontalGapRight = tooltipHorizontal
-    ? PORTAL_HORIZONTAL_GAP_PX
-    : 0;
-  $: portalGapTop = tooltipVertical ? PORTAL_VERTICAL_GAP_PX : 0;
-  $: portalGapBottom = tooltipVertical ? PORTAL_VERTICAL_GAP_PX : 0;
-  $: portalVerticalAlignOffsetLeft =
-    tooltipPosition === "left" && tooltipAlignment === "start"
-      ? PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX
-      : 0;
-  $: portalVerticalAlignOffsetRight =
-    tooltipPosition === "right" && tooltipAlignment === "end"
-      ? PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX
-      : 0;
+  $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
 
   function dismissFeedback() {
     copyFeedback.dismiss();
@@ -297,11 +279,11 @@
     tooltipType="icon"
     direction={tooltipPosition}
     intrinsicAlign={tooltipAlignment}
-    horizontalGapLeft={portalHorizontalGapLeft}
-    horizontalGapRight={portalHorizontalGapRight}
-    gapTop={portalGapTop}
-    gapBottom={portalGapBottom}
-    verticalAlignOffsetLeft={portalVerticalAlignOffsetLeft}
-    verticalAlignOffsetRight={portalVerticalAlignOffsetRight}
+    horizontalGapLeft={portalGaps.horizontalGapLeft}
+    horizontalGapRight={portalGaps.horizontalGapRight}
+    gapTop={portalGaps.gapTop}
+    gapBottom={portalGaps.gapBottom}
+    verticalAlignOffsetLeft={portalGaps.verticalAlignOffsetLeft}
+    verticalAlignOffsetRight={portalGaps.verticalAlignOffsetRight}
   />
 {/if}

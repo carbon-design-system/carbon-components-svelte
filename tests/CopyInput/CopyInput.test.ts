@@ -17,6 +17,12 @@ describe("CopyInput", () => {
     });
   });
 
+  afterEach(() => {
+    for (const portal of document.querySelectorAll("[data-floating-portal]")) {
+      portal.remove();
+    }
+  });
+
   it("renders a read-only field with the value", () => {
     render(CopyInput);
 
@@ -147,9 +153,11 @@ describe("CopyInput", () => {
     });
 
     expect(button).not.toHaveAttribute("aria-busy");
-    expect(button.querySelector(".bx--copy-btn__feedback")).toHaveTextContent(
-      "Copied!",
-    );
+    // Feedback is portalled by default.
+    const portal = document.querySelector("[data-floating-portal]");
+    expect(
+      portal?.querySelector(".bx--tooltip-portal__content"),
+    ).toHaveTextContent("Copied!");
   });
 
   it("async copy failure does not show feedback and dispatches copy:error", async () => {
