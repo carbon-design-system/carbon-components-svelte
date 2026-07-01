@@ -22,7 +22,6 @@
   import ArrowsVertical from "carbon-icons-svelte/lib/ArrowsVertical.svelte";
   import ArrowUp from "carbon-icons-svelte/lib/ArrowUp.svelte";
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
-  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import { onMount } from "svelte";
   import { COMPONENT_CATEGORIES } from "../component-categories";
   import {

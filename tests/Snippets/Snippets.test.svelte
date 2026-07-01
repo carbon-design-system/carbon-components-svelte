@@ -42,7 +42,7 @@
       data-expanded={expanded}
     ></span>
   {/snippet}
-  {#snippet expandedRow({ row, rowSelected })}
+  {#snippet expandedRow({ row, rowSelected: _rowSelected })}
     <pre>{JSON.stringify(row, null, 2)}</pre>
   {/snippet}
 </DataTable>
