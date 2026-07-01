@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.2/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -117,7 +117,9 @@
         "rules": {
           "correctness": {
             "noSelfAssign": "off",
-            "noDuplicateAttributes": "off"
+            "noDuplicateAttributes": "off",
+            "noUnusedImports": "off",
+            "noUnusedVariables": "off"
           },
           "complexity": {
             "noUselessUndefinedInitialization": "off"
@@ -169,9 +171,6 @@
       "includes": ["**/*.test.svelte", "docs/**/*.svelte"],
       "linter": {
         "rules": {
-          "correctness": {
-            "noUnusedFunctionParameters": "off"
-          },
           "performance": {
             "useTopLevelRegex": "off"
           }
@@ -184,29 +183,6 @@
         "rules": {
           "style": {
             "noRestrictedGlobals": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["src/TreeView/TreeView.svelte"],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "noUnusedVariables": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": [
-        "docs/src/pages/framed/TreeView/TreeViewInlineEditing.svelte",
-        "docs/src/components/ComponentDocLayout.svelte"
-      ],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "noUnusedVariables": "off"
           }
         }
       }
