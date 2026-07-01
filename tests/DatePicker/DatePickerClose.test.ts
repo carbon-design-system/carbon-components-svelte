@@ -7,6 +7,14 @@ afterEach(() => {
   cleanup();
 });
 
+function ariaLabelForDayInCurrentMonth(day: number) {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), day).toLocaleDateString(
+    "en-US",
+    { month: "long", day: "numeric", year: "numeric" },
+  );
+}
+
 describe("DatePicker close event", () => {
   it('dispatches close with trigger "select" when a date is chosen', async () => {
     const onClose = vi.fn();
@@ -127,7 +135,7 @@ describe("DatePicker close event", () => {
       return openCalendar;
     });
     const startDay = calendar.querySelector<HTMLElement>(
-      '[aria-label="June 1, 2026"]',
+      `[aria-label="${ariaLabelForDayInCurrentMonth(1)}"]`,
     );
     if (!startDay) throw new Error("expected a start day");
 
@@ -161,7 +169,7 @@ describe("DatePicker close event", () => {
       return openCalendar;
     });
     const startDay = calendar.querySelector<HTMLElement>(
-      '[aria-label="June 1, 2026"]',
+      `[aria-label="${ariaLabelForDayInCurrentMonth(1)}"]`,
     );
     if (!startDay) throw new Error("expected a start day");
 
@@ -169,7 +177,7 @@ describe("DatePicker close event", () => {
     await tick();
 
     const endDay = calendar.querySelector<HTMLElement>(
-      '[aria-label="June 15, 2026"]',
+      `[aria-label="${ariaLabelForDayInCurrentMonth(15)}"]`,
     );
     if (!endDay) throw new Error("expected an end day");
 
