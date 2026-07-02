@@ -74,6 +74,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   {
     label: "Overlays",
     components: [
+      "Dialog",
       "Modal",
       "ComposedModal",
       "Popover",
