@@ -3,6 +3,7 @@
   import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+  import IconIndicator from "carbon-components-svelte/IconIndicator/IconIndicator.svelte";
   import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
   import OverflowMenuItem from "carbon-components-svelte/OverflowMenu/OverflowMenuItem.svelte";
   import ProgressIndicator from "carbon-components-svelte/ProgressIndicator/ProgressIndicator.svelte";
@@ -64,6 +65,16 @@
     <span data-testid="dropdown-custom-label">Custom label content</span>
   {/snippet}
 </Dropdown>
+
+<IconIndicator
+  data-testid="icon-indicator-label-children"
+  kind="succeeded"
+  label="Succeeded"
+>
+  {#snippet labelChildren()}
+    <span data-testid="icon-indicator-custom-label">Custom label content</span>
+  {/snippet}
+</IconIndicator>
 
 <Dropdown data-testid="dropdown-icon-snippets" {items} selectedId="1">
   {#snippet icon({ item })}
