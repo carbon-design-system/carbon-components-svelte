@@ -1,0 +1,29 @@
+---
+components: ["Menu", "MenuItem"]
+description: Menu is a low-level primitive that anchors a list of actions to a trigger element, with keyboard navigation and outside-click dismissal built in.
+---
+
+<script>
+</script>
+
+## Basic
+
+Menu positions its content relative to an `anchor` element and does not render a trigger of its own. Bind a reference to the element that opens the menu, then control `open` from that element's event handler. Use `MenuItem` for each action; set `disabled` to make an item non-interactive.
+
+The root element has `role="menu"`. Set `labelText` or `aria-label` on Menu so assistive technologies get a meaningful name, since there is no visible text the menu is otherwise associated with.
+
+<FileSource src="/framed/Menu/MenuBasic" />
+
+## Direction
+
+Set `direction` to `"top"`, `"bottom"`, `"left"`, or `"right"` to control which side of the anchor the menu opens toward. The menu flips to the opposite side automatically when there is not enough space.
+
+<FileSource src="/framed/Menu/MenuDirection" />
+
+## Keyboard interactions
+
+Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. The menu closes from an item selection, <DocKbd label="Escape" />, or an outside click; <DocKbd label="Escape" /> also returns focus to the anchor.
+
+## Placement
+
+Menu forwards the same placement props as [FloatingPortal](/components/FloatingPortal): `gapTop`, `gapBottom`, `horizontalGapLeft`, `horizontalGapRight`, `verticalAlignOffsetLeft`, `verticalAlignOffsetRight`, `zIndex`, `intrinsicWidth`, `intrinsicAlign`, and `target`. See the FloatingPortal documentation for how each affects positioning.
