@@ -33,6 +33,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Link: "0.2.0",
   Loading: "0.2.0",
   LocalStorage: "0.30.0",
+  Menu: "0.110.0",
   Modal: "0.2.0",
   MultiSelect: "0.2.0",
   NotificationQueue: "0.94.0",

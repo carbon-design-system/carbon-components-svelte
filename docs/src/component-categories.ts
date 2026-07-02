@@ -129,7 +129,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   },
   {
     label: "Misc",
-    components: ["UserAvatar", "UserAvatarGroup"],
+    components: ["UserAvatar", "UserAvatarGroup", "Menu"],
   },
 ];
 
