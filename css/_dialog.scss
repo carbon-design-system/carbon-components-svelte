@@ -1,0 +1,47 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Dialog primitive. carbon-components@10.58 ships no <dialog> styles, so
+/// layout, background, and backdrop dimming are authored from scratch here,
+/// using the closest v10 token equivalents ($ui-01, $text-01, $ui-03, $overlay-01).
+/// @access private
+/// @group components
+@mixin dialog {
+  .#{$prefix}--dialog {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: rem(768px);
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    padding: $carbon--spacing-05;
+    border: 1px solid $ui-03;
+    background-color: $ui-01;
+    color: $text-01;
+
+    @include carbon--breakpoint(md) {
+      max-width: 84%;
+    }
+
+    @include carbon--breakpoint(lg) {
+      max-width: 60%;
+    }
+
+    @include carbon--breakpoint(xlg) {
+      max-width: 48%;
+    }
+  }
+
+  .#{$prefix}--dialog::backdrop {
+    background-color: $overlay-01;
+  }
+}
+
+@include exports("dialog") {
+  @include dialog;
+}

@@ -1,0 +1,15 @@
+---
+description: Dialog provides a lightweight, native browser primitive for building custom modal and non-modal overlays.
+---
+
+## Basic
+
+Open the dialog by binding to `open`. Set `modal` to `true` to open it with the browser's `showModal()`, which adds a backdrop and confines focus and interaction to the dialog. `Dialog` has no built-in heading, so provide an `aria-label` or `aria-labelledby` attribute; both forward to the underlying dialog element.
+
+<FileSource src="/framed/Dialog/Dialog" />
+
+## Non-modal
+
+Set `modal` to `false` (the default) to open the dialog with `show()`. The dialog renders without a backdrop, and the rest of the page stays interactive.
+
+<FileSource src="/framed/Dialog/NonModalDialog" />

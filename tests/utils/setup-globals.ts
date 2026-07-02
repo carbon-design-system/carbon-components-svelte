@@ -98,3 +98,23 @@ if (typeof DataTransfer === "undefined") {
 
   globalThis.DataTransfer = DataTransferMock as unknown as typeof DataTransfer;
 }
+
+// jsdom reflects the `open` attribute but does not implement showModal()/show()/close().
+// https://github.com/jsdom/jsdom/issues/3294
+if (
+  typeof HTMLDialogElement !== "undefined" &&
+  !HTMLDialogElement.prototype.showModal
+) {
+  HTMLDialogElement.prototype.showModal = function () {
+    this.setAttribute("open", "");
+  };
+  HTMLDialogElement.prototype.show = function () {
+    this.setAttribute("open", "");
+  };
+  HTMLDialogElement.prototype.close = function () {
+    if (this.hasAttribute("open")) {
+      this.removeAttribute("open");
+      this.dispatchEvent(new Event("close"));
+    }
+  };
+}
