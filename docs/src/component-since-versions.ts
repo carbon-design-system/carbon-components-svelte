@@ -19,6 +19,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   CopyInput: "0.109.0",
   DataTable: "0.5.0",
   DatePicker: "0.2.0",
+  Dialog: "0.110.0",
   Dropdown: "0.2.0",
   ExpandableTile: "0.2.0",
   FileUploader: "0.2.0",
