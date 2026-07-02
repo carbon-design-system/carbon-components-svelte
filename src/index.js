@@ -87,6 +87,8 @@ export { default as ListBoxSelection } from "./ListBox/ListBoxSelection.svelte";
 export { default as ListItem } from "./ListItem/ListItem.svelte";
 export { default as Loading } from "./Loading/Loading.svelte";
 export { default as LocalStorage } from "./LocalStorage/LocalStorage.svelte";
+export { default as Menu } from "./Menu/Menu.svelte";
+export { default as MenuItem } from "./Menu/MenuItem.svelte";
 export { default as Modal } from "./Modal/Modal.svelte";
 export { default as FluidMultiSelectSkeleton } from "./MultiSelect/FluidMultiSelectSkeleton.svelte";
 export { default as MultiSelect } from "./MultiSelect/MultiSelect.svelte";
