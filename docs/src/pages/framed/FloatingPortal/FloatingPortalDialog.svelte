@@ -1,18 +1,19 @@
 <script>
   import {
     Button,
+    Dialog,
     Dropdown,
     OverflowMenu,
     OverflowMenuItem,
     Stack,
   } from "carbon-components-svelte";
 
-  let dialog = null;
+  let open = false;
 </script>
 
-<Button on:click={() => dialog?.showModal()}>Open dialog</Button>
+<Button on:click={() => (open = true)}>Open dialog</Button>
 
-<dialog bind:this={dialog}>
+<Dialog bind:open modal aria-label="Region settings">
   <Stack gap={5}>
     <p>
       Carbon components that portal their floating content (dropdowns, overflow
@@ -45,6 +46,6 @@
       <OverflowMenuItem text="Duplicate" />
       <OverflowMenuItem danger text="Delete" />
     </OverflowMenu>
-    <Button kind="secondary" on:click={() => dialog.close()}>Close</Button>
+    <Button kind="secondary" on:click={() => (open = false)}>Close</Button>
   </Stack>
-</dialog>
+</Dialog>
