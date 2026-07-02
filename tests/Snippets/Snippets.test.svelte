@@ -8,6 +8,7 @@
   import OverflowMenuItem from "carbon-components-svelte/OverflowMenu/OverflowMenuItem.svelte";
   import ProgressIndicator from "carbon-components-svelte/ProgressIndicator/ProgressIndicator.svelte";
   import ProgressStep from "carbon-components-svelte/ProgressIndicator/ProgressStep.svelte";
+  import ShapeIndicator from "carbon-components-svelte/ShapeIndicator/ShapeIndicator.svelte";
   import Tab from "carbon-components-svelte/Tabs/Tab.svelte";
   import TabContent from "carbon-components-svelte/Tabs/TabContent.svelte";
   import Tabs from "carbon-components-svelte/Tabs/Tabs.svelte";
@@ -75,6 +76,16 @@
     <span data-testid="icon-indicator-custom-label">Custom label content</span>
   {/snippet}
 </IconIndicator>
+
+<ShapeIndicator
+  data-testid="shape-indicator-label-children"
+  kind="stable"
+  label="Stable"
+>
+  {#snippet labelChildren()}
+    <span data-testid="shape-indicator-custom-label">Custom label content</span>
+  {/snippet}
+</ShapeIndicator>
 
 <Dropdown data-testid="dropdown-icon-snippets" {items} selectedId="1">
   {#snippet icon({ item })}

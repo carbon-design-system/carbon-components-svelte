@@ -1,0 +1,130 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Shape indicator (absent from v10). v10 has no reactive per-theme status
+/// tokens, so `kind` colors come from the static Carbon palette with a
+/// light/dark branch instead.
+/// @access private
+/// @group components
+@mixin shape-indicator {
+  $custom-props: feature-flag-enabled("enable-css-custom-properties");
+  $is-light-theme: true;
+  @if not $custom-props {
+    $is-light-theme: lightness($ui-background) > 50%;
+  }
+
+  $status-red: if($is-light-theme, $carbon--red-60, $carbon--red-50);
+  $status-purple: if($is-light-theme, $carbon--purple-60, $carbon--purple-50);
+  $status-green: if($is-light-theme, $carbon--green-50, $carbon--green-40);
+  $status-blue: if($is-light-theme, $carbon--blue-70, $carbon--blue-50);
+  $status-gray: if($is-light-theme, $carbon--gray-60, $carbon--gray-50);
+
+  .#{$prefix}--shape-indicator {
+    @include type-style("helper-text-01");
+
+    display: flex;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--shape-indicator svg {
+    margin-inline-end: $carbon--spacing-03;
+    align-self: center;
+  }
+
+  .#{$prefix}--shape-indicator--14 {
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--shape-indicator--failed {
+    fill: $status-red;
+  }
+
+  .#{$prefix}--shape-indicator--critical {
+    fill: $status-red;
+  }
+
+  .#{$prefix}--shape-indicator--high {
+    fill: $status-red;
+  }
+
+  .#{$prefix}--shape-indicator--medium {
+    fill: $carbon--orange-40;
+
+    path:first-of-type {
+      fill: $carbon--orange-60;
+    }
+  }
+
+  .#{$prefix}--shape-indicator--low {
+    fill: $carbon--yellow-30;
+
+    path:nth-of-type(2) {
+      fill: $carbon--yellow-60;
+    }
+  }
+
+  .#{$prefix}--shape-indicator--cautious {
+    fill: $carbon--yellow-30;
+
+    path:first-of-type {
+      fill: $carbon--yellow-60;
+    }
+  }
+
+  .#{$prefix}--shape-indicator--undefined {
+    fill: $status-purple;
+  }
+
+  .#{$prefix}--shape-indicator--stable {
+    fill: $status-green;
+  }
+
+  .#{$prefix}--shape-indicator--informative {
+    fill: $status-blue;
+  }
+
+  .#{$prefix}--shape-indicator--incomplete {
+    path:nth-of-type(2) {
+      fill: $status-blue;
+    }
+  }
+
+  .#{$prefix}--shape-indicator--draft {
+    fill: $status-gray;
+  }
+
+  @if $custom-props {
+    @each $dark-theme in ("g80", "g90", "g100") {
+      [theme="#{$dark-theme}"] {
+        .#{$prefix}--shape-indicator--failed,
+        .#{$prefix}--shape-indicator--critical,
+        .#{$prefix}--shape-indicator--high {
+          fill: $carbon--red-50;
+        }
+
+        .#{$prefix}--shape-indicator--undefined {
+          fill: $carbon--purple-50;
+        }
+
+        .#{$prefix}--shape-indicator--stable {
+          fill: $carbon--green-40;
+        }
+
+        .#{$prefix}--shape-indicator--informative,
+        .#{$prefix}--shape-indicator--incomplete path:nth-of-type(2) {
+          fill: $carbon--blue-50;
+        }
+
+        .#{$prefix}--shape-indicator--draft {
+          fill: $carbon--gray-50;
+        }
+      }
+    }
+  }
+}
+
+@include exports("shape-indicator") {
+  @include shape-indicator;
+}
