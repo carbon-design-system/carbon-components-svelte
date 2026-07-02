@@ -95,7 +95,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   },
   {
     label: "Status",
-    components: ["IconIndicator"],
+    components: ["IconIndicator", "ShapeIndicator"],
   },
   {
     label: "Loading",
