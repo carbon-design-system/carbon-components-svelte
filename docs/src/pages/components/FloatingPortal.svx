@@ -108,12 +108,13 @@ Use floating portals inside native top-layer elements.
 
 ### Native dialog
 
-When the anchor is inside a
-[native dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog),
-floating content is automatically mounted into that dialog. The default target is
-`anchor.closest("dialog,[popover]")`, which resolves to the dialog when the
-anchor is nested under it. This keeps the content in the dialog top layer so it
-stays visible and interactive.
+When the anchor is inside a [Dialog](/components/Dialog) opened as a modal, or
+any other
+[native dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog)
+element, floating content is automatically mounted into that dialog. The
+default target is `anchor.closest("dialog,[popover]")`, which resolves to the
+dialog when the anchor is nested under it. This keeps the content in the
+dialog top layer so it stays visible and interactive.
 
 Components inside the dialog must still enable portalMenu for its menu or content
 to be portalled. Pass an explicit target to override this behavior.

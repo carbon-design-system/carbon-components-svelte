@@ -102,7 +102,7 @@ Set `portalMenu` to `true` to render the calendar in a floating portal. This pre
 
 ### Native dialog
 
-When the date picker is inside a native `<dialog>` opened with `showModal()`, portalMenu mounts the calendar into that dialog so it appears above the modal backdrop. The calendar uses `position: fixed` with viewport coordinates.
+When the date picker is inside a [Dialog](/components/Dialog) opened as a modal, portalMenu mounts the calendar into that dialog so it appears above the modal backdrop. The calendar uses `position: fixed` with viewport coordinates.
 
 <FileSource src="/framed/DatePicker/DatePickerDialog" />
 
