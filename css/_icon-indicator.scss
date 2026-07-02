@@ -1,0 +1,130 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Icon indicator (absent from v10). v10 has no reactive per-theme status
+/// tokens, so `kind` colors come from the static Carbon palette with a
+/// light/dark branch instead.
+/// @access private
+/// @group components
+@mixin icon-indicator {
+  $custom-props: feature-flag-enabled("enable-css-custom-properties");
+  $is-light-theme: true;
+  @if not $custom-props {
+    $is-light-theme: lightness($ui-background) > 50%;
+  }
+
+  $status-red: if($is-light-theme, $carbon--red-60, $carbon--red-50);
+  $status-purple: if($is-light-theme, $carbon--purple-60, $carbon--purple-50);
+  $status-green: if($is-light-theme, $carbon--green-50, $carbon--green-40);
+  $status-blue: if($is-light-theme, $carbon--blue-70, $carbon--blue-50);
+  $status-gray: if($is-light-theme, $carbon--gray-60, $carbon--gray-50);
+
+  .#{$prefix}--icon-indicator {
+    @include type-style("body-short-01");
+
+    display: flex;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--icon-indicator svg {
+    margin-inline-end: $carbon--spacing-03;
+    align-self: center;
+  }
+
+  .#{$prefix}--icon-indicator--20 {
+    @include type-style("body-short-02");
+  }
+
+  .#{$prefix}--icon-indicator--failed {
+    fill: $status-red;
+  }
+
+  .#{$prefix}--icon-indicator--caution-major {
+    fill: $carbon--orange-40;
+
+    path:first-of-type {
+      fill: $carbon--black-100;
+    }
+  }
+
+  .#{$prefix}--icon-indicator--caution-minor {
+    fill: $carbon--yellow-30;
+
+    path:first-of-type {
+      fill: $carbon--black-100;
+    }
+  }
+
+  .#{$prefix}--icon-indicator--undefined {
+    fill: $status-purple;
+  }
+
+  .#{$prefix}--icon-indicator--succeeded {
+    fill: $status-green;
+  }
+
+  .#{$prefix}--icon-indicator--normal {
+    fill: $status-blue;
+  }
+
+  .#{$prefix}--icon-indicator--in-progress {
+    fill: $status-blue;
+  }
+
+  .#{$prefix}--icon-indicator--incomplete {
+    fill: $status-blue;
+  }
+
+  .#{$prefix}--icon-indicator--not-started {
+    fill: $status-gray;
+  }
+
+  .#{$prefix}--icon-indicator--pending {
+    fill: $status-gray;
+  }
+
+  .#{$prefix}--icon-indicator--unknown {
+    fill: $status-gray;
+  }
+
+  .#{$prefix}--icon-indicator--informative {
+    fill: $status-blue;
+  }
+
+  @if $custom-props {
+    @each $dark-theme in ("g80", "g90", "g100") {
+      [theme="#{$dark-theme}"] {
+        .#{$prefix}--icon-indicator--failed {
+          fill: $carbon--red-50;
+        }
+
+        .#{$prefix}--icon-indicator--undefined {
+          fill: $carbon--purple-50;
+        }
+
+        .#{$prefix}--icon-indicator--succeeded {
+          fill: $carbon--green-40;
+        }
+
+        .#{$prefix}--icon-indicator--normal,
+        .#{$prefix}--icon-indicator--in-progress,
+        .#{$prefix}--icon-indicator--incomplete,
+        .#{$prefix}--icon-indicator--informative {
+          fill: $carbon--blue-50;
+        }
+
+        .#{$prefix}--icon-indicator--not-started,
+        .#{$prefix}--icon-indicator--pending,
+        .#{$prefix}--icon-indicator--unknown {
+          fill: $carbon--gray-50;
+        }
+      }
+    }
+  }
+}
+
+@include exports("icon-indicator") {
+  @include icon-indicator;
+}

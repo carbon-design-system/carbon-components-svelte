@@ -75,6 +75,7 @@ export { default as Grid } from "./Grid/Grid.svelte";
 export { default as Row } from "./Grid/Row.svelte";
 export { default as Heading } from "./Heading/Heading.svelte";
 export { default as Section } from "./Heading/Section.svelte";
+export { default as IconIndicator } from "./IconIndicator/IconIndicator.svelte";
 export { default as ImageLoader } from "./ImageLoader/ImageLoader.svelte";
 export { default as InlineLoading } from "./InlineLoading/InlineLoading.svelte";
 export { default as Link } from "./Link/Link.svelte";
