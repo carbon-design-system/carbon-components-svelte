@@ -84,6 +84,18 @@ describe("Svelte 5 Snippets", () => {
     });
   });
 
+  describe("ShapeIndicator labelChildren", () => {
+    it("should render labelChildren snippet", () => {
+      render(Snippets);
+
+      const indicator = screen.getByTestId("shape-indicator-label-children");
+      const customLabel = screen.getByTestId("shape-indicator-custom-label");
+      expect(customLabel).toBeInTheDocument();
+      expect(customLabel).toHaveTextContent("Custom label content");
+      expect(indicator).not.toHaveTextContent("Stable");
+    });
+  });
+
   describe("Dropdown icon/iconRight", () => {
     it("should render icon and iconRight snippets with selected", async () => {
       render(Snippets);
