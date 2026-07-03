@@ -1,0 +1,375 @@
+// Styles for the CommandPalette component.
+// CommandPalette is not part of carbon-components, so these styles follow
+// the Carbon Design System guidelines (tokens, spacing, motion, and field
+// heights) while borrowing from the text-input and search components.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/css--reset";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// CommandPalette styles
+/// @access private
+/// @group command-palette
+@mixin command-palette {
+  // [text inset, magnifier gutter, row min-height] per Search size.
+  $cmd-palette-insets: (
+    "sm": ($carbon--spacing-07, $carbon--spacing-03, $carbon--spacing-07),
+    "lg": ($carbon--spacing-08, $carbon--spacing-04, $carbon--spacing-08),
+    "xl": ($carbon--spacing-09, $carbon--spacing-05, $carbon--spacing-09),
+  );
+
+  // Overlay backdrop, centers the dialog near the top of the viewport.
+  .#{$prefix}--cmd-palette {
+    position: fixed;
+    z-index: 9000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 10vh $spacing-05 $spacing-05;
+    background-color: $overlay-01;
+    animation: $duration--fast-02 motion(entrance, productive) cmd-palette-fade-in;
+  }
+
+  // The floating dialog container.
+  .#{$prefix}--cmd-palette__dialog {
+    display: flex;
+    width: 100%;
+    max-height: 60vh;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: $ui-01;
+    box-shadow: 0 to-rem(2px) to-rem(12px) rgba(0, 0, 0, 0.3);
+    outline: none;
+  }
+
+  .#{$prefix}--cmd-palette__dialog--width-sm {
+    max-width: to-rem(384px);
+  }
+
+  .#{$prefix}--cmd-palette__dialog--width-md {
+    max-width: to-rem(640px);
+  }
+
+  .#{$prefix}--cmd-palette__dialog--width-lg {
+    max-width: to-rem(768px);
+  }
+
+  .#{$prefix}--cmd-palette__dialog--width-xl {
+    max-width: to-rem(1024px);
+  }
+
+  .#{$prefix}--cmd-palette__search.#{$prefix}--search {
+    flex: 0 0 auto;
+    border-bottom: to-rem(1px) solid $ui-03;
+  }
+
+  .#{$prefix}--cmd-palette__search .#{$prefix}--search-input {
+    background-color: $ui-01;
+    border-bottom: 0;
+
+    &:focus {
+      @include focus-outline('reset');
+    }
+  }
+
+  .#{$prefix}--cmd-palette__menu {
+    flex: 1 1 auto;
+    padding: $spacing-03 0;
+    margin: 0;
+    overflow-y: auto;
+    list-style: none;
+
+    ul[role='group'] {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+  }
+
+  .#{$prefix}--cmd-palette__group--hidden {
+    display: none;
+  }
+
+  .#{$prefix}--cmd-palette__group--divider {
+    border-top: to-rem(1px) solid $ui-03;
+    margin-top: $spacing-03;
+    padding-top: $spacing-03;
+  }
+
+  .#{$prefix}--cmd-palette__group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: $carbon--spacing-07;
+    padding-right: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--cmd-palette__group-action {
+    flex: 0 0 auto;
+    margin-left: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--cmd-palette__group-label {
+    @include type-style("label-01");
+
+    padding-right: $spacing-05;
+    padding-bottom: $spacing-02;
+    color: $text-02;
+  }
+
+  .#{$prefix}--cmd-palette__option {
+    @include type-style("body-short-01");
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-right: $spacing-05;
+    color: $text-01;
+    cursor: pointer;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--cmd-palette__option--active {
+    background-color: $hover-ui;
+    box-shadow: inset to-rem(3px) 0 0 0 $interactive-04;
+  }
+
+  .#{$prefix}--cmd-palette__option--selected {
+    background-color: $selected-ui;
+  }
+
+  .#{$prefix}--cmd-palette__option--selected.#{$prefix}--cmd-palette__option--active {
+    background-color: $hover-selected-ui;
+  }
+
+  .#{$prefix}--cmd-palette__option--disabled {
+    color: $disabled-02;
+    cursor: not-allowed;
+
+    .#{$prefix}--cmd-palette__option-match {
+      color: $disabled-02;
+    }
+  }
+
+  // Rows with a description are taller and top-align their content so the
+  // leading icon lines up with the title rather than the row center.
+  .#{$prefix}--cmd-palette__option--with-description {
+    align-items: flex-start;
+    padding-top: $spacing-05;
+    padding-bottom: $spacing-05;
+  }
+
+  .#{$prefix}--cmd-palette__option-icon,
+  .#{$prefix}--cmd-palette__option-selection {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+
+    svg {
+      width: to-rem(16px);
+      height: to-rem(16px);
+      fill: $icon-01;
+    }
+  }
+
+  .#{$prefix}--cmd-palette__option--with-description {
+    .#{$prefix}--cmd-palette__option-icon,
+    .#{$prefix}--cmd-palette__option-selection {
+      // Anchor at the row's top padding and center within the title's
+      // line-height (body-short-01 = 18px) so the icon aligns with the title.
+      top: $spacing-05;
+      height: to-rem(18px);
+      transform: none;
+    }
+  }
+
+  .#{$prefix}--cmd-palette__option--disabled .#{$prefix}--cmd-palette__option-icon svg {
+    fill: $disabled-02;
+  }
+
+  .#{$prefix}--cmd-palette__control {
+    position: relative;
+    display: block;
+    width: to-rem(16px);
+    height: to-rem(16px);
+    box-sizing: border-box;
+    border: to-rem(1px) solid $icon-02;
+    background-color: transparent;
+  }
+
+  .#{$prefix}--cmd-palette__control--radio {
+    border-radius: 50%;
+  }
+
+  .#{$prefix}--cmd-palette__control--radio.#{$prefix}--cmd-palette__control--checked {
+    border-color: $icon-01;
+  }
+
+  .#{$prefix}--cmd-palette__control--radio.#{$prefix}--cmd-palette__control--checked::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: to-rem(8px);
+    height: to-rem(8px);
+    border-radius: 50%;
+    background-color: $icon-01;
+    content: "";
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--cmd-palette__control--checkbox.#{$prefix}--cmd-palette__control--checked {
+    border-color: $icon-01;
+    background-color: $icon-01;
+  }
+
+  .#{$prefix}--cmd-palette__control--checkbox.#{$prefix}--cmd-palette__control--checked::after {
+    position: absolute;
+    top: to-rem(2px);
+    left: to-rem(5px);
+    width: to-rem(4px);
+    height: to-rem(8px);
+    border: solid $icon-03;
+    border-width: 0 to-rem(1px) to-rem(1px) 0;
+    content: "";
+    transform: rotate(45deg);
+  }
+
+  .#{$prefix}--cmd-palette__option--disabled .#{$prefix}--cmd-palette__control {
+    border-color: $disabled-02;
+  }
+
+  .#{$prefix}--cmd-palette__option-content {
+    display: flex;
+    overflow: hidden;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--cmd-palette__option-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--cmd-palette__option-match {
+    color: inherit;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--cmd-palette__loading {
+    @include type-style("body-short-01");
+
+    padding: $spacing-05;
+    color: $text-02;
+    text-align: center;
+  }
+
+  .#{$prefix}--cmd-palette__option-description {
+    @include type-style("label-01");
+
+    overflow: hidden;
+    color: $text-02;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--cmd-palette__option-shortcut {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    margin-left: $spacing-05;
+    gap: $spacing-01;
+  }
+
+  .#{$prefix}--cmd-palette__key {
+    @include type-style("label-01");
+
+    display: inline-flex;
+    min-width: to-rem(20px);
+    height: to-rem(20px);
+    align-items: center;
+    justify-content: center;
+    padding: 0 $spacing-02;
+    border: to-rem(1px) solid $ui-03;
+    background-color: $field-02;
+    color: $text-02;
+    font-family: carbon--font-family("mono");
+  }
+
+  .#{$prefix}--cmd-palette__empty {
+    @include type-style("body-short-01");
+
+    padding-top: $spacing-05;
+    padding-bottom: $spacing-05;
+    color: $text-02;
+    text-align: center;
+  }
+
+  .#{$prefix}--cmd-palette__footer {
+    @include type-style("label-01");
+
+    flex: 0 0 auto;
+    padding: $spacing-03 $spacing-05;
+    border-top: to-rem(1px) solid $ui-03;
+    color: $text-02;
+  }
+
+  // Flush-left alignment: result text and group headers share the search input
+  // text inset; leading icons sit in the magnifier gutter, centered per size.
+  @each $size, $inset in $cmd-palette-insets {
+    $text-inset: nth($inset, 1);
+    $icon-left: nth($inset, 2);
+    $row-height: nth($inset, 3);
+
+    .#{$prefix}--cmd-palette__menu--#{$size} {
+      .#{$prefix}--cmd-palette__option,
+      .#{$prefix}--cmd-palette__group-label,
+      .#{$prefix}--cmd-palette__empty,
+      .#{$prefix}--cmd-palette__loading {
+        padding-left: $text-inset;
+      }
+
+      .#{$prefix}--cmd-palette__option {
+        min-height: $row-height;
+      }
+
+      .#{$prefix}--cmd-palette__option-icon {
+        left: $icon-left;
+      }
+
+      .#{$prefix}--cmd-palette__option--with-selection .#{$prefix}--cmd-palette__option-selection {
+        left: $icon-left;
+      }
+
+      .#{$prefix}--cmd-palette__option--with-selection.#{$prefix}--cmd-palette__option--with-icon {
+        .#{$prefix}--cmd-palette__option-selection {
+          left: calc(#{$icon-left} - #{$carbon--spacing-06});
+        }
+      }
+    }
+  }
+
+  @keyframes cmd-palette-fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@include exports("command-palette") {
+  @include command-palette;
+}

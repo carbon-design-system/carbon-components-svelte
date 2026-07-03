@@ -1,0 +1,207 @@
+---
+components: ["CommandPalette", "CommandPaletteGroup", "CommandPaletteItem", "CommandPaletteHighlight"]
+description: Command palettes filter and highlight actions as users type, with grouped commands, keyboard navigation, and global shortcuts.
+---
+
+A command palette is a global search box for actions, routes, documents, and settings. By default it toggles open and closed with <DocKbd label="⌘" />+<DocKbd label="K" /> (macOS) or <DocKbd label="Ctrl" />+<DocKbd label="K" /> (elsewhere) via `triggerKeys`.
+
+Compose `CommandPaletteItem` children to display commands. Each item highlights the portion of its `text` that matches the search value. Result text is flush-left with the search input placeholder. Press the arrow keys to move between commands, <DocKbd label="Enter" /> to run the active command, and <DocKbd label="Escape" /> to close the palette.
+
+On open, focus moves to the input. On close, focus returns to the previous element and the search query clears.
+
+## Basic
+
+Render `CommandPaletteItem` children to display commands. The palette filters as the user types and fires `select` with the chosen item. What happens next is up to you.
+
+<FileSource src="/framed/CommandPalette/CommandPalette" />
+
+## Without icons
+
+When no item has an `icon`, text starts at the left edge aligned with the search input.
+
+<FileSource src="/framed/CommandPalette/NoIcons" />
+
+## Sizes
+
+The search input is large (`"lg"`) by default. Set `size` to choose another variant, matching the [Search](/components/Search) input sizing. Row height, text inset, and the leading-icon gutter all align with the input for the chosen size.
+
+### Small
+
+Set `size` to `"sm"` for a small search input.
+
+<FileSource src="/framed/CommandPalette/SizeSmall" />
+
+### Large
+
+The default. Set `size` to `"lg"` for a large search input.
+
+<FileSource src="/framed/CommandPalette/SizeLarge" />
+
+### Extra large
+
+Set `size` to `"xl"` for an extra-large search input.
+
+<FileSource src="/framed/CommandPalette/SizeExtraLarge" />
+
+## Grouping
+
+Compose `CommandPaletteGroup` and `CommandPaletteItem` for grouped commands. Wrap items in `CommandPaletteGroup` to add a category header. Use the `action` slot to add a header action such as a "View all" link. Set `divider` on a group to separate footer actions, and `persistent` on an item to keep it visible regardless of the search value.
+
+<FileSource src="/framed/CommandPalette/Grouped" />
+
+## Keywords
+
+Set `keywords` on an item to match on extra search terms even when the label does not contain the query.
+
+<FileSource src="/framed/CommandPalette/Keywords" />
+
+## Matching
+
+As the user types, each `CommandPaletteItem` is matched against the search value to decide whether it is shown and which characters of its `text` are highlighted. The `match` prop controls this. It receives the item `text` and the current search value and returns `{ matched, indices }`: `matched` filters the item out when `false`, and `indices` are the character positions highlighted in the text. The default is fuzzy matching. Items also match on `description` and `keywords` during filtering; only `text` is highlighted by default.
+
+### Default fuzzy matching
+
+Fuzzy matching prefers a contiguous substring, ranking a prefix above a word boundary above a mid-word occurrence, and falls back to a subsequence match so that "dsm" matches "**D**ata **S**tore for **M**emcache". Matching is case-insensitive. No configuration is required.
+
+### Custom fuzzy options
+
+Raise the match strictness with an inline `match` function that requires a contiguous substring. The example below rejects scattered subsequence matches like "dt" for "Data Table".
+
+<FileSource src="/framed/CommandPalette/CustomFuzzyOptions" />
+
+### Custom filtering
+
+Provide your own `match` function for full control over the matching logic. Return `matched: false` to filter an item out. Pass a no-op such as `match={() => ({ matched: true })}` to keep every item and disable highlighting entirely.
+
+<FileSource src="/framed/CommandPalette/CustomFilter" />
+
+### Custom filtering with character highlighting
+
+To customize how matched characters render, use the default slot with `let:segments`. Each segment is `{ text, match }`, computed from your `match` function's `indices`, so you can wrap matched runs in your own markup — no `{@html}` required.
+
+<FileSource src="/framed/CommandPalette/CustomHighlight" />
+
+## Filtering
+
+The `shouldFilter` prop toggles client-side filtering. Client-side matching (the default) and server-side filtering can each be used on their own or combined.
+
+### Server-side results
+
+Set `shouldFilter` to `false` to render results exactly as provided, for example results already filtered by a server. The default matcher still highlights the query within each result; pass a no-op `match={() => ({ matched: true })}` to disable client-side highlighting entirely.
+
+### Manual or asynchronous filtering
+
+Bind `value` to react to input. Set `loading={true}` and use the `loading` slot while results are in flight.
+
+<FileSource src="/framed/CommandPalette/ManualFilter" />
+
+### Empty state
+
+Set `noResultsText` for a plain message, or use the `empty` slot. The slot receives the current `value`.
+
+<FileSource src="/framed/CommandPalette/EmptyState" />
+
+## Links
+
+Set `href` on an item to navigate on select. Default `navigate` calls `window.location.assign`. Override it for client-side routers:
+
+```svelte
+<script>
+  import { goto } from "$app/navigation";
+</script>
+
+<CommandPalette navigate={goto}>
+  <CommandPaletteItem id="home" text="Home" href="/" />
+</CommandPalette>
+```
+
+The `select` event still fires first. Call `event.preventDefault()` to block navigation.
+
+<FileSource src="/framed/CommandPalette/Links" />
+
+## Selection (radio and multi-select)
+
+Set `selectionMode` to `"single"` for a radio or `"multiple"` for a checkbox. The list gets `aria-multiselectable`; each option gets `aria-selected` when you set `selected` on the item. Update `selected` in your `select` handler. Set `preventCloseOnSelect` if the palette should stay open (theme pickers, toggle panels).
+
+<FileSource src="/framed/CommandPalette/Selection" />
+
+## Max width
+
+`maxWidth` sets the dialog width. Values map to Carbon's 8px mini-unit scale:
+
+| `maxWidth` | Width |
+| --- | --- |
+| `"sm"` | 384px |
+| `"md"` | 640px (default) |
+| `"lg"` | 768px |
+| `"xl"` | 1024px |
+
+For a width outside these steps, pass `dialogClass` and style it yourself.
+
+<FileSource src="/framed/CommandPalette/MaxWidth" />
+
+## Footer
+
+Use the `footer` slot for keyboard hints or secondary actions.
+
+<FileSource src="/framed/CommandPalette/Footer" />
+
+## Initial highlight
+
+Nothing is highlighted on open unless you set `activeId`. Bind it if you want to sync highlight state across opens.
+
+```svelte
+<CommandPalette bind:open activeId="search">
+  <CommandPaletteItem id="home" text="Go to Dashboard" />
+  <CommandPaletteItem id="search" text="Search documents" />
+</CommandPalette>
+```
+
+<FileSource src="/framed/CommandPalette/InitialHighlight" />
+
+## Open with a keyboard shortcut
+
+The palette toggles `open` from a global shortcut. Default `triggerKeys` is `["mod+k"]` (⌘K on macOS, Ctrl+K elsewhere). Pass `"modifier+key"` strings: `mod`/`commandorcontrol`/`cmdorctrl` (platform-aware), `meta`/`cmd`, `ctrl`, `alt`/`option`, `shift`. Example: `triggerKeys={["meta+shift+p"]}`.
+
+### Disabling the default shortcut
+
+Pass an empty array. There is no disable callback or noop prop.
+
+```svelte
+<Button on:click={() => (open = true)}>Open palette</Button>
+<CommandPalette bind:open triggerKeys={[]} />
+```
+
+Bind `open` to a button, menu item, or your own keyboard handler. Other docs examples pass `triggerKeys={[]}` when they wire `open` themselves or demo command shortcuts without the default palette toggle.
+
+<FileSource src="/framed/CommandPalette/Shortcut" />
+
+## Command shortcuts
+
+While the palette is open, command shortcuts run matching **filtered, non-disabled** items. Set `executeShortcuts={false}` to turn this off.
+
+`shortcut` renders hint badges and is parsed into combos when `shortcutKeys` is not set. Symbols like <DocKbd label="⌘" /> map to `meta` (and `ctrl` on Windows, same as `triggerKeys`). Use `shortcutKeys` for explicit bindings when display text cannot parse, e.g. `shortcutKeys="meta+,"`.
+
+A shortcut press highlights the row, fires `select` on the matching `CommandPaletteItem`, then navigates when `href` is set (unless `preventCloseOnSelect` or `event.preventDefault()` on the item's `select`). Handle custom actions with `on:select` on each item. The palette `close` event trigger is `"shortcut-key"`.
+
+<FileSource src="/framed/CommandPalette/CommandShortcuts" />
+
+## Preventing default
+
+`CommandPaletteItem` `select` and palette `close` are cancelable. Call `event.preventDefault()` in an item's `on:select` to block the action and keep the palette open (say, when a command is unavailable). Call it in `on:close` to stop the palette from closing while async work is still running.
+
+<FileSource src="/framed/CommandPalette/PreventDefault" />
+
+## Prevent close on outside click
+
+Set `preventCloseOnClickOutside` when the palette should stay open until the user picks a command or presses <DocKbd label="Escape" />.
+
+<FileSource src="/framed/CommandPalette/PreventCloseOnClickOutside" />
+
+## Disabled items
+
+Set `disabled` on an individual `CommandPaletteItem` to keep it visible but non-interactive. Disabled items are skipped during keyboard navigation and cannot be selected.
+
+## Highlight matches
+
+Set `highlightMatches={false}` to turn off bold match emphasis in the default item renderer. Custom slots can use `CommandPaletteHighlight` or the `segments` slot prop with your own markup.

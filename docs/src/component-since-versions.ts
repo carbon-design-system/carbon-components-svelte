@@ -56,6 +56,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   RecursiveList: "0.39.0",
   Search: "0.2.0",
   SearchMenu: "0.110.0",
+  CommandPalette: "0.110.0",
   Select: "0.2.0",
   SelectableTile: "0.2.0",
   SessionStorage: "0.102.0",

@@ -22,7 +22,7 @@ describe("DataTable tableCellsByRowId caching", () => {
       props: {
         headers,
         rows: [row],
-        onCellClick: (cell) => {
+        onCellClick: (cell: { key: string; value: unknown }) => {
           lastCell = cell;
         },
       },
@@ -53,7 +53,7 @@ describe("DataTable tableCellsByRowId caching", () => {
       props: {
         headers,
         rows: [rowV1],
-        onCellClick: (cell) => {
+        onCellClick: (cell: { key: string; value: unknown }) => {
           lastCell = cell;
         },
       },
@@ -111,7 +111,7 @@ describe("DataTable tableCellsByRowId caching", () => {
       props: {
         headers,
         rows: [row],
-        onCellClick: (cell) => {
+        onCellClick: (cell: { key: string; value: unknown }) => {
           lastCell = cell;
         },
       },
