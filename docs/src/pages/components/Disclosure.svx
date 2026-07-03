@@ -1,0 +1,54 @@
+---
+description: Disclosures show and hide a section of content from a single, always-visible trigger.
+---
+
+<script>
+  import { Disclosure } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create a disclosure with `summary` for the always-visible trigger text and a
+default slot for the content it shows or hides.
+
+<Disclosure summary="Show shipping details">
+  <p>Orders ship within 2 business days and arrive in 3-5 business days.</p>
+</Disclosure>
+
+## Left-aligned chevron
+
+Align the chevron icon to the left side of the trigger by setting `align` to
+`"start"`. The default is `"end"`.
+
+<Disclosure align="start" summary="Show shipping details">
+  <p>Orders ship within 2 business days and arrive in 3-5 business days.</p>
+</Disclosure>
+
+## Custom summary slot
+
+Customize the trigger content with the summary slot instead of `summary`
+for more complex layouts with multiple elements.
+
+<Disclosure>
+  <svelte:fragment slot="summary">
+    <strong>Shipping details</strong>
+    <span>Ships in 2 days</span>
+  </svelte:fragment>
+  <p>Orders ship within 2 business days and arrive in 3-5 business days.</p>
+</Disclosure>
+
+## Open by default
+
+Set `open` to `true` to render the disclosure expanded.
+
+<Disclosure open summary="Show shipping details">
+  <p>Orders ship within 2 business days and arrive in 3-5 business days.</p>
+</Disclosure>
+
+## Reactive (two-way binding)
+
+Bind to `open` to control and read the disclosure state outside the component.
+Listen for `toggle` to react to state changes, such as when the trigger is
+activated with a click or the keyboard.
+
+<FileSource src="/framed/Disclosure/ReactiveDisclosure" />
