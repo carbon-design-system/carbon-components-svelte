@@ -15,7 +15,7 @@ Carbon Components Svelte is a [Svelte](https://github.com/sveltejs/svelte) compo
 
 The Carbon Svelte ecosystem also includes:
 
-- **[Carbon Icons Svelte](https://github.com/carbon-design-system/carbon-icons-svelte)**: 2,600+ Carbon icons as Svelte components
+- **[Carbon Icons Svelte](https://github.com/carbon-design-system/carbon-icons-svelte)**: 2,700+ Carbon icons as Svelte components
 - **[Carbon Pictograms Svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte)**: 1,500+ Carbon pictograms as Svelte components
 - **[Carbon Charts Svelte](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)**: 25+ charts, powered by d3
 - **[Carbon Preprocess Svelte](https://github.com/carbon-design-system/carbon-preprocess-svelte)**: Collection of Svelte preprocessors for Carbon
@@ -304,7 +304,7 @@ The icon and pictogram sets ship as separate packages of individual Svelte compo
 
 ### Icons
 
-2,600+ icons designed for product UI, in four sizes (16, 20, 24, and 32 pixels), set with a single prop.
+2,700+ icons designed for product UI, in four sizes (16, 20, 24, and 32 pixels), set with a single prop.
 
 ```sh
 # npm
