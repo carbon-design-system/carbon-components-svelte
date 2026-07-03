@@ -22,6 +22,8 @@
   export let intrinsicAlign: ComponentProps<FloatingPortal>["intrinsicAlign"] =
     "center";
   export let target: ComponentProps<FloatingPortal>["target"] = null;
+  export let lockDirection: ComponentProps<FloatingPortal>["lockDirection"] =
+    "none";
   export let dialogAncestor = false;
   export let dialogRef: HTMLDialogElement | null = null;
   export let popoverAncestor = false;
@@ -62,6 +64,7 @@
   {verticalAlignOffsetRight}
   {intrinsicAlign}
   {target}
+  {lockDirection}
   bind:ref
 >
   {content}
