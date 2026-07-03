@@ -1,6 +1,6 @@
 ---
-components: ["Menu", "MenuItem"]
-description: Menu is a low-level primitive that anchors a list of actions to a trigger element, with keyboard navigation and outside-click dismissal built in.
+components: ["Menu", "MenuItem", "MenuDivider"]
+description: Menu positions a list of actions next to an anchor element you control. Keyboard navigation and outside-click dismissal are built in.
 ---
 
 <script>
@@ -14,11 +14,23 @@ The root element has `role="menu"`. Set `labelText` or `aria-label` on Menu so a
 
 <FileSource src="/framed/Menu/MenuBasic" />
 
+## Item variants
+
+Set `icon` on `MenuItem` for a left-aligned Carbon icon. Use `kind="danger"` for destructive rows and `MenuDivider` between groups. For submenus, set `labelText` and nest `MenuItem` children; see [MenuButton](/components/MenuButton#menu-items) for keyboard and hover behavior.
+
+<FileSource src="/framed/Menu/MenuItemVariants" />
+
 ## Direction
 
 Set `direction` to `"top"`, `"bottom"`, `"left"`, or `"right"` to control which side of the anchor the menu opens toward. The menu flips to the opposite side automatically when there is not enough space.
 
 <FileSource src="/framed/Menu/MenuDirection" />
+
+## Size
+
+Set `size` to `"sm"` (default), `"md"`, or `"lg"` to control each item's row height.
+
+<FileSource src="/framed/Menu/MenuSize" />
 
 ## Keyboard interactions
 
