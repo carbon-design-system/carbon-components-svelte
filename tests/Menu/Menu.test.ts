@@ -42,6 +42,24 @@ describe("Menu", () => {
     expect(menu.style.position).toBe("relative");
   });
 
+  it("defaults to the unmodified sm row height", async () => {
+    render(MenuFixture);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    const menu = screen.getByRole("menu");
+    expect(menu).not.toHaveClass("bx--menu--md");
+    expect(menu).not.toHaveClass("bx--menu--lg");
+  });
+
+  it("applies the size modifier class", async () => {
+    render(MenuFixture, { props: { size: "lg" } });
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    expect(screen.getByRole("menu")).toHaveClass("bx--menu--lg");
+  });
+
   it("applies the direction attribute", async () => {
     render(MenuFixture, { props: { direction: "top" } });
 
@@ -53,14 +71,28 @@ describe("Menu", () => {
     );
   });
 
-  it("focuses the menu on open and dispatches the open event", async () => {
+  it("focuses the first item on open and dispatches the open event", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MenuFixture);
 
     await user.click(screen.getByRole("button", { name: "Trigger" }));
 
-    expect(screen.getByRole("menu")).toHaveFocus();
+    const items = screen.getAllByRole("menuitem");
+    expect(items[0]).toHaveFocus();
     expect(consoleLog).toHaveBeenCalledWith("open", expect.any(HTMLElement));
+  });
+
+  it("focuses the first item without scrolling the page into view", async () => {
+    const focusSpy = vi.spyOn(HTMLElement.prototype, "focus");
+    render(MenuFixture);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    const items = screen.getAllByRole("menuitem");
+    const itemFocusCall = focusSpy.mock.calls.find(
+      (_, index) => focusSpy.mock.instances[index] === items[0],
+    );
+    expect(itemFocusCall?.[0]).toEqual({ preventScroll: true });
   });
 
   it("navigates items with arrow keys without wrapping", async () => {
@@ -69,7 +101,7 @@ describe("Menu", () => {
     await user.click(screen.getByRole("button", { name: "Trigger" }));
     const items = screen.getAllByRole("menuitem");
 
-    await user.keyboard("{ArrowDown}");
+    // The first item is already focused on open.
     expect(items[0]).toHaveFocus();
 
     await user.keyboard("{ArrowDown}");
@@ -106,11 +138,22 @@ describe("Menu", () => {
     const items = screen.getAllByRole("menuitem");
     expect(items[1]).toHaveAttribute("aria-disabled", "true");
 
-    await user.keyboard("{ArrowDown}");
+    // The first item is already focused on open; ArrowDown skips the
+    // disabled second item and lands on the third.
     expect(items[0]).toHaveFocus();
 
     await user.keyboard("{ArrowDown}");
     expect(items[2]).toHaveFocus();
+  });
+
+  it("focuses the first non-disabled item on open", async () => {
+    render(MenuFixture, { props: { disabledIndex: 0 } });
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+    const items = screen.getAllByRole("menuitem");
+
+    expect(items[0]).toHaveAttribute("aria-disabled", "true");
+    expect(items[1]).toHaveFocus();
   });
 
   it("dispatches click and closes the menu when an item is selected", async () => {
