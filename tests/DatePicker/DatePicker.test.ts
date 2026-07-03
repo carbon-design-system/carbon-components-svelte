@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
 import { user } from "../utils/user";
@@ -51,9 +51,9 @@ describe("DatePicker", () => {
       screen.queryByLabelText("calendar-container"),
     ).not.toBeInTheDocument();
     await user.click(input);
-    expect(
-      await screen.findByLabelText("calendar-container"),
-    ).toBeInTheDocument();
+    const calendar = await screen.findByLabelText("calendar-container");
+    expect(calendar).toBeInTheDocument();
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--month");
   });
 
   it("renders single-letter weekday shorthands for locale='en'", async () => {
@@ -672,6 +672,85 @@ describe("DatePicker", () => {
       const wrapper = container.querySelector(".bx--date-picker");
       expect(wrapper?.contains(calendar)).toBe(true);
       expect(calendar.classList.contains("static")).toBe(true);
+    });
+  });
+
+  describe("month mode", () => {
+    it("renders month mode", async () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "month",
+        dateFormat: "F Y",
+      });
+
+      const input = screen.getByLabelText("Date");
+
+      const wrapper = container.querySelector(".bx--date-picker");
+      // Month mode reuses the single-mode input width styling.
+      expect(wrapper).toHaveClass("bx--date-picker--single");
+
+      expect(
+        screen.queryByLabelText("calendar-container"),
+      ).not.toBeInTheDocument();
+      await user.click(input);
+      expect(
+        await screen.findByLabelText("calendar-container"),
+      ).toBeInTheDocument();
+    });
+
+    it("renders a 12-month grid instead of days", async () => {
+      render(DatePicker, { datePickerType: "month", dateFormat: "F Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(
+        calendar.querySelectorAll(".flatpickr-monthSelect-month"),
+      ).toHaveLength(12);
+      expect(calendar.querySelectorAll(".flatpickr-day")).toHaveLength(0);
+    });
+
+    // Regression test: SCSS scopes the shorter calendar height to month mode
+    // via this marker class instead of `:has()` (unsupported at the Svelte 5
+    // browser baseline).
+    it("marks the calendar container for month-specific height styling", async () => {
+      render(DatePicker, { datePickerType: "month", dateFormat: "F Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(calendar).toHaveClass("bx--date-picker__calendar--month");
+    });
+
+    it("selects a month and dispatches change with the formatted date", async () => {
+      const changeHandler = vi.fn();
+      render(DatePicker, {
+        datePickerType: "month",
+        dateFormat: "F Y",
+        onchange: changeHandler,
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      await user.click(within(calendar).getByText("Mar"));
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      expect(input.value).toMatch(/^March \d{4}$/);
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        dateStr: input.value,
+      });
+    });
+
+    it("closes the calendar after selecting a month", async () => {
+      render(DatePicker, { datePickerType: "month", dateFormat: "F Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).toHaveClass("open");
+
+      await user.click(within(calendar).getByText("Jun"));
+      expect(calendar).not.toHaveClass("open");
     });
   });
 

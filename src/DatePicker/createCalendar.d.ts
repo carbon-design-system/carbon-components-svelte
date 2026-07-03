@@ -14,7 +14,7 @@ export interface FlatpickrInstance {
 }
 
 export interface CreateCalendarArgs {
-  options: { locale?: string; mode?: string };
+  options: { locale?: string; mode?: string; dateFormat?: string };
   base: HTMLElement;
   input: HTMLInputElement;
   dispatch: (event: string) => void;

@@ -47,8 +47,9 @@ export function resolveLocale(locale) {
 
 /**
  * @param {FlatpickrInstance} instance
+ * @param {{ isMonth?: boolean }} [modifiers]
  */
-function updateClasses(instance) {
+function updateClasses(instance, { isMonth = false } = {}) {
   const {
     calendarContainer,
     days,
@@ -58,6 +59,11 @@ function updateClasses(instance) {
   } = instance;
 
   calendarContainer.classList.add("bx--date-picker__calendar");
+  // Marker class so SCSS can target the shorter month grid without `:has()`.
+  calendarContainer.classList.toggle(
+    "bx--date-picker__calendar--month",
+    isMonth,
+  );
   calendarContainer
     .querySelector(".flatpickr-month")
     ?.classList.add("bx--date-picker__month");
@@ -114,15 +120,29 @@ function updateMonthNode(instance) {
 export async function createCalendar({ options, base, input, dispatch }) {
   /** @type {((new (config: { position: string; input: HTMLInputElement }) => unknown) | undefined)} */
   let RangePlugin;
+  /** @type {((config?: { shorthand?: boolean; dateFormat?: string; altFormat?: string }) => unknown) | undefined} */
+  let monthSelectPlugin;
 
   if (options.mode === "range") {
     const importee = await import("flatpickr/dist/esm/plugins/rangePlugin");
     RangePlugin = importee.default;
   }
 
+  if (options.mode === "month") {
+    const importee = await import("flatpickr/dist/esm/plugins/monthSelect");
+    monthSelectPlugin = importee.default;
+  }
+
   const plugins = [
     options.mode === "range" && RangePlugin
       ? new RangePlugin({ position: "left", input })
+      : false,
+    options.mode === "month" && monthSelectPlugin
+      ? monthSelectPlugin({
+          shorthand: true,
+          dateFormat: options.dateFormat,
+          altFormat: options.dateFormat,
+        })
       : false,
   ].filter(Boolean);
 
@@ -146,7 +166,9 @@ export async function createCalendar({ options, base, input, dispatch }) {
       /** @type {any} */ _d,
       /** @type {FlatpickrInstance} */ instance,
     ) => {
-      updateMonthNode(instance);
+      // The monthSelect plugin removes the month-label node in favor of a
+      // year-only stepper, so there is nothing for updateMonthNode to patch.
+      if (options.mode !== "month") updateMonthNode(instance);
     },
     onOpen: (
       /** @type {any} */ _s,
@@ -154,8 +176,8 @@ export async function createCalendar({ options, base, input, dispatch }) {
       /** @type {FlatpickrInstance} */ instance,
     ) => {
       dispatch("open");
-      updateClasses(instance);
-      updateMonthNode(instance);
+      updateClasses(instance, { isMonth: options.mode === "month" });
+      if (options.mode !== "month") updateMonthNode(instance);
     },
     ...options,
     locale: resolveLocale(options.locale),
