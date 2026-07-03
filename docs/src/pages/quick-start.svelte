@@ -304,7 +304,7 @@
             <Stack gap={3}>
               <div class="glyph-desc">
                 <Text type="body-long-01" color="secondary" maxWidth="40ch">
-                  2,600+ icons designed for product UI, in four sizes (16, 20,
+                  2,700+ icons designed for product UI, in four sizes (16, 20,
                   24, and 32 pixels), set with a single prop.
                 </Text>
               </div>
