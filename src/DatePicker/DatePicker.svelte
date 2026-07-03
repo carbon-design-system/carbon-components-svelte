@@ -11,7 +11,7 @@
 
   /**
    * Specify the date picker type.
-   * @type {"simple" | "single" | "range"}
+   * @type {"simple" | "single" | "range" | "month"}
    */
   export let datePickerType = "simple";
 
@@ -164,7 +164,10 @@
   /**
    * @type {import("svelte/store").Readable<boolean>}
    */
-  const hasCalendar = derived(mode, (_) => _ === "single" || _ === "range");
+  const hasCalendar = derived(
+    mode,
+    (_) => _ === "single" || _ === "range" || _ === "month",
+  );
 
   let datePickerRef = null;
   let inputRef = null;
@@ -612,7 +615,8 @@
     class:bx--date-picker--short={short}
     class:bx--date-picker--light={light}
     class:bx--date-picker--simple={datePickerType === "simple"}
-    class:bx--date-picker--single={datePickerType === "single"}
+    class:bx--date-picker--single={datePickerType === "single" ||
+      datePickerType === "month"}
     class:bx--date-picker--range={datePickerType === "range"}
     class:bx--date-picker--nolabel={datePickerType === "range" &&
       $labelTextEmpty}

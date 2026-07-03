@@ -65,3 +65,73 @@
 @include exports('datepicker-month-nav-disabled') {
   @include date-picker-month-nav-disabled;
 }
+
+// Carbon ships no styles for flatpickr's monthSelect plugin (used by
+// `datePickerType="month"`), so style its raw classes directly, matching
+// the token usage of the day-cell styles Carbon backports from v11.
+@mixin date-picker-month-select {
+  .flatpickr-monthSelect-months {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0.625rem 0.0625rem 0.1875rem;
+  }
+
+  .flatpickr-monthSelect-month {
+    box-sizing: border-box;
+    display: flex;
+    padding: 0.625rem;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: $text-01;
+    cursor: pointer;
+    font-weight: 400;
+    text-align: center;
+
+    &:hover {
+      background: $hover-ui;
+    }
+
+    &:focus {
+      outline: 1px solid $focus;
+      outline-offset: -1px;
+    }
+
+    &.selected {
+      background-color: $interactive-01;
+      color: $text-04;
+    }
+
+    &.disabled {
+      color: $disabled-02;
+      cursor: not-allowed;
+
+      &:hover {
+        background: none;
+      }
+    }
+  }
+}
+
+@include exports('datepicker-month-select') {
+  @include date-picker-month-select;
+}
+
+// The month grid is shorter than the day grid Carbon sizes `.flatpickr-calendar.open`
+// for (21rem), which leaves a large empty gap below the 4x3 month layout.
+// `updateClasses` in createCalendar.js marks the container with
+// `.#{$prefix}--date-picker__calendar--month` so this can scope the shorter
+// height without `:has()` (unsupported at the Svelte 5 browser baseline);
+// the extra class also out-specifies the base `.flatpickr-calendar.open` rule
+// (which loads before this partial).
+@mixin date-picker-month-select-height {
+  .flatpickr-calendar.open.#{$prefix}--date-picker__calendar--month {
+    height: 14rem;
+  }
+}
+
+@include exports('datepicker-month-select-height') {
+  @include date-picker-month-select-height;
+}
