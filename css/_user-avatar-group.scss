@@ -34,10 +34,29 @@
     box-shadow: 0 0 0 $carbon--spacing-01 var(--cds-ui-background, #{$ui-background});
   }
 
-  // Lift the hovered or focused avatar to the front of the stack.
+  // `stackOrder="first"`: reverse the default paint order so earlier avatars
+  // sit above later ones. `--user-avatar-index` is set per avatar in JS;
+  // `--user-avatar-group-count` on the container keeps every index positive.
+  .#{$prefix}--user-avatar-group--stack-first > * {
+    z-index: calc(
+      var(--user-avatar-group-count, 0) - var(--user-avatar-index, 0)
+    );
+  }
+
+  // The "+N" overflow chip opts out of item registration (it isn't a real
+  // avatar), so it never gets a `--user-avatar-index`. Pin it behind every
+  // real avatar instead of letting it fall back to the same z-index as the
+  // first one.
+  .#{$prefix}--user-avatar-group--stack-first
+    > *:has(.#{$prefix}--user-avatar-group__overflow) {
+    z-index: 0;
+  }
+
+  // Lift the hovered or focused avatar to the front of the stack, above the
+  // highest z-index a reversed stack can produce.
   .#{$prefix}--user-avatar-group--overlap > *:hover,
   .#{$prefix}--user-avatar-group--overlap > *:focus-within {
-    z-index: 1;
+    z-index: calc(var(--user-avatar-group-count, 0) + 1);
   }
 }
 
