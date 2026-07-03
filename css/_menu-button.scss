@@ -1,0 +1,21 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// MenuButton trigger (v10 has no `.bx--menu-button` styles to vendor).
+/// Rotates the trigger's chevron icon while the menu is open.
+/// @access private
+/// @group components
+@mixin menu-button {
+  .#{$prefix}--menu-button__trigger .#{$prefix}--btn__icon {
+    transition: transform $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--menu-button__trigger--open .#{$prefix}--btn__icon {
+    transform: rotate(180deg);
+  }
+}
+
+@include exports("menu-button") {
+  @include menu-button;
+}
