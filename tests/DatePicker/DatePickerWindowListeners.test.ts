@@ -5,6 +5,9 @@ import { user } from "../utils/user";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 
+/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
+const flush = () => new Promise((resolve) => setTimeout(resolve));
+
 const net = (
   add: ReturnType<typeof vi.spyOn>,
   remove: ReturnType<typeof vi.spyOn>,
@@ -57,6 +60,7 @@ describe("DatePicker window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     const instance = await openCalendar(() => {});
+    await flush();
     expect(instance.isOpen).toBe(true);
     expect(net(add, remove, "click")).toBe(1);
 
@@ -69,6 +73,7 @@ describe("DatePicker window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     const instance = await openCalendar(() => {});
+    await flush();
     expect(net(add, remove, "click")).toBe(1);
 
     instance.close();

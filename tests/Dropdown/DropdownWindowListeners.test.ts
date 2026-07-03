@@ -1,6 +1,9 @@
 import { render } from "@testing-library/svelte";
 import Dropdown from "./Dropdown.test.svelte";
 
+/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
+const flush = () => new Promise((resolve) => setTimeout(resolve));
+
 const netClick = (
   add: ReturnType<typeof vi.spyOn>,
   remove: ReturnType<typeof vi.spyOn>,
@@ -20,11 +23,12 @@ describe("Dropdown window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open dropdown registers exactly one window click listener", () => {
+  test("an open dropdown registers exactly one window click listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(Dropdown, { props: { open: true } });
+    await flush();
     expect(netClick(add, remove)).toBe(1);
 
     add.mockRestore();

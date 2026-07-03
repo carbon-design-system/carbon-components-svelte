@@ -1,5 +1,8 @@
 import { dismiss } from "../../src/utils/dismiss.js";
 
+/** Registration is deferred by a macrotask; flush it before dispatching test events. */
+const flush = () => new Promise((resolve) => setTimeout(resolve));
+
 describe("dismiss action", () => {
   let node: HTMLElement;
 
@@ -12,9 +15,10 @@ describe("dismiss action", () => {
     node.remove();
   });
 
-  test("registers a window listener only while enabled", () => {
+  test("registers a window listener only while enabled", async () => {
     const handler = vi.fn();
     const action = dismiss(node, { enabled: true, type: "click", handler });
+    await flush();
 
     window.dispatchEvent(new MouseEvent("click"));
     expect(handler).toHaveBeenCalledTimes(1);
@@ -22,9 +26,10 @@ describe("dismiss action", () => {
     action.destroy();
   });
 
-  test("does not register while disabled", () => {
+  test("does not register while disabled", async () => {
     const handler = vi.fn();
     const action = dismiss(node, { enabled: false, type: "click", handler });
+    await flush();
 
     window.dispatchEvent(new MouseEvent("click"));
     expect(handler).not.toHaveBeenCalled();
@@ -32,40 +37,71 @@ describe("dismiss action", () => {
     action.destroy();
   });
 
-  test("toggles the listener as enabled flips", () => {
+  test("does not fire for the click that enables it (same dispatch)", async () => {
+    const handler = vi.fn();
+    const action = dismiss(node, { enabled: true, type: "click", handler });
+
+    // No flush: dispatch immediately, simulating the enabling click still
+    // completing its own dispatch before the deferred registration runs.
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(handler).not.toHaveBeenCalled();
+
+    await flush();
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(handler).toHaveBeenCalledTimes(1);
+
+    action.destroy();
+  });
+
+  test("toggles the listener as enabled flips", async () => {
     const handler = vi.fn();
     const action = dismiss(node, { enabled: false, type: "click", handler });
+    await flush();
 
     window.dispatchEvent(new MouseEvent("click"));
     expect(handler).not.toHaveBeenCalled();
 
     action.update({ enabled: true, type: "click", handler });
+    await flush();
     window.dispatchEvent(new MouseEvent("click"));
     expect(handler).toHaveBeenCalledTimes(1);
 
     action.update({ enabled: false, type: "click", handler });
+    await flush();
     window.dispatchEvent(new MouseEvent("click"));
     expect(handler).toHaveBeenCalledTimes(1);
 
     action.destroy();
   });
 
-  test("removes the listener on destroy", () => {
+  test("removes the listener on destroy", async () => {
     const handler = vi.fn();
     const action = dismiss(node, { enabled: true, type: "click", handler });
+    await flush();
 
     action.destroy();
     window.dispatchEvent(new MouseEvent("click"));
     expect(handler).not.toHaveBeenCalled();
   });
 
-  test("shares one handler across multiple event types", () => {
+  test("does not register after destroy races the deferred registration", async () => {
+    const handler = vi.fn();
+    const action = dismiss(node, { enabled: true, type: "click", handler });
+    action.destroy();
+    await flush();
+
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  test("shares one handler across multiple event types", async () => {
     const handler = vi.fn();
     const action = dismiss(node, {
       enabled: true,
       type: ["click", "focusin"],
       handler,
     });
+    await flush();
 
     window.dispatchEvent(new MouseEvent("click"));
     window.dispatchEvent(new FocusEvent("focusin"));
@@ -74,7 +110,7 @@ describe("dismiss action", () => {
     action.destroy();
   });
 
-  test("supports distinct handlers per type via listeners", () => {
+  test("supports distinct handlers per type via listeners", async () => {
     const onClick = vi.fn();
     const onKeydown = vi.fn();
     const action = dismiss(node, {
@@ -84,6 +120,7 @@ describe("dismiss action", () => {
         { type: "keydown", handler: onKeydown },
       ],
     });
+    await flush();
 
     window.dispatchEvent(new MouseEvent("click"));
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
@@ -93,7 +130,7 @@ describe("dismiss action", () => {
     action.destroy();
   });
 
-  test("refreshes the handler in place without re-adding the listener", () => {
+  test("refreshes the handler in place without re-adding the listener", async () => {
     const addSpy = vi.spyOn(window, "addEventListener");
     const first = vi.fn();
     const second = vi.fn();
@@ -103,11 +140,13 @@ describe("dismiss action", () => {
       type: "click",
       handler: first,
     });
+    await flush();
     const addsAfterInit = addSpy.mock.calls.filter(
       (c) => c[0] === "click",
     ).length;
 
     action.update({ enabled: true, type: "click", handler: second });
+    await flush();
 
     const addsAfterUpdate = addSpy.mock.calls.filter(
       (c) => c[0] === "click",
@@ -122,7 +161,7 @@ describe("dismiss action", () => {
     addSpy.mockRestore();
   });
 
-  test("passes the passive flag through to addEventListener", () => {
+  test("passes the passive flag through to addEventListener", async () => {
     const addSpy = vi.spyOn(window, "addEventListener");
     const handler = vi.fn();
     const action = dismiss(node, {
@@ -131,6 +170,7 @@ describe("dismiss action", () => {
       handler,
       options: { passive: true },
     });
+    await flush();
 
     const call = addSpy.mock.calls.find((c) => c[0] === "touchmove");
     expect(call?.[2]).toEqual({ passive: true });
@@ -139,7 +179,7 @@ describe("dismiss action", () => {
     addSpy.mockRestore();
   });
 
-  test("forwards the real event to the handler", () => {
+  test("forwards the real event to the handler", async () => {
     let received: Event | undefined;
     const action = dismiss(node, {
       enabled: true,
@@ -148,6 +188,7 @@ describe("dismiss action", () => {
         received = event;
       },
     });
+    await flush();
 
     const event = new MouseEvent("click");
     window.dispatchEvent(event);
@@ -161,7 +202,7 @@ describe("dismiss listener pooling", () => {
   const clickAdds = (spy: ReturnType<typeof vi.spyOn>) =>
     spy.mock.calls.filter((c: unknown[]) => c[0] === "click").length;
 
-  test("many open consumers share one window listener", () => {
+  test("many open consumers share one window listener", async () => {
     const addSpy = vi.spyOn(window, "addEventListener");
     const removeSpy = vi.spyOn(window, "removeEventListener");
 
@@ -173,6 +214,7 @@ describe("dismiss listener pooling", () => {
         handler,
       }),
     );
+    await flush();
 
     expect(clickAdds(addSpy)).toBe(1);
 
@@ -189,7 +231,7 @@ describe("dismiss listener pooling", () => {
     removeSpy.mockRestore();
   });
 
-  test("calls consumers in registration order", () => {
+  test("calls consumers in registration order", async () => {
     const order: number[] = [];
     const a = dismiss(document.createElement("div"), {
       enabled: true,
@@ -206,6 +248,7 @@ describe("dismiss listener pooling", () => {
       type: "click",
       handler: () => order.push(3),
     });
+    await flush();
 
     window.dispatchEvent(new MouseEvent("click"));
     expect(order).toEqual([1, 2, 3]);
@@ -215,7 +258,7 @@ describe("dismiss listener pooling", () => {
     c.destroy();
   });
 
-  test("unregister during dispatch skips removed consumer", () => {
+  test("unregister during dispatch skips removed consumer", async () => {
     const calls: string[] = [];
     let inner: ReturnType<typeof dismiss>;
     const outer = dismiss(document.createElement("div"), {
@@ -231,6 +274,7 @@ describe("dismiss listener pooling", () => {
       type: "click",
       handler: () => calls.push("inner"),
     });
+    await flush();
 
     window.dispatchEvent(new MouseEvent("click"));
     expect(calls).toEqual(["outer"]);
@@ -238,7 +282,7 @@ describe("dismiss listener pooling", () => {
     outer.destroy();
   });
 
-  test("consumer added mid-dispatch waits for the next event", () => {
+  test("consumer added mid-dispatch waits for the next event", async () => {
     const calls: string[] = [];
     let added: ReturnType<typeof dismiss> | undefined;
 
@@ -255,10 +299,12 @@ describe("dismiss listener pooling", () => {
         });
       },
     });
+    await flush();
 
     window.dispatchEvent(new MouseEvent("click"));
     expect(calls).toEqual(["first"]);
 
+    await flush();
     window.dispatchEvent(new MouseEvent("click"));
     expect(calls).toEqual(["first", "first", "added"]);
 
@@ -266,7 +312,7 @@ describe("dismiss listener pooling", () => {
     added?.destroy();
   });
 
-  test("capture and bubble get separate listeners", () => {
+  test("capture and bubble get separate listeners", async () => {
     const addSpy = vi.spyOn(window, "addEventListener");
     const bubble = vi.fn();
     const capture = vi.fn();
@@ -282,6 +328,7 @@ describe("dismiss listener pooling", () => {
       handler: capture,
       options: { capture: true },
     });
+    await flush();
 
     expect(clickAdds(addSpy)).toBe(2);
 

@@ -2,6 +2,9 @@ import { fireEvent, render } from "@testing-library/svelte";
 import { tick } from "svelte";
 import RangeSlider from "./RangeSlider.test.svelte";
 
+/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
+const flush = () => new Promise((resolve) => setTimeout(resolve));
+
 const net = (
   add: ReturnType<typeof vi.spyOn>,
   remove: ReturnType<typeof vi.spyOn>,
@@ -36,6 +39,7 @@ describe("RangeSlider window listeners", () => {
     assert(slider instanceof HTMLElement);
     await fireEvent.mouseDown(slider);
     await tick();
+    await flush();
 
     expect(net(add, remove, "mousemove")).toBe(1);
     expect(net(add, remove, "touchmove")).toBe(1);
@@ -43,6 +47,7 @@ describe("RangeSlider window listeners", () => {
 
     await fireEvent.mouseUp(window);
     await tick();
+    await flush();
     for (const type of ["mousemove", "touchmove", "mouseup", "touchend"]) {
       expect(net(add, remove, type)).toBe(0);
     }

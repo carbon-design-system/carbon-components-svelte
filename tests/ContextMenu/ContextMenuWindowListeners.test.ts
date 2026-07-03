@@ -2,6 +2,9 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import ContextMenu from "./ContextMenu.test.svelte";
 
+/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
+const flush = () => new Promise((resolve) => setTimeout(resolve));
+
 const net = (
   add: ReturnType<typeof vi.spyOn>,
   remove: ReturnType<typeof vi.spyOn>,
@@ -26,11 +29,12 @@ describe("ContextMenu window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open menu registers one click and one keydown listener", () => {
+  test("an open menu registers one click and one keydown listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(ContextMenu, { props: { open: true } });
+    await flush();
     expect(net(add, remove, "click")).toBe(1);
     expect(net(add, remove, "keydown")).toBe(1);
 
@@ -43,11 +47,13 @@ describe("ContextMenu window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(ContextMenu, { props: { open: true, withSubmenu: true } });
+    await flush();
     // The parent option's global mousemove handler is idle until its submenu opens.
     expect(net(add, remove, "mousemove")).toBe(0);
 
     await fireEvent.click(screen.getByText("Option with submenu"));
     await tick();
+    await flush();
     expect(net(add, remove, "mousemove")).toBe(1);
 
     add.mockRestore();

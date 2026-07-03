@@ -1,6 +1,9 @@
 import { render } from "@testing-library/svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 
+/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
+const flush = () => new Promise((resolve) => setTimeout(resolve));
+
 const net = (
   add: ReturnType<typeof vi.spyOn>,
   remove: ReturnType<typeof vi.spyOn>,
@@ -25,11 +28,12 @@ describe("MultiSelect window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open MultiSelect registers one click and one focusin listener", () => {
+  test("an open MultiSelect registers one click and one focusin listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(MultiSelect, { props: { open: true } });
+    await flush();
     expect(net(add, remove, "click")).toBe(1);
     expect(net(add, remove, "focusin")).toBe(1);
 
