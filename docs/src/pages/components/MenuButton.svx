@@ -1,0 +1,142 @@
+---
+components: ["MenuButton", "MenuItem", "MenuDivider"]
+description: MenuButton is a labeled button that opens a dropdown of actions, including nested submenus.
+---
+
+<script>
+  import { MenuButton, MenuDivider, MenuItem } from "carbon-components-svelte";
+  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
+  import Cut from "carbon-icons-svelte/lib/Cut.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
+</script>
+
+## Basic
+
+Wrap `MenuItem` components in `MenuButton` and set `labelText` for the trigger label. Use the `labelChildren` slot for custom trigger content. Unlike [Menu](/components/Menu), `MenuButton` includes the trigger; you don't pass an anchor. 
+
+<MenuButton labelText="Actions">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+  <MenuItem disabled>Delete</MenuItem>
+</MenuButton>
+
+## Kind
+
+Set `kind` to match the importance of the action.
+
+### Primary
+
+The default kind is `"primary"`.
+
+<MenuButton labelText="Actions">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
+### Tertiary
+
+<MenuButton labelText="Actions" kind="tertiary">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
+### Ghost
+
+<MenuButton labelText="Actions" kind="ghost">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
+## Size
+
+Set `size` to scale the trigger button and each menu item's row height together. The default is `"md"`.
+
+### Small
+
+<MenuButton labelText="Actions" size="sm">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
+### Large
+
+<MenuButton labelText="Actions" size="lg">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
+## Direction
+
+Set `direction` to `"top"` or `"bottom"` (default) for which side of the trigger the menu opens on. Set `intrinsicAlign` to `"start"` (default), `"center"`, or `"end"` to align the menu edge with the trigger. The menu flips when there isn't room on the preferred side. See [Menu placement](/components/Menu#placement) for gap and offset props.
+
+<MenuButton labelText="Actions" direction="top" intrinsicAlign="end">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
+## Disabled
+
+Set `disabled` to `true` to disable the trigger button.
+
+<MenuButton labelText="Actions" disabled>
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+</MenuButton>
+
+## Menu items
+
+`MenuItem` takes an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups.
+
+### Icons
+
+Pass a Carbon icon to `icon`.
+
+<MenuButton labelText="Actions">
+  <MenuItem icon={Cut} on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem icon={Copy} on:click={() => console.log("Copy")}>Copy</MenuItem>
+</MenuButton>
+
+### Danger
+
+Set `kind="danger"` on `MenuItem` for a destructive action.
+
+<MenuButton labelText="Actions">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuDivider />
+  <MenuItem icon={TrashCan} kind="danger" on:click={() => console.log("Delete")}>
+    Delete
+  </MenuItem>
+</MenuButton>
+
+### Dividers
+
+Put a `MenuDivider` between groups.
+
+<MenuButton labelText="Actions">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+  <MenuDivider />
+  <MenuItem kind="danger" on:click={() => console.log("Delete")}>Delete</MenuItem>
+</MenuButton>
+
+### Nested
+
+Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. Open it with `ArrowRight`, click, or hover (short delay). `ArrowLeft` closes it and refocuses the parent. Picking a nested item closes the whole menu.
+
+<MenuButton labelText="Actions">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem labelText="Export as">
+    <MenuItem on:click={() => console.log("PDF")}>PDF</MenuItem>
+    <MenuItem on:click={() => console.log("JPG")}>JPG</MenuItem>
+    <MenuItem on:click={() => console.log("PNG")}>PNG</MenuItem>
+  </MenuItem>
+</MenuButton>
