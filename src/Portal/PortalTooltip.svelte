@@ -94,7 +94,7 @@
   {verticalAlignOffsetRight}
   {intrinsicAlign}
   intrinsicWidth={true}
-  lockDirection={true}
+  lockDirection="after-flip"
   let:direction={actualDirection}
 >
   <div
