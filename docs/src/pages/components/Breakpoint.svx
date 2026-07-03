@@ -1,6 +1,10 @@
 ---
-description: Breakpoint declaratively reports the current Carbon responsive breakpoint size.
+description: Breakpoint declaratively reports the current Carbon responsive breakpoint size, or hides an element outside a breakpoint range with the hideAtBreakpoint action.
 ---
+
+<script>
+  import { hideAtBreakpoint } from "carbon-components-svelte";
+</script>
 
 ## Breakpoints
 
@@ -29,3 +33,10 @@ Use `breakpointObserver` as an alternative to the component to get the current s
 Access the breakpoints dictionary to map from BreakpointSize to BreakpointValue.
 
 <FileSource src="/framed/Breakpoint/BreakpointObserver" />
+
+## use:hideAtBreakpoint
+
+Use the `hideAtBreakpoint` action to hide an element outside a breakpoint range, without wrapping it in `Breakpoint`. Set `above`, `below`, or both. Resize the browser to see the elements toggle.
+
+<div use:hideAtBreakpoint={{ above: "md" }}>Hidden at md and up</div>
+<div use:hideAtBreakpoint={{ below: "lg" }}>Hidden below lg</div>
