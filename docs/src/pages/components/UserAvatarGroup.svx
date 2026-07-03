@@ -86,6 +86,16 @@ Set `gap` to a negative length string to overlap the avatars by that amount, tig
   <UserAvatar backgroundColor="auto" name="Dinesh Chugtai" tooltipText="Dinesh Chugtai" />
 </UserAvatarGroup>
 
+### Stack order
+
+By default, the last avatar paints on top. Set `stackOrder="first"` to keep the first avatar most prominent instead.
+
+<UserAvatarGroup stackOrder="first">
+  <UserAvatar backgroundColor="auto" name="Monica" tooltipText="Monica" />
+  <UserAvatar backgroundColor="auto" name="Richard Hendricks" tooltipText="Richard Hendricks" />
+  <UserAvatar backgroundColor="auto" name="Dinesh Chugtai" tooltipText="Dinesh Chugtai" />
+</UserAvatarGroup>
+
 ## Sizes
 
 Set `size` on the group to resize every avatar at once, including the overflow chip. A child can still override with its own `size`.
