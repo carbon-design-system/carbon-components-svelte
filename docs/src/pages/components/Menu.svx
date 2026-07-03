@@ -14,23 +14,45 @@ The root element has `role="menu"`. Set `labelText` or `aria-label` on Menu so a
 
 <FileSource src="/framed/Menu/MenuBasic" />
 
-## Item variants
-
-Set `icon` on `MenuItem` for a left-aligned Carbon icon. Use `kind="danger"` for destructive rows and `MenuDivider` between groups. For submenus, set `labelText` and nest `MenuItem` children; see [MenuButton](/components/MenuButton#menu-items) for keyboard and hover behavior.
-
-<FileSource src="/framed/Menu/MenuItemVariants" />
-
-## Direction
-
-Set `direction` to `"top"`, `"bottom"`, `"left"`, or `"right"` to control which side of the anchor the menu opens toward. The menu flips to the opposite side automatically when there is not enough space.
-
-<FileSource src="/framed/Menu/MenuDirection" />
-
 ## Size
 
-Set `size` to `"sm"` (default), `"md"`, or `"lg"` to control each item's row height.
+Set `size` to control each item's row height. The default is `"sm"`.
 
-<FileSource src="/framed/Menu/MenuSize" />
+### Medium
+
+<FileSource src="/framed/Menu/MenuSizeMedium" />
+
+### Large
+
+<FileSource src="/framed/Menu/MenuSizeLarge" />
+
+## Menu items
+
+`MenuItem` takes an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups.
+
+### Icons
+
+Pass a Carbon icon to `icon`.
+
+<FileSource src="/framed/Menu/MenuItemIcons" />
+
+### Danger
+
+Set `kind="danger"` on `MenuItem` for a destructive action.
+
+<FileSource src="/framed/Menu/MenuItemDanger" />
+
+### Dividers
+
+Put a `MenuDivider` between groups.
+
+<FileSource src="/framed/Menu/MenuItemDividers" />
+
+### Nested
+
+Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. See [MenuButton menu items](/components/MenuButton#menu-items) for keyboard and hover behavior.
+
+<FileSource src="/framed/Menu/MenuItemNested" />
 
 ## Keyboard interactions
 
@@ -38,4 +60,34 @@ Once open, arrow keys move focus between items without wrapping past the first o
 
 ## Placement
 
-Menu forwards the same placement props as [FloatingPortal](/components/FloatingPortal): `gapTop`, `gapBottom`, `horizontalGapLeft`, `horizontalGapRight`, `verticalAlignOffsetLeft`, `verticalAlignOffsetRight`, `zIndex`, `intrinsicWidth`, `intrinsicAlign`, and `target`. See the FloatingPortal documentation for how each affects positioning.
+Menu forwards its placement props to [FloatingPortal](/components/FloatingPortal).
+
+### Direction
+
+Set `direction` to `"top"`, `"bottom"` (default), `"left"`, or `"right"` to control which side of the anchor the menu opens toward. The menu flips to the opposite side automatically when there is not enough space.
+
+<FileSource src="/framed/Menu/MenuDirection" />
+
+### Intrinsic width
+
+By default, the menu matches the anchor's width. Set `intrinsicWidth` to `true` to size the menu to its content instead, and set `intrinsicAlign` to `"start"` to keep it flush with the trigger's leading edge, the common menu pattern.
+
+<FileSource src="/framed/Menu/MenuIntrinsicWidth" />
+
+### Intrinsic alignment
+
+When `intrinsicWidth` is `true`, set `intrinsicAlign` to `"start"`, `"center"` (default), or `"end"` to position the menu along the anchor.
+
+<FileSource src="/framed/Menu/MenuIntrinsicAlign" />
+
+### Gaps and offsets
+
+Use `gapTop` and `gapBottom` to add vertical spacing when direction is `"top"` or `"bottom"`. Use `horizontalGapLeft` and `horizontalGapRight` to add horizontal spacing when direction is `"left"` or `"right"`, and `verticalAlignOffsetLeft` / `verticalAlignOffsetRight` to nudge that same content up or down. See [FloatingPortal gaps and offsets](/components/FloatingPortal#gaps-and-offsets) for the full prop reference.
+
+### Custom target
+
+By default, the menu mounts into the anchor's nearest `<dialog>` or `[popover]` ancestor, falling back to `document.body`. Set `target` to mount it into a specific DOM element instead. See the [FloatingPortal custom target](/components/FloatingPortal#custom-target) documentation for typical use cases.
+
+### Z-index
+
+Set `zIndex` to change the menu's stacking order. The default is `9200`.
