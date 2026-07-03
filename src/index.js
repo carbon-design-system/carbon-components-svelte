@@ -10,6 +10,7 @@ export { default as BreadcrumbSkeleton } from "./Breadcrumb/BreadcrumbSkeleton.s
 export { default as Breakpoint } from "./Breakpoint/Breakpoint.svelte";
 export { default as breakpointObserver } from "./Breakpoint/breakpointObserver";
 export { default as breakpoints } from "./Breakpoint/breakpoints";
+export { hideAtBreakpoint } from "./Breakpoint/hideAtBreakpoint";
 export { default as Button } from "./Button/Button.svelte";
 export { default as ButtonSet } from "./Button/ButtonSet.svelte";
 export { default as ButtonSkeleton } from "./Button/ButtonSkeleton.svelte";
