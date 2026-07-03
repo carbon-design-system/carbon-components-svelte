@@ -5,6 +5,59 @@ import { breakpoints } from "./breakpoints";
 /** @typedef {import("./breakpoints").BreakpointSize} BreakpointSize */
 
 /**
+ * Attaches `matchMedia` listeners for every breakpoint and invokes `callback`
+ * with the current size immediately, then again on every subsequent change.
+ * Framework-agnostic (no `onMount`), so it can be called from a Svelte action
+ * as well as from {@link breakpointObserver}.
+ * @param {(size: BreakpointSize) => void} callback
+ * @returns {() => void} Cleanup function that removes the listeners.
+ */
+export function observeBreakpoint(callback) {
+  /** @type {Record<BreakpointSize, MediaQueryList>} */
+  const match = {
+    sm: window.matchMedia(`(max-width: ${breakpoints.md}px)`),
+    md: window.matchMedia(
+      `(min-width: ${breakpoints.md}px) and (max-width: ${breakpoints.lg}px)`,
+    ),
+    lg: window.matchMedia(
+      `(min-width: ${breakpoints.lg}px) and (max-width: ${breakpoints.xlg}px)`,
+    ),
+    xlg: window.matchMedia(
+      `(min-width: ${breakpoints.xlg}px) and (max-width: ${breakpoints.max}px)`,
+    ),
+    max: window.matchMedia(`(min-width: ${breakpoints.max}px)`),
+  };
+  const matchers = Object.entries(match);
+  const sizeByMedia = /** @type {Record<string, BreakpointSize>} */ (
+    Object.fromEntries(
+      matchers.map(([size, queryList]) => [queryList.media, size]),
+    )
+  );
+
+  const entry = matchers.find(([_size, queryList]) => queryList.matches);
+  const size = entry?.[0];
+  if (size !== undefined) callback(/** @type {BreakpointSize} */ (size));
+
+  /** @type {(e: MediaQueryListEvent) => void} */
+  function handleChange({ matches, media }) {
+    const raw = sizeByMedia[media];
+    if (matches && raw !== undefined) {
+      callback(/** @type {BreakpointSize} */ (raw));
+    }
+  }
+
+  for (const [_size, queryList] of matchers) {
+    queryList.addEventListener("change", handleChange, { passive: true });
+  }
+
+  return () => {
+    for (const [_size, queryList] of matchers) {
+      queryList.removeEventListener("change", handleChange);
+    }
+  };
+}
+
+/**
  * Creates a readable store that returns the current breakpoint size.
  * It also provides functions for creating derived stores used to do comparisons.
  */
@@ -12,51 +65,7 @@ export function breakpointObserver() {
   /** @type {import("svelte/store").Writable<BreakpointSize | undefined>} */
   const store = writable(undefined);
 
-  onMount(() => {
-    /** @type {Record<BreakpointSize, MediaQueryList>} */
-    const match = {
-      sm: window.matchMedia(`(max-width: ${breakpoints.md}px)`),
-      md: window.matchMedia(
-        `(min-width: ${breakpoints.md}px) and (max-width: ${breakpoints.lg}px)`,
-      ),
-      lg: window.matchMedia(
-        `(min-width: ${breakpoints.lg}px) and (max-width: ${breakpoints.xlg}px)`,
-      ),
-      xlg: window.matchMedia(
-        `(min-width: ${breakpoints.xlg}px) and (max-width: ${breakpoints.max}px)`,
-      ),
-      max: window.matchMedia(`(min-width: ${breakpoints.max}px)`),
-    };
-    const matchers = Object.entries(match);
-    const sizeByMedia = /** @type {Record<string, BreakpointSize>} */ (
-      Object.fromEntries(
-        matchers.map(([size, queryList]) => [queryList.media, size]),
-      )
-    );
-
-    const entry = matchers.find(([_size, queryList]) => queryList.matches);
-    const size = entry?.[0];
-    if (size !== undefined) store.set(/** @type {BreakpointSize} */ (size));
-
-    /** @type {(e: MediaQueryListEvent) => void} */
-    function handleChange({ matches, media }) {
-      const raw = sizeByMedia[media];
-      if (matches && raw !== undefined) {
-        const size = /** @type {BreakpointSize} */ (raw);
-        store.set(size);
-      }
-    }
-
-    for (const [_size, queryList] of matchers) {
-      queryList.addEventListener("change", handleChange, { passive: true });
-    }
-
-    return () => {
-      for (const [_size, queryList] of matchers) {
-        queryList.removeEventListener("change", handleChange);
-      }
-    };
-  });
+  onMount(() => observeBreakpoint((size) => store.set(size)));
 
   return {
     subscribe: store.subscribe,
