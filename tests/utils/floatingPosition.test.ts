@@ -168,6 +168,19 @@ describe("floatingPosition", () => {
 
       expect(result.actualDirection).toBe("top");
     });
+
+    test("skips the flip check even when the preferred direction would overflow", () => {
+      const result = floatingPosition({
+        anchorRect: rect(100, 750, 150, 40), // bottom at 790, near viewport bottom (800): would flip without the lock
+        floatingRect: rect(0, 0, 150, 200),
+        viewport,
+        direction: "bottom",
+        lockedDirection: "bottom",
+      });
+
+      expect(result.actualDirection).toBe("bottom");
+      expect(result.top).toBe(790); // anchor.bottom, not flipped above the anchor
+    });
   });
 
   describe("intrinsic width (vertical)", () => {

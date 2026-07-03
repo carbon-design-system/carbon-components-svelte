@@ -100,6 +100,105 @@ describe("FloatingPortal", () => {
     expect(["left", "right"]).toContain(actualDirection);
   });
 
+  describe("direction lock", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("re-flips on a scroll-driven reposition by default", async () => {
+      render(FloatingPortalTest, {
+        props: { open: true, direction: "bottom" },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest(
+        "[data-floating-portal]",
+      ) as HTMLElement;
+      const anchor = screen.getByTestId("anchor");
+      expect(portalElement).toHaveAttribute(
+        "data-floating-direction",
+        "bottom",
+      );
+
+      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue({
+        top: 750,
+        bottom: 790,
+        left: 0,
+        right: 100,
+        width: 100,
+        height: 40,
+        x: 0,
+        y: 750,
+        toJSON: () => {},
+      } as DOMRect);
+      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue({
+        top: 0,
+        bottom: 200,
+        left: 0,
+        right: 100,
+        width: 100,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => {},
+      } as DOMRect);
+
+      window.dispatchEvent(new Event("scroll"));
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      expect(portalElement).toHaveAttribute("data-floating-direction", "top");
+    });
+
+    it('does not re-flip on a scroll-driven reposition within the same open session when lockDirection is "always"', async () => {
+      render(FloatingPortalTest, {
+        props: { open: true, direction: "bottom", lockDirection: "always" },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest(
+        "[data-floating-portal]",
+      ) as HTMLElement;
+      const anchor = screen.getByTestId("anchor");
+      expect(portalElement).toHaveAttribute(
+        "data-floating-direction",
+        "bottom",
+      );
+
+      // Anchor now sits near the bottom of the viewport (insufficient room
+      // below), as if the page scrolled. Without the lock this flips to "top".
+      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue({
+        top: 750,
+        bottom: 790,
+        left: 0,
+        right: 100,
+        width: 100,
+        height: 40,
+        x: 0,
+        y: 750,
+        toJSON: () => {},
+      } as DOMRect);
+      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue({
+        top: 0,
+        bottom: 200,
+        left: 0,
+        right: 100,
+        width: 100,
+        height: 200,
+        x: 0,
+        y: 0,
+        toJSON: () => {},
+      } as DOMRect);
+
+      window.dispatchEvent(new Event("scroll"));
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      expect(portalElement).toHaveAttribute(
+        "data-floating-direction",
+        "bottom",
+      );
+    });
+  });
+
   it("applies z-index from zIndex prop", async () => {
     render(FloatingPortalTest, {
       props: { open: true, zIndex: 10000 },

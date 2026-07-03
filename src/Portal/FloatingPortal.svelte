@@ -85,14 +85,20 @@
   export let intrinsicAlign = "center";
 
   /**
-   * Set to `true` to keep a flipped side stable for the duration of an open
-   * session. Once the content flips away from `direction` (because the preferred
-   * side does not fit), that side is reused even if the content later resizes,
-   * so a floating element whose content swaps (e.g. a tooltip whose text changes
-   * to something narrower) does not snap back to the preferred side mid-session.
-   * @type {boolean}
+   * Control when a resolved flip side is reused instead of recomputed on the
+   * next position update:
+   * - `"none"` (default): recompute the flip on every update.
+   * - `"after-flip"`: once the content flips away from `direction` (the
+   *   preferred side does not fit), reuse that side for the rest of the open
+   *   session. Recomputes freely until a flip actually happens, so a floating
+   *   element whose content resizes (e.g. a tooltip whose text changes to
+   *   something narrower) does not snap back to the preferred side mid-session.
+   * - `"always"`: lock whichever side the initial open settles on (flipped or
+   *   not) for the rest of the open session, so later scroll/resize updates
+   *   only reposition along that side instead of re-evaluating the flip.
+   * @type {"none" | "after-flip" | "always"}
    */
-  export let lockDirection = false;
+  export let lockDirection = "none";
 
   /**
    * Obtain a reference to the floating portal element.
@@ -205,8 +211,8 @@
     typeof document !== "undefined" &&
     effectiveTarget !== document.body;
 
-  // The side chosen on open; reused on subsequent updates when `lockDirection`
-  // is set so content resizes do not re-trigger a flip. Reset each open session.
+  // The side latched for the rest of an open session per `lockDirection`.
+  // Reset each open session.
   /** @type {"bottom" | "top" | "left" | "right" | null} */
   let lockedDirection = null;
 
@@ -223,9 +229,7 @@
         scrollY: window.scrollY,
       },
       direction,
-      lockedDirection: lockDirection
-        ? (lockedDirection ?? undefined)
-        : undefined,
+      lockedDirection: lockedDirection ?? undefined,
       useFixedPosition,
       intrinsicWidth,
       intrinsicAlign,
@@ -239,15 +243,26 @@
 
     // Latch the side only once it actually flips away from the preferred
     // direction. Until then keep recomputing, so the initial layout passes
-    // (which run before the content's final width is known for side placements)
-    // can still flip. Once flipped, stay flipped for the session so a content
-    // resize — e.g. a tooltip whose text swaps to something narrower — does not
-    // snap the box back to the preferred side.
+    // (which run before the content's final width is known for side
+    // placements) can still flip. Once flipped, stay flipped for the session
+    // so a content resize does not snap the box back.
     if (
-      lockDirection &&
+      lockDirection === "after-flip" &&
       lockedDirection === null &&
       pos.actualDirection !== direction
     ) {
+      lockedDirection = pos.actualDirection;
+    }
+  }
+
+  // Lock whatever side the open-time layout passes settled on, flipped or
+  // not, so a later scroll/resize/mutation update repositions along that
+  // side instead of re-running the flip check mid-interaction. Called once
+  // the settling passes finish (see the `open` effect below), not from
+  // `updatePosition()` itself. Locking there would latch onto the very
+  // scroll/resize update that triggered the call, defeating the point.
+  function lockAfterSettling() {
+    if (lockDirection === "always" && lockedDirection === null) {
       lockedDirection = pos.actualDirection;
     }
   }
@@ -310,7 +325,12 @@
         direction === "right" ||
         (intrinsicWidth && (direction === "top" || direction === "bottom"));
       if (needsSecondLayoutPass) {
-        requestAnimationFrame(updatePosition);
+        requestAnimationFrame(() => {
+          updatePosition();
+          lockAfterSettling();
+        });
+      } else {
+        lockAfterSettling();
       }
     });
   }
