@@ -2,6 +2,9 @@ import { render } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ComboBox from "./ComboBox.test.svelte";
 
+/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
+const flush = () => new Promise((resolve) => setTimeout(resolve));
+
 const netClick = (
   add: ReturnType<typeof vi.spyOn>,
   remove: ReturnType<typeof vi.spyOn>,
@@ -21,11 +24,12 @@ describe("ComboBox window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open combo box registers exactly one window click listener", () => {
+  test("an open combo box registers exactly one window click listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(ComboBox, { props: { open: true } });
+    await flush();
     expect(netClick(add, remove)).toBe(1);
 
     add.mockRestore();
@@ -37,6 +41,7 @@ describe("ComboBox window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(ComboBox, { props: { open: true } });
+    await flush();
     expect(netClick(add, remove)).toBe(1);
 
     // An outside click closes the menu, which must tear down the listener.

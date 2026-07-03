@@ -530,6 +530,10 @@ describe("HeaderSearch", () => {
     it("should deactivate when clicking outside", async () => {
       render(HeaderSearchTest, { props: { active: true } });
 
+      // dismiss() defers window listener registration by a macrotask; flush
+      // it before the outside click so that click is not missed.
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       // Click outside the search component
       const outsideElement = document.createElement("div");
       document.body.appendChild(outsideElement);

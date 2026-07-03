@@ -1,6 +1,9 @@
 import { render } from "@testing-library/svelte";
 import TooltipIcon from "./TooltipIcon.test.svelte";
 
+/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
+const flush = () => new Promise((resolve) => setTimeout(resolve));
+
 const net = (
   add: ReturnType<typeof vi.spyOn>,
   remove: ReturnType<typeof vi.spyOn>,
@@ -21,11 +24,12 @@ describe("TooltipIcon window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open icon tooltip registers exactly one window keydown listener", () => {
+  test("an open icon tooltip registers exactly one window keydown listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(TooltipIcon, { props: { open: true } });
+    await flush();
     expect(net(add, remove, "keydown")).toBe(1);
 
     add.mockRestore();

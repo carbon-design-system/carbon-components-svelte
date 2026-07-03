@@ -90,6 +90,8 @@ function unregisterConsumer({ key, pool, consumer }) {
 export function dismiss(_node, params) {
   let specs = normalize(params);
   let enabled = !!params.enabled;
+  let destroyed = false;
+  let addScheduled = false;
 
   /**
    * @type {Array<{ key: string, pool: Pool, consumer: Consumer }>}
@@ -97,8 +99,22 @@ export function dismiss(_node, params) {
   let registered = [];
 
   function add() {
-    if (typeof window === "undefined") return;
-    registered = specs.map((spec) => registerConsumer(spec));
+    if (typeof window === "undefined" || addScheduled) return;
+    addScheduled = true;
+    // Defer registration to the next task (not just a microtask). Enabling
+    // synchronously within a click (e.g. a button outside the anchor setting
+    // `open` to true) would otherwise register the window listener while
+    // that SAME click is still bubbling — heavy synchronous DOM work in the
+    // handler (mounting a portal, positioning it) can delay the event's
+    // arrival at `window` past any microtask flush, so only a macrotask
+    // defer reliably waits for the current dispatch to finish. Re-checks
+    // `enabled`/`destroyed` since either may have changed by the time this
+    // runs.
+    setTimeout(() => {
+      addScheduled = false;
+      if (destroyed || !enabled) return;
+      registered = specs.map((spec) => registerConsumer(spec));
+    });
   }
 
   function remove() {
@@ -134,6 +150,7 @@ export function dismiss(_node, params) {
       if (enabled) add();
     },
     destroy() {
+      destroyed = true;
       remove();
     },
   };
