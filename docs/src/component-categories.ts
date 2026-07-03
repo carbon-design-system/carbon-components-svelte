@@ -22,7 +22,14 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   },
   {
     label: "Layout",
-    components: ["Grid", "Stack", "Box", "AspectRatio", "Accordion"],
+    components: [
+      "Grid",
+      "Stack",
+      "Box",
+      "AspectRatio",
+      "Accordion",
+      "Disclosure",
+    ],
   },
   {
     label: "Actions",

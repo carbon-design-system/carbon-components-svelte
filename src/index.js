@@ -56,6 +56,7 @@ export { default as DatePickerInput } from "./DatePicker/DatePickerInput.svelte"
 export { default as DatePickerSkeleton } from "./DatePicker/DatePickerSkeleton.svelte";
 export { default as FluidDatePickerSkeleton } from "./DatePicker/FluidDatePickerSkeleton.svelte";
 export { default as Dialog } from "./Dialog/Dialog.svelte";
+export { default as Disclosure } from "./Disclosure/Disclosure.svelte";
 export { default as Dropdown } from "./Dropdown/Dropdown.svelte";
 export { default as DropdownSkeleton } from "./Dropdown/DropdownSkeleton.svelte";
 export { default as FluidDropdownSkeleton } from "./Dropdown/FluidDropdownSkeleton.svelte";
