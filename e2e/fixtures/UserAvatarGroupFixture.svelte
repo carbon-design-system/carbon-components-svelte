@@ -68,3 +68,19 @@
     {/each}
   </UserAvatarGroup>
 </div>
+
+<div data-testid="stack-first">
+  <UserAvatarGroup stackOrder="first" max={2}>
+    <UserAvatar backgroundColor="auto" name="Monica" tooltipText="Monica" />
+    <UserAvatar
+      backgroundColor="auto"
+      name="Richard Hendricks"
+      tooltipText="Richard Hendricks"
+    />
+    <UserAvatar
+      backgroundColor="auto"
+      name="Dinesh Chugtai"
+      tooltipText="Dinesh Chugtai"
+    />
+  </UserAvatarGroup>
+</div>

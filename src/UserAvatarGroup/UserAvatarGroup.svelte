@@ -37,6 +37,14 @@
   export let size = "md";
 
   /**
+   * Specify which end of the stack renders on top when avatars overlap.
+   * `"last"` matches the default browser paint order (and most avatar
+   * stacks). `"first"` keeps the first avatar most prominent instead.
+   * @type {"last" | "first"}
+   */
+  export let stackOrder = "last";
+
+  /**
    * Specify the tooltip text for the "+N" overflow avatar. Defaults to a
    * comma-separated list of hidden slotted `name` values. Set this when using
    * `total` for people who are not mounted.
@@ -60,6 +68,21 @@
 
   function isNegativeGap(value) {
     return typeof value === "string" && value.trim().startsWith("-");
+  }
+
+  // A `tooltipText` avatar wraps its element in a `TooltipDefinition`, so the
+  // registered node is nested a couple of levels below the direct child that
+  // the group's `> *` overlap/stacking CSS targets. Walk up to that direct
+  // child so the stacking custom property lands where the CSS reads it.
+  function overlapTarget(node) {
+    let el = node;
+    while (
+      el?.parentElement &&
+      !el.parentElement.classList.contains("bx--user-avatar-group")
+    ) {
+      el = el.parentElement;
+    }
+    return el ?? null;
   }
 
   // `max` of 0 (or non-positive) means "no limit"; mirror that as 0 in the
@@ -124,10 +147,30 @@
   // Overlap (stacked) when no gap is set, or when a negative gap tightens the
   // stack; a positive gap switches to a spaced row.
   $: overlap = gap == null || isNegativeGap(gap);
+  // `stackOrder: "first"` reverses which avatar paints on top. The default
+  // paint order already puts the last avatar on top for free, so only the
+  // reversed case needs an explicit per-avatar z-index; it's driven by a
+  // custom property (not `z-index` directly) so the hover/focus rule below
+  // can still win on specificity instead of losing to an inline style.
+  $: if (overlap && stackOrder === "first") {
+    for (const [index, item] of $items.entries()) {
+      overlapTarget(item.node)?.style.setProperty(
+        "--user-avatar-index",
+        String(index),
+      );
+    }
+  } else {
+    for (const item of $items) {
+      overlapTarget(item.node)?.style.removeProperty("--user-avatar-index");
+    }
+  }
   // A negative gap overrides the default overlap amount via a custom property.
   $: groupStyle =
     [
       isNegativeGap(gap) && `--user-avatar-group-overlap: ${gap}`,
+      overlap &&
+        stackOrder === "first" &&
+        `--user-avatar-group-count: ${$items.length}`,
       $$restProps.style,
     ]
       .filter(Boolean)
@@ -136,6 +179,7 @@
   $: groupClass = [
     "bx--user-avatar-group",
     overlap && "bx--user-avatar-group--overlap",
+    overlap && stackOrder === "first" && "bx--user-avatar-group--stack-first",
     $$restProps.class,
   ]
     .filter(Boolean)

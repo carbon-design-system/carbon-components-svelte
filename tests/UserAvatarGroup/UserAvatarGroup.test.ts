@@ -122,6 +122,38 @@ describe("UserAvatarGroup", () => {
     });
   });
 
+  it("reverses the stacking order so the first avatar paints on top, even when tooltipText wraps it", () => {
+    render(UserAvatarGroup);
+
+    const root = groupRoot("stack-first");
+    expect(root).toHaveClass("bx--user-avatar-group--stack-first");
+    expect(root.style.getPropertyValue("--user-avatar-group-count")).toBe("3");
+
+    // Each avatar sets `tooltipText`, so the registered node is nested inside
+    // a `TooltipDefinition` wrapper. The stacking index must land on that
+    // direct child wrapper (what the CSS `> *` selector targets), not on the
+    // nested avatar span the CSS rule never reaches.
+    const wrappers = Array.from(root.children).filter((child) =>
+      child.classList.contains("bx--user-avatar-tooltip"),
+    ) as HTMLElement[];
+    expect(wrappers[0].style.getPropertyValue("--user-avatar-index")).toBe("0");
+    expect(
+      wrappers[0]
+        .querySelector<HTMLElement>(".bx--user-avatar")
+        ?.style.getPropertyValue("--user-avatar-index"),
+    ).toBe("");
+    expect(wrappers[2].style.getPropertyValue("--user-avatar-index")).toBe("2");
+
+    // The overflow chip (past `max={2}`) opts out of registration, so it
+    // never gets an index; it relies on the `:has()` CSS rule instead.
+    const overflowWrapper = root
+      .querySelector(".bx--user-avatar-group__overflow")
+      ?.closest<HTMLElement>(".bx--user-avatar-tooltip");
+    expect(overflowWrapper?.style.getPropertyValue("--user-avatar-index")).toBe(
+      "",
+    );
+  });
+
   it("re-sorts to DOM order when an avatar is inserted ahead of others", async () => {
     render(UserAvatarGroup);
 

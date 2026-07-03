@@ -71,6 +71,14 @@
   </UserAvatarGroup>
 </div>
 
+<div data-testid="stack-first">
+  <UserAvatarGroup stackOrder="first" max={2}>
+    <UserAvatar name="Monica" tooltipText="Monica" />
+    <UserAvatar name="Richard Hendricks" tooltipText="Richard Hendricks" />
+    <UserAvatar name="Dinesh Chugtai" tooltipText="Dinesh Chugtai" />
+  </UserAvatarGroup>
+</div>
+
 <button
   type="button"
   data-testid="toggle-lead"

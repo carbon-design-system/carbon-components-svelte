@@ -88,6 +88,31 @@ test.describe("UserAvatarGroup", () => {
     await expect(overflow).toHaveText("99+");
   });
 
+  test("reverses stacking order so the first avatar paints on top, even wrapped in a tooltip", async ({
+    page,
+  }) => {
+    // Every avatar sets `tooltipText`, wrapping the registered element in a
+    // `TooltipDefinition`; the z-index must land on that direct-child
+    // wrapper, not the nested (non-positioned) avatar span.
+    const items = page
+      .getByTestId("stack-first")
+      .locator(".bx--user-avatar-group--overlap > *");
+
+    const zIndex = (el: Element) =>
+      Number.parseInt(getComputedStyle(el).zIndex, 10);
+    const first = await items.nth(0).evaluate(zIndex);
+    const second = await items.nth(1).evaluate(zIndex);
+    const third = await items.nth(2).evaluate(zIndex);
+
+    expect(first).toBeGreaterThan(second);
+    expect(second).toBeGreaterThan(third);
+
+    // The "+N" overflow chip (max={2} hides the third avatar) isn't a
+    // registered item; it should render behind every real avatar.
+    const overflow = await items.nth(3).evaluate(zIndex);
+    expect(overflow).toBeLessThan(third);
+  });
+
   test("spaces avatars apart when a gap is set", async ({ page }) => {
     const list = page.getByTestId("spaced").locator(".bx--user-avatar-group");
     await expect(list).not.toHaveClass(/bx--user-avatar-group--overlap/);
