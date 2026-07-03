@@ -300,13 +300,15 @@
                         class="doc-links"
                       >
                         <Link
+                          inline
+                          muted
                           href={sourceRepoUrl(entry.sourcePath)}
                           target="_blank"
                         >
                           Source code
                         </Link>
                         <Stack orientation="horizontal" gap={2} align="center">
-                          <Link href={entry.markdownHref} target="_blank">
+                          <Link inline muted href={entry.markdownHref} target="_blank">
                             Markdown
                           </Link>
                           <CopyMarkdownButton
