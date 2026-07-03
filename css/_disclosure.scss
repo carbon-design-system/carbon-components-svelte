@@ -1,0 +1,132 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Disclosure styles
+/// @access private
+/// @group components
+@mixin disclosure {
+  .#{$prefix}--disclosure {
+    width: 100%;
+  }
+
+  .#{$prefix}--disclosure__control {
+    @include button-reset;
+
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: to-rem(40px);
+    flex-direction: $accordion-flex-direction;
+    align-items: flex-start;
+    justify-content: $accordion-justify-content;
+    padding: to-rem(10px) 0;
+    margin: 0;
+    color: $text-01;
+    cursor: pointer;
+    transition: background-color motion(standard, productive) $duration--fast-02;
+
+    &:hover::before,
+    &:focus::before {
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 100%;
+      height: calc(100% + 2px);
+      content: "";
+    }
+
+    &:hover::before {
+      background-color: $hover-ui;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus::before {
+      @include focus-outline("outline-compat");
+    }
+  }
+
+  .#{$prefix}--disclosure__arrow {
+    @include focus-outline("reset");
+
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 1rem;
+    margin: $accordion-arrow-margin;
+    fill: $ui-05;
+    transform: rotate(-270deg) #{"/*rtl:ignore*/"};
+    transition: all $duration--fast-02 motion(standard, productive);
+  }
+
+  .#{$prefix}--disclosure__summary {
+    @include type-style("body-long-01");
+
+    z-index: 1;
+    width: 100%;
+    margin: $accordion-title-margin;
+    text-align: left;
+  }
+
+  .#{$prefix}--disclosure--start .#{$prefix}--disclosure__control {
+    // Reverse `$accordion-flex-direction` token:
+    flex-direction: row;
+  }
+
+  .#{$prefix}--disclosure--start .#{$prefix}--disclosure__arrow {
+    // Alters `$accordion-arrow-margin` token:
+    margin: 2px 0 0 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--disclosure--start .#{$prefix}--disclosure__summary {
+    margin-right: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--disclosure--start .#{$prefix}--disclosure__content {
+    margin-left: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--disclosure__content {
+    display: none;
+    padding-right: $carbon--spacing-05;
+    padding-left: $carbon--spacing-05;
+    // Transition property for when the disclosure closes
+    transition: padding motion(standard, productive) $duration--fast-02;
+  }
+
+  .#{$prefix}--disclosure--collapsing .#{$prefix}--disclosure__content,
+  .#{$prefix}--disclosure--expanding .#{$prefix}--disclosure__content {
+    display: block;
+  }
+
+  .#{$prefix}--disclosure--collapsing .#{$prefix}--disclosure__content {
+    animation: $duration--fast-02 motion(standard, productive)
+      collapse-accordion;
+  }
+
+  .#{$prefix}--disclosure--expanding .#{$prefix}--disclosure__content {
+    animation: $duration--fast-02 motion(standard, productive) expand-accordion;
+  }
+
+  .#{$prefix}--disclosure--open {
+    .#{$prefix}--disclosure__content {
+      display: block;
+      padding-top: $carbon--spacing-03;
+      padding-bottom: $carbon--spacing-05;
+      // Transition property for when the disclosure opens
+      transition: padding-top motion(entrance, productive) $duration--fast-02,
+        padding-bottom motion(entrance, productive) $duration--fast-02;
+    }
+
+    .#{$prefix}--disclosure__arrow {
+      fill: $ui-05;
+      transform: rotate(-90deg) #{"/*rtl:ignore*/"};
+    }
+  }
+}
+
+@include exports("disclosure") {
+  @include disclosure;
+}
