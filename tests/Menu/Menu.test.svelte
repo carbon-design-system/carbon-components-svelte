@@ -4,6 +4,7 @@
   import type { ComponentProps } from "svelte";
 
   export let direction: ComponentProps<Menu>["direction"] = "bottom";
+  export let size: ComponentProps<Menu>["size"] = "sm";
   export let disabledIndex: number | undefined = undefined;
 
   let anchor: HTMLButtonElement;
@@ -19,6 +20,7 @@
 <Menu
   {anchor}
   {direction}
+  {size}
   bind:open
   labelText="Example menu"
   on:open={(e) => console.log("open", e.detail)}

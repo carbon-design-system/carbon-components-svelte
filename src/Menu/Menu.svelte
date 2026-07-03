@@ -64,6 +64,12 @@
   export let zIndex = 9200;
 
   /**
+   * Specify the size of the menu, which controls each item's row height.
+   * @type {"sm" | "md" | "lg"}
+   */
+  export let size = "sm";
+
+  /**
    * Set to `true` to use the menu's intrinsic width instead of matching the anchor width.
    * @type {boolean}
    */
@@ -88,6 +94,9 @@
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
 
+  const NON_DISABLED_MENUITEM_SELECTOR =
+    "[role='menuitem']:not([aria-disabled='true'])";
+
   const dispatch = createEventDispatcher();
 
   let focusIndex = -1;
@@ -110,7 +119,13 @@
       focusIndex = -1;
       tick().then(() => {
         if (!open) return;
-        ref?.focus();
+        const firstItem = ref?.querySelector(NON_DISABLED_MENUITEM_SELECTOR);
+        if (firstItem instanceof HTMLElement) {
+          focusIndex = 0;
+          firstItem.focus({ preventScroll: true });
+        } else {
+          ref?.focus({ preventScroll: true });
+        }
         dispatch("open", anchor);
       });
     }
@@ -120,7 +135,13 @@
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
 
   function handleOutsideClick(event) {
-    if (open && isOutsideClick(event, [anchor, ref])) close("outside-click");
+    if (!open) return;
+    // Clicks inside any menu (this one or a portalled submenu) are not outside
+    // clicks. A submenu's <ul> isn't a DOM descendant of this menu even though
+    // it's logically nested, so isOutsideClick alone misses it.
+    const target = event.target;
+    if (target instanceof Element && target.closest("[role='menu']")) return;
+    if (isOutsideClick(event, [anchor, ref])) close("outside-click");
   }
   function handleEscape(event) {
     if (open && event.key === "Escape") close("escape-key");
@@ -141,13 +162,14 @@
   {intrinsicWidth}
   {intrinsicAlign}
   {target}
+  lockDirection="always"
   let:direction={portalDirection}
 >
   <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     bind:this={ref}
     use:rovingFocus={{
-      selector: "[role='menuitem']:not([aria-disabled='true'])",
+      selector: NON_DISABLED_MENUITEM_SELECTOR,
       orientation: "vertical",
       wrap: false,
       focusOnMove: true,
@@ -171,6 +193,8 @@
     style:left="auto"
     class:bx--menu={true}
     class:bx--menu--open={open}
+    class:bx--menu--md={size === "md"}
+    class:bx--menu--lg={size === "lg"}
     {...$$restProps}
     aria-label={menuAriaLabel}
     on:keydown
@@ -181,6 +205,8 @@
         event.preventDefault();
       }
     }}
+    on:mouseenter
+    on:mouseleave
   >
     <slot />
   </ul>
