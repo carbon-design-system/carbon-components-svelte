@@ -473,4 +473,50 @@ test.describe("DatePicker", () => {
       ).toHaveText("select");
     });
   });
+
+  test.describe("month", () => {
+    test("opens a 12-month grid instead of days", async ({ page }) => {
+      const input = page.getByLabel("Billing month");
+      await input.click();
+
+      const calendar = page
+        .getByTestId("date-picker-month")
+        .getByLabel("calendar-container");
+      await expect(calendar).toBeVisible();
+      await expect(
+        calendar.locator(".flatpickr-monthSelect-month"),
+      ).toHaveCount(12);
+      await expect(calendar.locator(".flatpickr-day")).toHaveCount(0);
+    });
+
+    test("selects a month and updates the input", async ({ page }) => {
+      const input = page.getByLabel("Billing month");
+      await input.click();
+
+      const calendar = page
+        .getByTestId("date-picker-month")
+        .getByLabel("calendar-container");
+      await calendar.getByText("Sep", { exact: true }).click();
+
+      await expect(input).toHaveValue("September 2024");
+      await expect(calendar).not.toHaveClass(/open/);
+    });
+
+    test("year stepper changes the displayed year without closing", async ({
+      page,
+    }) => {
+      const input = page.getByLabel("Billing month");
+      await input.click();
+
+      const calendar = page
+        .getByTestId("date-picker-month")
+        .getByLabel("calendar-container");
+      const yearInput = calendar.locator("input.cur-year");
+      await expect(yearInput).toHaveValue("2024");
+
+      await calendar.locator(".flatpickr-next-month").click();
+      await expect(yearInput).toHaveValue("2025");
+      await expect(calendar).toHaveClass(/open/);
+    });
+  });
 });

@@ -68,3 +68,19 @@
     {rangeCloseTriggers.join(",")}
   </p>
 </div>
+
+<div data-testid="date-picker-month">
+  <DatePicker
+    datePickerType="month"
+    dateFormat="F Y"
+    value="March 2024"
+    flatpickrProps={{ static: true }}
+    on:change
+  >
+    <DatePickerInput
+      data-testid="date-picker-billing-month"
+      labelText="Billing month"
+      placeholder="Month Year"
+    />
+  </DatePicker>
+</div>
