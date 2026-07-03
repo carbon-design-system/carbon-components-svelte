@@ -26,9 +26,27 @@ Use `bind:valueFrom` and `bind:valueTo` to update the range from outside the com
 
 <FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
 
+## Month calendar
+
+Set `datePickerType` to `"month"` to select a month instead of a day. The calendar shows a 12-month grid for the current year; use the year stepper to change years. Pair it with a `dateFormat` that omits the day, such as `"F Y"` (for example, "January 2026").
+
+<FileSource src="/framed/DatePicker/DatePickerMonth" />
+
+### Custom format
+
+Pass a numeric `dateFormat`, such as `"Y-m"`, along with a matching `placeholder` for a compact "yyyy-mm" input.
+
+<FileSource src="/framed/DatePicker/DatePickerMonthCustomFormat" />
+
+### Programmatic
+
+Use `bind:value` to update the selected month from outside the component, such as a "previous month" button.
+
+<FileSource src="/framed/DatePicker/DatePickerMonthProgrammatic" />
+
 ## Calendar options
 
-Configure constraints and behavior shared by single and range calendars.
+Configure constraints and behavior shared by single, range, and month calendars.
 
 ### Min and max dates
 
@@ -175,6 +193,14 @@ The range date picker renders both inputs inside a single fluid field.
 <DatePicker fluid datePickerType="range">
   <DatePickerInput labelText="Start date" placeholder="mm/dd/yyyy" />
   <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Month
+
+The fluid variant also supports the `"month"` date picker type.
+
+<DatePicker fluid datePickerType="month" dateFormat="F Y">
+  <DatePickerInput labelText="Billing month" placeholder="Month Year" />
 </DatePicker>
 
 ### Custom label
