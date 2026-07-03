@@ -2,6 +2,7 @@
   /**
    * @template {string | number} [Value=string | number]
    * @event {Value} update The selected value.
+   * @restProps {div}
    */
 
   /**
@@ -191,7 +192,11 @@
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
 </script>
 
-<div class:bx--form-item={true} class:bx--select--fluid={isFluid}>
+<div
+  class:bx--form-item={true}
+  class:bx--select--fluid={isFluid}
+  {...$$restProps}
+>
   <div
     class:bx--select={true}
     class:bx--select--inline={inline}
@@ -229,6 +234,8 @@
                   : undefined}
             aria-invalid={showInvalid || undefined}
             aria-readonly={readonly || undefined}
+            aria-label={$$props["aria-label"]}
+            aria-labelledby={$$props["aria-labelledby"]}
             disabled={disabled || undefined}
             required={required || undefined}
             {id}
@@ -237,7 +244,6 @@
             class:bx--select-input--xs={size === "xs"}
             class:bx--select-input--sm={size === "sm"}
             class:bx--select-input--xl={size === "xl"}
-            {...$$restProps}
             on:change={handleChange}
             on:change
             on:input
@@ -299,11 +305,12 @@
           required={required || undefined}
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
+          aria-label={$$props["aria-label"]}
+          aria-labelledby={$$props["aria-labelledby"]}
           class:bx--select-input={true}
           class:bx--select-input--xs={size === "xs"}
           class:bx--select-input--sm={size === "sm"}
           class:bx--select-input--xl={size === "xl"}
-          {...$$restProps}
           on:change={handleChange}
           on:change
           on:input

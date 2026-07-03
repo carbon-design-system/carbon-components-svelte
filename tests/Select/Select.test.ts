@@ -472,6 +472,32 @@ describe("Select", () => {
     expect(label).toHaveClass("bx--visually-hidden");
   });
 
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/3136
+  it("applies a user-supplied class to the outer wrapper, not the select or chevron", () => {
+    render(Select, { class: "mb32" });
+
+    const selectElement = screen.getByLabelText("Select label");
+    const wrapper = selectElement.closest(".bx--form-item");
+    assert(wrapper);
+
+    expect(wrapper).toHaveClass("mb32");
+    expect(selectElement).not.toHaveClass("mb32");
+
+    const chevron = wrapper.querySelector(".bx--select__arrow");
+    assert(chevron);
+    expect(chevron.closest(".bx--select-input__wrapper")).not.toHaveClass(
+      "mb32",
+    );
+  });
+
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/3136
+  it("forwards aria-label to the select element despite restProps moving to the wrapper", () => {
+    render(Select, { "aria-label": "Custom label" });
+
+    const selectElement = screen.getByLabelText("Select label");
+    expect(selectElement).toHaveAttribute("aria-label", "Custom label");
+  });
+
   it("renders with SelectItemGroup", () => {
     render(SelectGroup);
 

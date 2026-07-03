@@ -36,6 +36,7 @@
   {light}
   {readonly}
   {fluid}
+  {...$$restProps}
   on:change={() => console.log("change")}
   on:input={() => console.log("input")}
   on:update={(e) => console.log("update", e.detail)}
