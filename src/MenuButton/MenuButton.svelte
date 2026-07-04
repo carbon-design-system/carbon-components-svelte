@@ -25,7 +25,7 @@
 
   /**
    * Specify the size of the trigger button and the menu's row height.
-   * @type {"sm" | "md" | "lg"}
+   * @type {"xs" | "sm" | "md" | "lg"}
    */
   export let size = "md";
 
@@ -62,19 +62,42 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import Menu from "../Menu/Menu.svelte";
 
-  /** Button has no "xs" size and no "md"/"sm" names; remap to its closest matching row heights. */
-  const TRIGGER_BUTTON_SIZES = { sm: "small", md: "default", lg: "lg" };
+  /**
+   * Button's own "default"/"lg" naming is offset from the v11 size scale:
+   * unclassed "default" renders at 48px (v11 "lg"), while Button's "lg"
+   * class renders at 64px with baseline-aligned text (v11's "xl"/"2xl"
+   * tier). Remap so MenuButton never touches Button's "lg"/"xl" classes.
+   * "xs" has no Button equivalent; menu-button.scss shrinks it further.
+   */
+  const TRIGGER_BUTTON_SIZES = {
+    xs: "small",
+    sm: "small",
+    md: "field",
+    lg: "default",
+  };
 
   $: triggerClass = [
     "bx--menu-button__trigger",
+    size === "xs" && "bx--menu-button__trigger--xs",
     open && "bx--menu-button__trigger--open",
     $$restProps.class,
   ]
     .filter(Boolean)
     .join(" ");
 
-  function toggle() {
+  /**
+   * @type {(event: MouseEvent) => void}
+   */
+  function toggle(event) {
+    const wasOpen = open;
     open = !open;
+    // A keyboard-activated click (Enter/Space) reports detail 0; a real mouse
+    // click reports 1+. Blur only after a mouse-driven close, so the trigger
+    // doesn't linger with a visible focus ring - keyboard users still see
+    // focus stay put, as they should.
+    if (wasOpen && event.detail !== 0) {
+      ref?.blur();
+    }
   }
 </script>
 
@@ -89,6 +112,7 @@
   aria-haspopup="menu"
   aria-expanded={open}
   aria-label={$$restProps["aria-label"] ?? labelText}
+  on:mousedown={(event) => event.preventDefault()}
   on:click
   on:click={toggle}
 >

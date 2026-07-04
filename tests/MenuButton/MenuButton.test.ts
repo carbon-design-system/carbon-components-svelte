@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import MenuButtonSlot from "./MenuButton.slot.test.svelte";
 import MenuButtonFixture from "./MenuButton.test.svelte";
@@ -25,12 +25,53 @@ describe("MenuButton", () => {
     expect(screen.getByRole("button", { name: "Actions" })).toBeDisabled();
   });
 
-  it("applies the kind and size classes to the trigger", () => {
-    render(MenuButtonFixture, { props: { kind: "ghost", size: "lg" } });
+  it("applies the kind class to the trigger", () => {
+    render(MenuButtonFixture, { props: { kind: "ghost" } });
+
+    expect(screen.getByRole("button", { name: "Actions" })).toHaveClass(
+      "bx--btn--ghost",
+    );
+  });
+
+  it.each([
+    { size: "xs", buttonClass: "bx--btn--sm", menuClass: "bx--menu--xs" },
+    { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
+    { size: "md", buttonClass: "bx--btn--field", menuClass: "bx--menu--md" },
+    { size: "lg", buttonClass: undefined, menuClass: "bx--menu--lg" },
+  ] as const)("propagates size $size to the trigger and the menu row height", async ({
+    size,
+    buttonClass,
+    menuClass,
+  }) => {
+    render(MenuButtonFixture, { props: { size } });
 
     const trigger = screen.getByRole("button", { name: "Actions" });
-    expect(trigger).toHaveClass("bx--btn--ghost");
-    expect(trigger).toHaveClass("bx--btn--lg");
+
+    for (const unwanted of [
+      "bx--btn--sm",
+      "bx--btn--field",
+      "bx--btn--lg",
+      "bx--btn--xl",
+    ]) {
+      if (unwanted !== buttonClass) expect(trigger).not.toHaveClass(unwanted);
+    }
+    if (buttonClass) expect(trigger).toHaveClass(buttonClass);
+
+    await user.click(trigger);
+
+    const menu = screen.getByRole("menu");
+    for (const unwanted of ["bx--menu--xs", "bx--menu--md", "bx--menu--lg"]) {
+      if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
+    }
+    if (menuClass) expect(menu).toHaveClass(menuClass);
+  });
+
+  it("keeps the trigger off Button's baseline-aligned `lg`/`xl` classes", () => {
+    render(MenuButtonFixture, { props: { size: "lg" } });
+
+    expect(screen.getByRole("button", { name: "Actions" })).not.toHaveClass(
+      "bx--btn--lg",
+    );
   });
 
   it("rotates the trigger's chevron by toggling the open modifier class", async () => {
@@ -100,5 +141,38 @@ describe("MenuButton", () => {
 
     expect(screen.getByText("Custom trigger content")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Actions" })).toBeInTheDocument();
+  });
+
+  it("never focuses the trigger via a real mouse click, only via keyboard", async () => {
+    render(MenuButtonFixture);
+
+    const trigger = screen.getByRole("button", { name: "Actions" });
+
+    await user.click(trigger);
+    expect(trigger).not.toHaveFocus();
+
+    await user.click(trigger);
+    expect(trigger).not.toHaveFocus();
+
+    await user.tab();
+    expect(trigger).toHaveFocus();
+  });
+
+  it("blurs the trigger after a mouse-driven close, but not a keyboard-driven one", async () => {
+    // A real click reports event.detail 1+; a keyboard-activated (Enter/
+    // Space) one reports 0. Start each case already open so the closing
+    // click is what's under test, independent of how it was opened.
+    const { unmount } = render(MenuButtonFixture, { props: { open: true } });
+    let trigger = screen.getByRole("button", { name: "Actions" });
+    trigger.focus();
+    await fireEvent.click(trigger, { detail: 1 });
+    expect(trigger).not.toHaveFocus();
+    unmount();
+
+    render(MenuButtonFixture, { props: { open: true } });
+    trigger = screen.getByRole("button", { name: "Actions" });
+    trigger.focus();
+    await fireEvent.click(trigger, { detail: 0 });
+    expect(trigger).toHaveFocus();
   });
 });
