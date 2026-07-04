@@ -55,3 +55,10 @@
 </UserAvatar>
 
 <UserAvatar data-testid="custom-class" class="my-class" name="John Doe" />
+
+<UserAvatar
+  data-testid="tooltip-overflow-marker"
+  data-avatar-group-overflow="true"
+  name="Jane Roe"
+  tooltipText="Jane Roe"
+/>

@@ -209,6 +209,7 @@
     bind:open={tooltipOpen}
     on:close={releaseTooltip}
     data-overflow={groupOverflow ? "true" : undefined}
+    data-avatar-group-overflow={$$restProps["data-avatar-group-overflow"]}
   >
     <span
       bind:this={ref}
