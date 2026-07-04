@@ -1,0 +1,50 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Groups a `ComboButton`'s primary action and icon-only trigger button into
+/// a single visual unit. The divider mirrors v10's own `.bx--btn-set`
+/// technique (a box-shadow on the trigger, since adjacent buttons have no
+/// margin between them); the chevron rotates on open.
+/// @access private
+/// @group components
+@mixin combo-button {
+  .#{$prefix}--combo-button {
+    display: inline-flex;
+  }
+
+  .#{$prefix}--combo-button .#{$prefix}--combo-button__trigger:not(:focus) {
+    box-shadow: to-rem(-1px) 0 0 0 $button-separator;
+  }
+
+  .#{$prefix}--combo-button
+    .#{$prefix}--combo-button__trigger.#{$prefix}--btn--disabled {
+    box-shadow: to-rem(-1px) 0 0 0 $disabled-03;
+  }
+
+  .#{$prefix}--combo-button__trigger .#{$prefix}--btn__icon {
+    transition: transform $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--combo-button__trigger--open .#{$prefix}--btn__icon {
+    transform: rotate(180deg);
+  }
+
+  // Extra-small (Carbon React size="xs", 24px). Neither Button's "small"
+  // class (32px) nor any other Button size lands on 24px, so shrink further
+  // on top of the "small" size already passed to both buttons.
+  .#{$prefix}--combo-button--xs .#{$prefix}--btn {
+    min-height: to-rem(24px);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .#{$prefix}--combo-button--xs .#{$prefix}--btn--icon-only {
+    padding-right: to-rem(4px);
+    padding-left: to-rem(4px);
+  }
+}
+
+@include exports("combo-button") {
+  @include combo-button;
+}
