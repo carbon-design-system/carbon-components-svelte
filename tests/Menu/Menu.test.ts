@@ -48,8 +48,17 @@ describe("Menu", () => {
     await user.click(screen.getByRole("button", { name: "Trigger" }));
 
     const menu = screen.getByRole("menu");
+    expect(menu).not.toHaveClass("bx--menu--xs");
     expect(menu).not.toHaveClass("bx--menu--md");
     expect(menu).not.toHaveClass("bx--menu--lg");
+  });
+
+  it("applies the xs size modifier class", async () => {
+    render(MenuFixture, { props: { size: "xs" } });
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    expect(screen.getByRole("menu")).toHaveClass("bx--menu--xs");
   });
 
   it("applies the size modifier class", async () => {

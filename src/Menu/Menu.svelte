@@ -65,7 +65,8 @@
 
   /**
    * Specify the size of the menu, which controls each item's row height.
-   * @type {"sm" | "md" | "lg"}
+   * `"xs"` has no Carbon v10 equivalent and is hand-authored (see `css/_menu-xs.scss`).
+   * @type {"xs" | "sm" | "md" | "lg"}
    */
   export let size = "sm";
 
@@ -193,6 +194,7 @@
     style:left="auto"
     class:bx--menu={true}
     class:bx--menu--open={open}
+    class:bx--menu--xs={size === "xs"}
     class:bx--menu--md={size === "md"}
     class:bx--menu--lg={size === "lg"}
     {...$$restProps}
