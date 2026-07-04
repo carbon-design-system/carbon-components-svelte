@@ -41,6 +41,33 @@ test.describe("MenuButton", () => {
     await expect(page.getByRole("menu")).not.toBeVisible();
   });
 
+  test("does not leave the trigger focused after closing it with a mouse click", async ({
+    page,
+  }) => {
+    const trigger = page.getByRole("button", { name: "Actions" });
+    await trigger.click();
+    await trigger.click();
+
+    await expect(trigger).not.toBeFocused();
+  });
+
+  test("keeps the trigger focused after closing it with the keyboard", async ({
+    page,
+  }) => {
+    const trigger = page.getByRole("button", { name: "Actions" });
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    // dismiss.js defers registering its window listeners (including this
+    // Escape handler) past the enabling keypress by a macrotask (setTimeout),
+    // so the menu already being visible isn't enough - that happens
+    // synchronously, before the deferred registration runs. Wait past that
+    // macrotask boundary, or Escape can race the registration and be dropped.
+    await page.waitForTimeout(50);
+    await page.keyboard.press("Escape");
+
+    await expect(trigger).toBeFocused();
+  });
+
   test.describe("submenu", () => {
     test("opens on click without closing the root menu", async ({ page }) => {
       await page.getByRole("button", { name: "Actions" }).click();
