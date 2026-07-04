@@ -48,6 +48,9 @@
 
   /**
    * Specify the ARIA label for the button icon.
+   * On an icon-only button, this also drives Carbon's tooltip. If omitted,
+   * the icon-only button renders without a tooltip; supply your own
+   * `aria-label` or `aria-labelledby` for accessibility in that case.
    * @type {string}
    */
   export let iconDescription = undefined;
@@ -134,9 +137,15 @@
     ctx.declareRef(ref);
   }
   $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
+  // Without an iconDescription there is nothing to show in a tooltip or
+  // announce as the accessible name via the assistive-text span; skip the
+  // whole tooltip apparatus and let the consumer's own aria-label/
+  // aria-labelledby (passed through $$restProps) carry accessibility instead.
+  $: hasTooltipContent = hasIconOnly && Boolean(iconDescription);
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
-  $: usePortal = hasIconOnly && !hideTooltip && effectivePortalTooltip;
+  $: usePortal = hasTooltipContent && !hideTooltip && effectivePortalTooltip;
+  $: hasTooltip = hasTooltipContent && !hideTooltip && !usePortal;
 
   const tooltipId = {};
 
@@ -187,13 +196,13 @@
   }
 
   $: tooltipHidden =
-    hasIconOnly &&
+    hasTooltipContent &&
     !hideTooltip &&
     $activeButtonTooltip !== null &&
     $activeButtonTooltip !== tooltipId;
 
   function handleMouseEnter() {
-    if (hasIconOnly && !hideTooltip && !usePortal) {
+    if (hasTooltip) {
       claimActiveTooltip();
     }
   }
@@ -311,23 +320,13 @@
       kind && `bx--btn--${kind}`,
       isDisabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
-      hasIconOnly && !hideTooltip && !usePortal && "bx--tooltip__trigger",
-      hasIconOnly && !hideTooltip && !usePortal && "bx--tooltip--a11y",
-      hasIconOnly &&
-        !hideTooltip &&
-        !usePortal &&
-        tooltipPosition &&
-        `bx--btn--icon-only--${tooltipPosition}`,
-      hasIconOnly &&
-        !hideTooltip &&
-        !usePortal &&
+      hasTooltip && "bx--tooltip__trigger",
+      hasTooltip && "bx--tooltip--a11y",
+      hasTooltip && tooltipPosition && `bx--btn--icon-only--${tooltipPosition}`,
+      hasTooltip &&
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
-      hasIconOnly &&
-        !hideTooltip &&
-        !usePortal &&
-        tooltipHidden &&
-        "bx--tooltip--hidden",
+      hasTooltip && tooltipHidden && "bx--tooltip--hidden",
       hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
       $$restProps.class,
     ]
@@ -361,6 +360,7 @@
         bind:this={ref}
         {...buttonProps}
         on:click
+        on:mousedown
         on:focus
         on:focus={handlePortalFocus}
         on:blur
@@ -373,7 +373,7 @@
         on:mouseleave={handleMouseLeave}
         on:mouseleave={handlePortalMouseLeave}
       >
-        {#if hasIconOnly}
+        {#if hasIconOnly && iconDescription}
           <span class:bx--assistive-text={true} style:pointer-events="none">
             {iconDescription}
           </span>
@@ -402,6 +402,7 @@
       bind:this={ref}
       {...buttonProps}
       on:click
+      on:mousedown
       on:focus
       on:focus={handlePortalFocus}
       on:blur
@@ -414,7 +415,7 @@
       on:mouseleave={handleMouseLeave}
       on:mouseleave={handlePortalMouseLeave}
     >
-      {#if hasIconOnly}
+      {#if hasIconOnly && iconDescription}
         <span class:bx--assistive-text={true} style:pointer-events="none">
           {iconDescription}
         </span>
@@ -442,6 +443,7 @@
       bind:this={ref}
       {...buttonProps}
       on:click
+      on:mousedown
       on:focus
       on:focus={handlePortalFocus}
       on:blur
@@ -454,7 +456,7 @@
       on:mouseleave={handleMouseLeave}
       on:mouseleave={handlePortalMouseLeave}
     >
-      {#if hasIconOnly}
+      {#if hasIconOnly && iconDescription}
         <span class:bx--assistive-text={true} style:pointer-events="none">
           {iconDescription}
         </span>
@@ -482,6 +484,7 @@
     bind:this={ref}
     {...buttonProps}
     on:click
+    on:mousedown
     on:focus
     on:focus={handlePortalFocus}
     on:blur
@@ -494,7 +497,7 @@
     on:mouseleave={handleMouseLeave}
     on:mouseleave={handlePortalMouseLeave}
   >
-    {#if hasIconOnly}
+    {#if hasIconOnly && iconDescription}
       <span class:bx--assistive-text={true} style:pointer-events="none">
         {iconDescription}
       </span>
