@@ -41,6 +41,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "OverflowMenu",
       "ContextMenu",
       "MenuButton",
+      "ComboButton",
     ],
   },
   {
