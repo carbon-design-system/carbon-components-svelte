@@ -206,6 +206,26 @@ describe("Button", () => {
     expect(assistiveText).toHaveTextContent("Add item");
   });
 
+  it("should render an icon-only button with no tooltip when iconDescription is omitted", () => {
+    render(Button);
+
+    const button = screen.getByTestId("btn-icon-no-description");
+    expect(button).toHaveClass("bx--btn--icon-only");
+
+    // No tooltip apparatus without a description to show or announce.
+    expect(button).not.toHaveClass("bx--tooltip__trigger");
+    expect(button).not.toHaveClass("bx--tooltip--a11y");
+    expect(button).not.toHaveClass("bx--btn--icon-only--bottom");
+    expect(button).not.toHaveClass("bx--tooltip--align-center");
+    expect(button.querySelector(".bx--assistive-text")).not.toBeInTheDocument();
+
+    // Still accessible via a consumer-supplied aria-label.
+    expect(button).toHaveAttribute("aria-label", "Custom accessible name");
+    expect(screen.getByRole("button", { name: "Custom accessible name" })).toBe(
+      button,
+    );
+  });
+
   describe("portalTooltip", () => {
     beforeEach(() => {
       vi.useFakeTimers();

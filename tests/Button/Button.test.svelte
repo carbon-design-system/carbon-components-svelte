@@ -38,6 +38,12 @@
   iconDescription="Portal tooltip text"
 />
 
+<Button
+  data-testid="btn-icon-no-description"
+  icon={Add}
+  aria-label="Custom accessible name"
+/>
+
 <Button href="#">Link button</Button>
 
 <Button href="https://example.com" target="_blank">External link</Button>
