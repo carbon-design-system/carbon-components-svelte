@@ -307,7 +307,12 @@
                           Source code
                         </Link>
                         <Stack orientation="horizontal" gap={2} align="center">
-                          <Link inline muted href={entry.markdownHref} target="_blank">
+                          <Link
+                            inline
+                            muted
+                            href={entry.markdownHref}
+                            target="_blank"
+                          >
                             Markdown
                           </Link>
                           <CopyMarkdownButton
