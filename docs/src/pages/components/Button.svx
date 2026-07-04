@@ -77,6 +77,12 @@ Omit the label and provide an **iconDescription** for accessibility. This text i
 
 <Button iconDescription="Tooltip text" icon={Add} />
 
+### Icon-only without iconDescription
+
+If you omit `iconDescription`, the button renders without Carbon's tooltip instead of an empty one. Supply your own `aria-label` (or `aria-labelledby`) so the button stays accessible.
+
+<Button icon={Add} aria-label="Custom accessible name" />
+
 ### Icon-only link
 
 Set `href` to create an icon-only link button.
