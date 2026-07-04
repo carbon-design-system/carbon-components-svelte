@@ -55,6 +55,14 @@ The default kind is `"primary"`.
 
 Set `size` to scale the trigger button and each menu item's row height together. The default is `"md"`.
 
+### Extra small
+
+<MenuButton labelText="Actions" size="xs">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
 ### Small
 
 <MenuButton labelText="Actions" size="sm">
@@ -73,9 +81,21 @@ Set `size` to scale the trigger button and each menu item's row height together.
 
 ## Direction
 
-Set `direction` to `"top"` or `"bottom"` (default) for which side of the trigger the menu opens on. Set `intrinsicAlign` to `"start"` (default), `"center"`, or `"end"` to align the menu edge with the trigger. The menu flips when there isn't room on the preferred side. See [Menu placement](/components/Menu#placement) for gap and offset props.
+Set `direction` to `"top"` or `"bottom"` (default) for which side of the trigger the menu opens on. The menu flips to the opposite side when there isn't room on the preferred side. See [Menu placement](/components/Menu#placement) for gap and offset props.
 
-<MenuButton labelText="Actions" direction="top" intrinsicAlign="end">
+### Top
+
+<MenuButton labelText="Actions" direction="top">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
+### Alignment
+
+Set `intrinsicAlign` to `"start"` (default), `"center"`, or `"end"` to align the menu edge with the trigger.
+
+<MenuButton labelText="Actions" intrinsicAlign="end">
   <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
   <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
   <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
@@ -91,7 +111,16 @@ Set `disabled` to `true` to disable the trigger button.
 
 ## Menu items
 
-`MenuItem` takes an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups.
+`MenuItem` takes `disabled`, an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups.
+
+### Disabled
+
+Set `disabled` on a `MenuItem` to make it non-interactive.
+
+<MenuButton labelText="Actions">
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem disabled on:click={() => console.log("Copy")}>Copy</MenuItem>
+</MenuButton>
 
 ### Icons
 
