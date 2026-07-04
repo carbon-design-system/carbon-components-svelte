@@ -145,7 +145,7 @@ describe("UserAvatarGroup", () => {
     expect(wrappers[2].style.getPropertyValue("--user-avatar-index")).toBe("2");
 
     // The overflow chip (past `max={2}`) opts out of registration, so it
-    // never gets an index; it relies on the `:has()` CSS rule instead.
+    // never gets an index; it relies on the marker-class CSS rule instead.
     const overflowWrapper = root
       .querySelector(".bx--user-avatar-group__overflow")
       ?.closest<HTMLElement>(".bx--user-avatar-tooltip");

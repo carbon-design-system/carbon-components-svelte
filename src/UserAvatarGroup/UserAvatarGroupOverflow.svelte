@@ -32,6 +32,7 @@
 
 <UserAvatar
   class="bx--user-avatar-group__overflow"
+  data-avatar-group-overflow="true"
   initials={label}
   tooltipText={names}
 />

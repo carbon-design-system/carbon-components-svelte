@@ -122,6 +122,17 @@ describe("UserAvatar", () => {
     );
   });
 
+  it("forwards `data-avatar-group-overflow` to the tooltip wrapper, not only the inner avatar", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("tooltip-overflow-marker");
+    expect(avatar).toHaveAttribute("data-avatar-group-overflow", "true");
+
+    const wrapper = avatar.closest(".bx--tooltip--definition");
+    assert(wrapper);
+    expect(wrapper).toHaveAttribute("data-avatar-group-overflow", "true");
+  });
+
   it("forwards DOM events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(UserAvatar);

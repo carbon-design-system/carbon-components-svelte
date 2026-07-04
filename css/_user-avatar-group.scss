@@ -46,9 +46,11 @@
   // The "+N" overflow chip opts out of item registration (it isn't a real
   // avatar), so it never gets a `--user-avatar-index`. Pin it behind every
   // real avatar instead of letting it fall back to the same z-index as the
-  // first one.
+  // first one. `data-avatar-group-overflow` is set by `UserAvatar` on the
+  // tooltip wrapper (the direct child here), not just the inner avatar, so
+  // this reaches it without `:has()`.
   .#{$prefix}--user-avatar-group--stack-first
-    > *:has(.#{$prefix}--user-avatar-group__overflow) {
+    > [data-avatar-group-overflow="true"] {
     z-index: 0;
   }
 
