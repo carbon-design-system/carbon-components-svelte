@@ -219,12 +219,31 @@
   function updatePosition() {
     if (!mounted || !anchor || !ref) return;
 
+    // window.innerWidth/innerHeight can disagree with the document's actual
+    // rendered box in some hosting pages (observed with a carbon-components-
+    // svelte docs page, cause not fully isolated - some interaction between
+    // scrollbar accounting and the page's own CSS). Clamping to the smaller
+    // of the two avoids positioning content past the edge that's actually
+    // safe to render in, at no cost when they already agree. A zero rect
+    // (jsdom, or any environment that hasn't laid out the document) means
+    // this measurement isn't meaningful, so fall back to window.innerWidth/
+    // innerHeight unchanged rather than clamping everything to zero.
+    const docRect = document.documentElement.getBoundingClientRect();
+    const safeInnerWidth =
+      docRect.width > 0
+        ? Math.min(window.innerWidth, docRect.width)
+        : window.innerWidth;
+    const safeInnerHeight =
+      docRect.height > 0
+        ? Math.min(window.innerHeight, docRect.height)
+        : window.innerHeight;
+
     pos = floatingPosition({
       anchorRect: anchor.getBoundingClientRect(),
       floatingRect: ref.getBoundingClientRect(),
       viewport: {
-        innerWidth: window.innerWidth,
-        innerHeight: window.innerHeight,
+        innerWidth: safeInnerWidth,
+        innerHeight: safeInnerHeight,
         scrollX: window.scrollX,
         scrollY: window.scrollY,
       },
