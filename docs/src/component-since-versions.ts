@@ -11,6 +11,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   ClickableTile: "0.2.0",
   CodeSnippet: "0.2.0",
   ComboBox: "0.2.0",
+  ComboButton: "0.110.0",
   ComposedModal: "0.2.0",
   ContainedList: "0.98.0",
   ContentSwitcher: "0.2.0",

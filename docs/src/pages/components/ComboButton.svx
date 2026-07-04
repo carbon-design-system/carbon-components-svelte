@@ -1,0 +1,148 @@
+---
+components: ["ComboButton", "MenuItem", "MenuDivider"]
+description: ComboButton pairs a primary action with a menu of related secondary actions, so the most common action stays one click away.
+---
+
+<script>
+  import { ComboButton, MenuDivider, MenuItem } from "carbon-components-svelte";
+  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
+</script>
+
+## Basic
+
+Wrap `MenuItem` components in `ComboButton` and set `labelText` for the primary action button. Use the `labelChildren` slot for custom button content. Clicking the label fires `on:click`; clicking the chevron trigger opens the menu.
+
+<ComboButton labelText="Save">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+  <MenuItem on:click={() => console.log("Save and close")}>Save and close</MenuItem>
+</ComboButton>
+
+## Icon description
+
+The icon-only trigger needs its own accessible label, since it has no visible text. Override `iconDescription` to change it; the default is `"Additional actions"`.
+
+<ComboButton labelText="Save" iconDescription="More save options">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+### Tooltip position
+
+Set `tooltipPosition` to control where the trigger's tooltip appears. This is independent of `direction`, which controls where the menu opens - the two are separate concerns and can point different ways.
+
+<ComboButton labelText="Save" tooltipPosition="right">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+### No tooltip
+
+Set `iconDescription` to an empty string to render the trigger without Carbon's tooltip, the same way [Button](/components/Button#icons) handles an empty `iconDescription`. The trigger then has no accessible name of its own, so only do this when something else in the surrounding context labels it.
+
+<ComboButton labelText="Save" iconDescription="">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+## Size
+
+Set `size` to scale both buttons and each menu item's row height together. The default is `"md"`. `ComboButton` only supports the `"primary"` kind, matching Carbon React.
+
+### Extra small
+
+<ComboButton labelText="Save" size="xs">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+### Small
+
+<ComboButton labelText="Save" size="sm">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+### Large
+
+<ComboButton labelText="Save" size="lg">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+## Direction
+
+Set `direction` to `"top"` or `"bottom"` (default) for which side of the trigger the menu opens on. The menu flips to the opposite side when there isn't room on the preferred side. See [Menu placement](/components/Menu#placement) for gap and offset props.
+
+### Top
+
+<ComboButton labelText="Save" direction="top">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+### Alignment
+
+Set `intrinsicAlign` to `"start"`, `"center"`, or `"end"` (default) to align the menu edge with the trigger.
+
+<ComboButton labelText="Save" intrinsicAlign="start">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+## Disabled
+
+Set `disabled` to `true` to disable both the primary action and trigger buttons.
+
+<ComboButton labelText="Save" disabled>
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+</ComboButton>
+
+## Menu items
+
+`MenuItem` takes `disabled`, an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups. See [MenuButton](/components/MenuButton#menu-items) for the full set of examples and keyboard/hover behavior for submenus.
+
+### Disabled
+
+Set `disabled` on a `MenuItem` to make it non-interactive.
+
+<ComboButton labelText="Save">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem disabled on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+### Icons
+
+Pass a Carbon icon to `icon`.
+
+<ComboButton labelText="Save">
+  <MenuItem icon={Copy} on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+</ComboButton>
+
+### Danger
+
+Set `kind="danger"` on `MenuItem` for a destructive action.
+
+<ComboButton labelText="Save">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+  <MenuDivider />
+  <MenuItem icon={TrashCan} kind="danger" on:click={() => console.log("Delete draft")}>
+    Delete draft
+  </MenuItem>
+</ComboButton>
+
+### Nested
+
+Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu.
+
+<ComboButton labelText="Save">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem labelText="Export as">
+    <MenuItem on:click={() => console.log("PDF")}>PDF</MenuItem>
+    <MenuItem on:click={() => console.log("JPG")}>JPG</MenuItem>
+    <MenuItem on:click={() => console.log("PNG")}>PNG</MenuItem>
+  </MenuItem>
+</ComboButton>
