@@ -1,9 +1,12 @@
 <script>
   /**
    * @event {MouseEvent} click
-   */
-
-  /**
+   * @event {MouseEvent} mousedown
+   * @event {FocusEvent} focus
+   * @event {FocusEvent} blur
+   * @event {MouseEvent} mouseover
+   * @event {MouseEvent} mouseenter
+   * @event {MouseEvent} mouseleave
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "select"} trigger
@@ -113,8 +116,14 @@
   aria-expanded={open}
   aria-label={$$restProps["aria-label"] ?? labelText}
   on:mousedown={(event) => event.preventDefault()}
+  on:mousedown
   on:click
   on:click={toggle}
+  on:focus
+  on:blur
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
 >
   <slot name="labelChildren">{labelText}</slot>
 </Button>
