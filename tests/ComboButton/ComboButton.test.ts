@@ -41,6 +41,20 @@ describe("ComboButton", () => {
     expect(consoleLog).toHaveBeenCalledWith("mouseenter");
   });
 
+  it("dispatches mouseenter:trigger only from the trigger, not the primary action", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboButtonFixture);
+
+    const primaryAction = screen.getByRole("button", { name: "Save" });
+    const trigger = screen.getByRole("button", { name: "Additional actions" });
+
+    await fireEvent.mouseEnter(primaryAction);
+    expect(consoleLog).not.toHaveBeenCalledWith("mouseenter:trigger");
+
+    await fireEvent.mouseEnter(trigger);
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter:trigger");
+  });
+
   it("opens and closes the menu from the icon-only trigger", async () => {
     render(ComboButtonFixture);
 
