@@ -27,6 +27,7 @@
   on:click={() => console.log("click")}
   on:click:trigger={() => console.log("click:trigger")}
   on:mouseenter={() => console.log("mouseenter")}
+  on:mouseenter:trigger={() => console.log("mouseenter:trigger")}
   on:close={(e) => console.log("close", e.detail)}
 >
   {#each items as text}

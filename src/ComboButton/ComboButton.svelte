@@ -3,11 +3,17 @@
    * @event {MouseEvent} click
    * @event {MouseEvent} click:trigger - Fires when the menu trigger button is clicked, separate from the primary action's `click` event.
    * @event {MouseEvent} mousedown
+   * @event {MouseEvent} mousedown:trigger
    * @event {FocusEvent} focus
+   * @event {FocusEvent} focus:trigger
    * @event {FocusEvent} blur
+   * @event {FocusEvent} blur:trigger
    * @event {MouseEvent} mouseover
+   * @event {MouseEvent} mouseover:trigger
    * @event {MouseEvent} mouseenter
+   * @event {MouseEvent} mouseenter:trigger
    * @event {MouseEvent} mouseleave
+   * @event {MouseEvent} mouseleave:trigger
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "select"} trigger
@@ -101,6 +107,13 @@
   let triggerRef = null;
 
   /**
+   * @type {(name: string) => (event: Event) => void}
+   */
+  function dispatchTriggerEvent(name) {
+    return (event) => dispatch(`${name}:trigger`, event);
+  }
+
+  /**
    * @type {(event: MouseEvent) => void}
    */
   function toggleOpen(event) {
@@ -155,12 +168,18 @@
     aria-expanded={open}
     on:mousedown={(event) => event.preventDefault()}
     on:mousedown
+    on:mousedown={dispatchTriggerEvent("mousedown")}
     on:click={toggleOpen}
     on:focus
+    on:focus={dispatchTriggerEvent("focus")}
     on:blur
+    on:blur={dispatchTriggerEvent("blur")}
     on:mouseover
+    on:mouseover={dispatchTriggerEvent("mouseover")}
     on:mouseenter
+    on:mouseenter={dispatchTriggerEvent("mouseenter")}
     on:mouseleave
+    on:mouseleave={dispatchTriggerEvent("mouseleave")}
   />
   <Menu
     anchor={triggerRef}

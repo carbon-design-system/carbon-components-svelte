@@ -11,7 +11,7 @@ description: ComboButton pairs a primary action with a menu of related secondary
 
 ## Basic
 
-Wrap `MenuItem` components in `ComboButton` and set `labelText` for the primary action button. Use the `labelChildren` slot for custom button content. Clicking the label fires `on:click`; clicking the chevron trigger opens the menu and fires the separate `on:click:trigger` event.
+Wrap `MenuItem` components in `ComboButton` and set `labelText` for the primary action button. Use the `labelChildren` slot for custom button content. Clicking the label fires `on:click`; clicking the chevron trigger opens the menu and fires the separate `on:click:trigger` event. The trigger's other native events (`mousedown`, `focus`, `blur`, `mouseover`, `mouseenter`, `mouseleave`) dispatch the same way, each with a `:trigger`-suffixed counterpart alongside the shared, unscoped event.
 
 <ComboButton labelText="Save">
   <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
