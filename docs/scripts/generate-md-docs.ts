@@ -673,8 +673,7 @@ async function formatMarkdown(markdown: string) {
   try {
     const formatted = await prettierFormat(markdown, {
       parser: "markdown",
-      proseWrap: "always",
-      printWidth: 80,
+      proseWrap: "never",
     });
     return `${String(formatted).trimEnd()}\n`;
   } catch {
