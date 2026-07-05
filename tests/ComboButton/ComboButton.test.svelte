@@ -25,6 +25,8 @@
   {iconDescription}
   bind:open
   on:click={() => console.log("click")}
+  on:click:trigger={() => console.log("click:trigger")}
+  on:mouseenter={() => console.log("mouseenter")}
   on:close={(e) => console.log("close", e.detail)}
 >
   {#each items as text}
