@@ -1,9 +1,13 @@
 <script>
   /**
    * @event {MouseEvent} click
-   */
-
-  /**
+   * @event {MouseEvent} click:trigger - Fires when the menu trigger button is clicked, separate from the primary action's `click` event.
+   * @event {MouseEvent} mousedown
+   * @event {FocusEvent} focus
+   * @event {FocusEvent} blur
+   * @event {MouseEvent} mouseover
+   * @event {MouseEvent} mouseenter
+   * @event {MouseEvent} mouseleave
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "select"} trigger
@@ -73,9 +77,12 @@
    */
   export let ref = null;
 
+  import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import Menu from "../Menu/Menu.svelte";
+
+  const dispatch = createEventDispatcher();
 
   /**
    * Button's own "default"/"lg" naming is offset from the v11 size scale:
@@ -99,6 +106,7 @@
   function toggleOpen(event) {
     const wasOpen = open;
     open = !open;
+    dispatch("click:trigger", event);
     // A keyboard-activated click (Enter/Space) reports detail 0; a real mouse
     // click reports 1+. Blur only after a mouse-driven close, so the trigger
     // doesn't linger with a visible focus ring and pop its own tooltip -
@@ -122,6 +130,12 @@
     class="bx--combo-button__primary-action"
     aria-label={$$restProps["aria-label"] ?? labelText}
     on:click
+    on:mousedown
+    on:focus
+    on:blur
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
   >
     <slot name="labelChildren">{labelText}</slot>
   </Button>
@@ -140,7 +154,13 @@
     aria-haspopup="menu"
     aria-expanded={open}
     on:mousedown={(event) => event.preventDefault()}
+    on:mousedown
     on:click={toggleOpen}
+    on:focus
+    on:blur
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
   />
   <Menu
     anchor={triggerRef}
