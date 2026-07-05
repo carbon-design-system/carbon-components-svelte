@@ -19,6 +19,15 @@ describe("MenuButton", () => {
     expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
+  it("forwards mouseenter from the trigger", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MenuButtonFixture);
+
+    await fireEvent.mouseEnter(screen.getByRole("button", { name: "Actions" }));
+
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+  });
+
   it("renders the disabled state on the trigger", () => {
     render(MenuButtonFixture, { props: { disabled: true } });
 

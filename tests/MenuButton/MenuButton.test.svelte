@@ -18,6 +18,7 @@
   {disabled}
   bind:open
   on:click={() => console.log("click")}
+  on:mouseenter={() => console.log("mouseenter")}
   on:close={(e) => console.log("close", e.detail)}
 >
   {#each items as text}
