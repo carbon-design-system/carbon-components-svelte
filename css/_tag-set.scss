@@ -1,0 +1,65 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// TagSet: a row of tags that collapses into a "+N" overflow indicator with
+/// a hover tooltip once they no longer fit the available width.
+/// @access private
+/// @group components
+@mixin tag-set {
+  .#{$prefix}--tag-set {
+    position: relative;
+    max-width: 100%;
+  }
+
+  .#{$prefix}--tag-set__space {
+    min-width: 0;
+  }
+
+  // `Stack`'s `gap` is the single source of spacing between tags (including
+  // the "+N" indicator) — zero out `Tag`'s own default margin so the two
+  // mechanisms don't stack. Carbon's own margin also only zeroes
+  // `margin-left` for `:not(:first-child)`, which breaks once the indicator
+  // wraps a tag-styled span in its own element (no longer a direct sibling).
+  .#{$prefix}--tag-set__space .#{$prefix}--tag {
+    margin: 0;
+  }
+
+  .#{$prefix}--tag-set__space > * {
+    // Every child is either shown at natural width or pulled out of flow via
+    // `data-overflow` below — never squeeze one to fit, which would force its
+    // label to wrap instead of the intended single-line ellipsis truncation.
+    flex-shrink: 0;
+  }
+
+  // A tag past the fit count. Kept in the DOM (not `display: none`) so its
+  // `offsetWidth` stays measurable if the container grows and it fits again.
+  .#{$prefix}--tag-set__space [data-overflow="true"] {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--tag-set-overflow--empty {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  // `TooltipDefinition`'s definition-tooltip trigger draws a dotted
+  // underline by default (dictionary-term styling) — not appropriate for a
+  // tag-styled trigger. The extra class here outweighs the base rule's
+  // equal specificity, since this partial's rules emit before Carbon's own.
+  .#{$prefix}--tag-set-overflow
+    .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition {
+    border-bottom: none;
+  }
+
+  .#{$prefix}--tag-set-overflow__popover-trigger {
+    min-width: auto;
+    padding: 0 $carbon--spacing-03;
+  }
+}
+
+@include exports("tag-set") {
+  @include tag-set;
+}
