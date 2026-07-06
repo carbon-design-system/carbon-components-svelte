@@ -58,7 +58,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   },
   {
     label: "Content",
-    components: ["Heading", "Text", "Tag", "CodeSnippet"],
+    components: ["Heading", "Text", "Tag", "TagSet", "CodeSnippet"],
   },
   {
     label: "Forms",

@@ -1,0 +1,140 @@
+---
+components: ["TagSet"]
+description: Displays a row of tags that collapses to fit the available width, moving hidden tags into an overflow indicator with a tooltip.
+---
+
+<script>
+  import { Tag, TagSet } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Compose `TagSet` from ordinary `Tag` children. `TagSet` measures the available width and shows as many as fit.
+
+<TagSet>
+  <Tag type="red">Angular</Tag>
+  <Tag type="blue">React</Tag>
+  <Tag type="purple">Svelte</Tag>
+</TagSet>
+
+## Alignment
+
+Set `align` to change how the visible tags are positioned within the row when they don't fill the available width.
+
+### Center
+
+<TagSet align="center">
+  <Tag type="red">Angular</Tag>
+  <Tag type="blue">React</Tag>
+  <Tag type="purple">Svelte</Tag>
+</TagSet>
+
+### End
+
+<TagSet align="end">
+  <Tag type="red">Angular</Tag>
+  <Tag type="blue">React</Tag>
+  <Tag type="purple">Svelte</Tag>
+</TagSet>
+
+## Overflow
+
+Once the row runs out of space, the remaining tags collapse into a "+N" indicator. Hovering it shows the hidden labels in a tooltip.
+
+There is no fixed number of tags that triggers this. `TagSet` measures the actual pixel width available and fits as many tags as space allows, so the count that overflows depends on the container's width and each tag's label length, not a set threshold.
+
+<FileSource src="/framed/TagSet/TagSetOverflow" />
+
+### Max visible
+
+Set `maxVisible` to cap the number of visible tags regardless of how much space is available.
+
+<FileSource src="/framed/TagSet/TagSetMaxVisible" />
+
+### Multiline
+
+Set `multiline` to wrap every tag onto multiple lines instead of collapsing into an overflow indicator.
+
+<FileSource src="/framed/TagSet/TagSetMultiline" />
+
+## Tooltip alignment
+
+Set `overflowAlign` to align the tooltip relative to the "+N" indicator.
+
+### Align start
+
+<div style="max-width: 12rem;">
+  <TagSet overflowAlign="start">
+    <Tag type="red">Angular</Tag>
+    <Tag type="blue">React</Tag>
+    <Tag type="purple">Svelte</Tag>
+    <Tag type="green">Vue</Tag>
+    <Tag type="magenta">Ember</Tag>
+  </TagSet>
+</div>
+
+### Align end
+
+<div style="max-width: 12rem;">
+  <TagSet overflowAlign="end">
+    <Tag type="red">Angular</Tag>
+    <Tag type="blue">React</Tag>
+    <Tag type="purple">Svelte</Tag>
+    <Tag type="green">Vue</Tag>
+    <Tag type="magenta">Ember</Tag>
+  </TagSet>
+</div>
+
+## Tooltip direction
+
+Set `overflowDirection` to show the tooltip above the indicator instead of below.
+
+### Direction top
+
+<div style="max-width: 12rem;">
+  <TagSet overflowDirection="top">
+    <Tag type="red">Angular</Tag>
+    <Tag type="blue">React</Tag>
+    <Tag type="purple">Svelte</Tag>
+    <Tag type="green">Vue</Tag>
+    <Tag type="magenta">Ember</Tag>
+  </TagSet>
+</div>
+
+## Dismissible
+
+Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag` with `{ tag, index }` instead of taking a per-tag handler: remove the tag from your own state in response.
+
+<FileSource src="/framed/TagSet/TagSetDismissible" />
+
+## Custom overflow tooltip
+
+Override the `overflowTooltip` slot to replace the default plain-text tooltip with custom content.
+
+<FileSource src="/framed/TagSet/TagSetCustomOverflowTooltip" />
+
+## Sizes
+
+Set `size` on `TagSet` to apply it to every slotted tag (including the "+N" overflow indicator) that doesn't set its own `size`.
+
+### Small
+
+<TagSet size="sm">
+  <Tag type="red">Angular</Tag>
+  <Tag type="blue">React</Tag>
+  <Tag type="purple">Svelte</Tag>
+</TagSet>
+
+### Large
+
+<TagSet size="lg">
+  <Tag type="red">Angular</Tag>
+  <Tag type="blue">React</Tag>
+  <Tag type="purple">Svelte</Tag>
+</TagSet>
+
+## Gap
+
+Set `gap` to control the spacing between tags. Accepts a Carbon layout scale (`0`–`13`) or a CSS length string.
+
+<FileSource src="/framed/TagSet/TagSetGap" />
