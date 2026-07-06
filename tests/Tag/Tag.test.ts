@@ -42,7 +42,7 @@ describe("Tag", () => {
     render(Tag);
 
     const filterableTag = screen.getByText("Filterable");
-    expect(filterableTag).toHaveClass("bx--tag--filter");
+    expect(filterableTag.closest(".bx--tag")).toHaveClass("bx--tag--filter");
 
     const tagElement = filterableTag.closest(".bx--tag--filter");
     assert(tagElement);
@@ -130,7 +130,9 @@ describe("Tag", () => {
   it("renders large filterable tag", () => {
     render(Tag);
 
-    const largeFilterable = screen.getByText("Large filterable");
+    const largeFilterable = screen
+      .getByText("Large filterable")
+      .closest(".bx--tag");
     expect(largeFilterable).toHaveClass("bx--tag--lg");
     expect(largeFilterable).toHaveClass("bx--tag--filter");
   });
@@ -148,7 +150,9 @@ describe("Tag", () => {
   it("renders disabled filterable tag", () => {
     render(Tag);
 
-    const disabledTag = screen.getByText("Disabled filterable");
+    const disabledTag = screen
+      .getByText("Disabled filterable")
+      .closest(".bx--tag");
     expect(disabledTag).toHaveClass("bx--tag--disabled");
 
     const closeButton = screen.getByRole("button", { name: /custom title/i });
