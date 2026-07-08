@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.3/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -117,9 +117,7 @@
         "rules": {
           "correctness": {
             "noSelfAssign": "off",
-            "noDuplicateAttributes": "off",
-            "noUnusedImports": "off",
-            "noUnusedVariables": "off"
+            "noDuplicateAttributes": "off"
           },
           "complexity": {
             "noUselessUndefinedInitialization": "off"
@@ -183,6 +181,35 @@
         "rules": {
           "style": {
             "noRestrictedGlobals": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "docs/src/components/DocThemePicker.svelte",
+        "docs/src/pages/_module.svelte",
+        "docs/src/pages/component-index.svelte",
+        "src/UIShell/Header.svelte"
+      ],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "docs/src/pages/framed/NotificationQueue/NotificationQueueDeduplication.svelte",
+        "src/ComposedModal/ComposedModal.svelte",
+        "src/ContextMenu/ContextMenuOption.svelte"
+      ],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off"
           }
         }
       }
