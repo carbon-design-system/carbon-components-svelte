@@ -338,7 +338,7 @@
   >
   <div
     class:bx--header__search-menu={true}
-    aria-owns={menuId}
+    aria-owns={active ? menuId : undefined}
     aria-haspopup="menu"
   >
     <button
@@ -367,9 +367,13 @@
       id={inputId}
       role={richMenu ? "combobox" : undefined}
       aria-autocomplete="list"
-      aria-controls={menuId}
+      aria-controls={active ? menuId : undefined}
       aria-expanded={richMenu ? richMenuVisible : undefined}
-      aria-activedescendant={richMenu ? ($activeId ?? undefined) : selectedId}
+      aria-activedescendant={active
+        ? richMenu
+          ? ($activeId ?? undefined)
+          : selectedId
+        : undefined}
       bind:value
       on:change
       on:input

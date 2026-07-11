@@ -162,7 +162,9 @@ describe("HeaderSearch", () => {
         { href: "/2", text: "Result 2" },
         { href: "/3", text: "Result 3" },
       ];
-      render(HeaderSearchTest, { props: { results, selectedResultIndex: 1 } });
+      render(HeaderSearchTest, {
+        props: { active: true, results, selectedResultIndex: 1 },
+      });
 
       const searchInput = screen.getByRole("textbox");
       expect(searchInput.getAttribute("aria-activedescendant")).toMatch(
@@ -488,7 +490,7 @@ describe("HeaderSearch", () => {
 
   describe("Accessibility", () => {
     it("should have proper ARIA attributes", () => {
-      render(HeaderSearchTest);
+      render(HeaderSearchTest, { props: { active: true } });
 
       const searchContainer = screen.getByRole("search");
       expect(searchContainer).toBeInTheDocument();
@@ -498,6 +500,25 @@ describe("HeaderSearch", () => {
       expect(searchInput.getAttribute("aria-controls")).toMatch(
         /^ccs-[a-z0-9.]+-menu$/,
       );
+    });
+
+    it("should not reference a menu id via aria-owns/aria-controls/aria-activedescendant while closed", () => {
+      const { container } = render(HeaderSearchTest, {
+        props: {
+          active: false,
+          results: [
+            { id: "1", text: "Result one" },
+            { id: "2", text: "Result two" },
+          ],
+        },
+      });
+
+      const wrapper = container.querySelector(".bx--header__search-menu");
+      expect(wrapper).not.toHaveAttribute("aria-owns");
+
+      const input = container.querySelector(".bx--header__search-input");
+      expect(input).not.toHaveAttribute("aria-controls");
+      expect(input).not.toHaveAttribute("aria-activedescendant");
     });
 
     it("should have proper tabindex attributes", () => {
