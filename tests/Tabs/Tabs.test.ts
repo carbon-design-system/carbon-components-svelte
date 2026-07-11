@@ -40,6 +40,18 @@ describe("Tabs", () => {
     expect(tabsContainer).not.toHaveClass("bx--tabs--full-width");
   });
 
+  it("should not put a tabindex on the presentational <li> wrapper", () => {
+    const { container } = render(Tabs);
+
+    const presentationalItems = container.querySelectorAll(
+      'li[role="presentation"]',
+    );
+    expect(presentationalItems.length).toBeGreaterThan(0);
+    for (const li of presentationalItems) {
+      expect(li).not.toHaveAttribute("tabindex");
+    }
+  });
+
   it("should pass selected to the Tab default slot", async () => {
     render(TabSlot);
 
