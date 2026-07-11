@@ -510,6 +510,55 @@ describe("DatePicker", () => {
 
       expect(calendar).toHaveClass("open");
     });
+
+    // Regression test: axe-core flags out-of-range calendar days for
+    // insufficient color contrast because they carry no ARIA signal that
+    // they are disabled (only the meaningless flatpickr-disabled CSS class).
+    // WCAG 1.4.3 exempts text belonging to an inactive UI component, and
+    // axe-core's color-contrast check specifically skips aria-disabled="true"
+    // elements, so marking these days closes the gap correctly.
+    it("marks out-of-range calendar days as aria-disabled", async () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/01/2024",
+        minDate: new Date(2024, 2, 1),
+        maxDate: new Date(2024, 2, 31),
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      await screen.findByLabelText("calendar-container");
+
+      const disabledDays = container.querySelectorAll(
+        ".flatpickr-day.flatpickr-disabled",
+      );
+      expect(disabledDays.length).toBeGreaterThan(0);
+      for (const day of disabledDays) {
+        expect(day).toHaveAttribute("aria-disabled", "true");
+      }
+    });
+
+    it("composes a consumer-supplied onDayCreate with the default aria-disabled hook", async () => {
+      const onDayCreate = vi.fn();
+      const { container } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/01/2024",
+        minDate: new Date(2024, 2, 1),
+        maxDate: new Date(2024, 2, 31),
+        flatpickrProps: { onDayCreate },
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      await screen.findByLabelText("calendar-container");
+
+      expect(onDayCreate).toHaveBeenCalled();
+      const disabledDays = container.querySelectorAll(
+        ".flatpickr-day.flatpickr-disabled",
+      );
+      expect(disabledDays.length).toBeGreaterThan(0);
+      for (const day of disabledDays) {
+        expect(day).toHaveAttribute("aria-disabled", "true");
+      }
+    });
   });
 
   describe("bind:calendar", () => {
