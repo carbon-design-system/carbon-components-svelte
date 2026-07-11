@@ -79,7 +79,7 @@
 {:else}
   <!-- svelte-ignore a11y-interactive-supports-focus -->
   <div
-    role="row"
+    role={selection ? undefined : "row"}
     class:bx--structured-list-row={true}
     class:bx--structured-list-row--header-row={head}
     {...$$restProps}
@@ -90,7 +90,9 @@
   >
     <slot />
     {#if selection && head}
-      <StructuredListCell head style="width: 1px;">{""}</StructuredListCell>
+      <StructuredListCell head style="width: 1px;">
+        <span class:bx--visually-hidden={true}>Select row</span>
+      </StructuredListCell>
     {/if}
   </div>
 {/if}

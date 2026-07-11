@@ -4,11 +4,16 @@
 
   /** Set to `true` to prevent wrapping */
   export let noWrap = false;
+
+  import { getContext } from "svelte";
+
+  const ctx = getContext("carbon:StructuredListWrapper");
+  const selection = ctx?.selection ?? false;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
-  role={head ? "columnheader" : "cell"}
+  role={selection ? undefined : head ? "columnheader" : "cell"}
   class:bx--structured-list-th={head}
   class:bx--structured-list-td={!head}
   class:bx--structured-list-content--nowrap={noWrap}

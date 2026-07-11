@@ -51,8 +51,9 @@ describe("StructuredList", () => {
       props: { selection: true },
     });
 
-    const list = screen.getByRole("table");
+    const list = container.querySelector(".bx--structured-list");
     expect(list).toHaveClass("bx--structured-list--selection");
+    expect(screen.getByRole("radiogroup")).toBeInTheDocument();
 
     const inputs = screen.getAllByRole("radio");
     expect(inputs).toHaveLength(3);
@@ -70,6 +71,30 @@ describe("StructuredList", () => {
         width: "1px",
       });
     }
+  });
+
+  it("should not place a radio/checkbox role under a table or rowgroup role", () => {
+    const { container } = render(StructuredList, {
+      props: { selection: true },
+    });
+
+    const options = container.querySelectorAll(
+      '[role="radio"], [role="checkbox"]',
+    );
+    expect(options.length).toBeGreaterThan(0);
+    for (const option of options) {
+      expect(option.closest('[role="table"], [role="rowgroup"]')).toBeNull();
+    }
+  });
+
+  it("should give the selection-icon header cell accessible text", () => {
+    const { container } = render(StructuredList, {
+      props: { selection: true },
+    });
+
+    const headerCells = container.querySelectorAll(".bx--structured-list-th");
+    const selectionHeaderCell = headerCells[headerCells.length - 1];
+    expect(selectionHeaderCell.textContent?.trim()).not.toBe("");
   });
 
   it("should render a custom selection icon via the `icon` prop", () => {
