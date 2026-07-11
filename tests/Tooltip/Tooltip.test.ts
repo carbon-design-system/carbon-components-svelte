@@ -10,6 +10,7 @@ import TooltipEvents from "./TooltipEvents.test.svelte";
 import TooltipFooterFocus from "./TooltipFooterFocus.test.svelte";
 import TooltipFooterStandalone from "./TooltipFooterStandalone.test.svelte";
 import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
+import TooltipNoLabel from "./TooltipNoLabel.test.svelte";
 import TooltipOpen from "./TooltipOpen.test.svelte";
 import TooltipPortalDirections from "./TooltipPortalDirections.test.svelte";
 
@@ -277,6 +278,13 @@ describe("Tooltip", () => {
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Learn more" })).not.toHaveFocus();
+  });
+
+  test("should have a non-empty accessible name with no props set", () => {
+    render(TooltipNoLabel);
+
+    const trigger = screen.getByRole("button");
+    expect(trigger.getAttribute("aria-label")).toBeTruthy();
   });
 
   test("should label the interactive dialog with its trigger", () => {
