@@ -88,7 +88,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div
-  role="table"
+  role={selection ? undefined : "table"}
   class:bx--structured-list={true}
   class:bx--structured-list--selection={selection}
   class:bx--structured-list--condensed={condensed}

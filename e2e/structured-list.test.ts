@@ -7,7 +7,7 @@ test.describe("StructuredList", () => {
 
   test("renders structured list", async ({ page }) => {
     await expect(page.getByTestId("structured-list")).toBeVisible();
-    await expect(page.getByRole("table")).toBeVisible();
+    await expect(page.getByRole("radiogroup")).toBeVisible();
     await expect(page.getByText("Row A")).toBeVisible();
     await expect(page.getByText("Row B")).toBeVisible();
   });
