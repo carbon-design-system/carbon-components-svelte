@@ -246,6 +246,25 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(toolbarContent).not.toHaveAttribute("inert");
   });
 
+  it("should label each row selection checkbox", () => {
+    const { container } = render(DataTableBatchSelectionToolbar, {
+      props: { selectedRowIds: [] },
+    });
+
+    const rowCheckboxes = container.querySelectorAll(
+      'td input[type="checkbox"]',
+    );
+    expect(rowCheckboxes.length).toBeGreaterThan(0);
+    for (const checkbox of rowCheckboxes) {
+      const label = container.querySelector(`label[for="${checkbox.id}"]`);
+      const hasAccessibleName =
+        checkbox.getAttribute("aria-label") ||
+        label?.getAttribute("aria-label") ||
+        label?.textContent?.trim();
+      expect(hasAccessibleName).toBeTruthy();
+    }
+  });
+
   it("toggles inert attributes when selection changes", async () => {
     const { container, rerender } = render(DataTableBatchSelectionToolbar, {
       props: {

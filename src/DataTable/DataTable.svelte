@@ -801,6 +801,7 @@
           {#if expandable}
             <th
               scope="col"
+              id="{id}-expand"
               class:bx--table-expand={true}
               data-previous-value={expanded ? "collapsed" : undefined}
             >
@@ -830,6 +831,8 @@
                     <ChevronRight {...expandIconProps} />
                   </slot>
                 </button>
+              {:else}
+                <span class:bx--visually-hidden={true}>Expand rows</span>
               {/if}
             </th>
           {/if}
@@ -995,7 +998,7 @@
               {#if expandable}
                 <TableCell
                   class="bx--table-expand"
-                  headers="expand"
+                  headers="{id}-expand"
                   data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
                   expandedRowIdsSet.has(row.id)
                     ? "collapsed"
@@ -1059,6 +1062,7 @@
                       <InlineCheckbox
                         id={inputId}
                         name={inputName}
+                        aria-label="Select row"
                         checked={selectedRowIdsSet.has(row.id)}
                         value={row.id}
                         on:change={() => {
@@ -1224,7 +1228,7 @@
               {#if expandable}
                 <TableCell
                   class="bx--table-expand"
-                  headers="expand"
+                  headers="{id}-expand"
                   data-previous-value={isExpandable && isExpanded
                     ? "collapsed"
                     : undefined}
@@ -1283,6 +1287,7 @@
                       <InlineCheckbox
                         id={inputId}
                         name={inputName}
+                        aria-label="Select row"
                         checked={isSelected}
                         value={row.id}
                         on:change={() => {
