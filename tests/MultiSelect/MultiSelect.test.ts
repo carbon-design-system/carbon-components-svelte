@@ -104,6 +104,15 @@ describe("MultiSelect", () => {
     expect(screen.getByRole("listbox")).toBeInTheDocument();
   });
 
+  it("should not leave the option checkbox independently focusable", async () => {
+    render(MultiSelect, { props: { items } });
+    await openMenu();
+
+    const option = screen.getByRole("option", { name: "Slack" });
+    const checkbox = option.querySelector('input[type="checkbox"]');
+    expect(checkbox).toHaveAttribute("tabindex", "-1");
+  });
+
   it("should pass selected and highlighted to the default slot", async () => {
     render(MultiSelectItemSlot, { props: { selectedIds: ["1"] } });
 
