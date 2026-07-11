@@ -65,6 +65,12 @@
   export let id = `ccs-${Math.random().toString(36)}`;
 
   /**
+   * Set the tabindex for the input element.
+   * @type {number | string | undefined}
+   */
+  export let tabindex = undefined;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -144,6 +150,7 @@
       {checked}
       {disabled}
       {id}
+      {tabindex}
       bind:indeterminate
       name={effectiveName}
       required={effectiveRequired}
