@@ -1093,6 +1093,20 @@ describe("DataTable", () => {
     expect(expandedContent).toBeInTheDocument();
   });
 
+  it("should give the expand column an id referenced by every row's headers attribute", () => {
+    const { container } = render(DataTableExpandIcon);
+
+    const expandHeader = container.querySelector("th.bx--table-expand");
+    expect(expandHeader).toHaveAttribute("id");
+
+    const expandId = expandHeader?.getAttribute("id");
+    const expandCells = container.querySelectorAll("td.bx--table-expand");
+    expect(expandCells.length).toBeGreaterThan(0);
+    for (const cell of expandCells) {
+      expect(cell.getAttribute("headers")).toBe(expandId);
+    }
+  });
+
   // Styling and layout tests
   it("applies zebra stripe styling", () => {
     render(DataTable, {
