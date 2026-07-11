@@ -51,6 +51,7 @@
 
   const dispatch = createEventDispatcher();
   const label = writable(undefined);
+  const title = writable(undefined);
   const focusReturn = restoreFocus();
 
   let buttonRef = null;
@@ -100,12 +101,20 @@
     label.set(value);
   }
 
+  /**
+   * @type {(value: string | undefined) => void}
+   */
+  function updateTitle(value) {
+    title.set(value);
+  }
+
   setContext("carbon:Modal", {});
   setContext("carbon:ComposedModal", {
     closeModal,
     submit,
     declareRef,
     updateLabel,
+    updateTitle,
   });
 
   function focus(element) {
@@ -198,7 +207,7 @@
     bind:this={innerModal}
     role="dialog"
     aria-modal="true"
-    aria-label={$$props["aria-label"] ?? $label ?? undefined}
+    aria-label={$$props["aria-label"] ?? ($label || $title || undefined)}
     class:bx--modal-container={true}
     class:bx--modal-container--xs={size === "xs"}
     class:bx--modal-container--sm={size === "sm"}

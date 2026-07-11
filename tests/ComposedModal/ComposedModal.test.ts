@@ -32,6 +32,21 @@ describe("ComposedModal", () => {
     expect(screen.getByText("Test Modal")).toBeInTheDocument();
   });
 
+  it("should have an accessible name when only a title is set", () => {
+    render(ComposedModalTest, {
+      props: { open: true, headerTitle: "Modal title" },
+    });
+
+    const dialog = screen.getByRole("dialog");
+    const accessibleName =
+      dialog.getAttribute("aria-label") ||
+      (dialog.getAttribute("aria-labelledby") &&
+        document
+          .getElementById(dialog.getAttribute("aria-labelledby") ?? "")
+          ?.textContent?.trim());
+    expect(accessibleName).toBeTruthy();
+  });
+
   // Regression: ?? for aria-label so empty string is used (not fallback)
   it("uses empty aria-label when passed (nullish coalescing)", () => {
     render(ComposedModalTest, {
