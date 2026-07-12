@@ -38,7 +38,7 @@
   export let icon = /** @type {Icon} */ (Information);
 
   /** Specify the ARIA label for the tooltip button */
-  export let iconDescription = "";
+  export let iconDescription = "Show information";
 
   /** Specify the icon name attribute */
   export let iconName = "";
