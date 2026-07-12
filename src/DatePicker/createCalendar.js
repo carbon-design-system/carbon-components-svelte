@@ -87,6 +87,25 @@ function updateClasses(instance, { isMonth = false } = {}) {
 }
 
 /**
+ * Marks flatpickr's own disabled day elements (out-of-range days, and
+ * previous/next-month days that fall outside minDate/maxDate) as
+ * aria-disabled. Without this, axe-core's color-contrast check flags
+ * these days: WCAG 1.4.3 exempts inactive UI component text from the
+ * contrast requirement, but axe only recognizes that exemption via
+ * aria-disabled="true", not the flatpickr-disabled CSS class.
+ *
+ * @param {any} _dObj
+ * @param {any} _dStr
+ * @param {any} _fp
+ * @param {HTMLElement} dayElem
+ */
+function markDisabledDayAriaState(_dObj, _dStr, _fp, dayElem) {
+  if (dayElem.classList.contains("flatpickr-disabled")) {
+    dayElem.setAttribute("aria-disabled", "true");
+  }
+}
+
+/**
  * @param {FlatpickrInstance} instance
  */
 function updateMonthNode(instance) {
@@ -146,6 +165,8 @@ export async function createCalendar({ options, base, input, dispatch }) {
       : false,
   ].filter(Boolean);
 
+  const userOnDayCreate = options.onDayCreate;
+
   const config = {
     allowInput: true,
     disableMobile: true,
@@ -181,6 +202,14 @@ export async function createCalendar({ options, base, input, dispatch }) {
     },
     ...options,
     locale: resolveLocale(options.locale),
+    onDayCreate: [
+      markDisabledDayAriaState,
+      ...(Array.isArray(userOnDayCreate)
+        ? userOnDayCreate
+        : userOnDayCreate
+          ? [userOnDayCreate]
+          : []),
+    ],
   };
   return new /** @type {any} */ (flatpickr)(base, config);
 }
