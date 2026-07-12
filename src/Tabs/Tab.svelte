@@ -160,7 +160,6 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
-  tabindex="-1"
   role="presentation"
   class:bx--tabs__nav-item={true}
   class:bx--tabs__nav-item--disabled={disabled}
