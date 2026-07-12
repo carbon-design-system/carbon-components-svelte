@@ -23,9 +23,12 @@
   import { getContext } from "svelte";
   import Close from "../icons/Close.svelte";
 
-  const { closeModal, updateLabel } = getContext("carbon:ComposedModal");
+  const { closeModal, updateLabel, updateTitle } = getContext(
+    "carbon:ComposedModal",
+  );
 
   $: updateLabel(label);
+  $: updateTitle(title);
 </script>
 
 <div class:bx--modal-header={true} {...$$restProps}>
