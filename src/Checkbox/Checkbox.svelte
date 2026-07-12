@@ -71,6 +71,16 @@
   export let tabindex = undefined;
 
   /**
+   * Set to `true` to hide the input from the accessibility tree via CSS
+   * (not just tabindex/aria-hidden, which axe-core's nested-interactive
+   * check does not treat as sufficient). Use when this Checkbox is
+   * nested inside another interactive/widget-role element that already
+   * owns the checked-state semantics (e.g. a listbox option) and the
+   * checkbox itself is purely decorative.
+   */
+  export let decorative = false;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -151,6 +161,7 @@
       {disabled}
       {id}
       {tabindex}
+      style:display={decorative ? "none" : undefined}
       bind:indeterminate
       name={effectiveName}
       required={effectiveRequired}

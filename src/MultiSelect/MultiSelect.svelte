@@ -1058,6 +1058,7 @@
                     title={useTitleInItem ? itemToString(item) : undefined}
                     {...itemToInput(item)}
                     tabindex="-1"
+                    decorative
                     id="checkbox-{id}-{item.id}"
                     checked={item.isSelectAll ? allSelected : item.checked}
                     indeterminate={item.isSelectAll
@@ -1121,6 +1122,7 @@
                 title={useTitleInItem ? itemToString(item) : undefined}
                 {...itemToInput(item)}
                 tabindex="-1"
+                decorative
                 id="checkbox-{id}-{item.id}"
                 checked={item.isSelectAll ? allSelected : item.checked}
                 indeterminate={item.isSelectAll
