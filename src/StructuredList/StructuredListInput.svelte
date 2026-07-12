@@ -25,6 +25,12 @@
   export let name = "";
 
   /**
+   * Specify the tabindex
+   * @type {number | string | undefined}
+   */
+  export let tabindex = "0";
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -53,8 +59,7 @@
 <input
   bind:this={ref}
   type={multiple ? "checkbox" : "radio"}
-  tabindex="-1"
-  aria-hidden={ctx ? "true" : undefined}
+  {tabindex}
   {checked}
   {id}
   {name}
@@ -64,5 +69,11 @@
   {...$$restProps}
   on:change={() => {
     update(value);
+  }}
+  on:keydown={(event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      ref.click();
+    }
   }}
 >

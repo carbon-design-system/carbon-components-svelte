@@ -1,0 +1,27 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// Carbon's base `.bx--structured-list-input` is `display: none`, which
+// worked when the row's own <label> carried the radio/checkbox role and
+// tabindex. Now that the label is a plain wrapper (role isn't allowed on
+// <label>) and the native input is the focusable, checkbox/radio-shaped
+// control, it must stay in the tab order and accessibility tree -- visually
+// hidden the same way SelectableTile's input is, instead of display: none.
+@mixin structured-list-input-focusable {
+  .#{$prefix}--structured-list-input {
+    // The base rule sets `display: none`; CSS cascades per-property, so
+    // `@include hidden` alone (which never declares `display`) can't
+    // override it regardless of source order -- reset it explicitly.
+    display: inline-block;
+    @include hidden;
+  }
+
+  .#{$prefix}--structured-list-row:focus-within {
+    @include focus-outline("outline");
+  }
+}
+
+@include exports("structured-list-input-focusable") {
+  @include structured-list-input-focusable;
+}

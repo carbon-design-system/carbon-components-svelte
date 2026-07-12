@@ -79,7 +79,7 @@ describe("StructuredList", () => {
     });
 
     const options = container.querySelectorAll(
-      '[role="radio"], [role="checkbox"]',
+      'input[type="radio"], input[type="checkbox"]',
     );
     expect(options.length).toBeGreaterThan(0);
     for (const option of options) {
@@ -144,7 +144,7 @@ describe("StructuredList", () => {
     expect(screen.getByTestId("value").textContent).toBe("row-3-value");
   });
 
-  it("should expose selectable rows as radio with aria-checked", () => {
+  it("should expose selectable rows as native radio inputs with correct checked state", () => {
     render(StructuredList, {
       props: { selection: true, selected: "row-2-value" },
     });
@@ -152,11 +152,38 @@ describe("StructuredList", () => {
     const rows = screen.getAllByRole("radio");
     expect(rows).toHaveLength(3);
     for (const row of rows) {
-      expect(row.tagName).toBe("LABEL");
+      expect(row.tagName).toBe("INPUT");
     }
-    expect(rows[0]).toHaveAttribute("aria-checked", "false");
-    expect(rows[1]).toHaveAttribute("aria-checked", "true");
-    expect(rows[2]).toHaveAttribute("aria-checked", "false");
+    expect(rows[0]).not.toBeChecked();
+    expect(rows[1]).toBeChecked();
+    expect(rows[2]).not.toBeChecked();
+  });
+
+  it('should not put role="radio"/"checkbox" on the <label> element', () => {
+    const { container } = render(StructuredList, {
+      props: { selection: true },
+    });
+
+    const labels = container.querySelectorAll("label.bx--structured-list-row");
+    expect(labels.length).toBeGreaterThan(0);
+    for (const label of labels) {
+      expect(label).not.toHaveAttribute("role");
+      expect(label).not.toHaveAttribute("aria-checked");
+    }
+  });
+
+  it("should keep the native input focusable and keyboard-toggleable", () => {
+    const { container } = render(StructuredList, {
+      props: { selection: true },
+    });
+
+    const inputs = container.querySelectorAll(
+      'input[type="radio"], input[type="checkbox"]',
+    );
+    expect(inputs.length).toBeGreaterThan(0);
+    for (const input of inputs) {
+      expect(input).toHaveAttribute("tabindex", "0");
+    }
   });
 
   it("should handle custom content", () => {
@@ -231,26 +258,26 @@ describe("StructuredList", () => {
     expect(checkboxes).toHaveLength(3);
     expect(screen.queryAllByRole("radio")).toHaveLength(0);
     expect(screen.getByTestId("value").textContent).toBe("[]");
-    // a11y: each selectable row exposes its checked state to assistive tech.
+    // a11y: each selectable row's native input exposes its checked state.
     for (const checkbox of checkboxes) {
-      expect(checkbox).toHaveAttribute("aria-checked", "false");
+      expect(checkbox).not.toBeChecked();
     }
 
     await user.click(checkboxes[0]);
     expect(screen.getByTestId("value").textContent).toBe('["row-1-value"]');
     expect(consoleLog).toHaveBeenLastCalledWith("change", ["row-1-value"]);
-    expect(checkboxes[0]).toHaveAttribute("aria-checked", "true");
+    expect(checkboxes[0]).toBeChecked();
 
     await user.click(checkboxes[2]);
     expect(screen.getByTestId("value").textContent).toBe(
       '["row-1-value","row-3-value"]',
     );
-    expect(checkboxes[2]).toHaveAttribute("aria-checked", "true");
+    expect(checkboxes[2]).toBeChecked();
 
     // toggling re-selects off
     await user.click(checkboxes[0]);
     expect(screen.getByTestId("value").textContent).toBe('["row-3-value"]');
-    expect(checkboxes[0]).toHaveAttribute("aria-checked", "false");
+    expect(checkboxes[0]).not.toBeChecked();
   });
 });
 
