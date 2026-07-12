@@ -77,7 +77,7 @@
 <input
   bind:this={ref}
   type="checkbox"
-  tabindex="-1"
+  tabindex={disabled ? undefined : tabindex}
   class:bx--tile-input={true}
   checked={selected}
   {id}
@@ -100,16 +100,19 @@
       }
     }
   }}
+  on:keydown
+  on:keydown={(event) => {
+    if (disabled) return;
+    if (event.key === "Enter") {
+      event.preventDefault();
+      ref.click();
+    }
+  }}
 >
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <label
   for={id}
-  tabindex={disabled ? undefined : tabindex}
-  role="checkbox"
-  aria-checked={selected}
-  aria-disabled={disabled || undefined}
   class:bx--tile={true}
   class:bx--tile--selectable={true}
   class:bx--tile--is-selected={selected}
@@ -117,38 +120,9 @@
   class:bx--tile--disabled={disabled}
   {...$$restProps}
   on:click
-  on:click|preventDefault={() => {
-    if (disabled) return;
-    const newSelected = !selected;
-    selected = newSelected;
-
-    if (ref) {
-      ref.checked = newSelected;
-    }
-
-    if (hasGroup) {
-      update({ value, selected: newSelected });
-    } else {
-      if (newSelected) {
-        dispatch("select", id);
-      } else {
-        dispatch("deselect", id);
-      }
-    }
-  }}
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:keydown
-  on:keydown={(event) => {
-    if (disabled) return;
-    if (event.key === " " || event.key === "Enter") {
-      event.preventDefault();
-      if (ref) {
-        ref.click();
-      }
-    }
-  }}
 >
   <span aria-hidden="true" class:bx--tile__checkmark={true}>
     <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
