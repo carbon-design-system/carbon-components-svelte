@@ -47,11 +47,17 @@ test.describe("Modal with Dropdowns", () => {
     await menu.getByRole("option", { name: "Slack" }).click();
     await menu.getByRole("option", { name: "Email" }).click();
 
+    // The option checkbox is decorative (hidden from the accessibility
+    // tree), so query the underlying <input> directly rather than by role.
     await expect(
-      menu.getByRole("option", { name: "Slack" }).getByRole("checkbox"),
+      menu
+        .getByRole("option", { name: "Slack" })
+        .locator('input[type="checkbox"]'),
     ).toBeChecked();
     await expect(
-      menu.getByRole("option", { name: "Email" }).getByRole("checkbox"),
+      menu
+        .getByRole("option", { name: "Email" })
+        .locator('input[type="checkbox"]'),
     ).toBeChecked();
   });
 
@@ -71,13 +77,15 @@ test.describe("Modal with Dropdowns", () => {
       // Click label text, not the checkbox input. That path double-toggled.
       // biome-ignore lint/performance/noAwaitInLoops: each click must finish before the next
       await option.getByText(name, { exact: true }).click();
-      await expect(option.getByRole("checkbox")).toBeChecked();
+      // The option checkbox is decorative (hidden from the accessibility
+      // tree), so query the underlying <input> directly rather than by role.
+      await expect(option.locator('input[type="checkbox"]')).toBeChecked();
     }
 
     await Promise.all(
       picks.map((name) =>
         expect(
-          menu.getByRole("option", { name }).getByRole("checkbox"),
+          menu.getByRole("option", { name }).locator('input[type="checkbox"]'),
         ).toBeChecked(),
       ),
     );

@@ -113,6 +113,15 @@ describe("MultiSelect", () => {
     expect(checkbox).toHaveAttribute("tabindex", "-1");
   });
 
+  it("should hide the decorative option checkbox from the accessibility tree", async () => {
+    render(MultiSelect, { props: { items } });
+    await openMenu();
+
+    const option = screen.getByRole("option", { name: "Slack" });
+    const checkbox = option.querySelector('input[type="checkbox"]');
+    expect(checkbox).toHaveStyle({ display: "none" });
+  });
+
   it("should pass selected and highlighted to the default slot", async () => {
     render(MultiSelectItemSlot, { props: { selectedIds: ["1"] } });
 
@@ -1256,7 +1265,8 @@ describe("MultiSelect", () => {
       render(MultiSelect, { props });
 
       await openMenu();
-      const checkbox = screen.getByRole("checkbox", { name: "Slack" });
+      const option = screen.getByRole("option", { name: "Slack" });
+      const checkbox = option.querySelector('input[type="checkbox"]');
       expect(checkbox).toHaveAttribute("name", "contact_0");
       expect(checkbox).toHaveAttribute("value", "slack");
     });
@@ -2277,26 +2287,27 @@ describe("MultiSelect", () => {
       const optionsAfterScroll = screen.getAllByRole("option");
       expect(optionsAfterScroll.length).toBeGreaterThan(0);
 
-      // Click on the checkbox directly (more reliable than clicking the option)
-      const checkboxes = screen.getAllByRole("checkbox");
-      const firstCheckbox = checkboxes[0];
-      expect(firstCheckbox).toBeDefined();
+      // Click on the option (the option's own checkbox is decorative and
+      // hidden from the accessibility tree; the option owns selection).
+      const firstOption = optionsAfterScroll[0];
+      const firstCheckbox = firstOption.querySelector('input[type="checkbox"]');
 
       // Get the current checked state
       expect.assert(firstCheckbox instanceof HTMLInputElement);
       const wasChecked = firstCheckbox.checked;
 
-      // Click the checkbox to toggle it
-      await user.click(firstCheckbox);
+      // Click the option to toggle it
+      await user.click(firstOption);
       await tick();
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Verify selection works - the checkbox should have toggled
       await waitFor(() => {
-        const updatedCheckboxes = screen.getAllByRole("checkbox");
-        const firstUpdatedCheckbox = updatedCheckboxes[0];
-        expect.assert(firstUpdatedCheckbox instanceof HTMLInputElement);
-        expect(firstUpdatedCheckbox.checked).toBe(!wasChecked);
+        const updatedCheckbox = firstOption.querySelector(
+          'input[type="checkbox"]',
+        );
+        expect.assert(updatedCheckbox instanceof HTMLInputElement);
+        expect(updatedCheckbox.checked).toBe(!wasChecked);
       });
     });
 
@@ -2367,9 +2378,16 @@ describe("MultiSelect", () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // ArrowDown twice selects index 1, which is "Item 2" (items are 0-indexed)
-      // Verify the item is selected - check if any checkbox is checked
+      // Verify the item is selected - check if any checkbox is checked.
+      // The option checkboxes are decorative (hidden from the accessibility
+      // tree), so query the underlying <input> elements directly rather than
+      // via role.
       await waitFor(() => {
-        const checkboxes = screen.getAllByRole("checkbox");
+        const checkboxes = Array.from(
+          screen
+            .getAllByRole("option")
+            .map((option) => option.querySelector('input[type="checkbox"]')),
+        );
         const checkedCheckboxes = checkboxes.filter((cb) => {
           expect.assert(cb instanceof HTMLInputElement);
           return cb.checked;
@@ -2378,8 +2396,8 @@ describe("MultiSelect", () => {
 
         // Also verify we can find Item 2 if it's visible
         const item2Checkbox = checkboxes.find((cb) => {
-          const label = cb.closest("label");
-          return label?.textContent?.trim() === "Item 2";
+          const label = cb?.closest(".bx--checkbox-wrapper")?.textContent;
+          return label?.trim() === "Item 2";
         });
         if (item2Checkbox) {
           expect.assert(item2Checkbox instanceof HTMLInputElement);
