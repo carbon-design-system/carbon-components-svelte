@@ -6,59 +6,28 @@
   export let label = false;
 
   /**
-   * Specify the tabindex
+   * Specify the tabindex.
+   * @deprecated no longer applied here -- the row's own `<label>` isn't
+   * a tab stop anymore. Set `tabindex` on `StructuredListInput` instead,
+   * which now owns focus for the selectable row.
    * @type {number | string | undefined}
    */
   export let tabindex = "0";
 
   import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
-  import { getContext, onMount } from "svelte";
-  import { writable } from "svelte/store";
+  import { getContext } from "svelte";
   import StructuredListCell from "./StructuredListCell.svelte";
 
   const ctx = getContext("carbon:StructuredListWrapper");
-  const selectedValue = ctx?.selectedValue ?? writable(undefined);
-  const multiple = ctx?.multiple ?? false;
   const selection = ctx?.selection ?? false;
   const icon = ctx?.icon ?? CheckmarkFilled;
-
-  let labelRef;
-  let inputValue;
-
-  onMount(() => {
-    if (label && labelRef) {
-      const input = labelRef.querySelector(
-        'input[type="radio"], input[type="checkbox"]',
-      );
-      if (input) inputValue = input.value;
-    }
-  });
-
-  $: isSelectable = label && inputValue !== undefined;
-  $: ariaChecked = isSelectable
-    ? multiple
-      ? Array.isArray($selectedValue) && $selectedValue.includes(inputValue)
-      : $selectedValue === inputValue
-    : undefined;
-
-  function handleKeydown(event) {
-    if (event.key === " " || event.key === "Enter") {
-      event.preventDefault();
-      event.currentTarget.click();
-    }
-  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if label}
   <!-- svelte-ignore a11y-label-has-associated-control -->
-  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
-    bind:this={labelRef}
-    role={isSelectable ? (multiple ? "checkbox" : "radio") : undefined}
-    aria-checked={ariaChecked}
-    {tabindex}
     class:bx--structured-list-row={true}
     class:bx--structured-list-row--header-row={head}
     {...$$restProps}
@@ -66,8 +35,6 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
-    on:keydown
-    on:keydown={handleKeydown}
   >
     <slot />
     {#if selection}

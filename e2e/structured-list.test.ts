@@ -19,4 +19,16 @@ test.describe("StructuredList", () => {
 
     await expect(page.getByTestId("selected-value")).toHaveText("a");
   });
+
+  test("selects row via Tab + Space keyboard navigation", async ({ page }) => {
+    await expect(page.getByTestId("selected-value")).toHaveText("none");
+
+    const firstRadio = page.getByRole("radio").first();
+    await firstRadio.focus();
+    await expect(firstRadio).toBeFocused();
+
+    await page.keyboard.press("Space");
+
+    await expect(page.getByTestId("selected-value")).toHaveText("a");
+  });
 });
