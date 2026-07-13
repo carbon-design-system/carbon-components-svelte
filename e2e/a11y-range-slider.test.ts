@@ -6,21 +6,18 @@ test.describe("RangeSlider a11y", () => {
     await page.goto("/range-slider.html");
     await expect(page.getByTestId("range-slider")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations after changing the lower bound", async ({
-    page,
-  }) => {
-    await page.goto("/range-slider.html");
     await page.getByRole("slider", { name: "Lower bound" }).focus();
     await page.keyboard.press("ArrowRight");
     await expect(page.getByTestId("value-display")).toHaveText("21");
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const changedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(changedResults.violations).toEqual([]);
   });
 });

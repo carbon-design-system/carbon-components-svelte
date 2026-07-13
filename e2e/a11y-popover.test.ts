@@ -6,20 +6,17 @@ test.describe("Popover a11y", () => {
     await page.goto("/popover.html");
     await expect(page.getByTestId("open-popover")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations when open", async ({
-    page,
-  }) => {
-    await page.goto("/popover.html");
     await page.getByTestId("open-popover").click();
     await expect(page.getByTestId("popover-content")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const openResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(openResults.violations).toEqual([]);
   });
 });

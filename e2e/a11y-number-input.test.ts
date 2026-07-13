@@ -6,22 +6,19 @@ test.describe("NumberInput a11y", () => {
     await page.goto("/number-input.html");
     await expect(page.getByTestId("number-input-quantity")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations after incrementing", async ({
-    page,
-  }) => {
-    await page.goto("/number-input.html");
     await page
       .getByRole("button", { name: "Increment number" })
       .first()
       .click();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const incrementedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(incrementedResults.violations).toEqual([]);
   });
 });

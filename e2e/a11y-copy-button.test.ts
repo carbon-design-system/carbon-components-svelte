@@ -6,20 +6,17 @@ test.describe("CopyButton a11y", () => {
     await page.goto("/copy-button.html");
     await expect(page.getByTestId("copy-button")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations after copying", async ({
-    page,
-  }) => {
-    await page.goto("/copy-button.html");
     await page.getByRole("button", { name: "Copy to clipboard" }).click();
     await expect(page.getByTestId("copied-value")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const copiedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(copiedResults.violations).toEqual([]);
   });
 });

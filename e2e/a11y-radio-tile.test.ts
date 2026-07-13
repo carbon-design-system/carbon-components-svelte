@@ -6,20 +6,17 @@ test.describe("RadioTile a11y", () => {
     await page.goto("/radio-tile.html");
     await expect(page.getByTestId("radio-tile-group")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations after selecting a tile", async ({
-    page,
-  }) => {
-    await page.goto("/radio-tile.html");
     await page.getByTestId("radio-tile-a").click();
     await expect(page.getByTestId("selected-value")).toHaveText("a");
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const selectedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(selectedResults.violations).toEqual([]);
   });
 });

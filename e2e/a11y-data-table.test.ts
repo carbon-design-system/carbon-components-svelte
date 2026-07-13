@@ -6,30 +6,22 @@ test.describe("DataTable a11y", () => {
     await page.goto("/data-table.html");
     await expect(page.getByTestId("data-table-basic")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations after sorting a column", async ({
-    page,
-  }) => {
-    await page.goto("/data-table.html");
     const sortTable = page.getByTestId("data-table-sort");
     await sortTable.getByRole("button", { name: /Name/ }).click();
     await expect(
       sortTable.locator("th[aria-sort]").filter({ hasText: "Name" }),
     ).toHaveAttribute("aria-sort", "ascending");
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const sortedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(sortedResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations with a row expanded", async ({
-    page,
-  }) => {
-    await page.goto("/data-table.html");
     const expandTable = page.getByTestId("data-table-expand");
     await expandTable
       .getByRole("button", { name: "Expand current row" })
@@ -37,8 +29,9 @@ test.describe("DataTable a11y", () => {
       .click();
     await expect(page.getByTestId("expanded-detail").first()).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const expandedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(expandedResults.violations).toEqual([]);
   });
 });

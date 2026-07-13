@@ -6,20 +6,17 @@ test.describe("ContainedList a11y", () => {
     await page.goto("/contained-list.html");
     await expect(page.getByTestId("contained-list")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations after clicking an item", async ({
-    page,
-  }) => {
-    await page.goto("/contained-list.html");
     await page.getByText("Item 1").click();
     await expect(page.getByTestId("clicked-item")).toHaveText("1");
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const clickedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(clickedResults.violations).toEqual([]);
   });
 });

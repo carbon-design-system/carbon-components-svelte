@@ -6,23 +6,20 @@ test.describe("PasswordInput a11y", () => {
     await page.goto("/password-input.html");
     await expect(page.getByTestId("password-input")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations after revealing the password", async ({
-    page,
-  }) => {
-    await page.goto("/password-input.html");
     await page.getByRole("button", { name: "Show password" }).click();
     await expect(page.getByTestId("password-input")).toHaveAttribute(
       "type",
       "text",
     );
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const revealedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(revealedResults.violations).toEqual([]);
   });
 });

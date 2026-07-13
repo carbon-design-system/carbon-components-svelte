@@ -2,27 +2,29 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 test.describe("Dialog a11y", () => {
-  test("has no detectable accessibility violations with a modal dialog open", async ({
-    page,
-  }) => {
+  test("has no detectable accessibility violations", async ({ page }) => {
     await page.goto("/dialog.html");
+
     await page.getByTestId("open-modal").click();
     await expect(page.getByTestId("modal-focus-target")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const modalResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(modalResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
+    // Native <dialog> closes on Escape by default; close the modal before
+    // opening the non-modal one, since a modal dialog blocks interaction
+    // with everything outside it.
+    await page.keyboard.press("Escape");
+    await expect(page.getByTestId("modal-focus-target")).toBeHidden();
 
-  test("has no detectable accessibility violations with a non-modal dialog open", async ({
-    page,
-  }) => {
-    await page.goto("/dialog.html");
     await page.getByTestId("open-non-modal").click();
     await expect(page.getByText("Non-modal content")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const nonModalResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(nonModalResults.violations).toEqual([]);
   });
 });

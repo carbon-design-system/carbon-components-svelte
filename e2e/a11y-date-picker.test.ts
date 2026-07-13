@@ -6,20 +6,17 @@ test.describe("DatePicker a11y", () => {
     await page.goto("/date-picker.html");
     await expect(page.getByTestId("date-picker-meeting")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations with the calendar open", async ({
-    page,
-  }) => {
-    await page.goto("/date-picker.html");
     await page.getByTestId("date-picker-meeting").click();
     await expect(page.locator(".flatpickr-calendar.open")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const openResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(openResults.violations).toEqual([]);
   });
 });

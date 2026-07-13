@@ -6,20 +6,17 @@ test.describe("NotificationQueue a11y", () => {
     await page.goto("/notification-queue.html");
     await expect(page.getByTestId("notification-queue-root")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations with a toast visible", async ({
-    page,
-  }) => {
-    await page.goto("/notification-queue.html");
     await page.getByTestId("nq-add").click();
     await expect(page.getByText("Toast A")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const toastResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(toastResults.violations).toEqual([]);
   });
 });

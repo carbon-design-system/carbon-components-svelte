@@ -6,15 +6,11 @@ test.describe("RadioButtonGroup a11y", () => {
     await page.goto("/radio-button-group.html");
     await expect(page.getByTestId("radio-group-choice")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations after selecting a different option", async ({
-    page,
-  }) => {
-    await page.goto("/radio-button-group.html");
     await page.getByRole("radio", { name: "Option Two" }).click({
       force: true,
     });
@@ -22,8 +18,9 @@ test.describe("RadioButtonGroup a11y", () => {
       "Selected: two",
     );
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const selectedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(selectedResults.violations).toEqual([]);
   });
 });

@@ -6,15 +6,11 @@ test.describe("CodeSnippet a11y", () => {
     await page.goto("/code-snippet.html");
     await expect(page.getByTestId("snippet-single")).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    const staticResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(staticResults.violations).toEqual([]);
 
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has no detectable accessibility violations when expanded", async ({
-    page,
-  }) => {
-    await page.goto("/code-snippet.html");
     await page
       .getByTestId("multi-snippet")
       .getByRole("button", { name: "Show more" })
@@ -25,8 +21,9 @@ test.describe("CodeSnippet a11y", () => {
       }),
     ).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
+    const expandedResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(expandedResults.violations).toEqual([]);
   });
 });
