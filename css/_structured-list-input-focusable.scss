@@ -26,6 +26,7 @@
     display: table-cell;
     position: relative;
     width: 1px;
+    box-sizing: border-box;
   }
 
   .#{$prefix}--structured-list-input {
@@ -35,6 +36,20 @@
 
   .#{$prefix}--structured-list-row:focus-within {
     @include focus-outline("outline");
+  }
+
+  // Under `border-collapse: collapse`, every column's top border is
+  // resolved independently against the column above it. Carbon's hover
+  // rule below only adds `border-top` to `.bx--structured-list-td`
+  // cells, so the wrapper's column -- lacking that border -- resolves
+  // to a different edge than its neighbors, showing as a 1px seam right
+  // where the wrapper sits. Giving the wrapper the identical
+  // conditional border keeps every column's top edge resolving the same
+  // way, hover or not.
+  .#{$prefix}--structured-list--selection
+    .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
+    > .#{$prefix}--structured-list-input-wrapper {
+    border-top: 1px solid $ui-01;
   }
 
   // Carbon's base CSS fills the selection icon via
