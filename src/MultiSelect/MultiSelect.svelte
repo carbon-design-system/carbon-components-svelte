@@ -822,6 +822,7 @@
             } else if (event.key === "Escape") {
               close("escape-key");
             } else if (event.key === " ") {
+              if (readonly) event.preventDefault();
               if (!open) open = true;
             } else if (event.key === "Backspace" && value === "") {
               selectedIds = [];

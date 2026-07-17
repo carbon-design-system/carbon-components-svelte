@@ -2882,6 +2882,34 @@ describe("MultiSelect", () => {
       expect(screen.getByRole("listbox")).toBeInTheDocument();
     });
 
+    it("prevents the browser default (page scroll) on Space when readonly + filterable", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact",
+          readonly: true,
+          filterable: true,
+          placeholder: "Select",
+        },
+      });
+
+      const input = screen.getByRole("combobox");
+
+      // A readonly input cannot insert a space, so an un-prevented Space falls
+      // through to the browser's default page scroll. The handler must
+      // preventDefault while still opening the menu for review.
+      const event = new KeyboardEvent("keydown", {
+        key: " ",
+        bubbles: true,
+        cancelable: true,
+      });
+      input.dispatchEvent(event);
+      await tick();
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
     it("does not toggle a selection when an option is clicked while readonly", async () => {
       render(MultiSelect, {
         props: {
