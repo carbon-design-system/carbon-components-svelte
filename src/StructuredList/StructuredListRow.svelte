@@ -14,8 +14,8 @@
    */
   export let tabindex = "0";
 
-  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import { getContext } from "svelte";
+  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import StructuredListCell from "./StructuredListCell.svelte";
 
   const ctx = getContext("carbon:StructuredListWrapper");
