@@ -235,6 +235,26 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["carbon-icons-svelte", "carbon-icons-svelte/**"],
+                    "message": "Use the local icon in src/icons instead of importing from carbon-icons-svelte."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   ]
 }
