@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.110.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.110.0...v0.110.1) (2026-07-17)
+
+### Bug Fixes
+
+- **composed-modal:** fall back to title for the dialog's accessible name (#3428) ([636098d](https://github.com/carbon-design-system/carbon-components-svelte/commit/636098dccd96410bd062fdb8986e5e068fe5f1c0))
+- **data-table:** label row checkboxes and fix expand column headers (#3424) ([1e9d588](https://github.com/carbon-design-system/carbon-components-svelte/commit/1e9d58844c74004d9886971d3da3f08941c94635))
+- **date-picker:** mark out-of-range calendar days as aria-disabled (#3425) ([814400a](https://github.com/carbon-design-system/carbon-components-svelte/commit/814400aecdd75e1e0ef7d156a2e8f87ba3ff1cd0))
+- **multi-select:** hide decorative option checkbox via CSS (#3430) ([56df9fe](https://github.com/carbon-design-system/carbon-components-svelte/commit/56df9fe205b78654ad8ea3e530ecbdbc0b034cac))
+- **multi-select:** stop option checkboxes from being independently focusable (#3421) ([113ed03](https://github.com/carbon-design-system/carbon-components-svelte/commit/113ed03cd7e16fe3d06222b63fc28909b973e66f))
+- **select:** restore placeholder when options change with nothing selected (#3437) ([926dc15](https://github.com/carbon-design-system/carbon-components-svelte/commit/926dc159a0568afce11853863d5e9bff9e61164b))
+- **selectable-tile:** `SelectableTile` does not use incorrect `role="checkbox"` (#3427) ([e5a9c2c](https://github.com/carbon-design-system/carbon-components-svelte/commit/e5a9c2c9e54059e4d1bd68e8191e3ff82eebc34b))
+- **structured-list:** import inline `CheckmarkFilled` icon ([f285ce1](https://github.com/carbon-design-system/carbon-components-svelte/commit/f285ce13bc94ef20cbacec4a5ba148ab46fbe8cf)), closes [#3434](https://github.com/carbon-design-system/carbon-components-svelte/issues/3434)
+- **structured-list:** move radio/checkbox role off selectable row (#3431) ([cfb019c](https://github.com/carbon-design-system/carbon-components-svelte/commit/cfb019c461d1ccc6e97a1b8b830ff2a6095f39aa))
+- **structured-list:** stop mixing table and radio/checkbox ARIA roles (#3420) ([881d19d](https://github.com/carbon-design-system/carbon-components-svelte/commit/881d19dbe6589ce1e6b6d9c2296db50c96b29b4c))
+- **tabs:** remove tabindex from the presentational `<li>` wrapper (#3422) ([3f93599](https://github.com/carbon-design-system/carbon-components-svelte/commit/3f935997c392dbc303493a1563ffc755a1dc8509))
+- **tooltip:** default `iconDescription` is "Show information" (#3423) ([1941df8](https://github.com/carbon-design-system/carbon-components-svelte/commit/1941df8f49aa1bd840558b1b50165796ab6b0c1f))
+- **ui-shell:** stop `HeaderSearch` referencing non-existent menu id (#3426) ([a523ed3](https://github.com/carbon-design-system/carbon-components-svelte/commit/a523ed3b95526ea9e9f775e7e743fc006f673b92))
+
 ### [0.110.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.109.0...v0.110.0) (2026-07-10)
 
 ### ⚠ BREAKING CHANGES
