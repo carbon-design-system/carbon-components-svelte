@@ -8,17 +8,50 @@
 // <label>) and the native input is the focusable, checkbox/radio-shaped
 // control, it must stay in the tab order and accessibility tree -- visually
 // hidden the same way SelectableTile's input is, instead of display: none.
+//
+// The input renders as a sibling of the row's `.bx--structured-list-td`
+// cells (inside the CSS-table `.bx--structured-list-row`). Any non-`none`
+// display value on that raw sibling -- regardless of position -- makes the
+// browser's table auto-layout allocate it an oversized anonymous column,
+// opening a visible gap between cells. Giving the wrapper an explicit
+// `display: table-cell` makes it a real, correctly-sized column instead of
+// an anonymous one. Native radio/checkbox inputs can't take `table-cell`
+// display themselves (browsers force them back to `inline-block`), so the
+// wrapper carries the table-cell display; the clipping that hides the input
+// stays on the input itself, since a table-cell box is stretched to the
+// row's height regardless of its own `height`, which would defeat a 1px
+// clip applied to the wrapper.
 @mixin structured-list-input-focusable {
+  .#{$prefix}--structured-list-input-wrapper {
+    display: table-cell;
+    position: relative;
+    width: 1px;
+  }
+
   .#{$prefix}--structured-list-input {
-    // The base rule sets `display: none`; CSS cascades per-property, so
-    // `@include hidden` alone (which never declares `display`) can't
-    // override it regardless of source order -- reset it explicitly.
     display: inline-block;
     @include hidden;
   }
 
   .#{$prefix}--structured-list-row:focus-within {
     @include focus-outline("outline");
+  }
+
+  // Carbon's base CSS fills the selection icon via
+  // `.bx--structured-list-input:checked + .bx--structured-list-td`, an
+  // adjacent-sibling selector that requires the input to be a direct
+  // sibling of the cell. Wrapping the input for the table-layout fix above
+  // breaks that adjacency. `:has()` would restore it, but it's unsupported
+  // at the Svelte 5 browser baseline (Safari 14, Chrome 87 -- see
+  // _datepicker.scss), so instead StructuredListInput mirrors `checked`
+  // onto the wrapper itself, keeping the same adjacent-sibling shape.
+  .#{$prefix}--structured-list-input-wrapper--checked
+    + .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-svg,
+  .#{$prefix}--structured-list-input-wrapper--checked
+    + .#{$prefix}--structured-list-td
+    .#{$prefix}--structured-list-svg {
+    fill: $icon-01;
   }
 }
 
