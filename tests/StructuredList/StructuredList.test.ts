@@ -159,6 +159,45 @@ describe("StructuredList", () => {
     expect(rows[2]).not.toBeChecked();
   });
 
+  it("should wrap the native input in a table-cell so it doesn't leave a stray anonymous column", () => {
+    // Regression: an unwrapped, visually-hidden input sitting directly
+    // between two `.bx--structured-list-td` cells makes the browser's CSS
+    // table auto-layout allocate it an oversized anonymous column, opening
+    // a visible gap between cells. The wrapper must be a real table cell.
+    const { container } = render(StructuredList, {
+      props: { selection: true, selected: "row-2-value" },
+    });
+
+    const wrappers = container.querySelectorAll(
+      ".bx--structured-list-input-wrapper",
+    );
+    expect(wrappers.length).toBeGreaterThan(0);
+    for (const wrapper of wrappers) {
+      expect(wrapper.tagName).toBe("SPAN");
+      expect(wrapper.querySelector('input[type="radio"]')).not.toBeNull();
+      expect(
+        wrapper.parentElement?.classList.contains("bx--structured-list-row"),
+      ).toBe(true);
+    }
+
+    const checkedWrapper = screen
+      .getByRole("radio", { checked: true })
+      .closest(".bx--structured-list-input-wrapper");
+    expect(checkedWrapper).toHaveClass(
+      "bx--structured-list-input-wrapper--checked",
+    );
+
+    const uncheckedWrappers = [...wrappers].filter(
+      (wrapper) => wrapper !== checkedWrapper,
+    );
+    expect(uncheckedWrappers.length).toBeGreaterThan(0);
+    for (const wrapper of uncheckedWrappers) {
+      expect(wrapper).not.toHaveClass(
+        "bx--structured-list-input-wrapper--checked",
+      );
+    }
+  });
+
   it('should not put role="radio"/"checkbox" on the <label> element', () => {
     const { container } = render(StructuredList, {
       props: { selection: true },

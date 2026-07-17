@@ -56,24 +56,29 @@
     : $selectedValue === value;
 </script>
 
-<input
-  bind:this={ref}
-  type={multiple ? "checkbox" : "radio"}
-  {tabindex}
-  {checked}
-  {id}
-  {name}
-  {title}
-  {value}
-  class:bx--structured-list-input={true}
-  {...$$restProps}
-  on:change={() => {
-    update(value);
-  }}
-  on:keydown={(event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      ref.click();
-    }
-  }}
+<span
+  class:bx--structured-list-input-wrapper={true}
+  class:bx--structured-list-input-wrapper--checked={checked}
 >
+  <input
+    bind:this={ref}
+    type={multiple ? "checkbox" : "radio"}
+    {tabindex}
+    {checked}
+    {id}
+    {name}
+    {title}
+    {value}
+    class:bx--structured-list-input={true}
+    {...$$restProps}
+    on:change={() => {
+      update(value);
+    }}
+    on:keydown={(event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        ref.click();
+      }
+    }}
+  >
+</span>
