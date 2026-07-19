@@ -2,9 +2,9 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>heading</title>
     <g id="heading" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="h1" fill="#161616" x="76" y="48" width="140" height="14"></rect>
-        <rect id="h2" fill="#525252" x="76" y="78" width="110" height="10"></rect>
-        <rect id="h3" fill="#A8A8A8" x="76" y="102" width="88" height="8"></rect>
-        <rect id="h4" fill="#C6C6C6" x="76" y="124" width="64" height="6"></rect>
+        <rect id="h1" fill="var(--cds-icon-primary, #161616)" x="76" y="48" width="140" height="14"></rect>
+        <rect id="h2" fill="var(--cds-text-secondary, #525252)" x="76" y="78" width="110" height="10"></rect>
+        <rect id="h3" fill="var(--cds-text-placeholder, #a8a8a8)" x="76" y="102" width="88" height="8"></rect>
+        <rect id="h4" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="124" width="64" height="6"></rect>
     </g>
 </svg>

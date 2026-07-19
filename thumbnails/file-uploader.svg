@@ -2,13 +2,13 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>file-uploader</title>
     <g id="file-uploader" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="label" fill="#C6C6C6" x="76" y="48" width="90" height="8"></rect>
-        <rect id="drop-zone" fill="none" stroke="#8D8D8D" stroke-width="1.5" stroke-dasharray="4 3" x="76" y="64" width="168" height="50"></rect>
-        <path id="arrow-shaft" d="M160 93L160 83" stroke="#525252" stroke-width="1.25" stroke-linecap="square"></path>
-        <path id="arrow-head" d="M157 85L160 82L163 85" stroke="#525252" stroke-width="1.25" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
-        <path id="tray" d="M154 93L154 96L166 96L166 93" stroke="#525252" stroke-width="1.25" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
-        <rect id="file-row" fill="#F4F4F4" x="76" y="124" width="168" height="28"></rect>
-        <rect id="file-name" fill="#A8A8A8" x="88" y="134" width="80" height="8"></rect>
-        <path id="success-check" d="M227 138L230 141L236 134" stroke="#24A148" stroke-width="1.5" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
+        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="48" width="90" height="8"></rect>
+        <rect id="drop-zone" fill="none" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-dasharray="4 3" x="76" y="64" width="168" height="50"></rect>
+        <path id="arrow-shaft" d="M160 93L160 83" stroke="var(--cds-text-secondary, #525252)" stroke-width="1.25" stroke-linecap="square"></path>
+        <path id="arrow-head" d="M157 85L160 82L163 85" stroke="var(--cds-text-secondary, #525252)" stroke-width="1.25" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
+        <path id="tray" d="M154 93L154 96L166 96L166 93" stroke="var(--cds-text-secondary, #525252)" stroke-width="1.25" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
+        <rect id="file-row" fill="var(--cds-field-01, #f4f4f4)" x="76" y="124" width="168" height="28"></rect>
+        <rect id="file-name" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="134" width="80" height="8"></rect>
+        <path id="success-check" d="M227 138L230 141L236 134" stroke="var(--cds-support-success, #24a148)" stroke-width="1.5" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
     </g>
 </svg>

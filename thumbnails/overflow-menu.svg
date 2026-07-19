@@ -10,17 +10,17 @@
         </filter>
     </defs>
     <g id="overflow-menu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="trigger" fill="#F4F4F4" x="80" y="36" width="32" height="32"></rect>
-        <g id="overflow-icon" transform="translate(88, 44) scale(0.5)" fill="#161616">
+        <rect id="trigger" fill="var(--cds-field-01, #f4f4f4)" x="80" y="36" width="32" height="32"></rect>
+        <g id="overflow-icon" transform="translate(88, 44) scale(0.5)" fill="var(--cds-icon-primary, #161616)">
             <circle cx="16" cy="8" r="2"></circle>
             <circle cx="16" cy="16" r="2"></circle>
             <circle cx="16" cy="24" r="2"></circle>
         </g>
         <use xlink:href="#panel-shape" fill="black" fill-opacity="1" filter="url(#panel-shadow)"></use>
-        <use xlink:href="#panel-shape" fill="#FFFFFF"></use>
-        <rect id="item-1" fill="#525252" x="92" y="78" width="70" height="8"></rect>
-        <rect id="item-2" fill="#A8A8A8" x="92" y="100" width="90" height="8"></rect>
-        <rect id="divider" fill="#E0E0E0" x="80" y="118" width="160" height="1"></rect>
-        <rect id="item-danger" fill="#DA1E28" x="92" y="126" width="60" height="8"></rect>
+        <use xlink:href="#panel-shape" fill="var(--cds-ui-02, #ffffff)"></use>
+        <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="92" y="78" width="70" height="8"></rect>
+        <rect id="item-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="92" y="100" width="90" height="8"></rect>
+        <rect id="divider" fill="var(--cds-border-subtle, #e0e0e0)" x="80" y="118" width="160" height="1"></rect>
+        <rect id="item-danger" fill="var(--cds-support-error, #da1e28)" x="92" y="126" width="60" height="8"></rect>
     </g>
 </svg>

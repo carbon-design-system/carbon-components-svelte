@@ -2,7 +2,7 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>loading</title>
     <g id="loading" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <circle id="track" cx="160" cy="90" r="18" stroke="#E0E0E0" stroke-width="3" fill="none"></circle>
-        <circle id="indicator" cx="160" cy="90" r="18" stroke="#0F62FE" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="42 114" transform="rotate(-90 160 90)"></circle>
+        <circle id="track" cx="160" cy="90" r="18" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="3" fill="none"></circle>
+        <circle id="indicator" cx="160" cy="90" r="18" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="42 114" transform="rotate(-90 160 90)"></circle>
     </g>
 </svg>

@@ -10,15 +10,15 @@
         </filter>
     </defs>
     <g id="toggletip" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="label" fill="#525252" x="88" y="122" width="70" height="8"></rect>
-        <g id="information" transform="translate(168, 116) scale(0.5)" fill="#161616">
+        <rect id="label" fill="var(--cds-text-secondary, #525252)" x="88" y="122" width="70" height="8"></rect>
+        <g id="information" transform="translate(168, 116) scale(0.5)" fill="var(--cds-icon-primary, #161616)">
             <path d="M17 22L17 14 13 14 13 16 15 16 15 22 12 22 12 24 20 24 20 22 17 22zM16 8a1.5 1.5 0 101.5 1.5A1.5 1.5 0 0016 8z"></path>
             <path d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"></path>
         </g>
         <use xlink:href="#bubble-shape" fill="black" fill-opacity="1" filter="url(#bubble-shadow)"></use>
-        <use xlink:href="#bubble-shape" fill="#3D3D3D"></use>
-        <polygon id="caret" fill="#3D3D3D" points="171 106 179 106 175 112"></polygon>
-        <rect id="text-1" fill="#BEBEBE" x="113" y="68" width="80" height="6"></rect>
-        <rect id="text-2" fill="#BEBEBE" x="113" y="82" width="56" height="6"></rect>
+        <use xlink:href="#bubble-shape" fill="var(--cds-background-inverse, #3d3d3d)"></use>
+        <polygon id="caret" fill="var(--cds-background-inverse, #3d3d3d)" points="171 106 179 106 175 112"></polygon>
+        <rect id="text-1" fill="var(--cds-text-inverse, #bebebe)" x="113" y="68" width="80" height="6"></rect>
+        <rect id="text-2" fill="var(--cds-text-inverse, #bebebe)" x="113" y="82" width="56" height="6"></rect>
     </g>
 </svg>

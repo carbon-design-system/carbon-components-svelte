@@ -13,7 +13,7 @@
     <g id="tooltip-icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group-56-Copy" transform="translate(100.000000, 78.700000)">
             <use xlink:href="#bubble-shape" fill="black" fill-opacity="1" filter="url(#bubble-shadow)"></use>
-            <use xlink:href="#bubble-shape" fill="#3D3D3D"></use>
+            <use xlink:href="#bubble-shape" fill="var(--cds-background-inverse, #3d3d3d)"></use>
             <g id="Group" transform="translate(0.000000, 4.300000)">
                 <g id="information" transform="translate(0.937500, 0.937500)">
                     <mask id="mask-2" fill="white">
@@ -22,13 +22,13 @@
                     <use id="Mask" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
                     <g id="Group" mask="url(#mask-2)">
                         <g transform="translate(-0.937500, -0.937500)" id="icon-color">
-                            <rect id="Rectangle-3-Copy" fill="#161616" x="0" y="0" width="37.5" height="37.5"></rect>
+                            <rect id="Rectangle-3-Copy" fill="var(--cds-icon-primary, #161616)" x="0" y="0" width="37.5" height="37.5"></rect>
                         </g>
                     </g>
                 </g>
                 <rect id="transparent-rectangle" x="0" y="0" width="15" height="15"></rect>
             </g>
-            <rect id="Rectangle-Copy" fill="#BEBEBE" x="35" y="9.3" width="59" height="5"></rect>
+            <rect id="Rectangle-Copy" fill="var(--cds-text-inverse, #bebebe)" x="35" y="9.3" width="59" height="5"></rect>
         </g>
     </g>
 </svg>

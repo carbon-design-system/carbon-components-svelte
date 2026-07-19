@@ -2,7 +2,7 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>text</title>
     <g id="text" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <text id="eyebrow" fill="#525252" font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0.32" x="76" y="82">Carbon Components Svelte</text>
-        <text id="body" fill="#161616" font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" letter-spacing="0.16" x="76" y="106">Built for Svelte</text>
+        <text id="eyebrow" fill="var(--cds-text-secondary, #525252)" font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" letter-spacing="0.32" x="76" y="82">Carbon Components Svelte</text>
+        <text id="body" fill="var(--cds-icon-primary, #161616)" font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" letter-spacing="0.16" x="76" y="106">Built for Svelte</text>
     </g>
 </svg>

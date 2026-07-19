@@ -3,20 +3,20 @@
     <title>tag-set</title>
     <g id="tag-set" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="red">
-            <rect x="48" y="78" width="56" height="24" rx="12" fill="#DA1E28"></rect>
-            <rect x="62" y="88" width="28" height="4" fill="#F4F4F4"></rect>
+            <rect x="48" y="78" width="56" height="24" rx="12" fill="var(--cds-support-error, #da1e28)"></rect>
+            <rect x="62" y="88" width="28" height="4" fill="var(--cds-field-01, #f4f4f4)"></rect>
         </g>
         <g id="blue">
             <rect x="112" y="78" width="52" height="24" rx="12" fill="#0043CE"></rect>
-            <rect x="126" y="88" width="24" height="4" fill="#F4F4F4"></rect>
+            <rect x="126" y="88" width="24" height="4" fill="var(--cds-field-01, #f4f4f4)"></rect>
         </g>
         <g id="purple">
             <rect x="172" y="78" width="56" height="24" rx="12" fill="#8A3FFC"></rect>
-            <rect x="186" y="88" width="28" height="4" fill="#F4F4F4"></rect>
+            <rect x="186" y="88" width="28" height="4" fill="var(--cds-field-01, #f4f4f4)"></rect>
         </g>
         <g id="overflow">
-            <rect x="236" y="78" width="40" height="24" rx="12" fill="#E0E0E0"></rect>
-            <rect id="plus-label" fill="#525252" x="248" y="88" width="16" height="4"></rect>
+            <rect x="236" y="78" width="40" height="24" rx="12" fill="var(--cds-border-subtle, #e0e0e0)"></rect>
+            <rect id="plus-label" fill="var(--cds-text-secondary, #525252)" x="248" y="88" width="16" height="4"></rect>
         </g>
     </g>
 </svg>

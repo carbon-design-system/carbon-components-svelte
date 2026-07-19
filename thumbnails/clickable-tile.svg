@@ -17,8 +17,8 @@
         </filter>
     </defs>
     <g id="clickable-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="Rectangle" stroke="#0F62FE" stroke-width="1.5" fill="#E0E0E0" x="72" y="41" width="176" height="98"></rect>
-        <rect id="Rectangle-Copy-4" fill="#A8A8A8" x="85" y="54" width="90" height="8"></rect>
+        <rect id="Rectangle" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1.5" fill="var(--cds-border-subtle, #e0e0e0)" x="72" y="41" width="176" height="98"></rect>
+        <rect id="Rectangle-Copy-4" fill="var(--cds-text-placeholder, #a8a8a8)" x="85" y="54" width="90" height="8"></rect>
         <g id="Group" transform="translate(212.000000, 97.000000)">
             <g id="Soft-Shadow" fill="black" fill-opacity="1">
                 <use filter="url(#filter-2)" xlink:href="#path-1"></use>
@@ -26,7 +26,7 @@
             <g id="Hard-Shadow" fill="black" fill-opacity="1">
                 <use filter="url(#filter-4)" xlink:href="#path-3"></use>
             </g>
-            <polygon id="Ouline" fill="#FFFFFF" points="17.9403457 21.1863925 13.5219224 23.061902 10.9929768 17.1040795 7.2 20.8970563 7.2 1.90294373 20.8970563 15.6 15.5690628 15.6"></polygon>
+            <polygon id="Ouline" fill="var(--cds-ui-02, #ffffff)" points="17.9403457 21.1863925 13.5219224 23.061902 10.9929768 17.1040795 7.2 20.8970563 7.2 1.90294373 20.8970563 15.6 15.5690628 15.6"></polygon>
             <polygon id="Arrow" fill="#000000" points="13.7560605 14.4 18 14.4 8.4 4.8 8.4 18 11.4024434 14.9975566 14.1576509 21.4884188 16.3668625 20.5506641"></polygon>
         </g>
     </g>

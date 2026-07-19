@@ -3,16 +3,16 @@
     <title>tag</title>
     <g id="tag" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="gray">
-            <rect x="68" y="78" width="64" height="24" rx="12" fill="#393939"></rect>
-            <rect x="84" y="88" width="32" height="4" fill="#F4F4F4"></rect>
+            <rect x="68" y="78" width="64" height="24" rx="12" fill="var(--cds-button-secondary, #393939)"></rect>
+            <rect x="84" y="88" width="32" height="4" fill="var(--cds-field-01, #f4f4f4)"></rect>
         </g>
         <g id="blue">
             <rect x="144" y="78" width="56" height="24" rx="12" fill="#0043CE"></rect>
-            <rect x="158" y="88" width="28" height="4" fill="#F4F4F4"></rect>
+            <rect x="158" y="88" width="28" height="4" fill="var(--cds-field-01, #f4f4f4)"></rect>
         </g>
         <g id="green">
-            <rect x="212" y="78" width="52" height="24" rx="12" fill="#24A148"></rect>
-            <rect x="224" y="88" width="28" height="4" fill="#F4F4F4"></rect>
+            <rect x="212" y="78" width="52" height="24" rx="12" fill="var(--cds-support-success, #24a148)"></rect>
+            <rect x="224" y="88" width="28" height="4" fill="var(--cds-field-01, #f4f4f4)"></rect>
         </g>
     </g>
 </svg>
