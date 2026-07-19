@@ -20,7 +20,7 @@
   "files": {
     "includes": [
       "**",
-      "!!**/.*",
+      "!!**/.*/**/*",
       "!!**/docs/src/pages/index.svelte",
       "!**/*.svg"
     ]
