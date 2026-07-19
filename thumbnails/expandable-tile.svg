@@ -15,10 +15,10 @@
     </defs>
     <g id="expandable-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(72.000000, 33.000000)">
-            <rect id="Rectangle" stroke="#0F62FE" stroke-width="1.5" fill="#E0E0E0" x="0" y="8" width="176" height="98"></rect>
-            <rect id="Rectangle-Copy-4" fill="#A8A8A8" x="13" y="21" width="90" height="8"></rect>
+            <rect id="Rectangle" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1.5" fill="var(--cds-border-subtle, #e0e0e0)" x="0" y="8" width="176" height="98"></rect>
+            <rect id="Rectangle-Copy-4" fill="var(--cds-text-placeholder, #a8a8a8)" x="13" y="21" width="90" height="8"></rect>
             <rect id="Rectangle-Copy-5" x="13" y="0" width="90" height="8"></rect>
-            <g transform="translate(153.000000, 90.000000)" fill="#FFFFFF" id="hand-cursor">
+            <g transform="translate(153.000000, 90.000000)" fill="var(--cds-ui-02, #ffffff)" id="hand-cursor">
                 <g filter="url(#filter-1)" transform="translate(4.000000, 2.000000)">
                     <polygon id="Rectangle" points="7 4 10 4 10 8 7 8"></polygon>
                     <polygon id="Rectangle-Copy" points="10 7 13 7 13 11 10 11"></polygon>

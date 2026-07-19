@@ -10,15 +10,15 @@
         </filter>
     </defs>
     <g id="menu-button" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="button" fill="#0F62FE" x="86" y="44" width="148" height="32"></rect>
-        <rect id="label" fill="#FFFFFF" x="102" y="56" width="70" height="8"></rect>
-        <g id="chevron" transform="translate(210, 52) scale(0.5)" fill="#FFFFFF">
+        <rect id="button" fill="var(--cds-interactive-01, #0f62fe)" x="86" y="44" width="148" height="32"></rect>
+        <rect id="label" fill="var(--cds-ui-02, #ffffff)" x="102" y="56" width="70" height="8"></rect>
+        <g id="chevron" transform="translate(210, 52) scale(0.5)" fill="var(--cds-ui-02, #ffffff)">
             <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
         </g>
         <use xlink:href="#panel-shape" fill="black" fill-opacity="1" filter="url(#panel-shadow)"></use>
-        <use xlink:href="#panel-shape" fill="#FFFFFF"></use>
-        <rect id="item-1" fill="#525252" x="98" y="88" width="70" height="8"></rect>
-        <rect id="item-2" fill="#A8A8A8" x="98" y="108" width="90" height="8"></rect>
-        <rect id="item-3" fill="#A8A8A8" x="98" y="128" width="50" height="8"></rect>
+        <use xlink:href="#panel-shape" fill="var(--cds-ui-02, #ffffff)"></use>
+        <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="98" y="88" width="70" height="8"></rect>
+        <rect id="item-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="98" y="108" width="90" height="8"></rect>
+        <rect id="item-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="98" y="128" width="50" height="8"></rect>
     </g>
 </svg>

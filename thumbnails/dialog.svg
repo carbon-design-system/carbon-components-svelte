@@ -2,10 +2,10 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>dialog</title>
     <g id="dialog" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="panel" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" x="70" y="48" width="180" height="84"></rect>
-        <rect id="body-1" fill="#E0E0E0" x="86" y="64" width="140" height="6"></rect>
-        <rect id="body-2" fill="#E0E0E0" x="86" y="78" width="100" height="6"></rect>
-        <rect id="action" fill="#0F62FE" x="86" y="100" width="64" height="20"></rect>
-        <rect id="action-label" fill="#FFFFFF" x="100" y="107" width="36" height="6"></rect>
+        <rect id="panel" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="70" y="48" width="180" height="84"></rect>
+        <rect id="body-1" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="64" width="140" height="6"></rect>
+        <rect id="body-2" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="78" width="100" height="6"></rect>
+        <rect id="action" fill="var(--cds-interactive-01, #0f62fe)" x="86" y="100" width="64" height="20"></rect>
+        <rect id="action-label" fill="var(--cds-ui-02, #ffffff)" x="100" y="107" width="36" height="6"></rect>
     </g>
 </svg>

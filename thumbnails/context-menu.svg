@@ -33,25 +33,25 @@
         <rect id="Rectangle-Copy-4" x="56" y="111" width="13.65" height="17"></rect>
         <g id="Rectangle-2-Copy-17">
             <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
-            <use fill="#F4F4F4" fill-rule="evenodd" xlink:href="#path-1"></use>
+            <use fill="var(--cds-field-01, #f4f4f4)" fill-rule="evenodd" xlink:href="#path-1"></use>
         </g>
-        <rect id="Rectangle-2-Copy-28" fill="#E0E0E0" opacity="0.6" x="56" y="35" width="105" height="16"></rect>
-        <rect id="Rectangle-2-Copy-29" fill="#C6C6C6" opacity="0.6" x="56" y="54" width="106" height="1"></rect>
-        <rect id="Rectangle-2-Copy-30" fill="#C6C6C6" opacity="0.6" x="56" y="109" width="106" height="1"></rect>
-        <rect id="Rectangle-3-Copy-9" fill="#8D8D8D" x="65.45" y="41" width="43.05" height="4"></rect>
-        <rect id="Rectangle-3-Copy-14" fill="#BEBEBE" x="65.45" y="118" width="43.05" height="4"></rect>
-        <rect id="Rectangle-3-Copy-15" fill="#BEBEBE" x="65.45" y="134" width="52" height="4"></rect>
-        <rect id="Rectangle-3-Copy-10" fill="#BEBEBE" x="65.45" y="64" width="52" height="4"></rect>
-        <rect id="Rectangle-3-Copy-11" fill="#BEBEBE" x="65.45" y="80" width="43.05" height="4"></rect>
-        <rect id="Rectangle-3-Copy-12" fill="#BEBEBE" x="65.45" y="96" width="52" height="4"></rect>
+        <rect id="Rectangle-2-Copy-28" fill="var(--cds-border-subtle, #e0e0e0)" opacity="0.6" x="56" y="35" width="105" height="16"></rect>
+        <rect id="Rectangle-2-Copy-29" fill="var(--cds-text-disabled, #c6c6c6)" opacity="0.6" x="56" y="54" width="106" height="1"></rect>
+        <rect id="Rectangle-2-Copy-30" fill="var(--cds-text-disabled, #c6c6c6)" opacity="0.6" x="56" y="109" width="106" height="1"></rect>
+        <rect id="Rectangle-3-Copy-9" fill="var(--cds-border-strong, #8d8d8d)" x="65.45" y="41" width="43.05" height="4"></rect>
+        <rect id="Rectangle-3-Copy-14" fill="var(--cds-text-inverse, #bebebe)" x="65.45" y="118" width="43.05" height="4"></rect>
+        <rect id="Rectangle-3-Copy-15" fill="var(--cds-text-inverse, #bebebe)" x="65.45" y="134" width="52" height="4"></rect>
+        <rect id="Rectangle-3-Copy-10" fill="var(--cds-text-inverse, #bebebe)" x="65.45" y="64" width="52" height="4"></rect>
+        <rect id="Rectangle-3-Copy-11" fill="var(--cds-text-inverse, #bebebe)" x="65.45" y="80" width="43.05" height="4"></rect>
+        <rect id="Rectangle-3-Copy-12" fill="var(--cds-text-inverse, #bebebe)" x="65.45" y="96" width="52" height="4"></rect>
         <g id="Rectangle-2-Copy-17" transform="translate(162.000000, 32.000000)">
             <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
-            <use fill="#F4F4F4" fill-rule="evenodd" xlink:href="#path-3"></use>
+            <use fill="var(--cds-field-01, #f4f4f4)" fill-rule="evenodd" xlink:href="#path-3"></use>
         </g>
-        <rect id="Rectangle-3-Copy-13" fill="#BEBEBE" x="183.45" y="41" width="51" height="4"></rect>
-        <rect id="Rectangle-3-Copy-16" fill="#BEBEBE" x="183.45" y="57" width="43.05" height="4"></rect>
-        <rect id="Rectangle-2-Copy-33" fill="#E0E0E0" opacity="0.6" x="162" y="67" width="103" height="16"></rect>
-        <rect id="Rectangle-3-Copy-17" fill="#8D8D8D" x="183.45" y="73" width="51" height="4"></rect>
+        <rect id="Rectangle-3-Copy-13" fill="var(--cds-text-inverse, #bebebe)" x="183.45" y="41" width="51" height="4"></rect>
+        <rect id="Rectangle-3-Copy-16" fill="var(--cds-text-inverse, #bebebe)" x="183.45" y="57" width="43.05" height="4"></rect>
+        <rect id="Rectangle-2-Copy-33" fill="var(--cds-border-subtle, #e0e0e0)" opacity="0.6" x="162" y="67" width="103" height="16"></rect>
+        <rect id="Rectangle-3-Copy-17" fill="var(--cds-border-strong, #8d8d8d)" x="183.45" y="73" width="51" height="4"></rect>
         <g id="icon/navigation/caret/right/16" transform="translate(140.000000, 37.000000)">
             <mask id="mask-6" fill="white">
                 <use xlink:href="#path-5"></use>
@@ -65,7 +65,7 @@
             <g id="Hard-Shadow" fill="black" fill-opacity="1">
                 <use filter="url(#filter-10)" xlink:href="#path-9"></use>
             </g>
-            <polygon id="Ouline" fill="#FFFFFF" points="8.22265846 9.71042991 6.19754778 10.5700384 5.03844771 7.83936975 3.3 9.57781746 3.3 0.872182541 9.57781746 7.15 7.13582044 7.15"></polygon>
+            <polygon id="Ouline" fill="var(--cds-ui-02, #ffffff)" points="8.22265846 9.71042991 6.19754778 10.5700384 5.03844771 7.83936975 3.3 9.57781746 3.3 0.872182541 9.57781746 7.15 7.13582044 7.15"></polygon>
             <polygon id="Arrow" fill="#000000" points="6.30486108 6.6 8.25 6.6 3.85 2.2 3.85 8.25 5.22611988 6.87388012 6.48892333 9.8488586 7.50147867 9.41905436"></polygon>
         </g>
         <polygon id="Path" fill="#000000" points="172.642857 45 170.5 42.8742857 171.181429 42.2142857 172.642857 43.65 175.818571 40.5 176.5 41.1771429"></polygon>

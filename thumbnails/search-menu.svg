@@ -10,16 +10,16 @@
         </filter>
     </defs>
     <g id="search-menu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="field" fill="#F4F4F4" x="76" y="44" width="168" height="32"></rect>
-        <rect id="bottom-border" fill="#8D8D8D" x="76" y="75" width="168" height="1"></rect>
-        <circle id="magnifier-lens" cx="90" cy="58" r="4" stroke="#8D8D8D" stroke-width="1.25" fill="none"></circle>
-        <path id="magnifier-handle" d="M93 61L96.5 64.5" stroke="#8D8D8D" stroke-width="1.25" stroke-linecap="round"></path>
-        <rect id="query" fill="#525252" x="104" y="56" width="50" height="8"></rect>
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="44" width="168" height="32"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="75" width="168" height="1"></rect>
+        <circle id="magnifier-lens" cx="90" cy="58" r="4" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.25" fill="none"></circle>
+        <path id="magnifier-handle" d="M93 61L96.5 64.5" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.25" stroke-linecap="round"></path>
+        <rect id="query" fill="var(--cds-text-secondary, #525252)" x="104" y="56" width="50" height="8"></rect>
         <use xlink:href="#panel-shape" fill="black" fill-opacity="1" filter="url(#panel-shadow)"></use>
-        <use xlink:href="#panel-shape" fill="#FFFFFF"></use>
-        <rect id="item-highlight" fill="#E0E0E0" x="76" y="82" width="168" height="22"></rect>
-        <rect id="item-1" fill="#525252" x="88" y="89" width="60" height="8"></rect>
-        <rect id="item-2" fill="#A8A8A8" x="88" y="111" width="80" height="8"></rect>
-        <rect id="item-3" fill="#A8A8A8" x="88" y="129" width="50" height="8"></rect>
+        <use xlink:href="#panel-shape" fill="var(--cds-ui-02, #ffffff)"></use>
+        <rect id="item-highlight" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="82" width="168" height="22"></rect>
+        <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="88" y="89" width="60" height="8"></rect>
+        <rect id="item-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="111" width="80" height="8"></rect>
+        <rect id="item-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="129" width="50" height="8"></rect>
     </g>
 </svg>

@@ -2,11 +2,11 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>aspect-ratio</title>
     <g id="aspect-ratio" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="frame" fill="#E0E0E0" x="70" y="48" width="180" height="84"></rect>
-        <rect id="object" fill="#F4F4F4" x="82" y="58" width="156" height="64"></rect>
-        <path id="bracket-tl" d="M82 70L82 58L94 58" stroke="#0F62FE" stroke-width="1.5" fill="none" stroke-linecap="square"></path>
-        <path id="bracket-br" d="M238 110L238 122L226 122" stroke="#0F62FE" stroke-width="1.5" fill="none" stroke-linecap="square"></path>
-        <rect id="stub-1" fill="#A8A8A8" x="140" y="82" width="40" height="5"></rect>
-        <rect id="stub-2" fill="#C6C6C6" x="148" y="94" width="24" height="4"></rect>
+        <rect id="frame" fill="var(--cds-border-subtle, #e0e0e0)" x="70" y="48" width="180" height="84"></rect>
+        <rect id="object" fill="var(--cds-field-01, #f4f4f4)" x="82" y="58" width="156" height="64"></rect>
+        <path id="bracket-tl" d="M82 70L82 58L94 58" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1.5" fill="none" stroke-linecap="square"></path>
+        <path id="bracket-br" d="M238 110L238 122L226 122" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1.5" fill="none" stroke-linecap="square"></path>
+        <rect id="stub-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="140" y="82" width="40" height="5"></rect>
+        <rect id="stub-2" fill="var(--cds-text-disabled, #c6c6c6)" x="148" y="94" width="24" height="4"></rect>
     </g>
 </svg>

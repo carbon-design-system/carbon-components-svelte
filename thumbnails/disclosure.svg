@@ -2,13 +2,13 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>disclosure</title>
     <g id="disclosure" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="divider-top" fill="#E0E0E0" x="76" y="56" width="168" height="1"></rect>
-        <rect id="title" fill="#525252" x="76" y="68" width="100" height="8"></rect>
-        <g id="chevron" transform="translate(224, 64) scale(0.5) rotate(90 16 16)" fill="#161616">
+        <rect id="divider-top" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="56" width="168" height="1"></rect>
+        <rect id="title" fill="var(--cds-text-secondary, #525252)" x="76" y="68" width="100" height="8"></rect>
+        <g id="chevron" transform="translate(224, 64) scale(0.5) rotate(90 16 16)" fill="var(--cds-icon-primary, #161616)">
             <path d="M22 16L12 26 10.6 24.6 19.2 16 10.6 7.4 12 6z"></path>
         </g>
-        <rect id="body-1" fill="#E0E0E0" x="76" y="92" width="140" height="6"></rect>
-        <rect id="body-2" fill="#E0E0E0" x="76" y="106" width="100" height="6"></rect>
-        <rect id="divider-bottom" fill="#E0E0E0" x="76" y="128" width="168" height="1"></rect>
+        <rect id="body-1" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="92" width="140" height="6"></rect>
+        <rect id="body-2" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="106" width="100" height="6"></rect>
+        <rect id="divider-bottom" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="128" width="168" height="1"></rect>
     </g>
 </svg>

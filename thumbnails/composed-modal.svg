@@ -14,10 +14,10 @@
         <g id="Rectangle-Copy" fill="black" fill-opacity="1">
             <use filter="url(#filter-2)" xlink:href="#path-1"></use>
         </g>
-        <g id="color/gray/10-copy-11" transform="translate(60.000000, 44.000000)" fill="#F4F4F4">
+        <g id="color/gray/10-copy-11" transform="translate(60.000000, 44.000000)" fill="var(--cds-field-01, #f4f4f4)">
             <rect id="Rectangle" x="0" y="0" width="200" height="90"></rect>
         </g>
-        <g id="checkbox" transform="translate(69.000000, 76.000000)" fill="#161616">
+        <g id="checkbox" transform="translate(69.000000, 76.000000)" fill="var(--cds-icon-primary, #161616)">
             <path d="M9.75,1.5 L2.25,1.5 C1.83578644,1.5 1.5,1.83578644 1.5,2.25 L1.5,9.75 C1.5,10.1642136 1.83578644,10.5 2.25,10.5 L9.75,10.5 C10.1642136,10.5 10.5,10.1642136 10.5,9.75 L10.5,2.25 C10.5,1.83578644 10.1642136,1.5 9.75,1.5 Z M2.25,9.75 L2.25,2.25 L9.75,2.25 L9.75,9.75 L2.25,9.75 Z" id="Fill"></path>
         </g>
         <g id="icon/navigation/close/16-copy-3" transform="translate(239.000000, 53.000000)">
@@ -26,8 +26,8 @@
             </mask>
             <use id="icon-color" fill="#000000" xlink:href="#path-3"></use>
         </g>
-        <rect id="Rectangle-Copy-5" fill="#8D8D8D" x="70" y="57" width="58" height="7"></rect>
-        <rect id="Rectangle-Copy-20" fill="#C6C6C6" x="160" y="108" width="101" height="26"></rect>
-        <rect id="Rectangle-Copy-21" fill="#A8A8A8" x="88" y="79" width="96" height="5"></rect>
+        <rect id="Rectangle-Copy-5" fill="var(--cds-border-strong, #8d8d8d)" x="70" y="57" width="58" height="7"></rect>
+        <rect id="Rectangle-Copy-20" fill="var(--cds-text-disabled, #c6c6c6)" x="160" y="108" width="101" height="26"></rect>
+        <rect id="Rectangle-Copy-21" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="79" width="96" height="5"></rect>
     </g>
 </svg>

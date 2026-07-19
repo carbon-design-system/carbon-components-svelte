@@ -2,11 +2,11 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>theme</title>
     <g id="theme" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="white" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" x="70" y="76" width="28" height="28"></rect>
-        <rect id="g10" fill="#F4F4F4" x="106" y="76" width="28" height="28"></rect>
-        <rect id="g80" fill="#393939" x="142" y="76" width="28" height="28"></rect>
+        <rect id="white" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="70" y="76" width="28" height="28"></rect>
+        <rect id="g10" fill="var(--cds-field-01, #f4f4f4)" x="106" y="76" width="28" height="28"></rect>
+        <rect id="g80" fill="var(--cds-button-secondary, #393939)" x="142" y="76" width="28" height="28"></rect>
         <rect id="g90" fill="#262626" x="178" y="76" width="28" height="28"></rect>
-        <rect id="g100" fill="#161616" x="214" y="76" width="28" height="28"></rect>
-        <rect id="selected" fill="none" stroke="#0F62FE" stroke-width="2" x="140" y="74" width="32" height="32"></rect>
+        <rect id="g100" fill="var(--cds-icon-primary, #161616)" x="214" y="76" width="28" height="28"></rect>
+        <rect id="selected" fill="none" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="2" x="140" y="74" width="32" height="32"></rect>
     </g>
 </svg>

@@ -2,11 +2,11 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>content-switcher</title>
     <g id="content-switcher" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="container" fill="#F4F4F4" x="76" y="76" width="168" height="32"></rect>
-        <rect id="segment-active" fill="#393939" x="76" y="76" width="56" height="32"></rect>
-        <rect id="label-1" fill="#F4F4F4" x="92" y="89" width="24" height="6"></rect>
-        <rect id="label-2" fill="#8D8D8D" x="148" y="89" width="24" height="6"></rect>
-        <rect id="divider-2" fill="#8D8D8D" x="188" y="84" width="1" height="16"></rect>
-        <rect id="label-3" fill="#8D8D8D" x="204" y="89" width="24" height="6"></rect>
+        <rect id="container" fill="var(--cds-field-01, #f4f4f4)" x="76" y="76" width="168" height="32"></rect>
+        <rect id="segment-active" fill="var(--cds-button-secondary, #393939)" x="76" y="76" width="56" height="32"></rect>
+        <rect id="label-1" fill="var(--cds-field-01, #f4f4f4)" x="92" y="89" width="24" height="6"></rect>
+        <rect id="label-2" fill="var(--cds-border-strong, #8d8d8d)" x="148" y="89" width="24" height="6"></rect>
+        <rect id="divider-2" fill="var(--cds-border-strong, #8d8d8d)" x="188" y="84" width="1" height="16"></rect>
+        <rect id="label-3" fill="var(--cds-border-strong, #8d8d8d)" x="204" y="89" width="24" height="6"></rect>
     </g>
 </svg>

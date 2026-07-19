@@ -2,14 +2,14 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>pagination-nav</title>
     <g id="pagination-nav" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="prev" transform="translate(104, 81) scale(0.5)" fill="#161616">
+        <g id="prev" transform="translate(104, 81) scale(0.5)" fill="var(--cds-icon-primary, #161616)">
             <path d="M20 24L10 16 20 8z"></path>
         </g>
-        <rect id="page-1" fill="#525252" x="131" y="83" width="10" height="12"></rect>
-        <rect id="page-1-underline" fill="#0F62FE" x="127" y="99" width="18" height="2"></rect>
-        <rect id="page-2" fill="#A8A8A8" x="155" y="83" width="10" height="12"></rect>
-        <rect id="page-3" fill="#A8A8A8" x="179" y="83" width="10" height="12"></rect>
-        <g id="next" transform="translate(200, 81) scale(0.5)" fill="#161616">
+        <rect id="page-1" fill="var(--cds-text-secondary, #525252)" x="131" y="83" width="10" height="12"></rect>
+        <rect id="page-1-underline" fill="var(--cds-interactive-01, #0f62fe)" x="127" y="99" width="18" height="2"></rect>
+        <rect id="page-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="155" y="83" width="10" height="12"></rect>
+        <rect id="page-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="179" y="83" width="10" height="12"></rect>
+        <g id="next" transform="translate(200, 81) scale(0.5)" fill="var(--cds-icon-primary, #161616)">
             <path d="M12 8L22 16 12 24z"></path>
         </g>
     </g>

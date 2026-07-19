@@ -2,27 +2,27 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>pagination</title>
     <g id="pagination" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="bar" fill="#F4F4F4" x="40" y="74" width="240" height="32"></rect>
-        <rect id="left-label" fill="#A8A8A8" x="52" y="87" width="40" height="6"></rect>
-        <rect id="left-select" fill="#525252" x="100" y="87" width="20" height="6"></rect>
-        <g id="left-chevron" transform="translate(128, 82)" fill="#161616">
+        <rect id="bar" fill="var(--cds-field-01, #f4f4f4)" x="40" y="74" width="240" height="32"></rect>
+        <rect id="left-label" fill="var(--cds-text-placeholder, #a8a8a8)" x="52" y="87" width="40" height="6"></rect>
+        <rect id="left-select" fill="var(--cds-text-secondary, #525252)" x="100" y="87" width="20" height="6"></rect>
+        <g id="left-chevron" transform="translate(128, 82)" fill="var(--cds-icon-primary, #161616)">
             <g transform="translate(8, 8) scale(0.5) translate(-16, -16)">
                 <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
             </g>
         </g>
-        <rect id="divider" fill="#E0E0E0" x="160" y="74" width="1" height="32"></rect>
-        <rect id="right-select" fill="#525252" x="176" y="87" width="16" height="6"></rect>
-        <g id="right-chevron" transform="translate(200, 82)" fill="#161616">
+        <rect id="divider" fill="var(--cds-border-subtle, #e0e0e0)" x="160" y="74" width="1" height="32"></rect>
+        <rect id="right-select" fill="var(--cds-text-secondary, #525252)" x="176" y="87" width="16" height="6"></rect>
+        <g id="right-chevron" transform="translate(200, 82)" fill="var(--cds-icon-primary, #161616)">
             <g transform="translate(8, 8) scale(0.5) translate(-16, -16)">
                 <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
             </g>
         </g>
-        <g id="prev" transform="translate(220, 74)" fill="#161616">
+        <g id="prev" transform="translate(220, 74)" fill="var(--cds-icon-primary, #161616)">
             <g transform="translate(16, 16) scale(0.5) translate(-16, -16)">
                 <path d="M20 24L10 16 20 8z"></path>
             </g>
         </g>
-        <g id="next" transform="translate(244, 74)" fill="#161616">
+        <g id="next" transform="translate(244, 74)" fill="var(--cds-icon-primary, #161616)">
             <g transform="translate(16, 16) scale(0.5) translate(-16, -16)">
                 <path d="M12 8L22 16 12 24z"></path>
             </g>

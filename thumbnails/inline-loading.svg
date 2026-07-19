@@ -2,8 +2,8 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>inline-loading</title>
     <g id="inline-loading" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <circle id="track" cx="112" cy="90" r="10" stroke="#E0E0E0" stroke-width="2.5" fill="none"></circle>
-        <circle id="indicator" cx="112" cy="90" r="10" stroke="#0F62FE" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="24 63" transform="rotate(-90 112 90)"></circle>
-        <rect id="description" fill="#525252" x="134" y="86" width="90" height="8"></rect>
+        <circle id="track" cx="112" cy="90" r="10" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="2.5" fill="none"></circle>
+        <circle id="indicator" cx="112" cy="90" r="10" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="24 63" transform="rotate(-90 112 90)"></circle>
+        <rect id="description" fill="var(--cds-text-secondary, #525252)" x="134" y="86" width="90" height="8"></rect>
     </g>
 </svg>

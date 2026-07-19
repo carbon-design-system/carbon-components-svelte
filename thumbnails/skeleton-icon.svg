@@ -3,13 +3,13 @@
     <title>skeleton-icon</title>
     <defs>
         <linearGradient x1="-21.9775656%" y1="50%" x2="113.47099%" y2="50%" id="shine">
-            <stop stop-color="#C6C6C6" stop-opacity="0" offset="0%"></stop>
-            <stop stop-color="#C6C6C6" offset="100%"></stop>
+            <stop stop-color="var(--cds-text-disabled, #c6c6c6)" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="var(--cds-text-disabled, #c6c6c6)" offset="100%"></stop>
         </linearGradient>
     </defs>
     <g id="skeleton-icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="base" fill="#E0E0E0" x="144" y="74" width="32" height="32"></rect>
-        <rect id="fill" fill="#C6C6C6" x="144" y="74" width="21" height="32"></rect>
+        <rect id="base" fill="var(--cds-border-subtle, #e0e0e0)" x="144" y="74" width="32" height="32"></rect>
+        <rect id="fill" fill="var(--cds-text-disabled, #c6c6c6)" x="144" y="74" width="21" height="32"></rect>
         <rect id="shine-edge" fill="url(#shine)" transform="translate(168.5, 90) scale(-1, 1) translate(-168.5, -90)" x="165" y="74" width="7" height="32"></rect>
     </g>
 </svg>

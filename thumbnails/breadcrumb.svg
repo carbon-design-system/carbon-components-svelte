@@ -3,9 +3,9 @@
     <title>breadcrumb</title>
     <g id="breadcrumb" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="item-1" fill="#6F6F6F" x="72" y="86" width="48" height="8"></rect>
-        <path id="separator-1" d="M134 82L128 96" stroke="#8D8D8D" stroke-width="1.5" stroke-linecap="round"></path>
+        <path id="separator-1" d="M134 82L128 96" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linecap="round"></path>
         <rect id="item-2" fill="#6F6F6F" x="144" y="86" width="56" height="8"></rect>
-        <path id="separator-2" d="M210 82L204 96" stroke="#8D8D8D" stroke-width="1.5" stroke-linecap="round"></path>
-        <rect id="item-current" fill="#525252" x="220" y="86" width="48" height="8"></rect>
+        <path id="separator-2" d="M210 82L204 96" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linecap="round"></path>
+        <rect id="item-current" fill="var(--cds-text-secondary, #525252)" x="220" y="86" width="48" height="8"></rect>
     </g>
 </svg>

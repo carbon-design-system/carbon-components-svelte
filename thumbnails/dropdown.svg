@@ -2,7 +2,7 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>dropdown</title>
     <defs>
-        <rect id="panel-shape" x="76" y="92" width="168" height="68"></rect>
+        <rect id="panel-shape" x="76" y="80" width="168" height="68"></rect>
         <filter x="-10.0%" y="-8.8%" width="119.6%" height="129.4%" filterUnits="objectBoundingBox" id="panel-shadow">
             <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
             <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
@@ -10,18 +10,18 @@
         </filter>
     </defs>
     <g id="dropdown" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="label" fill="#A8A8A8" x="76" y="44" width="56" height="8"></rect>
-        <rect id="field" fill="#F4F4F4" x="76" y="60" width="168" height="32"></rect>
-        <rect id="bottom-border" fill="#8D8D8D" x="76" y="91" width="168" height="1"></rect>
-        <rect id="value" fill="#525252" x="88" y="72" width="70" height="8"></rect>
-        <g id="chevron" transform="translate(218, 68) scale(0.5) rotate(180 16 16)" fill="#161616">
+        <rect id="label" fill="var(--cds-text-placeholder, #a8a8a8)" x="76" y="32" width="56" height="8"></rect>
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="48" width="168" height="32"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="79" width="168" height="1"></rect>
+        <rect id="value" fill="var(--cds-text-secondary, #525252)" x="88" y="60" width="70" height="8"></rect>
+        <g id="chevron" transform="translate(218, 56) scale(0.5) rotate(180 16 16)" fill="var(--cds-icon-primary, #161616)">
             <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
         </g>
         <use xlink:href="#panel-shape" fill="black" fill-opacity="1" filter="url(#panel-shadow)"></use>
-        <use xlink:href="#panel-shape" fill="#FFFFFF"></use>
-        <rect id="item-highlight" fill="#E0E0E0" x="76" y="98" width="168" height="22"></rect>
-        <rect id="item-1" fill="#525252" x="88" y="105" width="60" height="8"></rect>
-        <rect id="item-2" fill="#A8A8A8" x="88" y="127" width="80" height="8"></rect>
-        <rect id="item-3" fill="#A8A8A8" x="88" y="145" width="50" height="8"></rect>
+        <use xlink:href="#panel-shape" fill="var(--cds-ui-02, #ffffff)"></use>
+        <rect id="item-highlight" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="86" width="168" height="22"></rect>
+        <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="88" y="93" width="60" height="8"></rect>
+        <rect id="item-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="115" width="80" height="8"></rect>
+        <rect id="item-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="133" width="50" height="8"></rect>
     </g>
 </svg>
