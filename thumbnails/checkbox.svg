@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>checkbox</title>
+    <g id="checkbox" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="checked">
+            <rect x="76" y="60" width="16" height="16" rx="2" fill="#0F62FE"></rect>
+            <path d="M79.5 68.2L82 70.7L88.5 63.8" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"></path>
+            <rect id="label" fill="#C6C6C6" x="104" y="64" width="120" height="8"></rect>
+        </g>
+        <g id="indeterminate">
+            <rect x="76" y="92" width="16" height="16" rx="2" fill="none" stroke="#0F62FE" stroke-width="1.5"></rect>
+            <rect x="80" y="99" width="8" height="2" fill="#0F62FE"></rect>
+            <rect id="label" fill="#E0E0E0" x="104" y="96" width="96" height="8"></rect>
+        </g>
+        <g id="unchecked">
+            <rect x="76" y="124" width="16" height="16" rx="2" fill="none" stroke="#8D8D8D" stroke-width="1.5"></rect>
+            <rect id="label" fill="#E0E0E0" x="104" y="128" width="108" height="8"></rect>
+        </g>
+    </g>
+</svg>

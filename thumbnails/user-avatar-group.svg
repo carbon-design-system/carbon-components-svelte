@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>user-avatar-group</title>
+    <g id="user-avatar-group" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="avatar-1" fill="#0F62FE" stroke="#FFFFFF" stroke-width="2" cx="118" cy="90" r="20"></circle>
+        <g id="user-1" transform="translate(110, 82) scale(0.5)" fill="#FFFFFF">
+            <path d="M16,4a5,5,0,1,1-5,5,5,5,0,0,1,5-5m0-2a7,7,0,1,0,7,7A7,7,0,0,0,16,2Z"></path>
+            <path d="M26,30H24V25a5,5,0,0,0-5-5H13a5,5,0,0,0-5,5v5H6V25a7,7,0,0,1,7-7h6a7,7,0,0,1,7,7Z"></path>
+        </g>
+        <circle id="avatar-2" fill="#007D79" stroke="#FFFFFF" stroke-width="2" cx="148" cy="90" r="20"></circle>
+        <g id="user-2" transform="translate(140, 82) scale(0.5)" fill="#FFFFFF">
+            <path d="M16,4a5,5,0,1,1-5,5,5,5,0,0,1,5-5m0-2a7,7,0,1,0,7,7A7,7,0,0,0,16,2Z"></path>
+            <path d="M26,30H24V25a5,5,0,0,0-5-5H13a5,5,0,0,0-5,5v5H6V25a7,7,0,0,1,7-7h6a7,7,0,0,1,7,7Z"></path>
+        </g>
+        <circle id="avatar-3" fill="#8A3FFC" stroke="#FFFFFF" stroke-width="2" cx="178" cy="90" r="20"></circle>
+        <g id="user-3" transform="translate(170, 82) scale(0.5)" fill="#FFFFFF">
+            <path d="M16,4a5,5,0,1,1-5,5,5,5,0,0,1,5-5m0-2a7,7,0,1,0,7,7A7,7,0,0,0,16,2Z"></path>
+            <path d="M26,30H24V25a5,5,0,0,0-5-5H13a5,5,0,0,0-5,5v5H6V25a7,7,0,0,1,7-7h6a7,7,0,0,1,7,7Z"></path>
+        </g>
+        <circle id="overflow" fill="#6F6F6F" stroke="#FFFFFF" stroke-width="2" cx="208" cy="90" r="20"></circle>
+        <text id="overflow-label" fill="#FFFFFF" font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="400" text-anchor="middle" dominant-baseline="central" x="208" y="90">+5</text>
+    </g>
+</svg>

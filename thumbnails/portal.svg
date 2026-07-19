@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>portal</title>
+    <g id="portal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="source" fill="#F4F4F4" stroke="#8D8D8D" stroke-width="1.5" x="60" y="50" width="90" height="80"></rect>
+        <rect id="source-hole" fill="none" stroke="#C6C6C6" stroke-width="1" stroke-dasharray="2 2" x="74" y="66" width="62" height="48"></rect>
+        <line id="connector" x1="158" y1="90" x2="178" y2="90" stroke="#0F62FE" stroke-width="1.25" stroke-dasharray="2 2"></line>
+        <rect id="destination" fill="#FFFFFF" stroke="#0F62FE" stroke-width="1.5" x="186" y="50" width="74" height="80"></rect>
+        <rect id="content-1" fill="#A8A8A8" x="198" y="70" width="50" height="6"></rect>
+        <rect id="content-2" fill="#E0E0E0" x="198" y="84" width="36" height="6"></rect>
+        <rect id="content-3" fill="#E0E0E0" x="198" y="98" width="42" height="6"></rect>
+    </g>
+</svg>

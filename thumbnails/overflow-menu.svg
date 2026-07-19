@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>overflow-menu</title>
+    <defs>
+        <rect id="panel-shape" x="80" y="68" width="160" height="76"></rect>
+        <filter x="-10.0%" y="-7.9%" width="120.0%" height="126.3%" filterUnits="objectBoundingBox" id="panel-shadow">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="overflow-menu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="trigger" fill="#F4F4F4" x="80" y="36" width="32" height="32"></rect>
+        <g id="overflow-icon" transform="translate(88, 44) scale(0.5)" fill="#161616">
+            <circle cx="16" cy="8" r="2"></circle>
+            <circle cx="16" cy="16" r="2"></circle>
+            <circle cx="16" cy="24" r="2"></circle>
+        </g>
+        <use xlink:href="#panel-shape" fill="black" fill-opacity="1" filter="url(#panel-shadow)"></use>
+        <use xlink:href="#panel-shape" fill="#FFFFFF"></use>
+        <rect id="item-1" fill="#525252" x="92" y="78" width="70" height="8"></rect>
+        <rect id="item-2" fill="#A8A8A8" x="92" y="100" width="90" height="8"></rect>
+        <rect id="divider" fill="#E0E0E0" x="80" y="118" width="160" height="1"></rect>
+        <rect id="item-danger" fill="#DA1E28" x="92" y="126" width="60" height="8"></rect>
+    </g>
+</svg>

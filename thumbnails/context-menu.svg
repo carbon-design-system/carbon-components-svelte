@@ -33,9 +33,9 @@
         <rect id="Rectangle-Copy-4" x="56" y="111" width="13.65" height="17"></rect>
         <g id="Rectangle-2-Copy-17">
             <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
-            <use fill="#F3F3F3" fill-rule="evenodd" xlink:href="#path-1"></use>
+            <use fill="#F4F4F4" fill-rule="evenodd" xlink:href="#path-1"></use>
         </g>
-        <rect id="Rectangle-2-Copy-28" fill="#DCDCDC" opacity="0.6" x="56" y="35" width="105" height="16"></rect>
+        <rect id="Rectangle-2-Copy-28" fill="#E0E0E0" opacity="0.6" x="56" y="35" width="105" height="16"></rect>
         <rect id="Rectangle-2-Copy-29" fill="#C6C6C6" opacity="0.6" x="56" y="54" width="106" height="1"></rect>
         <rect id="Rectangle-2-Copy-30" fill="#C6C6C6" opacity="0.6" x="56" y="109" width="106" height="1"></rect>
         <rect id="Rectangle-3-Copy-9" fill="#8D8D8D" x="65.45" y="41" width="43.05" height="4"></rect>
@@ -46,11 +46,11 @@
         <rect id="Rectangle-3-Copy-12" fill="#BEBEBE" x="65.45" y="96" width="52" height="4"></rect>
         <g id="Rectangle-2-Copy-17" transform="translate(162.000000, 32.000000)">
             <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
-            <use fill="#F3F3F3" fill-rule="evenodd" xlink:href="#path-3"></use>
+            <use fill="#F4F4F4" fill-rule="evenodd" xlink:href="#path-3"></use>
         </g>
         <rect id="Rectangle-3-Copy-13" fill="#BEBEBE" x="183.45" y="41" width="51" height="4"></rect>
         <rect id="Rectangle-3-Copy-16" fill="#BEBEBE" x="183.45" y="57" width="43.05" height="4"></rect>
-        <rect id="Rectangle-2-Copy-33" fill="#DCDCDC" opacity="0.6" x="162" y="67" width="103" height="16"></rect>
+        <rect id="Rectangle-2-Copy-33" fill="#E0E0E0" opacity="0.6" x="162" y="67" width="103" height="16"></rect>
         <rect id="Rectangle-3-Copy-17" fill="#8D8D8D" x="183.45" y="73" width="51" height="4"></rect>
         <g id="icon/navigation/caret/right/16" transform="translate(140.000000, 37.000000)">
             <mask id="mask-6" fill="white">

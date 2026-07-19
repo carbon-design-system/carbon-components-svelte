@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>time-picker</title>
+    <g id="time-picker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="#A8A8A8" x="80" y="48" width="50" height="8"></rect>
+        <rect id="time-field" fill="#F4F4F4" x="80" y="64" width="100" height="32"></rect>
+        <rect id="time-bottom-border" fill="#8D8D8D" x="80" y="95" width="100" height="1"></rect>
+        <rect id="time-value" fill="#A8A8A8" x="92" y="76" width="48" height="8"></rect>
+        <g id="time-icon" transform="translate(158, 73) scale(0.4375)" fill="#8D8D8D">
+            <path d="M16,30A14,14,0,1,1,30,16,14,14,0,0,1,16,30ZM16,4A12,12,0,1,0,28,16,12,12,0,0,0,16,4Z"></path>
+            <path d="M20.59 22 15 16.41 15 7 17 7 17 15.58 22 20.59 20.59 22z"></path>
+        </g>
+        <rect id="period-field" fill="#F4F4F4" x="181" y="64" width="60" height="32"></rect>
+        <rect id="period-bottom-border" fill="#8D8D8D" x="181" y="95" width="60" height="1"></rect>
+        <rect id="period-value" fill="#A8A8A8" x="191" y="76" width="24" height="8"></rect>
+        <g id="period-chevron" transform="translate(217, 72) scale(0.5)" fill="#161616">
+            <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
+        </g>
+    </g>
+</svg>

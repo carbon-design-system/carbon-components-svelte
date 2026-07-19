@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>progress-indicator</title>
+    <g id="progress-indicator" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="connector-1" fill="#0F62FE" x="110" y="89" width="40" height="2"></rect>
+        <rect id="connector-2" fill="#E0E0E0" x="170" y="89" width="40" height="2"></rect>
+        <circle id="step-1" fill="#0F62FE" cx="100" cy="90" r="10"></circle>
+        <path id="step-1-check" d="M95 90L99 94L106 86" stroke="#FFFFFF" stroke-width="1.5" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
+        <circle id="step-2-outer" fill="#FFFFFF" stroke="#0F62FE" stroke-width="2" cx="160" cy="90" r="10"></circle>
+        <circle id="step-2-inner" fill="#0F62FE" cx="160" cy="90" r="4"></circle>
+        <circle id="step-3-outer" fill="#FFFFFF" stroke="#8D8D8D" stroke-width="1.5" cx="220" cy="90" r="10"></circle>
+        <rect id="label-1" fill="#525252" x="84" y="108" width="32" height="6"></rect>
+        <rect id="label-2" fill="#525252" x="144" y="108" width="32" height="6"></rect>
+        <rect id="label-3" fill="#A8A8A8" x="204" y="108" width="32" height="6"></rect>
+    </g>
+</svg>

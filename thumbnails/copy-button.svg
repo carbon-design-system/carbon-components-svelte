@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>copy-button</title>
+    <g id="copy-button" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="button" fill="#F4F4F4" x="140" y="70" width="40" height="40"></rect>
+        <g id="copy-icon" transform="translate(152, 82) scale(0.5)" fill="#161616">
+            <path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"></path>
+            <path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z"></path>
+        </g>
+    </g>
+</svg>

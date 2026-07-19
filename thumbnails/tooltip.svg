@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>tooltip</title>
+    <defs>
+        <rect id="bubble-shape" x="100" y="58" width="120" height="40" rx="2"></rect>
+        <filter x="-12.5%" y="-22.5%" width="125.0%" height="167.5%" filterUnits="objectBoundingBox" id="bubble-shadow">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="tooltip" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <use xlink:href="#bubble-shape" fill="black" fill-opacity="1" filter="url(#bubble-shadow)"></use>
+        <use xlink:href="#bubble-shape" fill="#3D3D3D"></use>
+        <polygon id="caret" fill="#3D3D3D" points="156 98 164 98 160 104"></polygon>
+        <rect id="text-1" fill="#BEBEBE" x="112" y="70" width="80" height="6"></rect>
+        <rect id="text-2" fill="#BEBEBE" x="112" y="82" width="56" height="6"></rect>
+        <rect id="trigger" fill="#525252" x="140" y="110" width="40" height="8"></rect>
+    </g>
+</svg>

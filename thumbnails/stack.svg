@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>stack</title>
+    <g id="stack" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="item-1" fill="#E0E0E0" x="100" y="40" width="120" height="28"></rect>
+        <rect id="stub-1" fill="#A8A8A8" x="130" y="51" width="60" height="6"></rect>
+        <line id="gap-1" x1="160" y1="70" x2="160" y2="76" stroke="#0F62FE" stroke-width="1.5" stroke-linecap="round"></line>
+        <rect id="item-2" fill="#E0E0E0" x="100" y="76" width="120" height="28"></rect>
+        <rect id="stub-2" fill="#A8A8A8" x="130" y="87" width="60" height="6"></rect>
+        <line id="gap-2" x1="160" y1="106" x2="160" y2="112" stroke="#0F62FE" stroke-width="1.5" stroke-linecap="round"></line>
+        <rect id="item-3" fill="#E0E0E0" x="100" y="112" width="120" height="28"></rect>
+        <rect id="stub-3" fill="#A8A8A8" x="130" y="123" width="60" height="6"></rect>
+    </g>
+</svg>

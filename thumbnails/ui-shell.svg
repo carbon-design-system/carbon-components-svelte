@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>ui-shell</title>
+    <g id="ui-shell" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="header" fill="#161616" x="40" y="36" width="240" height="24"></rect>
+        <rect id="burger-1" fill="#F4F4F4" x="50" y="44" width="10" height="1.25"></rect>
+        <rect id="burger-2" fill="#F4F4F4" x="50" y="47.5" width="10" height="1.25"></rect>
+        <rect id="burger-3" fill="#F4F4F4" x="50" y="51" width="10" height="1.25"></rect>
+        <rect id="brand" fill="#A8A8A8" x="70" y="46" width="28" height="4"></rect>
+        <rect id="header-nav-1" fill="#8D8D8D" x="180" y="46" width="24" height="4"></rect>
+        <rect id="header-nav-2" fill="#8D8D8D" x="212" y="46" width="28" height="4"></rect>
+        <rect id="header-nav-3" fill="#8D8D8D" x="248" y="46" width="20" height="4"></rect>
+        <rect id="side-nav" fill="#F4F4F4" x="40" y="60" width="72" height="84"></rect>
+        <rect id="side-selected-bar" fill="#0F62FE" x="40" y="72" width="2" height="14"></rect>
+        <rect id="side-selected" fill="#525252" x="52" y="76" width="44" height="6"></rect>
+        <rect id="side-2" fill="#A8A8A8" x="52" y="98" width="40" height="6"></rect>
+        <rect id="side-3" fill="#A8A8A8" x="52" y="120" width="36" height="6"></rect>
+        <rect id="right-panel" fill="#FFFFFF" x="112" y="60" width="168" height="84"></rect>
+        <rect id="right-panel-left" fill="#E0E0E0" x="112" y="60" width="1" height="84"></rect>
+        <rect id="right-panel-right" fill="#E0E0E0" x="279" y="60" width="1" height="84"></rect>
+        <rect id="right-panel-bottom" fill="#E0E0E0" x="112" y="143" width="168" height="1"></rect>
+    </g>
+</svg>

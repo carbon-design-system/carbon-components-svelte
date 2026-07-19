@@ -8,15 +8,15 @@
         <polygon id="path-7" points="5.6875 8.734375 3.65625 6.703125 4.3021875 6.09375 5.6875 7.4546875 8.6978125 4.46875 9.34375 5.110625"></polygon>
     </defs>
     <g id="selectable-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group-Copy-2" transform="translate(56.000000, 109.000000)" fill="#F3F3F3">
+        <g id="Group-Copy-2" transform="translate(56.000000, 109.000000)" fill="#F4F4F4">
             <rect id="Rectangle" x="0" y="0" width="141" height="38"></rect>
             <rect id="Rectangle" x="0" y="0" width="208" height="38"></rect>
         </g>
-        <g id="Group" transform="translate(56.000000, 33.000000)" fill="#F3F3F3">
+        <g id="Group" transform="translate(56.000000, 33.000000)" fill="#F4F4F4">
             <rect id="Rectangle" x="0" y="0" width="141" height="38"></rect>
             <rect id="Rectangle" stroke="#161616" stroke-width="0.8" x="0" y="0" width="208" height="38"></rect>
         </g>
-        <g id="Group-Copy" transform="translate(56.000000, 71.000000)" fill="#F3F3F3">
+        <g id="Group-Copy" transform="translate(56.000000, 71.000000)" fill="#F4F4F4">
             <rect id="Rectangle" x="0" y="0" width="141" height="38"></rect>
             <rect id="Rectangle" stroke="#161616" stroke-width="0.8" x="0" y="0" width="208" height="38"></rect>
         </g>

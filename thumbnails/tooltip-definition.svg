@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>tooltip-definition</title>
+    <defs>
+        <rect id="bubble-shape" x="100" y="48" width="120" height="44" rx="2"></rect>
+        <filter x="-12.5%" y="-20.5%" width="125.0%" height="161.4%" filterUnits="objectBoundingBox" id="bubble-shadow">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="tooltip-definition" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <use xlink:href="#bubble-shape" fill="black" fill-opacity="1" filter="url(#bubble-shadow)"></use>
+        <use xlink:href="#bubble-shape" fill="#3D3D3D"></use>
+        <polygon id="caret" fill="#3D3D3D" points="156 92 164 92 160 98"></polygon>
+        <rect id="text-1" fill="#BEBEBE" x="112" y="60" width="80" height="6"></rect>
+        <rect id="text-2" fill="#BEBEBE" x="112" y="74" width="56" height="6"></rect>
+        <rect id="term" fill="#525252" x="130" y="114" width="60" height="8"></rect>
+        <line id="dotted-underline" x1="130" y1="126" x2="190" y2="126" stroke="#0F62FE" stroke-width="1.5" stroke-dasharray="2 2"></line>
+    </g>
+</svg>

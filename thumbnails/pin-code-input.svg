@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>pin-code-input</title>
+    <g id="pin-code-input" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="box-0" fill="#F4F4F4" x="74" y="64" width="28" height="32"></rect>
+        <rect id="box-0-border" fill="#8D8D8D" x="74" y="95" width="28" height="1"></rect>
+        <rect id="box-0-digit" fill="#525252" x="85" y="74" width="6" height="12"></rect>
+        <rect id="box-1" fill="#F4F4F4" x="110" y="64" width="28" height="32"></rect>
+        <rect id="box-1-border" fill="#8D8D8D" x="110" y="95" width="28" height="1"></rect>
+        <rect id="box-1-digit" fill="#525252" x="121" y="74" width="6" height="12"></rect>
+        <rect id="box-2" fill="#F4F4F4" x="146" y="64" width="28" height="32"></rect>
+        <rect id="box-2-border" fill="#8D8D8D" x="146" y="95" width="28" height="1"></rect>
+        <rect id="box-2-digit" fill="#525252" x="157" y="74" width="6" height="12"></rect>
+        <rect id="box-3" fill="#F4F4F4" x="182" y="64" width="28" height="32"></rect>
+        <rect id="box-3-border" fill="#8D8D8D" x="182" y="95" width="28" height="1"></rect>
+        <rect id="box-3-cursor" fill="#0F62FE" x="195" y="72" width="1.5" height="16"></rect>
+        <rect id="box-4" fill="#F4F4F4" x="218" y="64" width="28" height="32"></rect>
+        <rect id="box-4-border" fill="#8D8D8D" x="218" y="95" width="28" height="1"></rect>
+    </g>
+</svg>
