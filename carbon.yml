@@ -48,6 +48,7 @@ assets:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/accordion/usage
     framework: svelte
+    thumbnailPath: './thumbnails/accordion.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -56,15 +57,41 @@ assets:
   aspect-ratio:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/aspect-ratio.svg'
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/AspectRatio
+  badge-indicator:
+    name: Badge indicator
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/badge-indicator.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/BadgeIndicator
+  box:
+    name: Box
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/box.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Box
   breadcrumb:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/breadcrumb/usage
     framework: svelte
+    thumbnailPath: './thumbnails/breadcrumb.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -88,6 +115,7 @@ assets:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/button/usage
     framework: svelte
+    thumbnailPath: './thumbnails/button.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -112,6 +140,7 @@ assets:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/checkbox/usage
     framework: svelte
+    thumbnailPath: './thumbnails/checkbox.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -135,6 +164,7 @@ assets:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/code-snippet/usage
     framework: svelte
+    thumbnailPath: './thumbnails/code-snippet.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -143,11 +173,24 @@ assets:
   combo-box:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/combo-box.svg'
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/ComboBox
+  combo-button:
+    name: Combo button
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/combo-button.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ComboButton
   composed-modal:
     name: Composed modal
     status: stable
@@ -162,10 +205,23 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/ComposedModal
     tags:
       - input-control
+  contained-list:
+    name: Contained list
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/contained-list.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ContainedList
   content-switcher:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/content-switcher/usage
     framework: svelte
+    thumbnailPath: './thumbnails/content-switcher.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -189,14 +245,28 @@ assets:
   copy-button:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/copy-button.svg'
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/CopyButton
+  copy-input:
+    name: Copy input
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/copy-input.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CopyInput
   data-table:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/data-table.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/data-table/usage
     demoLinks:
       - type: storybook
@@ -206,6 +276,7 @@ assets:
   date-picker:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/date-picker.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/date-picker/usage
     demoLinks:
       - type: storybook
@@ -215,14 +286,40 @@ assets:
   definition-tooltip:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/tooltip-definition.svg'
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/TooltipDefinition
+  dialog:
+    name: Dialog
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/dialog.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Dialog
+  disclosure:
+    name: Disclosure
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/disclosure.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Disclosure
   dropdown:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/dropdown.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/dropdown/usage
     demoLinks:
       - type: storybook
@@ -247,12 +344,25 @@ assets:
   file-uploader:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/file-uploader.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/file-uploader/usage
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/FileUploader
+  floating-portal:
+    name: Floating portal
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/floating-portal.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FloatingPortal
   fluid-form:
     name: Fluid form
     status: stable
@@ -270,6 +380,7 @@ assets:
   form:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/form.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/form/usage
     demoLinks:
       - type: storybook
@@ -279,11 +390,36 @@ assets:
   grid:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/grid.svg'
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/Grid
+  heading:
+    name: Heading
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/heading.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Heading
+  icon-indicator:
+    name: Icon indicator
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/icon-indicator.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/IconIndicator
   image-loader:
     name: Image loader
     status: stable
@@ -303,6 +439,7 @@ assets:
   inline-loading:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/inline-loading.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/inline-loading/usage
     demoLinks:
       - type: storybook
@@ -326,6 +463,7 @@ assets:
   link:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/link.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/link/usage
     demoLinks:
       - type: storybook
@@ -335,6 +473,7 @@ assets:
   loading:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/loading.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/loading/usage
     demoLinks:
       - type: storybook
@@ -355,9 +494,34 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/LocalStorage
     tags:
       - input-control
+  menu:
+    name: Menu
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/menu.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Menu
+  menu-button:
+    name: Menu button
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/menu-button.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/MenuButton
   modal:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/modal.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/modal/usage
     demoLinks:
       - type: storybook
@@ -367,15 +531,29 @@ assets:
   multiselect:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/multi-select.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/dropdown/usage/#multiselect
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/MultiSelect
+  notification-queue:
+    name: Notification queue
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/notification-queue.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/NotificationQueue
   number-input:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/number-input.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/number-input/usage
     demoLinks:
       - type: storybook
@@ -402,7 +580,7 @@ assets:
     type: component
     platform: web
     framework: svelte
-    thumbnailPath: ''
+    thumbnailPath: './thumbnails/overflow-menu.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -413,6 +591,7 @@ assets:
   pagination:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/pagination.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/pagination/usage
     demoLinks:
       - type: storybook
@@ -422,6 +601,7 @@ assets:
   pagination-nav:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/pagination-nav.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -442,17 +622,43 @@ assets:
     tags:
       - form
       - contextual-navigation
+  pin-code-input:
+    name: Pin code input
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/pin-code-input.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/PinCodeInput
   popover:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/popover.svg'
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/Popover
+  portal:
+    name: Portal
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/portal.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Portal
   progress-bar:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/progress-bar.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/progress-bar/usage
     demoLinks:
       - type: storybook
@@ -462,6 +668,7 @@ assets:
   progress-indicator:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/progress-indicator.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/progress-indicator/usage
     demoLinks:
       - type: storybook
@@ -471,6 +678,7 @@ assets:
   radio-button:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/radio-button.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/radio-button/usage
     demoLinks:
       - type: storybook
@@ -508,15 +716,29 @@ assets:
   search:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/search.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/search/usage
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/Search
+  search-menu:
+    name: Search menu
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/search-menu.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SearchMenu
   select:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/select.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/select/usage
     demoLinks:
       - type: storybook
@@ -537,6 +759,42 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/SelectableTile
     tags:
       - input-control
+  session-storage:
+    name: Session storage
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/session-storage.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SessionStorage
+  shape-indicator:
+    name: Shape indicator
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/shape-indicator.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ShapeIndicator
+  skeleton-icon:
+    name: Skeleton icon
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/skeleton-icon.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SkeletonIcon
   skeleton-placeholder:
     name: Skeleton placeholder
     status: stable
@@ -568,15 +826,29 @@ assets:
   slider:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/slider.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/slider/usage
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/Slider
+  stack:
+    name: Stack
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/stack.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Stack
   structured-list:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/structured-list.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/structured-list/usage
     demoLinks:
       - type: storybook
@@ -586,6 +858,7 @@ assets:
   tabs:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/tabs.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/tabs/usage
     demoLinks:
       - type: storybook
@@ -595,15 +868,41 @@ assets:
   tag:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/tag.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/tag/usage
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/Tag
+  tag-set:
+    name: Tag set
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tag-set.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TagSet
+  text:
+    name: Text
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/text.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Text
   text-area:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/text-area.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -612,6 +911,7 @@ assets:
   text-input:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/text-input.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/text-input/usage
     demoLinks:
       - type: storybook
@@ -621,6 +921,7 @@ assets:
   theme:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/theme.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -629,6 +930,7 @@ assets:
   tile:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/tile.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/tile/usage
     demoLinks:
       - type: storybook
@@ -638,6 +940,7 @@ assets:
   time-picker:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/time-picker.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -660,15 +963,41 @@ assets:
   toggle:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/toggle.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/toggle/usage 
     demoLinks:
       - type: storybook
         name: Storybook
         action: link
         url: https://svelte.carbondesignsystem.com/components/Toggle
+  toggletip:
+    name: Toggletip
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/toggletip.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Toggletip
+  toolbar:
+    name: Toolbar
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/toolbar.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Toolbar
   tooltip:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/tooltip.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/tooltip/usage
     demoLinks:
       - type: storybook
@@ -692,6 +1021,7 @@ assets:
   tree-view:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/tree-view.svg'
     demoLinks:
       - type: storybook
         name: Storybook
@@ -714,6 +1044,7 @@ assets:
   ui-shell-header:
     status: stable
     framework: svelte
+    thumbnailPath: './thumbnails/ui-shell.svg'
     externalDocsUrl: https://www.carbondesignsystem.com/components/UI-shell-header/usage
     demoLinks:
       - type: storybook
@@ -735,3 +1066,27 @@ assets:
     tags:
       - data-display
       
+  user-avatar:
+    name: User avatar
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/user-avatar.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/UserAvatar
+  user-avatar-group:
+    name: User avatar group
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/user-avatar-group.svg'
+    demoLinks:
+      - type: storybook
+        name: Storybook
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/UserAvatarGroup
