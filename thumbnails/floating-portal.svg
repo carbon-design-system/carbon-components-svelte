@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>floating-portal</title>
+    <defs>
+        <rect id="panel-shape" x="90" y="40" width="140" height="64"></rect>
+        <filter x="-10.7%" y="-9.4%" width="121.4%" height="131.3%" filterUnits="objectBoundingBox" id="panel-shadow">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="floating-portal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <use xlink:href="#panel-shape" fill="black" fill-opacity="1" filter="url(#panel-shadow)"></use>
+        <use xlink:href="#panel-shape" fill="#FFFFFF"></use>
+        <rect id="content-1" fill="#525252" x="106" y="56" width="90" height="8"></rect>
+        <rect id="content-2" fill="#A8A8A8" x="106" y="72" width="70" height="8"></rect>
+        <line id="anchor-link" x1="160" y1="104" x2="160" y2="118" stroke="#0F62FE" stroke-width="1.25" stroke-dasharray="2 2"></line>
+        <rect id="trigger" fill="#0F62FE" x="130" y="118" width="60" height="20"></rect>
+        <rect id="trigger-label" fill="#FFFFFF" x="144" y="125" width="32" height="6"></rect>
+    </g>
+</svg>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>form</title>
+    <g id="form" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="panel" fill="#F4F4F4" x="84" y="28" width="152" height="144"></rect>
+        <rect id="legend" fill="#A8A8A8" x="96" y="38" width="48" height="5"></rect>
+        <rect id="helper-1" fill="#C6C6C6" x="96" y="50" width="88" height="3"></rect>
+        <rect id="helper-2" fill="#C6C6C6" x="96" y="56" width="72" height="3"></rect>
+        <rect id="select-label" fill="#A8A8A8" x="96" y="68" width="40" height="4"></rect>
+        <rect id="select-field" fill="#FFFFFF" x="96" y="76" width="128" height="18"></rect>
+        <rect id="select-border" fill="#8D8D8D" x="96" y="93" width="128" height="1"></rect>
+        <rect id="select-value" fill="#C6C6C6" x="104" y="82" width="56" height="4"></rect>
+        <g id="select-chevron" transform="translate(198, 77) scale(0.5)" fill="#161616">
+            <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
+        </g>
+        <rect id="select-a-field" fill="#FFFFFF" x="96" y="102" width="58" height="16"></rect>
+        <rect id="select-a-border" fill="#8D8D8D" x="96" y="117" width="58" height="1"></rect>
+        <rect id="select-a-value" fill="#C6C6C6" x="102" y="107" width="28" height="3"></rect>
+        <g id="select-a-chevron" transform="translate(138, 103) scale(0.4375)" fill="#161616">
+            <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
+        </g>
+        <rect id="select-b-field" fill="#FFFFFF" x="166" y="102" width="58" height="16"></rect>
+        <rect id="select-b-border" fill="#8D8D8D" x="166" y="117" width="58" height="1"></rect>
+        <rect id="select-b-value" fill="#C6C6C6" x="172" y="107" width="28" height="3"></rect>
+        <g id="select-b-chevron" transform="translate(208, 103) scale(0.4375)" fill="#161616">
+            <path d="M16 22L6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"></path>
+        </g>
+        <rect id="checkbox" fill="none" stroke="#161616" stroke-width="1" x="96" y="126" width="8" height="8"></rect>
+        <rect id="checkbox-label" fill="#C6C6C6" x="110" y="128" width="40" height="3"></rect>
+        <rect id="primary" fill="#0F62FE" x="96" y="144" width="64" height="16"></rect>
+    </g>
+</svg>
