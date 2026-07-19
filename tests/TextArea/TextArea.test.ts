@@ -228,23 +228,23 @@ describe("TextArea", () => {
       expect(message.closest(".bx--text-area__wrapper")).not.toBeNull();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      render(TextArea, {
-        fluid: true,
-        invalid: true,
-        invalidText: "Invalid input",
-        warn: true,
-        warnText: "Warning message",
-        ...props,
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        render(TextArea, {
+          fluid: true,
+          invalid: true,
+          invalidText: "Invalid input",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        });
 
-      expect(screen.queryByText("Invalid input")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(document.querySelector("[data-invalid]")).toBeNull();
-    });
+        expect(screen.queryByText("Invalid input")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(document.querySelector("[data-invalid]")).toBeNull();
+      },
+    );
 
     it("inherits fluid from the FluidForm context", () => {
       render(TextAreaFluidForm);

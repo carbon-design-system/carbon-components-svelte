@@ -239,18 +239,21 @@ describe("OverflowMenu", () => {
   test.each([
     ["sm", "bx--overflow-menu-options--sm"],
     ["xl", "bx--overflow-menu-options--xl"],
-  ] as const)("keeps the %s size modifier on the menu options inside a breadcrumb", async (size, expectedClass) => {
-    render(OverflowMenuInBreadcrumb, { props: { size } });
+  ] as const)(
+    "keeps the %s size modifier on the menu options inside a breadcrumb",
+    async (size, expectedClass) => {
+      render(OverflowMenuInBreadcrumb, { props: { size } });
 
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
 
-    const menu = screen.getByRole("menu");
-    // Keep the size class for compact menu items. The triangle caret is fixed
-    // in `_breadcrumb.scss`, not by dropping the modifier.
-    expect(menu).toHaveClass("bx--breadcrumb-menu-options");
-    expect(menu).toHaveClass(expectedClass);
-  });
+      const menu = screen.getByRole("menu");
+      // Keep the size class for compact menu items. The triangle caret is fixed
+      // in `_breadcrumb.scss`, not by dropping the modifier.
+      expect(menu).toHaveClass("bx--breadcrumb-menu-options");
+      expect(menu).toHaveClass(expectedClass);
+    },
+  );
 
   it("applies light variant styling", () => {
     render(OverflowMenu, { props: { light: true } });

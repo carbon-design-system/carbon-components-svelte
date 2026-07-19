@@ -38,17 +38,15 @@ describe("Pagination", () => {
     expect(pagination).toHaveClass("bx--pagination--md");
   });
 
-  it.each([
-    "xs",
-    "sm",
-    "md",
-    "lg",
-  ] as const)("applies the %s size class", (size) => {
-    const { container } = render(Pagination, { props: { size } });
+  it.each(["xs", "sm", "md", "lg"] as const)(
+    "applies the %s size class",
+    (size) => {
+      const { container } = render(Pagination, { props: { size } });
 
-    const pagination = container.querySelector(".bx--pagination");
-    expect(pagination).toHaveClass(`bx--pagination--${size}`);
-  });
+      const pagination = container.querySelector(".bx--pagination");
+      expect(pagination).toHaveClass(`bx--pagination--${size}`);
+    },
+  );
 
   it("should render with custom total items", () => {
     render(Pagination, {

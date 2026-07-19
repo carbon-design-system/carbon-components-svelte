@@ -112,42 +112,41 @@ describe("ComboButton", () => {
     { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
     { size: "md", buttonClass: "bx--btn--field", menuClass: "bx--menu--md" },
     { size: "lg", buttonClass: undefined, menuClass: "bx--menu--lg" },
-  ] as const)("propagates size $size to both buttons and the menu row height", async ({
-    size,
-    buttonClass,
-    menuClass,
-  }) => {
-    render(ComboButtonFixture, { props: { size } });
+  ] as const)(
+    "propagates size $size to both buttons and the menu row height",
+    async ({ size, buttonClass, menuClass }) => {
+      render(ComboButtonFixture, { props: { size } });
 
-    const primaryAction = screen.getByRole("button", { name: "Save" });
-    const trigger = screen.getByRole("button", {
-      name: "Additional actions",
-    });
+      const primaryAction = screen.getByRole("button", { name: "Save" });
+      const trigger = screen.getByRole("button", {
+        name: "Additional actions",
+      });
 
-    for (const unwanted of [
-      "bx--btn--sm",
-      "bx--btn--field",
-      "bx--btn--lg",
-      "bx--btn--xl",
-    ]) {
-      if (unwanted !== buttonClass) {
-        expect(primaryAction).not.toHaveClass(unwanted);
-        expect(trigger).not.toHaveClass(unwanted);
+      for (const unwanted of [
+        "bx--btn--sm",
+        "bx--btn--field",
+        "bx--btn--lg",
+        "bx--btn--xl",
+      ]) {
+        if (unwanted !== buttonClass) {
+          expect(primaryAction).not.toHaveClass(unwanted);
+          expect(trigger).not.toHaveClass(unwanted);
+        }
       }
-    }
-    if (buttonClass) {
-      expect(primaryAction).toHaveClass(buttonClass);
-      expect(trigger).toHaveClass(buttonClass);
-    }
+      if (buttonClass) {
+        expect(primaryAction).toHaveClass(buttonClass);
+        expect(trigger).toHaveClass(buttonClass);
+      }
 
-    await user.click(trigger);
+      await user.click(trigger);
 
-    const menu = screen.getByRole("menu");
-    for (const unwanted of ["bx--menu--xs", "bx--menu--md", "bx--menu--lg"]) {
-      if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
-    }
-    if (menuClass) expect(menu).toHaveClass(menuClass);
-  });
+      const menu = screen.getByRole("menu");
+      for (const unwanted of ["bx--menu--xs", "bx--menu--md", "bx--menu--lg"]) {
+        if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
+      }
+      if (menuClass) expect(menu).toHaveClass(menuClass);
+    },
+  );
 
   it("keeps both buttons the same height at every size (no Button `lg`/`xl` baseline misalignment)", () => {
     render(ComboButtonFixture, { props: { size: "lg" } });

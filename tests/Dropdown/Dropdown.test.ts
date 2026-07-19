@@ -202,30 +202,30 @@ describe("Dropdown", () => {
     expect(screen.getByRole("combobox")).toHaveTextContent("Slack");
   });
 
-  it.each([
-    "disabled",
-    "readonly",
-  ] as const)("should suppress invalid and warn states when %s", (state) => {
-    const { container } = render(Dropdown, {
-      props: {
-        items,
-        selectedId: "0",
-        [state]: true,
-        invalid: true,
-        invalidText: "Invalid selection",
-        warn: true,
-        warnText: "Warning message",
-      },
-    });
+  it.each(["disabled", "readonly"] as const)(
+    "should suppress invalid and warn states when %s",
+    (state) => {
+      const { container } = render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          [state]: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+          warn: true,
+          warnText: "Warning message",
+        },
+      });
 
-    const listbox = container.querySelector(".bx--dropdown");
-    expect(listbox).not.toHaveAttribute("data-invalid");
-    expect(listbox).not.toHaveClass("bx--dropdown--invalid");
-    expect(listbox).not.toHaveClass("bx--dropdown--warning");
-    expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
-    expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-  });
+      const listbox = container.querySelector(".bx--dropdown");
+      expect(listbox).not.toHaveAttribute("data-invalid");
+      expect(listbox).not.toHaveClass("bx--dropdown--invalid");
+      expect(listbox).not.toHaveClass("bx--dropdown--warning");
+      expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
+      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+    },
+  );
 
   it("should handle helper text", () => {
     render(Dropdown, {
@@ -1290,39 +1290,40 @@ describe("Dropdown", () => {
         virtualize: undefined,
         description: "with auto-enabled virtualization",
       },
-    ])("should scroll to selected item when menu opens $description", async ({
-      virtualize,
-    }) => {
-      const largeItems = createLargeItemList(500);
-      render(Dropdown, {
-        props: {
-          items: largeItems,
-          selectedId: "250", // Item 251, in the middle
-          virtualize,
-        },
-      });
-
-      const button = screen.getByRole("combobox");
-      await user.click(button);
-
-      await waitFor(() => {
-        const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
-        expect(menu).toBeVisible();
-
-        // The selected item should be visible
-        const selectedOption = within(menu).getByRole("option", {
-          name: "Item 251",
+    ])(
+      "should scroll to selected item when menu opens $description",
+      async ({ virtualize }) => {
+        const largeItems = createLargeItemList(500);
+        render(Dropdown, {
+          props: {
+            items: largeItems,
+            selectedId: "250", // Item 251, in the middle
+            virtualize,
+          },
         });
-        expect(selectedOption).toBeInTheDocument();
-        expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-        // The scroll position should be set to show the selected item at the top
-        // Item 251 is at index 250, itemHeight=40
-        // Expected scroll: 250 * 40 = 10000
-        expect(menu.scrollTop).toBe(10000);
-      });
-    });
+        const button = screen.getByRole("combobox");
+        await user.click(button);
+
+        await waitFor(() => {
+          const menu = screen.getByRole("listbox");
+          expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+          expect(menu).toBeVisible();
+
+          // The selected item should be visible
+          const selectedOption = within(menu).getByRole("option", {
+            name: "Item 251",
+          });
+          expect(selectedOption).toBeInTheDocument();
+          expect(selectedOption).toHaveAttribute("aria-selected", "true");
+
+          // The scroll position should be set to show the selected item at the top
+          // Item 251 is at index 250, itemHeight=40
+          // Expected scroll: 250 * 40 = 10000
+          expect(menu.scrollTop).toBe(10000);
+        });
+      },
+    );
 
     it.each([
       { virtualize: true, description: "with explicit virtualization" },
@@ -1330,52 +1331,53 @@ describe("Dropdown", () => {
         virtualize: undefined,
         description: "with auto-enabled virtualization",
       },
-    ])("should scroll to selected item when menu reopens $description", async ({
-      virtualize,
-    }) => {
-      const largeItems = createLargeItemList(500);
-      const { rerender } = render(Dropdown, {
-        props: {
-          items: largeItems,
-          selectedId: "250", // Item 251, in the middle
-          virtualize,
-        },
-      });
-
-      const button = screen.getByRole("combobox");
-      await user.click(button);
-
-      const menu = screen.getByRole("listbox");
-      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
-      expect(menu).toBeVisible();
-
-      // Scroll away from the selected item
-      menu.scrollTop = 0;
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      rerender({ open: false });
-      await tick();
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      rerender({ open: true });
-      await tick();
-
-      await waitFor(() => {
-        const menuAfterReopen = screen.getByRole("listbox");
-        expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
-
-        // Selected item should be visible after reopening
-        const selectedOption = within(menuAfterReopen).getByRole("option", {
-          name: "Item 251",
+    ])(
+      "should scroll to selected item when menu reopens $description",
+      async ({ virtualize }) => {
+        const largeItems = createLargeItemList(500);
+        const { rerender } = render(Dropdown, {
+          props: {
+            items: largeItems,
+            selectedId: "250", // Item 251, in the middle
+            virtualize,
+          },
         });
-        expect(selectedOption).toBeInTheDocument();
-        expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-        // Should have scrolled back to show the selected item at the top
-        // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
-        expect(menuAfterReopen.scrollTop).toBe(10000);
-      });
-    });
+        const button = screen.getByRole("combobox");
+        await user.click(button);
+
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+        expect(menu).toBeVisible();
+
+        // Scroll away from the selected item
+        menu.scrollTop = 0;
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        rerender({ open: false });
+        await tick();
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        rerender({ open: true });
+        await tick();
+
+        await waitFor(() => {
+          const menuAfterReopen = screen.getByRole("listbox");
+          expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
+
+          // Selected item should be visible after reopening
+          const selectedOption = within(menuAfterReopen).getByRole("option", {
+            name: "Item 251",
+          });
+          expect(selectedOption).toBeInTheDocument();
+          expect(selectedOption).toHaveAttribute("aria-selected", "true");
+
+          // Should have scrolled back to show the selected item at the top
+          // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
+          expect(menuAfterReopen.scrollTop).toBe(10000);
+        });
+      },
+    );
 
     it("should scroll to top when no item is selected", async () => {
       const largeItems = createLargeItemList(500);
@@ -1655,33 +1657,34 @@ describe("Dropdown", () => {
         virtualize: undefined,
         description: "with auto-enabled virtualization",
       },
-    ])("should start keyboard navigation at selected item $description", async ({
-      virtualize,
-    }) => {
-      const largeItems = createLargeItemList(500);
-      render(Dropdown, {
-        props: {
-          items: largeItems,
-          selectedId: "250", // Item 251, in the middle
-          virtualize,
-        },
-      });
+    ])(
+      "should start keyboard navigation at selected item $description",
+      async ({ virtualize }) => {
+        const largeItems = createLargeItemList(500);
+        render(Dropdown, {
+          props: {
+            items: largeItems,
+            selectedId: "250", // Item 251, in the middle
+            virtualize,
+          },
+        });
 
-      const button = screen.getByRole("combobox");
-      await user.click(button);
+        const button = screen.getByRole("combobox");
+        await user.click(button);
 
-      await waitFor(() => {
-        const menu = screen.getByRole("listbox");
-        expect(menu).toBeVisible();
-      });
+        await waitFor(() => {
+          const menu = screen.getByRole("listbox");
+          expect(menu).toBeVisible();
+        });
 
-      // Press ArrowDown - should move to next item (251 -> 252)
-      await user.keyboard("{ArrowDown}");
-      await user.keyboard("{Enter}");
+        // Press ArrowDown - should move to next item (251 -> 252)
+        await user.keyboard("{ArrowDown}");
+        await user.keyboard("{Enter}");
 
-      // Should have selected Item 252 (index 251)
-      expect(button).toHaveTextContent("Item 252");
-    });
+        // Should have selected Item 252 (index 251)
+        expect(button).toHaveTextContent("Item 252");
+      },
+    );
 
     it("should only scroll when highlighted item is outside viewport", async () => {
       const largeItems = createLargeItemList(500);
@@ -2385,27 +2388,27 @@ describe("Dropdown", () => {
       expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      render(Dropdown, {
-        props: {
-          items,
-          labelText: "Contact",
-          fluid: true,
-          invalid: true,
-          invalidText: "Invalid selection",
-          warn: true,
-          warnText: "Warning message",
-          ...props,
-        },
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        render(Dropdown, {
+          props: {
+            items,
+            labelText: "Contact",
+            fluid: true,
+            invalid: true,
+            invalidText: "Invalid selection",
+            warn: true,
+            warnText: "Warning message",
+            ...props,
+          },
+        });
 
-      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(document.querySelector("[data-invalid]")).toBeNull();
-    });
+        expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(document.querySelector("[data-invalid]")).toBeNull();
+      },
+    );
 
     it("marks the wrapper as condensed when fluid", () => {
       render(Dropdown, {

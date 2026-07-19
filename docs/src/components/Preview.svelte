@@ -55,9 +55,6 @@
     margin-right: -1rem;
   }
 
-  /* The negative margins above cancel the column's 1rem padding. On mobile
-             the doc grid collapses that padding to 0 (see global.css), so reset the
-             margins to keep the preview aligned with the flush content edge. */
   @media (max-width: 672px) {
     .preview {
       margin-left: 0;
@@ -73,9 +70,6 @@
     z-index: 9100;
   }
 
-  /* Below the lg breakpoint the side nav opens as a full-screen overlay
-             (z-index 8000) that must cover the page. Drop the breakout z-index here
-             so previews don't show through the open nav. */
   @media (max-width: 65.98rem) {
     .preview-viewer {
       z-index: auto;

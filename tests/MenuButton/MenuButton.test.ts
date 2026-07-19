@@ -47,33 +47,32 @@ describe("MenuButton", () => {
     { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
     { size: "md", buttonClass: "bx--btn--field", menuClass: "bx--menu--md" },
     { size: "lg", buttonClass: undefined, menuClass: "bx--menu--lg" },
-  ] as const)("propagates size $size to the trigger and the menu row height", async ({
-    size,
-    buttonClass,
-    menuClass,
-  }) => {
-    render(MenuButtonFixture, { props: { size } });
+  ] as const)(
+    "propagates size $size to the trigger and the menu row height",
+    async ({ size, buttonClass, menuClass }) => {
+      render(MenuButtonFixture, { props: { size } });
 
-    const trigger = screen.getByRole("button", { name: "Actions" });
+      const trigger = screen.getByRole("button", { name: "Actions" });
 
-    for (const unwanted of [
-      "bx--btn--sm",
-      "bx--btn--field",
-      "bx--btn--lg",
-      "bx--btn--xl",
-    ]) {
-      if (unwanted !== buttonClass) expect(trigger).not.toHaveClass(unwanted);
-    }
-    if (buttonClass) expect(trigger).toHaveClass(buttonClass);
+      for (const unwanted of [
+        "bx--btn--sm",
+        "bx--btn--field",
+        "bx--btn--lg",
+        "bx--btn--xl",
+      ]) {
+        if (unwanted !== buttonClass) expect(trigger).not.toHaveClass(unwanted);
+      }
+      if (buttonClass) expect(trigger).toHaveClass(buttonClass);
 
-    await user.click(trigger);
+      await user.click(trigger);
 
-    const menu = screen.getByRole("menu");
-    for (const unwanted of ["bx--menu--xs", "bx--menu--md", "bx--menu--lg"]) {
-      if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
-    }
-    if (menuClass) expect(menu).toHaveClass(menuClass);
-  });
+      const menu = screen.getByRole("menu");
+      for (const unwanted of ["bx--menu--xs", "bx--menu--md", "bx--menu--lg"]) {
+        if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
+      }
+      if (menuClass) expect(menu).toHaveClass(menuClass);
+    },
+  );
 
   it("keeps the trigger off Button's baseline-aligned `lg`/`xl` classes", () => {
     render(MenuButtonFixture, { props: { size: "lg" } });
