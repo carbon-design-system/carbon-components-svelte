@@ -159,28 +159,34 @@ describe("DatePicker", () => {
     expect(wrapper).toHaveClass("bx--date-picker-input__wrapper--warn");
   });
 
-  it.each([
-    "disabled",
-    "readonly",
-  ] as const)("suppresses invalid and warn states when %s", (state) => {
-    const { container } = render(DatePicker, {
-      [state]: true,
-      invalid: true,
-      invalidText: "Invalid date",
-      warn: true,
-      warnText: "Warning message",
-    });
+  it.each(["disabled", "readonly"] as const)(
+    "suppresses invalid and warn states when %s",
+    (state) => {
+      const { container } = render(DatePicker, {
+        [state]: true,
+        invalid: true,
+        invalidText: "Invalid date",
+        warn: true,
+        warnText: "Warning message",
+      });
 
-    const wrapper = container.querySelector(".bx--date-picker-input__wrapper");
-    expect(wrapper).not.toHaveClass("bx--date-picker-input__wrapper--invalid");
-    expect(wrapper).not.toHaveClass("bx--date-picker-input__wrapper--warn");
-    expect(
-      container.querySelector(".bx--date-picker__icon--invalid"),
-    ).toBeNull();
-    expect(container.querySelector(".bx--date-picker__icon--warn")).toBeNull();
-    expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
-    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-  });
+      const wrapper = container.querySelector(
+        ".bx--date-picker-input__wrapper",
+      );
+      expect(wrapper).not.toHaveClass(
+        "bx--date-picker-input__wrapper--invalid",
+      );
+      expect(wrapper).not.toHaveClass("bx--date-picker-input__wrapper--warn");
+      expect(
+        container.querySelector(".bx--date-picker__icon--invalid"),
+      ).toBeNull();
+      expect(
+        container.querySelector(".bx--date-picker__icon--warn"),
+      ).toBeNull();
+      expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+    },
+  );
 
   it("handles helper text", () => {
     render(DatePicker, { helperText: "Helper message" });
@@ -439,17 +445,20 @@ describe("DatePicker", () => {
       ["d.m.Y", "10.02.2026"],
       ["d/m/y", "10/02/26"],
       ["M j, Y", "Feb 10, 2026"],
-    ])("derived pattern for %s is valid with the Unicode (u) flag", (dateFormat, sampleValue) => {
-      render(DatePicker, { dateFormat });
+    ])(
+      "derived pattern for %s is valid with the Unicode (u) flag",
+      (dateFormat, sampleValue) => {
+        render(DatePicker, { dateFormat });
 
-      const input = screen.getByLabelText("Date");
-      const pattern = input.getAttribute("pattern");
-      expect(pattern).toBeTruthy();
+        const input = screen.getByLabelText("Date");
+        const pattern = input.getAttribute("pattern");
+        expect(pattern).toBeTruthy();
 
-      // This is how browsers evaluate the HTML pattern attribute.
-      const re = new RegExp(`^(?:${pattern})$`, "u");
-      expect(re.test(sampleValue)).toBe(true);
-    });
+        // This is how browsers evaluate the HTML pattern attribute.
+        const re = new RegExp(`^(?:${pattern})$`, "u");
+        expect(re.test(sampleValue)).toBe(true);
+      },
+    );
   });
 
   describe("minDate and maxDate", () => {
@@ -855,29 +864,29 @@ describe("DatePicker", () => {
       );
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      const { container } = render(DatePicker, {
-        fluid: true,
-        datePickerType: "single",
-        invalid: true,
-        invalidText: "Invalid date",
-        warn: true,
-        warnText: "Warning message",
-        ...props,
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        const { container } = render(DatePicker, {
+          fluid: true,
+          datePickerType: "single",
+          invalid: true,
+          invalidText: "Invalid date",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        });
 
-      expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(
-        container.querySelector(".bx--date-picker--fluid--invalid"),
-      ).toBeNull();
-      expect(
-        container.querySelector(".bx--date-picker--fluid--warn"),
-      ).toBeNull();
-    });
+        expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(
+          container.querySelector(".bx--date-picker--fluid--invalid"),
+        ).toBeNull();
+        expect(
+          container.querySelector(".bx--date-picker--fluid--warn"),
+        ).toBeNull();
+      },
+    );
 
     it("inherits fluid from the FluidForm context", () => {
       const { container } = render(DatePickerFluidForm);

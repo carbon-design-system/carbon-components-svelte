@@ -405,24 +405,24 @@ describe("PasswordInput", () => {
       ).toBeInTheDocument();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      render(PasswordInput, {
-        fluid: true,
-        labelText: "Password",
-        invalid: true,
-        invalidText: "Invalid password",
-        warn: true,
-        warnText: "Warning message",
-        ...props,
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        render(PasswordInput, {
+          fluid: true,
+          labelText: "Password",
+          invalid: true,
+          invalidText: "Invalid password",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        });
 
-      expect(screen.queryByText("Invalid password")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(document.querySelector("[data-invalid]")).toBeNull();
-    });
+        expect(screen.queryByText("Invalid password")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(document.querySelector("[data-invalid]")).toBeNull();
+      },
+    );
 
     it("ignores fluid for the inline variant", () => {
       render(PasswordInput, {

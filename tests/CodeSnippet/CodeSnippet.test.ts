@@ -87,21 +87,20 @@ describe("CodeSnippet", () => {
 npm -v
 yarn -v`,
     },
-  ] as const)("should not copy again on $variant snippet while feedback is active", async ({
-    variant,
-    label,
-    code,
-  }) => {
-    const copy = vi.fn();
-    render(CodeSnippetDoubleClick, {
-      props: { type: variant, code, copy },
-    });
+  ] as const)(
+    "should not copy again on $variant snippet while feedback is active",
+    async ({ variant, label, code }) => {
+      const copy = vi.fn();
+      render(CodeSnippetDoubleClick, {
+        props: { type: variant, code, copy },
+      });
 
-    await user.dblClick(screen.getByLabelText(label));
+      await user.dblClick(screen.getByLabelText(label));
 
-    expect(copy).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
-  });
+      expect(copy).toHaveBeenCalledTimes(1);
+      expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+    },
+  );
 
   const snippetVariants = [
     { type: "single" as const, label: "Copy to clipboard" },
@@ -109,120 +108,116 @@ yarn -v`,
     { type: "multi" as const, label: "Copy to clipboard" },
   ];
 
-  it.each(
-    snippetVariants,
-  )("async copy delays feedback until resolved ($type)", async ({
-    type,
-    label,
-  }) => {
-    let resolveCopy: () => void = () => {};
-    const copy = vi.fn(
-      () =>
-        new Promise<void>((resolve) => {
-          resolveCopy = resolve;
-        }),
-    );
+  it.each(snippetVariants)(
+    "async copy delays feedback until resolved ($type)",
+    async ({ type, label }) => {
+      let resolveCopy: () => void = () => {};
+      const copy = vi.fn(
+        () =>
+          new Promise<void>((resolve) => {
+            resolveCopy = resolve;
+          }),
+      );
 
-    render(CodeSnippetAsync, { props: { type, copy } });
+      render(CodeSnippetAsync, { props: { type, copy } });
 
-    const button = screen.getByLabelText(label);
-    fireEvent.click(button);
-    await Promise.resolve();
+      const button = screen.getByLabelText(label);
+      fireEvent.click(button);
+      await Promise.resolve();
 
-    expect(copy).toHaveBeenCalledTimes(1);
-    expect(button).toHaveAttribute("aria-busy", "true");
-    expect(button).not.toHaveClass("bx--copy-btn--fade-in");
+      expect(copy).toHaveBeenCalledTimes(1);
+      expect(button).toHaveAttribute("aria-busy", "true");
+      expect(button).not.toHaveClass("bx--copy-btn--fade-in");
 
-    resolveCopy();
-    await waitFor(() => {
-      expect(button).toHaveClass("bx--copy-btn--fade-in");
-    });
-
-    expect(button).not.toHaveAttribute("aria-busy");
-    // Feedback is portalled by default.
-    const portal = document.querySelector("[data-floating-portal]");
-    expect(
-      portal?.querySelector(".bx--tooltip-portal__content"),
-    ).toHaveTextContent("Copied!");
-  });
-
-  it.each(
-    snippetVariants,
-  )("forwards tooltipPosition to the portalled feedback tooltip ($type)", async ({
-    type,
-    label,
-  }) => {
-    render(CodeSnippetAsync, {
-      props: { type, copy: () => Promise.resolve(), tooltipPosition: "right" },
-    });
-
-    const button = screen.getByLabelText(label);
-    await user.click(button);
-
-    await waitFor(() => {
-      const portal = document.querySelector("[data-floating-portal]");
-      expect(portal).toHaveAttribute("data-floating-direction", "right");
-    });
-  });
-
-  it.each(
-    snippetVariants,
-  )("async copy failure does not show feedback ($type)", async ({
-    type,
-    label,
-  }) => {
-    const error = new Error("copy failed");
-    const copy = vi.fn().mockRejectedValue(error);
-    const onCopyError = vi.fn();
-
-    render(CodeSnippetAsync, {
-      props: { type, copy, onCopyError },
-    });
-
-    const button = screen.getByLabelText(label);
-    await user.click(button);
-
-    expect(onCopyError).toHaveBeenCalledWith({ error });
-    expect(button).not.toHaveClass("bx--copy-btn--fade-in");
-  });
-
-  it.each(
-    snippetVariants,
-  )("dispatches copy event after async copy resolves ($type)", async ({
-    type,
-    label,
-  }) => {
-    const order: string[] = [];
-    let resolveCopy: () => void = () => {};
-    const copy = vi.fn(async () => {
-      order.push("copyStart");
-      await new Promise<void>((resolve) => {
-        resolveCopy = resolve;
+      resolveCopy();
+      await waitFor(() => {
+        expect(button).toHaveClass("bx--copy-btn--fade-in");
       });
-      order.push("copyEnd");
-    });
 
-    render(CodeSnippetAsync, {
-      props: {
-        type,
-        copy,
-        onCopy: () => {
-          order.push("copyEvent");
+      expect(button).not.toHaveAttribute("aria-busy");
+      // Feedback is portalled by default.
+      const portal = document.querySelector("[data-floating-portal]");
+      expect(
+        portal?.querySelector(".bx--tooltip-portal__content"),
+      ).toHaveTextContent("Copied!");
+    },
+  );
+
+  it.each(snippetVariants)(
+    "forwards tooltipPosition to the portalled feedback tooltip ($type)",
+    async ({ type, label }) => {
+      render(CodeSnippetAsync, {
+        props: {
+          type,
+          copy: () => Promise.resolve(),
+          tooltipPosition: "right",
         },
-      },
-    });
+      });
 
-    const button = screen.getByLabelText(label);
-    fireEvent.click(button);
-    await Promise.resolve();
+      const button = screen.getByLabelText(label);
+      await user.click(button);
 
-    expect(order).toEqual(["copyStart"]);
+      await waitFor(() => {
+        const portal = document.querySelector("[data-floating-portal]");
+        expect(portal).toHaveAttribute("data-floating-direction", "right");
+      });
+    },
+  );
 
-    resolveCopy();
-    await waitFor(() => {
-      expect(order).toEqual(["copyStart", "copyEnd", "copyEvent"]);
-    });
-  });
+  it.each(snippetVariants)(
+    "async copy failure does not show feedback ($type)",
+    async ({ type, label }) => {
+      const error = new Error("copy failed");
+      const copy = vi.fn().mockRejectedValue(error);
+      const onCopyError = vi.fn();
+
+      render(CodeSnippetAsync, {
+        props: { type, copy, onCopyError },
+      });
+
+      const button = screen.getByLabelText(label);
+      await user.click(button);
+
+      expect(onCopyError).toHaveBeenCalledWith({ error });
+      expect(button).not.toHaveClass("bx--copy-btn--fade-in");
+    },
+  );
+
+  it.each(snippetVariants)(
+    "dispatches copy event after async copy resolves ($type)",
+    async ({ type, label }) => {
+      const order: string[] = [];
+      let resolveCopy: () => void = () => {};
+      const copy = vi.fn(async () => {
+        order.push("copyStart");
+        await new Promise<void>((resolve) => {
+          resolveCopy = resolve;
+        });
+        order.push("copyEnd");
+      });
+
+      render(CodeSnippetAsync, {
+        props: {
+          type,
+          copy,
+          onCopy: () => {
+            order.push("copyEvent");
+          },
+        },
+      });
+
+      const button = screen.getByLabelText(label);
+      fireEvent.click(button);
+      await Promise.resolve();
+
+      expect(order).toEqual(["copyStart"]);
+
+      resolveCopy();
+      await waitFor(() => {
+        expect(order).toEqual(["copyStart", "copyEnd", "copyEvent"]);
+      });
+    },
+  );
 
   it.each([
     {
@@ -242,36 +237,35 @@ yarn -v`,
 npm -v
 yarn -v`,
     },
-  ] as const)("should not copy again while async copy is pending ($type)", async ({
-    type,
-    label,
-    code,
-  }) => {
-    let resolveCopy: () => void = () => {};
-    const copy = vi.fn(
-      () =>
-        new Promise<void>((resolve) => {
-          resolveCopy = resolve;
-        }),
-    );
+  ] as const)(
+    "should not copy again while async copy is pending ($type)",
+    async ({ type, label, code }) => {
+      let resolveCopy: () => void = () => {};
+      const copy = vi.fn(
+        () =>
+          new Promise<void>((resolve) => {
+            resolveCopy = resolve;
+          }),
+      );
 
-    render(CodeSnippetAsyncDoubleClick, {
-      props: { type, code, copy },
-    });
+      render(CodeSnippetAsyncDoubleClick, {
+        props: { type, code, copy },
+      });
 
-    const button = screen.getByLabelText(label);
-    fireEvent.click(button);
-    await Promise.resolve();
-    await user.click(button);
+      const button = screen.getByLabelText(label);
+      fireEvent.click(button);
+      await Promise.resolve();
+      await user.click(button);
 
-    expect(copy).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("Copy events: 0")).toBeInTheDocument();
+      expect(copy).toHaveBeenCalledTimes(1);
+      expect(screen.getByText("Copy events: 0")).toBeInTheDocument();
 
-    resolveCopy();
-    await waitFor(() => {
-      expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
-    });
-  });
+      resolveCopy();
+      await waitFor(() => {
+        expect(screen.getByText("Copy events: 1")).toBeInTheDocument();
+      });
+    },
+  );
 
   test("should render multiline variant", () => {
     const { container } = render(CodeSnippetMultiline);
@@ -377,20 +371,22 @@ yarn -v`,
     { type: "single" as const, label: "Copy to clipboard" },
     { type: "inline" as const, label: "Copy code" },
     { type: "multi" as const, label: "Copy to clipboard" },
-  ])("dispatches mouseenter:copy-button from $type snippet copy control", ({
-    type,
-    label,
-  }) => {
-    const onMouseEnterCopyButton = vi.fn();
-    render(CodeSnippetMouseEnter, {
-      props: { type, onMouseEnterCopyButton },
-    });
+  ])(
+    "dispatches mouseenter:copy-button from $type snippet copy control",
+    ({ type, label }) => {
+      const onMouseEnterCopyButton = vi.fn();
+      render(CodeSnippetMouseEnter, {
+        props: { type, onMouseEnterCopyButton },
+      });
 
-    fireEvent.mouseEnter(screen.getByLabelText(label));
+      fireEvent.mouseEnter(screen.getByLabelText(label));
 
-    expect(onMouseEnterCopyButton).toHaveBeenCalledTimes(1);
-    expect(onMouseEnterCopyButton.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
-  });
+      expect(onMouseEnterCopyButton).toHaveBeenCalledTimes(1);
+      expect(onMouseEnterCopyButton.mock.calls[0][0]).toBeInstanceOf(
+        MouseEvent,
+      );
+    },
+  );
 
   test("does not dispatch mouseenter:copy-button from single snippet code area", () => {
     const onMouseEnterCopyButton = vi.fn();
@@ -418,42 +414,42 @@ yarn -v`,
     expect(onMouseEnter).toHaveBeenCalledTimes(1);
   });
 
-  it.each([
-    { type: "inline" as const, label: "Copy code" },
-  ])("forwards mouseenter from inline snippet copy control", ({
-    type,
-    label,
-  }) => {
-    const onMouseEnter = vi.fn();
-    render(CodeSnippetCopyButtonMouseEnter, {
-      props: { type, onMouseEnter },
-    });
+  it.each([{ type: "inline" as const, label: "Copy code" }])(
+    "forwards mouseenter from inline snippet copy control",
+    ({ type, label }) => {
+      const onMouseEnter = vi.fn();
+      render(CodeSnippetCopyButtonMouseEnter, {
+        props: { type, onMouseEnter },
+      });
 
-    fireEvent.mouseEnter(screen.getByLabelText(label));
+      fireEvent.mouseEnter(screen.getByLabelText(label));
 
-    expect(onMouseEnter).toHaveBeenCalledTimes(1);
-  });
+      expect(onMouseEnter).toHaveBeenCalledTimes(1);
+    },
+  );
 
   it.each([
     { type: "single" as const, label: "Copy to clipboard" },
     { type: "inline" as const, label: "Copy code" },
     { type: "multi" as const, label: "Copy to clipboard" },
-  ])("dispatches mouseleave:copy-button from $type snippet copy control", ({
-    type,
-    label,
-  }) => {
-    const onMouseleaveCopyButton = vi.fn();
-    render(CodeSnippetCopyButtonMouseLeave, {
-      props: { type, onMouseleaveCopyButton },
-    });
+  ])(
+    "dispatches mouseleave:copy-button from $type snippet copy control",
+    ({ type, label }) => {
+      const onMouseleaveCopyButton = vi.fn();
+      render(CodeSnippetCopyButtonMouseLeave, {
+        props: { type, onMouseleaveCopyButton },
+      });
 
-    const button = screen.getByLabelText(label);
-    fireEvent.mouseEnter(button);
-    fireEvent.mouseLeave(button);
+      const button = screen.getByLabelText(label);
+      fireEvent.mouseEnter(button);
+      fireEvent.mouseLeave(button);
 
-    expect(onMouseleaveCopyButton).toHaveBeenCalledTimes(1);
-    expect(onMouseleaveCopyButton.mock.calls[0][0]).toBeInstanceOf(MouseEvent);
-  });
+      expect(onMouseleaveCopyButton).toHaveBeenCalledTimes(1);
+      expect(onMouseleaveCopyButton.mock.calls[0][0]).toBeInstanceOf(
+        MouseEvent,
+      );
+    },
+  );
 
   it.each([
     { type: "single" as const, label: "Copy to clipboard" },
@@ -462,20 +458,20 @@ yarn -v`,
       type: "multi" as const,
       label: "Copy to clipboard",
     },
-  ])("forwards copy:error from $type snippet copy control", async ({
-    type,
-    label,
-  }) => {
-    const error = new Error("copy failed");
-    const onCopyError = vi.fn();
-    render(CodeSnippetCopyError, {
-      props: { type, onCopyError },
-    });
+  ])(
+    "forwards copy:error from $type snippet copy control",
+    async ({ type, label }) => {
+      const error = new Error("copy failed");
+      const onCopyError = vi.fn();
+      render(CodeSnippetCopyError, {
+        props: { type, onCopyError },
+      });
 
-    await user.click(screen.getByLabelText(label));
+      await user.click(screen.getByLabelText(label));
 
-    expect(onCopyError).toHaveBeenCalledWith({ error });
-  });
+      expect(onCopyError).toHaveBeenCalledWith({ error });
+    },
+  );
 
   test("should wrap text when wrapText is true", () => {
     const { container } = render(CodeSnippetWithWrapText);

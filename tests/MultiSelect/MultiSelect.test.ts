@@ -969,29 +969,31 @@ describe("MultiSelect", () => {
       expect(wrapper).toHaveClass("bx--list-box--warning");
     });
 
-    it.each([
-      "disabled",
-      "readonly",
-    ] as const)("suppresses invalid and warn states when %s", (state) => {
-      const { container } = render(MultiSelect, {
-        props: {
-          items,
-          [state]: true,
-          invalid: true,
-          invalidText: "Invalid selection",
-          warn: true,
-          warnText: "Warning message",
-        },
-      });
+    it.each(["disabled", "readonly"] as const)(
+      "suppresses invalid and warn states when %s",
+      (state) => {
+        const { container } = render(MultiSelect, {
+          props: {
+            items,
+            [state]: true,
+            invalid: true,
+            invalidText: "Invalid selection",
+            warn: true,
+            warnText: "Warning message",
+          },
+        });
 
-      const wrapper = screen.getByRole("combobox").closest(".bx--list-box");
-      expect(wrapper).not.toHaveClass("bx--multi-select--invalid");
-      expect(wrapper).not.toHaveClass("bx--list-box--warning");
-      expect(wrapper).not.toHaveAttribute("data-invalid");
-      expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
-      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-    });
+        const wrapper = screen.getByRole("combobox").closest(".bx--list-box");
+        expect(wrapper).not.toHaveClass("bx--multi-select--invalid");
+        expect(wrapper).not.toHaveClass("bx--list-box--warning");
+        expect(wrapper).not.toHaveAttribute("data-invalid");
+        expect(
+          container.querySelector(".bx--list-box__invalid-icon"),
+        ).toBeNull();
+        expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      },
+    );
 
     it("handles disabled state", () => {
       render(MultiSelect, {
@@ -2024,40 +2026,41 @@ describe("MultiSelect", () => {
         virtualize: undefined,
         description: "with auto-enabled virtualization",
       },
-    ])("should scroll to selected item when menu opens $description", async ({
-      virtualize,
-    }) => {
-      const largeItems = createLargeItemList(500);
-      render(MultiSelect, {
-        props: {
-          items: largeItems,
-          selectedIds: ["250"], // Item 251, in the middle
-          virtualize,
-          selectionFeedback: "fixed", // Keep items in original order
-          sortItem: () => 0, // Disable sorting to maintain original order
-        },
-      });
-
-      await openMenu();
-
-      await waitFor(() => {
-        const menu = screen.getByRole("listbox");
-        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
-        expect(menu).toBeVisible();
-
-        // The selected item should be visible
-        const selectedOption = within(menu).getByRole("option", {
-          name: "Item 251",
+    ])(
+      "should scroll to selected item when menu opens $description",
+      async ({ virtualize }) => {
+        const largeItems = createLargeItemList(500);
+        render(MultiSelect, {
+          props: {
+            items: largeItems,
+            selectedIds: ["250"], // Item 251, in the middle
+            virtualize,
+            selectionFeedback: "fixed", // Keep items in original order
+            sortItem: () => 0, // Disable sorting to maintain original order
+          },
         });
-        expect(selectedOption).toBeInTheDocument();
-        expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-        // The scroll position should be set to show the selected item at the top
-        // Item 251 is at index 250, itemHeight=40
-        // Expected scroll: 250 * 40 = 10000
-        expect(menu.scrollTop).toBe(10000);
-      });
-    });
+        await openMenu();
+
+        await waitFor(() => {
+          const menu = screen.getByRole("listbox");
+          expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+          expect(menu).toBeVisible();
+
+          // The selected item should be visible
+          const selectedOption = within(menu).getByRole("option", {
+            name: "Item 251",
+          });
+          expect(selectedOption).toBeInTheDocument();
+          expect(selectedOption).toHaveAttribute("aria-selected", "true");
+
+          // The scroll position should be set to show the selected item at the top
+          // Item 251 is at index 250, itemHeight=40
+          // Expected scroll: 250 * 40 = 10000
+          expect(menu.scrollTop).toBe(10000);
+        });
+      },
+    );
 
     it.each([
       { virtualize: true, description: "with explicit virtualization" },
@@ -2065,57 +2068,58 @@ describe("MultiSelect", () => {
         virtualize: undefined,
         description: "with auto-enabled virtualization",
       },
-    ])("should scroll to selected item when menu reopens $description", async ({
-      virtualize,
-    }) => {
-      const largeItems = createLargeItemList(500);
-      const { rerender } = render(MultiSelect, {
-        props: {
-          items: largeItems,
-          selectedIds: ["250"], // Item 251, in the middle
-          virtualize,
-          selectionFeedback: "fixed", // Keep items in original order
-          sortItem: () => 0, // Disable sorting to maintain original order
-        },
-      });
+    ])(
+      "should scroll to selected item when menu reopens $description",
+      async ({ virtualize }) => {
+        const largeItems = createLargeItemList(500);
+        const { rerender } = render(MultiSelect, {
+          props: {
+            items: largeItems,
+            selectedIds: ["250"], // Item 251, in the middle
+            virtualize,
+            selectionFeedback: "fixed", // Keep items in original order
+            sortItem: () => 0, // Disable sorting to maintain original order
+          },
+        });
 
-      await openMenu();
+        await openMenu();
 
-      const menu = screen.getByRole("listbox");
-      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
-      expect(menu).toBeVisible();
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+        expect(menu).toBeVisible();
 
-      // Scroll away from the selected item
-      menu.scrollTop = 0;
-      await new Promise((resolve) => setTimeout(resolve, 100));
+        // Scroll away from the selected item
+        menu.scrollTop = 0;
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-      rerender({ open: false });
-      await tick();
-      await new Promise((resolve) => setTimeout(resolve, 100));
+        rerender({ open: false });
+        await tick();
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-      rerender({ open: true });
-      await tick();
-      await new Promise((resolve) => setTimeout(resolve, 200));
+        rerender({ open: true });
+        await tick();
+        await new Promise((resolve) => setTimeout(resolve, 200));
 
-      await waitFor(
-        () => {
-          const menuAfterReopen = screen.getByRole("listbox");
-          expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
+        await waitFor(
+          () => {
+            const menuAfterReopen = screen.getByRole("listbox");
+            expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
 
-          // Selected item should be visible after reopening
-          const selectedOption = within(menuAfterReopen).getByRole("option", {
-            name: "Item 251",
-          });
-          expect(selectedOption).toBeInTheDocument();
-          expect(selectedOption).toHaveAttribute("aria-selected", "true");
+            // Selected item should be visible after reopening
+            const selectedOption = within(menuAfterReopen).getByRole("option", {
+              name: "Item 251",
+            });
+            expect(selectedOption).toBeInTheDocument();
+            expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-          // Should have scrolled back to show the selected item at the top
-          // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
-          expect(menuAfterReopen.scrollTop).toBe(10000);
-        },
-        { timeout: 3000 },
-      );
-    });
+            // Should have scrolled back to show the selected item at the top
+            // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
+            expect(menuAfterReopen.scrollTop).toBe(10000);
+          },
+          { timeout: 3000 },
+        );
+      },
+    );
 
     it("should scroll to top when no items are selected", async () => {
       const largeItems = createLargeItemList(500);
@@ -3226,27 +3230,27 @@ describe("MultiSelect", () => {
       expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      render(MultiSelect, {
-        props: {
-          fluid: true,
-          items,
-          labelText: "Contact methods",
-          invalid: true,
-          invalidText: "Invalid selection",
-          warn: true,
-          warnText: "Warning message",
-          ...props,
-        },
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        render(MultiSelect, {
+          props: {
+            fluid: true,
+            items,
+            labelText: "Contact methods",
+            invalid: true,
+            invalidText: "Invalid selection",
+            warn: true,
+            warnText: "Warning message",
+            ...props,
+          },
+        });
 
-      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(document.querySelector("[data-invalid]")).toBeNull();
-    });
+        expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(document.querySelector("[data-invalid]")).toBeNull();
+      },
+    );
 
     it("marks the wrapper as condensed when fluid", () => {
       render(MultiSelect, {

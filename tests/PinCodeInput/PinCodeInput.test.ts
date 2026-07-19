@@ -559,26 +559,28 @@ describe("PinCodeInput", () => {
       expect(message.closest(".bx--pin-code-input__fields")).not.toBeNull();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      const { container } = render(PinCodeInput, {
-        props: {
-          fluid: true,
-          invalid: true,
-          invalidText: "Incorrect code",
-          warn: true,
-          warnText: "Code expiring soon",
-          ...props,
-        },
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        const { container } = render(PinCodeInput, {
+          props: {
+            fluid: true,
+            invalid: true,
+            invalidText: "Incorrect code",
+            warn: true,
+            warnText: "Code expiring soon",
+            ...props,
+          },
+        });
 
-      expect(screen.queryByText("Incorrect code")).not.toBeInTheDocument();
-      expect(screen.queryByText("Code expiring soon")).not.toBeInTheDocument();
-      expect(container.querySelector("[data-invalid]")).toBeNull();
-      expect(container.querySelector(".bx--pin-code-input__icon")).toBeNull();
-    });
+        expect(screen.queryByText("Incorrect code")).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("Code expiring soon"),
+        ).not.toBeInTheDocument();
+        expect(container.querySelector("[data-invalid]")).toBeNull();
+        expect(container.querySelector(".bx--pin-code-input__icon")).toBeNull();
+      },
+    );
 
     it("inherits fluid from the FluidForm context", () => {
       render(PinCodeInputFluidForm);
