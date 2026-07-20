@@ -6,7 +6,12 @@
 
 /**
  * Place a floating element next to an anchor. Caller passes both rects and the
- * viewport. Flips direction when the preferred side does not fit.
+ * viewport. Flips direction when the preferred side does not fit, then shifts
+ * (clamps) the box to stay within the viewport on the cross axis - there is
+ * no "other side" to flip to there, so this is a shift rather than a flip,
+ * same as Floating UI's `shift`. For `left`/`right`, the primary axis also
+ * gets a final clamp as a fallback for when content is too wide for either
+ * side to fully fit.
  *
  * @param {Object} options
  * @param {RectLike} options.anchorRect - The anchor's `getBoundingClientRect()`.
@@ -192,6 +197,55 @@ export function floatingPosition({
     // changes — no recompute, no bounce. The CSS applies it from the matching
     // edge per alignment.
     caretNudgePx = rect.width / 2;
+  }
+
+  if (actualDirection === "top" || actualDirection === "bottom") {
+    const finalWidth = posWidth ?? floatingRect.width;
+
+    // `posLeft` is the box's own left edge for `start` alignment (or when
+    // matching the anchor width), but for `center`/`end` it is an
+    // anchor-relative coordinate that FloatingPortal shifts into place with a
+    // CSS `translateX` — account for that offset to find the true rendered
+    // left edge before clamping it to the viewport.
+    let trueLeft = posLeft;
+    if (intrinsicWidth && intrinsicAlign === "center") {
+      trueLeft = posLeft - finalWidth / 2;
+    } else if (intrinsicWidth && intrinsicAlign === "end") {
+      trueLeft = posLeft - finalWidth;
+    }
+
+    const minLeft = scrollXOffset;
+    const maxLeft = scrollXOffset + viewport.innerWidth - finalWidth;
+    // Content wider than the viewport: prefer the left edge over the right.
+    const clampedTrueLeft =
+      maxLeft >= minLeft
+        ? Math.min(Math.max(trueLeft, minLeft), maxLeft)
+        : minLeft;
+
+    const delta = clampedTrueLeft - trueLeft;
+    if (delta !== 0) {
+      posLeft += delta;
+      // Keep the caret pointing at the (unmoved) anchor center after the
+      // box itself shifted to stay within the viewport.
+      if (caretNudgePx !== undefined) caretNudgePx -= delta;
+    }
+  } else {
+    // `left`/`right`: clamp both axes. `top` is the cross axis (mirrors the
+    // top/bottom case's horizontal shift; no CSS transform involved here, so
+    // no extra offset accounting is needed). `left` is the primary axis -
+    // the flip above already tries the preferred side, but if the content is
+    // too wide for either side to fully fit, this is a final fallback so it
+    // stays on-screen rather than overflowing whichever side it landed on.
+    const minTop = scrollYOffset;
+    const maxTop = scrollYOffset + viewport.innerHeight - floatingRect.height;
+    top = maxTop >= minTop ? Math.min(Math.max(top, minTop), maxTop) : minTop;
+
+    const minLeft = scrollXOffset;
+    const maxLeft = scrollXOffset + viewport.innerWidth - floatingRect.width;
+    posLeft =
+      maxLeft >= minLeft
+        ? Math.min(Math.max(posLeft, minLeft), maxLeft)
+        : minLeft;
   }
 
   return {

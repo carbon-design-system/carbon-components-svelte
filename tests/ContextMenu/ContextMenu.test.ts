@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
@@ -9,13 +9,34 @@ import ContextMenuOptionIcon from "./ContextMenuOption.icon.test.svelte";
 import ContextMenuOptionRole from "./ContextMenuOption.role.test.svelte";
 import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
 
+/** ContextMenuOption's hover-open/close delay for a submenu ("moderate-01"). */
+const HOVER_DELAY_MS = 150;
+
+/**
+ * Stub an element's `getBoundingClientRect()` (jsdom never computes real
+ * layout) and force FloatingPortal to recompute against it, matching the
+ * pattern FloatingPortal's own tests use for reposition assertions. Accepts
+ * either a CSS selector or an already-resolved element.
+ */
+async function stubRectAndReposition(
+  target: string | Element,
+  rect: { top: number; left: number; right: number; bottom: number; width: number; height: number },
+) {
+  const element =
+    typeof target === "string" ? document.querySelector(target) : target;
+  assert(element);
+  (element as HTMLElement).getBoundingClientRect = () => rect as DOMRect;
+  window.dispatchEvent(new Event("resize"));
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+}
+
 describe("ContextMenu", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("should render with default props", () => {
-    render(ContextMenu);
+    render(ContextMenu, { props: { open: true } });
 
     const target = screen.getByTestId("target");
     expect(target).toBeInTheDocument();
@@ -58,7 +79,7 @@ describe("ContextMenu", () => {
   });
 
   it("should render menu options", () => {
-    render(ContextMenu);
+    render(ContextMenu, { props: { open: true } });
 
     const options = screen.getAllByRole("menuitem");
     expect(options).toHaveLength(3);
@@ -181,7 +202,7 @@ describe("ContextMenu", () => {
     expect(openCalls).toHaveLength(0);
   });
 
-  it("should handle custom position", () => {
+  it("should handle custom position", async () => {
     render(ContextMenu, {
       props: {
         open: true,
@@ -190,8 +211,21 @@ describe("ContextMenu", () => {
       },
     });
 
-    const menu = screen.getAllByRole("menu")[0];
-    expect(menu).toHaveStyle({
+    // jsdom never computes real layout, so the internal point-anchor's
+    // getBoundingClientRect() is zero regardless of its inline x/y style -
+    // stub it to reflect (100, 200), then force a reposition.
+    await stubRectAndReposition("[data-context-menu-point-anchor]", {
+      top: 200,
+      left: 100,
+      right: 100,
+      bottom: 200,
+      width: 0,
+      height: 0,
+    });
+
+    const portal = document.querySelector("[data-floating-portal]");
+    assert(portal);
+    expect(portal).toHaveStyle({
       left: "100px",
       top: "200px",
     });
@@ -217,6 +251,7 @@ describe("ContextMenu", () => {
   });
 
   it("should set level to 2 when ctx exists (nested menu)", async () => {
+    vi.useFakeTimers();
     render(ContextMenu, {
       props: {
         open: true,
@@ -227,7 +262,9 @@ describe("ContextMenu", () => {
     });
 
     const submenuTrigger = screen.getByText("Option with submenu");
-    await user.hover(submenuTrigger);
+    await fireEvent.mouseEnter(submenuTrigger.closest("li"));
+    await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+    vi.useRealTimers();
 
     const submenu = screen
       .getAllByRole("menu")
@@ -320,19 +357,42 @@ describe("ContextMenu", () => {
       },
     });
 
-    const submenuTrigger = screen.getByText("Option with submenu");
-    await user.hover(submenuTrigger);
+    const submenuTrigger = screen.getByText("Option with submenu").closest("li");
+    assert(submenuTrigger);
+    // Trigger sits flush against the right edge of a 400px-wide viewport.
+    submenuTrigger.getBoundingClientRect = () =>
+      ({ top: 100, left: 300, right: 400, bottom: 120, width: 100, height: 20 }) as DOMRect;
+
+    vi.useFakeTimers();
+    try {
+      await fireEvent.mouseEnter(submenuTrigger);
+      await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+    } finally {
+      vi.useRealTimers();
+    }
 
     const submenu = screen
       .getAllByRole("menu")
       .find((menu) => menu.getAttribute("data-level") === "2");
     assert(submenu);
+    const portal = submenu.closest("[data-floating-portal]");
+    assert(portal);
+    // FloatingPortal measures its own wrapper (not the <ul>) for the
+    // flip/clamp decision.
+    await stubRectAndReposition(portal, {
+      top: 100,
+      left: 0,
+      right: 200,
+      bottom: 300,
+      width: 200,
+      height: 200,
+    });
 
-    const submenuX = Number.parseInt(submenu.style.left, 10);
-    const submenuWidth = submenu.getBoundingClientRect().width;
+    expect(portal).toHaveAttribute("data-floating-direction", "left");
 
-    // Submenu should not overflow the right edge of viewport
-    expect(submenuX + submenuWidth).toBeLessThanOrEqual(400);
+    const submenuX = Number.parseInt((portal as HTMLElement).style.left, 10);
+    // Submenu should not overflow the right edge of viewport.
+    expect(submenuX + 200).toBeLessThanOrEqual(400);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
@@ -352,26 +412,38 @@ describe("ContextMenu", () => {
       },
     });
 
-    const submenuTrigger = screen.getByText("Option with submenu");
-    await user.hover(submenuTrigger);
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    const submenuTrigger = screen.getByText("Option with submenu").closest("li");
+    assert(submenuTrigger);
+    // Trigger has plenty of room to either side.
+    submenuTrigger.getBoundingClientRect = () =>
+      ({ top: 100, left: 100, right: 300, bottom: 120, width: 200, height: 20 }) as DOMRect;
+
+    vi.useFakeTimers();
+    try {
+      await fireEvent.mouseEnter(submenuTrigger);
+      await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+    } finally {
+      vi.useRealTimers();
+    }
 
     const submenu = screen
       .getAllByRole("menu")
       .find((menu) => menu.getAttribute("data-level") === "2");
     assert(submenu);
+    const portal = submenu.closest("[data-floating-portal]");
+    assert(portal);
+    await stubRectAndReposition(portal, {
+      top: 100,
+      left: 0,
+      right: 200,
+      bottom: 300,
+      width: 200,
+      height: 200,
+    });
 
-    const rootMenu = screen
-      .getAllByRole("menu")
-      .find((menu) => menu.getAttribute("data-level") === "1");
-    assert(rootMenu);
-
-    const rootX = Number.parseInt(rootMenu.style.left, 10);
-    const rootWidth = rootMenu.getBoundingClientRect().width;
-    const submenuX = Number.parseInt(submenu.style.left, 10);
-
-    // Submenu should be positioned to the right of the parent menu.
-    expect(submenuX).toBeGreaterThanOrEqual(rootX + rootWidth);
+    // Submenu should be positioned to the right of the parent (trigger) option.
+    expect(portal).toHaveAttribute("data-floating-direction", "right");
+    expect(Number.parseInt((portal as HTMLElement).style.left, 10)).toBe(300);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
@@ -391,17 +463,38 @@ describe("ContextMenu", () => {
       },
     });
 
-    const submenuTrigger = screen.getByText("Option with submenu");
-    await user.hover(submenuTrigger);
+    const submenuTrigger = screen.getByText("Option with submenu").closest("li");
+    assert(submenuTrigger);
+    // Neither side of a 200px-wide viewport has room for a 250px-wide submenu.
+    submenuTrigger.getBoundingClientRect = () =>
+      ({ top: 100, left: 50, right: 150, bottom: 120, width: 100, height: 20 }) as DOMRect;
+
+    vi.useFakeTimers();
+    try {
+      await fireEvent.mouseEnter(submenuTrigger);
+      await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+    } finally {
+      vi.useRealTimers();
+    }
 
     const submenu = screen
       .getAllByRole("menu")
       .find((menu) => menu.getAttribute("data-level") === "2");
     assert(submenu);
+    const portal = submenu.closest("[data-floating-portal]");
+    assert(portal);
+    await stubRectAndReposition(portal, {
+      top: 100,
+      left: 0,
+      right: 250,
+      bottom: 300,
+      width: 250,
+      height: 200,
+    });
 
-    const submenuX = Number.parseInt(submenu.style.left, 10);
-    // Submenu should be positioned at or near 0 (left edge of viewport).
-    expect(submenuX).toBeGreaterThanOrEqual(0);
+    // Content wider than the viewport itself: clamped to the left edge
+    // rather than overflowing whichever side it lands on.
+    expect(Number.parseInt((portal as HTMLElement).style.left, 10)).toBe(0);
   });
 
   // Regression test: a disabled submenu trigger should expose
@@ -449,7 +542,7 @@ describe("ContextMenu", () => {
       const submenu = screen
         .getAllByRole("menu")
         .find((menu) => menu.getAttribute("data-level") === "2");
-      expect(submenu).not.toHaveClass("bx--menu--open");
+      expect(submenu).toBeUndefined();
     });
 
     it("should not open submenu on hover when disabled", async () => {
@@ -474,7 +567,7 @@ describe("ContextMenu", () => {
       const submenu = screen
         .getAllByRole("menu")
         .find((menu) => menu.getAttribute("data-level") === "2");
-      expect(submenu).not.toHaveClass("bx--menu--open");
+      expect(submenu).toBeUndefined();
     });
 
     it("should not open submenu on click when disabled", async () => {
@@ -498,7 +591,7 @@ describe("ContextMenu", () => {
       const submenu = screen
         .getAllByRole("menu")
         .find((menu) => menu.getAttribute("data-level") === "2");
-      expect(submenu).not.toHaveClass("bx--menu--open");
+      expect(submenu).toBeUndefined();
     });
   });
 
@@ -662,6 +755,108 @@ describe("ContextMenu", () => {
 
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
+  });
+
+  describe("ContextMenuOption submenu safe triangle", () => {
+    it("does not close the submenu when the pointer moves into it before the close delay elapses", async () => {
+      vi.useFakeTimers();
+      try {
+        render(ContextMenu, {
+          props: { open: true, withSubmenu: true, x: 100, y: 100 },
+        });
+
+        const parent = screen.getByText("Option with submenu").closest("li");
+        assert(parent);
+        await fireEvent.mouseEnter(parent);
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+        expect(
+          screen.getByText("Submenu option 1"),
+        ).toBeInTheDocument();
+
+        await fireEvent.mouseLeave(parent);
+        const submenu = screen
+          .getAllByRole("menu")
+          .find((menu) => menu.getAttribute("data-level") === "2");
+        assert(submenu);
+        await fireEvent.mouseEnter(submenu);
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        expect(
+          screen.getByText("Submenu option 1"),
+        ).toBeInTheDocument();
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it("does not close the submenu when the pointer crosses through the safe triangle", async () => {
+      vi.useFakeTimers();
+      try {
+        render(ContextMenu, {
+          props: { open: true, withSubmenu: true, x: 100, y: 100 },
+        });
+
+        const parent = screen.getByText("Option with submenu").closest("li");
+        assert(parent);
+        await fireEvent.mouseEnter(parent);
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        const submenu = screen
+          .getAllByRole("menu")
+          .find((menu) => menu.getAttribute("data-level") === "2");
+        assert(submenu);
+        parent.getBoundingClientRect = () =>
+          ({ top: 100, left: 0, right: 100, bottom: 120, height: 20 }) as DOMRect;
+        submenu.getBoundingClientRect = () =>
+          ({ top: 100, left: 100, right: 300, bottom: 300, height: 200 }) as DOMRect;
+
+        await fireEvent.mouseLeave(parent);
+        // Inside the wedge between the trigger and the submenu's vertical center.
+        await fireEvent.mouseMove(parent, { clientX: 110, clientY: 200 });
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        expect(
+          screen.getByText("Submenu option 1"),
+        ).toBeInTheDocument();
+        expect(submenu).toHaveClass("bx--menu--open");
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it("closes the submenu when the pointer moves away from the safe triangle", async () => {
+      vi.useFakeTimers();
+      try {
+        render(ContextMenu, {
+          props: { open: true, withSubmenu: true, x: 100, y: 100 },
+        });
+
+        const parent = screen.getByText("Option with submenu").closest("li");
+        assert(parent);
+        await fireEvent.mouseEnter(parent);
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        const submenu = screen
+          .getAllByRole("menu")
+          .find((menu) => menu.getAttribute("data-level") === "2");
+        assert(submenu);
+        parent.getBoundingClientRect = () =>
+          ({ top: 100, left: 0, right: 100, bottom: 120, height: 20 }) as DOMRect;
+        submenu.getBoundingClientRect = () =>
+          ({ top: 100, left: 100, right: 300, bottom: 300, height: 200 }) as DOMRect;
+
+        await fireEvent.mouseLeave(parent);
+        // Far outside the wedge.
+        await fireEvent.mouseMove(parent, { clientX: 105, clientY: 400 });
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        // The submenu unmounts (rather than just losing a CSS class) once
+        // ContextMenuOption's own `submenuOpen` flips to false.
+        expect(submenu).not.toBeInTheDocument();
+      } finally {
+        vi.useRealTimers();
+      }
     });
   });
 });

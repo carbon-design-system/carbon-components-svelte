@@ -84,6 +84,7 @@
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clampIndex.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { createSubmenuHoverController } from "../utils/submenuHoverController.js";
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();
@@ -91,99 +92,23 @@
   const ctxGroup = getContext("carbon:ContextMenuGroup");
   const ctxRadioGroup = getContext("carbon:ContextMenuRadioGroup");
 
-  // "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
-  const moderate01 = 150;
-  const closeDelay = moderate01;
-
   let unsubCurrentIds = undefined;
   let unsubCurrentId = undefined;
-  let timeoutHover = undefined;
-  let timeoutClose = undefined;
-  let rootMenuPosition = [0, 0];
   let focusIndex = 0;
   let options = [];
   let role = "menuitem";
   let submenuOpen = false;
-  let submenuPosition = [0, 0];
-  let menuOffsetX = 0;
-  let mousePosition = { x: 0, y: 0 };
   /** @type {HTMLUListElement | null} */
   let submenuRef = null;
 
-  const unsubPosition = ctx.position.subscribe((position) => {
-    rootMenuPosition = position;
+  const hover = createSubmenuHoverController({
+    isDisabled: () => disabled,
+    setOpen: (open) => {
+      submenuOpen = open;
+    },
+    getTrigger: () => ref,
+    getSubmenu: () => submenuRef,
   });
-
-  const unsubMenuOffsetX = ctx.menuOffsetX.subscribe((_menuOffsetX) => {
-    menuOffsetX = _menuOffsetX;
-  });
-
-  function isPointInTriangle(px, py, x1, y1, x2, y2, x3, y3) {
-    const denominator = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
-    const a = ((y2 - y3) * (px - x3) + (x3 - x2) * (py - y3)) / denominator;
-    const b = ((y3 - y1) * (px - x3) + (x1 - x3) * (py - y3)) / denominator;
-    const c = 1 - a - b;
-
-    return a >= 0 && a <= 1 && b >= 0 && b <= 1 && c >= 0 && c <= 1;
-  }
-
-  // Utility function to check if mouse is in the
-  // safe triangle when transferring to the submenu.
-  function isInSafeTriangle(mouseX, mouseY) {
-    if (!submenuOpen || !ref || !submenuRef) return false;
-
-    const parentRect = ref.getBoundingClientRect();
-    const submenuRect = submenuRef.getBoundingClientRect();
-
-    // Magic number to make the triangle slightly larger
-    const buffer = 12;
-    const isSubmenuOnRight = submenuRect.left >= parentRect.right;
-
-    let trianglePoints;
-    if (isSubmenuOnRight) {
-      trianglePoints = {
-        x1: parentRect.right,
-        y1: parentRect.top - buffer,
-        x2: parentRect.right,
-        y2: parentRect.bottom + buffer,
-        x3: submenuRect.left,
-        y3: submenuRect.top + submenuRect.height / 2,
-      };
-    } else {
-      trianglePoints = {
-        x1: parentRect.left,
-        y1: parentRect.top - buffer,
-        x2: parentRect.left,
-        y2: parentRect.bottom + buffer,
-        x3: submenuRect.right,
-        y3: submenuRect.top + submenuRect.height / 2,
-      };
-    }
-
-    const inTopTriangle = isPointInTriangle(
-      mouseX,
-      mouseY,
-      trianglePoints.x1,
-      trianglePoints.y1,
-      isSubmenuOnRight ? trianglePoints.x3 : trianglePoints.x2,
-      submenuRect.top,
-      trianglePoints.x3,
-      trianglePoints.y3,
-    );
-
-    const inBottomTriangle = isPointInTriangle(
-      mouseX,
-      mouseY,
-      trianglePoints.x2,
-      trianglePoints.y2,
-      trianglePoints.x3,
-      trianglePoints.y3,
-      isSubmenuOnRight ? trianglePoints.x3 : trianglePoints.x1,
-      submenuRect.bottom,
-    );
-
-    return inTopTriangle || inBottomTriangle;
-  }
 
   function handleClick(event, opts = {}) {
     if (disabled) return;
@@ -210,15 +135,7 @@
 
   function handleGlobalMouseMove(event) {
     if (subOptions && submenuOpen) {
-      mousePosition = { x: event.clientX, y: event.clientY };
-
-      if (
-        isInSafeTriangle(event.clientX, event.clientY) &&
-        typeof timeoutClose === "number"
-      ) {
-        clearTimeout(timeoutClose);
-        timeoutClose = undefined;
-      }
+      hover.trackPointer(event.clientX, event.clientY);
     }
   }
 
@@ -238,12 +155,9 @@
     }
 
     return () => {
-      unsubPosition();
-      unsubMenuOffsetX();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
-      if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
-      if (typeof timeoutClose === "number") clearTimeout(timeoutClose);
+      hover.destroy();
     };
   });
 
@@ -251,23 +165,6 @@
   $: isRadio = !!ctxRadioGroup;
   $: subOptions = $$slots.default;
   $: ctx.setPopup(submenuOpen);
-  $: if (submenuOpen) {
-    const { width, y } = ref.getBoundingClientRect();
-    let x = rootMenuPosition[0] + width;
-
-    const submenuWidth = submenuRef?.getBoundingClientRect().width ?? width;
-
-    if (x + submenuWidth > window.innerWidth) {
-      x = rootMenuPosition[0] - submenuWidth;
-
-      // On narrow screens, position submenu at edge to avoid clipping.
-      if (x < 0) {
-        x = Math.max(0, window.innerWidth - submenuWidth);
-      }
-    }
-
-    submenuPosition = [x, y];
-  }
   $: {
     if (icon) {
       indented = true;
@@ -334,7 +231,7 @@
       (event.key === "ArrowRight" || event.key === " " || event.key === "Enter")
     ) {
       if (disabled) return;
-      submenuOpen = true;
+      hover.open();
       await tick();
       options = [...ref.querySelectorAll("li[tabindex]")];
       if (options[focusIndex]) options[focusIndex].focus();
@@ -370,39 +267,22 @@
   }}
   on:mouseenter
   on:mouseenter={() => {
-    if (subOptions && !disabled) {
-      if (typeof timeoutClose === "number") {
-        clearTimeout(timeoutClose);
-        timeoutClose = undefined;
-      }
-
-      timeoutHover = setTimeout(() => {
-        submenuOpen = true;
-      }, moderate01);
-    }
+    if (subOptions) hover.scheduleOpen();
   }}
   on:mousemove={(event) => {
     if (subOptions && submenuOpen) {
-      mousePosition = { x: event.clientX, y: event.clientY };
+      hover.trackPointer(event.clientX, event.clientY);
     }
   }}
   on:mouseleave
   on:mouseleave={() => {
-    if (subOptions) {
-      if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
-
-      timeoutClose = setTimeout(() => {
-        if (!isInSafeTriangle(mousePosition.x, mousePosition.y)) {
-          submenuOpen = false;
-        }
-      }, closeDelay);
-    }
+    if (subOptions) hover.scheduleClose();
   }}
   on:click={(event) => {
     if (subOptions) {
       event.stopPropagation();
       if (disabled) return;
-      submenuOpen = true;
+      hover.open();
       return;
     }
     handleClick(event);
@@ -426,9 +306,11 @@
 
     <ContextMenu
       bind:ref={submenuRef}
+      anchor={ref}
+      direction="right"
       open={submenuOpen}
-      x={submenuPosition[0]}
-      y={submenuPosition[1]}
+      on:mouseenter={hover.cancelClose}
+      on:mouseleave={hover.scheduleClose}
     >
       <slot />
     </ContextMenu>

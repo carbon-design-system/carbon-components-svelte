@@ -95,6 +95,7 @@ export { default as LocalStorage } from "./LocalStorage/LocalStorage.svelte";
 export { default as Menu } from "./Menu/Menu.svelte";
 export { default as MenuDivider } from "./Menu/MenuDivider.svelte";
 export { default as MenuItem } from "./Menu/MenuItem.svelte";
+export { default as MenuItemRadioGroup } from "./Menu/MenuItemRadioGroup.svelte";
 export { default as MenuButton } from "./MenuButton/MenuButton.svelte";
 export { default as Modal } from "./Modal/Modal.svelte";
 export { default as FluidMultiSelectSkeleton } from "./MultiSelect/FluidMultiSelectSkeleton.svelte";
