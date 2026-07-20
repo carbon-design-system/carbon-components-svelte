@@ -1,5 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import MenuItemPreventDefault from "./MenuItem.preventDefault.test.svelte";
+import MenuItemRadio from "./MenuItem.radio.test.svelte";
+import MenuItemSelectable from "./MenuItem.selectable.test.svelte";
+import MenuItemShortcut from "./MenuItem.shortcut.test.svelte";
 import MenuItemSlot from "./MenuItem.slot.test.svelte";
 import MenuItemFixture from "./MenuItem.test.svelte";
 
@@ -202,6 +206,161 @@ describe("MenuItem", () => {
         "title",
         "Export as",
       );
+    });
+
+    it("does not close the submenu when the pointer crosses through the safe triangle", async () => {
+      vi.useFakeTimers();
+      try {
+        render(MenuItemFixture);
+
+        await fireEvent.click(screen.getByRole("button", { name: "Trigger" }));
+        const parent = screen.getByRole("menuitem", { name: "Export as" });
+        await fireEvent.mouseEnter(parent);
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        const submenu = screen.getByRole("menu", { name: "Export as" });
+        parent.getBoundingClientRect = () =>
+          ({ top: 100, left: 0, right: 100, bottom: 120, height: 20 }) as DOMRect;
+        submenu.getBoundingClientRect = () =>
+          ({ top: 100, left: 100, right: 300, bottom: 300, height: 200 }) as DOMRect;
+
+        await fireEvent.mouseLeave(parent);
+        // Inside the wedge between the trigger and the submenu's vertical center.
+        await fireEvent.mouseMove(parent, { clientX: 110, clientY: 200 });
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        expect(
+          screen.getByRole("menuitem", { name: "PDF" }),
+        ).toBeInTheDocument();
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it("closes the submenu when the pointer moves away from the safe triangle", async () => {
+      vi.useFakeTimers();
+      try {
+        render(MenuItemFixture);
+
+        await fireEvent.click(screen.getByRole("button", { name: "Trigger" }));
+        const parent = screen.getByRole("menuitem", { name: "Export as" });
+        await fireEvent.mouseEnter(parent);
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        const submenu = screen.getByRole("menu", { name: "Export as" });
+        parent.getBoundingClientRect = () =>
+          ({ top: 100, left: 0, right: 100, bottom: 120, height: 20 }) as DOMRect;
+        submenu.getBoundingClientRect = () =>
+          ({ top: 100, left: 100, right: 300, bottom: 300, height: 200 }) as DOMRect;
+
+        await fireEvent.mouseLeave(parent);
+        // Far outside the wedge.
+        await fireEvent.mouseMove(parent, { clientX: 105, clientY: 400 });
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        expect(
+          screen.queryByRole("menuitem", { name: "PDF" }),
+        ).not.toBeInTheDocument();
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+  });
+
+  describe("selectable", () => {
+    it("renders role menuitemcheckbox and toggles selected on click without closing the menu", async () => {
+      render(MenuItemSelectable);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      const item = screen.getByRole("menuitemcheckbox", { name: "Show grid" });
+      expect(item).toHaveAttribute("aria-checked", "false");
+
+      await user.click(item);
+
+      expect(item).toHaveAttribute("aria-checked", "true");
+      expect(
+        item.querySelector(".bx--menu-option__icon svg"),
+      ).toBeInTheDocument();
+      // Selecting a checkbox item keeps the menu open.
+      expect(screen.getByRole("menu")).toBeInTheDocument();
+    });
+
+    it("does not render a checkmark when unselected", async () => {
+      render(MenuItemSelectable, { props: { selected: false } });
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      const item = screen.getByRole("menuitemcheckbox", { name: "Show grid" });
+
+      expect(item.querySelector(".bx--menu-option__icon svg")).toBeNull();
+      // The icon gutter is still reserved so the label stays aligned.
+      expect(item.querySelector(".bx--menu-option__icon")).toBeInTheDocument();
+    });
+  });
+
+  describe("shortcutText and icon slot", () => {
+    it("renders shortcut text at the trailing edge of the item", async () => {
+      render(MenuItemShortcut);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      const item = screen.getByRole("menuitem", { name: /^Save/ });
+
+      expect(item.querySelector(".bx--menu-option__info")).toHaveTextContent(
+        "Ctrl+S",
+      );
+    });
+
+    it("renders custom markup from the icon slot", async () => {
+      render(MenuItemShortcut);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
+    });
+  });
+
+  describe("radio", () => {
+    it("renders role menuitemradio and only checks the selected option", async () => {
+      render(MenuItemRadio, { props: { selectedId: "center" } });
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const left = screen.getByRole("menuitemradio", { name: "Left" });
+      const center = screen.getByRole("menuitemradio", { name: "Center" });
+      expect(left).toHaveAttribute("aria-checked", "false");
+      expect(center).toHaveAttribute("aria-checked", "true");
+    });
+
+    it("selecting an option updates the group and closes the menu", async () => {
+      render(MenuItemRadio, { props: { selectedId: "left" } });
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      await user.click(screen.getByRole("menuitemradio", { name: "Right" }));
+
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("preventDefault", () => {
+    it("keeps the menu open when a click handler calls preventDefault", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MenuItemPreventDefault);
+
+      await user.click(screen.getByRole("menuitem", { name: "Stay open" }));
+
+      expect(consoleLog).toHaveBeenCalledWith("click", "Stay open");
+      expect(consoleLog).not.toHaveBeenCalledWith("close");
+      expect(screen.getByRole("menu")).toBeInTheDocument();
+    });
+
+    it("closes the menu normally when preventDefault is not called", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MenuItemPreventDefault);
+
+      await user.click(screen.getByRole("menuitem", { name: "Close menu" }));
+
+      expect(consoleLog).toHaveBeenCalledWith("click", "Close menu");
+      expect(consoleLog).toHaveBeenCalledWith("close");
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
     });
   });
 });
