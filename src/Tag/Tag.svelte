@@ -226,7 +226,7 @@
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
     {...$$restProps}
-    on:click
+    role="presentation"
     on:mouseover
     on:mouseenter
     on:mouseleave
