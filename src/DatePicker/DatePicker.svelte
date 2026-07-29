@@ -420,6 +420,10 @@
       applyOptionIfChanged("locale", locale, resolveLocale(locale));
       applyOptionIfChanged("dateFormat", dateFormat);
       for (const [option, value] of Object.entries(flatpickrProps)) {
+        // `static` is decided by `effectivePortalMenu` at creation time
+        // (see below); re-applying the default `flatpickrProps.static`
+        // here would clobber that on every reactive re-run.
+        if (option === "static" && effectivePortalMenu) continue;
         applyOptionIfChanged(option, value);
       }
       return;

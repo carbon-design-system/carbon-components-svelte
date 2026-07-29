@@ -731,6 +731,33 @@ describe("DatePicker", () => {
       expect(wrapper?.contains(calendar)).toBe(true);
       expect(calendar.classList.contains("static")).toBe(true);
     });
+
+    it("does not reapply static:true on a reactive re-run (#3444)", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        portalMenu: true,
+      });
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+
+      const fp = (
+        input as unknown as { _flatpickr: { config: { static: boolean } } }
+      )._flatpickr;
+      expect(fp.config.static).toBe(false);
+
+      // Trigger the `initCalendar` reactive statement to re-run (e.g. a
+      // minDate update) without touching `portalMenu` or `flatpickrProps`.
+      await rerender({
+        datePickerType: "single",
+        portalMenu: true,
+        minDate: "01/01/2024",
+      });
+      await tick();
+
+      expect(fp.config.static).toBe(false);
+    });
   });
 
   describe("month mode", () => {
