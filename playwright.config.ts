@@ -11,7 +11,14 @@ export default defineConfig({
     baseURL: "http://localhost:4173",
   },
   projects: process.env.CI
-    ? [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }]
+    ? [
+        {
+          // Reuse the Chrome preinstalled on GitHub-hosted runners instead of
+          // downloading Playwright's bundled Chromium.
+          name: "chromium",
+          use: { ...devices["Desktop Chrome"], channel: "chrome" },
+        },
+      ]
     : [
         { name: "chromium", use: { ...devices["Desktop Chrome"] } },
         { name: "firefox", use: { ...devices["Desktop Firefox"] } },
