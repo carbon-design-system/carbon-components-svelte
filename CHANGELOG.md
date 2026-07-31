@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.110.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.110.1...v0.110.2) (2026-07-31)
+
+### Bug Fixes
+
+- **date-picker:** keep calendar portalled after reactive re-run (#3445) ([2b220ba](https://github.com/carbon-design-system/carbon-components-svelte/commit/2b220baa4c2c107745cd4f09ae5719000aca2560)), closes [#3444](https://github.com/carbon-design-system/carbon-components-svelte/issues/3444)
+- **date-picker:** resync flatpickr `allowInput` on readonly toggle (#3447) ([abb6297](https://github.com/carbon-design-system/carbon-components-svelte/commit/abb62972e77dde1b27245a536ecc1bfb118d127d))
+- **multi-select:** prevent page scroll on Space in filterable read-only mode (#3438) ([2997fb1](https://github.com/carbon-design-system/carbon-components-svelte/commit/2997fb1e0b659b8d2aa1e31aa5be037a2beac62d))
+
 ### [0.110.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.110.0...v0.110.1) (2026-07-17)
 
 ### Bug Fixes
