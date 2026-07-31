@@ -548,6 +548,7 @@
   }
   $: if (calendar) {
     calendar.set("clickOpens", !$readonlyAny);
+    calendar.set("allowInput", !$readonlyAny);
     if ($readonlyAny && calendar.isOpen) calendar.close();
   }
 

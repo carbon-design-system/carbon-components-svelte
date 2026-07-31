@@ -137,6 +137,30 @@ describe("DatePicker", () => {
       expect(start).toHaveAttribute("readonly");
       expect(end).toHaveAttribute("readonly");
     });
+
+    it("keeps flatpickr's allowInput option in sync when readonly toggles after mount", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        readonly: false,
+      });
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+
+      const fp = (
+        input as unknown as { _flatpickr: { config: { allowInput: boolean } } }
+      )._flatpickr;
+      expect(fp.config.allowInput).toBe(true);
+
+      await rerender({
+        datePickerType: "single",
+        readonly: true,
+      });
+      await tick();
+
+      expect(fp.config.allowInput).toBe(false);
+    });
   });
 
   it("handles invalid state", () => {
