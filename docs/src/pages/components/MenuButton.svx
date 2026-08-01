@@ -79,6 +79,22 @@ Set `size` to scale the trigger button and each menu item's row height together.
   <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
 </MenuButton>
 
+## Icon-only
+
+Set `iconOnly` for an icon-only trigger. `labelText` is no longer rendered, but it remains the trigger's accessible name. Pass `icon` to swap the glyph. Use this trigger for overflow menus that need submenus, which [OverflowMenu](/components/OverflowMenu) does not support.
+
+<MenuButton iconOnly labelText="Row actions">
+  <MenuItem on:click={() => console.log("Rename")}>Rename</MenuItem>
+  <MenuItem labelText="Export as">
+    <MenuItem on:click={() => console.log("PDF")}>PDF</MenuItem>
+    <MenuItem on:click={() => console.log("CSV")}>CSV</MenuItem>
+  </MenuItem>
+  <MenuDivider />
+  <MenuItem icon={TrashCan} kind="danger" on:click={() => console.log("Delete")}>
+    Delete
+  </MenuItem>
+</MenuButton>
+
 ## Direction
 
 Set `direction` to `"top"` or `"bottom"` (default) for which side of the trigger the menu opens on. The menu flips to the opposite side when there isn't room on the preferred side. See [Menu placement](/components/Menu#placement) for gap and offset props.
