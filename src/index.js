@@ -235,3 +235,7 @@ export {
 } from "./utils/filterTreeNodes";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzyMatch";
 export { toHierarchy } from "./utils/toHierarchy";
+export {
+  resolveCheckboxState,
+  toggleCheckboxNode,
+} from "./utils/treeCheckboxState";

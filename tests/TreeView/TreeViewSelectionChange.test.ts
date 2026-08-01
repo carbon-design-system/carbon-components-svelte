@@ -13,6 +13,7 @@ type SelectChangeDetail = {
   selectedIds: ReadonlyArray<Id>;
   added: Id[];
   removed: Id[];
+  indeterminateIds: ReadonlyArray<Id>;
 };
 
 function treeItemById(id: Id): HTMLElement {
@@ -36,6 +37,7 @@ describe("TreeView select:change", () => {
       selectedIds: [0],
       added: [0],
       removed: [],
+      indeterminateIds: [],
     });
   });
 
@@ -77,6 +79,7 @@ describe("TreeView select:change", () => {
       selectedIds: [0],
       added: [0],
       removed: [],
+      indeterminateIds: [],
     });
 
     // Ctrl+click adds node 7.
@@ -88,6 +91,7 @@ describe("TreeView select:change", () => {
       selectedIds: [0, 7],
       added: [7],
       removed: [],
+      indeterminateIds: [],
     });
 
     // Ctrl+click again removes node 7.
@@ -99,6 +103,7 @@ describe("TreeView select:change", () => {
       selectedIds: [0],
       added: [],
       removed: [7],
+      indeterminateIds: [],
     });
   });
 
@@ -151,6 +156,7 @@ describe("TreeView select:change", () => {
       selectedIds: [8],
       added: [8],
       removed: [],
+      indeterminateIds: [],
     });
   });
 
@@ -165,6 +171,7 @@ describe("TreeView select:change", () => {
       selectedIds: [0, 7],
       added: [0, 7],
       removed: [9],
+      indeterminateIds: [],
     });
   });
 

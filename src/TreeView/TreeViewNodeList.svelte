@@ -32,6 +32,7 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   import { getContext } from "svelte";
+  import Checkbox from "../Checkbox/Checkbox.svelte";
   import CaretDown from "../icons/CaretDown.svelte";
   import TreeViewNode, {
     computeTreeLeafDepth,
@@ -64,12 +65,23 @@
     activeNodeId,
     selectedIdsSetStore,
     expandedIdsSetStore,
+    indeterminateIdsSetStore,
+    selectionModeStore,
     clickNode,
     selectNode,
     expandNode,
     focusNode,
     toggleNode,
   } = getContext("carbon:TreeView");
+
+  /**
+   * Tri-state value for `aria-checked` on the row.
+   * @returns {"true" | "false" | "mixed"}
+   */
+  function toAriaChecked(isSelected, isIndeterminate) {
+    if (isIndeterminate) return "mixed";
+    return isSelected ? "true" : "false";
+  }
 
   function offset() {
     const depth = computeTreeLeafDepth(refLabel) - 1;
@@ -82,6 +94,8 @@
   $: parent = Array.isArray(nodes);
   $: expanded = $expandedIdsSetStore.has(id);
   $: selected = $selectedIdsSetStore.has(id);
+  $: isCheckboxMode = $selectionModeStore === "checkbox";
+  $: indeterminate = isCheckboxMode && $indeterminateIdsSetStore.has(id);
   // Merge all props (including custom properties) with computed properties
   // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -155,7 +169,10 @@
     {id}
     tabindex={disabled ? undefined : -1}
     aria-current={id === $activeNodeId || undefined}
-    aria-selected={disabled ? undefined : selected}
+    aria-selected={isCheckboxMode || disabled ? undefined : selected}
+    aria-checked={isCheckboxMode
+      ? toAriaChecked(selected, indeterminate)
+      : undefined}
     aria-disabled={disabled}
     class:bx--tree-node={true}
     class:bx--tree-parent-node={true}
@@ -231,6 +248,19 @@
     }}
   >
     <div class:bx--tree-node__label={true} bind:this={refLabel}>
+      {#if isCheckboxMode}
+        <!-- The row owns the checked-state semantics, so the input is
+             decorative and its label is empty to keep `textContent` (used by
+             type-ahead and accessible names) unchanged. -->
+        <Checkbox
+          decorative
+          hideLabel
+          labelText=""
+          {disabled}
+          {indeterminate}
+          checked={selected}
+        />
+      {/if}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <span
