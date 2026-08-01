@@ -21,6 +21,7 @@ import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte
 import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
 import DataTableExpandIcon from "./DataTableExpandIcon.test.svelte";
 import DataTableFooter from "./DataTableFooter.test.svelte";
+import DataTableHiddenColumnSearch from "./DataTableHiddenColumnSearch.test.svelte";
 
 describe("DataTable", () => {
   beforeEach(() => {
@@ -3136,6 +3137,171 @@ describe("DataTable", () => {
       const cells = container.querySelectorAll("tfoot td");
       expect(cells).toHaveLength(footerHeaders.length);
       expect(cells[2]).toHaveTextContent(String(largeRows.length));
+    });
+  });
+
+  describe("hidden columns", () => {
+    const headersWithHiddenProtocol = [
+      { key: "name", value: "Name" },
+      { key: "protocol", value: "Protocol", columnHidden: true },
+      { key: "port", value: "Port" },
+      { key: "rule", value: "Rule" },
+    ];
+
+    const getColumnHeaderText = () =>
+      screen
+        .getAllByRole("columnheader")
+        .map((columnHeader) => columnHeader.textContent?.trim());
+
+    const getBodyRows = () =>
+      screen.getAllByRole("row").filter((row) => row.closest("tbody") !== null);
+
+    const getRowText = (row: HTMLElement) =>
+      within(row)
+        .getAllByRole("cell")
+        .map((cell) => cell.textContent?.trim());
+
+    it("renders no header or body cells for a hidden column", () => {
+      render(DataTable, {
+        props: { headers: headersWithHiddenProtocol, rows },
+      });
+
+      expect(getColumnHeaderText()).toEqual(["Name", "Port", "Rule"]);
+      expect(screen.queryByText("Protocol")).not.toBeInTheDocument();
+      expect(screen.queryByText("HTTP")).not.toBeInTheDocument();
+
+      const bodyRows = getBodyRows();
+      expect(bodyRows).toHaveLength(3);
+      bodyRows.forEach((row, index) => {
+        expect(getRowText(row)).toEqual([
+          rows[index].name,
+          String(rows[index].port),
+          rows[index].rule,
+        ]);
+      });
+    });
+
+    it("sizes the expanded row to the visible column count", async () => {
+      const { container, rerender } = render(DataTable, {
+        props: {
+          headers: headersWithHiddenProtocol,
+          rows,
+          expandable: true,
+          expandedRowIds: ["a"],
+        },
+      });
+
+      const getExpandedCell = () =>
+        container.querySelector("tr[data-child-row] td");
+
+      // 3 visible columns + the expand column.
+      expect(getExpandedCell()).toHaveAttribute("colspan", "4");
+
+      await rerender({ selectable: true });
+      await tick();
+
+      expect(getExpandedCell()).toHaveAttribute("colspan", "5");
+    });
+
+    it("excludes hidden columns from toolbar search", async () => {
+      render(DataTableHiddenColumnSearch);
+
+      const searchInput = screen.getByRole("searchbox");
+
+      await user.type(searchInput, "load balancer 1");
+      expect(getBodyRows()).toHaveLength(1);
+
+      await user.clear(searchInput);
+      await user.type(searchInput, "dns");
+      expect(getBodyRows()).toHaveLength(0);
+    });
+
+    it("sorts by a hidden column key", () => {
+      render(DataTable, {
+        props: {
+          headers: [
+            { key: "name", value: "Name" },
+            { key: "protocol", value: "Protocol" },
+            { key: "port", value: "Port", columnHidden: true },
+            { key: "rule", value: "Rule" },
+          ],
+          rows,
+          sortable: true,
+          sortKey: "port",
+          sortDirection: "ascending",
+        },
+      });
+
+      // Ports 80, 443, and 3000 belong to rows "c", "b", and "a".
+      expect(getBodyRows().map((row) => getRowText(row)[0])).toEqual([
+        "Load Balancer 2",
+        "Load Balancer 1",
+        "Load Balancer 3",
+      ]);
+    });
+
+    it("adds and removes the column when hidden is toggled", async () => {
+      const { rerender } = render(DataTable, { props: { headers, rows } });
+
+      expect(getColumnHeaderText()).toEqual([
+        "Name",
+        "Protocol",
+        "Port",
+        "Rule",
+      ]);
+
+      await rerender({ headers: headersWithHiddenProtocol });
+      await tick();
+
+      expect(getColumnHeaderText()).toEqual(["Name", "Port", "Rule"]);
+      expect(getRowText(getBodyRows()[0])).toEqual([
+        "Load Balancer 3",
+        "3000",
+        "Round robin",
+      ]);
+
+      await rerender({ headers });
+      await tick();
+
+      expect(getColumnHeaderText()).toEqual([
+        "Name",
+        "Protocol",
+        "Port",
+        "Rule",
+      ]);
+      expect(getRowText(getBodyRows()[0])).toEqual([
+        "Load Balancer 3",
+        "HTTP",
+        "3000",
+        "Round robin",
+      ]);
+    });
+
+    it("sizes virtualization spacer rows to the visible column count", () => {
+      const largeRows = Array.from({ length: 500 }, (_, i) => ({
+        id: String(i),
+        name: `Load Balancer ${i + 1}`,
+        protocol: "HTTP",
+        port: 3000 + i * 10,
+        rule: "Round robin",
+      }));
+
+      render(DataTable, {
+        props: {
+          headers: headersWithHiddenProtocol,
+          rows: largeRows,
+          virtualize: true,
+        },
+      });
+
+      // Spacer rows are the only rows with an inline height.
+      const spacerRows = getBodyRows().filter((row) =>
+        row.getAttribute("style")?.includes("height:"),
+      );
+      expect(spacerRows.length).toBeGreaterThan(0);
+      for (const row of spacerRows) {
+        expect(within(row).getByRole("cell")).toHaveAttribute("colspan", "3");
+      }
     });
   });
 });

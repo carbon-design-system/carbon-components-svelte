@@ -22,6 +22,7 @@
           b: DataTableSortValue<BaseRow>,
         ) => number);
     sortAlways?: boolean;
+    columnHidden?: boolean;
   };
 
   export let headers: readonly DataTableHeader[] = [
