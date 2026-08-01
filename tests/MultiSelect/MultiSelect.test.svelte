@@ -24,6 +24,8 @@
     undefined;
   export let selectionFeedback: ComponentProps<MultiSelect>["selectionFeedback"] =
     "top-after-reopen";
+  export let maxSelectedItems: ComponentProps<MultiSelect>["maxSelectedItems"] =
+    undefined;
   export let translateWithIdSelection: ComponentProps<MultiSelect>["translateWithIdSelection"] =
     undefined;
   export let itemToString: ComponentProps<MultiSelect>["itemToString"] = (
@@ -64,6 +66,7 @@
   {readonly}
   {readonlyText}
   {selectionFeedback}
+  {maxSelectedItems}
   {translateWithIdSelection}
   {itemToString}
   {itemToInput}

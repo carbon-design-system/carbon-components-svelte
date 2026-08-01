@@ -76,6 +76,14 @@
    */
   export let selectionFeedback = "top-after-reopen";
 
+  /**
+   * Cap how many items can be selected at once.
+   * Unset or a non-positive value means unlimited.
+   * When set, select-all is unavailable and unchecked items disable once the cap is reached.
+   * @type {number | undefined}
+   */
+  export let maxSelectedItems = undefined;
+
   /** Set to `true` to disable the dropdown */
   export let disabled = false;
 
@@ -329,12 +337,25 @@
     declareRef,
   });
 
+  /**
+   * Whether an item should be treated as disabled for selection and keyboard nav.
+   * Checked items stay enabled at the cap so they can be cleared.
+   * @param {Item & { checked?: boolean }} item
+   */
+  function isItemDisabled(item) {
+    if (item.disabled) return true;
+    if (hasMaxSelectedItems && item.isSelectAll) return true;
+    if (isAtSelectionCap && !item.checked) return true;
+    return false;
+  }
+
   function change(step) {
     const navigableItems = filterable ? filteredItems : sortedItems;
     highlightedIndex = nextEnabledIndex({
       items: navigableItems,
       index: highlightedIndex,
       step,
+      isDisabled: isItemDisabled,
     });
     highlightOrigin = "keyboard";
   }
@@ -344,7 +365,7 @@
     // Read-only allows opening and navigating the menu to review values, but
     // never changing them. Guarding here covers every path (click, Enter,
     // label click, select-all) so callers don't each need a readonly check.
-    if (readonly || item.disabled) return;
+    if (readonly || isItemDisabled(item)) return;
 
     if (item.isSelectAll) {
       const target = !allSelected;
@@ -617,6 +638,10 @@
   $: selectionCount = hasSelectAll
     ? checked.filter((item) => !item.isSelectAll).length
     : checked.length;
+  $: hasMaxSelectedItems =
+    typeof maxSelectedItems === "number" && maxSelectedItems > 0;
+  $: isAtSelectionCap =
+    hasMaxSelectedItems && selectionCount >= maxSelectedItems;
   $: filteredItems = sortedItems.filter(
     (item) => item.isSelectAll || filterItem(item, value),
   );
@@ -1020,6 +1045,10 @@
             <div style="transform: translateY({virtualData.offsetY}px);">
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
+                {@const itemDisabled =
+                  item.disabled ||
+                  (hasMaxSelectedItems && !!item.isSelectAll) ||
+                  (isAtSelectionCap && !item.checked)}
                 <ListBoxMenuItem
                   id="{id}-{item.id}"
                   role="option"
@@ -1032,9 +1061,9 @@
                     : item.checked}
                   active={item.isSelectAll ? false : item.checked}
                   highlighted={highlightedIndex === actualIndex}
-                  disabled={item.disabled}
+                  disabled={itemDisabled}
                   on:click={(event) => {
-                    if (item.disabled) {
+                    if (itemDisabled) {
                       event.stopPropagation();
                       return;
                     }
@@ -1049,7 +1078,7 @@
                     }
                   }}
                   on:mouseenter={() => {
-                    if (item.disabled) return;
+                    if (itemDisabled) return;
                     highlightedIndex = actualIndex;
                     highlightOrigin = "pointer";
                   }}
@@ -1065,7 +1094,7 @@
                     indeterminate={item.isSelectAll
                       ? selectAllIndeterminate
                       : false}
-                    disabled={item.disabled}
+                    disabled={itemDisabled}
                     {readonly}
                   >
                     <slot
@@ -1084,6 +1113,10 @@
           </div>
         {:else}
           {#each itemsToRender as item, index (item.id)}
+            {@const itemDisabled =
+              item.disabled ||
+              (hasMaxSelectedItems && !!item.isSelectAll) ||
+              (isAtSelectionCap && !item.checked)}
             <ListBoxMenuItem
               id="{id}-{item.id}"
               role="option"
@@ -1096,9 +1129,9 @@
                 : item.checked}
               active={item.isSelectAll ? false : item.checked}
               highlighted={highlightedIndex === index}
-              disabled={item.disabled}
+              disabled={itemDisabled}
               on:click={(event) => {
-                if (item.disabled) {
+                if (itemDisabled) {
                   event.stopPropagation();
                   return;
                 }
@@ -1113,7 +1146,7 @@
                 }
               }}
               on:mouseenter={() => {
-                if (item.disabled) return;
+                if (itemDisabled) return;
                 highlightedIndex = index;
                 highlightOrigin = "pointer";
               }}
@@ -1129,7 +1162,7 @@
                 indeterminate={item.isSelectAll
                   ? selectAllIndeterminate
                   : false}
-                disabled={item.disabled}
+                disabled={itemDisabled}
                 {readonly}
               >
                 <slot

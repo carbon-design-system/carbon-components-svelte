@@ -571,6 +571,131 @@ describe("MultiSelect", () => {
     });
   });
 
+  describe("maxSelectedItems", () => {
+    const preferenceItems = [
+      { id: "0", text: "Email" },
+      { id: "1", text: "Slack" },
+      { id: "2", text: "SMS" },
+      { id: "3", text: "Push" },
+    ];
+
+    it("stops checking items once the cap is reached and still allows unchecking", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: preferenceItems,
+          maxSelectedItems: 2,
+          labelText: "Preferences",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("Email");
+      await toggleOption("Slack");
+
+      expect(consoleLog).toHaveBeenLastCalledWith(
+        "select",
+        expect.objectContaining({
+          selectedIds: expect.arrayContaining(["0", "1"]),
+        }),
+      );
+      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toHaveLength(2);
+
+      const smsOption = screen.getByRole("option", { name: "SMS" });
+      expect(smsOption).toHaveAttribute("aria-disabled", "true");
+
+      await user.click(smsOption);
+      expect(smsOption).toHaveAttribute("aria-selected", "false");
+      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toHaveLength(2);
+
+      await toggleOption("Email");
+      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toEqual(["1"]);
+
+      expect(smsOption).not.toHaveAttribute("aria-disabled");
+      await toggleOption("SMS");
+      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toEqual(
+        expect.arrayContaining(["1", "2"]),
+      );
+    });
+
+    it("skips unchecked items at the cap during keyboard navigation", async () => {
+      render(MultiSelect, {
+        props: {
+          items: preferenceItems,
+          maxSelectedItems: 1,
+          selectedIds: ["0"],
+          sortItem: () => 0,
+          labelText: "Preferences",
+        },
+      });
+
+      await openMenu();
+
+      const emailOption = screen.getByRole("option", { name: "Email" });
+      const slackOption = screen.getByRole("option", { name: "Slack" });
+      expect(slackOption).toHaveAttribute("aria-disabled", "true");
+
+      await user.keyboard("{ArrowDown}");
+      expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+      await user.keyboard("{ArrowDown}");
+      expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+      expect(slackOption).not.toHaveClass(
+        "bx--list-box__menu-item--highlighted",
+      );
+
+      await user.keyboard("{Enter}");
+      expect(emailOption).toHaveAttribute("aria-selected", "false");
+      expect(slackOption).not.toHaveAttribute("aria-disabled");
+    });
+
+    it("disables select-all when a cap is set", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "select-all", text: "All roles", isSelectAll: true },
+            { id: "editor", text: "Editor" },
+            { id: "owner", text: "Owner" },
+            { id: "uploader", text: "Uploader" },
+          ],
+          maxSelectedItems: 2,
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const selectAllOption = screen.getByRole("option", { name: "All roles" });
+      expect(selectAllOption).toHaveAttribute("aria-disabled", "true");
+
+      await user.click(selectAllOption);
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    });
+
+    it("preserves unlimited selection when maxSelectedItems is omitted", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: preferenceItems,
+          labelText: "Preferences",
+        },
+      });
+
+      await openMenu();
+      await toggleOption("Email");
+      await toggleOption("Slack");
+      await toggleOption("SMS");
+      await toggleOption("Push");
+
+      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toHaveLength(4);
+      for (const name of ["Email", "Slack", "SMS", "Push"]) {
+        expect(screen.getByRole("option", { name })).not.toHaveAttribute(
+          "aria-disabled",
+        );
+      }
+    });
+  });
+
   describe("filtering behavior", () => {
     it("filters items based on input", async () => {
       const consoleLog = vi.spyOn(console, "log");
