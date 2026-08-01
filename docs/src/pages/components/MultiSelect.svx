@@ -180,6 +180,17 @@ Set `virtualize={false}` to explicitly disable virtualization, even for large li
 
 <FileSource src="/framed/MultiSelect/VirtualizedMultiSelect" />
 
+### Load more
+
+`scrollend` fires when the menu is scrolled near the bottom so you can append the next page of `items`. Same pattern as [ComboBox load more](/components/ComboBox#load-more): handle `on:scrollend`, keep prior items visible while loading, and track in-flight status locally (or with the `empty` slot when appropriate). The event is a near-bottom load-more signal, not the browser's native `scrollend`.
+
+```svelte
+<MultiSelect
+  {items}
+  on:scrollend={() => loadNextPage()}
+/>
+```
+
 ### Custom overscan
 
 Overscanning is the process of rendering extra items above and below the viewport to ensure smooth scrolling. The default overscan value is 3.
