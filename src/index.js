@@ -45,6 +45,7 @@ export { default as Table } from "./DataTable/Table.svelte";
 export { default as TableBody } from "./DataTable/TableBody.svelte";
 export { default as TableCell } from "./DataTable/TableCell.svelte";
 export { default as TableContainer } from "./DataTable/TableContainer.svelte";
+export { default as TableFoot } from "./DataTable/TableFoot.svelte";
 export { default as TableHead } from "./DataTable/TableHead.svelte";
 export { default as TableHeader } from "./DataTable/TableHeader.svelte";
 export { default as TableRow } from "./DataTable/TableRow.svelte";

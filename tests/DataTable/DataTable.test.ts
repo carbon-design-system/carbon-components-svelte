@@ -20,6 +20,7 @@ import DataTableCustomBoth from "./DataTableCustomBoth.test.svelte";
 import DataTableCustomDescription from "./DataTableCustomDescription.test.svelte";
 import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
 import DataTableExpandIcon from "./DataTableExpandIcon.test.svelte";
+import DataTableFooter from "./DataTableFooter.test.svelte";
 
 describe("DataTable", () => {
   beforeEach(() => {
@@ -2988,6 +2989,98 @@ describe("DataTable", () => {
       expect.assert(scrollContainer instanceof HTMLElement);
       scrollContainer.scrollTop = 100;
       expect(scrollContainer.scrollTop).toBe(100);
+    });
+  });
+
+  describe("footer", () => {
+    const footerHeaders = [
+      { key: "name", value: "Name" },
+      { key: "protocol", value: "Protocol" },
+      { key: "port", value: "Port" },
+    ] as const;
+
+    it("should not render a tfoot without the footerCell slot", () => {
+      const { container } = render(DataTableFooter, {
+        props: { withFooter: false },
+      });
+
+      expect(container.querySelector("tfoot")).not.toBeInTheDocument();
+    });
+
+    it("should render one footer cell per column, in header order", () => {
+      const { container } = render(DataTableFooter);
+
+      const tfoot = container.querySelector("tfoot");
+      assert(tfoot);
+
+      const cells = tfoot.querySelectorAll("td");
+      expect(cells).toHaveLength(footerHeaders.length);
+      expect(within(tfoot).getByText("Total")).toBeInTheDocument();
+      expect(cells[0]).toHaveTextContent("Total");
+      expect(cells[1]).toHaveTextContent("");
+      expect(cells[2]).toHaveTextContent("3523");
+    });
+
+    it("should pass each header to the slot", () => {
+      const { container } = render(DataTableFooter, {
+        props: {
+          headers: [
+            { key: "port", value: "Port" },
+            { key: "name", value: "Name" },
+            { key: "protocol", value: "Protocol" },
+          ],
+        },
+      });
+
+      const cells = container.querySelectorAll("tfoot td");
+      // "port" moved first, so the total follows it rather than the column index.
+      expect(cells[0]).toHaveTextContent("3523");
+      expect(cells[1]).toHaveTextContent("");
+      expect(cells[2]).toHaveTextContent("");
+    });
+
+    it("should emit leading cells matching the header row", () => {
+      const { container } = render(DataTableFooter, {
+        props: { expandable: true, selectable: true },
+      });
+
+      const headerCells = container.querySelectorAll("thead tr th");
+      const footerCells = container.querySelectorAll("tfoot td");
+      expect(footerCells).toHaveLength(headerCells.length);
+      expect(footerCells).toHaveLength(footerHeaders.length + 2);
+
+      expect(footerCells[0]).toHaveClass("bx--table-expand");
+      expect(footerCells[0]).toHaveAttribute("aria-hidden", "true");
+      expect(footerCells[1]).toHaveClass("bx--table-column-checkbox");
+      expect(footerCells[1]).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("should render once while virtualized rows scroll", () => {
+      const largeRows = Array.from({ length: 500 }, (_, i) => ({
+        id: String(i),
+        name: `Load Balancer ${i + 1}`,
+        protocol: "HTTP",
+        port: 1,
+      }));
+
+      const { container } = render(DataTableFooter, {
+        props: { rows: largeRows, virtualize: true },
+      });
+
+      const footers = container.querySelectorAll("tfoot");
+      expect(footers).toHaveLength(1);
+
+      const spacerRows = [...container.querySelectorAll("tbody tr")].filter(
+        (row) => row.getAttribute("style")?.includes("height:"),
+      );
+      expect(spacerRows.length).toBeGreaterThan(0);
+      for (const spacerRow of spacerRows) {
+        expect(spacerRow.closest("tfoot")).toBeNull();
+      }
+
+      const cells = container.querySelectorAll("tfoot td");
+      expect(cells).toHaveLength(footerHeaders.length);
+      expect(cells[2]).toHaveTextContent(String(largeRows.length));
     });
   });
 });
