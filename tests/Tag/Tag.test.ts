@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type TagComponent from "carbon-components-svelte/Tag/Tag.svelte";
 import type { ComponentProps } from "svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import Tag from "./Tag.test.svelte";
 
@@ -14,7 +15,7 @@ describe("Tag", () => {
 
     const basicTag = screen.getByText("IBM Cloud");
     expect(basicTag.parentElement).toHaveClass("my-class");
-    expect(basicTag.parentElement).toHaveStyle({ margin: "1rem" });
+    expectInlineStyle(basicTag.parentElement, { margin: "1rem" });
 
     const colors = [
       "red",

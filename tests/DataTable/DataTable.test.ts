@@ -12,6 +12,7 @@ import type {
 } from "carbon-components-svelte/DataTable/data-table-utils";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import DataTableSortPreventDefault from "./DataTable.sort.preventDefault.test.svelte";
 import DataTable from "./DataTable.test.svelte";
@@ -1253,7 +1254,7 @@ describe("DataTable", () => {
       });
 
       const table = screen.getByRole("table");
-      expect(table).toHaveStyle({ "max-height": "24rem" });
+      expectInlineStyle(table, { "max-height": "24rem" });
     });
 
     it("ignores stickyHeaderMaxHeight when stickyHeader is disabled", () => {

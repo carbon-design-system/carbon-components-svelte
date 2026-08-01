@@ -3,6 +3,7 @@ import type NotificationButtonComponent from "carbon-components-svelte/Notificat
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import NotificationQueueTest from "./NotificationQueue.test.svelte";
 
@@ -46,7 +47,7 @@ describe("NotificationQueue", () => {
 
     const queueContainer = document.querySelector('[style*="position: fixed"]');
     expect(queueContainer).toBeInTheDocument();
-    expect(queueContainer).toHaveStyle({
+    expectInlineStyle(queueContainer, {
       position: "fixed",
       right: "1rem",
       top: "3rem",
@@ -361,7 +362,7 @@ describe("NotificationQueue", () => {
     await tick();
 
     const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toHaveStyle({ top: "3rem", right: "1rem" });
+    expectInlineStyle(queueContainer, { top: "3rem", right: "1rem" });
     const bottomValue = queueContainer
       ?.getAttribute("style")
       ?.match(/bottom:\s*([^;]+)/)?.[1]
@@ -381,7 +382,7 @@ describe("NotificationQueue", () => {
     await tick();
 
     const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toHaveStyle({ bottom: "1rem", right: "1rem" });
+    expectInlineStyle(queueContainer, { bottom: "1rem", right: "1rem" });
     const topValue = queueContainer
       ?.getAttribute("style")
       ?.match(/top:\s*([^;]+)/)?.[1]
@@ -405,7 +406,7 @@ describe("NotificationQueue", () => {
     await tick();
 
     const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toHaveStyle({ top: "5rem", right: "2rem" });
+    expectInlineStyle(queueContainer, { top: "5rem", right: "2rem" });
   });
 
   it("should use custom z-index", async () => {
