@@ -36,6 +36,12 @@
    */
   export let ref = null;
 
+  /**
+   * Set to `true` to defer mounting the panel content until the item is first opened.
+   * Once mounted, the content stays mounted for subsequent collapses.
+   */
+  export let lazy = false;
+
   import { getContext, onMount } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
 
@@ -60,6 +66,9 @@
   }
 
   let animation = undefined;
+  let hasOpened = open;
+
+  $: if (open) hasOpened = true;
 
   onMount(() => {
     return () => {
@@ -109,5 +118,9 @@
       <slot name="title">{title}</slot>
     </div>
   </button>
-  <div class:bx--accordion__content={true}><slot /></div>
+  <div class:bx--accordion__content={true}>
+    {#if !lazy || hasOpened}
+      <slot />
+    {/if}
+  </div>
 </li>
