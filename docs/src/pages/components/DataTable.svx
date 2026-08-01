@@ -417,6 +417,14 @@ Flip `columnHidden` on a bound `headers` array from a `ToolbarMenu` to build a c
 
 <FileSource src="/framed/DataTable/DataTableColumnVisibility" />
 
+### Pinned columns
+
+Set `pinned` to `"start"` or `"end"` in `headers` to keep a column visible while the table scrolls horizontally. The selection and expansion columns pin along with the first `start` column. Pinned columns must be contiguous with their edge; a pin separated from the edge by an unpinned column is ignored.
+
+Pinned columns do not work with a [sticky header](#sticky-header).
+
+<FileSource src="/framed/DataTable/DataTablePinnedColumns" />
+
 ## Sticky header
 
 Set `stickyHeader` to fix the header in place while the body scrolls.
