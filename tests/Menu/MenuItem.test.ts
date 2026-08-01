@@ -1,5 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import MenuItemRadioGroupFixture from "./MenuItem.radioGroup.test.svelte";
+import MenuItemSelectableFixture from "./MenuItem.selectable.test.svelte";
 import MenuItemSlot from "./MenuItem.slot.test.svelte";
 import MenuItemFixture from "./MenuItem.test.svelte";
 
@@ -235,6 +237,142 @@ describe("MenuItem", () => {
         "title",
         "Export as",
       );
+    });
+  });
+
+  describe("selectable", () => {
+    const getSelectedIds = () =>
+      JSON.parse(screen.getByTestId("selected-ids").textContent || "[]");
+
+    it("renders checkbox items and seeds the bound value from a selected item", async () => {
+      render(MenuItemSelectableFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      expect(
+        screen.getByRole("group", { name: "Columns" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("menuitemcheckbox", { name: "Name" }),
+      ).toHaveAttribute("aria-checked", "false");
+      expect(
+        screen.getByRole("menuitemcheckbox", { name: "Size" }),
+      ).toHaveAttribute("aria-checked", "true");
+      expect(getSelectedIds()).toEqual(["size"]);
+    });
+
+    it("toggles aria-checked and the bound selectedIds on click", async () => {
+      render(MenuItemSelectableFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      await user.click(screen.getByRole("menuitemcheckbox", { name: "Name" }));
+
+      expect(getSelectedIds()).toEqual(["size", "name"]);
+
+      // Selecting closes the menu, so reopen it to toggle the item back off.
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      expect(
+        screen.getByRole("menuitemcheckbox", { name: "Name" }),
+      ).toHaveAttribute("aria-checked", "true");
+
+      await user.click(screen.getByRole("menuitemcheckbox", { name: "Name" }));
+      expect(getSelectedIds()).toEqual(["size"]);
+    });
+
+    it("selects with Enter", async () => {
+      render(MenuItemSelectableFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      screen.getByRole("menuitemcheckbox", { name: "Name" }).focus();
+      await user.keyboard("{Enter}");
+
+      expect(getSelectedIds()).toEqual(["size", "name"]);
+    });
+
+    it("moves focus onto checkbox items with arrow keys", async () => {
+      render(MenuItemSelectableFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      expect(screen.getByRole("menuitem", { name: "Plain" })).toHaveFocus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(
+        screen.getByRole("menuitemcheckbox", { name: "Name" }),
+      ).toHaveFocus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(
+        screen.getByRole("menuitemcheckbox", { name: "Size" }),
+      ).toHaveFocus();
+    });
+
+    it("keeps the menu open when the click event is prevented", async () => {
+      render(MenuItemSelectableFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      await user.click(screen.getByRole("menuitemcheckbox", { name: "Date" }));
+
+      expect(screen.getByRole("menu")).toBeInTheDocument();
+      expect(getSelectedIds()).toEqual(["size"]);
+    });
+  });
+
+  describe("radio group", () => {
+    const getSelectedId = () => screen.getByTestId("selected-id").textContent;
+
+    it("renders radio items and seeds the bound value from a selected item", async () => {
+      render(MenuItemRadioGroupFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      expect(
+        screen.getByRole("group", { name: "Density" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("menuitemradio", { name: "Compact" }),
+      ).toHaveAttribute("aria-checked", "false");
+      expect(
+        screen.getByRole("menuitemradio", { name: "Comfortable" }),
+      ).toHaveAttribute("aria-checked", "true");
+      expect(getSelectedId()).toBe("comfortable");
+    });
+
+    it("unchecks the previous item when another one is selected", async () => {
+      render(MenuItemRadioGroupFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      await user.click(screen.getByRole("menuitemradio", { name: "Compact" }));
+
+      expect(getSelectedId()).toBe("compact");
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      expect(
+        screen.getByRole("menuitemradio", { name: "Compact" }),
+      ).toHaveAttribute("aria-checked", "true");
+      expect(
+        screen.getByRole("menuitemradio", { name: "Comfortable" }),
+      ).toHaveAttribute("aria-checked", "false");
+    });
+
+    it("selects with Space", async () => {
+      render(MenuItemRadioGroupFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      screen.getByRole("menuitemradio", { name: "Compact" }).focus();
+      await user.keyboard(" ");
+
+      expect(getSelectedId()).toBe("compact");
+    });
+
+    it("moves focus onto radio items with arrow keys", async () => {
+      render(MenuItemRadioGroupFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      await user.keyboard("{ArrowDown}");
+
+      expect(
+        screen.getByRole("menuitemradio", { name: "Compact" }),
+      ).toHaveFocus();
     });
   });
 });
