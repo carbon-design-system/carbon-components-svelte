@@ -14,6 +14,7 @@
     value: string;
     width?: string;
     minWidth?: string;
+    columnAlign?: "start" | "end";
     display?: (value: string | number | boolean) => string;
     sort?:
       | false
