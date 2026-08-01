@@ -41,8 +41,35 @@
   }
 }
 
+/// Inline rename input, rendered in place of a node label while editing.
+/// @access private
+/// @group components
+@mixin treeview-rename {
+  .#{$prefix}--tree-node__rename {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+
+    // The row already draws the focus outline on `.bx--tree-node__label`.
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
 @include exports('treeview-hidden') {
   @include treeview-hidden;
+}
+
+@include exports('treeview-rename') {
+  @include treeview-rename;
 }
 
 @include exports('treeview-multiselect') {
