@@ -21,6 +21,7 @@
    * @property {true} empty - Whether the header is empty
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
    * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
+   * @property {(value: DataTableValue, filterValue: any, row: Row) => boolean} [filter] - Override the default predicate for this column's entry in `filters`
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
@@ -32,6 +33,7 @@
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
    * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
+   * @property {(value: DataTableValue, filterValue: any, row: Row) => boolean} [filter] - Override the default predicate for this column's entry in `filters`
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
@@ -84,6 +86,10 @@
    * @event {{ key: null; direction: "none" } | { key: DataTableKey<Row>; direction: "ascending" | "descending" }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
    * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
    * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
+   * @event {{ key: null; value: null; filters: Record<string, any> } | { key: DataTableKey<Row>; value: any; filters: Record<string, any> }} filter - Dispatched when the resolved `filters` change. There is no built-in filter UI, so this is not a click handler: it fires whenever a column filter value changes, including from a control bound into `filters`. The event is cancelable: call `preventDefault()` to skip client side filtering for that change (for example server side filtering, where you read `detail.filters` for your API and hand back new `rows`). If not cancelled, the table narrows the current `rows` client side. Typical uses: server side filtering, URL or query string sync, and persisting filter preferences.
+   * @property {DataTableKey<Row> | null} key - Column whose filter value changed (`header.key`), or `null` when more than one entry changed in a single assignment.
+   * @property {any} value - New filter value for `key`, or `null` when `key` is `null`.
+   * @property {Record<string, any>} filters - The whole filter map after the change.
    * @event click:cell
    * @type {object}
    * @property {DataTableCell<Row>} cell
@@ -281,6 +287,33 @@
    */
   export let filterMode = "remove";
 
+  /**
+   * Specify per-column filter values, keyed by `header.key`.
+   *
+   * An entry is skipped when its value is `undefined`, `null`, a blank string, or an
+   * empty array. Active entries combine with `AND` across columns and with the
+   * `ToolbarSearch` value. A column matches on a case-insensitive substring for a
+   * string value, on membership for an array value, and on strict equality otherwise;
+   * set `header.filter` to override the predicate for that column.
+   * @example
+   * ```svelte
+   * <Select bind:selected={filters.status} …/>
+   * <DataTable bind:filters bind:filteredRowIds {headers} {rows} />
+   * ```
+   * @type {Record<string, any>}
+   * @bindable writable
+   */
+  export let filters = {};
+
+  /**
+   * The row ids matching the column filters and the `ToolbarSearch` value.
+   * Bind to this rather than to `ToolbarSearch.filteredRowIds` when column
+   * filters are in play; with no column filters the two agree.
+   * @type {ReadonlyArray<Row["id"]>}
+   * @bindable readonly
+   */
+  export let filteredRowIds = [];
+
   /** Specify the number of items to display in a page */
   export let pageSize = 0;
 
@@ -326,8 +359,10 @@
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
   import {
     compareValues,
+    createColumnFilterPredicate,
     formatHeaderWidth,
     getDisplayedRows,
+    isColumnFilterActive,
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
@@ -428,17 +463,90 @@
   // an active search is not silently dropped on row reassignment.
   let lastSearchValue = "";
   let lastCustomFilter = undefined;
+  // Column filters as of the last pass, so that assigning `filters` from within an
+  // `on:filter` handler cannot loop. Compared by value rather than by reference: a
+  // control bound to `filters.someKey` mutates the map in place.
+  let appliedFilters = snapshotFilters(filters);
 
   /**
-   * Recompute the matched rows from `originalRows` using the stored search state.
-   * "hide" mode keeps every row in `tableRows` and lets `matchedRowIdsSet` carry
-   * the truth; otherwise the rendered set shrinks to the matches.
+   * @type {(source: Record<string, DataTableValue>) => Record<string, DataTableValue>}
+   */
+  function snapshotFilters(source) {
+    const snapshot = {};
+    for (const [key, value] of Object.entries(source ?? {})) {
+      snapshot[key] = Array.isArray(value) ? [...value] : value;
+    }
+    return snapshot;
+  }
+
+  /**
+   * @type {(a: DataTableValue, b: DataTableValue) => boolean}
+   */
+  function filterValuesEqual(a, b) {
+    if (Array.isArray(a) && Array.isArray(b)) {
+      return a.length === b.length && a.every((value, i) => value === b[i]);
+    }
+    return a === b;
+  }
+
+  /**
+   * Keys whose filter value differs from the last applied pass.
+   * @type {(next: Record<string, DataTableValue>) => string[]}
+   */
+  function getChangedFilterKeys(next) {
+    const changed = [];
+    const keys = new Set([
+      ...Object.keys(next),
+      ...Object.keys(appliedFilters),
+    ]);
+
+    for (const key of keys) {
+      if (!filterValuesEqual(next[key], appliedFilters[key])) {
+        changed.push(key);
+      }
+    }
+
+    return changed;
+  }
+
+  /**
+   * Active column filters paired with their resolved predicates.
+   * @type {() => Array<{ key: string; predicate: (cellValue: DataTableValue, row: Row) => boolean }>}
+   */
+  function getActiveColumnFilters() {
+    const active = [];
+    /** @type {Map<string, DataTableHeader<Row>> | null} */
+    let headersByKey = null;
+
+    for (const [key, filterValue] of Object.entries(filters ?? {})) {
+      if (!isColumnFilterActive(filterValue)) continue;
+      if (headersByKey === null) {
+        headersByKey = new Map(headers.map((header) => [header.key, header]));
+      }
+      active.push({
+        key,
+        predicate: createColumnFilterPredicate(
+          filterValue,
+          headersByKey.get(key)?.filter,
+        ),
+      });
+    }
+
+    return active;
+  }
+
+  /**
+   * Recompute the matched rows from `originalRows` using the stored search state and
+   * the active column filters, which combine with `AND`. "hide" mode keeps every row
+   * in `tableRows` and lets `matchedRowIdsSet` carry the truth; otherwise the
+   * rendered set shrinks to the matches.
    * @type {() => ReadonlyArray<Row["id"]>}
    */
   function applyFilters() {
     const searchValue = String(lastSearchValue ?? "")
       .trim()
       .toLowerCase();
+    const activeColumnFilters = getActiveColumnFilters();
     let filteredRows = originalRows;
 
     if (searchValue.length > 0) {
@@ -472,8 +580,17 @@
       }
     }
 
+    if (activeColumnFilters.length > 0) {
+      filteredRows = filteredRows.filter((row) =>
+        activeColumnFilters.every(({ key, predicate }) =>
+          predicate(resolvePath(row, key), row),
+        ),
+      );
+    }
+
     const ids = filteredRows.map((row) => row.id);
     matchedRowIdsSet = new Set(ids);
+    filteredRowIds = ids;
     tableRows.set(hideMode ? originalRows : filteredRows);
     return ids;
   }
@@ -487,6 +604,34 @@
     lastCustomFilter = customFilter;
     return applyFilters();
   }
+
+  /**
+   * Dispatch the cancelable `filter` event, then filter client side unless the
+   * consumer cancelled. Mirrors the `sort` dispatch: compute the next state, dispatch,
+   * and only apply when the dispatch returns truthy.
+   * @type {(next: Record<string, DataTableValue>) => void}
+   */
+  function syncColumnFilters(next) {
+    const changedKeys = getChangedFilterKeys(next);
+    if (changedKeys.length === 0) return;
+
+    // Record the change before dispatching so a handler that assigns `filters`
+    // is treated as a new change instead of re-entering this one.
+    appliedFilters = snapshotFilters(next);
+    const key = changedKeys.length === 1 ? changedKeys[0] : null;
+    const applyFilter = dispatch(
+      "filter",
+      { key, value: key === null ? null : next[key], filters: next },
+      { cancelable: true },
+    );
+
+    if (applyFilter) applyFilters();
+  }
+
+  // Seed `filteredRowIds` and apply any column filters passed at mount.
+  applyFilters();
+
+  $: syncColumnFilters(filters ?? {});
 
   $: if (rows !== prevRows_ref) {
     originalRows = [...rows];
