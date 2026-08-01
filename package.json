@@ -73,7 +73,7 @@
     "jsdom": "^29.1.1",
     "lightningcss": "^1.33.0",
     "sass-embedded": "^1.100.0",
-    "sveld": "^0.36.0",
+    "sveld": "^0.36.1",
     "svelte": "^5.56.6",
     "svelte-check": "^4.7.3",
     "typescript": "^6.0.3",
