@@ -541,7 +541,10 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
-  import { virtualize as virtualizeRows } from "../utils/virtualize.js";
+  import {
+    scrollHighlightedIntoView,
+    virtualize as virtualizeRows,
+  } from "../utils/virtualize.js";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
   import TreeViewNodeVirtual from "./TreeViewNodeVirtual.svelte";
 
@@ -1145,26 +1148,27 @@
   }
 
   /**
-   * Scroll a virtual row into view and focus it. The caller mutates
-   * `expandedIds` before scheduling this on a `tick`, so by now `visibleFlat`
-   * already reflects the expanded ancestors.
+   * Scroll a virtual row into view and focus it. Callers schedule this on a
+   * `tick`, so `visibleFlat` already reflects the ancestors `showNode` expanded.
    * @param {string | number} targetId
    */
   function focusVirtualRowById(targetId) {
     if (!virtualConfig || !scrollContainerRef) return;
-    const idx = visibleFlat.findIndex((row) => row.node.id === targetId);
-    if (idx < 0) return;
-    const top = idx * virtualConfig.itemHeight;
-    if (top < scrollTop) {
-      virtualSetScrollTop(top);
-    } else if (
-      top + virtualConfig.itemHeight >
-      scrollTop + getVirtualContainerHeight()
-    ) {
-      virtualSetScrollTop(
-        top + virtualConfig.itemHeight - getVirtualContainerHeight(),
-      );
-    }
+
+    const index = visibleFlat.findIndex((row) => row.node.id === targetId);
+    if (index < 0) return;
+
+    const nextScrollTop = scrollHighlightedIntoView({
+      highlightedIndex: index,
+      currentScrollTop: scrollTop,
+      itemCount: visibleFlat.length,
+      itemHeight: virtualConfig.itemHeight,
+      containerHeight: getVirtualContainerHeight(),
+      // Overscan rows are mounted but offscreen, so require true visibility.
+      overscan: 0,
+    });
+    if (nextScrollTop !== null) virtualSetScrollTop(nextScrollTop);
+
     tick().then(() => {
       scrollContainerRef
         ?.querySelector(`[data-tree-row-id="${CSS.escape(String(targetId))}"]`)

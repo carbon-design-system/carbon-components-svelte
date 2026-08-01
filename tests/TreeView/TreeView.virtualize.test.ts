@@ -137,6 +137,61 @@ describe("TreeView (virtualize)", () => {
     expect(findRowById(0)).not.toBeNull();
   });
 
+  it("showNode focuses a row at the very end of the list, clamping the scroll position", async () => {
+    // Last root (#499) has id 1996; its last child is 1999. Reaching it
+    // requires expanding the branch and scrolling past the clamped maximum.
+    render(TreeViewVirtualize, {
+      totalRoots: 500,
+      childrenPerRoot: 3,
+      showNodeId: 1999,
+    });
+
+    await user.click(screen.getByTestId("show-node"));
+
+    await waitFor(() => {
+      expect(findRowById(1999)).not.toBeNull();
+      expect(findRowById(1999)).toHaveFocus();
+    });
+
+    // 503 visible rows * 32px - 320px container = 15776px max scroll.
+    expect(screen.getByRole("tree").scrollTop).toBe(15776);
+  });
+
+  it("showNode focuses the target when the consumer expands a branch in the same pass", async () => {
+    render(TreeViewVirtualize, {
+      totalRoots: 500,
+      childrenPerRoot: 3,
+      expandBeforeShowId: 1996,
+      showNodeId: 1999,
+    });
+
+    // Scroll somewhere unrelated first so the target starts far offscreen.
+    const ul = screen.getByRole("tree");
+    ul.scrollTop = 3200;
+    ul.dispatchEvent(new Event("scroll"));
+    await tick();
+
+    await user.click(screen.getByTestId("expand-and-show-node"));
+
+    await waitFor(() => {
+      expect(findRowById(1999)).not.toBeNull();
+      expect(findRowById(1999)).toHaveFocus();
+    });
+  });
+
+  it("showNode leaves the scroll position alone when the row is already visible", async () => {
+    render(TreeViewVirtualize, {
+      totalRoots: 500,
+      childrenPerRoot: 3,
+      showNodeId: 4, // root #1, within the initial window
+    });
+
+    await user.click(screen.getByTestId("show-node"));
+
+    await waitFor(() => expect(findRowById(4)).toHaveFocus());
+    expect(screen.getByRole("tree").scrollTop).toBe(0);
+  });
+
   it("showNode scrolls a deep, offscreen node into view and focuses it", async () => {
     // root #300's id = 1200; target one of its children (id 1201).
     render(TreeViewVirtualize, {

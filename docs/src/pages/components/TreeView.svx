@@ -208,6 +208,16 @@ Bind `scrollContainerRef` to access the scroll element directly.
 
 <FileSource src="/framed/TreeView/TreeViewVirtualize" />
 
+## Virtualization (log explorer)
+
+A log explorer is a canonical case for virtualization. Raw logs are flat, but tools group them into a tree -- here by **service**, then **severity** (`ERROR` / `WARN` / `INFO` / `DEBUG`), then individual **log lines**, with each line expanding into structured **fields** (`trace_id`, `status`, `latency_ms`). The tree stays small until you expand a branch; one busy severity group then adds hundreds of sibling rows. Virtualization keeps the DOM count near the viewport size even when the visible row count jumps into the hundreds.
+
+Service and severity rows use icons; log lines use a `Tag` and plain text in the slot. Select a log line to see its metadata in an `InlineNotification` below the tree. Toggle severity `SelectableTag` filters or search by message / `trace_id` to shrink the visible list -- scroll position clamps automatically when rows are removed.
+
+Click **Expand busiest branch** to open `checkout-service` → `INFO` (~620 lines) and compare **visible rows** with **rendered in DOM**. Click **Jump to last error** to see `TreeView.showNode` expand the path to a row buried thousands of lines down and scroll it into view.
+
+<FileSource src="/framed/TreeView/TreeViewVirtualizeLogs" />
+
 ## Flat data
 
 Convert flat data to a hierarchical structure using the `toHierarchy` utility.

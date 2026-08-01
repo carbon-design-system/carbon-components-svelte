@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { TreeView } from "carbon-components-svelte";
   import type { TreeNode } from "carbon-components-svelte/TreeView/TreeView.svelte";
+  import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";
 
   export let totalRoots = 500;
@@ -22,6 +22,7 @@
   }
 
   export let showNodeId: TreeNode["id"] = 0;
+  export let expandBeforeShowId: TreeNode["id"] = 0;
 
   let treeview: TreeView;
   let activeId: TreeNode["id"] | undefined = undefined;
@@ -51,4 +52,17 @@
   on:click={() => treeview.showNode(showNodeId)}
 >
   Show node
+</button>
+
+<!-- Mirrors the docs example, without awaiting a flush in between: `showNode`
+     runs while the rendered window still reflects the collapsed tree. -->
+<button
+  type="button"
+  data-testid="expand-and-show-node"
+  on:click={() => {
+    expandedIds = [expandBeforeShowId];
+    treeview.showNode(showNodeId);
+  }}
+>
+  Expand and show node
 </button>
