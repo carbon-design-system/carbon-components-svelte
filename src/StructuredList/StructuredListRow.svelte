@@ -12,7 +12,7 @@
    * which now owns focus for the selectable row.
    * @type {number | string | undefined}
    */
-  export let tabindex = "0";
+  export const tabindex = "0";
 
   import { getContext } from "svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
