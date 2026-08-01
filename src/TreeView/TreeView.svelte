@@ -29,6 +29,22 @@
   }
 
   /**
+   * Whether a keydown event should feed the type-ahead search buffer:
+   * a single printable character with no modifier (excludes Space, which
+   * is reserved for selection).
+   * @param {KeyboardEvent} event
+   */
+  function isTypeAheadKey(event) {
+    return (
+      event.key.length === 1 &&
+      event.key !== " " &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    );
+  }
+
+  /**
    * Creates a TreeWalker instance for keyboard navigation.
    * @returns {TreeWalker} A TreeWalker configured to navigate tree nodes
    */
@@ -689,6 +705,69 @@
     return target.closest(".bx--tree-node");
   }
 
+  /** Type-ahead search buffer, reset after `typeAheadTimeoutMs` of inactivity. */
+  let typeAheadBuffer = "";
+  let typeAheadTimeoutId = null;
+  const typeAheadTimeoutMs = 500;
+
+  /** @returns {Element[]} Visible (non-disabled, non-hidden) tree items in document order. */
+  function collectVisibleTreeItems() {
+    if (!treeWalker || !ref) return [];
+    treeWalker.currentNode = ref;
+    /** @type {Element[]} */
+    const items = [];
+    let n = treeWalker.nextNode();
+    while (n) {
+      items.push(n);
+      n = treeWalker.nextNode();
+    }
+    return items;
+  }
+
+  /**
+   * Moves focus to the next visible node whose label starts with the
+   * typed search string, cycling from the current item. Repeating the
+   * same character (e.g. "bbb") cycles through matches for that letter,
+   * matching native `<select>`-style type-ahead.
+   * @param {KeyboardEvent} event
+   * @param {Element} treeItem
+   * @returns {boolean} Whether the event was handled as type-ahead input.
+   */
+  function handleTypeAhead(event, treeItem) {
+    if (!isTypeAheadKey(event)) return false;
+
+    if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
+    typeAheadBuffer += event.key.toLowerCase();
+    typeAheadTimeoutId = setTimeout(() => {
+      typeAheadBuffer = "";
+    }, typeAheadTimeoutMs);
+
+    const isRepeatedChar =
+      typeAheadBuffer.length > 1 &&
+      [...typeAheadBuffer].every((c) => c === typeAheadBuffer[0]);
+    const query = isRepeatedChar ? typeAheadBuffer[0] : typeAheadBuffer;
+
+    const items = collectVisibleTreeItems();
+    if (items.length === 0) return true;
+
+    const startIndex = Math.max(items.indexOf(treeItem), 0);
+
+    for (let offset = 1; offset <= items.length; offset++) {
+      const candidate = items[(startIndex + offset) % items.length];
+      const label = (candidate.textContent ?? "").trim().toLowerCase();
+      if (label.startsWith(query)) {
+        resetNodeTabIndices(ref);
+        if (candidate instanceof HTMLElement) {
+          candidate.tabIndex = 0;
+          candidate.focus();
+        }
+        break;
+      }
+    }
+
+    return true;
+  }
+
   function handleKeyDown(event) {
     event.stopPropagation();
 
@@ -707,6 +786,8 @@
 
     const treeItem = getTreeItemFromTarget(event.target);
     if (!treeItem) return;
+
+    if (handleTypeAhead(event, treeItem)) return;
 
     treeWalker.currentNode = treeItem;
 
@@ -809,6 +890,7 @@
 
     return () => {
       setMultiselectKeyListeners(false);
+      if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
     };
   });
 
