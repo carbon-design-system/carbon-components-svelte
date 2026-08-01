@@ -352,6 +352,25 @@ Custom column widths do not work with a [sticky header](#sticky-header).
 
 <FileSource src="/framed/DataTable/DataTableHeaderWidth" />
 
+### Alignment
+
+Set `columnAlign` in `headers` to align a column's header and cells. Values are logical: `end` is the right edge in left-to-right text and the left edge in right-to-left text; the default, `start`, is the left edge. Sortable columns keep their sort affordance.
+
+<DataTable
+  sortable
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "cost", value: "Monthly cost", columnAlign: "end", display: (cost) => "$" + cost },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 3", protocol: "HTTP", port: 3000, cost: 1240 },
+    { id: "b", name: "Load Balancer 1", protocol: "HTTP", port: 443, cost: 865 },
+    { id: "c", name: "Load Balancer 2", protocol: "HTTP", port: 80, cost: 310 },
+  ]}
+/>
+
 ## Column visibility
 
 Control which columns render without editing the `headers` definition.
