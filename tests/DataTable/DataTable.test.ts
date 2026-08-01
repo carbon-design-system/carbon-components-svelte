@@ -1272,6 +1272,98 @@ describe("DataTable", () => {
     expect(protocolHeader).toHaveStyle({ "min-width": "100px" });
   });
 
+  describe("column alignment", () => {
+    const alignedHeaders = [
+      { key: "name", value: "Name" },
+      { key: "protocol", value: "Protocol", columnAlign: "start" },
+      { key: "port", value: "Port", columnAlign: "end" },
+      { key: "rule", value: "Rule" },
+    ] as const;
+
+    const getBodyRows = () =>
+      screen.getAllByRole("row").filter((row) => row.closest("tbody") !== null);
+
+    it("aligns the header and every cell of an aligned column only", () => {
+      render(DataTable, { props: { headers: alignedHeaders, rows } });
+
+      const columnHeaders = screen.getAllByRole("columnheader");
+      expect(columnHeaders[1]).toHaveClass("bx--table-column--align-start");
+      expect(columnHeaders[2]).toHaveClass("bx--table-column--align-end");
+      expect(columnHeaders[0].className).not.toMatch(/align/);
+      expect(columnHeaders[3].className).not.toMatch(/align/);
+
+      const bodyRows = getBodyRows();
+      expect(bodyRows).toHaveLength(rows.length);
+
+      for (const row of bodyRows) {
+        const cells = within(row).getAllByRole("cell");
+        expect(cells[1]).toHaveClass("bx--table-column--align-start");
+        expect(cells[2]).toHaveClass("bx--table-column--align-end");
+        expect(cells[0].className).not.toMatch(/align/);
+        expect(cells[3].className).not.toMatch(/align/);
+      }
+    });
+
+    it("renders no alignment class when headers omit align", () => {
+      const { container } = render(DataTable, { props: { headers, rows } });
+
+      expect(
+        container.querySelectorAll("[class*='bx--table-column--align']"),
+      ).toHaveLength(0);
+    });
+
+    it("keeps the sort affordance on an aligned sortable header", async () => {
+      render(DataTable, {
+        props: { headers: alignedHeaders, rows, sortable: true },
+      });
+
+      const portHeader = screen.getAllByRole("columnheader")[2];
+      expect(portHeader).toHaveClass("bx--table-column--align-end");
+      expect(portHeader).toHaveAttribute("aria-sort", "none");
+
+      const sortButton = within(portHeader).getByRole("button");
+      expect(sortButton).toHaveClass("bx--table-sort");
+
+      await user.click(sortButton);
+      expect(portHeader).toHaveAttribute("aria-sort", "ascending");
+    });
+
+    it("aligns virtualized rows but not spacer rows", () => {
+      const largeRows = Array.from({ length: 500 }, (_, i) => ({
+        id: String(i),
+        name: `Load Balancer ${i + 1}`,
+        protocol: "HTTP",
+        port: 3000 + i,
+        rule: "Round robin",
+      }));
+
+      render(DataTable, {
+        props: { headers: alignedHeaders, rows: largeRows, virtualize: true },
+      });
+
+      const isSpacer = (row: HTMLElement) =>
+        row.getAttribute("style")?.includes("height:") ?? false;
+      const bodyRows = getBodyRows();
+      const dataRows = bodyRows.filter((row) => !isSpacer(row));
+      const spacerRows = bodyRows.filter(isSpacer);
+
+      expect(dataRows.length).toBeGreaterThan(0);
+      expect(spacerRows.length).toBeGreaterThan(0);
+
+      for (const row of dataRows) {
+        const cells = within(row).getAllByRole("cell");
+        expect(cells[1]).toHaveClass("bx--table-column--align-start");
+        expect(cells[2]).toHaveClass("bx--table-column--align-end");
+      }
+
+      for (const row of spacerRows) {
+        for (const cell of within(row).getAllByRole("cell")) {
+          expect(cell.className).not.toMatch(/align/);
+        }
+      }
+    });
+  });
+
   it("applies sticky header", () => {
     render(DataTable, {
       props: {

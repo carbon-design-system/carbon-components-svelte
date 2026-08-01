@@ -37,6 +37,7 @@
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
+   * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
    * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
    * @typedef {object} DataTableCell<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
@@ -594,6 +595,15 @@
   let prevRows;
   let prevVisibleHeaders;
 
+  const alignClasses = {
+    start: "bx--table-column--align-start",
+    end: "bx--table-column--align-end",
+  };
+
+  function formatAlignClass(columnAlign) {
+    return alignClasses[columnAlign];
+  }
+
   /** Build cell objects for one row. Always new objects so `display` columns re-run. */
   function computeRowCells(row) {
     const cells = [];
@@ -608,6 +618,7 @@
         display: header.display,
         empty: header.empty,
         columnMenu: header.columnMenu,
+        columnAlign: header.columnAlign,
       });
     });
 
@@ -666,7 +677,8 @@
             a.value === b.value &&
             a.display === b.display &&
             a.empty === b.empty &&
-            a.columnMenu === b.columnMenu
+            a.columnMenu === b.columnMenu &&
+            a.columnAlign === b.columnAlign
           ) {
             newCells[i] = a;
           } else {
@@ -940,6 +952,7 @@
             {:else}
               <TableHeader
                 id="{id}-{header.key}"
+                class={formatAlignClass(header.columnAlign)}
                 style={formatHeaderWidth(header)}
                 sortable={sortable && header.sort !== false}
                 sortDirection={sortKey === header.key ? sortDirection : "none"}
@@ -1147,7 +1160,10 @@
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
                 {#if cell.empty}
-                  <td class:bx--table-column-menu={cell.columnMenu}>
+                  <td
+                    class={formatAlignClass(cell.columnAlign)}
+                    class:bx--table-column-menu={cell.columnMenu}
+                  >
                     <slot
                       name="cell"
                       {row}
@@ -1164,6 +1180,7 @@
                   </td>
                 {:else}
                   <TableCell
+                    class={formatAlignClass(cell.columnAlign)}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
@@ -1371,7 +1388,10 @@
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
                 {#if cell.empty}
-                  <td class:bx--table-column-menu={cell.columnMenu}>
+                  <td
+                    class={formatAlignClass(cell.columnAlign)}
+                    class:bx--table-column-menu={cell.columnMenu}
+                  >
                     <slot
                       name="cell"
                       {row}
@@ -1386,6 +1406,7 @@
                   </td>
                 {:else}
                   <TableCell
+                    class={formatAlignClass(cell.columnAlign)}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
