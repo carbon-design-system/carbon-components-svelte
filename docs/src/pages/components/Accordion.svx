@@ -245,3 +245,23 @@ Set `size` to `"sm"` for a small skeleton.
 
 <Accordion skeleton size="sm" />
 
+## Lazy loading
+
+Set `lazy` on an accordion item to defer mounting its panel content until the
+item first opens. Use it for panels with heavy content, such as API-fetched
+data or charts, so they mount only when needed. The content stays mounted
+after the item collapses.
+
+<Accordion>
+  <AccordionItem lazy title="Natural Language Classifier">
+   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+   </p>
+  </AccordionItem>
+  <AccordionItem lazy title="Natural Language Understanding">
+    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  </AccordionItem>
+  <AccordionItem lazy title="Language Translator">
+    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  </AccordionItem>
+</Accordion>
+
