@@ -427,6 +427,37 @@
     }
   }
 
+  /**
+   * Look up a node by `id` without re-implementing tree traversal.
+   * Returns `null` if no node with the given `id` exists.
+   * @type {(id: Node["id"]) => Node | null}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => console.log(treeView.getNode('node-123'))}>
+   *   Log Node
+   * </button>
+   * ```
+   */
+  export function getNode(id) {
+    return cachedNodeMap?.get(id) ?? null;
+  }
+
+  /**
+   * Look up multiple nodes by `id`. Ids without a matching node are omitted.
+   * @type {(ids: ReadonlyArray<Node["id"]>) => Array<Node>}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => console.log(treeView.getNodes(selectedIds))}>
+   *   Log Selected Nodes
+   * </button>
+   * ```
+   */
+  export function getNodes(ids) {
+    return ids.map((id) => cachedNodeMap?.get(id)).filter((node) => node);
+  }
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -526,6 +557,8 @@
   let cachedFlattenedNodes = null;
   /** @type {Array<Node["id"]> | null} */
   let cachedNodeIds = null;
+  /** @type {Map<Node["id"], Node> | null} */
+  let cachedNodeMap = null;
 
   /** @type {Node["id"] | null} */
   let anchorId = null;
@@ -898,6 +931,9 @@
     cachedNodes = nodes;
     cachedFlattenedNodes = traverse(nodes);
     cachedNodeIds = cachedFlattenedNodes.map((node) => node.id);
+    cachedNodeMap = new Map(
+      cachedFlattenedNodes.map((node) => [node.id, node]),
+    );
   }
 
   $: multiselectStore.set(multiselect);
