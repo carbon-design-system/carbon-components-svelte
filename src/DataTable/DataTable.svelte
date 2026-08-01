@@ -24,6 +24,7 @@
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
+   * @property {"start" | "end"} [pinned] - Keep the column visible while the table scrolls horizontally. Pinned columns must be contiguous with their edge. Ignored when `stickyHeader` is `true`.
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
@@ -35,6 +36,7 @@
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
+   * @property {"start" | "end"} [pinned] - Keep the column visible while the table scrolls horizontally. Pinned columns must be contiguous with their edge. Ignored when `stickyHeader` is `true`.
    * @property {string} [width]
    * @property {string} [minWidth]
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
@@ -326,6 +328,7 @@
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
   import {
     compareValues,
+    computePinnedOffsets,
     formatHeaderWidth,
     getDisplayedRows,
     resolvePath,
@@ -407,6 +410,7 @@
   onMount(() => {
     return () => {
       if (scrollListenerCleanup) scrollListenerCleanup();
+      if (pinnedResizeCleanup) pinnedResizeCleanup();
     };
   });
 
@@ -619,6 +623,7 @@
         empty: header.empty,
         columnMenu: header.columnMenu,
         columnAlign: header.columnAlign,
+        pinned: header.pinned,
       });
     });
 
@@ -678,7 +683,8 @@
             a.display === b.display &&
             a.empty === b.empty &&
             a.columnMenu === b.columnMenu &&
-            a.columnAlign === b.columnAlign
+            a.columnAlign === b.columnAlign &&
+            a.pinned === b.pinned
           ) {
             newCells[i] = a;
           } else {
@@ -805,8 +811,134 @@
   );
 
   // Calculate total columns for spacer rows and expanded row cells
-  $: totalColumns =
-    (expandable ? 1 : 0) + (selectable ? 1 : 0) + visibleHeaders.length;
+  $: leadingColumns = (expandable ? 1 : 0) + (selectable ? 1 : 0);
+  $: totalColumns = leadingColumns + visibleHeaders.length;
+
+  /**
+   * `stickyHeader` lays the table out with `display: flex` rows in two
+   * independently scrolling containers, where `position: sticky` cannot pin a
+   * column. Pinning opts out of that mode instead of half-supporting it.
+   */
+  $: isPinned = !stickyHeader && visibleHeaders.some((header) => header.pinned);
+
+  // The selection and expansion columns pin with the first `start` column;
+  // leaving them floating beside a pinned identifier column looks broken.
+  $: pinnedFlags = isPinned
+    ? [
+        ...Array(leadingColumns).fill(
+          visibleHeaders[0]?.pinned === "start" ? "start" : undefined,
+        ),
+        ...visibleHeaders.map((header) => header.pinned),
+      ]
+    : [];
+
+  /** @type {Array<number>} */
+  let columnWidths = [];
+  /** @type {null | (() => void)} */
+  let pinnedResizeCleanup = null;
+
+  /**
+   * Sticky offsets are the summed widths of the pinned cells before a column.
+   * Those widths are not knowable from `headers` (the selection and expansion
+   * columns are content-sized and `width` is optional), so read them off the
+   * rendered header row.
+   * @param {HTMLElement} table
+   */
+  function measureColumnWidths(table) {
+    const headerRow = table.querySelector("thead tr");
+    if (!headerRow) return;
+    const next = Array.from(
+      headerRow.children,
+      (cell) => cell.getBoundingClientRect().width,
+    );
+    if (
+      next.length === columnWidths.length &&
+      next.every((width, index) => width === columnWidths[index])
+    ) {
+      return;
+    }
+    columnWidths = next;
+  }
+
+  $: if (pinnedResizeCleanup && !(isPinned && tableRef)) {
+    pinnedResizeCleanup();
+    pinnedResizeCleanup = null;
+    columnWidths = [];
+  }
+
+  // Re-measure on every column change, and on layout changes via the observer.
+  $: if (isPinned && tableRef && pinnedFlags.length > 0) {
+    if (pinnedResizeCleanup) {
+      pinnedResizeCleanup();
+      pinnedResizeCleanup = null;
+    }
+    const table = tableRef;
+    tick().then(() => measureColumnWidths(table));
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver(() => measureColumnWidths(table));
+      observer.observe(table);
+      pinnedResizeCleanup = () => observer.disconnect();
+    }
+  }
+
+  $: pinnedOffsets = computePinnedOffsets(columnWidths, pinnedFlags);
+
+  /**
+   * Everything the markup needs for one pinned column: `class:` and `style:`
+   * directives for plain cells, plus class and style strings for `TableHeader`
+   * and `TableCell`, which forward them to their inner `th` / `td`.
+   * @param {"start" | "end"} side
+   * @param {number} offset
+   * @param {boolean} isBoundary
+   */
+  function createPinnedColumn(side, offset, isBoundary) {
+    const inset = `${offset}px`;
+    const className = `bx--table-column--pinned-${side}`;
+    return {
+      side,
+      isBoundary,
+      className: isBoundary
+        ? `${className} bx--table-column--pinned-boundary`
+        : className,
+      style: `inset-inline-${side}: ${inset}`,
+      insetStart: side === "start" ? inset : undefined,
+      insetEnd: side === "end" ? inset : undefined,
+    };
+  }
+
+  /**
+   * Resolved pin per column, in rendered cell order (leading columns first).
+   * `null` for columns that are not pinned.
+   */
+  $: pinnedColumns = pinnedFlags.map((_, index) => {
+    const endIndex = pinnedFlags.length - pinnedOffsets.end.length;
+    if (index < pinnedOffsets.start.length) {
+      return createPinnedColumn(
+        "start",
+        pinnedOffsets.start[index],
+        index === pinnedOffsets.start.length - 1,
+      );
+    }
+    if (index >= endIndex) {
+      return createPinnedColumn(
+        "end",
+        pinnedOffsets.end[index - endIndex],
+        index === endIndex,
+      );
+    }
+    return null;
+  });
+
+  /**
+   * @param {{ width?: string; minWidth?: string }} header
+   * @param {null | { style: string }} pinned
+   */
+  function formatHeaderStyle(header, pinned) {
+    return (
+      [formatHeaderWidth(header), pinned?.style].filter(Boolean).join(";") ||
+      undefined
+    );
+  }
 </script>
 
 <TableContainer {useStaticWidth} {...$$restProps}>
@@ -848,6 +980,7 @@
       {stickyHeader}
       {sortable}
       {useStaticWidth}
+      data-pinned-columns={isPinned ? "" : undefined}
       tableStyle={[
         hasCustomHeaderWidth && "table-layout: fixed",
         stickyHeader &&
@@ -864,10 +997,16 @@
       >
         <TableRow>
           {#if expandable}
+            {@const pinned = pinnedColumns[0]}
             <th
               scope="col"
               id="{id}-expand"
               class:bx--table-expand={true}
+              class:bx--table-column--pinned-start={pinned?.side === "start"}
+              class:bx--table-column--pinned-end={pinned?.side === "end"}
+              class:bx--table-column--pinned-boundary={pinned?.isBoundary}
+              style:inset-inline-start={pinned?.insetStart}
+              style:inset-inline-end={pinned?.insetEnd}
               data-previous-value={expanded ? "collapsed" : undefined}
             >
               {#if batchExpansion}
@@ -902,12 +1041,29 @@
             </th>
           {/if}
           {#if selectable && !batchSelection}
-            <th scope="col">
+            {@const pinned = pinnedColumns[expandable ? 1 : 0]}
+            <th
+              scope="col"
+              class:bx--table-column--pinned-start={pinned?.side === "start"}
+              class:bx--table-column--pinned-end={pinned?.side === "end"}
+              class:bx--table-column--pinned-boundary={pinned?.isBoundary}
+              style:inset-inline-start={pinned?.insetStart}
+              style:inset-inline-end={pinned?.insetEnd}
+            >
               <span class:bx--visually-hidden={true}>Select row</span>
             </th>
           {/if}
           {#if batchSelection && !radio}
-            <th scope="col" class:bx--table-column-checkbox={true}>
+            {@const pinned = pinnedColumns[expandable ? 1 : 0]}
+            <th
+              scope="col"
+              class:bx--table-column-checkbox={true}
+              class:bx--table-column--pinned-start={pinned?.side === "start"}
+              class:bx--table-column--pinned-end={pinned?.side === "end"}
+              class:bx--table-column--pinned-boundary={pinned?.isBoundary}
+              style:inset-inline-start={pinned?.insetStart}
+              style:inset-inline-end={pinned?.insetEnd}
+            >
               <InlineCheckbox
                 aria-label="Select all rows"
                 name="{id}-select-all"
@@ -936,24 +1092,40 @@
               />
             </th>
           {/if}
-          {#each visibleHeaders as header (header.key)}
+          {#each visibleHeaders as header, columnIndex (header.key)}
+            {@const pinned = pinnedColumns[leadingColumns + columnIndex]}
             {#if header.empty}
               {#if header.columnMenu}
                 <th
                   scope="col"
                   class:bx--table-column-menu={true}
+                  class:bx--table-column--pinned-start={pinned?.side === "start"}
+                  class:bx--table-column--pinned-end={pinned?.side === "end"}
+                  class:bx--table-column--pinned-boundary={pinned?.isBoundary}
+                  style:inset-inline-start={pinned?.insetStart}
+                  style:inset-inline-end={pinned?.insetEnd}
                   style={formatHeaderWidth(header)}
                 ></th>
               {:else}
-                <th scope="col" style={formatHeaderWidth(header)}>
+                <th
+                  scope="col"
+                  class:bx--table-column--pinned-start={pinned?.side === "start"}
+                  class:bx--table-column--pinned-end={pinned?.side === "end"}
+                  class:bx--table-column--pinned-boundary={pinned?.isBoundary}
+                  style:inset-inline-start={pinned?.insetStart}
+                  style:inset-inline-end={pinned?.insetEnd}
+                  style={formatHeaderWidth(header)}
+                >
                   <div class:bx--table-header-label={true}></div>
                 </th>
               {/if}
             {:else}
               <TableHeader
                 id="{id}-{header.key}"
-                class={formatAlignClass(header.columnAlign)}
-                style={formatHeaderWidth(header)}
+                class={[formatAlignClass(header.columnAlign), pinned?.className]
+                  .filter(Boolean)
+                  .join(" ")}
+                style={formatHeaderStyle(header, pinned)}
                 sortable={sortable && header.sort !== false}
                 sortDirection={sortKey === header.key ? sortDirection : "none"}
                 active={sortKey === header.key}
@@ -1064,8 +1236,10 @@
               }}
             >
               {#if expandable}
+                {@const pinned = pinnedColumns[0]}
                 <TableCell
-                  class="bx--table-expand"
+                  class="bx--table-expand {pinned?.className ?? ''}"
+                  style={pinned?.style}
                   headers="{id}-expand"
                   data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
                   expandedRowIdsSet.has(row.id)
@@ -1106,9 +1280,15 @@
                 </TableCell>
               {/if}
               {#if selectable}
+                {@const pinned = pinnedColumns[expandable ? 1 : 0]}
                 <td
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
+                  class:bx--table-column--pinned-start={pinned?.side === "start"}
+                  class:bx--table-column--pinned-end={pinned?.side === "end"}
+                  class:bx--table-column--pinned-boundary={pinned?.isBoundary}
+                  style:inset-inline-start={pinned?.insetStart}
+                  style:inset-inline-end={pinned?.insetEnd}
                 >
                   {#if !nonSelectableRowIdsSet.has(row.id)}
                     {@const inputId = `${id}-${row.id}`}
@@ -1159,10 +1339,17 @@
                 </td>
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
+                {@const pinned = pinnedColumns[leadingColumns + j]}
                 {#if cell.empty}
                   <td
                     class={formatAlignClass(cell.columnAlign)}
                     class:bx--table-column-menu={cell.columnMenu}
+                    class:bx--table-column--pinned-start={pinned?.side ===
+                      "start"}
+                    class:bx--table-column--pinned-end={pinned?.side === "end"}
+                    class:bx--table-column--pinned-boundary={pinned?.isBoundary}
+                    style:inset-inline-start={pinned?.insetStart}
+                    style:inset-inline-end={pinned?.insetEnd}
                   >
                     <slot
                       name="cell"
@@ -1180,8 +1367,11 @@
                   </td>
                 {:else}
                   <TableCell
-                    class={formatAlignClass(cell.columnAlign)}
+                    class={[formatAlignClass(cell.columnAlign), pinned?.className]
+                      .filter(Boolean)
+                      .join(" ")}
                     headers="{id}-{cell.key}"
+                    style={pinned?.style}
                     on:click={(event) => {
                       dispatch("click", { row, cell });
                       dispatch("click:cell", {
@@ -1297,8 +1487,10 @@
               }}
             >
               {#if expandable}
+                {@const pinned = pinnedColumns[0]}
                 <TableCell
-                  class="bx--table-expand"
+                  class="bx--table-expand {pinned?.className ?? ''}"
+                  style={pinned?.style}
                   headers="{id}-expand"
                   data-previous-value={isExpandable && isExpanded
                     ? "collapsed"
@@ -1337,9 +1529,15 @@
                 </TableCell>
               {/if}
               {#if selectable}
+                {@const pinned = pinnedColumns[expandable ? 1 : 0]}
                 <td
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
+                  class:bx--table-column--pinned-start={pinned?.side === "start"}
+                  class:bx--table-column--pinned-end={pinned?.side === "end"}
+                  class:bx--table-column--pinned-boundary={pinned?.isBoundary}
+                  style:inset-inline-start={pinned?.insetStart}
+                  style:inset-inline-end={pinned?.insetEnd}
                 >
                   {#if isSelectable}
                     {@const inputId = `${id}-${row.id}`}
@@ -1387,10 +1585,17 @@
                 </td>
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
+                {@const pinned = pinnedColumns[leadingColumns + j]}
                 {#if cell.empty}
                   <td
                     class={formatAlignClass(cell.columnAlign)}
                     class:bx--table-column-menu={cell.columnMenu}
+                    class:bx--table-column--pinned-start={pinned?.side ===
+                      "start"}
+                    class:bx--table-column--pinned-end={pinned?.side === "end"}
+                    class:bx--table-column--pinned-boundary={pinned?.isBoundary}
+                    style:inset-inline-start={pinned?.insetStart}
+                    style:inset-inline-end={pinned?.insetEnd}
                   >
                     <slot
                       name="cell"
@@ -1406,8 +1611,11 @@
                   </td>
                 {:else}
                   <TableCell
-                    class={formatAlignClass(cell.columnAlign)}
+                    class={[formatAlignClass(cell.columnAlign), pinned?.className]
+                      .filter(Boolean)
+                      .join(" ")}
                     headers="{id}-{cell.key}"
+                    style={pinned?.style}
                     on:click={(event) => {
                       dispatch("click", { row, cell });
                       dispatch("click:cell", {

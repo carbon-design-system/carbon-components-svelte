@@ -49,6 +49,18 @@ export function formatHeaderWidth<
 >(header: Header): string | undefined;
 
 /**
+ * Sticky offsets for pinned columns, in source order.
+ *
+ * `start` covers columns `0..start.length - 1` and `end` covers the final
+ * `end.length` columns. Pins that are not contiguous with their edge are
+ * dropped; missing widths count as `0`.
+ */
+export function computePinnedOffsets(
+  columnWidths: ReadonlyArray<number>,
+  pinnedFlags: ReadonlyArray<"start" | "end" | undefined>,
+): { start: Array<number>; end: Array<number> };
+
+/**
  * Compares two values for sorting in a data table.
  * Handles numbers, strings, null/undefined values, and custom sort functions.
  * @returns {number} Negative if a < b (ascending) or a > b (descending), positive if a > b (ascending) or a < b (descending), 0 if equal

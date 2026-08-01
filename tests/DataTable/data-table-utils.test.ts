@@ -1,5 +1,6 @@
 import {
   compareValues,
+  computePinnedOffsets,
   formatHeaderWidth,
   getDisplayedRows,
   resolvePath,
@@ -1314,5 +1315,86 @@ describe("toCsv", () => {
 
   it("emits only the header row when there are no rows", () => {
     expect(toCsv(headers, [])).toBe("Name,Port");
+  });
+});
+
+describe("computePinnedOffsets", () => {
+  it("returns empty arrays when no column is pinned", () => {
+    expect(
+      computePinnedOffsets([100, 200, 300], [undefined, undefined, undefined]),
+    ).toEqual({ start: [], end: [] });
+  });
+
+  it("returns empty arrays for empty input", () => {
+    expect(computePinnedOffsets([], [])).toEqual({ start: [], end: [] });
+  });
+
+  it("gives the first start column an offset of zero", () => {
+    expect(
+      computePinnedOffsets([100, 200, 300], ["start", undefined, undefined]),
+    ).toEqual({ start: [0], end: [] });
+  });
+
+  it("accumulates start offsets from the preceding widths", () => {
+    expect(
+      computePinnedOffsets([100, 200, 300], ["start", "start", "start"]),
+    ).toEqual({ start: [0, 100, 300], end: [] });
+  });
+
+  it("accumulates end offsets from the right, in reverse", () => {
+    expect(
+      computePinnedOffsets([100, 200, 300], [undefined, "end", "end"]),
+    ).toEqual({ start: [], end: [300, 0] });
+  });
+
+  it("pins both edges of the same table", () => {
+    expect(
+      computePinnedOffsets(
+        [100, 200, 300, 400],
+        ["start", undefined, "end", "end"],
+      ),
+    ).toEqual({ start: [0], end: [400, 0] });
+  });
+
+  it("drops a start pin that is not contiguous with the leading edge", () => {
+    expect(
+      computePinnedOffsets([100, 200, 300], [undefined, "start", undefined]),
+    ).toEqual({ start: [], end: [] });
+  });
+
+  it("drops an end pin that is not contiguous with the trailing edge", () => {
+    expect(
+      computePinnedOffsets([100, 200, 300], [undefined, "end", undefined]),
+    ).toEqual({ start: [], end: [] });
+  });
+
+  it("keeps the contiguous run and drops the pin beyond the gap", () => {
+    expect(
+      computePinnedOffsets(
+        [100, 200, 300, 400],
+        ["start", "start", undefined, "start"],
+      ),
+    ).toEqual({ start: [0, 100], end: [] });
+  });
+
+  it("treats missing widths as zero", () => {
+    expect(computePinnedOffsets([], ["start", "start"])).toEqual({
+      start: [0, 0],
+      end: [],
+    });
+  });
+
+  it("never counts one column as both a start and an end pin", () => {
+    expect(computePinnedOffsets([100], ["start"])).toEqual({
+      start: [0],
+      end: [],
+    });
+  });
+
+  it("returns empty arrays for non-array input", () => {
+    expect(
+      // @ts-expect-error
+      computePinnedOffsets(undefined, undefined),
+    ).toEqual({ start: [], end: [] });
   });
 });
