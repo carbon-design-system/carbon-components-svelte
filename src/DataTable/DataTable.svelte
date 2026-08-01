@@ -23,6 +23,7 @@
    * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
+   * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
@@ -33,6 +34,7 @@
    * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
+   * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
@@ -411,6 +413,10 @@
   // since there may be multiple `DataTable` instances that have overlapping row ids.
   const id = `ccs-${Math.random().toString(36)}`;
 
+  // A columnHidden header stays in `headers`, the column definition, and is
+  // skipped everywhere the rendered column set is meant.
+  $: visibleHeaders = headers.filter((header) => !header.columnHidden);
+
   // Store a copy of the original rows for filter restoration.
   let prevRows_ref = rows;
   let originalRows = [...rows];
@@ -445,7 +451,9 @@
       filteredRows = originalRows.filter((row) => customFilter(row, value));
     } else {
       // Get searchable keys from headers (non-empty headers with keys).
-      const searchableKeys = headers
+      // Hidden columns are excluded: matching on a column the user cannot
+      // see produces results they cannot explain.
+      const searchableKeys = visibleHeaders
         .filter((header) => !header.empty && header.key)
         .map((header) => header.key);
 
@@ -584,17 +592,26 @@
 
   let tableCellsByRowId = {};
   let prevRows;
-  let prevHeaders;
+  let prevVisibleHeaders;
 
   /** Build cell objects for one row. Always new objects so `display` columns re-run. */
   function computeRowCells(row) {
-    return headers.map((header, index) => ({
-      key: header.key ?? `key-${index}`,
-      value: header.key ? resolvePath(row, header.key) : undefined,
-      display: header.display,
-      empty: header.empty,
-      columnMenu: header.columnMenu,
-    }));
+    const cells = [];
+
+    // Index into `headers` rather than the visible subset so hiding a preceding
+    // column does not renumber the generated keys the `{#each}` blocks key on.
+    headers.forEach((header, index) => {
+      if (header.columnHidden) return;
+      cells.push({
+        key: header.key ?? `key-${index}`,
+        value: header.key ? resolvePath(row, header.key) : undefined,
+        display: header.display,
+        empty: header.empty,
+        columnMenu: header.columnMenu,
+      });
+    });
+
+    return cells;
   }
 
   /**
@@ -630,7 +647,9 @@
     tableCellsByRowId = next;
   }
 
-  $: if (rows !== prevRows || headers !== prevHeaders) {
+  // Compare against `visibleHeaders`, not `headers`: it is a fresh array on every
+  // `headers` invalidation, so toggling `columnHidden` in place still rebuilds the cells.
+  $: if (rows !== prevRows || visibleHeaders !== prevVisibleHeaders) {
     const next = {};
 
     for (const row of rows) {
@@ -662,7 +681,7 @@
 
     tableCellsByRowId = next;
     prevRows = rows;
-    prevHeaders = headers;
+    prevVisibleHeaders = visibleHeaders;
   }
 
   $: ascending = sortDirection === "ascending";
@@ -769,13 +788,13 @@
         })()
       : null;
 
-  $: hasCustomHeaderWidth = headers.some(
+  $: hasCustomHeaderWidth = visibleHeaders.some(
     (header) => header.width ?? header.minWidth,
   );
 
-  // Calculate total columns for spacer rows
+  // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
-    (expandable ? 1 : 0) + (selectable ? 1 : 0) + headers.length;
+    (expandable ? 1 : 0) + (selectable ? 1 : 0) + visibleHeaders.length;
 </script>
 
 <TableContainer {useStaticWidth} {...$$restProps}>
@@ -905,7 +924,7 @@
               />
             </th>
           {/if}
-          {#each headers as header (header.key)}
+          {#each visibleHeaders as header (header.key)}
             {#if header.empty}
               {#if header.columnMenu}
                 <th
@@ -1189,11 +1208,7 @@
               >
                 {#if expandedRowIdsSet.has(row.id) &&
                 !nonExpandableRowIdsSet.has(row.id)}
-                  <TableCell
-                    colspan={selectable
-                      ? headers.length + 2
-                      : headers.length + 1}
-                  >
+                  <TableCell colspan={totalColumns}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot
                         name="expandedRow"
@@ -1415,9 +1430,7 @@
                 }}
               >
                 {#if isExpanded && isExpandable}
-                  <TableCell
-                    colspan={selectable ? headers.length + 2 : headers.length + 1}
-                  >
+                  <TableCell colspan={totalColumns}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot name="expandedRow" {row} rowSelected={isSelected} />
                     </div>
