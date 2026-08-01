@@ -98,6 +98,12 @@ Set `size` to `"xs"` for an extra-small overflow menu.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
+## Scrollable
+
+Set `maxHeight` to cap the menu height and scroll the remaining items. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. Keyboard navigation scrolls the focused item into view.
+
+<FileSource src="/framed/OverflowMenu/OverflowMenuScrollable" />
+
 ## Custom primary focus
 
 Set `primaryFocus` to `true` on a menu item to focus it when opening the dropdown.
