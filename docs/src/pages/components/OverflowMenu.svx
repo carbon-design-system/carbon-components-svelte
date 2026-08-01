@@ -14,7 +14,7 @@ description: Overflow menus present a list of actions in a compact dropdown, ide
 
 ## Basic
 
-Create a basic overflow menu by wrapping overflow menu item components within the overflow menu.
+Create a basic overflow menu by wrapping overflow menu item components within the overflow menu. For menus that need submenus, use [MenuButton](/components/MenuButton#icon-only) instead.
 
 <OverflowMenu>
   <OverflowMenuItem text="Manage credentials" />
