@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import Box from "./Box.test.svelte";
 
 describe("Box", () => {
@@ -46,7 +47,7 @@ describe("Box", () => {
   it("applies custom padding via inline style", () => {
     render(Box);
 
-    expect(screen.getByText("Custom padding")).toHaveStyle({
+    expectInlineStyle(screen.getByText("Custom padding"), {
       padding: "1.5rem",
     });
   });
@@ -57,10 +58,10 @@ describe("Box", () => {
     expect(screen.getByText("Full width capped")).toHaveClass(
       "bx--box-full-width",
     );
-    expect(screen.getByText("Full width capped")).toHaveStyle({
+    expectInlineStyle(screen.getByText("Full width capped"), {
       maxWidth: "480px",
     });
-    expect(screen.getByText("Custom width")).toHaveStyle({
+    expectInlineStyle(screen.getByText("Custom width"), {
       width: "12rem",
       minWidth: "8rem",
     });

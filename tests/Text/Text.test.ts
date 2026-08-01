@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import Text from "./Text.test.svelte";
 
 describe("Text", () => {
@@ -94,7 +95,7 @@ describe("Text", () => {
   it("applies maxWidth as a CSS length string", () => {
     render(Text);
 
-    expect(screen.getByText("Max width ch")).toHaveStyle({ maxWidth: "38ch" });
+    expectInlineStyle(screen.getByText("Max width ch"), { maxWidth: "38ch" });
   });
 
   it("applies full width modifier class", () => {
@@ -115,7 +116,7 @@ describe("Text", () => {
       "bx--type-text-primary",
       "combined",
     );
-    expect(node).toHaveStyle({ maxWidth: "42ch" });
+    expectInlineStyle(node, { maxWidth: "42ch" });
   });
 
   it("applies multiline truncation when `lines` is set", () => {
