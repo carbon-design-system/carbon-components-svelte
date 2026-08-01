@@ -1,0 +1,71 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Pinned column styling for DataTable headers with `pinned: "start" | "end"`.
+/// The offsets are measured at runtime and applied inline; this partial
+/// supplies the opaque background, the stacking order, and the boundary shadow.
+///
+/// A sticky cell with a transparent background lets the scrolled content show
+/// straight through it. Carbon already paints every `th` and `td` for each row
+/// state — default, zebra, selected, hover — and
+/// `_data-table-highlighted-row.scss` covers the highlighted combinations. The
+/// background rules here are therefore a low-specificity fallback, deliberately
+/// left unscoped: qualifying them with the table selector would outrank those
+/// state rules and flatten hover, zebra, and selection to a single colour.
+///
+/// `data-pinned-columns` is set on the table only when a column is actually
+/// pinned, so a table without pinned columns keeps its default stacking.
+/// @access private
+/// @group components
+@mixin data-table-pinned-column {
+  th.#{$prefix}--table-column--pinned-start,
+  th.#{$prefix}--table-column--pinned-end {
+    background-color: $layer-accent;
+  }
+
+  td.#{$prefix}--table-column--pinned-start,
+  td.#{$prefix}--table-column--pinned-end {
+    background-color: $layer;
+  }
+
+  .#{$prefix}--data-table[data-pinned-columns] {
+    // Confine pinned cells to the table's own stacking context. The toolbar
+    // that precedes the table is `position: relative; z-index: 1` and has to
+    // keep winning, for example when an overflow menu opens over the header.
+    isolation: isolate;
+
+    thead {
+      // Above pinned body cells (z-index 1): in a virtualized table the header
+      // row is sticky and rows scroll underneath it.
+      position: relative;
+      z-index: 2;
+    }
+
+    th.#{$prefix}--table-column--pinned-start,
+    th.#{$prefix}--table-column--pinned-end,
+    td.#{$prefix}--table-column--pinned-start,
+    td.#{$prefix}--table-column--pinned-end {
+      position: sticky;
+      // Above unpinned cells, which are not positioned at all.
+      z-index: 1;
+    }
+
+    // Only the column at each edge of the pinned group casts a shadow, so the
+    // seam between pinned and scrolling content reads as a single edge. The
+    // negative spread keeps the blur off the horizontal cell edges. Negate
+    // through `calc`: in the themable build the tokens are custom properties,
+    // and `-var(…)` is not valid CSS.
+    .#{$prefix}--table-column--pinned-start.#{$prefix}--table-column--pinned-boundary {
+      box-shadow: $spacing-01 0 $spacing-02 calc(-1 * #{$spacing-01}) $shadow;
+    }
+
+    .#{$prefix}--table-column--pinned-end.#{$prefix}--table-column--pinned-boundary {
+      box-shadow: calc(-1 * #{$spacing-01}) 0 $spacing-02
+        calc(-1 * #{$spacing-01}) $shadow;
+    }
+  }
+}
+
+@include exports("data-table-pinned-column") {
+  @include data-table-pinned-column;
+}

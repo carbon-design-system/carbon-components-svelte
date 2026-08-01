@@ -226,6 +226,48 @@ export function formatHeaderWidth(header) {
 }
 
 /**
+ * Sticky offsets for pinned columns, in source order.
+ *
+ * A pinned column must be contiguous with its edge: `start` pins run from the
+ * first column, `end` pins run from the last. A pin that is separated from its
+ * edge by an unpinned column is dropped rather than accommodated, since sticky
+ * offsets can only be stacked against an edge.
+ *
+ * `start` covers columns `0..start.length - 1` and `end` covers the final
+ * `end.length` columns, so each offset maps back to a column by position.
+ * Missing widths count as `0`, which keeps the pinned set stable before the
+ * first measurement.
+ * @param {ReadonlyArray<number>} columnWidths - Rendered width of each column, in source order
+ * @param {ReadonlyArray<"start" | "end" | undefined>} pinnedFlags - Requested pin side of each column, in source order
+ * @returns {{ start: Array<number>, end: Array<number> }}
+ */
+export function computePinnedOffsets(columnWidths, pinnedFlags) {
+  const flags = Array.isArray(pinnedFlags) ? pinnedFlags : [];
+  const widths = Array.isArray(columnWidths) ? columnWidths : [];
+
+  /** @type {Array<number>} */
+  const start = [];
+  /** @type {Array<number>} */
+  const end = [];
+
+  let offset = 0;
+  for (let i = 0; i < flags.length; i++) {
+    if (flags[i] !== "start") break;
+    start.push(offset);
+    offset += widths[i] || 0;
+  }
+
+  offset = 0;
+  for (let i = flags.length - 1; i >= start.length; i--) {
+    if (flags[i] !== "end") break;
+    end.unshift(offset);
+    offset += widths[i] || 0;
+  }
+
+  return { start, end };
+}
+
+/**
  * Compares two values for sorting in a data table.
  * Handles numbers, strings, null/undefined values, and custom sort functions.
  * @template T
