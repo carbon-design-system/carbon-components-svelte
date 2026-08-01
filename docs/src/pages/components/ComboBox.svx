@@ -252,6 +252,18 @@ For async (for example, server-side) filtering, bind to `value` and update `item
 
 <FileSource src="/framed/ComboBox/AsyncComboBox" />
 
+### Load more
+
+`scrollend` fires when the menu is scrolled near the bottom. Use it to append the next page of `items`. The component does not fetch or mutate `items` for you.
+
+This is a library load-more signal, named like Modal's lowercase `transitionend`. It is not the browser's native `scrollend` (scroll stopped).
+
+Keep prior items visible while the next page loads. Track in-flight status in local state, or surface it with the `empty` slot when the list is temporarily empty.
+
+`scrollend` fires once per approach to the bottom. It re-arms after the user scrolls away, and when `items` grows so another page can be requested. Holding the scrollbar at the bottom does not spam the handler. The raw DOM `scroll` event is still forwarded via `on:scroll`.
+
+<FileSource src="/framed/ComboBox/ScrollEndComboBox" />
+
 ### Allow custom value
 
 Set `allowCustomValue` to `true` to let users enter custom text that is not in the predefined list. By default, user-entered text is cleared when the combobox loses focus without selecting an item. With allowCustomValue enabled, custom text is preserved.
