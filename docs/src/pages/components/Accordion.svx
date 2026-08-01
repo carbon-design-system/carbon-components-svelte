@@ -95,6 +95,26 @@ accordion is first rendered.
   </AccordionItem>
 </Accordion>
 
+## Single-open
+
+Set `type` to `"single"` so that opening an item automatically closes any
+other open item. This is useful for FAQs, step-by-step wizards, or settings
+panels where only one section should be expanded at a time. The default is
+`"multiple"`, which allows any number of items to be open simultaneously.
+
+<Accordion type="single">
+  <AccordionItem open title="Natural Language Classifier">
+   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+   </p>
+  </AccordionItem>
+  <AccordionItem title="Natural Language Understanding">
+    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  </AccordionItem>
+  <AccordionItem title="Language Translator">
+    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  </AccordionItem>
+</Accordion>
+
 ## Programmatic example
 
 Programmatically control the accordion items with the `bind:open` directive,
