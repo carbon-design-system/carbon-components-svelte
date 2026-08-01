@@ -82,6 +82,7 @@ export { default as IconIndicator } from "./IconIndicator/IconIndicator.svelte";
 export { default as ImageLoader } from "./ImageLoader/ImageLoader.svelte";
 export { default as InlineLoading } from "./InlineLoading/InlineLoading.svelte";
 export { default as Link } from "./Link/Link.svelte";
+export { default as LinkDownload } from "./Link/LinkDownload.svelte";
 export { default as OutboundLink } from "./Link/OutboundLink.svelte";
 export { default as ListBox } from "./ListBox/ListBox.svelte";
 export { default as ListBoxField } from "./ListBox/ListBoxField.svelte";
