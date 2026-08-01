@@ -3,6 +3,7 @@
    * @generics {Id extends string | number = string | number, Icon = any} Id,Icon
    * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
    * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; } }}
+   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; } }} childNodes
    */
 
   /** @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>} */
@@ -21,6 +22,9 @@
   /** `aria-setsize` — the number of siblings (including this node). */
   export let setsize = 1;
 
+  /** Whether this node has children that have not been loaded yet. */
+  export let hasChildren = false;
+
   /**
    * Specify the icon to render.
    * @type {Icon}
@@ -33,6 +37,10 @@
     computeTreeLeafDepth,
     findParentTreeNode,
   } from "./TreeViewNode.svelte";
+  // `<svelte:fragment>` (used to forward the `childNodes` slot without adding
+  // a DOM wrapper) can only target a `Component`, not `<svelte:self>` — so
+  // this recurses via a self-import instead.
+  import Self from "./TreeViewNodeList.svelte";
 
   /**
    * First focusable tree item in a subtree `ul` — handles both bare
@@ -87,6 +95,7 @@
     ...restProps,
     text, // Ensure text is included and marked as used
     disabled, // Ensure disabled is always included (has default value)
+    hasChildren, // Ensure hasChildren is always included (has default value)
     expanded,
     leaf: !parent,
     selected,
@@ -112,8 +121,8 @@
 
 {#if root}
   {#each nodes as child, index (child.id)}
-    {#if Array.isArray(child.nodes)}
-      <svelte:self
+    {#if Array.isArray(child.nodes) || child.hasChildren}
+      <Self
         {...child}
         level={1}
         posinset={index + 1}
@@ -121,7 +130,10 @@
         let:node
       >
         <slot {node} />
-      </svelte:self>
+        <svelte:fragment slot="childNodes" let:node>
+          <slot name="childNodes" {node} />
+        </svelte:fragment>
+      </Self>
     {:else}
       <TreeViewNode
         leaf
@@ -254,30 +266,37 @@
       class:bx--tree-node__children={true}
       class:bx--tree-node--hidden={!expanded}
     >
-      {#each nodes as child, index (child.id)}
-        {#if Array.isArray(child.nodes)}
-          <svelte:self
-            {...child}
-            level={level + 1}
-            posinset={index + 1}
-            setsize={nodes.length}
-            let:node
-          >
-            <slot {node} />
-          </svelte:self>
-        {:else}
-          <TreeViewNode
-            leaf
-            {...child}
-            level={level + 1}
-            posinset={index + 1}
-            setsize={nodes.length}
-            let:node
-          >
-            <slot {node}>{node.text}</slot>
-          </TreeViewNode>
-        {/if}
-      {/each}
+      {#if hasChildren && nodes.length === 0}
+        <slot name="childNodes" {node} />
+      {:else}
+        {#each nodes as child, index (child.id)}
+          {#if Array.isArray(child.nodes) || child.hasChildren}
+            <Self
+              {...child}
+              level={level + 1}
+              posinset={index + 1}
+              setsize={nodes.length}
+              let:node
+            >
+              <slot {node} />
+              <svelte:fragment slot="childNodes" let:node>
+                <slot name="childNodes" {node} />
+              </svelte:fragment>
+            </Self>
+          {:else}
+            <TreeViewNode
+              leaf
+              {...child}
+              level={level + 1}
+              posinset={index + 1}
+              setsize={nodes.length}
+              let:node
+            >
+              <slot {node}>{node.text}</slot>
+            </TreeViewNode>
+          {/if}
+        {/each}
+      {/if}
     </ul>
   </li>
 {/if}

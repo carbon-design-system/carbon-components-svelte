@@ -203,6 +203,7 @@
    * @property {boolean} [disabled] - Whether the node is disabled
    * @property {string} [href] - Optional URL the node links to
    * @property {string} [target] - Optional link target (e.g., "_blank")
+   * @property {boolean} [hasChildren] - Whether the node has children that have not been loaded yet. Renders an expander even without a `nodes` array; expanding fires `toggle` so children can be loaded lazily.
    * @property {TreeNode<Id>[]} [nodes]
    * @typedef {object} ShowNodeOptions
    * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
@@ -217,6 +218,7 @@
    * @property {Array<Id>} added - Node ids selected since the previous change
    * @property {Array<Id>} removed - Node ids deselected since the previous change
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }}
+   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }} childNodes
    * @event select
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    * @event toggle
@@ -1045,5 +1047,8 @@
 >
   <TreeViewNodeList root {nodes} let:node>
     <slot {node}> {node.text} </slot>
+    <svelte:fragment slot="childNodes" let:node>
+      <slot name="childNodes" {node} />
+    </svelte:fragment>
   </TreeViewNodeList>
 </ul>
