@@ -1,10 +1,10 @@
 ---
-components: ["Link", "OutboundLink"]
-description: Links provide styled hyperlinks with multiple sizes, states, and icons, including an outbound variant for external links.
+components: ["Link", "OutboundLink", "LinkDownload"]
+description: Links provide styled hyperlinks with multiple sizes, states, and icons, including outbound and download variants.
 ---
 
 <script>
-  import { Link, OutboundLink, Text } from "carbon-components-svelte";
+  import { Link, LinkDownload, OutboundLink, Text } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
 </script>
 
@@ -69,6 +69,24 @@ External links open in a new tab and append assistive text automatically for scr
 >
   Carbon Design System
 </OutboundLink>
+
+## Download link
+
+Use `LinkDownload` to trigger a client-side file download instead of navigating to a URL. Set `data` to the content to download, a string or `Blob`, and `filename` for the downloaded file name.
+
+<LinkDownload
+  data="id,name{'\n'}1,Alpha{'\n'}2,Bravo"
+  filename="items.csv"
+  type="text/csv;charset=utf-8"
+>
+  Download CSV
+</LinkDownload>
+
+### Dynamic content
+
+`data` is read at the moment the link is clicked, so downloaded content reflects filtering, sorting, or other state changes made before the click.
+
+<FileSource src="/framed/Link/LinkDownloadCsv" />
 
 ## Icons
 
