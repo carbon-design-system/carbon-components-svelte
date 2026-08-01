@@ -52,11 +52,18 @@
   let nextId = 0;
   const id = () => nextId++;
 
+  /** A leaf at the deepest level, used as a `showNode` target. */
+  let deepFile = null;
+
   function makeFolder(name, depth, fanout) {
     const node = { id: id(), text: name, icon: Folder, nodes: [] };
     for (let i = 0; i < fanout.files; i++) {
       const fname = fileNames[(i + depth) % fileNames.length];
-      node.nodes.push({ id: id(), text: fname, icon: iconFor(fname) });
+      const file = { id: id(), text: fname, icon: iconFor(fname) };
+      node.nodes.push(file);
+      if (depth === fanout.maxDepth) {
+        deepFile = { id: file.id, path: `${name}/${fname}` };
+      }
     }
     if (depth < fanout.maxDepth) {
       for (let i = 0; i < fanout.folders; i++) {
@@ -143,13 +150,17 @@
   $: filteredNodes =
     searchValue.trim() === "" ? nodes : filterTreeByText(nodes, searchValue);
 
-  $: if (filteredNodes) {
-    tick().then(() => scrollContainerRef?.scrollTo({ top: 0 }));
-  }
-
   let expandedIds = [];
-  $: if (searchValue.trim() !== "") {
-    expandedIds = allIds(filteredNodes);
+
+  // A new filter resets the view: expand every match and jump back to the top.
+  // Gate on the text actually changing. Reactive statements also run on
+  // unrelated passes, and resetting unconditionally would fight anything else
+  // that scrolls or expands -- `showNode`, or the user's own caret clicks.
+  let lastSearchValue = searchValue;
+  $: if (searchValue !== lastSearchValue) {
+    lastSearchValue = searchValue;
+    expandedIds = searchValue.trim() === "" ? [] : allIds(filteredNodes);
+    tick().then(() => scrollContainerRef?.scrollTo({ top: 0 }));
   }
 
   let scrollContainerRef = null;
@@ -190,6 +201,14 @@
       }}
     >
       Collapse all
+    </Button>
+    <Button
+      kind="tertiary"
+      size="small"
+      disabled={searchValue.trim() !== ""}
+      on:click={() => treeview?.showNode(deepFile.id)}
+    >
+      Jump to a deep file
     </Button>
   </ButtonSet>
 

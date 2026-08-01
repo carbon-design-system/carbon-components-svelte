@@ -193,7 +193,7 @@ Virtualization is opt-in. TreeView cannot tell from `nodes` alone whether the tr
 
 Leave `virtualize` unset for the default recursive rendering. Behavior matches prior versions.
 
-Row height is fixed and comes from `size` (32px default, 24px compact). Pass `true` for defaults, or an object to customize:
+Row height is fixed and comes from `size` (32px default, 24px compact). Rows do not grow to fit their content, so keep slot content to a single line. Pass `true` for defaults, or an object to customize:
 
 | Field             | Default                       | Description                                                                 |
 | ----------------- | ----------------------------- | --------------------------------------------------------------------------- |
@@ -204,19 +204,9 @@ Row height is fixed and comes from `size` (32px default, 24px compact). Pass `tr
 Bind `scrollContainerRef` to access the scroll element directly.
 
 > [!NOTE]
-> Keyboard navigation, `showNode`, expand/collapse, and other APIs work in virtualized mode. Deep rows scroll into view when focused.
+> Keyboard navigation, `showNode`, expand/collapse, and other APIs work in virtualized mode. `showNode` scrolls a row that is not currently mounted into view before focusing it -- try **Jump to a deep file** in the example below.
 
 <FileSource src="/framed/TreeView/TreeViewVirtualize" />
-
-## Virtualization (log explorer)
-
-A log explorer is a canonical case for virtualization. Raw logs are flat, but tools group them into a tree -- here by **service**, then **severity** (`ERROR` / `WARN` / `INFO` / `DEBUG`), then individual **log lines**, with each line expanding into structured **fields** (`trace_id`, `status`, `latency_ms`). The tree stays small until you expand a branch; one busy severity group then adds hundreds of sibling rows. Virtualization keeps the DOM count near the viewport size even when the visible row count jumps into the hundreds.
-
-Service and severity rows use icons; log lines use a `Tag` and plain text in the slot. Select a log line to see its metadata in an `InlineNotification` below the tree. Toggle severity `SelectableTag` filters or search by message / `trace_id` to shrink the visible list -- scroll position clamps automatically when rows are removed.
-
-Click **Expand busiest branch** to open `checkout-service` → `INFO` (~620 lines) and compare **visible rows** with **rendered in DOM**. Click **Jump to last error** to see `TreeView.showNode` expand the path to a row buried thousands of lines down and scroll it into view.
-
-<FileSource src="/framed/TreeView/TreeViewVirtualizeLogs" />
 
 ## Flat data
 
