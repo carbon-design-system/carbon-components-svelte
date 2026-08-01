@@ -6,6 +6,7 @@ import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzy-match";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import ComboBoxEmpty from "./ComboBox.empty.test.svelte";
 import ComboBoxSlot from "./ComboBox.slot.test.svelte";
 import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
@@ -822,6 +823,103 @@ describe("ComboBox", () => {
       await tick();
 
       expect(getStatus()).toHaveTextContent("");
+    });
+  });
+
+  describe("empty slot", () => {
+    it("shows default No results when the filtered list is empty", async () => {
+      render(ComboBox);
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "zzz");
+
+      expect(screen.getByText("No results")).toBeInTheDocument();
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--list-box__menu-item--empty"),
+      ).toBeInTheDocument();
+    });
+
+    it("does not show the empty slot when options are present", async () => {
+      render(ComboBox);
+
+      await user.click(getInput());
+
+      expect(screen.queryByText("No results")).not.toBeInTheDocument();
+      expect(screen.getAllByRole("option").length).toBeGreaterThan(0);
+      expect(
+        document.querySelector(".bx--list-box__menu-item--empty"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("renders a custom empty slot for loading and error states", () => {
+      const { unmount } = render(ComboBoxEmpty, {
+        props: { items: [], open: true, emptyContent: "loading" },
+      });
+
+      expect(screen.getByTestId("empty-loading")).toHaveTextContent(
+        "Searching…",
+      );
+      expect(screen.queryByText("No results")).not.toBeInTheDocument();
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+
+      unmount();
+
+      render(ComboBoxEmpty, {
+        props: { items: [], open: true, emptyContent: "error" },
+      });
+
+      expect(screen.getByTestId("empty-error")).toHaveTextContent(
+        "Something went wrong",
+      );
+      expect(screen.queryByTestId("empty-loading")).not.toBeInTheDocument();
+    });
+
+    it("does not treat the empty row as a selectable option", async () => {
+      render(ComboBox);
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "zzz");
+
+      expect(screen.getByText("No results")).toBeInTheDocument();
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+      expect(input.getAttribute("aria-activedescendant")).toBe("");
+
+      await user.keyboard("{ArrowDown}");
+      expect(input.getAttribute("aria-activedescendant")).toBe("");
+      expect(input).toHaveValue("zzz");
+
+      await user.keyboard("{Enter}");
+      expect(input).toHaveValue("zzz");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("keeps hidden options mounted beside the empty row when filterMode is hide", async () => {
+      const { container } = render(ComboBox, {
+        props: { filterMode: "hide" },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "zzz");
+
+      expect(screen.getByText("No results")).toBeInTheDocument();
+      expect(
+        container.querySelectorAll('[role="option"][hidden]'),
+      ).toHaveLength(3);
+    });
+
+    it("opens the menu when typing into an empty items list", async () => {
+      render(ComboBox, { props: { items: [] } });
+
+      const input = getInput();
+      await user.type(input, "a");
+
+      expect(input).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByText("No results")).toBeInTheDocument();
+      expect(screen.getByRole("listbox")).toBeVisible();
     });
   });
 

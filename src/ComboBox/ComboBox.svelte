@@ -41,6 +41,7 @@
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
+   * @slot {{}} empty
    */
 
   /**
@@ -1354,6 +1355,18 @@
             ? `max-height: ${menuMaxHeight};`
             : undefined}
       >
+        <!-- A sibling of the options, not a replacement: `filterMode="hide"`
+             keeps every option mounted, only hidden. -->
+        {#if filteredItems.length === 0}
+          <div
+            class:bx--list-box__menu-item={true}
+            class:bx--list-box__menu-item--empty={true}
+          >
+            <div class:bx--list-box__menu-item__option={true}>
+              <slot name="empty">No results</slot>
+            </div>
+          </div>
+        {/if}
         {#if isVirtualized}
           <VirtualWindow
             {totalHeight}
