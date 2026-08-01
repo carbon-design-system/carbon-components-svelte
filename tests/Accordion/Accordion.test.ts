@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
+import AccordionLazy from "./Accordion.lazy.test.svelte";
 import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
@@ -430,5 +431,44 @@ describe("Accordion", () => {
     // Clicking the open item again just collapses it.
     await user.click(lastItem);
     itemIsCollapsed(/Language Translator/);
+  });
+
+  it("should defer mounting panel content until first opened when lazy", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(AccordionLazy, { props: { lazy: true, open: false } });
+
+    expect(screen.queryByText("Lazy panel content")).not.toBeInTheDocument();
+    expect(consoleLog).not.toHaveBeenCalledWith("lazy-content-mounted");
+
+    await user.click(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    );
+
+    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
+    expect(consoleLog).toHaveBeenCalledWith("lazy-content-mounted");
+    consoleLog.mockClear();
+
+    // Collapsing keeps the content mounted (no remount on re-expand).
+    await user.click(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    );
+    await user.click(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    );
+
+    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
+    expect(consoleLog).not.toHaveBeenCalledWith("lazy-content-mounted");
+  });
+
+  it("should mount panel content immediately when lazy is false", () => {
+    render(AccordionLazy, { props: { lazy: false, open: false } });
+
+    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
+  });
+
+  it("should mount panel content immediately when lazy item starts open", () => {
+    render(AccordionLazy, { props: { lazy: true, open: true } });
+
+    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
   });
 });
