@@ -424,71 +424,74 @@
   // Row ids that match the active filter. In "hide" mode this toggles `hidden` on rows
   // instead of shrinking `tableRows`.
   let matchedRowIdsSet = new Set(originalRows.map((row) => row.id));
-  // Last filter applied via `filterRows`, replayed when `rows` changes so
+  // Last search applied via `filterRows`, replayed when `rows` changes so
   // an active search is not silently dropped on row reassignment.
   let lastSearchValue = "";
   let lastCustomFilter = undefined;
 
   /**
+   * Recompute the matched rows from `originalRows` using the stored search state.
+   * "hide" mode keeps every row in `tableRows` and lets `matchedRowIdsSet` carry
+   * the truth; otherwise the rendered set shrinks to the matches.
+   * @type {() => ReadonlyArray<Row["id"]>}
+   */
+  function applyFilters() {
+    const searchValue = String(lastSearchValue ?? "")
+      .trim()
+      .toLowerCase();
+    let filteredRows = originalRows;
+
+    if (searchValue.length > 0) {
+      if (typeof lastCustomFilter === "function") {
+        filteredRows = filteredRows.filter((row) =>
+          lastCustomFilter(row, searchValue),
+        );
+      } else {
+        // Get searchable keys from headers (non-empty headers with keys).
+        // Hidden columns are excluded: matching on a column the user cannot
+        // see produces results they cannot explain.
+        const searchableKeys = visibleHeaders
+          .filter((header) => !header.empty && header.key)
+          .map((header) => header.key);
+
+        // Default filter checks fields defined in headers
+        // for a basic, case-insensitive match (non-fuzzy).
+        // This supports nested keys like "contact.company".
+        filteredRows = filteredRows.filter((row) =>
+          searchableKeys.some((searchKey) => {
+            const cellValue = resolvePath(row, searchKey);
+            if (
+              typeof cellValue === "string" ||
+              typeof cellValue === "number"
+            ) {
+              return `${cellValue}`.toLowerCase().includes(searchValue);
+            }
+            return false;
+          }),
+        );
+      }
+    }
+
+    const ids = filteredRows.map((row) => row.id);
+    matchedRowIdsSet = new Set(ids);
+    tableRows.set(hideMode ? originalRows : filteredRows);
+    return ids;
+  }
+
+  /**
+   * Record the search state from `ToolbarSearch` and recompute the matched rows.
    * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}
    */
   function filterRows(searchValue, customFilter) {
     lastSearchValue = searchValue;
     lastCustomFilter = customFilter;
-    const value = searchValue.trim().toLowerCase();
-
-    if (value.length === 0) {
-      // Reset to original rows.
-      const ids = originalRows.map((row) => row.id);
-      matchedRowIdsSet = new Set(ids);
-      tableRows.set(originalRows);
-      return ids;
-    }
-
-    let filteredRows = [];
-
-    if (typeof customFilter === "function") {
-      // Apply custom filter if provided.
-      filteredRows = originalRows.filter((row) => customFilter(row, value));
-    } else {
-      // Get searchable keys from headers (non-empty headers with keys).
-      // Hidden columns are excluded: matching on a column the user cannot
-      // see produces results they cannot explain.
-      const searchableKeys = visibleHeaders
-        .filter((header) => !header.empty && header.key)
-        .map((header) => header.key);
-
-      // Default filter checks fields defined in headers
-      // for a basic, case-insensitive match (non-fuzzy).
-      // This supports nested keys like "contact.company".
-      filteredRows = originalRows.filter((row) => {
-        return searchableKeys.some((searchKey) => {
-          const cellValue = resolvePath(row, searchKey);
-          if (typeof cellValue === "string" || typeof cellValue === "number") {
-            return `${cellValue}`?.toLowerCase().includes(value);
-          }
-          return false;
-        });
-      });
-    }
-
-    const ids = filteredRows.map((row) => row.id);
-    matchedRowIdsSet = new Set(ids);
-    // "hide" mode keeps every row mounted and drives visibility via `matchedRowIdsSet`;
-    // otherwise shrink the rendered set as before.
-    tableRows.set(hideMode ? originalRows : filteredRows);
-    return ids;
+    return applyFilters();
   }
 
   $: if (rows !== prevRows_ref) {
     originalRows = [...rows];
     prevRows_ref = rows;
-    if (lastSearchValue.trim().length > 0) {
-      filterRows(lastSearchValue, lastCustomFilter);
-    } else {
-      matchedRowIdsSet = new Set(rows.map((row) => row.id));
-      $tableRows = rows;
-    }
+    applyFilters();
   }
 
   // Replay the active filter when the strategy flips so the rendered set and the
@@ -497,9 +500,7 @@
   let prevHideModeRef = hideMode;
   $: if (hideMode !== prevHideModeRef) {
     prevHideModeRef = hideMode;
-    if (lastSearchValue.trim().length > 0) {
-      filterRows(lastSearchValue, lastCustomFilter);
-    }
+    applyFilters();
   }
 
   /**
