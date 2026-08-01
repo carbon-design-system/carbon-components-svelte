@@ -169,6 +169,14 @@ Configure `TreeView.showNode` behavior using optional parameters. By default, al
 
 <FileSource src="/framed/TreeView/TreeViewShowNodeOptions" />
 
+## Node lookup
+
+Use `TreeView.getNode` to resolve a node's text or metadata from its id, useful for a breadcrumb or detail pane driven by `activeId`. Unmatched ids return `null`.
+
+Use `TreeView.getNodes` to resolve multiple ids at once, such as `selectedIds`. Unmatched ids are omitted from the result.
+
+<FileSource src="/framed/TreeView/TreeViewGetNode" />
+
 ## Flat data
 
 Convert flat data to a hierarchical structure using the `toHierarchy` utility.
