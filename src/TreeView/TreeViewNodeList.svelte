@@ -2,8 +2,8 @@
   /**
    * @generics {Id extends string | number = string | number, Icon = any} Id,Icon
    * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
-   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; } }}
-   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; } }} childNodes
+   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; match: [number, number] | null; } }}
+   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; match: [number, number] | null; } }} childNodes
    */
 
   /** @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>} */
@@ -64,6 +64,8 @@
     activeNodeId,
     selectedIdsSetStore,
     expandedIdsSetStore,
+    filteredOutIdsSetStore,
+    matchesStore,
     clickNode,
     selectNode,
     expandNode,
@@ -82,6 +84,8 @@
   $: parent = Array.isArray(nodes);
   $: expanded = $expandedIdsSetStore.has(id);
   $: selected = $selectedIdsSetStore.has(id);
+  $: filteredOut = $filteredOutIdsSetStore.has(id);
+  $: match = $matchesStore.get(id) ?? null;
   // Merge all props (including custom properties) with computed properties
   // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -99,6 +103,7 @@
     expanded,
     leaf: !parent,
     selected,
+    match,
   };
   $: {
     // The root list is a non-selectable wrapper; its default empty `id` would
@@ -163,6 +168,7 @@
     class:bx--tree-node--selected={selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
+    class:bx--tree-node--filtered-out={filteredOut}
     aria-expanded={expanded}
     aria-owns="{treeId}-{id}-subtree"
     aria-level={level}

@@ -234,4 +234,5 @@ export {
   filterTreeNodes,
 } from "./utils/filterTreeNodes";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzyMatch";
+export { matchTreeNodes } from "./utils/matchTreeNodes";
 export { toHierarchy } from "./utils/toHierarchy";

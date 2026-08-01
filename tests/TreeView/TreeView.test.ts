@@ -91,6 +91,7 @@ describe.each(testCases)("$name", ({ component }) => {
       icon: expect.anything(),
       id: 0,
       leaf: true,
+      match: null,
       // The `select` payload reflects the post-click state: the node is now selected.
       selected: true,
       text: "AI / Machine learning",
