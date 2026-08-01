@@ -94,6 +94,7 @@
     getContext,
     onMount,
   } from "svelte";
+  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
 
   const dispatch = createEventDispatcher();
   const { focusedId, add, remove, update, itemsById } = getContext(
@@ -110,7 +111,10 @@
 
   afterUpdate(() => {
     if (ref && focused) {
+      // `preventScroll` keeps a portaled menu from scrolling the document;
+      // scroll the item into view within the menu's own scroll container.
       ref.focus({ preventScroll: true });
+      scrollIntoViewWithinMenu(ref, '[role="menu"]');
     }
   });
 
