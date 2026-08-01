@@ -169,18 +169,27 @@
    * @property {ReadonlyArray<Id>} selectedIds - The full set of selected node ids after the change
    * @property {Array<Id>} added - Node ids selected since the previous change
    * @property {Array<Id>} removed - Node ids deselected since the previous change
-   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }}
-   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }} childNodes
+   * @typedef {object} TreeViewCheckChange<Id=(string|number)>
+   * @property {ReadonlyArray<Id>} checkedIds - The full set of checked node ids after the change
+   * @property {Array<Id>} added - Node ids checked since the previous change
+   * @property {Array<Id>} removed - Node ids unchecked since the previous change
+   * @property {ReadonlyArray<Id>} indeterminateIds - The partially checked node ids after the change
+   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
+   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }} childNodes
    * @event select
-   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
+   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
    * @event toggle
-   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
+   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
    * @event toggle:change
    * @type {TreeViewExpandedChange<Node["id"]>}
    * @event focus
-   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
+   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
    * @event select:change
    * @type {TreeViewSelectionChange<Node["id"]>}
+   * @event check
+   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   * @event check:change
+   * @type {TreeViewCheckChange<Node["id"]>}
    */
 
   /**
@@ -243,6 +252,39 @@
    * @type {'node' | 'shallow' | 'deep'}
    */
   export let multiselectMode = "node";
+
+  /**
+   * Specify how a selection is presented.
+   * `"checkbox"` renders a tri-state checkbox on every node and implies
+   * multi-selection; `multiselect` and `multiselectMode` are ignored in that mode.
+   * @type {"highlight" | "checkbox"}
+   */
+  export let selectionMode = "highlight";
+
+  /**
+   * In `selectionMode="checkbox"`, `checkMode` controls how far a check propagates:
+   * - `'node'`: only the clicked node; parents and children never follow each other
+   * - `'deep'`: the node plus all non-disabled descendants, with ancestors deriving
+   *   an indeterminate state (default)
+   * @type {'node' | 'deep'}
+   */
+  export let checkMode = "deep";
+
+  /**
+   * The node ids that are checked in `selectionMode="checkbox"`. Distinct from
+   * `selectedIds`, which tracks row highlighting and is unused in checkbox mode.
+   * @type {ReadonlyArray<Node["id"]>}
+   * @bindable writable
+   */
+  export let checkedIds = [];
+
+  /**
+   * The node ids that are partially checked in `selectionMode="checkbox"`.
+   * Derived from `checkedIds`; writes to this prop are overwritten.
+   * @type {ReadonlyArray<Node["id"]>}
+   * @bindable readonly
+   */
+  export let indeterminateIds = [];
 
   /**
    * Programmatically expand all nodes
@@ -363,7 +405,11 @@
         if (select) {
           activeId = lastId;
           const targetNode = path[path.length - 1];
-          if (multiselect && multiselectMode !== "node") {
+          if (selectionMode === "checkbox") {
+            checkedIds = toggleCheckboxNode(nodes, checkedIds, lastId, true, {
+              cascade: checkMode !== "node",
+            });
+          } else if (isMultiselect && multiselectMode !== "node") {
             setSelectedIds(
               multiselectExpansionIds(targetNode, multiselectMode),
             );
@@ -422,6 +468,10 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
+  import {
+    resolveCheckboxState,
+    toggleCheckboxNode,
+  } from "../utils/treeCheckboxState.js";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
 
   const dispatch = createEventDispatcher();
@@ -430,6 +480,8 @@
 
   /** @type {import("svelte/store").Writable<boolean>} */
   const multiselectStore = writable(multiselect);
+  /** @type {import("svelte/store").Writable<"highlight" | "checkbox">} */
+  const selectionModeStore = writable(selectionMode);
 
   /** @type {import("svelte/store").Writable<Node["id"]>} */
   const activeNodeId = writable(activeId);
@@ -440,17 +492,25 @@
   /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
   const selectedIdsSetStore = writable(new Set(selectedIds));
   /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
+  const checkedIdsSetStore = writable(new Set(checkedIds));
+  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
   const expandedIdsSetStore = writable(new Set(expandedIds));
+  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
+  const indeterminateIdsSetStore = writable(new Set(indeterminateIds));
 
   /** @type {HTMLElement | null} */
   let ref = null;
+
+  $: isCheckboxMode = selectionMode === "checkbox";
+  // Checkbox mode is already multi-select; ignore highlight multiselect.
+  $: isMultiselect = multiselect && !isCheckboxMode;
 
   /** While true (Ctrl/Cmd/Shift held), node labels use user-select: none for multiselect clicks. */
   let multiselectModifierActive = false;
 
   /** @param {KeyboardEvent} e */
   function syncModifierFromKeyboard(event) {
-    if (!multiselect) return;
+    if (!isMultiselect) return;
     multiselectModifierActive =
       event.ctrlKey || event.metaKey || event.shiftKey;
   }
@@ -461,14 +521,14 @@
 
   /** @param {MouseEvent} e */
   function syncModifierFromTreeMouseDown(event) {
-    if (!multiselect) return;
+    if (!isMultiselect) return;
     multiselectModifierActive =
       event.ctrlKey || event.metaKey || event.shiftKey;
   }
 
   /** @param {Event} e */
   function handleMultiselectSelectStart(event) {
-    if (multiselect && multiselectModifierActive) {
+    if (isMultiselect && multiselectModifierActive) {
       event.preventDefault();
     }
   }
@@ -502,7 +562,7 @@
     }
   }
 
-  $: setMultiselectKeyListeners(multiselect);
+  $: setMultiselectKeyListeners(isMultiselect);
 
   /** @type {TreeWalker | null} */
   let treeWalker = null;
@@ -564,17 +624,20 @@
   }
 
   /**
-   * Re-derive the `expanded`/`selected` flags from the source-of-truth state
-   * at dispatch time. The `node` object passed by the child components is
-   * computed reactively, so its flags still reflect the pre-action state when a
-   * handler mutates `selectedIds`/`expandedIds` and then dispatches synchronously.
-   * @type {(node: Node) => Node & { expanded: boolean; selected: boolean }}
+   * Re-derive the `expanded`/`selected`/`checked`/`indeterminate` flags from
+   * the source-of-truth state at dispatch time. The `node` object passed by
+   * the child components is computed reactively, so its flags still reflect
+   * the pre-action state when a handler mutates
+   * `selectedIds`/`checkedIds`/`expandedIds` and then dispatches synchronously.
+   * @type {(node: Node) => Node & { expanded: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
    */
   function withLiveState(node) {
     return {
       ...node,
       expanded: expandedIdsSet.has(node.id),
       selected: selectedIdsSet.has(node.id),
+      checked: checkedIds.includes(node.id),
+      indeterminate: indeterminateIds.includes(node.id),
     };
   }
 
@@ -596,10 +659,45 @@
   function clickNode(node, event) {
     activeId = node.id;
 
-    const mode =
-      multiselect && multiselectMode !== "node" ? multiselectMode : "node";
+    // Link nodes have no checkbox; they fire `select` like highlight mode.
+    if (selectionMode === "checkbox") {
+      if (node.href !== undefined) {
+        dispatch("select", withLiveState(node));
+        return;
+      }
 
-    if (multiselect && event) {
+      // The checkbox label synthesizes a second click on the hidden input
+      // with `detail: 0`. Real pointer clicks have `detail >= 1`, so skip
+      // the forwarded one to avoid toggling twice.
+      const isForwardedLabelClick =
+        event?.target instanceof HTMLInputElement && event.detail === 0;
+
+      if (isForwardedLabelClick) return;
+
+      // Enter/Space always toggles. Pointer clicks only toggle when they
+      // hit the checkbox, not the rest of the row.
+      const isKeyboardActivation = event?.type === "keydown";
+      const clickedCheckbox =
+        isKeyboardActivation ||
+        event?.target?.closest?.(".bx--checkbox-wrapper") != null;
+
+      if (!clickedCheckbox) return;
+
+      checkedIds = toggleCheckboxNode(
+        nodes,
+        checkedIds,
+        node.id,
+        !checkedIds.includes(node.id),
+        { cascade: checkMode !== "node" },
+      );
+      dispatch("check", withLiveState(node));
+      return;
+    }
+
+    const mode =
+      isMultiselect && multiselectMode !== "node" ? multiselectMode : "node";
+
+    if (isMultiselect && event) {
       const isMeta =
         /** @type {MouseEvent | KeyboardEvent} */ (event).metaKey ||
         /** @type {MouseEvent | KeyboardEvent} */ (event).ctrlKey;
@@ -661,7 +759,10 @@
 
   /** @type {(node: Node) => void} */
   function selectNode(node) {
-    if (multiselect) {
+    // Focus movement must not check the node in checkbox mode.
+    if (selectionMode === "checkbox") return;
+
+    if (isMultiselect) {
       const mode = multiselectMode === "node" ? "node" : multiselectMode;
       const expansion = multiselectExpansionIds(node, mode);
       const set = new Set(selectedIds);
@@ -705,8 +806,11 @@
     selectedNodeIds,
     expandedNodeIds,
     selectedIdsSetStore,
+    checkedIdsSetStore,
     expandedIdsSetStore,
+    indeterminateIdsSetStore,
     multiselectStore,
+    selectionModeStore,
     clickNode,
     selectNode,
     expandNode,
@@ -837,7 +941,7 @@
 
       if (isHomeOrEnd) {
         if (
-          multiselect &&
+          isMultiselect &&
           event.shiftKey &&
           event.ctrlKey &&
           treeItem instanceof HTMLElement
@@ -852,7 +956,7 @@
         ) {
           nextFocusNode = treeWalker.currentNode;
           if (
-            multiselect &&
+            isMultiselect &&
             event.shiftKey &&
             event.ctrlKey &&
             nextFocusNode instanceof Element
@@ -956,9 +1060,63 @@
     cachedChildIdsByParentId = childIdsByParentId;
   }
 
-  $: multiselectStore.set(multiselect);
+  $: multiselectStore.set(isMultiselect);
+  $: selectionModeStore.set(selectionMode);
   $: flattenedNodes = cachedFlattenedNodes ?? [];
   $: nodeIds = cachedNodeIds ?? [];
+
+  /** @type {ReadonlyArray<Node["id"]>} */
+  let lastIndeterminateIdsPushed = indeterminateIds;
+  /** @type {ReadonlyArray<Node["id"]>} */
+  let lastCheckedIdsPushed = checkedIds;
+
+  // Depend on `cachedNodes` so this runs after the cache refresh, and write
+  // `checkedIds` so the sync block below sees the settled state.
+  $: {
+    if (selectionMode === "checkbox") {
+      const checkboxState = resolveCheckboxState(
+        cachedNodes ?? nodes,
+        checkedIds,
+        {
+          cascade: checkMode !== "node",
+        },
+      );
+      if (!arrayIdsEqual(checkboxState.checkedIds, checkedIds)) {
+        checkedIds = checkboxState.checkedIds;
+      }
+      if (!arrayIdsEqual(checkboxState.indeterminateIds, indeterminateIds)) {
+        indeterminateIds = checkboxState.indeterminateIds;
+      }
+    } else if (indeterminateIds.length > 0) {
+      indeterminateIds = [];
+    }
+
+    if (!arrayIdsEqual(indeterminateIds, lastIndeterminateIdsPushed)) {
+      lastIndeterminateIdsPushed = indeterminateIds;
+      indeterminateIdsSetStore.set(new Set(indeterminateIds));
+    }
+
+    if (!arrayIdsEqual(checkedIds, lastCheckedIdsPushed)) {
+      const prevCheckedIds = lastCheckedIdsPushed;
+      lastCheckedIdsPushed = checkedIds;
+      checkedIdsSetStore.set(new Set(checkedIds));
+
+      const nextCheckedIds = checkedIds.slice();
+      const nextIndeterminateIds = indeterminateIds.slice();
+      const prevSet = new Set(prevCheckedIds);
+      const nextSet = new Set(nextCheckedIds);
+      const added = nextCheckedIds.filter((id) => !prevSet.has(id));
+      const removed = prevCheckedIds.filter((id) => !nextSet.has(id));
+      tick().then(() => {
+        dispatch("check:change", {
+          checkedIds: nextCheckedIds,
+          added,
+          removed,
+          indeterminateIds: nextIndeterminateIds,
+        });
+      });
+    }
+  }
 
   let prevActiveIdForAutoCollapse = activeId;
 
@@ -1060,11 +1218,13 @@
   class:bx--tree={true}
   class:bx--tree--default={size === "default"}
   class:bx--tree--compact={size === "compact"}
-  class:bx--tree--multiselect={multiselect}
-  class:bx--tree--multiselect-modifier={multiselect && multiselectModifierActive}
+  class:bx--tree--multiselect={isMultiselect}
+  class:bx--tree--checkbox={isCheckboxMode}
+  class:bx--tree--multiselect-modifier={isMultiselect &&
+    multiselectModifierActive}
   aria-label={hideLabel ? labelText : undefined}
   aria-labelledby={hideLabel ? undefined : labelId}
-  aria-multiselectable={multiselect || undefined}
+  aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
   on:mousedown|capture={syncModifierFromTreeMouseDown}
   on:selectstart|capture={handleMultiselectSelectStart}
   on:keydown

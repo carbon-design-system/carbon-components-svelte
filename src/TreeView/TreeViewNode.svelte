@@ -58,7 +58,7 @@
   /**
    * @generics {Node extends TreeNode<any> = TreeNode<any>, Icon = any} Node,Icon
    * @typedef {import('./TreeView.svelte').TreeNode<Id>} TreeNode<Id=(string|number)>
-   * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; } }}
+   * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
    */
 
   export let leaf = false;
@@ -94,6 +94,7 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   import { getContext } from "svelte";
+  import Checkbox from "../Checkbox/Checkbox.svelte";
 
   let ref = null;
   let refLabel = null;
@@ -102,15 +103,37 @@
   const {
     activeNodeId,
     selectedIdsSetStore,
+    checkedIdsSetStore,
+    indeterminateIdsSetStore,
+    selectionModeStore,
     clickNode,
     selectNode,
     focusNode,
   } = getContext("carbon:TreeView");
+
+  /**
+   * Tri-state value for `aria-checked` on the row.
+   * @returns {"true" | "false" | "mixed"}
+   */
+  function toAriaChecked(isSelected, isIndeterminate) {
+    if (isIndeterminate) return "mixed";
+    return isSelected ? "true" : "false";
+  }
+
   function offset() {
-    return computeTreeLeafDepth(refLabel) - 1 + (leaf && icon ? 2 : 2.5);
+    const depth = computeTreeLeafDepth(refLabel) - 1;
+    // Checkbox is the leading element; use one inset per depth. The
+    // leaf/icon offsets below align text with a parent's caret and would
+    // shift the checkboxes instead.
+    if (isCheckboxMode) return depth + 1;
+    return depth + (leaf && icon ? 2 : 2.5);
   }
 
   $: selected = $selectedIdsSetStore.has(id);
+  $: checked = $checkedIdsSetStore.has(id);
+  // Link rows navigate; they render no checkbox.
+  $: isCheckboxMode = $selectionModeStore === "checkbox" && href === undefined;
+  $: indeterminate = isCheckboxMode && $indeterminateIdsSetStore.has(id);
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -126,6 +149,8 @@
     expanded: false, // A node cannot be expanded.
     leaf,
     selected,
+    checked,
+    indeterminate,
   };
   $: {
     if (
@@ -217,7 +242,10 @@
     {id}
     tabindex={disabled ? undefined : -1}
     aria-current={id === $activeNodeId || undefined}
-    aria-selected={disabled ? undefined : selected}
+    aria-selected={isCheckboxMode || disabled ? undefined : selected}
+    aria-checked={isCheckboxMode
+      ? toAriaChecked(checked, indeterminate)
+      : undefined}
     aria-disabled={disabled}
     aria-level={level}
     aria-posinset={posinset}
@@ -225,11 +253,14 @@
     class:bx--tree-node={true}
     class:bx--tree-leaf-node={true}
     class:bx--tree-node--active={id === $activeNodeId}
-    class:bx--tree-node--selected={selected}
+    class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
     on:click|stopPropagation={(event) => {
       if (disabled) return;
+      // Stop the label from toggling the decorative input; `clickNode`
+      // owns checked state.
+      if (isCheckboxMode) event.preventDefault();
       clickNode(node, event);
     }}
     on:keydown={(event) => {
@@ -267,6 +298,17 @@
     }}
   >
     <div bind:this={refLabel} class:bx--tree-node__label={true}>
+      {#if isCheckboxMode}
+        <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->
+        <Checkbox
+          decorative
+          hideLabel
+          labelText=""
+          {disabled}
+          {indeterminate}
+          {checked}
+        />
+      {/if}
       <svelte:component this={icon} class="bx--tree-node__icon" />
       <slot {node}> {text} </slot>
     </div>
