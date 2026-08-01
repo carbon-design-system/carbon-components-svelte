@@ -9,6 +9,7 @@ import { closeMenu, openMenu, toggleOption } from "./helpers";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectDuplicateIds from "./MultiSelectDuplicateIds.test.svelte";
+import MultiSelectEmptySlot from "./MultiSelectEmptySlot.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectItemSlot from "./MultiSelectItemSlot.test.svelte";
 import MultiSelectItemToStringId from "./MultiSelectItemToStringId.test.svelte";
@@ -1744,6 +1745,79 @@ describe("MultiSelect", () => {
       expect(wrapper).not.toHaveClass(
         "bx--list-box__field--wrapper--input-focused",
       );
+    });
+  });
+
+  describe("empty slot", () => {
+    it("shows the default empty content when the open menu has no items", () => {
+      render(MultiSelect, { props: { items: [], open: true } });
+
+      expect(screen.getByText("No results")).toBeInTheDocument();
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--list-box__menu-item--empty"),
+      ).toBeInTheDocument();
+    });
+
+    it("shows the default empty content when a filter matches nothing", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter...");
+      await user.click(input);
+      await user.type(input, "zzz");
+
+      expect(screen.getByText("No results")).toBeInTheDocument();
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+    });
+
+    it("renders a custom empty slot instead of the default", () => {
+      render(MultiSelectEmptySlot, {
+        props: {
+          items: [],
+          open: true,
+          emptyContent: "Something went wrong",
+        },
+      });
+
+      expect(screen.getByText("Something went wrong")).toBeInTheDocument();
+      expect(screen.queryByText("No results")).not.toBeInTheDocument();
+    });
+
+    it("does not treat the empty row as a selectable option", async () => {
+      render(MultiSelect, {
+        props: {
+          items: [],
+          open: true,
+          labelText: "Roles",
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{ArrowDown}");
+      await tick();
+
+      expect(combobox).not.toHaveAttribute("aria-activedescendant");
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+
+      await user.click(screen.getByText("No results"));
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+    });
+
+    it("does not show the empty slot when the menu has items", () => {
+      render(MultiSelect, { props: { items, open: true } });
+
+      expect(screen.queryByText("No results")).not.toBeInTheDocument();
+      expect(screen.getAllByRole("option")).toHaveLength(3);
+      expect(
+        document.querySelector(".bx--list-box__menu-item--empty"),
+      ).not.toBeInTheDocument();
     });
   });
 });

@@ -70,6 +70,7 @@
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ group: string; items: ReadonlyArray<Item & { checked: boolean }>; }} group
    * @slot {{ item: Item; index: number; props: { filter: boolean; disabled: boolean; value: Item["id"]; title: string; maxWidth: string; }; }} tag
+   * @slot {{}} empty
    * @restProps {input | button}
    */
 
@@ -1895,7 +1896,16 @@
             ? `max-height: ${menuMaxHeight};`
             : undefined}
       >
-        {#if isVirtualized}
+        {#if itemsToUse.length === 0}
+          <div
+            class:bx--list-box__menu-item={true}
+            class:bx--list-box__menu-item--empty={true}
+          >
+            <div class:bx--list-box__menu-item__option={true}>
+              <slot name="empty">No results</slot>
+            </div>
+          </div>
+        {:else if isVirtualized}
           <VirtualWindow
             {totalHeight}
             {offsetY}

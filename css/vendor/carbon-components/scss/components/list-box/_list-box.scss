@@ -914,3 +914,71 @@ $list-box-menu-width: to-rem(300px);
 @include exports("list-box-menu-group-header") {
   @include list-box-menu-group-header;
 }
+
+// carbon-components-svelte patch
+// Empty row for Dropdown, ComboBox, and MultiSelect menus. It shows when the
+// open menu has no options, for loading, error, or no-match content.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Non-interactive empty / loading row for Dropdown, ComboBox, and MultiSelect menus.
+/// @access private
+/// @group components
+@mixin list-box-menu-item-empty {
+  .#{$prefix}--list-box__menu-item--empty {
+    color: $text-secondary;
+    cursor: default;
+    pointer-events: none;
+
+    // Centers text and taller content, such as a 32px InlineLoading, alike.
+    // Text lands where an option's padding puts it. Taller content grows the
+    // row instead of overflowing it.
+    .#{$prefix}--list-box__menu-item__option {
+      display: flex;
+      height: auto;
+      min-height: to-rem(40px);
+      align-items: center;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-width: 0;
+      color: inherit;
+    }
+  }
+
+  // Beats the fixed row height of each size.
+  .#{$prefix}--list-box__menu-item.#{$prefix}--list-box__menu-item--empty {
+    height: auto;
+  }
+
+  .#{$prefix}--list-box--xs
+    .#{$prefix}--list-box__menu-item--empty
+    .#{$prefix}--list-box__menu-item__option {
+    min-height: to-rem(24px);
+  }
+
+  .#{$prefix}--list-box--sm
+    .#{$prefix}--list-box__menu-item--empty
+    .#{$prefix}--list-box__menu-item__option {
+    min-height: to-rem(32px);
+  }
+
+  .#{$prefix}--list-box--xl
+    .#{$prefix}--list-box__menu-item--empty
+    .#{$prefix}--list-box__menu-item__option,
+  .#{$prefix}--list-box--lg
+    .#{$prefix}--list-box__menu-item--empty
+    .#{$prefix}--list-box__menu-item__option {
+    min-height: to-rem(48px);
+  }
+
+  // Restates the resting background, so it needs no hover guard.
+  .#{$prefix}--list-box__menu-item--empty,
+  .#{$prefix}--list-box__menu-item--empty:hover {
+    background-color: transparent;
+  }
+}
+
+@include exports("list-box-menu-item-empty") {
+  @include list-box-menu-item-empty;
+}
