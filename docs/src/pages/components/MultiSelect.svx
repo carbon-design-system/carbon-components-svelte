@@ -115,6 +115,17 @@ Move selected items to the top of the list immediately after selection by settin
     {id: "2", text: "Fax"}]}"
   />
 
+### Maximum selection
+
+Limit how many items a user can select by setting `maxSelectedItems`. Once the cap is reached, remaining unchecked items are disabled until a selection is cleared. Select-all is unavailable when a cap is set.
+
+<MultiSelect maxSelectedItems="{3}" labelText="Preferences" label="Select preferences..."
+    items="{[{id: "0", text: "Email"},
+    {id: "1", text: "Slack"},
+    {id: "2", text: "SMS"},
+    {id: "3", text: "Push"}]}"
+  />
+
 ### Select all
 
 Add a "select all" item by setting isSelectAll to true on an item. Clicking this item selects or deselects all non-disabled items. Disabled items are not affected by "select all".
