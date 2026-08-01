@@ -39,6 +39,14 @@
   export let flipped = false;
 
   /**
+   * Specify the maximum height of the menu.
+   * A number is treated as pixels; a string is used as a CSS length.
+   * The menu scrolls once its items exceed the height.
+   * @type {number | string}
+   */
+  export let maxHeight = undefined;
+
+  /**
    * Specify the menu options class.
    * @type {string}
    */
@@ -251,6 +259,8 @@
   // performance. The previous approach created individual `style` tags per
   // instance, causing overhead when many OverflowMenu components are rendered.
   $: overflowMenuOptionsAfterWidth = buttonWidth ? `${buttonWidth}px` : "2rem";
+  $: maxHeightStyle =
+    typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
 
   function handleOutsideClick(event) {
     if (menuRef && isOutsideClick(event, [buttonRef, menuRef])) {
@@ -357,9 +367,11 @@
     class:bx--overflow-menu-options--xs={size === "xs"}
     class:bx--overflow-menu-options--sm={size === "sm"}
     class:bx--overflow-menu-options--xl={size === "xl"}
+    class:bx--overflow-menu-options--scrollable={!!maxHeight}
     class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
     class={menuOptionsClass}
     style="--overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
+    style:max-height={maxHeightStyle}
     on:keydown={(e) => {
       if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
         e.preventDefault();
@@ -404,9 +416,11 @@
       class:bx--overflow-menu-options--xs={size === "xs"}
       class:bx--overflow-menu-options--sm={size === "sm"}
       class:bx--overflow-menu-options--xl={size === "xl"}
+      class:bx--overflow-menu-options--scrollable={!!maxHeight}
       class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
       class={menuOptionsClass}
       style="position: relative; top: auto; left: auto; --overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
+      style:max-height={maxHeightStyle}
       on:keydown={(event) => {
         if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
           event.preventDefault();

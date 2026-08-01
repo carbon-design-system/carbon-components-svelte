@@ -7,6 +7,7 @@ import OverflowMenuAllDisabled from "./OverflowMenu.allDisabled.test.svelte";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
 import OverflowMenuDisabledLink from "./OverflowMenu.disabledLink.test.svelte";
 import OverflowMenuDynamicItems from "./OverflowMenu.dynamicItems.test.svelte";
+import OverflowMenuMaxHeight from "./OverflowMenu.maxHeight.test.svelte";
 import OverflowMenuPreventDefault from "./OverflowMenu.preventDefault.test.svelte";
 import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
@@ -880,6 +881,70 @@ describe("OverflowMenu", () => {
       expect(
         noIcons.querySelector(".bx--overflow-menu-options__option-icon"),
       ).toBeNull();
+    });
+  });
+
+  describe("maxHeight", () => {
+    afterEach(() => {
+      const existingPortals = document.querySelectorAll(
+        "[data-floating-portal]",
+      );
+      for (const portal of existingPortals) {
+        portal.remove();
+      }
+    });
+
+    it("caps the menu height in pixels when given a number", async () => {
+      render(OverflowMenuMaxHeight, { props: { maxHeight: 240 } });
+
+      await user.click(screen.getByRole("button"));
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toHaveClass("bx--overflow-menu-options--scrollable");
+      expect(menu).toHaveStyle("max-height: 240px");
+    });
+
+    it("passes a string maxHeight through verbatim", async () => {
+      render(OverflowMenuMaxHeight, { props: { maxHeight: "20rem" } });
+
+      await user.click(screen.getByRole("button"));
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toHaveClass("bx--overflow-menu-options--scrollable");
+      expect(menu.style.maxHeight).toBe("20rem");
+    });
+
+    it("renders neither the class nor the style when maxHeight is unset", async () => {
+      render(OverflowMenuMaxHeight);
+
+      await user.click(screen.getByRole("button"));
+
+      const menu = screen.getByRole("menu");
+      expect(menu).not.toHaveClass("bx--overflow-menu-options--scrollable");
+      expect(menu.style.maxHeight).toBe("");
+    });
+
+    it("caps the height of a portalled menu", async () => {
+      render(OverflowMenuMaxHeight, {
+        props: { maxHeight: 240, portalMenu: true },
+      });
+
+      await user.click(screen.getByRole("button"));
+
+      const menu = screen.getByRole("menu");
+      expect(menu.closest("[data-floating-portal]")).toBeInTheDocument();
+      expect(menu).toHaveClass("bx--overflow-menu-options--scrollable");
+      expect(menu).toHaveStyle("max-height: 240px");
+    });
+
+    it("leaves a portalled menu unscrollable when maxHeight is unset", async () => {
+      render(OverflowMenuMaxHeight, { props: { portalMenu: true } });
+
+      await user.click(screen.getByRole("button"));
+
+      const menu = screen.getByRole("menu");
+      expect(menu).not.toHaveClass("bx--overflow-menu-options--scrollable");
+      expect(menu.style.maxHeight).toBe("");
     });
   });
 

@@ -9,7 +9,11 @@
  * not scrollable.
  */
 /**
- * Scroll `el` into view within its nearest `role="listbox"` scroll container
- * using `block: "nearest"` semantics. Never scrolls the document.
+ * Scroll `el` into view within its nearest scroll container matching
+ * `containerSelector` using `block: "nearest"` semantics. Never scrolls the
+ * document.
  */
-export function scrollIntoViewWithinMenu(el: HTMLElement): void;
+export function scrollIntoViewWithinMenu(
+  el: HTMLElement,
+  containerSelector?: string,
+): void;
