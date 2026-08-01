@@ -28,7 +28,7 @@ Set `size` to control each item's row height. The default is `"sm"`.
 
 ## Menu items
 
-`MenuItem` takes an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups.
+`MenuItem` takes an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups. Items can also hold checkbox or radio state; see [MenuButton selectable](/components/MenuButton#selectable).
 
 ### Icons
 

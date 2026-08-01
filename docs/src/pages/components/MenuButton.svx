@@ -1,5 +1,5 @@
 ---
-components: ["MenuButton", "MenuItem", "MenuDivider"]
+components: ["MenuButton", "MenuItem", "MenuDivider", "MenuItemGroup", "MenuItemRadioGroup"]
 description: MenuButton is a labeled button that opens a dropdown of actions, including nested submenus.
 ---
 
@@ -181,6 +181,20 @@ Put a `MenuDivider` between groups.
   <MenuDivider />
   <MenuItem kind="danger" on:click={() => console.log("Delete")}>Delete</MenuItem>
 </MenuButton>
+
+### Selectable
+
+Wrap items in `MenuItemGroup` to make them checkboxes that hold state, such as which table columns are visible. Give every item an id, then bind `selectedIds` for the chosen ones. Set `selected` on an item to check it when the menu first opens, or set `selectable` on a single item outside a group for a standalone toggle.
+
+Choosing an item closes the menu. Call `event.preventDefault()` in an item's `on:click` handler to keep it open for a multi-select flow, then update the bound value yourself.
+
+<FileSource src="/framed/MenuButton/MenuButtonSelectable" />
+
+### Radio group
+
+Wrap items in `MenuItemRadioGroup` for a set where one choice is active at a time, such as row density. Bind `selectedId` for the active id; picking another item clears the previous one.
+
+<FileSource src="/framed/MenuButton/MenuButtonRadioGroup" />
 
 ### Nested
 
