@@ -86,10 +86,12 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(firstItem).toHaveAttribute("aria-selected", "true");
     expect(consoleLog).toBeCalledWith("selectedIds", [0]);
     expect(consoleLog).toBeCalledWith("select", {
+      checked: false,
       disabled: false,
       expanded: false,
       icon: expect.anything(),
       id: 0,
+      indeterminate: false,
       leaf: true,
       // The `select` payload reflects the post-click state: the node is now selected.
       selected: true,
@@ -1382,7 +1384,13 @@ describe("TreeView Generics", () => {
       type SelectEventDetail =
         SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<
-        TreeNode & { expanded: boolean; leaf: boolean; selected: boolean }
+        TreeNode & {
+          expanded: boolean;
+          leaf: boolean;
+          selected: boolean;
+          checked: boolean;
+          indeterminate: boolean;
+        }
       >();
     });
 
@@ -1407,7 +1415,13 @@ describe("TreeView Generics", () => {
       type StringSelectDetail =
         StringSelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<StringSelectDetail>().toEqualTypeOf<
-        StringNode & { expanded: boolean; leaf: boolean; selected: boolean }
+        StringNode & {
+          expanded: boolean;
+          leaf: boolean;
+          selected: boolean;
+          checked: boolean;
+          indeterminate: boolean;
+        }
       >();
 
       // Number ID
@@ -1446,7 +1460,13 @@ describe("TreeView Generics", () => {
       type UnionSelectDetail =
         UnionSelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<UnionSelectDetail>().toEqualTypeOf<
-        UnionNode & { expanded: boolean; leaf: boolean; selected: boolean }
+        UnionNode & {
+          expanded: boolean;
+          leaf: boolean;
+          selected: boolean;
+          checked: boolean;
+          indeterminate: boolean;
+        }
       >();
     });
 
@@ -1478,7 +1498,13 @@ describe("TreeView Generics", () => {
       type SelectEventDetail =
         SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectEventDetail>().toEqualTypeOf<
-        InferredNode & { expanded: boolean; leaf: boolean; selected: boolean }
+        InferredNode & {
+          expanded: boolean;
+          leaf: boolean;
+          selected: boolean;
+          checked: boolean;
+          indeterminate: boolean;
+        }
       >();
       expectTypeOf<SelectEventDetail["id"]>().toEqualTypeOf<InferredId>();
     });
@@ -1539,7 +1565,13 @@ describe("TreeView Generics", () => {
       type SelectDetail = SelectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<SelectDetail["id"]>().toEqualTypeOf<number>();
       expectTypeOf<SelectDetail>().toEqualTypeOf<
-        CustomNode & { expanded: boolean; leaf: boolean; selected: boolean }
+        CustomNode & {
+          expanded: boolean;
+          leaf: boolean;
+          selected: boolean;
+          checked: boolean;
+          indeterminate: boolean;
+        }
       >();
 
       type ToggleEvent = Events["toggle"];
