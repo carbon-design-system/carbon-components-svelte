@@ -15,13 +15,14 @@
   "devDependencies": {
     "@roxi/routify": "^3.6.4",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "@types/mdast": "^4.0.4",
     "@types/prismjs": "^1.26.5",
+    "@types/unist": "^2.0.11",
     "carbon-icons-svelte": "^13.12.0",
     "carbon-pictograms-svelte": "^13.18.0",
     "clipboard-copy": "^4.0.1",
     "estree-walker": "^3.0.3",
     "github-slugger": "^2.0.0",
-    "mdast": "^3.0.0",
     "mdsvex": "^0.12.7",
     "minisearch": "^7.1.0",
     "prettier": "^3.8.3",
@@ -30,6 +31,7 @@
     "prismjs": "^1.30.0",
     "rehype-slug": "^6.0.0",
     "svelte": "^5.56.3",
+    "unist-util-visit": "^2.0.3",
     "vite": "^8.1.0"
   },
   "type": "module"
