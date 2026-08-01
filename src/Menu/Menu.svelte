@@ -95,8 +95,15 @@
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
 
-  const NON_DISABLED_MENUITEM_SELECTOR =
-    "[role='menuitem']:not([aria-disabled='true'])";
+  // Selectable and radio items carry their own roles, so navigation and
+  // initial focus must match all three.
+  const NON_DISABLED_MENUITEM_SELECTOR = [
+    "menuitem",
+    "menuitemcheckbox",
+    "menuitemradio",
+  ]
+    .map((role) => `[role='${role}']:not([aria-disabled='true'])`)
+    .join(",");
 
   const dispatch = createEventDispatcher();
 

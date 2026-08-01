@@ -47,6 +47,29 @@
   export let shortcutText = "";
 
   /**
+   * Set to `true` to select the item.
+   * Only applies to a selectable item or one inside
+   * `MenuItemGroup` or `MenuItemRadioGroup`.
+   * @bindable writable
+   */
+  export let selected = false;
+
+  /**
+   * Set to `true` to make the item a standalone checkbox.
+   * Automatically enabled when `selected` is `true` or when the item
+   * is inside `MenuItemGroup`.
+   * @bindable writable
+   */
+  export let selectable = false;
+
+  /**
+   * Specify the id.
+   * It's recommended to provide an id as a value to bind to
+   * within a selectable or radio menu group.
+   */
+  export let id = `ccs-${Math.random().toString(36)}`;
+
+  /**
    * Obtain a reference to the list item HTML element.
    * @bindable readonly
    */
@@ -54,6 +77,7 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import CaretRight from "../icons/CaretRight.svelte";
+  import Checkmark from "../icons/Checkmark.svelte";
   import Menu from "./Menu.svelte";
 
   // "moderate-01" duration (ms) from Carbon motion recommended for small
@@ -63,12 +87,27 @@
 
   const dispatch = createEventDispatcher();
   const ctx = getContext("carbon:Menu");
+  const ctxGroup = getContext("carbon:MenuItemGroup");
+  const ctxRadioGroup = getContext("carbon:MenuItemRadioGroup");
 
   let submenuOpen = false;
   let hoverTimeout;
   let closeTimeout;
+  // `selected` implies the checkbox variant. Latch it instead of writing back
+  // to `selectable` so deselecting the item keeps its role and indentation.
+  let hasBeenSelected = false;
 
   $: hasSubmenu = labelText !== undefined && $$slots.default;
+  $: if (selected) hasBeenSelected = true;
+  $: isSelectable = !!ctxGroup || selectable || hasBeenSelected;
+  $: isRadio = !!ctxRadioGroup;
+  $: isIndented = isSelectable || isRadio;
+  $: role = isRadio
+    ? "menuitemradio"
+    : isSelectable
+      ? "menuitemcheckbox"
+      : "menuitem";
+  $: displayIcon = isIndented ? (selected ? Checkmark : undefined) : icon;
 
   function handleClick(event) {
     if (disabled) return;
@@ -76,6 +115,14 @@
     const shouldContinue = dispatch("click", event, { cancelable: true });
 
     if (shouldContinue) {
+      if (ctxGroup) {
+        ctxGroup.toggleOption({ id });
+      } else if (ctxRadioGroup) {
+        ctxRadioGroup.setOption({ id });
+      } else if (isSelectable) {
+        selected = !selected;
+      }
+
       ctx.close("select");
     }
   }
@@ -107,18 +154,34 @@
   }
 
   onMount(() => {
+    let unsubscribe;
+
+    if (ctxGroup) {
+      if (selected) ctxGroup.addOption({ id });
+      unsubscribe = ctxGroup.currentIds.subscribe((currentIds) => {
+        selected = currentIds.includes(id);
+      });
+    } else if (ctxRadioGroup) {
+      if (selected) ctxRadioGroup.addOption({ id });
+      unsubscribe = ctxRadioGroup.currentId.subscribe((currentId) => {
+        selected = id === currentId;
+      });
+    }
+
     return () => {
       clearTimeout(hoverTimeout);
       clearTimeout(closeTimeout);
+      unsubscribe?.();
     };
   });
 </script>
 
 <li
   bind:this={ref}
-  role="menuitem"
+  {role}
   tabindex="-1"
   aria-disabled={disabled}
+  aria-checked={isIndented ? selected : undefined}
   aria-haspopup={hasSubmenu ? true : undefined}
   aria-expanded={hasSubmenu ? submenuOpen : undefined}
   class:bx--menu-option={true}
@@ -170,9 +233,9 @@
     class:bx--menu-option__content={true}
     class:bx--menu-option__content--disabled={disabled}
   >
-    {#if icon}
+    {#if isIndented || icon}
       <div class:bx--menu-option__icon={true}>
-        <svelte:component this={icon} />
+        <svelte:component this={displayIcon} />
       </div>
     {/if}
     <span
