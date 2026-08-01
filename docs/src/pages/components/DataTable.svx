@@ -879,6 +879,14 @@ Use `rowClass` to apply custom CSS classes to rows. Pass a string for a static c
 
 <FileSource src="/framed/DataTable/DataTableRowClass" />
 
+## Footer
+
+Use the `footerCell` slot to render a summary row aligned to the table columns. The slot receives each header, so it can decide what to render per column and leave the rest blank.
+
+Compute totals, averages, and counts yourself; the table does not aggregate. The footer renders once for the whole table rather than once per page, and it stays in place while virtualized rows scroll.
+
+<FileSource src="/framed/DataTable/DataTableFooter" />
+
 ## Sizes
 
 Set `size` to control row height. The default is medium.
