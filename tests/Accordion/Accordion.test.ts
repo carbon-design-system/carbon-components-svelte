@@ -7,6 +7,7 @@ import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
+import AccordionItemExtra from "./AccordionItem.extra.test.svelte";
 
 describe("Accordion", () => {
   const itemIsDisabled = (name: string | RegExp) => {
@@ -491,5 +492,57 @@ describe("Accordion", () => {
     render(AccordionLazy, { props: { lazy: true, open: true } });
 
     expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
+  });
+
+  describe("extra slot", () => {
+    it("renders extra content outside the heading button", () => {
+      render(AccordionItemExtra);
+
+      const heading = screen.getByRole("button", {
+        name: /Natural Language Classifier/,
+      });
+      const extra = screen.getByText("3 errors");
+
+      expect(extra).toBeInTheDocument();
+      expect(heading).not.toContainElement(extra);
+      expect(extra.closest(".bx--accordion__extra")).toBeInTheDocument();
+    });
+
+    it("does not toggle the item when extra content is clicked", async () => {
+      render(AccordionItemExtra);
+
+      itemIsCollapsed(/Natural Language Classifier/);
+
+      await user.click(screen.getByRole("button", { name: "Manage" }));
+
+      itemIsCollapsed(/Natural Language Classifier/);
+    });
+
+    it("still toggles the item from the heading button", async () => {
+      render(AccordionItemExtra);
+
+      const heading = screen.getByRole("button", {
+        name: /Natural Language Classifier/,
+      });
+
+      await user.click(heading);
+      itemIsExpanded(/Natural Language Classifier/);
+
+      await user.click(heading);
+      itemIsCollapsed(/Natural Language Classifier/);
+    });
+
+    it("does not render the header row without the slot", () => {
+      const { container } = render(AccordionItemExtra, {
+        props: { withExtra: false },
+      });
+
+      expect(
+        container.querySelector(".bx--accordion__heading-row"),
+      ).not.toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--accordion__extra"),
+      ).not.toBeInTheDocument();
+    });
   });
 });

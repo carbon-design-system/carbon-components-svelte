@@ -1,5 +1,9 @@
 <script>
   /**
+   * @slot {{}} extra
+   */
+
+  /**
    * Specify the title of the accordion item heading.
    * Alternatively, use the "title" slot.
    * @example
@@ -76,6 +80,8 @@
       unsubscribeOpenId();
     };
   });
+
+  $: hasExtra = $$slots.extra;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -91,33 +97,43 @@
     animation = undefined;
   }}
 >
-  <button
-    bind:this={ref}
-    type="button"
-    class:bx--accordion__heading={true}
-    aria-label={ariaLabel}
-    aria-expanded={open}
-    {disabled}
-    on:click
-    on:click={() => {
-      open = !open;
-      animation = open ? "expanding" : "collapsing";
-    }}
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-    on:keydown
-    on:keydown={(event) => {
-      if (open && event.key === "Escape") {
-        open = false;
-      }
-    }}
+  <div
+    class:bx--accordion__heading-row={hasExtra}
+    style:display={hasExtra ? undefined : "contents"}
   >
-    <ChevronRight class="bx--accordion__arrow" />
-    <div class:bx--accordion__title={true}>
-      <slot name="title">{title}</slot>
-    </div>
-  </button>
+    <button
+      bind:this={ref}
+      type="button"
+      class:bx--accordion__heading={true}
+      aria-label={ariaLabel}
+      aria-expanded={open}
+      {disabled}
+      on:click
+      on:click={() => {
+        open = !open;
+        animation = open ? "expanding" : "collapsing";
+      }}
+      on:mouseover
+      on:mouseenter
+      on:mouseleave
+      on:keydown
+      on:keydown={(event) => {
+        if (open && event.key === "Escape") {
+          open = false;
+        }
+      }}
+    >
+      <ChevronRight class="bx--accordion__arrow" />
+      <div class:bx--accordion__title={true}>
+        <slot name="title">{title}</slot>
+      </div>
+    </button>
+    {#if hasExtra}
+      <div class:bx--accordion__extra={true}>
+        <slot name="extra" />
+      </div>
+    {/if}
+  </div>
   <div class:bx--accordion__content={true}>
     {#if !lazy || hasOpened}
       <slot />

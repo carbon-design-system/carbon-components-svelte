@@ -1,0 +1,30 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Header row for AccordionItem's "extra" slot, which renders secondary
+/// content as a sibling of the heading button instead of inside it.
+/// @access private
+/// @group components
+@mixin accordion-extra {
+  .#{$prefix}--accordion__heading-row {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .#{$prefix}--accordion__heading-row .#{$prefix}--accordion__heading {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .#{$prefix}--accordion__extra {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    align-self: stretch;
+    padding-left: $carbon--spacing-03;
+  }
+}
+
+@include exports("accordion-extra") {
+  @include accordion-extra;
+}
