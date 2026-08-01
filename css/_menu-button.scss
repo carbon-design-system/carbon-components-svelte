@@ -23,6 +23,61 @@
     padding-top: 0;
     padding-bottom: 0;
   }
+
+  /// Icon-only MenuButton uses Menu (box-shadow) with an overflow-style
+  /// trigger. OverflowMenu hides the seam with a ::after bridge on the
+  /// options list; Menu has no equivalent, so the menu shadow paints onto
+  /// the open trigger. Mirror that bridge for the attached icon-only case.
+  /// Widths match the overflow-menu trigger sizes (sm/md/xl + our xs).
+  .#{$prefix}--menu[data-carbon-menu-button-icon-only] {
+    &::after {
+      position: absolute;
+      display: block;
+      background-color: $layer;
+      content: "";
+    }
+
+    &[data-floating-menu-direction="bottom"]::after {
+      top: to-rem(-3px);
+      left: 0;
+      width: to-rem(32px);
+      height: to-rem(3px);
+    }
+
+    &[data-floating-menu-direction="top"]::after {
+      bottom: to-rem(-3px);
+      left: 0;
+      width: to-rem(32px);
+      height: to-rem(3px);
+    }
+
+    &.#{$prefix}--menu--xs[data-floating-menu-direction="bottom"]::after,
+    &.#{$prefix}--menu--xs[data-floating-menu-direction="top"]::after {
+      width: to-rem(24px);
+    }
+
+    &.#{$prefix}--menu--md[data-floating-menu-direction="bottom"]::after,
+    &.#{$prefix}--menu--md[data-floating-menu-direction="top"]::after {
+      width: to-rem(40px);
+    }
+
+    &.#{$prefix}--menu--lg[data-floating-menu-direction="bottom"]::after,
+    &.#{$prefix}--menu--lg[data-floating-menu-direction="top"]::after {
+      width: to-rem(48px);
+    }
+
+    &[data-carbon-align="end"][data-floating-menu-direction="bottom"]::after,
+    &[data-carbon-align="end"][data-floating-menu-direction="top"]::after {
+      right: 0;
+      left: auto;
+    }
+
+    &[data-carbon-align="center"][data-floating-menu-direction="bottom"]::after,
+    &[data-carbon-align="center"][data-floating-menu-direction="top"]::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
 }
 
 @include exports("menu-button") {

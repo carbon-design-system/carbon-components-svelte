@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import MenuButtonIconOnly from "./MenuButton.iconOnly.test.svelte";
 import MenuButtonSlot from "./MenuButton.slot.test.svelte";
 import MenuButtonFixture from "./MenuButton.test.svelte";
 
@@ -182,5 +183,52 @@ describe("MenuButton", () => {
     trigger.focus();
     await fireEvent.click(trigger, { detail: 0 });
     expect(trigger).toHaveFocus();
+  });
+
+  describe("icon-only", () => {
+    it("names the trigger from labelText without rendering it as label content", () => {
+      render(MenuButtonIconOnly);
+
+      expect(
+        screen.getByRole("button", { name: "Row actions" }),
+      ).toBeInTheDocument();
+      // The icon's <title> carries the same text; it is not visible content.
+      expect(
+        screen.queryByText("Row actions", { ignore: "title" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("attaches the menu with the overflow-menu shadow bridge", async () => {
+      render(MenuButtonIconOnly);
+
+      await user.click(screen.getByRole("button", { name: "Row actions" }));
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toHaveAttribute("data-carbon-menu-button-icon-only");
+      expect(menu).toHaveAttribute("data-carbon-align", "start");
+    });
+
+    it.each([
+      { size: "sm", sizeClass: "bx--overflow-menu--sm" },
+      { size: "lg", sizeClass: "bx--overflow-menu--xl" },
+    ] as const)(
+      "renders the overflow menu trigger with the $size size class",
+      ({ size, sizeClass }) => {
+        render(MenuButtonIconOnly, { props: { size } });
+
+        const trigger = screen.getByRole("button", { name: "Row actions" });
+
+        expect(trigger).toHaveClass("bx--overflow-menu");
+        expect(trigger).toHaveClass(sizeClass);
+      },
+    );
+
+    it("renders the disabled state on the trigger", () => {
+      render(MenuButtonIconOnly, { props: { disabled: true } });
+
+      expect(
+        screen.getByRole("button", { name: "Row actions" }),
+      ).toBeDisabled();
+    });
   });
 });
