@@ -58,7 +58,7 @@
   /**
    * @generics {Node extends TreeNode<any> = TreeNode<any>, Icon = any} Node,Icon
    * @typedef {import('./TreeView.svelte').TreeNode<Id>} TreeNode<Id=(string|number)>
-   * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; } }}
+   * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; match: [number, number] | null; } }}
    */
 
   export let leaf = false;
@@ -102,6 +102,8 @@
   const {
     activeNodeId,
     selectedIdsSetStore,
+    filteredOutIdsSetStore,
+    matchesStore,
     clickNode,
     selectNode,
     focusNode,
@@ -111,6 +113,8 @@
   }
 
   $: selected = $selectedIdsSetStore.has(id);
+  $: filteredOut = $filteredOutIdsSetStore.has(id);
+  $: match = $matchesStore.get(id) ?? null;
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -126,6 +130,7 @@
     expanded: false, // A node cannot be expanded.
     leaf,
     selected,
+    match,
   };
   $: {
     if (
@@ -165,6 +170,7 @@
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
+      class:bx--tree-node--filtered-out={filteredOut}
       on:click|stopPropagation={(event) => {
         if (disabled) return;
         clickNode(node, event);
@@ -228,6 +234,7 @@
     class:bx--tree-node--selected={selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
+    class:bx--tree-node--filtered-out={filteredOut}
     on:click|stopPropagation={(event) => {
       if (disabled) return;
       clickNode(node, event);

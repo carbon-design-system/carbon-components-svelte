@@ -7,6 +7,22 @@
   }
 }
 
+/// Rows hidden by the `filterText` prop, and the highlighted match within a
+/// visible row's label. `<mark>` carries a UA background, so both colors are
+/// set from theme tokens to keep it legible in every theme.
+/// @access private
+/// @group components
+@mixin treeview-filter {
+  .#{$prefix}--tree-node--filtered-out {
+    display: none;
+  }
+
+  .#{$prefix}--tree-node__match {
+    background-color: $highlight;
+    color: $text-01;
+  }
+}
+
 @mixin treeview-multiselect-overrides {
   .#{$prefix}--tree--multiselect
     .#{$prefix}--tree-node--selected
@@ -43,6 +59,10 @@
 
 @include exports('treeview-hidden') {
   @include treeview-hidden;
+}
+
+@include exports('treeview-filter') {
+  @include treeview-filter;
 }
 
 @include exports('treeview-multiselect') {
