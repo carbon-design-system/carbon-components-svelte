@@ -13,6 +13,12 @@
    */
   export let size = undefined;
 
+  /**
+   * Set to `true` to remove the gutter around the accordion, aligning it flush with its container.
+   * Has no effect when `align` is `"start"`.
+   */
+  export let flush = false;
+
   /** Set to `true` to disable the accordion */
   export let disabled = false;
 
@@ -58,6 +64,7 @@
     {...$$restProps}
     {align}
     {size}
+    {flush}
     on:click
     on:mouseover
     on:mouseenter
@@ -71,6 +78,7 @@
     class:bx--accordion--end={align === "end"}
     class:bx--accordion--sm={size === "sm"}
     class:bx--accordion--xl={size === "xl"}
+    class:bx--accordion--flush={flush && align !== "start"}
     {...$$restProps}
     on:click
     on:mouseover
