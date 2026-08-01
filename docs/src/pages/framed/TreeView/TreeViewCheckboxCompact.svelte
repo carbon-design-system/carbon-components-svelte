@@ -33,6 +33,7 @@
 <Stack gap={6}>
   <div>
     <TreeView
+      size="compact"
       selectionMode="checkbox"
       labelText="Cloud Products"
       {nodes}

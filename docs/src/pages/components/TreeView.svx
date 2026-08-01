@@ -52,22 +52,38 @@ Add links to leaf nodes by defining an `href` property. Link nodes render as `<a
 
 Customize node rendering using the default slot with the `let:node` directive. The node object provides:
 
-| Property | Description                                      |
-| -------- | ------------------------------------------------ |
-| id       | The node id.                                     |
-| text     | The node text.                                   |
-| expanded | True when the node is expanded.                  |
-| leaf     | True when the node does not have child nodes.    |
-| disabled | True when the node is disabled.                  |
-| selected | True when the node is selected.                  |
+| Property     | Description                                          |
+| ------------ | ----------------------------------------------------- |
+| id           | The node id.                                           |
+| text         | The node text.                                         |
+| expanded     | True when the node is expanded.                        |
+| leaf         | True when the node does not have child nodes.          |
+| disabled     | True when the node is disabled.                        |
+| selected     | True when the node is selected.                        |
+| checked      | True when the node is checked (`selectionMode="checkbox"`). |
+| indeterminate | True when the node is partially checked (`selectionMode="checkbox"`). |
 
 <FileSource src="/framed/TreeView/TreeViewSlot" />
 
 ### Checkbox
 
-Slot a checkbox component in each tree view node to create a tree with checkable items. The checkbox is wrapped in a container with `stopPropagation` to prevent tree node selection when checking items.
+Set `selectionMode` to `"checkbox"` to render a checkbox on every node. Checking a branch checks its descendants, and a branch whose descendants are only partly checked renders indeterminate.
+
+Bind to `checkedIds` to read and set which nodes are checked. That is separate from `selectedIds`, which tracks row highlighting and is unused in checkbox mode. Bind to `indeterminateIds` to read which nodes are partially checked; it is derived from `checkedIds` and read-only, so writes are overwritten. Checkbox mode carries its own multi-selection, so [Multi-select](#multi-select) is ignored. Link nodes navigate instead of checking and render no checkbox.
 
 <FileSource src="/framed/TreeView/TreeViewCheckbox" />
+
+### Checkbox (independent)
+
+Set `checkMode` to `"node"` to check each node on its own. Parents and children no longer follow each other, and no node is indeterminate.
+
+<FileSource src="/framed/TreeView/TreeViewCheckboxIndependent" />
+
+### Checkbox (compact)
+
+Combine `size="compact"` with `selectionMode="checkbox"`.
+
+<FileSource src="/framed/TreeView/TreeViewCheckboxCompact" />
 
 ### Inline editing
 
@@ -77,15 +93,17 @@ Use a `contenteditable` element in each tree view node to enable inline editing 
 
 ## Events
 
-Use `on:select`, `on:toggle`, and `on:focus` for user-driven selection, expansion, and focus. Each detail is the affected node after the gesture, with the same shape as the [Custom (slot)](#custom-slot) node.
+Use `on:select`, `on:toggle`, `on:check`, and `on:focus` for user-driven selection, expansion, checking, and focus. Each detail is the affected node after the gesture, with the same shape as the [Custom (slot)](#custom-slot) node. `on:check` fires only in `selectionMode="checkbox"`, when the checkbox itself is toggled; link nodes (which render no checkbox) fire `on:select` instead.
 
-Use `on:toggle:change` and `on:select:change` to track every expansion or selection change from any source, including imperative methods and bound ids. Each detail includes the full set plus `added` and `removed` deltas. Aggregate events skip mount and no-op updates; bulk operations emit one event.
+Use `on:toggle:change`, `on:select:change`, and `on:check:change` to track every expansion, selection, or check change from any source, including imperative methods and bound ids. Each detail includes the full set plus `added` and `removed` deltas (`on:check:change` also includes `indeterminateIds`). Aggregate events skip mount and no-op updates; bulk operations emit one event.
 
 <FileSource src="/framed/TreeView/TreeViewEvents" />
 
 ## Multi-select
 
 Set `multiselect` to allow more than one selected row; `multiselectMode` controls the unit each gesture applies to.
+
+For a selection that persists parent and child state instead of highlighting rows, see [Checkbox](#checkbox).
 
 ### Node
 
