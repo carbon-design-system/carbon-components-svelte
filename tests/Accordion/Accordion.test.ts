@@ -238,6 +238,13 @@ describe("Accordion", () => {
     itemIsCollapsed(/Language Translator/);
   });
 
+  it("applies flush class to skeleton", () => {
+    render(AccordionSkeleton, { props: { flush: true } });
+
+    const accordion = screen.getByRole("list");
+    expect(accordion).toHaveClass("bx--accordion--flush");
+  });
+
   it("renders skeleton", () => {
     render(AccordionSkeleton);
 
@@ -325,6 +332,20 @@ describe("Accordion", () => {
     const accordion = screen.getByRole("list");
     expect(accordion).not.toHaveClass("bx--accordion--sm");
     expect(accordion).not.toHaveClass("bx--accordion--xl");
+  });
+
+  it("applies flush class", () => {
+    render(Accordion, { props: { flush: true } });
+
+    const accordion = screen.getByRole("list");
+    expect(accordion).toHaveClass("bx--accordion--flush");
+  });
+
+  it("does not apply flush class when align is start", () => {
+    render(Accordion, { props: { flush: true, align: "start" } });
+
+    const accordion = screen.getByRole("list");
+    expect(accordion).not.toHaveClass("bx--accordion--flush");
   });
 
   it("should apply custom class to Accordion", () => {
