@@ -44,6 +44,7 @@
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
    * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
+   * @slot {{ header: DataTableNonEmptyHeader; index: number; }} footerCell
    * @event click
    * @type {object}
    * @property {DataTableHeader<Row>} [header]
@@ -330,6 +331,7 @@
   import TableBody from "./TableBody.svelte";
   import TableCell from "./TableCell.svelte";
   import TableContainer from "./TableContainer.svelte";
+  import TableFoot from "./TableFoot.svelte";
   import TableHead from "./TableHead.svelte";
   import TableHeader from "./TableHeader.svelte";
   import TableRow from "./TableRow.svelte";
@@ -1381,6 +1383,27 @@
           {/each}
         {/if}
       </TableBody>
+      {#if $$slots.footerCell}
+        <TableFoot>
+          <TableRow>
+            {#if expandable}
+              <td aria-hidden="true" class:bx--table-expand={true}></td>
+            {/if}
+            {#if selectable}
+              <td
+                aria-hidden="true"
+                class:bx--table-column-checkbox={true}
+                class:bx--table-column-radio={radio}
+              ></td>
+            {/if}
+            {#each headers as header, index (header.key)}
+              <td>
+                <slot name="footerCell" {header} {index} />
+              </td>
+            {/each}
+          </TableRow>
+        </TableFoot>
+      {/if}
     </Table>
   </div>
 </TableContainer>

@@ -3,6 +3,7 @@
   import TableBody from "carbon-components-svelte/DataTable/TableBody.svelte";
   import TableCell from "carbon-components-svelte/DataTable/TableCell.svelte";
   import TableContainer from "carbon-components-svelte/DataTable/TableContainer.svelte";
+  import TableFoot from "carbon-components-svelte/DataTable/TableFoot.svelte";
   import TableHead from "carbon-components-svelte/DataTable/TableHead.svelte";
   import TableRow from "carbon-components-svelte/DataTable/TableRow.svelte";
   import type { ComponentProps } from "svelte";
@@ -13,6 +14,7 @@
     | "TableCell"
     | "TableRow"
     | "TableHead"
+    | "TableFoot"
     | "TableContainer" = "Table";
 
   // Table props
@@ -91,6 +93,19 @@
     {/if}
     <slot />
   </TableHead>
+{:else if testComponent === "TableFoot"}
+  <TableFoot
+    on:click={() => console.log("click")}
+    on:mouseover={() => console.log("mouseover")}
+    on:mouseenter={() => console.log("mouseenter")}
+    on:mouseleave={() => console.log("mouseleave")}
+    {...$$restProps}
+  >
+    {#if slotContent}
+      {slotContent}
+    {/if}
+    <slot />
+  </TableFoot>
 {:else if testComponent === "TableContainer"}
   <TableContainer
     {title}
