@@ -352,6 +352,52 @@ Custom column widths do not work with a [sticky header](#sticky-header).
 
 <FileSource src="/framed/DataTable/DataTableHeaderWidth" />
 
+## Column visibility
+
+Control which columns render without editing the `headers` definition.
+
+### Hidden columns
+
+Set `columnHidden` to `true` on a header to skip that column in render while keeping it in `headers`. A single canonical header list keeps column order and definitions stable across toggles. Hidden columns are excluded from toolbar search, since a match the reader cannot see is a result they cannot explain. An active sort on a hidden column still applies, because hiding is presentational.
+
+<DataTable
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule", columnHidden: true },
+  ]}
+  rows={[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin",
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin",
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation",
+    },
+  ]}
+/>
+
+### Toggling columns
+
+Flip `columnHidden` on a bound `headers` array from a `ToolbarMenu` to build a column picker.
+
+<FileSource src="/framed/DataTable/DataTableColumnVisibility" />
+
 ## Sticky header
 
 Set `stickyHeader` to fix the header in place while the body scrolls.
