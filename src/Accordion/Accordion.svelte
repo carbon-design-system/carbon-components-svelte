@@ -19,6 +19,13 @@
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
+  /**
+   * Specify the expansion behavior of the accordion.
+   * Set to `"single"` so that opening an item closes all other items.
+   * @type {"single" | "multiple"}
+   */
+  export let type = "multiple";
+
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
   import AccordionSkeleton from "./AccordionSkeleton.svelte";
@@ -30,7 +37,19 @@
 
   $: disableItems.set(disabled);
 
-  setContext("carbon:Accordion", { disableItems });
+  /**
+   * Tracks the identity of the currently open item when `type` is `"single"`.
+   * @type {import("svelte/store").Writable<object | null>}
+   */
+  const openId = writable(null);
+
+  function notifyOpen(id) {
+    if (type === "single") {
+      openId.set(id);
+    }
+  }
+
+  setContext("carbon:Accordion", { disableItems, openId, notifyOpen });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

@@ -42,16 +42,29 @@
   let initialDisabled = disabled;
 
   const ctx = getContext("carbon:Accordion");
-  const unsubscribe = ctx.disableItems.subscribe((value) => {
+  const unsubscribeDisableItems = ctx.disableItems.subscribe((value) => {
     if (!value && initialDisabled) return;
     disabled = value;
   });
+
+  const id = {};
+
+  const unsubscribeOpenId = ctx.openId.subscribe((openItemId) => {
+    if (openItemId !== null && openItemId !== id) {
+      open = false;
+    }
+  });
+
+  $: if (open) {
+    ctx.notifyOpen(id);
+  }
 
   let animation = undefined;
 
   onMount(() => {
     return () => {
-      unsubscribe();
+      unsubscribeDisableItems();
+      unsubscribeOpenId();
     };
   });
 </script>

@@ -3,6 +3,7 @@ import { user } from "../utils/user";
 import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
 import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
+import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
 
@@ -411,5 +412,23 @@ describe("Accordion", () => {
 
     const button = screen.getByRole("button");
     expect(button).toHaveAttribute("aria-label", "Custom description");
+  });
+
+  it('closes other items when type is "single"', async () => {
+    render(AccordionSingle);
+
+    const firstItem = screen.getByText("Natural Language Classifier");
+    const lastItem = screen.getByText("Language Translator");
+
+    await user.click(firstItem);
+    itemIsExpanded(/Natural Language Classifier/);
+
+    await user.click(lastItem);
+    itemIsExpanded(/Language Translator/);
+    itemIsCollapsed(/Natural Language Classifier/);
+
+    // Clicking the open item again just collapses it.
+    await user.click(lastItem);
+    itemIsCollapsed(/Language Translator/);
   });
 });
