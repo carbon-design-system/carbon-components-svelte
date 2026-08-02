@@ -561,6 +561,29 @@ test.describe("forced colors", () => {
       .soft(await style(page, ".bx--search-menu__menu"))
       .toMatchObject({ outline: "solid 1px", outlineColor: system.CanvasText });
   });
+
+  test("UserAvatar status dots keep their colors and a CanvasText edge", async ({
+    page,
+  }) => {
+    const dots = ["online", "away", "busy", "offline"].map(
+      (status) => `.bx--user-avatar__status--${status}`,
+    );
+    const [online, away, busy, offline] = await Promise.all(
+      dots.map((dot) => style(page, dot)),
+    );
+    for (const [i, dot] of [online, away, busy, offline].entries()) {
+      expect.soft(dot, dots[i]).toMatchObject({
+        outline: "solid 1px",
+        outlineColor: system.CanvasText,
+      });
+    }
+    const fills = [online, away, busy].map((dot) => dot.background);
+    expect.soft(new Set([...fills, system.Canvas]).size).toBe(4);
+    expect.soft(offline).toMatchObject({
+      background: system.Canvas,
+      borderColor: system.GrayText,
+    });
+  });
 });
 
 // The subtle read-only border is a color cue that forced colors erases, so

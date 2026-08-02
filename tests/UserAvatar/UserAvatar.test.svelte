@@ -134,3 +134,15 @@
   name="John Doe"
   aria-label="Open profile"
 />
+
+<UserAvatar data-testid="status-online" name="Jane Roe" status="online" />
+
+<UserAvatar data-testid="status-away" name="Jane Roe" status="away" />
+
+<UserAvatar data-testid="status-busy" name="Jane Roe" status="busy" />
+
+<UserAvatar data-testid="status-offline" name="Jane Roe" status="offline" />
+
+<UserAvatar data-testid="badge-slot" name="Jane Roe" status="online">
+  <span slot="badge" data-testid="custom-badge">99</span>
+</UserAvatar>

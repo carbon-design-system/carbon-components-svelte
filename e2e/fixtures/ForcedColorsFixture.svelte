@@ -44,6 +44,7 @@
     Toggletip,
     TreeView,
     Truncate,
+    UserAvatar,
   } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
@@ -205,4 +206,9 @@
     <Toggletip labelText="Toggletip">Closed</Toggletip>
     <Toggletip labelText="Open toggletip" open>Open</Toggletip>
   </div>
+
+  <UserAvatar name="Online" status="online" />
+  <UserAvatar name="Away" status="away" />
+  <UserAvatar name="Busy" status="busy" />
+  <UserAvatar name="Offline" status="offline" />
 </main>
