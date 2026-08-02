@@ -4,7 +4,7 @@ description: Tabs organize content into separate views that can be switched betw
 ---
 
 <script>
-  import { Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton } from "carbon-components-svelte";
+  import { Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, DataTable } from "carbon-components-svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
@@ -92,6 +92,51 @@ Tabs can be conditionally rendered using Svelte's `{#if}` blocks. The component 
 If the current selected tab is removed, the next tab is selected.
 
 <FileSource src="/framed/Tabs/TabsConditional" />
+
+## Lazy content
+
+By default, every `TabContent` panel stays mounted and toggles visibility with the `hidden` attribute. Set `lazy` on a panel to defer mounting its slot until that tab is first selected. Set `unmountOnHide` to remove the slot when the tab is deselected — useful for heavy panels such as a DataTable.
+
+<Tabs>
+  <Tab label="Overview" />
+  <Tab label="Load balancers" />
+  <svelte:fragment slot="content">
+    <TabContent>Lightweight overview content.</TabContent>
+    <TabContent lazy>
+      <DataTable
+        headers="{[
+          { key: "name", value: "Name" },
+          { key: "protocol", value: "Protocol" },
+          { key: "port", value: "Port" },
+          { key: "rule", value: "Rule" }
+        ]}"
+        rows="{[
+          {
+            id: "a",
+            name: "Load Balancer 3",
+            protocol: "HTTP",
+            port: 3000,
+            rule: "Round robin"
+          },
+          {
+            id: "b",
+            name: "Load Balancer 1",
+            protocol: "HTTP",
+            port: 443,
+            rule: "Round robin"
+          },
+          {
+            id: "c",
+            name: "Load Balancer 2",
+            protocol: "HTTP",
+            port: 80,
+            rule: "DNS delegation"
+          },
+        ]}"
+      />
+    </TabContent>
+  </svelte:fragment>
+</Tabs>
 
 ## Width
 
