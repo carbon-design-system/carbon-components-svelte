@@ -11,6 +11,7 @@
   export let required = false;
   export let minLabel = "";
   export let maxLabel = "";
+  export let formatValue: ((value: number) => string) | undefined = undefined;
   export let hideTextInput = false;
   export let fullWidth = false;
   export let min = 0;
@@ -46,6 +47,7 @@
     {required}
     {minLabel}
     {maxLabel}
+    {formatValue}
     {hideTextInput}
     {fullWidth}
     {light}
@@ -80,6 +82,7 @@
     {required}
     {minLabel}
     {maxLabel}
+    {formatValue}
     {hideTextInput}
     {fullWidth}
     {light}

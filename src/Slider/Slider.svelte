@@ -22,6 +22,13 @@
   /** Specify the label for the min value */
   export let minLabel = "";
 
+  /**
+   * Format displayed values for range labels and `aria-valuetext`.
+   * Does not change the numeric model; the text input stays numeric.
+   * @type {undefined | ((value: number) => string)}
+   */
+  export let formatValue = undefined;
+
   /** Set the step value */
   export let step = 1;
 
@@ -102,6 +109,18 @@
   let dragging = false;
   let holding = false;
   let currentEvent = null;
+
+  /** @type {(label: string, numericValue: number) => string | number} */
+  function formatRangeLabel(label, numericValue) {
+    if (label) return label;
+    if (formatValue) return formatValue(numericValue);
+    return label ?? numericValue;
+  }
+
+  /** @type {(numericValue: number) => string | undefined} */
+  function getValueText(numericValue) {
+    return formatValue ? formatValue(numericValue) : undefined;
+  }
 
   function startInteraction(event) {
     if (disabled || readonly) return;
@@ -203,7 +222,9 @@
     class:bx--slider-container--readonly={readonly}
     style:width={fullWidth && "100%"}
   >
-    <span class:bx--slider__range-label={true}>{minLabel ?? min}</span>
+    <span class:bx--slider__range-label={true}
+      >{formatRangeLabel(minLabel, min)}</span
+    >
     <div
       bind:this={ref}
       class:bx--slider={true}
@@ -221,6 +242,7 @@
         aria-valuemax={max}
         aria-valuemin={min}
         aria-valuenow={value}
+        aria-valuetext={getValueText(value)}
         aria-labelledby={labelId}
         aria-describedby={showInvalid
           ? errorId
@@ -257,7 +279,9 @@
         style:transform="translate(0, -50%) scaleX({left / 100})"
       ></div>
     </div>
-    <span class:bx--slider__range-label={true}>{maxLabel ?? max}</span>
+    <span class:bx--slider__range-label={true}
+      >{formatRangeLabel(maxLabel, max)}</span
+    >
     <div class:bx--slider-text-input-wrapper={true}>
       {#if showInvalid}
         <WarningFilled class="bx--slider__invalid-icon" />
