@@ -61,6 +61,12 @@ Toggle the example below to grow the content past the threshold and reveal the e
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetOverflow" />
 
+### Collapsed row count
+
+Set `maxCollapsedNumberOfRows` to shorten the collapsed preview. Each row is 16px tall; the default is `15` (240px). Use `minCollapsedNumberOfRows`, `minExpandedNumberOfRows`, and `maxExpandedNumberOfRows` for the matching minimum and expanded limits.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetRowCounts" />
+
 ## Expanded by default
 
 Set `expanded` to `true` to show the full multi-line code snippet.
@@ -102,7 +108,7 @@ Set `hideCopyButton` to `true` to hide the copy button.
 
 ### Show more
 
-Set `showMoreLess` to `false` to hide the expand/collapse button on multi-line snippets.
+Set `showMoreLess` to `false` to hide the expand/collapse button on multi-line snippets. Overflowing content scrolls inside the collapsed container instead of being clipped with no way to reach the rest.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetHideShowMore" />
 
