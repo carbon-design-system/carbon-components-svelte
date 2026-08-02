@@ -26,4 +26,23 @@ test.describe("ContainedList", () => {
     const link = page.getByTestId("link-item");
     await expect(link).toHaveCSS("text-decoration-line", "none");
   });
+
+  test("search slot stays under the header while the list scrolls", async ({
+    page,
+  }) => {
+    const scroller = page.getByTestId("search-scroller");
+    const offset = () =>
+      scroller.evaluate((el) => {
+        const search = el.querySelector(".bx--search");
+        return Math.round(
+          (search?.getBoundingClientRect().top ?? 0) -
+            el.getBoundingClientRect().top,
+        );
+      });
+    const before = await offset();
+    await scroller.evaluate((el) => {
+      el.scrollTop = 300;
+    });
+    expect(await offset()).toBe(before);
+  });
 });
