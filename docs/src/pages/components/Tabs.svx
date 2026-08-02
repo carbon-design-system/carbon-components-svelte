@@ -4,7 +4,7 @@ description: Tabs organize content into separate views that can be switched betw
 ---
 
 <script>
-  import { Box, CodeSnippet, Stack, Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, Text, DataTable } from "carbon-components-svelte";
+  import { Box, CodeSnippet, Stack, Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, Text, DataTable, Button } from "carbon-components-svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
@@ -170,6 +170,24 @@ When the tabs exceed the available width, the list scrolls horizontally and back
 Below the medium breakpoint, vertical tabs collapse into the same horizontal, scrollable row with overflow buttons. Resize the viewport to see them.
 
 <FileSource src="/framed/Tabs/TabsVerticalOverflow" />
+
+## Tab bar actions
+
+Render right-aligned controls beside the tab list with the `extra` slot. The
+content sits outside the scrollable nav, so overflow buttons still measure the
+tabs alone.
+
+<Tabs>
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <Button slot="extra" kind="ghost" size="field">New tab</Button>
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
 
 ## Disabled tabs
 
