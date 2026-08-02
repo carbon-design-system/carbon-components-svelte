@@ -39,3 +39,27 @@
 @include exports('list-box-menu-item-icon') {
   @include list-box-menu-item-icon;
 }
+
+/// Non-interactive empty / loading row for Dropdown, ComboBox, and MultiSelect menus.
+/// @access private
+/// @group components
+@mixin list-box-menu-item-empty {
+  .#{$prefix}--list-box__menu-item--empty {
+    color: $text-02;
+    cursor: default;
+    pointer-events: none;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    .#{$prefix}--list-box__menu-item__option {
+      color: inherit;
+      border-top-color: transparent;
+    }
+  }
+}
+
+@include exports("list-box-menu-item-empty") {
+  @include list-box-menu-item-empty;
+}
