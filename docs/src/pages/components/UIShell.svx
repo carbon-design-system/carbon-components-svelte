@@ -77,6 +77,12 @@ Duplicate those items in `HeaderSideNavItems` so the links stay in the side nav 
 
 <FileSource src="/framed/UIShell/HeaderNavExternalLinks" />
 
+### Hover menus
+
+Set `openOnHover` to `true` on `HeaderNavMenu` to open the submenu after a short delay when the pointer enters, and close it when the pointer leaves. Click and keyboard behavior are unchanged.
+
+<FileSource src="/framed/UIShell/HeaderNavHover" />
+
 ### Skip to content
 
 Pair `SkipToContent` with `Content` so keyboard users can jump past the header and navigation straight to the main content. By default `SkipToContent` links to `href="#main-content"` and `Content` renders with `id="main-content"`, so the two work together without extra configuration. Override both `href` and `id` together if you render more than one `Content` region, or need a different anchor.
