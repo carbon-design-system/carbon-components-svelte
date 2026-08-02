@@ -39,9 +39,11 @@
   export let secondaryButtonText = "";
 
   /**
-   * 2-tuple prop to render two secondary buttons for a 3 button modal.
-   * Supersedes `secondaryButtonText`.
-   * @type {[] | [{ text: string; }, { text: string; }]}
+   * One or two secondary buttons for the modal footer.
+   * Supersedes `secondaryButtonText`. Each entry needs `text`; optional
+   * `kind` (defaults to `"secondary"`) and `disabled` pass through to Button.
+   * With two entries plus a primary button, the footer uses the three-button layout.
+   * @type {ReadonlyArray<{ text: string; kind?: string; disabled?: boolean }>}
    */
   export let secondaryButtons = [];
 
@@ -75,7 +77,8 @@
   {#if secondaryButtons.length > 0}
     {#each secondaryButtons as button (button.text)}
       <Button
-        kind="secondary"
+        kind={button.kind ?? "secondary"}
+        disabled={button.disabled}
         on:click={() => {
           dispatch("click:button--secondary", { text: button.text });
         }}

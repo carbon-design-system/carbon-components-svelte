@@ -168,6 +168,37 @@ describe("ModalFooter", () => {
     expect(screen.getByRole("button", { name: "Reset" })).toBeInTheDocument();
   });
 
+  it("should render one secondaryButtons entry with legacy { text }", () => {
+    render(ModalFooterTest, {
+      props: {
+        primaryButtonText: "Save",
+        secondaryButtons: [{ text: "Cancel" }],
+      },
+    });
+
+    const cancel = screen.getByRole("button", { name: "Cancel" });
+    expect(cancel).toHaveClass("bx--btn--secondary");
+    expect(cancel).not.toBeDisabled();
+  });
+
+  it("should apply kind and disabled from secondaryButtons", () => {
+    render(ModalFooterTest, {
+      props: {
+        primaryButtonText: "Save",
+        secondaryButtons: [
+          { text: "Save draft", kind: "secondary" },
+          { text: "Cancel", kind: "ghost", disabled: true },
+        ],
+      },
+    });
+
+    const draft = screen.getByRole("button", { name: "Save draft" });
+    const cancel = screen.getByRole("button", { name: "Cancel" });
+    expect(draft).toHaveClass("bx--btn--secondary");
+    expect(cancel).toHaveClass("bx--btn--ghost");
+    expect(cancel).toBeDisabled();
+  });
+
   it("should handle three-button layout", () => {
     render(ModalFooterTest, {
       props: {

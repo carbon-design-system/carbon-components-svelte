@@ -146,6 +146,63 @@ describe("Modal", () => {
     });
   });
 
+  it("renders one secondaryButtons entry with legacy { text }", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        primaryButtonText: "Save",
+        secondaryButtons: [{ text: "Cancel" }],
+      },
+    });
+
+    const cancel = screen.getByRole("button", { name: "Cancel" });
+    expect(cancel).toHaveClass("bx--btn--secondary");
+    expect(cancel).not.toBeDisabled();
+  });
+
+  it("renders two secondaryButtons with kind and disabled", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        primaryButtonText: "Save",
+        secondaryButtons: [
+          { text: "Save draft", kind: "secondary" },
+          { text: "Cancel", kind: "ghost", disabled: true },
+        ],
+      },
+    });
+
+    const draft = screen.getByRole("button", { name: "Save draft" });
+    const cancel = screen.getByRole("button", { name: "Cancel" });
+    expect(draft).toHaveClass("bx--btn--secondary");
+    expect(cancel).toHaveClass("bx--btn--ghost");
+    expect(cancel).toBeDisabled();
+
+    const footer = draft.closest(".bx--modal-footer");
+    expect(footer).toHaveClass("bx--modal-footer--three-button");
+  });
+
+  it("dispatches click:button--secondary for secondaryButtons entries", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ModalTest, {
+      props: {
+        open: true,
+        primaryButtonText: "Save",
+        secondaryButtons: [{ text: "Cancel" }, { text: "Reset" }],
+      },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
+      text: "Cancel",
+    });
+
+    await user.click(screen.getByRole("button", { name: "Reset" }));
+    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
+      text: "Reset",
+    });
+  });
+
   it("supports different modal sizes", () => {
     type Size = "xs" | "sm" | "lg";
     const sizeMappings = {
