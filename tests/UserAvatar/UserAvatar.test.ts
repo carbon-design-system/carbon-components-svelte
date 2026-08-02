@@ -1,9 +1,10 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
 import type UserAvatarComponent from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import type { ComponentProps } from "svelte";
 import { getAvatarBackgroundColor } from "../../src/utils/avatarColor.js";
 import { user } from "../utils/user";
 import UserAvatar from "./UserAvatar.test.svelte";
+import UserAvatarImageError from "./UserAvatarImageError.test.svelte";
 
 describe("UserAvatar", () => {
   afterEach(() => {
@@ -69,6 +70,44 @@ describe("UserAvatar", () => {
     expect(img).toHaveAttribute("referrerpolicy", "no-referrer");
     expect(img).not.toHaveAttribute("data-testid");
     expect(img).not.toHaveAttribute("data-avatar-host");
+  });
+
+  it("falls back to initials when the image fails to load and dispatches image:error", async () => {
+    const onImageError = vi.fn();
+    render(UserAvatarImageError, { props: { onImageError } });
+
+    const avatar = screen.getByTestId("image-error");
+    const img = avatar.querySelector("img");
+    assert(img);
+
+    img.dispatchEvent(new Event("error"));
+
+    expect(onImageError).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(avatar.querySelector("img")).toBeNull();
+      expect(avatar).toHaveTextContent("JD");
+    });
+  });
+
+  it("retries the image when the src changes after a failed load", async () => {
+    const { rerender } = render(UserAvatarImageError, {
+      props: { image: "https://example.com/broken.jpg" },
+    });
+
+    const avatar = screen.getByTestId("image-error");
+    const img = avatar.querySelector("img");
+    assert(img);
+    img.dispatchEvent(new Event("error"));
+    await waitFor(() => {
+      expect(avatar).toHaveTextContent("JD");
+    });
+
+    await rerender({ image: "https://example.com/photo.jpg" });
+
+    const nextImg = avatar.querySelector("img");
+    assert(nextImg);
+    expect(nextImg).toHaveAttribute("src", "https://example.com/photo.jpg");
+    expect(avatar).not.toHaveTextContent("JD");
   });
 
   it("renders a custom icon, taking priority over the name", () => {
