@@ -1,6 +1,7 @@
 // Extends the v10 search with the extra-small (`xs`) size added in newer
 // Carbon (React `size="xs"`, 24px height). v10 only ships sm/lg/xl.
 // Mirrors the v10 `--sm` block scaled to 24px: 4px gap + 16px icon + 4px.
+// Also lays out an optional trailing submit button (`--with-submit`).
 
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
@@ -24,6 +25,7 @@
 
   .#{$prefix}--search--xs {
     .#{$prefix}--search-close,
+    .#{$prefix}--search-button,
     &.#{$prefix}--search--expandable,
     &.#{$prefix}--search--expandable .#{$prefix}--search-magnifier {
       width: to-rem(24px);
@@ -36,6 +38,120 @@
   }
 }
 
+/// Optional trailing submit button layout
+/// @access private
+/// @group components
+@mixin search-submit-button {
+  // v10 sizes the submit button via a sibling selector outside `.bx--search`.
+  // When the button is inside the field, mirror close-button sizing here.
+  .#{$prefix}--search--sm .#{$prefix}--search-button {
+    width: to-rem(32px);
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--search--lg .#{$prefix}--search-button {
+    width: to-rem(40px);
+    height: to-rem(40px);
+  }
+
+  .#{$prefix}--search--xl .#{$prefix}--search-button {
+    width: to-rem(48px);
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--search--with-submit .#{$prefix}--search-button {
+    @include button-reset(false);
+    @include focus-outline("reset");
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-left: 0;
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--light
+    .#{$prefix}--search-button {
+    background-color: $field-02;
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--xs .#{$prefix}--search-input {
+    padding-right: to-rem(48px);
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--sm .#{$prefix}--search-input {
+    padding-right: to-rem(64px);
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--lg .#{$prefix}--search-input {
+    padding-right: to-rem(80px);
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--xl .#{$prefix}--search-input {
+    padding-right: to-rem(96px);
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--xs .#{$prefix}--search-close {
+    right: to-rem(24px);
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--sm .#{$prefix}--search-close {
+    right: to-rem(32px);
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--lg .#{$prefix}--search-close {
+    right: to-rem(40px);
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--xl .#{$prefix}--search-close {
+    right: to-rem(48px);
+  }
+
+  // Fluid already reserves the right edge for the decorative magnifier; place
+  // the submit button there and shift the clear control one button width left.
+  .#{$prefix}--search--with-submit.#{$prefix}--search--fluid
+    .#{$prefix}--search-input {
+    padding-right: to-rem(128px);
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--fluid
+    .#{$prefix}--search-close {
+    right: to-rem(48px);
+    inset: auto to-rem(48px) 0 auto;
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--fluid
+    .#{$prefix}--search-button {
+    border: none;
+    block-size: to-rem(40px);
+    inline-size: to-rem(40px);
+    inset: auto 0 0 auto;
+  }
+
+  .#{$prefix}--search--with-submit.#{$prefix}--search--fluid
+    .#{$prefix}--search-magnifier-icon {
+    display: none;
+  }
+
+  .#{$prefix}--search--with-submit
+    .#{$prefix}--search-input:focus
+    ~ .#{$prefix}--search-button:hover {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--search--disabled .#{$prefix}--search-button {
+    cursor: not-allowed;
+    outline: none;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
 @include exports("search-xs") {
   @include search-xs;
+}
+
+@include exports("search-submit-button") {
+  @include search-submit-button;
 }

@@ -10,6 +10,7 @@ import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";
 import SearchInitialEvent from "./SearchInitialEvent.test.svelte";
 import SearchSkeleton from "./SearchSkeleton.test.svelte";
+import SearchSubmit from "./SearchSubmit.test.svelte";
 
 describe("Search", () => {
   const getSearchInput = (label?: string | RegExp) =>
@@ -244,5 +245,63 @@ describe("Search", () => {
     expect(skeleton.children).toHaveLength(2);
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
+  });
+
+  describe("submit button", () => {
+    const getSubmitButton = (label = "Search") =>
+      screen.getByRole("button", { name: label });
+
+    it("does not render the submit button by default", () => {
+      render(Search);
+
+      expect(
+        screen.queryByRole("button", { name: "Search" }),
+      ).not.toBeInTheDocument();
+      expect(document.querySelector(".bx--search--with-submit")).toBeNull();
+    });
+
+    it("renders the submit button when showSubmitButton is true", () => {
+      render(SearchSubmit);
+
+      const submitButton = getSubmitButton();
+      expect(submitButton).toBeInTheDocument();
+      expect(submitButton).toHaveClass("bx--search-button");
+      expect(
+        getSearchInput("Submit search").closest(".bx--search"),
+      ).toHaveClass("bx--search--with-submit");
+    });
+
+    it("dispatches submit with the current value on button click", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(SearchSubmit);
+
+      await user.click(getSubmitButton());
+      expect(consoleLog).toHaveBeenCalledWith("submit", "Cloud functions");
+      expect(screen.getByTestId("submitted")).toHaveTextContent(
+        "Cloud functions",
+      );
+    });
+
+    it("dispatches submit with the current value on Enter", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(SearchSubmit);
+
+      const search = getSearchInput("Submit search");
+      search.focus();
+      await user.keyboard("{Enter}");
+      expect(consoleLog).toHaveBeenCalledWith("submit", "Cloud functions");
+      expect(screen.getByTestId("submitted")).toHaveTextContent(
+        "Cloud functions",
+      );
+    });
+
+    it("does not dispatch submit when disabled", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(SearchSubmit, { props: { disabled: true } });
+
+      await user.click(getSubmitButton());
+      expect(consoleLog).not.toHaveBeenCalled();
+      expect(screen.getByTestId("submitted")).toHaveTextContent("");
+    });
   });
 });
