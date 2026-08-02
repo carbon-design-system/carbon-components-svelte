@@ -6,13 +6,16 @@ description: Time pickers provide a time input field with optional period (AM/PM
 <script>
   import { TimePicker, TimePickerSelect, SelectItem, FluidTimePickerSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
+
+  let normalizedValue = "";
 </script>
 
 ## Basic
 
-Create a time picker with period (AM/PM) and timezone selectors.
+Create a time picker with period (AM/PM) and timezone selectors. The default
+`format` is `"12"`.
 
-<TimePicker labelText="Cron job" placeholder="hh:mm">
+<TimePicker labelText="Cron job">
   <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
@@ -22,6 +25,53 @@ Create a time picker with period (AM/PM) and timezone selectors.
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
 </TimePicker>
+
+## Format
+
+`format` chooses the 12-hour or 24-hour clock and drives the input `pattern`,
+`placeholder`, and `maxlength` presets. Pass `pattern` (or `placeholder` /
+`maxlength`) explicitly to override a preset.
+
+### 12-hour
+
+Use with a period selector. Hours run from 1 through 12.
+
+<TimePicker format="12" labelText="Start time">
+  <TimePickerSelect value="am">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+</TimePicker>
+
+### 24-hour
+
+Omit the period selector when using a 24-hour clock.
+
+<TimePicker format="24" labelText="Start time" helperText="24-hour, e.g. 14:30" />
+
+### Seconds
+
+Set `seconds` to accept `hh:mm:ss`. The maxlength preset becomes 8.
+
+<TimePicker format="24" seconds labelText="Timestamp" />
+
+## Normalize
+
+Set `normalize` to reformat a valid value on blur. Compact input such as
+`930` becomes `09:30`. Invalid input is left unchanged.
+
+Listen to `change` for a structured detail with `value`, `hours`, `minutes`,
+optional `seconds`, and `valid`.
+
+<TimePicker
+  format="24"
+  normalize
+  bind:value={normalizedValue}
+  labelText="Departure"
+  on:change={(e) => {
+    console.log("change", e.detail);
+  }}
+/>
 
 ## Light
 
