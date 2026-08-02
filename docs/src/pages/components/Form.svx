@@ -77,3 +77,33 @@ programmatically.
    <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
   <Button type="submit">Submit</Button>
 </Form>
+
+## SvelteKit enhance
+
+Svelte's `use:` directive cannot target components. Set `actions` to apply
+SvelteKit's `enhance` (or any other action) to the underlying form element.
+
+```svelte
+<script>
+  import { enhance } from "$app/forms";
+  import { Form, TextInput, Button } from "carbon-components-svelte";
+</script>
+
+<Form method="POST" action="?/save" actions={[enhance]}>
+  <TextInput name="name" labelText="Name" />
+  <Button type="submit">Save</Button>
+</Form>
+```
+
+Pass a submit callback as a `[action, parameter]` tuple:
+
+```svelte
+<Form
+  method="POST"
+  action="?/save"
+  actions={[[enhance, () => ({ reset: false })]]}
+>
+  <TextInput name="name" labelText="Name" />
+  <Button type="submit">Save</Button>
+</Form>
+```

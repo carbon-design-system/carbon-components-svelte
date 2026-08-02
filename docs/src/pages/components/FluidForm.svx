@@ -176,6 +176,24 @@ intended.
   </TimePicker>
 </div>
 
+## SvelteKit enhance
+
+Set `actions` to apply SvelteKit's `enhance` (or any other action) to the
+underlying form element. See [Form](/components/Form#sveltekit-enhance) for
+usage details.
+
+```svelte
+<script>
+  import { enhance } from "$app/forms";
+  import { FluidForm, TextInput, Button } from "carbon-components-svelte";
+</script>
+
+<FluidForm method="POST" action="?/save" actions={[enhance]}>
+  <TextInput name="name" labelText="Name" />
+  <Button type="submit">Save</Button>
+</FluidForm>
+```
+
 ## Invalid
 
 Handle form validation and display error states with `invalid` and `invalidText` on form inputs.
