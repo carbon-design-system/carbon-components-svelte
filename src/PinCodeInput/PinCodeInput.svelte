@@ -150,6 +150,19 @@
    */
   export let selectTextOnFocus = false;
 
+  /**
+   * Visually partition segments into groups with a decorative separator
+   * between each group.
+   *
+   * Each entry is the number of segments in that group. Values must be
+   * positive integers that sum to `count`. Invalid values are ignored and
+   * segments render as a single contiguous row. Separators are decorative
+   * only (`aria-hidden`); focus, paste, and value indices ignore them.
+   * @type {number[] | undefined}
+   * @example [3, 3]
+   */
+  export let groups = undefined;
+
   /** Set an id for the input group */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -209,6 +222,8 @@
   $: isFluid = fluid || !!formContext?.isFluid;
   $: segmentPlaceholder =
     placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
+  $: resolvedGroups = resolveGroups(groups, count);
+  $: segmentItems = buildSegmentItems(resolvedGroups, count);
 
   $: legendId = `legend-${id}`;
   $: helperId = `helper-${id}`;
@@ -234,6 +249,52 @@
     dispatch("clear");
   }
   $: if (anyValue) hadValue = true;
+
+  /**
+   * @param {number[] | undefined} groupSizes
+   * @param {number} segmentCount
+   * @returns {number[] | undefined}
+   */
+  function resolveGroups(groupSizes, segmentCount) {
+    if (!groupSizes || groupSizes.length === 0) return undefined;
+    if (!groupSizes.every((size) => Number.isInteger(size) && size > 0)) {
+      return undefined;
+    }
+    const sum = groupSizes.reduce((total, size) => total + size, 0);
+    if (sum !== segmentCount) return undefined;
+    return groupSizes;
+  }
+
+  /**
+   * @typedef {{ kind: "segment"; index: number } | { kind: "separator"; key: string }} SegmentItem
+   */
+
+  /**
+   * @param {number[] | undefined} groupSizes
+   * @param {number} segmentCount
+   * @returns {SegmentItem[]}
+   */
+  function buildSegmentItems(groupSizes, segmentCount) {
+    /** @type {SegmentItem[]} */
+    const items = [];
+    if (!groupSizes) {
+      for (let index = 0; index < segmentCount; index++) {
+        items.push({ kind: "segment", index });
+      }
+      return items;
+    }
+
+    let index = 0;
+    for (let groupIndex = 0; groupIndex < groupSizes.length; groupIndex++) {
+      for (let offset = 0; offset < groupSizes[groupIndex]; offset++) {
+        items.push({ kind: "segment", index: index++ });
+      }
+      if (groupIndex < groupSizes.length - 1) {
+        items.push({ kind: "separator", key: `sep-${groupIndex}` });
+      }
+    }
+    return items;
+  }
 
   /** @type {(char: string) => boolean} */
   function isValidChar(char) {
@@ -487,42 +548,52 @@
       class:bx--pin-code-input__fields--warning={hasWarn}
     >
       <div class:bx--pin-code-input__segments={true}>
-        {#each code as char, index (index)}
-          <input
-            bind:this={inputs[index]}
-            type="text"
-            inputmode={type === "numeric" ? "numeric" : "text"}
-            autocomplete={index === 0 ? "one-time-code" : "off"}
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"
-            maxlength="1"
-            value={char}
-            placeholder={segmentPlaceholder || undefined}
-            id={index === 0 ? id : `${id}-${index}`}
-            {disabled}
-            {readonly}
-            required={name ? undefined : required}
-            aria-readonly={readonly || undefined}
-            aria-label={`${labelText || "Pin code"} digit ${index + 1} of ${count}`}
-            aria-invalid={hasError || undefined}
-            data-invalid={hasError || undefined}
-            data-warn={hasWarn || undefined}
-            class:bx--text-input={true}
-            class:bx--pin-code-input__field={true}
-            class:bx--pin-code-input__field--masked={mask}
-            class:bx--pin-code-input__field--uppercase={uppercase}
-            class:bx--text-input--light={light}
-            class:bx--text-input--invalid={hasError}
-            class:bx--text-input--warning={hasWarn}
-            class:bx--text-input--xs={size === "xs"}
-            class:bx--text-input--sm={size === "sm"}
-            class:bx--text-input--xl={size === "xl"}
-            on:input={(event) => handleInput(index, event)}
-            on:keydown={(event) => handleKeydown(index, event)}
-            on:paste={(event) => handlePaste(index, event)}
-            on:focus={handleFocus}
-          >
+        {#each segmentItems as item (item.kind === "segment" ? item.index : item.key)}
+          {#if item.kind === "separator"}
+            <span
+              class:bx--pin-code-input__group-separator={true}
+              aria-hidden="true"
+              >–</span
+            >
+          {:else}
+            {@const index = item.index}
+            {@const char = code[index]}
+            <input
+              bind:this={inputs[index]}
+              type="text"
+              inputmode={type === "numeric" ? "numeric" : "text"}
+              autocomplete={index === 0 ? "one-time-code" : "off"}
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              maxlength="1"
+              value={char}
+              placeholder={segmentPlaceholder || undefined}
+              id={index === 0 ? id : `${id}-${index}`}
+              {disabled}
+              {readonly}
+              required={name ? undefined : required}
+              aria-readonly={readonly || undefined}
+              aria-label={`${labelText || "Pin code"} digit ${index + 1} of ${count}`}
+              aria-invalid={hasError || undefined}
+              data-invalid={hasError || undefined}
+              data-warn={hasWarn || undefined}
+              class:bx--text-input={true}
+              class:bx--pin-code-input__field={true}
+              class:bx--pin-code-input__field--masked={mask}
+              class:bx--pin-code-input__field--uppercase={uppercase}
+              class:bx--text-input--light={light}
+              class:bx--text-input--invalid={hasError}
+              class:bx--text-input--warning={hasWarn}
+              class:bx--text-input--xs={size === "xs"}
+              class:bx--text-input--sm={size === "sm"}
+              class:bx--text-input--xl={size === "xl"}
+              on:input={(event) => handleInput(index, event)}
+              on:keydown={(event) => handleKeydown(index, event)}
+              on:paste={(event) => handlePaste(index, event)}
+              on:focus={handleFocus}
+            >
+          {/if}
         {/each}
         {#if !isFluid}
           {#if hasError}

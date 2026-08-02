@@ -29,6 +29,7 @@
   export let fluid: ComponentProps<PinCodeInput>["fluid"] = false;
   export let name: ComponentProps<PinCodeInput>["name"] = undefined;
   export let required: ComponentProps<PinCodeInput>["required"] = false;
+  export let groups: ComponentProps<PinCodeInput>["groups"] = undefined;
 </script>
 
 <PinCodeInput
@@ -55,6 +56,7 @@
   {fluid}
   {name}
   {required}
+  {groups}
   on:change={(e) => console.log("change", e.detail)}
   on:complete={(e) => console.log("complete", e.detail)}
   on:clear={() => console.log("clear")}

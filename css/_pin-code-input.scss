@@ -25,6 +25,15 @@
     gap: $carbon--spacing-01;
   }
 
+  .#{$prefix}--pin-code-input__group-separator {
+    @include type-style('body-short-01');
+
+    flex-shrink: 0;
+    margin-inline: $carbon--spacing-02;
+    color: $text-02;
+    user-select: none;
+  }
+
   .#{$prefix}--pin-code-input__field.#{$prefix}--text-input {
     @include type-style('body-short-01');
 
