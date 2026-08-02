@@ -286,6 +286,104 @@ describe("TimePicker", () => {
     });
   });
 
+  it("marks values below min as invalid with reason min", async () => {
+    const onChange = vi.fn();
+    render(TimePicker, {
+      props: {
+        onChange,
+        format: "24",
+        min: "09:00",
+        max: "17:00",
+        invalidText: "Outside booking hours",
+      },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "08:00");
+    await user.tab();
+    expect(input).toHaveClass("bx--text-input--invalid");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByText("Outside booking hours")).toBeInTheDocument();
+    expect(onChange).toHaveBeenCalledWith({
+      value: "08:00",
+      hours: 8,
+      minutes: 0,
+      valid: false,
+      reason: "min",
+    });
+  });
+
+  it("marks values above max as invalid with reason max", async () => {
+    const onChange = vi.fn();
+    render(TimePicker, {
+      props: {
+        onChange,
+        format: "24",
+        min: "09:00",
+        max: "17:00",
+        invalidText: "Outside booking hours",
+      },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "18:00");
+    await user.tab();
+    expect(input).toHaveClass("bx--text-input--invalid");
+    expect(onChange).toHaveBeenCalledWith({
+      value: "18:00",
+      hours: 18,
+      minutes: 0,
+      valid: false,
+      reason: "max",
+    });
+  });
+
+  it("accepts in-range values when min and max are set", async () => {
+    const onChange = vi.fn();
+    render(TimePicker, {
+      props: {
+        onChange,
+        format: "24",
+        min: "09:00",
+        max: "17:00",
+        invalidText: "Outside booking hours",
+      },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "10:30");
+    await user.tab();
+    expect(input).not.toHaveClass("bx--text-input--invalid");
+    expect(screen.queryByText("Outside booking hours")).not.toBeInTheDocument();
+    expect(onChange).toHaveBeenCalledWith({
+      value: "10:30",
+      hours: 10,
+      minutes: 30,
+      valid: true,
+    });
+  });
+
+  it("does not constrain when min and max are unset", async () => {
+    const onChange = vi.fn();
+    render(TimePicker, {
+      props: {
+        onChange,
+        format: "24",
+      },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "03:00");
+    await user.tab();
+    expect(input).not.toHaveClass("bx--text-input--invalid");
+    expect(onChange).toHaveBeenCalledWith({
+      value: "03:00",
+      hours: 3,
+      minutes: 0,
+      valid: true,
+    });
+  });
+
   it("should handle focus and blur events", async () => {
     const onFocus = vi.fn();
     const onBlur = vi.fn();
