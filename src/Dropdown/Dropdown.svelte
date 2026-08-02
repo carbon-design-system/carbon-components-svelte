@@ -26,6 +26,12 @@
    */
 
   /**
+   * Dispatched when the menu is scrolled near the bottom (load-more signal).
+   * Not the browser's native `scrollend` (scroll stopped).
+   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
+   */
+
+  /**
    * Set the dropdown items.
    * @type {ReadonlyArray<Item>}
    */
@@ -212,6 +218,7 @@
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import { typeaheadIndex } from "../utils/typeahead.js";
   import {
@@ -222,6 +229,7 @@
   } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+  const scrollEndTracker = createScrollEndTracker();
   const insideModal = getContext("carbon:Modal");
   const formContext = getContext("carbon:Form");
 
@@ -307,6 +315,7 @@
   $: virtualConfig = virtualState.config;
   $: virtualData = virtualState.data;
   $: itemsToRender = virtualState.itemsToRender;
+  $: scrollEndTracker.noteItemCount(items.length);
 
   afterUpdate(() => {
     // Scroll to highlighted item when it changes via keyboard navigation
@@ -394,7 +403,27 @@
     if (!open && shouldVirtualize) {
       listScrollTop = resetVirtualScrollOnClose();
     }
+    if (!open) {
+      scrollEndTracker.reset();
+    }
   });
+
+  /**
+   * @param {Event} event
+   */
+  function handleMenuScroll(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    listScrollTop = target.scrollTop;
+    const detail = scrollEndTracker.observe({
+      scrollTop: target.scrollTop,
+      scrollHeight: target.scrollHeight,
+      clientHeight: target.clientHeight,
+      itemCount: items.length,
+    });
+    if (detail) {
+      dispatch("scrollend", detail);
+    }
+  }
 
   function change(step) {
     highlightedIndex = nextEnabledIndex({
@@ -670,9 +699,7 @@
         anchor={ref}
         {direction}
         on:scroll
-        on:scroll={(event) => {
-          listScrollTop = event.target.scrollTop;
-        }}
+        on:scroll={handleMenuScroll}
         on:mouseleave={() => {
           // Clear the hover highlight when the cursor leaves the menu so the
           // highlighted state does not linger on the last hovered item.
