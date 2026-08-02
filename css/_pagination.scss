@@ -1,6 +1,7 @@
 // Extra-small (xs, 24px) pagination. v10 ships sm/lg only; upstream carbon#21695.
 // v11 sizes from layout.height; at xs that is 24px ($size-xs / 1.5rem in v10).
 // Simple mode: compact prev/next + status for toolbars and cards.
+// Page-number NumberInput (`pageInputType="input"`) is a CCS extension.
 
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
@@ -65,10 +66,53 @@
   }
 }
 
+/// Page-number NumberInput inside Pagination (`pageInputType="input"`)
+/// @access private
+/// @group components
+@mixin pagination-page-input {
+  .#{$prefix}--pagination
+    .#{$prefix}--number
+    input.#{$prefix}--pagination__page-number-input {
+    width: 4rem;
+    min-width: 4rem;
+    height: 100%;
+    border: none;
+    border-left: 1px solid $ui-03;
+    padding-right: $carbon--spacing-05;
+    padding-left: $carbon--spacing-05;
+    background-color: transparent;
+  }
+
+  .#{$prefix}--pagination--xs
+    .#{$prefix}--number
+    input.#{$prefix}--pagination__page-number-input {
+    height: $size-xs;
+    min-height: $size-xs;
+  }
+
+  .#{$prefix}--pagination--sm
+    .#{$prefix}--number
+    input.#{$prefix}--pagination__page-number-input {
+    height: $size-sm;
+    min-height: $size-sm;
+  }
+
+  .#{$prefix}--pagination--lg
+    .#{$prefix}--number
+    input.#{$prefix}--pagination__page-number-input {
+    height: $size-lg;
+    min-height: $size-lg;
+  }
+}
+
 @include exports("pagination-xs") {
   @include pagination-xs;
 }
 
 @include exports("pagination-simple") {
   @include pagination-simple;
+}
+
+@include exports("pagination-page-input") {
+  @include pagination-page-input;
 }

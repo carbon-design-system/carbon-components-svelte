@@ -170,6 +170,97 @@ describe("Pagination", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("defaults to select page input", () => {
+    render(Pagination, {
+      props: { totalItems: 102 },
+    });
+
+    expect(
+      screen.getByRole("combobox", { name: /Page number, of 11 pages/ }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("spinbutton")).not.toBeInTheDocument();
+  });
+
+  it("renders a number input when pageInputType is input", () => {
+    render(Pagination, {
+      props: { totalItems: 102, pageInputType: "input" },
+    });
+
+    const input = screen.getByRole("spinbutton", {
+      name: /Page number, of 11 pages/,
+    });
+    expect(input).toHaveValue(1);
+    expect(
+      screen.queryByRole("combobox", { name: /Page number/ }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("clamps page input values to the total page range", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: { totalItems: 102, pageSize: 10, pageInputType: "input" },
+    });
+
+    const input = screen.getByRole("spinbutton", {
+      name: /Page number, of 11 pages/,
+    });
+    await user.clear(input);
+    await user.type(input, "99");
+    await user.tab();
+
+    expect(
+      screen.getByRole("spinbutton", { name: /Page number, of 11 pages/ }),
+    ).toHaveValue(11);
+    expect(consoleLog).toHaveBeenCalledWith("change", { page: 11 });
+    expect(consoleLog).toHaveBeenCalledWith("update", {
+      pageSize: 10,
+      page: 11,
+    });
+  });
+
+  it("clamps page input values below the minimum to page 1", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: {
+        totalItems: 102,
+        page: 3,
+        pageInputType: "input",
+      },
+    });
+
+    const input = screen.getByRole("spinbutton", {
+      name: /Page number, of 11 pages/,
+    });
+    await user.clear(input);
+    await user.type(input, "0");
+    await user.tab();
+
+    expect(
+      screen.getByRole("spinbutton", { name: /Page number, of 11 pages/ }),
+    ).toHaveValue(1);
+    expect(consoleLog).toHaveBeenCalledWith("change", { page: 1 });
+  });
+
+  it("dispatches change when page input commits a valid page", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: { totalItems: 102, pageInputType: "input" },
+    });
+
+    const input = screen.getByRole("spinbutton", {
+      name: /Page number, of 11 pages/,
+    });
+    await user.clear(input);
+    await user.type(input, "5");
+    await user.tab();
+
+    expect(consoleLog).toHaveBeenCalledWith("change", { page: 5 });
+    expect(consoleLog).toHaveBeenCalledWith("update", {
+      pageSize: 10,
+      page: 5,
+    });
+  });
+
   it("should handle disabled page size input", () => {
     render(Pagination, {
       props: { pageSizeInputDisabled: true },

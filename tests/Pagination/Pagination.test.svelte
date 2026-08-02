@@ -9,6 +9,8 @@
   export let backwardText = "Previous page";
   export let itemsPerPageText = "Items per page:";
   export let pageInputDisabled = false;
+  export let pageInputType: ComponentProps<Pagination>["pageInputType"] =
+    "select";
   export let pageSizeInputDisabled = false;
   export let simple = false;
   export let pageSize = 10;
@@ -38,6 +40,7 @@
   {backwardText}
   {itemsPerPageText}
   {pageInputDisabled}
+  {pageInputType}
   {pageSizeInputDisabled}
   {simple}
   {pageWindow}
