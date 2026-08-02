@@ -10,6 +10,14 @@
   export let selected = 0;
 
   /**
+   * Choose whether arrow keys change the selection on focus.
+   * Defaults to `"automatic"`. Set to `"manual"` so arrow keys only move
+   * focus; press Enter or Space to select.
+   * @type {"automatic" | "manual"}
+   */
+  export let activation = "automatic";
+
+  /**
    * Specify the size of the vertical tabs.
    * `"xl"` matches the default height.
    * @type {"sm" | "md" | "lg" | "xl"}
@@ -171,10 +179,27 @@
    */
   function update(id) {
     currentIndex = $tabsById[id].index;
+    focusedIndex = -1;
   }
 
   // Vertical tabs are never dismissible; this no-op satisfies the `Tab` context.
   function dismiss() {}
+
+  /**
+   * Focus a tab at an absolute index without changing selection.
+   * @type {(index: number) => Promise<void>}
+   */
+  async function focusTab(index) {
+    if (index < 0 || index >= $tabs.length) return;
+    focusedIndex = index;
+
+    await tick();
+    const activeTab = /** @type {HTMLElement | undefined} */ (
+      refTabList?.querySelectorAll("[role='tab']")[index]
+    );
+    activeTab?.focus({ preventScroll: $belowMd });
+    if ($belowMd) scrollTabIntoView(activeTab);
+  }
 
   /**
    * Move selection/focus to a tab at an absolute index. Roving focus resolves
@@ -182,9 +207,13 @@
    * @type {(index: number) => Promise<void>}
    */
   async function selectTab(index) {
-    if (index === currentIndex) return;
+    if (index === currentIndex) {
+      focusedIndex = -1;
+      return;
+    }
 
     currentIndex = index;
+    focusedIndex = -1;
 
     await tick();
     const activeTab = /** @type {HTMLElement | undefined} */ (
@@ -260,9 +289,13 @@
   });
 
   let currentIndex = selected;
+  let focusedIndex = -1;
   let prevIndex = -1;
 
-  $: currentIndex = selected;
+  $: {
+    currentIndex = selected;
+    focusedIndex = -1;
+  }
   $: currentTab = $tabs[currentIndex] || undefined;
   $: currentContent = $content[currentIndex] || undefined;
   $: {
@@ -323,11 +356,15 @@
         selector: "[role='tab']",
         orientation,
         skipDisabled: true,
-        getActiveIndex: () => currentIndex,
+        getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : currentIndex),
         onMove: (index, event) => {
           // Prevent the arrow keys from also scrolling the page.
           event.preventDefault();
-          selectTab(index);
+          if (activation === "manual") {
+            focusTab(index);
+          } else {
+            selectTab(index);
+          }
         },
       }}
       class:bx--tabs__nav={true}

@@ -99,6 +99,40 @@ describe("TabsVertical", () => {
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
+  describe('activation="manual"', () => {
+    it("ArrowDown moves focus without changing selection", async () => {
+      render(TabsVertical, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowDown}");
+      expect(tab3).toHaveFocus();
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+      expect(tab3).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(consoleLog).not.toHaveBeenCalledWith("change event", 2);
+    });
+
+    it("Enter selects the focused tab", async () => {
+      render(TabsVertical, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowDown}");
+      expect(tab3).toHaveFocus();
+
+      await user.keyboard("{Enter}");
+      expect(tab3).toHaveAttribute("aria-selected", "true");
+      expect(tab1).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByText("Content 3")).toBeVisible();
+      expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    });
+  });
+
   it("should prevent the default scroll on arrow navigation", async () => {
     render(TabsVertical);
 
