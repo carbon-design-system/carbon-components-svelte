@@ -1,7 +1,7 @@
 <script>
   /**
    * @template [Icon=any]
-   * @restProps {div | span}
+   * @restProps {div | button | a}
    */
 
   /**
@@ -25,6 +25,13 @@
 
   /** Set to `true` to render a `button` element instead of a `div` */
   export let interactive = false;
+
+  /**
+   * Specify the `href` attribute to render the tag as an anchor.
+   * Mutually exclusive with `filter`; when both are set, `filter` takes precedence.
+   * @type {string}
+   */
+  export let href = undefined;
 
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
@@ -162,6 +169,48 @@
       <Close />
     </button>
   </div>
+{:else if href}
+  <!-- svelte-ignore a11y-missing-attribute -->
+  <!-- svelte-ignore a11y-no-redundant-roles -->
+  <a
+    bind:this={ref}
+    href={disabled ? undefined : href}
+    role={disabled ? "link" : undefined}
+    {id}
+    aria-disabled={disabled || undefined}
+    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    data-overflow={groupOverflow ? "true" : undefined}
+    class:bx--tag={true}
+    class:bx--tag--inline={inline}
+    class:bx--tag--interactive={true}
+    class:bx--tag--disabled={disabled}
+    class:bx--tag--sm={resolvedSize === "sm"}
+    class:bx--tag--lg={resolvedSize === "lg"}
+    class:bx--tag--red={type === "red"}
+    class:bx--tag--magenta={type === "magenta"}
+    class:bx--tag--purple={type === "purple"}
+    class:bx--tag--blue={type === "blue"}
+    class:bx--tag--cyan={type === "cyan"}
+    class:bx--tag--teal={type === "teal"}
+    class:bx--tag--green={type === "green"}
+    class:bx--tag--gray={type === "gray"}
+    class:bx--tag--cool-gray={type === "cool-gray"}
+    class:bx--tag--warm-gray={type === "warm-gray"}
+    class:bx--tag--high-contrast={type === "high-contrast"}
+    class:bx--tag--outline={type === "outline"}
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    {#if $$slots.icon || icon}
+      <div class:bx--tag__custom-icon={true}>
+        <slot name="icon"> <svelte:component this={icon} /> </slot>
+      </div>
+    {/if}
+    <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
+  </a>
 {:else if interactive}
   <button
     bind:this={ref}
