@@ -76,6 +76,37 @@ describe("FormGroup", () => {
     expect(fieldset).toHaveAttribute("data-invalid", "true");
   });
 
+  it("should set disabled on the fieldset", () => {
+    render(FormGroupTest, {
+      props: {
+        disabled: true,
+        withNativeInput: true,
+      },
+    });
+
+    const fieldset = screen.getByRole("group");
+    expect(fieldset).toBeDisabled();
+
+    // Native `<fieldset disabled>` propagates to nested inputs; the input
+    // should not carry its own `disabled` attribute.
+    const input = screen.getByRole("textbox", { name: "Nested input" });
+    expect(input).toBeDisabled();
+    expect(input).not.toHaveAttribute("disabled");
+  });
+
+  it("should not disable the fieldset by default", () => {
+    render(FormGroupTest, {
+      props: {
+        withNativeInput: true,
+      },
+    });
+
+    expect(screen.getByRole("group")).not.toBeDisabled();
+    expect(
+      screen.getByRole("textbox", { name: "Nested input" }),
+    ).not.toBeDisabled();
+  });
+
   it("should not have data-invalid when invalid is false", () => {
     render(FormGroupTest, {
       props: {
