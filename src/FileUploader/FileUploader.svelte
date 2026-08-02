@@ -9,9 +9,39 @@
 
   /**
    * Specify the file uploader status.
+   * Applied to every file row unless overridden by `fileStatus`.
    * @type {"uploading" | "edit" | "complete"}
    */
   export let status = "uploading";
+
+  /**
+   * Override the global `status` for an individual file.
+   * Receives `(file, index)` and returns `"uploading" | "edit" | "complete"`.
+   * When omitted, every row uses `status`.
+   * @type {undefined | ((file: File, index: number) => "uploading" | "edit" | "complete")}
+   */
+  export let fileStatus = undefined;
+
+  /**
+   * Mark an individual file as invalid.
+   * Receives `(file, index)` and returns a boolean.
+   * @type {undefined | ((file: File, index: number) => boolean)}
+   */
+  export let fileInvalid = undefined;
+
+  /**
+   * Per-file error subject when the row is invalid.
+   * Receives `(file, index)` and returns the subject text.
+   * @type {undefined | ((file: File, index: number) => string)}
+   */
+  export let fileErrorSubject = undefined;
+
+  /**
+   * Per-file error body when the row is invalid.
+   * Receives `(file, index)` and returns the body text.
+   * @type {undefined | ((file: File, index: number) => string)}
+   */
+  export let fileErrorBody = undefined;
 
   /** Set to `true` to disable the file uploader */
   export let disabled = false;
@@ -170,6 +200,43 @@
   /** Stable keys for `{#each}` (and Biome-safe: no commas in the each header). */
   $: filesWithKeys = keyFiles(files);
 
+  /**
+   * @param {File} file
+   * @param {number} index
+   * @returns {"uploading" | "edit" | "complete"}
+   */
+  function resolveFileStatus(file, index) {
+    return typeof fileStatus === "function" ? fileStatus(file, index) : status;
+  }
+
+  /**
+   * @param {File} file
+   * @param {number} index
+   */
+  function resolveFileInvalid(file, index) {
+    return typeof fileInvalid === "function" ? fileInvalid(file, index) : false;
+  }
+
+  /**
+   * @param {File} file
+   * @param {number} index
+   */
+  function resolveFileErrorSubject(file, index) {
+    return typeof fileErrorSubject === "function"
+      ? fileErrorSubject(file, index)
+      : "";
+  }
+
+  /**
+   * @param {File} file
+   * @param {number} index
+   */
+  function resolveFileErrorBody(file, index) {
+    return typeof fileErrorBody === "function"
+      ? fileErrorBody(file, index)
+      : "";
+  }
+
   $: {
     const prevSet = new Set(prevFiles);
     const currentSet = new Set(files);
@@ -290,15 +357,23 @@
     }}
   />
   <div class:bx--file-container={true}>
-    {#each filesWithKeys as { file, key } (key)}
-      <span class:bx--file__selected-file={true}>
+    {#each filesWithKeys as { file, key }, index (key)}
+      {@const rowStatus = resolveFileStatus(file, index)}
+      {@const rowInvalid = resolveFileInvalid(file, index)}
+      {@const rowErrorSubject = resolveFileErrorSubject(file, index)}
+      {@const rowErrorBody = resolveFileErrorBody(file, index)}
+      <span
+        class:bx--file__selected-file={true}
+        class:bx--file__selected-file--invalid={rowInvalid}
+      >
         <p class:bx--file-filename={true}>{file.name}</p>
         <span class:bx--file__state-container={true}>
           <Filename
             {file}
             fileName={file.name}
             {iconDescription}
-            {status}
+            status={rowStatus}
+            invalid={rowInvalid}
             on:keydown
             on:keydown={(event) => {
               if (event.key === " " || event.key === "Enter") {
@@ -311,6 +386,18 @@
             }}
           />
         </span>
+        {#if rowInvalid && rowErrorSubject}
+          <div class:bx--form-requirement={true}>
+            <div class:bx--form-requirement__title={true}>
+              {rowErrorSubject}
+            </div>
+            {#if rowErrorBody}
+              <p class:bx--form-requirement__supplement={true}>
+                {rowErrorBody}
+              </p>
+            {/if}
+          </div>
+        {/if}
       </span>
     {/each}
   </div>
