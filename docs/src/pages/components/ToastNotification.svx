@@ -21,7 +21,7 @@ Control notification visibility by binding to `open` to show, hide, and reuse th
 
 ## Autoclose
 
-Automatically close the notification after a specified duration (in milliseconds) with `timeout`.
+Automatically close the notification after a specified duration (in milliseconds) with `timeout`. Set `pauseOnHover` to pause the timeout while the pointer is over the toast so users can finish reading (opt-in).
 
 <FileSource src="/framed/ToastNotification/ToastNotificationTimeout" />
 
