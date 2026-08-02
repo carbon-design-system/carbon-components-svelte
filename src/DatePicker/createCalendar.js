@@ -47,9 +47,9 @@ export function resolveLocale(locale) {
 
 /**
  * @param {FlatpickrInstance} instance
- * @param {{ isMonth?: boolean }} [modifiers]
+ * @param {{ isMonth?: boolean; isYear?: boolean }} [modifiers]
  */
-function updateClasses(instance, { isMonth = false } = {}) {
+function updateClasses(instance, { isMonth = false, isYear = false } = {}) {
   const {
     calendarContainer,
     days,
@@ -59,11 +59,12 @@ function updateClasses(instance, { isMonth = false } = {}) {
   } = instance;
 
   calendarContainer.classList.add("bx--date-picker__calendar");
-  // Marker class so SCSS can target the shorter month grid without `:has()`.
+  // Marker classes so SCSS can target the shorter month/year grids without `:has()`.
   calendarContainer.classList.toggle(
     "bx--date-picker__calendar--month",
     isMonth,
   );
+  calendarContainer.classList.toggle("bx--date-picker__calendar--year", isYear);
   calendarContainer
     .querySelector(".flatpickr-month")
     ?.classList.add("bx--date-picker__month");
@@ -141,6 +142,8 @@ export async function createCalendar({ options, base, input, dispatch }) {
   let RangePlugin;
   /** @type {((config?: { shorthand?: boolean; dateFormat?: string; altFormat?: string }) => unknown) | undefined} */
   let monthSelectPlugin;
+  /** @type {((config?: { dateFormat?: string; altFormat?: string }) => unknown) | undefined} */
+  let yearSelectPlugin;
 
   if (options.mode === "range") {
     const importee = await import("flatpickr/dist/esm/plugins/rangePlugin");
@@ -152,6 +155,11 @@ export async function createCalendar({ options, base, input, dispatch }) {
     monthSelectPlugin = importee.default;
   }
 
+  if (options.mode === "year") {
+    const importee = await import("./yearSelectPlugin.js");
+    yearSelectPlugin = importee.default;
+  }
+
   const plugins = [
     options.mode === "range" && RangePlugin
       ? new RangePlugin({ position: "left", input })
@@ -159,6 +167,12 @@ export async function createCalendar({ options, base, input, dispatch }) {
     options.mode === "month" && monthSelectPlugin
       ? monthSelectPlugin({
           shorthand: true,
+          dateFormat: options.dateFormat,
+          altFormat: options.dateFormat,
+        })
+      : false,
+    options.mode === "year" && yearSelectPlugin
+      ? yearSelectPlugin({
           dateFormat: options.dateFormat,
           altFormat: options.dateFormat,
         })
@@ -187,9 +201,11 @@ export async function createCalendar({ options, base, input, dispatch }) {
       /** @type {any} */ _d,
       /** @type {FlatpickrInstance} */ instance,
     ) => {
-      // The monthSelect plugin removes the month-label node in favor of a
-      // year-only stepper, so there is nothing for updateMonthNode to patch.
-      if (options.mode !== "month") updateMonthNode(instance);
+      // The monthSelect / yearSelect plugins remove the month-label node, so
+      // there is nothing for updateMonthNode to patch.
+      if (options.mode !== "month" && options.mode !== "year") {
+        updateMonthNode(instance);
+      }
     },
     onOpen: (
       /** @type {any} */ _s,
@@ -197,8 +213,13 @@ export async function createCalendar({ options, base, input, dispatch }) {
       /** @type {FlatpickrInstance} */ instance,
     ) => {
       dispatch("open");
-      updateClasses(instance, { isMonth: options.mode === "month" });
-      if (options.mode !== "month") updateMonthNode(instance);
+      updateClasses(instance, {
+        isMonth: options.mode === "month",
+        isYear: options.mode === "year",
+      });
+      if (options.mode !== "month" && options.mode !== "year") {
+        updateMonthNode(instance);
+      }
     },
     ...options,
     locale: resolveLocale(options.locale),
