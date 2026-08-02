@@ -165,6 +165,42 @@ describe("UserAvatar", () => {
     expect(consoleLog).toHaveBeenCalledWith("mouseenter");
   });
 
+  it("renders a span by default", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("default");
+    expect(avatar.tagName).toBe("SPAN");
+    expect(avatar).not.toHaveClass("bx--user-avatar--interactive");
+  });
+
+  it("renders a button when interactive is set", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("interactive");
+    expect(avatar.tagName).toBe("BUTTON");
+    expect(avatar).toHaveAttribute("type", "button");
+    expect(avatar).toHaveClass("bx--user-avatar--interactive");
+    expect(avatar).toHaveAttribute("aria-label", "John Doe");
+  });
+
+  it("renders an anchor when href is set", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("href");
+    expect(avatar.tagName).toBe("A");
+    expect(avatar).toHaveAttribute("href", "/profile");
+    expect(avatar).toHaveClass("bx--user-avatar--interactive");
+  });
+
+  it("prefers href over interactive", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("href-over-interactive");
+    expect(avatar.tagName).toBe("A");
+    expect(avatar).toHaveAttribute("href", "/profile");
+    expect(avatar).not.toHaveAttribute("type");
+  });
+
   describe("Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;

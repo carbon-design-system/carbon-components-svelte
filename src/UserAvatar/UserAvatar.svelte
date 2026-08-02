@@ -3,7 +3,7 @@
 
   /**
    * Custom avatar content via the default slot overrides the computed image, icon, and initials.
-   * @restProps {div}
+   * @restProps {span | button | a}
    */
 
   /**
@@ -61,6 +61,8 @@
 
   /**
    * Specify the tooltip text. When set, the avatar is wrapped in a tooltip.
+   * Do not combine with `interactive` or `href` — the tooltip trigger is already
+   * focusable, and nesting an interactive avatar inside it is invalid.
    * @type {string}
    */
   export let tooltipText = undefined;
@@ -84,6 +86,21 @@
    * @type {boolean}
    */
   export let portalTooltip = true;
+
+  /**
+   * Set to `true` to render a `button` element instead of a `span`.
+   * Use when the avatar is a clickable control (for example, a custom profile menu
+   * trigger). Prefer this over attaching `on:click` to a non-interactive `span`.
+   * Ignored when `href` is set.
+   */
+  export let interactive = false;
+
+  /**
+   * Set an `href` to render an anchor element instead of a `span`.
+   * Takes priority over `interactive`.
+   * @type {string}
+   */
+  export let href = undefined;
 
   /**
    * Obtain a reference to the avatar HTML element.
@@ -177,6 +194,16 @@
   // Fall back to the group's size, then to "md".
   $: resolvedSize = size ?? $groupSize ?? "md";
 
+  // `href` wins over `interactive`. When either is set, the avatar itself is the
+  // focus target — do not nest it inside TooltipDefinition's button.
+  $: isLink = typeof href === "string";
+  $: isButton = !isLink && interactive;
+  $: isInteractive = isLink || isButton;
+  $: avatarTag = isLink ? "a" : isButton ? "button" : "span";
+  // TooltipDefinition always renders a focusable button trigger. Use it only
+  // when the avatar stays a non-interactive span.
+  $: useTooltipWrapper = !!tooltipText && !isInteractive;
+
   const glyphSize = { sm: 16, md: 20, lg: 24, xl: 32 };
   const WHITESPACE = /\s+/;
 
@@ -201,13 +228,14 @@
     "bx--user-avatar",
     `bx--user-avatar--${resolvedSize}`,
     `bx--user-avatar--${resolvedBackgroundColor}`,
+    isInteractive && "bx--user-avatar--interactive",
     $$restProps.class,
   ]
     .filter(Boolean)
     .join(" ");
 </script>
 
-{#if tooltipText}
+{#if useTooltipWrapper}
   <TooltipDefinition
     class="bx--user-avatar-tooltip"
     {tooltipText}
@@ -245,10 +273,16 @@
   </TooltipDefinition>
 {:else}
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <span
+  <!-- svelte-ignore a11y-missing-attribute -->
+  <svelte:element
+    this={avatarTag}
     bind:this={ref}
     {...$$restProps}
     class={avatarClass}
+    href={isLink ? href : undefined}
+    type={isButton ? "button" : undefined}
+    aria-label={$$restProps["aria-label"] ??
+      (isInteractive && name ? name : undefined)}
     data-overflow={groupOverflow ? "true" : undefined}
     on:click
     on:mouseover
@@ -266,5 +300,5 @@
     {:else}
       <User size={glyphSize[resolvedSize]} />
     {/if}
-  </span>
+  </svelte:element>
 {/if}

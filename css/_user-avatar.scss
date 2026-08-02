@@ -15,6 +15,22 @@
     color: $text-on-color;
   }
 
+  // Reset native button/link chrome so `interactive` / `href` keep the circle.
+  // Offset the focus ring outside the disc so `overflow: hidden` does not hide it.
+  .#{$prefix}--user-avatar--interactive {
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font: inherit;
+    appearance: none;
+
+    &:focus {
+      outline: 2px solid $focus;
+      outline-offset: 2px;
+    }
+  }
+
   // Images fill the circle; the icon glyph keeps its intrinsic size.
   .#{$prefix}--user-avatar img {
     width: 100%;
