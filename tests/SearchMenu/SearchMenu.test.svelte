@@ -8,6 +8,7 @@
   export let shouldFilter = true;
   export let disabled = false;
   export let loading = false;
+  export let debounce: ComponentProps<SearchMenu>["debounce"] = undefined;
   export let size: ComponentProps<SearchMenu>["size"] = undefined;
   export let menuSize: ComponentProps<SearchMenu>["menuSize"] = undefined;
   export let portal: ComponentProps<SearchMenu>["portal"] = true;
@@ -17,6 +18,7 @@
   };
   export let closeTrigger = "";
   export let events: string[] = [];
+  export let searches: string[] = [];
 
   const items = [
     "Databases for TestSQL",
@@ -32,6 +34,7 @@
   {shouldFilter}
   {disabled}
   {loading}
+  {debounce}
   {size}
   {menuSize}
   {portal}
@@ -39,6 +42,7 @@
   labelText="Search"
   on:select={(e) => (selected = { value: e.detail.value, submitted: false })}
   on:submit={(e) => (selected = { value: e.detail.value, submitted: true })}
+  on:search={(e) => (searches = [...searches, String(e.detail.value ?? "")])}
   on:close={(e) => (closeTrigger = e.detail.trigger)}
   on:keyup={() => (events = [...events, "keyup"])}
 >
@@ -52,3 +56,4 @@
 </div>
 <div data-testid="close">{closeTrigger}</div>
 <div data-testid="events">{events.join(",")}</div>
+<div data-testid="searches">{JSON.stringify(searches)}</div>

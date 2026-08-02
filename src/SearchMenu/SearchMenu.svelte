@@ -6,6 +6,7 @@
   /**
    * @event {{ value: string; item: { text?: string; value?: string; href?: string }; event: Event }} select
    * @event {{ value: T }} submit
+   * @event {{ value: T }} search
    * @event {{ trigger: "escape-key" | "outside-click" | "select" | "blur" }} close
    * @restProps {input}
    * @slot {{}} before
@@ -69,6 +70,14 @@
   /** Specify the number of skeleton rows rendered while `loading` */
   export let skeletonCount = 4;
 
+  /**
+   * Debounce delay in milliseconds before dispatching the `search` event.
+   * `bind:value` updates immediately. When unset, no `search` event is
+   * dispatched. Set to `0` to dispatch on every value change without delay.
+   * @type {number | undefined}
+   */
+  export let debounce = undefined;
+
   /** Specify the placeholder text */
   export let placeholder = "Search...";
 
@@ -113,16 +122,51 @@
    */
   export let menuRef = null;
 
-  import { createEventDispatcher, setContext } from "svelte";
+  import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import Search from "../Search/Search.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+  import { debounce as createDebounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { fuzzyMatch } from "../utils/fuzzyMatch.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
+
+  /** @type {(((next: T) => void) & { cancel?: () => void }) | null} */
+  let scheduleSearch = null;
+  /** @type {number | undefined | null} */
+  let activeDebounce = null;
+  // Svelte 3/4 drop events dispatched during the initial reactive flush
+  // (parent listeners are not attached yet). Wait until mount so `debounce={0}`
+  // still emits the initial value; debounced schedules only start after mount.
+  let searchReady = false;
+
+  function dispatchSearch(next) {
+    dispatch("search", { value: next });
+  }
+
+  // Gate on `activeDebounce` so this block does not re-enter when it assigns
+  // `scheduleSearch` (reading and writing that binding in one `$:` loops).
+  $: if (debounce !== activeDebounce) {
+    scheduleSearch?.cancel?.();
+    activeDebounce = debounce;
+    if (typeof debounce !== "number") {
+      scheduleSearch = null;
+    } else if (debounce <= 0) {
+      scheduleSearch = (next) => dispatchSearch(next);
+    } else {
+      scheduleSearch = createDebounce(dispatchSearch, debounce);
+    }
+  }
+
+  $: if (searchReady && scheduleSearch) scheduleSearch(value);
+
+  onMount(() => {
+    searchReady = true;
+    return () => scheduleSearch?.cancel?.();
+  });
 
   let anchorRef = null;
   let searchAnchorRef = null;
