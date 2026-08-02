@@ -24,6 +24,8 @@
     undefined;
   export let danger: ComponentProps<ModalFooter>["danger"] = false;
   export let slotContent = "";
+  /** When true, `on:click:button--secondary` calls preventDefault() so the modal stays open. */
+  export let preventSecondaryDefault = false;
 </script>
 
 <ComposedModal
@@ -45,8 +47,10 @@
     {secondaryButtons}
     {secondaryClass}
     {danger}
-    on:click:button--secondary={(e) =>
-      console.log("click:button--secondary", e.detail)}
+    on:click:button--secondary={(e) => {
+      console.log("click:button--secondary", e.detail);
+      if (preventSecondaryDefault) e.preventDefault();
+    }}
     {...$$restProps}
   >
     {#if slotContent}
