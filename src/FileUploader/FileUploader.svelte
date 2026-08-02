@@ -162,6 +162,7 @@
   export let ref = null;
 
   import { createEventDispatcher, tick } from "svelte";
+  import { filterIncomingFiles } from "../utils/filterIncomingFiles.js";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
 
@@ -300,43 +301,19 @@
     bind:ref
     bind:files
     on:change={(event) => {
-      let newFiles = event.detail;
-      const allRejected = [];
+      // In multiple mode, newFiles includes re-sent existing files
+      // (same reference) plus newly selected ones. Only reject new
+      // objects that match an existing file by content.
       const existingRefs = new Set(prevFiles);
-
-      if (maxFileSize !== undefined) {
-        const rejected = newFiles.filter((file) => file.size > maxFileSize);
-        newFiles = newFiles.filter((file) => file.size <= maxFileSize);
-
-        if (rejected.length > 0) {
-          allRejected.push(
-            ...rejected.map((file) => ({ file, reason: "size" })),
-          );
-        }
-      }
-
-      if (preventDuplicate) {
-        // In multiple mode, newFiles includes re-sent existing files
-        // (same reference) plus newly selected ones. Only reject new
-        // objects that match an existing file by content.
-        const existingKeys = new Set(
-          prevFiles.map((f) => `${f.name}\0${f.size}\0${f.lastModified}`),
-        );
-        function isDuplicate(f) {
-          return (
-            !existingRefs.has(f) &&
-            existingKeys.has(`${f.name}\0${f.size}\0${f.lastModified}`)
-          );
-        }
-        const duplicates = newFiles.filter(isDuplicate);
-        newFiles = newFiles.filter((f) => !isDuplicate(f));
-
-        if (duplicates.length > 0) {
-          allRejected.push(
-            ...duplicates.map((file) => ({ file, reason: "duplicate" })),
-          );
-        }
-      }
+      const { accepted: newFiles, rejected: allRejected } = filterIncomingFiles(
+        event.detail,
+        {
+          maxFileSize,
+          preventDuplicate,
+          existingFiles: prevFiles,
+          carryRefs: existingRefs,
+        },
+      );
 
       if (allRejected.length > 0) {
         dispatch("rejected", allRejected);
