@@ -1,6 +1,6 @@
 ---
 components: ["ContainedList", "ContainedListItem"]
-description: Contained lists display items within a labeled container, with support for multiple sizes, icons, actions, interactive items, and search.
+description: Contained lists display items within a labeled container, with support for multiple sizes, icons, actions, interactive items, links, and search.
 ---
 
 <script>
@@ -152,5 +152,22 @@ Use the `action` slot on an item for trailing controls such as buttons or icons.
   <ContainedListItem interactive disabled>Item 2</ContainedListItem>
   <ContainedListItem interactive>
     Item 3
+  </ContainedListItem>
+</ContainedList>
+
+## Link items
+
+Set `href` to render a list item as an anchor with clickable styles. Prefer this for navigation so links support middle-click and SEO. `href` takes precedence over `interactive`. Pass `target` and `rel` through rest props on the item.
+
+<ContainedList labelText="Related resources">
+  <ContainedListItem href="https://carbondesignsystem.com/">
+    Carbon Design System
+  </ContainedListItem>
+  <ContainedListItem href="https://svelte.dev/">Svelte</ContainedListItem>
+  <ContainedListItem
+    href="https://github.com/carbon-design-system/carbon-components-svelte"
+    target="_blank"
+  >
+    carbon-components-svelte
   </ContainedListItem>
 </ContainedList>
