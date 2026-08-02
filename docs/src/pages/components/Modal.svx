@@ -83,7 +83,7 @@ Stack multiple modals for complex workflows. Each modal maintains its own state 
 
 ## Multiple secondary buttons
 
-Add up to two secondary actions with `secondaryButtons`, which replaces the single secondary button text option.
+Add up to two secondary actions with `secondaryButtons`, which replaces the single secondary button text option. Each entry needs display text; set `kind` and `disabled` per button when actions should differ in weight or availability.
 
 <FileSource src="/framed/Modal/3ButtonModal" />
 
