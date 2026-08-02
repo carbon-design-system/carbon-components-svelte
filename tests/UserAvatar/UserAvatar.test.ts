@@ -240,6 +240,31 @@ describe("UserAvatar", () => {
     expect(avatar).not.toHaveAttribute("type");
   });
 
+  it("renders a status badge for each presence status", () => {
+    render(UserAvatar);
+
+    for (const status of ["online", "away", "busy", "offline"] as const) {
+      const avatar = screen.getByTestId(`status-${status}`);
+      const badge = avatar.parentElement?.querySelector(
+        ".bx--user-avatar__badge",
+      );
+      assert(badge);
+      expect(
+        badge.querySelector(`.bx--user-avatar__status--${status}`),
+      ).toBeInTheDocument();
+    }
+  });
+
+  it("lets a custom badge slot override the status indicator", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("badge-slot");
+    const wrapper = avatar.parentElement;
+    assert(wrapper);
+    expect(wrapper.querySelector(".bx--user-avatar__status")).toBeNull();
+    expect(screen.getByTestId("custom-badge")).toHaveTextContent("99");
+  });
+
   describe("Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;
