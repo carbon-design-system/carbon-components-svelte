@@ -31,8 +31,10 @@
 
   /**
    * Specify the direction of the menu.
+   * `"auto"` prefers bottom and flips when the menu would clip the viewport
+   * (via FloatingPortal when `portal` is `true`).
    * Only used when `portal` is `true`.
-   * @type {"bottom" | "top"}
+   * @type {"bottom" | "top" | "auto"}
    */
   export let direction = "bottom";
 
@@ -44,10 +46,18 @@
   export let portalHostClass = undefined;
 
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+
+  $: preferredDirection = direction === "auto" ? "bottom" : direction;
+  $: lockDirection = direction === "auto" ? "always" : "none";
 </script>
 
 {#if portal}
-  <FloatingPortal {anchor} {direction} {open}>
+  <FloatingPortal
+    {anchor}
+    direction={preferredDirection}
+    {lockDirection}
+    {open}
+  >
     <div class={portalHostClass}>
       <div
         bind:this={ref}
