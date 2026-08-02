@@ -18,6 +18,7 @@
    * @event {null} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
    * @event {{ trigger: "escape-key" | "outside-click" }} close
+   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    */
 
@@ -286,6 +287,7 @@
   } from "../ListBox/list-box-utils.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
@@ -295,6 +297,7 @@
   } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+  const scrollEndTracker = createScrollEndTracker();
   const formContext = getContext("carbon:Form");
   const insideModal = getContext("carbon:Modal");
 
@@ -493,7 +496,27 @@
         listRef.scrollTop = listScrollTop;
       }
     }
+    if (!open) {
+      scrollEndTracker.reset();
+    }
   });
+
+  /**
+   * @param {Event} event
+   */
+  function handleMenuScroll(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    listScrollTop = target.scrollTop;
+    const detail = scrollEndTracker.observe({
+      scrollTop: target.scrollTop,
+      scrollHeight: target.scrollHeight,
+      clientHeight: target.clientHeight,
+      itemCount: itemsToUse.length,
+    });
+    if (detail) {
+      dispatch("scrollend", detail);
+    }
+  }
 
   function sort() {
     const selectedIdsSet = new Set(selectedIds);
@@ -634,6 +657,7 @@
       : virtualize !== undefined || items.length > 100;
 
   $: itemsToUse = filterable ? filteredItems : sortedItems;
+  $: scrollEndTracker.noteItemCount(itemsToUse.length);
 
   $: menuMaxHeight = getMenuMaxHeight(size);
 
@@ -997,9 +1021,7 @@
         aria-multiselectable="true"
         aria-readonly={readonly || undefined}
         on:scroll
-        on:scroll={(event) => {
-          listScrollTop = event.target.scrollTop;
-        }}
+        on:scroll={handleMenuScroll}
         on:mouseleave={() => {
           // Clear the hover highlight when the cursor leaves the menu so the
           // highlighted state does not linger on the last hovered item.
