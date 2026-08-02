@@ -103,6 +103,12 @@ This example also overrides `itemRangeText` and `pageRangeText` to format the it
 
 <FileSource src="/framed/Pagination/PageWindow" />
 
+## Page number input
+
+Set `pageInputType` to `"input"` to replace the page select with a number input. Use this for large page counts so users can jump to any page, including ones outside the windowed select options. It has no effect with `pagesUnknown`, which shows no page control.
+
+<FileSource src="/framed/Pagination/PageInput" />
+
 ## Custom page select
 
 Use the `pageSelect` slot to replace the default page-number `Select` with your own control. The slot exposes `currentPage`, `totalPages`, `currentPageSize`, and `selectLabelText` for display; bind `page` on `Pagination` itself and set it from within the slot to navigate.
