@@ -94,6 +94,60 @@ describe("TagSet", () => {
     ).toHaveLength(0);
   });
 
+  it("opens a disclosure popover listing overflow tags when +N is clicked", async () => {
+    const { container } = render(TagSetFixture);
+
+    stubMeasurements(container, 110, 50);
+    const trigger = await screen.findByText("+3");
+    await user.click(trigger);
+
+    await waitFor(() => {
+      expect(
+        document.querySelector(".bx--tag-set-overflow__tag-list"),
+      ).not.toBeNull();
+    });
+
+    const list = document.querySelector(".bx--tag-set-overflow__tag-list");
+    expect.assert(list instanceof HTMLElement);
+    expect(
+      within(list)
+        .getAllByText(/^Tag \d$/)
+        .map((el) => el.textContent?.trim()),
+    ).toEqual(["Tag 2", "Tag 3", "Tag 4"]);
+    // Hover tooltip preview is separate from the disclosure list.
+    expect(
+      container.querySelectorAll('[role="tooltip"] .bx--tag'),
+    ).toHaveLength(0);
+  });
+
+  it("dispatches close:tag from a dismissible tag inside the overflow popover", async () => {
+    const onTagClose = vi.fn();
+    const { container } = render(TagSetFixture, {
+      dismissible: true,
+      onTagClose,
+    });
+
+    stubMeasurements(container, 110, 50);
+    const trigger = await screen.findByText("+3");
+    await user.click(trigger);
+
+    const list = await waitFor(() => {
+      const node = document.querySelector(".bx--tag-set-overflow__tag-list");
+      expect.assert(node instanceof HTMLElement);
+      return node;
+    });
+
+    const closeButtons = within(list).getAllByTitle("Clear filter");
+    await user.click(closeButtons[0]);
+
+    expect(onTagClose).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({
+        tag: expect.objectContaining({ label: "Tag 2" }),
+        index: 1,
+      }),
+    );
+  });
+
   it("dispatches close:tag with the tag and its index", async () => {
     const onTagClose = vi.fn();
     const { container } = render(TagSetFixture, {
