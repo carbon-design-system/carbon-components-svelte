@@ -83,4 +83,27 @@ test.describe("TooltipDefinition portaled inside Modal", () => {
       ),
     ).toBeVisible();
   });
+
+  // Regression test: the portal used to be `pointer-events: none`, so moving
+  // the pointer from the trigger onto the portalled tooltip fell through to
+  // whatever was underneath. That left the trigger's hover state stuck
+  // "left" with no counterpart on the portal to cancel the pending close,
+  // so the tooltip closed after leaveDelayMs, the trigger reappeared under
+  // the pointer, and the tooltip reopened — flickering open/closed.
+  test("stays open when the pointer moves from the trigger onto the portalled tooltip", async ({
+    page,
+  }) => {
+    await page.getByTestId("open-modal").click();
+    await page.getByRole("button", { name: "Definition in modal" }).hover();
+
+    const tooltip = page.getByRole("tooltip");
+    await expect(tooltip).toBeVisible();
+
+    await tooltip.hover();
+    // Longer than the default 300ms leaveDelayMs, so a stale close timer
+    // would have fired and hidden the tooltip by now.
+    await page.waitForTimeout(500);
+
+    await expect(tooltip).toBeVisible();
+  });
 });

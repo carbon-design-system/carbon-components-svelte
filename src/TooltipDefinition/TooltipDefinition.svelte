@@ -175,10 +175,15 @@
     intrinsicWidth={true}
     let:direction={actualDirection}
   >
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class:bx--tooltip-portal={true}
       data-direction={actualDirection ?? direction}
       data-tooltip-type="definition"
+      on:mouseenter={clickToOpen ? undefined : () => setOpenDelayed(true, 0)}
+      on:mouseleave={clickToOpen
+        ? undefined
+        : () => setOpenDelayed(false, leaveDelayMs)}
     >
       <span class:bx--tooltip-portal__caret={true}></span>
       <span

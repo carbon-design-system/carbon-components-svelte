@@ -43,6 +43,13 @@
   export let title = "Clear filter";
 
   /**
+   * Cap the tag width. When the label overflows, a tooltip shows the full text.
+   * Accepts any CSS length (for example `"8rem"`, `"120px"`).
+   * @type {string | undefined}
+   */
+  export let maxWidth = undefined;
+
+  /**
    * Specify the icon to render.
    * @type {Icon}
    */
@@ -58,9 +65,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import { readable } from "svelte/store";
   import Close from "../icons/Close.svelte";
+  import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import TagSkeleton from "./TagSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -77,9 +85,47 @@
   const groupSize = tagSet?.size ?? readable(undefined);
 
   let labelRef = null;
+  let isTruncated = false;
+  let truncationLabel = "";
+  let measureToken = 0;
 
   // Fall back to the group's size, then to "default".
   $: resolvedSize = size ?? $groupSize ?? "default";
+
+  // Interactive tags are already buttons — wrapping the label in
+  // `TooltipDefinition` would nest buttons. Use the native `title` instead.
+  $: showTruncationTooltip = isTruncated && !interactive;
+  $: interactiveTitle =
+    isTruncated && interactive ? truncationLabel : undefined;
+
+  async function measureTruncation() {
+    const token = ++measureToken;
+    await tick();
+    if (token !== measureToken) return;
+
+    if (!maxWidth || !labelRef) {
+      isTruncated = false;
+      truncationLabel = "";
+      return;
+    }
+
+    const text = labelRef.textContent?.trim() ?? "";
+    const truncated = labelRef.scrollWidth > labelRef.clientWidth;
+    isTruncated = truncated;
+    truncationLabel = truncated ? text : "";
+  }
+
+  $: if (maxWidth != null && !skeleton) {
+    void maxWidth;
+    void filter;
+    void interactive;
+    void type;
+    void resolvedSize;
+    measureTruncation();
+  } else if (maxWidth == null) {
+    isTruncated = false;
+    truncationLabel = "";
+  }
 
   if (tagSet) {
     onMount(() => {
@@ -133,6 +179,7 @@
     class:bx--tag--inline={inline}
     class:bx--tag--disabled={disabled}
     class:bx--tag--filter={filter}
+    class:bx--tag--truncate={maxWidth != null}
     class:bx--tag--sm={resolvedSize === "sm"}
     class:bx--tag--lg={resolvedSize === "lg"}
     class:bx--tag--red={type === "red"}
@@ -148,16 +195,31 @@
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
     {...$$restProps}
+    style:max-width={maxWidth}
     on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
   >
-    <span bind:this={labelRef} class:bx--tag__label={true}>
-      <slot props={{ class: "bx--tag__label" }}>
-        {type}
-      </slot>
-    </span>
+    {#if showTruncationTooltip}
+      <TooltipDefinition
+        class="bx--tag__label-tooltip"
+        tooltipText={truncationLabel}
+        portalTooltip
+      >
+        <span bind:this={labelRef} class:bx--tag__label={true}>
+          <slot props={{ class: "bx--tag__label" }}>
+            {type}
+          </slot>
+        </span>
+      </TooltipDefinition>
+    {:else}
+      <span bind:this={labelRef} class:bx--tag__label={true}>
+        <slot props={{ class: "bx--tag__label" }}>
+          {type}
+        </slot>
+      </span>
+    {/if}
     <button
       type="button"
       aria-labelledby={id}
@@ -219,11 +281,13 @@
     {disabled}
     aria-disabled={disabled}
     tabindex={disabled ? "-1" : undefined}
+    title={interactiveTitle}
     data-overflow={groupOverflow ? "true" : undefined}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
     class:bx--tag--interactive={true}
     class:bx--tag--disabled={disabled}
+    class:bx--tag--truncate={maxWidth != null}
     class:bx--tag--sm={resolvedSize === "sm"}
     class:bx--tag--lg={resolvedSize === "lg"}
     class:bx--tag--red={type === "red"}
@@ -239,6 +303,7 @@
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
     {...$$restProps}
+    style:max-width={maxWidth}
     on:click
     on:mouseover
     on:mouseenter
@@ -260,6 +325,7 @@
     class:bx--tag={true}
     class:bx--tag--inline={inline}
     class:bx--tag--disabled={disabled}
+    class:bx--tag--truncate={maxWidth != null}
     class:bx--tag--sm={resolvedSize === "sm"}
     class:bx--tag--lg={resolvedSize === "lg"}
     class:bx--tag--red={type === "red"}
@@ -275,6 +341,7 @@
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
     {...$$restProps}
+    style:max-width={maxWidth}
     on:click
     on:mouseover
     on:mouseenter
@@ -285,6 +352,16 @@
         <slot name="icon"> <svelte:component this={icon} /> </slot>
       </div>
     {/if}
-    <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
+    {#if showTruncationTooltip}
+      <TooltipDefinition
+        class="bx--tag__label-tooltip"
+        tooltipText={truncationLabel}
+        portalTooltip
+      >
+        <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
+      </TooltipDefinition>
+    {:else}
+      <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
+    {/if}
   </div>
 {/if}
