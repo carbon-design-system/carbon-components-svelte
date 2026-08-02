@@ -293,4 +293,39 @@ describe("UserAvatarGroup", () => {
       "-1rem",
     );
   });
+
+  it("dispatches click:overflow with the hidden avatars when the chip is clicked", async () => {
+    const onOverflowClick = vi.fn();
+    render(UserAvatarGroup, { onOverflowClick });
+    await tick();
+
+    const root = groupRoot("overflow-click");
+    const chip = root.querySelector(".bx--user-avatar-group__overflow");
+    assert(chip);
+    expect(chip.tagName).toBe("BUTTON");
+
+    await user.click(chip);
+
+    expect(onOverflowClick).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({
+        detail: {
+          hidden: [
+            expect.objectContaining({ name: "Dinesh Chugtai" }),
+            expect.objectContaining({ name: "Bertram Gilfoyle" }),
+          ],
+        },
+      }),
+    );
+  });
+
+  it("renders the overflow chip as a button when the overflow slot is present", async () => {
+    render(UserAvatarGroup, { showOverflowSlot: true });
+    await tick();
+
+    const root = groupRoot("overflow-slot");
+    const chip = root.querySelector(".bx--user-avatar-group__overflow");
+    assert(chip);
+    expect(chip.tagName).toBe("BUTTON");
+    expect(chip).toHaveClass("bx--user-avatar--interactive");
+  });
 });
