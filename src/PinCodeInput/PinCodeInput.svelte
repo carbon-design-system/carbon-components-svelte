@@ -123,6 +123,16 @@
   /** Set to `true` to mark the field as required */
   export let required = false;
 
+  /**
+   * Specify a name attribute for native form participation.
+   *
+   * When set, a hidden input mirrors the assembled `value` so the code is
+   * included in FormData / form submissions. `required` is applied to the
+   * hidden input instead of each segment.
+   * @type {string | undefined}
+   */
+  export let name = undefined;
+
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
@@ -466,6 +476,9 @@
         <slot name="labelChildren">{labelText}</slot>
       </legend>
     {/if}
+    {#if name}
+      <input type="hidden" {name} {value} {required}>
+    {/if}
     <div
       data-invalid={hasError || undefined}
       data-warn={hasWarn || undefined}
@@ -489,7 +502,7 @@
             id={index === 0 ? id : `${id}-${index}`}
             {disabled}
             {readonly}
-            {required}
+            required={name ? undefined : required}
             aria-readonly={readonly || undefined}
             aria-label={`${labelText || "Pin code"} digit ${index + 1} of ${count}`}
             aria-invalid={hasError || undefined}

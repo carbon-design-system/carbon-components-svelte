@@ -156,6 +156,48 @@ describe("PinCodeInput", () => {
     expect(component.code).toEqual(["1", "2", "3", ""]);
   });
 
+  it("renders a hidden input for native form participation when name is set", async () => {
+    const { container } = render(PinCodeInput, {
+      props: { name: "otp", value: "12" },
+    });
+    const fieldset = getFieldset(container);
+    const hidden = fieldset?.querySelector(
+      'input[type="hidden"]',
+    ) as HTMLInputElement | null;
+
+    expect(hidden).not.toBeNull();
+    expect(hidden).toHaveAttribute("name", "otp");
+    expect(hidden?.value).toBe("12");
+
+    const inputs = getInputs();
+    inputs[2].focus();
+    await user.keyboard("34");
+    await tick();
+
+    expect(hidden?.value).toBe("1234");
+  });
+
+  it("does not render a hidden input when name is omitted", () => {
+    const { container } = render(PinCodeInput);
+    const fieldset = getFieldset(container);
+
+    expect(fieldset?.querySelector('input[type="hidden"]')).toBeNull();
+  });
+
+  it("applies required to the hidden input instead of segments when name is set", () => {
+    const { container } = render(PinCodeInput, {
+      props: { name: "otp", required: true },
+    });
+    const hidden = getFieldset(container)?.querySelector(
+      'input[type="hidden"]',
+    );
+
+    expect(hidden).toHaveAttribute("required");
+    for (const input of getInputs()) {
+      expect(input).not.toBeRequired();
+    }
+  });
+
   it("dispatches complete and change events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(PinCodeInput);
