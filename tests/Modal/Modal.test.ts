@@ -568,6 +568,53 @@ describe("Modal", () => {
     });
   });
 
+  it("hides the close button when hideCloseButton is true", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Forced choice",
+        primaryButtonText: "Accept",
+        secondaryButtonText: "Decline",
+        hideCloseButton: true,
+      },
+    });
+
+    expect(screen.queryByLabelText("Close the modal")).not.toBeInTheDocument();
+    expect(screen.getByText("Accept")).toBeInTheDocument();
+    expect(screen.getByText("Decline")).toBeInTheDocument();
+  });
+
+  it("still closes via footer secondary button when hideCloseButton is true", async () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Forced choice",
+        primaryButtonText: "Accept",
+        secondaryButtonText: "Decline",
+        hideCloseButton: true,
+        closeOnSecondary: true,
+      },
+    });
+
+    expect(screen.queryByLabelText("Close the modal")).not.toBeInTheDocument();
+
+    await user.click(screen.getByText("Decline"));
+    await tick();
+
+    expect(document.querySelector(".bx--modal")).not.toHaveClass("is-visible");
+  });
+
+  it("renders the close button by default", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Default close",
+      },
+    });
+
+    expect(screen.getByLabelText("Close the modal")).toBeInTheDocument();
+  });
+
   it("does not leave the modal open when a programmatic on:close handler throws", async () => {
     const error = new Error("consumer error");
     const trap = absorbUnhandledRejection((reason) => reason === error);

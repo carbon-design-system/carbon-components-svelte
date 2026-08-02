@@ -118,6 +118,12 @@
   /** Set to `true` to prevent the modal from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
+  /**
+   * Set to `true` to hide the header close button.
+   * Provide an alternative dismiss path (footer actions or Escape).
+   */
+  export let hideCloseButton = false;
+
   /** Set an id for the top-level element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -276,7 +282,7 @@
     on:mousedown={outsideDismiss.pressInside}
   >
     <div class:bx--modal-header={true}>
-      {#if passiveModal}
+      {#if passiveModal && !hideCloseButton}
         <button
           bind:this={buttonRef}
           type="button"
@@ -297,7 +303,7 @@
       <h3 id={modalHeadingId} class:bx--modal-header__heading={true}>
         <slot name="heading">{modalHeading}</slot>
       </h3>
-      {#if !passiveModal}
+      {#if !passiveModal && !hideCloseButton}
         <button
           bind:this={buttonRef}
           type="button"

@@ -21,6 +21,7 @@
     undefined;
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
   export let preventCloseOnClickOutside = false;
+  export let hideCloseButton = false;
   export let size: ComponentProps<Modal>["size"] = undefined;
   export let danger = false;
   export let alert = false;
@@ -30,6 +31,10 @@
   export let onsubmit: ((event: CustomEvent) => void) | undefined = undefined;
   export let onclickbuttonprimary: ((event: CustomEvent) => void) | undefined =
     undefined;
+  export let onclickbuttonsecondary:
+    | ((event: CustomEvent) => void)
+    | undefined = undefined;
+  export let closeOnSecondary = false;
   export let includeInput = true;
 </script>
 
@@ -51,6 +56,7 @@
   {secondaryButtons}
   {selectorPrimaryFocus}
   {preventCloseOnClickOutside}
+  {hideCloseButton}
   {size}
   {danger}
   {alert}
@@ -59,8 +65,14 @@
   on:close={(e) => onclose?.(e)}
   on:submit={onsubmit || (() => console.log("submit"))}
   on:click:button--primary={onclickbuttonprimary || (() => console.log("click:button--primary"))}
-  on:click:button--secondary={(e) =>
-    console.log("click:button--secondary", e.detail)}
+  on:click:button--secondary={(e) => {
+    if (closeOnSecondary) open = false;
+    if (onclickbuttonsecondary) {
+      onclickbuttonsecondary(e);
+    } else {
+      console.log("click:button--secondary", e.detail);
+    }
+  }}
   on:transitionend={(e) => console.log("transitionend", e.detail)}
 >
   <slot />
