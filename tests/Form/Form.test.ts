@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import FormActionsTest from "./Form.actions.test.svelte";
 import FormTest from "./Form.test.svelte";
 
 describe("Form", () => {
@@ -8,6 +9,46 @@ describe("Form", () => {
     const form = screen.getByTestId("form");
     expect(form).toBeInTheDocument();
     expect(form).toHaveClass("bx--form");
+  });
+
+  describe("actions", () => {
+    it("calls each action with the form element", () => {
+      const action = vi.fn(() => ({ destroy: vi.fn() }));
+      render(FormActionsTest, { props: { actions: [action] } });
+      const form = screen.getByTestId("form");
+      expect(action).toHaveBeenCalledTimes(1);
+      expect(action).toHaveBeenCalledWith(form);
+    });
+
+    it("invokes destroy on unmount", () => {
+      const destroy = vi.fn();
+      const action = vi.fn(() => ({ destroy }));
+      const { unmount } = render(FormActionsTest, {
+        props: { actions: [action] },
+      });
+      expect(destroy).not.toHaveBeenCalled();
+      unmount();
+      expect(destroy).toHaveBeenCalledTimes(1);
+    });
+
+    it("passes tuple parameters to actions", () => {
+      const action = vi.fn(() => ({ destroy: vi.fn() }));
+      const parameter = { submit: vi.fn() };
+      render(FormActionsTest, {
+        props: { actions: [[action, parameter]] },
+      });
+      const form = screen.getByTestId("form");
+      expect(action).toHaveBeenCalledWith(form, parameter);
+    });
+
+    it("preserves bind:ref alongside actions", () => {
+      const action = vi.fn(() => ({ destroy: vi.fn() }));
+      const { component } = render(FormActionsTest, {
+        props: { actions: [action] },
+      });
+      const form = screen.getByTestId("form");
+      expect(component.ref).toBe(form);
+    });
   });
 
   it("renders form elements correctly", () => {
