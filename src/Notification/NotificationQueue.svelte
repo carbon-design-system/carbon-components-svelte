@@ -118,6 +118,63 @@
   export function clear() {
     notifications = [];
   }
+
+  const DEFAULT_SETTLE_TIMEOUT = 3000;
+
+  /**
+   * @param {string | NotificationData} msg
+   * @param {NotificationData["kind"]} kind
+   * @param {Partial<NotificationData>} [defaults]
+   * @returns {NotificationData}
+   */
+  function toNotificationData(msg, kind, defaults = {}) {
+    if (typeof msg === "string") {
+      return { ...defaults, kind, title: msg, subtitle: "", caption: "" };
+    }
+    return { ...defaults, kind, ...msg };
+  }
+
+  /**
+   * Show a loading notification for a promise, then update it to success or
+   * error when the promise settles. Returns the original promise result.
+   * String messages become the notification title. Success and error toasts
+   * default to a 3000ms timeout unless overridden in a `NotificationData` object.
+   * @type {<T>(p: Promise<T>, msgs: { loading: string | NotificationData; success: string | ((value: T) => string | NotificationData); error: string | ((err: unknown) => string | NotificationData) }) => Promise<T>}
+   */
+  export function promise(p, msgs) {
+    const id = add(
+      toNotificationData(msgs.loading, "info", { hideCloseButton: true }),
+    );
+
+    return p.then(
+      (value) => {
+        const successMsg =
+          typeof msgs.success === "function"
+            ? msgs.success(value)
+            : msgs.success;
+        update(
+          id,
+          toNotificationData(successMsg, "success", {
+            hideCloseButton: false,
+            timeout: DEFAULT_SETTLE_TIMEOUT,
+          }),
+        );
+        return value;
+      },
+      (err) => {
+        const errorMsg =
+          typeof msgs.error === "function" ? msgs.error(err) : msgs.error;
+        update(
+          id,
+          toNotificationData(errorMsg, "error", {
+            hideCloseButton: false,
+            timeout: DEFAULT_SETTLE_TIMEOUT,
+          }),
+        );
+        throw err;
+      },
+    );
+  }
 </script>
 
 {#if notifications.length > 0}

@@ -270,6 +270,73 @@ describe("NotificationQueue", () => {
     expect(updated).toBe(false);
   });
 
+  it("should update to success when promise resolves", async () => {
+    const { component } = render(NotificationQueueTest);
+    let resolvePromise!: (value: string) => void;
+    const p = new Promise<string>((resolve) => {
+      resolvePromise = resolve;
+    });
+
+    const resultPromise = getQueue(component).promise(p, {
+      loading: "Saving...",
+      success: "Saved",
+      error: "Failed",
+    });
+    await tick();
+
+    expect(screen.getByText("Saving...")).toBeInTheDocument();
+
+    resolvePromise("ok");
+    await expect(resultPromise).resolves.toBe("ok");
+    await tick();
+
+    expect(screen.queryByText("Saving...")).not.toBeInTheDocument();
+    expect(screen.getByText("Saved")).toBeInTheDocument();
+    expect(screen.getAllByRole("alert")).toHaveLength(1);
+  });
+
+  it("should update to error when promise rejects", async () => {
+    const { component } = render(NotificationQueueTest);
+    let rejectPromise!: (reason?: unknown) => void;
+    const p = new Promise<string>((_, reject) => {
+      rejectPromise = reject;
+    });
+
+    const resultPromise = getQueue(component).promise(p, {
+      loading: "Saving...",
+      success: "Saved",
+      error: (err: unknown) => (err instanceof Error ? err.message : "Failed"),
+    });
+    await tick();
+
+    expect(screen.getByText("Saving...")).toBeInTheDocument();
+
+    rejectPromise(new Error("Network error"));
+    await expect(resultPromise).rejects.toThrow("Network error");
+    await tick();
+
+    expect(screen.queryByText("Saving...")).not.toBeInTheDocument();
+    expect(screen.getByText("Network error")).toBeInTheDocument();
+    expect(screen.getAllByRole("alert")).toHaveLength(1);
+  });
+
+  it("should return the original promise result from promise()", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    const value = await getQueue(component).promise(
+      Promise.resolve({ id: 42 }),
+      {
+        loading: "Loading...",
+        success: (data: { id: number }) => `Loaded ${data.id}`,
+        error: "Failed",
+      },
+    );
+    await tick();
+
+    expect(value).toEqual({ id: 42 });
+    expect(screen.getByText("Loaded 42")).toBeInTheDocument();
+  });
+
   it("should clear all notifications", async () => {
     const { component } = render(NotificationQueueTest);
 
