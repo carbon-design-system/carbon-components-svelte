@@ -863,6 +863,156 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("year mode", () => {
+    it("renders year mode", async () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "year",
+        dateFormat: "Y",
+      });
+
+      const input = screen.getByLabelText("Date");
+
+      const wrapper = container.querySelector(".bx--date-picker");
+      // Year mode reuses the single-mode input width styling.
+      expect(wrapper).toHaveClass("bx--date-picker--single");
+
+      expect(
+        screen.queryByLabelText("calendar-container"),
+      ).not.toBeInTheDocument();
+      await user.click(input);
+      expect(
+        await screen.findByLabelText("calendar-container"),
+      ).toBeInTheDocument();
+    });
+
+    it("renders a year grid instead of days", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(
+        calendar.querySelectorAll(".flatpickr-yearSelect-year"),
+      ).toHaveLength(12);
+      expect(calendar.querySelectorAll(".flatpickr-day")).toHaveLength(0);
+    });
+
+    it("labels the range to match the first and last rendered year", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      const years = calendar.querySelectorAll(".flatpickr-yearSelect-year");
+      const firstYear = years[0].textContent;
+      const lastYear = years[years.length - 1].textContent;
+
+      expect(
+        calendar.querySelector(".flatpickr-yearSelect-range"),
+      ).toHaveTextContent(`${firstYear} - ${lastYear}`);
+    });
+
+    it("removes the leftover year-input wrapper so the range label is the only child", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      const currentMonth = calendar.querySelector(".flatpickr-current-month");
+      expect(currentMonth?.querySelector(".numInputWrapper")).toBeNull();
+      expect(currentMonth?.children).toHaveLength(1);
+    });
+
+    it("rebuilds the grid and range label when changeYear is called programmatically", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "year",
+          dateFormat: "Y",
+          oncalendar: (cal: Instance | null | undefined) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      instance.open();
+      await tick();
+      const calendar = await screen.findByLabelText("calendar-container");
+      const yearsBefore = Array.from(
+        calendar.querySelectorAll(".flatpickr-yearSelect-year"),
+      ).map((el) => el.textContent);
+
+      instance.changeYear(instance.currentYear + 10);
+      await tick();
+
+      const yearsAfter = Array.from(
+        calendar.querySelectorAll(".flatpickr-yearSelect-year"),
+      ).map((el) => el.textContent);
+      expect(yearsAfter).not.toEqual(yearsBefore);
+      expect(
+        calendar.querySelector(".flatpickr-yearSelect-range"),
+      ).toHaveTextContent(
+        `${yearsAfter[0]} - ${yearsAfter[yearsAfter.length - 1]}`,
+      );
+    });
+
+    it("marks the calendar container for year-specific height styling", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(calendar).toHaveClass("bx--date-picker__calendar--year");
+    });
+
+    it("selects a year and dispatches change with the formatted date", async () => {
+      const changeHandler = vi.fn();
+      const currentDecadeStart =
+        new Date().getFullYear() - (new Date().getFullYear() % 10);
+      // Pick a year that is always in the initial decade grid (decadeStart - 1
+      // through decadeStart + 10), avoiding the current year cell when possible.
+      const targetYear = String(currentDecadeStart + 3);
+
+      render(DatePicker, {
+        datePickerType: "year",
+        dateFormat: "Y",
+        onchange: changeHandler,
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      await user.click(within(calendar).getByText(targetYear));
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      expect(input.value).toBe(targetYear);
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        dateStr: targetYear,
+      });
+    });
+
+    it("closes the calendar after selecting a year", async () => {
+      const currentDecadeStart =
+        new Date().getFullYear() - (new Date().getFullYear() % 10);
+      const targetYear = String(currentDecadeStart + 4);
+
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).toHaveClass("open");
+
+      await user.click(within(calendar).getByText(targetYear));
+      expect(calendar).not.toHaveClass("open");
+    });
+  });
+
   describe("fluid variant", () => {
     it("does not render fluid classes by default", () => {
       const { container } = render(DatePicker);

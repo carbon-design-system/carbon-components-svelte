@@ -135,3 +135,76 @@
 @include exports('datepicker-month-select-height') {
   @include date-picker-month-select-height;
 }
+
+// Year picker (`datePickerType="year"`) uses a local yearSelect plugin with
+// the same 3-column grid layout as monthSelect. Style its cells to match.
+@mixin date-picker-year-select {
+  .flatpickr-yearSelect-range {
+    display: inline-block;
+    font-weight: 600;
+    color: $text-01;
+  }
+
+  .flatpickr-yearSelect-years {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0.625rem 0.0625rem 0.1875rem;
+  }
+
+  .flatpickr-yearSelect-year {
+    box-sizing: border-box;
+    display: flex;
+    padding: 0.625rem;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: $text-01;
+    cursor: pointer;
+    font-weight: 400;
+    text-align: center;
+
+    &:hover {
+      background: $hover-ui;
+    }
+
+    &:focus {
+      outline: 1px solid $focus;
+      outline-offset: -1px;
+    }
+
+    &.selected {
+      background-color: $interactive-01;
+      color: $text-04;
+    }
+
+    &.today:not(.selected) {
+      color: $interactive-01;
+      font-weight: 600;
+    }
+
+    &.disabled {
+      color: $disabled-02;
+      cursor: not-allowed;
+
+      &:hover {
+        background: none;
+      }
+    }
+  }
+}
+
+@include exports('datepicker-year-select') {
+  @include date-picker-year-select;
+}
+
+@mixin date-picker-year-select-height {
+  .flatpickr-calendar.open.#{$prefix}--date-picker__calendar--year {
+    height: 14rem;
+  }
+}
+
+@include exports('datepicker-year-select-height') {
+  @include date-picker-year-select-height;
+}
