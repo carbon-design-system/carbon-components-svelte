@@ -1,4 +1,6 @@
 <script>
+  import { copyText } from "../utils/copyText.js";
+
   /**
    * @template [Icon=any]
    * @event {null} copy
@@ -86,6 +88,9 @@
   /** Set the feedback text shown after clicking the copy button */
   export let feedback = "Copied!";
 
+  /** Set the feedback text shown when copying fails */
+  export let errorFeedback = "Failed to copy";
+
   /**
    * Specify an icon to render during the feedback window (for example, after copying).
    * When unset, the copy icon is always shown.
@@ -100,10 +105,12 @@
   export let iconDescription = "Copy to clipboard";
 
   /**
-   * Override the default copy behavior of using the navigator.clipboard.writeText API to copy text.
+   * Override the default copy behavior (`navigator.clipboard.writeText` with
+   * a `document.execCommand("copy")` fallback). Failures reject so the control
+   * can show `errorFeedback` and dispatch `copy:error`.
    * @type {(text: string) => void | Promise<void>}
    */
-  export let copy = undefined;
+  export let copy = copyText;
 
   /**
    * Set to `true` to render the feedback tooltip in a portal,
@@ -243,6 +250,7 @@
       <CopyButton
         text={value}
         {feedback}
+        {errorFeedback}
         {feedbackIcon}
         {feedbackTimeout}
         {iconDescription}
