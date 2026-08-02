@@ -153,6 +153,17 @@ each rejected file.
 
 <FileSource src="/framed/FileUploader/FileUploaderMaxFileSize" />
 
+## Maximum number of files
+
+Limit how many files can be attached with `maxFiles`. Excess files are rejected
+after size and duplicate checks, in selection order. A `rejected` event fires
+with `{ file, reason: "count" }` for each excess file. When the list is at
+capacity, further picks are disabled until a file is removed.
+
+This example accepts up to 3 documents.
+
+<FileSource src="/framed/FileUploader/FileUploaderMaxFiles" />
+
 ## File ordering
 
 Control the order of files in the list.
