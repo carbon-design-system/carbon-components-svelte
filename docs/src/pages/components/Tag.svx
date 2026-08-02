@@ -92,6 +92,39 @@ on:close={() => console.log("close")}
 carbon-components
 </Tag>
 
+### Max width
+
+Set `maxWidth` to a CSS length to ellipsis long labels. A tooltip with the full text appears only when the label is truncated. Accepts any valid CSS length, including `rem`, `px`, `ch`, and `%`.
+
+<Stack gap={5}>
+  <div>
+    <div>maxWidth="8rem"</div>
+    <Tag filter maxWidth="8rem" on:close>
+      status:active AND region:us-south AND service:cloud-object-storage
+    </Tag>
+  </div>
+  <div>
+    <div>maxWidth="140px"</div>
+    <Tag filter maxWidth="140px" on:close>
+      status:active AND region:us-south AND service:cloud-object-storage
+    </Tag>
+  </div>
+  <div>
+    <div>maxWidth="20ch"</div>
+    <Tag filter maxWidth="20ch" on:close>
+      status:active AND region:us-south AND service:cloud-object-storage
+    </Tag>
+  </div>
+  <div>
+    <div>maxWidth="60%" (relative to the containing block)</div>
+    <div style="width: 200px;">
+      <Tag filter maxWidth="60%" on:close>
+        status:active AND region:us-south AND service:cloud-object-storage
+      </Tag>
+    </div>
+  </div>
+</Stack>
+
 ## Custom icon
 
 Add a custom icon to the tag. Note: custom icons cannot be used with the filterable variant.
