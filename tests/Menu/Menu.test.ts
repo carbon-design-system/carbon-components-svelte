@@ -220,4 +220,36 @@ describe("Menu", () => {
       trigger: "outside-click",
     });
   });
+
+  describe("maxHeight", () => {
+    it("caps the menu height in pixels when given a number", async () => {
+      render(MenuFixture, { props: { maxHeight: 240 } });
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toHaveClass("bx--menu--scrollable");
+      expect(menu).toHaveStyle("max-height: 240px");
+    });
+
+    it("passes a string maxHeight through verbatim", async () => {
+      render(MenuFixture, { props: { maxHeight: "20rem" } });
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toHaveClass("bx--menu--scrollable");
+      expect(menu.style.maxHeight).toBe("20rem");
+    });
+
+    it("renders neither the class nor the style when maxHeight is unset", async () => {
+      render(MenuFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const menu = screen.getByRole("menu");
+      expect(menu).not.toHaveClass("bx--menu--scrollable");
+      expect(menu.style.maxHeight).toBe("");
+    });
+  });
 });

@@ -1,9 +1,8 @@
 import { scrollIntoViewWithinMenu } from "../../src/utils/scrollIntoViewWithinMenu.js";
 
 /**
- * Build a `role="listbox"` container with a single item, stubbing the layout
- * jsdom does not compute: the container's scrollability and both elements'
- * bounding rects.
+ * Build a container with a single item, stubbing the layout jsdom does not
+ * compute: the container's scrollability and both elements' bounding rects.
  */
 function buildMenu(options: {
   scrollable: boolean;
@@ -11,9 +10,10 @@ function buildMenu(options: {
   containerBottom: number;
   itemTop: number;
   itemBottom: number;
+  role?: string;
 }) {
   const container = document.createElement("div");
-  container.setAttribute("role", "listbox");
+  container.setAttribute("role", options.role ?? "listbox");
   Object.defineProperty(container, "clientHeight", { value: 100 });
   Object.defineProperty(container, "scrollHeight", {
     value: options.scrollable ? 300 : 100,
@@ -100,5 +100,66 @@ describe("scrollIntoViewWithinMenu", () => {
     scrollIntoViewWithinMenu(item);
 
     expect(container.scrollTop).toBe(50);
+  });
+
+  describe("container selector", () => {
+    test("resolves a listbox container by default", () => {
+      const { container, item } = buildMenu({
+        scrollable: true,
+        containerTop: 0,
+        containerBottom: 100,
+        itemTop: 110,
+        itemBottom: 130,
+      });
+
+      scrollIntoViewWithinMenu(item);
+
+      expect(container.scrollTop).toBe(80);
+    });
+
+    test("ignores a menu container under the default selector", () => {
+      const { container, item } = buildMenu({
+        scrollable: true,
+        containerTop: 0,
+        containerBottom: 100,
+        itemTop: 110,
+        itemBottom: 130,
+        role: "menu",
+      });
+
+      scrollIntoViewWithinMenu(item);
+
+      expect(container.scrollTop).toBe(50);
+    });
+
+    test("resolves a menu container when the selector is passed", () => {
+      const { container, item } = buildMenu({
+        scrollable: true,
+        containerTop: 0,
+        containerBottom: 100,
+        itemTop: 110,
+        itemBottom: 130,
+        role: "menu",
+      });
+
+      scrollIntoViewWithinMenu(item, '[role="menu"]');
+
+      expect(container.scrollTop).toBe(80);
+    });
+
+    test("does not scroll a non-scrollable menu container", () => {
+      const { container, item } = buildMenu({
+        scrollable: false,
+        containerTop: 0,
+        containerBottom: 100,
+        itemTop: 110,
+        itemBottom: 130,
+        role: "menu",
+      });
+
+      scrollIntoViewWithinMenu(item, '[role="menu"]');
+
+      expect(container.scrollTop).toBe(50);
+    });
   });
 });

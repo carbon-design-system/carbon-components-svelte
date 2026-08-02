@@ -83,6 +83,14 @@
   export let intrinsicAlign = "center";
 
   /**
+   * Specify the maximum height of the menu.
+   * A number is treated as pixels; a string is used as a CSS length.
+   * The menu scrolls once its items exceed the height.
+   * @type {number | string}
+   */
+  export let maxHeight = undefined;
+
+  /**
    * DOM node to mount the menu into.
    * When unset, uses the anchor's nearest `<dialog>` or `[popover]`, else `document.body`.
    * @type {HTMLElement | null}
@@ -94,6 +102,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
 
   const NON_DISABLED_MENUITEM_SELECTOR =
     "[role='menuitem']:not([aria-disabled='true'])";
@@ -123,7 +132,7 @@
         const firstItem = ref?.querySelector(NON_DISABLED_MENUITEM_SELECTOR);
         if (firstItem instanceof HTMLElement) {
           focusIndex = 0;
-          firstItem.focus({ preventScroll: true });
+          focusMenuItem(firstItem);
         } else {
           ref?.focus({ preventScroll: true });
         }
@@ -134,6 +143,18 @@
   }
 
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
+  $: maxHeightStyle =
+    typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
+
+  /**
+   * @param {HTMLElement} item
+   */
+  function focusMenuItem(item) {
+    // `preventScroll` keeps a portaled menu from scrolling the document;
+    // scroll the item into view within the menu's own scroll container.
+    item.focus({ preventScroll: true });
+    scrollIntoViewWithinMenu(item, '[role="menu"]');
+  }
 
   function handleOutsideClick(event) {
     if (!open) return;
@@ -173,10 +194,15 @@
       selector: NON_DISABLED_MENUITEM_SELECTOR,
       orientation: "vertical",
       wrap: false,
-      focusOnMove: true,
+      focusOnMove: false,
       getActiveIndex: () => focusIndex,
       onMove: (index) => {
         focusIndex = index;
+        const items = /** @type {HTMLElement[]} */ (
+          Array.from(ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [])
+        );
+        const item = items[index];
+        if (item) focusMenuItem(item);
       },
     }}
     use:dismiss={{
@@ -192,11 +218,13 @@
     style:position="relative"
     style:top="auto"
     style:left="auto"
+    style:max-height={maxHeightStyle}
     class:bx--menu={true}
     class:bx--menu--open={open}
     class:bx--menu--xs={size === "xs"}
     class:bx--menu--md={size === "md"}
     class:bx--menu--lg={size === "lg"}
+    class:bx--menu--scrollable={!!maxHeight}
     {...$$restProps}
     aria-label={menuAriaLabel}
     on:keydown
