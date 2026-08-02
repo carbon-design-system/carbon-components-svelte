@@ -13,6 +13,7 @@
   export let closeIconClass: ComponentProps<ModalHeader>["closeIconClass"] = "";
   export let iconDescription: ComponentProps<ModalHeader>["iconDescription"] =
     "Close";
+  export let hideCloseButton = false;
   export let slotContent = "";
 </script>
 
@@ -25,6 +26,7 @@
     {closeClass}
     {closeIconClass}
     {iconDescription}
+    {hideCloseButton}
     on:click={() => console.log("click")}
     {...$$restProps}
   >
