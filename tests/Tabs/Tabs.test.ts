@@ -156,6 +156,57 @@ describe("Tabs", () => {
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
+  describe('activation="manual"', () => {
+    it("ArrowRight moves focus without changing selection", async () => {
+      render(Tabs, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowRight}");
+      expect(tab3).toHaveFocus();
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+      expect(tab3).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(consoleLog).not.toHaveBeenCalledWith("change event", 2);
+    });
+
+    it("Enter selects the focused tab", async () => {
+      render(Tabs, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowRight}");
+      expect(tab3).toHaveFocus();
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+
+      await user.keyboard("{Enter}");
+      expect(tab3).toHaveAttribute("aria-selected", "true");
+      expect(tab1).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByText("Content 3")).toBeVisible();
+      expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    });
+
+    it("Space selects the focused tab", async () => {
+      render(Tabs, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowRight}");
+      expect(tab3).toHaveFocus();
+
+      await user.keyboard(" ");
+      expect(tab3).toHaveAttribute("aria-selected", "true");
+      expect(tab1).toHaveAttribute("aria-selected", "false");
+      expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    });
+  });
+
   it("uses an empty aria-label when passed an empty string", () => {
     render(Tabs, { props: { ariaLabel: "" } });
     const nav = screen.getByRole("navigation");

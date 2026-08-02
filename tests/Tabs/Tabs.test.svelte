@@ -5,6 +5,7 @@
   import type { ComponentProps } from "svelte";
 
   export let selected = 0;
+  export let activation: ComponentProps<Tabs>["activation"] = "automatic";
   export let type: ComponentProps<Tabs>["type"] = "default";
   export let autoWidth = false;
   export let fullWidth = false;
@@ -14,6 +15,7 @@
 
 <Tabs
   {selected}
+  {activation}
   {type}
   {autoWidth}
   {fullWidth}

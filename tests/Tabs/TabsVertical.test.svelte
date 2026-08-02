@@ -5,12 +5,15 @@
   import type { ComponentProps } from "svelte";
 
   export let selected = 0;
+  export let activation: ComponentProps<TabsVertical>["activation"] =
+    "automatic";
   export let icon: ComponentProps<Tab>["icon"] = undefined;
   export let size: ComponentProps<TabsVertical>["size"] = undefined;
 </script>
 
 <TabsVertical
   {selected}
+  {activation}
   {size}
   on:change={({ detail }) => {
     console.log("change event", detail);
