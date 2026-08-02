@@ -1,7 +1,8 @@
 <script>
   /**
    * @typedef {import("../utils/timeFormat.js").TimeFormat} TimeFormat
-   * @typedef {{ value: string; hours: number | null; minutes: number | null; seconds?: number | null; valid: boolean }} TimePickerChangeDetail
+   * @typedef {import("../utils/timeFormat.js").TimeConstraintReason} TimeConstraintReason
+   * @typedef {{ value: string; hours: number | null; minutes: number | null; seconds?: number | null; valid: boolean; reason?: TimeConstraintReason }} TimePickerChangeDetail
    * @event {TimePickerChangeDetail} change
    */
 
@@ -36,6 +37,22 @@
    * (for example `930` → `09:30`).
    */
   export let normalize = false;
+
+  /**
+   * Specify the earliest allowed time (same format as `value`, e.g. `"09:00"`).
+   * Out-of-range values participate in the invalid state and set
+   * `reason: "min"` on the `change` detail. Unset means no lower bound.
+   * @type {string}
+   */
+  export let min = undefined;
+
+  /**
+   * Specify the latest allowed time (same format as `value`, e.g. `"17:00"`).
+   * Out-of-range values participate in the invalid state and set
+   * `reason: "max"` on the `change` detail. Unset means no upper bound.
+   * @type {string}
+   */
+  export let max = undefined;
 
   /**
    * Specify the input placeholder text.
@@ -115,7 +132,11 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
-  import { getTimeInputPreset, parseTime } from "../utils/timeFormat.js";
+  import {
+    checkTimeConstraints,
+    getTimeInputPreset,
+    parseTime,
+  } from "../utils/timeFormat.js";
 
   const formContext = getContext("carbon:Form");
   const selectCount = writable(0);
@@ -146,6 +167,18 @@
     if (seconds) {
       detail.seconds = parsed.seconds;
     }
+    if (parsed.valid && parsed.hours !== null) {
+      const range = checkTimeConstraints(parsed, {
+        format,
+        seconds,
+        min,
+        max,
+      });
+      if (!range.valid && range.reason) {
+        detail.valid = false;
+        detail.reason = range.reason;
+      }
+    }
     return detail;
   }
 
@@ -175,8 +208,19 @@
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: rangeConstraint = checkTimeConstraints(value, {
+    format,
+    seconds,
+    min,
+    max,
+  });
+  $: autoInvalid =
+    ((min != null && min !== "") || (max != null && max !== "")) &&
+    value.trim() !== "" &&
+    (rangeConstraint.reason === "min" || rangeConstraint.reason === "max");
+  $: effectiveInvalid = invalid || autoInvalid;
+  $: showInvalid = effectiveInvalid && !disabled && !readonly;
+  $: showWarn = warn && !effectiveInvalid && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: timePickerContext.isFluid = isFluid;
   $: equalWidth = $selectCount !== 2;
@@ -283,8 +327,8 @@
     <div
       class:bx--time-picker={true}
       class:bx--time-picker--light={light}
-      class:bx--time-picker--invalid={invalid}
-      class:bx--time-picker--warn={warn}
+      class:bx--time-picker--invalid={effectiveInvalid}
+      class:bx--time-picker--warn={warn && !effectiveInvalid}
       class:bx--time-picker--readonly={readonly}
       class:bx--time-picker--sm={size === "sm"}
       class:bx--time-picker--xl={size === "xl"}
@@ -304,13 +348,14 @@
         {/if}
         <Stack orientation="horizontal" gap={0}>
           <div
-            data-invalid={invalid || undefined}
-            data-warn={!invalid && warn ? true : undefined}
+            data-invalid={effectiveInvalid || undefined}
+            data-warn={!effectiveInvalid && warn ? true : undefined}
             class:bx--text-input__field-wrapper={true}
-            class:bx--text-input__field-wrapper--warning={!invalid && warn}
+            class:bx--text-input__field-wrapper--warning={!effectiveInvalid &&
+              warn}
             style:width="auto"
           >
-            {#if invalid}
+            {#if effectiveInvalid}
               <WarningFilled class="bx--text-input__invalid-icon" />
             {:else if warn}
               <WarningAltFilled
@@ -321,9 +366,9 @@
               bind:this={ref}
               bind:value
               type="text"
-              data-invalid={invalid || undefined}
-              aria-invalid={invalid || undefined}
-              aria-describedby={invalid
+              data-invalid={effectiveInvalid || undefined}
+              aria-invalid={effectiveInvalid || undefined}
+              aria-describedby={effectiveInvalid
                 ? errorId
                 : warn
                   ? warnId
@@ -341,8 +386,8 @@
               class:bx--time-picker__input-field={true}
               class:bx--text-input={true}
               class:bx--text-input--light={light}
-              class:bx--text-input--invalid={invalid}
-              class:bx--text-input--warning={!invalid && warn}
+              class:bx--text-input--invalid={effectiveInvalid}
+              class:bx--text-input--warning={!effectiveInvalid && warn}
               on:change={handleChange}
               on:input
               on:keydown
@@ -357,7 +402,7 @@
         </Stack>
       </div>
     </div>
-    {#if invalid}
+    {#if effectiveInvalid}
       <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
     {:else if warn}
       <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>

@@ -1,8 +1,10 @@
 import {
+  checkTimeConstraints,
   formatTime,
   getTimeInputPreset,
   isValidTime,
   parseTime,
+  toMinutesSinceMidnight,
 } from "../../src/utils/timeFormat.js";
 
 describe("getTimeInputPreset", () => {
@@ -151,5 +153,101 @@ describe("isValidTime", () => {
     expect(isValidTime("14:30", { format: "24" })).toBe(true);
     expect(isValidTime("14:30", { format: "12" })).toBe(false);
     expect(isValidTime("")).toBe(true);
+  });
+});
+
+describe("toMinutesSinceMidnight", () => {
+  test("converts clock parts", () => {
+    expect(toMinutesSinceMidnight(9, 30)).toBe(570);
+    expect(toMinutesSinceMidnight(0, 0)).toBe(0);
+    expect(toMinutesSinceMidnight(14, 30, 30)).toBe(870.5);
+  });
+});
+
+describe("checkTimeConstraints", () => {
+  test("treats unset bounds as unlimited", () => {
+    expect(checkTimeConstraints("03:00", { format: "24" })).toEqual({
+      valid: true,
+    });
+    expect(
+      checkTimeConstraints("23:00", { format: "24", min: "", max: "" }),
+    ).toEqual({ valid: true });
+  });
+
+  test("rejects times below min", () => {
+    expect(
+      checkTimeConstraints("08:00", {
+        format: "24",
+        min: "09:00",
+        max: "17:00",
+      }),
+    ).toEqual({ valid: false, reason: "min" });
+  });
+
+  test("rejects times above max", () => {
+    expect(
+      checkTimeConstraints("18:00", {
+        format: "24",
+        min: "09:00",
+        max: "17:00",
+      }),
+    ).toEqual({ valid: false, reason: "max" });
+  });
+
+  test("accepts times in range inclusive of bounds", () => {
+    expect(
+      checkTimeConstraints("09:00", {
+        format: "24",
+        min: "09:00",
+        max: "17:00",
+      }),
+    ).toEqual({ valid: true });
+    expect(
+      checkTimeConstraints("17:00", {
+        format: "24",
+        min: "09:00",
+        max: "17:00",
+      }),
+    ).toEqual({ valid: true });
+    expect(
+      checkTimeConstraints("12:30", {
+        format: "24",
+        min: "09:00",
+        max: "17:00",
+      }),
+    ).toEqual({ valid: true });
+  });
+
+  test("treats empty input as valid", () => {
+    expect(
+      checkTimeConstraints("", { format: "24", min: "09:00", max: "17:00" }),
+    ).toEqual({ valid: true });
+  });
+
+  test("ignores unparsable bounds", () => {
+    expect(
+      checkTimeConstraints("10:00", {
+        format: "24",
+        min: "nope",
+        max: "also-bad",
+      }),
+    ).toEqual({ valid: true });
+  });
+
+  test("compares seconds when enabled", () => {
+    expect(
+      checkTimeConstraints("09:00:00", {
+        format: "24",
+        seconds: true,
+        min: "09:00:01",
+      }),
+    ).toEqual({ valid: false, reason: "min" });
+    expect(
+      checkTimeConstraints("09:00:01", {
+        format: "24",
+        seconds: true,
+        min: "09:00:01",
+      }),
+    ).toEqual({ valid: true });
   });
 });

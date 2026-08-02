@@ -9,6 +9,8 @@
   export let format: ComponentProps<TimePicker>["format"] = "12";
   export let seconds: ComponentProps<TimePicker>["seconds"] = false;
   export let normalize: ComponentProps<TimePicker>["normalize"] = false;
+  export let min: ComponentProps<TimePicker>["min"] = undefined;
+  export let max: ComponentProps<TimePicker>["max"] = undefined;
   export let placeholder: ComponentProps<TimePicker>["placeholder"] = undefined;
   export let pattern: ComponentProps<TimePicker>["pattern"] = undefined;
   export let maxlength: ComponentProps<TimePicker>["maxlength"] = undefined;
@@ -34,6 +36,8 @@
   {format}
   {seconds}
   {normalize}
+  {min}
+  {max}
   {placeholder}
   {pattern}
   {maxlength}

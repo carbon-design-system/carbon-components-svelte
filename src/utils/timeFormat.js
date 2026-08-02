@@ -294,3 +294,91 @@ export function formatTime(hours, minutes, options = {}) {
 export function isValidTime(raw, options = {}) {
   return parseTime(raw, options).valid;
 }
+
+/**
+ * Convert clock parts to minutes since midnight.
+ * Seconds contribute as a fraction of a minute.
+ *
+ * @param {number} hours
+ * @param {number} minutes
+ * @param {number} [seconds]
+ * @returns {number}
+ */
+export function toMinutesSinceMidnight(hours, minutes, seconds = 0) {
+  return hours * 60 + minutes + seconds / 60;
+}
+
+/**
+ * @typedef {"min" | "max"} TimeConstraintReason
+ */
+
+/**
+ * @typedef {object} TimeConstraintResult
+ * @property {boolean} valid
+ * @property {TimeConstraintReason} [reason]
+ */
+
+/**
+ * Check a parsed or raw time against optional `min` / `max` bounds.
+ *
+ * Bounds use the same format as `value`. Unset or unparsable bounds are
+ * ignored (unlimited on that side). Empty input is valid. Inclusive bounds.
+ *
+ * Compares minutes since midnight from the clock-face parts. With
+ * `format="12"`, hours are 1–12 and are not adjusted for AM/PM — period
+ * selects are independent of this check.
+ *
+ * @param {string | ParsedTime} rawOrParsed
+ * @param {{ format?: TimeFormat; seconds?: boolean; min?: string; max?: string }} [options]
+ * @returns {TimeConstraintResult}
+ */
+export function checkTimeConstraints(rawOrParsed, options = {}) {
+  const format = options.format ?? "12";
+  const includeSeconds = options.seconds === true;
+  const parsed =
+    typeof rawOrParsed === "string"
+      ? parseTime(rawOrParsed, { format, seconds: includeSeconds })
+      : rawOrParsed;
+
+  if (!parsed.valid || parsed.hours === null || parsed.minutes === null) {
+    return { valid: parsed.valid };
+  }
+
+  const valueMinutes = toMinutesSinceMidnight(
+    parsed.hours,
+    parsed.minutes,
+    parsed.seconds ?? 0,
+  );
+
+  const min = options.min;
+  if (min != null && min !== "") {
+    const bound = parseTime(min, { format, seconds: includeSeconds });
+    if (bound.valid && bound.hours !== null && bound.minutes !== null) {
+      const minMinutes = toMinutesSinceMidnight(
+        bound.hours,
+        bound.minutes,
+        bound.seconds ?? 0,
+      );
+      if (valueMinutes < minMinutes) {
+        return { valid: false, reason: "min" };
+      }
+    }
+  }
+
+  const max = options.max;
+  if (max != null && max !== "") {
+    const bound = parseTime(max, { format, seconds: includeSeconds });
+    if (bound.valid && bound.hours !== null && bound.minutes !== null) {
+      const maxMinutes = toMinutesSinceMidnight(
+        bound.hours,
+        bound.minutes,
+        bound.seconds ?? 0,
+      );
+      if (valueMinutes > maxMinutes) {
+        return { valid: false, reason: "max" };
+      }
+    }
+  }
+
+  return { valid: true };
+}
