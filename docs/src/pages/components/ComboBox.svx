@@ -339,6 +339,8 @@ Set `portalMenu` to `true` to render the dropdown menu in a floating portal. Thi
 
 When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
 
+Set `direction` to `"auto"` to prefer opening below the field and flip above when the menu would clip the viewport. With `"auto"`, `portalMenu` also defaults to `true` so placement uses FloatingPortal measurement. Explicit `"top"` and `"bottom"` keep a fixed preferred side.
+
 <FileSource src="/framed/ComboBox/ComboBoxPortalMenu" />
 
 ## Light
