@@ -19,7 +19,11 @@
 </script>
 
 <ContainedList kind="disclosed" labelText="List title">
-  <Search placeholder="Filterable search" bind:value={searchTerm} />
+  <Search
+    slot="search"
+    placeholder="Filterable search"
+    bind:value={searchTerm}
+  />
   {#each filteredResults as item}
     <ContainedListItem>{item}</ContainedListItem>
   {/each}
