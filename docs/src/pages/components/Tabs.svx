@@ -67,6 +67,24 @@ Below the medium breakpoint, vertical tabs collapse into the same horizontal, sc
 
 <FileSource src="/framed/Tabs/TabsVerticalOverflow" />
 
+## Manual activation
+
+By default, tabs use automatic activation: arrow keys move focus and select the
+tab. Set `activation` to `"manual"` so arrow keys only move focus; press
+<DocKbd label="Enter" /> or <DocKbd label="Space" /> to select. Use manual
+activation when switching panels is expensive.
+
+<Tabs activation="manual">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ## Disabled tabs
 
 Set `disabled` on a tab to prevent interaction. Keyboard navigation skips disabled
@@ -452,6 +470,7 @@ Show a loading state for the container tab variant.
 Use TabsVertical for a tab list beside the panel. Compose it with the same Tab and
 TabContent components. From the medium breakpoint up, tabs stack in a vertical column.
 On narrower screens, the list becomes a horizontal row with overflow scrolling.
+`activation` works the same as on Tabs (see [Manual activation](#manual-activation)).
 
 <TabsVertical>
   <Tab label="Dashboard" />
