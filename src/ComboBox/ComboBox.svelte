@@ -26,6 +26,12 @@
    */
 
   /**
+   * Dispatched when the menu is scrolled near the bottom (load-more signal).
+   * Not the browser's native `scrollend` (scroll stopped).
+   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
+   */
+
+  /**
    * Set the combobox items.
    * @type {ReadonlyArray<Item>}
    */
@@ -243,6 +249,7 @@
   } from "../ListBox/list-box-utils.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
@@ -252,6 +259,7 @@
   } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+  const scrollEndTracker = createScrollEndTracker();
   const insideModal = getContext("carbon:Modal");
   const formContext = getContext("carbon:Form");
 
@@ -291,6 +299,23 @@
       ? autocompleteCustomFilter
       : shouldFilterItem
     : shouldFilterItem;
+
+  /**
+   * @param {Event} event
+   */
+  function handleMenuScroll(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    listScrollTop = target.scrollTop;
+    const detail = scrollEndTracker.observe({
+      scrollTop: target.scrollTop,
+      scrollHeight: target.scrollHeight,
+      clientHeight: target.clientHeight,
+      itemCount: filteredItems.length,
+    });
+    if (detail) {
+      dispatch("scrollend", detail);
+    }
+  }
 
   function change(step) {
     const navigableItems = filteredItems?.length ? filteredItems : items;
@@ -408,6 +433,7 @@
       if (shouldVirtualize) {
         listScrollTop = resetVirtualScrollOnClose();
       }
+      scrollEndTracker.reset();
       highlightedIndex = -1;
       highlightOrigin = null;
       prevHighlightedIndex = -1;
@@ -466,6 +492,7 @@
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
+  $: scrollEndTracker.noteItemCount(filteredItems.length);
   $: highlightedId =
     filteredItems[highlightedIndex] == null
       ? undefined
@@ -842,9 +869,7 @@
         anchor={fieldRef}
         {direction}
         on:scroll
-        on:scroll={(event) => {
-          listScrollTop = event.target.scrollTop;
-        }}
+        on:scroll={handleMenuScroll}
         on:mouseleave={() => {
           // Clear the hover highlight when the cursor leaves the menu so the
           // highlighted state does not linger on the last hovered item.
