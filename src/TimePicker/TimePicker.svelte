@@ -1,5 +1,11 @@
 <script>
   /**
+   * @typedef {import("../utils/time-format.js").TimeFormat} TimeFormat
+   * @typedef {{ value: string; hours: number | null; minutes: number | null; seconds?: number | null; valid: boolean }} TimePickerChangeDetail
+   * @event {TimePickerChangeDetail} change
+   */
+
+  /**
    * Specify the size of the input.
    * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "xl"}
@@ -14,14 +20,45 @@
    */
   export let value = "";
 
-  /** Specify the input placeholder text */
-  export let placeholder = "hh:mm";
+  /**
+   * Specify the time format. Drives pattern, placeholder, and maxlength
+   * presets unless those props are set explicitly.
+   * @type {TimeFormat}
+   */
+  export let format = "12";
 
-  /** Specify the `pattern` attribute for the input element */
-  export let pattern = "(1[012]|[1-9]):[0-5][0-9](\\s)?";
+  /**
+   * Set to `true` to accept seconds (`hh:mm:ss`).
+   * Extends pattern, placeholder, and maxlength presets.
+   */
+  export let seconds = false;
 
-  /** Specify the `maxlength` input attribute */
-  export let maxlength = 5;
+  /**
+   * Set to `true` to reformat a valid value on blur
+   * (for example `930` → `09:30`).
+   */
+  export let normalize = false;
+
+  /**
+   * Specify the input placeholder text.
+   * Defaults from `format` and `seconds` when unset.
+   * @type {string}
+   */
+  export let placeholder = undefined;
+
+  /**
+   * Specify the `pattern` attribute for the input element.
+   * Defaults from `format` and `seconds`. Overrides the format preset when set.
+   * @type {string}
+   */
+  export let pattern = undefined;
+
+  /**
+   * Specify the `maxlength` input attribute.
+   * Defaults from `format` and `seconds` when unset.
+   * @type {number}
+   */
+  export let maxlength = undefined;
 
   /** Set to `true` to disable the input */
   export let disabled = false;
@@ -78,7 +115,7 @@
   /** Set to `true` to select the input's text when it receives focus */
   export let selectTextOnFocus = false;
 
-  import { getContext, setContext, tick } from "svelte";
+  import { createEventDispatcher, getContext, setContext, tick } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
   import {
     FORM_CONTEXT_KEY,
@@ -95,12 +132,14 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
+  import { getTimeInputPreset, parseTime } from "../utils/time-format.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = size ?? $formSize;
+  const dispatch = createEventDispatcher();
   const groupReadonly = writable(readonly);
   const groupDisabled = writable(disabled);
   // Fluid selects show their own labels; hiding the picker's hides theirs.
@@ -127,6 +166,45 @@
     if (ref) value = ref.value;
   }
 
+  /** @returns {TimePickerChangeDetail} */
+  function changeDetail() {
+    const parsed = parseTime(value, { format, seconds });
+    /** @type {TimePickerChangeDetail} */
+    const detail = {
+      value,
+      hours: parsed.hours,
+      minutes: parsed.minutes,
+      valid: parsed.valid,
+    };
+    if (seconds) {
+      detail.seconds = parsed.seconds;
+    }
+    return detail;
+  }
+
+  function applyNormalize() {
+    if (!normalize || disabled || readonly) return;
+    const parsed = parseTime(value, { format, seconds });
+    if (parsed.valid && parsed.value !== value) {
+      value = parsed.value;
+    }
+  }
+
+  function handleBlur() {
+    applyNormalize();
+  }
+
+  function handleChange() {
+    // Native `change` can fire before `blur`; normalize first so detail matches
+    // the reformatted value.
+    applyNormalize();
+    dispatch("change", changeDetail());
+  }
+
+  $: preset = getTimeInputPreset(format, seconds);
+  $: resolvedPattern = pattern ?? preset.pattern;
+  $: resolvedPlaceholder = placeholder ?? preset.placeholder;
+  $: resolvedMaxlength = maxlength ?? preset.maxlength;
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
@@ -194,9 +272,9 @@
                   aria-errormessage={showInvalid && invalidText
                     ? errorId
                     : undefined}
-                  {pattern}
-                  {placeholder}
-                  {maxlength}
+                  pattern={resolvedPattern}
+                  placeholder={resolvedPlaceholder}
+                  maxlength={resolvedMaxlength}
                   {id}
                   {name}
                   {disabled}
@@ -216,13 +294,14 @@
                   )}
                   class:bx--time-picker__input-field={true}
                   class:bx--text-input={true}
-                  on:change
+                  on:change={handleChange}
                   on:input
                   on:keydown
                   on:keyup
                   on:focus
                   on:focus={handleFocus}
                   on:blur
+                  on:blur={handleBlur}
                   on:paste
                 >
               </div>
@@ -299,9 +378,9 @@
               aria-errormessage={showInvalid && invalidText
                 ? errorId
                 : undefined}
-              {pattern}
-              {placeholder}
-              {maxlength}
+              pattern={resolvedPattern}
+              placeholder={resolvedPlaceholder}
+              maxlength={resolvedMaxlength}
               {id}
               {name}
               {disabled}
@@ -325,13 +404,14 @@
               class:bx--text-input={true}
               class:bx--text-input--invalid={showInvalid}
               class:bx--text-input--warning={showWarn}
-              on:change
+              on:change={handleChange}
               on:input
               on:keydown
               on:keyup
               on:focus
               on:focus={handleFocus}
               on:blur
+              on:blur={handleBlur}
               on:paste
             >
           </div>

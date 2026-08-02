@@ -6,10 +6,12 @@
 
   export let size: ComponentProps<TimePicker>["size"] = undefined;
   export let value: ComponentProps<TimePicker>["value"] = "";
-  export let placeholder: ComponentProps<TimePicker>["placeholder"] = "hh:mm";
-  export let pattern: ComponentProps<TimePicker>["pattern"] =
-    "(1[012]|[1-9]):[0-5][0-9](\\s)?";
-  export let maxlength: ComponentProps<TimePicker>["maxlength"] = 5;
+  export let format: ComponentProps<TimePicker>["format"] = "12";
+  export let seconds: ComponentProps<TimePicker>["seconds"] = false;
+  export let normalize: ComponentProps<TimePicker>["normalize"] = false;
+  export let placeholder: ComponentProps<TimePicker>["placeholder"] = undefined;
+  export let pattern: ComponentProps<TimePicker>["pattern"] = undefined;
+  export let maxlength: ComponentProps<TimePicker>["maxlength"] = undefined;
   export let disabled: ComponentProps<TimePicker>["disabled"] = false;
   export let readonly: ComponentProps<TimePicker>["readonly"] = false;
   export let labelText: ComponentProps<TimePicker>["labelText"] = "Time";
@@ -24,7 +26,7 @@
   export let ref: ComponentProps<TimePicker>["ref"] = null;
   export let fluid: ComponentProps<TimePicker>["fluid"] = false;
   export let selectTextOnFocus: ComponentProps<TimePicker>["selectTextOnFocus"] = false;
-  export let onChange: () => void = () => {};
+  export let onChange: (detail: unknown) => void = () => {};
   export let onInput: () => void = () => {};
   export let onKeydown: () => void = () => {};
   export let onFocus: () => void = () => {};
@@ -34,6 +36,9 @@
 <TimePicker
   {size}
   bind:value
+  {format}
+  {seconds}
+  {normalize}
   {placeholder}
   {pattern}
   {maxlength}
@@ -51,7 +56,7 @@
   {ref}
   {fluid}
   {selectTextOnFocus}
-  on:change={onChange}
+  on:change={(e) => onChange(e.detail)}
   on:input={onInput}
   on:keydown={onKeydown}
   on:focus={onFocus}
