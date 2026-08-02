@@ -161,6 +161,53 @@ describe("RangeSlider", () => {
     expect(inputs[1]).toHaveAttribute("name", "upper");
   });
 
+  it("should format aria-valuetext on both thumbs without changing numeric values", () => {
+    render(RangeSlider, {
+      props: {
+        value: 20,
+        valueUpper: 80,
+        formatValue: (v) => `$${v}`,
+      },
+    });
+
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+    expect(lowerThumb).toHaveAttribute("aria-valuetext", "$20");
+    expect(upperThumb).toHaveAttribute("aria-valuetext", "$80");
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", "20");
+    expect(upperThumb).toHaveAttribute("aria-valuenow", "80");
+    expect(screen.getByText("$0")).toBeInTheDocument();
+    expect(screen.getByText("$100")).toBeInTheDocument();
+
+    const inputs = screen.getAllByRole("spinbutton");
+    expect(inputs[0]).toHaveValue(20);
+    expect(inputs[1]).toHaveValue(80);
+  });
+
+  it("should keep value props numeric when formatValue is set", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(RangeSlider, {
+      props: {
+        value: 10,
+        valueUpper: 90,
+        formatValue: (v) => `${v}%`,
+      },
+    });
+
+    const [lowerThumb] = screen.getAllByRole("slider");
+    expect(lowerThumb).toHaveAttribute("aria-valuetext", "10%");
+
+    lowerThumb.focus();
+    await user.keyboard("{ArrowRight}");
+
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: 11,
+      valueUpper: 90,
+    });
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", "11");
+    expect(lowerThumb).toHaveAttribute("aria-valuetext", "11%");
+    expect(screen.getAllByRole("spinbutton")[0]).toHaveValue(11);
+  });
+
   it("should not respond to keyboard when disabled", () => {
     render(RangeSlider, {
       props: { value: 10, valueUpper: 90, disabled: true },
