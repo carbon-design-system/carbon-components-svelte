@@ -14,6 +14,7 @@ import Tabs from "./Tabs.test.svelte";
 import TabsAllDisabled from "./TabsAllDisabled.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
 import TabsLazy from "./TabsLazy.test.svelte";
+import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 
 describe("Tabs", () => {
@@ -409,6 +410,88 @@ describe("Tabs", () => {
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
     await user.click(tab1);
     expect(selectedIndex).toHaveTextContent("0");
+  });
+
+  it("keeps selectedId on the same logical tab when a prior tab is removed", async () => {
+    render(TabsSelectedId, {
+      props: { selectedId: "tab-b", showTabA: true },
+    });
+
+    expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+    expect(screen.getByText("Content B")).toBeVisible();
+
+    await user.click(screen.getByTestId("toggle-tab-a"));
+
+    expect(
+      screen.queryByRole("tab", { name: "Tab A" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+    expect(screen.getByText("Content B")).toBeVisible();
+  });
+
+  it("falls back when the selectedId tab is removed", async () => {
+    render(TabsSelectedId, {
+      props: { selectedId: "tab-b", showTabA: true, showTabB: true },
+    });
+
+    await user.click(screen.getByTestId("toggle-tab-b"));
+
+    expect(
+      screen.queryByRole("tab", { name: "Tab B" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-c");
+    expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByText("Content C")).toBeVisible();
+  });
+
+  it("uses the index API when selectedId is unset", async () => {
+    render(TabsSelectedId, {
+      props: { selected: 2, selectedId: undefined },
+    });
+
+    expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByText("Content C")).toBeVisible();
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("");
+
+    await user.click(screen.getByRole("tab", { name: "Tab A" }));
+
+    expect(screen.getByRole("tab", { name: "Tab A" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("");
+  });
+
+  it("lets selectedId win over selected", () => {
+    render(TabsSelectedId, {
+      props: { selected: 0, selectedId: "tab-c" },
+    });
+
+    expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByText("Content C")).toBeVisible();
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-c");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
   });
 });
 

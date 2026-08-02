@@ -31,7 +31,10 @@
    */
   export let tabindex = "0";
 
-  /** Set an id for the top-level element */
+  /**
+   * Set an id for the top-level element.
+   * Use a stable value with `Tabs` `selectedId` when tabs are added or removed dynamically.
+   */
   export let id = `ccs-${Math.random().toString(36)}`;
 
   /**

@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import { user } from "../utils/user";
 import TabsVertical from "./TabsVertical.test.svelte";
+import TabsVerticalSelectedId from "./TabsVerticalSelectedId.test.svelte";
 import TabsVerticalSkeleton from "./TabsVerticalSkeleton.test.svelte";
 
 describe("TabsVertical", () => {
@@ -149,6 +150,31 @@ describe("TabsVertical", () => {
     expect(
       navLink?.querySelector(".bx--tabs__nav-item--icon svg"),
     ).toBeInTheDocument();
+  });
+
+  it("keeps selectedId on the same logical tab when a prior tab is removed", async () => {
+    render(TabsVerticalSelectedId, {
+      props: { selectedId: "tab-b", showTabA: true },
+    });
+
+    expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+
+    await user.click(screen.getByTestId("toggle-tab-a"));
+
+    expect(
+      screen.queryByRole("tab", { name: "Tab A" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
   });
 });
 

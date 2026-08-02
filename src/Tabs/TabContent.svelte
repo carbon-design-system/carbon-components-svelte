@@ -1,5 +1,8 @@
 <script>
-  /** Set an id for the top-level element */
+  /**
+   * Set an id for the top-level element.
+   * Prefer a stable value when pairing panels with dynamic tabs.
+   */
   export let id = `ccs-${Math.random().toString(36)}`;
 
   /**
