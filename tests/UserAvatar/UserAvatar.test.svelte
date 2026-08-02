@@ -62,3 +62,14 @@
   name="Jane Roe"
   tooltipText="Jane Roe"
 />
+
+<UserAvatar data-testid="interactive" interactive name="John Doe" />
+
+<UserAvatar data-testid="href" href="/profile" name="John Doe" />
+
+<UserAvatar
+  data-testid="href-over-interactive"
+  href="/profile"
+  interactive
+  name="John Doe"
+/>
