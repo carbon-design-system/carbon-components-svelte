@@ -227,6 +227,79 @@ describe("Dropdown", () => {
     },
   );
 
+  it("should hide the clear button when clearable is false", () => {
+    render(Dropdown, {
+      props: {
+        items,
+        selectedId: "0",
+        labelText: "Contact",
+        clearable: false,
+      },
+    });
+
+    expect(
+      screen.queryByRole("button", { name: "Clear selected item" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("should hide the clear button when there is no selection", () => {
+    render(Dropdown, {
+      props: {
+        items,
+        labelText: "Contact",
+        label: "Choose a contact method",
+        clearable: true,
+      },
+    });
+
+    expect(
+      screen.queryByRole("button", { name: "Clear selected item" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("should clear the selection and dispatch clear when clicking the clear button", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Dropdown, {
+      props: {
+        items,
+        selectedId: "0",
+        labelText: "Contact",
+        label: "Choose a contact method",
+        clearable: true,
+      },
+    });
+
+    const clearButton = screen.getByRole("button", {
+      name: "Clear selected item",
+    });
+    await user.click(clearButton);
+
+    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(String));
+    expect(
+      screen.queryByRole("button", { name: "Clear selected item" }),
+    ).not.toBeInTheDocument();
+    const button = screen.getByLabelText("Contact");
+    expect(
+      within(button).getByText("Choose a contact method"),
+    ).toBeInTheDocument();
+    expect(within(button).queryByText("Slack")).not.toBeInTheDocument();
+  });
+
+  it("should use custom translations for the clear button", () => {
+    render(Dropdown, {
+      props: {
+        items,
+        selectedId: "0",
+        clearable: true,
+        translateWithIdSelection: () => "Remove selected item",
+      },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Remove selected item" }),
+    ).toBeInTheDocument();
+  });
+
   it("should handle helper text", () => {
     render(Dropdown, {
       props: {

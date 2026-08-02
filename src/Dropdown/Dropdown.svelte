@@ -13,6 +13,7 @@
    * @type {object}
    * @property {Item["id"]} selectedId
    * @property {Item} selectedItem
+   * @event {KeyboardEvent | MouseEvent} clear
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
@@ -95,6 +96,12 @@
   export let readonly = false;
 
   /**
+   * Set to `true` to show a clear button when an item is selected.
+   * Clears `selectedId` and dispatches a `clear` event.
+   */
+  export let clearable = false;
+
+  /**
    * Set to `true` to use the fluid variant.
    * Inherited from the parent `FluidForm` context,
    * so it does not need to be set when used inside `FluidForm`.
@@ -124,6 +131,13 @@
    * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
    */
   export let translateWithId = undefined;
+
+  /**
+   * Override the label of the clear button when a selection is present.
+   * Defaults to "Clear selected item" since a dropdown can only have one selection.
+   * @type {(id: "clearSelection") => string}
+   */
+  export let translateWithIdSelection = undefined;
 
   /**
    * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
@@ -189,6 +203,7 @@
     ListBoxMenu,
     ListBoxMenuIcon,
     ListBoxMenuItem,
+    ListBoxSelection,
   } from "../ListBox";
   import {
     getMenuItemHeight,
@@ -412,6 +427,12 @@
     });
   }
 
+  function clearSelection() {
+    if (readonly) return;
+    selectedId = undefined;
+    open = false;
+  }
+
   /**
    * Close the menu and notify consumers of the dismissal cause.
    * Only dispatches when transitioning from open to closed so redundant
@@ -620,6 +641,15 @@
             {label}
           {/if}
         </span>
+        {#if clearable && selectedId !== undefined}
+          <ListBoxSelection
+            on:clear
+            on:clear={clearSelection}
+            translateWithId={translateWithIdSelection}
+            {disabled}
+            {readonly}
+          />
+        {/if}
         <ListBoxMenuIcon
           on:click={(event) => {
           event.stopPropagation();
