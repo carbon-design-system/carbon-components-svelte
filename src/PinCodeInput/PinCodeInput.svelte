@@ -16,9 +16,10 @@
    *
    * Derived from `code` (i.e. `code.join("")`); bind to read the assembled
    * value. When `complete` is `true`, its length equals `count`. Each
-   * character matches the active `type`: `0-9` for `"numeric"`, `a-zA-Z0-9`
-   * for `"alphanumeric"`. Original casing is preserved regardless of
-   * `uppercase`, which only affects the visual rendering.
+   * character matches `pattern` when set, otherwise the active `type`:
+   * `0-9` for `"numeric"`, `a-zA-Z0-9` for `"alphanumeric"`. Original casing
+   * is preserved regardless of `uppercase`, which only affects the visual
+   * rendering.
    * @bindable readonly
    */
   export let value = "";
@@ -28,8 +29,8 @@
    *
    * `code` is the source of truth; its length tracks `count`. Each element is
    * either an empty string (unfilled segment) or a single character matching
-   * the active `type`: `0-9` for `"numeric"`, `a-zA-Z0-9` for
-   * `"alphanumeric"`.
+   * `pattern` when set, otherwise the active `type`: `0-9` for `"numeric"`,
+   * `a-zA-Z0-9` for `"alphanumeric"`.
    * @type {string[]}
    * @bindable writable
    */
@@ -39,9 +40,21 @@
    * Specify the type of allowed characters.
    *
    * `"numeric"` allows `0-9`; `"alphanumeric"` allows `a-z`, `A-Z`, `0-9`.
+   * Ignored when `pattern` is set.
    * @type {"numeric" | "alphanumeric"}
    */
   export let type = "numeric";
+
+  /**
+   * Override the per-character validation used for typing and paste.
+   *
+   * Accepts a `RegExp` or a string compiled with `new RegExp(...)`. The
+   * pattern is tested against each individual character, not the full
+   * assembled value. When unset, `type` selects the preset (`"numeric"` or
+   * `"alphanumeric"`).
+   * @type {RegExp | string | undefined}
+   */
+  export let pattern = undefined;
 
   /**
    * Set to `true` to visually display the characters in uppercase
@@ -162,7 +175,16 @@
   wasComplete = count > 0 && code.length === count && code.every(Boolean);
   hadValue = code.some(Boolean);
 
-  $: pattern = type === "numeric" ? /^[0-9]$/ : /^[a-zA-Z0-9]$/;
+  /** @type {RegExp} */
+  let charPattern;
+  $: charPattern =
+    pattern == null
+      ? type === "numeric"
+        ? /^[0-9]$/
+        : /^[a-zA-Z0-9]$/
+      : typeof pattern === "string"
+        ? new RegExp(pattern)
+        : pattern;
 
   $: if (code.length !== count) {
     code = Array.from({ length: count }, (_, index) => code[index] ?? "");
@@ -204,7 +226,9 @@
   $: if (anyValue) hadValue = true;
 
   /** @type {(char: string) => boolean} */
-  const isValidChar = (char) => pattern.test(char);
+  function isValidChar(char) {
+    return charPattern.test(char);
+  }
 
   /** @type {(index: number, char: string) => void} */
   function setChar(index, char) {

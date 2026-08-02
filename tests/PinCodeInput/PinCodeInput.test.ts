@@ -72,6 +72,64 @@ describe("PinCodeInput", () => {
     expect(inputs[0].value).toBe("a");
   });
 
+  it("accepts and rejects characters against a custom pattern", async () => {
+    render(PinCodeInput, { props: { pattern: /^[0-9a-fA-F]$/ } });
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await user.keyboard("g");
+    expect(inputs[0].value).toBe("");
+
+    await user.keyboard("a");
+    expect(inputs[0].value).toBe("a");
+
+    await user.keyboard("F");
+    expect(inputs[1].value).toBe("F");
+
+    await user.keyboard("9");
+    expect(inputs[2].value).toBe("9");
+  });
+
+  it("compiles a string pattern for per-character validation", async () => {
+    render(PinCodeInput, { props: { pattern: "^[a-zA-Z]$" } });
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await user.keyboard("1");
+    expect(inputs[0].value).toBe("");
+
+    await user.keyboard("b");
+    expect(inputs[0].value).toBe("b");
+  });
+
+  it("uses type presets when pattern is omitted", async () => {
+    render(PinCodeInput, { props: { type: "numeric" } });
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await user.keyboard("a");
+    expect(inputs[0].value).toBe("");
+
+    await user.keyboard("3");
+    expect(inputs[0].value).toBe("3");
+  });
+
+  it("filters pasted characters with a custom pattern", async () => {
+    const { component } = render(PinCodeInput, {
+      props: { pattern: /^[0-9a-fA-F]$/ },
+    });
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await fireEvent.paste(inputs[0], {
+      clipboardData: { getData: () => "A1gB2z" },
+    });
+    await tick();
+
+    expect(component.value).toBe("A1B2");
+    expect(inputs.map((input) => input.value)).toEqual(["A", "1", "B", "2"]);
+  });
+
   it("moves focus back and clears on backspace when empty", async () => {
     render(PinCodeInput);
     const inputs = getInputs();

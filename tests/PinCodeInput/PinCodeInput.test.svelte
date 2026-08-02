@@ -8,6 +8,7 @@
   export let value: ComponentProps<PinCodeInput>["value"] = "";
   export let code: ComponentProps<PinCodeInput>["code"] = [];
   export let type: ComponentProps<PinCodeInput>["type"] = "numeric";
+  export let pattern: ComponentProps<PinCodeInput>["pattern"] = undefined;
   export let mask: ComponentProps<PinCodeInput>["mask"] = false;
   export let uppercase: ComponentProps<PinCodeInput>["uppercase"] = false;
   export let complete: ComponentProps<PinCodeInput>["complete"] = false;
@@ -35,6 +36,7 @@
   bind:complete
   {size}
   {type}
+  {pattern}
   {mask}
   {uppercase}
   {disabled}
