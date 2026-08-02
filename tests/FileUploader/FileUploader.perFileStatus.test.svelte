@@ -1,21 +1,21 @@
-<script>
+<script lang="ts">
   import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 
   export let delay = 50;
 
-  let files = [];
-  let statusByKey = {};
-  let timersByKey = {};
+  let files: File[] = [];
+  let statusByKey: Record<string, "uploading" | "complete"> = {};
+  let timersByKey: Record<string, ReturnType<typeof setTimeout>> = {};
 
-  function fileKey(file) {
+  function fileKey(file: File) {
     return `${file.name}-${file.size}-${file.lastModified}`;
   }
 
-  function fileStatus(file) {
+  function fileStatus(file: File) {
     return statusByKey[fileKey(file)] ?? "uploading";
   }
 
-  function handleAdd(e) {
+  function handleAdd(e: CustomEvent<ReadonlyArray<File>>) {
     e.detail.forEach((file, index) => {
       const key = fileKey(file);
       if (timersByKey[key]) clearTimeout(timersByKey[key]);
@@ -31,7 +31,7 @@
     });
   }
 
-  function handleRemove(e) {
+  function handleRemove(e: CustomEvent<ReadonlyArray<File>>) {
     const next = { ...statusByKey };
     for (const file of e.detail) {
       const key = fileKey(file);
