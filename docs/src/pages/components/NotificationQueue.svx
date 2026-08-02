@@ -43,6 +43,14 @@ Use `update(id, patch)` to change an existing notification in place. The patch m
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueUpdate" />
 
+## Promise
+
+Use `promise(p, msgs)` for async work that should show a loading toast, then morph to success or error when the promise settles. Pass string messages or `NotificationData` objects for `loading`, `success`, and `error`. `success` and `error` also accept a function of the resolved value or rejection reason.
+
+`promise` returns the original promise result so you can still `await` it. Settled toasts default to a 3000ms timeout; override `timeout` in a `NotificationData` object when needed.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueuePromise" />
+
 ## Max notifications
 
 By default, the queue displays a maximum of 3 notifications. When the limit is exceeded, the oldest notification is removed automatically.
