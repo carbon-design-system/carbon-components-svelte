@@ -86,7 +86,8 @@
 
   /**
    * Override the page-selection control.
-   * Falls back to the default page number `Select` when unset.
+   * Falls back to the default page number `Select`, or a `NumberInput`
+   * when `pageInputType` is `"input"`, when unset.
    * Use the bound `page` prop to navigate from within the slot.
    * @slot {{ currentPage: number; totalPages: number; currentPageSize: number; selectLabelText: string; }} pageSelect
    */
@@ -154,6 +155,15 @@
 
   /** Set to `true` to disable the page input */
   export let pageInputDisabled = false;
+
+  /**
+   * Specify how the page number is entered.
+   * Use `"input"` for large page counts so users can jump to pages
+   * outside the windowed select options from `pageWindow`.
+   * Has no effect when `pagesUnknown` is `true`, which shows no page control.
+   * @type {"select" | "input"}
+   */
+  export let pageInputType = "select";
 
   /** Set to `true` to disable the page size input */
   export let pageSizeInputDisabled = false;
@@ -242,8 +252,10 @@
   import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
+  import NumberInput from "../NumberInput/NumberInput.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
+  import { clamp } from "../utils/numeric-format.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -256,6 +268,21 @@
   let prevPageSizesKey;
   let backBtnRef = null;
   let forwardBtnRef = null;
+  let pageInputKey = 0;
+
+  /**
+   * Clamp a page-number input value and dispatch `change` when it commits.
+   * @param {null | number} raw
+   */
+  function handlePageInputChange(raw) {
+    if (raw === null || Number.isNaN(raw)) return;
+    const next = clamp(Math.trunc(raw), 1, totalPages);
+    page = next;
+    // Remount when the committed value was clamped so the input display
+    // resets even if `page` did not change.
+    if (next !== raw) pageInputKey += 1;
+    dispatch("change", { page: next });
+  }
 
   $: effectivePageSizes = dynamicPageSizes
     ? getFilteredPageSizes(pageSizes, totalItems)
@@ -283,7 +310,15 @@
     prevPage = page;
     prevPageSize = pageSize;
   }
-  $: selectItems = getWindowedPages(page, totalPages, pageWindow);
+  $: selectItems =
+    pageInputType === "input"
+      ? []
+      : getWindowedPages(page, totalPages, pageWindow);
+  // Digit count of the widest page number; the page input's CSS sizes
+  // to it so the width holds steady while the user types.
+  $: pageInputDigits = Number.isFinite(totalPages)
+    ? String(totalPages).length
+    : undefined;
   $: internalBackButtonDisabled =
     backButtonDisabled ?? (disabled || page === 1);
   $: internalForwardButtonDisabled =
@@ -376,36 +411,57 @@
         currentPageSize={pageSize}
         selectLabelText={pageSelectLabelText(totalPages)}
       >
-        <!-- Native <option>s instead of SelectItem: a SelectItem
-             registers a store subscriber per page (pageWindow, default
-             1000). Coerce on:update to Number — without SelectItem,
-             Select keeps option values as strings. -->
-        <Select
-          id="bx--pagination-select-{id}-pages"
-          class="bx--select__page-number"
-          labelText={pageSelectLabelText(totalPages)}
-          inline
-          hideLabel
-          disabled={pageInputDisabled || disabled}
-          selected={page}
-          on:update={(event) => {
-            const next = Number(event.detail);
-            page = next;
-            dispatch("change", { page: next });
-          }}
-        >
-          {#each selectItems as pageNumber (pageNumber)}
-            <!-- `selected` so server-rendered markup shows the page;
-                 Select sets the value only once mounted. -->
-            <option
-              class:bx--select-option={true}
-              value={pageNumber}
-              selected={pageNumber === page}
-            >
-              {pageNumber}
-            </option>
-          {/each}
-        </Select>
+        {#if pageInputType === "input"}
+          {#key pageInputKey}
+            <NumberInput
+              id="bx--pagination-select-{id}-pages"
+              class="bx--pagination__page-number-input"
+              style={pageInputDigits
+                ? `--ccs-pagination-page-input-digits: ${pageInputDigits}`
+                : undefined}
+              labelText={pageSelectLabelText(totalPages)}
+              hideLabel
+              hideSteppers
+              disableWheel
+              {disabled}
+              min={1}
+              max={totalPages}
+              value={page}
+              on:change={(event) => handlePageInputChange(event.detail)}
+            />
+          {/key}
+        {:else}
+          <!-- Native <option>s instead of SelectItem: a SelectItem
+               registers a store subscriber per page (pageWindow, default
+               1000). Coerce on:update to Number — without SelectItem,
+               Select keeps option values as strings. -->
+          <Select
+            id="bx--pagination-select-{id}-pages"
+            class="bx--select__page-number"
+            labelText={pageSelectLabelText(totalPages)}
+            inline
+            hideLabel
+            disabled={pageInputDisabled || disabled}
+            selected={page}
+            on:update={(event) => {
+              const next = Number(event.detail);
+              page = next;
+              dispatch("change", { page: next });
+            }}
+          >
+            {#each selectItems as pageNumber (pageNumber)}
+              <!-- `selected` so server-rendered markup shows the page;
+                   Select sets the value only once mounted. -->
+              <option
+                class:bx--select-option={true}
+                value={pageNumber}
+                selected={pageNumber === page}
+              >
+                {pageNumber}
+              </option>
+            {/each}
+          </Select>
+        {/if}
       </slot>
       <span class:bx--pagination__text={true}>
         {pageRangeText(page, totalPages)}

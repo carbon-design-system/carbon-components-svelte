@@ -251,6 +251,136 @@ describe("Pagination", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("defaults to select page input", () => {
+    render(Pagination, {
+      props: { totalItems: 102 },
+    });
+
+    expect(
+      screen.getByRole("combobox", { name: /Page number, of 11 pages/ }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("spinbutton")).not.toBeInTheDocument();
+  });
+
+  it("renders a number input when pageInputType is input", () => {
+    render(Pagination, {
+      props: { totalItems: 102, pageInputType: "input" },
+    });
+
+    const input = screen.getByRole("spinbutton", {
+      name: /Page number, of 11 pages/,
+    });
+    expect(input).toHaveValue(1);
+    expect(
+      screen.queryByRole("combobox", { name: /Page number/ }),
+    ).not.toBeInTheDocument();
+  });
+
+  it.each([
+    [9, "1"],
+    [99, "2"],
+    [9999, "4"],
+    [99999, "5"],
+  ])("sizes the page input to the digits of %i pages", (pages, digits) => {
+    render(Pagination, {
+      props: { totalItems: pages, pageSize: 1, pageInputType: "input" },
+    });
+
+    const input = screen.getByRole("spinbutton", { name: /Page number/ });
+    expect(
+      input.style.getPropertyValue("--ccs-pagination-page-input-digits"),
+    ).toBe(digits);
+  });
+
+  it("falls back to the minimum page input width for unbounded pages", () => {
+    render(Pagination, {
+      props: {
+        totalItems: Number.POSITIVE_INFINITY,
+        pageInputType: "input",
+      },
+    });
+
+    const input = screen.getByRole("spinbutton", { name: /Page number/ });
+    expect(
+      input.style.getPropertyValue("--ccs-pagination-page-input-digits"),
+    ).toBe("");
+  });
+
+  it("clamps page input values to the total page range", async () => {
+    const onChange = vi.fn();
+    const onUpdate = vi.fn();
+    render(Pagination, {
+      props: {
+        totalItems: 102,
+        pageSize: 10,
+        pageInputType: "input",
+        onChange,
+        onUpdate,
+      },
+    });
+
+    const input = screen.getByRole("spinbutton", {
+      name: /Page number, of 11 pages/,
+    });
+    await user.clear(input);
+    await user.type(input, "99");
+    await user.tab();
+
+    expect(
+      screen.getByRole("spinbutton", { name: /Page number, of 11 pages/ }),
+    ).toHaveValue(11);
+    expect(onChange).toHaveBeenCalledWith({ page: 11 });
+    expect(onUpdate).toHaveBeenCalledWith({
+      pageSize: 10,
+      page: 11,
+    });
+  });
+
+  it("clamps page input values below the minimum to page 1", async () => {
+    const onChange = vi.fn();
+    render(Pagination, {
+      props: {
+        totalItems: 102,
+        page: 3,
+        pageInputType: "input",
+        onChange,
+      },
+    });
+
+    const input = screen.getByRole("spinbutton", {
+      name: /Page number, of 11 pages/,
+    });
+    await user.clear(input);
+    await user.type(input, "0");
+    await user.tab();
+
+    expect(
+      screen.getByRole("spinbutton", { name: /Page number, of 11 pages/ }),
+    ).toHaveValue(1);
+    expect(onChange).toHaveBeenCalledWith({ page: 1 });
+  });
+
+  it("dispatches change when page input commits a valid page", async () => {
+    const onChange = vi.fn();
+    const onUpdate = vi.fn();
+    render(Pagination, {
+      props: { totalItems: 102, pageInputType: "input", onChange, onUpdate },
+    });
+
+    const input = screen.getByRole("spinbutton", {
+      name: /Page number, of 11 pages/,
+    });
+    await user.clear(input);
+    await user.type(input, "5");
+    await user.tab();
+
+    expect(onChange).toHaveBeenCalledWith({ page: 5 });
+    expect(onUpdate).toHaveBeenCalledWith({
+      pageSize: 10,
+      page: 5,
+    });
+  });
+
   it("should handle disabled page size input", () => {
     render(Pagination, {
       props: { pageSizeInputDisabled: true },
