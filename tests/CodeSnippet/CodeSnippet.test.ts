@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import {
   mockSnippetOverflowHeight,
   waitForSnippetMeasurement,
@@ -482,6 +483,58 @@ yarn -v`,
 
   test("should hide show more button when hideShowMore is true", () => {
     render(CodeSnippetWithHideShowMore);
+    expect(screen.queryByText("Show more")).not.toBeInTheDocument();
+  });
+
+  test("defaults to a 15-row collapsed max-height for multi snippets", () => {
+    const { container } = render(CodeSnippet, {
+      props: {
+        type: "multi",
+        code: "line 1\nline 2\nline 3",
+      },
+    });
+    const snippet = container.querySelector(".bx--snippet-container");
+    expectInlineStyle(snippet, {
+      "min-height": "48px",
+      "max-height": "240px",
+    });
+  });
+
+  test("applies custom collapsed and expanded row counts to max-height", async () => {
+    mockSnippetOverflowHeight(16 * 10);
+    const { container } = render(CodeSnippet, {
+      props: {
+        type: "multi",
+        code: "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk",
+        maxCollapsedNumberOfRows: 5,
+        minCollapsedNumberOfRows: 2,
+        maxExpandedNumberOfRows: 20,
+        minExpandedNumberOfRows: 10,
+      },
+    });
+    await waitForSnippetMeasurement();
+
+    const snippet = container.querySelector(".bx--snippet-container");
+    expectInlineStyle(snippet, {
+      "min-height": "32px",
+      "max-height": "80px",
+    });
+
+    await user.click(await screen.findByText("Show more"));
+
+    expectInlineStyle(snippet, {
+      "min-height": "160px",
+      "max-height": "320px",
+    });
+  });
+
+  test("scrolls overflowing content when showMoreLess is false", () => {
+    const { container } = render(CodeSnippetWithHideShowMore);
+    const snippet = container.querySelector(".bx--snippet-container");
+    expectInlineStyle(snippet, {
+      "max-height": "240px",
+      "overflow-y": "auto",
+    });
     expect(screen.queryByText("Show more")).not.toBeInTheDocument();
   });
 

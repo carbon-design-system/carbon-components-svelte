@@ -123,10 +123,53 @@
   /**
    * Set to `false` to hide the show more/less button.
    *
+   * When hidden, overflowing multi-line content scrolls inside the
+   * collapsed container instead of being clipped with no affordance.
+   *
    * NOTE: this prop only works with the `type="multi"` variant.
    * @bindable writable
    */
   export let showMoreLess = true;
+
+  /**
+   * Specify the maximum number of rows shown when collapsed.
+   * Set to `0` for no maximum.
+   *
+   * NOTE: this prop only works with the `type="multi"` variant.
+   * Row height is 16px.
+   * @type {number}
+   */
+  export let maxCollapsedNumberOfRows = 15;
+
+  /**
+   * Specify the maximum number of rows shown when expanded.
+   * Set to `0` for no maximum (default).
+   *
+   * NOTE: this prop only works with the `type="multi"` variant.
+   * Row height is 16px.
+   * @type {number}
+   */
+  export let maxExpandedNumberOfRows = 0;
+
+  /**
+   * Specify the minimum number of rows shown when collapsed.
+   * Set to `0` for no minimum.
+   *
+   * NOTE: this prop only works with the `type="multi"` variant.
+   * Row height is 16px.
+   * @type {number}
+   */
+  export let minCollapsedNumberOfRows = 3;
+
+  /**
+   * Specify the minimum number of rows shown when expanded.
+   * Set to `0` for no minimum.
+   *
+   * NOTE: this prop only works with the `type="multi"` variant.
+   * Row height is 16px.
+   * @type {number}
+   */
+  export let minExpandedNumberOfRows = 16;
 
   /** Set an id for the code element */
   export let id = `ccs-${Math.random().toString(36)}`;
@@ -193,11 +236,15 @@
   let exceedsThreshold = false;
   let resizeObserver;
 
-  /**
-   * The collapsed (non-expanded) max-height of the snippet, in px.
-   * The expand button is only relevant when the content exceeds this.
-   */
-  const collapsedHeight = 16 * 15;
+  /** Carbon row height used to convert row-count props to pixels. */
+  const rowHeightInPixels = 16;
+
+  /** @type {number | undefined} */
+  let minHeight = undefined;
+  /** @type {string | undefined} */
+  let maxHeight = undefined;
+  /** @type {"auto" | undefined} */
+  let overflowY = undefined;
 
   function syncCopyFeedback() {
     animation = copyFeedback.animation;
@@ -224,15 +271,51 @@
       Number.parseFloat(style.paddingBottom);
     const height = ref.getBoundingClientRect().height - padding;
     if (height <= 0) return;
-    exceedsThreshold = height > collapsedHeight;
+    const collapsedMaxHeight = maxCollapsedNumberOfRows * rowHeightInPixels;
+    // Mirror Carbon React: the expand control is only useful when collapsed
+    // content is capped and expanding can reveal more rows than that cap.
+    const canExpand =
+      maxCollapsedNumberOfRows > 0 &&
+      (maxExpandedNumberOfRows <= 0 ||
+        maxExpandedNumberOfRows > maxCollapsedNumberOfRows);
+    exceedsThreshold = canExpand && height > collapsedMaxHeight;
     // If the content no longer overflows, collapse so the expanded min-height
     // doesn't leave the snippet taller than its (now shorter) content.
     if (!exceedsThreshold && expanded) expanded = false;
   }
 
   $: expandText = expanded ? showLessText : showMoreText;
-  $: minHeight = expanded ? collapsedHeight : 48;
-  $: maxHeight = expanded ? "none" : `${collapsedHeight}px`;
+
+  // Multi-line min/max heights come from row-count props (16px per row).
+  // A value of `0` means no constraint for that axis (Carbon React parity).
+  $: if (type === "multi") {
+    if (expanded) {
+      minHeight =
+        minExpandedNumberOfRows > 0
+          ? minExpandedNumberOfRows * rowHeightInPixels
+          : undefined;
+      maxHeight =
+        maxExpandedNumberOfRows > 0
+          ? `${maxExpandedNumberOfRows * rowHeightInPixels}px`
+          : "none";
+    } else {
+      minHeight =
+        minCollapsedNumberOfRows > 0
+          ? minCollapsedNumberOfRows * rowHeightInPixels
+          : undefined;
+      maxHeight =
+        maxCollapsedNumberOfRows > 0
+          ? `${maxCollapsedNumberOfRows * rowHeightInPixels}px`
+          : undefined;
+    }
+    // Without the show-more control, overflowing content must remain reachable
+    // via scroll rather than hard-clipping with no affordance.
+    overflowY = showMoreLess ? undefined : "auto";
+  } else {
+    minHeight = undefined;
+    maxHeight = undefined;
+    overflowY = undefined;
+  }
 
   // Re-measure whenever the snippet resizes (font load, content change, width
   // change causing reflow), so the expand button only shows on real overflow.
@@ -240,6 +323,10 @@
     resizeObserver.disconnect();
     if (type === "multi" && showMoreLess && ref) {
       resizeObserver.observe(ref);
+      // Row-count props change the overflow threshold without a resize event.
+      maxCollapsedNumberOfRows;
+      maxExpandedNumberOfRows;
+      measureHeight();
     } else {
       exceedsThreshold = false;
     }
@@ -396,8 +483,9 @@
       aria-label={$$restProps["aria-label"] ?? codeLabel}
       class:bx--snippet-container={true}
       style:width="100%"
-      style:min-height="{minHeight}px"
+      style:min-height={minHeight == null ? undefined : `${minHeight}px`}
       style:max-height={maxHeight}
+      style:overflow-y={overflowY}
     >
       <pre bind:this={ref}><code><slot>{code}</slot></code></pre>
     </div>
