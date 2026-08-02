@@ -38,6 +38,12 @@
    */
   export let ref = null;
 
+  /**
+   * Set to `true` to open the menu on hover after a short delay.
+   * Click and keyboard behavior are unchanged.
+   */
+  export let openOnHover = false;
+
   import {
     createEventDispatcher,
     getContext,
@@ -62,6 +68,9 @@
 
   const dispatch = createEventDispatcher();
 
+  // "moderate-01" duration (ms) from Carbon motion — matches MenuItem submenu hover.
+  const HOVER_DELAY_MS = 150;
+
   /**
    * Ids of the selected items in the menu.
    * @type {import("svelte/store").Writable<ReadonlySet<string>>}
@@ -76,6 +85,15 @@
   const unregisterMenuItem = menuItemRegistry.unregister;
 
   let menuRef = null;
+  /** @type {ReturnType<typeof setTimeout> | undefined} */
+  let hoverTimeout;
+  /** @type {ReturnType<typeof setTimeout> | undefined} */
+  let closeTimeout;
+  // Set while the menu is open only because of hover, so the click that
+  // usually follows confirms it instead of toggling it shut.
+  let hoverOpened = false;
+
+  $: if (!expanded) hoverOpened = false;
 
   // Present when this menu is a top-level item of a `HeaderNav`.
   const menubar = getContext("carbon:HeaderNav");
@@ -180,6 +198,42 @@
       dispatch("close", { trigger: "outside-click" });
     }
   }
+
+  function clearHoverTimers() {
+    clearTimeout(hoverTimeout);
+    clearTimeout(closeTimeout);
+  }
+
+  function scheduleOpenOnHover() {
+    if (!openOnHover) return;
+    clearTimeout(closeTimeout);
+    clearTimeout(hoverTimeout);
+    hoverTimeout = setTimeout(() => {
+      if (expanded) return;
+      expanded = true;
+      hoverOpened = true;
+    }, HOVER_DELAY_MS);
+  }
+
+  function scheduleCloseOnHover() {
+    if (!openOnHover) return;
+    clearTimeout(hoverTimeout);
+    clearTimeout(closeTimeout);
+    closeTimeout = setTimeout(() => {
+      // Keyboard focus inside the menu keeps it open; hiding it would drop
+      // focus. Blur, Escape and outside click still close it.
+      const active = document.activeElement;
+      if (active && (ref?.contains(active) || menuRef?.contains(active)))
+        return;
+      expanded = false;
+    }, HOVER_DELAY_MS);
+  }
+
+  onMount(() => {
+    return () => {
+      clearHoverTimers();
+    };
+  });
 </script>
 
 <li
@@ -200,6 +254,11 @@
       return;
     }
     event.preventDefault();
+    clearTimeout(hoverTimeout);
+    if (hoverOpened) {
+      hoverOpened = false;
+      return;
+    }
     expanded = !expanded;
   }}
   on:keydown={(event) => {
@@ -221,6 +280,8 @@
       closeMenu("escape-key");
     }
   }}
+  on:mouseenter={scheduleOpenOnHover}
+  on:mouseleave={scheduleCloseOnHover}
 >
   <a
     bind:this={ref}
