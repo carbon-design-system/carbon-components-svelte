@@ -27,6 +27,8 @@
   export let selectTextOnFocus: ComponentProps<PinCodeInput>["selectTextOnFocus"] = false;
   export let size: ComponentProps<PinCodeInput>["size"] = "default";
   export let fluid: ComponentProps<PinCodeInput>["fluid"] = false;
+  export let name: ComponentProps<PinCodeInput>["name"] = undefined;
+  export let required: ComponentProps<PinCodeInput>["required"] = false;
 </script>
 
 <PinCodeInput
@@ -51,6 +53,8 @@
   {id}
   {selectTextOnFocus}
   {fluid}
+  {name}
+  {required}
   on:change={(e) => console.log("change", e.detail)}
   on:complete={(e) => console.log("complete", e.detail)}
   on:clear={() => console.log("clear")}
