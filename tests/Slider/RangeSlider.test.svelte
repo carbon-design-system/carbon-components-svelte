@@ -6,6 +6,10 @@
   export let min = 0;
   export let max = 100;
   export let step = 1;
+  export let marks:
+    | boolean
+    | ReadonlyArray<{ value: number; label?: string }>
+    | undefined = false;
   export let disabled = false;
   export let readonly = false;
   export let hideTextInput = false;
@@ -24,6 +28,7 @@
   {min}
   {max}
   {step}
+  {marks}
   {disabled}
   {readonly}
   {hideTextInput}
