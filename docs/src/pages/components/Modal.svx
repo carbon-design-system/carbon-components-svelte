@@ -131,6 +131,12 @@ Disable closing the modal when clicking outside with `preventCloseOnClickOutside
 
 <FileSource src="/framed/Modal/ModalPreventOutsideClick" />
 
+### Hide close button
+
+Set `hideCloseButton` to `true` to remove the header close button. Use this for forced-choice dialogs such as auth walls or terms acceptance. Always provide an alternative dismiss path — typically footer actions — and pair with `preventCloseOnClickOutside` when outside clicks should not dismiss the dialog. <DocKbd label="Escape" /> still closes the modal unless you cancel the `close` event.
+
+<FileSource src="/framed/Modal/ModalHideCloseButton" />
+
 ## Button with icon
 
 Enhance modal buttons with icons for better visual context and clarity.
