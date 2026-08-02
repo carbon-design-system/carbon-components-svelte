@@ -13,6 +13,8 @@
     undefined;
   export let itemsPerPageText = "Items per page:";
   export let pageInputDisabled = false;
+  export let pageInputType: ComponentProps<Pagination>["pageInputType"] =
+    "select";
   export let pageSizeInputDisabled = false;
   export let simple = false;
   export let pageSize = 10;
@@ -52,6 +54,7 @@
   {forwardTextTooltipPosition}
   {itemsPerPageText}
   {pageInputDisabled}
+  {pageInputType}
   {pageSizeInputDisabled}
   {simple}
   {pageWindow}
