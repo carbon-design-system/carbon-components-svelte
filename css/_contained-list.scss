@@ -29,6 +29,10 @@
     width: 100%;
   }
 
+  .#{$prefix}--contained-list__search {
+    width: 100%;
+  }
+
   .#{$prefix}--contained-list .#{$prefix}--search {
     position: sticky;
     z-index: 1;
