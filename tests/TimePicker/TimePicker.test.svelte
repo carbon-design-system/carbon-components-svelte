@@ -6,10 +6,12 @@
 
   export let size: ComponentProps<TimePicker>["size"] = undefined;
   export let value: ComponentProps<TimePicker>["value"] = "";
-  export let placeholder: ComponentProps<TimePicker>["placeholder"] = "hh:mm";
-  export let pattern: ComponentProps<TimePicker>["pattern"] =
-    "(1[012]|[1-9]):[0-5][0-9](\\s)?";
-  export let maxlength: ComponentProps<TimePicker>["maxlength"] = 5;
+  export let format: ComponentProps<TimePicker>["format"] = "12";
+  export let seconds: ComponentProps<TimePicker>["seconds"] = false;
+  export let normalize: ComponentProps<TimePicker>["normalize"] = false;
+  export let placeholder: ComponentProps<TimePicker>["placeholder"] = undefined;
+  export let pattern: ComponentProps<TimePicker>["pattern"] = undefined;
+  export let maxlength: ComponentProps<TimePicker>["maxlength"] = undefined;
   export let light: ComponentProps<TimePicker>["light"] = false;
   export let disabled: ComponentProps<TimePicker>["disabled"] = false;
   export let readonly: ComponentProps<TimePicker>["readonly"] = false;
@@ -29,6 +31,9 @@
 <TimePicker
   {size}
   bind:value
+  {format}
+  {seconds}
+  {normalize}
   {placeholder}
   {pattern}
   {maxlength}
@@ -46,8 +51,8 @@
   {name}
   {ref}
   {fluid}
-  on:change={() => {
-    console.log("change");
+  on:change={(e) => {
+    console.log("change", e.detail);
   }}
   on:input={() => {
     console.log("input");
