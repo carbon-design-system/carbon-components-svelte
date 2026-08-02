@@ -4,7 +4,8 @@ description: Tabs organize content into separate views that can be switched betw
 ---
 
 <script>
-  import { Box, CodeSnippet, Stack, Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, Text, DataTable } from "carbon-components-svelte";
+  import { Box, CodeSnippet, Stack, Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, Text, DataTable, Button } from "carbon-components-svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
@@ -170,6 +171,28 @@ When the tabs exceed the available width, the list scrolls horizontally and back
 Below the medium breakpoint, vertical tabs collapse into the same horizontal, scrollable row with overflow buttons. Resize the viewport to see them.
 
 <FileSource src="/framed/Tabs/TabsVerticalOverflow" />
+
+## Tab bar actions
+
+Put buttons at the end of the tab bar with the `actions` slot. They sit
+beside the tab list, not in it: Tab reaches them after the selected tab,
+and arrow keys move between tabs only. When the tabs overflow, the list
+scrolls in the space that is left.
+
+<Tabs>
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
+  <svelte:fragment slot="actions">
+    <Button kind="ghost" size="field" icon={Add} iconDescription="Add view" />
+    <Button kind="ghost" size="field" icon={Settings} iconDescription="Tab settings" />
+  </svelte:fragment>
+  <svelte:fragment slot="content">
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
+  </svelte:fragment>
+</Tabs>
 
 ## Disabled tabs
 
