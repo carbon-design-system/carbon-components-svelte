@@ -32,6 +32,15 @@
   /** Set the step value */
   export let step = 1;
 
+  /**
+   * Show tick marks along the track.
+   * Set to `true` to place a tick at every `step`, or pass an array of
+   * `{ value, label? }` for specific stops with optional labels below the track.
+   * Marks are visual only; snapping still follows `step`.
+   * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
+   */
+  export let marks = false;
+
   /** Set the step multiplier value */
   export let stepMultiplier = 4;
 
@@ -102,6 +111,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { resolveSliderMarks } from "../utils/resolveSliderMarks.js";
 
   const dispatch = createEventDispatcher();
 
@@ -174,6 +184,10 @@
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: range = max - min;
   $: left = ((value - min) / range) * 100;
+  $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
+  $: hasMarkLabels = resolvedMarks.some(
+    (mark) => mark.label != null && mark.label !== "",
+  );
   $: {
     if (value <= min) {
       value = min;
@@ -230,6 +244,8 @@
       class:bx--slider={true}
       class:bx--slider--disabled={disabled}
       class:bx--slider--readonly={readonly}
+      class:bx--slider--with-marks={resolvedMarks.length > 0}
+      class:bx--slider--with-mark-labels={hasMarkLabels}
       style:max-width={fullWidth ? "none" : undefined}
       on:mousedown={startInteraction}
       on:touchstart={startInteraction}
@@ -278,6 +294,19 @@
         class:bx--slider__filled-track={true}
         style:transform="translate(0, -50%) scaleX({left / 100})"
       ></div>
+      {#if resolvedMarks.length > 0}
+        <div class:bx--slider__marks={true} aria-hidden="true">
+          {#each resolvedMarks as mark (mark.value)}
+            {@const percent =
+              range === 0 ? 0 : ((mark.value - min) / range) * 100}
+            <span class:bx--slider__mark={true} style:left="{percent}%">
+              {#if mark.label != null && mark.label !== ""}
+                <span class:bx--slider__mark-label={true}>{mark.label}</span>
+              {/if}
+            </span>
+          {/each}
+        </div>
+      {/if}
     </div>
     <span class:bx--slider__range-label={true}
       >{formatRangeLabel(maxLabel, max)}</span

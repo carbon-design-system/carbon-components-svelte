@@ -17,6 +17,10 @@
   export let min = 0;
   export let max = 100;
   export let step = 1;
+  export let marks:
+    | boolean
+    | ReadonlyArray<{ value: number; label?: string }>
+    | undefined = false;
   export let light = false;
   export let hideLabel = false;
   export let labelText = "Test Slider";
@@ -38,6 +42,7 @@
     {min}
     {max}
     {step}
+    {marks}
     {disabled}
     {readonly}
     {invalid}
@@ -73,6 +78,7 @@
     {min}
     {max}
     {step}
+    {marks}
     {disabled}
     {readonly}
     {invalid}
