@@ -180,6 +180,36 @@ describe("Pagination", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("hides selects in simple mode and shows page status text", () => {
+    const { container } = render(Pagination, {
+      props: { simple: true, totalItems: 102 },
+    });
+
+    const pagination = container.querySelector(".bx--pagination");
+    expect(pagination).toHaveClass("bx--pagination--simple");
+    expect(screen.queryAllByRole("combobox")).toHaveLength(0);
+    expect(screen.getByText("page 1 of 11 pages")).toBeInTheDocument();
+    expect(screen.queryByText("1–10 of 102 items")).not.toBeInTheDocument();
+  });
+
+  it("navigates pages in simple mode", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: { simple: true, totalItems: 102, page: 1 },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Next page" }));
+
+    expect(consoleLog).toHaveBeenCalledWith("next", { page: 2 });
+    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
+    expect(screen.getByText("page 2 of 11 pages")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Previous page" }));
+
+    expect(consoleLog).toHaveBeenCalledWith("previous", { page: 1 });
+    expect(screen.getByText("page 1 of 11 pages")).toBeInTheDocument();
+  });
+
   it("should handle unknown pages", () => {
     render(Pagination, {
       props: { pagesUnknown: true },

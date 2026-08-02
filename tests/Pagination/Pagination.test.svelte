@@ -10,6 +10,7 @@
   export let itemsPerPageText = "Items per page:";
   export let pageInputDisabled = false;
   export let pageSizeInputDisabled = false;
+  export let simple = false;
   export let pageSize = 10;
   export let pageSizes: ComponentProps<Pagination>["pageSizes"] = [10];
   export let dynamicPageSizes = false;
@@ -38,6 +39,7 @@
   {itemsPerPageText}
   {pageInputDisabled}
   {pageSizeInputDisabled}
+  {simple}
   {pageWindow}
   bind:pageSize
   {pageSizes}
