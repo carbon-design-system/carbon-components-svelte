@@ -57,6 +57,23 @@ The default input mode is `"numeric"`. Set `type` to `"alphanumeric"` to allow l
   on:paste
 />
 
+## Custom pattern
+
+Use `pattern` to override the per-character test used for typing and paste. Pass a `RegExp` or a string compiled with `new RegExp(...)`. The pattern is matched against each individual character, not the full assembled value. When `pattern` is unset, `type` selects the numeric or alphanumeric preset.
+
+<PinCodeInput
+  count={6}
+  pattern={/^[0-9a-fA-F]$/}
+  type="alphanumeric"
+  uppercase
+  labelText="Serial number"
+  helperText="Enter the 6-character hex serial"
+  on:complete
+  on:change
+  on:clear
+  on:paste
+/>
+
 ## Uppercase display
 
 Set `uppercase` to `true` to display characters in uppercase. The bound value and code retain the original casing.
