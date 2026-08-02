@@ -72,6 +72,12 @@
   export let pageSizeInputDisabled = false;
 
   /**
+   * Set to `true` for a compact prev/next control with page status text.
+   * Hides the page size and page selects. Suited to toolbars and cards.
+   */
+  export let simple = false;
+
+  /**
    * Specify the number of items to display in a page.
    * @bindable writable
    */
@@ -199,51 +205,62 @@
 <div
   {id}
   class:bx--pagination={true}
+  class:bx--pagination--simple={simple}
   class:bx--pagination--xs={size === "xs"}
   class:bx--pagination--sm={size === "sm"}
   class:bx--pagination--md={size === "md"}
   class:bx--pagination--lg={size === "lg"}
   {...$$restProps}
 >
-  <div class:bx--pagination__left={true}>
-    {#if !pageSizeInputDisabled}
-      <label
-        id="bx--pagination-select-{id}-sizes-label"
-        for="bx--pagination-select-{id}-sizes"
-        class:bx--pagination__text={true}
-      >
-        {itemsPerPageText}
-      </label>
-      <Select
-        id="bx--pagination-select-{id}-sizes"
-        class="bx--select__item-count"
-        hideLabel
-        noLabel
-        inline
-        on:update={(event) => {
-          dispatch("change", { pageSize: event.detail });
-        }}
-        bind:selected={pageSize}
-      >
-        {#each effectivePageSizes as size, index (size)}
-          <SelectItem value={size} text={size.toString()} />
-        {/each}
-      </Select>
-    {/if}
-    <span class:bx--pagination__text={!pageSizeInputDisabled}>
-      {#if pagesUnknown}
-        {itemText(pageSize * (page - 1) + 1, page * pageSize)}
-      {:else}
-        {itemRangeText(
-          Math.min(pageSize * (page - 1) + 1, totalItems),
-          Math.min(page * pageSize, totalItems),
-          totalItems,
-        )}
+  {#if !simple}
+    <div class:bx--pagination__left={true}>
+      {#if !pageSizeInputDisabled}
+        <label
+          id="bx--pagination-select-{id}-sizes-label"
+          for="bx--pagination-select-{id}-sizes"
+          class:bx--pagination__text={true}
+        >
+          {itemsPerPageText}
+        </label>
+        <Select
+          id="bx--pagination-select-{id}-sizes"
+          class="bx--select__item-count"
+          hideLabel
+          noLabel
+          inline
+          on:update={(event) => {
+            dispatch("change", { pageSize: event.detail });
+          }}
+          bind:selected={pageSize}
+        >
+          {#each effectivePageSizes as size, index (size)}
+            <SelectItem value={size} text={size.toString()} />
+          {/each}
+        </Select>
       {/if}
-    </span>
-  </div>
+      <span class:bx--pagination__text={!pageSizeInputDisabled}>
+        {#if pagesUnknown}
+          {itemText(pageSize * (page - 1) + 1, page * pageSize)}
+        {:else}
+          {itemRangeText(
+            Math.min(pageSize * (page - 1) + 1, totalItems),
+            Math.min(page * pageSize, totalItems),
+            totalItems,
+          )}
+        {/if}
+      </span>
+    </div>
+  {/if}
   <div class:bx--pagination__right={true}>
-    {#if !pageInputDisabled}
+    {#if simple}
+      <span class:bx--pagination__text={true}>
+        {#if pagesUnknown}
+          {pageText(page)}
+        {:else}
+          {pageText(page)} {pageRangeText(page, totalPages)}
+        {/if}
+      </span>
+    {:else if !pageInputDisabled}
       <Select
         id="bx--pagination-select-{id}-pages"
         class="bx--select__page-number"
