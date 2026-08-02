@@ -18,6 +18,19 @@
   imageDescription="A user photo"
 />
 
+<UserAvatar
+  data-testid="image-attributes"
+  data-avatar-host="true"
+  name="Should Not Show"
+  image="https://example.com/photo.jpg"
+  imageDescription="A user photo"
+  imageAttributes={{
+    loading: "lazy",
+    srcset: "https://example.com/photo.jpg 1x",
+    referrerPolicy: "no-referrer",
+  }}
+/>
+
 <UserAvatar data-testid="icon" name="Should Not Show" icon={Add} />
 
 <UserAvatar data-testid="size-lg" size="lg" name="John Doe" />

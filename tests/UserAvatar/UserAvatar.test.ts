@@ -51,6 +51,26 @@ describe("UserAvatar", () => {
     expect(avatar).not.toHaveTextContent("SS");
   });
 
+  it("spreads imageAttributes onto the img and keeps rest props on the host", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("image-attributes");
+    expect(avatar).toHaveAttribute("data-avatar-host", "true");
+    expect(avatar).not.toHaveAttribute("loading");
+    expect(avatar).not.toHaveAttribute("srcset");
+    expect(avatar).not.toHaveAttribute("referrerpolicy");
+
+    const img = avatar.querySelector("img");
+    assert(img);
+    expect(img).toHaveAttribute("src", "https://example.com/photo.jpg");
+    expect(img).toHaveAttribute("alt", "A user photo");
+    expect(img).toHaveAttribute("loading", "lazy");
+    expect(img).toHaveAttribute("srcset", "https://example.com/photo.jpg 1x");
+    expect(img).toHaveAttribute("referrerpolicy", "no-referrer");
+    expect(img).not.toHaveAttribute("data-testid");
+    expect(img).not.toHaveAttribute("data-avatar-host");
+  });
+
   it("renders a custom icon, taking priority over the name", () => {
     render(UserAvatar);
 

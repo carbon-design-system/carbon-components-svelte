@@ -46,6 +46,14 @@
   export let imageDescription = undefined;
 
   /**
+   * Pass additional attributes through to the image element
+   * (for example `loading`, `srcset`, or `referrerPolicy`).
+   * Does not replace `image` or `imageDescription`. Rest props stay on the host.
+   * @type {Record<string, string>}
+   */
+  export let imageAttributes = undefined;
+
+  /**
    * Specify the icon to render. Falls back to a default user icon.
    * @type {Icon}
    */
@@ -225,7 +233,7 @@
       {#if $$slots.default}
         <slot />
       {:else if image}
-        <img src={image} alt={imageDescription}>
+        <img {...imageAttributes} src={image} alt={imageDescription}>
       {:else if icon}
         <svelte:component this={icon} size={glyphSize[resolvedSize]} />
       {:else if avatarInitials}
@@ -250,7 +258,7 @@
     {#if $$slots.default}
       <slot />
     {:else if image}
-      <img src={image} alt={imageDescription}>
+      <img {...imageAttributes} src={image} alt={imageDescription}>
     {:else if icon}
       <svelte:component this={icon} size={glyphSize[resolvedSize]} />
     {:else if avatarInitials}
