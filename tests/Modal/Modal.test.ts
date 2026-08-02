@@ -845,6 +845,87 @@ describe("Modal", () => {
     expect(clickPrimaryHandler).not.toHaveBeenCalled();
   });
 
+  describe("primaryButtonLoading", () => {
+    it("shows InlineLoading and does not dispatch submit on click", async () => {
+      const submitHandler = vi.fn();
+      const clickPrimaryHandler = vi.fn();
+      render(ModalTest, {
+        props: {
+          open: true,
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+          onsubmit: submitHandler,
+          onclickbuttonprimary: clickPrimaryHandler,
+        },
+      });
+
+      expect(screen.getByText("Loading")).toBeInTheDocument();
+      expect(document.querySelector(".bx--inline-loading")).toBeInTheDocument();
+
+      const primaryButton = screen.getByRole("button", { name: /Loading/i });
+      expect(primaryButton).toBeDisabled();
+      await user.click(primaryButton);
+
+      expect(submitHandler).not.toHaveBeenCalled();
+      expect(clickPrimaryHandler).not.toHaveBeenCalled();
+    });
+
+    it("does not dispatch submit when pressing Enter while loading", async () => {
+      const submitHandler = vi.fn();
+      const clickPrimaryHandler = vi.fn();
+      render(ModalTest, {
+        props: {
+          open: true,
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+          shouldSubmitOnEnter: true,
+          onsubmit: submitHandler,
+          onclickbuttonprimary: clickPrimaryHandler,
+        },
+      });
+
+      screen.getByTestId("test-focus").focus();
+      await user.keyboard("{Enter}");
+      await tick();
+
+      expect(submitHandler).not.toHaveBeenCalled();
+      expect(clickPrimaryHandler).not.toHaveBeenCalled();
+    });
+
+    it("keeps the idle primary button path unchanged", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ModalTest, {
+        props: {
+          open: true,
+          primaryButtonText: "Save",
+          primaryButtonLoading: false,
+        },
+      });
+
+      expect(screen.getByText("Save")).toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--inline-loading"),
+      ).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Save" }));
+      expect(consoleLog).toHaveBeenCalledWith("submit");
+      expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
+    });
+
+    it("uses a custom loading description", () => {
+      render(ModalTest, {
+        props: {
+          open: true,
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+          primaryButtonLoadingDescription: "Saving...",
+        },
+      });
+
+      expect(screen.getByText("Saving...")).toBeInTheDocument();
+    });
+  });
+
   describe("Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;

@@ -18,6 +18,18 @@
   export let primaryButtonDisabled = false;
 
   /**
+   * Set to `true` to show a loading state on the primary button.
+   * While loading, the button is non-interactive and submit is suppressed.
+   */
+  export let primaryButtonLoading = false;
+
+  /**
+   * Specify the description for the primary button loading state.
+   * Passed to `InlineLoading` as `description`.
+   */
+  export let primaryButtonLoadingDescription = "Loading";
+
+  /**
    * Specify a class for the primary button.
    * @type {string}
    */
@@ -44,9 +56,15 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import Button from "../Button/Button.svelte";
+  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
 
   const dispatch = createEventDispatcher();
   const { closeModal, submit } = getContext("carbon:ComposedModal");
+
+  function handlePrimaryClick() {
+    if (primaryButtonLoading) return;
+    submit();
+  }
 </script>
 
 <div
@@ -80,12 +98,19 @@
   {#if primaryButtonText}
     <Button
       kind={danger ? "danger" : "primary"}
-      disabled={primaryButtonDisabled}
+      disabled={primaryButtonDisabled || primaryButtonLoading}
       class={primaryClass}
-      icon={primaryButtonIcon}
-      on:click={submit}
+      icon={primaryButtonLoading ? undefined : primaryButtonIcon}
+      on:click={handlePrimaryClick}
     >
-      {primaryButtonText}
+      {#if primaryButtonLoading}
+        <InlineLoading
+          status="active"
+          description={primaryButtonLoadingDescription}
+        />
+      {:else}
+        {primaryButtonText}
+      {/if}
     </Button>
   {/if}
   <slot />
