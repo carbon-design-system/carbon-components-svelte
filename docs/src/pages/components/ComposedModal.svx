@@ -40,6 +40,12 @@ Set `hideCloseButton` on `ModalHeader` to remove the header close button. Use th
 
 <FileSource src="/framed/Modal/ComposedModalHideCloseButton" />
 
+## Prevent secondary button close
+
+`secondaryButtonText` closes the modal by default. The footer dispatches a cancelable `click:button--secondary` event first. Call `e.preventDefault()` to keep the modal open — for example when Cancel should stay put for a dirty form.
+
+<FileSource src="/framed/Modal/ComposedModalPreventSecondaryClose" />
+
 ## Danger
 
 Display critical or destructive actions with the danger variant. Set `danger` on both ComposedModal and ModalFooter for the red danger styling.
