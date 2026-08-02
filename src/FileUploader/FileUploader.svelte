@@ -4,7 +4,7 @@
    * @event {ReadonlyArray<File>} remove
    * @event {ReadonlyArray<File>} change
    * @event {void} clear
-   * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
+   * @event {Array<{ file: File; reason: "size" | "duplicate" | "count" }>} rejected
    */
 
   /**
@@ -64,6 +64,19 @@
    * ```
    */
   export let maxFileSize = undefined;
+
+  /**
+   * Specify the maximum number of files that can be attached.
+   * Excess files are rejected after size and duplicate checks, in selection
+   * order, via the `rejected` event with `reason: "count"`.
+   * When the list is at capacity, further picks are disabled until a file is removed.
+   * @type {number | undefined}
+   * @example
+   * ```svelte
+   * <FileUploader multiple maxFiles={3} />
+   * ```
+   */
+  export let maxFiles = undefined;
 
   /**
    * Obtain a reference to the uploaded files.
@@ -238,6 +251,9 @@
       : "";
   }
 
+  $: atMaxFiles = maxFiles !== undefined && files.length >= maxFiles;
+  $: inputDisabled = disabled || atMaxFiles;
+
   $: {
     const prevSet = new Set(prevFiles);
     const currentSet = new Set(files);
@@ -290,7 +306,7 @@
     </p>
   {/if}
   <FileUploaderButton
-    {disabled}
+    disabled={inputDisabled}
     disableLabelChanges
     labelText={buttonLabel}
     {accept}
@@ -305,7 +321,7 @@
       // (same reference) plus newly selected ones. Only reject new
       // objects that match an existing file by content.
       const existingRefs = new Set(prevFiles);
-      const { accepted: newFiles, rejected: allRejected } = filterIncomingFiles(
+      let { accepted: newFiles, rejected: allRejected } = filterIncomingFiles(
         event.detail,
         {
           maxFileSize,
@@ -314,6 +330,21 @@
           carryRefs: existingRefs,
         },
       );
+
+      // Count check runs after size/duplicate. Keep carried files; trim
+      // newly added files that would exceed maxFiles (selection order).
+      if (maxFiles !== undefined) {
+        const carriedForCount = newFiles.filter((f) => existingRefs.has(f));
+        const addedForCount = newFiles.filter((f) => !existingRefs.has(f));
+        const slots = Math.max(0, maxFiles - carriedForCount.length);
+        if (addedForCount.length > slots) {
+          const excess = addedForCount.slice(slots);
+          allRejected.push(
+            ...excess.map((file) => ({ file, reason: "count" })),
+          );
+          newFiles = [...carriedForCount, ...addedForCount.slice(0, slots)];
+        }
+      }
 
       if (allRejected.length > 0) {
         dispatch("rejected", allRejected);

@@ -1260,4 +1260,88 @@ describe("FileUploader", () => {
     expect(screen.getByText("Please try again.")).toBeInTheDocument();
     expect(rows[1].querySelector(".bx--file-invalid")).toBeInTheDocument();
   });
+
+  it("should accept files under maxFiles limit", async () => {
+    const rejectedHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { multiple: true, maxFiles: 3, onRejected: rejectedHandler },
+    });
+
+    const files = [
+      new File(["a"], "file1.txt", { type: "text/plain" }),
+      new File(["b"], "file2.txt", { type: "text/plain" }),
+      new File(["c"], "file3.txt", { type: "text/plain" }),
+    ];
+
+    assert(component.ref instanceof HTMLInputElement);
+    simulateFileSelection(component.ref, files);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+      expect(screen.queryByText("file2.txt")).toBeInTheDocument();
+      expect(screen.queryByText("file3.txt")).toBeInTheDocument();
+    });
+
+    expect(rejectedHandler).not.toHaveBeenCalled();
+  });
+
+  it("should reject excess files with reason count when exceeding maxFiles", async () => {
+    const rejectedHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: {
+        multiple: true,
+        maxFiles: 3,
+        onRejected: rejectedHandler,
+        onChange: changeHandler,
+      },
+    });
+
+    const files = [
+      new File(["a"], "file1.txt", { type: "text/plain" }),
+      new File(["b"], "file2.txt", { type: "text/plain" }),
+      new File(["c"], "file3.txt", { type: "text/plain" }),
+      new File(["d"], "file4.txt", { type: "text/plain" }),
+    ];
+
+    assert(component.ref instanceof HTMLInputElement);
+    simulateFileSelection(component.ref, files);
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    const rejected = rejectedHandler.mock.calls[0][0].detail;
+    expect(rejected).toHaveLength(1);
+    expect(rejected[0].file.name).toBe("file4.txt");
+    expect(rejected[0].reason).toBe("count");
+
+    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(3);
+    expect(screen.queryByText("file4.txt")).not.toBeInTheDocument();
+  });
+
+  it("should reject additional picks when already at maxFiles", async () => {
+    const rejectedHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: { multiple: true, maxFiles: 2, onRejected: rejectedHandler },
+    });
+
+    assert(component.ref instanceof HTMLInputElement);
+    const input = component.ref;
+    simulateFileSelection(input, [
+      new File(["a"], "file1.txt", { type: "text/plain" }),
+      new File(["b"], "file2.txt", { type: "text/plain" }),
+    ]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+      expect(screen.queryByText("file2.txt")).toBeInTheDocument();
+    });
+
+    expect(input).toBeDisabled();
+    const button = document.querySelector("button");
+    assert(button);
+    expect(button).toHaveClass("bx--btn--disabled");
+  });
 });

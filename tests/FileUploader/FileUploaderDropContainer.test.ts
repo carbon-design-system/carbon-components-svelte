@@ -608,4 +608,87 @@ describe("FileUploaderDropContainer", () => {
     assert(label);
     expect(label).toHaveAttribute("for", "custom-drop");
   });
+
+  it("should accept files under maxFiles limit", async () => {
+    const rejectedHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        multiple: true,
+        maxFiles: 3,
+        onrejected: rejectedHandler,
+        onchange: changeHandler,
+      },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    simulateFileSelection(input, [
+      new File(["a"], "file1.txt", { type: "text/plain" }),
+      new File(["b"], "file2.txt", { type: "text/plain" }),
+      new File(["c"], "file3.txt", { type: "text/plain" }),
+    ]);
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(3);
+    expect(rejectedHandler).not.toHaveBeenCalled();
+  });
+
+  it("should reject excess files with reason count when exceeding maxFiles", async () => {
+    const rejectedHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        multiple: true,
+        maxFiles: 3,
+        onrejected: rejectedHandler,
+        onchange: changeHandler,
+      },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    simulateFileSelection(input, [
+      new File(["a"], "file1.txt", { type: "text/plain" }),
+      new File(["b"], "file2.txt", { type: "text/plain" }),
+      new File(["c"], "file3.txt", { type: "text/plain" }),
+      new File(["d"], "file4.txt", { type: "text/plain" }),
+    ]);
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    const rejected = rejectedHandler.mock.calls[0][0].detail;
+    expect(rejected).toHaveLength(1);
+    expect(rejected[0].file.name).toBe("file4.txt");
+    expect(rejected[0].reason).toBe("count");
+    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(3);
+  });
+
+  it("should disable further picks when at maxFiles", async () => {
+    const { container } = render(FileUploaderDropContainer, {
+      props: { multiple: true, maxFiles: 2 },
+    });
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    simulateFileSelection(input, [
+      new File(["a"], "file1.txt", { type: "text/plain" }),
+      new File(["b"], "file2.txt", { type: "text/plain" }),
+    ]);
+
+    await vi.waitFor(() => {
+      expect(input).toBeDisabled();
+    });
+
+    const label = container.querySelector("label");
+    assert(label instanceof HTMLElement);
+    expect(label).toHaveClass("bx--file-browse-btn--disabled");
+    expect(label).toHaveAttribute("aria-disabled", "true");
+  });
 });
