@@ -5,6 +5,7 @@
 
   export let direction: ComponentProps<Menu>["direction"] = "bottom";
   export let size: ComponentProps<Menu>["size"] = "sm";
+  export let maxHeight: ComponentProps<Menu>["maxHeight"] = undefined;
   export let disabledIndex: number | undefined = undefined;
 
   let anchor: HTMLButtonElement;
@@ -21,6 +22,7 @@
   {anchor}
   {direction}
   {size}
+  {maxHeight}
   bind:open
   labelText="Example menu"
   on:open={(e) => console.log("open", e.detail)}
