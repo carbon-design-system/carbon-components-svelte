@@ -117,6 +117,12 @@ Set `intrinsicAlign` to `"start"` (default), `"center"`, or `"end"` to align the
   <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
 </MenuButton>
 
+## Scrollable
+
+Set `maxHeight` to cap the menu height and scroll the remaining items. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. Keyboard navigation scrolls the focused item into view.
+
+<FileSource src="/framed/MenuButton/MenuButtonScrollable" />
+
 ## Disabled
 
 Set `disabled` to `true` to disable the trigger button.
