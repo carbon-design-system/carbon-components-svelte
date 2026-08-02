@@ -27,13 +27,22 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, setContext, tick } from "svelte";
+  /**
+   * Set to `true` to open the menu on hover after a short delay.
+   * Click and keyboard behavior are unchanged.
+   */
+  export let openOnHover = false;
+
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
 
   const dispatch = createEventDispatcher();
+
+  // "moderate-01" duration (ms) from Carbon motion — matches MenuItem submenu hover.
+  const HOVER_DELAY_MS = 150;
 
   /**
    * @type {import("svelte/store").Writable<Record<string, boolean>>}
@@ -45,6 +54,10 @@
   const menuItems = writable([]);
 
   let menuRef = null;
+  /** @type {ReturnType<typeof setTimeout> | undefined} */
+  let hoverTimeout;
+  /** @type {ReturnType<typeof setTimeout> | undefined} */
+  let closeTimeout;
 
   /**
    * @type {(item: { id: string; isSelected: boolean }) => void}
@@ -100,6 +113,35 @@
       dispatch("close", { trigger: "outside-click" });
     }
   }
+
+  function clearHoverTimers() {
+    clearTimeout(hoverTimeout);
+    clearTimeout(closeTimeout);
+  }
+
+  function scheduleOpenOnHover() {
+    if (!openOnHover) return;
+    clearTimeout(closeTimeout);
+    clearTimeout(hoverTimeout);
+    hoverTimeout = setTimeout(() => {
+      expanded = true;
+    }, HOVER_DELAY_MS);
+  }
+
+  function scheduleCloseOnHover() {
+    if (!openOnHover) return;
+    clearTimeout(hoverTimeout);
+    clearTimeout(closeTimeout);
+    closeTimeout = setTimeout(() => {
+      expanded = false;
+    }, HOVER_DELAY_MS);
+  }
+
+  onMount(() => {
+    return () => {
+      clearHoverTimers();
+    };
+  });
 </script>
 
 <li
@@ -119,6 +161,8 @@
       expanded = !expanded;
     }
   }}
+  on:mouseenter={scheduleOpenOnHover}
+  on:mouseleave={scheduleCloseOnHover}
 >
   <a
     bind:this={ref}
