@@ -708,6 +708,94 @@ describe("Dropdown", () => {
     expect(dropdown).toHaveClass("bx--list-box--up");
   });
 
+  describe('direction="auto"', () => {
+    afterEach(() => {
+      const existingPortals = document.querySelectorAll(
+        "[data-floating-portal]",
+      );
+      for (const portal of existingPortals) {
+        portal.remove();
+      }
+    });
+
+    it("should portal the menu by default", () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          direction: "auto",
+          open: true,
+        },
+      });
+
+      const menu = screen.getByRole("listbox");
+      const floatingPortal = menu.closest("[data-floating-portal]");
+      expect(floatingPortal).toBeInTheDocument();
+      expect(floatingPortal).toHaveAttribute(
+        "data-floating-direction",
+        "bottom",
+      );
+    });
+
+    it("should flip when the menu would clip the viewport", async () => {
+      const original = Element.prototype.getBoundingClientRect;
+      Element.prototype.getBoundingClientRect = function () {
+        if (this.hasAttribute?.("data-floating-portal")) {
+          return {
+            x: 0,
+            y: 0,
+            width: 150,
+            height: 200,
+            top: 0,
+            right: 150,
+            bottom: 200,
+            left: 0,
+            toJSON() {
+              return this;
+            },
+          } as DOMRect;
+        }
+        if (this.classList?.contains("bx--list-box__field")) {
+          return {
+            x: 100,
+            y: 750,
+            width: 150,
+            height: 40,
+            top: 750,
+            right: 250,
+            bottom: 790,
+            left: 100,
+            toJSON() {
+              return this;
+            },
+          } as DOMRect;
+        }
+        return original.call(this);
+      };
+
+      try {
+        render(Dropdown, {
+          props: {
+            items,
+            selectedId: "0",
+            direction: "auto",
+            open: true,
+          },
+        });
+
+        const menu = screen.getByRole("listbox");
+        await tick();
+        const floatingPortal = menu.closest("[data-floating-portal]");
+        expect(floatingPortal).toHaveAttribute(
+          "data-floating-direction",
+          "top",
+        );
+      } finally {
+        Element.prototype.getBoundingClientRect = original;
+      }
+    });
+  });
+
   it("should select nothing when all items are disabled", async () => {
     const allDisabledItems = [
       { id: "0", text: "Slack", disabled: true },
