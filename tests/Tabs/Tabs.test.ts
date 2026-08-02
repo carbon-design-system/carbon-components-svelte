@@ -13,6 +13,7 @@ import TabSlot from "./TabSlot.test.svelte";
 import Tabs from "./Tabs.test.svelte";
 import TabsAllDisabled from "./TabsAllDisabled.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
+import TabsLazy from "./TabsLazy.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 
 describe("Tabs", () => {
@@ -885,6 +886,63 @@ describe("TabsSkeleton", () => {
 
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
+  });
+
+  describe("TabContent lazy and unmountOnHide", () => {
+    it("keeps unselected content in the DOM with the hidden attribute by default", () => {
+      render(TabsLazy);
+
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(screen.getByText("Content 2")).not.toBeVisible();
+      expect(screen.getByText("Content 3")).not.toBeVisible();
+
+      const panels = screen.getAllByRole("tabpanel", { hidden: true });
+      expect(panels[1]).toHaveAttribute("hidden");
+      expect(panels[2]).toHaveAttribute("hidden");
+    });
+
+    it("does not mount lazy content until the tab is first selected", async () => {
+      render(TabsLazy, { props: { lazy: true } });
+
+      expect(screen.getByText("Content 1")).toBeInTheDocument();
+      expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
+      expect(screen.queryByText("Content 3")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("tab", { name: "Tab 2" }));
+
+      expect(screen.getByText("Content 2")).toBeVisible();
+      expect(screen.queryByText("Content 3")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("tab", { name: "Tab 1" }));
+
+      expect(screen.getByText("Content 2")).toBeInTheDocument();
+      expect(screen.getByText("Content 2")).not.toBeVisible();
+    });
+
+    it("unmounts content when deselected with unmountOnHide", async () => {
+      render(TabsLazy, { props: { unmountOnHide: true } });
+
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("tab", { name: "Tab 2" }));
+
+      expect(screen.getByText("Content 2")).toBeVisible();
+      expect(screen.queryByText("Content 1")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("tab", { name: "Tab 1" }));
+
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
+    });
+
+    it("mounts lazy content on the initially selected tab", () => {
+      render(TabsLazy, { props: { selected: 1, lazy: true } });
+
+      expect(screen.queryByText("Content 1")).not.toBeInTheDocument();
+      expect(screen.getByText("Content 2")).toBeVisible();
+      expect(screen.queryByText("Content 3")).not.toBeInTheDocument();
     });
   });
 });

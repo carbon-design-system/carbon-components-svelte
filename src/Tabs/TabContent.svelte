@@ -2,6 +2,16 @@
   /** Set an id for the top-level element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
+  /**
+   * Set to `true` to defer mounting panel content until this tab is first selected
+   */
+  export let lazy = false;
+
+  /**
+   * Set to `true` to unmount panel content when the tab is deselected
+   */
+  export let unmountOnHide = false;
+
   import { getContext, onMount } from "svelte";
 
   const { selectedContent, addContent, removeContent, tabs, contentById } =
@@ -15,9 +25,13 @@
     };
   });
 
+  let hasBeenSelected = false;
+
   $: selected = $selectedContent === id;
+  $: if (selected) hasBeenSelected = true;
   $: index = $contentById[id]?.index ?? 0;
   $: tabId = $tabs[index]?.id;
+  $: shouldMount = unmountOnHide ? selected : lazy ? hasBeenSelected : true;
 </script>
 
 <div
@@ -29,5 +43,7 @@
   class:bx--tab-content={true}
   {...$$restProps}
 >
-  <slot />
+  {#if shouldMount}
+    <slot />
+  {/if}
 </div>
