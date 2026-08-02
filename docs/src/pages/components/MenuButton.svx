@@ -147,6 +147,16 @@ Pass a Carbon icon to `icon`.
   <MenuItem icon={Copy} on:click={() => console.log("Copy")}>Copy</MenuItem>
 </MenuButton>
 
+### Shortcuts
+
+Set `shortcutText` to show a keyboard hint on the right of the row. Use the `shortcutText` slot for custom content. The hint is display-only; it does not register a keybinding.
+
+<MenuButton labelText="Actions">
+  <MenuItem icon={Cut} shortcutText="⌘X" on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem icon={Copy} shortcutText="⌘C" on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem shortcutText="⌘V" on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
 ### Danger
 
 Set `kind="danger"` on `MenuItem` for a destructive action.

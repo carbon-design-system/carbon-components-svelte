@@ -36,6 +36,12 @@ Pass a Carbon icon to `icon`.
 
 <FileSource src="/framed/Menu/MenuItemIcons" />
 
+### Shortcuts
+
+Set `shortcutText` to show a keyboard hint on the right of the row. Use the `shortcutText` slot for custom content. The hint is display-only; it does not register a keybinding.
+
+<FileSource src="/framed/Menu/MenuItemShortcuts" />
+
 ### Danger
 
 Set `kind="danger"` on `MenuItem` for a destructive action.
