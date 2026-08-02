@@ -28,6 +28,13 @@
   /** Specify the label for the min value */
   export let minLabel = "";
 
+  /**
+   * Format displayed values for range labels and `aria-valuetext`.
+   * Does not change the numeric model; the text inputs stay numeric.
+   * @type {undefined | ((value: number) => string)}
+   */
+  export let formatValue = undefined;
+
   /** Set the step value */
   export let step = 1;
 
@@ -130,6 +137,18 @@
   let holding = false;
   /** @type {PointerLikeEvent | null} */
   let currentEvent = null;
+
+  /** @type {(label: string, numericValue: number) => string | number} */
+  function formatRangeLabel(label, numericValue) {
+    if (label) return label;
+    if (formatValue) return formatValue(numericValue);
+    return label || numericValue;
+  }
+
+  /** @type {(numericValue: number) => string | undefined} */
+  function getValueText(numericValue) {
+    return formatValue ? formatValue(numericValue) : undefined;
+  }
 
   /** @type {(e: PointerLikeEvent) => number | null} */
   function getClientX(event) {
@@ -348,7 +367,9 @@
         />
       {/if}
     </div>
-    <span class:bx--slider__range-label={true}>{minLabel || min}</span>
+    <span class:bx--slider__range-label={true}
+      >{formatRangeLabel(minLabel, min)}</span
+    >
     <div
       bind:this={ref}
       class:bx--slider={true}
@@ -372,6 +393,7 @@
           aria-valuemax={valueUpper}
           aria-valuemin={min}
           aria-valuenow={value}
+          aria-valuetext={getValueText(value)}
           aria-label={ariaLabelInput}
           aria-describedby={invalid ? errorId : warn ? warnId : undefined}
           aria-invalid={invalid || undefined}
@@ -418,6 +440,7 @@
           aria-valuemax={max}
           aria-valuemin={value}
           aria-valuenow={valueUpper}
+          aria-valuetext={getValueText(valueUpper)}
           aria-label={ariaLabelInputUpper}
           aria-describedby={invalid ? errorId : warn ? warnId : undefined}
           aria-invalid={invalid || undefined}
@@ -456,7 +479,9 @@
           100})"
       ></div>
     </div>
-    <span class:bx--slider__range-label={true}>{maxLabel || max}</span>
+    <span class:bx--slider__range-label={true}
+      >{formatRangeLabel(maxLabel, max)}</span
+    >
     <div
       class:bx--slider-text-input-wrapper={true}
       class:bx--slider-text-input-wrapper--upper={true}
