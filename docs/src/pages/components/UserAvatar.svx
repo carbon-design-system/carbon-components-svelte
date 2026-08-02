@@ -42,6 +42,8 @@ Set `icon` to render a custom icon instead of the default user icon.
 
 Set `image` to render a photo. Provide `imageDescription` for the alternative text. The image fills the circle (`object-fit: cover`) and takes priority over the icon and initials.
 
+If the image fails to load, the avatar falls back to the icon or initials and dispatches `image:error`.
+
 <UserAvatar
   size="xl"
   image="https://i.pravatar.cc/300?img=12"
