@@ -12,6 +12,8 @@
   export let hasScrollingContent = false;
   export let primaryButtonText = "";
   export let primaryButtonDisabled = false;
+  export let primaryButtonLoading = false;
+  export let primaryButtonLoadingDescription = "Loading";
   export let primaryButtonIcon = undefined;
   export let shouldSubmitOnEnter = true;
   export let secondaryButtonText = "";
@@ -41,6 +43,8 @@
   {hasScrollingContent}
   {primaryButtonText}
   {primaryButtonDisabled}
+  {primaryButtonLoading}
+  {primaryButtonLoadingDescription}
   {primaryButtonIcon}
   {shouldSubmitOnEnter}
   {secondaryButtonText}

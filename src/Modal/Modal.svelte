@@ -77,6 +77,18 @@
   export let primaryButtonDisabled = false;
 
   /**
+   * Set to `true` to show a loading state on the primary button.
+   * While loading, the button is non-interactive and submit is suppressed.
+   */
+  export let primaryButtonLoading = false;
+
+  /**
+   * Specify the description for the primary button loading state.
+   * Passed to `InlineLoading` as `description`.
+   */
+  export let primaryButtonLoadingDescription = "Loading";
+
+  /**
    * Specify the primary button icon.
    * @type {Icon}
    */
@@ -116,6 +128,7 @@
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
+  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Close from "../icons/Close.svelte";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outsideDismiss.js";
@@ -212,7 +225,8 @@
       } else if (
         shouldSubmitOnEnter &&
         event.key === "Enter" &&
-        !primaryButtonDisabled
+        !primaryButtonDisabled &&
+        !primaryButtonLoading
       ) {
         const target = event.target;
         const tag = target?.tagName;
@@ -342,16 +356,24 @@
         <Button
           bind:ref={primaryButtonRef}
           kind={danger ? "danger" : "primary"}
-          disabled={primaryButtonDisabled}
-          icon={primaryButtonIcon}
+          disabled={primaryButtonDisabled || primaryButtonLoading}
+          icon={primaryButtonLoading ? undefined : primaryButtonIcon}
           type={formId ? "submit" : "button"}
           form={formId}
           on:click={() => {
+            if (primaryButtonLoading) return;
             dispatch("submit");
             dispatch("click:button--primary");
           }}
         >
-          {primaryButtonText}
+          {#if primaryButtonLoading}
+            <InlineLoading
+              status="active"
+              description={primaryButtonLoadingDescription}
+            />
+          {:else}
+            {primaryButtonText}
+          {/if}
         </Button>
       </div>
     {/if}

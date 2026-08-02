@@ -11,6 +11,9 @@
   export let primaryButtonIcon: ComponentProps<ModalFooter>["primaryButtonIcon"] =
     undefined;
   export let primaryButtonDisabled: ComponentProps<ModalFooter>["primaryButtonDisabled"] = false;
+  export let primaryButtonLoading: ComponentProps<ModalFooter>["primaryButtonLoading"] = false;
+  export let primaryButtonLoadingDescription: ComponentProps<ModalFooter>["primaryButtonLoadingDescription"] =
+    "Loading";
   export let primaryClass: ComponentProps<ModalFooter>["primaryClass"] =
     undefined;
   export let secondaryButtonText: ComponentProps<ModalFooter>["secondaryButtonText"] =
@@ -35,6 +38,8 @@
     {primaryButtonText}
     {primaryButtonIcon}
     {primaryButtonDisabled}
+    {primaryButtonLoading}
+    {primaryButtonLoadingDescription}
     {primaryClass}
     {secondaryButtonText}
     {secondaryButtons}

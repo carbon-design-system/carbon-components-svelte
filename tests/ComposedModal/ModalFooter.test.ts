@@ -90,6 +90,59 @@ describe("ModalFooter", () => {
     expect(primaryButton).toBeDisabled();
   });
 
+  describe("primaryButtonLoading", () => {
+    it("shows InlineLoading and does not dispatch submit on click", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ModalFooterTest, {
+        props: {
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+        },
+      });
+
+      expect(screen.getByText("Loading")).toBeInTheDocument();
+      expect(document.querySelector(".bx--inline-loading")).toBeInTheDocument();
+
+      const primaryButton = screen.getByRole("button", { name: /Loading/i });
+      expect(primaryButton).toBeDisabled();
+      await user.click(primaryButton);
+
+      expect(consoleLog).not.toHaveBeenCalledWith("submit");
+      expect(consoleLog).not.toHaveBeenCalledWith("click:button--primary");
+    });
+
+    it("keeps the idle primary button path unchanged", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ModalFooterTest, {
+        props: {
+          primaryButtonText: "Save",
+          primaryButtonLoading: false,
+        },
+      });
+
+      expect(screen.getByText("Save")).toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--inline-loading"),
+      ).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Save" }));
+      expect(consoleLog).toHaveBeenCalledWith("submit");
+      expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
+    });
+
+    it("uses a custom loading description", () => {
+      render(ModalFooterTest, {
+        props: {
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+          primaryButtonLoadingDescription: "Saving...",
+        },
+      });
+
+      expect(screen.getByText("Saving...")).toBeInTheDocument();
+    });
+  });
+
   it("should render danger variant", () => {
     render(ModalFooterTest, {
       props: {
