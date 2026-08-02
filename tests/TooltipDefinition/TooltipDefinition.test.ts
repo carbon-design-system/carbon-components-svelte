@@ -300,5 +300,62 @@ describe("TooltipDefinition", () => {
         "bx--tooltip--portal-active",
       );
     });
+
+    // Regression test: the portalled tooltip sits right against (and
+    // slightly overlaps) the trigger, so the pointer can leave the trigger
+    // and land on the portal before the close timer fires. Without a
+    // mouseenter handler on the portal to cancel that timer, the tooltip
+    // would close and immediately reopen in a loop.
+    it("should stay open when the pointer moves from the trigger onto the portal", async () => {
+      vi.useFakeTimers();
+
+      render(TooltipDefinition, {
+        props: { portalTooltip: true, enterDelayMs: 0, leaveDelayMs: 200 },
+      });
+
+      const trigger = screen.getByText("Tooltip trigger");
+      const definition = trigger.closest(".bx--tooltip--definition");
+      expect.assert(definition instanceof HTMLElement);
+
+      await fireEvent.mouseEnter(definition);
+      expect(screen.getByText("Test tooltip text")).toBeInTheDocument();
+
+      await fireEvent.mouseLeave(definition);
+
+      const portalContent = document.querySelector(".bx--tooltip-portal");
+      expect.assert(portalContent instanceof HTMLElement);
+      await fireEvent.mouseEnter(portalContent);
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(screen.getByText("Test tooltip text")).toBeInTheDocument();
+
+      vi.useRealTimers();
+    });
+
+    it("should close after leaveDelayMs when the pointer leaves the portal", async () => {
+      vi.useFakeTimers();
+
+      render(TooltipDefinition, {
+        props: { portalTooltip: true, enterDelayMs: 0, leaveDelayMs: 200 },
+      });
+
+      const trigger = screen.getByText("Tooltip trigger");
+      const definition = trigger.closest(".bx--tooltip--definition");
+      expect.assert(definition instanceof HTMLElement);
+
+      await fireEvent.mouseEnter(definition);
+
+      const portalContent = document.querySelector(".bx--tooltip-portal");
+      expect.assert(portalContent instanceof HTMLElement);
+      await fireEvent.mouseEnter(portalContent);
+      await fireEvent.mouseLeave(portalContent);
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(screen.queryByText("Test tooltip text")).not.toBeInTheDocument();
+
+      vi.useRealTimers();
+    });
   });
 });

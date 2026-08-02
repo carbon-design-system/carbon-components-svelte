@@ -1,9 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import type TagComponent from "carbon-components-svelte/Tag/Tag.svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import Tag from "./Tag.test.svelte";
+import TagMaxWidth from "./TagMaxWidth.test.svelte";
 
 describe("Tag", () => {
   afterEach(() => {
@@ -258,6 +260,67 @@ describe("Tag", () => {
     assert(tagElement);
     const iconContainer = tagElement.querySelector(".bx--tag__custom-icon");
     expect(iconContainer).toBeInTheDocument();
+  });
+
+  describe("maxWidth truncation", () => {
+    let clientWidthSpy: ReturnType<typeof vi.spyOn>;
+    let scrollWidthSpy: ReturnType<typeof vi.spyOn>;
+
+    function mockOverflow(truncated: boolean) {
+      clientWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "clientWidth", "get")
+        .mockReturnValue(truncated ? 40 : 200);
+      scrollWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+        .mockReturnValue(truncated ? 200 : 40);
+    }
+
+    afterEach(() => {
+      clientWidthSpy?.mockRestore();
+      scrollWidthSpy?.mockRestore();
+    });
+
+    it("applies the truncate class and max-width style", async () => {
+      mockOverflow(false);
+      render(TagMaxWidth, {
+        props: { maxWidth: "8rem", label: "Short", filter: true },
+      });
+      await tick();
+
+      const tag = screen.getByText("Short").closest(".bx--tag");
+      expect(tag).toHaveClass("bx--tag--truncate");
+      expectInlineStyle(tag, { maxWidth: "8rem" });
+    });
+
+    it("does not render a tooltip when the label is not truncated", async () => {
+      mockOverflow(false);
+      render(TagMaxWidth, {
+        props: { maxWidth: "8rem", label: "Short", filter: true },
+      });
+      await tick();
+
+      expect(
+        document.querySelector(".bx--tooltip--definition"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("renders a tooltip when the filter label overflows", async () => {
+      mockOverflow(true);
+      const label =
+        "status:active AND region:us-south AND service:cloud-object-storage";
+      render(TagMaxWidth, {
+        props: { maxWidth: "8rem", label, filter: true },
+      });
+      await tick();
+      // Wrapping the label remounts it; wait for the post-measure update.
+      await tick();
+
+      const tooltip = document.querySelector(".bx--tooltip--definition");
+      expect(tooltip).toBeInTheDocument();
+      expect(
+        tooltip?.querySelector(".bx--tooltip__trigger")?.textContent?.trim(),
+      ).toBe(label);
+    });
   });
 
   describe("Generics", () => {
