@@ -156,12 +156,22 @@
   export let name = "";
 
   /**
+   * Enable paste-to-upload for screenshots and clipboard files.
+   * When `true`, listens for `paste` on `document`. Pass an `HTMLElement`
+   * (for example a form) to listen on that element instead.
+   * Clipboard files use the same size, duplicate, ordering, `add`, `change`,
+   * and `rejected` path as button selection. No-op when `disabled`.
+   * @type {boolean | HTMLElement}
+   */
+  export let pasteTarget = false;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @type {null | HTMLInputElement}
    */
   export let ref = null;
 
-  import { createEventDispatcher, tick } from "svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
   import { filterIncomingFiles } from "../utils/filterIncomingFiles.js";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
@@ -169,6 +179,85 @@
   const dispatch = createEventDispatcher();
 
   let prevFiles = [];
+
+  /** @type {EventTarget | null} */
+  let pasteListenNode = null;
+
+  /**
+   * Shared path for files from button selection and paste: filters by size
+   * and duplicates, orders, and dispatches `change`/`rejected`.
+   * @param {ReadonlyArray<File>} newFiles
+   */
+  function processIncomingFiles(newFiles) {
+    const existingRefs = new Set(prevFiles);
+    const { accepted, rejected: allRejected } = filterIncomingFiles(newFiles, {
+      maxFileSize,
+      preventDuplicate,
+      existingFiles: prevFiles,
+      carryRefs: existingRefs,
+    });
+
+    if (allRejected.length > 0) {
+      dispatch("rejected", allRejected);
+    }
+
+    const carried = accepted.filter((f) => existingRefs.has(f));
+    const added = accepted.filter((f) => !existingRefs.has(f));
+
+    if (typeof orderFiles === "function") {
+      files = orderFiles(carried, added);
+    } else if (orderFiles === "prepend") {
+      files = [...added, ...carried];
+    } else {
+      files = [...carried, ...added];
+    }
+
+    dispatch("change", files);
+  }
+
+  /** @param {ClipboardEvent} event */
+  function handlePaste(event) {
+    if (disabled) return;
+    const clipboardFiles = event.clipboardData?.files;
+    if (!clipboardFiles?.length) return;
+
+    event.preventDefault();
+    const incoming = [...clipboardFiles];
+    processIncomingFiles(multiple ? [...files, ...incoming] : incoming);
+  }
+
+  /** @param {boolean | HTMLElement} target */
+  function setPasteListener(target) {
+    /** @type {EventTarget | null} */
+    const next =
+      target === true
+        ? typeof document === "undefined"
+          ? null
+          : document
+        : typeof HTMLElement !== "undefined" && target instanceof HTMLElement
+          ? target
+          : null;
+
+    if (pasteListenNode === next) return;
+
+    if (pasteListenNode !== null) {
+      pasteListenNode.removeEventListener("paste", handlePaste);
+    }
+
+    pasteListenNode = next;
+
+    if (pasteListenNode !== null) {
+      pasteListenNode.addEventListener("paste", handlePaste);
+    }
+  }
+
+  $: setPasteListener(pasteTarget);
+
+  onMount(() => {
+    return () => {
+      setPasteListener(false);
+    };
+  });
 
   // Per-file stable id: assigned once on first sight and carried with the
   // File reference, so reorders and removals don't shift other files' ids.
@@ -301,36 +390,7 @@
     bind:ref
     bind:files
     on:change={(event) => {
-      // In multiple mode, newFiles includes re-sent existing files
-      // (same reference) plus newly selected ones. Only reject new
-      // objects that match an existing file by content.
-      const existingRefs = new Set(prevFiles);
-      const { accepted: newFiles, rejected: allRejected } = filterIncomingFiles(
-        event.detail,
-        {
-          maxFileSize,
-          preventDuplicate,
-          existingFiles: prevFiles,
-          carryRefs: existingRefs,
-        },
-      );
-
-      if (allRejected.length > 0) {
-        dispatch("rejected", allRejected);
-      }
-
-      const carried = newFiles.filter((f) => existingRefs.has(f));
-      const added = newFiles.filter((f) => !existingRefs.has(f));
-
-      if (typeof orderFiles === "function") {
-        files = orderFiles(carried, added);
-      } else if (orderFiles === "prepend") {
-        files = [...added, ...carried];
-      } else {
-        files = [...carried, ...added];
-      }
-
-      dispatch("change", files);
+      processIncomingFiles(event.detail);
     }}
   />
   <div class:bx--file-container={true}>

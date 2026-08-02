@@ -45,6 +45,7 @@
     undefined;
   export let fileErrorBody: ComponentProps<FileUploader>["fileErrorBody"] =
     undefined;
+  export let pasteTarget: ComponentProps<FileUploader>["pasteTarget"] = false;
 </script>
 
 <form data-testid="file-form">
@@ -66,6 +67,7 @@
     {fileInvalid}
     {fileErrorSubject}
     {fileErrorBody}
+    {pasteTarget}
     bind:ref
     bind:files
     on:add={(e) => onAdd?.(e)}
