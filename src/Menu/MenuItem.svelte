@@ -34,6 +34,19 @@
   export let labelText = undefined;
 
   /**
+   * Specify the shortcut text.
+   * Alternatively, use the "shortcutText" slot.
+   * Display only; does not register a keybinding.
+   * @example
+   * ```svelte
+   * <MenuItem>
+   *   <span slot="shortcutText">⌘S</span>
+   * </MenuItem>
+   * ```
+   */
+  export let shortcutText = "";
+
+  /**
    * Obtain a reference to the list item HTML element.
    * @bindable readonly
    */
@@ -175,6 +188,10 @@
     {#if hasSubmenu}
       <div class:bx--menu-option__info={true}>
         <CaretRight />
+      </div>
+    {:else if shortcutText || $$slots.shortcutText}
+      <div class:bx--menu-option__info={true}>
+        <slot name="shortcutText">{shortcutText}</slot>
       </div>
     {/if}
   </div>

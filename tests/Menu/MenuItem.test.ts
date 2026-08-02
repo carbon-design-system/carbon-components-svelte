@@ -28,6 +28,39 @@ describe("MenuItem", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("renders shortcutText in the info region", async () => {
+    render(MenuItemFixture);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    const item = screen.getByRole("menuitem", { name: "Save ⌘S" });
+    expect(item.querySelector(".bx--menu-option__info")).toHaveTextContent(
+      "⌘S",
+    );
+  });
+
+  it("does not render an info region when shortcutText is unset", async () => {
+    render(MenuItemFixture);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    const item = screen.getByRole("menuitem", { name: "Plain" });
+    expect(
+      item.querySelector(".bx--menu-option__info"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("renders the shortcutText slot", async () => {
+    render(MenuItemSlot);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    const item = screen.getByRole("menuitem", { name: "Save ⌘S" });
+    expect(item.querySelector(".bx--menu-option__info kbd")).toHaveTextContent(
+      "⌘S",
+    );
+  });
+
   it("applies the danger class for kind danger", async () => {
     render(MenuItemFixture);
 
