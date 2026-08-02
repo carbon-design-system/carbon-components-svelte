@@ -66,4 +66,49 @@ describe("createTimeoutDismiss", () => {
     vi.advanceTimersByTime(1000);
     expect(cb).not.toHaveBeenCalled();
   });
+
+  test("pause stops the timer and resume continues with remaining time", () => {
+    const dismiss = createTimeoutDismiss();
+    const cb = vi.fn();
+
+    dismiss.sync(true, 1000, cb);
+    vi.advanceTimersByTime(400);
+    dismiss.pause();
+
+    expect(dismiss.timeoutId).toBeUndefined();
+    vi.advanceTimersByTime(1000);
+    expect(cb).not.toHaveBeenCalled();
+
+    dismiss.resume();
+    vi.advanceTimersByTime(599);
+    expect(cb).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
+    expect(cb).toHaveBeenCalledTimes(1);
+  });
+
+  test("pause is a no-op when no timer is active", () => {
+    const dismiss = createTimeoutDismiss();
+    const cb = vi.fn();
+
+    dismiss.sync(true, 0, cb);
+    dismiss.pause();
+    dismiss.resume();
+
+    vi.advanceTimersByTime(1000);
+    expect(cb).not.toHaveBeenCalled();
+  });
+
+  test("resume fires immediately when remaining time is already zero", () => {
+    const dismiss = createTimeoutDismiss();
+    const cb = vi.fn();
+
+    dismiss.sync(true, 1000, cb);
+    vi.setSystemTime(Date.now() + 1000);
+    dismiss.pause();
+    expect(dismiss.timeoutId).toBeUndefined();
+
+    dismiss.resume();
+    expect(cb).toHaveBeenCalledTimes(1);
+  });
 });
