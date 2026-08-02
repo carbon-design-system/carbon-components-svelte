@@ -47,6 +47,14 @@ Set `step` to control increment size.
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
+### Formatted values
+
+Use `formatValue` to format range labels and `aria-valuetext` (for example currency or percent). The text input and bound `value` stay numeric.
+
+<Slider labelText="Budget" value={50} formatValue={(v) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v)} />
+
+<Slider labelText="Opacity" value={75} formatValue={(v) => `${v}%`} />
+
 ## Light
 
 Use the light variant for light backgrounds.
@@ -104,6 +112,12 @@ Set `hideTextInput` to `true` to hide both numeric inputs while keeping the slid
 Set `min`, `max`, and `step` to customize the range.
 
 <RangeSlider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" step={10} value={100} valueUpper={500} />
+
+### Formatted values
+
+`formatValue` applies to both thumbs' `aria-valuetext` and the range labels. Bound `value` / `valueUpper` stay numeric.
+
+<RangeSlider labelText="Price range" value={20} valueUpper={80} formatValue={(v) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v)} />
 
 ### Invalid
 
