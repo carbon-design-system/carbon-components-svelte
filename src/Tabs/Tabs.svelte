@@ -2,6 +2,7 @@
   /**
    * @event {number} change
    * @event {{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }} dismiss
+   * @slot {{}} extra - Right-aligned tab bar actions outside the scrollable list.
    */
 
   /**
@@ -544,6 +545,7 @@
 
   $: maxSizeIndex = type === "container" ? 3 : 2;
   $: resolvedSize = resolveTabsSize(size, maxSizeIndex);
+  $: hasExtra = $$slots.extra;
 </script>
 
 <div
@@ -563,6 +565,7 @@
   class:bx--layout--size-md={resolvedSize === "md"}
   class:bx--layout--size-lg={resolvedSize === "lg"}
   class:bx--layout--size-xl={resolvedSize === "xl"}
+  class:bx--tabs--with-extra={hasExtra}
   {...$$restProps}
 >
   {#if isOverflow}
@@ -623,6 +626,11 @@
     >
       <ChevronRight />
     </button>
+  {/if}
+  {#if hasExtra}
+    <div class:bx--tabs__extra={true}>
+      <slot name="extra" />
+    </div>
   {/if}
 </div>
 <slot name="content" />
