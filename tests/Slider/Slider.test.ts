@@ -430,6 +430,44 @@ describe("Slider", () => {
     expect(screen.getByText("100 MB")).toBeInTheDocument();
   });
 
+  it("should format aria-valuetext and range labels without changing the numeric value", () => {
+    render(Slider, {
+      props: {
+        value: 50,
+        formatValue: (v) => `$${v}`,
+      },
+    });
+
+    const slider = screen.getByRole("slider");
+    expect(slider).toHaveAttribute("aria-valuetext", "$50");
+    expect(slider).toHaveAttribute("aria-valuenow", "50");
+    expect(screen.getByText("$0")).toBeInTheDocument();
+    expect(screen.getByText("$100")).toBeInTheDocument();
+    expect(screen.getByRole("spinbutton")).toHaveValue(50);
+  });
+
+  it("should keep value numeric when formatValue is set", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Slider, {
+      props: {
+        value: 10,
+        formatValue: (v) => `${v}%`,
+      },
+    });
+
+    const slider = screen.getByRole("slider");
+    expect(slider).toHaveAttribute("aria-valuetext", "10%");
+
+    await user.tab();
+    expect(slider).toHaveFocus();
+    await user.keyboard("{ArrowRight}");
+
+    expect(consoleLog).toHaveBeenCalledWith("change", 11);
+    expect(slider).toHaveAttribute("aria-valuenow", "11");
+    expect(slider).toHaveAttribute("aria-valuetext", "11%");
+    expect(screen.getByRole("spinbutton")).toHaveValue(11);
+  });
+
   it("should handle required state", () => {
     render(Slider, {
       props: { required: true },
