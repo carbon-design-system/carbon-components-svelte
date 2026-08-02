@@ -3,8 +3,10 @@
 
   /**
    * Custom avatar content via the default slot overrides the computed image, icon, and initials.
+   * Compose a presence indicator or other overlay via the `badge` slot.
    * @event {null} image:error - Dispatched when the `image` URL fails to load. The avatar then falls back to the icon or initials.
    * @restProps {span | button | a}
+   * @slot {{}} badge - Overlay content at the bottom-right of the avatar (for example a status dot or `BadgeIndicator`).
    */
 
   /**
@@ -67,6 +69,13 @@
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);
+
+  /**
+   * Specify a presence status. Renders a status indicator as the default
+   * `badge` slot content. A custom `badge` slot overrides this.
+   * @type {"online" | "away" | "busy" | "offline"}
+   */
+  export let status = undefined;
 
   /**
    * Specify the tooltip text. When set, the avatar is wrapped in a tooltip.
@@ -221,6 +230,8 @@
     failedImage = image;
     dispatch("image:error");
   }
+
+  $: hasBadge = $$slots.badge || Boolean(status);
 </script>
 
 {#if useTooltipWrapper}
@@ -237,11 +248,102 @@
     aria-labelledby={ariaLabelledBy}
     aria-describedby={ariaDescribedBy}
   >
-    <span
+    {#if hasBadge}
+      <span class:bx--user-avatar__badge-wrapper={true}>
+        <span
+          bind:this={ref}
+          {id}
+          {...avatarProps}
+          class={avatarClass}
+          on:click
+          on:mouseover
+          on:mouseenter
+          on:mouseleave
+          on:focus
+          on:blur
+          on:keydown
+        >
+          {#if $$slots.default}
+            <slot />
+          {:else if image && image !== failedImage}
+            <img
+              {...imageAttributes}
+              src={image}
+              alt={imageAlt}
+              on:error={handleImageError}
+            >
+          {:else if icon}
+            <svelte:component this={icon} size={glyphSize[resolvedSize]} />
+          {:else if avatarInitials}
+            <span class:bx--user-avatar__text={true}>{avatarInitials}</span>
+          {:else}
+            <User size={glyphSize[resolvedSize]} />
+          {/if}
+        </span>
+        <span class:bx--user-avatar__badge={true}>
+          <slot name="badge">
+            {#if status}
+              <span
+                class:bx--user-avatar__status={true}
+                class:bx--user-avatar__status--online={status === "online"}
+                class:bx--user-avatar__status--away={status === "away"}
+                class:bx--user-avatar__status--busy={status === "busy"}
+                class:bx--user-avatar__status--offline={status === "offline"}
+                aria-hidden="true"
+              ></span>
+            {/if}
+          </slot>
+        </span>
+      </span>
+    {:else}
+      <span
+        bind:this={ref}
+        {id}
+        {...avatarProps}
+        class={avatarClass}
+        on:click
+        on:mouseover
+        on:mouseenter
+        on:mouseleave
+        on:focus
+        on:blur
+        on:keydown
+      >
+        {#if $$slots.default}
+          <slot />
+        {:else if image && image !== failedImage}
+          <img
+            {...imageAttributes}
+            src={image}
+            alt={imageAlt}
+            on:error={handleImageError}
+          >
+        {:else if icon}
+          <svelte:component this={icon} size={glyphSize[resolvedSize]} />
+        {:else if avatarInitials}
+          <span class:bx--user-avatar__text={true}>{avatarInitials}</span>
+        {:else}
+          <User size={glyphSize[resolvedSize]} />
+        {/if}
+      </span>
+    {/if}
+  </TooltipDefinition>
+{:else if hasBadge}
+  <span
+    class:bx--user-avatar__badge-wrapper={true}
+    data-overflow={groupOverflow ? "true" : undefined}
+    data-avatar-group-overflow={$$restProps["data-avatar-group-overflow"]}
+  >
+    <svelte:element
+      this={avatarTag}
       bind:this={ref}
       {id}
-      {...avatarProps}
+      {...$$restProps}
       class={avatarClass}
+      href={isLink ? href : undefined}
+      type={isButton ? "button" : undefined}
+      aria-label={$$restProps["aria-label"] ??
+        (isInteractive && name ? name : undefined)}
       on:click
       on:mouseover
       on:mouseenter
@@ -266,8 +368,22 @@
       {:else}
         <User size={glyphSize[resolvedSize]} />
       {/if}
+    </svelte:element>
+    <span class:bx--user-avatar__badge={true}>
+      <slot name="badge">
+        {#if status}
+          <span
+            class:bx--user-avatar__status={true}
+            class:bx--user-avatar__status--online={status === "online"}
+            class:bx--user-avatar__status--away={status === "away"}
+            class:bx--user-avatar__status--busy={status === "busy"}
+            class:bx--user-avatar__status--offline={status === "offline"}
+            aria-hidden="true"
+          ></span>
+        {/if}
+      </slot>
     </span>
-  </TooltipDefinition>
+  </span>
 {:else}
   <svelte:element
     this={avatarTag}
