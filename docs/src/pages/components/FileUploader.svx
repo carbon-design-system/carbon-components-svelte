@@ -80,6 +80,27 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
+## Per-file status
+
+Use `fileStatus` when files upload independently and should not share one
+global `status`. The callback receives `(file, index)` and returns
+`"uploading"`, `"edit"`, or `"complete"`. When omitted, every row uses
+`status`.
+
+`FileUploader` re-resolves rows when `files` (or the `fileStatus` prop)
+changes. If the callback reads reactive state that updates without
+changing `files`, reassign the list afterward (for example
+`files = [...files]`) so each row picks up the new status.
+
+Optional `fileInvalid`, `fileErrorSubject`, and `fileErrorBody` callbacks
+mark individual rows as invalid with error copy—without switching to
+manual `FileUploaderItem` composition.
+
+This demo starts each new file as uploading, then marks it complete on a
+staggered delay.
+
+<FileSource src="/framed/FileUploader/FileUploaderPerFileStatus" />
+
 ## Per-file status icon labels
 
 Set `iconDescription` to a function for accessible labels that depend on each row. The callback receives `{ file, fileName, status, invalid }`.
