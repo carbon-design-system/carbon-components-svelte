@@ -138,6 +138,12 @@ Set `wrapText` to `true` to wrap long lines in multi-line snippets.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetWrapText" />
 
+## Syntax highlighting
+
+CodeSnippet does not ship a syntax highlighter. Pass the plain source to `code` so copy uses unstyled text, and render highlighted HTML from Prism, Shiki, or another highlighter in the default slot with `{@html}`. Load language grammars and token theme CSS in your app.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetSyntaxHighlight" />
+
 ## Dynamic multi-line code
 
 Use `code` instead of the default slot for dynamically updated code.
