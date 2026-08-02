@@ -121,6 +121,74 @@
   }
 
   //--------------------------------------------------------------------------
+  // Status / badge overlay (bottom-right presence indicator)
+  //--------------------------------------------------------------------------
+  .#{$prefix}--user-avatar__badge-wrapper {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .#{$prefix}--user-avatar__badge {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    display: flex;
+    border-radius: 50%;
+    // Ring separates the badge from the avatar using the surrounding surface.
+    box-shadow: 0 0 0 $carbon--spacing-01
+      var(--cds-ui-background, #{$ui-background});
+    transform: translate(25%, 25%);
+    pointer-events: none;
+  }
+
+  .#{$prefix}--user-avatar__status {
+    display: block;
+    width: $carbon--spacing-03;
+    height: $carbon--spacing-03;
+    border-radius: 50%;
+  }
+
+  .#{$prefix}--user-avatar--lg + .#{$prefix}--user-avatar__badge
+    .#{$prefix}--user-avatar__status,
+  .#{$prefix}--user-avatar--xl + .#{$prefix}--user-avatar__badge
+    .#{$prefix}--user-avatar__status {
+    width: $carbon--spacing-04;
+    height: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--user-avatar__status--online {
+    background-color: $support-success;
+  }
+
+  .#{$prefix}--user-avatar__status--away {
+    background-color: $support-warning;
+  }
+
+  .#{$prefix}--user-avatar__status--busy {
+    position: relative;
+    background-color: $support-error;
+
+    // Horizontal bar distinguishes busy from online when color alone is unreliable.
+    &::after {
+      content: "";
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline-start: 20%;
+      width: 60%;
+      height: 2px;
+      background-color: $text-on-color;
+      transform: translateY(-50%);
+    }
+  }
+
+  .#{$prefix}--user-avatar__status--offline {
+    box-sizing: border-box;
+    border: 2px solid $icon-disabled;
+    background-color: var(--cds-ui-background, #{$ui-background});
+  }
+
+  //--------------------------------------------------------------------------
   // Tooltip wrapper: strip the definition trigger's underline/padding so the
   // circle renders clean when `tooltipText` is set.
   //--------------------------------------------------------------------------
