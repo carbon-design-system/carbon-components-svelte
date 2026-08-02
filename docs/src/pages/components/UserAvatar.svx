@@ -48,6 +48,17 @@ Set `image` to render a photo. Provide `imageDescription` for the alternative te
   imageDescription="Richard Hendricks"
 />
 
+### Image attributes
+
+Pass HTML attributes to the image with `imageAttributes`. Use this for values such as `loading`, `srcset`, or `referrerPolicy`. Rest props stay on the host element; `image` and `imageDescription` still set `src` and `alt`.
+
+<UserAvatar
+  size="xl"
+  image="https://i.pravatar.cc/300?img=12"
+  imageDescription="Richard Hendricks"
+  imageAttributes={{ loading: "lazy" }}
+/>
+
 ### Sizes
 
 Set `size` to one of `"sm"`, `"md"` (default), `"lg"`, or `"xl"`. The size applies to any content; the image fills the frame at every size.
