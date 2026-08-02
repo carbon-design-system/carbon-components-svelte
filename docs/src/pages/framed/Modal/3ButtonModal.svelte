@@ -10,10 +10,13 @@
   bind:open
   modalHeading="Create database"
   primaryButtonText="Confirm"
-  secondaryButtons={[{ text: "Cancel" }, { text: "Edit" }]}
+  secondaryButtons={[
+    { text: "Cancel", kind: "ghost" },
+    { text: "Save draft", kind: "secondary" },
+  ]}
   on:click:button--secondary={({ detail }) => {
     if (detail.text === "Cancel") open = false;
-    if (detail.text === "Edit") console.log("Edit");
+    if (detail.text === "Save draft") console.log("Save draft");
   }}
   on:open
   on:close
