@@ -778,6 +778,12 @@ Compose [SearchMenu](/components/SearchMenu) in the toolbar for a search typeahe
 
 <FileSource src="/framed/DataTable/DataTableSearchMenu" />
 
+## Export
+
+Serialize headers and rows to a CSV string with `toCsv`. It applies each column's `display` formatting and skips empty columns, so the export matches what the table renders. It returns a string instead of triggering a download; pass the result to [`downloadFile`](/components/Link#download-link) (or wire it into [`LinkDownload`](/components/Link#download-link)) when you want a file. Export the current view by passing the rows matching `filteredRowIds`; values a spreadsheet would read as formulas are prefixed with a single quote unless `escapeFormulas` is `false`.
+
+<FileSource src="/framed/DataTable/DataTableExport" />
+
 ## Filtering
 
 Filter rows with `shouldFilterRows`.
