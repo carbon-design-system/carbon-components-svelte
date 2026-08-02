@@ -384,6 +384,133 @@ describe("FileUploaderDropContainer", () => {
     expect(event.detail[0].reason).toBe("invalid");
   });
 
+  it("should reject oversized files with reason size", async () => {
+    const rejectedHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        multiple: true,
+        maxFileSize: 1000,
+        onrejected: rejectedHandler,
+        onchange: changeHandler,
+      },
+    });
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+
+    const smallFile = new File(["x".repeat(500)], "small.txt", {
+      type: "text/plain",
+    });
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+    dropDiv.dispatchEvent(createDragEvent("drop", [smallFile, largeFile]));
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
+      { file: largeFile, reason: "size" },
+    ]);
+    expect(changeHandler.mock.calls[0][0].detail).toHaveLength(1);
+    expect(changeHandler.mock.calls[0][0].detail[0].name).toBe("small.txt");
+  });
+
+  it("should reject duplicate files with reason duplicate", async () => {
+    const existing = new File(["content"], "dup.txt", { type: "text/plain" });
+    Object.defineProperty(existing, "lastModified", { value: 100 });
+    const rejectedHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        multiple: true,
+        preventDuplicate: true,
+        files: [existing],
+        onrejected: rejectedHandler,
+        onchange: changeHandler,
+      },
+    });
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+
+    const duplicate = new File(["content"], "dup.txt", { type: "text/plain" });
+    Object.defineProperty(duplicate, "lastModified", { value: 100 });
+    const unique = new File(["other"], "new.txt", { type: "text/plain" });
+    dropDiv.dispatchEvent(createDragEvent("drop", [duplicate, unique]));
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
+      { file: duplicate, reason: "duplicate" },
+    ]);
+    const files = changeHandler.mock.calls[0][0].detail;
+    expect(files).toHaveLength(2);
+    expect(files.map((f: File) => f.name)).toEqual(["dup.txt", "new.txt"]);
+  });
+
+  it("should apply validateFiles after size and duplicate checks", async () => {
+    const existing = new File(["ok"], "kept.txt", { type: "text/plain" });
+    Object.defineProperty(existing, "lastModified", { value: 1 });
+    const validateFiles = vi.fn((files: File[]) =>
+      files.filter((f: File) => !f.name.startsWith("skip")),
+    );
+    const rejectedHandler = vi.fn();
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: {
+        multiple: true,
+        maxFileSize: 1000,
+        preventDuplicate: true,
+        files: [existing],
+        validateFiles,
+        onrejected: rejectedHandler,
+        onchange: changeHandler,
+      },
+    });
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+
+    const oversized = new File(["x".repeat(2000)], "big.txt", {
+      type: "text/plain",
+    });
+    const duplicate = new File(["ok"], "kept.txt", { type: "text/plain" });
+    Object.defineProperty(duplicate, "lastModified", { value: 1 });
+    const skipped = new File(["x".repeat(10)], "skip-me.txt", {
+      type: "text/plain",
+    });
+    const ok = new File(["x".repeat(10)], "ok.txt", { type: "text/plain" });
+
+    dropDiv.dispatchEvent(
+      createDragEvent("drop", [oversized, duplicate, skipped, ok]),
+    );
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    // validateFiles should only see files that passed size/duplicate
+    expect(validateFiles).toHaveBeenCalledWith([skipped, ok]);
+
+    const rejected = rejectedHandler.mock.calls[0][0].detail;
+    expect(rejected).toEqual([
+      { file: oversized, reason: "size" },
+      { file: duplicate, reason: "duplicate" },
+      { file: skipped, reason: "invalid" },
+    ]);
+    expect(
+      changeHandler.mock.calls[0][0].detail.map((f: File) => f.name),
+    ).toEqual(["kept.txt", "ok.txt"]);
+  });
+
   it("should handle file input change event", async () => {
     const changeHandler = vi.fn();
     const { container } = render(FileUploaderDropContainer, {

@@ -2,7 +2,7 @@
   /**
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} change
-   * @event {Array<{ file: File; reason: string }>} rejected
+   * @event {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} rejected
    */
 
   /**
@@ -22,7 +22,31 @@
   export let multiple = false;
 
   /**
+   * Specify the maximum file size in bytes.
+   * Files exceeding this limit are filtered out and reported via the
+   * `rejected` event with `reason: 'size'`.
+   * File sizes use binary (base 2) units: 1024 bytes = 1 KiB, not 1000 bytes.
+   * @type {number | undefined}
+   * @example
+   * ```svelte
+   * <!-- 5 MB = 5 × 1024 × 1024 = 5,242,880 bytes -->
+   * <FileUploaderDropContainer maxFileSize={5 * 1024 * 1024} />
+   * ```
+   */
+  export let maxFileSize = undefined;
+
+  /**
+   * Set to `true` to reject files that match an already-selected file
+   * (by name, size, and lastModified). Rejected duplicates are reported
+   * via the `rejected` event with `reason: 'duplicate'`.
+   */
+  export let preventDuplicate = false;
+
+  /**
    * Override the default behavior of validating uploaded files.
+   * Runs after `maxFileSize` and `preventDuplicate` checks.
+   * Files removed by this function are reported via `rejected` with
+   * `reason: 'invalid'`.
    * By default, files are not validated.
    * @type {(files: ReadonlyArray<File>) => ReadonlyArray<File>}
    */
@@ -56,10 +80,36 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
+  import { filterIncomingFiles } from "../utils/filterIncomingFiles.js";
 
   const dispatch = createEventDispatcher();
 
   let over = false;
+
+  /** @param {ReadonlyArray<File>} incoming */
+  function processIncoming(incoming) {
+    const { accepted, rejected: builtInRejected } = filterIncomingFiles(
+      incoming,
+      {
+        maxFileSize,
+        preventDuplicate,
+        existingFiles: files,
+      },
+    );
+    const validated = validateFiles(accepted);
+    const acceptedSet = new Set(validated);
+    /** @type {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} */
+    const rejected = [
+      ...builtInRejected,
+      ...accepted
+        .filter((file) => !acceptedSet.has(file))
+        .map((file) => ({ file, reason: /** @type {const} */ ("invalid") })),
+    ];
+    if (rejected.length > 0) dispatch("rejected", rejected);
+    files = multiple ? [...files, ...validated] : validated;
+    dispatch("add", files);
+    dispatch("change", files);
+  }
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -84,16 +134,7 @@
   on:drop|preventDefault|stopPropagation={(event) => {
     if (!disabled) {
       over = false;
-      const incoming = [...event.dataTransfer.files];
-      const newFiles = validateFiles(incoming);
-      const accepted = new Set(newFiles);
-      const rejected = incoming
-        .filter((file) => !accepted.has(file))
-        .map((file) => ({ file, reason: "invalid" }));
-      if (rejected.length > 0) dispatch("rejected", rejected);
-      files = multiple ? [...files, ...newFiles] : newFiles;
-      dispatch("add", files);
-      dispatch("change", files);
+      processIncoming([...event.dataTransfer.files]);
     }
   }}
 >
@@ -131,16 +172,7 @@
     {multiple}
     class:bx--file-input={true}
     on:change={({ target }) => {
-      const incoming = [...target.files];
-      const newFiles = validateFiles(incoming);
-      const accepted = new Set(newFiles);
-      const rejected = incoming
-        .filter((file) => !accepted.has(file))
-        .map((file) => ({ file, reason: "invalid" }));
-      if (rejected.length > 0) dispatch("rejected", rejected);
-      files = multiple ? [...files, ...newFiles] : newFiles;
-      dispatch("add", files);
-      dispatch("change", files);
+      processIncoming([...target.files]);
     }}
     on:click
     on:click={(event) => {
