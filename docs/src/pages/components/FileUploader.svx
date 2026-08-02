@@ -225,22 +225,16 @@ Customize file uploader item size with `size`. The default is `"default"`.
 
 ## Drop container
 
-Use the file uploader drop container for drag-and-drop file uploads. It supports file
-validation and multiple file selection.
+Use the file uploader drop container for drag-and-drop file uploads. It supports
+multiple file selection, size and duplicate checks, and custom validation.
 
-This example accepts files smaller than 1 kB and logs the selected files to the
-console.
+Set `maxFileSize` and `preventDuplicate` for the same rejection reasons as
+`FileUploader` (`size`, `duplicate`). Use `validateFiles` for additional
+filtering; files it removes are reported with `reason: "invalid"`.
 
-<FileUploaderDropContainer
-  multiple
-  labelText="Drag and drop files here or click to upload" 
-  validateFiles={files => {
-    return files.filter(file => file.size < 1_024)
-  }}
-  on:change={e=> {
-    console.log("files", e.detail)
-  }}
-/>
+This example rejects files over 1 kB and duplicates of already-selected files.
+
+<FileSource src="/framed/FileUploader/FileUploaderDropContainerValidation" />
 
 ## Skeleton
 
