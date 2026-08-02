@@ -26,4 +26,25 @@ test.describe("ContainedList", () => {
     const link = page.getByTestId("link-item");
     await expect(link).toHaveCSS("text-decoration-line", "none");
   });
+
+  test("search slot stays under the header while the list scrolls", async ({
+    page,
+  }) => {
+    const scroller = page.getByTestId("search-scroller");
+    await expect(scroller.getByRole("searchbox")).toBeVisible();
+    await scroller.evaluate((el) => {
+      el.scrollTop = 300;
+    });
+    // The header sticks at the top and the search sticks right below it.
+    const gap = await scroller.evaluate((el) => {
+      const header = el.querySelector(".bx--contained-list__header");
+      const search = el.querySelector(".bx--search");
+      if (!header || !search) throw new Error("missing header or search");
+      return Math.round(
+        search.getBoundingClientRect().top -
+          header.getBoundingClientRect().bottom,
+      );
+    });
+    expect(gap).toBe(0);
+  });
 });
