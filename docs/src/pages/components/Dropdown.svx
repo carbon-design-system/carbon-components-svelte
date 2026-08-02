@@ -33,6 +33,14 @@ Omit `selectedId` to render the dropdown with no item selected. The label appear
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Clearable
+
+Set `clearable` to `true` to show a clear button when an item is selected. Clearing resets `selectedId` and dispatches a `clear` event. The clear button is hidden when there is no selection.
+
+<Dropdown clearable labelText="Contact" selectedId="0" label="Choose a contact method" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ### Initial selection
 
 Set `selectedId` to pre-select an item when the dropdown first renders. The trigger shows that item's label in the closed state.
