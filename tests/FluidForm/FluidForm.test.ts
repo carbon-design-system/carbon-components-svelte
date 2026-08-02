@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import FluidFormActionsTest from "./FluidForm.actions.test.svelte";
 import FluidFormTest from "./FluidForm.test.svelte";
 
 describe("FluidForm", () => {
@@ -15,6 +16,37 @@ describe("FluidForm", () => {
     const form = screen.getByTestId("fluid-form");
     expect(component.ref).toBe(form);
     expect(component.ref?.tagName).toBe("FORM");
+  });
+
+  describe("actions", () => {
+    it("calls each action with the form element", () => {
+      const action = vi.fn(() => ({ destroy: vi.fn() }));
+      render(FluidFormActionsTest, { props: { actions: [action] } });
+      const form = screen.getByTestId("fluid-form");
+      expect(action).toHaveBeenCalledTimes(1);
+      expect(action).toHaveBeenCalledWith(form);
+    });
+
+    it("invokes destroy on unmount", () => {
+      const destroy = vi.fn();
+      const action = vi.fn(() => ({ destroy }));
+      const { unmount } = render(FluidFormActionsTest, {
+        props: { actions: [action] },
+      });
+      expect(destroy).not.toHaveBeenCalled();
+      unmount();
+      expect(destroy).toHaveBeenCalledTimes(1);
+    });
+
+    it("passes tuple parameters to actions", () => {
+      const action = vi.fn(() => ({ destroy: vi.fn() }));
+      const parameter = { submit: vi.fn() };
+      render(FluidFormActionsTest, {
+        props: { actions: [[action, parameter]] },
+      });
+      const form = screen.getByTestId("fluid-form");
+      expect(action).toHaveBeenCalledWith(form, parameter);
+    });
   });
 
   it("renders form elements correctly", () => {
