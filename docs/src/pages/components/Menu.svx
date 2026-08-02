@@ -58,6 +58,12 @@ Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu.
 
 Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. The menu closes from an item selection, <DocKbd label="Escape" />, or an outside click; <DocKbd label="Escape" /> also returns focus to the anchor.
 
+## Scrollable
+
+Set `maxHeight` to cap the menu height and scroll the remaining items. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. Keyboard navigation scrolls the focused item into view.
+
+<FileSource src="/framed/Menu/MenuScrollable" />
+
 ## Placement
 
 Menu forwards its placement props to [FloatingPortal](/components/FloatingPortal).
