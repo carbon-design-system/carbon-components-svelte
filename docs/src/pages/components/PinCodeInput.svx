@@ -287,6 +287,29 @@ Use the `labelChildren` slot to render custom label content.
   </span>
 </PinCodeInput>
 
+## Form name
+
+Set `name` so the assembled code participates in native form submission
+(for example SvelteKit form actions and `FormData`). A hidden input mirrors
+`value`. When `name` is set, `required` is applied to the hidden input instead
+of each segment.
+
+```svelte
+<script>
+  import { Form, PinCodeInput, Button } from "carbon-components-svelte";
+</script>
+
+<Form method="POST" action="?/verify">
+  <PinCodeInput
+    name="code"
+    required
+    count={6}
+    labelText="Verification code"
+  />
+  <Button type="submit">Verify</Button>
+</Form>
+```
+
 ## Paste and autofill
 
 Paste a full code into any segment to fill all segments at once. A partial paste fills from the focused segment forward. Non-matching characters are ignored. The paste event fires with the clipboard value (whitespace stripped) before segments are updated.
