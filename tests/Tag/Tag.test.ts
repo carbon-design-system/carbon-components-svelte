@@ -98,6 +98,54 @@ describe("Tag", () => {
     expect(interactiveTag).toHaveClass("bx--tag--interactive");
   });
 
+  it("renders href tag as an anchor with interactive styles", () => {
+    render(Tag);
+
+    const linkedTag = screen.getByRole("link", { name: "Linked tag" });
+    expect(linkedTag).toHaveAttribute("href", "/filtered?tag=ml");
+    expect(linkedTag).toHaveClass("bx--tag");
+    expect(linkedTag).toHaveClass("bx--tag--interactive");
+    expect(linkedTag).toHaveClass("bx--tag--blue");
+  });
+
+  it("forwards target and sets rel for blank targets", () => {
+    render(Tag);
+
+    const linkedTag = screen.getByRole("link", { name: "External linked tag" });
+    expect(linkedTag).toHaveAttribute("target", "_blank");
+    expect(linkedTag).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("disables href navigation when disabled", () => {
+    render(Tag);
+
+    const linkedTag = screen
+      .getByText("Disabled linked tag")
+      .closest(".bx--tag");
+    assert(linkedTag);
+    expect(linkedTag.tagName).toBe("A");
+    expect(linkedTag).not.toHaveAttribute("href");
+    expect(linkedTag).toHaveAttribute("role", "link");
+    expect(linkedTag).toHaveAttribute("aria-disabled", "true");
+    expect(linkedTag).not.toHaveAttribute("tabindex");
+    expect(linkedTag).toHaveClass("bx--tag--disabled");
+  });
+
+  it("prefers filter over href when both are set", () => {
+    render(Tag);
+
+    const filterTag = screen
+      .getByText("Filter wins over href")
+      .closest(".bx--tag");
+    assert(filterTag);
+    expect(filterTag.tagName).toBe("DIV");
+    expect(filterTag).toHaveClass("bx--tag--filter");
+    expect(filterTag).not.toHaveAttribute("href");
+    expect(
+      screen.queryByRole("link", { name: "Filter wins over href" }),
+    ).not.toBeInTheDocument();
+  });
+
   it("renders skeleton state", () => {
     render(Tag);
 
