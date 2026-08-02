@@ -149,6 +149,43 @@ describe("PinCodeInput", () => {
     ).toBe(true);
   });
 
+  it("distributes multi-char autofill input across all segments", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { component } = render(PinCodeInput);
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await fireEvent.input(inputs[0], { target: { value: "1234" } });
+    await tick();
+
+    expect(component.value).toBe("1234");
+    expect(component.code).toEqual(["1", "2", "3", "4"]);
+    expect(inputs[3]).toHaveFocus();
+    expect(consoleLog.mock.calls.some(([event]) => event === "paste")).toBe(
+      false,
+    );
+    expect(
+      consoleLog.mock.calls.some(
+        ([event, detail]) =>
+          event === "complete" &&
+          (detail as { value: string }).value === "1234",
+      ),
+    ).toBe(true);
+  });
+
+  it("keeps single-character input behavior unchanged", async () => {
+    const { component } = render(PinCodeInput);
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await user.keyboard("9");
+    await tick();
+
+    expect(component.value).toBe("9");
+    expect(component.code).toEqual(["9", "", "", ""]);
+    expect(inputs[1]).toHaveFocus();
+  });
+
   it("does not dispatch paste when the clipboard has no valid characters", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(PinCodeInput);

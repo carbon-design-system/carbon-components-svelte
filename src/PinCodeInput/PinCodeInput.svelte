@@ -227,6 +227,29 @@
     }
   }
 
+  /**
+   * Distribute valid characters across segments, matching paste behavior:
+   * a full-length code replaces every segment; otherwise fill from `index`.
+   * @type {(index: number, chars: string[]) => void}
+   */
+  function fillFromChars(index, chars) {
+    const next = code.slice();
+    if (chars.length === count) {
+      for (let i = 0; i < count; i++) next[i] = chars[i];
+    } else {
+      let cursor = index;
+      for (const char of chars) {
+        if (cursor >= count) break;
+        next[cursor++] = char;
+      }
+    }
+    code = next;
+    dispatch("change", { value: code.join(""), code });
+
+    const firstEmpty = code.findIndex((char) => !char);
+    focusInput(firstEmpty === -1 ? count - 1 : firstEmpty);
+  }
+
   /** @type {(index: number, event: Event) => void} */
   function handleInput(index, event) {
     const input = /** @type {HTMLInputElement} */ (event.target);
@@ -234,9 +257,20 @@
       input.value = code[index] ?? "";
       return;
     }
-    let char = input.value;
-    if (char.length > 1) char = char.slice(-1);
 
+    const raw = input.value;
+    // OS/password-manager autofill may insert the whole code into one field.
+    if (raw.length > 1) {
+      const chars = raw.split("").filter(isValidChar);
+      if (chars.length === 0) {
+        input.value = code[index] ?? "";
+        return;
+      }
+      fillFromChars(index, chars);
+      return;
+    }
+
+    const char = raw;
     if (char && !isValidChar(char)) {
       input.value = code[index] ?? "";
       return;
@@ -288,22 +322,7 @@
     if (chars.length === 0) return;
 
     dispatch("paste", { value: text });
-
-    const next = code.slice();
-    if (chars.length === count) {
-      for (let i = 0; i < count; i++) next[i] = chars[i];
-    } else {
-      let cursor = index;
-      for (const char of chars) {
-        if (cursor >= count) break;
-        next[cursor++] = char;
-      }
-    }
-    code = next;
-    dispatch("change", { value: code.join(""), code });
-
-    const firstEmpty = code.findIndex((char) => !char);
-    focusInput(firstEmpty === -1 ? count - 1 : firstEmpty);
+    fillFromChars(index, chars);
   }
 
   /** @type {(event: KeyboardEvent) => void} */
