@@ -53,3 +53,8 @@ Combine the composed modal with a progress indicator to create a multi-step flow
 Set `secondaryButtons` in the modal footer to create a 3-button modal. This replaces secondaryButtonText and takes a tuple of two button configurations.
 
 <FileSource src="/framed/Modal/3ButtonComposedModal" />
+## Primary button loading
+
+Set `primaryButtonLoading` on `ModalFooter` while an async submit is in progress. The primary button shows an [InlineLoading](/components/InlineLoading) spinner, becomes non-interactive, and suppresses `submit` until loading finishes. The modal stays open.
+
+<FileSource src="/framed/Modal/ComposedModalPrimaryButtonLoading" />
