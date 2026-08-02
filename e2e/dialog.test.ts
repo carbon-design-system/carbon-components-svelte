@@ -17,16 +17,35 @@ test.describe("Dialog", () => {
     await expect(page.getByTestId("modal-open-count")).toHaveText("1");
   });
 
-  test("closes the modal on Escape and dispatches a close event", async ({
+  test("closes the modal on Escape with escape-key trigger and restores focus", async ({
     page,
   }) => {
-    await page.getByTestId("open-modal").click();
+    const opener = page.getByTestId("open-modal");
+    await opener.click();
     await expect(page.getByTestId("modal-dialog")).toBeVisible();
 
     await page.keyboard.press("Escape");
 
     await expect(page.getByTestId("modal-dialog")).toBeHidden();
     await expect(page.getByTestId("modal-close-count")).toHaveText("1");
+    await expect(page.getByTestId("modal-close-trigger")).toHaveText(
+      "escape-key",
+    );
+    await expect(opener).toBeFocused();
+  });
+
+  test("closes with close-button trigger via form method=dialog", async ({
+    page,
+  }) => {
+    await page.getByTestId("open-modal").click();
+    await expect(page.getByTestId("modal-dialog")).toBeVisible();
+
+    await page.getByTestId("modal-close-button").click();
+
+    await expect(page.getByTestId("modal-dialog")).toBeHidden();
+    await expect(page.getByTestId("modal-close-trigger")).toHaveText(
+      "close-button",
+    );
   });
 
   test("opens non-modally without a backdrop that blocks the rest of the page", async ({
