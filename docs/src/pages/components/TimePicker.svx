@@ -8,6 +8,7 @@ description: Time pickers provide a time input field with optional period (AM/PM
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 
   let normalizedValue = "";
+  let bookingValue = "10:00";
 </script>
 
 ## Basic
@@ -68,6 +69,31 @@ optional `seconds`, and `valid`.
   normalize
   bind:value={normalizedValue}
   labelText="Departure"
+  on:change={(e) => {
+    console.log("change", e.detail);
+  }}
+/>
+
+## Min and max
+
+Constrain the field to a booking window with `min` and `max` (same format as
+`value`). Out-of-range times join the invalid state and set `reason` to
+`"min"` or `"max"` on the `change` detail. Omit either bound for an open end.
+
+Bounds compare minutes since midnight from the text field. Prefer
+`format="24"` for windows that cross noon. AM/PM `TimePickerSelect` values
+are independent of `min` / `max` — they do not shift the comparison.
+`normalize` still reformats on blur before the range check in `change`.
+
+<TimePicker
+  format="24"
+  normalize
+  min="09:00"
+  max="17:00"
+  bind:value={bookingValue}
+  invalidText="Choose a time between 09:00 and 17:00"
+  labelText="Appointment"
+  helperText="Business hours 09:00–17:00"
   on:change={(e) => {
     console.log("change", e.detail);
   }}
