@@ -64,7 +64,7 @@ describe("ModalFooter", () => {
 
   it("should handle secondary button click", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    render(ModalFooterTest, {
+    const { container } = render(ModalFooterTest, {
       props: {
         secondaryButtonText: "Cancel",
       },
@@ -76,6 +76,25 @@ describe("ModalFooter", () => {
       text: "Cancel",
     });
     expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(container.querySelector(".bx--modal")).not.toHaveClass("is-visible");
+  });
+
+  it("keeps modal open when preventDefault is called on secondary click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(ModalFooterTest, {
+      props: {
+        secondaryButtonText: "Cancel",
+        preventSecondaryDefault: true,
+      },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
+      text: "Cancel",
+    });
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    expect(container.querySelector(".bx--modal")).toHaveClass("is-visible");
   });
 
   it("should disable primary button when configured", () => {

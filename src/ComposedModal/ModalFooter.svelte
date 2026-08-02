@@ -1,8 +1,7 @@
 <script>
   /**
    * @template [Icon=any]
-   * @event click:button--secondary
-   * @property {string} text
+   * @event {{ text: string }} click:button--secondary - Dispatched when a secondary button is clicked. For `secondaryButtonText`, the event is cancelable: call `preventDefault()` to keep the modal open. If not cancelled, the modal closes. Array `secondaryButtons` never auto-close.
    */
 
   /** Specify the primary button text */
@@ -67,6 +66,17 @@
     if (primaryButtonLoading) return;
     submit();
   }
+
+  function handleSecondaryClick() {
+    const shouldContinue = dispatch(
+      "click:button--secondary",
+      { text: secondaryButtonText },
+      { cancelable: true },
+    );
+    if (shouldContinue) {
+      closeModal();
+    }
+  }
 </script>
 
 <div
@@ -90,10 +100,7 @@
     <Button
       kind="secondary"
       class={secondaryClass}
-      on:click={() => {
-        closeModal();
-        dispatch("click:button--secondary", { text: secondaryButtonText });
-      }}
+      on:click={handleSecondaryClick}
     >
       {secondaryButtonText}
     </Button>
