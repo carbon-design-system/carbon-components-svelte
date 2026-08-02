@@ -12,20 +12,31 @@
   // overflow buttons.
   const component = params.has("vertical") ? TabsVertical : Tabs;
   const props = params.has("vertical") ? { orientation: "horizontal" } : {};
+  // `?actions` adds buttons in the `actions` slot.
+  const actions = params.has("actions");
 
   const items = Array.from({ length: 10 }, (_, i) => `Tab label ${i + 1}`);
 </script>
 
 <!-- Constrain the width so the list overflows regardless of the viewport. -->
 <div style="inline-size: 320px;" {dir} data-testid="tabs-overflow">
-  <svelte:component this={component} {...props}>
-    {#each items as item}
-      <Tab label={item} />
-    {/each}
-    <svelte:fragment slot="content">
+  {#if actions}
+    <Tabs>
       {#each items as item}
-        <TabContent>{item} content</TabContent>
+        <Tab label={item} />
       {/each}
-    </svelte:fragment>
-  </svelte:component>
+      <button slot="actions" type="button">Add tab</button>
+    </Tabs>
+  {:else}
+    <svelte:component this={component} {...props}>
+      {#each items as item}
+        <Tab label={item} />
+      {/each}
+      <svelte:fragment slot="content">
+        {#each items as item}
+          <TabContent>{item} content</TabContent>
+        {/each}
+      </svelte:fragment>
+    </svelte:component>
+  {/if}
 </div>

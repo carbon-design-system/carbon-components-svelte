@@ -10,6 +10,7 @@ import TabIconSecondaryLabel from "./TabIconSecondaryLabel.test.svelte";
 import TabSecondaryLabel from "./TabSecondaryLabel.test.svelte";
 import TabSlot from "./TabSlot.test.svelte";
 import Tabs from "./Tabs.test.svelte";
+import TabsActions from "./TabsActions.test.svelte";
 import TabsAllDisabled from "./TabsAllDisabled.test.svelte";
 import TabsDismissible from "./TabsDismissible.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
@@ -327,6 +328,33 @@ describe("Tabs", () => {
     expect(
       container.querySelector(".bx--tab--overflow-nav-button"),
     ).not.toBeInTheDocument();
+  });
+
+  describe("actions slot", () => {
+    it("renders outside the tab list, after it in tab order", async () => {
+      render(TabsActions);
+
+      const action = screen.getByRole("button", { name: "New tab" });
+      expect(screen.getByRole("tablist")).not.toContainElement(action);
+      expect(action.parentElement).toHaveClass("bx--tabs__actions");
+
+      await user.tab();
+      expect(screen.getByRole("tab", { name: "Tab 1" })).toHaveFocus();
+      await user.keyboard("{ArrowRight}{ArrowRight}{ArrowRight}");
+      expect(screen.getByRole("tab", { name: "Tab 1" })).toHaveFocus();
+      await user.tab();
+      expect(action).toHaveFocus();
+    });
+
+    it("renders no wrapper without the slot", () => {
+      const { container } = render(TabsActions, {
+        props: { withActions: false },
+      });
+
+      expect(
+        container.querySelector(".bx--tabs__actions"),
+      ).not.toBeInTheDocument();
+    });
   });
 
   it("should apply custom class", () => {
