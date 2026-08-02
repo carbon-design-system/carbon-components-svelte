@@ -808,4 +808,58 @@ describe("Slider", () => {
     expect(Number.isInteger(secondValue)).toBe(true);
     expect(secondValue % 1).toBe(0);
   });
+
+  it("should render labeled marks at the given values", () => {
+    const { container } = render(Slider, {
+      props: {
+        min: 0,
+        max: 3,
+        step: 1,
+        value: 1,
+        marks: [
+          { value: 0, label: "Off" },
+          { value: 1, label: "Low" },
+          { value: 2, label: "Med" },
+          { value: 3, label: "High" },
+        ],
+      },
+    });
+
+    const marksEl = container.querySelector(".bx--slider__marks");
+    const markEls = container.querySelectorAll(".bx--slider__mark");
+    expect(marksEl).toBeInTheDocument();
+    expect(markEls).toHaveLength(4);
+    expect(screen.getByText("Off")).toBeInTheDocument();
+    expect(screen.getByText("Low")).toBeInTheDocument();
+    expect(screen.getByText("Med")).toBeInTheDocument();
+    expect(screen.getByText("High")).toBeInTheDocument();
+    expect(markEls[0]).toHaveStyle({ left: "0%" });
+    expect(markEls[1]).toHaveStyle({ left: `${(1 / 3) * 100}%` });
+    expect(markEls[3]).toHaveStyle({ left: "100%" });
+    expect(container.querySelector(".bx--slider")).toHaveClass(
+      "bx--slider--with-marks",
+      "bx--slider--with-mark-labels",
+    );
+  });
+
+  it("should place a tick at every step when marks is true", () => {
+    const { container } = render(Slider, {
+      props: { min: 0, max: 10, step: 5, marks: true },
+    });
+
+    const markEls = container.querySelectorAll(".bx--slider__mark");
+    expect(markEls).toHaveLength(3);
+    expect(markEls[0]).toHaveStyle({ left: "0%" });
+    expect(markEls[1]).toHaveStyle({ left: "50%" });
+    expect(markEls[2]).toHaveStyle({ left: "100%" });
+    expect(container.querySelector(".bx--slider__mark-label")).toBeNull();
+  });
+
+  it("should not render marks when marks is false", () => {
+    const { container } = render(Slider, {
+      props: { marks: false },
+    });
+
+    expect(container.querySelector(".bx--slider__marks")).toBeNull();
+  });
 });
