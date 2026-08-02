@@ -576,6 +576,42 @@ describe("NotificationQueue", () => {
     },
   );
 
+  it("should render action button from actionText and invoke onAction", async () => {
+    vi.useRealTimers();
+    const onAction = vi.fn();
+    const { component } = render(NotificationQueueTest);
+
+    getQueue(component).add({
+      kind: "success",
+      title: "Item deleted",
+      subtitle: "You can undo this action.",
+      actionText: "Undo",
+      onAction,
+    });
+    await tick();
+
+    const actionButton = screen.getByRole("button", { name: "Undo" });
+    expect(actionButton).toBeInTheDocument();
+
+    await user.click(actionButton);
+    expect(onAction).toHaveBeenCalledTimes(1);
+  });
+
+  it("should not render action button when actionText is omitted", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    getQueue(component).add({
+      kind: "success",
+      title: "No action",
+    });
+    await tick();
+
+    expect(
+      screen.queryByRole("button", { name: "Undo" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Close notification")).toBeInTheDocument();
+  });
+
   it.each(["bottom-right", "bottom-left", "bottom-center"] as const)(
     "should append notifications for %s position",
     async (position) => {

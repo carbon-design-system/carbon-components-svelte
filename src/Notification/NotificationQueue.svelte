@@ -10,6 +10,8 @@
    * @property {boolean} [lowContrast]
    * @property {string} [closeButtonDescription]
    * @property {boolean} [hideCloseButton]
+   * @property {string} [actionText] - Label for an action button rendered in the toast actions slot
+   * @property {() => void} [onAction] - Click handler for the action button
    */
 
   /**
@@ -42,6 +44,7 @@
    */
   export let maxNotifications = 3;
 
+  import NotificationActionButton from "./NotificationActionButton.svelte";
   import ToastNotification from "./ToastNotification.svelte";
 
   /** @type {Array<NotificationData & { id: string }>} */
@@ -163,10 +166,19 @@
     style:z-index={zIndex}
   >
     {#each notifications as notification (notification.id)}
+      {@const { actionText, onAction, ...toastProps } = notification}
       <ToastNotification
-        {...notification}
+        {...toastProps}
         on:close={() => remove(notification.id)}
-      />
+      >
+        <svelte:fragment slot="actions">
+          {#if actionText}
+            <NotificationActionButton on:click={onAction}>
+              {actionText}
+            </NotificationActionButton>
+          {/if}
+        </svelte:fragment>
+      </ToastNotification>
     {/each}
   </div>
 {/if}
