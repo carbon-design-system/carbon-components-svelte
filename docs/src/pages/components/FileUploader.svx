@@ -181,6 +181,24 @@ file by name, size, and last modified. Rejected duplicates are reported via
 
 <FileSource src="/framed/FileUploader/FileUploaderPreventDuplicate" />
 
+## Paste uploads
+
+Set `pasteTarget` to `true` to accept screenshots and other clipboard files
+pasted anywhere on the page.
+
+Pasted files use the same size limit, duplicate detection, ordering, and
+`add` / `change` / `rejected` events as button selection. Paste is ignored when
+`disabled` is `true`.
+
+<FileSource src="/framed/FileUploader/FileUploaderPaste" />
+
+### Focused target
+
+Pass an `HTMLElement` to listen only when paste happens on that element (for
+example a bug-report form). Focus inside the form and paste a screenshot.
+
+<FileSource src="/framed/FileUploader/FileUploaderPasteFocusedTarget" />
+
 ## Disabled
 
 Disable the file uploader by setting `disabled` to `true`.
