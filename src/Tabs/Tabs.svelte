@@ -3,6 +3,7 @@
    * @event {number} change
    * @event {{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }} dismiss
    * @restProps {div}
+   * @slot {{}} actions - Buttons at the inline end of the tab bar, outside the tab list. They are not tabs: Tab moves to them after the tab list, and arrow keys skip them.
    */
 
   /**
@@ -704,6 +705,11 @@
     >
       <ChevronRight />
     </button>
+  {/if}
+  {#if $$slots.actions}
+    <div class:bx--tabs__actions={true}>
+      <slot name="actions" />
+    </div>
   {/if}
 </div>
 <slot name="content" />

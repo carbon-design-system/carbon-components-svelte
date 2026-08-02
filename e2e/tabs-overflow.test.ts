@@ -115,3 +115,36 @@ for (const variant of ["", "&vertical"]) {
     });
   });
 }
+
+for (const dir of ["ltr", "rtl"]) {
+  test(`Tabs actions sit at the inline end, outside the list (${dir})`, async ({
+    page,
+  }) => {
+    await page.goto(`/tabs-overflow.html?actions&dir=${dir}`);
+    const root = page.getByTestId("tabs-overflow");
+
+    // The list still overflows, and the forward button stays beside it.
+    await expect(page.locator(NEXT)).not.toHaveClass(new RegExp(HIDDEN));
+
+    // Measure once the layout settles: the overflow buttons appear after
+    // the list measures itself, which shifts the boxes.
+    await expect(async () => {
+      const [rootBox, navBox, nextBox, actionBox] = await Promise.all([
+        root.boundingBox(),
+        page.getByRole("tablist").boundingBox(),
+        page.locator(NEXT).boundingBox(),
+        page.getByRole("button", { name: "Add tab" }).boundingBox(),
+      ]);
+      if (!rootBox || !navBox || !nextBox || !actionBox) {
+        throw new Error("box");
+      }
+      const end = (box: typeof rootBox) =>
+        dir === "rtl" ? -box.x : box.x + box.width;
+      const start = (box: typeof rootBox) =>
+        dir === "rtl" ? -(box.x + box.width) : box.x;
+      expect(end(actionBox)).toBeCloseTo(end(rootBox), 0);
+      expect(start(actionBox)).toBeGreaterThanOrEqual(end(nextBox));
+      expect(start(nextBox)).toBeGreaterThanOrEqual(end(navBox) - 1);
+    }).toPass();
+  });
+}
