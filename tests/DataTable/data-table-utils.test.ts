@@ -5,6 +5,7 @@ import {
   resolvePath,
   rowsEqual,
   shouldIgnoreRowClick,
+  toCsv,
 } from "../../src/DataTable/data-table-utils.js";
 
 describe("shouldIgnoreRowClick", () => {
@@ -1182,5 +1183,136 @@ describe("formatHeaderWidth", () => {
     const header = { width: null, minWidth: null };
     // null is falsy, so it won't be included
     expect(formatHeaderWidth(header)).toBeUndefined();
+  });
+});
+
+describe("toCsv", () => {
+  const headers = [
+    { key: "name", value: "Name" },
+    { key: "port", value: "Port" },
+  ];
+  const rows = [
+    { id: "a", name: "Load Balancer 1", port: 3000 },
+    { id: "b", name: "Load Balancer 2", port: 443 },
+  ];
+
+  it("serializes headers and rows with CRLF line endings", () => {
+    expect(toCsv(headers, rows)).toBe(
+      "Name,Port\r\nLoad Balancer 1,3000\r\nLoad Balancer 2,443",
+    );
+  });
+
+  it("omits the header row when includeHeaders is false", () => {
+    expect(toCsv(headers, rows, { includeHeaders: false })).toBe(
+      "Load Balancer 1,3000\r\nLoad Balancer 2,443",
+    );
+  });
+
+  it("quotes fields containing the delimiter, quotes, or newlines", () => {
+    const csv = toCsv(
+      [{ key: "name", value: "Name" }],
+      [
+        { id: "a", name: "Round robin, DNS delegation" },
+        { id: "b", name: 'Rule "primary"' },
+        { id: "c", name: "Line 1\nLine 2" },
+      ],
+    );
+
+    expect(csv).toBe(
+      [
+        "Name",
+        '"Round robin, DNS delegation"',
+        '"Rule ""primary"""',
+        '"Line 1\nLine 2"',
+      ].join("\r\n"),
+    );
+  });
+
+  it("applies display formatting instead of the raw value", () => {
+    const csv = toCsv(
+      [
+        {
+          key: "port",
+          value: "Port",
+          display: (item: unknown) => `Port ${item}`,
+        },
+      ],
+      rows,
+    );
+
+    expect(csv).toBe("Port\r\nPort 3000\r\nPort 443");
+  });
+
+  it("resolves nested dot-notation keys", () => {
+    const csv = toCsv(
+      [{ key: "contact.company", value: "Company" }],
+      [{ id: "a", contact: { company: "IBM" } }],
+    );
+
+    expect(csv).toBe("Company\r\nIBM");
+  });
+
+  it("skips empty headers", () => {
+    const csv = toCsv(
+      [
+        { key: "name", value: "Name" },
+        { key: "overflow", empty: true },
+      ],
+      rows,
+    );
+
+    expect(csv).toBe("Name\r\nLoad Balancer 1\r\nLoad Balancer 2");
+  });
+
+  it("falls back to the header key when value is absent", () => {
+    expect(toCsv([{ key: "name" }], rows)).toBe(
+      "name\r\nLoad Balancer 1\r\nLoad Balancer 2",
+    );
+  });
+
+  it("stringifies null, undefined, and Date values", () => {
+    const csv = toCsv(
+      [
+        { key: "name", value: "Name" },
+        { key: "port", value: "Port" },
+        { key: "created", value: "Created" },
+      ],
+      [
+        {
+          id: "a",
+          name: null,
+          port: undefined,
+          created: new Date("2024-01-15T10:30:00.000Z"),
+        },
+      ],
+    );
+
+    expect(csv).toBe("Name,Port,Created\r\n,,2024-01-15T10:30:00.000Z");
+  });
+
+  it("prefixes formula values unless escapeFormulas is false", () => {
+    const formulaHeaders = [{ key: "name", value: "Name" }];
+    const formulaRows = [{ id: "a", name: "=1+1" }];
+
+    expect(toCsv(formulaHeaders, formulaRows)).toBe("Name\r\n'=1+1");
+    expect(toCsv(formulaHeaders, formulaRows, { escapeFormulas: false })).toBe(
+      "Name\r\n=1+1",
+    );
+  });
+
+  it("uses a custom delimiter for both separation and quoting", () => {
+    const csv = toCsv(
+      headers,
+      [{ id: "a", name: "Round robin, DNS delegation; fallback", port: 3000 }],
+      { delimiter: ";" },
+    );
+
+    expect(csv).toBe(
+      'Name;Port\r\n"Round robin, DNS delegation; fallback";3000',
+    );
+  });
+
+  it("emits only the header row when there are no rows", () => {
+    expect(toCsv(headers, [])).toBe("Name,Port");
   });
 });
