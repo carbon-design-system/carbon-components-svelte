@@ -10,6 +10,7 @@
    * @property {MultiSelectItemText} text
    * @property {boolean} [disabled] - Whether the item is disabled
    * @property {boolean} [isSelectAll] - Whether this item acts as a "select all" toggle
+   * @property {string} [group] - Group label used to render items under a non-selectable header
    * @event select
    * @type {object}
    * @property {Item["id"][]} selectedIds
@@ -20,6 +21,7 @@
    * @event {{ trigger: "escape-key" | "outside-click" }} close
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
+   * @slot {{ group: string; items: ReadonlyArray<Item & { checked: boolean }>; }} group
    */
 
   /**
@@ -132,7 +134,9 @@
   /**
    * Override the sorting logic.
    * The default sorting compare the item text value.
-   * @type {((a: Item, b: Item) => number) | (() => void)}
+   * Each item carries a `checked` flag, so the comparator can sort by selection
+   * state (for example, to float selected items to the top within a group).
+   * @type {((a: Item & { checked: boolean }, b: Item & { checked: boolean }) => number) | (() => void)}
    */
   export let sortItem = (a, b) =>
     a.text.localeCompare(b.text, locale, { numeric: true });
@@ -301,6 +305,7 @@
     getMenuMaxHeight,
   } from "../ListBox/list-box-utils.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { groupItems } from "../utils/groupItems.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { moveIndex } from "../utils/moveIndex.js";
@@ -611,6 +616,17 @@
       .filter((item) => item.isSelectAll)
       .map((item) => ({ ...item, checked: allChecked }));
 
+    // When items are grouped, keep each group's items contiguous and skip the
+    // selection-feedback reorder, which would otherwise pull checked items out
+    // of their group.
+    if (regularItems.some((item) => item.group)) {
+      const withChecked = regularItems.map((item) => ({
+        ...item,
+        checked: selectedIdsSet.has(item.id),
+      }));
+      return [...selectAllEntries, ...groupItems(withChecked, sortItem)];
+    }
+
     if (
       selectionFeedback === "top" ||
       selectionFeedback === "top-after-reopen"
@@ -743,13 +759,39 @@
   $: activeDescendantId =
     highlightedId == null ? null : `${id}-${highlightedId}`;
 
+  $: hasGroups = sortedItems.some((item) => item.group);
+
+  // Auto-virtualization assumes uniform row height, which group headers break.
+  // Honor an explicit `virtualize` opt-in, but do not auto-enable it for
+  // grouped lists.
   $: shouldVirtualize =
     virtualize === false
       ? false
-      : virtualize !== undefined || items.length > 100;
+      : virtualize !== undefined || (!hasGroups && items.length > 100);
 
   $: itemsToUse = filterable ? filteredItems : sortedItems;
   $: scrollEndTracker.noteItemCount(itemsToUse.length);
+
+  // Per-group derived data for header rendering: a stable id (used by each
+  // option's aria-describedby so screen readers announce the group) and the
+  // group's items (exposed to the `group` slot for counts/aggregation).
+  $: groupHeaderIds = new Map();
+  $: groupItemsByLabel = new Map();
+  $: {
+    groupHeaderIds = new Map();
+    groupItemsByLabel = new Map();
+    let groupIndex = 0;
+    for (const item of itemsToUse) {
+      if (!item.group) continue;
+      const existing = groupItemsByLabel.get(item.group);
+      if (existing) {
+        existing.push(item);
+      } else {
+        groupHeaderIds.set(item.group, `${id}-group-${groupIndex++}`);
+        groupItemsByLabel.set(item.group, [item]);
+      }
+    }
+  }
 
   $: menuMaxHeight = getMenuMaxHeight(size);
 
@@ -1125,6 +1167,7 @@
       <ListBoxMenu
         aria-label={ariaLabel}
         {id}
+        class={hasGroups ? "bx--list-box__menu--grouped" : undefined}
         portal={effectivePortalMenu}
         portalHostClass="bx--multi-select bx--list-box--expanded"
         {open}
@@ -1163,11 +1206,31 @@
                   !item.checked &&
                   !item.disabled &&
                   !item.isSelectAll}
+                {#if item.group && item.group !== itemsToUse[actualIndex - 1]?.group}
+                  <div
+                    role="presentation"
+                    id={groupHeaderIds.get(item.group)}
+                    class:bx--list-box__menu-item--group-header={true}
+                  >
+                    <slot
+                      name="group"
+                      group={item.group}
+                      items={groupItemsByLabel.get(item.group) ?? []}
+                    >
+                      {item.group}
+                    </slot>
+                  </div>
+                {/if}
                 <ListBoxMenuItem
                   id="{id}-{item.id}"
                   role="option"
                   aria-labelledby="checkbox-{id}-{item.id}"
-                  aria-describedby={capDisabled ? maxSelectedId : undefined}
+                  aria-describedby={[
+                    capDisabled ? maxSelectedId : null,
+                    item.group ? groupHeaderIds.get(item.group) : null,
+                  ]
+                    .filter(Boolean)
+                    .join(" ") || undefined}
                   aria-selected={item.isSelectAll ? allSelected : item.checked}
                   aria-checked={item.isSelectAll
                     ? selectAllIndeterminate
@@ -1245,11 +1308,31 @@
               !item.checked &&
               !item.disabled &&
               !item.isSelectAll}
+            {#if item.group && item.group !== itemsToUse[index - 1]?.group}
+              <div
+                role="presentation"
+                id={groupHeaderIds.get(item.group)}
+                class:bx--list-box__menu-item--group-header={true}
+              >
+                <slot
+                  name="group"
+                  group={item.group}
+                  items={groupItemsByLabel.get(item.group) ?? []}
+                >
+                  {item.group}
+                </slot>
+              </div>
+            {/if}
             <ListBoxMenuItem
               id="{id}-{item.id}"
               role="option"
               aria-labelledby="checkbox-{id}-{item.id}"
-              aria-describedby={capDisabled ? maxSelectedId : undefined}
+              aria-describedby={[
+                capDisabled ? maxSelectedId : null,
+                item.group ? groupHeaderIds.get(item.group) : null,
+              ]
+                .filter(Boolean)
+                .join(" ") || undefined}
               aria-selected={item.isSelectAll ? allSelected : item.checked}
               aria-checked={item.isSelectAll
                 ? selectAllIndeterminate
