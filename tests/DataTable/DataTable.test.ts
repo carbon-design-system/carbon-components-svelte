@@ -942,6 +942,61 @@ describe("DataTable", () => {
     expect(selectedRow).toBeInTheDocument();
   });
 
+  it("handles shift+click range selection", async () => {
+    render(DataTable, {
+      props: {
+        selectable: true,
+        headers,
+        rows,
+      },
+    });
+
+    const checkboxes = screen.getAllByRole("checkbox");
+
+    await user.click(checkboxes[0]);
+
+    await user.keyboard("{Shift>}");
+    await user.click(checkboxes[2]);
+    await user.keyboard("{/Shift}");
+
+    // Every row between the anchor and the shift-clicked row is selected.
+    expect(checkboxes[0]).toBeChecked();
+    expect(checkboxes[1]).toBeChecked();
+    expect(checkboxes[2]).toBeChecked();
+
+    // Shift+click again to deselect the range back to the anchor.
+    await user.keyboard("{Shift>}");
+    await user.click(checkboxes[1]);
+    await user.keyboard("{/Shift}");
+
+    expect(checkboxes[0]).toBeChecked();
+    expect(checkboxes[1]).not.toBeChecked();
+    expect(checkboxes[2]).not.toBeChecked();
+  });
+
+  it("does not range-select non-selectable rows on shift+click", async () => {
+    render(DataTable, {
+      props: {
+        selectable: true,
+        nonSelectableRowIds: ["b"],
+        headers,
+        rows,
+      },
+    });
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    expect(checkboxes).toHaveLength(2);
+
+    await user.click(checkboxes[0]);
+
+    await user.keyboard("{Shift>}");
+    await user.click(checkboxes[1]);
+    await user.keyboard("{/Shift}");
+
+    expect(checkboxes[0]).toBeChecked();
+    expect(checkboxes[1]).toBeChecked();
+  });
+
   it("handles batch selection", async () => {
     const { container } = render(DataTable, {
       props: {
