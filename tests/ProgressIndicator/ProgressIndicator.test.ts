@@ -312,6 +312,36 @@ describe("ProgressIndicator", () => {
       await user.click(screen.getByText("Step 3"));
       expect(consoleLog).toHaveBeenLastCalledWith("change", 1);
     });
+
+    it("does not track the logical step across removal when selectedId is unset (documents existing index-based behavior)", async () => {
+      const { rerender } = render(ProgressIndicatorConditional, {
+        showOptional: true,
+        currentIndex: 2,
+      });
+
+      let listItems = screen.getAllByRole("listitem");
+      expect(listItems[2]).toHaveTextContent("Step 3");
+      expect(listItems[2]).toHaveClass("bx--progress-step--current");
+
+      rerender({ showOptional: false, currentIndex: 2 });
+
+      await waitFor(() => {
+        expect(screen.getAllByRole("listitem")).toHaveLength(2);
+      });
+
+      listItems = screen.getAllByRole("listitem");
+      // Step 3 shifted from index 2 to index 1, but currentIndex is still 2
+      // (no selectedId to re-anchor it) — by design, no step is marked
+      // "current" anymore. This is the pre-existing, unchanged behavior;
+      // selectedId is the opt-in fix for it.
+      expect(listItems[1]).toHaveTextContent("Step 3");
+      expect(listItems[1]).not.toHaveClass("bx--progress-step--current");
+      expect(
+        listItems.some((item) =>
+          item.classList.contains("bx--progress-step--current"),
+        ),
+      ).toBe(false);
+    });
   });
 
   it("should not throw when ProgressStep is rendered outside a ProgressIndicator", () => {
@@ -415,6 +445,46 @@ describe("ProgressIndicator", () => {
       expect(listItems[0]).toHaveClass("bx--progress-step--current");
       expect(screen.getByTestId("selected-id")).toHaveTextContent("step-b");
       expect(screen.getByTestId("current-index")).toHaveTextContent("0");
+    });
+
+    it("falls back when the selectedId step itself is removed", async () => {
+      render(ProgressIndicatorSelectedId, {
+        props: { selectedId: "step-a", showStepA: true },
+      });
+
+      await user.click(screen.getByTestId("toggle-step-a"));
+
+      await waitFor(() => {
+        expect(screen.getAllByRole("listitem")).toHaveLength(2);
+      });
+
+      const listItems = screen.getAllByRole("listitem");
+      expect(listItems[0]).toHaveTextContent("Step B");
+      expect(listItems[0]).toHaveClass("bx--progress-step--current");
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("step-b");
+      expect(screen.getByTestId("current-index")).toHaveTextContent("0");
+    });
+
+    it("uses the index API when selectedId is unset", () => {
+      render(ProgressIndicatorSelectedId, {
+        props: { currentIndex: 2, selectedId: undefined },
+      });
+
+      const listItems = screen.getAllByRole("listitem");
+      expect(listItems[2]).toHaveClass("bx--progress-step--current");
+      expect(screen.getByTestId("current-index")).toHaveTextContent("2");
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("");
+    });
+
+    it("lets selectedId win over currentIndex", () => {
+      render(ProgressIndicatorSelectedId, {
+        props: { currentIndex: 0, selectedId: "step-c" },
+      });
+
+      const listItems = screen.getAllByRole("listitem");
+      expect(listItems[2]).toHaveClass("bx--progress-step--current");
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("step-c");
+      expect(screen.getByTestId("current-index")).toHaveTextContent("2");
     });
   });
 });
