@@ -4,6 +4,7 @@ import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import ProgressIndicatorConditional from "./ProgressIndicatorConditional.test.svelte";
 import ProgressIndicatorIssue1249 from "./ProgressIndicatorIssue1249.test.svelte";
 import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";
+import ProgressIndicatorSelectedId from "./ProgressIndicatorSelectedId.test.svelte";
 import ProgressStepIconSlot from "./ProgressStepIconSlot.test.svelte";
 import ProgressStepStandalone from "./ProgressStepStandalone.test.svelte";
 
@@ -388,6 +389,32 @@ describe("ProgressIndicator", () => {
       await waitFor(() => {
         expect(listItems[2]).toHaveClass("bx--progress-step--complete");
       });
+    });
+  });
+
+  describe("selectedId", () => {
+    it("keeps selectedId on the same logical step when a prior step is removed", async () => {
+      render(ProgressIndicatorSelectedId, {
+        props: { selectedId: "step-b", showStepA: true },
+      });
+
+      let listItems = screen.getAllByRole("listitem");
+      expect(listItems[1]).toHaveTextContent("Step B");
+      expect(listItems[1]).toHaveClass("bx--progress-step--current");
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("step-b");
+      expect(screen.getByTestId("current-index")).toHaveTextContent("1");
+
+      await user.click(screen.getByTestId("toggle-step-a"));
+
+      await waitFor(() => {
+        expect(screen.getAllByRole("listitem")).toHaveLength(2);
+      });
+
+      listItems = screen.getAllByRole("listitem");
+      expect(listItems[0]).toHaveTextContent("Step B");
+      expect(listItems[0]).toHaveClass("bx--progress-step--current");
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("step-b");
+      expect(screen.getByTestId("current-index")).toHaveTextContent("0");
     });
   });
 });
