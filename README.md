@@ -8,7 +8,7 @@
 
 Carbon Components Svelte is a [Svelte](https://github.com/sveltejs/svelte) component library that implements the [Carbon Design System](https://www.carbondesignsystem.com/), an open source design system by IBM. Ship accessible, consistent, production-ready interfaces.
 
-- **70+ components**: from inputs to data tables
+- **90+ components**: from inputs to data tables
 - **5 built-in themes**: two light, three dark
 - **Fully typed TypeScript API**: props, events, and slots
 - **WCAG 2.1 AA**: keyboard and screen-reader ready
