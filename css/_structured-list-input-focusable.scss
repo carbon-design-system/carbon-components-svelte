@@ -34,7 +34,11 @@
     @include hidden;
   }
 
-  .#{$prefix}--structured-list-row:focus-within {
+  // Scoped to `--selection`: `:focus-within` also fires for any focusable
+  // content a consumer places inside a plain row (e.g. a sort button in a
+  // header row), which isn't the row-level selection state this is for.
+  .#{$prefix}--structured-list--selection
+    .#{$prefix}--structured-list-row:focus-within {
     @include focus-outline("outline");
   }
 
