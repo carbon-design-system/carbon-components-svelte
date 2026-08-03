@@ -76,9 +76,8 @@ Below the medium breakpoint, vertical tabs collapse into the same horizontal, sc
 ## Manual activation
 
 By default, tabs use automatic activation: arrow keys move focus and select the
-tab. Set `activation` to `"manual"` so arrow keys only move focus; press
-<DocKbd label="Enter" /> or <DocKbd label="Space" /> to select. Use manual
-activation when switching panels is expensive.
+tab. Set `activation` to `"manual"` so arrow keys only move focus. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to select.
+Use manual activation when switching panels is expensive.
 
 <Tabs activation="manual">
   <Tab label="Tab label 1" />
