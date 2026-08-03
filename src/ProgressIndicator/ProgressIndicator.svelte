@@ -1,9 +1,20 @@
 <script>
   /**
    * Specify the current step index.
+   * Ignored when `selectedId` is set.
    * @bindable writable
    */
   export let currentIndex = 0;
+
+  /**
+   * Specify the current step by id.
+   * When set, takes precedence over `currentIndex` and stays on the same
+   * logical step as steps are added or removed. Pair with a stable `id` on
+   * each `ProgressStep`.
+   * @bindable writable
+   * @type {string | undefined}
+   */
+  export let selectedId = undefined;
 
   /** Set to `true` to use the vertical variant */
   export let vertical = false;
@@ -77,10 +88,38 @@
    */
   function change(index) {
     if (preventChangeOnClick) return;
-    currentIndex = index;
+
+    if (selectedId === undefined) {
+      currentIndex = index;
+    } else {
+      const step = $steps[index];
+      if (!step) return;
+      selectedId = step.id;
+    }
 
     /** @event {number} change */
     dispatch("change", index);
+  }
+
+  /**
+   * Resolve `currentIndex` from `selectedId` when set. If the selected id was
+   * removed, keep the same index (next step) or clamp, and re-anchor
+   * `selectedId` to whatever step that resolves to.
+   * @type {() => void}
+   */
+  function syncSelection() {
+    if (selectedId === undefined) return;
+
+    const step = $stepsById[selectedId];
+    if (step) {
+      currentIndex = step.index;
+      return;
+    }
+
+    if ($steps.length === 0) return;
+
+    currentIndex = Math.min(Math.max(currentIndex, 0), $steps.length - 1);
+    selectedId = $steps[currentIndex]?.id;
   }
 
   setContext("carbon:ProgressIndicator", {
@@ -92,12 +131,25 @@
     change,
   });
 
-  $: steps.update((_) =>
-    _.map((step, i) => ({
-      ...step,
-      current: i === currentIndex,
-    })),
-  );
+  // Combined into one statement (rather than a separate syncSelection()
+  // block feeding this one) so the flag recompute always runs in the same
+  // pass right after syncSelection(), using the just-resolved currentIndex.
+  // Svelte skips re-invalidating `currentIndex` when syncSelection() (called
+  // from a different reactive statement) reassigns it to the same numeric
+  // value, which would otherwise leave stale `current` flags on removal.
+  // This also makes the recompute run on every steps add/remove (via
+  // `$stepsById`), not just when currentIndex itself changes.
+  $: {
+    if (selectedId !== undefined && $stepsById) {
+      syncSelection();
+    }
+    steps.update((_) =>
+      _.map((step, i) => ({
+        ...step,
+        current: i === currentIndex,
+      })),
+    );
+  }
   $: preventChangeOnClickStore.set(preventChangeOnClick);
 </script>
 
