@@ -7,6 +7,7 @@ import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
 import ContentSwitcherLowContrast from "./ContentSwitcher.lowContrast.test.svelte";
 import ContentSwitcherLowContrastIconOnly from "./ContentSwitcher.lowContrastIconOnly.test.svelte";
 import ContentSwitcherNested from "./ContentSwitcher.nested.test.svelte";
+import ContentSwitcherSelectedId from "./ContentSwitcher.selectedId.test.svelte";
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
 import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.svelte";
 import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
@@ -604,6 +605,85 @@ describe("ContentSwitcher", () => {
 
       await user.keyboard("{Enter}");
       expect(consoleLog).toHaveBeenCalledWith("change", 1);
+    });
+  });
+
+  describe("selectedId", () => {
+    it("keeps selectedId on the same logical switch when a prior switch is removed", async () => {
+      render(ContentSwitcherSelectedId, {
+        props: { selectedId: "switch-b", showSwitchA: true },
+      });
+
+      expect(screen.getByRole("tab", { name: "Switch B" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("switch-b");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+
+      await user.click(screen.getByTestId("toggle-switch-a"));
+
+      expect(
+        screen.queryByRole("tab", { name: "Switch A" }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByRole("tab", { name: "Switch B" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("switch-b");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+    });
+
+    it("falls back when the selectedId switch itself is removed", async () => {
+      render(ContentSwitcherSelectedId, {
+        props: { selectedId: "switch-b", showSwitchA: true, showSwitchB: true },
+      });
+
+      await user.click(screen.getByTestId("toggle-switch-b"));
+
+      expect(
+        screen.queryByRole("tab", { name: "Switch B" }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("switch-c");
+      expect(screen.getByRole("tab", { name: "Switch C" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+    });
+
+    it("uses the index API when selectedId is unset", async () => {
+      render(ContentSwitcherSelectedId, {
+        props: { selectedIndex: 2, selectedId: undefined },
+      });
+
+      expect(screen.getByRole("tab", { name: "Switch C" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("");
+
+      await user.click(screen.getByRole("tab", { name: "Switch A" }));
+
+      expect(screen.getByRole("tab", { name: "Switch A" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("");
+    });
+
+    it("lets selectedId win over selectedIndex", () => {
+      render(ContentSwitcherSelectedId, {
+        props: { selectedIndex: 0, selectedId: "switch-c" },
+      });
+
+      expect(screen.getByRole("tab", { name: "Switch C" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("switch-c");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
     });
   });
 });
