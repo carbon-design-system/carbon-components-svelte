@@ -5,9 +5,20 @@
 
   /**
    * Set the selected index of the switch item.
+   * Ignored when `selectedId` is set.
    * @bindable writable
    */
   export let selectedIndex = 0;
+
+  /**
+   * Specify the selected switch by id.
+   * When set, takes precedence over `selectedIndex` and stays on the same
+   * logical switch as switches are added or removed. Pair with a stable `id`
+   * on each `Switch`.
+   * @bindable writable
+   * @type {string | undefined}
+   */
+  export let selectedId = undefined;
 
   /**
    * Specify the size of the content switcher.
@@ -56,6 +67,10 @@
   // Inferred when every registered switch provides an `icon`.
   $: iconOnly = switches.length > 0 && switches.every((s) => s.icon);
 
+  $: if (selectedId !== undefined && switches) {
+    syncSelection();
+  }
+
   // Flag to trigger DOM reordering only when switches change.
   // This is necessary to avoid infinite loops in Svelte 5.
   let needsDomSync = false;
@@ -75,7 +90,7 @@
       return;
     }
 
-    if (selected) {
+    if (selectedId === undefined && selected) {
       selectedIndex = switches.length;
     }
 
@@ -95,7 +110,32 @@
    * @type {(id: string) => void}
    */
   function update(id) {
+    if (selectedId !== undefined) {
+      selectedId = id;
+      return;
+    }
     selectedIndex = switches.map(({ id }) => id).indexOf(id);
+  }
+
+  /**
+   * Resolve `selectedIndex` from `selectedId` when set. If the selected id was
+   * removed, keep the same index (next switch) or clamp, and re-anchor
+   * `selectedId` to whatever switch that resolves to.
+   * @type {() => void}
+   */
+  function syncSelection() {
+    if (selectedId === undefined) return;
+
+    const index = switches.findIndex((s) => s.id === selectedId);
+    if (index > -1) {
+      selectedIndex = index;
+      return;
+    }
+
+    if (switches.length === 0) return;
+
+    selectedIndex = Math.min(Math.max(selectedIndex, 0), switches.length - 1);
+    selectedId = switches[selectedIndex]?.id;
   }
 
   /**
@@ -103,7 +143,14 @@
    */
   async function changeTo(index) {
     if (index < 0 || index >= switches.length) return;
-    selectedIndex = index;
+
+    if (selectedId === undefined) {
+      selectedIndex = index;
+    } else {
+      const target = switches[index];
+      if (!target) return;
+      selectedId = target.id;
+    }
 
     await tick();
     const tab = document.getElementById(switches[index].id);
@@ -146,15 +193,15 @@
     if (needsDomSync && ref) {
       needsDomSync = false;
 
-      const selectedId = switches[selectedIndex]?.id;
+      const preservedId = switches[selectedIndex]?.id;
       switches = syncDomOrder({
         root: ref,
         selector: "[role='tab']",
         items: switches,
       });
 
-      if (selectedId !== undefined) {
-        const nextIndex = switches.findIndex((s) => s.id === selectedId);
+      if (preservedId !== undefined) {
+        const nextIndex = switches.findIndex((s) => s.id === preservedId);
         if (nextIndex > -1) {
           selectedIndex = nextIndex;
         }
