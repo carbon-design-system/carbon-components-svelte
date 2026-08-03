@@ -40,6 +40,14 @@
     { id: "b1", name: "Item A" },
     { id: "b2", name: "Item B" },
   ];
+
+  const selectRangeHeaders = [{ key: "name", value: "Product" }];
+
+  const selectRangeRows = [
+    { id: "r1", name: "Item A" },
+    { id: "r2", name: "Item B" },
+    { id: "r3", name: "Item C" },
+  ];
 </script>
 
 <div data-testid="data-table-basic">
@@ -68,4 +76,8 @@
 
 <div data-testid="data-table-batch">
   <DataTable batchSelection headers={batchHeaders} rows={batchRows} />
+</div>
+
+<div data-testid="data-table-select-range">
+  <DataTable selectable headers={selectRangeHeaders} rows={selectRangeRows} />
 </div>

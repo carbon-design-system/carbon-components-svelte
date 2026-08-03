@@ -223,6 +223,7 @@
   /**
    * Set to `true` for the selectable variant.
    * Automatically set to `true` if `radio` or `batchSelection` are `true`.
+   * Shift-clicking a row checkbox extends selection to every row between it and the last row clicked (not supported with `radio`).
    * @bindable writable
    */
   export let selectable = false;
@@ -498,6 +499,37 @@
   function resetSelectedRowIds() {
     selectAll = false;
     selectedRowIds = [];
+    lastSelectedRowId = null;
+  }
+
+  /** Anchor row id for shift+click range selection; cleared when the anchor no longer exists in the current row order. */
+  let lastSelectedRowId = null;
+
+  /**
+   * Apply `checked` to every selectable row between the anchor row and `targetIndex` (inclusive),
+   * where `targetIndex` is a position in `rowsToVirtualize`. Returns `false` if the anchor row
+   * is no longer present (for example, filtered out), so the caller can fall back to a single toggle.
+   * @type {(targetIndex: number, checked: boolean) => boolean}
+   */
+  function selectRowRange(targetIndex, checked) {
+    const anchorIndex = rowsToVirtualize.findIndex(
+      (row) => row.id === lastSelectedRowId,
+    );
+    if (anchorIndex === -1) return false;
+
+    const start = Math.min(anchorIndex, targetIndex);
+    const end = Math.max(anchorIndex, targetIndex);
+    const next = new Set(selectedRowIds);
+    for (const row of rowsToVirtualize.slice(start, end + 1)) {
+      if (nonSelectableRowIdsSet.has(row.id)) continue;
+      if (checked) {
+        next.add(row.id);
+      } else {
+        next.delete(row.id);
+      }
+    }
+    selectedRowIds = [...next];
+    return true;
   }
 
   setContext("carbon:DataTable", {
@@ -1067,22 +1099,25 @@
                         aria-label="Select row"
                         checked={selectedRowIdsSet.has(row.id)}
                         value={row.id}
-                        on:change={() => {
-                          if (selectedRowIdsSet.has(row.id)) {
-                            selectedRowIds = selectedRowIds.filter(
-                              (id) => id !== row.id,
-                            );
-                            dispatch("click:row--select", {
-                              row,
-                              selected: false,
-                            });
-                          } else {
-                            selectedRowIds = [...selectedRowIds, row.id];
-                            dispatch("click:row--select", {
-                              row,
-                              selected: true,
-                            });
+                        on:click={(event) => {
+                          const checked = event.target.checked;
+                          const usedRange =
+                            event.shiftKey &&
+                            lastSelectedRowId !== null &&
+                            selectRowRange(actualIndex, checked);
+
+                          if (!usedRange) {
+                            const next = new Set(selectedRowIds);
+                            if (checked) {
+                              next.add(row.id);
+                            } else {
+                              next.delete(row.id);
+                            }
+                            selectedRowIds = [...next];
                           }
+
+                          lastSelectedRowId = row.id;
+                          dispatch("click:row--select", { row, selected: checked });
                         }}
                       />
                     {/if}
@@ -1292,17 +1327,25 @@
                         aria-label="Select row"
                         checked={isSelected}
                         value={row.id}
-                        on:change={() => {
-                          const next = new Set(selectedRowIds);
-                          if (isSelected) {
-                            next.delete(row.id);
+                        on:click={(event) => {
+                          const checked = event.target.checked;
+                          const usedRange =
+                            event.shiftKey &&
+                            lastSelectedRowId !== null &&
+                            selectRowRange(index, checked);
+
+                          if (!usedRange) {
+                            const next = new Set(selectedRowIds);
+                            if (checked) {
+                              next.add(row.id);
+                            } else {
+                              next.delete(row.id);
+                            }
                             selectedRowIds = [...next];
-                            dispatch("click:row--select", { row, selected: false });
-                          } else {
-                            next.add(row.id);
-                            selectedRowIds = [...next];
-                            dispatch("click:row--select", { row, selected: true });
                           }
+
+                          lastSelectedRowId = row.id;
+                          dispatch("click:row--select", { row, selected: checked });
                         }}
                       />
                     {/if}
