@@ -1517,7 +1517,7 @@ Enable row selection with checkboxes or radios, with optional batch actions.
 
 ### Checkbox
 
-Set `selectable` to `true` for multi-select. Bind selectedRowIds to track selections. Use inputName to customize checkbox names.
+Set `selectable` to `true` for multi-select. Bind selectedRowIds to track selections. Use inputName to customize checkbox names. Hold <DocKbd label="Shift" /> while clicking a checkbox to select every row between it and the last row clicked.
 
 <FileSource src="/framed/DataTable/SelectableDataTable" />
 
