@@ -1,6 +1,6 @@
 A complete [Svelte](https://github.com/sveltejs/svelte) component library that implements the [IBM Carbon Design System](https://www.carbondesignsystem.com/). Ship accessible, consistent, production-ready interfaces.
 
-- **70+ components** — from inputs to data tables
+- **90+ components** — from inputs to data tables
 - **5 built-in themes** — two light, three dark
 - **Fully typed TypeScript API** — props, events, and slots
 - **WCAG 2.1 AA** — keyboard and screen-reader ready
@@ -277,7 +277,7 @@ Documentation is available in LLM-friendly plain text for use with coding assist
 
 The Carbon Svelte collection includes packages for icons, pictograms, and data visualization:
 
-- **Carbon Components Svelte** — 70+ components — [GitHub](https://github.com/carbon-design-system/carbon-components-svelte)
+- **Carbon Components Svelte** — 90+ components — [GitHub](https://github.com/carbon-design-system/carbon-components-svelte)
 - **Carbon Icons Svelte** — 2,700+ icons — [GitHub](https://github.com/carbon-design-system/carbon-icons-svelte)
 - **Carbon Pictograms Svelte** — 1,500+ pictograms — [GitHub](https://github.com/carbon-design-system/carbon-pictograms-svelte)
 - **Carbon Charts Svelte** — 25+ charts, powered by d3 — [GitHub](https://github.com/carbon-design-system/carbon-charts/tree/master/packages/svelte)

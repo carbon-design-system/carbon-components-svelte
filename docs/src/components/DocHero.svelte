@@ -22,7 +22,7 @@
 <Box tag="section" class="hero band" paddingY={8}>
   <Grid>
     <Row style="margin-top: 2rem">
-      <Column xlg={10} lg={12} md={8} sm={4}>
+      <Column>
         <Stack gap={3}>
           {#if eyebrow}
             <DocEyebrow {eyebrow} {icon} />
