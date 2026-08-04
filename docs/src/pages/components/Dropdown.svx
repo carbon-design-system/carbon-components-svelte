@@ -363,6 +363,12 @@ When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defa
 
 <FileSource src="/framed/Dropdown/DropdownPortalMenu" />
 
+### Custom max height
+
+Set `maxHeight` to override the size-based default height of a portaled menu. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. The menu scrolls once its items exceed the height.
+
+<FileSource src="/framed/Dropdown/DropdownMaxHeight" />
+
 ## Skeleton
 
 Display a loading state using the dropdown skeleton.
