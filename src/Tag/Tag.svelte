@@ -342,7 +342,7 @@
     class:bx--tag--outline={type === "outline"}
     {...$$restProps}
     style:max-width={maxWidth}
-    on:click
+
     on:mouseover
     on:mouseenter
     on:mouseleave
