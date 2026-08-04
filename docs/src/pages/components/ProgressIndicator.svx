@@ -33,6 +33,12 @@ Create a horizontal progress indicator with four steps.
   />
 </ProgressIndicator>
 
+## Selected by id
+
+For dynamic step sets, bind `selectedId` and give each `ProgressStep` a stable `id`. Selection stays on the same logical step when steps before it are added or removed. When set, `selectedId` takes precedence over `currentIndex`.
+
+<FileSource src="/framed/ProgressIndicator/ProgressIndicatorSelectedId" />
+
 ## Prevent change on click
 
 Disable automatic step selection when clicking completed steps.

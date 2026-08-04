@@ -18,6 +18,7 @@
    * @event {null} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
    * @event {{ trigger: "escape-key" | "outside-click" }} close
+   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    */
 
@@ -75,6 +76,14 @@
    * @type {"top" | "fixed" | "top-after-reopen"}
    */
   export let selectionFeedback = "top-after-reopen";
+
+  /**
+   * Cap how many items can be selected at once.
+   * Unset or a non-positive value means unlimited.
+   * When set, select-all is unavailable and unchecked items disable once the cap is reached.
+   * @type {number | undefined}
+   */
+  export let maxSelectedItems = undefined;
 
   /** Set to `true` to disable the dropdown */
   export let disabled = false;
@@ -286,6 +295,7 @@
   } from "../ListBox/list-box-utils.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
@@ -295,6 +305,7 @@
   } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+  const scrollEndTracker = createScrollEndTracker();
   const formContext = getContext("carbon:Form");
   const insideModal = getContext("carbon:Modal");
 
@@ -329,12 +340,25 @@
     declareRef,
   });
 
+  /**
+   * Whether an item should be treated as disabled for selection and keyboard nav.
+   * Checked items stay enabled at the cap so they can be cleared.
+   * @param {Item & { checked?: boolean }} item
+   */
+  function isItemDisabled(item) {
+    if (item.disabled) return true;
+    if (hasMaxSelectedItems && item.isSelectAll) return true;
+    if (isAtSelectionCap && !item.checked) return true;
+    return false;
+  }
+
   function change(step) {
     const navigableItems = filterable ? filteredItems : sortedItems;
     highlightedIndex = nextEnabledIndex({
       items: navigableItems,
       index: highlightedIndex,
       step,
+      isDisabled: isItemDisabled,
     });
     highlightOrigin = "keyboard";
   }
@@ -344,7 +368,7 @@
     // Read-only allows opening and navigating the menu to review values, but
     // never changing them. Guarding here covers every path (click, Enter,
     // label click, select-all) so callers don't each need a readonly check.
-    if (readonly || item.disabled) return;
+    if (readonly || isItemDisabled(item)) return;
 
     if (item.isSelectAll) {
       const target = !allSelected;
@@ -493,7 +517,27 @@
         listRef.scrollTop = listScrollTop;
       }
     }
+    if (!open) {
+      scrollEndTracker.reset();
+    }
   });
+
+  /**
+   * @param {Event} event
+   */
+  function handleMenuScroll(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    listScrollTop = target.scrollTop;
+    const detail = scrollEndTracker.observe({
+      scrollTop: target.scrollTop,
+      scrollHeight: target.scrollHeight,
+      clientHeight: target.clientHeight,
+      itemCount: itemsToUse.length,
+    });
+    if (detail) {
+      dispatch("scrollend", detail);
+    }
+  }
 
   function sort() {
     const selectedIdsSet = new Set(selectedIds);
@@ -617,6 +661,10 @@
   $: selectionCount = hasSelectAll
     ? checked.filter((item) => !item.isSelectAll).length
     : checked.length;
+  $: hasMaxSelectedItems =
+    typeof maxSelectedItems === "number" && maxSelectedItems > 0;
+  $: isAtSelectionCap =
+    hasMaxSelectedItems && selectionCount >= maxSelectedItems;
   $: filteredItems = sortedItems.filter(
     (item) => item.isSelectAll || filterItem(item, value),
   );
@@ -634,6 +682,7 @@
       : virtualize !== undefined || items.length > 100;
 
   $: itemsToUse = filterable ? filteredItems : sortedItems;
+  $: scrollEndTracker.noteItemCount(itemsToUse.length);
 
   $: menuMaxHeight = getMenuMaxHeight(size);
 
@@ -822,6 +871,7 @@
             } else if (event.key === "Escape") {
               close("escape-key");
             } else if (event.key === " ") {
+              if (readonly) event.preventDefault();
               if (!open) open = true;
             } else if (event.key === "Backspace" && value === "") {
               selectedIds = [];
@@ -996,9 +1046,7 @@
         aria-multiselectable="true"
         aria-readonly={readonly || undefined}
         on:scroll
-        on:scroll={(event) => {
-          listScrollTop = event.target.scrollTop;
-        }}
+        on:scroll={handleMenuScroll}
         on:mouseleave={() => {
           // Clear the hover highlight when the cursor leaves the menu so the
           // highlighted state does not linger on the last hovered item.
@@ -1019,6 +1067,10 @@
             <div style="transform: translateY({virtualData.offsetY}px);">
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
+                {@const itemDisabled =
+                  item.disabled ||
+                  (hasMaxSelectedItems && !!item.isSelectAll) ||
+                  (isAtSelectionCap && !item.checked)}
                 <ListBoxMenuItem
                   id="{id}-{item.id}"
                   role="option"
@@ -1031,9 +1083,9 @@
                     : item.checked}
                   active={item.isSelectAll ? false : item.checked}
                   highlighted={highlightedIndex === actualIndex}
-                  disabled={item.disabled}
+                  disabled={itemDisabled}
                   on:click={(event) => {
-                    if (item.disabled) {
+                    if (itemDisabled) {
                       event.stopPropagation();
                       return;
                     }
@@ -1048,7 +1100,7 @@
                     }
                   }}
                   on:mouseenter={() => {
-                    if (item.disabled) return;
+                    if (itemDisabled) return;
                     highlightedIndex = actualIndex;
                     highlightOrigin = "pointer";
                   }}
@@ -1064,7 +1116,7 @@
                     indeterminate={item.isSelectAll
                       ? selectAllIndeterminate
                       : false}
-                    disabled={item.disabled}
+                    disabled={itemDisabled}
                     {readonly}
                   >
                     <slot
@@ -1083,6 +1135,10 @@
           </div>
         {:else}
           {#each itemsToRender as item, index (item.id)}
+            {@const itemDisabled =
+              item.disabled ||
+              (hasMaxSelectedItems && !!item.isSelectAll) ||
+              (isAtSelectionCap && !item.checked)}
             <ListBoxMenuItem
               id="{id}-{item.id}"
               role="option"
@@ -1095,9 +1151,9 @@
                 : item.checked}
               active={item.isSelectAll ? false : item.checked}
               highlighted={highlightedIndex === index}
-              disabled={item.disabled}
+              disabled={itemDisabled}
               on:click={(event) => {
-                if (item.disabled) {
+                if (itemDisabled) {
                   event.stopPropagation();
                   return;
                 }
@@ -1112,7 +1168,7 @@
                 }
               }}
               on:mouseenter={() => {
-                if (item.disabled) return;
+                if (itemDisabled) return;
                 highlightedIndex = index;
                 highlightOrigin = "pointer";
               }}
@@ -1128,7 +1184,7 @@
                 indeterminate={item.isSelectAll
                   ? selectAllIndeterminate
                   : false}
-                disabled={item.disabled}
+                disabled={itemDisabled}
                 {readonly}
               >
                 <slot

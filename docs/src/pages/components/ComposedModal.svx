@@ -34,6 +34,18 @@ The modal dispatches a cancelable `close` event. Call e.preventDefault() to keep
 
 <FileSource src="/framed/Modal/ComposedModalPreventClose" />
 
+## Hide close button
+
+Set `hideCloseButton` on `ModalHeader` to remove the header close button. Use this for forced-choice dialogs such as auth walls or terms acceptance. Always provide an alternative dismiss path — typically footer actions — and pair with `preventCloseOnClickOutside` when outside clicks should not dismiss the dialog. <DocKbd label="Escape" /> still closes the modal unless you cancel the `close` event.
+
+<FileSource src="/framed/Modal/ComposedModalHideCloseButton" />
+
+## Prevent secondary button close
+
+`secondaryButtonText` closes the modal by default. The footer dispatches a cancelable `click:button--secondary` event first. Call `e.preventDefault()` to keep the modal open — for example when Cancel should stay put for a dirty form.
+
+<FileSource src="/framed/Modal/ComposedModalPreventSecondaryClose" />
+
 ## Danger
 
 Display critical or destructive actions with the danger variant. Set `danger` on both ComposedModal and ModalFooter for the red danger styling.
@@ -53,3 +65,8 @@ Combine the composed modal with a progress indicator to create a multi-step flow
 Set `secondaryButtons` in the modal footer to create a 3-button modal. This replaces secondaryButtonText and takes a tuple of two button configurations.
 
 <FileSource src="/framed/Modal/3ButtonComposedModal" />
+## Primary button loading
+
+Set `primaryButtonLoading` on `ModalFooter` while an async submit is in progress. The primary button shows an [InlineLoading](/components/InlineLoading) spinner, becomes non-interactive, and suppresses `submit` until loading finishes. The modal stays open.
+
+<FileSource src="/framed/Modal/ComposedModalPrimaryButtonLoading" />

@@ -16,9 +16,10 @@
    *
    * Derived from `code` (i.e. `code.join("")`); bind to read the assembled
    * value. When `complete` is `true`, its length equals `count`. Each
-   * character matches the active `type`: `0-9` for `"numeric"`, `a-zA-Z0-9`
-   * for `"alphanumeric"`. Original casing is preserved regardless of
-   * `uppercase`, which only affects the visual rendering.
+   * character matches `pattern` when set, otherwise the active `type`:
+   * `0-9` for `"numeric"`, `a-zA-Z0-9` for `"alphanumeric"`. Original casing
+   * is preserved regardless of `uppercase`, which only affects the visual
+   * rendering.
    * @bindable readonly
    */
   export let value = "";
@@ -28,8 +29,8 @@
    *
    * `code` is the source of truth; its length tracks `count`. Each element is
    * either an empty string (unfilled segment) or a single character matching
-   * the active `type`: `0-9` for `"numeric"`, `a-zA-Z0-9` for
-   * `"alphanumeric"`.
+   * `pattern` when set, otherwise the active `type`: `0-9` for `"numeric"`,
+   * `a-zA-Z0-9` for `"alphanumeric"`.
    * @type {string[]}
    * @bindable writable
    */
@@ -39,9 +40,21 @@
    * Specify the type of allowed characters.
    *
    * `"numeric"` allows `0-9`; `"alphanumeric"` allows `a-z`, `A-Z`, `0-9`.
+   * Ignored when `pattern` is set.
    * @type {"numeric" | "alphanumeric"}
    */
   export let type = "numeric";
+
+  /**
+   * Override the per-character validation used for typing and paste.
+   *
+   * Accepts a `RegExp` or a string compiled with `new RegExp(...)`. The
+   * pattern is tested against each individual character, not the full
+   * assembled value. When unset, `type` selects the preset (`"numeric"` or
+   * `"alphanumeric"`).
+   * @type {RegExp | string | undefined}
+   */
+  export let pattern = undefined;
 
   /**
    * Set to `true` to visually display the characters in uppercase
@@ -110,6 +123,16 @@
   /** Set to `true` to mark the field as required */
   export let required = false;
 
+  /**
+   * Specify a name attribute for native form participation.
+   *
+   * When set, a hidden input mirrors the assembled `value` so the code is
+   * included in FormData / form submissions. `required` is applied to the
+   * hidden input instead of each segment.
+   * @type {string | undefined}
+   */
+  export let name = undefined;
+
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
@@ -162,7 +185,16 @@
   wasComplete = count > 0 && code.length === count && code.every(Boolean);
   hadValue = code.some(Boolean);
 
-  $: pattern = type === "numeric" ? /^[0-9]$/ : /^[a-zA-Z0-9]$/;
+  /** @type {RegExp} */
+  let charPattern;
+  $: charPattern =
+    pattern == null
+      ? type === "numeric"
+        ? /^[0-9]$/
+        : /^[a-zA-Z0-9]$/
+      : typeof pattern === "string"
+        ? new RegExp(pattern)
+        : pattern;
 
   $: if (code.length !== count) {
     code = Array.from({ length: count }, (_, index) => code[index] ?? "");
@@ -204,7 +236,9 @@
   $: if (anyValue) hadValue = true;
 
   /** @type {(char: string) => boolean} */
-  const isValidChar = (char) => pattern.test(char);
+  function isValidChar(char) {
+    return charPattern.test(char);
+  }
 
   /** @type {(index: number, char: string) => void} */
   function setChar(index, char) {
@@ -227,6 +261,29 @@
     }
   }
 
+  /**
+   * Distribute valid characters across segments, matching paste behavior:
+   * a full-length code replaces every segment; otherwise fill from `index`.
+   * @type {(index: number, chars: string[]) => void}
+   */
+  function fillFromChars(index, chars) {
+    const next = code.slice();
+    if (chars.length === count) {
+      for (let i = 0; i < count; i++) next[i] = chars[i];
+    } else {
+      let cursor = index;
+      for (const char of chars) {
+        if (cursor >= count) break;
+        next[cursor++] = char;
+      }
+    }
+    code = next;
+    dispatch("change", { value: code.join(""), code });
+
+    const firstEmpty = code.findIndex((char) => !char);
+    focusInput(firstEmpty === -1 ? count - 1 : firstEmpty);
+  }
+
   /** @type {(index: number, event: Event) => void} */
   function handleInput(index, event) {
     const input = /** @type {HTMLInputElement} */ (event.target);
@@ -234,9 +291,20 @@
       input.value = code[index] ?? "";
       return;
     }
-    let char = input.value;
-    if (char.length > 1) char = char.slice(-1);
 
+    const raw = input.value;
+    // OS/password-manager autofill may insert the whole code into one field.
+    if (raw.length > 1) {
+      const chars = raw.split("").filter(isValidChar);
+      if (chars.length === 0) {
+        input.value = code[index] ?? "";
+        return;
+      }
+      fillFromChars(index, chars);
+      return;
+    }
+
+    const char = raw;
     if (char && !isValidChar(char)) {
       input.value = code[index] ?? "";
       return;
@@ -288,22 +356,7 @@
     if (chars.length === 0) return;
 
     dispatch("paste", { value: text });
-
-    const next = code.slice();
-    if (chars.length === count) {
-      for (let i = 0; i < count; i++) next[i] = chars[i];
-    } else {
-      let cursor = index;
-      for (const char of chars) {
-        if (cursor >= count) break;
-        next[cursor++] = char;
-      }
-    }
-    code = next;
-    dispatch("change", { value: code.join(""), code });
-
-    const firstEmpty = code.findIndex((char) => !char);
-    focusInput(firstEmpty === -1 ? count - 1 : firstEmpty);
+    fillFromChars(index, chars);
   }
 
   /** @type {(event: KeyboardEvent) => void} */
@@ -423,6 +476,9 @@
         <slot name="labelChildren">{labelText}</slot>
       </legend>
     {/if}
+    {#if name}
+      <input type="hidden" {name} {value} {required}>
+    {/if}
     <div
       data-invalid={hasError || undefined}
       data-warn={hasWarn || undefined}
@@ -446,7 +502,7 @@
             id={index === 0 ? id : `${id}-${index}`}
             {disabled}
             {readonly}
-            {required}
+            required={name ? undefined : required}
             aria-readonly={readonly || undefined}
             aria-label={`${labelText || "Pin code"} digit ${index + 1} of ${count}`}
             aria-invalid={hasError || undefined}

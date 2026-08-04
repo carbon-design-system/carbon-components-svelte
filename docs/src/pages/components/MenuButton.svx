@@ -1,5 +1,5 @@
 ---
-components: ["MenuButton", "MenuItem", "MenuDivider"]
+components: ["MenuButton", "MenuItem", "MenuDivider", "MenuItemGroup", "MenuItemRadioGroup"]
 description: MenuButton is a labeled button that opens a dropdown of actions, including nested submenus.
 ---
 
@@ -79,6 +79,22 @@ Set `size` to scale the trigger button and each menu item's row height together.
   <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
 </MenuButton>
 
+## Icon-only
+
+Set `iconOnly` for an icon-only trigger. `labelText` is no longer rendered, but it remains the trigger's accessible name. Pass `icon` to swap the glyph. Use this trigger for overflow menus that need submenus, which [OverflowMenu](/components/OverflowMenu) does not support.
+
+<MenuButton iconOnly labelText="Row actions">
+  <MenuItem on:click={() => console.log("Rename")}>Rename</MenuItem>
+  <MenuItem labelText="Export as">
+    <MenuItem on:click={() => console.log("PDF")}>PDF</MenuItem>
+    <MenuItem on:click={() => console.log("CSV")}>CSV</MenuItem>
+  </MenuItem>
+  <MenuDivider />
+  <MenuItem icon={TrashCan} kind="danger" on:click={() => console.log("Delete")}>
+    Delete
+  </MenuItem>
+</MenuButton>
+
 ## Direction
 
 Set `direction` to `"top"` or `"bottom"` (default) for which side of the trigger the menu opens on. The menu flips to the opposite side when there isn't room on the preferred side. See [Menu placement](/components/Menu#placement) for gap and offset props.
@@ -100,6 +116,12 @@ Set `intrinsicAlign` to `"start"` (default), `"center"`, or `"end"` to align the
   <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
   <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
 </MenuButton>
+
+## Scrollable
+
+Set `maxHeight` to cap the menu height and scroll the remaining items. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. Keyboard navigation scrolls the focused item into view.
+
+<FileSource src="/framed/MenuButton/MenuButtonScrollable" />
 
 ## Disabled
 
@@ -131,6 +153,16 @@ Pass a Carbon icon to `icon`.
   <MenuItem icon={Copy} on:click={() => console.log("Copy")}>Copy</MenuItem>
 </MenuButton>
 
+### Shortcuts
+
+Set `shortcutText` to show a keyboard hint on the right of the row. Use the `shortcutText` slot for custom content. The hint is display-only; it does not register a keybinding.
+
+<MenuButton labelText="Actions">
+  <MenuItem icon={Cut} shortcutText="⌘X" on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem icon={Copy} shortcutText="⌘C" on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem shortcutText="⌘V" on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
 ### Danger
 
 Set `kind="danger"` on `MenuItem` for a destructive action.
@@ -155,6 +187,20 @@ Put a `MenuDivider` between groups.
   <MenuDivider />
   <MenuItem kind="danger" on:click={() => console.log("Delete")}>Delete</MenuItem>
 </MenuButton>
+
+### Selectable
+
+Wrap items in `MenuItemGroup` to make them checkboxes that hold state, such as which table columns are visible. Give every item an id, then bind `selectedIds` for the chosen ones. Set `selected` on an item to check it when the menu first opens, or set `selectable` on a single item outside a group for a standalone toggle.
+
+Choosing an item closes the menu. Call `event.preventDefault()` in an item's `on:click` handler to keep it open for a multi-select flow, then update the bound value yourself.
+
+<FileSource src="/framed/MenuButton/MenuButtonSelectable" />
+
+### Radio group
+
+Wrap items in `MenuItemRadioGroup` for a set where one choice is active at a time, such as row density. Bind `selectedId` for the active id; picking another item clears the previous one.
+
+<FileSource src="/framed/MenuButton/MenuButtonRadioGroup" />
 
 ### Nested
 

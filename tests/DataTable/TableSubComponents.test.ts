@@ -221,6 +221,32 @@ describe("Table Sub-Components", () => {
     });
   });
 
+  describe("TableFoot", () => {
+    it("should render as tfoot element", () => {
+      const { container } = render(TableSubComponents, {
+        props: { testComponent: "TableFoot", slotContent: "Foot content" },
+      });
+
+      const tfoot = container.querySelector("tfoot");
+      expect(tfoot).toBeInTheDocument();
+      expect(screen.getByText("Foot content")).toBeInTheDocument();
+    });
+
+    it("should apply custom attributes", () => {
+      const { container } = render(TableSubComponents, {
+        props: {
+          testComponent: "TableFoot",
+          "data-testid": "custom-tfoot",
+        },
+      });
+
+      const tfoot = container.querySelector(
+        "tfoot[data-testid='custom-tfoot']",
+      );
+      expect(tfoot).toBeInTheDocument();
+    });
+  });
+
   describe("TableContainer", () => {
     it("should render with default props", () => {
       const { container } = render(TableSubComponents, {

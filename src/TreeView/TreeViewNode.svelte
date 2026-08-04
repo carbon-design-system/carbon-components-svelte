@@ -68,6 +68,13 @@
   export let text = "";
   export let disabled = false;
 
+  /** 1-based `aria-level` of this node within the tree. */
+  export let level = 1;
+  /** 1-based `aria-posinset` of this node among its siblings. */
+  export let posinset = 1;
+  /** `aria-setsize` — the number of siblings (including this node). */
+  export let setsize = 1;
+
   /**
    * Specify the URL the TreeNode links to.
    * @type {string | undefined}
@@ -106,8 +113,15 @@
   $: selected = $selectedIdsSetStore.has(id);
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
+  // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
+  $: ({
+    level: _level,
+    posinset: _posinset,
+    setsize: _setsize,
+    ...restProps
+  } = $$props);
   $: node = {
-    ...$$props,
+    ...restProps,
     disabled, // Ensure disabled is always included (has default value)
     expanded: false, // A node cannot be expanded.
     leaf,
@@ -142,6 +156,9 @@
       tabindex={disabled ? undefined : -1}
       aria-current={id === $activeNodeId ? "page" : undefined}
       aria-disabled={disabled}
+      aria-level={level}
+      aria-posinset={posinset}
+      aria-setsize={setsize}
       class:bx--tree-node={true}
       class:bx--tree-leaf-node={true}
       class:bx--tree-node--active={id === $activeNodeId}
@@ -202,6 +219,9 @@
     aria-current={id === $activeNodeId || undefined}
     aria-selected={disabled ? undefined : selected}
     aria-disabled={disabled}
+    aria-level={level}
+    aria-posinset={posinset}
+    aria-setsize={setsize}
     class:bx--tree-node={true}
     class:bx--tree-leaf-node={true}
     class:bx--tree-node--active={id === $activeNodeId}

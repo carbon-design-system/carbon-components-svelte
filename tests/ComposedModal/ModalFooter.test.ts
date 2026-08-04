@@ -64,7 +64,7 @@ describe("ModalFooter", () => {
 
   it("should handle secondary button click", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    render(ModalFooterTest, {
+    const { container } = render(ModalFooterTest, {
       props: {
         secondaryButtonText: "Cancel",
       },
@@ -76,6 +76,25 @@ describe("ModalFooter", () => {
       text: "Cancel",
     });
     expect(consoleLog).toHaveBeenCalledWith("close");
+    expect(container.querySelector(".bx--modal")).not.toHaveClass("is-visible");
+  });
+
+  it("keeps modal open when preventDefault is called on secondary click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(ModalFooterTest, {
+      props: {
+        secondaryButtonText: "Cancel",
+        preventSecondaryDefault: true,
+      },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
+      text: "Cancel",
+    });
+    expect(consoleLog).not.toHaveBeenCalledWith("close");
+    expect(container.querySelector(".bx--modal")).toHaveClass("is-visible");
   });
 
   it("should disable primary button when configured", () => {
@@ -88,6 +107,59 @@ describe("ModalFooter", () => {
 
     const primaryButton = screen.getByRole("button", { name: "Save" });
     expect(primaryButton).toBeDisabled();
+  });
+
+  describe("primaryButtonLoading", () => {
+    it("shows InlineLoading and does not dispatch submit on click", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ModalFooterTest, {
+        props: {
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+        },
+      });
+
+      expect(screen.getByText("Loading")).toBeInTheDocument();
+      expect(document.querySelector(".bx--inline-loading")).toBeInTheDocument();
+
+      const primaryButton = screen.getByRole("button", { name: /Loading/i });
+      expect(primaryButton).toBeDisabled();
+      await user.click(primaryButton);
+
+      expect(consoleLog).not.toHaveBeenCalledWith("submit");
+      expect(consoleLog).not.toHaveBeenCalledWith("click:button--primary");
+    });
+
+    it("keeps the idle primary button path unchanged", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ModalFooterTest, {
+        props: {
+          primaryButtonText: "Save",
+          primaryButtonLoading: false,
+        },
+      });
+
+      expect(screen.getByText("Save")).toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--inline-loading"),
+      ).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Save" }));
+      expect(consoleLog).toHaveBeenCalledWith("submit");
+      expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
+    });
+
+    it("uses a custom loading description", () => {
+      render(ModalFooterTest, {
+        props: {
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+          primaryButtonLoadingDescription: "Saving...",
+        },
+      });
+
+      expect(screen.getByText("Saving...")).toBeInTheDocument();
+    });
   });
 
   it("should render danger variant", () => {
@@ -113,6 +185,37 @@ describe("ModalFooter", () => {
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Reset" })).toBeInTheDocument();
+  });
+
+  it("should render one secondaryButtons entry with legacy { text }", () => {
+    render(ModalFooterTest, {
+      props: {
+        primaryButtonText: "Save",
+        secondaryButtons: [{ text: "Cancel" }],
+      },
+    });
+
+    const cancel = screen.getByRole("button", { name: "Cancel" });
+    expect(cancel).toHaveClass("bx--btn--secondary");
+    expect(cancel).not.toBeDisabled();
+  });
+
+  it("should apply kind and disabled from secondaryButtons", () => {
+    render(ModalFooterTest, {
+      props: {
+        primaryButtonText: "Save",
+        secondaryButtons: [
+          { text: "Save draft", kind: "secondary" },
+          { text: "Cancel", kind: "ghost", disabled: true },
+        ],
+      },
+    });
+
+    const draft = screen.getByRole("button", { name: "Save draft" });
+    const cancel = screen.getByRole("button", { name: "Cancel" });
+    expect(draft).toHaveClass("bx--btn--secondary");
+    expect(cancel).toHaveClass("bx--btn--ghost");
+    expect(cancel).toBeDisabled();
   });
 
   it("should handle three-button layout", () => {

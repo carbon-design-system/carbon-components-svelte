@@ -1,9 +1,21 @@
 <script>
+  /**
+   * @restProps {fieldset}
+   * @slot {{}}
+   */
+
   /** Set to `true` for to remove the bottom margin */
   export let noMargin = false;
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
+
+  /**
+   * Set to `true` to disable the fieldset and nested native form controls.
+   * Div-based controls such as Dropdown may still need an explicit
+   * `disabled` prop for full visual disable.
+   */
+  export let disabled = false;
 
   /** Set to `true` to render a form requirement */
   export let message = false;
@@ -21,6 +33,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <fieldset
+  {disabled}
   data-invalid={invalid || undefined}
   class:bx--fieldset={true}
   class:bx--fieldset--no-margin={noMargin}

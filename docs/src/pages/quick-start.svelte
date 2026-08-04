@@ -330,8 +330,12 @@
                     bind:value={iconSizeIndex}
                     hideTextInput
                     fullWidth
-                    minLabel="16"
-                    maxLabel="32"
+                    marks={[
+                      { value: 0, label: "16" },
+                      { value: 1, label: "20" },
+                      { value: 2, label: "24" },
+                      { value: 3, label: "32" },
+                    ]}
                   />
                   <div class="glyph-grid glyph-grid--icons">
                     <div class="glyph-cell">
@@ -436,8 +440,13 @@
                     bind:value={pictogramSize}
                     hideTextInput
                     fullWidth
-                    minLabel="48"
-                    maxLabel="64"
+                    marks={[
+                      { value: 48, label: "48" },
+                      { value: 52, label: "52" },
+                      { value: 56, label: "56" },
+                      { value: 60, label: "60" },
+                      { value: 64, label: "64" },
+                    ]}
                   />
                   <div class="glyph-grid glyph-grid--pictograms">
                     <div class="glyph-cell">

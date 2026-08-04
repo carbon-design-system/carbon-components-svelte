@@ -14,7 +14,7 @@ description: Overflow menus present a list of actions in a compact dropdown, ide
 
 ## Basic
 
-Create a basic overflow menu by wrapping overflow menu item components within the overflow menu.
+Create a basic overflow menu by wrapping overflow menu item components within the overflow menu. For menus that need submenus, use [MenuButton](/components/MenuButton#icon-only) instead.
 
 <OverflowMenu>
   <OverflowMenuItem text="Manage credentials" />
@@ -97,6 +97,12 @@ Set `size` to `"xs"` for an extra-small overflow menu.
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
+
+## Scrollable
+
+Set `maxHeight` to cap the menu height and scroll the remaining items. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. Keyboard navigation scrolls the focused item into view.
+
+<FileSource src="/framed/OverflowMenu/OverflowMenuScrollable" />
 
 ## Custom primary focus
 

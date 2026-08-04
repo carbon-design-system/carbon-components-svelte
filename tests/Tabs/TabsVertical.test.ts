@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import { user } from "../utils/user";
 import TabsVertical from "./TabsVertical.test.svelte";
+import TabsVerticalSelectedId from "./TabsVerticalSelectedId.test.svelte";
 import TabsVerticalSkeleton from "./TabsVerticalSkeleton.test.svelte";
 
 describe("TabsVertical", () => {
@@ -99,6 +100,40 @@ describe("TabsVertical", () => {
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
+  describe('activation="manual"', () => {
+    it("ArrowDown moves focus without changing selection", async () => {
+      render(TabsVertical, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowDown}");
+      expect(tab3).toHaveFocus();
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+      expect(tab3).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(consoleLog).not.toHaveBeenCalledWith("change event", 2);
+    });
+
+    it("Enter selects the focused tab", async () => {
+      render(TabsVertical, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowDown}");
+      expect(tab3).toHaveFocus();
+
+      await user.keyboard("{Enter}");
+      expect(tab3).toHaveAttribute("aria-selected", "true");
+      expect(tab1).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByText("Content 3")).toBeVisible();
+      expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    });
+  });
+
   it("should prevent the default scroll on arrow navigation", async () => {
     render(TabsVertical);
 
@@ -115,6 +150,31 @@ describe("TabsVertical", () => {
     expect(
       navLink?.querySelector(".bx--tabs__nav-item--icon svg"),
     ).toBeInTheDocument();
+  });
+
+  it("keeps selectedId on the same logical tab when a prior tab is removed", async () => {
+    render(TabsVerticalSelectedId, {
+      props: { selectedId: "tab-b", showTabA: true },
+    });
+
+    expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+
+    await user.click(screen.getByTestId("toggle-tab-a"));
+
+    expect(
+      screen.queryByRole("tab", { name: "Tab A" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
   });
 });
 

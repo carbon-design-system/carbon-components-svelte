@@ -11,7 +11,7 @@
 
   /**
    * Specify the date picker type.
-   * @type {"simple" | "single" | "range" | "month"}
+   * @type {"simple" | "single" | "range" | "month" | "year"}
    */
   export let datePickerType = "simple";
 
@@ -38,7 +38,11 @@
    */
   export let valueTo = "";
 
-  /** Specify the date format */
+  /**
+   * Specify the date format.
+   * Use `"F Y"` or `"m/Y"` with `datePickerType="month"`, and `"Y"` with
+   * `datePickerType="year"`.
+   */
   export let dateFormat = "m/d/Y";
 
   /**
@@ -96,7 +100,8 @@
 
   /**
    * Bind to the Flatpickr calendar instance for programmatic control.
-   * Only available when `datePickerType` is `"single"` or `"range"`.
+   * Only available when `datePickerType` is `"single"`, `"range"`, `"month"`,
+   * or `"year"`.
    * @see https://flatpickr.js.org/instance-methods-properties-elements/
    * @type {import("flatpickr/dist/types/instance").Instance | null}
    * @bindable readonly
@@ -166,7 +171,7 @@
    */
   const hasCalendar = derived(
     mode,
-    (_) => _ === "single" || _ === "range" || _ === "month",
+    (_) => _ === "single" || _ === "range" || _ === "month" || _ === "year",
   );
 
   let datePickerRef = null;
@@ -420,6 +425,10 @@
       applyOptionIfChanged("locale", locale, resolveLocale(locale));
       applyOptionIfChanged("dateFormat", dateFormat);
       for (const [option, value] of Object.entries(flatpickrProps)) {
+        // `static` is decided by `effectivePortalMenu` at creation time
+        // (see below); re-applying the default `flatpickrProps.static`
+        // here would clobber that on every reactive re-run.
+        if (option === "static" && effectivePortalMenu) continue;
         applyOptionIfChanged(option, value);
       }
       return;
@@ -544,6 +553,7 @@
   }
   $: if (calendar) {
     calendar.set("clickOpens", !$readonlyAny);
+    calendar.set("allowInput", !$readonlyAny);
     if ($readonlyAny && calendar.isOpen) calendar.close();
   }
 
@@ -616,7 +626,8 @@
     class:bx--date-picker--light={light}
     class:bx--date-picker--simple={datePickerType === "simple"}
     class:bx--date-picker--single={datePickerType === "single" ||
-      datePickerType === "month"}
+      datePickerType === "month" ||
+      datePickerType === "year"}
     class:bx--date-picker--range={datePickerType === "range"}
     class:bx--date-picker--nolabel={datePickerType === "range" &&
       $labelTextEmpty}

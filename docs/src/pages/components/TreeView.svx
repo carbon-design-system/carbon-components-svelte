@@ -169,6 +169,22 @@ Configure `TreeView.showNode` behavior using optional parameters. By default, al
 
 <FileSource src="/framed/TreeView/TreeViewShowNodeOptions" />
 
+## Node lookup
+
+Use `TreeView.getNode` to resolve a node's text or metadata from its id, useful for a breadcrumb or detail pane driven by `activeId`. Unmatched ids return `null`.
+
+Use `TreeView.getNodes` to resolve multiple ids at once, such as `selectedIds`. Unmatched ids are omitted from the result.
+
+<FileSource src="/framed/TreeView/TreeViewGetNode" />
+
+## Lazy loading
+
+Set `hasChildren` on a node to render it as an expandable branch before its `nodes` are known. Expanding it fires `toggle` as usual; the handler can fetch and assign `nodes` asynchronously.
+
+While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot renders in place of the (empty) subtree, receiving the same `node` as the default slot. TreeView has no built-in concept of "loading" or "error" — the slot is generic, so you decide what to render (a spinner, an error message with retry, or nothing) based on whatever fields you put on the node yourself.
+
+<FileSource src="/framed/TreeView/TreeViewLazyLoad" />
+
 ## Flat data
 
 Convert flat data to a hierarchical structure using the `toHierarchy` utility.

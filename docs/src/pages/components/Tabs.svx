@@ -4,7 +4,7 @@ description: Tabs organize content into separate views that can be switched betw
 ---
 
 <script>
-  import { Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton } from "carbon-components-svelte";
+  import { Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, DataTable } from "carbon-components-svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
@@ -37,6 +37,12 @@ Use `bind:selected` for a two-way binding with the selected tab index, so you ca
 
 <FileSource src="/framed/Tabs/TabsReactive" />
 
+## Selected by id
+
+For dynamic tab sets, bind `selectedId` and give each `Tab` a stable `id`. Selection stays on the same logical tab when tabs before it are added or removed. When set, `selectedId` takes precedence over `selected`.
+
+<FileSource src="/framed/Tabs/TabsSelectedId" />
+
 ## Overflow
 
 When the tabs exceed the available width, the list scrolls horizontally and backward/forward buttons appear at each end. Scroll by dragging, using the buttons, or moving focus with the arrow keys. Resize the viewport to see the buttons appear and hide.
@@ -67,6 +73,23 @@ Below the medium breakpoint, vertical tabs collapse into the same horizontal, sc
 
 <FileSource src="/framed/Tabs/TabsVerticalOverflow" />
 
+## Manual activation
+
+By default, tabs use automatic activation: arrow keys move focus and select the
+tab. Set `activation` to `"manual"` so arrow keys only move focus. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to select.
+Use manual activation when switching panels is expensive.
+
+<Tabs activation="manual">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ## Disabled tabs
 
 Set `disabled` on a tab to prevent interaction. Keyboard navigation skips disabled
@@ -92,6 +115,51 @@ Tabs can be conditionally rendered using Svelte's `{#if}` blocks. The component 
 If the current selected tab is removed, the next tab is selected.
 
 <FileSource src="/framed/Tabs/TabsConditional" />
+
+## Lazy content
+
+By default, every `TabContent` panel stays mounted and toggles visibility with the `hidden` attribute. Set `lazy` on a panel to defer mounting its slot until that tab is first selected. Set `unmountOnHide` to remove the slot when the tab is deselected — useful for heavy panels such as a DataTable.
+
+<Tabs>
+  <Tab label="Overview" />
+  <Tab label="Load balancers" />
+  <svelte:fragment slot="content">
+    <TabContent>Lightweight overview content.</TabContent>
+    <TabContent lazy>
+      <DataTable
+        headers="{[
+          { key: "name", value: "Name" },
+          { key: "protocol", value: "Protocol" },
+          { key: "port", value: "Port" },
+          { key: "rule", value: "Rule" }
+        ]}"
+        rows="{[
+          {
+            id: "a",
+            name: "Load Balancer 3",
+            protocol: "HTTP",
+            port: 3000,
+            rule: "Round robin"
+          },
+          {
+            id: "b",
+            name: "Load Balancer 1",
+            protocol: "HTTP",
+            port: 443,
+            rule: "Round robin"
+          },
+          {
+            id: "c",
+            name: "Load Balancer 2",
+            protocol: "HTTP",
+            port: 80,
+            rule: "DNS delegation"
+          },
+        ]}"
+      />
+    </TabContent>
+  </svelte:fragment>
+</Tabs>
 
 ## Width
 
@@ -252,10 +320,10 @@ Icon-only tabs also work with the container type.
 ## Dismissible
 
 Set `dismissible` on Tabs to render a close button on each tab. Handle the
-dismiss event to remove the tab from your data and update selected if needed. The
-event detail includes `{ id, label, disabled, index }`. Set an id on each Tab to
-match the event to your list. Press <DocKbd label="Delete" /> on the focused tab
-to dismiss it.
+dismiss event to remove the tab from your data. Bind `selectedId` with a stable
+`id` on each Tab so selection stays coherent without manual index math. The
+event detail includes `{ id, label, disabled, index }`. Press
+<DocKbd label="Delete" /> on the focused tab to dismiss it.
 
 ### Basic
 
@@ -452,6 +520,7 @@ Show a loading state for the container tab variant.
 Use TabsVertical for a tab list beside the panel. Compose it with the same Tab and
 TabContent components. From the medium breakpoint up, tabs stack in a vertical column.
 On narrower screens, the list becomes a horizontal row with overflow scrolling.
+`activation` works the same as on Tabs (see [Manual activation](#manual-activation)).
 
 <TabsVertical>
   <Tab label="Dashboard" />

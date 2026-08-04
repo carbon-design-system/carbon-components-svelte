@@ -10,7 +10,7 @@ export const CATEGORY_FILTER_PARAM = "categories";
 
 export const SEARCH_FILTER_PARAM = "q";
 
-export function versionRank(version?: string): number {
+function versionRank(version?: string): number {
   if (!version) return -1;
   return version
     .split(".")
@@ -19,7 +19,7 @@ export function versionRank(version?: string): number {
 
 const PUBLISHED_VERSION_RANK = versionRank(pkg.version);
 
-export function isNewComponent(name: string): boolean {
+function isNewComponent(name: string): boolean {
   const since = COMPONENT_SINCE_VERSIONS[name];
   return since !== undefined && versionRank(since) > PUBLISHED_VERSION_RANK;
 }
@@ -51,7 +51,7 @@ const FILE_PATH_BY_MODULE = new Map(
   ]),
 );
 
-export function sourcePathFor(name: string): string {
+function sourcePathFor(name: string): string {
   return FILE_PATH_BY_MODULE.get(name) ?? `src/${name}/${name}.svelte`;
 }
 

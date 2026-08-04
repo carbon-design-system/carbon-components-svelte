@@ -5,6 +5,7 @@
   export let kind: ComponentProps<InlineNotification>["kind"] = "error";
   export let lowContrast: ComponentProps<InlineNotification>["lowContrast"] = false;
   export let timeout: ComponentProps<InlineNotification>["timeout"] = 0;
+  export let pauseOnHover: ComponentProps<InlineNotification>["pauseOnHover"] = false;
   export let role: ComponentProps<InlineNotification>["role"] = "alert";
   export let title: ComponentProps<InlineNotification>["title"] = "";
   export let subtitle: ComponentProps<InlineNotification>["subtitle"] = "";
@@ -19,6 +20,7 @@
   {kind}
   {lowContrast}
   {timeout}
+  {pauseOnHover}
   {role}
   {title}
   {subtitle}

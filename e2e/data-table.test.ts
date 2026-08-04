@@ -79,4 +79,16 @@ test.describe("DataTable", () => {
     const selectedRows = batch.locator("tbody tr.bx--data-table--selected");
     await expect(selectedRows).toHaveCount(2);
   });
+
+  test("selectable: shift+click selects the row range", async ({ page }) => {
+    const table = page.getByTestId("data-table-select-range");
+    const checkboxes = table.getByRole("checkbox", { name: "Select row" });
+
+    await checkboxes.nth(0).click({ force: true });
+    await checkboxes.nth(2).click({ force: true, modifiers: ["Shift"] });
+
+    await expect(checkboxes.nth(0)).toBeChecked();
+    await expect(checkboxes.nth(1)).toBeChecked();
+    await expect(checkboxes.nth(2)).toBeChecked();
+  });
 });

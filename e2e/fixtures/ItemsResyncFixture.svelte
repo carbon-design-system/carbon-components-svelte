@@ -58,6 +58,8 @@
   let selRemoveItems = make();
   let selRemoveSelected = "orwell";
 
+  let selNoSelectionExtra = false;
+
   let msSwapItems = make();
   let msSwapSelectedIds = ["orwell"];
 
@@ -99,6 +101,10 @@
     selFillItems = [];
     msFillItems = [];
   }
+
+  function toggleNoSelectionOption() {
+    selNoSelectionExtra = !selNoSelectionExtra;
+  }
 </script>
 
 <button type="button" data-testid="load" on:click={load}>Load options</button>
@@ -121,6 +127,13 @@
   on:click={removeNonSelected}
 >
   Remove non-selected
+</button>
+<button
+  type="button"
+  data-testid="toggle-no-selection-option"
+  on:click={toggleNoSelectionOption}
+>
+  Toggle no-selection option
 </button>
 
 <ComboBox
@@ -200,6 +213,15 @@
   {/each}
 </Select>
 <p data-testid="sel-remove-selected">{selRemoveSelected}</p>
+
+<!-- No `selected` prop: the empty-valued placeholder is the effective selection. -->
+<Select data-testid="sel-no-selection" labelText="Select no selection">
+  <SelectItem value="" text="Choose an option" />
+  <SelectItem value="austen" text="Jane Austen" />
+  {#if selNoSelectionExtra}
+    <SelectItem value="dickens" text="Charles Dickens" />
+  {/if}
+</Select>
 
 <!-- Wrapper carries data-testid; MultiSelect does not spread $$restProps. -->
 <div data-testid="ms-swap">

@@ -4,7 +4,7 @@ description: Pagination provides navigation controls for large data sets, showin
 ---
 
 <script>
-  import { Pagination, PaginationSkeleton } from "carbon-components-svelte";
+  import { Pagination, PaginationSkeleton, Toolbar, ToolbarContent } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -72,6 +72,16 @@ Because the component cannot detect the last page, bind to `page` and toggle `fo
 The number of native select items is derived from totalItems. For large datasets, this can impact performance. Use `pageWindow` to limit rendered items.
 
 <FileSource src="/framed/Pagination/PageWindow" />
+
+## Simple
+
+Set `simple` for a compact previous/next control with page status text. Useful in toolbars and cards.
+
+<Toolbar size="sm">
+  <ToolbarContent>
+    <Pagination simple size="sm" totalItems={102} pageText={(page) => `${page.toLocaleString()}`} />
+  </ToolbarContent>
+</Toolbar>
 
 ## Hidden controls
 

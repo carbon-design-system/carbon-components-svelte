@@ -77,6 +77,18 @@
   export let primaryButtonDisabled = false;
 
   /**
+   * Set to `true` to show a loading state on the primary button.
+   * While loading, the button is non-interactive and submit is suppressed.
+   */
+  export let primaryButtonLoading = false;
+
+  /**
+   * Specify the description for the primary button loading state.
+   * Passed to `InlineLoading` as `description`.
+   */
+  export let primaryButtonLoadingDescription = "Loading";
+
+  /**
    * Specify the primary button icon.
    * @type {Icon}
    */
@@ -92,9 +104,11 @@
   export let secondaryButtonText = "";
 
   /**
-   * 2-tuple prop to render two secondary buttons for a 3 button modal.
-   * Supersedes `secondaryButtonText`.
-   * @type {[{ text: string; }, { text: string; }]}
+   * One or two secondary buttons for the modal footer.
+   * Supersedes `secondaryButtonText`. Each entry needs `text`; optional
+   * `kind` (defaults to `"secondary"`) and `disabled` pass through to Button.
+   * With two entries plus a primary button, the footer uses the three-button layout.
+   * @type {ReadonlyArray<{ text: string; kind?: string; disabled?: boolean }>}
    */
   export let secondaryButtons = [];
 
@@ -103,6 +117,12 @@
 
   /** Set to `true` to prevent the modal from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
+
+  /**
+   * Set to `true` to hide the header close button.
+   * Provide an alternative dismiss path (footer actions or Escape).
+   */
+  export let hideCloseButton = false;
 
   /** Set an id for the top-level element */
   export let id = `ccs-${Math.random().toString(36)}`;
@@ -116,6 +136,7 @@
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
+  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Close from "../icons/Close.svelte";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outsideDismiss.js";
@@ -212,7 +233,8 @@
       } else if (
         shouldSubmitOnEnter &&
         event.key === "Enter" &&
-        !primaryButtonDisabled
+        !primaryButtonDisabled &&
+        !primaryButtonLoading
       ) {
         const target = event.target;
         const tag = target?.tagName;
@@ -260,7 +282,7 @@
     on:mousedown={outsideDismiss.pressInside}
   >
     <div class:bx--modal-header={true}>
-      {#if passiveModal}
+      {#if passiveModal && !hideCloseButton}
         <button
           bind:this={buttonRef}
           type="button"
@@ -281,7 +303,7 @@
       <h3 id={modalHeadingId} class:bx--modal-header__heading={true}>
         <slot name="heading">{modalHeading}</slot>
       </h3>
-      {#if !passiveModal}
+      {#if !passiveModal && !hideCloseButton}
         <button
           bind:this={buttonRef}
           type="button"
@@ -319,7 +341,8 @@
         {#if secondaryButtons.length > 0}
           {#each secondaryButtons as button (button.text)}
             <Button
-              kind="secondary"
+              kind={button.kind ?? "secondary"}
+              disabled={button.disabled}
               on:click={() => {
                 dispatch("click:button--secondary", { text: button.text });
               }}
@@ -342,16 +365,24 @@
         <Button
           bind:ref={primaryButtonRef}
           kind={danger ? "danger" : "primary"}
-          disabled={primaryButtonDisabled}
-          icon={primaryButtonIcon}
+          disabled={primaryButtonDisabled || primaryButtonLoading}
+          icon={primaryButtonLoading ? undefined : primaryButtonIcon}
           type={formId ? "submit" : "button"}
           form={formId}
           on:click={() => {
+            if (primaryButtonLoading) return;
             dispatch("submit");
             dispatch("click:button--primary");
           }}
         >
-          {primaryButtonText}
+          {#if primaryButtonLoading}
+            <InlineLoading
+              status="active"
+              description={primaryButtonLoadingDescription}
+            />
+          {:else}
+            {primaryButtonText}
+          {/if}
         </Button>
       </div>
     {/if}

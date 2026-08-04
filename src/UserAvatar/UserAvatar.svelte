@@ -3,7 +3,8 @@
 
   /**
    * Custom avatar content via the default slot overrides the computed image, icon, and initials.
-   * @restProps {div}
+   * @event {null} image:error - Dispatched when the `image` URL fails to load. The avatar then falls back to the icon or initials.
+   * @restProps {span | button | a}
    */
 
   /**
@@ -35,6 +36,8 @@
   /**
    * Specify an image source to render a photo.
    * Takes priority over the icon and initials.
+   * If the image fails to load, the avatar falls back to the icon or initials
+   * and dispatches `image:error`.
    * @type {string}
    */
   export let image = undefined;
@@ -46,6 +49,14 @@
   export let imageDescription = undefined;
 
   /**
+   * Pass additional attributes through to the image element
+   * (for example `loading`, `srcset`, or `referrerPolicy`).
+   * Does not replace `image` or `imageDescription`. Rest props stay on the host.
+   * @type {Record<string, string>}
+   */
+  export let imageAttributes = undefined;
+
+  /**
    * Specify the icon to render. Falls back to a default user icon.
    * @type {Icon}
    */
@@ -53,6 +64,8 @@
 
   /**
    * Specify the tooltip text. When set, the avatar is wrapped in a tooltip.
+   * Do not combine with `interactive` or `href` — the tooltip trigger is already
+   * focusable, and nesting an interactive avatar inside it is invalid.
    * @type {string}
    */
   export let tooltipText = undefined;
@@ -78,17 +91,34 @@
   export let portalTooltip = true;
 
   /**
+   * Set to `true` to render a `button` element instead of a `span`.
+   * Use when the avatar is a clickable control (for example, a custom profile menu
+   * trigger). Prefer this over attaching `on:click` to a non-interactive `span`.
+   * Ignored when `href` is set.
+   */
+  export let interactive = false;
+
+  /**
+   * Set an `href` to render an anchor element instead of a `span`.
+   * Takes priority over `interactive`.
+   * @type {string}
+   */
+  export let href = undefined;
+
+  /**
    * Obtain a reference to the avatar HTML element.
    * @bindable readonly
    * @type {null | HTMLElement}
    */
   export let ref = null;
 
-  import { getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get, readable } from "svelte/store";
   import User from "../icons/User.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import { getAvatarBackgroundColor } from "../utils/avatarColor.js";
+
+  const dispatch = createEventDispatcher();
 
   // When rendered inside a `UserAvatarGroup`, register with the group so it can
   // count avatars and hide those beyond its `max`. The group context is absent
@@ -169,6 +199,16 @@
   // Fall back to the group's size, then to "md".
   $: resolvedSize = size ?? $groupSize ?? "md";
 
+  // `href` wins over `interactive`. When either is set, the avatar itself is the
+  // focus target — do not nest it inside TooltipDefinition's button.
+  $: isLink = typeof href === "string";
+  $: isButton = !isLink && interactive;
+  $: isInteractive = isLink || isButton;
+  $: avatarTag = isLink ? "a" : isButton ? "button" : "span";
+  // TooltipDefinition always renders a focusable button trigger. Use it only
+  // when the avatar stays a non-interactive span.
+  $: useTooltipWrapper = !!tooltipText && !isInteractive;
+
   const glyphSize = { sm: 16, md: 20, lg: 24, xl: 32 };
   const WHITESPACE = /\s+/;
 
@@ -193,13 +233,24 @@
     "bx--user-avatar",
     `bx--user-avatar--${resolvedSize}`,
     `bx--user-avatar--${resolvedBackgroundColor}`,
+    isInteractive && "bx--user-avatar--interactive",
     $$restProps.class,
   ]
     .filter(Boolean)
     .join(" ");
+
+  // Fall back to icon/initials when the photo URL fails. Comparing against the
+  // failed URL means a new `image` value automatically retries without a
+  // reactive reset that would fight the error handler.
+  let failedImage = undefined;
+
+  function handleImageError() {
+    failedImage = image;
+    dispatch("image:error");
+  }
 </script>
 
-{#if tooltipText}
+{#if useTooltipWrapper}
   <TooltipDefinition
     class="bx--user-avatar-tooltip"
     {tooltipText}
@@ -224,8 +275,13 @@
     >
       {#if $$slots.default}
         <slot />
-      {:else if image}
-        <img src={image} alt={imageDescription}>
+      {:else if image && image !== failedImage}
+        <img
+          {...imageAttributes}
+          src={image}
+          alt={imageDescription}
+          on:error={handleImageError}
+        >
       {:else if icon}
         <svelte:component this={icon} size={glyphSize[resolvedSize]} />
       {:else if avatarInitials}
@@ -237,10 +293,16 @@
   </TooltipDefinition>
 {:else}
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <span
+  <!-- svelte-ignore a11y-missing-attribute -->
+  <svelte:element
+    this={avatarTag}
     bind:this={ref}
     {...$$restProps}
     class={avatarClass}
+    href={isLink ? href : undefined}
+    type={isButton ? "button" : undefined}
+    aria-label={$$restProps["aria-label"] ??
+      (isInteractive && name ? name : undefined)}
     data-overflow={groupOverflow ? "true" : undefined}
     on:click
     on:mouseover
@@ -249,8 +311,13 @@
   >
     {#if $$slots.default}
       <slot />
-    {:else if image}
-      <img src={image} alt={imageDescription}>
+    {:else if image && image !== failedImage}
+      <img
+        {...imageAttributes}
+        src={image}
+        alt={imageDescription}
+        on:error={handleImageError}
+      >
     {:else if icon}
       <svelte:component this={icon} size={glyphSize[resolvedSize]} />
     {:else if avatarInitials}
@@ -258,5 +325,5 @@
     {:else}
       <User size={glyphSize[resolvedSize]} />
     {/if}
-  </span>
+  </svelte:element>
 {/if}

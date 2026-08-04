@@ -23,6 +23,7 @@
    * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
+   * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
@@ -33,8 +34,10 @@
    * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
+   * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
+   * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
    * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
    * @typedef {object} DataTableCell<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
@@ -44,6 +47,7 @@
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
    * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
+   * @slot {{ header: DataTableNonEmptyHeader; index: number; }} footerCell
    * @event click
    * @type {object}
    * @property {DataTableHeader<Row>} [header]
@@ -222,6 +226,7 @@
   /**
    * Set to `true` for the selectable variant.
    * Automatically set to `true` if `radio` or `batchSelection` are `true`.
+   * Shift-clicking a row checkbox extends selection to every row between it and the last row clicked (not supported with `radio`).
    * @bindable writable
    */
   export let selectable = false;
@@ -330,6 +335,7 @@
   import TableBody from "./TableBody.svelte";
   import TableCell from "./TableCell.svelte";
   import TableContainer from "./TableContainer.svelte";
+  import TableFoot from "./TableFoot.svelte";
   import TableHead from "./TableHead.svelte";
   import TableHeader from "./TableHeader.svelte";
   import TableRow from "./TableRow.svelte";
@@ -408,6 +414,10 @@
   // since there may be multiple `DataTable` instances that have overlapping row ids.
   const id = `ccs-${Math.random().toString(36)}`;
 
+  // A columnHidden header stays in `headers`, the column definition, and is
+  // skipped everywhere the rendered column set is meant.
+  $: visibleHeaders = headers.filter((header) => !header.columnHidden);
+
   // Store a copy of the original rows for filter restoration.
   let prevRows_ref = rows;
   let originalRows = [...rows];
@@ -442,7 +452,9 @@
       filteredRows = originalRows.filter((row) => customFilter(row, value));
     } else {
       // Get searchable keys from headers (non-empty headers with keys).
-      const searchableKeys = headers
+      // Hidden columns are excluded: matching on a column the user cannot
+      // see produces results they cannot explain.
+      const searchableKeys = visibleHeaders
         .filter((header) => !header.empty && header.key)
         .map((header) => header.key);
 
@@ -496,6 +508,37 @@
   function resetSelectedRowIds() {
     selectAll = false;
     selectedRowIds = [];
+    lastSelectedRowId = null;
+  }
+
+  /** Anchor row id for shift+click range selection; cleared when the anchor no longer exists in the current row order. */
+  let lastSelectedRowId = null;
+
+  /**
+   * Apply `checked` to every selectable row between the anchor row and `targetIndex` (inclusive),
+   * where `targetIndex` is a position in `rowsToVirtualize`. Returns `false` if the anchor row
+   * is no longer present (for example, filtered out), so the caller can fall back to a single toggle.
+   * @type {(targetIndex: number, checked: boolean) => boolean}
+   */
+  function selectRowRange(targetIndex, checked) {
+    const anchorIndex = rowsToVirtualize.findIndex(
+      (row) => row.id === lastSelectedRowId,
+    );
+    if (anchorIndex === -1) return false;
+
+    const start = Math.min(anchorIndex, targetIndex);
+    const end = Math.max(anchorIndex, targetIndex);
+    const next = new Set(selectedRowIds);
+    for (const row of rowsToVirtualize.slice(start, end + 1)) {
+      if (nonSelectableRowIdsSet.has(row.id)) continue;
+      if (checked) {
+        next.add(row.id);
+      } else {
+        next.delete(row.id);
+      }
+    }
+    selectedRowIds = [...next];
+    return true;
   }
 
   setContext("carbon:DataTable", {
@@ -550,17 +593,36 @@
 
   let tableCellsByRowId = {};
   let prevRows;
-  let prevHeaders;
+  let prevVisibleHeaders;
+
+  const alignClasses = {
+    start: "bx--table-column--align-start",
+    end: "bx--table-column--align-end",
+  };
+
+  function formatAlignClass(columnAlign) {
+    return alignClasses[columnAlign];
+  }
 
   /** Build cell objects for one row. Always new objects so `display` columns re-run. */
   function computeRowCells(row) {
-    return headers.map((header, index) => ({
-      key: header.key ?? `key-${index}`,
-      value: header.key ? resolvePath(row, header.key) : undefined,
-      display: header.display,
-      empty: header.empty,
-      columnMenu: header.columnMenu,
-    }));
+    const cells = [];
+
+    // Index into `headers` rather than the visible subset so hiding a preceding
+    // column does not renumber the generated keys the `{#each}` blocks key on.
+    headers.forEach((header, index) => {
+      if (header.columnHidden) return;
+      cells.push({
+        key: header.key ?? `key-${index}`,
+        value: header.key ? resolvePath(row, header.key) : undefined,
+        display: header.display,
+        empty: header.empty,
+        columnMenu: header.columnMenu,
+        columnAlign: header.columnAlign,
+      });
+    });
+
+    return cells;
   }
 
   /**
@@ -596,7 +658,9 @@
     tableCellsByRowId = next;
   }
 
-  $: if (rows !== prevRows || headers !== prevHeaders) {
+  // Compare against `visibleHeaders`, not `headers`: it is a fresh array on every
+  // `headers` invalidation, so toggling `columnHidden` in place still rebuilds the cells.
+  $: if (rows !== prevRows || visibleHeaders !== prevVisibleHeaders) {
     const next = {};
 
     for (const row of rows) {
@@ -613,7 +677,8 @@
             a.value === b.value &&
             a.display === b.display &&
             a.empty === b.empty &&
-            a.columnMenu === b.columnMenu
+            a.columnMenu === b.columnMenu &&
+            a.columnAlign === b.columnAlign
           ) {
             newCells[i] = a;
           } else {
@@ -628,7 +693,7 @@
 
     tableCellsByRowId = next;
     prevRows = rows;
-    prevHeaders = headers;
+    prevVisibleHeaders = visibleHeaders;
   }
 
   $: ascending = sortDirection === "ascending";
@@ -735,13 +800,13 @@
         })()
       : null;
 
-  $: hasCustomHeaderWidth = headers.some(
+  $: hasCustomHeaderWidth = visibleHeaders.some(
     (header) => header.width ?? header.minWidth,
   );
 
-  // Calculate total columns for spacer rows
+  // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
-    (expandable ? 1 : 0) + (selectable ? 1 : 0) + headers.length;
+    (expandable ? 1 : 0) + (selectable ? 1 : 0) + visibleHeaders.length;
 </script>
 
 <TableContainer {useStaticWidth} {...$$restProps}>
@@ -837,7 +902,9 @@
             </th>
           {/if}
           {#if selectable && !batchSelection}
-            <th scope="col"></th>
+            <th scope="col">
+              <span class:bx--visually-hidden={true}>Select row</span>
+            </th>
           {/if}
           {#if batchSelection && !radio}
             <th scope="col" class:bx--table-column-checkbox={true}>
@@ -869,7 +936,7 @@
               />
             </th>
           {/if}
-          {#each headers as header (header.key)}
+          {#each visibleHeaders as header (header.key)}
             {#if header.empty}
               {#if header.columnMenu}
                 <th
@@ -885,6 +952,7 @@
             {:else}
               <TableHeader
                 id="{id}-{header.key}"
+                class={formatAlignClass(header.columnAlign)}
                 style={formatHeaderWidth(header)}
                 sortable={sortable && header.sort !== false}
                 sortDirection={sortKey === header.key ? sortDirection : "none"}
@@ -1065,22 +1133,25 @@
                         aria-label="Select row"
                         checked={selectedRowIdsSet.has(row.id)}
                         value={row.id}
-                        on:change={() => {
-                          if (selectedRowIdsSet.has(row.id)) {
-                            selectedRowIds = selectedRowIds.filter(
-                              (id) => id !== row.id,
-                            );
-                            dispatch("click:row--select", {
-                              row,
-                              selected: false,
-                            });
-                          } else {
-                            selectedRowIds = [...selectedRowIds, row.id];
-                            dispatch("click:row--select", {
-                              row,
-                              selected: true,
-                            });
+                        on:click={(event) => {
+                          const checked = event.target.checked;
+                          const usedRange =
+                            event.shiftKey &&
+                            lastSelectedRowId !== null &&
+                            selectRowRange(actualIndex, checked);
+
+                          if (!usedRange) {
+                            const next = new Set(selectedRowIds);
+                            if (checked) {
+                              next.add(row.id);
+                            } else {
+                              next.delete(row.id);
+                            }
+                            selectedRowIds = [...next];
                           }
+
+                          lastSelectedRowId = row.id;
+                          dispatch("click:row--select", { row, selected: checked });
                         }}
                       />
                     {/if}
@@ -1089,7 +1160,10 @@
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
                 {#if cell.empty}
-                  <td class:bx--table-column-menu={cell.columnMenu}>
+                  <td
+                    class={formatAlignClass(cell.columnAlign)}
+                    class:bx--table-column-menu={cell.columnMenu}
+                  >
                     <slot
                       name="cell"
                       {row}
@@ -1106,6 +1180,7 @@
                   </td>
                 {:else}
                   <TableCell
+                    class={formatAlignClass(cell.columnAlign)}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
@@ -1150,11 +1225,7 @@
               >
                 {#if expandedRowIdsSet.has(row.id) &&
                 !nonExpandableRowIdsSet.has(row.id)}
-                  <TableCell
-                    colspan={selectable
-                      ? headers.length + 2
-                      : headers.length + 1}
-                  >
+                  <TableCell colspan={totalColumns}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot
                         name="expandedRow"
@@ -1290,17 +1361,25 @@
                         aria-label="Select row"
                         checked={isSelected}
                         value={row.id}
-                        on:change={() => {
-                          const next = new Set(selectedRowIds);
-                          if (isSelected) {
-                            next.delete(row.id);
+                        on:click={(event) => {
+                          const checked = event.target.checked;
+                          const usedRange =
+                            event.shiftKey &&
+                            lastSelectedRowId !== null &&
+                            selectRowRange(index, checked);
+
+                          if (!usedRange) {
+                            const next = new Set(selectedRowIds);
+                            if (checked) {
+                              next.add(row.id);
+                            } else {
+                              next.delete(row.id);
+                            }
                             selectedRowIds = [...next];
-                            dispatch("click:row--select", { row, selected: false });
-                          } else {
-                            next.add(row.id);
-                            selectedRowIds = [...next];
-                            dispatch("click:row--select", { row, selected: true });
                           }
+
+                          lastSelectedRowId = row.id;
+                          dispatch("click:row--select", { row, selected: checked });
                         }}
                       />
                     {/if}
@@ -1309,7 +1388,10 @@
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
                 {#if cell.empty}
-                  <td class:bx--table-column-menu={cell.columnMenu}>
+                  <td
+                    class={formatAlignClass(cell.columnAlign)}
+                    class:bx--table-column-menu={cell.columnMenu}
+                  >
                     <slot
                       name="cell"
                       {row}
@@ -1324,6 +1406,7 @@
                   </td>
                 {:else}
                   <TableCell
+                    class={formatAlignClass(cell.columnAlign)}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
@@ -1368,9 +1451,7 @@
                 }}
               >
                 {#if isExpanded && isExpandable}
-                  <TableCell
-                    colspan={selectable ? headers.length + 2 : headers.length + 1}
-                  >
+                  <TableCell colspan={totalColumns}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot name="expandedRow" {row} rowSelected={isSelected} />
                     </div>
@@ -1381,6 +1462,27 @@
           {/each}
         {/if}
       </TableBody>
+      {#if $$slots.footerCell}
+        <TableFoot>
+          <TableRow>
+            {#if expandable}
+              <td aria-hidden="true" class:bx--table-expand={true}></td>
+            {/if}
+            {#if selectable}
+              <td
+                aria-hidden="true"
+                class:bx--table-column-checkbox={true}
+                class:bx--table-column-radio={radio}
+              ></td>
+            {/if}
+            {#each headers as header, index (header.key)}
+              <td>
+                <slot name="footerCell" {header} {index} />
+              </td>
+            {/each}
+          </TableRow>
+        </TableFoot>
+      {/if}
     </Table>
   </div>
 </TableContainer>

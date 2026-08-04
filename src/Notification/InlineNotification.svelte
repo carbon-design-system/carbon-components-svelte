@@ -16,6 +16,9 @@
   /** Set the timeout duration (ms) to hide the notification after opening it */
   export let timeout = 0;
 
+  /** Set to `true` to pause the auto-dismiss timeout while the pointer is over the notification. */
+  export let pauseOnHover = false;
+
   /**
    * Specify the ARIA `role` for the notification container.
    * @type {"alert" | "log" | "status"}
@@ -62,6 +65,14 @@
     }
   }
 
+  function onMouseEnter() {
+    if (pauseOnHover) dismiss.pause();
+  }
+
+  function onMouseLeave() {
+    if (pauseOnHover) dismiss.resume();
+  }
+
   $: dismiss.sync(open, timeout, () => close(true));
 
   onMount(() => () => dismiss.clear());
@@ -84,7 +95,9 @@
     on:click
     on:mouseover
     on:mouseenter
+    on:mouseenter={onMouseEnter}
     on:mouseleave
+    on:mouseleave={onMouseLeave}
   >
     <div class:bx--inline-notification__details={true}>
       <NotificationIcon notificationType="inline" {kind} />

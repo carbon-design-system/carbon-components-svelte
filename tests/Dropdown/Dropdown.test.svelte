@@ -24,6 +24,9 @@
   export let hideLabel: ComponentProps<Dropdown>["hideLabel"] = false;
   export let translateWithId: ComponentProps<Dropdown>["translateWithId"] =
     undefined;
+  export let translateWithIdSelection: ComponentProps<Dropdown>["translateWithIdSelection"] =
+    undefined;
+  export let clearable: ComponentProps<Dropdown>["clearable"] = false;
   export let id: ComponentProps<Dropdown>["id"] = "test-dropdown";
   export let name: ComponentProps<Dropdown>["name"] = undefined;
   export let ref: ComponentProps<Dropdown>["ref"] = null;
@@ -54,11 +57,16 @@
   {label}
   {hideLabel}
   {translateWithId}
+  {translateWithIdSelection}
+  {clearable}
   {id}
   {name}
   bind:ref
   {virtualize}
   {portalMenu}
   on:select={(e) => onselect?.(e)}
+  on:clear={(e) => {
+    console.log("clear", e.type);
+  }}
   {...$$restProps}
 />

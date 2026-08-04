@@ -1,9 +1,10 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
 import type UserAvatarComponent from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import type { ComponentProps } from "svelte";
 import { getAvatarBackgroundColor } from "../../src/utils/avatarColor.js";
 import { user } from "../utils/user";
 import UserAvatar from "./UserAvatar.test.svelte";
+import UserAvatarImageError from "./UserAvatarImageError.test.svelte";
 
 describe("UserAvatar", () => {
   afterEach(() => {
@@ -49,6 +50,64 @@ describe("UserAvatar", () => {
     expect(img).toHaveAttribute("src", "https://example.com/photo.jpg");
     expect(img).toHaveAttribute("alt", "A user photo");
     expect(avatar).not.toHaveTextContent("SS");
+  });
+
+  it("spreads imageAttributes onto the img and keeps rest props on the host", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("image-attributes");
+    expect(avatar).toHaveAttribute("data-avatar-host", "true");
+    expect(avatar).not.toHaveAttribute("loading");
+    expect(avatar).not.toHaveAttribute("srcset");
+    expect(avatar).not.toHaveAttribute("referrerpolicy");
+
+    const img = avatar.querySelector("img");
+    assert(img);
+    expect(img).toHaveAttribute("src", "https://example.com/photo.jpg");
+    expect(img).toHaveAttribute("alt", "A user photo");
+    expect(img).toHaveAttribute("loading", "lazy");
+    expect(img).toHaveAttribute("srcset", "https://example.com/photo.jpg 1x");
+    expect(img).toHaveAttribute("referrerpolicy", "no-referrer");
+    expect(img).not.toHaveAttribute("data-testid");
+    expect(img).not.toHaveAttribute("data-avatar-host");
+  });
+
+  it("falls back to initials when the image fails to load and dispatches image:error", async () => {
+    const onImageError = vi.fn();
+    render(UserAvatarImageError, { props: { onImageError } });
+
+    const avatar = screen.getByTestId("image-error");
+    const img = avatar.querySelector("img");
+    assert(img);
+
+    img.dispatchEvent(new Event("error"));
+
+    expect(onImageError).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(avatar.querySelector("img")).toBeNull();
+      expect(avatar).toHaveTextContent("JD");
+    });
+  });
+
+  it("retries the image when the src changes after a failed load", async () => {
+    const { rerender } = render(UserAvatarImageError, {
+      props: { image: "https://example.com/broken.jpg" },
+    });
+
+    const avatar = screen.getByTestId("image-error");
+    const img = avatar.querySelector("img");
+    assert(img);
+    img.dispatchEvent(new Event("error"));
+    await waitFor(() => {
+      expect(avatar).toHaveTextContent("JD");
+    });
+
+    await rerender({ image: "https://example.com/photo.jpg" });
+
+    const nextImg = avatar.querySelector("img");
+    assert(nextImg);
+    expect(nextImg).toHaveAttribute("src", "https://example.com/photo.jpg");
+    expect(avatar).not.toHaveTextContent("JD");
   });
 
   it("renders a custom icon, taking priority over the name", () => {
@@ -143,6 +202,42 @@ describe("UserAvatar", () => {
 
     await user.hover(avatar);
     expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+  });
+
+  it("renders a span by default", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("default");
+    expect(avatar.tagName).toBe("SPAN");
+    expect(avatar).not.toHaveClass("bx--user-avatar--interactive");
+  });
+
+  it("renders a button when interactive is set", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("interactive");
+    expect(avatar.tagName).toBe("BUTTON");
+    expect(avatar).toHaveAttribute("type", "button");
+    expect(avatar).toHaveClass("bx--user-avatar--interactive");
+    expect(avatar).toHaveAttribute("aria-label", "John Doe");
+  });
+
+  it("renders an anchor when href is set", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("href");
+    expect(avatar.tagName).toBe("A");
+    expect(avatar).toHaveAttribute("href", "/profile");
+    expect(avatar).toHaveClass("bx--user-avatar--interactive");
+  });
+
+  it("prefers href over interactive", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("href-over-interactive");
+    expect(avatar.tagName).toBe("A");
+    expect(avatar).toHaveAttribute("href", "/profile");
+    expect(avatar).not.toHaveAttribute("type");
   });
 
   describe("Generics", () => {

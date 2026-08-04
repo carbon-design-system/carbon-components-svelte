@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>checkbox</title>
+    <g id="checkbox" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="checked">
+            <rect x="76" y="58" width="16" height="16" rx="1" fill="var(--cds-icon-primary, #161616)"></rect>
+            <g transform="translate(80, 58) translate(9, 5) rotate(-45) translate(-9, -5)">
+                <path d="M0 0V5M0 5H9" stroke="var(--cds-icon-inverse, #ffffff)" stroke-width="2" stroke-linecap="square"></path>
+            </g>
+            <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="104" y="62" width="120" height="8"></rect>
+        </g>
+        <g id="indeterminate">
+            <rect x="76" y="82" width="16" height="16" rx="1" fill="var(--cds-icon-primary, #161616)"></rect>
+            <rect x="80" y="89" width="8" height="2" fill="var(--cds-icon-inverse, #ffffff)"></rect>
+            <rect id="label" fill="var(--cds-border-subtle, #e0e0e0)" x="104" y="86" width="96" height="8"></rect>
+        </g>
+        <g id="unchecked">
+            <rect x="76" y="106" width="16" height="16" rx="1" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1"></rect>
+            <rect id="label" fill="var(--cds-border-subtle, #e0e0e0)" x="104" y="110" width="108" height="8"></rect>
+        </g>
+    </g>
+</svg>

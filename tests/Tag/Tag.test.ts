@@ -1,8 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import type TagComponent from "carbon-components-svelte/Tag/Tag.svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import Tag from "./Tag.test.svelte";
+import TagMaxWidth from "./TagMaxWidth.test.svelte";
 
 describe("Tag", () => {
   afterEach(() => {
@@ -14,7 +17,7 @@ describe("Tag", () => {
 
     const basicTag = screen.getByText("IBM Cloud");
     expect(basicTag.parentElement).toHaveClass("my-class");
-    expect(basicTag.parentElement).toHaveStyle({ margin: "1rem" });
+    expectInlineStyle(basicTag.parentElement, { margin: "1rem" });
 
     const colors = [
       "red",
@@ -95,6 +98,54 @@ describe("Tag", () => {
 
     const interactiveTag = screen.getByRole("button", { name: "Text" });
     expect(interactiveTag).toHaveClass("bx--tag--interactive");
+  });
+
+  it("renders href tag as an anchor with interactive styles", () => {
+    render(Tag);
+
+    const linkedTag = screen.getByRole("link", { name: "Linked tag" });
+    expect(linkedTag).toHaveAttribute("href", "/filtered?tag=ml");
+    expect(linkedTag).toHaveClass("bx--tag");
+    expect(linkedTag).toHaveClass("bx--tag--interactive");
+    expect(linkedTag).toHaveClass("bx--tag--blue");
+  });
+
+  it("forwards target and sets rel for blank targets", () => {
+    render(Tag);
+
+    const linkedTag = screen.getByRole("link", { name: "External linked tag" });
+    expect(linkedTag).toHaveAttribute("target", "_blank");
+    expect(linkedTag).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  it("disables href navigation when disabled", () => {
+    render(Tag);
+
+    const linkedTag = screen
+      .getByText("Disabled linked tag")
+      .closest(".bx--tag");
+    assert(linkedTag);
+    expect(linkedTag.tagName).toBe("A");
+    expect(linkedTag).not.toHaveAttribute("href");
+    expect(linkedTag).toHaveAttribute("role", "link");
+    expect(linkedTag).toHaveAttribute("aria-disabled", "true");
+    expect(linkedTag).not.toHaveAttribute("tabindex");
+    expect(linkedTag).toHaveClass("bx--tag--disabled");
+  });
+
+  it("prefers filter over href when both are set", () => {
+    render(Tag);
+
+    const filterTag = screen
+      .getByText("Filter wins over href")
+      .closest(".bx--tag");
+    assert(filterTag);
+    expect(filterTag.tagName).toBe("DIV");
+    expect(filterTag).toHaveClass("bx--tag--filter");
+    expect(filterTag).not.toHaveAttribute("href");
+    expect(
+      screen.queryByRole("link", { name: "Filter wins over href" }),
+    ).not.toBeInTheDocument();
   });
 
   it("renders skeleton state", () => {
@@ -209,6 +260,67 @@ describe("Tag", () => {
     assert(tagElement);
     const iconContainer = tagElement.querySelector(".bx--tag__custom-icon");
     expect(iconContainer).toBeInTheDocument();
+  });
+
+  describe("maxWidth truncation", () => {
+    let clientWidthSpy: ReturnType<typeof vi.spyOn>;
+    let scrollWidthSpy: ReturnType<typeof vi.spyOn>;
+
+    function mockOverflow(truncated: boolean) {
+      clientWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "clientWidth", "get")
+        .mockReturnValue(truncated ? 40 : 200);
+      scrollWidthSpy = vi
+        .spyOn(HTMLElement.prototype, "scrollWidth", "get")
+        .mockReturnValue(truncated ? 200 : 40);
+    }
+
+    afterEach(() => {
+      clientWidthSpy?.mockRestore();
+      scrollWidthSpy?.mockRestore();
+    });
+
+    it("applies the truncate class and max-width style", async () => {
+      mockOverflow(false);
+      render(TagMaxWidth, {
+        props: { maxWidth: "8rem", label: "Short", filter: true },
+      });
+      await tick();
+
+      const tag = screen.getByText("Short").closest(".bx--tag");
+      expect(tag).toHaveClass("bx--tag--truncate");
+      expectInlineStyle(tag, { maxWidth: "8rem" });
+    });
+
+    it("does not render a tooltip when the label is not truncated", async () => {
+      mockOverflow(false);
+      render(TagMaxWidth, {
+        props: { maxWidth: "8rem", label: "Short", filter: true },
+      });
+      await tick();
+
+      expect(
+        document.querySelector(".bx--tooltip--definition"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("renders a tooltip when the filter label overflows", async () => {
+      mockOverflow(true);
+      const label =
+        "status:active AND region:us-south AND service:cloud-object-storage";
+      render(TagMaxWidth, {
+        props: { maxWidth: "8rem", label, filter: true },
+      });
+      await tick();
+      // Wrapping the label remounts it; wait for the post-measure update.
+      await tick();
+
+      const tooltip = document.querySelector(".bx--tooltip--definition");
+      expect(tooltip).toBeInTheDocument();
+      expect(
+        tooltip?.querySelector(".bx--tooltip__trigger")?.textContent?.trim(),
+      ).toBe(label);
+    });
   });
 
   describe("Generics", () => {

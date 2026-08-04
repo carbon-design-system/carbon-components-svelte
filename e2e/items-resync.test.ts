@@ -142,6 +142,28 @@ test.describe("Items resync — display derived from value + items", () => {
     await expect(page.getByTestId("ms-remove")).toContainText("1");
   });
 
+  test("Select keeps the placeholder when the option list changes with nothing selected", async ({
+    page,
+  }) => {
+    // On the Svelte 5 runtime a spread <select> gets a MutationObserver that
+    // re-asserts select.__value (undefined here, since Select never spreads a
+    // value) on every option add/remove, resetting selectedIndex to -1.
+    // `value` reads "" both when the placeholder is selected and when
+    // selectedIndex is -1, so only selectedIndex distinguishes the two.
+    const select = page.getByTestId("sel-no-selection");
+    const selectedIndex = () =>
+      select.evaluate((node: HTMLSelectElement) => node.selectedIndex);
+
+    await expect(select).toHaveValue("");
+    await expect.poll(selectedIndex).toBe(0);
+
+    await page.getByTestId("toggle-no-selection-option").click();
+    await expect.poll(selectedIndex).toBe(0);
+
+    await page.getByTestId("toggle-no-selection-option").click();
+    await expect.poll(selectedIndex).toBe(0);
+  });
+
   test("Dropdown shows selection after async fill (reference)", async ({
     page,
   }) => {

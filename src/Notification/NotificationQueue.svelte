@@ -14,7 +14,7 @@
 
   /**
    * Specify the position of the notification queue.
-   * @type {"top-right" | "bottom-right"}
+   * @type {"top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right"}
    */
   export let position = "top-right";
 
@@ -23,6 +23,9 @@
 
   /** Specify the bottom offset (CSS value) */
   export let offsetBottom = "1rem";
+
+  /** Specify the left offset (CSS value) */
+  export let offsetLeft = "1rem";
 
   /** Specify the right offset (CSS value) */
   export let offsetRight = "1rem";
@@ -50,6 +53,22 @@
     return `notification-${idCounter++}`;
   }
 
+  function isTopPosition(value) {
+    return value.startsWith("top");
+  }
+
+  function isLeftPosition(value) {
+    return value.endsWith("left");
+  }
+
+  function isRightPosition(value) {
+    return value.endsWith("right");
+  }
+
+  function isCenterPosition(value) {
+    return value.endsWith("center");
+  }
+
   /**
    * Add a notification to the queue.
    * If a notification with the same id already exists, the call is ignored.
@@ -67,7 +86,7 @@
     /** @type {NotificationData & { id: string }} */
     const newNotification = { ...notification, id };
 
-    if (position === "top-right") {
+    if (isTopPosition(position)) {
       notifications = [newNotification, ...notifications];
       if (notifications.length > maxNotifications) {
         notifications.splice(maxNotifications);
@@ -122,10 +141,25 @@
 
 {#if notifications.length > 0}
   <div
+    class:bx--notification-queue={true}
+    class:bx--notification-queue--top-left={position === "top-left"}
+    class:bx--notification-queue--top-center={position === "top-center"}
+    class:bx--notification-queue--top-right={position === "top-right"}
+    class:bx--notification-queue--bottom-left={position === "bottom-left"}
+    class:bx--notification-queue--bottom-center={position === "bottom-center"}
+    class:bx--notification-queue--bottom-right={position === "bottom-right"}
     style:position="fixed"
-    style:right={offsetRight}
-    style:top={position === "top-right" ? offsetTop : undefined}
-    style:bottom={position === "bottom-right" ? offsetBottom : undefined}
+    style:left={isLeftPosition(position)
+      ? offsetLeft
+      : isCenterPosition(position)
+        ? "50%"
+        : undefined}
+    style:right={isRightPosition(position) ? offsetRight : undefined}
+    style:top={isTopPosition(position) ? offsetTop : undefined}
+    style:bottom={isTopPosition(position) ? undefined : offsetBottom}
+    style:transform={isCenterPosition(position)
+      ? "translateX(-50%)"
+      : undefined}
     style:z-index={zIndex}
   >
     {#each notifications as notification (notification.id)}

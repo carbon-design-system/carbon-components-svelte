@@ -14,6 +14,7 @@
     value: string;
     width?: string;
     minWidth?: string;
+    columnAlign?: "start" | "end";
     display?: (value: string | number | boolean) => string;
     sort?:
       | false
@@ -22,6 +23,7 @@
           b: DataTableSortValue<BaseRow>,
         ) => number);
     sortAlways?: boolean;
+    columnHidden?: boolean;
   };
 
   export let headers: readonly DataTableHeader[] = [

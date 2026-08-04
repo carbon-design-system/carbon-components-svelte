@@ -13,11 +13,24 @@
    */
   export let size = undefined;
 
+  /**
+   * Set to `true` to remove the gutter around the accordion, aligning it flush with its container.
+   * Has no effect when `align` is `"start"`.
+   */
+  export let flush = false;
+
   /** Set to `true` to disable the accordion */
   export let disabled = false;
 
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
+
+  /**
+   * Specify the expansion behavior of the accordion.
+   * Set to `"single"` so that opening an item closes all other items.
+   * @type {"single" | "multiple"}
+   */
+  export let type = "multiple";
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
@@ -30,7 +43,19 @@
 
   $: disableItems.set(disabled);
 
-  setContext("carbon:Accordion", { disableItems });
+  /**
+   * Tracks the identity of the currently open item when `type` is `"single"`.
+   * @type {import("svelte/store").Writable<object | null>}
+   */
+  const openId = writable(null);
+
+  function notifyOpen(id) {
+    if (type === "single") {
+      openId.set(id);
+    }
+  }
+
+  setContext("carbon:Accordion", { disableItems, openId, notifyOpen });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -39,6 +64,7 @@
     {...$$restProps}
     {align}
     {size}
+    {flush}
     on:click
     on:mouseover
     on:mouseenter
@@ -52,6 +78,7 @@
     class:bx--accordion--end={align === "end"}
     class:bx--accordion--sm={size === "sm"}
     class:bx--accordion--xl={size === "xl"}
+    class:bx--accordion--flush={flush && align !== "start"}
     {...$$restProps}
     on:click
     on:mouseover

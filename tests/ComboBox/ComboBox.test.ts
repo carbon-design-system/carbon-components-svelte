@@ -494,27 +494,27 @@ describe("ComboBox", () => {
     expect(screen.getByText("Warning message")).toBeInTheDocument();
   });
 
-  it.each([
-    "disabled",
-    "readonly",
-  ] as const)("should suppress invalid and warn states when %s", (state) => {
-    const { container } = render(ComboBox, {
-      props: {
-        [state]: true,
-        invalid: true,
-        invalidText: "Invalid selection",
-        warn: true,
-        warnText: "Warning message",
-      },
-    });
+  it.each(["disabled", "readonly"] as const)(
+    "should suppress invalid and warn states when %s",
+    (state) => {
+      const { container } = render(ComboBox, {
+        props: {
+          [state]: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+          warn: true,
+          warnText: "Warning message",
+        },
+      });
 
-    expect(container.querySelector(".bx--combo-box")).not.toHaveAttribute(
-      "data-invalid",
-    );
-    expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
-    expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-  });
+      expect(container.querySelector(".bx--combo-box")).not.toHaveAttribute(
+        "data-invalid",
+      );
+      expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
+      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+    },
+  );
 
   it("should handle helper text", () => {
     render(ComboBox, { props: { helperText: "Helper message" } });
@@ -2094,49 +2094,50 @@ describe("ComboBox", () => {
         virtualize: undefined,
         description: "with auto-enabled virtualization",
       },
-    ])("should reset scroll position when menu reopens $description", async ({
-      virtualize,
-    }) => {
-      const largeItems = createLargeItemList(500);
-      const { rerender } = render(ComboBox, {
-        props: {
-          items: largeItems,
-          virtualize,
-        },
-      });
+    ])(
+      "should reset scroll position when menu reopens $description",
+      async ({ virtualize }) => {
+        const largeItems = createLargeItemList(500);
+        const { rerender } = render(ComboBox, {
+          props: {
+            items: largeItems,
+            virtualize,
+          },
+        });
 
-      await user.click(getInput());
+        await user.click(getInput());
 
-      const menu = screen.getByRole("listbox");
-      expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
-      expect(menu).toBeVisible();
-      expect(menu.style.maxHeight).toBeTruthy();
-      expect(menu.style.overflowY).toBe("auto");
+        const menu = screen.getByRole("listbox");
+        expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
+        expect(menu).toBeVisible();
+        expect(menu.style.maxHeight).toBeTruthy();
+        expect(menu.style.overflowY).toBe("auto");
 
-      menu.scrollTop = 1000;
-      await new Promise((resolve) => setTimeout(resolve, 100));
+        menu.scrollTop = 1000;
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-      const scrollBeforeClose = menu.scrollTop;
-      expect(scrollBeforeClose).toBeGreaterThan(0);
+        const scrollBeforeClose = menu.scrollTop;
+        expect(scrollBeforeClose).toBeGreaterThan(0);
 
-      rerender({ open: false });
-      await tick();
-      await new Promise((resolve) => setTimeout(resolve, 100));
+        rerender({ open: false });
+        await tick();
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-      rerender({ open: true });
-      await tick();
+        rerender({ open: true });
+        await tick();
 
-      await waitFor(() => {
-        const menuAfterReopen = screen.getByRole("listbox");
-        expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
-        expect(menuAfterReopen).toBeInTheDocument();
-        return menuAfterReopen;
-      });
+        await waitFor(() => {
+          const menuAfterReopen = screen.getByRole("listbox");
+          expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
+          expect(menuAfterReopen).toBeInTheDocument();
+          return menuAfterReopen;
+        });
 
-      await waitFor(() => {
-        expect(screen.getByText("Item 1")).toBeInTheDocument();
-      });
-    });
+        await waitFor(() => {
+          expect(screen.getByText("Item 1")).toBeInTheDocument();
+        });
+      },
+    );
 
     it("should work with filtering when virtualized", async () => {
       const largeItems = createLargeItemList(500);
@@ -2382,35 +2383,36 @@ describe("ComboBox", () => {
         virtualize: undefined,
         description: "with auto-enabled virtualization",
       },
-    ])("should start keyboard navigation at selected item $description", async ({
-      virtualize,
-    }) => {
-      const largeItems = createLargeItemList(500);
-      render(ComboBox, {
-        props: {
-          items: largeItems,
-          selectedId: "250", // Item 251, in the middle
-          virtualize,
-          // Use a filter that shows all items so we can test navigation
-          shouldFilterItem: () => true,
-        },
-      });
+    ])(
+      "should start keyboard navigation at selected item $description",
+      async ({ virtualize }) => {
+        const largeItems = createLargeItemList(500);
+        render(ComboBox, {
+          props: {
+            items: largeItems,
+            selectedId: "250", // Item 251, in the middle
+            virtualize,
+            // Use a filter that shows all items so we can test navigation
+            shouldFilterItem: () => true,
+          },
+        });
 
-      const input = getInput();
-      await user.click(input);
+        const input = getInput();
+        await user.click(input);
 
-      await waitFor(() => {
-        const menu = screen.getByRole("listbox");
-        expect(menu).toBeVisible();
-      });
+        await waitFor(() => {
+          const menu = screen.getByRole("listbox");
+          expect(menu).toBeVisible();
+        });
 
-      // Press ArrowDown - should move to next item (250 -> 251)
-      await user.keyboard("{ArrowDown}");
-      await user.keyboard("{Enter}");
+        // Press ArrowDown - should move to next item (250 -> 251)
+        await user.keyboard("{ArrowDown}");
+        await user.keyboard("{Enter}");
 
-      // Should have selected Item 252 (index 251)
-      expect(input).toHaveValue("Item 252");
-    });
+        // Should have selected Item 252 (index 251)
+        expect(input).toHaveValue("Item 252");
+      },
+    );
 
     it("should only scroll when highlighted item is outside viewport", async () => {
       const largeItems = createLargeItemList(500);
@@ -3088,25 +3090,25 @@ describe("ComboBox", () => {
       expect(message.closest(".bx--list-box__wrapper--fluid")).not.toBeNull();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      render(ComboBox, {
-        props: {
-          fluid: true,
-          invalid: true,
-          invalidText: "Invalid selection",
-          warn: true,
-          warnText: "Warning message",
-          ...props,
-        },
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        render(ComboBox, {
+          props: {
+            fluid: true,
+            invalid: true,
+            invalidText: "Invalid selection",
+            warn: true,
+            warnText: "Warning message",
+            ...props,
+          },
+        });
 
-      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(document.querySelector("[data-invalid]")).toBeNull();
-    });
+        expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(document.querySelector("[data-invalid]")).toBeNull();
+      },
+    );
 
     it("marks the wrapper as condensed when fluid", () => {
       render(ComboBox, {

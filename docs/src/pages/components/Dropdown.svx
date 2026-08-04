@@ -33,6 +33,14 @@ Omit `selectedId` to render the dropdown with no item selected. The label appear
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Clearable
+
+Set `clearable` to `true` to show a clear button when an item is selected. Clearing resets `selectedId` and dispatches a `clear` event. The clear button is hidden when there is no selection.
+
+<Dropdown clearable labelText="Contact" selectedId="0" label="Choose a contact method" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ### Initial selection
 
 Set `selectedId` to pre-select an item when the dropdown first renders. The trigger shows that item's label in the closed state.
@@ -124,6 +132,17 @@ In the example below, 10,000 items are provided to the dropdown but only 11 item
 Set `virtualize={false}` to explicitly disable virtualization, even for large lists. Or customize the threshold at which virtualization activates. See [Custom threshold](#custom-threshold).
 
 <FileSource src="/framed/Dropdown/VirtualizedDropdown" />
+
+### Load more
+
+`scrollend` fires when the menu is scrolled near the bottom so you can append the next page of `items`. Same pattern as [ComboBox load more](/components/ComboBox#load-more): handle `on:scrollend`, keep prior items visible while loading, and track in-flight status locally (or with the `empty` slot when appropriate). The event is a near-bottom load-more signal, not the browser's native `scrollend`.
+
+```svelte
+<Dropdown
+  {items}
+  on:scrollend={() => loadNextPage()}
+/>
+```
 
 ### Custom overscan
 

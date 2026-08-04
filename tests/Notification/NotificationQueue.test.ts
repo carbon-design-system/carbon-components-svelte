@@ -3,6 +3,7 @@ import type NotificationButtonComponent from "carbon-components-svelte/Notificat
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import NotificationQueueTest from "./NotificationQueue.test.svelte";
 
@@ -46,7 +47,7 @@ describe("NotificationQueue", () => {
 
     const queueContainer = document.querySelector('[style*="position: fixed"]');
     expect(queueContainer).toBeInTheDocument();
-    expect(queueContainer).toHaveStyle({
+    expectInlineStyle(queueContainer, {
       position: "fixed",
       right: "1rem",
       top: "3rem",
@@ -351,6 +352,78 @@ describe("NotificationQueue", () => {
     expect(screen.getByText("Third")).toBeInTheDocument();
   });
 
+  it.each<{
+    position:
+      | "top-right"
+      | "top-left"
+      | "top-center"
+      | "bottom-right"
+      | "bottom-left"
+      | "bottom-center";
+    className: string;
+    styles: Record<string, string>;
+    absent: string[];
+  }>([
+    {
+      position: "top-right",
+      className: "bx--notification-queue--top-right",
+      styles: { top: "3rem", right: "1rem" },
+      absent: ["bottom", "left", "transform"],
+    },
+    {
+      position: "top-left",
+      className: "bx--notification-queue--top-left",
+      styles: { top: "3rem", left: "1rem" },
+      absent: ["bottom", "right", "transform"],
+    },
+    {
+      position: "top-center",
+      className: "bx--notification-queue--top-center",
+      styles: { top: "3rem", left: "50%", transform: "translateX(-50%)" },
+      absent: ["bottom", "right"],
+    },
+    {
+      position: "bottom-right",
+      className: "bx--notification-queue--bottom-right",
+      styles: { bottom: "1rem", right: "1rem" },
+      absent: ["top", "left", "transform"],
+    },
+    {
+      position: "bottom-left",
+      className: "bx--notification-queue--bottom-left",
+      styles: { bottom: "1rem", left: "1rem" },
+      absent: ["top", "right", "transform"],
+    },
+    {
+      position: "bottom-center",
+      className: "bx--notification-queue--bottom-center",
+      styles: { bottom: "1rem", left: "50%", transform: "translateX(-50%)" },
+      absent: ["top", "right"],
+    },
+  ])(
+    "should position notifications at $position",
+    async ({ position, className, styles, absent }) => {
+      const { component } = render(NotificationQueueTest, {
+        props: { position },
+      });
+
+      getQueue(component).add({
+        kind: "success",
+        title: "Test",
+      });
+      await tick();
+
+      const queueContainer = document.querySelector(".bx--notification-queue");
+      expect(queueContainer).toHaveClass("bx--notification-queue", className);
+      expectInlineStyle(queueContainer, styles);
+
+      const styleAttr = queueContainer?.getAttribute("style") ?? "";
+      for (const property of absent) {
+        expect(styleAttr).not.toMatch(new RegExp(`${property}\\s*:`));
+      }
+    },
+  );
+
   it("should position notifications at top-right by default", async () => {
     const { component } = render(NotificationQueueTest);
 
@@ -360,41 +433,17 @@ describe("NotificationQueue", () => {
     });
     await tick();
 
-    const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toHaveStyle({ top: "3rem", right: "1rem" });
-    const bottomValue = queueContainer
-      ?.getAttribute("style")
-      ?.match(/bottom:\s*([^;]+)/)?.[1]
-      ?.trim();
-    expect(bottomValue).toBeFalsy();
-  });
-
-  it("should position notifications at bottom-right", async () => {
-    const { component } = render(NotificationQueueTest, {
-      props: { position: "bottom-right" },
-    });
-
-    getQueue(component).add({
-      kind: "success",
-      title: "Test",
-    });
-    await tick();
-
-    const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toHaveStyle({ bottom: "1rem", right: "1rem" });
-    const topValue = queueContainer
-      ?.getAttribute("style")
-      ?.match(/top:\s*([^;]+)/)?.[1]
-      ?.trim();
-    expect(topValue).toBeFalsy();
+    const queueContainer = document.querySelector(".bx--notification-queue");
+    expect(queueContainer).toHaveClass("bx--notification-queue--top-right");
+    expectInlineStyle(queueContainer, { top: "3rem", right: "1rem" });
   });
 
   it("should use custom offsets", async () => {
     const { component } = render(NotificationQueueTest, {
       props: {
-        position: "top-right",
+        position: "top-left",
         offsetTop: "5rem",
-        offsetRight: "2rem",
+        offsetLeft: "2rem",
       },
     });
 
@@ -404,8 +453,8 @@ describe("NotificationQueue", () => {
     });
     await tick();
 
-    const queueContainer = document.querySelector('[style*="position: fixed"]');
-    expect(queueContainer).toHaveStyle({ top: "5rem", right: "2rem" });
+    const queueContainer = document.querySelector(".bx--notification-queue");
+    expectInlineStyle(queueContainer, { top: "5rem", left: "2rem" });
   });
 
   it("should use custom z-index", async () => {
@@ -500,53 +549,59 @@ describe("NotificationQueue", () => {
     expect(screen.getByLabelText("Custom close")).toBeInTheDocument();
   });
 
-  it("should handle notification order for top-right position", async () => {
-    const { component } = render(NotificationQueueTest, {
-      props: { position: "top-right" },
-    });
+  it.each(["top-right", "top-left", "top-center"] as const)(
+    "should prepend notifications for %s position",
+    async (position) => {
+      const { component } = render(NotificationQueueTest, {
+        props: { position },
+      });
 
-    getQueue(component).add({
-      id: "first",
-      kind: "success",
-      title: "First",
-    });
-    await tick();
+      getQueue(component).add({
+        id: "first",
+        kind: "success",
+        title: "First",
+      });
+      await tick();
 
-    getQueue(component).add({
-      id: "second",
-      kind: "info",
-      title: "Second",
-    });
-    await tick();
+      getQueue(component).add({
+        id: "second",
+        kind: "info",
+        title: "Second",
+      });
+      await tick();
 
-    const notifications = screen.getAllByRole("alert");
-    expect(notifications[0]).toHaveTextContent("Second");
-    expect(notifications[1]).toHaveTextContent("First");
-  });
+      const notifications = screen.getAllByRole("alert");
+      expect(notifications[0]).toHaveTextContent("Second");
+      expect(notifications[1]).toHaveTextContent("First");
+    },
+  );
 
-  it("should handle notification order for bottom-right position", async () => {
-    const { component } = render(NotificationQueueTest, {
-      props: { position: "bottom-right" },
-    });
+  it.each(["bottom-right", "bottom-left", "bottom-center"] as const)(
+    "should append notifications for %s position",
+    async (position) => {
+      const { component } = render(NotificationQueueTest, {
+        props: { position },
+      });
 
-    getQueue(component).add({
-      id: "first",
-      kind: "success",
-      title: "First",
-    });
-    await tick();
+      getQueue(component).add({
+        id: "first",
+        kind: "success",
+        title: "First",
+      });
+      await tick();
 
-    getQueue(component).add({
-      id: "second",
-      kind: "info",
-      title: "Second",
-    });
-    await tick();
+      getQueue(component).add({
+        id: "second",
+        kind: "info",
+        title: "Second",
+      });
+      await tick();
 
-    const notifications = screen.getAllByRole("alert");
-    expect(notifications[0]).toHaveTextContent("First");
-    expect(notifications[1]).toHaveTextContent("Second");
-  });
+      const notifications = screen.getAllByRole("alert");
+      expect(notifications[0]).toHaveTextContent("First");
+      expect(notifications[1]).toHaveTextContent("Second");
+    },
+  );
 
   it("should not render container when all notifications are removed", async () => {
     vi.useRealTimers();

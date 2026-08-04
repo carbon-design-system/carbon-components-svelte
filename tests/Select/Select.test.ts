@@ -198,24 +198,23 @@ describe("Select", () => {
     expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
   });
 
-  it.each([
-    "ArrowDown",
-    "ArrowUp",
-    " ",
-  ])("prevents %s keydown when read-only", (key) => {
-    render(Select, { readonly: true });
-    const selectElement = screen.getByLabelText("Select label");
-    const event = new KeyboardEvent("keydown", {
-      key,
-      bubbles: true,
-      cancelable: true,
-    });
-    const preventDefault = vi.spyOn(event, "preventDefault");
+  it.each(["ArrowDown", "ArrowUp", " "])(
+    "prevents %s keydown when read-only",
+    (key) => {
+      render(Select, { readonly: true });
+      const selectElement = screen.getByLabelText("Select label");
+      const event = new KeyboardEvent("keydown", {
+        key,
+        bubbles: true,
+        cancelable: true,
+      });
+      const preventDefault = vi.spyOn(event, "preventDefault");
 
-    selectElement.dispatchEvent(event);
+      selectElement.dispatchEvent(event);
 
-    expect(preventDefault).toHaveBeenCalled();
-  });
+      expect(preventDefault).toHaveBeenCalled();
+    },
+  );
 
   it("does not prevent Tab keydown when read-only", () => {
     render(Select, { readonly: true });
@@ -583,23 +582,23 @@ describe("Select", () => {
       expect(message.closest(".bx--select-input__wrapper")).not.toBeNull();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      render(Select, {
-        fluid: true,
-        invalid: true,
-        invalidText: "Invalid selection",
-        warn: true,
-        warnText: "Warning message",
-        ...props,
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        render(Select, {
+          fluid: true,
+          invalid: true,
+          invalidText: "Invalid selection",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        });
 
-      expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(document.querySelector("[data-invalid]")).toBeNull();
-    });
+        expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(document.querySelector("[data-invalid]")).toBeNull();
+      },
+    );
 
     it("ignores fluid for the inline variant", () => {
       render(Select, { fluid: true, inline: true });

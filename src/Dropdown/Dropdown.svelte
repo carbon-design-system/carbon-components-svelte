@@ -13,6 +13,7 @@
    * @type {object}
    * @property {Item["id"]} selectedId
    * @property {Item} selectedItem
+   * @event {KeyboardEvent | MouseEvent} clear
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
@@ -22,6 +23,12 @@
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "select"} trigger
+   */
+
+  /**
+   * Dispatched when the menu is scrolled near the bottom (load-more signal).
+   * Not the browser's native `scrollend` (scroll stopped).
+   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    */
 
   /**
@@ -95,6 +102,12 @@
   export let readonly = false;
 
   /**
+   * Set to `true` to show a clear button when an item is selected.
+   * Clears `selectedId` and dispatches a `clear` event.
+   */
+  export let clearable = false;
+
+  /**
    * Set to `true` to use the fluid variant.
    * Inherited from the parent `FluidForm` context,
    * so it does not need to be set when used inside `FluidForm`.
@@ -124,6 +137,13 @@
    * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
    */
   export let translateWithId = undefined;
+
+  /**
+   * Override the label of the clear button when a selection is present.
+   * Defaults to "Clear selected item" since a dropdown can only have one selection.
+   * @type {(id: "clearSelection") => string}
+   */
+  export let translateWithIdSelection = undefined;
 
   /**
    * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
@@ -189,6 +209,7 @@
     ListBoxMenu,
     ListBoxMenuIcon,
     ListBoxMenuItem,
+    ListBoxSelection,
   } from "../ListBox";
   import {
     getMenuItemHeight,
@@ -197,6 +218,7 @@
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { nextEnabledIndex } from "../utils/moveIndex.js";
   import { typeaheadIndex } from "../utils/typeahead.js";
   import {
@@ -207,6 +229,7 @@
   } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
+  const scrollEndTracker = createScrollEndTracker();
   const insideModal = getContext("carbon:Modal");
   const formContext = getContext("carbon:Form");
 
@@ -292,6 +315,7 @@
   $: virtualConfig = virtualState.config;
   $: virtualData = virtualState.data;
   $: itemsToRender = virtualState.itemsToRender;
+  $: scrollEndTracker.noteItemCount(items.length);
 
   afterUpdate(() => {
     // Scroll to highlighted item when it changes via keyboard navigation
@@ -379,7 +403,27 @@
     if (!open && shouldVirtualize) {
       listScrollTop = resetVirtualScrollOnClose();
     }
+    if (!open) {
+      scrollEndTracker.reset();
+    }
   });
+
+  /**
+   * @param {Event} event
+   */
+  function handleMenuScroll(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    listScrollTop = target.scrollTop;
+    const detail = scrollEndTracker.observe({
+      scrollTop: target.scrollTop,
+      scrollHeight: target.scrollHeight,
+      clientHeight: target.clientHeight,
+      itemCount: items.length,
+    });
+    if (detail) {
+      dispatch("scrollend", detail);
+    }
+  }
 
   function change(step) {
     highlightedIndex = nextEnabledIndex({
@@ -410,6 +454,12 @@
       selectedId,
       selectedItem: itemsById.get(selectedId),
     });
+  }
+
+  function clearSelection() {
+    if (readonly) return;
+    selectedId = undefined;
+    open = false;
   }
 
   /**
@@ -620,6 +670,15 @@
             {label}
           {/if}
         </span>
+        {#if clearable && selectedId !== undefined}
+          <ListBoxSelection
+            on:clear
+            on:clear={clearSelection}
+            translateWithId={translateWithIdSelection}
+            {disabled}
+            {readonly}
+          />
+        {/if}
         <ListBoxMenuIcon
           on:click={(event) => {
           event.stopPropagation();
@@ -640,9 +699,7 @@
         anchor={ref}
         {direction}
         on:scroll
-        on:scroll={(event) => {
-          listScrollTop = event.target.scrollTop;
-        }}
+        on:scroll={handleMenuScroll}
         on:mouseleave={() => {
           // Clear the hover highlight when the cursor leaves the menu so the
           // highlighted state does not linger on the last hovered item.

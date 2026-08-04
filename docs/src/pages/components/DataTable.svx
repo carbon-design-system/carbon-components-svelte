@@ -352,6 +352,71 @@ Custom column widths do not work with a [sticky header](#sticky-header).
 
 <FileSource src="/framed/DataTable/DataTableHeaderWidth" />
 
+### Alignment
+
+Set `columnAlign` in `headers` to align a column's header and cells. Values are logical: `end` is the right edge in left-to-right text and the left edge in right-to-left text; the default, `start`, is the left edge. Sortable columns keep their sort affordance.
+
+<DataTable
+  sortable
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "cost", value: "Monthly cost", columnAlign: "end", display: (cost) => "$" + cost },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 3", protocol: "HTTP", port: 3000, cost: 1240 },
+    { id: "b", name: "Load Balancer 1", protocol: "HTTP", port: 443, cost: 865 },
+    { id: "c", name: "Load Balancer 2", protocol: "HTTP", port: 80, cost: 310 },
+  ]}
+/>
+
+## Column visibility
+
+Control which columns render without editing the `headers` definition.
+
+### Hidden columns
+
+Set `columnHidden` to `true` on a header to skip that column in render while keeping it in `headers`. A single canonical header list keeps column order and definitions stable across toggles. Hidden columns are excluded from toolbar search, since a match the reader cannot see is a result they cannot explain. An active sort on a hidden column still applies, because hiding is presentational.
+
+<DataTable
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule", columnHidden: true },
+  ]}
+  rows={[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin",
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin",
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation",
+    },
+  ]}
+/>
+
+### Toggling columns
+
+Flip `columnHidden` on a bound `headers` array from a `ToolbarMenu` to build a column picker.
+
+<FileSource src="/framed/DataTable/DataTableColumnVisibility" />
+
 ## Sticky header
 
 Set `stickyHeader` to fix the header in place while the body scrolls.
@@ -778,6 +843,12 @@ Compose [SearchMenu](/components/SearchMenu) in the toolbar for a search typeahe
 
 <FileSource src="/framed/DataTable/DataTableSearchMenu" />
 
+## Export
+
+Serialize headers and rows to a CSV string with `toCsv`. It applies each column's `display` formatting and skips empty columns, so the export matches what the table renders. It returns a string instead of triggering a download; pass the result to [`downloadFile`](/components/Link#download-link) (or wire it into [`LinkDownload`](/components/Link#download-link)) when you want a file. Export the current view by passing the rows matching `filteredRowIds`; values a spreadsheet would read as formulas are prefixed with a single quote unless `escapeFormulas` is `false`.
+
+<FileSource src="/framed/DataTable/DataTableExport" />
+
 ## Filtering
 
 Filter rows with `shouldFilterRows`.
@@ -872,6 +943,14 @@ Set `zebra` to `true` to add alternating row colors.
 Use `rowClass` to apply custom CSS classes to rows. Pass a string for a static class, or a function that receives row, rowIndex, selected, and expanded and returns conditional classes. Try selecting and expanding rows to see the custom styles.
 
 <FileSource src="/framed/DataTable/DataTableRowClass" />
+
+## Footer
+
+Use the `footerCell` slot to render a summary row aligned to the table columns. The slot receives each header, so it can decide what to render per column and leave the rest blank.
+
+Compute totals, averages, and counts yourself; the table does not aggregate. The footer renders once for the whole table rather than once per page, and it stays in place while virtualized rows scroll.
+
+<FileSource src="/framed/DataTable/DataTableFooter" />
 
 ## Sizes
 
@@ -1503,7 +1582,7 @@ Enable row selection with checkboxes or radios, with optional batch actions.
 
 ### Checkbox
 
-Set `selectable` to `true` for multi-select. Bind selectedRowIds to track selections. Use inputName to customize checkbox names.
+Set `selectable` to `true` for multi-select. Bind selectedRowIds to track selections. Use inputName to customize checkbox names. Hold <DocKbd label="Shift" /> while clicking a checkbox to select every row between it and the last row clicked.
 
 <FileSource src="/framed/DataTable/SelectableDataTable" />
 

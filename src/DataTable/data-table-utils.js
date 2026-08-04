@@ -274,3 +274,113 @@ export function compareValues(itemA, itemB, ascending, customSort) {
   // Reverse result for descending order
   return ascending ? result : -result;
 }
+
+// Leading characters a spreadsheet interprets as the start of a formula.
+const FORMULA_PREFIX_REGEX = /^[=+\-@\t\r]/;
+
+/**
+ * Stringifies a cell value for CSV output.
+ * @param {unknown} value - The resolved cell value
+ * @returns {string} The value as a string; empty for null and undefined
+ */
+function stringifyCsvValue(value) {
+  if (value === null || value === undefined) return "";
+  if (value instanceof Date) return value.toISOString();
+  if (typeof value === "object") return JSON.stringify(value);
+  return String(value);
+}
+
+/**
+ * Quotes and escapes a single CSV field per RFC 4180.
+ * @param {string} field - The stringified field value
+ * @param {string} delimiter - The field delimiter
+ * @param {boolean} escapeFormulas - Whether to neutralize spreadsheet formulas
+ * @returns {string} The escaped field
+ */
+function escapeCsvField(field, delimiter, escapeFormulas) {
+  const value =
+    escapeFormulas && FORMULA_PREFIX_REGEX.test(field) ? `'${field}` : field;
+
+  if (
+    value.includes(delimiter) ||
+    value.includes('"') ||
+    value.includes("\r") ||
+    value.includes("\n")
+  ) {
+    return `"${value.replaceAll('"', '""')}"`;
+  }
+
+  return value;
+}
+
+/**
+ * @typedef {object} ToCsvHeader
+ * @property {string} key - Column key; supports nested paths like "contact.company"
+ * @property {unknown} [value] - Column label; falls back to the key
+ * @property {boolean} [empty] - Whether the column renders no data
+ * @property {(item: unknown, row: Record<string, unknown>) => unknown} [display] - Formats the cell value
+ */
+
+/**
+ * @typedef {object} ToCsvOptions
+ * @property {string} [delimiter] - Field delimiter. Defaults to ","
+ * @property {boolean} [includeHeaders] - Whether to emit the header row. Defaults to true
+ * @property {boolean} [escapeFormulas] - Whether to prefix fields starting with "=", "+", "-", "@", tab, or carriage return with a single quote. Defaults to true
+ * @property {string} [newline] - Line ending. Defaults to "\r\n"
+ */
+
+/**
+ * Serializes data table headers and rows to a CSV string.
+ * Skips empty columns, resolves nested keys, and applies `display` formatting
+ * so the export matches the rendered table.
+ * @template {Record<string, unknown>} Row
+ * @param {ReadonlyArray<ToCsvHeader>} headers - The data table headers
+ * @param {ReadonlyArray<Row>} rows - The rows to serialize
+ * @param {ToCsvOptions} [options] - Serialization options
+ * @returns {string} The CSV string
+ */
+export function toCsv(headers, rows, options = {}) {
+  const {
+    delimiter = ",",
+    includeHeaders = true,
+    escapeFormulas = true,
+    newline = "\r\n",
+  } = options;
+
+  const columns = headers.filter((header) => !header.empty);
+  /** @type {string[]} */
+  const lines = [];
+
+  if (includeHeaders) {
+    lines.push(
+      columns
+        .map((header) =>
+          escapeCsvField(
+            stringifyCsvValue(header.value ?? header.key),
+            delimiter,
+            escapeFormulas,
+          ),
+        )
+        .join(delimiter),
+    );
+  }
+
+  for (const row of rows) {
+    lines.push(
+      columns
+        .map((header) => {
+          const value = resolvePath(row, header.key);
+          return escapeCsvField(
+            stringifyCsvValue(
+              header.display ? header.display(value, row) : value,
+            ),
+            delimiter,
+            escapeFormulas,
+          );
+        })
+        .join(delimiter),
+    );
+  }
+
+  return lines.join(newline);
+}

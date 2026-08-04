@@ -11,6 +11,8 @@
     undefined;
   export let offsetBottom: ComponentProps<NotificationQueue>["offsetBottom"] =
     undefined;
+  export let offsetLeft: ComponentProps<NotificationQueue>["offsetLeft"] =
+    undefined;
   export let offsetRight: ComponentProps<NotificationQueue>["offsetRight"] =
     undefined;
   export let zIndex: ComponentProps<NotificationQueue>["zIndex"] = undefined;
@@ -24,6 +26,7 @@
   {position}
   {offsetTop}
   {offsetBottom}
+  {offsetLeft}
   {offsetRight}
   {zIndex}
   {maxNotifications}

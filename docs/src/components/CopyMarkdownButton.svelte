@@ -31,8 +31,6 @@
 />
 
 <style>
-  /* iconDescription embeds a newline (size/token estimate on its own line);
-       applies to the proactive hover tooltip rendered in the floating portal. */
   :global(
     [data-floating-portal]
       .bx--tooltip-portal[data-tooltip-type="icon"]

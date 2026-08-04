@@ -4,6 +4,8 @@
   let modalOpen = false;
   let modalOpenCount = 0;
   let modalCloseCount = 0;
+  /** @type {string | null} */
+  let modalCloseTrigger = null;
 
   let nonModalOpen = false;
 </script>
@@ -17,6 +19,7 @@
 </button>
 <div data-testid="modal-open-count">{modalOpenCount}</div>
 <div data-testid="modal-close-count">{modalCloseCount}</div>
+<div data-testid="modal-close-trigger">{modalCloseTrigger ?? ""}</div>
 
 <Dialog
   bind:open={modalOpen}
@@ -24,10 +27,16 @@
   aria-label="Modal dialog"
   data-testid="modal-dialog"
   on:open={() => (modalOpenCount += 1)}
-  on:close={() => (modalCloseCount += 1)}
+  on:close={(e) => {
+    modalCloseCount += 1;
+    modalCloseTrigger = e.detail.trigger;
+  }}
 >
   <p>Modal content</p>
   <button type="button" data-testid="modal-focus-target">Focus target</button>
+  <form method="dialog">
+    <button type="submit" data-testid="modal-close-button">Close</button>
+  </form>
 </Dialog>
 
 <button

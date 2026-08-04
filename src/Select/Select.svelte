@@ -170,11 +170,15 @@
   });
 
   // Options mounted after selected is set do not update the native value.
+  // selectedIndex -1 comes back as value "", indistinguishable from an
+  // empty-valued option being selected, so it must be re-asserted explicitly.
   function syncNativeSelectValue() {
     tick().then(() => {
       if (!ref) return;
       const nextValue = $selectedValue == null ? "" : String($selectedValue);
-      if (ref.value !== nextValue) ref.value = nextValue;
+      if (ref.selectedIndex === -1 || ref.value !== nextValue) {
+        ref.value = nextValue;
+      }
     });
   }
 

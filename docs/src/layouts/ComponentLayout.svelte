@@ -255,8 +255,6 @@
     padding-top: var(--cds-spacing-06);
   }
 
-  /* Lead description below the component title: larger editorial type with
-                         extra breathing room so it reads as a standout subtitle. */
   .hero__description {
     margin-top: var(--cds-spacing-06);
     margin-bottom: var(--cds-spacing-04);

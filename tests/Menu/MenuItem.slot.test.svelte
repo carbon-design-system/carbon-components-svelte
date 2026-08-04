@@ -11,6 +11,12 @@
 </button>
 
 <Menu {anchor} bind:open labelText="Example menu">
+  <MenuItem>
+    Save
+    <svelte:fragment slot="shortcutText">
+      <kbd>⌘S</kbd>
+    </svelte:fragment>
+  </MenuItem>
   <MenuItem labelText="Export as">
     <svelte:fragment slot="labelChildren">
       <strong>Custom label content</strong>

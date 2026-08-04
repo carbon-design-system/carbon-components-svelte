@@ -100,3 +100,11 @@
 >
   Filter click and close
 </Tag>
+
+<Tag href="/filtered?tag=ml" type="blue">Linked tag</Tag>
+
+<Tag href="/filtered?tag=ml" target="_blank">External linked tag</Tag>
+
+<Tag href="/filtered?tag=ml" disabled>Disabled linked tag</Tag>
+
+<Tag filter href="/should-not-link" on:close>Filter wins over href</Tag>

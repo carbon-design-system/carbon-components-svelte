@@ -36,22 +36,44 @@
    */
   export let ref = null;
 
+  /**
+   * Set to `true` to defer mounting the panel content until the item is first opened.
+   * Once mounted, the content stays mounted for subsequent collapses.
+   */
+  export let lazy = false;
+
   import { getContext, onMount } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
 
   let initialDisabled = disabled;
 
   const ctx = getContext("carbon:Accordion");
-  const unsubscribe = ctx.disableItems.subscribe((value) => {
+  const unsubscribeDisableItems = ctx.disableItems.subscribe((value) => {
     if (!value && initialDisabled) return;
     disabled = value;
   });
 
+  const id = {};
+
+  const unsubscribeOpenId = ctx.openId.subscribe((openItemId) => {
+    if (openItemId !== null && openItemId !== id) {
+      open = false;
+    }
+  });
+
+  $: if (open) {
+    ctx.notifyOpen(id);
+  }
+
   let animation = undefined;
+  let hasOpened = open;
+
+  $: if (open) hasOpened = true;
 
   onMount(() => {
     return () => {
-      unsubscribe();
+      unsubscribeDisableItems();
+      unsubscribeOpenId();
     };
   });
 </script>
@@ -96,5 +118,9 @@
       <slot name="title">{title}</slot>
     </div>
   </button>
-  <div class:bx--accordion__content={true}><slot /></div>
+  <div class:bx--accordion__content={true}>
+    {#if !lazy || hasOpened}
+      <slot />
+    {/if}
+  </div>
 </li>

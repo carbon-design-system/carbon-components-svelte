@@ -60,6 +60,53 @@ export function compareValues<T = unknown>(
   customSort?: ((a: T, b: T) => number) | false | undefined,
 ): number;
 
+export type ToCsvHeader<Row> = {
+  /** Column key. Supports nested paths like `"contact.company"`. */
+  key: string;
+  /** Column label written to the header row. Falls back to `key`. */
+  value?: unknown;
+  /** Whether the column renders no data. Empty columns are skipped. */
+  empty?: boolean;
+  /** Formats the cell value, matching the rendered table. */
+  display?: (item: unknown, row: Row) => unknown;
+};
+
+export type ToCsvOptions = {
+  /**
+   * Field delimiter. Set to `"\t"` for TSV or `";"` for locales where
+   * Excel expects it.
+   * @default ","
+   */
+  delimiter?: string;
+  /**
+   * Emit the header row.
+   * @default true
+   */
+  includeHeaders?: boolean;
+  /**
+   * Prefix a field starting with `=`, `+`, `-`, `@`, tab, or carriage return
+   * with a single quote so spreadsheets do not evaluate it as a formula.
+   * @default true
+   */
+  escapeFormulas?: boolean;
+  /**
+   * Line ending. RFC 4180 specifies `"\r\n"`, which is what Excel expects.
+   * @default "\r\n"
+   */
+  newline?: string;
+};
+
+/**
+ * Serializes data table headers and rows to a CSV string.
+ * Skips empty columns, resolves nested keys, and applies `display` formatting
+ * so the export matches the rendered table.
+ */
+export function toCsv<Row extends Record<string, unknown>>(
+  headers: ReadonlyArray<ToCsvHeader<Row>>,
+  rows: ReadonlyArray<Row>,
+  options?: ToCsvOptions,
+): string;
+
 type PathDepth = [never, 0, 1, 2, ...0[]];
 
 type Join<K, P> = K extends string | number

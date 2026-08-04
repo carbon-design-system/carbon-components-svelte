@@ -40,10 +40,12 @@ export { default as CopyInputSkeleton } from "./CopyInput/CopyInputSkeleton.svel
 export { default as FluidCopyInputSkeleton } from "./CopyInput/FluidCopyInputSkeleton.svelte";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
+export { toCsv } from "./DataTable/data-table-utils";
 export { default as Table } from "./DataTable/Table.svelte";
 export { default as TableBody } from "./DataTable/TableBody.svelte";
 export { default as TableCell } from "./DataTable/TableCell.svelte";
 export { default as TableContainer } from "./DataTable/TableContainer.svelte";
+export { default as TableFoot } from "./DataTable/TableFoot.svelte";
 export { default as TableHead } from "./DataTable/TableHead.svelte";
 export { default as TableHeader } from "./DataTable/TableHeader.svelte";
 export { default as TableRow } from "./DataTable/TableRow.svelte";
@@ -82,6 +84,7 @@ export { default as IconIndicator } from "./IconIndicator/IconIndicator.svelte";
 export { default as ImageLoader } from "./ImageLoader/ImageLoader.svelte";
 export { default as InlineLoading } from "./InlineLoading/InlineLoading.svelte";
 export { default as Link } from "./Link/Link.svelte";
+export { default as LinkDownload } from "./Link/LinkDownload.svelte";
 export { default as OutboundLink } from "./Link/OutboundLink.svelte";
 export { default as ListBox } from "./ListBox/ListBox.svelte";
 export { default as ListBoxField } from "./ListBox/ListBoxField.svelte";
@@ -95,6 +98,8 @@ export { default as LocalStorage } from "./LocalStorage/LocalStorage.svelte";
 export { default as Menu } from "./Menu/Menu.svelte";
 export { default as MenuDivider } from "./Menu/MenuDivider.svelte";
 export { default as MenuItem } from "./Menu/MenuItem.svelte";
+export { default as MenuItemGroup } from "./Menu/MenuItemGroup.svelte";
+export { default as MenuItemRadioGroup } from "./Menu/MenuItemRadioGroup.svelte";
 export { default as MenuButton } from "./MenuButton/MenuButton.svelte";
 export { default as Modal } from "./Modal/Modal.svelte";
 export { default as FluidMultiSelectSkeleton } from "./MultiSelect/FluidMultiSelectSkeleton.svelte";
@@ -228,6 +233,7 @@ export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
+export { downloadFile } from "./utils/downloadFile";
 export {
   filterTreeById,
   filterTreeByText,

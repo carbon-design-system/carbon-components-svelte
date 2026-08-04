@@ -1,8 +1,7 @@
 <script>
   /**
    * @template [Icon=any]
-   * @event click:button--secondary
-   * @property {string} text
+   * @event {{ text: string }} click:button--secondary - Dispatched when a secondary button is clicked. For `secondaryButtonText`, the event is cancelable: call `preventDefault()` to keep the modal open. If not cancelled, the modal closes. Array `secondaryButtons` never auto-close.
    */
 
   /** Specify the primary button text */
@@ -18,6 +17,18 @@
   export let primaryButtonDisabled = false;
 
   /**
+   * Set to `true` to show a loading state on the primary button.
+   * While loading, the button is non-interactive and submit is suppressed.
+   */
+  export let primaryButtonLoading = false;
+
+  /**
+   * Specify the description for the primary button loading state.
+   * Passed to `InlineLoading` as `description`.
+   */
+  export let primaryButtonLoadingDescription = "Loading";
+
+  /**
    * Specify a class for the primary button.
    * @type {string}
    */
@@ -27,9 +38,11 @@
   export let secondaryButtonText = "";
 
   /**
-   * 2-tuple prop to render two secondary buttons for a 3 button modal.
-   * Supersedes `secondaryButtonText`.
-   * @type {[] | [{ text: string; }, { text: string; }]}
+   * One or two secondary buttons for the modal footer.
+   * Supersedes `secondaryButtonText`. Each entry needs `text`; optional
+   * `kind` (defaults to `"secondary"`) and `disabled` pass through to Button.
+   * With two entries plus a primary button, the footer uses the three-button layout.
+   * @type {ReadonlyArray<{ text: string; kind?: string; disabled?: boolean }>}
    */
   export let secondaryButtons = [];
 
@@ -44,9 +57,26 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import Button from "../Button/Button.svelte";
+  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
 
   const dispatch = createEventDispatcher();
   const { closeModal, submit } = getContext("carbon:ComposedModal");
+
+  function handlePrimaryClick() {
+    if (primaryButtonLoading) return;
+    submit();
+  }
+
+  function handleSecondaryClick() {
+    const shouldContinue = dispatch(
+      "click:button--secondary",
+      { text: secondaryButtonText },
+      { cancelable: true },
+    );
+    if (shouldContinue) {
+      closeModal();
+    }
+  }
 </script>
 
 <div
@@ -57,7 +87,8 @@
   {#if secondaryButtons.length > 0}
     {#each secondaryButtons as button (button.text)}
       <Button
-        kind="secondary"
+        kind={button.kind ?? "secondary"}
+        disabled={button.disabled}
         on:click={() => {
           dispatch("click:button--secondary", { text: button.text });
         }}
@@ -69,10 +100,7 @@
     <Button
       kind="secondary"
       class={secondaryClass}
-      on:click={() => {
-        closeModal();
-        dispatch("click:button--secondary", { text: secondaryButtonText });
-      }}
+      on:click={handleSecondaryClick}
     >
       {secondaryButtonText}
     </Button>
@@ -80,12 +108,19 @@
   {#if primaryButtonText}
     <Button
       kind={danger ? "danger" : "primary"}
-      disabled={primaryButtonDisabled}
+      disabled={primaryButtonDisabled || primaryButtonLoading}
       class={primaryClass}
-      icon={primaryButtonIcon}
-      on:click={submit}
+      icon={primaryButtonLoading ? undefined : primaryButtonIcon}
+      on:click={handlePrimaryClick}
     >
-      {primaryButtonText}
+      {#if primaryButtonLoading}
+        <InlineLoading
+          status="active"
+          description={primaryButtonLoadingDescription}
+        />
+      {:else}
+        {primaryButtonText}
+      {/if}
     </Button>
   {/if}
   <slot />

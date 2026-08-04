@@ -20,6 +20,12 @@
   /** Specify the ARIA label for the close icon */
   export let iconDescription = "Close";
 
+  /**
+   * Set to `true` to hide the header close button.
+   * Provide an alternative dismiss path (footer actions or Escape).
+   */
+  export let hideCloseButton = false;
+
   import { getContext } from "svelte";
   import Close from "../icons/Close.svelte";
 
@@ -51,18 +57,20 @@
     </h3>
   {/if}
   <slot />
-  <button
-    type="button"
-    aria-label={iconDescription}
-    class:bx--modal-close={true}
-    class={closeClass}
-    on:click
-    on:click={closeModal}
-  >
-    <Close
-      size={20}
-      class="bx--modal-close__icon {closeIconClass}"
-      aria-hidden="true"
-    />
-  </button>
+  {#if !hideCloseButton}
+    <button
+      type="button"
+      aria-label={iconDescription}
+      class:bx--modal-close={true}
+      class={closeClass}
+      on:click
+      on:click={closeModal}
+    >
+      <Close
+        size={20}
+        class="bx--modal-close__icon {closeIconClass}"
+        aria-hidden="true"
+      />
+    </button>
+  {/if}
 </div>

@@ -124,6 +124,16 @@
     text-align: center;
   }
 
+  // Unlike the `icon` variant, `definition` tooltips can open on hover and
+  // sit close enough to the trigger that the pointer travels over the
+  // tooltip itself (e.g. `Tag` `maxWidth` truncation). Keep this variant
+  // hoverable so entering the tooltip cancels the pending close instead of
+  // the portal being a dead zone the pointer falls through, which flickers
+  // the tooltip open/closed as it re-triggers the trigger's hover handlers.
+  .#{$prefix}--tooltip-portal[data-tooltip-type='definition'] {
+    pointer-events: auto;
+  }
+
   .#{$prefix}--tooltip-portal[data-tooltip-type='definition']
     .#{$prefix}--tooltip-portal__content {
     @include tooltip--content('definition');
@@ -133,7 +143,7 @@
     z-index: auto;
     transform: none;
     opacity: 1;
-    pointer-events: none;
+    pointer-events: auto;
     display: flex;
     align-items: center;
     min-height: unset;

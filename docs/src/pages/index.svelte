@@ -120,7 +120,7 @@
         type="expressive-heading-06"
         color="primary"
         balance
-        maxWidth="32ch"
+        maxWidth="55rem"
       >
         The Carbon Design System,<br />built for Svelte
       </Text>
@@ -136,7 +136,7 @@
         <Column>
           <div class="metrics-grid">
             <DocMetric
-              value="70+"
+              value="90+"
               label="Components"
               caption="From inputs to data tables"
             />
@@ -226,7 +226,7 @@
                   borderRight
                   borderBottom
                   title="Carbon Components Svelte"
-                  subtitle="70+ components"
+                  subtitle="90+ components"
                   target="_blank"
                   href="https://github.com/carbon-design-system/carbon-components-svelte"
                 />

@@ -10,7 +10,11 @@
     | ((e: CustomEvent<ReadonlyArray<File>>) => void)
     | undefined = undefined;
   export let onrejected:
-    | ((e: CustomEvent<Array<{ file: File; reason: string }>>) => void)
+    | ((
+        e: CustomEvent<
+          Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>
+        >,
+      ) => void)
     | undefined = undefined;
 </script>
 

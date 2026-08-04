@@ -14,4 +14,18 @@ Set `modal` to `true` to open the dialog with the browser's `showModal()`, which
 
 `Dialog` renders only what you put in its default slot, with no built-in header, footer, or action buttons. Use it to build a custom overlay, or as the top-layer host for portalled content such as DatePicker or FloatingPortal. For a ready-made dialog with a heading, body, and action buttons, use [Modal](/components/Modal) instead.
 
+When the dialog opens, focus moves into it (native modal focus trap). When it closes, focus returns to the element that opened it.
+
 <FileSource src="/framed/Dialog/ModalDialog" />
+
+## Closing
+
+The `close` event includes a `trigger` property indicating what dismissed the dialog: `"escape-key"` (<DocKbd label="Escape" />), `"backdrop"`, `"close-button"` (for example a `<form method="dialog">` submit), or `"programmatic"` (when `open` is set to `false`).
+
+<FileSource src="/framed/Dialog/DialogCloseTriggers" />
+
+### Prevent on outside click
+
+Disable closing the modal dialog when clicking the backdrop with `preventCloseOnClickOutside`.
+
+<FileSource src="/framed/Dialog/DialogPreventOutsideClick" />

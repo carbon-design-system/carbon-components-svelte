@@ -8,6 +8,7 @@
   export let value: ComponentProps<PinCodeInput>["value"] = "";
   export let code: ComponentProps<PinCodeInput>["code"] = [];
   export let type: ComponentProps<PinCodeInput>["type"] = "numeric";
+  export let pattern: ComponentProps<PinCodeInput>["pattern"] = undefined;
   export let mask: ComponentProps<PinCodeInput>["mask"] = false;
   export let uppercase: ComponentProps<PinCodeInput>["uppercase"] = false;
   export let complete: ComponentProps<PinCodeInput>["complete"] = false;
@@ -26,6 +27,8 @@
   export let selectTextOnFocus: ComponentProps<PinCodeInput>["selectTextOnFocus"] = false;
   export let size: ComponentProps<PinCodeInput>["size"] = "default";
   export let fluid: ComponentProps<PinCodeInput>["fluid"] = false;
+  export let name: ComponentProps<PinCodeInput>["name"] = undefined;
+  export let required: ComponentProps<PinCodeInput>["required"] = false;
 </script>
 
 <PinCodeInput
@@ -35,6 +38,7 @@
   bind:complete
   {size}
   {type}
+  {pattern}
   {mask}
   {uppercase}
   {disabled}
@@ -49,6 +53,8 @@
   {id}
   {selectTextOnFocus}
   {fluid}
+  {name}
+  {required}
   on:change={(e) => console.log("change", e.detail)}
   on:complete={(e) => console.log("complete", e.detail)}
   on:clear={() => console.log("clear")}

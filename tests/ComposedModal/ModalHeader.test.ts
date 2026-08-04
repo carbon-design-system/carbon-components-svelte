@@ -57,6 +57,20 @@ describe("ModalHeader", () => {
     expect(closeButton).toHaveClass("bx--modal-close");
   });
 
+  it("should hide close button when hideCloseButton is true", () => {
+    render(ModalHeaderTest, {
+      props: {
+        title: "Forced choice",
+        hideCloseButton: true,
+      },
+    });
+
+    expect(
+      screen.queryByRole("button", { name: "Close" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("Forced choice")).toBeInTheDocument();
+  });
+
   it("should handle custom icon description", () => {
     render(ModalHeaderTest, {
       props: {

@@ -156,23 +156,23 @@ describe("NumberInput", () => {
       expect(message.closest(".bx--number__input-wrapper")).not.toBeNull();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      render(NumberInput, {
-        fluid: true,
-        invalid: true,
-        invalidText: "Invalid input",
-        warn: true,
-        warnText: "Warning message",
-        ...props,
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        render(NumberInput, {
+          fluid: true,
+          invalid: true,
+          invalidText: "Invalid input",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        });
 
-      expect(screen.queryByText("Invalid input")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(document.querySelector("[data-invalid]")).toBeNull();
-    });
+        expect(screen.queryByText("Invalid input")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(document.querySelector("[data-invalid]")).toBeNull();
+      },
+    );
 
     it("renders disabled steppers instead of the readonly icon when readonly", () => {
       render(NumberInput, { fluid: true, readonly: true });
@@ -1164,23 +1164,26 @@ describe("NumberInput", () => {
       ["1,5", 1.5, "comma as decimal"],
       // Invalid input
       ["abc", null, "invalid input"],
-    ] as const)("should parse '%s' as %s (%s)", async (input, expectedValue, _description) => {
-      render(NumberInput, {
-        props: { allowDecimal: true, allowEmpty: true },
-      });
+    ] as const)(
+      "should parse '%s' as %s (%s)",
+      async (input, expectedValue, _description) => {
+        render(NumberInput, {
+          props: { allowDecimal: true, allowEmpty: true },
+        });
 
-      const inputEl = screen.getByRole("textbox");
-      await user.clear(inputEl);
-      await user.type(inputEl, input);
-      await user.tab();
+        const inputEl = screen.getByRole("textbox");
+        await user.clear(inputEl);
+        await user.type(inputEl, input);
+        await user.tab();
 
-      const valueDisplay = screen.getByTestId("value");
-      if (expectedValue === null) {
-        expect(valueDisplay.textContent).toBe(isSvelte5 ? "" : "null");
-      } else {
-        expect(valueDisplay.textContent).toBe(expectedValue.toString());
-      }
-    });
+        const valueDisplay = screen.getByTestId("value");
+        if (expectedValue === null) {
+          expect(valueDisplay.textContent).toBe(isSvelte5 ? "" : "null");
+        } else {
+          expect(valueDisplay.textContent).toBe(expectedValue.toString());
+        }
+      },
+    );
 
     it("should parse empty input as null after blur", async () => {
       render(NumberInput, {

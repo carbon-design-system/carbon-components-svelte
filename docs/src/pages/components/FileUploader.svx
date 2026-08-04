@@ -80,6 +80,27 @@ This example accepts multiple JPEG files and displays them in a completed state.
 
 <FileUploader multiple labelTitle="Upload files" buttonLabel="Add files" labelDescription="Only JPEG files are accepted." accept="{['.jpg', '.jpeg']}" status="complete" />
 
+## Per-file status
+
+Use `fileStatus` when files upload independently and should not share one
+global `status`. The callback receives `(file, index)` and returns
+`"uploading"`, `"edit"`, or `"complete"`. When omitted, every row uses
+`status`.
+
+`FileUploader` re-resolves rows when `files` (or the `fileStatus` prop)
+changes. If the callback reads reactive state that updates without
+changing `files`, reassign the list afterward (for example
+`files = [...files]`) so each row picks up the new status.
+
+Optional `fileInvalid`, `fileErrorSubject`, and `fileErrorBody` callbacks
+mark individual rows as invalid with error copy—without switching to
+manual `FileUploaderItem` composition.
+
+This demo starts each new file as uploading, then marks it complete on a
+staggered delay.
+
+<FileSource src="/framed/FileUploader/FileUploaderPerFileStatus" />
+
 ## Per-file status icon labels
 
 Set `iconDescription` to a function for accessible labels that depend on each row. The callback receives `{ file, fileName, status, invalid }`.
@@ -225,22 +246,16 @@ Customize file uploader item size with `size`. The default is `"default"`.
 
 ## Drop container
 
-Use the file uploader drop container for drag-and-drop file uploads. It supports file
-validation and multiple file selection.
+Use the file uploader drop container for drag-and-drop file uploads. It supports
+multiple file selection, size and duplicate checks, and custom validation.
 
-This example accepts files smaller than 1 kB and logs the selected files to the
-console.
+Set `maxFileSize` and `preventDuplicate` for the same rejection reasons as
+`FileUploader` (`size`, `duplicate`). Use `validateFiles` for additional
+filtering; files it removes are reported with `reason: "invalid"`.
 
-<FileUploaderDropContainer
-  multiple
-  labelText="Drag and drop files here or click to upload" 
-  validateFiles={files => {
-    return files.filter(file => file.size < 1_024)
-  }}
-  on:change={e=> {
-    console.log("files", e.detail)
-  }}
-/>
+This example rejects files over 1 kB and duplicates of already-selected files.
+
+<FileSource src="/framed/FileUploader/FileUploaderDropContainerValidation" />
 
 ## Skeleton
 

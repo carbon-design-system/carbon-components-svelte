@@ -64,6 +64,26 @@ shows a form with checkboxes, radio buttons, and a select menu.
   <Button type="submit">Submit</Button>
 </Form>
 
+## Disabled
+
+Set `disabled` on FormGroup to disable the fieldset and nested native form
+controls. Labels are visually muted via Carbon's `fieldset[disabled]` styles.
+Div-based controls such as Dropdown, ComboBox, and MultiSelect are not fully
+styled by the native attribute alone—pass `disabled` on those components until
+form-level context propagation lands.
+
+<Form>
+  <FormGroup legendText="Account details" disabled>
+    <Checkbox id="checkbox-disabled-0" labelText="Email notifications" checked />
+    <Checkbox id="checkbox-disabled-1" labelText="SMS notifications" />
+    <Select id="select-disabled" labelText="Preferred language">
+      <SelectItem value="en" text="English" />
+      <SelectItem value="es" text="Spanish" />
+    </Select>
+  </FormGroup>
+  <Button type="submit">Submit</Button>
+</Form>
+
 ## Prevent default behavior
 
 Handle form submission by preventing the default browser behavior. Use
@@ -77,3 +97,33 @@ programmatically.
    <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
   <Button type="submit">Submit</Button>
 </Form>
+
+## SvelteKit enhance
+
+Svelte's `use:` directive cannot target components. Set `actions` to apply
+SvelteKit's `enhance` (or any other action) to the underlying form element.
+
+```svelte
+<script>
+  import { enhance } from "$app/forms";
+  import { Form, TextInput, Button } from "carbon-components-svelte";
+</script>
+
+<Form method="POST" action="?/save" actions={[enhance]}>
+  <TextInput name="name" labelText="Name" />
+  <Button type="submit">Save</Button>
+</Form>
+```
+
+Pass a submit callback as a `[action, parameter]` tuple:
+
+```svelte
+<Form
+  method="POST"
+  action="?/save"
+  actions={[[enhance, () => ({ reset: false })]]}
+>
+  <TextInput name="name" labelText="Name" />
+  <Button type="submit">Save</Button>
+</Form>
+```

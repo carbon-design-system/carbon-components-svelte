@@ -13,6 +13,8 @@ import TabSlot from "./TabSlot.test.svelte";
 import Tabs from "./Tabs.test.svelte";
 import TabsAllDisabled from "./TabsAllDisabled.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
+import TabsLazy from "./TabsLazy.test.svelte";
+import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 
 describe("Tabs", () => {
@@ -154,6 +156,57 @@ describe("Tabs", () => {
     expect(tab1).toHaveFocus();
     expect(tab1).toHaveAttribute("aria-selected", "true");
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
+  });
+
+  describe('activation="manual"', () => {
+    it("ArrowRight moves focus without changing selection", async () => {
+      render(Tabs, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowRight}");
+      expect(tab3).toHaveFocus();
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+      expect(tab3).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(consoleLog).not.toHaveBeenCalledWith("change event", 2);
+    });
+
+    it("Enter selects the focused tab", async () => {
+      render(Tabs, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowRight}");
+      expect(tab3).toHaveFocus();
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+
+      await user.keyboard("{Enter}");
+      expect(tab3).toHaveAttribute("aria-selected", "true");
+      expect(tab1).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByText("Content 3")).toBeVisible();
+      expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    });
+
+    it("Space selects the focused tab", async () => {
+      render(Tabs, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowRight}");
+      expect(tab3).toHaveFocus();
+
+      await user.keyboard(" ");
+      expect(tab3).toHaveAttribute("aria-selected", "true");
+      expect(tab1).toHaveAttribute("aria-selected", "false");
+      expect(consoleLog).toHaveBeenCalledWith("change event", 2);
+    });
   });
 
   it("uses an empty aria-label when passed an empty string", () => {
@@ -357,6 +410,88 @@ describe("Tabs", () => {
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
     await user.click(tab1);
     expect(selectedIndex).toHaveTextContent("0");
+  });
+
+  it("keeps selectedId on the same logical tab when a prior tab is removed", async () => {
+    render(TabsSelectedId, {
+      props: { selectedId: "tab-b", showTabA: true },
+    });
+
+    expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+    expect(screen.getByText("Content B")).toBeVisible();
+
+    await user.click(screen.getByTestId("toggle-tab-a"));
+
+    expect(
+      screen.queryByRole("tab", { name: "Tab A" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-b");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+    expect(screen.getByText("Content B")).toBeVisible();
+  });
+
+  it("falls back when the selectedId tab is removed", async () => {
+    render(TabsSelectedId, {
+      props: { selectedId: "tab-b", showTabA: true, showTabB: true },
+    });
+
+    await user.click(screen.getByTestId("toggle-tab-b"));
+
+    expect(
+      screen.queryByRole("tab", { name: "Tab B" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-c");
+    expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByText("Content C")).toBeVisible();
+  });
+
+  it("uses the index API when selectedId is unset", async () => {
+    render(TabsSelectedId, {
+      props: { selected: 2, selectedId: undefined },
+    });
+
+    expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByText("Content C")).toBeVisible();
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("");
+
+    await user.click(screen.getByRole("tab", { name: "Tab A" }));
+
+    expect(screen.getByRole("tab", { name: "Tab A" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("");
+  });
+
+  it("lets selectedId win over selected", () => {
+    render(TabsSelectedId, {
+      props: { selected: 0, selectedId: "tab-c" },
+    });
+
+    expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByText("Content C")).toBeVisible();
+    expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-c");
+    expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
   });
 });
 
@@ -885,6 +1020,63 @@ describe("TabsSkeleton", () => {
 
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
+  });
+
+  describe("TabContent lazy and unmountOnHide", () => {
+    it("keeps unselected content in the DOM with the hidden attribute by default", () => {
+      render(TabsLazy);
+
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(screen.getByText("Content 2")).not.toBeVisible();
+      expect(screen.getByText("Content 3")).not.toBeVisible();
+
+      const panels = screen.getAllByRole("tabpanel", { hidden: true });
+      expect(panels[1]).toHaveAttribute("hidden");
+      expect(panels[2]).toHaveAttribute("hidden");
+    });
+
+    it("does not mount lazy content until the tab is first selected", async () => {
+      render(TabsLazy, { props: { lazy: true } });
+
+      expect(screen.getByText("Content 1")).toBeInTheDocument();
+      expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
+      expect(screen.queryByText("Content 3")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("tab", { name: "Tab 2" }));
+
+      expect(screen.getByText("Content 2")).toBeVisible();
+      expect(screen.queryByText("Content 3")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("tab", { name: "Tab 1" }));
+
+      expect(screen.getByText("Content 2")).toBeInTheDocument();
+      expect(screen.getByText("Content 2")).not.toBeVisible();
+    });
+
+    it("unmounts content when deselected with unmountOnHide", async () => {
+      render(TabsLazy, { props: { unmountOnHide: true } });
+
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("tab", { name: "Tab 2" }));
+
+      expect(screen.getByText("Content 2")).toBeVisible();
+      expect(screen.queryByText("Content 1")).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("tab", { name: "Tab 1" }));
+
+      expect(screen.getByText("Content 1")).toBeVisible();
+      expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
+    });
+
+    it("mounts lazy content on the initially selected tab", () => {
+      render(TabsLazy, { props: { selected: 1, lazy: true } });
+
+      expect(screen.queryByText("Content 1")).not.toBeInTheDocument();
+      expect(screen.getByText("Content 2")).toBeVisible();
+      expect(screen.queryByText("Content 3")).not.toBeInTheDocument();
     });
   });
 });

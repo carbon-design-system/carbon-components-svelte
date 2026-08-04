@@ -91,7 +91,7 @@
     );
 
   // Split MiniSearch hits into two groups. MiniSearch already ranks and filters,
-  // so pass shouldFilter={false} and let the default matcher highlight labels.
+  // so pass shouldFilter={false} and let `matchQuery` highlight labels.
   $: componentHits = results.filter((r) => r.isComponent);
   $: sectionHits = results.filter((r) => !r.isComponent);
 
@@ -110,11 +110,33 @@
       .join("");
   }
 
+  /**
+   * Match `query` against `text` by OR-ing per-term fuzzy matches, mirroring how
+   * MiniSearch matched each term independently. A single whole-string match would
+   * fail whenever the query spans two displayed fields (e.g. "multiselect bas"
+   * matching text "MultiSelect" + description "Basic") or a query term isn't
+   * present in this particular field at all.
+   */
+  function matchQuery(text: string, query: string) {
+    const terms = query.trim().split(/\s+/).filter(Boolean);
+    if (terms.length === 0) return { matched: true, indices: [] as number[] };
+    const indices = new Set<number>();
+    let matched = false;
+    for (const term of terms) {
+      const result = fuzzyMatch(text, term);
+      if (result.matched) {
+        matched = true;
+        for (const i of result.indices) indices.add(i);
+      }
+    }
+    return { matched, indices: [...indices].sort((a, b) => a - b) };
+  }
+
   /** Highlight the current query in arbitrary text (e.g. a description). */
   function highlightHtml(text: string | undefined) {
     if (!text) return "";
-    const { matched, indices } = fuzzyMatch(text, value);
-    return toHtml(highlightSegments(text, matched ? (indices ?? []) : []));
+    const { matched, indices } = matchQuery(text, value);
+    return toHtml(highlightSegments(text, matched ? indices : []));
   }
 
   let isOpen = false;
@@ -226,6 +248,7 @@
         placeholder="Search"
         spellcheck="false"
         shouldFilter={false}
+        match={matchQuery}
         on:select={(e) => {
           // Selecting a link item would navigate natively; intercept it and
           // route through Routify for SPA navigation instead.
@@ -425,7 +448,7 @@
 
   :global(.docs-search-hit) {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 0.5rem;
     min-width: 0;
   }

@@ -91,3 +91,30 @@
 @include exports('overflow-menu-xs') {
   @include overflow-menu-xs;
 }
+
+/// Scrollable overflow menu, paired with the inline `max-height` the
+/// `maxHeight` prop sets on the options list.
+/// @access private
+/// @group components
+@mixin overflow-menu-scrollable {
+  .#{$prefix}--overflow-menu-options--scrollable {
+    overflow-y: auto;
+
+    // Open menus are `display: flex; flex-direction: column`. Without this,
+    // items shrink to fit `max-height` instead of overflowing into a scroll.
+    .#{$prefix}--overflow-menu-options__option {
+      flex-shrink: 0;
+    }
+
+    // The ::after caret sits outside the list box and bridges the hover gap
+    // between trigger and menu. `overflow-y` clips it, and this menu opens on
+    // click, so the bridge is not needed here.
+    &::after {
+      display: none;
+    }
+  }
+}
+
+@include exports('overflow-menu-scrollable') {
+  @include overflow-menu-scrollable;
+}

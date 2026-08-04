@@ -2,7 +2,9 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
+import AccordionLazy from "./Accordion.lazy.test.svelte";
 import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
+import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
 
@@ -236,6 +238,13 @@ describe("Accordion", () => {
     itemIsCollapsed(/Language Translator/);
   });
 
+  it("applies flush class to skeleton", () => {
+    render(AccordionSkeleton, { props: { flush: true } });
+
+    const accordion = screen.getByRole("list");
+    expect(accordion).toHaveClass("bx--accordion--flush");
+  });
+
   it("renders skeleton", () => {
     render(AccordionSkeleton);
 
@@ -325,6 +334,20 @@ describe("Accordion", () => {
     expect(accordion).not.toHaveClass("bx--accordion--xl");
   });
 
+  it("applies flush class", () => {
+    render(Accordion, { props: { flush: true } });
+
+    const accordion = screen.getByRole("list");
+    expect(accordion).toHaveClass("bx--accordion--flush");
+  });
+
+  it("does not apply flush class when align is start", () => {
+    render(Accordion, { props: { flush: true, align: "start" } });
+
+    const accordion = screen.getByRole("list");
+    expect(accordion).not.toHaveClass("bx--accordion--flush");
+  });
+
   it("should apply custom class to Accordion", () => {
     render(Accordion, { props: { customClass: "custom-accordion" } });
 
@@ -411,5 +434,62 @@ describe("Accordion", () => {
 
     const button = screen.getByRole("button");
     expect(button).toHaveAttribute("aria-label", "Custom description");
+  });
+
+  it('closes other items when type is "single"', async () => {
+    render(AccordionSingle);
+
+    const firstItem = screen.getByText("Natural Language Classifier");
+    const lastItem = screen.getByText("Language Translator");
+
+    await user.click(firstItem);
+    itemIsExpanded(/Natural Language Classifier/);
+
+    await user.click(lastItem);
+    itemIsExpanded(/Language Translator/);
+    itemIsCollapsed(/Natural Language Classifier/);
+
+    // Clicking the open item again just collapses it.
+    await user.click(lastItem);
+    itemIsCollapsed(/Language Translator/);
+  });
+
+  it("should defer mounting panel content until first opened when lazy", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(AccordionLazy, { props: { lazy: true, open: false } });
+
+    expect(screen.queryByText("Lazy panel content")).not.toBeInTheDocument();
+    expect(consoleLog).not.toHaveBeenCalledWith("lazy-content-mounted");
+
+    await user.click(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    );
+
+    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
+    expect(consoleLog).toHaveBeenCalledWith("lazy-content-mounted");
+    consoleLog.mockClear();
+
+    // Collapsing keeps the content mounted (no remount on re-expand).
+    await user.click(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    );
+    await user.click(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    );
+
+    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
+    expect(consoleLog).not.toHaveBeenCalledWith("lazy-content-mounted");
+  });
+
+  it("should mount panel content immediately when lazy is false", () => {
+    render(AccordionLazy, { props: { lazy: false, open: false } });
+
+    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
+  });
+
+  it("should mount panel content immediately when lazy item starts open", () => {
+    render(AccordionLazy, { props: { lazy: true, open: true } });
+
+    expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
   });
 });

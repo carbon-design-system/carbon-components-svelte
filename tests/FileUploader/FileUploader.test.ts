@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
+import FileUploaderPerFileStatusDemo from "./FileUploader.perFileStatus.test.svelte";
 import FileUploader from "./FileUploader.test.svelte";
 import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
 import FileUploaderDropContainerSlot from "./FileUploaderDropContainer.slot.test.svelte";
@@ -1106,5 +1108,156 @@ describe("FileUploader", () => {
       assert(ctx.file instanceof File);
       expect(ctx.file.name).toBe(ctx.fileName);
     }
+  });
+
+  it("should apply per-file status via fileStatus, overriding global status", () => {
+    const file1 = new File(["a"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["b"], "file2.txt", { type: "text/plain" });
+    const file3 = new File(["c"], "file3.txt", { type: "text/plain" });
+
+    const { container } = render(FileUploader, {
+      props: {
+        multiple: true,
+        status: "edit",
+        files: [file1, file2, file3],
+        fileStatus: (_file: File, index: number) =>
+          (["uploading", "edit", "complete"] as const)[index],
+      },
+    });
+
+    const rows = container.querySelectorAll(".bx--file__selected-file");
+    expect(rows).toHaveLength(3);
+
+    expect(rows[0].querySelector(".bx--loading")).toBeInTheDocument();
+    expect(rows[0].querySelector(".bx--file-close")).not.toBeInTheDocument();
+    expect(rows[0].querySelector(".bx--file-complete")).not.toBeInTheDocument();
+
+    expect(rows[1].querySelector(".bx--file-close")).toBeInTheDocument();
+    expect(rows[1].querySelector(".bx--loading")).not.toBeInTheDocument();
+    expect(rows[1].querySelector(".bx--file-complete")).not.toBeInTheDocument();
+
+    expect(rows[2].querySelector(".bx--file-complete")).toBeInTheDocument();
+    expect(rows[2].querySelector(".bx--loading")).not.toBeInTheDocument();
+    expect(rows[2].querySelector(".bx--file-close")).not.toBeInTheDocument();
+  });
+
+  it("should fall back to global status when fileStatus is unset", () => {
+    const file1 = new File(["a"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["b"], "file2.txt", { type: "text/plain" });
+
+    const { container } = render(FileUploader, {
+      props: {
+        multiple: true,
+        status: "complete",
+        files: [file1, file2],
+      },
+    });
+
+    const rows = container.querySelectorAll(".bx--file__selected-file");
+    expect(rows).toHaveLength(2);
+    expect(rows[0].querySelector(".bx--file-complete")).toBeInTheDocument();
+    expect(rows[1].querySelector(".bx--file-complete")).toBeInTheDocument();
+    expect(container.querySelector(".bx--loading")).not.toBeInTheDocument();
+    expect(container.querySelector(".bx--file-close")).not.toBeInTheDocument();
+  });
+
+  it("demo-style fileStatus transitions uploading to complete", async () => {
+    const { container } = render(FileUploaderPerFileStatusDemo, {
+      props: { delay: 50 },
+    });
+
+    const input = container.querySelector(
+      "input[type=file]",
+    ) as HTMLInputElement;
+    const file = new File(["a"], "a.txt", { type: "text/plain" });
+    simulateFileSelection(input, [file]);
+
+    await vi.waitFor(() => {
+      expect(container.querySelector(".bx--loading")).toBeInTheDocument();
+    });
+
+    await vi.waitFor(
+      () => {
+        expect(
+          container.querySelector(".bx--file-complete"),
+        ).toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
+    expect(container.querySelector(".bx--loading")).not.toBeInTheDocument();
+  });
+
+  it("should update row status when fileStatus callback identity changes", async () => {
+    const file = new File(["a"], "file1.txt", { type: "text/plain" });
+    let current: "uploading" | "complete" = "uploading";
+
+    const { rerender, container } = render(FileUploader, {
+      props: {
+        files: [file],
+        status: "edit",
+        fileStatus: () => current,
+      },
+    });
+
+    expect(container.querySelector(".bx--loading")).toBeInTheDocument();
+
+    current = "complete";
+    await rerender({
+      files: [file],
+      status: "edit",
+      fileStatus: () => current,
+    });
+    await tick();
+
+    expect(container.querySelector(".bx--loading")).not.toBeInTheDocument();
+    expect(container.querySelector(".bx--file-complete")).toBeInTheDocument();
+  });
+
+  it("should NOT update when fileStatus reference is stable but closure data changes", async () => {
+    const file = new File(["a"], "file1.txt", { type: "text/plain" });
+    const state = { status: "uploading" as "uploading" | "complete" };
+    const fileStatus = () => state.status;
+
+    const { container } = render(FileUploader, {
+      props: {
+        files: [file],
+        status: "edit",
+        fileStatus,
+      },
+    });
+
+    expect(container.querySelector(".bx--loading")).toBeInTheDocument();
+
+    state.status = "complete";
+    await tick();
+
+    // Stable callback: child has no signal to re-resolve.
+    expect(container.querySelector(".bx--loading")).toBeInTheDocument();
+  });
+
+  it("should render per-file invalid state and error copy", () => {
+    const file1 = new File(["a"], "ok.txt", { type: "text/plain" });
+    const file2 = new File(["b"], "bad.txt", { type: "text/plain" });
+
+    const { container } = render(FileUploader, {
+      props: {
+        multiple: true,
+        status: "edit",
+        files: [file1, file2],
+        fileInvalid: (file: File) => file.name === "bad.txt",
+        fileErrorSubject: (file: File) =>
+          file.name === "bad.txt" ? "Upload failed" : "",
+        fileErrorBody: (file: File) =>
+          file.name === "bad.txt" ? "Please try again." : "",
+      },
+    });
+
+    const rows = container.querySelectorAll(".bx--file__selected-file");
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).not.toHaveClass("bx--file__selected-file--invalid");
+    expect(rows[1]).toHaveClass("bx--file__selected-file--invalid");
+    expect(screen.getByText("Upload failed")).toBeInTheDocument();
+    expect(screen.getByText("Please try again.")).toBeInTheDocument();
+    expect(rows[1].querySelector(".bx--file-invalid")).toBeInTheDocument();
   });
 });

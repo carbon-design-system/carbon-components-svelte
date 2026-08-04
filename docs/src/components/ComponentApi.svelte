@@ -104,6 +104,22 @@
     return { mainDescription, exampleCode };
   }
 
+  function formatDescriptionHtml(description: string) {
+    return description
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/`(.*?)`/g, "<code>$1</code>")
+      .replace(/https?:\/\/[^\s<]+/g, (url) => {
+        const trailing = url.match(/[.,;:!?)\]]+$/)?.[0] ?? "";
+        const href = url.slice(0, url.length - trailing.length);
+        return `<a class="bx--link" href="${href}" target="_blank" rel="noopener noreferrer">${href}</a>${trailing}`;
+      });
+  }
+
+  function codeBlockType(value: string | undefined | null) {
+    return (value ?? "").includes("\n") ? "multi" : "inline";
+  }
+
   $: source = `https://github.com/carbon-design-system/carbon-components-svelte/tree/master/${component.filePath}`;
   $: forwarded_events = component.events.filter(
     (event) => event.type === "forwarded",
@@ -210,15 +226,7 @@
                 {@const parsed = parseDescription(prop.description)}
                 {#if parsed.mainDescription}
                   <div class="description">
-                    {@html parsed.mainDescription
-                      .replace(/</g, "&lt;")
-                      .replace(/>/g, "&gt;")
-                      .replace(/`(.*?)`/g, "<code>$1</code>")
-                      .replace(/https?:\/\/[^\s<]+/g, (url) => {
-                        const trailing = url.match(/[.,;:!?)\]]+$/)?.[0] ?? "";
-                        const href = url.slice(0, url.length - trailing.length);
-                        return `<a class="bx--link" href="${href}" target="_blank" rel="noopener noreferrer">${href}</a>${trailing}`;
-                      })}
+                    {@html formatDescriptionHtml(parsed.mainDescription)}
                   </div>
                 {/if}
                 {#if parsed.exampleCode}
@@ -258,7 +266,7 @@
                   <svelte:component
                     this={AsyncCodeBlock}
                     language="typescript"
-                    type={/\n/.test(prop.value ?? "") ? "multi" : "inline"}
+                    type={codeBlockType(prop.value)}
                     code={prop.value ?? ""}
                     portalTooltip
                   />
@@ -310,7 +318,7 @@
               <svelte:component
                 this={AsyncCodeBlock}
                 language="typescript"
-                type={/\n/.test(slot.slot_props ?? "") ? "multi" : "inline"}
+                type={codeBlockType(slot.slot_props)}
                 code={slot.slot_props ?? ""}
                 portalTooltip
               />
@@ -364,9 +372,7 @@
               <svelte:component
                 this={AsyncCodeBlock}
                 language="typescript"
-                type={/\n/.test(dispatched_event.detail ?? "")
-                  ? "multi"
-                  : "inline"}
+                type={codeBlockType(dispatched_event.detail)}
                 code={dispatched_event.detail ?? ""}
                 portalTooltip
               />

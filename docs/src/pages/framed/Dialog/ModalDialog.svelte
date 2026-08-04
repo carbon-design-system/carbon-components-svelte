@@ -11,10 +11,12 @@
   modal
   aria-label="Example modal dialog"
   on:open={() => console.log("open")}
-  on:close={() => console.log("close")}
+  on:close={(e) => console.log("close", e.detail)}
 >
   <Stack gap={5}>
     <p>Dialog content.</p>
-    <Button on:click={() => (open = false)}>Close</Button>
+    <form method="dialog">
+      <Button type="submit">Close</Button>
+    </form>
   </Stack>
 </Dialog>

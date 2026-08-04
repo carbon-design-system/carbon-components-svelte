@@ -391,28 +391,28 @@ describe("TimePicker", () => {
       expect(message.closest(".bx--time-picker--fluid")).not.toBeNull();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      render(TimePicker, {
-        fluid: true,
-        invalid: true,
-        invalidText: "Invalid time",
-        warn: true,
-        warnText: "Warning message",
-        ...props,
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        render(TimePicker, {
+          fluid: true,
+          invalid: true,
+          invalidText: "Invalid time",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        });
 
-      expect(screen.queryByText("Invalid time")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(
-        document.querySelector(".bx--time-picker--fluid--invalid"),
-      ).toBeNull();
-      expect(
-        document.querySelector(".bx--time-picker--fluid--warning"),
-      ).toBeNull();
-    });
+        expect(screen.queryByText("Invalid time")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(
+          document.querySelector(".bx--time-picker--fluid--invalid"),
+        ).toBeNull();
+        expect(
+          document.querySelector(".bx--time-picker--fluid--warning"),
+        ).toBeNull();
+      },
+    );
 
     it("inherits fluid from the FluidForm context", () => {
       render(TimePickerFluidForm);

@@ -33,9 +33,9 @@
    */
   export let icon = CheckmarkFilled;
 
-  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
+  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
 
   const dispatch = createEventDispatcher();
   /**

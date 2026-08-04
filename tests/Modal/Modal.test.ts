@@ -146,6 +146,63 @@ describe("Modal", () => {
     });
   });
 
+  it("renders one secondaryButtons entry with legacy { text }", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        primaryButtonText: "Save",
+        secondaryButtons: [{ text: "Cancel" }],
+      },
+    });
+
+    const cancel = screen.getByRole("button", { name: "Cancel" });
+    expect(cancel).toHaveClass("bx--btn--secondary");
+    expect(cancel).not.toBeDisabled();
+  });
+
+  it("renders two secondaryButtons with kind and disabled", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        primaryButtonText: "Save",
+        secondaryButtons: [
+          { text: "Save draft", kind: "secondary" },
+          { text: "Cancel", kind: "ghost", disabled: true },
+        ],
+      },
+    });
+
+    const draft = screen.getByRole("button", { name: "Save draft" });
+    const cancel = screen.getByRole("button", { name: "Cancel" });
+    expect(draft).toHaveClass("bx--btn--secondary");
+    expect(cancel).toHaveClass("bx--btn--ghost");
+    expect(cancel).toBeDisabled();
+
+    const footer = draft.closest(".bx--modal-footer");
+    expect(footer).toHaveClass("bx--modal-footer--three-button");
+  });
+
+  it("dispatches click:button--secondary for secondaryButtons entries", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ModalTest, {
+      props: {
+        open: true,
+        primaryButtonText: "Save",
+        secondaryButtons: [{ text: "Cancel" }, { text: "Reset" }],
+      },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
+      text: "Cancel",
+    });
+
+    await user.click(screen.getByRole("button", { name: "Reset" }));
+    expect(consoleLog).toHaveBeenCalledWith("click:button--secondary", {
+      text: "Reset",
+    });
+  });
+
   it("supports different modal sizes", () => {
     type Size = "xs" | "sm" | "lg";
     const sizeMappings = {
@@ -511,6 +568,53 @@ describe("Modal", () => {
     });
   });
 
+  it("hides the close button when hideCloseButton is true", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Forced choice",
+        primaryButtonText: "Accept",
+        secondaryButtonText: "Decline",
+        hideCloseButton: true,
+      },
+    });
+
+    expect(screen.queryByLabelText("Close the modal")).not.toBeInTheDocument();
+    expect(screen.getByText("Accept")).toBeInTheDocument();
+    expect(screen.getByText("Decline")).toBeInTheDocument();
+  });
+
+  it("still closes via footer secondary button when hideCloseButton is true", async () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Forced choice",
+        primaryButtonText: "Accept",
+        secondaryButtonText: "Decline",
+        hideCloseButton: true,
+        closeOnSecondary: true,
+      },
+    });
+
+    expect(screen.queryByLabelText("Close the modal")).not.toBeInTheDocument();
+
+    await user.click(screen.getByText("Decline"));
+    await tick();
+
+    expect(document.querySelector(".bx--modal")).not.toHaveClass("is-visible");
+  });
+
+  it("renders the close button by default", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "Default close",
+      },
+    });
+
+    expect(screen.getByLabelText("Close the modal")).toBeInTheDocument();
+  });
+
   it("does not leave the modal open when a programmatic on:close handler throws", async () => {
     const error = new Error("consumer error");
     const trap = absorbUnhandledRejection((reason) => reason === error);
@@ -843,6 +947,87 @@ describe("Modal", () => {
 
     expect(submitHandler).not.toHaveBeenCalled();
     expect(clickPrimaryHandler).not.toHaveBeenCalled();
+  });
+
+  describe("primaryButtonLoading", () => {
+    it("shows InlineLoading and does not dispatch submit on click", async () => {
+      const submitHandler = vi.fn();
+      const clickPrimaryHandler = vi.fn();
+      render(ModalTest, {
+        props: {
+          open: true,
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+          onsubmit: submitHandler,
+          onclickbuttonprimary: clickPrimaryHandler,
+        },
+      });
+
+      expect(screen.getByText("Loading")).toBeInTheDocument();
+      expect(document.querySelector(".bx--inline-loading")).toBeInTheDocument();
+
+      const primaryButton = screen.getByRole("button", { name: /Loading/i });
+      expect(primaryButton).toBeDisabled();
+      await user.click(primaryButton);
+
+      expect(submitHandler).not.toHaveBeenCalled();
+      expect(clickPrimaryHandler).not.toHaveBeenCalled();
+    });
+
+    it("does not dispatch submit when pressing Enter while loading", async () => {
+      const submitHandler = vi.fn();
+      const clickPrimaryHandler = vi.fn();
+      render(ModalTest, {
+        props: {
+          open: true,
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+          shouldSubmitOnEnter: true,
+          onsubmit: submitHandler,
+          onclickbuttonprimary: clickPrimaryHandler,
+        },
+      });
+
+      screen.getByTestId("test-focus").focus();
+      await user.keyboard("{Enter}");
+      await tick();
+
+      expect(submitHandler).not.toHaveBeenCalled();
+      expect(clickPrimaryHandler).not.toHaveBeenCalled();
+    });
+
+    it("keeps the idle primary button path unchanged", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ModalTest, {
+        props: {
+          open: true,
+          primaryButtonText: "Save",
+          primaryButtonLoading: false,
+        },
+      });
+
+      expect(screen.getByText("Save")).toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--inline-loading"),
+      ).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Save" }));
+      expect(consoleLog).toHaveBeenCalledWith("submit");
+      expect(consoleLog).toHaveBeenCalledWith("click:button--primary");
+    });
+
+    it("uses a custom loading description", () => {
+      render(ModalTest, {
+        props: {
+          open: true,
+          primaryButtonText: "Save",
+          primaryButtonLoading: true,
+          primaryButtonLoadingDescription: "Saving...",
+        },
+      });
+
+      expect(screen.getByText("Saving...")).toBeInTheDocument();
+    });
   });
 
   describe("Generics", () => {

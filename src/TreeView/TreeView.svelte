@@ -29,6 +29,22 @@
   }
 
   /**
+   * Whether a keydown event should feed the type-ahead search buffer:
+   * a single printable character with no modifier (excludes Space, which
+   * is reserved for selection).
+   * @param {KeyboardEvent} event
+   */
+  function isTypeAheadKey(event) {
+    return (
+      event.key.length === 1 &&
+      event.key !== " " &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    );
+  }
+
+  /**
    * Creates a TreeWalker instance for keyboard navigation.
    * @returns {TreeWalker} A TreeWalker configured to navigate tree nodes
    */
@@ -187,6 +203,7 @@
    * @property {boolean} [disabled] - Whether the node is disabled
    * @property {string} [href] - Optional URL the node links to
    * @property {string} [target] - Optional link target (e.g., "_blank")
+   * @property {boolean} [hasChildren] - Whether the node has children that have not been loaded yet. Renders an expander even without a `nodes` array; expanding fires `toggle` so children can be loaded lazily.
    * @property {TreeNode<Id>[]} [nodes]
    * @typedef {object} ShowNodeOptions
    * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
@@ -201,6 +218,7 @@
    * @property {Array<Id>} added - Node ids selected since the previous change
    * @property {Array<Id>} removed - Node ids deselected since the previous change
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }}
+   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }} childNodes
    * @event select
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    * @event toggle
@@ -411,6 +429,37 @@
     }
   }
 
+  /**
+   * Look up a node by `id` without re-implementing tree traversal.
+   * Returns `null` if no node with the given `id` exists.
+   * @type {(id: Node["id"]) => Node | null}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => console.log(treeView.getNode('node-123'))}>
+   *   Log Node
+   * </button>
+   * ```
+   */
+  export function getNode(id) {
+    return cachedNodeMap?.get(id) ?? null;
+  }
+
+  /**
+   * Look up multiple nodes by `id`. Ids without a matching node are omitted.
+   * @type {(ids: ReadonlyArray<Node["id"]>) => Array<Node>}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => console.log(treeView.getNodes(selectedIds))}>
+   *   Log Selected Nodes
+   * </button>
+   * ```
+   */
+  export function getNodes(ids) {
+    return ids.map((id) => cachedNodeMap?.get(id)).filter((node) => node);
+  }
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -510,6 +559,8 @@
   let cachedFlattenedNodes = null;
   /** @type {Array<Node["id"]> | null} */
   let cachedNodeIds = null;
+  /** @type {Map<Node["id"], Node> | null} */
+  let cachedNodeMap = null;
 
   /** @type {Node["id"] | null} */
   let anchorId = null;
@@ -689,6 +740,69 @@
     return target.closest(".bx--tree-node");
   }
 
+  /** Type-ahead search buffer, reset after `typeAheadTimeoutMs` of inactivity. */
+  let typeAheadBuffer = "";
+  let typeAheadTimeoutId = null;
+  const typeAheadTimeoutMs = 500;
+
+  /** @returns {Element[]} Visible (non-disabled, non-hidden) tree items in document order. */
+  function collectVisibleTreeItems() {
+    if (!treeWalker || !ref) return [];
+    treeWalker.currentNode = ref;
+    /** @type {Element[]} */
+    const items = [];
+    let n = treeWalker.nextNode();
+    while (n) {
+      items.push(n);
+      n = treeWalker.nextNode();
+    }
+    return items;
+  }
+
+  /**
+   * Moves focus to the next visible node whose label starts with the
+   * typed search string, cycling from the current item. Repeating the
+   * same character (e.g. "bbb") cycles through matches for that letter,
+   * matching native `<select>`-style type-ahead.
+   * @param {KeyboardEvent} event
+   * @param {Element} treeItem
+   * @returns {boolean} Whether the event was handled as type-ahead input.
+   */
+  function handleTypeAhead(event, treeItem) {
+    if (!isTypeAheadKey(event)) return false;
+
+    if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
+    typeAheadBuffer += event.key.toLowerCase();
+    typeAheadTimeoutId = setTimeout(() => {
+      typeAheadBuffer = "";
+    }, typeAheadTimeoutMs);
+
+    const isRepeatedChar =
+      typeAheadBuffer.length > 1 &&
+      [...typeAheadBuffer].every((c) => c === typeAheadBuffer[0]);
+    const query = isRepeatedChar ? typeAheadBuffer[0] : typeAheadBuffer;
+
+    const items = collectVisibleTreeItems();
+    if (items.length === 0) return true;
+
+    const startIndex = Math.max(items.indexOf(treeItem), 0);
+
+    for (let offset = 1; offset <= items.length; offset++) {
+      const candidate = items[(startIndex + offset) % items.length];
+      const label = (candidate.textContent ?? "").trim().toLowerCase();
+      if (label.startsWith(query)) {
+        resetNodeTabIndices(ref);
+        if (candidate instanceof HTMLElement) {
+          candidate.tabIndex = 0;
+          candidate.focus();
+        }
+        break;
+      }
+    }
+
+    return true;
+  }
+
   function handleKeyDown(event) {
     event.stopPropagation();
 
@@ -707,6 +821,8 @@
 
     const treeItem = getTreeItemFromTarget(event.target);
     if (!treeItem) return;
+
+    if (handleTypeAhead(event, treeItem)) return;
 
     treeWalker.currentNode = treeItem;
 
@@ -809,6 +925,7 @@
 
     return () => {
       setMultiselectKeyListeners(false);
+      if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
     };
   });
 
@@ -816,6 +933,9 @@
     cachedNodes = nodes;
     cachedFlattenedNodes = traverse(nodes);
     cachedNodeIds = cachedFlattenedNodes.map((node) => node.id);
+    cachedNodeMap = new Map(
+      cachedFlattenedNodes.map((node) => [node.id, node]),
+    );
   }
 
   $: multiselectStore.set(multiselect);
@@ -927,5 +1047,8 @@
 >
   <TreeViewNodeList root {nodes} let:node>
     <slot {node}> {node.text} </slot>
+    <svelte:fragment slot="childNodes" let:node>
+      <slot name="childNodes" {node} />
+    </svelte:fragment>
   </TreeViewNodeList>
 </ul>

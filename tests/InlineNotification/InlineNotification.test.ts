@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import InlineNotificationTest from "./InlineNotification.test.svelte";
@@ -193,6 +193,52 @@ describe("InlineNotification", () => {
     expect(closeHandler).not.toHaveBeenCalled();
 
     vi.advanceTimersByTime(1000);
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+  });
+
+  it("should pause timeout on hover when pauseOnHover is true", async () => {
+    const closeHandler = vi.fn();
+    render(InlineNotificationTest, {
+      props: { timeout: 1000, pauseOnHover: true, onclose: closeHandler },
+    });
+
+    const notification = document.querySelector(".bx--inline-notification");
+    assert(notification);
+
+    vi.advanceTimersByTime(400);
+    await fireEvent.mouseEnter(notification);
+
+    vi.advanceTimersByTime(1000);
+    await tick();
+    expect(closeHandler).not.toHaveBeenCalled();
+
+    await fireEvent.mouseLeave(notification);
+    vi.advanceTimersByTime(599);
+    await tick();
+    expect(closeHandler).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
+    await tick();
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+  });
+
+  it("should not pause timeout on hover when pauseOnHover is false", async () => {
+    const closeHandler = vi.fn();
+    render(InlineNotificationTest, {
+      props: { timeout: 1000, pauseOnHover: false, onclose: closeHandler },
+    });
+
+    const notification = document.querySelector(".bx--inline-notification");
+    assert(notification);
+
+    vi.advanceTimersByTime(400);
+    await fireEvent.mouseEnter(notification);
+
+    vi.advanceTimersByTime(600);
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);

@@ -44,9 +44,21 @@ Use `bind:value` to update the selected month from outside the component, such a
 
 <FileSource src="/framed/DatePicker/DatePickerMonthProgrammatic" />
 
+## Year calendar
+
+Set `datePickerType` to `"year"` to select a year instead of a day. The calendar shows a decade grid; use the prev/next controls to move between decades. Pair it with a year-only `dateFormat` such as `"Y"` (for example, "2026").
+
+<FileSource src="/framed/DatePicker/DatePickerYear" />
+
+### Programmatic
+
+Use `bind:value` to select a year from outside the component, or `bind:calendar` to move the displayed decade—such as jumping to the current year or paging forward—without changing the selection.
+
+<FileSource src="/framed/DatePicker/DatePickerYearProgrammatic" />
+
 ## Calendar options
 
-Configure constraints and behavior shared by single, range, and month calendars.
+Configure constraints and behavior shared by single, range, month, and year calendars.
 
 ### Min and max dates
 
@@ -201,6 +213,14 @@ The fluid variant also supports the `"month"` date picker type.
 
 <DatePicker fluid datePickerType="month" dateFormat="F Y">
   <DatePickerInput labelText="Billing month" placeholder="Month Year" />
+</DatePicker>
+
+### Year
+
+The fluid variant also supports the `"year"` date picker type.
+
+<DatePicker fluid datePickerType="year" dateFormat="Y">
+  <DatePickerInput labelText="Fiscal year" placeholder="yyyy" />
 </DatePicker>
 
 ### Custom label

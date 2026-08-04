@@ -47,6 +47,39 @@ Set `step` to control increment size.
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
 
+### Formatted values
+
+Use `formatValue` to format range labels and `aria-valuetext` (for example currency or percent). The text input and bound `value` stay numeric.
+
+<Slider labelText="Budget" value={50} formatValue={(v) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v)} />
+
+<Slider labelText="Opacity" value={75} formatValue={(v) => `${v}%`} />
+
+## Marks
+
+Set `marks` to show tick marks along the track. Pass an array of stops with optional labels, or set `marks` to `true` to tick every `step`. Marks are visual only; snapping still follows `step`.
+
+<Slider
+  labelText="Intensity"
+  hideTextInput
+  min={0}
+  max={3}
+  step={1}
+  value={1}
+  marks={[
+    { value: 0, label: "Off" },
+    { value: 1, label: "Low" },
+    { value: 2, label: "Med" },
+    { value: 3, label: "High" },
+  ]}
+/>
+
+### Every step
+
+Set `marks` to `true` to place a tick at every `step`.
+
+<Slider labelText="Instances" hideTextInput min={0} max={10} step={2} value={4} marks />
+
 ## Light
 
 Use the light variant for light backgrounds.
@@ -104,6 +137,32 @@ Set `hideTextInput` to `true` to hide both numeric inputs while keeping the slid
 Set `min`, `max`, and `step` to customize the range.
 
 <RangeSlider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" step={10} value={100} valueUpper={500} />
+
+### Formatted values
+
+`formatValue` applies to both thumbs' `aria-valuetext` and the range labels. Bound `value` / `valueUpper` stay numeric.
+
+<RangeSlider labelText="Price range" value={20} valueUpper={80} formatValue={(v) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v)} />
+
+### Marks
+
+Set `marks` the same way as on `Slider` for tick marks and optional labels.
+
+<RangeSlider
+  labelText="Intensity"
+  hideTextInput
+  min={0}
+  max={3}
+  step={1}
+  value={0}
+  valueUpper={2}
+  marks={[
+    { value: 0, label: "Off" },
+    { value: 1, label: "Low" },
+    { value: 2, label: "Med" },
+    { value: 3, label: "High" },
+  ]}
+/>
 
 ### Invalid
 

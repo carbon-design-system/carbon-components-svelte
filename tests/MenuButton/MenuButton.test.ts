@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import MenuButtonIconOnly from "./MenuButton.iconOnly.test.svelte";
 import MenuButtonSlot from "./MenuButton.slot.test.svelte";
 import MenuButtonFixture from "./MenuButton.test.svelte";
 
@@ -47,33 +48,32 @@ describe("MenuButton", () => {
     { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
     { size: "md", buttonClass: "bx--btn--field", menuClass: "bx--menu--md" },
     { size: "lg", buttonClass: undefined, menuClass: "bx--menu--lg" },
-  ] as const)("propagates size $size to the trigger and the menu row height", async ({
-    size,
-    buttonClass,
-    menuClass,
-  }) => {
-    render(MenuButtonFixture, { props: { size } });
+  ] as const)(
+    "propagates size $size to the trigger and the menu row height",
+    async ({ size, buttonClass, menuClass }) => {
+      render(MenuButtonFixture, { props: { size } });
 
-    const trigger = screen.getByRole("button", { name: "Actions" });
+      const trigger = screen.getByRole("button", { name: "Actions" });
 
-    for (const unwanted of [
-      "bx--btn--sm",
-      "bx--btn--field",
-      "bx--btn--lg",
-      "bx--btn--xl",
-    ]) {
-      if (unwanted !== buttonClass) expect(trigger).not.toHaveClass(unwanted);
-    }
-    if (buttonClass) expect(trigger).toHaveClass(buttonClass);
+      for (const unwanted of [
+        "bx--btn--sm",
+        "bx--btn--field",
+        "bx--btn--lg",
+        "bx--btn--xl",
+      ]) {
+        if (unwanted !== buttonClass) expect(trigger).not.toHaveClass(unwanted);
+      }
+      if (buttonClass) expect(trigger).toHaveClass(buttonClass);
 
-    await user.click(trigger);
+      await user.click(trigger);
 
-    const menu = screen.getByRole("menu");
-    for (const unwanted of ["bx--menu--xs", "bx--menu--md", "bx--menu--lg"]) {
-      if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
-    }
-    if (menuClass) expect(menu).toHaveClass(menuClass);
-  });
+      const menu = screen.getByRole("menu");
+      for (const unwanted of ["bx--menu--xs", "bx--menu--md", "bx--menu--lg"]) {
+        if (unwanted !== menuClass) expect(menu).not.toHaveClass(unwanted);
+      }
+      if (menuClass) expect(menu).toHaveClass(menuClass);
+    },
+  );
 
   it("keeps the trigger off Button's baseline-aligned `lg`/`xl` classes", () => {
     render(MenuButtonFixture, { props: { size: "lg" } });
@@ -183,5 +183,52 @@ describe("MenuButton", () => {
     trigger.focus();
     await fireEvent.click(trigger, { detail: 0 });
     expect(trigger).toHaveFocus();
+  });
+
+  describe("icon-only", () => {
+    it("names the trigger from labelText without rendering it as label content", () => {
+      render(MenuButtonIconOnly);
+
+      expect(
+        screen.getByRole("button", { name: "Row actions" }),
+      ).toBeInTheDocument();
+      // The icon's <title> carries the same text; it is not visible content.
+      expect(
+        screen.queryByText("Row actions", { ignore: "title" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("attaches the menu with the overflow-menu shadow bridge", async () => {
+      render(MenuButtonIconOnly);
+
+      await user.click(screen.getByRole("button", { name: "Row actions" }));
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toHaveAttribute("data-carbon-menu-button-icon-only");
+      expect(menu).toHaveAttribute("data-carbon-align", "start");
+    });
+
+    it.each([
+      { size: "sm", sizeClass: "bx--overflow-menu--sm" },
+      { size: "lg", sizeClass: "bx--overflow-menu--xl" },
+    ] as const)(
+      "renders the overflow menu trigger with the $size size class",
+      ({ size, sizeClass }) => {
+        render(MenuButtonIconOnly, { props: { size } });
+
+        const trigger = screen.getByRole("button", { name: "Row actions" });
+
+        expect(trigger).toHaveClass("bx--overflow-menu");
+        expect(trigger).toHaveClass(sizeClass);
+      },
+    );
+
+    it("renders the disabled state on the trigger", () => {
+      render(MenuButtonIconOnly, { props: { disabled: true } });
+
+      expect(
+        screen.getByRole("button", { name: "Row actions" }),
+      ).toBeDisabled();
+    });
   });
 });

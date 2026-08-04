@@ -63,6 +63,12 @@ Connect the modal's primary button to a form with `formId`. This enables native 
 
 <FileSource src="/framed/Modal/ModalWithForm" />
 
+## Primary button loading
+
+Set `primaryButtonLoading` while an async submit is in progress. The primary button shows an [InlineLoading](/components/InlineLoading) spinner, becomes non-interactive, and suppresses `submit` until loading finishes. The modal stays open.
+
+<FileSource src="/framed/Modal/ModalPrimaryButtonLoading" />
+
 ## Has scrolling content
 
 Enable vertical scrolling for modals with lengthy content. This ensures all content remains accessible while maintaining a reasonable modal height.
@@ -77,7 +83,7 @@ Stack multiple modals for complex workflows. Each modal maintains its own state 
 
 ## Multiple secondary buttons
 
-Add up to two secondary actions with `secondaryButtons`, which replaces the single secondary button text option.
+Add up to two secondary actions with `secondaryButtons`, which replaces the single secondary button text option. Each entry needs display text; set `kind` and `disabled` per button when actions should differ in weight or availability.
 
 <FileSource src="/framed/Modal/3ButtonModal" />
 
@@ -124,6 +130,12 @@ The modal dispatches a cancelable `close` event. Call `e.preventDefault()` to ke
 Disable closing the modal when clicking outside with `preventCloseOnClickOutside`. This is useful for transactional modals where explicit user action is required.
 
 <FileSource src="/framed/Modal/ModalPreventOutsideClick" />
+
+### Hide close button
+
+Set `hideCloseButton` to `true` to remove the header close button. Use this for forced-choice dialogs such as auth walls or terms acceptance. Always provide an alternative dismiss path — typically footer actions — and pair with `preventCloseOnClickOutside` when outside clicks should not dismiss the dialog. <DocKbd label="Escape" /> still closes the modal unless you cancel the `close` event.
+
+<FileSource src="/framed/Modal/ModalHideCloseButton" />
 
 ## Button with icon
 

@@ -72,6 +72,64 @@ describe("PinCodeInput", () => {
     expect(inputs[0].value).toBe("a");
   });
 
+  it("accepts and rejects characters against a custom pattern", async () => {
+    render(PinCodeInput, { props: { pattern: /^[0-9a-fA-F]$/ } });
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await user.keyboard("g");
+    expect(inputs[0].value).toBe("");
+
+    await user.keyboard("a");
+    expect(inputs[0].value).toBe("a");
+
+    await user.keyboard("F");
+    expect(inputs[1].value).toBe("F");
+
+    await user.keyboard("9");
+    expect(inputs[2].value).toBe("9");
+  });
+
+  it("compiles a string pattern for per-character validation", async () => {
+    render(PinCodeInput, { props: { pattern: "^[a-zA-Z]$" } });
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await user.keyboard("1");
+    expect(inputs[0].value).toBe("");
+
+    await user.keyboard("b");
+    expect(inputs[0].value).toBe("b");
+  });
+
+  it("uses type presets when pattern is omitted", async () => {
+    render(PinCodeInput, { props: { type: "numeric" } });
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await user.keyboard("a");
+    expect(inputs[0].value).toBe("");
+
+    await user.keyboard("3");
+    expect(inputs[0].value).toBe("3");
+  });
+
+  it("filters pasted characters with a custom pattern", async () => {
+    const { component } = render(PinCodeInput, {
+      props: { pattern: /^[0-9a-fA-F]$/ },
+    });
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await fireEvent.paste(inputs[0], {
+      clipboardData: { getData: () => "A1gB2z" },
+    });
+    await tick();
+
+    expect(component.value).toBe("A1B2");
+    expect(inputs.map((input) => input.value)).toEqual(["A", "1", "B", "2"]);
+  });
+
   it("moves focus back and clears on backspace when empty", async () => {
     render(PinCodeInput);
     const inputs = getInputs();
@@ -96,6 +154,48 @@ describe("PinCodeInput", () => {
 
     expect(component.value).toBe("123");
     expect(component.code).toEqual(["1", "2", "3", ""]);
+  });
+
+  it("renders a hidden input for native form participation when name is set", async () => {
+    const { container } = render(PinCodeInput, {
+      props: { name: "otp", value: "12" },
+    });
+    const fieldset = getFieldset(container);
+    const hidden = fieldset?.querySelector(
+      'input[type="hidden"]',
+    ) as HTMLInputElement | null;
+
+    expect(hidden).not.toBeNull();
+    expect(hidden).toHaveAttribute("name", "otp");
+    expect(hidden?.value).toBe("12");
+
+    const inputs = getInputs();
+    inputs[2].focus();
+    await user.keyboard("34");
+    await tick();
+
+    expect(hidden?.value).toBe("1234");
+  });
+
+  it("does not render a hidden input when name is omitted", () => {
+    const { container } = render(PinCodeInput);
+    const fieldset = getFieldset(container);
+
+    expect(fieldset?.querySelector('input[type="hidden"]')).toBeNull();
+  });
+
+  it("applies required to the hidden input instead of segments when name is set", () => {
+    const { container } = render(PinCodeInput, {
+      props: { name: "otp", required: true },
+    });
+    const hidden = getFieldset(container)?.querySelector(
+      'input[type="hidden"]',
+    );
+
+    expect(hidden).toHaveAttribute("required");
+    for (const input of getInputs()) {
+      expect(input).not.toBeRequired();
+    }
   });
 
   it("dispatches complete and change events", async () => {
@@ -147,6 +247,43 @@ describe("PinCodeInput", () => {
           event === "paste" && (detail as { value: string }).value === "4321",
       ),
     ).toBe(true);
+  });
+
+  it("distributes multi-char autofill input across all segments", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { component } = render(PinCodeInput);
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await fireEvent.input(inputs[0], { target: { value: "1234" } });
+    await tick();
+
+    expect(component.value).toBe("1234");
+    expect(component.code).toEqual(["1", "2", "3", "4"]);
+    expect(inputs[3]).toHaveFocus();
+    expect(consoleLog.mock.calls.some(([event]) => event === "paste")).toBe(
+      false,
+    );
+    expect(
+      consoleLog.mock.calls.some(
+        ([event, detail]) =>
+          event === "complete" &&
+          (detail as { value: string }).value === "1234",
+      ),
+    ).toBe(true);
+  });
+
+  it("keeps single-character input behavior unchanged", async () => {
+    const { component } = render(PinCodeInput);
+    const inputs = getInputs();
+
+    inputs[0].focus();
+    await user.keyboard("9");
+    await tick();
+
+    expect(component.value).toBe("9");
+    expect(component.code).toEqual(["9", "", "", ""]);
+    expect(inputs[1]).toHaveFocus();
   });
 
   it("does not dispatch paste when the clipboard has no valid characters", async () => {
@@ -559,26 +696,28 @@ describe("PinCodeInput", () => {
       expect(message.closest(".bx--pin-code-input__fields")).not.toBeNull();
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      const { container } = render(PinCodeInput, {
-        props: {
-          fluid: true,
-          invalid: true,
-          invalidText: "Incorrect code",
-          warn: true,
-          warnText: "Code expiring soon",
-          ...props,
-        },
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        const { container } = render(PinCodeInput, {
+          props: {
+            fluid: true,
+            invalid: true,
+            invalidText: "Incorrect code",
+            warn: true,
+            warnText: "Code expiring soon",
+            ...props,
+          },
+        });
 
-      expect(screen.queryByText("Incorrect code")).not.toBeInTheDocument();
-      expect(screen.queryByText("Code expiring soon")).not.toBeInTheDocument();
-      expect(container.querySelector("[data-invalid]")).toBeNull();
-      expect(container.querySelector(".bx--pin-code-input__icon")).toBeNull();
-    });
+        expect(screen.queryByText("Incorrect code")).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("Code expiring soon"),
+        ).not.toBeInTheDocument();
+        expect(container.querySelector("[data-invalid]")).toBeNull();
+        expect(container.querySelector(".bx--pin-code-input__icon")).toBeNull();
+      },
+    );
 
     it("inherits fluid from the FluidForm context", () => {
       render(PinCodeInputFluidForm);

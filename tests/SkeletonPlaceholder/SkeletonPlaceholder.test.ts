@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import SkeletonPlaceholder from "./SkeletonPlaceholder.test.svelte";
 
@@ -16,7 +17,7 @@ describe("SkeletonPlaceholder", () => {
     });
 
     const element = screen.getByTestId("skeleton-placeholder");
-    expect(element).toHaveStyle({ height: "12rem", width: "12rem" });
+    expectInlineStyle(element, { height: "12rem", width: "12rem" });
   });
 
   it("should render with size prop (number)", () => {
@@ -34,7 +35,7 @@ describe("SkeletonPlaceholder", () => {
     });
 
     const element = screen.getByTestId("skeleton-placeholder");
-    expect(element).toHaveStyle({ width: "20rem", height: "10rem" });
+    expectInlineStyle(element, { width: "20rem", height: "10rem" });
   });
 
   it("should allow width/height to override size", () => {
@@ -43,7 +44,7 @@ describe("SkeletonPlaceholder", () => {
     });
 
     const element = screen.getByTestId("skeleton-placeholder");
-    expect(element).toHaveStyle({ width: "10rem", height: "8rem" });
+    expectInlineStyle(element, { width: "10rem", height: "8rem" });
   });
 
   it("should handle mouse events", async () => {

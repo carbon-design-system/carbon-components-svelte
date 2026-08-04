@@ -5,9 +5,27 @@
 
   /**
    * Specify the selected tab index.
+   * Ignored when `selectedId` is set.
    * @bindable writable
    */
   export let selected = 0;
+
+  /**
+   * Specify the selected tab by id.
+   * When set, takes precedence over `selected` and stays on the same logical
+   * tab as tabs are added or removed. Pair with a stable `id` on each `Tab`.
+   * @bindable writable
+   * @type {string | undefined}
+   */
+  export let selectedId = undefined;
+
+  /**
+   * Choose whether arrow keys change the selection on focus.
+   * Defaults to `"automatic"`. Set to `"manual"` so arrow keys only move
+   * focus; press Enter or Space to select.
+   * @type {"automatic" | "manual"}
+   */
+  export let activation = "automatic";
 
   /**
    * Specify the size of the vertical tabs.
@@ -170,11 +188,55 @@
    * @type {(id: string) => void}
    */
   function update(id) {
+    focusedIndex = -1;
+    if (selectedId !== undefined) {
+      selectedId = id;
+      return;
+    }
     currentIndex = $tabsById[id].index;
+  }
+
+  /**
+   * Resolve selection from `selectedId` when set; otherwise use `selected`.
+   * If the selected id was removed, keep the same index (next tab) or clamp.
+   * @type {() => void}
+   */
+  function syncSelection() {
+    if (selectedId === undefined) {
+      currentIndex = selected;
+      return;
+    }
+
+    const tab = $tabsById[selectedId];
+    if (tab) {
+      currentIndex = tab.index;
+      return;
+    }
+
+    if ($tabs.length === 0) return;
+
+    currentIndex = Math.min(Math.max(currentIndex, 0), $tabs.length - 1);
+    selectedId = $tabs[currentIndex].id;
   }
 
   // Vertical tabs are never dismissible; this no-op satisfies the `Tab` context.
   function dismiss() {}
+
+  /**
+   * Focus a tab at an absolute index without changing selection.
+   * @type {(index: number) => Promise<void>}
+   */
+  async function focusTab(index) {
+    if (index < 0 || index >= $tabs.length) return;
+    focusedIndex = index;
+
+    await tick();
+    const activeTab = /** @type {HTMLElement | undefined} */ (
+      refTabList?.querySelectorAll("[role='tab']")[index]
+    );
+    activeTab?.focus({ preventScroll: $belowMd });
+    if ($belowMd) scrollTabIntoView(activeTab);
+  }
 
   /**
    * Move selection/focus to a tab at an absolute index. Roving focus resolves
@@ -182,9 +244,19 @@
    * @type {(index: number) => Promise<void>}
    */
   async function selectTab(index) {
-    if (index === currentIndex) return;
+    if (index === currentIndex) {
+      focusedIndex = -1;
+      return;
+    }
 
-    currentIndex = index;
+    focusedIndex = -1;
+    if (selectedId === undefined) {
+      currentIndex = index;
+    } else {
+      const tab = $tabs[index];
+      if (!tab) return;
+      selectedId = tab.id;
+    }
 
     await tick();
     const activeTab = /** @type {HTMLElement | undefined} */ (
@@ -239,6 +311,11 @@
           }),
         );
       }
+
+      // Re-resolve after reorder so `selectedId` keeps the same logical tab.
+      if (selectedId !== undefined) {
+        syncSelection();
+      }
     }
 
     if (selected !== currentIndex) {
@@ -260,9 +337,17 @@
   });
 
   let currentIndex = selected;
+  let focusedIndex = -1;
   let prevIndex = -1;
 
-  $: currentIndex = selected;
+  $: {
+    if (selectedId === undefined) {
+      currentIndex = selected;
+    } else {
+      syncSelection();
+    }
+    focusedIndex = -1;
+  }
   $: currentTab = $tabs[currentIndex] || undefined;
   $: currentContent = $content[currentIndex] || undefined;
   $: {
@@ -323,11 +408,15 @@
         selector: "[role='tab']",
         orientation,
         skipDisabled: true,
-        getActiveIndex: () => currentIndex,
+        getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : currentIndex),
         onMove: (index, event) => {
           // Prevent the arrow keys from also scrolling the page.
           event.preventDefault();
-          selectTab(index);
+          if (activation === "manual") {
+            focusTab(index);
+          } else {
+            selectTab(index);
+          }
         },
       }}
       class:bx--tabs__nav={true}

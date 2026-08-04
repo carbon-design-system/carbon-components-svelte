@@ -92,6 +92,39 @@ on:close={() => console.log("close")}
 carbon-components
 </Tag>
 
+### Max width
+
+Set `maxWidth` to a CSS length to ellipsis long labels. A tooltip with the full text appears only when the label is truncated. Accepts any valid CSS length, including `rem`, `px`, `ch`, and `%`.
+
+<Stack gap={5}>
+  <div>
+    <div>maxWidth="8rem"</div>
+    <Tag filter maxWidth="8rem" on:close>
+      status:active AND region:us-south AND service:cloud-object-storage
+    </Tag>
+  </div>
+  <div>
+    <div>maxWidth="140px"</div>
+    <Tag filter maxWidth="140px" on:close>
+      status:active AND region:us-south AND service:cloud-object-storage
+    </Tag>
+  </div>
+  <div>
+    <div>maxWidth="20ch"</div>
+    <Tag filter maxWidth="20ch" on:close>
+      status:active AND region:us-south AND service:cloud-object-storage
+    </Tag>
+  </div>
+  <div>
+    <div>maxWidth="60%" (relative to the containing block)</div>
+    <div style="width: 200px;">
+      <Tag filter maxWidth="60%" on:close>
+        status:active AND region:us-south AND service:cloud-object-storage
+      </Tag>
+    </div>
+  </div>
+</Stack>
+
 ## Custom icon
 
 Add a custom icon to the tag. Note: custom icons cannot be used with the filterable variant.
@@ -104,12 +137,30 @@ Set `interactive` to render a button element instead of a div for clickable tags
 
 <Tag interactive>Machine learning</Tag>
 
+## Link
+
+Set `href` to render the tag as an anchor. Link tags reuse interactive styles. Do not wrap a `Tag` in an `<a>`; pass `href` on the tag itself. `href` is mutually exclusive with `filter`; when both are set, `filter` takes precedence.
+
+<Tag href="/components/Tag" type="red">red</Tag>
+<Tag href="/components/Tag" type="magenta">magenta</Tag>
+<Tag href="/components/Tag" type="purple">purple</Tag>
+<Tag href="/components/Tag" type="blue">blue</Tag>
+<Tag href="/components/Tag" type="cyan">cyan</Tag>
+<Tag href="/components/Tag" type="teal">teal</Tag>
+<Tag href="/components/Tag" type="green">green</Tag>
+<Tag href="/components/Tag" type="gray">gray</Tag>
+<Tag href="/components/Tag" type="cool-gray">cool-gray</Tag>
+<Tag href="/components/Tag" type="warm-gray">warm-gray</Tag>
+<Tag href="/components/Tag" type="high-contrast">high-contrast</Tag>
+<Tag href="/components/Tag" type="outline">outline</Tag>
+
 ## Disabled
 
-Both filterable and interactive tag variants support a disabled state.
+Filterable, interactive, and link tag variants support a disabled state.
 
 <Tag filter disabled>Machine learning</Tag>
 <Tag interactive disabled>Machine learning</Tag>
+<Tag href="/components/Tag" disabled>Machine learning</Tag>
 
 ## Tooltip
 

@@ -5,6 +5,7 @@ import { user } from "../utils/user";
 import ContainedListLabelChildren from "./ContainedList.labelChildren.test.svelte";
 import ContainedList from "./ContainedList.test.svelte";
 import ContainedListItemAction from "./ContainedListItem.action.test.svelte";
+import ContainedListItemHref from "./ContainedListItem.href.test.svelte";
 
 describe("ContainedList", () => {
   beforeEach(() => {
@@ -214,6 +215,49 @@ describe("ContainedList", () => {
 
     await user.click(dismissButton);
     expect(consoleLog).toHaveBeenCalledWith("action click");
+  });
+
+  it("should render href items as anchors with clickable styles", () => {
+    render(ContainedListItemHref);
+
+    const link = screen.getByRole("link", { name: "Documentation" });
+    expect(link).toHaveAttribute("href", "/docs");
+    expect(link).toHaveClass("bx--contained-list-item__content");
+    expect(link.closest("li")).toHaveClass(
+      "bx--contained-list-item--clickable",
+    );
+  });
+
+  it("should prefer href over interactive and forward click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ContainedListItemHref);
+
+    const link = screen.getByRole("link", { name: "Prefer href" });
+    expect(link.tagName).toBe("A");
+    expect(
+      screen.getByText("Prefer href").closest("li")?.querySelector("button"),
+    ).toBeNull();
+
+    await user.click(link);
+    expect(consoleLog).toHaveBeenCalledWith("click");
+  });
+
+  it("should keep button and div when href is unset", () => {
+    render(ContainedListItemHref);
+
+    const interactiveItem = screen.getByText("Interactive").closest("li");
+    assert(interactiveItem);
+    expect(interactiveItem.querySelector("button")).toBeInTheDocument();
+    expect(interactiveItem.querySelector("a")).toBeNull();
+
+    const staticItem = screen.getByText("Static").closest("li");
+    assert(staticItem);
+    expect(
+      staticItem.querySelector("div.bx--contained-list-item__content"),
+    ).toBeInTheDocument();
+    expect(staticItem.querySelector("button")).toBeNull();
+    expect(staticItem.querySelector("a")).toBeNull();
+    expect(staticItem).not.toHaveClass("bx--contained-list-item--clickable");
   });
 
   describe("ContainedListItem Generics", () => {

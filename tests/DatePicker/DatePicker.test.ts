@@ -137,6 +137,30 @@ describe("DatePicker", () => {
       expect(start).toHaveAttribute("readonly");
       expect(end).toHaveAttribute("readonly");
     });
+
+    it("keeps flatpickr's allowInput option in sync when readonly toggles after mount", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        readonly: false,
+      });
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+
+      const fp = (
+        input as unknown as { _flatpickr: { config: { allowInput: boolean } } }
+      )._flatpickr;
+      expect(fp.config.allowInput).toBe(true);
+
+      await rerender({
+        datePickerType: "single",
+        readonly: true,
+      });
+      await tick();
+
+      expect(fp.config.allowInput).toBe(false);
+    });
   });
 
   it("handles invalid state", () => {
@@ -159,28 +183,34 @@ describe("DatePicker", () => {
     expect(wrapper).toHaveClass("bx--date-picker-input__wrapper--warn");
   });
 
-  it.each([
-    "disabled",
-    "readonly",
-  ] as const)("suppresses invalid and warn states when %s", (state) => {
-    const { container } = render(DatePicker, {
-      [state]: true,
-      invalid: true,
-      invalidText: "Invalid date",
-      warn: true,
-      warnText: "Warning message",
-    });
+  it.each(["disabled", "readonly"] as const)(
+    "suppresses invalid and warn states when %s",
+    (state) => {
+      const { container } = render(DatePicker, {
+        [state]: true,
+        invalid: true,
+        invalidText: "Invalid date",
+        warn: true,
+        warnText: "Warning message",
+      });
 
-    const wrapper = container.querySelector(".bx--date-picker-input__wrapper");
-    expect(wrapper).not.toHaveClass("bx--date-picker-input__wrapper--invalid");
-    expect(wrapper).not.toHaveClass("bx--date-picker-input__wrapper--warn");
-    expect(
-      container.querySelector(".bx--date-picker__icon--invalid"),
-    ).toBeNull();
-    expect(container.querySelector(".bx--date-picker__icon--warn")).toBeNull();
-    expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
-    expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-  });
+      const wrapper = container.querySelector(
+        ".bx--date-picker-input__wrapper",
+      );
+      expect(wrapper).not.toHaveClass(
+        "bx--date-picker-input__wrapper--invalid",
+      );
+      expect(wrapper).not.toHaveClass("bx--date-picker-input__wrapper--warn");
+      expect(
+        container.querySelector(".bx--date-picker__icon--invalid"),
+      ).toBeNull();
+      expect(
+        container.querySelector(".bx--date-picker__icon--warn"),
+      ).toBeNull();
+      expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+    },
+  );
 
   it("handles helper text", () => {
     render(DatePicker, { helperText: "Helper message" });
@@ -439,17 +469,20 @@ describe("DatePicker", () => {
       ["d.m.Y", "10.02.2026"],
       ["d/m/y", "10/02/26"],
       ["M j, Y", "Feb 10, 2026"],
-    ])("derived pattern for %s is valid with the Unicode (u) flag", (dateFormat, sampleValue) => {
-      render(DatePicker, { dateFormat });
+    ])(
+      "derived pattern for %s is valid with the Unicode (u) flag",
+      (dateFormat, sampleValue) => {
+        render(DatePicker, { dateFormat });
 
-      const input = screen.getByLabelText("Date");
-      const pattern = input.getAttribute("pattern");
-      expect(pattern).toBeTruthy();
+        const input = screen.getByLabelText("Date");
+        const pattern = input.getAttribute("pattern");
+        expect(pattern).toBeTruthy();
 
-      // This is how browsers evaluate the HTML pattern attribute.
-      const re = new RegExp(`^(?:${pattern})$`, "u");
-      expect(re.test(sampleValue)).toBe(true);
-    });
+        // This is how browsers evaluate the HTML pattern attribute.
+        const re = new RegExp(`^(?:${pattern})$`, "u");
+        expect(re.test(sampleValue)).toBe(true);
+      },
+    );
   });
 
   describe("minDate and maxDate", () => {
@@ -722,6 +755,33 @@ describe("DatePicker", () => {
       expect(wrapper?.contains(calendar)).toBe(true);
       expect(calendar.classList.contains("static")).toBe(true);
     });
+
+    it("does not reapply static:true on a reactive re-run (#3444)", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        portalMenu: true,
+      });
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+
+      const fp = (
+        input as unknown as { _flatpickr: { config: { static: boolean } } }
+      )._flatpickr;
+      expect(fp.config.static).toBe(false);
+
+      // Trigger the `initCalendar` reactive statement to re-run (e.g. a
+      // minDate update) without touching `portalMenu` or `flatpickrProps`.
+      await rerender({
+        datePickerType: "single",
+        portalMenu: true,
+        minDate: "01/01/2024",
+      });
+      await tick();
+
+      expect(fp.config.static).toBe(false);
+    });
   });
 
   describe("month mode", () => {
@@ -803,6 +863,156 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("year mode", () => {
+    it("renders year mode", async () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "year",
+        dateFormat: "Y",
+      });
+
+      const input = screen.getByLabelText("Date");
+
+      const wrapper = container.querySelector(".bx--date-picker");
+      // Year mode reuses the single-mode input width styling.
+      expect(wrapper).toHaveClass("bx--date-picker--single");
+
+      expect(
+        screen.queryByLabelText("calendar-container"),
+      ).not.toBeInTheDocument();
+      await user.click(input);
+      expect(
+        await screen.findByLabelText("calendar-container"),
+      ).toBeInTheDocument();
+    });
+
+    it("renders a year grid instead of days", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(
+        calendar.querySelectorAll(".flatpickr-yearSelect-year"),
+      ).toHaveLength(12);
+      expect(calendar.querySelectorAll(".flatpickr-day")).toHaveLength(0);
+    });
+
+    it("labels the range to match the first and last rendered year", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      const years = calendar.querySelectorAll(".flatpickr-yearSelect-year");
+      const firstYear = years[0].textContent;
+      const lastYear = years[years.length - 1].textContent;
+
+      expect(
+        calendar.querySelector(".flatpickr-yearSelect-range"),
+      ).toHaveTextContent(`${firstYear} - ${lastYear}`);
+    });
+
+    it("removes the leftover year-input wrapper so the range label is the only child", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      const currentMonth = calendar.querySelector(".flatpickr-current-month");
+      expect(currentMonth?.querySelector(".numInputWrapper")).toBeNull();
+      expect(currentMonth?.children).toHaveLength(1);
+    });
+
+    it("rebuilds the grid and range label when changeYear is called programmatically", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "year",
+          dateFormat: "Y",
+          oncalendar: (cal: Instance | null | undefined) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      instance.open();
+      await tick();
+      const calendar = await screen.findByLabelText("calendar-container");
+      const yearsBefore = Array.from(
+        calendar.querySelectorAll(".flatpickr-yearSelect-year"),
+      ).map((el) => el.textContent);
+
+      instance.changeYear(instance.currentYear + 10);
+      await tick();
+
+      const yearsAfter = Array.from(
+        calendar.querySelectorAll(".flatpickr-yearSelect-year"),
+      ).map((el) => el.textContent);
+      expect(yearsAfter).not.toEqual(yearsBefore);
+      expect(
+        calendar.querySelector(".flatpickr-yearSelect-range"),
+      ).toHaveTextContent(
+        `${yearsAfter[0]} - ${yearsAfter[yearsAfter.length - 1]}`,
+      );
+    });
+
+    it("marks the calendar container for year-specific height styling", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(calendar).toHaveClass("bx--date-picker__calendar--year");
+    });
+
+    it("selects a year and dispatches change with the formatted date", async () => {
+      const changeHandler = vi.fn();
+      const currentDecadeStart =
+        new Date().getFullYear() - (new Date().getFullYear() % 10);
+      // Pick a year that is always in the initial decade grid (decadeStart - 1
+      // through decadeStart + 10), avoiding the current year cell when possible.
+      const targetYear = String(currentDecadeStart + 3);
+
+      render(DatePicker, {
+        datePickerType: "year",
+        dateFormat: "Y",
+        onchange: changeHandler,
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      await user.click(within(calendar).getByText(targetYear));
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      expect(input.value).toBe(targetYear);
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        dateStr: targetYear,
+      });
+    });
+
+    it("closes the calendar after selecting a year", async () => {
+      const currentDecadeStart =
+        new Date().getFullYear() - (new Date().getFullYear() % 10);
+      const targetYear = String(currentDecadeStart + 4);
+
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).toHaveClass("open");
+
+      await user.click(within(calendar).getByText(targetYear));
+      expect(calendar).not.toHaveClass("open");
+    });
+  });
+
   describe("fluid variant", () => {
     it("does not render fluid classes by default", () => {
       const { container } = render(DatePicker);
@@ -855,29 +1065,29 @@ describe("DatePicker", () => {
       );
     });
 
-    it.each([
-      { disabled: true },
-      { readonly: true },
-    ])("suppresses invalid and warn states when %o", (props) => {
-      const { container } = render(DatePicker, {
-        fluid: true,
-        datePickerType: "single",
-        invalid: true,
-        invalidText: "Invalid date",
-        warn: true,
-        warnText: "Warning message",
-        ...props,
-      });
+    it.each([{ disabled: true }, { readonly: true }])(
+      "suppresses invalid and warn states when %o",
+      (props) => {
+        const { container } = render(DatePicker, {
+          fluid: true,
+          datePickerType: "single",
+          invalid: true,
+          invalidText: "Invalid date",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        });
 
-      expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
-      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
-      expect(
-        container.querySelector(".bx--date-picker--fluid--invalid"),
-      ).toBeNull();
-      expect(
-        container.querySelector(".bx--date-picker--fluid--warn"),
-      ).toBeNull();
-    });
+        expect(screen.queryByText("Invalid date")).not.toBeInTheDocument();
+        expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+        expect(
+          container.querySelector(".bx--date-picker--fluid--invalid"),
+        ).toBeNull();
+        expect(
+          container.querySelector(".bx--date-picker--fluid--warn"),
+        ).toBeNull();
+      },
+    );
 
     it("inherits fluid from the FluidForm context", () => {
       const { container } = render(DatePickerFluidForm);

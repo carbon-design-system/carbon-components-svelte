@@ -38,6 +38,13 @@
   export let orderFiles: ComponentProps<FileUploader>["orderFiles"] = "append";
   export let iconDescription: ComponentProps<FileUploader>["iconDescription"] =
     undefined;
+  export let fileStatus: ComponentProps<FileUploader>["fileStatus"] = undefined;
+  export let fileInvalid: ComponentProps<FileUploader>["fileInvalid"] =
+    undefined;
+  export let fileErrorSubject: ComponentProps<FileUploader>["fileErrorSubject"] =
+    undefined;
+  export let fileErrorBody: ComponentProps<FileUploader>["fileErrorBody"] =
+    undefined;
 </script>
 
 <form data-testid="file-form">
@@ -55,6 +62,10 @@
     {preventDuplicate}
     {orderFiles}
     {iconDescription}
+    {fileStatus}
+    {fileInvalid}
+    {fileErrorSubject}
+    {fileErrorBody}
     bind:ref
     bind:files
     on:add={(e) => onAdd?.(e)}

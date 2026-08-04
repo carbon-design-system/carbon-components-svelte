@@ -1,10 +1,9 @@
 <script>
   /**
    * @restProps {form}
+   * @typedef {import("svelte/action").Action<HTMLFormElement, any>} FormAction
+   * @typedef {FormAction | [FormAction, any]} FormActionEntry
    */
-
-  import { setContext } from "svelte";
-  import Form from "../Form/Form.svelte";
 
   /**
    * Obtain a reference to the form element.
@@ -12,6 +11,18 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  /**
+   * Apply Svelte actions to the underlying form element.
+   * Each entry is an action or a `[action, parameter]` tuple.
+   * Use this for SvelteKit's `enhance` and other form actions that
+   * cannot target components with `use:`.
+   * @type {ReadonlyArray<FormActionEntry>}
+   */
+  export let actions = [];
+
+  import { setContext } from "svelte";
+  import Form from "../Form/Form.svelte";
 
   /**
    * Context published under the key `"carbon:Form"` for descendant inputs.
@@ -27,6 +38,7 @@
 
 <Form
   bind:ref
+  {actions}
   {...$$restProps}
   class={["bx--form--fluid", $$restProps.class].filter(Boolean).join(" ")}
   on:click
