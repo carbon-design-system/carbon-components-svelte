@@ -118,6 +118,7 @@
   import { floatingPosition } from "../utils/floatingPosition.js";
   import { getScrollableAncestors } from "../utils/getScrollableAncestors.js";
   import { rafThrottle } from "../utils/rafThrottle.js";
+  import { addPooledListener } from "../utils/windowListenerPool.js";
   import Portal from "./Portal.svelte";
 
   let mounted = true;
@@ -137,12 +138,43 @@
     }
   }
 
+  // Pooled `window` scroll/resize listeners: many `FloatingPortal` instances
+  // (every Tooltip, ListBoxMenu, Menu, ...) can be mounted at once while only
+  // a few are ever open, so each instance shares one real window listener
+  // per event type instead of registering its own for its whole mount
+  // lifetime.
+  /** @type {(() => void) | null} */
+  let unlistenWindowScroll = null;
+  /** @type {(() => void) | null} */
+  let unlistenWindowResize = null;
+
+  function addWindowListeners() {
+    if (!unlistenWindowScroll) {
+      unlistenWindowScroll = addPooledListener("scroll", scheduleUpdate, {
+        passive: true,
+      });
+    }
+    if (!unlistenWindowResize) {
+      unlistenWindowResize = addPooledListener("resize", scheduleUpdate, {
+        passive: true,
+      });
+    }
+  }
+
+  function removeWindowListeners() {
+    unlistenWindowScroll?.();
+    unlistenWindowScroll = null;
+    unlistenWindowResize?.();
+    unlistenWindowResize = null;
+  }
+
   onMount(() => {
     return () => {
       mounted = false;
       unobserveAnchor();
       unobserveFloating();
       removeScrollListeners();
+      removeWindowListeners();
       scheduleUpdate.cancel();
     };
   });
@@ -299,7 +331,10 @@
     .filter(Boolean)
     .join("; ");
 
-  $: if (!open) {
+  $: if (open) {
+    addWindowListeners();
+  } else {
+    removeWindowListeners();
     unobserveAnchor();
     unobserveFloating();
     removeScrollListeners();
@@ -335,11 +370,6 @@
     });
   }
 </script>
-
-<svelte:window
-  on:scroll|passive={open ? scheduleUpdate : undefined}
-  on:resize|passive={open ? scheduleUpdate : undefined}
-/>
 
 {#if open}
   <Portal

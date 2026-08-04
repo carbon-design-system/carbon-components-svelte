@@ -491,6 +491,66 @@ describe("FloatingPortal", () => {
     });
   });
 
+  describe("window listener pooling", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("shares one window scroll/resize listener across multiple open instances", async () => {
+      const addSpy = vi.spyOn(window, "addEventListener");
+
+      render(FloatingPortalTest, { props: { open: true } });
+      await screen.findByText("Floating content");
+      render(FloatingPortalTest, { props: { open: true } });
+      await screen.findAllByText("Floating content");
+
+      const scrollAdds = addSpy.mock.calls.filter(
+        ([event]) => event === "scroll",
+      ).length;
+      const resizeAdds = addSpy.mock.calls.filter(
+        ([event]) => event === "resize",
+      ).length;
+      expect(scrollAdds).toBe(1);
+      expect(resizeAdds).toBe(1);
+    });
+
+    it("does not hold a window scroll/resize listener while closed", async () => {
+      const addSpy = vi.spyOn(window, "addEventListener");
+
+      render(FloatingPortalTest, { props: { open: false } });
+      await tick();
+
+      const scrollAdds = addSpy.mock.calls.filter(
+        ([event]) => event === "scroll",
+      ).length;
+      const resizeAdds = addSpy.mock.calls.filter(
+        ([event]) => event === "resize",
+      ).length;
+      expect(scrollAdds).toBe(0);
+      expect(resizeAdds).toBe(0);
+    });
+
+    it("removes the pooled window listener once the last open instance unmounts", async () => {
+      const removeSpy = vi.spyOn(window, "removeEventListener");
+
+      const { unmount } = render(FloatingPortalTest, {
+        props: { open: true },
+      });
+      await screen.findByText("Floating content");
+
+      unmount();
+
+      const scrollRemoves = removeSpy.mock.calls.filter(
+        ([event]) => event === "scroll",
+      ).length;
+      const resizeRemoves = removeSpy.mock.calls.filter(
+        ([event]) => event === "resize",
+      ).length;
+      expect(scrollRemoves).toBe(1);
+      expect(resizeRemoves).toBe(1);
+    });
+  });
+
   describe("scrollable ancestor tracking", () => {
     afterEach(() => {
       vi.restoreAllMocks();
