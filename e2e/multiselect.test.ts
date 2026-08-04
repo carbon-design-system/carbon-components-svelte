@@ -24,6 +24,20 @@ test.describe("MultiSelect", () => {
     await expect(page.getByTestId("selected-count")).toContainText("2");
   });
 
+  test("shift+click selects the range between the anchor and the clicked item", async ({
+    page,
+  }) => {
+    const multiselect = page.getByTestId("multiselect-fruits");
+    await multiselect.click();
+
+    await page.getByRole("option", { name: "Apple" }).click();
+    await page
+      .getByRole("option", { name: "Cherry" })
+      .click({ modifiers: ["Shift"] });
+
+    await expect(page.getByTestId("selected-count")).toContainText("3");
+  });
+
   test("filters items when filterable", async ({ page }) => {
     const multiselect = page.getByTestId("multiselect-fruits");
     await multiselect.click();
