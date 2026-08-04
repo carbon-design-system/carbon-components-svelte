@@ -291,6 +291,58 @@ describe("MultiSelect", () => {
     });
   });
 
+  describe("shift+click range selection", () => {
+    const rangeItems = [
+      { id: "0", text: "Alpha" },
+      { id: "1", text: "Bravo" },
+      { id: "2", text: "Charlie" },
+      { id: "3", text: "Delta" },
+    ];
+
+    it("selects every item between the anchor and the shift-clicked item", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: { items: rangeItems },
+      });
+
+      await openMenu();
+      await toggleOption("Alpha");
+
+      const deltaOption = screen.getByRole("option", { name: "Delta" });
+      await user.keyboard("{Shift>}");
+      await user.click(deltaOption);
+      await user.keyboard("{/Shift}");
+
+      for (const option of screen.getAllByRole("option")) {
+        expect(option).toHaveAttribute("aria-selected", "true");
+      }
+      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toEqual(
+        expect.arrayContaining(["0", "1", "2", "3"]),
+      );
+      expect(consoleLog.mock.calls.at(-1)?.[1].selectedIds).toHaveLength(4);
+    });
+
+    it("falls back to a single toggle when shift+click has no prior anchor", async () => {
+      render(MultiSelect, {
+        props: { items: rangeItems },
+      });
+
+      await openMenu();
+
+      const charlieOption = screen.getByRole("option", { name: "Charlie" });
+      await user.keyboard("{Shift>}");
+      await user.click(charlieOption);
+      await user.keyboard("{/Shift}");
+
+      expect(charlieOption).toHaveAttribute("aria-selected", "true");
+      for (const option of screen.getAllByRole("option")) {
+        if (option !== charlieOption) {
+          expect(option).toHaveAttribute("aria-selected", "false");
+        }
+      }
+    });
+  });
+
   describe("isSelectAll behavior", () => {
     const itemsWithSelectAll = [
       { id: "select-all", text: "All roles", isSelectAll: true },

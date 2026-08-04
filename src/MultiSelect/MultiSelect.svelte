@@ -321,6 +321,8 @@
   let listScrollTop = 0;
   let prevOpen = false;
   let internalSelectedIdsRef = selectedIds;
+  /** Anchor item id for shift+click range selection; cleared when selection is reset entirely. */
+  let lastSelectedItemId = null;
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
@@ -363,6 +365,45 @@
     highlightOrigin = "keyboard";
   }
 
+  /**
+   * Sync the isSelectAll pseudo-item's checked state to whether every selectable item is
+   * checked. Mutates `sortedItems` in place; callers reassign it afterward.
+   */
+  function syncSelectAllItem() {
+    if (!hasSelectAll) return;
+
+    const newSelectableChecked = sortedItems.filter(
+      (sortedItem) =>
+        !sortedItem.disabled && !sortedItem.isSelectAll && sortedItem.checked,
+    ).length;
+    const newAllSelected =
+      selectableItems.length > 0 &&
+      newSelectableChecked === selectableItems.length;
+    const selectAllIndex = sortedItems.findIndex(
+      (sortedItem) => sortedItem.isSelectAll,
+    );
+    if (
+      selectAllIndex !== -1 &&
+      sortedItems[selectAllIndex].checked !== newAllSelected
+    ) {
+      sortedItems[selectAllIndex] = {
+        ...sortedItems[selectAllIndex],
+        checked: newAllSelected,
+      };
+    }
+  }
+
+  /** Apply `selectionFeedback: "top"` bookkeeping after a checked-state change. */
+  function applyTopSelectionFeedback() {
+    if (selectionFeedback !== "top") return;
+
+    selectedIds = sortedItems
+      .filter((sortedItem) => sortedItem.checked && !sortedItem.isSelectAll)
+      .map((sortedItem) => sortedItem.id);
+    internalSelectedIdsRef = selectedIds;
+    sortedItems = sort();
+  }
+
   /** Handle selection of an item, including isSelectAll logic. */
   function selectItem(item) {
     // Read-only allows opening and navigating the menu to review values, but
@@ -383,40 +424,47 @@
         sortedItems[itemIndex] = { ...item, checked: !item.checked };
       }
 
-      if (hasSelectAll) {
-        const newSelectableChecked = sortedItems.filter(
-          (sortedItem) =>
-            !sortedItem.disabled &&
-            !sortedItem.isSelectAll &&
-            sortedItem.checked,
-        ).length;
-        const newAllSelected =
-          selectableItems.length > 0 &&
-          newSelectableChecked === selectableItems.length;
-        const selectAllIndex = sortedItems.findIndex(
-          (sortedItem) => sortedItem.isSelectAll,
-        );
-        if (
-          selectAllIndex !== -1 &&
-          sortedItems[selectAllIndex].checked !== newAllSelected
-        ) {
-          sortedItems[selectAllIndex] = {
-            ...sortedItems[selectAllIndex],
-            checked: newAllSelected,
-          };
-        }
-      }
-
+      syncSelectAllItem();
       sortedItems = [...sortedItems];
     }
 
-    if (selectionFeedback === "top") {
-      selectedIds = sortedItems
-        .filter((sortedItem) => sortedItem.checked && !sortedItem.isSelectAll)
-        .map((sortedItem) => sortedItem.id);
-      internalSelectedIdsRef = selectedIds;
-      sortedItems = sort();
-    }
+    applyTopSelectionFeedback();
+  }
+
+  /**
+   * Apply `checked` to every selectable item between the anchor item and `targetIndex`
+   * (inclusive), where `targetIndex` is a position in `itemsToUse`. Returns `false` if the
+   * anchor item is no longer present (for example, filtered out), so the caller can fall
+   * back to a single toggle.
+   * @type {(targetIndex: number, checked: boolean) => boolean}
+   */
+  function selectItemRange(targetIndex, checked) {
+    if (readonly) return false;
+
+    const anchorIndex = itemsToUse.findIndex(
+      (item) => item.id === lastSelectedItemId,
+    );
+    if (anchorIndex === -1) return false;
+
+    const start = Math.min(anchorIndex, targetIndex);
+    const end = Math.max(anchorIndex, targetIndex);
+    const rangeIds = new Set(
+      itemsToUse
+        .slice(start, end + 1)
+        .filter((item) => !item.isSelectAll && !isItemDisabled(item))
+        .map((item) => item.id),
+    );
+
+    sortedItems = sortedItems.map((sortedItem) =>
+      rangeIds.has(sortedItem.id) && sortedItem.checked !== checked
+        ? { ...sortedItem, checked }
+        : sortedItem,
+    );
+
+    syncSelectAllItem();
+    applyTopSelectionFeedback();
+
+    return true;
   }
 
   afterUpdate(() => {
@@ -804,6 +852,7 @@
               on:clear
               on:clear={() => {
               selectedIds = [];
+              lastSelectedItemId = null;
               sortedItems = sortedItems.map((item) => ({
                 ...item,
                 checked: false,
@@ -875,6 +924,7 @@
               if (!open) open = true;
             } else if (event.key === "Backspace" && value === "") {
               selectedIds = [];
+              lastSelectedItemId = null;
               sortedItems = sortedItems.map((item) => ({
                 ...item,
                 checked: false,
@@ -885,6 +935,7 @@
               } else {
                 value = "";
                 selectedIds = [];
+                lastSelectedItemId = null;
                 sortedItems = sortedItems.map((item) => ({
                   ...item,
                   checked: false,
@@ -1019,6 +1070,7 @@
               on:clear
               on:clear={() => {
               selectedIds = [];
+              lastSelectedItemId = null;
               sortedItems = sortedItems.map((item) => ({
                 ...item,
                 checked: false,
@@ -1092,7 +1144,15 @@
                     // Label default synthesizes a second click; without this,
                     // selectItem runs twice and the toggle nets to no change.
                     event.preventDefault();
-                    selectItem(item);
+                    const usedRange =
+                      event.shiftKey &&
+                      lastSelectedItemId !== null &&
+                      !item.isSelectAll &&
+                      selectItemRange(actualIndex, !item.checked);
+                    if (!usedRange) {
+                      selectItem(item);
+                    }
+                    lastSelectedItemId = item.id;
                     if (filterable) {
                       inputRef?.focus();
                     } else {
@@ -1160,7 +1220,15 @@
                 // Label default synthesizes a second click; without this,
                 // selectItem runs twice and the toggle nets to no change.
                 event.preventDefault();
-                selectItem(item);
+                const usedRange =
+                  event.shiftKey &&
+                  lastSelectedItemId !== null &&
+                  !item.isSelectAll &&
+                  selectItemRange(index, !item.checked);
+                if (!usedRange) {
+                  selectItem(item);
+                }
+                lastSelectedItemId = item.id;
                 if (filterable) {
                   inputRef?.focus();
                 } else {
