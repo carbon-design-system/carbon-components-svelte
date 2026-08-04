@@ -160,7 +160,7 @@ describe("CopyInput", () => {
     ).toHaveTextContent("Copied!");
   });
 
-  it("async copy failure does not show feedback and dispatches copy:error", async () => {
+  it("async copy failure shows error feedback and dispatches copy:error", async () => {
     const error = new Error("copy failed");
     const copy = vi.fn().mockRejectedValue(error);
     const onCopyError = vi.fn();
@@ -173,10 +173,15 @@ describe("CopyInput", () => {
     await user.click(button);
 
     expect(onCopyError).toHaveBeenCalledWith({ error });
-    expect(button).not.toHaveClass("bx--copy-btn--fade-in");
+    expect(button).toHaveClass("bx--copy-btn--fade-in");
+
+    const portal = document.querySelector("[data-floating-portal]");
+    expect(
+      portal?.querySelector(".bx--tooltip-portal__content"),
+    ).toHaveTextContent("Failed to copy");
 
     await user.click(button);
-    expect(copy).toHaveBeenCalledTimes(2);
+    expect(copy).toHaveBeenCalledTimes(1);
   });
 
   it("dispatches mouseenter:copy-button from the copy button", () => {

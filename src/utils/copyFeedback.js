@@ -3,14 +3,17 @@
 /** @typedef {'fade-in' | 'fade-out' | undefined} CopyFeedbackAnimation */
 
 /**
- * Copy-button "Copied!" feedback (fade-in/out, portal tooltip).
+ * Copy-button feedback (fade-in/out, portal tooltip).
  * `copyActive` blocks a second click before Svelte assigns `animation`.
+ * On copy failure, still opens feedback (`isError`) so callers can show
+ * error text in the same tooltip slot, then rethrows.
  *
  * @param {() => void} [onSync] - Run after internal state changes (sync component `let`s).
  * @returns {{
  *   get animation(): CopyFeedbackAnimation,
  *   get feedbackOpen(): boolean,
  *   get copyPending(): boolean,
+ *   get isError(): boolean,
  *   dismiss: () => void,
  *   onClick: (performCopy: () => void | Promise<void>, feedbackTimeout: number, portalled?: boolean) => Promise<void>,
  *   onAnimationEnd: (event: { animationName: string }) => void,
@@ -25,9 +28,35 @@ export function createCopyFeedbackState(onSync) {
   let timeout;
   let copyActive = false;
   let copyPending = false;
+  let isError = false;
 
   function notify() {
     onSync?.();
+  }
+
+  /**
+   * @param {number} feedbackTimeout
+   * @param {boolean} portalled
+   * @param {boolean} error
+   */
+  function openFeedback(feedbackTimeout, portalled, error) {
+    copyPending = false;
+    isError = error;
+    animation = "fade-in";
+    feedbackOpen = true;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      if (portalled) {
+        feedbackOpen = false;
+        animation = undefined;
+        copyActive = false;
+        isError = false;
+      } else {
+        animation = "fade-out";
+      }
+      notify();
+    }, feedbackTimeout);
+    notify();
   }
 
   function dismiss() {
@@ -35,6 +64,7 @@ export function createCopyFeedbackState(onSync) {
     animation = undefined;
     copyActive = false;
     copyPending = false;
+    isError = false;
     clearTimeout(timeout);
     timeout = undefined;
     notify();
@@ -45,6 +75,7 @@ export function createCopyFeedbackState(onSync) {
     animation = undefined;
     copyActive = false;
     copyPending = false;
+    isError = false;
     clearTimeout(timeout);
     timeout = undefined;
   }
@@ -63,32 +94,17 @@ export function createCopyFeedbackState(onSync) {
 
     copyActive = true;
     copyPending = true;
+    isError = false;
     notify();
 
     try {
       await performCopy();
     } catch (error) {
-      copyActive = false;
-      copyPending = false;
-      notify();
+      openFeedback(feedbackTimeout, portalled, true);
       throw error;
     }
 
-    copyPending = false;
-    animation = "fade-in";
-    feedbackOpen = true;
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      if (portalled) {
-        feedbackOpen = false;
-        animation = undefined;
-        copyActive = false;
-      } else {
-        animation = "fade-out";
-      }
-      notify();
-    }, feedbackTimeout);
-    notify();
+    openFeedback(feedbackTimeout, portalled, false);
   }
 
   /** @param {{ animationName: string }} event */
@@ -97,6 +113,7 @@ export function createCopyFeedbackState(onSync) {
       animation = undefined;
       feedbackOpen = false;
       copyActive = false;
+      isError = false;
       notify();
     }
   }
@@ -110,6 +127,9 @@ export function createCopyFeedbackState(onSync) {
     },
     get copyPending() {
       return copyPending;
+    },
+    get isError() {
+      return isError;
     },
     dismiss,
     onClick,
