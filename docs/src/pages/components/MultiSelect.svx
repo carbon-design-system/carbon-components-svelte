@@ -151,6 +151,42 @@ Prevent automatic alphabetical ordering by passing a no-op function to `sortItem
     sortItem="{() => {}}"
   />
 
+## Grouped items
+
+Set a `group` value on items to render them under a non-selectable header. Items sharing a `group` are kept together in first-appearance order, and `sortItem` sorts within each group. Items without a `group` render without a header.
+
+`selectedIds` is a flat array regardless of grouping. Bind to it and bucket by `group` to aggregate the selection per group.
+
+### Basic
+
+<FileSource src="/framed/MultiSelect/GroupedMultiSelect" />
+
+### Select all
+
+Combine grouping with a select-all item by setting `isSelectAll` on one item. The select-all item renders above the groups, without a header, and toggles every item across all groups.
+
+<FileSource src="/framed/MultiSelect/GroupedMultiSelectSelectAll" />
+
+### Selection-aware sorting
+
+`sortItem` runs within each group, and every item it receives carries a `checked` flag. Sort on `checked` to float selected items to the top of their group. Set `selectionFeedback` to `"top"` to re-sort on each selection so the order stays current.
+
+When items are grouped, `selectionFeedback` no longer hoists selected items to the top of the entire list, which would pull them out of their group. Items stay within their group; use `sortItem` to reorder within a group instead.
+
+<FileSource src="/framed/MultiSelect/GroupedMultiSelectSortItem" />
+
+### Custom header
+
+Customize the group header with the `group` slot, which exposes `group` (the label) and `items` (the group's items, each with a `checked` flag).
+
+<FileSource src="/framed/MultiSelect/GroupedMultiSelectCustomHeader" />
+
+### Virtualization
+
+Grouped lists don't virtualize automatically because group headers break the uniform row height virtualization relies on. Set `virtualize` explicitly to opt in, as in this 6,000-item, six-group example. Scroll position can drift near group boundaries as a result, so reserve virtualized grouping for datasets too large to render in full.
+
+<FileSource src="/framed/MultiSelect/GroupedMultiSelectVirtualized" />
+
 ## Filterable
 
 Enable filtering by setting `filterable` to `true`. This example includes a placeholder text for the filter input.

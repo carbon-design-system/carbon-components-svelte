@@ -19,6 +19,7 @@ import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectBindValue from "./MultiSelectBindValue.test.svelte";
 import MultiSelectDuplicateIds from "./MultiSelectDuplicateIds.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
+import MultiSelectGroupSlot from "./MultiSelectGroupSlot.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
 import MultiSelectItemSlot from "./MultiSelectItemSlot.test.svelte";
 import MultiSelectItemToStringId from "./MultiSelectItemToStringId.test.svelte";
@@ -1900,12 +1901,15 @@ describe("MultiSelect", () => {
       type Item = { id: string; text: string };
 
       const sortItem: ComponentProps<MultiSelectComponent<Item>>["sortItem"] = (
-        a: Item,
-        b: Item,
+        a,
+        b,
       ) => a.text.localeCompare(b.text, "en", { numeric: true });
 
+      // The comparator receives items augmented with their `checked` state.
       expectTypeOf(sortItem).returns.toEqualTypeOf<number>();
-      expectTypeOf(sortItem).parameters.toEqualTypeOf<[Item, Item]>();
+      expectTypeOf(sortItem).parameters.toEqualTypeOf<
+        [Item & { checked: boolean }, Item & { checked: boolean }]
+      >();
     });
 
     it('itemToString may return string or Item["id"] (matches default text ?? id)', () => {
@@ -3613,5 +3617,200 @@ describe("MultiSelect", () => {
     expect(listBox.children).toHaveLength(2);
     expect(listBox.children[0]).toHaveClass("bx--list-box__label");
     expect(listBox.children[1]).toHaveClass("bx--list-box__field");
+  });
+
+  describe("Grouping", () => {
+    const groupedItems = [
+      { id: "0", text: "Apple", group: "Fruits" },
+      { id: "1", text: "Carrot", group: "Vegetables" },
+      { id: "2", text: "Mango", group: "Fruits" },
+    ] as const;
+
+    it("renders a non-selectable header per group and keeps group items contiguous", () => {
+      render(MultiSelect, {
+        props: { items: groupedItems, labelText: "Food", open: true },
+      });
+
+      const headers = screen.getAllByText(
+        (text, element) =>
+          element?.classList.contains(
+            "bx--list-box__menu-item--group-header",
+          ) === true &&
+          (text === "Fruits" || text === "Vegetables"),
+      );
+      expect(headers.map((header) => header.textContent?.trim())).toEqual([
+        "Fruits",
+        "Vegetables",
+      ]);
+
+      for (const header of headers) {
+        expect(header.getAttribute("role")).toBe("presentation");
+      }
+
+      // Fruits items render together before Vegetables, regardless of input order.
+      expect(nthRenderedOptionText(0)).toBe("Apple");
+      expect(nthRenderedOptionText(1)).toBe("Mango");
+      expect(nthRenderedOptionText(2)).toBe("Carrot");
+    });
+
+    it("marks the menu as grouped for edge padding, but not ungrouped menus", () => {
+      const { unmount } = render(MultiSelect, {
+        props: { items: groupedItems, labelText: "Food", open: true },
+      });
+
+      const groupedMenu = document.querySelector('[role="listbox"]');
+      expect(groupedMenu).toHaveClass("bx--list-box__menu");
+      expect(groupedMenu).toHaveClass("bx--list-box__menu--grouped");
+      unmount();
+
+      render(MultiSelect, {
+        props: { items, labelText: "Contact", open: true },
+      });
+      expect(document.querySelector('[role="listbox"]')).not.toHaveClass(
+        "bx--list-box__menu--grouped",
+      );
+    });
+
+    it("associates each option with its group header via aria-describedby", () => {
+      render(MultiSelect, {
+        props: { items: groupedItems, labelText: "Food", open: true },
+      });
+
+      const apple = screen
+        .getByText((text) => text.trim() === "Apple")
+        .closest('[role="option"]');
+      const headerId = apple?.getAttribute("aria-describedby");
+      assert(headerId);
+
+      const header = document.getElementById(headerId);
+      expect(header?.textContent?.trim()).toBe("Fruits");
+    });
+
+    it("toggles a grouped option without disturbing selectedIds semantics", async () => {
+      render(MultiSelect, {
+        props: { items: groupedItems, labelText: "Food", open: true },
+      });
+
+      const logSpy = vi.spyOn(console, "log");
+      await toggleOption("Mango");
+
+      expect(logSpy).toHaveBeenCalledWith(
+        "select",
+        expect.objectContaining({ selectedIds: ["2"] }),
+      );
+    });
+
+    it("treats an empty-string group as ungrouped (no header)", () => {
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "0", text: "Apple", group: "" },
+            { id: "1", text: "Carrot", group: "Vegetables" },
+          ],
+          labelText: "Food",
+          open: true,
+        },
+      });
+
+      const headers = document.querySelectorAll(
+        ".bx--list-box__menu-item--group-header",
+      );
+      // Only the non-empty "Vegetables" group renders a header.
+      expect(
+        Array.from(headers).map((header) => header.textContent?.trim()),
+      ).toEqual(["Vegetables"]);
+    });
+
+    it("exposes group label and items (with checked state) to the group slot", () => {
+      render(MultiSelectGroupSlot, {
+        props: {
+          items: groupedItems,
+          selectedIds: ["0"],
+          open: true,
+        },
+      });
+
+      // "Fruits" has Apple (checked) + Mango → 1/2; "Vegetables" has Carrot → 0/1.
+      expect(screen.getByTestId("group-Fruits")).toHaveTextContent(
+        "Fruits: 1/2",
+      );
+      expect(screen.getByTestId("group-Vegetables")).toHaveTextContent(
+        "Vegetables: 0/1",
+      );
+    });
+
+    it("supports isSelectAll alongside grouping", async () => {
+      const logSpy = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "all", text: "All", isSelectAll: true },
+            { id: "0", text: "Apple", group: "Fruits" },
+            { id: "1", text: "Carrot", group: "Vegetables" },
+            { id: "2", text: "Mango", group: "Fruits" },
+          ],
+          labelText: "Food",
+          open: true,
+        },
+      });
+
+      // Select-all renders first, headerless (it has no group).
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveTextContent("All");
+
+      await toggleOption("All");
+
+      // Select-all toggles every grouped item across all groups; the
+      // isSelectAll entry is excluded from selectedIds.
+      const selectCall = logSpy.mock.calls.find((call) => call[0] === "select");
+      assert(selectCall);
+      expect(new Set(selectCall[1].selectedIds)).toEqual(
+        new Set(["0", "1", "2"]),
+      );
+    });
+
+    it("sorts within a group using sortItem with the checked flag", () => {
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "0", text: "Apple", group: "Fruits" },
+            { id: "1", text: "Mango", group: "Fruits" },
+            { id: "2", text: "Cherry", group: "Fruits" },
+          ],
+          selectedIds: ["2"],
+          selectionFeedback: "top",
+          sortItem: (a, b) => {
+            if (a.checked !== b.checked) return a.checked ? -1 : 1;
+            return a.text.localeCompare(b.text);
+          },
+          labelText: "Food",
+          open: true,
+        },
+      });
+
+      // Cherry is selected, so it floats to the top of its group; the rest
+      // stay alphabetical within the same group.
+      expect(nthRenderedOptionText(0)).toBe("Cherry");
+      expect(nthRenderedOptionText(1)).toBe("Apple");
+      expect(nthRenderedOptionText(2)).toBe("Mango");
+    });
+
+    it("keeps items in their group regardless of selectionFeedback", () => {
+      render(MultiSelect, {
+        props: {
+          items: groupedItems,
+          selectedIds: ["2"],
+          selectionFeedback: "top",
+          labelText: "Food",
+          open: true,
+        },
+      });
+
+      // selectionFeedback="top" would normally hoist the checked item, but
+      // grouping keeps Mango within Fruits, after Apple.
+      expect(nthRenderedOptionText(0)).toBe("Apple");
+      expect(nthRenderedOptionText(1)).toBe("Mango");
+      expect(nthRenderedOptionText(2)).toBe("Carrot");
+    });
   });
 });
