@@ -31,6 +31,14 @@ For options inside `ContextMenuGroup`, see [Selectable](#selectable), [Selectabl
 
 <FileSource src="/framed/ContextMenu/ContextMenuOptionProps" />
 
+## Scrollable
+
+Set `maxHeight` to cap the menu height and scroll the remaining items. A number is treated as pixels; a string is used as any CSS length, such as `"10rem"`. Keyboard navigation scrolls the focused item into view.
+
+ContextMenu flips above the cursor when the menu doesn't otherwise fit below it, but always renders at `maxHeight` regardless of which side has room - a fixed value can still overflow the viewport edge on the side it lands on. This example computes `maxHeight` from the click position so the menu always fills, but never exceeds, whichever side has more space.
+
+<FileSource src="/framed/ContextMenu/ContextMenuScrollable" />
+
 ## Nested menu
 
 Put children inside a parent `ContextMenuOption` to open a flyout submenu. Use `indented` on the parent when it has no icon so the label aligns with other rows.
