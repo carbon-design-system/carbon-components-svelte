@@ -664,4 +664,22 @@ describe("ContextMenu", () => {
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
   });
+
+  describe("maxHeight", () => {
+    it("caps the menu height and marks it scrollable", () => {
+      render(ContextMenu, { props: { open: true, maxHeight: 240 } });
+
+      const menu = screen.getAllByRole("menu")[0];
+      expect(menu).toHaveClass("bx--menu--scrollable");
+      expect(menu).toHaveStyle("max-height: 240px");
+    });
+
+    it("renders neither the class nor the style when maxHeight is unset", () => {
+      render(ContextMenu, { props: { open: true } });
+
+      const menu = screen.getAllByRole("menu")[0];
+      expect(menu).not.toHaveClass("bx--menu--scrollable");
+      expect(menu.style.maxHeight).toBe("");
+    });
+  });
 });
