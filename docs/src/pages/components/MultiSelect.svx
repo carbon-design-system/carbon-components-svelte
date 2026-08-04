@@ -93,7 +93,7 @@ renders, along with each respective item's id set to the value attribute.
 
 ## Selection
 
-Control which items start selected, how selections reorder the list, and how to read the resolved order.
+Control which items start selected, how selections reorder the list, and how to read the resolved order. Hold <DocKbd label="Shift" /> while clicking an item to select every item between it and the last item clicked.
 
 ### Initial selection
 
