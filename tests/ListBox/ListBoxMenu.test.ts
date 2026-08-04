@@ -155,6 +155,64 @@ describe("ListBoxMenu", () => {
       expect(floatingPortal).toHaveAttribute("data-floating-direction", "top");
     });
 
+    it('should prefer bottom and flip when direction is "auto"', async () => {
+      const original = Element.prototype.getBoundingClientRect;
+      Element.prototype.getBoundingClientRect = function () {
+        if (this.hasAttribute?.("data-floating-portal")) {
+          return {
+            x: 0,
+            y: 0,
+            width: 150,
+            height: 200,
+            top: 0,
+            right: 150,
+            bottom: 200,
+            left: 0,
+            toJSON() {
+              return this;
+            },
+          } as DOMRect;
+        }
+        if (this.getAttribute?.("data-testid") === "anchor") {
+          return {
+            x: 100,
+            y: 750,
+            width: 150,
+            height: 40,
+            top: 750,
+            right: 250,
+            bottom: 790,
+            left: 100,
+            toJSON() {
+              return this;
+            },
+          } as DOMRect;
+        }
+        return original.call(this);
+      };
+
+      try {
+        render(ListBoxMenu, {
+          props: {
+            slotContent: "Auto direction menu",
+            portal: true,
+            open: true,
+            direction: "auto",
+          },
+        });
+
+        const menu = await screen.findByText("Auto direction menu");
+        await tick();
+        const floatingPortal = menu.closest("[data-floating-portal]");
+        expect(floatingPortal).toHaveAttribute(
+          "data-floating-direction",
+          "top",
+        );
+      } finally {
+        Element.prototype.getBoundingClientRect = original;
+      }
+    });
+
     it("should expose ref when portal is true", async () => {
       const { component } = render(ListBoxMenu, {
         props: { slotContent: "Portal ref menu", portal: true, open: true },
