@@ -19,6 +19,7 @@
     undefined;
   export let iconDescription: ComponentProps<ComboButton>["iconDescription"] =
     undefined;
+  export let maxHeight: ComponentProps<ComboButton>["maxHeight"] = undefined;
 
   export let open = false;
   /** Called with the name of each forwarded event, e.g. `click` or `click:trigger`. */
@@ -41,6 +42,7 @@
   {tooltipAlignment}
   {tooltipAlign}
   {iconDescription}
+  {maxHeight}
   bind:open
   on:click={() => onEvent?.("click")}
   on:click:trigger={() => onEvent?.("click:trigger")}
