@@ -164,4 +164,30 @@ describe("ComboButton", () => {
     expect(trigger).toHaveClass("bx--btn--icon-only--right");
     expect(trigger).not.toHaveClass("bx--btn--icon-only--top");
   });
+
+  describe("maxHeight", () => {
+    it("caps the menu height and marks it scrollable", async () => {
+      render(ComboButtonFixture, { props: { maxHeight: 240 } });
+
+      await user.click(
+        screen.getByRole("button", { name: "Additional actions" }),
+      );
+
+      const menu = screen.getByRole("menu");
+      expect(menu).toHaveClass("bx--menu--scrollable");
+      expect(menu).toHaveStyle("max-height: 240px");
+    });
+
+    it("renders neither the class nor the style when maxHeight is unset", async () => {
+      render(ComboButtonFixture);
+
+      await user.click(
+        screen.getByRole("button", { name: "Additional actions" }),
+      );
+
+      const menu = screen.getByRole("menu");
+      expect(menu).not.toHaveClass("bx--menu--scrollable");
+      expect(menu.style.maxHeight).toBe("");
+    });
+  });
 });
