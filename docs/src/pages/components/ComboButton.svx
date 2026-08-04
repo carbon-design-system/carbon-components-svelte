@@ -99,6 +99,18 @@ Set `disabled` to `true` to disable both the primary action and trigger buttons.
   <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
 </ComboButton>
 
+## Scrollable
+
+Set `maxHeight` to cap the menu height and scroll the remaining items. A number is treated as pixels; a string is used as any CSS length, such as `"10rem"`. Keyboard navigation scrolls the focused item into view.
+
+<ComboButton labelText="Save" maxHeight="10rem">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+  <MenuItem on:click={() => console.log("Save and close")}>Save and close</MenuItem>
+  <MenuItem on:click={() => console.log("Save as template")}>Save as template</MenuItem>
+  <MenuItem on:click={() => console.log("Save to drive")}>Save to drive</MenuItem>
+</ComboButton>
+
 ## Menu items
 
 `MenuItem` takes `disabled`, an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups. See [MenuButton](/components/MenuButton#menu-items) for the full set of examples and keyboard/hover behavior for submenus.
