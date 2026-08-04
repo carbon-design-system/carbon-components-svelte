@@ -36,6 +36,7 @@
   export let helperText: ComponentProps<MultiSelect>["helperText"] = "";
   export let virtualize: ComponentProps<MultiSelect>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<MultiSelect>["portalMenu"] = false;
+  export let maxHeight: ComponentProps<MultiSelect>["maxHeight"] = undefined;
   export let sortItem: ComponentProps<MultiSelect>["sortItem"] = undefined;
   export let open: ComponentProps<MultiSelect>["open"] = undefined;
   export let ariaLabel: ComponentProps<MultiSelect>["aria-label"] = undefined;
@@ -73,6 +74,7 @@
   {helperText}
   {virtualize}
   {portalMenu}
+  {maxHeight}
   {sortItem}
   {open}
   {fluid}

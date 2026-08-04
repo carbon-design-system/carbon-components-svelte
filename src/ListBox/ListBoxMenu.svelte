@@ -43,7 +43,19 @@
    */
   export let portalHostClass = undefined;
 
+  /**
+   * Specify the maximum height of the menu.
+   * A number is treated as pixels; a string is used as a CSS length.
+   * The menu scrolls once its items exceed the height.
+   * @type {number | string}
+   */
+  export let maxHeight = undefined;
+
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+
+  $: maxHeightStyle =
+    typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
+  $: maxHeightCss = maxHeightStyle ? `max-height: ${maxHeightStyle};` : "";
 </script>
 
 {#if portal}
@@ -51,11 +63,11 @@
     <div class={portalHostClass}>
       <div
         bind:this={ref}
+        {...$$restProps}
         role="listbox"
         id="menu-{id}"
         class:bx--list-box__menu={true}
-        style="position: static; {$$restProps.style || ''}"
-        {...$$restProps}
+        style="position: static; {maxHeightCss} {$$restProps.style || ''}"
         on:scroll
         on:mouseleave
       >
@@ -66,10 +78,11 @@
 {:else}
   <div
     bind:this={ref}
+    {...$$restProps}
     role="listbox"
     id="menu-{id}"
     class:bx--list-box__menu={true}
-    {...$$restProps}
+    style="{maxHeightCss} {$$restProps.style || ''}"
     on:scroll
     on:mouseleave
   >
