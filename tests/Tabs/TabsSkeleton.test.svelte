@@ -7,4 +7,20 @@
   export let size: ComponentProps<TabsSkeleton>["size"] = undefined;
 </script>
 
-<TabsSkeleton {count} {type} {size} />
+<TabsSkeleton
+  {count}
+  {type}
+  {size}
+  on:click={() => {
+    console.log("click");
+  }}
+  on:mouseover={() => {
+    console.log("mouseover");
+  }}
+  on:mouseenter={() => {
+    console.log("mouseenter");
+  }}
+  on:mouseleave={() => {
+    console.log("mouseleave");
+  }}
+/>
