@@ -71,7 +71,6 @@
     class:bx--data-table--short={size === "short"}
     class:bx--data-table--tall={size === "tall"}
     class:bx--data-table--zebra={zebra}
-    on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
