@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import { nextFrame } from "../utils/next-frame";
 import { user } from "../utils/user";
+import FluidTextAreaSkeletonEvents from "./FluidTextAreaSkeletonEvents.test.svelte";
 import TextAreaCounterMode from "./TextArea.counterMode.test.svelte";
 import TextArea from "./TextArea.test.svelte";
 import TextAreaCustom from "./TextAreaCustom.test.svelte";
@@ -723,5 +724,24 @@ describe("TextArea", () => {
       unmount();
       expect(observed.size).toBe(0);
     });
+  });
+
+  it("FluidTextAreaSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(FluidTextAreaSkeletonEvents);
+
+    const skeleton = screen.getByTestId("fluid-text-area-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+    vi.restoreAllMocks();
   });
 });
