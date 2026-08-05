@@ -4,6 +4,7 @@ import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
+import FluidNumberInputSkeletonEvents from "./FluidNumberInputSkeletonEvents.test.svelte";
 import NumberInput from "./NumberInput.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
 
@@ -1827,5 +1828,22 @@ describe("NumberInput", () => {
       const input = screen.getByLabelText("Clusters");
       expect(input).not.toHaveAttribute("pattern");
     });
+  });
+
+  it("does not forward click but forwards mouse events on fluid skeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(FluidNumberInputSkeletonEvents);
+
+    const skeleton = screen.getByTestId("fluid-number-input-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });
