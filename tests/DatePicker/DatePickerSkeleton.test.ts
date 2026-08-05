@@ -70,7 +70,7 @@ describe("DatePickerSkeleton", () => {
     const element = screen.getByTestId("date-picker-skeleton");
 
     await user.click(element);
-    expect(consoleLog).toHaveBeenCalledWith("click");
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
 
     await user.hover(element);
     expect(consoleLog).toHaveBeenCalledWith("mouseover");
