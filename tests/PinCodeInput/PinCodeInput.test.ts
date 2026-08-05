@@ -816,4 +816,21 @@ describe("PinCodeInput", () => {
     await user.unhover(skeleton);
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
+
+  it("does not forward click but forwards mouse events on skeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(PinCodeInputSkeleton);
+
+    const skeleton = screen.getByTestId("pin-code-input-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
 });
