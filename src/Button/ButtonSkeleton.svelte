@@ -57,7 +57,6 @@
     class:bx--btn--lg={effectiveSize === "lg"}
     class:bx--btn--xl={effectiveSize === "xl"}
     {...$$restProps}
-    on:click
     on:focus
     on:blur
     on:mouseover
