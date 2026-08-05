@@ -11,6 +11,7 @@ import Checkbox from "./Checkbox.test.svelte";
 import CheckboxGroupEvents from "./CheckboxGroupEvents.test.svelte";
 import CheckboxGroupReactive from "./CheckboxGroupReactive.test.svelte";
 import CheckboxReactiveBind from "./CheckboxReactiveBind.test.svelte";
+import CheckboxSkeletonForwardedEvents from "./CheckboxSkeleton.forwarded-events.test.svelte";
 import CheckboxTitleTruncation from "./CheckboxTitleTruncation.test.svelte";
 import MultipleCheckboxes from "./MultipleCheckboxes.test.svelte";
 import MultipleCheckboxesObject from "./MultipleCheckboxesObject.test.svelte";
@@ -587,6 +588,20 @@ describe("Checkbox", () => {
 
       expect(getLabel().getAttribute("title")).toBe("Custom title");
     });
+  });
+
+  it("should not forward click on CheckboxSkeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CheckboxSkeletonForwardedEvents);
+
+    const skeleton = screen.getByTestId("checkbox-skeleton");
+
+    // Click should not fire
+    await user.click(skeleton);
+    const clickCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "click",
+    );
+    expect(clickCalls).toHaveLength(0);
   });
 
   describe("Generics", () => {
