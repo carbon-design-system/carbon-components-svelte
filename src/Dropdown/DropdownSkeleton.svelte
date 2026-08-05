@@ -12,7 +12,6 @@
   class:bx--form-item={true}
   class:bx--list-box--inline={inline}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
