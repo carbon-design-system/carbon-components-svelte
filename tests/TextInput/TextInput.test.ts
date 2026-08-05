@@ -4,6 +4,7 @@ import { user } from "../utils/user";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
 import TextInputInlineLabelChildren from "./TextInputInlineLabelChildren.test.svelte";
+import TextInputSkeletonEvents from "./TextInputSkeletonEvents.test.svelte";
 
 describe("TextInput", () => {
   it("should not render a stray helper element or aria-describedby for an empty-string helperText", () => {
@@ -516,5 +517,25 @@ describe("TextInput", () => {
 
     expect(mockHandler).toHaveBeenCalled();
     expect(mockHandler.mock.calls[0][0].detail).toBe(5);
+  });
+
+  it("FluidTextInputSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(TextInputSkeletonEvents, { props: { component: "fluid" } });
+
+    const skeleton = screen.getByTestId("skeleton");
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+    consoleLog.mockRestore();
   });
 });
