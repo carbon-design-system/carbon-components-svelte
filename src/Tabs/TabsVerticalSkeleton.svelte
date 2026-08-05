@@ -11,7 +11,6 @@
     class:bx--tabs--vertical={true}
     class:bx--skeleton={true}
     {...$$restProps}
-    on:click
     on:mouseover
     on:mouseenter
     on:mouseleave
