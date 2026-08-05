@@ -775,3 +775,25 @@ describe("SelectSkeleton", () => {
     expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });
+
+describe("FluidSelectSkeleton", () => {
+  it("does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(SelectFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-select-skeleton");
+    expect(skeleton).toBeInTheDocument();
+
+    // Click should not trigger console.log
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    // But mouse events should still fire
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
+});
