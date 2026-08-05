@@ -285,4 +285,23 @@ describe("TextArea", () => {
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-area");
   });
+
+  it("FluidTextAreaSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TextAreaFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-text-area-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+    vi.restoreAllMocks();
+  });
 });
