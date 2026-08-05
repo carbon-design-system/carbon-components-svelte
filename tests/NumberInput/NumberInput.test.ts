@@ -5,6 +5,7 @@ import { clickToFocus } from "../utils/click-to-focus";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
 import FluidNumberInputSkeletonEvents from "./FluidNumberInputSkeletonEvents.test.svelte";
+import NumberInputSkeleton from "./NumberInput.skeleton.test.svelte";
 import NumberInput from "./NumberInput.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
 
@@ -1835,6 +1836,23 @@ describe("NumberInput", () => {
     render(FluidNumberInputSkeletonEvents);
 
     const skeleton = screen.getByTestId("fluid-number-input-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
+
+  it("does not forward click but forwards mouse events on skeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(NumberInputSkeleton);
+
+    const skeleton = screen.getByTestId("number-input-skeleton");
 
     await user.click(skeleton);
     expect(consoleLog).not.toHaveBeenCalledWith("click");
