@@ -73,7 +73,6 @@
       class:bx--data-table--md={size === "medium"}
       class:bx--data-table--tall={size === "tall"}
       class:bx--data-table--zebra={zebra}
-      on:click
       on:mouseover
       on:mouseenter
       on:mouseleave
