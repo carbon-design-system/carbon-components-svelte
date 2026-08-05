@@ -10,6 +10,7 @@ import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";
 import SearchInitialEvent from "./SearchInitialEvent.test.svelte";
+import SearchSkeletonEvents from "./SearchSkeleton.events.test.svelte";
 import SearchSkeleton from "./SearchSkeleton.test.svelte";
 
 describe("Search", () => {
@@ -252,6 +253,24 @@ describe("Search", () => {
     render(FluidSearchSkeletonEvents);
 
     const skeleton = screen.getByTestId("fluid-search-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
+
+  it("SearchSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(SearchSkeletonEvents);
+
+    const skeleton = document.querySelector(".bx--skeleton");
+    expect(skeleton).not.toBeNull();
+    assert(skeleton instanceof HTMLElement);
 
     await user.click(skeleton);
     expect(consoleLog).not.toHaveBeenCalledWith("click");
