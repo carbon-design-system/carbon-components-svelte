@@ -4,6 +4,7 @@ import { user } from "../utils/user";
 import TextInputFluidForm from "./TextInput.fluidForm.test.svelte";
 import TextInputFluidSkeleton from "./TextInput.fluidSkeleton.test.svelte";
 import TextInputFluidSlot from "./TextInput.fluidSlot.test.svelte";
+import TextInputSkeleton from "./TextInput.skeleton.test.svelte";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
 import TextInputInlineLabelChildren from "./TextInputInlineLabelChildren.test.svelte";
@@ -661,9 +662,48 @@ describe("TextInput", () => {
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
 
+  it("renders text input skeleton state", () => {
+    render(TextInputSkeleton);
+
+    const skeleton = screen.getByTestId("text-input-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass("bx--form-item");
+    expect(skeleton.children).toHaveLength(2);
+    expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
+    expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
+  });
+
+  it("hides the text input skeleton label when hideLabel is true", () => {
+    render(TextInputSkeleton, { props: { hideLabel: true } });
+
+    const skeleton = screen.getByTestId("text-input-skeleton");
+    expect(skeleton.children).toHaveLength(1);
+    expect(skeleton.children[0]).toHaveClass("bx--skeleton", "bx--text-input");
+  });
+
   it("FluidTextInputSkeleton does not forward click but forwards mouse events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(TextInputSkeletonEvents, { props: { component: "fluid" } });
+
+    const skeleton = screen.getByTestId("skeleton");
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+    consoleLog.mockRestore();
+  });
+
+  it("TextInputSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(TextInputSkeletonEvents, { props: { component: "text" } });
 
     const skeleton = screen.getByTestId("skeleton");
     expect(consoleLog).not.toHaveBeenCalledWith("click");
