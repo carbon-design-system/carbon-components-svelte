@@ -3,6 +3,7 @@ import type SelectComponent from "carbon-components-svelte/Select/Select.svelte"
 import type SelectItemComponent from "carbon-components-svelte/Select/SelectItem.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
+import SelectSkeletonEvents from "./SelectSkeletonEvents.test.svelte";
 import SelectFalsy from "./Select.falsy.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
 import SelectManyItems from "./Select.manyItems.test.svelte";
@@ -576,5 +577,27 @@ describe("Select Generics", () => {
     type Props = ComponentProps<ComponentType>;
 
     expectTypeOf<Props["value"]>().toEqualTypeOf<string | number | undefined>();
+  });
+});
+
+describe("SelectSkeleton", () => {
+  it("does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(SelectSkeletonEvents);
+
+    const skeleton = screen.getByTestId("select-skeleton");
+    expect(skeleton).toBeInTheDocument();
+
+    // Click should not trigger console.log
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    // But mouse events should still fire
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });
