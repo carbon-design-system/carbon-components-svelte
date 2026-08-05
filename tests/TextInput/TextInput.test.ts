@@ -7,6 +7,7 @@ import TextInputFluidSlot from "./TextInput.fluidSlot.test.svelte";
 import TextInput from "./TextInput.test.svelte";
 import TextInputCustom from "./TextInputCustom.test.svelte";
 import TextInputInlineLabelChildren from "./TextInputInlineLabelChildren.test.svelte";
+import TextInputSkeletonEvents from "./TextInputSkeletonEvents.test.svelte";
 
 describe("TextInput", () => {
   it("should render with default props", () => {
@@ -658,5 +659,25 @@ describe("TextInput", () => {
     expect(skeleton.children).toHaveLength(2);
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
+  });
+
+  it("FluidTextInputSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(TextInputSkeletonEvents, { props: { component: "fluid" } });
+
+    const skeleton = screen.getByTestId("skeleton");
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+    consoleLog.mockRestore();
   });
 });
