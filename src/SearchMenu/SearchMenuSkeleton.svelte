@@ -18,7 +18,6 @@
 <div
   class="bx--search-menu__menu bx--search-menu__menu--inline bx--search-menu__menu--{size}"
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
