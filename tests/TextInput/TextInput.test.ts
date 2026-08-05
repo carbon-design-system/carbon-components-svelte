@@ -538,4 +538,24 @@ describe("TextInput", () => {
 
     consoleLog.mockRestore();
   });
+
+  it("TextInputSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(TextInputSkeletonEvents, { props: { component: "text" } });
+
+    const skeleton = screen.getByTestId("skeleton");
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+    consoleLog.mockRestore();
+  });
 });
