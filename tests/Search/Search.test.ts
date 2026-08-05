@@ -4,6 +4,7 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import SearchFocusWithoutSelect from "./Search.focusWithoutSelect.test.svelte";
+import FluidSearchSkeletonEvents from "./FluidSearchSkeleton.events.test.svelte";
 import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";
@@ -340,5 +341,21 @@ describe("Search", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
+  });
+
+  it("FluidSearchSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(FluidSearchSkeletonEvents);
+
+    const skeleton = screen.getByTestId("fluid-search-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });
