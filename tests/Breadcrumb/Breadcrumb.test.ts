@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import { user } from "../utils/user";
 import BreadcrumbAriaCurrent from "./Breadcrumb.ariaCurrent.test.svelte";
 import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
 import BreadcrumbLabelText from "./Breadcrumb.labelText.test.svelte";
@@ -7,6 +8,7 @@ import BreadcrumbSize from "./Breadcrumb.size.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
 import BreadcrumbSkeletonSm from "./Breadcrumb.skeleton-sm.test.svelte";
 import Breadcrumb from "./Breadcrumb.test.svelte";
+import BreadcrumbSkeletonForwardedEvents from "./BreadcrumbSkeleton.forwarded-events.test.svelte";
 
 describe("Breadcrumb", () => {
   it("renders with default props", () => {
@@ -159,5 +161,20 @@ describe("Breadcrumb", () => {
     const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
     expect(skeleton).toBeInTheDocument();
     expect(skeleton).toHaveClass("bx--breadcrumb--sm");
+  });
+
+  it("should not forward click on BreadcrumbSkeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(BreadcrumbSkeletonForwardedEvents);
+
+    const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
+    assert(skeleton);
+
+    // Click should not fire
+    await user.click(skeleton);
+    const clickCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "click",
+    );
+    expect(clickCalls).toHaveLength(0);
   });
 });
