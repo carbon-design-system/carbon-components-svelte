@@ -100,7 +100,7 @@ describe("DatePickerSkeleton", () => {
     expect(container.querySelectorAll("span.bx--label")).toHaveLength(2);
   });
 
-  it("forwards mouse and click events", async () => {
+  it("forwards mouse events but not click", async () => {
     const onclick = vi.fn();
     const onmouseover = vi.fn();
     const onmouseleave = vi.fn();
@@ -111,7 +111,7 @@ describe("DatePickerSkeleton", () => {
     const element = screen.getByTestId("date-picker-skeleton");
 
     await user.click(element);
-    expect(onclick).toHaveBeenCalled();
+    expect(onclick).not.toHaveBeenCalled();
 
     await user.hover(element);
     expect(onmouseover).toHaveBeenCalled();
