@@ -2612,4 +2612,22 @@ describe("Dropdown", () => {
       expect(consoleLog).toHaveBeenCalledWith("mouseleave");
     });
   });
+
+  describe("FluidDropdownSkeleton", () => {
+    it("does not forward click but forwards mouse events", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(DropdownFluidSkeleton);
+
+      const element = screen.getByTestId("fluid-dropdown-skeleton");
+
+      await user.click(element);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    });
+  });
 });
