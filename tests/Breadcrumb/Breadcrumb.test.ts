@@ -7,6 +7,7 @@ import BreadcrumbProps from "./Breadcrumb.props.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
 import BreadcrumbSlotProps from "./Breadcrumb.slotProps.test.svelte";
 import Breadcrumb from "./Breadcrumb.test.svelte";
+import BreadcrumbSkeletonForwardedEvents from "./BreadcrumbSkeleton.forwarded-events.test.svelte";
 
 describe("Breadcrumb", () => {
   it("renders with default props", () => {
@@ -167,5 +168,20 @@ describe("Breadcrumb", () => {
     await user.click(next);
     expect(list).toHaveClass("bx--breadcrumb--vertical");
     expect(list).not.toHaveClass("bx--breadcrumb--horizontal");
+  });
+
+  it("should not forward click on BreadcrumbSkeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(BreadcrumbSkeletonForwardedEvents);
+
+    const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
+    assert(skeleton);
+
+    // Click should not fire
+    await user.click(skeleton);
+    const clickCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "click",
+    );
+    expect(clickCalls).toHaveLength(0);
   });
 });
