@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
+import FluidTimePickerSkeletonEvents from "./FluidTimePickerSkeletonEvents.test.svelte";
 import TimePickerFluidSkeleton from "./TimePicker.fluidSkeleton.test.svelte";
 import TimePickerFluidSlot from "./TimePicker.fluidSlot.test.svelte";
 import TimePickerSkeleton from "./TimePicker.skeleton.test.svelte";
@@ -686,5 +687,25 @@ describe("TimePicker", () => {
     expect(skeleton.children).toHaveLength(2);
     expect(skeleton.children[0]).toHaveClass("bx--text-input--fluid__skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--select--fluid__skeleton");
+  });
+
+  it("does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(FluidTimePickerSkeletonEvents);
+
+    const skeleton = screen.getByTestId("skeleton");
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+    consoleLog.mockRestore();
   });
 });
