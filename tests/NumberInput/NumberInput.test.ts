@@ -1944,4 +1944,21 @@ describe("NumberInput", () => {
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
+
+  it("does not forward click but forwards mouse events on fluid skeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(NumberInputFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-number-input-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
 });
