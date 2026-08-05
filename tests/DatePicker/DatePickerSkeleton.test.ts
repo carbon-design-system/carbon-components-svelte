@@ -123,4 +123,20 @@ describe("FluidDatePickerSkeleton", () => {
       skeleton.querySelectorAll(".bx--date-picker--fluid__skeleton--container"),
     ).toHaveLength(2);
   });
+
+  it("does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(FluidDatePickerSkeleton);
+
+    const element = screen.getByTestId("fluid-date-picker-skeleton");
+
+    await user.click(element);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(element);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(element);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
 });
