@@ -1,5 +1,5 @@
 ---
-description: A tree view displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, and programmatic control of the tree state.
+description: A tree view displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, programmatic control of the tree state, and virtualization for large trees.
 ---
 
 ## Basic
@@ -184,6 +184,29 @@ Set `hasChildren` on a node to render it as an expandable branch before its `nod
 While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot renders in place of the (empty) subtree, receiving the same `node` as the default slot. TreeView has no built-in concept of "loading" or "error" — the slot is generic, so you decide what to render (a spinner, an error message with retry, or nothing) based on whatever fields you put on the node yourself.
 
 <FileSource src="/framed/TreeView/TreeViewLazyLoad" />
+
+## Virtualization
+
+Virtualization renders only the rows currently visible in the scroll viewport, improving performance for large trees (for example, file trees and log explorers). Set `virtualize` to enable it. The tree still tracks the full `nodes` dataset; only the on-screen slice is mounted in the DOM.
+
+Virtualization is opt-in. TreeView cannot tell from `nodes` alone whether the tree will stay small or grow through expansion, so it does not auto-enable based on row count. Once you set `virtualize`, windowing is always active. TreeView switches to a flat ARIA structure (`aria-level`, `aria-posinset`, `aria-setsize`) to support windowing.
+
+Leave `virtualize` unset for the default recursive rendering. Behavior matches prior versions.
+
+Row height is fixed and comes from `size` (32px default, 24px compact). Rows do not grow to fit their content, so keep slot content to a single line. Pass `true` for defaults, or an object to customize:
+
+| Field             | Default                       | Description                                                                 |
+| ----------------- | ----------------------------- | --------------------------------------------------------------------------- |
+| `containerHeight` | `maxVisibleRows * itemHeight` | Scroll viewport height. Pass a number (pixels) or a CSS string (`"80%"`, `"100%"`, `"calc(...)"`) when the parent sets height. |
+| `maxVisibleRows`  | `10`                          | Rows visible at once when `containerHeight` is not set.                     |
+| `overscan`        | `3`                           | Extra rows rendered above and below the viewport during scroll.             |
+
+Bind `scrollContainerRef` to access the scroll element directly.
+
+> [!NOTE]
+> Keyboard navigation, `showNode`, expand/collapse, and other APIs work in virtualized mode. `showNode` scrolls a row that is not currently mounted into view before focusing it -- try **Jump to a deep file** in the example below.
+
+<FileSource src="/framed/TreeView/TreeViewVirtualize" />
 
 ## Flat data
 
