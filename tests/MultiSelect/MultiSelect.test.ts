@@ -670,7 +670,7 @@ describe("MultiSelect", () => {
       );
     });
 
-    it("skips unchecked items at the cap during keyboard navigation", async () => {
+    it("keeps cap-disabled items navigable but refuses selection", async () => {
       render(MultiSelect, {
         props: {
           items: preferenceItems,
@@ -691,14 +691,41 @@ describe("MultiSelect", () => {
       expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
       await user.keyboard("{ArrowDown}");
-      expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
-      expect(slackOption).not.toHaveClass(
-        "bx--list-box__menu-item--highlighted",
-      );
+      expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
       await user.keyboard("{Enter}");
-      expect(emailOption).toHaveAttribute("aria-selected", "false");
-      expect(slackOption).not.toHaveAttribute("aria-disabled");
+      expect(slackOption).toHaveAttribute("aria-selected", "false");
+      expect(slackOption).toHaveAttribute("aria-disabled", "true");
+      expect(emailOption).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("describes why cap-disabled options refuse selection", async () => {
+      render(MultiSelect, {
+        props: {
+          items: preferenceItems,
+          maxSelectedItems: 1,
+          selectedIds: ["0"],
+          sortItem: () => 0,
+          labelText: "Preferences",
+        },
+      });
+
+      await openMenu();
+
+      const slackOption = screen.getByRole("option", { name: "Slack" });
+      const describedById = slackOption.getAttribute("aria-describedby");
+      expect(describedById).toBeTruthy();
+      expect(document.getElementById(describedById ?? "")).toHaveTextContent(
+        "Maximum items selected",
+      );
+
+      // Checked items stay selectable at the cap and need no explanation.
+      const emailOption = screen.getByRole("option", { name: "Email" });
+      expect(emailOption).not.toHaveAttribute("aria-describedby");
+
+      // Below the cap, no option carries the description.
+      await toggleOption("Email");
+      expect(slackOption).not.toHaveAttribute("aria-describedby");
     });
 
     it("disables select-all when a cap is set", async () => {
@@ -1522,7 +1549,6 @@ describe("MultiSelect", () => {
     const input = screen.getByPlaceholderText("Filter...");
     await user.click(input);
 
-    // If the while loop has no guard, this would hang forever.
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{ArrowUp}");
 
@@ -1533,7 +1559,7 @@ describe("MultiSelect", () => {
     }
   });
 
-  it("skips disabled items during keyboard navigation", async () => {
+  it("highlights disabled items during keyboard navigation without selecting them", async () => {
     render(MultiSelect, {
       props: {
         items: [
@@ -1550,9 +1576,15 @@ describe("MultiSelect", () => {
     await user.type(input, "a");
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{ArrowDown}");
-    await user.keyboard("{Enter}");
 
+    // The disabled item is reachable (APG), but Enter on it is a no-op.
     const options = screen.getAllByRole("option");
+    expect(options[1]).toHaveClass("bx--list-box__menu-item--highlighted");
+    await user.keyboard("{Enter}");
+    expect(options[1]).toHaveAttribute("aria-selected", "false");
+
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{Enter}");
     expect(options[2]).toHaveAttribute("aria-selected", "true");
   });
 

@@ -191,6 +191,13 @@
   export let readonlyText = "Read-only";
 
   /**
+   * Specify the assistive text describing options disabled by `maxSelectedItems`.
+   * Announced so screen reader users learn why an option refuses selection,
+   * not just that it is disabled.
+   */
+  export let maxSelectedText = "Maximum items selected";
+
+  /**
    * Specify a name attribute for the select.
    * @type {string}
    */
@@ -296,7 +303,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
-  import { nextEnabledIndex } from "../utils/moveIndex.js";
+  import { moveIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,
@@ -355,13 +362,12 @@
   }
 
   function change(step) {
+    // Disabled options stay in the keyboard navigation sequence (APG:
+    // "Focusability of disabled controls") so assistive-tech users can
+    // discover them; selectItem and the option click handlers refuse the
+    // actual selection.
     const navigableItems = filterable ? filteredItems : sortedItems;
-    highlightedIndex = nextEnabledIndex({
-      items: navigableItems,
-      index: highlightedIndex,
-      step,
-      isDisabled: isItemDisabled,
-    });
+    highlightedIndex = moveIndex(highlightedIndex, step, navigableItems.length);
     highlightOrigin = "keyboard";
   }
 
@@ -713,6 +719,7 @@
     typeof maxSelectedItems === "number" && maxSelectedItems > 0;
   $: isAtSelectionCap =
     hasMaxSelectedItems && selectionCount >= maxSelectedItems;
+  $: maxSelectedId = `max-selected-${id}`;
   $: filteredItems = sortedItems.filter(
     (item) => item.isSelectAll || filterItem(item, value),
   );
@@ -1123,10 +1130,16 @@
                   item.disabled ||
                   (hasMaxSelectedItems && !!item.isSelectAll) ||
                   (isAtSelectionCap && !item.checked)}
+                {@const capDisabled =
+                  isAtSelectionCap &&
+                  !item.checked &&
+                  !item.disabled &&
+                  !item.isSelectAll}
                 <ListBoxMenuItem
                   id="{id}-{item.id}"
                   role="option"
                   aria-labelledby="checkbox-{id}-{item.id}"
+                  aria-describedby={capDisabled ? maxSelectedId : undefined}
                   aria-selected={item.isSelectAll ? allSelected : item.checked}
                   aria-checked={item.isSelectAll
                     ? selectAllIndeterminate
@@ -1199,10 +1212,16 @@
               item.disabled ||
               (hasMaxSelectedItems && !!item.isSelectAll) ||
               (isAtSelectionCap && !item.checked)}
+            {@const capDisabled =
+              isAtSelectionCap &&
+              !item.checked &&
+              !item.disabled &&
+              !item.isSelectAll}
             <ListBoxMenuItem
               id="{id}-{item.id}"
               role="option"
               aria-labelledby="checkbox-{id}-{item.id}"
+              aria-describedby={capDisabled ? maxSelectedId : undefined}
               aria-selected={item.isSelectAll ? allSelected : item.checked}
               aria-checked={item.isSelectAll
                 ? selectAllIndeterminate
@@ -1288,6 +1307,11 @@
     >
       {helperText}
     </div>
+  {/if}
+  {#if hasMaxSelectedItems}
+    <span id={maxSelectedId} class:bx--visually-hidden={true}
+      >{maxSelectedText}</span
+    >
   {/if}
   {#if readonly}
     <span id={readonlyId} class:bx--visually-hidden={true}
