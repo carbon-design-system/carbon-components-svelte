@@ -394,6 +394,116 @@ describe("FloatingPortal", () => {
     });
   });
 
+  describe("viewport measurement fallback", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    // Regression test: on a page where window.innerWidth disagrees with
+    // document.documentElement's actual rendered box (observed on this
+    // project's own docs site - cause not fully isolated), clamping only to
+    // window.innerWidth positioned a ContextMenu partially outside the
+    // visually rendered area.
+    it("clamps to the narrower of window.innerWidth and the document's rendered width", async () => {
+      Object.defineProperty(window, "innerWidth", {
+        writable: true,
+        configurable: true,
+        value: 1000,
+      });
+      vi.spyOn(
+        document.documentElement,
+        "getBoundingClientRect",
+      ).mockReturnValue({ width: 800, height: 800 } as DOMRect);
+
+      render(FloatingPortalTest, {
+        props: {
+          open: true,
+          direction: "bottom",
+          intrinsicWidth: true,
+          intrinsicAlign: "start",
+        },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest(
+        "[data-floating-portal]",
+      ) as HTMLElement;
+      const anchor = screen.getByTestId("anchor");
+
+      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue({
+        top: 100,
+        bottom: 120,
+        left: 950,
+        right: 1050,
+        width: 100,
+        height: 20,
+      } as DOMRect);
+      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue({
+        top: 0,
+        bottom: 113,
+        left: 0,
+        right: 208,
+        width: 208,
+        height: 113,
+      } as DOMRect);
+
+      window.dispatchEvent(new Event("resize"));
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      // Clamped against the narrower 800px document width (800 - 208 = 592),
+      // not the wider 1000px window.innerWidth (which would give 792).
+      expect(portalElement).toHaveStyle({ left: "592px" });
+    });
+
+    it("falls back to window.innerWidth when the document rect is zero (no real layout, e.g. jsdom by default)", async () => {
+      Object.defineProperty(window, "innerWidth", {
+        writable: true,
+        configurable: true,
+        value: 1000,
+      });
+
+      render(FloatingPortalTest, {
+        props: {
+          open: true,
+          direction: "bottom",
+          intrinsicWidth: true,
+          intrinsicAlign: "start",
+        },
+      });
+
+      const content = await screen.findByText("Floating content");
+      const portalElement = content.closest(
+        "[data-floating-portal]",
+      ) as HTMLElement;
+      const anchor = screen.getByTestId("anchor");
+
+      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue({
+        top: 100,
+        bottom: 120,
+        left: 950,
+        right: 1050,
+        width: 100,
+        height: 20,
+      } as DOMRect);
+      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue({
+        top: 0,
+        bottom: 113,
+        left: 0,
+        right: 208,
+        width: 208,
+        height: 113,
+      } as DOMRect);
+
+      window.dispatchEvent(new Event("resize"));
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      // document.documentElement.getBoundingClientRect() is jsdom's default
+      // zero rect here (unmocked) - clamps against window.innerWidth (792),
+      // not zero.
+      expect(portalElement).toHaveStyle({ left: "792px" });
+    });
+  });
+
   it("binds ref to the floating portal element", async () => {
     const { component } = render(FloatingPortalTest, {
       props: { open: true },

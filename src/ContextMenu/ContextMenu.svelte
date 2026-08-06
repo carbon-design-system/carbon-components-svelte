@@ -49,6 +49,32 @@
    */
   export let labelText = undefined;
 
+  /**
+   * Specify the size of the menu, which controls each item's row height.
+   * @type {"xs" | "sm" | "md" | "lg"}
+   */
+  export let size = "sm";
+
+  /**
+   * Specify the z-index of the menu.
+   */
+  export let zIndex = 9200;
+
+  /**
+   * Anchor to a real element instead of the `x`/`y` point - used internally
+   * by `ContextMenuOption` for nested submenus, which (like a `MenuItem`
+   * submenu) should open relative to their trigger `<li>`, not a click point.
+   * @type {null | HTMLElement}
+   */
+  export let anchor = null;
+
+  /**
+   * Preferred direction to open in. The root, click-triggered menu opens
+   * `"bottom"`; a `ContextMenuOption` submenu opens `"right"`.
+   * @type {"bottom" | "top" | "left" | "right"}
+   */
+  export let direction = "bottom";
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -57,28 +83,28 @@
     setContext,
   } from "svelte";
   import { writable } from "svelte/store";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<[number, number]>}
-   */
-  const position = writable([x, y]);
-  /**
    * @type {import("svelte/store").Writable<number>}
    */
   const currentIndex = writable(-1);
   const hasPopup = writable(false);
-  /**
-   * @type {import("svelte/store").Writable<number>}
-   */
-  const menuOffsetX = writable(0);
   const ctx = getContext("carbon:ContextMenu");
 
+  /** Real, zero-size, in-document element positioned at (x, y) - lets
+   * FloatingPortal anchor to an arbitrary point instead of a real trigger
+   * element, when `anchor` isn't given. FloatingPortal watches the anchor's
+   * `style` attribute via MutationObserver, so updating x/y while open
+   * repositions the menu. */
+  let pointAnchor;
+  $: effectiveAnchor = anchor ?? pointAnchor;
+
   let options = [];
-  let direction = 1;
   let prevX = 0;
   let prevY = 0;
   let prevOpen = false;
@@ -102,26 +128,8 @@
   /** @type {(e: MouseEvent) => void} */
   function openMenu(event) {
     event.preventDefault();
-    const { height, width } = ref.getBoundingClientRect();
-
-    if (open || x === 0) {
-      if (window.innerWidth - width < event.x) {
-        x = event.x - width;
-      } else {
-        x = event.x;
-      }
-    }
-
-    if (open || y === 0) {
-      menuOffsetX.set(event.x);
-
-      if (window.innerHeight - height < event.y) {
-        y = event.y - height;
-      } else {
-        y = event.y;
-      }
-    }
-    position.set([x, y]);
+    x = event.x;
+    y = event.y;
     open = true;
     openDetail = event.target;
   }
@@ -156,15 +164,13 @@
   }
 
   setContext("carbon:ContextMenu", {
-    menuOffsetX,
     currentIndex,
-    position,
     close,
     setPopup,
   });
 
   afterUpdate(() => {
-    if (open) {
+    if (open && ref) {
       options = [...ref.querySelectorAll("li[data-nested='false']")];
 
       if (level === 1) {
@@ -185,7 +191,7 @@
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
 
   function handleOutsideClick(event) {
-    if (open && isOutsideClick(event, ref)) close("outside-click");
+    if (open && ref && isOutsideClick(event, ref)) close("outside-click");
   }
   function handleEscape(event) {
     if (open && event.key === "Escape") close("escape-key");
@@ -196,55 +202,81 @@
   on:contextmenu={(event) => {
     if (target != null) return;
     if (level > 1) return;
-    if (!ref) return;
     openMenu(event);
   }}
 />
 
-<!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-<ul
-  bind:this={ref}
-  use:rovingFocus={{
-    selector: "li[data-nested='false']",
-    orientation: "vertical",
-    wrap: false,
-    getActiveIndex: () => focusIndex,
-    onMove: (index) => {
-      if ($hasPopup) return;
-      focusIndex = index;
-    },
-  }}
-  use:dismiss={{
-    enabled: open,
-    listeners: [
-      { type: "click", handler: handleOutsideClick },
-      { type: "keydown", handler: handleEscape },
-    ],
-  }}
-  role="menu"
-  tabindex="-1"
-  data-direction={direction}
-  data-level={level}
-  class:bx--menu={true}
-  class:bx--menu--open={open}
-  class:bx--menu--invisible={open && x === 0 && y === 0}
-  class:bx--menu--root={level === 1}
-  style:left="{x}px"
+<div
+  bind:this={pointAnchor}
+  data-context-menu-point-anchor
+  aria-hidden="true"
+  style:position="fixed"
   style:top="{y}px"
-  {...$$restProps}
-  aria-label={menuAriaLabel}
-  on:click
-  on:click={(event) => {
-    const closestOption = event.target.closest("[tabindex]");
+  style:left="{x}px"
+  style:width="0"
+  style:height="0"
+  style:pointer-events="none"
+></div>
 
-    if (closestOption && closestOption.getAttribute("role") !== "menuitem") {
-      close("select");
-    }
-  }}
-  on:keydown
-  on:keydown={(event) => {
-    if (open) event.preventDefault();
-  }}
+<FloatingPortal
+  anchor={effectiveAnchor}
+  {direction}
+  {open}
+  intrinsicWidth
+  intrinsicAlign="start"
+  {zIndex}
+  let:direction={portalDirection}
 >
-  <slot />
-</ul>
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+  <ul
+    bind:this={ref}
+    use:rovingFocus={{
+      selector: "li[data-nested='false']",
+      orientation: "vertical",
+      wrap: false,
+      getActiveIndex: () => focusIndex,
+      onMove: (index) => {
+        if ($hasPopup) return;
+        focusIndex = index;
+      },
+    }}
+    use:dismiss={{
+      enabled: open,
+      listeners: [
+        { type: "click", handler: handleOutsideClick },
+        { type: "keydown", handler: handleEscape },
+      ],
+    }}
+    role="menu"
+    tabindex="-1"
+    data-direction={portalDirection}
+    data-level={level}
+    style:position="relative"
+    style:top="auto"
+    style:left="auto"
+    class:bx--menu={true}
+    class:bx--menu--open={open}
+    class:bx--menu--root={level === 1}
+    class:bx--menu--xs={size === "xs"}
+    class:bx--menu--md={size === "md"}
+    class:bx--menu--lg={size === "lg"}
+    {...$$restProps}
+    aria-label={menuAriaLabel}
+    on:click
+    on:click={(event) => {
+      const closestOption = event.target.closest("[tabindex]");
+
+      if (closestOption && closestOption.getAttribute("role") !== "menuitem") {
+        close("select");
+      }
+    }}
+    on:keydown
+    on:keydown={(event) => {
+      if (open) event.preventDefault();
+    }}
+    on:mouseenter
+    on:mouseleave
+  >
+    <slot />
+  </ul>
+</FloatingPortal>
