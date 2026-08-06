@@ -36,6 +36,16 @@ The `clear` event fires when clicking the clear button or pressing <DocKbd label
 
 <Search value="Cloud functions" on:clear={() => console.log('clear')}/>
 
+## Submit button
+
+Set `showSubmitButton` to `true` to show a trailing search button for form-style search. Clicking the button or pressing <DocKbd label="Enter" /> dispatches `submit` with the current value. Use `submitButtonLabelText` to localize the button label.
+
+<Search
+  showSubmitButton
+  value="Cloud functions"
+  on:submit={(e) => console.log("submit", e.detail.value)}
+/>
+
 ## Expandable
 
 Enable the expandable variant to show a compact search icon that expands on focus.
