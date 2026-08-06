@@ -60,6 +60,7 @@ Customize node rendering using the default slot with the `let:node` directive. T
 | leaf     | True when the node does not have child nodes.    |
 | disabled | True when the node is disabled.                  |
 | selected | True when the node is selected.                  |
+| match    | Character offsets of the [Search](#search) match, or null. |
 
 <FileSource src="/framed/TreeView/TreeViewSlot" />
 
@@ -193,11 +194,21 @@ Convert flat data to a hierarchical structure using the `toHierarchy` utility.
 
 ## Filtering
 
-Filter nodes with the built-in helpers.
+Hide rows in place with `filterText`, or derive a filtered data set with the tree helpers.
+
+### Search
+
+Set `filterText` to hide the rows that do not match, matching node text case-insensitively. Rows stay mounted, so a branch keeps its local DOM state while it is hidden and a parent whose children all fail the filter stays a parent.
+
+Ancestors of a match expand automatically and collapse back to their previous state once the filter clears. Any node expanded by hand while filtering stays expanded.
+
+The default label wraps the matched characters in a `<mark>`. To highlight matches in custom node content, read `node.match` from the default slot: it holds the start and end character offsets of the match, or `null` when the row is visible only because a descendant matched.
+
+<FileSource src="/framed/TreeView/TreeViewSearch" />
 
 ### By text
 
-Combine a search input with `filterTreeByText` to create an interactive searchable tree. Type to filter nodes by name (case-insensitive substring matching). By default, matching nodes and their ancestors are included to maintain valid tree structure.
+Combine a search input with `filterTreeByText` to derive a filtered copy of the data. Type to filter nodes by name (case-insensitive substring matching). By default, matching nodes and their ancestors are included to maintain valid tree structure. For live search that keeps the original tree intact, use [Search](#search) instead.
 
 <FileSource src="/framed/TreeView/TreeViewFilter" />
 
