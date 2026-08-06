@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/svelte";
-import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import ListBoxField from "./ListBoxField.test.svelte";
 
@@ -72,75 +71,22 @@ describe("ListBoxField", () => {
     expect(field).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("should show 'Open menu' label when collapsed", () => {
-    render(ListBoxField, {
-      props: {
-        "aria-expanded": false,
-        slotContent: "Test field",
-      },
-    });
+  it.each([{ "aria-expanded": true }, { "aria-expanded": false }])(
+    "should not set an aria-label when %o as that would override the <label for>",
+    (props) => {
+      render(ListBoxField, {
+        props: {
+          ...props,
+          slotContent: "Test field",
+        },
+      });
 
-    const field = screen
-      .getByText("Test field")
-      .closest(".bx--list-box__field");
-    expect(field).toHaveAttribute("aria-label", "Open menu");
-  });
-
-  it("should show 'Close menu' label when expanded", () => {
-    render(ListBoxField, {
-      props: {
-        "aria-expanded": true,
-        slotContent: "Test field",
-      },
-    });
-
-    const field = screen
-      .getByText("Test field")
-      .closest(".bx--list-box__field");
-    expect(field).toHaveAttribute("aria-label", "Close menu");
-  });
-
-  it("should use custom translation for open", () => {
-    const customTranslations = {
-      open: "Custom open",
-      close: "Custom close",
-    } as const;
-
-    const props = {
-      "aria-expanded": false,
-      translateWithId: (id: keyof typeof customTranslations) =>
-        customTranslations[id],
-      slotContent: "Custom field",
-    } satisfies ComponentProps<ListBoxField>;
-
-    render(ListBoxField, { props });
-
-    const field = screen
-      .getByText("Custom field")
-      .closest(".bx--list-box__field");
-    expect(field).toHaveAttribute("aria-label", "Custom open");
-  });
-
-  it("should use custom translation for close", () => {
-    const customTranslations = {
-      open: "Custom open",
-      close: "Custom close",
-    } as const;
-
-    const props = {
-      "aria-expanded": true,
-      translateWithId: (id: keyof typeof customTranslations) =>
-        customTranslations[id],
-      slotContent: "Custom field",
-    } satisfies ComponentProps<ListBoxField>;
-
-    render(ListBoxField, { props });
-
-    const field = screen
-      .getByText("Custom field")
-      .closest(".bx--list-box__field");
-    expect(field).toHaveAttribute("aria-label", "Custom close");
-  });
+      const field = screen
+        .getByText("Test field")
+        .closest(".bx--list-box__field");
+      expect(field).not.toHaveAttribute("aria-label");
+    },
+  );
 
   it("should generate menu id based on field id", () => {
     render(ListBoxField, {

@@ -32,18 +32,10 @@ const items = [
 
 describe("MultiSelect", () => {
   const openMenu = async () =>
-    await user.click(
-      await screen.findByLabelText("Open menu", {
-        selector: `[role="combobox"]`,
-      }),
-    );
+    await user.click(await screen.findByRole("combobox", { expanded: false }));
 
   const closeMenu = async () =>
-    await user.click(
-      await screen.findByLabelText("Close menu", {
-        selector: `[role="combobox"]`,
-      }),
-    );
+    await user.click(await screen.findByRole("combobox", { expanded: true }));
 
   const toggleOption = async (optionText: string) =>
     await user.click(
@@ -67,6 +59,87 @@ describe("MultiSelect", () => {
       "aria-expanded",
       "false",
     );
+  });
+
+  describe("field accessible name and description", () => {
+    it("names the non-filterable trigger with the field label", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+        },
+      });
+
+      // aria-label would beat the <label for> association in accessible-name
+      // precedence, so the trigger must not carry one.
+      const trigger = screen.getByRole("combobox", {
+        name: "Contact methods",
+      });
+      expect(trigger).not.toHaveAttribute("aria-label");
+
+      // The name must not flip to "Close menu" while the menu is open.
+      await user.click(trigger);
+      expect(
+        screen.getByRole("combobox", { name: "Contact methods" }),
+      ).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it.each([{ filterable: false }, { filterable: true }])(
+      "describes the field with the selection count when %o",
+      ({ filterable }) => {
+        render(MultiSelect, {
+          props: {
+            id: "test-multiselect",
+            items,
+            labelText: "Contact methods",
+            filterable,
+            selectedIds: ["0", "1"],
+          },
+        });
+
+        const combobox = screen.getByRole("combobox");
+        expect(combobox).toHaveAttribute(
+          "aria-describedby",
+          "selection-test-multiselect",
+        );
+
+        const description = document.querySelector(
+          "#selection-test-multiselect",
+        );
+        expect(description).toHaveTextContent("2 selected");
+        expect(description).toHaveClass("bx--visually-hidden");
+      },
+    );
+
+    it("omits the selection count description when nothing is selected", () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+        },
+      });
+
+      expect(screen.getByRole("combobox")).not.toHaveAttribute(
+        "aria-describedby",
+      );
+    });
+
+    it("appends the selection count description to existing helper text", () => {
+      render(MultiSelect, {
+        props: {
+          id: "test-multiselect",
+          items,
+          labelText: "Contact methods",
+          helperText: "Helper text",
+          selectedIds: ["0"],
+        },
+      });
+
+      expect(screen.getByRole("combobox")).toHaveAttribute(
+        "aria-describedby",
+        "selection-test-multiselect helper-test-multiselect",
+      );
+    });
   });
 
   it("renders default slot", () => {

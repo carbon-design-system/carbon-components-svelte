@@ -38,7 +38,9 @@ test.describe("Modal with Dropdowns", () => {
   });
 
   test("MultiSelect opens and selects items", async ({ page }) => {
-    const trigger = page.getByRole("combobox", { name: "Open menu" });
+    const trigger = page.getByRole("combobox", {
+      name: "Notification methods",
+    });
     await trigger.click();
 
     const menu = page.getByRole("listbox", { name: "Choose an item" });
@@ -65,7 +67,9 @@ test.describe("Modal with Dropdowns", () => {
   test("MultiSelect keeps sequential label clicks selected and syncs bind:selectedIds", async ({
     page,
   }) => {
-    const trigger = page.getByRole("combobox", { name: "Open menu" });
+    const trigger = page.getByRole("combobox", {
+      name: "Notification methods",
+    });
     await trigger.click();
 
     const menu = page.getByRole("listbox", { name: "Choose an item" });
