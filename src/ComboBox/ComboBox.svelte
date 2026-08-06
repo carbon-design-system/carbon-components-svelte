@@ -23,6 +23,7 @@
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "select"} trigger
+   * @event {string} create
    */
 
   /**
@@ -124,9 +125,25 @@
   /**
    * Set to `true` to allow custom values that are not in the items list.
    * By default, user-entered text is cleared when the combobox loses focus without selecting an item.
-   * When enabled, custom text is preserved.
+   * When enabled, custom text is preserved. A trailing "Create …" menu row is also shown for novel
+   * queries (case-insensitive `itemToString` match); listen to `create` to append a new option.
    */
   export let allowCustomValue = false;
+
+  /**
+   * @param {string} query
+   * @returns {string}
+   */
+  function defaultCreateOptionText(query) {
+    return `Create "${query}"`;
+  }
+
+  /**
+   * Label for the synthetic create-option menu row when `allowCustomValue` is enabled.
+   * Pass a string for a fixed label, or a function of the current query.
+   * @type {string | ((query: string) => string)}
+   */
+  export let createOptionText = defaultCreateOptionText;
 
   /**
    * Set to `true` to clear the input value when opening the dropdown.
@@ -263,6 +280,9 @@
   const insideModal = getContext("carbon:Modal");
   const formContext = getContext("carbon:Form");
 
+  /** Stable sentinel so the create row never collides with a real item id. */
+  const CREATE_OPTION_ID = "__ccs-combo-box-create-option__";
+
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
 
@@ -318,13 +338,31 @@
   }
 
   function change(step) {
-    const navigableItems = filteredItems?.length ? filteredItems : items;
+    const baseItems = filteredItems?.length ? filteredItems : items;
+    const navigableItems = showCreateOption
+      ? [...filteredItems, { id: CREATE_OPTION_ID, disabled: false }]
+      : baseItems;
     highlightedIndex = nextEnabledIndex({
       items: navigableItems,
       index: highlightedIndex,
       step,
     });
     highlightOrigin = "keyboard";
+  }
+
+  /**
+   * Dispatch `create` for the current query and close the menu.
+   * Does not mutate `items`; the consumer owns appending the new option.
+   * @param {string} query
+   * @param {boolean} [wasOpen]
+   */
+  function commitCreate(query, wasOpen = open) {
+    valueBeforeOpen = "";
+    dispatch("create", query);
+    open = false;
+    highlightedIndex = -1;
+    highlightOrigin = null;
+    if (wasOpen) dispatch("close", { trigger: "select" });
   }
 
   /**
@@ -493,13 +531,34 @@
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
   $: scrollEndTracker.noteItemCount(filteredItems.length);
+  $: trimmedQuery = typeof value === "string" ? value.trim() : "";
+  // Novel when no item's display string equals the query (case-insensitive),
+  // matching Enter selection equality. Trailing create row shows whenever the
+  // query is novel so users can create even if partial matches remain.
+  $: isNovelQuery =
+    allowCustomValue &&
+    trimmedQuery.length > 0 &&
+    !items.some(
+      (item) => itemToString(item).toLowerCase() === trimmedQuery.toLowerCase(),
+    );
+  $: showCreateOption = open && isNovelQuery;
+  $: createOptionIndex = showCreateOption ? filteredItems.length : -1;
+  $: createOptionLabel =
+    typeof createOptionText === "function"
+      ? createOptionText(trimmedQuery)
+      : createOptionText;
   $: highlightedId =
-    filteredItems[highlightedIndex] == null
-      ? undefined
-      : `${id}-${filteredItems[highlightedIndex].id}`;
+    showCreateOption && highlightedIndex === createOptionIndex
+      ? `${id}-${CREATE_OPTION_ID}`
+      : filteredItems[highlightedIndex] == null
+        ? undefined
+        : `${id}-${filteredItems[highlightedIndex].id}`;
 
-  $: shouldVirtualize =
-    virtualize === false
+  // Prefer a non-virtualized path when the create row is shown so the trailing
+  // row is always present without adjusting virtual height maps.
+  $: shouldVirtualize = showCreateOption
+    ? false
+    : virtualize === false
       ? false
       : virtualize !== undefined || items.length > 100;
 
@@ -725,39 +784,57 @@
           }
           if (event.key === "Enter") {
             const wasOpen = open;
-            open = !open;
-            if (
-              highlightOrigin === "keyboard" &&
-              highlightedIndex > -1 &&
-              filteredItems[highlightedIndex]?.id !== selectedId
-            ) {
-              open = false;
-              valueBeforeOpen = "";
-              if (filteredItems[highlightedIndex]) {
-                value = itemToString(filteredItems[highlightedIndex]);
-                selectedItem = filteredItems[highlightedIndex];
-                selectedId = filteredItems[highlightedIndex].id;
-                if (wasOpen) dispatch("close", { trigger: "select" });
-              }
+            const inputValue = ref?.value ?? value;
+            const query =
+              typeof inputValue === "string" ? inputValue.trim() : "";
+            const isCreateHighlighted =
+              showCreateOption && highlightedIndex === createOptionIndex;
+
+            if (isCreateHighlighted) {
+              commitCreate(query, wasOpen);
             } else {
-              // Match typed value case-insensitively against item text
-              const inputValue = ref?.value ?? value;
-              const matchedItem = filteredItems.find(
-                (item) =>
-                  item.text.toLowerCase() === inputValue?.toLowerCase() &&
-                  !item.disabled,
-              );
-              if (matchedItem) {
+              open = !open;
+              if (
+                highlightOrigin === "keyboard" &&
+                highlightedIndex > -1 &&
+                filteredItems[highlightedIndex]?.id !== selectedId
+              ) {
                 open = false;
                 valueBeforeOpen = "";
-                selectedItem = matchedItem;
-                value = itemToString(selectedItem);
-                selectedId = selectedItem.id;
-                if (wasOpen) dispatch("close", { trigger: "select" });
+                if (filteredItems[highlightedIndex]) {
+                  value = itemToString(filteredItems[highlightedIndex]);
+                  selectedItem = filteredItems[highlightedIndex];
+                  selectedId = filteredItems[highlightedIndex].id;
+                  if (wasOpen) dispatch("close", { trigger: "select" });
+                }
+              } else {
+                // Match typed value case-insensitively against item text
+                const matchedItem = filteredItems.find(
+                  (item) =>
+                    item.text.toLowerCase() === inputValue?.toLowerCase() &&
+                    !item.disabled,
+                );
+                if (matchedItem) {
+                  open = false;
+                  valueBeforeOpen = "";
+                  selectedItem = matchedItem;
+                  value = itemToString(selectedItem);
+                  selectedId = selectedItem.id;
+                  if (wasOpen) dispatch("close", { trigger: "select" });
+                } else if (
+                  wasOpen &&
+                  allowCustomValue &&
+                  query.length > 0 &&
+                  isNovelQuery
+                ) {
+                  // Novel custom text with no highlight: signal create while
+                  // preserving today's allowCustomValue close behavior.
+                  dispatch("create", query);
+                }
               }
+              highlightedIndex = -1;
+              highlightOrigin = null;
             }
-            highlightedIndex = -1;
-            highlightOrigin = null;
           } else if (event.key === "Tab") {
             // Accept the inline suggestion before focus moves to the next
             // control. Tab is not prevented, so focus still advances normally.
@@ -1016,6 +1093,21 @@
               {/if}
             </ListBoxMenuItem>
           {/each}
+          {#if showCreateOption}
+            <ListBoxMenuItem
+              id="{id}-{CREATE_OPTION_ID}"
+              highlighted={highlightedIndex === createOptionIndex}
+              on:click={() => {
+                commitCreate(trimmedQuery);
+              }}
+              on:mouseenter={() => {
+                highlightedIndex = createOptionIndex;
+                highlightOrigin = "pointer";
+              }}
+            >
+              {createOptionLabel}
+            </ListBoxMenuItem>
+          {/if}
         {/if}
       </ListBoxMenu>
     {/if}
