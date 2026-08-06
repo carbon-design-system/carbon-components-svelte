@@ -1,5 +1,12 @@
 <script>
   /**
+   * @slot {{}} labelChildren - Custom label content. Overrides `labelText`.
+   * @slot {{}} action - Interactive control in the header (for example a button or expandable Search).
+   * @slot {{}} search - Search field below the header. Compose `Search` or expandable `Search`; filtering stays consumer-side.
+   * @slot {{}}
+   */
+
+  /**
    * Specify the kind of contained list.
    * @type {"on-page" | "disclosed"}
    */
@@ -24,6 +31,8 @@
   export let id = `ccs-${Math.random().toString(36)}`;
 
   $: labelId = `label-${id}`;
+  $: hasLabel = Boolean(labelText || $$slots.labelChildren);
+  $: hasHeader = Boolean(hasLabel || $$slots.action);
 </script>
 
 <div
@@ -40,7 +49,7 @@
   class:bx--contained-list--on-page="{kind === 'on-page'}"
   class:bx--contained-list--disclosed="{kind === 'disclosed'}"
 >
-  {#if labelText || $$slots.labelChildren || $$slots.action}
+  {#if hasHeader}
     <div
       class:bx--contained-list__header="{true}"
       class:bx--layout--size-sm={kind !== 'disclosed' && size === 'sm'}
@@ -48,7 +57,7 @@
       class:bx--layout--size-lg={kind !== 'disclosed' && size === 'lg'}
       class:bx--layout--size-xl={kind !== 'disclosed' && size === 'xl'}
     >
-      {#if labelText || $$slots.labelChildren}
+      {#if hasLabel}
         <div id="{labelId}" class:bx--contained-list__label="{true}">
           <slot name="labelChildren"> {labelText} </slot>
         </div>
@@ -60,9 +69,12 @@
       {/if}
     </div>
   {/if}
-  <ul
-    aria-labelledby={labelText || $$slots.labelChildren ? labelId : undefined}
-  >
+  {#if $$slots.search}
+    <div class:bx--contained-list__search="{true}">
+      <slot name="search" />
+    </div>
+  {/if}
+  <ul aria-labelledby={hasLabel ? labelId : undefined}>
     <slot />
   </ul>
 </div>
