@@ -64,3 +64,9 @@ Create persistent notifications that do not auto-dismiss by omitting timeout and
 These notifications remain visible until programmatically removed.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueuePersistent" />
+
+## Actions
+
+Pass `actionText` and `onAction` to `add()` to render a [NotificationActionButton](ToastNotification#actions) in the toast. Useful for undo or retry flows without mounting a toast template yourself.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueActions" />

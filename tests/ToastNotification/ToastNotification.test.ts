@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
+import ToastNotificationActionsTest from "./ToastNotificationActions.test.svelte";
 import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
 import ToastNotificationCustomTest from "./ToastNotificationCustom.test.svelte";
 import ToastNotificationReusableTest from "./ToastNotificationReusable.test.svelte";
@@ -351,6 +352,22 @@ describe("ToastNotification", () => {
     expect(screen.getByText("Custom Title:")).toBeInTheDocument();
     expect(screen.getByText("Custom subtitle content.")).toBeInTheDocument();
     expect(screen.getByText("Custom caption content.")).toBeInTheDocument();
+  });
+
+  it("should render actions slot", () => {
+    render(ToastNotificationActionsTest);
+
+    expect(screen.getByRole("button", { name: "Undo" })).toBeInTheDocument();
+  });
+
+  it("should invoke action button click handler", async () => {
+    vi.useRealTimers();
+    const onAction = vi.fn();
+    render(ToastNotificationActionsTest, { props: { onAction } });
+
+    await user.click(screen.getByRole("button", { name: "Undo" }));
+
+    expect(onAction).toHaveBeenCalledTimes(1);
   });
 
   it("should support bind:open", async () => {
