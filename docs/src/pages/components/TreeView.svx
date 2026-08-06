@@ -71,9 +71,19 @@ Slot a checkbox component in each tree view node to create a tree with checkable
 
 ### Inline editing
 
-Use a `contenteditable` element in each tree view node to enable inline editing of node names. The editable region is wrapped in a container with `stopPropagation` to prevent tree node selection when editing.
+Set `editable` to rename nodes in place. Press <DocKbd label="F2" /> or double-click a node to start editing. <DocKbd label="Enter" /> commits the new name, as does clicking away from the input; <DocKbd label="Escape" /> restores the original name.
+
+Nodes stay yours to manage: `rename` reports the node id, the committed text, and the previous text, and your handler applies it. An unchanged or empty name reports nothing.
+
+Set `editable` to `false` on a node to opt it out, as the first node here does. Disabled nodes and link nodes are never editable.
 
 <FileSource src="/framed/TreeView/TreeViewInlineEditing" />
+
+### Programmatic rename
+
+Use `TreeView.editNode` to start an edit from elsewhere in the interface, such as a toolbar or context menu. A collapsed target expands into view first.
+
+<FileSource src="/framed/TreeView/TreeViewEditNode" />
 
 ## Events
 

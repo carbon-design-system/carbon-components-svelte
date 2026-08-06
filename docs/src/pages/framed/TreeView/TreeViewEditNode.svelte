@@ -1,8 +1,10 @@
 <script>
-  import { RecursiveList, Stack, TreeView } from "carbon-components-svelte";
+  import { Button, ButtonSet, Stack, TreeView } from "carbon-components-svelte";
 
+  let treeview = null;
+  let activeId = "";
   let nodes = [
-    { id: 0, text: "AI / Machine learning", editable: false },
+    { id: 0, text: "AI / Machine learning" },
     {
       id: 1,
       text: "Analytics",
@@ -38,8 +40,21 @@
 </script>
 
 <Stack gap={6}>
+  <ButtonSet>
+    <Button
+      disabled={activeId === ""}
+      on:click={() => treeview?.editNode(activeId)}
+    >
+      Rename active node
+    </Button>
+    <Button kind="tertiary" on:click={() => treeview?.editNode(3)}>
+      Rename a collapsed node
+    </Button>
+  </ButtonSet>
   <div>
     <TreeView
+      bind:this={treeview}
+      bind:activeId
       labelText="Cloud Products"
       editable
       {nodes}
@@ -48,5 +63,4 @@
       }}
     />
   </div>
-  <RecursiveList {nodes} />
 </Stack>
