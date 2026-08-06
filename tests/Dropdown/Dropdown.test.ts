@@ -646,7 +646,7 @@ describe("Dropdown", () => {
     expect(dropdown).toHaveClass("bx--list-box--up");
   });
 
-  it("should not infinite loop when all items are disabled", async () => {
+  it("should select nothing when all items are disabled", async () => {
     const allDisabledItems = [
       { id: "0", text: "Slack", disabled: true },
       { id: "1", text: "Email", disabled: true },
@@ -663,18 +663,24 @@ describe("Dropdown", () => {
     const button = screen.getByRole("combobox");
     await user.click(button);
 
-    // If the while loop has no guard, this would hang forever.
+    // Disabled items stay in the keyboard navigation sequence so
+    // assistive-tech users can discover them.
     await user.keyboard("{ArrowDown}");
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-0$/);
     await user.keyboard("{ArrowUp}");
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-2$/);
 
-    // No item should be selected since all are disabled.
+    // Enter on a highlighted disabled item selects nothing and leaves the
+    // menu open, matching click.
+    await user.keyboard("{Enter}");
+    expect(button).toHaveAttribute("aria-expanded", "true");
     const options = screen.getAllByRole("option");
     for (const option of options) {
       expect(option).not.toHaveAttribute("aria-selected", "true");
     }
   });
 
-  it("should handle keyboard navigation with disabled items", async () => {
+  it("should highlight but not select disabled items during keyboard navigation", async () => {
     const itemsWithDisabled = [
       { id: "0", text: "Slack" },
       { id: "1", text: "Email", disabled: true },
@@ -691,8 +697,19 @@ describe("Dropdown", () => {
     const button = screen.getByRole("combobox");
     await user.click(button);
 
-    // Keyboard nav starts at selected item (index 0, Slack)
-    // ArrowDown once: skips disabled Email (index 1), goes to Fax (index 2)
+    // Keyboard nav starts at selected item (index 0, Slack). ArrowDown lands
+    // on disabled Email (index 1) — disabled items stay in the navigation
+    // sequence so assistive-tech users can discover them.
+    await user.keyboard("{ArrowDown}");
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-1$/);
+
+    // Enter on the highlighted disabled item selects nothing and leaves the
+    // menu open, matching click.
+    await user.keyboard("{Enter}");
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    expect(button).toHaveTextContent("Slack");
+
+    // ArrowDown again reaches Fax (index 2), which selects normally.
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{Enter}");
 
