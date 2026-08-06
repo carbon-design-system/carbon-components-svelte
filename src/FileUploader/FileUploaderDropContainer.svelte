@@ -2,7 +2,7 @@
   /**
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} change
-   * @event {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} rejected
+   * @event {Array<{ file: File; reason: "size" | "duplicate" | "invalid" | "count" }>} rejected
    */
 
   /**
@@ -41,6 +41,19 @@
    * via the `rejected` event with `reason: 'duplicate'`.
    */
   export let preventDuplicate = false;
+
+  /**
+   * Specify the maximum number of files that can be attached.
+   * Excess files are rejected after `validateFiles`, in selection order, via
+   * the `rejected` event with `reason: "count"`.
+   * When the list is at capacity, further picks are disabled until a file is removed.
+   * @type {number | undefined}
+   * @example
+   * ```svelte
+   * <FileUploaderDropContainer multiple maxFiles={3} />
+   * ```
+   */
+  export let maxFiles = undefined;
 
   /**
    * Override the default behavior of validating uploaded files.
@@ -86,6 +99,9 @@
 
   let over = false;
 
+  $: atMaxFiles = maxFiles !== undefined && files.length >= maxFiles;
+  $: inputDisabled = disabled || atMaxFiles;
+
   /** @param {ReadonlyArray<File>} incoming */
   function processIncoming(incoming) {
     const { accepted, rejected: builtInRejected } = filterIncomingFiles(
@@ -96,15 +112,33 @@
         existingFiles: files,
       },
     );
-    const validated = validateFiles(accepted);
+    let validated = validateFiles(accepted);
     const acceptedSet = new Set(validated);
-    /** @type {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} */
+    /** @type {Array<{ file: File; reason: "size" | "duplicate" | "invalid" | "count" }>} */
     const rejected = [
       ...builtInRejected,
       ...accepted
         .filter((file) => !acceptedSet.has(file))
         .map((file) => ({ file, reason: /** @type {const} */ ("invalid") })),
     ];
+
+    // Count check runs after validateFiles. In multiple mode, slots are
+    // relative to files already attached; in single mode, the selection replaces.
+    if (maxFiles !== undefined) {
+      const existingCount = multiple ? files.length : 0;
+      const slots = Math.max(0, maxFiles - existingCount);
+      if (validated.length > slots) {
+        const excess = validated.slice(slots);
+        rejected.push(
+          ...excess.map((file) => ({
+            file,
+            reason: /** @type {const} */ ("count"),
+          })),
+        );
+        validated = validated.slice(0, slots);
+      }
+    }
+
     if (rejected.length > 0) dispatch("rejected", rejected);
     files = multiple ? [...files, ...validated] : validated;
     dispatch("add", files);
@@ -118,21 +152,21 @@
   {...$$restProps}
   on:dragover
   on:dragover|preventDefault|stopPropagation={(event) => {
-    if (!disabled) {
+    if (!inputDisabled) {
       over = true;
       event.dataTransfer.dropEffect = "copy";
     }
   }}
   on:dragleave
   on:dragleave|preventDefault|stopPropagation={(event) => {
-    if (!disabled) {
+    if (!inputDisabled) {
       over = false;
       event.dataTransfer.dropEffect = "move";
     }
   }}
   on:drop
   on:drop|preventDefault|stopPropagation={(event) => {
-    if (!disabled) {
+    if (!inputDisabled) {
       over = false;
       processIncoming([...event.dataTransfer.files]);
     }
@@ -143,10 +177,10 @@
   <label
     for={id}
     {role}
-    tabindex={disabled ? -1 : tabindex}
-    aria-disabled={disabled || undefined}
+    tabindex={inputDisabled ? -1 : tabindex}
+    aria-disabled={inputDisabled || undefined}
     class:bx--file-browse-btn={true}
-    class:bx--file-browse-btn--disabled={disabled}
+    class:bx--file-browse-btn--disabled={inputDisabled}
     on:keydown
     on:keydown={(event) => {
       if (event.key === " " || event.key === "Enter") {
@@ -166,7 +200,7 @@
     type="file"
     tabindex="-1"
     {id}
-    {disabled}
+    disabled={inputDisabled}
     accept={typeof accept === "string" ? accept : accept.join(",")}
     {name}
     {multiple}
