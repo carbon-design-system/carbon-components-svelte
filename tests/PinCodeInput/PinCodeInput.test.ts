@@ -32,6 +32,120 @@ describe("PinCodeInput", () => {
     expect(getInputs()).toHaveLength(6);
   });
 
+  describe("groups", () => {
+    const getSeparators = (container: HTMLElement) =>
+      container.querySelectorAll(".bx--pin-code-input__group-separator");
+
+    it("renders decorative separators between valid groups", () => {
+      const { container } = render(PinCodeInput, {
+        props: { count: 6, groups: [3, 3] },
+      });
+
+      expect(getInputs()).toHaveLength(6);
+      expect(getSeparators(container)).toHaveLength(1);
+      expect(getSeparators(container)[0]).toHaveAttribute(
+        "aria-hidden",
+        "true",
+      );
+      expect(getSeparators(container)[0]).toHaveTextContent("–");
+    });
+
+    it("renders a separator between each adjacent group", () => {
+      const { container } = render(PinCodeInput, {
+        props: { count: 6, groups: [2, 2, 2] },
+      });
+
+      expect(getSeparators(container)).toHaveLength(2);
+    });
+
+    it("ignores groups that do not sum to count", () => {
+      const { container } = render(PinCodeInput, {
+        props: { count: 6, groups: [2, 2] },
+      });
+
+      expect(getInputs()).toHaveLength(6);
+      expect(getSeparators(container)).toHaveLength(0);
+    });
+
+    it("ignores groups with non-positive sizes", () => {
+      const { container } = render(PinCodeInput, {
+        props: { count: 4, groups: [0, 4] },
+      });
+
+      expect(getSeparators(container)).toHaveLength(0);
+    });
+
+    it("keeps arrow navigation contiguous across separators", async () => {
+      render(PinCodeInput, { props: { count: 6, groups: [3, 3] } });
+      const inputs = getInputs();
+
+      inputs[2].focus();
+      await user.keyboard("{ArrowRight}");
+      expect(inputs[3]).toHaveFocus();
+
+      await user.keyboard("{ArrowLeft}");
+      expect(inputs[2]).toHaveFocus();
+    });
+
+    it("auto-advances focus across a group boundary", async () => {
+      render(PinCodeInput, { props: { count: 6, groups: [3, 3] } });
+      const inputs = getInputs();
+
+      inputs[2].focus();
+      await user.keyboard("1");
+      expect(inputs[3]).toHaveFocus();
+    });
+
+    it("distributes a pasted code across grouped segments", async () => {
+      const { component } = render(PinCodeInput, {
+        props: { count: 6, groups: [3, 3] },
+      });
+      const inputs = getInputs();
+
+      inputs[0].focus();
+      await fireEvent.paste(inputs[0], {
+        clipboardData: { getData: () => "123456" },
+      });
+      await tick();
+
+      expect(component.value).toBe("123456");
+      expect(inputs.map((input) => input.value)).toEqual([
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+      ]);
+      expect(inputs[5]).toHaveFocus();
+    });
+
+    it("fills a partial paste from the focused segment across groups", async () => {
+      const { component } = render(PinCodeInput, {
+        props: { count: 6, groups: [3, 3] },
+      });
+      const inputs = getInputs();
+
+      inputs[2].focus();
+      await fireEvent.paste(inputs[2], {
+        clipboardData: { getData: () => "789" },
+      });
+      await tick();
+
+      expect(inputs.map((input) => input.value)).toEqual([
+        "",
+        "",
+        "7",
+        "8",
+        "9",
+        "",
+      ]);
+      expect(component.value).toBe("789");
+      // First empty segment receives focus after paste.
+      expect(inputs[0]).toHaveFocus();
+    });
+  });
+
   it("applies the extra-small size to each field", () => {
     render(PinCodeInput, { props: { size: "xs" } });
     for (const input of getInputs()) {
