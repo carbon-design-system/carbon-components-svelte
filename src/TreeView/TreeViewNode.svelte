@@ -52,6 +52,43 @@
     }
     return null;
   }
+
+  const SLOTTED_INTERACTIVE_SELECTOR =
+    'input, button, select, textarea, a[href], label, [contenteditable], [role="checkbox"]';
+
+  /**
+   * Prevents a tree item from taking focus when clicking slotted controls
+   * (e.g. checkboxes, links, contenteditable regions).
+   * @type {(
+   *   event: MouseEvent,
+   *   labelRoot: HTMLElement | null,
+   *   options?: { ignoreToggle?: boolean }
+   * ) => void}
+   */
+  export function preventTreeItemFocusOnSlottedControl(
+    event,
+    labelRoot,
+    options = {},
+  ) {
+    if (
+      !(event.target instanceof Element) ||
+      !labelRoot?.contains(event.target)
+    ) {
+      return;
+    }
+
+    if (
+      options.ignoreToggle &&
+      event.target.closest(".bx--tree-parent-node__toggle")
+    ) {
+      return;
+    }
+
+    const interactive = event.target.closest(SLOTTED_INTERACTIVE_SELECTOR);
+    if (interactive instanceof HTMLElement) {
+      event.preventDefault();
+    }
+  }
 </script>
 
 <script>
@@ -141,6 +178,11 @@
     refLabel.style.marginLeft = `-${offset()}rem`;
     refLabel.style.paddingLeft = `${offset()}rem`;
   }
+
+  /** @param {MouseEvent} event */
+  function handleSlottedControlMouseDown(event) {
+    preventTreeItemFocusOnSlottedControl(event, refLabel);
+  }
 </script>
 
 {#if href}
@@ -169,6 +211,7 @@
         if (disabled) return;
         clickNode(node, event);
       }}
+      on:mousedown={handleSlottedControlMouseDown}
       on:keydown={(event) => {
         if (
           event.key === "ArrowUp" ||
@@ -232,6 +275,7 @@
       if (disabled) return;
       clickNode(node, event);
     }}
+    on:mousedown={handleSlottedControlMouseDown}
     on:keydown={(event) => {
       if (
         event.key === "ArrowUp" ||
