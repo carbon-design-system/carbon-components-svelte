@@ -155,6 +155,27 @@ describe("UIShell", () => {
       expect(hamburgerButton).toHaveAttribute("title", "Close menu");
     });
 
+    it("should toggle aria-expanded on the hamburger menu button", async () => {
+      const { container } = render(UiShell, {
+        props: {
+          persistentHamburgerMenu: true,
+          isSideNavOpen: false,
+        },
+      });
+
+      const hamburgerButton = container.querySelector(
+        ".bx--header__menu-trigger",
+      );
+      assert(hamburgerButton);
+      expect(hamburgerButton).toHaveAttribute("aria-expanded", "false");
+
+      await user.click(hamburgerButton);
+      expect(hamburgerButton).toHaveAttribute("aria-expanded", "true");
+
+      await user.click(hamburgerButton);
+      expect(hamburgerButton).toHaveAttribute("aria-expanded", "false");
+    });
+
     describe("user interaction preservation", () => {
       const setViewportWidth = (width: number) => {
         Object.defineProperty(window, "innerWidth", {
