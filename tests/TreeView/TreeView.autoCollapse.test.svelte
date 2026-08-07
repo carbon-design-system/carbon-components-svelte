@@ -32,12 +32,24 @@
         {
           id: "subfolder1",
           text: "Subfolder 1",
-          nodes: [{ id: "subitem1", text: "Subitem 1" }],
+          nodes: [
+            {
+              id: "subitem1",
+              text: "Subitem 1",
+              nodes: [{ id: "subsubitem1", text: "Subsubitem 1" }],
+            },
+          ],
         },
         {
           id: "subfolder2",
           text: "Subfolder 2",
-          nodes: [{ id: "subitem2", text: "Subitem 2" }],
+          nodes: [
+            {
+              id: "subitem2",
+              text: "Subitem 2",
+              nodes: [{ id: "subsubitem2", text: "Subsubitem 2" }],
+            },
+          ],
         },
       ],
     },

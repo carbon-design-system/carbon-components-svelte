@@ -1828,6 +1828,43 @@ describe("TreeView autoCollapse", () => {
     expect(folder1).toHaveAttribute("aria-expanded", "false");
   });
 
+  it("applies autoCollapse across 4 levels of nesting and top-level root siblings when activeId changes", async () => {
+    // Exercises the precomputed sibling cache (perf/tree-view-autocollapse-sibling-cache):
+    // a chain of ancestors 4 levels deep, a sibling collapse at a *nested* level,
+    // and a sibling collapse at the *top-level root* (whose "parent" is the
+    // implicit forest root, not a real node).
+    const { rerender } = render(TreeViewAutoCollapse, { autoCollapse: true });
+
+    const folder1 = treeItemById("folder1");
+    const folder2 = treeItemById("folder2");
+    const folder3 = treeItemById("folder3");
+
+    // Activate a leaf 4 levels deep: folder3 > subfolder1 > subitem1 > subsubitem1.
+    await rerender({ activeId: "subsubitem1" });
+
+    expect(folder3).toHaveAttribute("aria-expanded", "true");
+    const subfolder1 = treeItemById("subfolder1");
+    const subfolder2 = treeItemById("subfolder2");
+    expect(subfolder1).toHaveAttribute("aria-expanded", "true");
+    expect(subfolder2).toHaveAttribute("aria-expanded", "false");
+    const subitem1 = treeItemById("subitem1");
+    expect(subitem1).toHaveAttribute("aria-expanded", "true");
+
+    // Move to the sibling deep branch: subfolder1 (and its expanded child
+    // subitem1) must collapse, while the shared ancestor folder3 stays expanded.
+    await rerender({ activeId: "subsubitem2" });
+    expect(folder3).toHaveAttribute("aria-expanded", "true");
+    expect(subfolder2).toHaveAttribute("aria-expanded", "true");
+    expect(subfolder1).toHaveAttribute("aria-expanded", "false");
+
+    // Jump to a leaf under a different top-level root (folder1): its root-level
+    // siblings folder2 and folder3 must collapse (root-parent edge case).
+    await rerender({ activeId: "item1" });
+    expect(folder1).toHaveAttribute("aria-expanded", "true");
+    expect(folder2).toHaveAttribute("aria-expanded", "false");
+    expect(folder3).toHaveAttribute("aria-expanded", "false");
+  });
+
   describe("TreeViewNode Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;
