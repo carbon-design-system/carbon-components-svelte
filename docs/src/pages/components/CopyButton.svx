@@ -67,6 +67,12 @@ Set `feedbackIcon` to show a different icon while feedback is visible. The copy 
 
 <CopyButton text="Carbon svelte" feedbackIcon={Checkmark} />
 
+### Duration
+
+Set `feedbackTimeout` to change how long the feedback stays visible, in milliseconds. Defaults to `2000`.
+
+<CopyButton text="Carbon svelte" feedbackTimeout={5000} />
+
 ## Copy behavior
 
 Replace or disable the default clipboard behavior.
