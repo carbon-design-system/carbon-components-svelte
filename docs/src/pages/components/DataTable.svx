@@ -1,6 +1,6 @@
 ---
 components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions"]
-description: Data tables display structured data in a tabular format. Use them to present large datasets with built-in support for sorting, filtering, pagination, virtualization, and row selection and expansion.
+description: Data tables display structured data in rows and columns, with sorting, filtering, pagination, virtualization, and row selection and expansion.
 ---
 
 <script>
