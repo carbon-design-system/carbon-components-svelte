@@ -109,7 +109,7 @@
     />
   </span>
   {#if invalid && errorSubject}
-    <div class:bx--form-requirement={true}>
+    <div class:bx--form-requirement={true} role="alert">
       <div class:bx--form-requirement__title={true}>{errorSubject}</div>
       {#if errorBody}
         <p class:bx--form-requirement__supplement={true}>{errorBody}</p>
