@@ -955,6 +955,61 @@ describe("MultiSelect", () => {
 
       expect(screen.getByTestId("bound-value")).toHaveTextContent("hello");
     });
+
+    // Perf regression: `filteredItems` must be gated on `filterable && open`
+    // so a closed, non-filterable MultiSelect never runs the (potentially
+    // expensive, consumer-supplied) filterItem over the full item list.
+    it("does not invoke filterItem while closed and not filterable", async () => {
+      const filterItem = vi.fn((item: MultiSelectItem, value: string) =>
+        item.text.toLowerCase().includes(value.trim().toLowerCase()),
+      );
+
+      const { component } = render(MultiSelect, {
+        props: {
+          items,
+          filterable: false,
+          filterItem,
+        },
+      });
+
+      filterItem.mockClear();
+
+      // Programmatic selectedIds updates reassign `sortedItems`, which is
+      // what used to always re-run the always-on filter.
+      component.selectedIds = ["0"];
+      await tick();
+
+      expect(filterItem).not.toHaveBeenCalled();
+    });
+
+    it("invokes filterItem once filterable and open", async () => {
+      const filterItem = vi.fn((item: MultiSelectItem, value: string) =>
+        item.text.toLowerCase().includes(value.trim().toLowerCase()),
+      );
+
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          filterItem,
+          placeholder: "Filter items...",
+        },
+      });
+
+      // Not yet open: still gated.
+      expect(filterItem).not.toHaveBeenCalled();
+
+      const input = screen.getByPlaceholderText("Filter items...");
+      await user.click(input);
+      filterItem.mockClear();
+
+      await user.type(input, "em");
+
+      expect(filterItem).toHaveBeenCalled();
+      expect(screen.queryByText("Slack")).not.toBeInTheDocument();
+      expect(screen.getByText("Email")).toBeInTheDocument();
+      expect(screen.queryByText("Fax")).not.toBeInTheDocument();
+    });
   });
 
   describe("sorting behavior", () => {

@@ -366,7 +366,13 @@
     // "Focusability of disabled controls") so assistive-tech users can
     // discover them; selectItem and the option click handlers refuse the
     // actual selection.
-    const navigableItems = filterable ? filteredItems : sortedItems;
+    //
+    // `filteredItems` is gated on `open` and recomputes reactively, so it can
+    // still be stale/empty here immediately after synchronously flipping
+    // `open` to `true` in the same keydown handler (before the reactive
+    // statement re-runs). Fall back to `sortedItems` in that case, matching
+    // ComboBox's `filteredItems?.length ? filteredItems : items` guard.
+    const navigableItems = filteredItems.length ? filteredItems : sortedItems;
     highlightedIndex = moveIndex(highlightedIndex, step, navigableItems.length);
     highlightOrigin = "keyboard";
   }
@@ -723,9 +729,12 @@
   $: isAtSelectionCap =
     hasMaxSelectedItems && selectionCount >= maxSelectedItems;
   $: maxSelectedId = `max-selected-${id}`;
-  $: filteredItems = sortedItems.filter(
-    (item) => item.isSelectAll || filterItem(item, value),
-  );
+  $: filteredItems =
+    filterable && open
+      ? sortedItems.filter(
+          (item) => item.isSelectAll || filterItem(item, value),
+        )
+      : [];
   $: highlightedId =
     highlightedIndex > -1
       ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
