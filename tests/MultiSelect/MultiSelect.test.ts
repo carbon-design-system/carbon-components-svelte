@@ -632,6 +632,23 @@ describe("MultiSelect", () => {
       expect(allRolesOption).toHaveAttribute("aria-checked", "false");
     });
 
+    it("select-all option shows checked when all enabled items are selected and disabled items are excluded", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          selectedIds: ["editor", "owner", "uploader"],
+          labelText: "Roles",
+        },
+      });
+
+      await openMenu();
+      const allRolesOption = screen.getByRole("option", { name: "All roles" });
+      expect(allRolesOption).toHaveAttribute("aria-checked", "true");
+      const readerOption = screen.getByRole("option", { name: "Reader" });
+      expect(readerOption).toHaveAttribute("aria-disabled", "true");
+      expect(readerOption).toHaveAttribute("aria-selected", "false");
+    });
+
     it("clear button deselects all including select-all state", async () => {
       render(MultiSelect, {
         props: {
