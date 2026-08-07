@@ -25,7 +25,7 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
-  /** Set to `true` to disable the checkbox */
+  /** Set to `true` to disable the link */
   export let disabled = false;
 
   /** Set to `true` to allow visited styles */
