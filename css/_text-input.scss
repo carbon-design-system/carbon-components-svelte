@@ -24,3 +24,23 @@
 @include exports("text-input-xs") {
   @include text-input-xs;
 }
+
+/// Character counter (Carbon React `enableCounter`/`maxCount`). v10 ships no
+/// `.bx--text-input__label-wrapper` at all (unlike `.bx--text-area__label-wrapper`,
+/// which v10 already flexes label/counter apart) - add it here so the label
+/// and counter split across the row the same way TextArea's already does.
+/// The counter itself reuses `.bx--label`'s own `label-01` type style; no
+/// dedicated counter rule is needed.
+/// @access private
+/// @group components
+@mixin text-input-counter {
+  .#{$prefix}--text-input__label-wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@include exports("text-input-counter") {
+  @include text-input-counter;
+}

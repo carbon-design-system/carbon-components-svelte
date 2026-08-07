@@ -46,6 +46,16 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
+  /**
+   * Specify the max character count allowed for the input.
+   * Required for `enableCounter` to display.
+   * @type {number}
+   */
+  export let maxCount = undefined;
+
+  /** Set to `true` to display the character counter. Has no effect without `maxCount`. */
+  export let enableCounter = false;
+
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
@@ -131,19 +141,30 @@
   {#if inline}
     <div class:bx--text-input__label-helper-wrapper={true}>
       {#if labelText || $$slots.labelChildren}
-        <label
-          for={id}
-          class:bx--label={true}
-          class:bx--visually-hidden={hideLabel}
-          class:bx--label--disabled={disabled}
-          class:bx--label--inline={inline}
-          class:bx--label--inline--xs={size === "xs"}
-          class:bx--label--inline--sm={size === "sm"}
-          class:bx--label--inline--xl={size === "xl"}
-          class:bx--label--slotted={isFluid && $$slots.labelChildren}
-        >
-          <slot name="labelChildren"> {labelText} </slot>
-        </label>
+        <div class:bx--text-input__label-wrapper={true}>
+          <label
+            for={id}
+            class:bx--label={true}
+            class:bx--visually-hidden={hideLabel}
+            class:bx--label--disabled={disabled}
+            class:bx--label--inline={inline}
+            class:bx--label--inline--xs={size === "xs"}
+            class:bx--label--inline--sm={size === "sm"}
+            class:bx--label--inline--xl={size === "xl"}
+            class:bx--label--slotted={isFluid && $$slots.labelChildren}
+          >
+            <slot name="labelChildren"> {labelText} </slot>
+          </label>
+          {#if enableCounter && maxCount != null}
+            <div
+              class:bx--label={true}
+              class:bx--label--disabled={disabled}
+              class:bx--text-input__label-counter={true}
+            >
+              {(value ?? "").toString().length}/{maxCount}
+            </div>
+          {/if}
+        </div>
       {/if}
       {#if !isFluid && helperText}
         <div
@@ -157,18 +178,29 @@
     </div>
   {/if}
   {#if !inline && (labelText || $$slots.labelChildren)}
-    <label
-      for={id}
-      class:bx--label={true}
-      class:bx--visually-hidden={hideLabel}
-      class:bx--label--disabled={disabled}
-      class:bx--label--inline={inline}
-      class:bx--label--inline-sm={inline && size === "sm"}
-      class:bx--label--inline-xl={inline && size === "xl"}
-      class:bx--label--slotted={isFluid && $$slots.labelChildren}
-    >
-      <slot name="labelChildren"> {labelText} </slot>
-    </label>
+    <div class:bx--text-input__label-wrapper={true}>
+      <label
+        for={id}
+        class:bx--label={true}
+        class:bx--visually-hidden={hideLabel}
+        class:bx--label--disabled={disabled}
+        class:bx--label--inline={inline}
+        class:bx--label--inline-sm={inline && size === "sm"}
+        class:bx--label--inline-xl={inline && size === "xl"}
+        class:bx--label--slotted={isFluid && $$slots.labelChildren}
+      >
+        <slot name="labelChildren"> {labelText} </slot>
+      </label>
+      {#if enableCounter && maxCount != null}
+        <div
+          class:bx--label={true}
+          class:bx--label--disabled={disabled}
+          class:bx--text-input__label-counter={true}
+        >
+          {(value ?? "").toString().length}/{maxCount}
+        </div>
+      {/if}
+    </div>
   {/if}
   <div
     class:bx--text-input__field-outer-wrapper={true}
@@ -219,6 +251,7 @@
         class:bx--text-input--xs={size === "xs"}
         class:bx--text-input--sm={size === "sm"}
         class:bx--text-input--xl={size === "xl"}
+        maxlength={enableCounter ? maxCount : undefined}
         {...$$restProps}
         on:change={onChange}
         on:input={onInput}

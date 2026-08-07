@@ -60,6 +60,40 @@ describe("TextInput", () => {
     );
   });
 
+  it("should show the character counter when enableCounter and maxCount are set", () => {
+    render(TextInput, {
+      props: { enableCounter: true, maxCount: 100, value: "Test text" },
+    });
+
+    expect(screen.getByText("9/100")).toBeInTheDocument();
+  });
+
+  it("should not show the character counter when enableCounter is false", () => {
+    render(TextInput, {
+      props: { maxCount: 100, value: "Test text" },
+    });
+
+    expect(screen.queryByText("9/100")).not.toBeInTheDocument();
+  });
+
+  it("should not show the character counter when maxCount is unset", () => {
+    render(TextInput, { props: { enableCounter: true, value: "Test text" } });
+
+    expect(screen.queryByText(/^9\//)).not.toBeInTheDocument();
+  });
+
+  it("should not set maxlength when enableCounter is false, even with maxCount set", () => {
+    render(TextInput, { props: { maxCount: 100 } });
+
+    expect(screen.getByRole("textbox")).not.toHaveAttribute("maxlength");
+  });
+
+  it("should set maxlength when enableCounter and maxCount are both set", () => {
+    render(TextInput, { props: { maxCount: 100, enableCounter: true } });
+
+    expect(screen.getByRole("textbox")).toHaveAttribute("maxlength", "100");
+  });
+
   it("should handle invalid state", () => {
     render(TextInput, {
       props: { invalid: true, invalidText: "Invalid input" },
