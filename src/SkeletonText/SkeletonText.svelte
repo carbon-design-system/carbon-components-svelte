@@ -20,7 +20,14 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if paragraph}
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div {...$$restProps} on:click on:mouseover on:mouseenter on:mouseleave>
+  <div
+    aria-hidden="true"
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
     {#each Array.from({ length: lines }).map((_, i) => {
       const min = widthPx ? widthNum - 75 : 0;
       const max = widthPx ? widthNum : 75;
@@ -38,6 +45,7 @@
 {:else}
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <p
+    aria-hidden="true"
     class:bx--skeleton__text={true}
     class:bx--skeleton__heading={heading}
     style:width
