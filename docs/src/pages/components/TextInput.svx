@@ -20,6 +20,12 @@ Add helper text below the input to provide additional context or instructions.
 
 <TextInput labelText="User name" helperText="Your user name is associated with your email" placeholder="Enter user name..." />
 
+## Character counter
+
+Set `enableCounter` and `maxCount` to show a character counter to the right of the label. `enableCounter` alone has no effect - both props are required for the counter (and the native `maxlength` attribute) to apply.
+
+<TextInput enableCounter maxCount={20} labelText="User name" placeholder="Enter user name..." />
+
 ## Hidden label
 
 Hide the label visually with `hideLabel`. The label remains available to screen readers.
