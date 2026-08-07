@@ -547,7 +547,9 @@ describe("FileUploader", () => {
 
     const closeButtons = () =>
       Array.from(
-        document.querySelectorAll(".bx--file__state-container .bx--file-close"),
+        document.querySelectorAll<HTMLElement>(
+          ".bx--file__state-container .bx--file-close",
+        ),
       );
 
     closeButtons()[0].focus();
