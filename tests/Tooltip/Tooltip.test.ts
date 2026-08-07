@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type TooltipComponent from "carbon-components-svelte/Tooltip/Tooltip.svelte";
+import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
 import TooltipAlignments from "./TooltipAlignments.test.svelte";
 import TooltipCustomContent from "./TooltipCustomContent.test.svelte";
 import TooltipCustomIcon from "./TooltipCustomIcon.test.svelte";
@@ -295,6 +297,44 @@ describe("Tooltip", () => {
       .getAttribute("aria-labelledby");
     expect(labelledby).toBeTruthy();
     expect(document.getElementById(labelledby ?? "")).toBeInTheDocument();
+  });
+
+  describe("reposition performance", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    test("should not remeasure geometry on unrelated re-renders while open", async () => {
+      const { rerender } = render(Tooltip, {
+        open: true,
+        iconDescription: "Information",
+      });
+
+      // Let the initial tick()-deferred position() run before observing.
+      // `tick()` resolves via microtasks, which fake timers don't control.
+      await tick();
+      await tick();
+
+      const spy = vi.spyOn(Element.prototype, "getBoundingClientRect");
+
+      // Re-render with a prop that doesn't affect tooltip geometry.
+      await rerender({ open: true, iconDescription: "Updated description" });
+      await tick();
+      await tick();
+
+      expect(spy).not.toHaveBeenCalled();
+
+      // A direction change still triggers a reposition.
+      await rerender({
+        open: true,
+        direction: "top",
+        iconDescription: "Updated description",
+      });
+      await tick();
+      await tick();
+
+      expect(spy).toHaveBeenCalled();
+    });
   });
 
   describe("Generics", () => {

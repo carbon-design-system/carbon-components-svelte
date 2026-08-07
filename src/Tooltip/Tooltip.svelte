@@ -103,11 +103,11 @@
   export let portalTooltip = undefined;
 
   import {
-    afterUpdate,
     createEventDispatcher,
     getContext,
     onMount,
     setContext,
+    tick,
   } from "svelte";
   import { writable } from "svelte/store";
   import Information from "../icons/Information.svelte";
@@ -189,59 +189,74 @@
     };
   });
 
-  afterUpdate(() => {
-    if (open && !effectivePortalTooltip) {
-      const button = ref.getBoundingClientRect();
-      const tooltip = refTooltip.getBoundingClientRect();
+  function position() {
+    if (!(open && !effectivePortalTooltip && ref && refTooltip)) return;
 
-      let iconWidth = 16;
-      let iconHeight = 16;
+    const button = ref.getBoundingClientRect();
+    const tooltip = refTooltip.getBoundingClientRect();
 
-      if (refIcon) {
-        const icon = refIcon.getBoundingClientRect();
-        iconWidth = icon.width;
-        iconHeight = icon.height;
-      }
+    let iconWidth = 16;
+    let iconHeight = 16;
 
-      let offsetX = 0;
-      let offsetY = 0;
-
-      switch (direction) {
-        case "bottom":
-          if (hideIcon) {
-            offsetX = -1 * (tooltip.width / 2 - button.width / 2);
-          } else {
-            offsetX = -1 * (tooltip.width / 2 - button.width + iconWidth / 2);
-          }
-          offsetY = iconHeight / 2;
-          break;
-        case "right":
-          offsetX = button.width + 6;
-          offsetY = -1 * (tooltip.height / 2 + iconWidth / 2 - 3);
-          break;
-        case "left":
-          if (hideIcon) {
-            offsetX = -1 * (tooltip.width + 6 + 1);
-          } else {
-            offsetX = -1 * (tooltip.width - button.width + iconWidth + 8);
-          }
-          offsetY = -1 * (tooltip.height / 2 + button.height) - 2;
-          break;
-        case "top":
-          if (hideIcon) {
-            offsetX = -1 * (tooltip.width / 2 - button.width / 2);
-          } else {
-            offsetX =
-              -1 * (tooltip.width / 2 - button.width + iconWidth / 2 + 1);
-          }
-          offsetY = -1 * (tooltip.height + button.height + iconWidth / 2 - 1);
-          break;
-      }
-
-      refTooltip.style.left = `${offsetX}px`;
-      refTooltip.style.marginTop = `${offsetY}px`;
+    if (refIcon) {
+      const icon = refIcon.getBoundingClientRect();
+      iconWidth = icon.width;
+      iconHeight = icon.height;
     }
-  });
+
+    let offsetX = 0;
+    let offsetY = 0;
+
+    switch (direction) {
+      case "bottom":
+        if (hideIcon) {
+          offsetX = -1 * (tooltip.width / 2 - button.width / 2);
+        } else {
+          offsetX = -1 * (tooltip.width / 2 - button.width + iconWidth / 2);
+        }
+        offsetY = iconHeight / 2;
+        break;
+      case "right":
+        offsetX = button.width + 6;
+        offsetY = -1 * (tooltip.height / 2 + iconWidth / 2 - 3);
+        break;
+      case "left":
+        if (hideIcon) {
+          offsetX = -1 * (tooltip.width + 6 + 1);
+        } else {
+          offsetX = -1 * (tooltip.width - button.width + iconWidth + 8);
+        }
+        offsetY = -1 * (tooltip.height / 2 + button.height) - 2;
+        break;
+      case "top":
+        if (hideIcon) {
+          offsetX = -1 * (tooltip.width / 2 - button.width / 2);
+        } else {
+          offsetX = -1 * (tooltip.width / 2 - button.width + iconWidth / 2 + 1);
+        }
+        offsetY = -1 * (tooltip.height + button.height + iconWidth / 2 - 1);
+        break;
+    }
+
+    refTooltip.style.left = `${offsetX}px`;
+    refTooltip.style.marginTop = `${offsetY}px`;
+  }
+
+  // Reposition only when the tooltip opens or an input that affects its
+  // geometry changes—not on every unrelated re-render of this component
+  // (unlike `afterUpdate`, which would force a synchronous reflow each time).
+  // The DOM must be committed before measuring, so defer behind `tick()`.
+  //
+  // `ref`/`refTooltip`/`refIcon` are intentionally NOT read here: they're
+  // `bind:this` targets, and Svelte's compiled output re-invalidates a
+  // `bind:this` binding on every component update regardless of whether the
+  // element identity actually changed, which would make this block refire
+  // on every unrelated re-render. `position()` already null-checks them.
+  $: if (open && !effectivePortalTooltip) {
+    void direction;
+    void hideIcon;
+    tick().then(position);
+  }
 
   $: tooltipOpen.set(open);
   $: if (!open) openedByHover.set(false);
