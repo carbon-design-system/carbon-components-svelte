@@ -10,7 +10,7 @@ description: Toggletips display contextual content in a popover that is toggled 
 
 ## Basic
 
-Unlike a tooltip, a toggletip opens and closes on click. Click the button to toggle the content. Press `Escape` or click outside to close it.
+Unlike a tooltip, a toggletip opens and closes on click. Click the button to toggle the content. Press <DocKbd label="Escape" /> or click outside to close it.
 
 <Toggletip>
   Custom toggletip content with a longer description that wraps onto multiple lines.
