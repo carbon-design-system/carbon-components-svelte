@@ -126,7 +126,7 @@ Import the corresponding locale module from `flatpickr/dist/l10n/<key>` and pass
 
 ## Portal
 
-Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with overflow hidden or z-index stacking contexts. When inside a Modal, portalMenu defaults to true unless explicitly set to false.
+Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Inside a [Modal](/components/Modal), `portalMenu` defaults to `true` unless explicitly set to `false`.
 
 <FileSource src="/framed/DatePicker/DatePickerModal" />
 
