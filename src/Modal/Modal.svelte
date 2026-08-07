@@ -133,7 +133,7 @@
    */
   export let ref = null;
 
-  import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
@@ -151,6 +151,7 @@
   let innerModal = null;
   let opened = false;
   let closeDispatched = false;
+  let mounted = false;
 
   function focus(element) {
     const container = element || innerModal;
@@ -186,7 +187,19 @@
 
   setContext("carbon:Modal", {});
 
-  afterUpdate(() => {
+  // Initial mount already runs the reactive block below, which handles
+  // dispatching "open" and the `opened`/`focusReturn.save()` bookkeeping.
+  // What it can't do is focus the modal: reactive statements run *before*
+  // the DOM is committed, so `innerModal` isn't attached yet. `onMount`
+  // runs after mount, so the DOM is already in place — no `tick()` needed.
+  onMount(() => {
+    mounted = true;
+    if (open) {
+      focus();
+    }
+  });
+
+  $: {
     if (opened) {
       if (!open) {
         opened = false;
@@ -199,11 +212,20 @@
       }
     } else if (open) {
       opened = true;
+      // Reading `document.activeElement` doesn't depend on this modal's own
+      // DOM, so it's safe (and race-free) to capture it synchronously here.
       focusReturn.save();
-      focus();
       dispatch("open");
+      // Skip on the initial-mount run: `onMount` above already handles
+      // focusing an already-open modal. This only covers later open
+      // transitions, where `focus()` needs the committed DOM (`tick()`).
+      if (mounted) {
+        tick().then(() => {
+          if (open) focus();
+        });
+      }
     }
-  });
+  }
 
   $: modalLabelId = `bx--modal-header__label--modal-${id}`;
   $: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
