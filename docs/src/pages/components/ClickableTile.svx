@@ -16,7 +16,7 @@ Carbon Design System
 
 ## Prevent default
 
-Handle the click event to override default link behavior. Use e.preventDefault() to stop navigation.
+Handle the `click` event to override default link behavior. Call `e.preventDefault()` to stop navigation.
 
 <ClickableTile
   href="/"
