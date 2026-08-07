@@ -76,7 +76,7 @@ Use the `before` slot to render content to the left of the input within a joined
 
 As the user types, each `SearchMenuItem` is matched against the search value to decide whether it is shown and which characters of its `text` are highlighted. The `match` prop controls this. It receives the item `text` and the current search value and returns `{ matched, indices }`: `matched` filters the item out when `false`, and `indices` are the character positions highlighted in the text. The default is fuzzy matching.
 
-### Default fuzzy matching
+### Built-in fuzzy matching
 
 Fuzzy matching prefers a contiguous substring, ranking a prefix above a word boundary above a mid-word occurrence, and falls back to a subsequence match so that "dsm" matches "**D**ata **S**tore for **M**emcache". Matching is case-insensitive. No configuration is required.
 

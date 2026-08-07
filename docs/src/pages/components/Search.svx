@@ -18,7 +18,7 @@ The search input is extra-large by default. Set `size` to choose another variant
 
 <Search />
 
-## Default value
+## Initial value
 
 Set an initial value with `value`.
 

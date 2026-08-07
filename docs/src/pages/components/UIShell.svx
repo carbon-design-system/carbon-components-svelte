@@ -146,7 +146,7 @@ Add utilities to the header with header utilities. Compose [BadgeIndicator](/com
 
 <FileSource src="/framed/UIShell/HeaderUtilities" />
 
-### Default avatar
+### Fallback avatar
 
 Use `ProfileMenu` for an account menu in the header. When the `avatar` slot is empty, a default [UserAvatar](/components/UserAvatar) renders. The menu closes on outside click and <DocKbd label="Escape" />.
 

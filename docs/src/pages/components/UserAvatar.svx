@@ -15,7 +15,7 @@ It is designed to be used with the UI Shell [profile menu](/components/UIShell#p
 
 The avatar renders the first available of an image, a custom icon, initials, or the default user icon.
 
-### Default
+### Fallback icon
 
 Render the avatar without any content to show the default user icon.
 
