@@ -648,6 +648,7 @@
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
   $: readonlyId = `readonly-${id}`;
+  $: selectionId = `selection-${id}`;
   // `aria-readonly` on a combobox/listbox does not reliably surface read-only state,
   // so the read-only state is also exposed as a visually-hidden description. The
   // single status/help id is combined with the read-only id (a describedby
@@ -660,8 +661,13 @@
         : !isFluid && !showInvalid && !showWarn && helperText
           ? helperId
           : undefined;
+  $: hasSelectionDescription = !readonly && selectionCount > 0;
   $: fieldDescribedById =
-    [readonly ? readonlyId : null, statusDescribedById]
+    [
+      readonly ? readonlyId : null,
+      hasSelectionDescription ? selectionId : null,
+      statusDescribedById,
+    ]
       .filter(Boolean)
       .join(" ") || undefined;
   // The selection count badge is hidden from assistive tech in read-only.
@@ -1069,7 +1075,6 @@
           {id}
           {disabled}
           {readonly}
-          {translateWithId}
         >
           {#if selectionCount > 0}
             <ListBoxSelection
@@ -1316,6 +1321,12 @@
   {#if readonly}
     <span id={readonlyId} class:bx--visually-hidden={true}
       >{readonlyDescription}</span
+    >
+  {/if}
+  {#if hasSelectionDescription}
+    <span id={selectionId} class:bx--visually-hidden={true}
+      >{selectionCount}
+      selected</span
     >
   {/if}
 </div>

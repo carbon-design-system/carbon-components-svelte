@@ -8,8 +8,6 @@
   export let readonly: ComponentProps<ListBoxField>["readonly"] = false;
   export let role: ComponentProps<ListBoxField>["role"] = "combobox";
   export let tabindex: ComponentProps<ListBoxField>["tabindex"] = "-1";
-  export let translateWithId: ComponentProps<ListBoxField>["translateWithId"] =
-    undefined;
   export let id: ComponentProps<ListBoxField>["id"] = undefined;
   export let ref: ComponentProps<ListBoxField>["ref"] = null;
   export let slotContent = "";
@@ -30,7 +28,6 @@
   {readonly}
   {role}
   {tabindex}
-  {translateWithId}
   {id}
   bind:ref
   on:click={(e) => onclick?.(e)}

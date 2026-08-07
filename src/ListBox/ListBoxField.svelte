@@ -1,8 +1,4 @@
 <script>
-  /**
-   * @typedef {"close" | "open"} ListBoxFieldTranslationId
-   */
-
   /** Set to `true` to disable the list box field */
   export let disabled = false;
 
@@ -18,15 +14,6 @@
    */
   export let tabindex = "-1";
 
-  /** Default translation ids */
-  export const translationIds = { close: "close", open: "open" };
-
-  /**
-   * Override the default translation ids.
-   * @type {(id: ListBoxFieldTranslationId) => string}
-   */
-  export let translateWithId = (id) => defaultTranslations[id];
-
   /** Set an id for the top-level element */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -38,10 +25,6 @@
 
   import { getContext } from "svelte";
 
-  const defaultTranslations = {
-    [translationIds.close]: "Close menu",
-    [translationIds.open]: "Open menu",
-  };
   const ctx = getContext("carbon:MultiSelect");
 
   $: if (ctx && ref) {
@@ -62,7 +45,6 @@
   aria-controls={(ariaExpanded && menuId) || undefined}
   aria-disabled={disabled}
   aria-readonly={readonly || undefined}
-  aria-label={ariaExpanded ? translateWithId("close") : translateWithId("open")}
   tabindex={disabled ? "-1" : tabindex}
   class:bx--list-box__field={true}
   {...$$restProps}
