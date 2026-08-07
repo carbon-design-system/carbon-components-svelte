@@ -47,6 +47,23 @@ describe("Button", () => {
     }
   });
 
+  it("aligns the size scale with Carbon React's v11 xs/sm/md/lg/xl/2xl steps", () => {
+    render(Button);
+
+    const sizes = {
+      "xs size": "bx--btn--xs",
+      "sm size": "bx--btn--sm",
+      "md size": "bx--btn--field",
+      "lg size": "bx--btn--lg-48",
+      "xl size": "bx--btn--lg",
+      "2xl size": "bx--btn--xl",
+    };
+
+    for (const [text, className] of Object.entries(sizes)) {
+      expect(screen.getByText(text).closest("button")).toHaveClass(className);
+    }
+  });
+
   it("should render icon-only button with tooltip", () => {
     render(Button);
 
@@ -361,7 +378,7 @@ describe("Button", () => {
     expect(
       container.querySelector(".bx--btn__badge-wrapper"),
     ).toBeInTheDocument();
-    expect(button).toHaveClass("bx--btn--lg");
+    expect(button).toHaveClass("bx--btn--lg-48");
     expect(badge).not.toHaveClass("bx--badge-indicator--count");
     expect(badge?.textContent?.trim()).toBe("");
   });
@@ -392,7 +409,7 @@ describe("Button", () => {
     const container = screen.getByTestId("badge-size-override");
     const button = container.querySelector("button");
 
-    expect(button).toHaveClass("bx--btn--lg");
+    expect(button).toHaveClass("bx--btn--lg-48");
     expect(button).not.toHaveClass("bx--btn--sm");
   });
 

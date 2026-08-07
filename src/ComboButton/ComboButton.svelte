@@ -90,20 +90,6 @@
 
   const dispatch = createEventDispatcher();
 
-  /**
-   * Button's own "default"/"lg" naming is offset from the v11 size scale:
-   * unclassed "default" renders at 48px (v11 "lg"), while Button's "lg"
-   * class renders at 64px with baseline-aligned text (v11's "xl"/"2xl"
-   * tier). Remap so ComboButton never touches Button's "lg"/"xl" classes.
-   * "xs" has no Button equivalent; combo-button.scss shrinks it further.
-   */
-  const TRIGGER_BUTTON_SIZES = {
-    xs: "small",
-    sm: "small",
-    md: "field",
-    lg: "default",
-  };
-
   let triggerRef = null;
 
   /**
@@ -130,15 +116,10 @@
   }
 </script>
 
-<div
-  bind:this={ref}
-  class:bx--combo-button={true}
-  class:bx--combo-button--xs={size === "xs"}
-  {...$$restProps}
->
+<div bind:this={ref} class:bx--combo-button={true} {...$$restProps}>
   <Button
     kind="primary"
-    size={TRIGGER_BUTTON_SIZES[size]}
+    {size}
     {disabled}
     class="bx--combo-button__primary-action"
     aria-label={$$restProps["aria-label"] ?? labelText}
@@ -157,7 +138,7 @@
     icon={ChevronDown}
     {iconDescription}
     kind="primary"
-    size={TRIGGER_BUTTON_SIZES[size]}
+    {size}
     {disabled}
     hideTooltip={open}
     {tooltipPosition}

@@ -44,10 +44,10 @@ describe("MenuButton", () => {
   });
 
   it.each([
-    { size: "xs", buttonClass: "bx--btn--sm", menuClass: "bx--menu--xs" },
+    { size: "xs", buttonClass: "bx--btn--xs", menuClass: "bx--menu--xs" },
     { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
     { size: "md", buttonClass: "bx--btn--field", menuClass: "bx--menu--md" },
-    { size: "lg", buttonClass: undefined, menuClass: "bx--menu--lg" },
+    { size: "lg", buttonClass: "bx--btn--lg-48", menuClass: "bx--menu--lg" },
   ] as const)(
     "propagates size $size to the trigger and the menu row height",
     async ({ size, buttonClass, menuClass }) => {
@@ -56,8 +56,10 @@ describe("MenuButton", () => {
       const trigger = screen.getByRole("button", { name: "Actions" });
 
       for (const unwanted of [
+        "bx--btn--xs",
         "bx--btn--sm",
         "bx--btn--field",
+        "bx--btn--lg-48",
         "bx--btn--lg",
         "bx--btn--xl",
       ]) {
@@ -75,12 +77,12 @@ describe("MenuButton", () => {
     },
   );
 
-  it("keeps the trigger off Button's baseline-aligned `lg`/`xl` classes", () => {
+  it("keeps the trigger off Button's old, baseline-aligned 64px `lg` class", () => {
     render(MenuButtonFixture, { props: { size: "lg" } });
 
-    expect(screen.getByRole("button", { name: "Actions" })).not.toHaveClass(
-      "bx--btn--lg",
-    );
+    const trigger = screen.getByRole("button", { name: "Actions" });
+    expect(trigger).toHaveClass("bx--btn--lg-48");
+    expect(trigger).not.toHaveClass("bx--btn--lg");
   });
 
   it("rotates the trigger's chevron by toggling the open modifier class", async () => {

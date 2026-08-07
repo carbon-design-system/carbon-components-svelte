@@ -7,9 +7,18 @@
 
   /**
    * Specify the size of button skeleton.
-   * @type {"default" | "field" | "small" | "lg" | "xl"}
+   * `"default"`, `"field"`, and `"small"` are deprecated aliases for `"lg"`, `"md"`, and `"sm"`
+   * kept for backward compatibility.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "default" | "field" | "small"}
    */
   export let size = "default";
+
+  $: isXs = size === "xs";
+  $: isSm = size === "small" || size === "sm";
+  $: isMd = size === "field" || size === "md";
+  $: isLg = size === "lg";
+  $: isXl = size === "xl";
+  $: is2xl = size === "2xl";
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -20,10 +29,12 @@
     role="button"
     class:bx--skeleton={true}
     class:bx--btn={true}
-    class:bx--btn--field={size === "field"}
-    class:bx--btn--sm={size === "small"}
-    class:bx--btn--lg={size === "lg"}
-    class:bx--btn--xl={size === "xl"}
+    class:bx--btn--xs={isXs}
+    class:bx--btn--sm={isSm}
+    class:bx--btn--field={isMd}
+    class:bx--btn--lg-48={isLg}
+    class:bx--btn--lg={isXl}
+    class:bx--btn--xl={is2xl}
     {...$$restProps}
     on:click
     on:focus
@@ -39,10 +50,12 @@
   <div
     class:bx--skeleton={true}
     class:bx--btn={true}
-    class:bx--btn--field={size === "field"}
-    class:bx--btn--sm={size === "small"}
-    class:bx--btn--lg={size === "lg"}
-    class:bx--btn--xl={size === "xl"}
+    class:bx--btn--xs={isXs}
+    class:bx--btn--sm={isSm}
+    class:bx--btn--field={isMd}
+    class:bx--btn--lg-48={isLg}
+    class:bx--btn--lg={isXl}
+    class:bx--btn--xl={is2xl}
     {...$$restProps}
     on:click
     on:focus

@@ -29,20 +29,6 @@
   .#{$prefix}--combo-button__trigger--open .#{$prefix}--btn__icon {
     transform: rotate(180deg);
   }
-
-  // Extra-small (Carbon React size="xs", 24px). Neither Button's "small"
-  // class (32px) nor any other Button size lands on 24px, so shrink further
-  // on top of the "small" size already passed to both buttons.
-  .#{$prefix}--combo-button--xs .#{$prefix}--btn {
-    min-height: to-rem(24px);
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-  .#{$prefix}--combo-button--xs .#{$prefix}--btn--icon-only {
-    padding-right: to-rem(4px);
-    padding-left: to-rem(4px);
-  }
 }
 
 @include exports("combo-button") {
