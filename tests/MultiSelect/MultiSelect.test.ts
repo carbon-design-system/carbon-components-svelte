@@ -1921,6 +1921,155 @@ describe("MultiSelect", () => {
     });
   });
 
+  describe("Space toggles the highlighted option and Home/End jump (APG)", () => {
+    it("non-filterable: Space toggles the highlighted option and keeps the menu open", async () => {
+      render(MultiSelect, { props: { items } });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{ArrowDown}");
+      await tick();
+
+      const firstOption = screen.getAllByRole("option")[0];
+      expect(firstOption).toHaveAttribute("aria-checked", "false");
+
+      await user.keyboard(" ");
+      expect(firstOption).toHaveAttribute("aria-checked", "true");
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+
+      await user.keyboard(" ");
+      expect(firstOption).toHaveAttribute("aria-checked", "false");
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("non-filterable: Space still opens the menu when closed", async () => {
+      render(MultiSelect, { props: { items } });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+
+      await user.keyboard(" ");
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      expect(combobox).not.toHaveAttribute("aria-activedescendant");
+    });
+
+    it("non-filterable: Space does not toggle a hover-highlighted option", async () => {
+      render(MultiSelect, { props: { items } });
+
+      await openMenu();
+      const emailOption = screen.getByRole("option", { name: "Email" });
+      await user.hover(emailOption);
+      expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+      await user.keyboard(" ");
+      expect(emailOption).toHaveAttribute("aria-checked", "false");
+      expect(screen.getByRole("combobox")).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+    });
+
+    it("non-filterable: Space on a highlighted disabled option is a no-op", async () => {
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "1", text: "Aa" },
+            { id: "2", text: "Ba", disabled: true },
+            { id: "3", text: "Ca" },
+          ],
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{ArrowDown}");
+      await tick();
+
+      const disabledOption = screen.getByRole("option", { name: "Ba" });
+      expect(disabledOption).toHaveClass(
+        "bx--list-box__menu-item--highlighted",
+      );
+
+      await user.keyboard(" ");
+      expect(disabledOption).toHaveAttribute("aria-selected", "false");
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("non-filterable: Space does not change the selection when read-only", async () => {
+      render(MultiSelect, { props: { items, readonly: true } });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(combobox);
+      await user.keyboard("{ArrowDown}");
+      await tick();
+
+      await user.keyboard(" ");
+      expect(screen.getAllByRole("option")[0]).toHaveAttribute(
+        "aria-checked",
+        "false",
+      );
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("non-filterable: Home and End jump to the first and last option", async () => {
+      render(MultiSelect, { props: { items } });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{ArrowDown}");
+      await tick();
+
+      const options = screen.getAllByRole("option");
+
+      await user.keyboard("{End}");
+      expect(combobox).toHaveAttribute(
+        "aria-activedescendant",
+        options.at(-1)?.id,
+      );
+
+      await user.keyboard("{Home}");
+      expect(combobox).toHaveAttribute("aria-activedescendant", options[0].id);
+    });
+
+    it("non-filterable: End opens a closed menu and highlights the last option", async () => {
+      render(MultiSelect, { props: { items } });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+
+      await user.keyboard("{End}");
+      await tick();
+
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      expect(combobox).toHaveAttribute(
+        "aria-activedescendant",
+        screen.getAllByRole("option").at(-1)?.id,
+      );
+    });
+
+    it("filterable: Home and End move the text caret, not the highlight", async () => {
+      render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter..." },
+      });
+
+      const input = screen.getByPlaceholderText<HTMLInputElement>("Filter...");
+      await user.click(input);
+      await user.type(input, "a");
+      expect(input).toHaveAttribute("aria-expanded", "true");
+
+      await user.keyboard("{Home}");
+      expect(input).not.toHaveAttribute("aria-activedescendant");
+      expect(input.selectionStart).toBe(0);
+
+      await user.keyboard("{End}");
+      expect(input).not.toHaveAttribute("aria-activedescendant");
+      expect(input.selectionStart).toBe(1);
+    });
+  });
+
   describe("Generics", () => {
     it("should support custom item types with generics", () => {
       type Product = {

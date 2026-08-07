@@ -1040,7 +1040,14 @@
           // Read-only still opens and navigates the menu; selectItem is the
           // single guard that blocks the actual selection change.
           if (event.key === " ") {
-            open = !open;
+            if (!open) {
+              open = true;
+            } else if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
+              const item = (filterable ? filteredItems : sortedItems)[
+                highlightedIndex
+              ];
+              if (item) selectItem(item);
+            }
           } else if (event.key === "Tab") {
             open = false;
           } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -1066,6 +1073,16 @@
             }
           } else if (event.key === "Escape") {
             close("escape-key");
+          } else if (event.key === "Home" || event.key === "End") {
+            // APG select-only combobox: Home/End open a closed listbox, then
+            // move the highlight to the first/last option. The filterable
+            // variant deliberately leaves these keys to the text caret.
+            event.preventDefault();
+            if (!open) open = true;
+            const navigableItems = filterable ? filteredItems : sortedItems;
+            highlightedIndex =
+              event.key === "Home" ? 0 : navigableItems.length - 1;
+            highlightOrigin = "keyboard";
           }
         }}
           on:blur={(event) => {
