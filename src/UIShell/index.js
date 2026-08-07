@@ -25,3 +25,6 @@ export { default as SideNavLink } from "./SideNavLink.svelte";
 export { default as SideNavMenu } from "./SideNavMenu.svelte";
 export { default as SideNavMenuItem } from "./SideNavMenuItem.svelte";
 export { default as SkipToContent } from "./SkipToContent.svelte";
+export { default as Switcher } from "./Switcher.svelte";
+export { default as SwitcherDivider } from "./SwitcherDivider.svelte";
+export { default as SwitcherItem } from "./SwitcherItem.svelte";
