@@ -68,9 +68,9 @@ shows a form with checkboxes, radio buttons, and a select menu.
 
 Set `disabled` on FormGroup to disable the fieldset and nested native form
 controls. Labels are visually muted via Carbon's `fieldset[disabled]` styles.
-Div-based controls such as Dropdown, ComboBox, and MultiSelect are not fully
-styled by the native attribute alone—pass `disabled` on those components until
-form-level context propagation lands.
+`Dropdown`, `ComboBox`, and `MultiSelect` render as divs rather than native form
+controls, so the fieldset attribute does not reach them. Set `disabled` on each
+of those components directly.
 
 <Form>
   <FormGroup legendText="Account details" disabled>
