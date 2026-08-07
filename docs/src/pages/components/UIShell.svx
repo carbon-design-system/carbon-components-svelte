@@ -96,7 +96,7 @@ A `HeaderAction` reveals a panel from the right edge.
 
 ### App switcher
 
-The panel does not animate by default. Enable a slide transition by passing [transition:slide params](https://svelte.dev/docs#slide) to `transition` (e.g., `{ duration: 200 }`) to customize duration, delay, and easing.
+The panel does not animate by default. Enable a slide transition by passing [transition:slide params](https://svelte.dev/docs#slide) to `transition`, for example `{ duration: 200 }`, to customize duration, delay, and easing.
 
 <FileSource src="/framed/UIShell/HeaderSwitcher" />
 
