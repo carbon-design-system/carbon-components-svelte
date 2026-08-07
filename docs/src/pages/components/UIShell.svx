@@ -24,7 +24,10 @@ components: ["Header",
 "SideNavMenuItem",
 "Content",
 "SkipToContent",
-"HeaderGlobalAction"]
+"HeaderGlobalAction",
+"Switcher",
+"SwitcherItem",
+"SwitcherDivider"]
 description: The UI shell provides components for building application shells and navigation — header, side navigation, and content areas.
 ---
 
@@ -107,6 +110,14 @@ You can mount multiple switchers and customize each button. For example, add a t
 Control tooltip alignment with `tooltipAlignment`. Providing button text overrides the tooltip.
 
 <FileSource src="/framed/UIShell/HeaderMultipleSwitcher" />
+
+### Switcher, SwitcherItem, and SwitcherDivider
+
+Compose `Switcher`, `SwitcherItem`, and `SwitcherDivider` directly for roving-focus keyboard navigation (arrow keys move focus between items) and `role="listitem"` semantics. This is the same panel content as the example above, built from `HeaderPanelLink` / `HeaderPanelLinks` - use whichever fits: the plain anchors above are simpler, while `Switcher` matches Carbon React's `UIShell/Switcher` API and its keyboard behavior.
+
+Set `isSelected` on a `SwitcherItem` to mark it as the current selection, and bind the panel's open state to `expanded` so items are only tabbable while the panel is visible.
+
+<FileSource src="/framed/UIShell/HeaderSwitcherComponents" />
 
 ## Search
 
