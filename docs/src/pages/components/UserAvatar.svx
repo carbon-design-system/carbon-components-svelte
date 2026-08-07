@@ -1,5 +1,6 @@
 ---
 components: ["UserAvatar"]
+description: User avatars display a photo, a custom icon, or initials derived from a name, for identifying a person in a header, list, or profile menu.
 ---
 
 <script>
@@ -7,13 +8,9 @@ components: ["UserAvatar"]
   import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
 </script>
 
-The `UserAvatar` renders a circular avatar for a user. It displays a photo, a custom icon, or initials derived from a name, falling back to a default user icon.
-
-It is designed to be used with the UI Shell [profile menu](/components/UIShell#profile-menu).
-
 ## Content
 
-The avatar renders the first available of an image, a custom icon, initials, or the default user icon.
+The avatar renders the first available of an image, a custom icon, initials, or the default user icon. It is designed for the UI Shell [profile menu](/components/UIShell#profile-menu).
 
 ### Fallback icon
 
