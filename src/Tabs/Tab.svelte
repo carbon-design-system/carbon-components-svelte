@@ -91,6 +91,8 @@
     remove,
     update,
     dismiss,
+    tabsById,
+    contentByIndex,
   } = getContext("carbon:Tabs");
 
   // Icon-only tabs show `label` as a portalled tooltip on hover/focus.
@@ -159,6 +161,10 @@
   // Default href is the "#" placeholder, so tabs behave as selection controls.
   // Any other href is user-provided and should navigate like a link.
   $: isLink = !!href && href !== "#";
+  // Panels learn their tab's id by index (`TabContent`); mirror that pairing
+  // in the other direction so the tab can point `aria-controls` at its panel.
+  // `undefined` when no panel is rendered for this tab's position.
+  $: panelId = $contentByIndex[$tabsById[id]?.index];
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -200,6 +206,7 @@
     tabindex={disabled ? "-1" : tabindex}
     aria-selected={selected}
     aria-disabled={disabled}
+    aria-controls={panelId}
     aria-label={$iconOnly ? label : undefined}
     {id}
     {href}

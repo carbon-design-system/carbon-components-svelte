@@ -29,6 +29,23 @@ describe("TabsVertical", () => {
     expect(screen.getByText("Content 2")).not.toBeVisible();
   });
 
+  it("should link each tab to its panel via aria-controls", () => {
+    render(TabsVertical);
+
+    const tabs = screen.getAllByRole("tab");
+    const panels = screen.getAllByRole("tabpanel", { hidden: true });
+
+    expect(tabs).toHaveLength(4);
+    expect(panels).toHaveLength(4);
+
+    tabs.forEach((tab, index) => {
+      const panelId = tab.getAttribute("aria-controls");
+      assert(panelId);
+      expect(panelId).toBe(panels[index].id);
+      expect(panels[index]).toHaveAttribute("aria-labelledby", tab.id);
+    });
+  });
+
   it("should default to the xl layout size", () => {
     render(TabsVertical);
 

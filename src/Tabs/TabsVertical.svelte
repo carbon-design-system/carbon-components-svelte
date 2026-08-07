@@ -69,6 +69,16 @@
    */
   const contentById = derived(content, (_) => keyBy(_));
   /**
+   * Reverse lookup so each `Tab` can find its paired panel id by index.
+   * @type {import("svelte/store").Readable<Record<number, string>>}
+   */
+  const contentByIndex = derived(content, (_) => {
+    /** @type {Record<number, string>} */
+    const map = {};
+    for (const item of _) map[item.index] = item.id;
+    return map;
+  });
+  /**
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const selectedContent = writable(undefined);
@@ -271,7 +281,9 @@
 
   setContext("carbon:Tabs", {
     tabs,
+    tabsById,
     contentById,
+    contentByIndex,
     selectedTab,
     selectedContent,
     activeTooltip,
