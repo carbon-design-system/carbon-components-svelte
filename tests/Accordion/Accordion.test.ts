@@ -27,6 +27,21 @@ describe("Accordion", () => {
     );
   };
 
+  it("links the header button to its content region via aria-controls", () => {
+    render(Accordion);
+
+    const button = screen.getByRole("button", {
+      name: /Natural Language Classifier/,
+    });
+    const contentId = button.getAttribute("aria-controls");
+    assert(contentId);
+
+    const content = document.getElementById(contentId);
+    assert(content);
+    expect(content).toHaveClass("bx--accordion__content");
+    expect(content).toHaveTextContent("1");
+  });
+
   it("renders and functions correctly", async () => {
     render(Accordion);
 
