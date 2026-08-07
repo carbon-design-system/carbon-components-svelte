@@ -65,16 +65,20 @@
   let rows = null;
   let unsubscribe = null;
 
-  $: if (shouldFilterRows) {
-    unsubscribe = ctx?.tableRows.subscribe((tableRows) => {
-      // Only update if the rows have actually changed.
-      // This approach works in both Svelte 4 and Svelte 5.
-      if (!rowsEqual(tableRows, rows)) {
-        rows = tableRows;
-      }
-    });
-  } else {
-    rows = null;
+  $: {
+    unsubscribe?.();
+    unsubscribe = null;
+    if (shouldFilterRows) {
+      unsubscribe = ctx?.tableRows.subscribe((tableRows) => {
+        // Only update if the rows have actually changed.
+        // This approach works in both Svelte 4 and Svelte 5.
+        if (!rowsEqual(tableRows, rows)) {
+          rows = tableRows;
+        }
+      });
+    } else {
+      rows = null;
+    }
   }
 
   onMount(() => {
