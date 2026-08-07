@@ -75,11 +75,24 @@
     }
   }
 
+  // Compute the visible page window directly instead of
+  // materializing a `total`-length array and slicing it down,
+  // since the rendered window is bounded by `shown`.
+  function computePageWindow(total, startOffset, front, back) {
+    const start = startOffset + front;
+    const end = total - back - 1;
+    const window = [];
+
+    for (let i = start; i < end; i++) {
+      window.push(i);
+    }
+
+    return window;
+  }
+
   // all enumerable items to render in between
   // overflow menus
-  $: items = Array.from({ length: total })
-    .map((_item, i) => i)
-    .slice(startOffset + front, (back + 1) * -1);
+  $: items = computePageWindow(total, startOffset, front, back);
 </script>
 
 <nav aria-label="pagination" class:bx--pagination-nav={true} {...$$restProps}>

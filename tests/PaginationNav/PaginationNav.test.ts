@@ -161,6 +161,21 @@ describe("PaginationNav", () => {
     expect(within(activeButton).getByText("Active, Page")).toBeInTheDocument();
   });
 
+  it("should render the correct page window when both front and back overflow", () => {
+    const { container } = render(PaginationNav, {
+      props: { total: 100, shown: 10, page: 50 },
+    });
+
+    const pageButtons = container.querySelectorAll("button[data-page]");
+    const pages = Array.from(pageButtons).map((button) =>
+      Number(button.getAttribute("data-page")),
+    );
+
+    // First page, the window around the current page (bounded by
+    // `shown`), and the last page — with overflow selects in between.
+    expect(pages).toEqual([1, 48, 49, 50, 51, 52, 53, 100]);
+  });
+
   it("should handle overflow selection", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(PaginationNav, {
