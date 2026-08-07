@@ -206,7 +206,7 @@ Skip doc updates for internal refactors with no API or behavior change.
 
 Routify picks up new `.svx` files automatically. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. No separate nav registration is required.
 
-Prose conventions (backticks, plain language, SVX gotchas): see [docs/COMPONENT_DOCS_STYLE.md](docs/COMPONENT_DOCS_STYLE.md).
+Prose conventions: see [Prose and inline code](#prose-and-inline-code) and [SVX gotchas](#svx-gotchas).
 
 Preview locally with `cd docs && bun dev`.
 
@@ -404,7 +404,7 @@ The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click
 
 1. Export from `src/index.js`
 2. JSDoc all public API → `bun build:docs`
-3. Create `docs/src/pages/components/{Component}.svx` modeled on a similar existing component: a frontmatter `description:`, then `## Basic` first (see [Example conventions](#example-conventions) for structure and grouping). Follow prose conventions in [`COMPONENT_DOCS_STYLE.md`](docs/COMPONENT_DOCS_STYLE.md).
+3. Create `docs/src/pages/components/{Component}.svx` modeled on a similar existing component: a frontmatter `description:`, then `## Basic` first (see [Example conventions](#example-conventions) for structure and grouping). Follow the prose conventions in [Prose and inline code](#prose-and-inline-code).
 4. Add framed examples only where interactivity requires them
 5. Preview with `cd docs && bun dev`
 
