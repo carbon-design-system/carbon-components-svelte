@@ -149,19 +149,6 @@
   }
 
   /**
-   * Finds a node by id across top-level tree roots.
-   * @template {{ id: string | number; disabled?: boolean; nodes?: TNode[] }} TNode
-   * @returns {TNode | null}
-   */
-  function findForestNodeById(roots, id) {
-    for (const child of roots) {
-      const path = findNodeById(child, id);
-      if (path) return path[path.length - 1];
-    }
-    return null;
-  }
-
-  /**
    * IDs to select for multiselect expansion from `node` (non-disabled only).
    * Disabled nodes are omitted; subtrees under a disabled node are not traversed.
    * @template {{ id: string | number; disabled?: boolean; nodes?: TNode[] }} TNode
@@ -643,7 +630,7 @@
             const ordered = [];
             const seen = new Set();
             for (const id of sliceIds) {
-              const n = findForestNodeById(nodes, id);
+              const n = cachedNodeMap?.get(id);
               if (!n) continue;
               for (const eid of multiselectExpansionIds(n, mode)) {
                 if (!seen.has(eid)) {
