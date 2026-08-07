@@ -1,4 +1,5 @@
 ---
+components: ["MultiSelect", "FluidMultiSelectSkeleton"]
 description: Multi-selects provide a dropdown for selecting multiple options with checkboxes, with filtering, custom formatting, and multiple states.
 ---
 

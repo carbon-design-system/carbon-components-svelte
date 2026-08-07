@@ -1,4 +1,5 @@
 ---
+components: ["CodeSnippet", "CodeSnippetSkeleton"]
 description: Code snippets display and copy code examples, with single-line, multi-line, and inline formats and customizable copy and expand controls.
 ---
 

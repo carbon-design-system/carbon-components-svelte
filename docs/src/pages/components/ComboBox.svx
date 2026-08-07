@@ -1,4 +1,5 @@
 ---
+components: ["ComboBox", "FluidComboBoxSkeleton"]
 description: Combo boxes combine a text input with a dropdown menu to select from predefined options or enter custom values, with filtering and custom rendering.
 ---
 

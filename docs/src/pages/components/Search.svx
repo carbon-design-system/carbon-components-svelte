@@ -1,4 +1,5 @@
 ---
+components: ["Search", "SearchSkeleton", "FluidSearchSkeleton"]
 description: Search provides a flexible search input, with support for expandable and fluid variants, multiple sizes, and custom icons.
 ---
 

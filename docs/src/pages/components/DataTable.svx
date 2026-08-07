@@ -1,5 +1,5 @@
 ---
-components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions"]
+components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions", "DataTableSkeleton"]
 description: Data tables display structured data in rows and columns, with sorting, filtering, pagination, virtualization, and row selection and expansion.
 ---
 

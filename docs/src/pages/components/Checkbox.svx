@@ -1,4 +1,5 @@
 ---
+components: ["Checkbox", "CheckboxGroup", "CheckboxSkeleton"]
 description: Checkboxes let users select one or more options from a list, for multiple-choice questions, settings, or confirmations.
 ---
 

@@ -1,4 +1,5 @@
 ---
+components: ["Button", "ButtonSkeleton"]
 description: Buttons trigger actions like submitting a form or navigating, with multiple kinds and sizes to match each action's importance.
 ---
 
