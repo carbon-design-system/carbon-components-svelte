@@ -204,7 +204,7 @@ Wrap items in `MenuItemRadioGroup` for a set where one choice is active at a tim
 
 ### Nested
 
-Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. Open it with `ArrowRight`, click, or hover (short delay). `ArrowLeft` closes it and refocuses the parent. Picking a nested item closes the whole menu.
+Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. Open it with <DocKbd label="→" />, click, or hover (short delay). <DocKbd label="←" /> closes it and refocuses the parent. Picking a nested item closes the whole menu.
 
 <MenuButton labelText="Actions">
   <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
