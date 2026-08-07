@@ -84,11 +84,27 @@
 
   const formContext = getContext("carbon:Form");
 
+  $: helperId = `helper-${id}`;
+  $: counterId = `counter-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
+  $: showCounter = !!maxCount && !!(labelText || $$slots.labelChildren);
+  $: describedBy =
+    [
+      showInvalid
+        ? errorId
+        : showWarn && !isFluid
+          ? warnId
+          : helperText && !isFluid
+            ? helperId
+            : null,
+      showCounter ? counterId : null,
+    ]
+      .filter(Boolean)
+      .join(" ") || undefined;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -115,6 +131,7 @@
       </label>
       {#if maxCount}
         <div
+          id={counterId}
           class:bx--label={true}
           class:bx--label--disabled={disabled}
           class:bx--text-area__label-counter={true}
@@ -144,11 +161,7 @@
       bind:this={ref}
       bind:value
       aria-invalid={showInvalid || undefined}
-      aria-describedby={showInvalid
-        ? errorId
-        : showWarn && !isFluid
-          ? warnId
-          : undefined}
+      aria-describedby={describedBy}
       data-warn={showWarn || undefined}
       {disabled}
       {id}
@@ -193,6 +206,7 @@
   </div>
   {#if !isFluid && !showInvalid && !showWarn && helperText}
     <div
+      id={helperId}
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
     >

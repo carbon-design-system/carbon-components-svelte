@@ -73,6 +73,41 @@ describe("TextArea", () => {
     );
   });
 
+  it("should associate helper text with the textarea via aria-describedby", () => {
+    render(TextArea, { props: { helperText: "Helper text" } });
+
+    const textarea = screen.getByRole("textbox");
+    const describedById = textarea.getAttribute("aria-describedby");
+    assert(describedById);
+    expect(screen.getByText("Helper text")).toHaveAttribute(
+      "id",
+      describedById,
+    );
+  });
+
+  it("should include the counter id in aria-describedby alongside helper text", () => {
+    render(TextArea, {
+      props: { helperText: "Helper text", maxCount: 100, value: "hi" },
+    });
+
+    const textarea = screen.getByRole("textbox");
+    const describedBy = textarea.getAttribute("aria-describedby");
+    assert(describedBy);
+    const ids = describedBy.split(" ");
+
+    expect(screen.getByText("Helper text").id).toBe(ids[0]);
+    expect(screen.getByText("2/100").id).toBe(ids[1]);
+  });
+
+  it("should include the counter id in aria-describedby without helper text", () => {
+    render(TextArea, { props: { maxCount: 100, value: "hi" } });
+
+    const textarea = screen.getByRole("textbox");
+    expect(textarea.getAttribute("aria-describedby")).toBe(
+      screen.getByText("2/100").id,
+    );
+  });
+
   it("should handle invalid state", () => {
     render(TextArea, {
       props: { invalid: true, invalidText: "Invalid input" },
