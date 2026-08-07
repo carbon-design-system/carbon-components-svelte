@@ -646,6 +646,14 @@
               if (highlightedIndex === -1) change(step);
             });
           }
+        } else if (event.key === "Home" || event.key === "End") {
+          // APG select-only combobox: Home/End open a closed listbox, then
+          // move the highlight to the first/last option, mirroring the
+          // open-and-move convention already used for the plain arrow keys.
+          event.preventDefault();
+          if (!open) open = true;
+          highlightedIndex = event.key === "Home" ? 0 : items.length - 1;
+          highlightOrigin = "keyboard";
         } else if (event.key === "Escape") {
           close("escape-key");
         } else if (

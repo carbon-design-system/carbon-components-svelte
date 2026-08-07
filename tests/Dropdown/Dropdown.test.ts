@@ -480,6 +480,68 @@ describe("Dropdown", () => {
     expect(button.getAttribute("aria-activedescendant")).toMatch(/-2$/);
   });
 
+  it("should move the highlight to the last item with End", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+
+    await user.keyboard("{ArrowDown}");
+    await tick();
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+
+    await user.keyboard("{End}");
+    await tick();
+    // Fax (id="2") is the last item.
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+  });
+
+  it("should move the highlight to the first item with Home", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+
+    await user.keyboard("{ArrowUp}");
+    await tick();
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+
+    await user.keyboard("{Home}");
+    await tick();
+    // Slack (id="0") is the first item.
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+  });
+
+  it("should open a closed menu and highlight the last item with End", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+    expect(button).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard("{End}");
+    await tick();
+
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    // Fax (id="2") is the last item.
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+  });
+
+  it("should open a closed menu and highlight the first item with Home", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+    expect(button).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard("{Home}");
+    await tick();
+
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    // Slack (id="0") is the first item.
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+  });
+
   it("should open the menu on Alt+ArrowDown without moving the highlight", async () => {
     render(Dropdown, { props: { items } });
 
@@ -1739,6 +1801,24 @@ describe("Dropdown", () => {
       // ArrowDown twice: index 1 -> 2 (Item 3)
       // Enter selects Item 3
       expect(button).toHaveTextContent("Item 3");
+    });
+
+    it("should jump to the last item with End when virtualized", async () => {
+      const largeItems = createLargeItemList(500);
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "0",
+          virtualize: true,
+        },
+      });
+
+      const button = screen.getByRole("combobox");
+      await user.click(button);
+      await user.keyboard("{End}");
+      await user.keyboard("{Enter}");
+
+      expect(button).toHaveTextContent("Item 500");
     });
 
     it.each([
