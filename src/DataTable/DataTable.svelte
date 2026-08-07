@@ -877,6 +877,7 @@
                   aria-label={expanded
                     ? "Collapse all rows"
                     : "Expand all rows"}
+                  aria-expanded={expanded}
                   aria-controls={expandableRowIds
                     .map((rid) => `${id}-expandable-row-${rid}`)
                     .join(" ")}
@@ -1080,6 +1081,7 @@
                       aria-label={expandedRowIdsSet.has(row.id)
                         ? "Collapse current row"
                         : "Expand current row"}
+                      aria-expanded={expandedRowIdsSet.has(row.id)}
                       on:click|stopPropagation={() => {
                         const rowExpanded = expandedRowIdsSet.has(row.id);
 
@@ -1312,6 +1314,7 @@
                       aria-label={isExpanded
                         ? "Collapse current row"
                         : "Expand current row"}
+                      aria-expanded={isExpanded}
                       on:click|stopPropagation={() => {
                         const next = new Set(expandedRowIds);
                         if (isExpanded) next.delete(row.id);
