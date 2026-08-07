@@ -63,7 +63,7 @@ Control the tooltip position and alignment with `tooltipPosition` and `tooltipAl
 
 ### Hidden tooltip
 
-Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers. Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed (e.g., toolbars). The **iconDescription** remains accessible to screen readers.
+Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers. Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed, as in a toolbar. The **iconDescription** remains accessible to screen readers.
 
 <Stack orientation="horizontal" gap={2}>
   <FileUploaderButton labelText="" hideTooltip iconDescription="Add file" icon={Add} />
