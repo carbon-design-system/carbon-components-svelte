@@ -99,7 +99,7 @@ Set `backgroundColor` to `"auto"` to pick a color from `name` (or `initials`). T
 
 Set `interactive` to render a `button` instead of a `span` when the avatar is a clickable control, such as a custom profile menu trigger. The button receives a focus ring. `name` is used as the accessible name when `aria-label` is not set.
 
-Do not set `interactive` when slotting the avatar into [ProfileMenu](/components/UIShell#profilemenu) — that component already wraps the avatar in a labelled trigger button.
+Do not set `interactive` when slotting the avatar into [ProfileMenu](/components/UIShell#profile-menu) — that component already wraps the avatar in a labelled trigger button.
 
 <UserAvatar interactive name="Richard Hendricks" backgroundColor="purple" />
 
@@ -131,6 +131,6 @@ The floating portal keeps the tooltip from being clipped by the modal's overflow
 
 ## Use within ProfileMenu
 
-Slot the avatar into [ProfileMenu](/components/UIShell#profilemenu) for the header trigger and the profile header. Use `size="md"` for the trigger and `size="lg"` for the header to match the menu frame. Leave `interactive`, `href`, and `tooltipText` unset on the slotted avatar so the menu owns focus and labelling.
+Slot the avatar into [ProfileMenu](/components/UIShell#profile-menu) for the header trigger and the profile header. Use `size="md"` for the trigger and `size="lg"` for the header to match the menu frame. Leave `interactive`, `href`, and `tooltipText` unset on the slotted avatar so the menu owns focus and labelling.
 
 <UserAvatar size="md" name="Richard Hendricks" />

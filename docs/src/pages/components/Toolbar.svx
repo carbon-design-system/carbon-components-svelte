@@ -167,6 +167,6 @@ Stack multiple action buttons in the toolbar.
 
 Toolbar batch actions display batch actions when items are selected. 
 
-Although intended for use with [DataTable](/components/datatable), batch actions can be used standalone when selectedIds is provided. That prop is not required when used with a data table.
+Although intended for use with [DataTable](/components/DataTable), batch actions can be used standalone when `selectedIds` is provided. That prop is not required when used with a data table.
 
 <FileSource src="/framed/Toolbar/ToolbarBatchActionsStandalone" />
