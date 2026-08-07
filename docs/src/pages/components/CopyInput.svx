@@ -11,7 +11,7 @@ description: Copy inputs display a read-only value in a text field with a built-
 
 ## Basic
 
-Set `value` to the string to show and copy. For install commands, see [CodeSnippet](/components/CodeSnippet); for display-only values, use [TextInput](/components/TextInput#readonly).
+Set `value` to the string to show and copy. For install commands, see [CodeSnippet](/components/CodeSnippet); for display-only values, use [TextInput](/components/TextInput#read-only).
 
 <CopyInput labelText="API endpoint" value="https://api.example.com/v1" />
 
