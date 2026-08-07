@@ -16,6 +16,7 @@ describe("ToolbarSearch unsubscribes from tableRows before resubscribing", () =>
     // Mounts with `shouldFilterRows = true` (one live subscription), then
     // toggles true -> false -> true -> false -> true.
     for (let i = 0; i < 4; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: sequential execution is intentional
       await user.click(toggleButton);
     }
 
