@@ -236,6 +236,32 @@ describe("ContextMenu", () => {
     expect(submenu).toHaveAttribute("data-level", "2");
   });
 
+  it("should restore focus to the parent option when the submenu closes with ArrowLeft", async () => {
+    render(ContextMenu, {
+      props: {
+        open: true,
+        withSubmenu: true,
+        x: 100,
+        y: 100,
+      },
+    });
+
+    const submenuTrigger = screen.getByRole("menuitem", {
+      name: "Option with submenu",
+    });
+    submenuTrigger.focus();
+    await user.keyboard("{ArrowRight}");
+
+    const submenuOption = screen.getByRole("menuitem", {
+      name: "Submenu option 1",
+    });
+    expect(submenuOption).toHaveFocus();
+
+    await user.keyboard("{ArrowLeft}");
+
+    expect(submenuTrigger).toHaveFocus();
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1848
   it("should not close parent menu when clicking submenu trigger", async () => {
     const consoleLog = vi.spyOn(console, "log");
