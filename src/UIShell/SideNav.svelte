@@ -47,12 +47,21 @@
     acquireBodyScrollLock,
     releaseBodyScrollLock,
   } from "../utils/bodyScrollLock.js";
+  import { dismiss } from "../utils/dismiss.js";
   import {
+    hamburgerMenuRef,
     isSideNavCollapsed,
     isSideNavMobile,
     isSideNavRail,
     shouldRenderHamburgerMenu,
   } from "./nav-store";
+
+  function handleEscape(event) {
+    if (isOpen && !fixed && $isSideNavMobile && event.key === "Escape") {
+      isOpen = false;
+      $hamburgerMenuRef?.focus();
+    }
+  }
 
   const dispatch = createEventDispatcher();
 
@@ -117,6 +126,11 @@
   ></div>
 {/if}
 <nav
+  use:dismiss={{
+    enabled: isOpen && !fixed && $isSideNavMobile,
+    type: "keydown",
+    handler: handleEscape,
+  }}
   aria-hidden={!isOpen}
   aria-label={ariaLabel}
   class:bx--side-nav__navigation={true}

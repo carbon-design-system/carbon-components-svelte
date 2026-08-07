@@ -27,8 +27,16 @@
   /** Obtain a reference to the HTML button element */
   export let ref = null;
 
+  import { onDestroy } from "svelte";
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/Menu.svelte";
+  import { hamburgerMenuRef } from "./nav-store.js";
+
+  $: hamburgerMenuRef.set(ref);
+
+  onDestroy(() => {
+    hamburgerMenuRef.update((current) => (current === ref ? null : current));
+  });
 </script>
 
 <button
