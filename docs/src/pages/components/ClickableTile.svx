@@ -14,6 +14,12 @@ Create a clickable tile with an href to link to another page.
 Carbon Design System
 </ClickableTile>
 
+## Reactive example
+
+Bind to `clicked` to read whether the tile has been activated.
+
+<FileSource src="/framed/ClickableTile/ReactiveClickableTile" />
+
 ## Prevent default
 
 Handle the click event to override default link behavior. Use e.preventDefault() to stop navigation.
