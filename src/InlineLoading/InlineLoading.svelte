@@ -18,7 +18,7 @@
    */
   export let iconDescription = undefined;
 
-  /** Specify the timeout delay (ms) after `status` is set to "success" */
+  /** Specify the timeout delay (ms) before the `success` event fires after `status` is set to "finished" */
   export let successDelay = 1500;
 
   import { createEventDispatcher, onMount } from "svelte";

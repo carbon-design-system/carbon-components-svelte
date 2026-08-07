@@ -2,7 +2,8 @@
   /** @restProps {a | p} */
 
   /**
-   * Set to `true` to click the tile.
+   * Whether the tile has been clicked.
+   * Toggles on click and on Space/Enter.
    * @bindable readonly
    */
   export let clicked = false;
