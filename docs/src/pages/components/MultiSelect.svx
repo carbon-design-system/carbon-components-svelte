@@ -130,7 +130,7 @@ Limit how many items a user can select by setting `maxSelectedItems`. Once the c
 
 Add a "select all" item by setting isSelectAll to true on an item. Clicking this item selects or deselects all non-disabled items. Disabled items are not affected by "select all".
 
-The select-all option is styled differently from regular options (with a separator border) so it is visually distinct as a group toggle. Its checkbox supports an **indeterminate** state when only a subset of non-disabled items are selected; it shows checked when all are selected and unchecked when none are selected.
+The select-all option is styled differently from regular options (with a separator border) so it is visually distinct as a group toggle. Its checkbox supports an `indeterminate` state when only a subset of non-disabled items are selected; it shows checked when all are selected and unchecked when none are selected.
 
 <FileSource src="/framed/MultiSelect/MultiSelectSelectAll" />
 
