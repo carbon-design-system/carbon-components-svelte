@@ -190,4 +190,36 @@ describe("Filename", () => {
 
     expect(keydownHandler).toHaveBeenCalled();
   });
+
+  it("should announce upload complete when status transitions to complete", async () => {
+    const { container, rerender } = render(Filename, {
+      props: { status: "uploading", fileName: "report.csv" },
+    });
+
+    await rerender({ status: "complete", fileName: "report.csv" });
+
+    const status = container.querySelector('[role="status"]');
+    expect(status).toHaveTextContent("report.csv upload complete");
+  });
+
+  it("should announce the iconDescription override instead of the default", async () => {
+    const { container, rerender } = render(Filename, {
+      props: {
+        status: "uploading",
+        fileName: "report.csv",
+        iconDescription: ({
+          fileName,
+          status,
+        }: {
+          fileName: string;
+          status: string;
+        }) => (status === "complete" ? `${fileName} hochgeladen` : undefined),
+      },
+    });
+
+    await rerender({ status: "complete" });
+
+    const status = container.querySelector('[role="status"]');
+    expect(status).toHaveTextContent("report.csv hochgeladen");
+  });
 });
