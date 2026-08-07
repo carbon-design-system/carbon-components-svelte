@@ -2,7 +2,6 @@
   import { Button, Dialog, Stack } from "carbon-components-svelte";
 
   let open = false;
-  /** @type {string | null} */
   let lastTrigger = null;
 </script>
 
