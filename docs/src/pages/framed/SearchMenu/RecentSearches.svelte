@@ -8,7 +8,6 @@
   import Time from "carbon-icons-svelte/lib/Time.svelte";
 
   let value = "";
-  /** @type {HTMLInputElement | null} */
   let searchRef = null;
 
   let recent = [
