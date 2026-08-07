@@ -10,6 +10,24 @@
 
   /** Set to `true` to use static width */
   export let useStaticWidth = false;
+
+  import { setContext } from "svelte";
+  import { writable } from "svelte/store";
+
+  const titleId = `ccs-${Math.random().toString(36)}`;
+  const descriptionId = `ccs-${Math.random().toString(36)}`;
+  const hasTitle = writable(!!title);
+  const hasDescription = writable(!!description);
+
+  $: hasTitle.set(!!title);
+  $: hasDescription.set(!!description);
+
+  setContext("carbon:TableContainer", {
+    titleId,
+    descriptionId,
+    hasTitle,
+    hasDescription,
+  });
 </script>
 
 <div
@@ -20,8 +38,10 @@
 >
   {#if title}
     <div class:bx--data-table-header={true}>
-      <h4 class:bx--data-table-header__title={true}>{title}</h4>
-      <p class:bx--data-table-header__description={true}>{description}</p>
+      <h4 id={titleId} class:bx--data-table-header__title={true}>{title}</h4>
+      <p id={descriptionId} class:bx--data-table-header__description={true}>
+        {description}
+      </p>
     </div>
   {/if}
   <slot />

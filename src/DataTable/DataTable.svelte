@@ -414,6 +414,14 @@
   // since there may be multiple `DataTable` instances that have overlapping row ids.
   const id = `ccs-${Math.random().toString(36)}`;
 
+  // Label the table with its title/description. Only when the default
+  // heading markup renders (not overridden via the titleChildren /
+  // descriptionChildren slots, whose custom markup we don't control ids for).
+  const titleId = `${id}-title`;
+  const descriptionId = `${id}-description`;
+  $: hasTitle = !!title && !$$slots.titleChildren;
+  $: hasDescription = !!description && !$$slots.descriptionChildren;
+
   // A columnHidden header stays in `headers`, the column definition, and is
   // skipped everywhere the rendered column set is meant.
   $: visibleHeaders = headers.filter((header) => !header.columnHidden);
@@ -817,7 +825,9 @@
           name="titleChildren"
           props={{ class: "bx--data-table-header__title" }}
         >
-          <h4 class:bx--data-table-header__title={true}>{title}</h4>
+          <h4 id={titleId} class:bx--data-table-header__title={true}>
+            {title}
+          </h4>
         </slot>
       {/if}
       {#if description || $$slots.descriptionChildren}
@@ -825,7 +835,9 @@
           name="descriptionChildren"
           props={{ class: "bx--data-table-header__description" }}
         >
-          <p class:bx--data-table-header__description={true}>{description}</p>
+          <p id={descriptionId} class:bx--data-table-header__description={true}>
+            {description}
+          </p>
         </slot>
       {/if}
     </div>
@@ -848,6 +860,8 @@
       {stickyHeader}
       {sortable}
       {useStaticWidth}
+      labelledBy={hasTitle ? titleId : undefined}
+      describedBy={hasDescription ? descriptionId : undefined}
       tableStyle={[
         hasCustomHeaderWidth && "table-layout: fixed",
         stickyHeader &&
