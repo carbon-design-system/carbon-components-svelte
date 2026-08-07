@@ -412,9 +412,11 @@
           activeId = lastId;
           const targetNode = path[path.length - 1];
           if (multiselect && multiselectMode !== "node") {
-            selectedIds = multiselectExpansionIds(targetNode, multiselectMode);
+            setSelectedIds(
+              multiselectExpansionIds(targetNode, multiselectMode),
+            );
           } else {
-            selectedIds = [lastId];
+            setSelectedIds([lastId]);
           }
         }
 
@@ -569,6 +571,10 @@
   let expandedIdsSet = new Set(expandedIds);
   /** @type {ReadonlyArray<Node["id"]>} */
   let lastExpandedIdsRef = expandedIds;
+  /** @type {Set<Node["id"]>} */
+  let selectedIdsSet = new Set(selectedIds);
+  /** @type {ReadonlyArray<Node["id"]>} */
+  let lastSelectedIdsRef = selectedIds;
   /** @type {Node["id"]} */
   let lastActiveIdPushed = activeId;
   /** @type {ReadonlyArray<Node["id"]>} */
@@ -598,8 +604,22 @@
     return {
       ...node,
       expanded: expandedIdsSet.has(node.id),
-      selected: selectedIds.includes(node.id),
+      selected: selectedIdsSet.has(node.id),
     };
+  }
+
+  /**
+   * Reassign `selectedIds` and keep `selectedIdsSet` (used for O(1) lookups
+   * in `withLiveState`) synchronously in sync. `selectedIdsSetStore` is only
+   * refreshed reactively (see below), which lags behind handlers that mutate
+   * `selectedIds` and dispatch in the same synchronous call, so it can't be
+   * used for `withLiveState`.
+   * @type {(next: ReadonlyArray<Node["id"]>) => void}
+   */
+  function setSelectedIds(next) {
+    selectedIds = next;
+    selectedIdsSet = new Set(next);
+    lastSelectedIdsRef = next;
   }
 
   /** @type {(node: Node, event?: Event) => void} */
@@ -625,7 +645,7 @@
         } else {
           for (const id of expansionSet) currentSet.add(id);
         }
-        selectedIds = Array.from(currentSet);
+        setSelectedIds(Array.from(currentSet));
         anchorId = node.id;
       } else if (isShift && anchorId != null) {
         const visibleIds = traverseVisible(nodes, expandedIdsSet)
@@ -638,7 +658,7 @@
           const end = Math.max(anchorIndex, currentIndex);
           const sliceIds = visibleIds.slice(start, end + 1);
           if (mode === "node") {
-            selectedIds = sliceIds;
+            setSelectedIds(sliceIds);
           } else {
             const ordered = [];
             const seen = new Set();
@@ -652,18 +672,18 @@
                 }
               }
             }
-            selectedIds = ordered;
+            setSelectedIds(ordered);
           }
         } else {
-          selectedIds = multiselectExpansionIds(node, mode);
+          setSelectedIds(multiselectExpansionIds(node, mode));
           anchorId = node.id;
         }
       } else {
-        selectedIds = multiselectExpansionIds(node, mode);
+        setSelectedIds(multiselectExpansionIds(node, mode));
         anchorId = node.id;
       }
     } else {
-      selectedIds = [node.id];
+      setSelectedIds([node.id]);
     }
 
     dispatch("select", withLiveState(node));
@@ -676,9 +696,9 @@
       const expansion = multiselectExpansionIds(node, mode);
       const set = new Set(selectedIds);
       for (const id of expansion) set.add(id);
-      selectedIds = Array.from(set);
+      setSelectedIds(Array.from(set));
     } else {
-      selectedIds = [node.id];
+      setSelectedIds([node.id]);
     }
   }
 
@@ -889,7 +909,7 @@
         }
       }
 
-      selectedIds = selectedIds.concat(nodeIds);
+      setSelectedIds(selectedIds.concat(nodeIds));
     }
 
     if (nextFocusNode && nextFocusNode !== treeItem) {
@@ -948,6 +968,13 @@
     if (expandedIds !== lastExpandedIdsRef) {
       expandedIdsSet = new Set(expandedIds);
       lastExpandedIdsRef = expandedIds;
+    }
+
+    // Catches `selectedIds` reassignments that didn't go through
+    // `setSelectedIds` (e.g. an external `bind:selectedIds` update).
+    if (selectedIds !== lastSelectedIdsRef) {
+      selectedIdsSet = new Set(selectedIds);
+      lastSelectedIdsRef = selectedIds;
     }
 
     // `autoCollapse` should also be triggered when activeId changes programmatically.

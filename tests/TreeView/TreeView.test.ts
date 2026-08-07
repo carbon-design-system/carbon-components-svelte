@@ -603,6 +603,36 @@ describe("TreeView Props", () => {
     expect(tree).not.toHaveAttribute("aria-multiselectable");
   });
 
+  it("reports `selected` correctly in the focus dispatch payload after many nodes are selected", () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    // A broad initial `selectedIds` set exercises the Set-based lookup
+    // `withLiveState` uses to compute `selected` for the dispatch payload
+    // (perf/tree-view-dispatch-set-lookup), rather than an O(n) `.includes`.
+    // `7` (Blockchain) is left out of `selectedIds` so it can serve as the
+    // "focused but not selected" control, both enabled and top-level (so it
+    // renders regardless of `expandedIds`).
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [0, 1, 9],
+    });
+
+    const lastFocusDetail = () =>
+      consoleLog.mock.calls.filter((call) => call[0] === "focus").at(-1)?.[1];
+
+    const selectedItem = treeItemById(9);
+    selectedItem.focus();
+    expect(lastFocusDetail()).toEqual(
+      expect.objectContaining({ id: 9, selected: true }),
+    );
+
+    const unselectedItem = treeItemById(7);
+    unselectedItem.focus();
+    expect(lastFocusDetail()).toEqual(
+      expect.objectContaining({ id: 7, selected: false }),
+    );
+  });
+
   it("ctrl+click toggles selection in multiselect mode", async () => {
     render(TreeViewMultiselect, {
       multiselect: true,
