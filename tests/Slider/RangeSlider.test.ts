@@ -92,6 +92,36 @@ describe("RangeSlider", () => {
     expect(upperThumb).toHaveAttribute("aria-valuenow", "50");
   });
 
+  it("should jump the lower thumb to min/End clamped to upper via Home and End", async () => {
+    render(RangeSlider, {
+      props: { value: 40, valueUpper: 60, min: 0, max: 100 },
+    });
+
+    const [lowerThumb] = screen.getAllByRole("slider");
+    lowerThumb.focus();
+
+    await user.keyboard("{End}");
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", "60");
+
+    await user.keyboard("{Home}");
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", "0");
+  });
+
+  it("should jump the upper thumb to max/Home clamped to lower via Home and End", async () => {
+    render(RangeSlider, {
+      props: { value: 40, valueUpper: 60, min: 0, max: 100 },
+    });
+
+    const [, upperThumb] = screen.getAllByRole("slider");
+    upperThumb.focus();
+
+    await user.keyboard("{Home}");
+    expect(upperThumb).toHaveAttribute("aria-valuenow", "40");
+
+    await user.keyboard("{End}");
+    expect(upperThumb).toHaveAttribute("aria-valuenow", "100");
+  });
+
   it("should dispatch change event with { value, valueUpper } detail", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(RangeSlider, { props: { value: 0, valueUpper: 100 } });

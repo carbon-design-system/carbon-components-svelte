@@ -269,6 +269,14 @@
         {id}
         on:keydown={(event) => {
           if (disabled || readonly) return;
+
+          if (event.key === "Home" || event.key === "End") {
+            value = event.key === "Home" ? min : max;
+            dispatch("input", value);
+            dispatch("change", value);
+            return;
+          }
+
           const keys = {
             ArrowDown: -1,
             ArrowLeft: -1,
