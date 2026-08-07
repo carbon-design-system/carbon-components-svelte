@@ -111,7 +111,7 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Fax");
   });
 
-  it("should skip disabled items when opening the menu on ArrowDown", async () => {
+  it("should highlight a disabled first item when opening the menu on ArrowDown", async () => {
     render(ComboBox, {
       props: {
         items: [
@@ -128,8 +128,15 @@ describe("ComboBox", () => {
     await user.keyboard("{ArrowDown}");
     await tick();
 
-    // Slack (id="0") is disabled, so Email (id="1") is highlighted.
-    expect(input.getAttribute("aria-activedescendant")).toMatch(/-1$/);
+    // Slack (id="0") is disabled but stays in the navigation sequence so
+    // assistive-tech users can discover it.
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+
+    // Enter on the highlighted disabled item selects nothing and leaves the
+    // menu open
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("");
+    expect(input).toHaveAttribute("aria-expanded", "true");
   });
 
   it("should respect an existing typed filter when opening the menu on ArrowDown", async () => {
@@ -935,7 +942,7 @@ describe("ComboBox", () => {
     expect(dropdown).toBeVisible();
   });
 
-  it("should not infinite loop when all items are disabled", async () => {
+  it("should select nothing when all items are disabled", async () => {
     render(ComboBoxCustom, {
       props: {
         items: [
@@ -948,13 +955,18 @@ describe("ComboBox", () => {
     const input = getInput();
     await user.click(input);
 
-    // If the while loop has no guard, this would hang forever.
+    // Disabled items stay in the keyboard navigation sequence so
+    // assistive-tech users can discover them.
     await user.keyboard("{ArrowDown}");
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-1$/);
     await user.keyboard("{ArrowUp}");
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-3$/);
 
-    // No item should be selectable since all are disabled.
+    // Enter on a highlighted disabled item selects nothing and leaves the
+    // menu open
     await user.keyboard("{Enter}");
     expect(input).toHaveValue("");
+    expect(input).toHaveAttribute("aria-expanded", "true");
   });
 
   it("should not auto-select an unrelated item when Enter is pressed with a partial match", async () => {
@@ -971,17 +983,13 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("a");
   });
 
-  it("should skip disabled items in filtered list, not unfiltered list", async () => {
-    // Regression: `change()` previously checked `items[index].disabled`
-    // instead of `_items[index].disabled`, indexing into the wrong array
-    // when filtering was active.
+  it("should navigate the filtered list, not the unfiltered list", async () => {
+    // Regression guard: `change()` previously indexed into the wrong array
+    // when filtering was active. Navigation must step through the filtered
+    // items, including disabled ones.
     //
     // Unfiltered: [Ax, Bx, Ay(disabled), Az]
     // Filtered by "a": [Ax, Ay(disabled), Az]
-    //
-    // Old bug: at filtered index 1 (Ay), it checked items[1] (Bx, not
-    // disabled) and stopped — highlighting a disabled item. Fixed code
-    // checks _items[1] (Ay, disabled) and correctly skips to Az.
     render(ComboBoxCustom, {
       props: {
         items: [
@@ -998,15 +1006,22 @@ describe("ComboBox", () => {
     // Typing "a" filters to: Ax, Ay (disabled), Az
     await user.type(input, "a");
 
-    // ArrowDown highlights Ax (index 0)
+    // ArrowDown highlights Ax (filtered index 0)
     await user.keyboard("{ArrowDown}");
-    // ArrowDown should skip disabled Ay, highlight Az
+    // ArrowDown highlights disabled Ay (id "3"), not Bx (id "2") — the
+    // highlight steps through the filtered list and includes disabled items.
+    await user.keyboard("{ArrowDown}");
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-3$/);
+    // Enter on the highlighted disabled item is a no-op.
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("a");
+    // ArrowDown reaches Az, which selects normally.
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{Enter}");
     expect(input).toHaveValue("Az");
   });
 
-  it("should skip disabled items during keyboard navigation", async () => {
+  it("should highlight but not select disabled items during keyboard navigation", async () => {
     render(ComboBoxCustom, {
       props: {
         items: [
@@ -1018,8 +1033,14 @@ describe("ComboBox", () => {
     });
     const input = getInput();
     await user.click(input);
-    await user.keyboard("{ArrowDown}"); // should highlight A
-    await user.keyboard("{ArrowDown}"); // should skip B and highlight C
+    await user.keyboard("{ArrowDown}"); // highlights A
+    await user.keyboard("{ArrowDown}"); // highlights disabled B
+    // Enter on the highlighted disabled item selects nothing and leaves the
+    // menu open, matching click.
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("");
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    await user.keyboard("{ArrowDown}"); // highlights C
     await user.keyboard("{Enter}");
     expect(input).toHaveValue("C");
   });

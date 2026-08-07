@@ -250,7 +250,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
-  import { nextEnabledIndex } from "../utils/moveIndex.js";
+  import { moveIndex } from "../utils/moveIndex.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,
@@ -318,12 +318,12 @@
   }
 
   function change(step) {
+    // Disabled options stay in the keyboard navigation sequence (APG:
+    // "Focusability of disabled controls") so assistive-tech users can
+    // discover them; the Enter handler and the option click handlers refuse
+    // the actual selection.
     const navigableItems = filteredItems?.length ? filteredItems : items;
-    highlightedIndex = nextEnabledIndex({
-      items: navigableItems,
-      index: highlightedIndex,
-      step,
-    });
+    highlightedIndex = moveIndex(highlightedIndex, step, navigableItems.length);
     highlightOrigin = "keyboard";
   }
 
@@ -724,6 +724,15 @@
             event.preventDefault();
           }
           if (event.key === "Enter") {
+            // Enter on a highlighted disabled option -> the menu stays open.
+            if (
+              open &&
+              highlightOrigin === "keyboard" &&
+              highlightedIndex > -1 &&
+              filteredItems[highlightedIndex]?.disabled
+            ) {
+              return;
+            }
             const wasOpen = open;
             open = !open;
             if (
