@@ -186,6 +186,14 @@ Set `direction` to `"top"` to open the menu above the input. Useful when space b
 
 Set `size` to adjust the height of the dropdown. The default is medium.
 
+### Large
+
+Set `size` to `"lg"` (Carbon React's name for this step) or `"xl"` for a large dropdown - both render identically.
+
+<Dropdown size="lg" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ### Extra-large
 
 Set `size` to `"xl"` for an extra-large dropdown.

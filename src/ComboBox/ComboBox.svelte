@@ -63,8 +63,8 @@
   export let direction = "bottom";
 
   /**
-   * Set the size of the combobox.
-   * @type {"xs" | "sm" | "lg" | "xl"}
+   * Set the size of the combobox. `"md"` is the default, unclassed size.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 

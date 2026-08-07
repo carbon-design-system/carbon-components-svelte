@@ -54,8 +54,8 @@
   export let value = "";
 
   /**
-   * Set the size of the multiselect.
-   * @type {"xs" | "sm" | "lg" | "xl"}
+   * Set the size of the multiselect. `"md"` is the default, unclassed size.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 

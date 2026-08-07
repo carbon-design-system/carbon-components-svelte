@@ -537,6 +537,7 @@ describe("ComboBox", () => {
 
   test.each([
     ["sm", "bx--list-box--sm"],
+    ["lg", "bx--list-box--lg"],
     ["xl", "bx--list-box--xl"],
   ] as const)("should handle size variants", (size, className) => {
     const { container } = render(ComboBox, { props: { size } });

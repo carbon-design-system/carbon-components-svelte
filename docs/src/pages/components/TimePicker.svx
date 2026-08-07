@@ -175,6 +175,21 @@ Set `isOnlyTwo` to render only two elements.
 
 The default input height is medium. Set `size` to choose another variant.
 
+### Large
+
+Use the large size for more prominent time pickers by setting `size` to `"lg"` (Carbon React's name for this step) or `"xl"` - both render identically.
+
+<TimePicker size="lg" labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="pdt">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
 ### Extra-large
 
 Use the extra-large size for more prominent time pickers by setting `size` to `"xl"`.

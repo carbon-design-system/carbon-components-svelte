@@ -26,7 +26,7 @@ describe("TextInput", () => {
   });
 
   it("should handle different sizes", () => {
-    const sizes = ["xs", "sm", "xl"] as const;
+    const sizes = ["xs", "sm", "lg", "xl"] as const;
     for (const size of sizes) {
       const { unmount } = render(TextInput, {
         props: { size },
@@ -35,6 +35,20 @@ describe("TextInput", () => {
       const input = screen.getByLabelText("User name");
       expect(input).toHaveClass(`bx--text-input--${size}`);
       unmount();
+    }
+  });
+
+  it("should render md size the same as the default, unclassed size", () => {
+    render(TextInput, { props: { size: "md" } });
+
+    const input = screen.getByLabelText("User name");
+    for (const className of [
+      "bx--text-input--xs",
+      "bx--text-input--sm",
+      "bx--text-input--lg",
+      "bx--text-input--xl",
+    ]) {
+      expect(input).not.toHaveClass(className);
     }
   });
 

@@ -250,6 +250,16 @@ Use the small size for compact layouts by setting `size` to `"sm"`. This is idea
     {id: "2", text: "Fax"}]}"
   />
 
+### Large
+
+Use the large size for prominent selections by setting `size` to `"lg"` (Carbon React's name for this step) or `"xl"` - both render identically.
+
+<MultiSelect size="lg" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ### Extra-large
 
 Use the extra-large size for prominent selections by setting `size` to `"xl"`.
