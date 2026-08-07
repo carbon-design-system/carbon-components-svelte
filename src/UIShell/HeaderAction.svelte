@@ -6,7 +6,7 @@
    * @property {"toggle"} trigger
    * @event close
    * @type {object}
-   * @property {"outside-click" | "toggle"} trigger
+   * @property {"outside-click" | "toggle" | "escape-key"} trigger
    */
 
   /**
@@ -71,6 +71,9 @@
   /** Set to `true` to prevent the panel from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
+  /** Set an id for the trigger button element. Also used to label the panel. */
+  export let id = `ccs-${Math.random().toString(36)}`;
+
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
   import Close from "../icons/Close.svelte";
@@ -103,12 +106,29 @@
       dispatch("close", { trigger: "outside-click" });
     }
   }
+
+  function handleKeydown(event) {
+    if (isOpen && event.key === "Escape") {
+      isOpen = false;
+      dispatch("close", { trigger: "escape-key" });
+      ref?.focus();
+    }
+  }
 </script>
 
 <button
   bind:this={ref}
-  use:dismiss={{ enabled: isOpen, type: "click", handler: handleOutsideClick }}
+  use:dismiss={{
+    enabled: isOpen,
+    listeners: [
+      { type: "click", handler: handleOutsideClick },
+      { type: "keydown", handler: handleKeydown },
+    ],
+  }}
   type="button"
+  aria-haspopup="true"
+  aria-expanded={isOpen}
+  {id}
   class:bx--header__action={true}
   class:bx--header__action--active={isOpen}
   class:bx--header__action--text={text}
@@ -139,6 +159,8 @@
 {#if isOpen}
   <div
     bind:this={refPanel}
+    role="region"
+    aria-labelledby={id}
     class:bx--header-panel={true}
     class:bx--header-panel--expanded={true}
     transition:slide|local={{
