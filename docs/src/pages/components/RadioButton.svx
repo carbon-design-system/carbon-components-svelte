@@ -33,7 +33,7 @@ Multiple standalone radio buttons sharing the same name automatically form a gro
 
 ## Hidden legend
 
-Hide the visible legend with `hideLegend`. Screen readers still receive the legend text.
+Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
 
 <RadioButtonGroup hideLegend legendText="Storage tier (disk)" name="plan-legend" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />

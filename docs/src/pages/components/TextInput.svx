@@ -22,7 +22,7 @@ Add helper text below the input to provide additional context or instructions.
 
 ## Hidden label
 
-Hide the label visually with `hideLabel`. The label remains available to screen readers.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <TextInput hideLabel labelText="User name" placeholder="Enter user name..." />
 
@@ -162,6 +162,6 @@ Show a loading state with the default skeleton variant.
 
 ### Without label
 
-Show a loading state without a label with `hideLabel`.
+Show a loading state without a label by setting `hideLabel` to `true`.
 
 <TextInputSkeleton hideLabel />
