@@ -32,7 +32,7 @@ When persistence is enabled, theme changes sync across browser tabs that share t
 
 Override default Carbon theme tokens using the `tokens` prop.
 
-**Understanding token usage:** The Theme component sets CSS custom properties as `--cds-{token}`. Not every token name maps directly to component styles. Components often use semantic tokens (like `interactive-01`) rather than component-specific ones.
+`Theme` sets CSS custom properties as `--cds-{token}`. Not every token name maps directly to component styles. Components often use semantic tokens (like `interactive-01`) rather than component-specific ones.
 
 For example, primary buttons use `interactive-01` for background, with separate hover and active tokens. Check component CSS or Carbon docs to see which tokens affect a given component.
 
