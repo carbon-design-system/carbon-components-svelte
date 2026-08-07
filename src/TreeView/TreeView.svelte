@@ -865,16 +865,17 @@
 
       if (isSelectAll) {
         event.preventDefault();
+        const visibleEls = new Map(
+          Array.from(
+            ref?.querySelectorAll(
+              '[role="treeitem"]:not(.bx--tree-node--hidden)',
+            ) ?? [],
+          ).map((el) => [el.id, el]),
+        );
         for (const n of flattenedNodes) {
           if (n.disabled) continue;
-          const el = ref?.querySelector(`[id="${CSS.escape(String(n.id))}"]`);
-          if (!el) continue;
-          if (
-            el.classList.contains("bx--tree-node--hidden") ||
-            isUnderCollapsedSubtree(el)
-          ) {
-            continue;
-          }
+          const el = visibleEls.get(String(n.id));
+          if (!el || isUnderCollapsedSubtree(el)) continue;
           nodeIds.push(n.id);
         }
       }

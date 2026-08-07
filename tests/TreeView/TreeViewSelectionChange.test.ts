@@ -121,6 +121,35 @@ describe("TreeView select:change", () => {
     expect(detail.removed).toEqual([]);
   });
 
+  it("excludes nodes under a collapsed subtree while including visible children of an expanded one", async () => {
+    const onSelectChange = vi.fn();
+    render(TreeViewSelectionChange, {
+      multiselect: true,
+      selectedIds: [],
+      // Expand node 1 (Analytics) only; its child 2 (which has grandchildren
+      // 3, 4) stays collapsed, as does node 9 (Databases).
+      expandedIds: [1],
+      onSelectChange,
+    });
+
+    treeItemById(0).focus();
+    await user.keyboard("{Control>}a{/Control}");
+
+    await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
+    const detail = lastDetail(onSelectChange);
+    // Top-level rows (0, 1, 7, 9; 14 is disabled) plus the now-visible
+    // children of expanded node 1 (2, 5, 6). Node 2's grandchildren (3, 4)
+    // and node 9's children (10-13) remain hidden and must be excluded,
+    // even though they're still mounted in the DOM.
+    expect([...detail.added].sort((a, b) => Number(a) - Number(b))).toEqual([
+      0, 1, 2, 5, 6, 7, 9,
+    ]);
+    expect(
+      [...detail.selectedIds].sort((a, b) => Number(a) - Number(b)),
+    ).toEqual([0, 1, 2, 5, 6, 7, 9]);
+    expect(detail.removed).toEqual([]);
+  });
+
   it("fires for Ctrl+Shift+End range-extend", async () => {
     const onSelectChange = vi.fn();
     render(TreeViewSelectionChange, {
