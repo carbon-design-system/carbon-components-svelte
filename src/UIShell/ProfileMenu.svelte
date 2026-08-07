@@ -77,7 +77,7 @@
     ],
   }}
   type="button"
-  aria-haspopup="menu"
+  aria-haspopup="true"
   aria-expanded={isOpen}
   aria-label={iconDescription}
   class:bx--header__action={true}
@@ -97,6 +97,7 @@
 {#if isOpen}
   <div
     bind:this={refMenu}
+    aria-label={iconDescription}
     class:bx--profile-menu={true}
     transition:slide|local={{
       ...transition,
