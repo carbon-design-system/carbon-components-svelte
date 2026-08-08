@@ -39,7 +39,7 @@ Bind to `selected` for simpler state management.
 
 ## Hidden legend
 
-Hide the visible legend with `hideLegend`. Screen readers still receive the legend text.
+Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
 
 <SelectableTileGroup hideLegend legendText="Select options" name="options-hidden-legend" selected={["option1"]}>
   <SelectableTile value="option1">

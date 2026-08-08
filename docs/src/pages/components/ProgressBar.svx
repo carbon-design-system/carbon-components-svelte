@@ -32,7 +32,7 @@ Use the small size variant for compact layouts.
 
 ## Hidden label
 
-Hide the visible label with `hideLabel`. Screen readers still receive the label text.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <ProgressBar hideLabel value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 

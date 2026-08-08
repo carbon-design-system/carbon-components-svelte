@@ -68,7 +68,7 @@ Add descriptive text below the select menu.
 
 ### Hidden label
 
-Hide the visible label with `hideLabel`. Screen readers still receive the label text.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <Select hideLabel labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
@@ -309,6 +309,6 @@ Display a loading state using the skeleton variant.
 
 ### No label
 
-Show a loading state without a visible label using `hideLabel`.
+Show a loading state without a label by setting `hideLabel` to `true`.
 
 <SelectSkeleton hideLabel />

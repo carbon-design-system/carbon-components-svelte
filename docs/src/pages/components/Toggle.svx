@@ -37,7 +37,7 @@ Customize or hide the toggle labels.
 
 ### Hidden
 
-Hide the visible label with `hideLabel`. Screen readers still receive the label text.
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <Toggle labelText="Push notifications" hideLabel />
 

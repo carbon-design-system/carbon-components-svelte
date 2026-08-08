@@ -137,6 +137,6 @@ Display a loading state for the extra-small search variant.
 
 ### Without label
 
-Show a loading state without a label using `hideLabel`.
+Show a loading state without a label by setting `hideLabel` to `true`.
 
 <SearchSkeleton hideLabel />
