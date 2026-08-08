@@ -35,6 +35,8 @@
 
   let step = {};
 
+  $: stateSuffix = invalid ? ", invalid" : complete ? ", complete" : "";
+
   const ctx = getContext("carbon:ProgressIndicator");
   const stepsById = ctx?.stepsById ?? writable({});
   const add = ctx?.add ?? (() => {});
@@ -73,6 +75,7 @@
     type="button"
     {disabled}
     aria-disabled={disabled}
+    aria-current={current ? "step" : undefined}
     tabindex={!current && !disabled ? "0" : "-1"}
     class:bx--progress-step-button={true}
     class:bx--progress-step-button--unclickable={current ||
@@ -108,6 +111,9 @@
         <p class:bx--progress-optional={true}>{secondaryLabel}</p>
       {/if}
     </div>
+    {#if stateSuffix}
+      <span class:bx--visually-hidden={true}>{stateSuffix}</span>
+    {/if}
     <span class:bx--progress-line={true}></span>
   </button>
 </li>

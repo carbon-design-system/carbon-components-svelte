@@ -43,6 +43,31 @@ describe("ProgressIndicator", () => {
       );
     });
 
+    it("should expose current, complete, and invalid state to assistive tech", () => {
+      render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: [
+          { label: "Step 1", description: "First step", complete: true },
+          { label: "Step 2", description: "Second step", complete: false },
+          {
+            label: "Step 3",
+            description: "Third step",
+            complete: false,
+            invalid: true,
+          },
+        ],
+      });
+
+      const buttons = screen.getAllByRole("button");
+
+      expect(buttons[0]).not.toHaveAttribute("aria-current");
+      expect(buttons[1]).toHaveAttribute("aria-current", "step");
+      expect(buttons[2]).not.toHaveAttribute("aria-current");
+
+      expect(buttons[0]).toHaveAccessibleName(/, complete$/);
+      expect(buttons[2]).toHaveAccessibleName(/, invalid$/);
+    });
+
     it("should update currentIndex when clicking on completed steps", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(ProgressIndicator, {
