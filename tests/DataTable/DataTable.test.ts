@@ -1090,6 +1090,7 @@ describe("DataTable", () => {
     // Verify expand button is present in each row
     const expandButtons = screen.getAllByRole("button", { name: /expand/i });
     expect(expandButtons.length).toBe(3);
+    expect(expandButtons[0]).toHaveAttribute("aria-expanded", "false");
 
     // Click expand button on first row
     await user.click(expandButtons[0]);
@@ -1097,6 +1098,7 @@ describe("DataTable", () => {
     const expandedRow = container.querySelector(".bx--expandable-row");
     expect(expandedRow).toBeInTheDocument();
     expect(expandedRow).toHaveClass("bx--expandable-row bx--parent-row");
+    expect(expandButtons[0]).toHaveAttribute("aria-expanded", "true");
   });
 
   it("handles batch expansion", async () => {
@@ -1114,16 +1116,46 @@ describe("DataTable", () => {
     ).toHaveLength(0);
 
     const expandAllButton = screen.getByLabelText("Expand all rows");
+    expect(expandAllButton).toHaveAttribute("aria-expanded", "false");
 
     await user.click(expandAllButton);
     expect(
       container.querySelectorAll(".bx--child-row-inner-container"),
     ).toHaveLength(3);
+    expect(expandAllButton).toHaveAttribute("aria-expanded", "true");
 
     await user.click(expandAllButton);
     expect(
       container.querySelectorAll(".bx--child-row-inner-container"),
     ).toHaveLength(0);
+    expect(expandAllButton).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("sets aria-expanded on per-row expand buttons when virtualized", async () => {
+    const largeRows = Array.from({ length: 150 }, (_, i) => ({
+      id: String(i),
+      name: `Load Balancer ${i + 1}`,
+      protocol: "HTTP",
+      port: 3000 + i,
+      rule: "Round robin",
+    }));
+
+    render(DataTable, {
+      props: {
+        expandable: true,
+        virtualize: true,
+        headers,
+        rows: largeRows,
+      },
+    });
+
+    const [firstExpandButton] = screen.getAllByRole("button", {
+      name: /expand/i,
+    });
+    expect(firstExpandButton).toHaveAttribute("aria-expanded", "false");
+
+    await user.click(firstExpandButton);
+    expect(firstExpandButton).toHaveAttribute("aria-expanded", "true");
   });
 
   it("renders custom expand icon via expandIcon slot", async () => {
