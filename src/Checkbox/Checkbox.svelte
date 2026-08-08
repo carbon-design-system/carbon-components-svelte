@@ -51,6 +51,18 @@
   /** Specify the helper text */
   export let helperText = "";
 
+  /** Set to `true` to indicate an invalid state */
+  export let invalid = false;
+
+  /** Specify the invalid state text */
+  export let invalidText = "";
+
+  /** Set to `true` to indicate a warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Set a name for the input element */
   export let name = "";
 
@@ -88,6 +100,8 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import { readable } from "svelte/store";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import { overflowTitle } from "../utils/overflowTitle.js";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
@@ -115,6 +129,8 @@
   $: effectiveName = ctx ? ($groupName ?? name) : name;
   $: effectiveRequired = ctx ? ($groupRequired ?? required) : required;
   $: effectiveReadonly = $groupReadonly || readonly;
+  $: showInvalid = invalid && !disabled && !effectiveReadonly;
+  $: showWarn = warn && !invalid && !disabled && !effectiveReadonly;
 
   // Track previous checked value to avoid duplicate dispatches in Svelte 5
   // The reactive statement will only dispatch when checked changes externally (e.g., via bind:checked)
@@ -130,6 +146,8 @@
   let refLabel = null;
 
   $: helperId = `helper-${id}`;
+  $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -147,6 +165,8 @@
     class:bx--form-item={true}
     class:bx--checkbox-wrapper={true}
     class:bx--checkbox-wrapper--readonly={effectiveReadonly}
+    class:bx--checkbox-wrapper--invalid={showInvalid}
+    class:bx--checkbox-wrapper--warning={showWarn}
     {...$$restProps}
     on:click
     on:mouseover
@@ -166,7 +186,15 @@
       name={effectiveName}
       required={effectiveRequired}
       aria-readonly={effectiveReadonly || undefined}
-      aria-describedby={helperText ? helperId : undefined}
+      aria-invalid={showInvalid || undefined}
+      data-invalid={showInvalid || undefined}
+      aria-describedby={showInvalid
+        ? errorId
+        : showWarn
+          ? warnId
+          : helperText
+            ? helperId
+            : undefined}
       class:bx--checkbox={true}
       on:click={(event) => {
         if (effectiveReadonly) {
@@ -209,7 +237,18 @@
         <slot name="labelChildren"> {labelText} </slot>
       </span>
     </label>
-    {#if helperText}
+    <div class:bx--checkbox__validation-msg={true}>
+      {#if showInvalid}
+        <WarningFilled class="bx--checkbox__invalid-icon" />
+        <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+      {:else if showWarn}
+        <WarningAltFilled
+          class="bx--checkbox__invalid-icon bx--checkbox__invalid-icon--warning"
+        />
+        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {/if}
+    </div>
+    {#if helperText && !showInvalid && !showWarn}
       <div
         id={helperId}
         class:bx--form__helper-text={true}

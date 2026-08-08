@@ -8,6 +8,7 @@ import CheckboxReadonly from "./Checkbox.readonly.test.svelte";
 import CheckboxSkeleton from "./Checkbox.skeleton.test.svelte";
 import CheckboxSlot from "./Checkbox.slot.test.svelte";
 import Checkbox from "./Checkbox.test.svelte";
+import CheckboxValidation from "./Checkbox.validation.test.svelte";
 import CheckboxGroupEvents from "./CheckboxGroupEvents.test.svelte";
 import CheckboxGroupReactive from "./CheckboxGroupReactive.test.svelte";
 import CheckboxReactiveBind from "./CheckboxReactiveBind.test.svelte";
@@ -507,6 +508,82 @@ describe("Checkbox", () => {
 
     await user.click(input);
     expect(input).toBeChecked();
+  });
+
+  it("renders the invalid state with an error message and aria wiring", () => {
+    render(CheckboxValidation, { invalid: true, invalidText: "Required" });
+
+    const wrapper = screen.getByTestId("checkbox");
+    expect(wrapper).toHaveClass("bx--checkbox-wrapper--invalid");
+
+    const input = screen.getByRole("checkbox");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAttribute("data-invalid", "true");
+
+    const message = screen.getByText("Required");
+    expect(message).toHaveClass("bx--form-requirement");
+    expect(input).toHaveAttribute("aria-describedby", message.id);
+  });
+
+  it("renders the warning state with a warning message", () => {
+    render(CheckboxValidation, { warn: true, warnText: "Heads up" });
+
+    const wrapper = screen.getByTestId("checkbox");
+    expect(wrapper).toHaveClass("bx--checkbox-wrapper--warning");
+    expect(wrapper).not.toHaveClass("bx--checkbox-wrapper--invalid");
+
+    const input = screen.getByRole("checkbox");
+    expect(input).not.toHaveAttribute("aria-invalid");
+
+    const message = screen.getByText("Heads up");
+    expect(message).toHaveClass("bx--form-requirement");
+    expect(input).toHaveAttribute("aria-describedby", message.id);
+  });
+
+  it("prioritizes invalid over warn when both are set", () => {
+    render(CheckboxValidation, {
+      invalid: true,
+      invalidText: "Required",
+      warn: true,
+      warnText: "Heads up",
+    });
+
+    expect(screen.getByText("Required")).toBeInTheDocument();
+    expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
+  });
+
+  it("suppresses invalid/warn styling when disabled or readonly", () => {
+    const { rerender } = render(CheckboxValidation, {
+      invalid: true,
+      invalidText: "Required",
+      disabled: true,
+    });
+    expect(screen.getByTestId("checkbox")).not.toHaveClass(
+      "bx--checkbox-wrapper--invalid",
+    );
+    expect(screen.queryByText("Required")).not.toBeInTheDocument();
+
+    rerender({
+      invalid: true,
+      invalidText: "Required",
+      disabled: false,
+      readonly: true,
+    });
+    expect(screen.getByTestId("checkbox")).not.toHaveClass(
+      "bx--checkbox-wrapper--invalid",
+    );
+    expect(screen.queryByText("Required")).not.toBeInTheDocument();
+  });
+
+  it("hides helper text while invalid or warn text is shown", () => {
+    render(CheckboxValidation, {
+      invalid: true,
+      invalidText: "Required",
+      helperText: "Helper text",
+    });
+
+    expect(screen.getByText("Required")).toBeInTheDocument();
+    expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
   });
 
   it("should render helper text when provided", () => {

@@ -45,6 +45,18 @@
   /** Specify the helper text */
   export let helperText = "";
 
+  /** Set to `true` to indicate an invalid state */
+  export let invalid = false;
+
+  /** Specify the invalid state text */
+  export let invalidText = "";
+
+  /** Set to `true` to indicate a warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
@@ -56,6 +68,8 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
 
   const dispatch = createEventDispatcher();
   /**
@@ -108,9 +122,15 @@
   $: $groupName = name;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
 
   const fallbackHelperId = `ccs-${Math.random().toString(36)}`;
+  const fallbackErrorId = `ccs-${Math.random().toString(36)}`;
+  const fallbackWarnId = `ccs-${Math.random().toString(36)}`;
   $: helperId = id ? `helper-${id}` : fallbackHelperId;
+  $: errorId = id ? `error-${id}` : fallbackErrorId;
+  $: warnId = id ? `warn-${id}` : fallbackWarnId;
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -127,8 +147,17 @@
   <fieldset
     class:bx--checkbox-group={true}
     class:bx--checkbox-group--readonly={readonly}
+    class:bx--checkbox-group--invalid={showInvalid}
+    class:bx--checkbox-group--warning={showWarn}
     {disabled}
-    aria-describedby={helperText ? helperId : undefined}
+    data-invalid={showInvalid || undefined}
+    aria-describedby={showInvalid
+      ? errorId
+      : showWarn
+        ? warnId
+        : helperText
+          ? helperId
+          : undefined}
   >
     {#if legendText || $$slots.legendChildren}
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>
@@ -136,8 +165,19 @@
       </legend>
     {/if}
     <slot />
+    <div class:bx--checkbox-group__validation-msg={true}>
+      {#if showInvalid}
+        <WarningFilled class="bx--checkbox__invalid-icon" />
+        <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+      {:else if showWarn}
+        <WarningAltFilled
+          class="bx--checkbox__invalid-icon bx--checkbox__invalid-icon--warning"
+        />
+        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {/if}
+    </div>
   </fieldset>
-  {#if helperText}
+  {#if helperText && !showInvalid && !showWarn}
     <div
       id={helperId}
       class:bx--form__helper-text={true}

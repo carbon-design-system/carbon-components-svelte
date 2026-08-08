@@ -12,10 +12,15 @@
   export let legendText: ComponentProps<CheckboxGroup>["legendText"] = "";
   export let hideLegend: ComponentProps<CheckboxGroup>["hideLegend"] = false;
   export let helperText: ComponentProps<CheckboxGroup>["helperText"] = "";
+  export let invalid: ComponentProps<CheckboxGroup>["invalid"] = false;
+  export let invalidText: ComponentProps<CheckboxGroup>["invalidText"] = "";
+  export let warn: ComponentProps<CheckboxGroup>["warn"] = false;
+  export let warnText: ComponentProps<CheckboxGroup>["warnText"] = "";
   export let id: ComponentProps<CheckboxGroup>["id"] = undefined;
   export let readonly: ComponentProps<CheckboxGroup>["readonly"] = false;
   export let customClass = "";
   export let useSlot = false;
+  export let checkboxInvalid = false;
 </script>
 
 {#if useSlot}
@@ -27,6 +32,10 @@
     {hideLegend}
     {id}
     {helperText}
+    {invalid}
+    {invalidText}
+    {warn}
+    {warnText}
     {readonly}
     class={customClass}
     on:change={(e) => {
@@ -48,6 +57,10 @@
     {hideLegend}
     {id}
     {helperText}
+    {invalid}
+    {invalidText}
+    {warn}
+    {warnText}
     {readonly}
     class={customClass}
     on:change={(e) => {
@@ -55,7 +68,12 @@
     }}
   >
     <Checkbox value="1" labelText="Option 1" />
-    <Checkbox value="2" labelText="Option 2" />
+    <Checkbox
+      value="2"
+      labelText="Option 2"
+      invalid={checkboxInvalid}
+      invalidText="Individual error"
+    />
     <Checkbox value="3" labelText="Option 3" />
   </CheckboxGroup>
 {/if}
