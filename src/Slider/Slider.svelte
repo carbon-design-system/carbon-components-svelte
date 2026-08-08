@@ -183,7 +183,7 @@
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: range = max - min;
-  $: left = ((value - min) / range) * 100;
+  $: left = range === 0 ? 0 : ((value - min) / range) * 100;
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
   $: hasMarkLabels = resolvedMarks.some(
     (mark) => mark.label != null && mark.label !== "",
