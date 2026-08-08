@@ -12,6 +12,22 @@ describe("ProfileMenu", () => {
     expect(screen.queryByText("Settings")).not.toBeInTheDocument();
   });
 
+  it("promises a generic popup, not a menu", () => {
+    render(ProfileMenu);
+
+    expect(getTrigger()).toHaveAttribute("aria-haspopup", "true");
+  });
+
+  it("names the panel from the trigger's iconDescription", async () => {
+    render(ProfileMenu);
+
+    await user.click(getTrigger());
+
+    expect(
+      screen.getByText("Settings").closest(".bx--profile-menu"),
+    ).toHaveAttribute("aria-label", "Profile");
+  });
+
   it("renders a default UserAvatar when no avatar slot is provided", async () => {
     render(ProfileMenu);
 
