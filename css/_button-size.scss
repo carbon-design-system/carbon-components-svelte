@@ -1,0 +1,39 @@
+// `Button`'s v10 size classes are offset one step from Carbon React's v11
+// scale (`xs | sm | md | lg | xl | 2xl`, 24/32/40/48/64/80px): v10's
+// unclassed base already lands on 48px (v11 `lg`), and v10's own `--lg`/
+// `--xl` classes are 64/80px (v11 `xl`/`2xl`). `sm`/`md` already have exact
+// v10 aliases (`--sm`, `--field`/`--md`). Only the 24px (`xs`) and 48px
+// (`lg`) steps have no v10 class of their own, so this partial adds them.
+//
+// Loaded after Carbon's base styles (see all.scss).
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// New v11 `xs`/`lg` Button size steps.
+/// @access private
+/// @group components
+@mixin button-size {
+  // Extra-small (Carbon React size="xs", 24px). No v10 class lands on 24px.
+  .#{$prefix}--btn--xs {
+    min-height: to-rem(24px);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .#{$prefix}--btn--xs.#{$prefix}--btn--icon-only {
+    padding-right: to-rem(4px);
+    padding-left: to-rem(4px);
+  }
+
+  // Large (Carbon React size="lg", 48px). Matches v10's unclassed base
+  // exactly; this class exists so `size="lg"` leaves an explicit, greppable
+  // marker instead of relying on the absence of any size class.
+  .#{$prefix}--btn--lg-48 {
+    min-height: to-rem(48px);
+  }
+}
+
+@include exports("button-size") {
+  @include button-size;
+}

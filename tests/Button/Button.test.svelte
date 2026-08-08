@@ -12,8 +12,16 @@
 <Button kind="danger-tertiary">danger-tertiary</Button>
 <Button kind="danger-ghost">danger-ghost</Button>
 
+<!-- Deprecated size aliases, kept for backward compatibility -->
 <Button size="field">field size</Button>
 <Button size="small">small size</Button>
+
+<Button size="xs">xs size</Button>
+<Button size="sm">sm size</Button>
+<Button size="md">md size</Button>
+<Button size="lg">lg size</Button>
+<Button size="xl">xl size</Button>
+<Button size="2xl">2xl size</Button>
 
 <Button
   icon={Add}

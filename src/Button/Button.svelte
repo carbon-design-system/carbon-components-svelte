@@ -20,7 +20,9 @@
   /**
    * Specify the size of button.
    * When the `badge` slot is used, size is set to `lg` per Carbon design guidelines.
-   * @type {"default" | "field" | "small" | "lg" | "xl"}
+   * `"default"`, `"field"`, and `"small"` are deprecated aliases for `"lg"`, `"md"`, and `"sm"`
+   * kept for backward compatibility.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "default" | "field" | "small"}
    */
   export let size = "default";
 
@@ -313,10 +315,12 @@
     class: [
       "bx--btn",
       expressive && "bx--btn--expressive",
-      effectiveSize === "small" && "bx--btn--sm",
-      effectiveSize === "field" && "bx--btn--field",
-      effectiveSize === "lg" && "bx--btn--lg",
-      effectiveSize === "xl" && "bx--btn--xl",
+      effectiveSize === "xs" && "bx--btn--xs",
+      (effectiveSize === "small" || effectiveSize === "sm") && "bx--btn--sm",
+      (effectiveSize === "field" || effectiveSize === "md") && "bx--btn--field",
+      effectiveSize === "lg" && "bx--btn--lg-48",
+      effectiveSize === "xl" && "bx--btn--lg",
+      effectiveSize === "2xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,
       isDisabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",

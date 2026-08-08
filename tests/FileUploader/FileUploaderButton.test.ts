@@ -324,8 +324,11 @@ describe("FileUploaderButton", () => {
     expect(button2).toHaveClass("bx--btn--field");
     expect(button3).not.toHaveClass("bx--btn--sm");
     expect(button3).not.toHaveClass("bx--btn--field");
-    expect(button4).toHaveClass("bx--btn--lg");
-    expect(button5).toHaveClass("bx--btn--xl");
+    // Button's size scale aligns with Carbon React's v11 scale: "lg" is the
+    // 48px step, and Button's old 64px `bx--btn--lg` class is now reached
+    // via "xl".
+    expect(button4).toHaveClass("bx--btn--lg-48");
+    expect(button5).toHaveClass("bx--btn--lg");
   });
 
   it("should handle name attribute", () => {

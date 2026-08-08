@@ -108,10 +108,10 @@ describe("ComboButton", () => {
   });
 
   it.each([
-    { size: "xs", buttonClass: "bx--btn--sm", menuClass: "bx--menu--xs" },
+    { size: "xs", buttonClass: "bx--btn--xs", menuClass: "bx--menu--xs" },
     { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },
     { size: "md", buttonClass: "bx--btn--field", menuClass: "bx--menu--md" },
-    { size: "lg", buttonClass: undefined, menuClass: "bx--menu--lg" },
+    { size: "lg", buttonClass: "bx--btn--lg-48", menuClass: "bx--menu--lg" },
   ] as const)(
     "propagates size $size to both buttons and the menu row height",
     async ({ size, buttonClass, menuClass }) => {
@@ -123,8 +123,10 @@ describe("ComboButton", () => {
       });
 
       for (const unwanted of [
+        "bx--btn--xs",
         "bx--btn--sm",
         "bx--btn--field",
+        "bx--btn--lg-48",
         "bx--btn--lg",
         "bx--btn--xl",
       ]) {
@@ -148,15 +150,18 @@ describe("ComboButton", () => {
     },
   );
 
-  it("keeps both buttons the same height at every size (no Button `lg`/`xl` baseline misalignment)", () => {
+  it("keeps both buttons at the 48px `lg` step, never Button's old 64px `lg` class", () => {
     render(ComboButtonFixture, { props: { size: "lg" } });
 
     const primaryAction = screen.getByRole("button", { name: "Save" });
     const trigger = screen.getByRole("button", { name: "Additional actions" });
 
-    // Button's own "lg"/"xl" classes render at 64px/80px for labeled buttons
-    // but are ignored for icon-only buttons, and apply baseline (not center)
-    // alignment - ComboButton must never reach for them.
+    // Button's size scale aligns with Carbon React's v11 scale: "lg" is the
+    // 48px step (`bx--btn--lg-48`), not the v10-named `bx--btn--lg` (64px,
+    // Carbon React's "xl"), which also applies baseline (not center)
+    // alignment - ComboButton must never reach for it.
+    expect(primaryAction).toHaveClass("bx--btn--lg-48");
+    expect(trigger).toHaveClass("bx--btn--lg-48");
     expect(primaryAction).not.toHaveClass("bx--btn--lg");
     expect(trigger).not.toHaveClass("bx--btn--lg");
   });

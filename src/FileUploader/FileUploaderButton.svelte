@@ -144,10 +144,12 @@
   class:bx--btn--danger={kind === "danger"}
   class:bx--btn--danger-tertiary={kind === "danger-tertiary"}
   class:bx--btn--danger-ghost={kind === "danger-ghost"}
-  class:bx--btn--sm={size === "small"}
-  class:bx--btn--field={size === "field"}
-  class:bx--btn--lg={size === "lg"}
-  class:bx--btn--xl={size === "xl"}
+  class:bx--btn--xs={size === "xs"}
+  class:bx--btn--sm={size === "small" || size === "sm"}
+  class:bx--btn--field={size === "field" || size === "md"}
+  class:bx--btn--lg-48={size === "lg"}
+  class:bx--btn--lg={size === "xl"}
+  class:bx--btn--xl={size === "2xl"}
   class:bx--btn--icon-only={hasIconOnly}
   class:bx--tooltip__trigger={hasIconOnly && !hideTooltip}
   class:bx--tooltip--a11y={hasIconOnly && !hideTooltip}

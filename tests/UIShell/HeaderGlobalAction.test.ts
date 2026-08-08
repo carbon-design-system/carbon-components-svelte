@@ -23,7 +23,7 @@ describe("HeaderGlobalAction", () => {
     expect(
       container.querySelector(".bx--btn__badge-wrapper"),
     ).toBeInTheDocument();
-    expect(button).toHaveClass("bx--btn--lg");
+    expect(button).toHaveClass("bx--btn--lg-48");
     expect(badge).not.toHaveClass("bx--badge-indicator--count");
     expect(badge?.textContent?.trim()).toBe("");
   });

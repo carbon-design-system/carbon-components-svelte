@@ -15,15 +15,6 @@
     transform: rotate(180deg);
   }
 
-  // Extra-small (Carbon React size="xs", 24px). Neither Button's "small"
-  // class (32px) nor any other Button size lands on 24px, so shrink further
-  // on top of the "small" size already passed to the trigger.
-  .#{$prefix}--menu-button__trigger--xs {
-    min-height: to-rem(24px);
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
   /// Icon-only MenuButton uses Menu (box-shadow) with an overflow-style
   /// trigger. OverflowMenu hides the seam with a ::after bridge on the
   /// options list; Menu has no equivalent, so the menu shadow paints onto
