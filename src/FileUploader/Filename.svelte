@@ -53,11 +53,30 @@
     return null;
   })();
 
+  let prevStatus = status;
+  let prevInvalid = invalid;
+  let statusAnnouncement = "";
+
+  // Announce transitions only (not the initial render) so a screen reader
+  // user hears completion/invalid state without being told about every
+  // status a file starts in.
+  $: if (status !== prevStatus || invalid !== prevInvalid) {
+    if (invalid && !prevInvalid) {
+      statusAnnouncement = `${fileName} invalid`;
+    } else if (status === "complete" && prevStatus !== "complete") {
+      statusAnnouncement = `${fileName} upload complete`;
+    }
+    prevStatus = status;
+    prevInvalid = invalid;
+  }
+
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import Close from "../icons/Close.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Loading from "../Loading/Loading.svelte";
 </script>
+
+<span role="status" class:bx--visually-hidden={true}>{statusAnnouncement}</span>
 
 {#if status === "uploading"}
   <Loading
