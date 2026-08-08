@@ -21,12 +21,15 @@ export function trapFocus({ container, event }) {
   const tabbable = /** @type {HTMLElement[]} */ (
     Array.from(container.querySelectorAll(selectorTabbable))
   ).filter((el) => {
-    const style = getComputedStyle(el);
-    if (style.visibility === "hidden" || style.display === "none") {
-      return false;
-    }
-
-    // Zero dimensions after layout; offsetParent is null when not in the DOM.
+    // Cheap geometry check first, so the (layout/style-recalc-forcing)
+    // `getComputedStyle` call below is only reached for elements not
+    // already excluded by it. `offsetParent` is `null` both when the
+    // browser hasn't computed real layout for the element (not attached,
+    // inside a `display: none` ancestor) and for visible `position: fixed`
+    // elements — and, in test environments like jsdom that don't compute
+    // layout at all, for every element unconditionally. Requiring
+    // `offsetParent !== null` before trusting zero dimensions avoids
+    // treating "no layout information" as "hidden".
     if (
       el.offsetParent !== null &&
       el.offsetWidth === 0 &&
@@ -35,7 +38,10 @@ export function trapFocus({ container, event }) {
       return false;
     }
 
-    return true;
+    // `visibility: hidden` elements keep their layout box, so this can only
+    // be detected via computed style, not geometry.
+    const style = getComputedStyle(el);
+    return style.visibility !== "hidden" && style.display !== "none";
   });
 
   if (tabbable.length === 0) {
