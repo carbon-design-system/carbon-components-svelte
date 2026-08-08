@@ -596,17 +596,14 @@
   function sort() {
     const selectedIdsSet = new Set(selectedIds);
 
+    const regularItems = items.filter((item) => !item.isSelectAll);
+    const enabledRegularItems = regularItems.filter((item) => !item.disabled);
+    const allChecked =
+      enabledRegularItems.length > 0 &&
+      enabledRegularItems.every((item) => selectedIdsSet.has(item.id));
     const selectAllEntries = items
       .filter((item) => item.isSelectAll)
-      .map((item) => {
-        const regularItems = items.filter((i) => !i.isSelectAll && !i.disabled);
-        const allChecked =
-          regularItems.length > 0 &&
-          regularItems.every((i) => selectedIdsSet.has(i.id));
-        return { ...item, checked: allChecked };
-      });
-
-    const regularItems = items.filter((item) => !item.isSelectAll);
+      .map((item) => ({ ...item, checked: allChecked }));
 
     if (
       selectionFeedback === "top" ||
