@@ -47,6 +47,13 @@ describe("SkeletonPlaceholder", () => {
     expectInlineStyle(element, { width: "10rem", height: "8rem" });
   });
 
+  it("should hide the placeholder from assistive technology", () => {
+    render(SkeletonPlaceholder);
+
+    const element = screen.getByTestId("skeleton-placeholder");
+    expect(element).toHaveAttribute("aria-hidden", "true");
+  });
+
   it("should handle mouse events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(SkeletonPlaceholder);
