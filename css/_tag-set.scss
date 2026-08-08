@@ -2,7 +2,8 @@
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// TagSet: a row of tags that collapses into a "+N" overflow indicator with
-/// a hover tooltip once they no longer fit the available width.
+/// a hover tooltip and a clickable disclosure popover once they no longer
+/// fit the available width.
 /// @access private
 /// @group components
 @mixin tag-set {
@@ -57,6 +58,25 @@
   .#{$prefix}--tag-set-overflow__popover-trigger {
     min-width: auto;
     padding: 0 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--tag-set-overflow__tag-list {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+    margin: 0;
+    padding: $carbon--spacing-05;
+    list-style: none;
+    outline: none;
+  }
+
+  .#{$prefix}--tag-set-overflow__tagset-popover {
+    min-width: initial;
+    text-align: start;
+  }
+
+  .#{$prefix}--tag-set-overflow__tag-item .#{$prefix}--tag {
+    margin: 0;
   }
 }
 
