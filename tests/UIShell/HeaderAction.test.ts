@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
 import type HeaderActionComponent from "carbon-components-svelte/UIShell/HeaderAction.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
@@ -54,6 +54,37 @@ describe("HeaderAction", () => {
       await user.click(getActionButton());
       await user.click(document.body);
       expect(screen.getByTestId("panel-content")).toBeInTheDocument();
+    });
+  });
+
+  describe("accessibility", () => {
+    const getActionButton = () =>
+      screen.getByRole("button", { name: "Switcher" });
+
+    it("exposes aria-haspopup and toggles aria-expanded", async () => {
+      render(HeaderActionOutsideClick);
+
+      const button = getActionButton();
+      expect(button).toHaveAttribute("aria-haspopup", "true");
+      expect(button).toHaveAttribute("aria-expanded", "false");
+
+      await user.click(button);
+      expect(button).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("closes the panel and refocuses the trigger on Escape", async () => {
+      render(HeaderActionOutsideClick);
+
+      const button = getActionButton();
+      await user.click(button);
+      expect(screen.getByTestId("panel-content")).toBeInTheDocument();
+
+      await user.keyboard("{Escape}");
+
+      await waitFor(() =>
+        expect(screen.queryByTestId("panel-content")).not.toBeInTheDocument(),
+      );
+      expect(button).toHaveFocus();
     });
   });
 
