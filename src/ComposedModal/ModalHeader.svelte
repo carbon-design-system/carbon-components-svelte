@@ -29,7 +29,7 @@
   import { getContext } from "svelte";
   import Close from "../icons/Close.svelte";
 
-  const { closeModal, updateLabel, updateTitle } = getContext(
+  const { closeModal, updateLabel, updateTitle, labelId, titleId } = getContext(
     "carbon:ComposedModal",
   );
 
@@ -40,6 +40,7 @@
 <div class:bx--modal-header={true} {...$$restProps}>
   {#if label}
     <h2
+      id={labelId}
       class:bx--modal-header__label={true}
       class:bx--type-delta={true}
       class={labelClass}
@@ -49,6 +50,7 @@
   {/if}
   {#if title}
     <h3
+      id={titleId}
       class:bx--modal-header__heading={true}
       class:bx--type-beta={true}
       class={titleClass}

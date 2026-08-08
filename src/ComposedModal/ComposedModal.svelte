@@ -54,6 +54,12 @@
   const title = writable(undefined);
   const focusReturn = restoreFocus();
 
+  // Ids for ModalHeader's label/title headings, so ModalBody (when
+  // `hasScrollingContent`) can name its region via `aria-labelledby`.
+  const modalId = `ccs-${Math.random().toString(36)}`;
+  const labelId = `${modalId}-label`;
+  const titleId = `${modalId}-title`;
+
   let buttonRef = null;
   let innerModal = null;
   let closeDispatched = false;
@@ -115,6 +121,10 @@
     declareRef,
     updateLabel,
     updateTitle,
+    labelId,
+    titleId,
+    label,
+    title,
   });
 
   function focus(element) {
