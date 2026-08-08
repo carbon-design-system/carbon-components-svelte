@@ -12,6 +12,7 @@
   type DataTableHeader = {
     key: string;
     value: string;
+    pinned?: "start" | "end";
     width?: string;
     minWidth?: string;
     columnAlign?: "start" | "end";
