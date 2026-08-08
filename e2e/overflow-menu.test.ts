@@ -77,4 +77,23 @@ test.describe("OverflowMenu", () => {
     await page.keyboard.press("Escape");
     await expect(trigger).toBeFocused();
   });
+
+  test("positions the menu below and flush with the trigger's left edge", async ({
+    page,
+  }) => {
+    const trigger = page.getByTestId("overflow-menu");
+    await trigger.click();
+
+    const menu = page.getByRole("menu");
+    await expect(menu).toBeVisible();
+
+    const triggerBox = await trigger.boundingBox();
+    const menuBox = await menu.boundingBox();
+    if (!triggerBox || !menuBox) throw new Error("missing bounding box");
+
+    // direction="bottom" (default), not flipped: menu top sits at the
+    // trigger's bottom edge, menu left aligns with the trigger's left edge.
+    expect(menuBox.y).toBeCloseTo(triggerBox.y + triggerBox.height, 0);
+    expect(menuBox.x).toBeCloseTo(triggerBox.x, 0);
+  });
 });

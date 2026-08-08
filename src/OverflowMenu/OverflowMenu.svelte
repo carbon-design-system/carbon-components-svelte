@@ -220,15 +220,21 @@
       if (!effectivePortalMenu) {
         // Menu is a button sibling; position from offsetTop/offsetLeft.
         const { offsetTop, offsetLeft } = buttonRef;
+        // Read menu geometry up front, before any writes below: reading
+        // offsetHeight/offsetWidth after menuRef.style has already been
+        // written forces a second synchronous layout recalc on top of the
+        // one triggered by the reads above.
+        const menuHeight = menuRef.offsetHeight;
+        const menuWidth = menuRef.offsetWidth;
 
         if (direction === "top") {
-          menuRef.style.top = `${offsetTop - menuRef.offsetHeight}px`;
+          menuRef.style.top = `${offsetTop - menuHeight}px`;
         } else {
           menuRef.style.top = `${offsetTop + height}px`;
         }
 
         if (flipped) {
-          menuRef.style.left = `${offsetLeft + width - menuRef.offsetWidth}px`;
+          menuRef.style.left = `${offsetLeft + width - menuWidth}px`;
         } else {
           menuRef.style.left = `${offsetLeft}px`;
         }
