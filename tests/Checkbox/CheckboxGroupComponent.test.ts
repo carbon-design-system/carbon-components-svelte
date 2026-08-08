@@ -229,6 +229,73 @@ describe("CheckboxGroup", () => {
     expect(fieldset).not.toHaveAttribute("aria-describedby");
   });
 
+  it("renders the invalid state on the fieldset with an error message", () => {
+    render(CheckboxGroupComponent, {
+      props: { invalid: true, invalidText: "Select at least one option" },
+    });
+
+    const fieldset = screen.getByRole("group");
+    expect(fieldset).toHaveClass("bx--checkbox-group--invalid");
+    expect(fieldset).toHaveAttribute("data-invalid", "true");
+
+    const message = screen.getByText("Select at least one option");
+    expect(message).toHaveClass("bx--form-requirement");
+    expect(fieldset).toHaveAttribute("aria-describedby", message.id);
+  });
+
+  it("renders the warning state on the fieldset with a warning message", () => {
+    render(CheckboxGroupComponent, {
+      props: { warn: true, warnText: "Heads up" },
+    });
+
+    const fieldset = screen.getByRole("group");
+    expect(fieldset).toHaveClass("bx--checkbox-group--warning");
+    expect(fieldset).not.toHaveAttribute("data-invalid");
+
+    const message = screen.getByText("Heads up");
+    expect(message).toHaveClass("bx--form-requirement");
+  });
+
+  it("prioritizes invalid over warn on the group when both are set", () => {
+    render(CheckboxGroupComponent, {
+      props: {
+        invalid: true,
+        invalidText: "Select at least one option",
+        warn: true,
+        warnText: "Heads up",
+      },
+    });
+
+    expect(screen.getByText("Select at least one option")).toBeInTheDocument();
+    expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
+  });
+
+  it("hides group helper text while invalid or warn text is shown", () => {
+    render(CheckboxGroupComponent, {
+      props: {
+        invalid: true,
+        invalidText: "Select at least one option",
+        helperText: "Helper text message",
+      },
+    });
+
+    expect(screen.getByText("Select at least one option")).toBeInTheDocument();
+    expect(screen.queryByText("Helper text message")).not.toBeInTheDocument();
+  });
+
+  it("defers a checkbox's own invalid message to the group when nested", () => {
+    render(CheckboxGroupComponent, { props: { checkboxInvalid: true } });
+
+    // The individual Checkbox's own invalid text is suppressed by CSS
+    // (`display: none`) when nested in a CheckboxGroup, in favor of the
+    // group's own validation message - assert the wrapper still carries the
+    // marker class CSS keys off of, without asserting computed styles.
+    const option2 = screen.getByRole("checkbox", { name: "Option 2" });
+    expect(option2.closest(".bx--checkbox-wrapper")).toHaveClass(
+      "bx--checkbox-wrapper--invalid",
+    );
+  });
+
   it("should support multiple selections", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(CheckboxGroupComponent);

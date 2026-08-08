@@ -1,0 +1,119 @@
+// Checkbox/CheckboxGroup `invalid`/`warn` states. v10 ships none of this
+// (`grep` for `checkbox…--invalid` under carbon-components' checkbox SCSS
+// returns nothing) - ported from Carbon React's real @carbon/styles
+// `_checkbox.scss`, translated to this repo's `to-rem()`/`$carbon--spacing-*`
+// conventions. `$icon-primary`, `$support-error`, `$support-warning`, and
+// `$text-error` are v11 token names that the v10 theme mixin already
+// globally aliases to their v10 equivalents (`$icon-01`, `$support-01`,
+// `$support-03`, `$text-error`), so they resolve correctly under this
+// repo's v10 pin.
+//
+// Loaded after Carbon's base styles (see all.scss), so these selectors are
+// deliberately more specific than v10's own `.bx--checkbox-label::before`
+// and `.bx--form-requirement` rules and win regardless of load order.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Checkbox/CheckboxGroup invalid and warning states.
+/// @access private
+/// @group components
+@mixin checkbox-validation {
+  .#{$prefix}--checkbox-group[data-invalid] .#{$prefix}--checkbox-label::before,
+  .#{$prefix}--checkbox-wrapper--invalid .#{$prefix}--checkbox-label::before,
+  .#{$prefix}--checkbox-wrapper--invalid
+    .#{$prefix}--checkbox:checked
+    + .#{$prefix}--checkbox-label::before {
+    border: 1px solid $support-error;
+  }
+
+  // A checkbox individually marked invalid inside a group defers to the
+  // group's own state: its message is hidden, and its border resets to
+  // normal unless the group itself is also invalid.
+  .#{$prefix}--checkbox-group
+    .#{$prefix}--checkbox-wrapper--invalid
+    > .#{$prefix}--checkbox__validation-msg,
+  .#{$prefix}--checkbox-group
+    .#{$prefix}--checkbox-wrapper--warning
+    > .#{$prefix}--checkbox__validation-msg,
+  .#{$prefix}--checkbox-group
+    .#{$prefix}--checkbox-wrapper
+    > .#{$prefix}--form__helper-text {
+    display: none;
+  }
+
+  .#{$prefix}--checkbox-group:not(.#{$prefix}--checkbox-group[data-invalid])
+    .#{$prefix}--checkbox-wrapper--invalid
+    .#{$prefix}--checkbox-label::before,
+  .#{$prefix}--checkbox-group:not(.#{$prefix}--checkbox-group[data-invalid])
+    .#{$prefix}--checkbox-wrapper--invalid
+    .#{$prefix}--checkbox:checked
+    + .#{$prefix}--checkbox-label::before {
+    border: 1px solid $icon-primary;
+  }
+
+  .#{$prefix}--checkbox-group__validation-msg,
+  .#{$prefix}--checkbox__validation-msg {
+    display: none;
+    align-items: flex-start;
+    inline-size: 100%;
+    margin-block-start: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--checkbox__invalid-icon {
+    margin: to-rem(1px) to-rem(1px) 0 to-rem(3px);
+    fill: $support-error;
+    min-inline-size: to-rem(16px);
+  }
+
+  .#{$prefix}--checkbox__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--checkbox__invalid-icon--warning path:first-of-type {
+    fill: #000000;
+  }
+
+  .#{$prefix}--checkbox-group--invalid
+    .#{$prefix}--checkbox-group__validation-msg,
+  .#{$prefix}--checkbox-group--warning
+    .#{$prefix}--checkbox-group__validation-msg,
+  .#{$prefix}--checkbox-wrapper--invalid
+    > .#{$prefix}--checkbox__validation-msg,
+  .#{$prefix}--checkbox-wrapper--warning
+    > .#{$prefix}--checkbox__validation-msg {
+    display: flex;
+  }
+
+  .#{$prefix}--checkbox-group--invalid
+    .#{$prefix}--checkbox-group__validation-msg
+    .#{$prefix}--form-requirement,
+  .#{$prefix}--checkbox-group--warning
+    .#{$prefix}--checkbox-group__validation-msg
+    .#{$prefix}--form-requirement,
+  .#{$prefix}--checkbox-wrapper--invalid
+    .#{$prefix}--checkbox__validation-msg
+    .#{$prefix}--form-requirement,
+  .#{$prefix}--checkbox-wrapper--warning
+    .#{$prefix}--checkbox__validation-msg
+    .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    margin-block-start: 0;
+    margin-inline-start: $carbon--spacing-03;
+    max-block-size: 100%;
+  }
+
+  .#{$prefix}--checkbox-group--invalid
+    .#{$prefix}--checkbox-group__validation-msg
+    .#{$prefix}--form-requirement,
+  .#{$prefix}--checkbox-wrapper--invalid
+    .#{$prefix}--checkbox__validation-msg
+    .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+}
+
+@include exports("checkbox-validation") {
+  @include checkbox-validation;
+}
