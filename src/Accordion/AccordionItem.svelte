@@ -54,6 +54,7 @@
   });
 
   const id = {};
+  const contentId = `ccs-${Math.random().toString(36)}`;
 
   const unsubscribeOpenId = ctx.openId.subscribe((openItemId) => {
     if (openItemId !== null && openItemId !== id) {
@@ -97,6 +98,7 @@
     class:bx--accordion__heading={true}
     aria-label={ariaLabel}
     aria-expanded={open}
+    aria-controls={contentId}
     {disabled}
     on:click
     on:click={() => {
@@ -118,7 +120,7 @@
       <slot name="title">{title}</slot>
     </div>
   </button>
-  <div class:bx--accordion__content={true}>
+  <div id={contentId} class:bx--accordion__content={true}>
     {#if !lazy || hasOpened}
       <slot />
     {/if}
