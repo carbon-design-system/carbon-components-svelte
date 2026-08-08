@@ -281,9 +281,9 @@ describe("PaginationNav", () => {
   });
 
   it("should populate overflow options lazily on first interaction", async () => {
-    const consoleLog = vi.spyOn(console, "log");
+    const onChange = vi.fn();
     render(PaginationNav, {
-      props: { total: 2000, shown: 5 },
+      props: { total: 2000, shown: 5, onChange },
     });
 
     const overflowIndicator = screen.getByLabelText("Select Page number");
@@ -303,7 +303,7 @@ describe("PaginationNav", () => {
     expect(options.length).toBeGreaterThan(1);
 
     await user.selectOptions(overflowIndicator, "4");
-    expect(consoleLog).toHaveBeenCalledWith("change", { page: 4 });
+    expect(onChange).toHaveBeenCalledWith({ page: 4 });
   });
 
   it("should eagerly render overflow options below the lazy-populate threshold", () => {
