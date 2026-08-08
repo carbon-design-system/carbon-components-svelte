@@ -153,6 +153,22 @@ describe("ContentSwitcher", () => {
     expect(tabs[2]).toHaveClass("bx--content-switcher--selected");
   });
 
+  it("prevents ArrowRight's default action (page scroll) when moving focus", async () => {
+    render(ContentSwitcher);
+
+    const tabs = screen.getAllByRole("tab");
+    await user.tab();
+
+    const event = new KeyboardEvent("keydown", {
+      key: "ArrowRight",
+      bubbles: true,
+      cancelable: true,
+    });
+    tabs[0].dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(true);
+  });
+
   it("handles keyboard navigation", async () => {
     render(ContentSwitcher);
 

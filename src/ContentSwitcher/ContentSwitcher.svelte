@@ -228,8 +228,15 @@
         .map((s) => document.getElementById(s.id))
         .filter((el) => el instanceof HTMLElement),
     getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : currentIndex),
-    onMove: (index) =>
-      selectionMode === "manual" ? focusTo(index) : changeTo(index),
+    onMove: (index, event) => {
+      // Prevent the arrow keys from also scrolling the page.
+      event.preventDefault();
+      if (selectionMode === "manual") {
+        focusTo(index);
+      } else {
+        changeTo(index);
+      }
+    },
   }}
   class:bx--content-switcher={true}
   class:bx--content-switcher--sm={size === "sm"}
