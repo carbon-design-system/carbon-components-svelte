@@ -9,6 +9,7 @@ import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
 import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
+import DatePickerPresets from "./DatePickerPresets.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
 
 describe("DatePicker", () => {
@@ -88,6 +89,43 @@ describe("DatePicker", () => {
     expect(
       await screen.findByLabelText("calendar-container"),
     ).toBeInTheDocument();
+  });
+
+  describe("presets", () => {
+    it("applies a preset range and dispatches change", async () => {
+      const changeHandler = vi.fn();
+      render(DatePickerPresets, {
+        props: { onchange: changeHandler },
+      });
+
+      await user.click(screen.getByLabelText("Start date"));
+      await screen.findByLabelText("calendar-container");
+
+      await user.click(screen.getByRole("button", { name: "Last 7 days" }));
+
+      expect(screen.getByLabelText("Start date")).toHaveValue("01/09/2024");
+      expect(screen.getByLabelText("End date")).toHaveValue("01/15/2024");
+      expect(changeHandler).toHaveBeenCalled();
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        dateStr: { from: "01/09/2024", to: "01/15/2024" },
+      });
+    });
+
+    it("ignores presets when datePickerType is not range", async () => {
+      render(DatePickerPresets, {
+        props: { datePickerType: "single" },
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      await screen.findByLabelText("calendar-container");
+
+      expect(
+        screen.queryByRole("button", { name: "Today" }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText("Date range presets"),
+      ).not.toBeInTheDocument();
+    });
   });
 
   it("handles disabled state", () => {
