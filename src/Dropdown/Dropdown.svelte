@@ -241,6 +241,7 @@
   let highlightedIndex = -1;
   let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
   let prevHighlightedIndex = -1;
+  let prevItemsLength = items.length;
   let typeaheadBuffer = "";
   let listScrollTop = 0;
   let prevOpen = false;
@@ -290,6 +291,17 @@
     prevHighlightedIndex = -1;
     typeaheadBuffer = "";
     resetTypeaheadBuffer.cancel();
+  }
+
+  // Clamp a stale highlight when `items` shrinks while the menu is open, so a
+  // keyboard-driven Enter/Space cannot dereference an index past the end.
+  $: if (items.length !== prevItemsLength) {
+    prevItemsLength = items.length;
+    if (highlightedIndex >= items.length) {
+      highlightedIndex = -1;
+      highlightOrigin = null;
+      prevHighlightedIndex = -1;
+    }
   }
 
   $: shouldVirtualize =
@@ -480,20 +492,16 @@
       open = true;
       return;
     }
+    const highlighted =
+      highlightOrigin === "keyboard" && highlightedIndex > -1
+        ? items[highlightedIndex]
+        : undefined;
     // Enter/Space on a highlighted disabled option -> the menu stays open.
-    if (
-      highlightOrigin === "keyboard" &&
-      highlightedIndex > -1 &&
-      items[highlightedIndex]?.disabled
-    ) {
+    if (highlighted?.disabled) {
       return;
     }
-    if (
-      highlightOrigin === "keyboard" &&
-      highlightedIndex > -1 &&
-      items[highlightedIndex].id !== selectedId
-    ) {
-      selectedId = items[highlightedIndex].id;
+    if (highlighted && highlighted.id !== selectedId) {
+      selectedId = highlighted.id;
       dispatchSelect();
       close("select");
     } else {
