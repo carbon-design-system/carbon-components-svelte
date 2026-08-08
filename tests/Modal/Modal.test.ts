@@ -110,6 +110,38 @@ describe("Modal", () => {
     expect(closeHandler).toHaveBeenCalledTimes(1);
   });
 
+  // perf/modal-reactive-open-state: focusing on a post-mount open transition
+  // now happens via `tick().then(focus)` (the `$:` block that dispatches
+  // "open" runs before the DOM commits, unlike the old `afterUpdate`), so
+  // this pins down that focus still lands correctly once the tick resolves,
+  // and that an unrelated re-render doesn't cause a duplicate "open" dispatch.
+  it("moves focus into the modal on a post-mount open transition, without duplicating on:open", async () => {
+    const openHandler = vi.fn();
+    const { rerender } = render(ModalTest, {
+      props: {
+        open: false,
+        modalHeading: "Post-mount Focus Test",
+        primaryButtonText: "Save",
+        includeInput: false,
+        onopen: openHandler,
+      },
+    });
+
+    rerender({ open: true });
+    await tick();
+    await tick();
+
+    expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
+    expect(openHandler).toHaveBeenCalledTimes(1);
+
+    // An unrelated re-render (open stays true) must not re-fire "open".
+    rerender({ open: true, modalHeading: "Post-mount Focus Test Updated" });
+    await tick();
+    await tick();
+
+    expect(openHandler).toHaveBeenCalledTimes(1);
+  });
+
   it("handles form submission", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ModalTest, {
