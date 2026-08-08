@@ -19,7 +19,6 @@
   /**
    * Set to `true` to indent the label.
    * Rendered indented regardless when `icon` is set, or when the option is selectable or part of a radio group.
-   * @bindable writable
    */
   export let indented = false;
 
@@ -28,7 +27,6 @@
    * Icon is rendered to the left of the label text.
    * Overridden with a checkmark icon when the option is selectable or part of a radio group.
    * @type {Icon}
-   * @bindable writable
    */
   export let icon = /** @type {Icon} */ (undefined);
 
