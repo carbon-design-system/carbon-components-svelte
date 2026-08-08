@@ -18,15 +18,15 @@
 
   /**
    * Set to `true` to indent the label.
-   * @bindable writable
+   * Rendered indented regardless when `icon` is set, or when the option is selectable or part of a radio group.
    */
   export let indented = false;
 
   /**
    * Specify the icon to render.
    * Icon is rendered to the left of the label text.
+   * Overridden with a checkmark icon when the option is selectable or part of a radio group.
    * @type {Icon}
-   * @bindable writable
    */
   export let icon = /** @type {Icon} */ (undefined);
 
@@ -268,36 +268,25 @@
 
     submenuPosition = [x, y];
   }
-  $: {
-    if (icon) {
-      indented = true;
-    }
+  $: resolvedIcon =
+    isSelectable || isRadio ? (selected ? Checkmark : undefined) : icon;
+  $: isIndented = indented || icon !== undefined || isSelectable || isRadio;
 
+  $: {
     let nextRole = "menuitem";
     if (isSelectable) nextRole = "menuitemcheckbox";
     if (isRadio) nextRole = "menuitemradio";
     role = nextRole;
 
-    if (isSelectable) {
-      indented = true;
-
-      if (selected) {
-        if (ctxGroup) ctxGroup.addOption({ id });
-        icon = Checkmark;
-      } else {
-        icon = undefined;
-      }
+    if (isSelectable && selected && ctxGroup) {
+      ctxGroup.addOption({ id });
     }
 
     if (isRadio) {
-      indented = true;
       ctxRadioGroup.addOption({ id });
 
-      if (selected) {
-        if (ctxRadioGroup) ctxRadioGroup.setOption({ id });
-        icon = Checkmark;
-      } else {
-        icon = undefined;
+      if (selected && ctxRadioGroup) {
+        ctxRadioGroup.setOption({ id });
       }
     }
   }
@@ -320,7 +309,7 @@
   class:bx--menu-option--disabled={disabled}
   class:bx--menu-option--active={subOptions && submenuOpen}
   class:bx--menu-option--danger={!subOptions && kind === "danger"}
-  {indented}
+  indented={isIndented}
   aria-checked={isSelectable || isRadio ? selected : undefined}
   data-nested={ref &&
     ref.closest(".bx--menu").getAttribute("data-level") === "2"}
@@ -415,9 +404,9 @@
       class:bx--menu-option__content={true}
       class:bx--menu-option__content--disabled={disabled}
     >
-      {#if indented}
+      {#if isIndented}
         <div class:bx--menu-option__icon={true}>
-          <slot name="icon"> <svelte:component this={icon} /> </slot>
+          <slot name="icon"> <svelte:component this={resolvedIcon} /> </slot>
         </div>
       {/if}
       <span class:bx--menu-option__label={true} title={labelText}>
@@ -439,9 +428,9 @@
       class:bx--menu-option__content={true}
       class:bx--menu-option__content--disabled={disabled}
     >
-      {#if indented}
+      {#if isIndented}
         <div class:bx--menu-option__icon={true}>
-          <slot name="icon"> <svelte:component this={icon} /> </slot>
+          <slot name="icon"> <svelte:component this={resolvedIcon} /> </slot>
         </div>
       {/if}
       <span class:bx--menu-option__label={true} title={labelText}>
