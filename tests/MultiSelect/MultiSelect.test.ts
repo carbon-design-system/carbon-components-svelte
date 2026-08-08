@@ -3027,6 +3027,19 @@ describe("MultiSelect", () => {
     });
   });
 
+  describe("maxHeight", () => {
+    it("should override the size-based default on a portaled menu", async () => {
+      render(MultiSelect, {
+        props: { items, portalMenu: true, maxHeight: 200 },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      expect(menu.style.maxHeight).toBe("200px");
+    });
+  });
+
   describe("portalMenu", () => {
     afterEach(() => {
       const existingPortals = document.querySelectorAll(

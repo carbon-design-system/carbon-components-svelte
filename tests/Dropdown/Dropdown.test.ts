@@ -2066,6 +2066,24 @@ describe("Dropdown", () => {
     });
   });
 
+  describe("maxHeight", () => {
+    it("should override the size-based default on a portaled menu", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          portalMenu: true,
+          maxHeight: 200,
+        },
+      });
+
+      const button = screen.getByRole("combobox");
+      await user.click(button);
+
+      const menu = screen.getByRole("listbox");
+      expect(menu.style.maxHeight).toBe("200px");
+    });
+  });
+
   describe("portalMenu", () => {
     afterEach(() => {
       const existingPortals = document.querySelectorAll(

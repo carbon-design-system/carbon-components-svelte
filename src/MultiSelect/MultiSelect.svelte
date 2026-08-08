@@ -272,6 +272,14 @@
   export let portalMenu = undefined;
 
   /**
+   * Specify the maximum height of the menu.
+   * A number is treated as pixels; a string is used as a CSS length.
+   * The menu scrolls once its items exceed the height.
+   * @type {number | string}
+   */
+  export let maxHeight = undefined;
+
+  /**
    * Obtain a reference to the list HTML element.
    * @type {null | HTMLDivElement}
    * @bindable readonly
@@ -745,7 +753,7 @@
   $: itemsToUse = filterable ? filteredItems : sortedItems;
   $: scrollEndTracker.noteItemCount(itemsToUse.length);
 
-  $: menuMaxHeight = getMenuMaxHeight(size);
+  $: resolvedMenuMaxHeight = maxHeight ?? getMenuMaxHeight(size);
 
   $: virtualState = virtualListState({
     items: itemsToUse,
@@ -1135,13 +1143,12 @@
           highlightOrigin = null;
         }}
         bind:ref={listRef}
-        style={effectivePortalMenu
-          ? `max-height: ${virtualConfig
-              ? `${virtualConfig.containerHeight}px; overflow-y: auto`
-              : menuMaxHeight};`
-          : virtualConfig
-            ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
-            : undefined}
+        style={virtualConfig
+          ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+          : undefined}
+        maxHeight={!virtualConfig && effectivePortalMenu
+          ? resolvedMenuMaxHeight
+          : undefined}
       >
         {#if virtualData?.isVirtualized}
           <div style="height: {virtualData.totalHeight}px; position: relative;">

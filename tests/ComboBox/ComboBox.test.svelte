@@ -43,6 +43,7 @@
   export let autoHighlight: ComponentProps<ComboBox>["autoHighlight"] = "none";
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
+  export let maxHeight: ComponentProps<ComboBox>["maxHeight"] = undefined;
   export let ariaLabel: ComponentProps<ComboBox>["aria-label"] = undefined;
   export let fluid: ComponentProps<ComboBox>["fluid"] = false;
   export let condensed: ComponentProps<ComboBox>["condensed"] = false;
@@ -80,6 +81,7 @@
   {autoHighlight}
   {virtualize}
   {portalMenu}
+  {maxHeight}
   on:select={(e) => {
     console.log("select", e.detail);
   }}

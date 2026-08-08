@@ -63,6 +63,31 @@ describe("ListBoxMenu", () => {
     expect(component.ref).toBeInstanceOf(HTMLDivElement);
   });
 
+  it("should apply maxHeight as pixels when a number", () => {
+    render(ListBoxMenu, {
+      props: { slotContent: "Capped menu", maxHeight: 200 },
+    });
+
+    const menu = screen.getByText("Capped menu").closest(".bx--list-box__menu");
+    expect(menu).toHaveStyle("max-height: 200px");
+  });
+
+  it("should apply maxHeight as a CSS length when a string", async () => {
+    render(ListBoxMenu, {
+      props: {
+        slotContent: "Portal capped menu",
+        maxHeight: "20rem",
+        portal: true,
+        open: true,
+      },
+    });
+
+    const menu = await screen.findByText("Portal capped menu");
+    expect(
+      menu.closest(".bx--list-box__menu")?.getAttribute("style"),
+    ).toContain("max-height: 20rem");
+  });
+
   it("should apply custom attributes", () => {
     render(ListBoxMenu, {
       props: {
