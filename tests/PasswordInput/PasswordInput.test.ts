@@ -6,6 +6,7 @@ import PasswordInputSkeleton from "./PasswordInput.skeleton.test.svelte";
 import PasswordInputSlot from "./PasswordInput.slot.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
 import PasswordInputInModal from "./PasswordInputInModal.test.svelte";
+import PasswordInputSkeletonEvents from "./PasswordInputSkeletonEvents.test.svelte";
 
 describe("PasswordInput", () => {
   describe("Default", () => {
@@ -484,6 +485,26 @@ describe("PasswordInput", () => {
         "bx--skeleton",
         "bx--text-input",
       );
+    });
+
+    it("does not forward click but forwards mouse events", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PasswordInputSkeletonEvents);
+
+      const skeleton = screen.getByTestId("skeleton");
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.click(skeleton);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(skeleton);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+      expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+      await user.unhover(skeleton);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+      consoleLog.mockRestore();
     });
   });
 });

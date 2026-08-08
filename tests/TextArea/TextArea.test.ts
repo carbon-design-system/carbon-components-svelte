@@ -5,6 +5,7 @@ import TextAreaFluidSkeleton from "./TextArea.fluidSkeleton.test.svelte";
 import TextAreaFluidSlot from "./TextArea.fluidSlot.test.svelte";
 import TextArea from "./TextArea.test.svelte";
 import TextAreaCustom from "./TextAreaCustom.test.svelte";
+import TextAreaSkeleton from "./TextAreaSkeleton.test.svelte";
 
 describe("TextArea", () => {
   it("should render with default props", () => {
@@ -284,5 +285,86 @@ describe("TextArea", () => {
     expect(skeleton.children).toHaveLength(2);
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-area");
+  });
+
+  it("FluidTextAreaSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TextAreaFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-text-area-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+    vi.restoreAllMocks();
+  });
+
+  describe("TextAreaSkeleton", () => {
+    let consoleLog: Console["log"];
+
+    beforeEach(() => {
+      consoleLog = vi.spyOn(console, "log");
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("should render with default props", () => {
+      const { container } = render(TextAreaSkeleton);
+
+      const formItem = container.querySelector(".bx--form-item");
+      expect(formItem).toBeInTheDocument();
+
+      const textAreaSkeleton = container.querySelector(".bx--text-area");
+      expect(textAreaSkeleton).toBeInTheDocument();
+      expect(textAreaSkeleton).toHaveClass("bx--skeleton");
+    });
+
+    it("should render with hidden label", () => {
+      const { container } = render(TextAreaSkeleton, {
+        props: { hideLabel: true },
+      });
+
+      const label = container.querySelector(".bx--label");
+      expect(label).not.toBeInTheDocument();
+
+      const textAreaSkeleton = container.querySelector(".bx--text-area");
+      expect(textAreaSkeleton).toBeInTheDocument();
+      expect(textAreaSkeleton).toHaveClass("bx--skeleton");
+    });
+
+    it("should render label by default", () => {
+      const { container } = render(TextAreaSkeleton);
+
+      const label = container.querySelector(".bx--label");
+      expect(label).toBeInTheDocument();
+      expect(label).toHaveClass("bx--skeleton");
+    });
+
+    it("does not forward click but forwards mouse events", async () => {
+      const { container } = render(TextAreaSkeleton);
+
+      const skeleton = container.querySelector(".bx--form-item");
+      if (!skeleton) {
+        throw new Error("Skeleton not found");
+      }
+
+      await user.click(skeleton);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(skeleton);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(skeleton);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    });
   });
 });

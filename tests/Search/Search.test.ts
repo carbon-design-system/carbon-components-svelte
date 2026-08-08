@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type SearchComponent from "carbon-components-svelte/Search/Search.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
+import FluidSearchSkeletonEvents from "./FluidSearchSkeleton.events.test.svelte";
 import SearchFluidForm from "./Search.fluidForm.test.svelte";
 import SearchFluidSkeleton from "./Search.fluidSkeleton.test.svelte";
 import SearchFluidSlot from "./Search.fluidSlot.test.svelte";
@@ -9,6 +10,7 @@ import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";
 import SearchInitialEvent from "./SearchInitialEvent.test.svelte";
+import SearchSkeletonEvents from "./SearchSkeleton.events.test.svelte";
 import SearchSkeleton from "./SearchSkeleton.test.svelte";
 
 describe("Search", () => {
@@ -244,5 +246,39 @@ describe("Search", () => {
     expect(skeleton.children).toHaveLength(2);
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
+  });
+
+  it("FluidSearchSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(FluidSearchSkeletonEvents);
+
+    const skeleton = screen.getByTestId("fluid-search-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
+
+  it("SearchSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(SearchSkeletonEvents);
+
+    const skeleton = document.querySelector(".bx--skeleton");
+    expect(skeleton).not.toBeNull();
+    assert(skeleton instanceof HTMLElement);
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });

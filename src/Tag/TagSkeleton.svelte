@@ -11,7 +11,6 @@
   class:bx--tag--lg={size === "lg"}
   class:bx--skeleton={true}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

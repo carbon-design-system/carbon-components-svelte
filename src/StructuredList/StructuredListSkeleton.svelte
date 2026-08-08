@@ -14,7 +14,6 @@
   class:bx--skeleton={true}
   class:bx--structured-list={true}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

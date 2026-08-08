@@ -17,7 +17,6 @@
   class:bx--tabs--scrollable={true}
   class:bx--tabs--scrollable--container={type === "container"}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

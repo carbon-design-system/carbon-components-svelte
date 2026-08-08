@@ -6,6 +6,7 @@ import { user } from "../utils/user";
 import NumberInputFluidForm from "./NumberInput.fluidForm.test.svelte";
 import NumberInputFluidSkeleton from "./NumberInput.fluidSkeleton.test.svelte";
 import NumberInputFluidSlot from "./NumberInput.fluidSlot.test.svelte";
+import NumberInputSkeleton from "./NumberInput.skeleton.test.svelte";
 import NumberInput from "./NumberInput.test.svelte";
 import NumberInputCustom from "./NumberInputCustom.test.svelte";
 
@@ -1943,5 +1944,39 @@ describe("NumberInput", () => {
     expect(skeleton.children).toHaveLength(2);
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
+  });
+
+  it("does not forward click but forwards mouse events on fluid skeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(NumberInputFluidSkeleton);
+
+    const skeleton = screen.getByTestId("fluid-number-input-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
+
+  it("does not forward click but forwards mouse events on skeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(NumberInputSkeleton);
+
+    const skeleton = screen.getByTestId("number-input-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });

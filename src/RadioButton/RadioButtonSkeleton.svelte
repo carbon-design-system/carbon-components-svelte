@@ -3,7 +3,6 @@
 <div
   class:bx--radio-button-wrapper={true}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

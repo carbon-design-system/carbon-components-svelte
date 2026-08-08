@@ -8,6 +8,8 @@ import CopyInput from "./CopyInput.test.svelte";
 import CopyInputAsync from "./CopyInputAsync.test.svelte";
 import CopyInputAsyncDoubleClick from "./CopyInputAsyncDoubleClick.test.svelte";
 import CopyInputMouseEnter from "./CopyInputMouseEnter.test.svelte";
+import CopyInputSkeletonEvents from "./CopyInputSkeletonEvents.test.svelte";
+import FluidCopyInputSkeletonEvents from "./FluidCopyInputSkeletonEvents.test.svelte";
 
 describe("CopyInput", () => {
   beforeEach(() => {
@@ -332,6 +334,38 @@ describe("CopyInput", () => {
         "bx--skeleton",
         "bx--text-input",
       );
+    });
+
+    it("does not forward click but forwards mouse events on skeleton", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(CopyInputSkeletonEvents);
+
+      const element = screen.getByTestId("copy-input-skeleton");
+
+      await user.click(element);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    });
+
+    it("does not forward click but forwards mouse events on fluid skeleton", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(FluidCopyInputSkeletonEvents);
+
+      const element = screen.getByTestId("fluid-copy-input-skeleton");
+
+      await user.click(element);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
     });
   });
 });

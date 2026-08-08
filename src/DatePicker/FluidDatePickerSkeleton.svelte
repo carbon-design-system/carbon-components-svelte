@@ -12,7 +12,6 @@
   class:bx--date-picker--fluid__skeleton={true}
   class:bx--date-picker--fluid__skeleton--range={range}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

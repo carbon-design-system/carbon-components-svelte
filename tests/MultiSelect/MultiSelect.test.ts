@@ -3868,4 +3868,22 @@ describe("MultiSelect", () => {
     expect(listBox.children[0]).toHaveClass("bx--list-box__label");
     expect(listBox.children[1]).toHaveClass("bx--list-box__field");
   });
+
+  describe("FluidMultiSelectSkeleton", () => {
+    it("does not forward click but forwards mouse events", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelectFluidSkeleton);
+
+      const element = screen.getByTestId("fluid-multi-select-skeleton");
+
+      await user.click(element);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    });
+  });
 });
