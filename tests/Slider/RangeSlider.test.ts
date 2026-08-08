@@ -92,6 +92,22 @@ describe("RangeSlider", () => {
     expect(upperThumb).toHaveAttribute("aria-valuenow", "50");
   });
 
+  it("prevents arrow/Home/End default actions (page scroll) while dragging a thumb", () => {
+    render(RangeSlider);
+
+    const [lowerThumb] = screen.getAllByRole("slider");
+
+    for (const key of ["ArrowRight", "Home", "End"]) {
+      const event = new KeyboardEvent("keydown", {
+        key,
+        bubbles: true,
+        cancelable: true,
+      });
+      lowerThumb.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
+    }
+  });
+
   it("should jump the lower thumb to min/End clamped to upper via Home and End", async () => {
     render(RangeSlider, {
       props: { value: 40, valueUpper: 60, min: 0, max: 100 },
