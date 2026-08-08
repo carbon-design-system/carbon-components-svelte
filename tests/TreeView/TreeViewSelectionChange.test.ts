@@ -164,9 +164,7 @@ describe("TreeView select:change", () => {
     await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
     const detail = lastDetail(onSelectChange);
     expect([...detail.selectedIds].sort()).toEqual([0, 1, 7, 9]);
-    expect(detail.selectedIds.length).toBe(
-      new Set(detail.selectedIds).size,
-    );
+    expect(detail.selectedIds.length).toBe(new Set(detail.selectedIds).size);
   });
 
   it("fires for Ctrl+Shift+End range-extend", async () => {

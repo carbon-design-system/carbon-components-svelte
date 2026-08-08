@@ -158,6 +158,22 @@ describe("Tabs", () => {
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
+  it("prevents ArrowRight's default action (page scroll) when moving focus", async () => {
+    render(Tabs);
+
+    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    await user.click(tab1);
+
+    const event = new KeyboardEvent("keydown", {
+      key: "ArrowRight",
+      bubbles: true,
+      cancelable: true,
+    });
+    tab1.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(true);
+  });
+
   it("supports Home/End keyboard navigation", async () => {
     render(Tabs);
 
