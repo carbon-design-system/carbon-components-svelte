@@ -125,6 +125,19 @@ describe("Slider", () => {
     expect(screen.getByText("990 MB")).toBeInTheDocument();
   });
 
+  it("should pin the thumb at a defined position when min equals max", () => {
+    render(Slider, {
+      props: {
+        min: 10,
+        max: 10,
+        value: 10,
+      },
+    });
+
+    const slider = screen.getByRole("slider");
+    expect(slider.style.left).toBe("0%");
+  });
+
   it("should handle hidden text input", () => {
     render(Slider, {
       props: { hideTextInput: true },
