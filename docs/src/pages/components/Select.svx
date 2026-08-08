@@ -123,6 +123,18 @@ Use the small size variant for compact layouts.
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
+### Large
+
+Use the large size variant for prominent selections, setting `size` to `"lg"` (Carbon React's name for this step) or `"xl"` - both render identically.
+
+<Select size="lg" labelText="Carbon theme" selected="g10" >
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
 ### Extra-large
 
 Use the extra-large size variant for prominent selections.

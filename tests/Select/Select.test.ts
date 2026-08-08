@@ -102,6 +102,26 @@ describe("Select", () => {
     expect(selectElement).toHaveClass("bx--select-input--xl");
   });
 
+  it("renders large size variant (Carbon React's v11 alias for xl)", () => {
+    render(Select, { size: "lg" });
+    const selectElement = screen.getByLabelText("Select label");
+    expect(selectElement).toHaveClass("bx--select-input--lg");
+    expect(selectElement).not.toHaveClass("bx--select-input--xl");
+  });
+
+  it("renders md size the same as the default, unclassed size", () => {
+    render(Select, { size: "md" });
+    const selectElement = screen.getByLabelText("Select label");
+    for (const className of [
+      "bx--select-input--xs",
+      "bx--select-input--sm",
+      "bx--select-input--lg",
+      "bx--select-input--xl",
+    ]) {
+      expect(selectElement).not.toHaveClass(className);
+    }
+  });
+
   it("renders default variant", () => {
     render(Select);
     const selectElement = screen.getByLabelText("Select label");

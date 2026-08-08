@@ -26,7 +26,7 @@ describe("TimePicker", () => {
   });
 
   it("should handle different sizes", () => {
-    const sizes = ["sm", "xl"] as const;
+    const sizes = ["sm", "lg", "xl"] as const;
     for (const size of sizes) {
       const { container } = render(TimePicker, {
         props: { size },
@@ -36,6 +36,19 @@ describe("TimePicker", () => {
         `bx--time-picker--${size}`,
       );
       container.remove();
+    }
+  });
+
+  it("should render md size the same as the default, unclassed size", () => {
+    const { container } = render(TimePicker, { props: { size: "md" } });
+
+    const timePicker = container.querySelector(".bx--time-picker");
+    for (const className of [
+      "bx--time-picker--sm",
+      "bx--time-picker--lg",
+      "bx--time-picker--xl",
+    ]) {
+      expect(timePicker).not.toHaveClass(className);
     }
   });
 

@@ -63,8 +63,10 @@
   export let direction = "bottom";
 
   /**
-   * Specify the size of the dropdown field.
-   * @type {"xs" | "sm" | "lg" | "xl"}
+   * Specify the size of the dropdown field. `"md"` (the default, unclassed
+   * size) and `"lg"` are Carbon React's v11 names for the same steps `"xl"`
+   * already renders (48px); `"xl"` remains supported.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -511,6 +513,7 @@
     open && "bx--dropdown--open",
     size === "xs" && "bx--dropdown--xs",
     size === "sm" && "bx--dropdown--sm",
+    size === "lg" && "bx--dropdown--lg",
     size === "xl" && "bx--dropdown--xl",
     inline && "bx--dropdown--inline",
     disabled && "bx--dropdown--disabled",

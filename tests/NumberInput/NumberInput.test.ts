@@ -32,7 +32,7 @@ describe("NumberInput", () => {
   });
 
   it("should handle different sizes", () => {
-    const sizes = ["sm", "xl"] as const;
+    const sizes = ["sm", "lg", "xl"] as const;
     for (const size of sizes) {
       const { unmount } = render(NumberInput, {
         props: { size },
@@ -41,6 +41,20 @@ describe("NumberInput", () => {
       const input = screen.getByLabelText("Clusters");
       expect(input.closest(".bx--number")).toHaveClass(`bx--number--${size}`);
       unmount();
+    }
+  });
+
+  it("should render md size the same as the default, unclassed size", () => {
+    render(NumberInput, { props: { size: "md" } });
+
+    const input = screen.getByLabelText("Clusters");
+    const wrapper = input.closest(".bx--number");
+    for (const className of [
+      "bx--number--sm",
+      "bx--number--lg",
+      "bx--number--xl",
+    ]) {
+      expect(wrapper).not.toHaveClass(className);
     }
   });
 

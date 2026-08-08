@@ -1,7 +1,7 @@
 <script>
   /**
-   * Set the size of the list box.
-   * @type {"xs" | "sm" | "lg" | "xl"}
+   * Set the size of the list box. `"md"` is the default, unclassed size.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 

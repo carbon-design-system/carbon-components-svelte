@@ -380,6 +380,18 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
+### Large
+
+Set `size` to `"lg"` (Carbon React's name for this step) or `"xl"` for a large combobox - both render identically.
+
+<ComboBox labelText="Contact" placeholder="Select contact method"
+size="lg"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
 ### Extra-large
 
 Set `size` to `"xl"` for an extra-large combobox.
