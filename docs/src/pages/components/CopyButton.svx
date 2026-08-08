@@ -17,7 +17,7 @@ Set `text` to the string to copy. By default, the copy button uses the native [C
 
 Pass an async `copy` function when the text is not available at render time, for example markdown fetched on click. Feedback appears after `copy()` resolves.
 
-While copy() is pending, the button sets aria-busy and ignores clicks. On failure, skip feedback and listen for `copy:error`.
+While `copy()` is pending, the button sets `aria-busy` and ignores clicks. On failure, skip feedback and listen for `copy:error`.
 
 Prefetch on hover with `on:mouseenter`.
 
