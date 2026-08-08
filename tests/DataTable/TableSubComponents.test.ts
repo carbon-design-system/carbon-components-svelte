@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import TableContainerWithTable from "./TableContainerWithTable.test.svelte";
 import TableSubComponents from "./TableSubComponents.test.svelte";
 
 describe("Table Sub-Components", () => {
@@ -12,6 +13,36 @@ describe("Table Sub-Components", () => {
       const table = container.querySelector("table");
       expect(table).toBeInTheDocument();
       expect(table).toHaveClass("bx--data-table");
+    });
+
+    it("should not set aria-labelledby without a TableContainer ancestor", () => {
+      render(TableSubComponents, {
+        props: { testComponent: "Table", slotContent: "Content" },
+      });
+
+      const table = screen.getByRole("table");
+      expect(table).not.toHaveAttribute("aria-labelledby");
+      expect(table).not.toHaveAttribute("aria-describedby");
+    });
+
+    it("labels a Table nested in a standalone TableContainer via context", () => {
+      render(TableContainerWithTable, {
+        props: { title: "Container Title", description: "Container Desc" },
+      });
+
+      const table = screen.getByRole("table");
+
+      const labelledbyId = table.getAttribute("aria-labelledby");
+      assert(labelledbyId);
+      expect(document.getElementById(labelledbyId)).toHaveTextContent(
+        "Container Title",
+      );
+
+      const describedbyId = table.getAttribute("aria-describedby");
+      assert(describedbyId);
+      expect(document.getElementById(describedbyId)).toHaveTextContent(
+        "Container Desc",
+      );
     });
 
     it("should handle size variants", () => {

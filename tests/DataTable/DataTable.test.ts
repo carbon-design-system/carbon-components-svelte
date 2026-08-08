@@ -143,6 +143,39 @@ describe("DataTable", () => {
     expect(screen.getByText("Test Description")).toBeInTheDocument();
   });
 
+  it("labels the table with its title and description", () => {
+    render(DataTable, {
+      props: {
+        title: "Test Table",
+        description: "Test Description",
+        headers,
+        rows,
+      },
+    });
+
+    const table = screen.getByRole("table");
+
+    const labelledbyId = table.getAttribute("aria-labelledby");
+    assert(labelledbyId);
+    expect(document.getElementById(labelledbyId)).toHaveTextContent(
+      "Test Table",
+    );
+
+    const describedbyId = table.getAttribute("aria-describedby");
+    assert(describedbyId);
+    expect(document.getElementById(describedbyId)).toHaveTextContent(
+      "Test Description",
+    );
+  });
+
+  it("does not set aria-labelledby or aria-describedby without a title", () => {
+    render(DataTable, { props: { headers, rows } });
+
+    const table = screen.getByRole("table");
+    expect(table).not.toHaveAttribute("aria-labelledby");
+    expect(table).not.toHaveAttribute("aria-describedby");
+  });
+
   it("handles empty table state", () => {
     render(DataTable, {
       props: {
