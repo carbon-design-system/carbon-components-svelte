@@ -79,6 +79,22 @@ describe("Slider", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", 0);
   });
 
+  it("prevents arrow/Home/End default actions (page scroll) while dragging the thumb", () => {
+    render(Slider);
+
+    const slider = screen.getByRole("slider");
+
+    for (const key of ["ArrowRight", "Home", "End"]) {
+      const event = new KeyboardEvent("keydown", {
+        key,
+        bubbles: true,
+        cancelable: true,
+      });
+      slider.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
+    }
+  });
+
   it("should jump to min and max with Home and End", async () => {
     render(Slider, { props: { value: 50, min: 0, max: 100 } });
 
