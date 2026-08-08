@@ -4,7 +4,7 @@ description: Tabs organize content into separate views that can be switched betw
 ---
 
 <script>
-  import { Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, DataTable } from "carbon-components-svelte";
+  import { Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, DataTable, Button } from "carbon-components-svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
@@ -83,6 +83,24 @@ Use manual activation when switching panels is expensive.
   <Tab label="Tab label 1" />
   <Tab label="Tab label 2" />
   <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Tab bar actions
+
+Render right-aligned controls beside the tab list with the `extra` slot. The
+content sits outside the scrollable nav, so overflow buttons still measure the
+tabs alone.
+
+<Tabs>
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <Button slot="extra" kind="ghost" size="field">New tab</Button>
   <svelte:fragment slot="content">
     <TabContent>Content 1</TabContent>
     <TabContent>Content 2</TabContent>

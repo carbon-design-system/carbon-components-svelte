@@ -13,6 +13,7 @@ import TabSlot from "./TabSlot.test.svelte";
 import Tabs from "./Tabs.test.svelte";
 import TabsAllDisabled from "./TabsAllDisabled.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
+import TabsExtra from "./TabsExtra.test.svelte";
 import TabsLazy from "./TabsLazy.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
@@ -301,6 +302,70 @@ describe("Tabs", () => {
     await fireEvent.scroll(nav);
     expect(prev).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
     expect(next).toHaveClass("bx--tab--overflow-nav-button--hidden");
+  });
+
+  describe("extra slot", () => {
+    it("renders extra content outside the tab list", () => {
+      const { container } = render(TabsExtra);
+
+      const tablist = screen.getByRole("tablist");
+      const extra = screen.getByRole("button", { name: "New tab" });
+
+      expect(extra).toBeInTheDocument();
+      expect(tablist).not.toContainElement(extra);
+      expect(extra.closest(".bx--tabs__extra")).toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--tabs--with-extra"),
+      ).toBeInTheDocument();
+    });
+
+    it("does not render the extra wrapper without the slot", () => {
+      const { container } = render(TabsExtra, {
+        props: { withExtra: false },
+      });
+
+      expect(
+        container.querySelector(".bx--tabs__extra"),
+      ).not.toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--tabs--with-extra"),
+      ).not.toBeInTheDocument();
+    });
+
+    // Extra is a sibling of the nav, so overflow still reads only the tablist
+    // scroll metrics — extra width does not inflate scrollWidth.
+    it("computes overflow from the tablist without including extra width", async () => {
+      const { container } = render(TabsExtra);
+
+      const nav = screen.getByRole("tablist");
+      const extra = screen.getByRole("button", { name: "New tab" });
+
+      Object.defineProperty(extra, "offsetWidth", {
+        configurable: true,
+        value: 120,
+      });
+      Object.defineProperty(nav, "scrollWidth", {
+        configurable: true,
+        value: 600,
+      });
+      Object.defineProperty(nav, "clientWidth", {
+        configurable: true,
+        value: 200,
+      });
+      Object.defineProperty(nav, "scrollLeft", {
+        configurable: true,
+        writable: true,
+        value: 0,
+      });
+      await fireEvent.scroll(nav);
+
+      const next = container.querySelector(
+        ".bx--tab--overflow-nav-button--next",
+      );
+      expect(next).toBeInTheDocument();
+      expect(next).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
+      expect(nav).not.toContainElement(extra);
+    });
   });
 
   it("should apply custom class", () => {

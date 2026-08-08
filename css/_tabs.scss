@@ -362,6 +362,37 @@
   @include tabs-overflow;
 }
 
+/// Tab bar `extra` slot: right-aligned actions outside the scrollable nav so
+/// overflow chevron math still measures the tab list alone.
+/// @access private
+/// @group components
+@mixin tabs-extra {
+  .#{$prefix}--tabs--with-extra {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  // Shrink the scrollport when actions take space; overflow still reads the
+  // nav's own scrollWidth / clientWidth (extra is a sibling, not a child).
+  .#{$prefix}--tabs--with-extra .#{$prefix}--tabs__nav {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--tabs__extra {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    margin-inline-start: auto;
+    padding-inline-start: $carbon--spacing-05;
+  }
+}
+
+@include exports('tabs-extra') {
+  @include tabs-extra;
+}
+
 /// Tab full-width styles
 /// @access private
 /// @group components
