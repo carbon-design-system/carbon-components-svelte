@@ -444,7 +444,7 @@ Combine `filterable` and `warn` to show warnings on a filterable multi-select.
 
 ### Disabled
 
-Disable the entire dropdown by setting `disabled` to `true`. This prevents all user interaction.
+Disable the entire dropdown by setting `disabled` to `true`.
 
 <MultiSelect disabled labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
