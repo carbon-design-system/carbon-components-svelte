@@ -16,7 +16,10 @@ describe("TimePicker", () => {
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute("name", "test-time");
     expect(input).toHaveAttribute("placeholder", "hh:mm");
-    expect(input).toHaveAttribute("pattern", "(1[012]|[1-9]):[0-5][0-9](\\s)?");
+    expect(input).toHaveAttribute(
+      "pattern",
+      "(0?[1-9]|1[012]):[0-5][0-9](\\s)?",
+    );
     expect(input).toHaveAttribute("maxlength", "5");
     expect(screen.getByText("Time")).toBeInTheDocument();
     expect(screen.getByText("AM")).toBeInTheDocument();
@@ -196,7 +199,97 @@ describe("TimePicker", () => {
 
     expect(input).toHaveValue("10:30");
     await user.keyboard("{Tab}");
-    expect(consoleLog).toHaveBeenCalledWith("change");
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: "10:30",
+      hours: 10,
+      minutes: 30,
+      valid: true,
+    });
+  });
+
+  it("applies 24-hour pattern presets and accepts 14:30", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(TimePicker, { props: { format: "24" } });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute(
+      "pattern",
+      "([01]?[0-9]|2[0-3]):[0-5][0-9](\\s)?",
+    );
+    expect(input).toHaveAttribute("maxlength", "5");
+
+    await user.type(input, "14:30");
+    await user.tab();
+    expect(input).toHaveValue("14:30");
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: "14:30",
+      hours: 14,
+      minutes: 30,
+      valid: true,
+    });
+  });
+
+  it("extends pattern and maxlength when seconds are enabled", () => {
+    render(TimePicker, { props: { seconds: true } });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("placeholder", "hh:mm:ss");
+    expect(input).toHaveAttribute("maxlength", "8");
+    expect(input).toHaveAttribute(
+      "pattern",
+      "(0?[1-9]|1[012]):[0-5][0-9]:[0-5][0-9](\\s)?",
+    );
+  });
+
+  it("normalizes a valid compact value on blur", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(TimePicker, { props: { normalize: true, format: "12" } });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "930");
+    await user.tab();
+    expect(input).toHaveValue("09:30");
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: "09:30",
+      hours: 9,
+      minutes: 30,
+      valid: true,
+    });
+  });
+
+  it("leaves invalid values unchanged and reports valid:false", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(TimePicker, { props: { normalize: true, format: "24" } });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "ab");
+    await user.tab();
+    expect(input).toHaveValue("ab");
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: "ab",
+      hours: null,
+      minutes: null,
+      valid: false,
+    });
+  });
+
+  it("includes seconds in the change detail when enabled", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(TimePicker, {
+      props: { format: "24", seconds: true, normalize: true },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "143015");
+    await user.tab();
+    expect(input).toHaveValue("14:30:15");
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: "14:30:15",
+      hours: 14,
+      minutes: 30,
+      seconds: 15,
+      valid: true,
+    });
   });
 
   it("should handle focus and blur events", async () => {
