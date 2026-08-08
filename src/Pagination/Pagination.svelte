@@ -68,6 +68,14 @@
   /** Set to `true` to disable the page input */
   export let pageInputDisabled = false;
 
+  /**
+   * Specify how the page number is entered.
+   * Use `"input"` for large page counts so users can jump to pages
+   * outside the windowed select options from `pageWindow`.
+   * @type {"select" | "input"}
+   */
+  export let pageInputType = "select";
+
   /** Set to `true` to disable the page size input */
   export let pageSizeInputDisabled = false;
 
@@ -143,13 +151,32 @@
   import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
+  import NumberInput from "../NumberInput/NumberInput.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
+  import { clamp } from "../utils/numericFormat.js";
 
   const dispatch = createEventDispatcher();
 
   let prevPage = page;
   let prevPageSize = pageSize;
+  let pageInputKey = 0;
+
+  /**
+   * Clamp a page-number input value and dispatch `change` when it commits.
+   * @param {null | number} raw
+   */
+  function handlePageInputChange(raw) {
+    if (raw === null || Number.isNaN(raw)) return;
+    const next = pagesUnknown
+      ? Math.max(1, Math.trunc(raw))
+      : clamp(Math.trunc(raw), 1, totalPages);
+    page = next;
+    // Remount when the committed value was clamped so the input display
+    // resets even if `page` did not change.
+    if (next !== raw) pageInputKey += 1;
+    dispatch("change", { page: next });
+  }
 
   /**
    * Returns a subset of page numbers centered around the current page to prevent
@@ -191,7 +218,10 @@
     prevPage = page;
     prevPageSize = pageSize;
   }
-  $: selectItems = getWindowedPages(page, totalPages, pageWindow);
+  $: selectItems =
+    pageInputType === "input"
+      ? []
+      : getWindowedPages(page, totalPages, pageWindow);
   $: effectivePageSizes = dynamicPageSizes
     ? getFilteredPageSizes(pageSizes, totalItems)
     : pageSizes;
@@ -261,21 +291,38 @@
         {/if}
       </span>
     {:else if !pageInputDisabled}
-      <Select
-        id="bx--pagination-select-{id}-pages"
-        class="bx--select__page-number"
-        labelText="Page number, of {totalPages} pages"
-        inline
-        hideLabel
-        on:update={(event) => {
-          dispatch("change", { page: event.detail });
-        }}
-        bind:selected={page}
-      >
-        {#each selectItems as size, index (size)}
-          <SelectItem value={size} text={size.toString()} />
-        {/each}
-      </Select>
+      {#if pageInputType === "input"}
+        {#key pageInputKey}
+          <NumberInput
+            id="bx--pagination-select-{id}-pages"
+            class="bx--pagination__page-number-input"
+            labelText="Page number, of {totalPages} pages"
+            hideLabel
+            hideSteppers
+            disableWheel
+            min={1}
+            max={pagesUnknown ? undefined : totalPages}
+            value={page}
+            on:change={(event) => handlePageInputChange(event.detail)}
+          />
+        {/key}
+      {:else}
+        <Select
+          id="bx--pagination-select-{id}-pages"
+          class="bx--select__page-number"
+          labelText="Page number, of {totalPages} pages"
+          inline
+          hideLabel
+          on:update={(event) => {
+            dispatch("change", { page: event.detail });
+          }}
+          bind:selected={page}
+        >
+          {#each selectItems as size, index (size)}
+            <SelectItem value={size} text={size.toString()} />
+          {/each}
+        </Select>
+      {/if}
       <span class:bx--pagination__text={true}>
         {#if pagesUnknown}
           {pageText(page)}

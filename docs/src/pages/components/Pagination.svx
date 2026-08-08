@@ -83,6 +83,12 @@ Set `simple` for a compact previous/next control with page status text. Useful i
   </ToolbarContent>
 </Toolbar>
 
+## Page number input
+
+Set `pageInputType` to `"input"` to replace the page select with a number input. Use this for large page counts so users can jump to any page, including ones outside the windowed select options.
+
+<FileSource src="/framed/Pagination/PageInput" />
+
 ## Hidden controls
 
 Hide individual pagination controls.
