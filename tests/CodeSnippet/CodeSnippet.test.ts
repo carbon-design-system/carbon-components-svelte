@@ -298,6 +298,27 @@ yarn -v`,
     expect(screen.getByText("Show more")).toBeInTheDocument();
   });
 
+  test("should set aria-expanded and aria-controls on the show-more button", async () => {
+    mockSnippetOverflowHeight();
+    render(CodeSnippetExpandable);
+    await waitForSnippetMeasurement();
+
+    const showMoreButton = await screen.findByText("Show more");
+    const button = showMoreButton.closest("button");
+    assert(button);
+    expect(button).toHaveAttribute("aria-expanded", "false");
+
+    const controlsId = button.getAttribute("aria-controls");
+    assert(controlsId);
+    const codeContainer = document.getElementById(controlsId);
+    assert(codeContainer);
+    expect(codeContainer).toHaveClass("bx--snippet-container");
+
+    await user.click(button);
+
+    expect(button).toHaveAttribute("aria-expanded", "true");
+  });
+
   // Regression: chevron should not duplicate the button's accessible name
   test("should not set aria-label on the expand chevron", async () => {
     mockSnippetOverflowHeight();

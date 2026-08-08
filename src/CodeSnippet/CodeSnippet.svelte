@@ -476,6 +476,7 @@
   >
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
+      {id}
       role="textbox"
       tabindex={disabled ? undefined : "0"}
       aria-readonly="true"
@@ -515,6 +516,8 @@
         kind="ghost"
         size="small"
         class="bx--snippet-btn--expand"
+        aria-expanded={expanded}
+        aria-controls={id}
         {disabled}
         on:click={() => {
           expanded = !expanded;
