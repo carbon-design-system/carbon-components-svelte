@@ -56,6 +56,18 @@ Set `readonly` to `true` to make the checkbox non-interactive while keeping the 
 <Checkbox labelText="Label text (unchecked)" readonly />
 <Checkbox labelText="Label text (checked)" checked readonly />
 
+### Invalid
+
+Set `invalid` to `true` and provide `invalidText` to show a validation error.
+
+<Checkbox labelText="I agree to the terms and conditions" invalid invalidText="You must agree to the terms and conditions to continue" />
+
+### Warning
+
+Set `warn` to `true` and provide `warnText` to show a warning message. `invalid` takes precedence over `warn` when both are set.
+
+<Checkbox labelText="Subscribe to promotional emails" warn warnText="You may receive fewer updates about your account" />
+
 ## Reactive
 
 Bind to track and update the checkbox state.
@@ -149,6 +161,26 @@ Disable all checkboxes in the group.
 Set `readonly` to `true` on CheckboxGroup to display non-editable values. Unlike disabled, the readonly state keeps labels readable. You can also set readonly on individual checkboxes when needed.
 
 <CheckboxGroup readonly legendText="Notification preferences" name="prefs-readonly" selected={["email", "push"]}>
+<Checkbox value="email" labelText="Email" />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications" />
+</CheckboxGroup>
+
+### Invalid
+
+Set `invalid` to `true` and provide `invalidText` to show a validation error for the group. The group's state takes precedence over any invalid/warn state set on an individual checkbox.
+
+<CheckboxGroup invalid invalidText="Select at least one notification preference" legendText="Notification preferences" name="prefs-invalid">
+<Checkbox value="email" labelText="Email" />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications" />
+</CheckboxGroup>
+
+### Warning
+
+Set `warn` to `true` and provide `warnText` to show a warning message for the group.
+
+<CheckboxGroup warn warnText="Push notifications may be delayed" legendText="Notification preferences" name="prefs-warn" selected={["email"]}>
 <Checkbox value="email" labelText="Email" />
 <Checkbox value="sms" labelText="SMS" />
 <Checkbox value="push" labelText="Push notifications" />
